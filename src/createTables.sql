@@ -152,6 +152,7 @@ COMMENT ON COLUMN zaehlung.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabe
 
 -- enable ae as foreign tables
 -- see: https://www.percona.com/blog/2018/08/21/foreign-data-wrappers-postgresql-postgres_fdw/
+
 -- on arteigenschaften.ch:
 -- postgresql insists on a password. But data is open,
 -- so no problem not to use a secure one
