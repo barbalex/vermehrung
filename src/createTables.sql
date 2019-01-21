@@ -153,7 +153,9 @@ COMMENT ON COLUMN zaehlung.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabe
 -- enable ae as foreign tables
 -- see: https://www.percona.com/blog/2018/08/21/foreign-data-wrappers-postgresql-postgres_fdw/
 -- on arteigenschaften.ch:
-CREATE USER fdw_user WITH ENCRYPTED PASSWORD 'secret'
+-- postgresql insists on a password. But data is open,
+-- so no problem not to use a secure one
+CREATE USER fdw_user WITH ENCRYPTED PASSWORD 'secret';
 GRANT SELECT ON TABLE ae.taxonomy, ae.object TO fdw_user;
 
 -- on vermehrung
