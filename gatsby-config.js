@@ -4,6 +4,9 @@ const { createHttpLink } = require(`apollo-link-http`)
 const secrets = require('./secrets.json')
 
 module.exports = {
+  siteMetadata: {
+    title: 'vermehrung',
+  },
   plugins: [
     {
       resolve: 'gatsby-plugin-eslint',
@@ -22,6 +25,21 @@ module.exports = {
         // Add any options here
       },
     },
+    {
+      resolve: 'gatsby-plugin-web-font-loader',
+      options: {
+        google: {
+          families: ['Roboto'],
+        },
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-typography',
+      options: {
+        pathToConfigModule: './src/utils/typography.js',
+      },
+    },
+    'gatsby-plugin-react-helmet',
     {
       resolve: 'gatsby-source-graphql',
       options: {
