@@ -3,7 +3,7 @@
   "description": "Gatsby simple source hasura graphql cms",
   "license": "MIT",
   "scripts": {
-    "dev": "HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
+    "dev": "HASURA_GRAPHQL_URL=http://157.230.107.167/v1alpha1/graphql gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve"
   },
