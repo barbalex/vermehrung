@@ -55,21 +55,7 @@ module.exports = {
           }),
         refetchInterval: 10, // Refresh every 60 seconds for new data
       },
-    } /*
-    {
-      resolve: 'gatsby-source-graphql',
-      options: {
-        typeName: 'POSTGRAPHILE',
-        fieldName: 'ae',
-        createLink: () =>
-          createHttpLink({
-            uri: `${process.env.POSTGRAPHILE_URL}`,
-            headers: {},
-            fetch,
-          }),
-        refetchInterval: 10, // Refresh every 60 seconds for new data
-      },
-    },*/,
+    },
     'gatsby-plugin-styled-components',
     {
       resolve: 'gatsby-plugin-manifest',
