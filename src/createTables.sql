@@ -157,35 +157,17 @@ COMMENT ON COLUMN zaehlung.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabe
 -- postgresql insists on a password. But data is open,
 -- so no problem not to use a secure one
 CREATE USER fdw_user WITH ENCRYPTED PASSWORD 'secret';
-GRANT SELECT ON TABLE ae.taxonomy, ae.object TO fdw_user;
+GRANT SELECT ON TABLE ae.v_vermehrung_arten TO fdw_user;
 
 -- on vermehrung
-CREATE SERVER ae_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host 'arteigenschaften.ch', dbname 'ae', port '5432');
-CREATE USER MAPPING for postgres SERVER ae_server OPTIONS (user 'fdw_user', password 'secret');
-CREATE TYPE taxonomy_type AS ENUM ('Art', 'Lebensraum');
-CREATE FOREIGN TABLE ae_taxonomy (
+-- need to use this view
+-- because joining tables is way too slow
+CREATE FOREIGN TABLE ae_art (
   id UUID,
-  type taxonomy_type DEFAULT NULL,
-  name text DEFAULT NULL,
-  description text DEFAULT NULL,
-  links text[] DEFAULT NULL,
-  last_updated date DEFAULT NULL,
-  organization_id UUID DEFAULT NULL,
-  imported_by UUID NOT NULL,
-  terms_of_use text DEFAULT NULL,
-  habitat_label varchar(50) DEFAULT NULL,
-  habitat_comments text DEFAULT NULL,
-  habitat_nr_fns_min integer DEFAULT NULL,
-  habitat_nr_fns_max integer DEFAULT NULL
+  name text
 )
-SERVER ae_server OPTIONS (schema_name 'ae', table_name 'taxonomy');
+SERVER ae_server OPTIONS (schema_name 'ae', table_name 'v_vermehrung_arten');
 
-CREATE FOREIGN TABLE ae_object (
-  id UUID,
-  taxonomy_id UUID NOT NULL,
-  parent_id UUID DEFAULT NULL,
-  name text,
-  properties jsonb DEFAULT NULL,
-  id_old text DEFAULT NULL
-)
-SERVER ae_server OPTIONS (schema_name 'ae', table_name 'object');
+
+
+
