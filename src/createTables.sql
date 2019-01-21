@@ -1,6 +1,6 @@
 CREATE EXTENSION if not exists "uuid-ossp";
 
---DROP TABLE IF EXISTS person;
+DROP TABLE IF EXISTS person;
 CREATE TABLE public.person (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   name text DEFAULT NULL,
@@ -20,7 +20,7 @@ COMMENT ON COLUMN public.person.email IS 'Email';
 COMMENT ON COLUMN public.person.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN public.person.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
---DROP TABLE IF EXISTS public.user CASCADE;
+DROP TABLE IF EXISTS public.user CASCADE;
 CREATE TABLE public.user (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   name text UNIQUE,
@@ -38,3 +38,9 @@ CREATE INDEX ON public.user USING btree (id);
 CREATE INDEX ON public.user USING btree (name);
 CREATE INDEX ON public.user USING btree (person_id);
 COMMENT ON COLUMN public.user.person_id IS 'Datensatz bzw. Fremdschlüssel des Users in der Tabelle "person"';
+
+DROP TABLE IF EXISTS art CASCADE;
+CREATE TABLE art (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  ae_id
+);

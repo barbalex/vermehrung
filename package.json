@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-postgres-graphql",
-  "description": "Gatsby simple source hasura graphql cms",
+  "name": "vermehrung.apflora.ch",
+  "description": "breeding endangered plant species",
   "license": "MIT",
   "scripts": {
-    "dev": "HASURA_GRAPHQL_URL=http://157.230.107.167/v1alpha1/graphql gatsby develop",
+    "dev": "HASURA_GRAPHQL_URL=http://157.230.107.167/v1alpha1/graphql POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve"
   },
