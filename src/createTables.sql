@@ -1,7 +1,7 @@
 CREATE EXTENSION if not exists "uuid-ossp";
 
-DROP TABLE IF EXISTS person;
-CREATE TABLE public.person (
+DROP TABLE IF EXISTS person CASCADE;
+CREATE TABLE person (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   name text DEFAULT NULL,
   person text DEFAULT NULL,
@@ -10,15 +10,15 @@ CREATE TABLE public.person (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-CREATE INDEX ON public.person USING btree (id);
-CREATE INDEX ON public.person USING btree (name);
-COMMENT ON COLUMN public.person.id IS 'Primärschlüssel';
-COMMENT ON COLUMN public.person.name IS 'Vor- und Nachname';
-COMMENT ON COLUMN public.person.person IS 'Strasse, PLZ und Ort';
-COMMENT ON COLUMN public.person.telefon IS 'Telefonnummer';
-COMMENT ON COLUMN public.person.email IS 'Email';
-COMMENT ON COLUMN public.person.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN public.person.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON person USING btree (id);
+CREATE INDEX ON person USING btree (name);
+COMMENT ON COLUMN person.id IS 'Primärschlüssel';
+COMMENT ON COLUMN person.name IS 'Vor- und Nachname';
+COMMENT ON COLUMN person.person IS 'Strasse, PLZ und Ort';
+COMMENT ON COLUMN person.telefon IS 'Telefonnummer';
+COMMENT ON COLUMN person.email IS 'Email';
+COMMENT ON COLUMN person.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN person.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS public.user CASCADE;
 CREATE TABLE public.user (
@@ -29,7 +29,9 @@ CREATE TABLE public.user (
   email text UNIQUE default null,
   role name DEFAULT NULL,
   pass text DEFAULT NULL,
-  person_id uuid DEFAULT NULL REFERENCES public.person (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  person_id uuid DEFAULT NULL REFERENCES person (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null,
   CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
   constraint role_length_maximum_512 check (length(role) < 512),
   constraint pass_length_minimum_6 check (length(pass) > 5)
@@ -42,5 +44,108 @@ COMMENT ON COLUMN public.user.person_id IS 'Datensatz bzw. Fremdschlüssel des U
 DROP TABLE IF EXISTS art CASCADE;
 CREATE TABLE art (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  ae_id
+  ae_id UUID DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null
 );
+CREATE INDEX ON art USING btree (id);
+CREATE INDEX ON art USING btree (ae_id);
+
+DROP TABLE IF EXISTS s_ort CASCADE;
+CREATE TABLE s_ort (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  name text default null,
+  x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
+  y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
+  bemerkungen text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null
+);
+CREATE INDEX ON s_ort USING btree (id);
+CREATE INDEX ON s_ort USING btree (name);
+
+DROP TABLE IF EXISTS sammlung CASCADE;
+CREATE TABLE sammlung (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  art_id UUID DEFAULT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  person_id UUID DEFAULT NULL REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  s_ort_id UUID DEFAULT NULL REFERENCES s_ort (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null
+);
+CREATE INDEX ON sammlung USING btree (id);
+CREATE INDEX ON sammlung USING btree (art_id);
+CREATE INDEX ON sammlung USING btree (person_id);
+CREATE INDEX ON sammlung USING btree (s_ort_id);
+
+DROP TABLE IF EXISTS v_ort CASCADE;
+CREATE TABLE v_ort (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  person_id UUID DEFAULT NULL REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
+  y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
+  bemerkungen text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null
+);
+CREATE INDEX ON v_ort USING btree (id);
+CREATE INDEX ON v_ort USING btree (person_id);
+
+DROP TABLE IF EXISTS kultur CASCADE;
+CREATE TABLE kultur (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  sammlung_id UUID DEFAULT NULL REFERENCES sammlung (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  v_ort_id UUID DEFAULT NULL REFERENCES v_ort (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bemerkungen text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null,
+  unique (sammlung_id, v_ort_id)
+);
+CREATE INDEX ON kultur USING btree (id);
+CREATE INDEX ON kultur USING btree (sammlung_id);
+CREATE INDEX ON kultur USING btree (v_ort_id);
+
+DROP TABLE IF EXISTS beet CASCADE;
+CREATE TABLE beet (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bemerkungen text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null
+);
+CREATE INDEX ON beet USING btree (id);
+CREATE INDEX ON beet USING btree (kultur_id);
+
+DROP TABLE IF EXISTS zaehlung_einheit_werte;
+CREATE TABLE zaehlung_einheit_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
+);
+CREATE INDEX ON zaehlung_einheit_werte USING btree (id);
+CREATE INDEX ON zaehlung_einheit_werte USING btree (code);
+CREATE INDEX ON zaehlung_einheit_werte USING btree (sort);
+COMMENT ON COLUMN zaehlung_einheit_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN zaehlung_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN zaehlung_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+DROP TABLE IF EXISTS zaehlung CASCADE;
+CREATE TABLE zaehlung (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  datum date DEFAULT NULL,
+  anzahl integer DEFAULT NULL,
+  einheit integer DEFAULT NULL REFERENCES zaehlung_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null
+);
+CREATE INDEX ON zaehlung USING btree (id);
+CREATE INDEX ON zaehlung USING btree (kultur_id);
+CREATE INDEX ON zaehlung USING btree (datum);
+CREATE INDEX ON zaehlung USING btree (anzahl);
+CREATE INDEX ON zaehlung USING btree (einheit);
+COMMENT ON COLUMN zaehlung.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "zaehlung_einheit_werte"';
