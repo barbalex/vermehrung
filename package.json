@@ -3,16 +3,26 @@
   "description": "breeding endangered plant species",
   "license": "MIT",
   "scripts": {
-    "dev": "HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql gatsby develop",
+    "dev": "set HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql && set POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql && gatsby develop",
+    "dev_unix": "HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve"
   },
   "dependencies": {
+    "@material-ui/core": "^3.9.0",
+    "@wapps/gatsby-plugin-material-ui": "^1.2.0",
     "apollo-link-http": "1.5.9",
     "gatsby": "2.0.91",
     "gatsby-link": "2.0.8",
+    "gatsby-plugin-manifest": "2.0.13",
+    "gatsby-plugin-offline": "2.0.21",
+    "gatsby-plugin-styled-components": "3.0.4",
     "gatsby-source-graphql": "2.0.8",
+    "lodash": "4.17.11",
     "react": "16.8.0-alpha.1",
-    "react-dom": "16.8.0-alpha.1"
+    "react-dom": "16.8.0-alpha.1",
+    "react-icons": "3.3.0",
+    "react-reflex": "3.0.8",
+    "styled-components": "4.1.3"
   }
 }

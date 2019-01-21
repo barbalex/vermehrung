@@ -35,5 +35,19 @@ module.exports = {
         refetchInterval: 10, // Refresh every 60 seconds for new data
       },
     },*/,
+    'gatsby-plugin-styled-components',
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        name: 'vermehrung.apflora.ch',
+        short_name: 'vermehrung',
+        start_url: '/',
+        background_color: '#00695c',
+        theme_color: '#00695c',
+        display: 'minimal-ui',
+        icon: 'src/images/seedling.png',
+      },
+    },
+    'gatsby-plugin-offline',
   ],
 }
