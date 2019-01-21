@@ -1,0 +1,22 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "strict": 0,
+    "react/prop-types": 0,
+    "react/display-name": "off",
+    "no-console": "off",
+    "react-hooks/rules-of-hooks": "error"
+  },
+  "env": {
+    "browser": true,
+    "amd": true,
+    "node": true
+  },
+  "plugins": ["react", "react-hooks"],
+  "settings": {
+    "react": {
+      "version": "999.999.999"
+    }
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"]
+}

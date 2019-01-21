@@ -6,6 +6,23 @@ const secrets = require('./secrets.json')
 module.exports = {
   plugins: [
     {
+      resolve: 'gatsby-plugin-eslint',
+      options: {
+        test: /\.js$|\.jsx$/,
+        exclude: /(node_modules|cache|public|docs)/,
+        options: {
+          emitWarning: true,
+          failOnError: false,
+        },
+      },
+    },
+    {
+      resolve: `@wapps/gatsby-plugin-material-ui`,
+      options: {
+        // Add any options here
+      },
+    },
+    {
       resolve: 'gatsby-source-graphql',
       options: {
         typeName: 'HASURA',
