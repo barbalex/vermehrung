@@ -1,14 +1,15 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
-import Signup from './Signup'
-import Login from './Login'
+//import Signup from './Signup'
+//import Login from './Login'
 import ErrorBoundary from '../ErrorBoundary'
-import withAuthState from '../../state/withAuth'
+import storeContext from '../../storeContext'
 
 const IconContainer = styled.div`
   position: relative;
@@ -28,8 +29,9 @@ const UserNameDiv = styled.div`
   z-index: -1;
 `
 
-const Account = ({ authState }) => {
-  const { email, signupOpen, loginOpen } = authState.state
+const Account = () => {
+  const store = useContext(storeContext)
+  const { email /*, signupOpen, loginOpen*/ } = store
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickMenu = useCallback(event => setAnchorEl(event.currentTarget), [])
   const onCloseMenu = useCallback(() => setAnchorEl(null), [])
@@ -82,11 +84,11 @@ const Account = ({ authState }) => {
           {email && <MenuItem onClick={onClickLogout}>Abmelden</MenuItem>}
           <MenuItem onClick={onClickSignup}>Konto erstellen</MenuItem>
         </Menu>
-        {signupOpen && <Signup />}
-        {loginOpen && <Login />}
+        {/*signupOpen && <Signup />*/}
+        {/*loginOpen && <Login />*/}
       </>
     </ErrorBoundary>
   )
 }
 
-export default withAuthState(Account)
+export default observer(Account)

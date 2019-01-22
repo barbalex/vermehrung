@@ -23,9 +23,10 @@ const Spacer = styled.div`
 
 const NavButton = styled(Button)`
   color: white !important;
-  border: ${props => (props.active ? '1px white' : 'unset')};
+  /*border: ${props => (props.active ? '1px white' : 'unset')};*/
   border-color: rgba(255, 255, 255, 0.5) !important;
-  font-weight: ${props => (props.active ? '700' : '600')};
+  font-weight: ${props => (props.active ? '700' : '500')};
+  /*font-weight: 600;*/
 `
 
 const Header = () => {
@@ -35,6 +36,7 @@ const Header = () => {
     <Location>
       {({ location }) => {
         const { pathname } = location
+        console.log({ location, pathname })
 
         return (
           <ErrorBoundary>
@@ -47,24 +49,24 @@ const Header = () => {
                   title="Home"
                   onClick={onClickSiteTitle}
                 >
-                  erfassen.ch
+                  Vermehrung
                 </SiteTitle>
                 <Spacer />
                 <NavButton
                   variant={pathname === '/' ? 'outlined' : 'text'}
                   component={Link}
                   to="/"
-                  active={(pathname === '/').toString()}
+                  active={pathname === '/' ? 1 : 0}
                 >
                   Home
                 </NavButton>
                 <NavButton
-                  variant={pathname === '/Projekte/' ? 'outlined' : 'text'}
+                  variant={pathname === '/Vermehrung/' ? 'outlined' : 'text'}
                   component={Link}
-                  to="/Projekte/"
-                  active={(pathname === '/Projekte/').toString()}
+                  to="/Vermehrung/"
+                  active={pathname === '/Vermehrung/' ? 1 : 0}
                 >
-                  Projekte
+                  Vermehrung
                 </NavButton>
                 <Account />
               </Toolbar>
