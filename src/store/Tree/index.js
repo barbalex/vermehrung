@@ -1,0 +1,33 @@
+import { types } from 'mobx-state-tree'
+import isEqual from 'lodash/isEqual'
+
+import Node from './Node'
+
+export default types
+  .model('Tree', {
+    activeNodeArray: types.optional(
+      types.array(types.union(types.string, types.number)),
+      [],
+    ),
+    openNodes: types.optional(
+      types.array(types.array(types.union(types.string, types.number))),
+      [],
+    ),
+    nodes: types.optional(types.array(Node), []),
+  })
+  .actions(self => ({
+    setNodes(val) {
+      self.nodes = val
+    },
+  }))
+  .views(self => ({
+    get activeNode() {
+      return self.nodes.find(n => isEqual(n.url, self.activeNodeArray))
+    },
+  }))
+
+export const defaultValue = {
+  activeNodeArray: [],
+  openNodes: [],
+  nodes: [],
+}

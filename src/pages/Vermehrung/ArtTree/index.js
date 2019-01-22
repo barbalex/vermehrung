@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import get from 'lodash/get'
 
 import ErrorBoundary from '../../../components/ErrorBoundary'
-import Tree from './Tree'
+import ArtList from './ArtList'
 
 const Container = styled.div`
   height: 100%;
@@ -21,18 +22,18 @@ const Container = styled.div`
     display: none !important;
   }
 `
-const InnerTreeContainer = styled.div`
-  height: 100%;
-  overflow: hidden;
-`
 
-const ArtTree = () => {
+const ArtTree = ({ data, path }) => {
+  const aeArten = get(data, 'hasura.ae_art', [])
+  console.log('ArtTree', { aeArten, aeArt0: aeArten[0], path })
+
   return (
     <ErrorBoundary>
       <Container>
-        <InnerTreeContainer>
-          <Tree />
-        </InnerTreeContainer>
+        <div>
+          Arten
+          <ArtList arten={aeArten} />
+        </div>
       </Container>
     </ErrorBoundary>
   )
