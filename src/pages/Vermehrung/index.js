@@ -16,6 +16,8 @@ import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
 
 const Index = ({ data }) => {
+  console.log('Vermehrung', { data })
+
   return (
     <ErrorBoundary>
       <Layout>
@@ -49,9 +51,33 @@ export default Index
 export const query = graphql`
   query AuthorQuery {
     hasura {
-      person {
+      ae_art(where: { artByAeArt: { id: { _is_null: false } } }) {
         id
         name
+        artByAeArt {
+          id
+          ae_id
+          sammlungsByartId {
+            id
+            sOrtBysOrtId {
+              id
+              name
+            }
+            kultursBysammlungId {
+              id
+              bemerkungen
+              vOrtByvOrtId {
+                id
+                bemerkungen
+              }
+              zaehlungsBykulturId {
+                id
+                anzahl
+                bemerkungen
+              }
+            }
+          }
+        }
       }
     }
   }
