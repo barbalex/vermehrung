@@ -25,11 +25,8 @@ const Node = styled.div`
   padding-left: ${props => `${props.level * 12 - 12}px`};
 `
 
-const ArtTree = ({ data, pathname }) => {
+const ArtTree = ({ data }) => {
   const aeArten = get(data, 'hasura.ae_art', [])
-  // eslint-disable-next-line no-unused-vars
-  const [first, ...path] = pathname.split('/')
-  // TODO:
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
 

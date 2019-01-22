@@ -39,7 +39,7 @@ const Index = ({ data, location }) => {
               renderOnResizeRate={200}
               renderOnResize={true}
             >
-              <ArtTree data={data} pathname={pathname} />
+              <ArtTree data={data} />
             </ReflexElement>
             <ReflexSplitter />
             <ReflexElement
