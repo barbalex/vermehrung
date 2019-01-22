@@ -20,6 +20,15 @@ module.exports = {
       },
     },
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'images',
+        path: `${__dirname}/src/images/`,
+      },
+    },
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp',
+    {
       resolve: `@wapps/gatsby-plugin-material-ui`,
       options: {
         // Add any options here
@@ -67,6 +76,57 @@ module.exports = {
         theme_color: '#00695c',
         display: 'minimal-ui',
         icon: 'src/images/seedling.png',
+      },
+    },
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        gfm: true,
+        commonmark: true,
+        footnotes: true,
+        pedantic: true,
+        excerpt_separator: '<!-- end -->',
+        plugins: [
+          {
+            resolve: 'gatsby-remark-images',
+            options: {
+              maxWidth: 740,
+            },
+          },
+          {
+            resolve: 'gatsby-remark-autolink-headers',
+            options: {
+              offsetY: '64',
+            },
+          },
+          {
+            resolve: 'gatsby-remark-emojis',
+            options: {
+              // Deactivate the plugin globally (default: true)
+              active: true,
+              // Add a custom css class
+              class: 'emoji-icon',
+              // Select the size (available size: 16, 24, 32, 64)
+              size: 32,
+              // Add custom styles
+              styles: {
+                display: 'inline',
+                margin: '0',
+                'margin-top': '-3px',
+                position: 'relative',
+                top: '3px',
+                width: '20px',
+              },
+            },
+          },
+          {
+            resolve: 'gatsby-remark-external-links',
+            options: {
+              target: '_self',
+              rel: 'nofollow',
+            },
+          },
+        ],
       },
     },
     'gatsby-plugin-offline',

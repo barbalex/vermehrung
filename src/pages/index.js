@@ -1,17 +1,203 @@
 import React from 'react'
+import Typography from '@material-ui/core/Typography'
+import MaterialCard from '@material-ui/core/Card'
 import { graphql } from 'gatsby'
+import styled from 'styled-components'
+import Img from 'gatsby-image'
 
 import AuthorList from '../components/AuthorList'
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 
+const ScrollContainer = styled.div`
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  margin-top: 64px;
+`
+const Container = styled.div`
+  padding: 15px;
+  position: relative;
+  min-height: 100%;
+  @media (min-width: 700px) {
+    padding: 20px;
+  }
+  @media (min-width: 1200px) {
+    padding: 25px;
+  }
+  @media (min-width: 1700px) {
+    padding: 30px;
+  }
+`
+const CardContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 15px;
+  grid-row-gap: 15px;
+  @media (min-width: 700px) {
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 25px;
+    grid-row-gap: 25px;
+  }
+  @media (min-width: 1700px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+  }
+  p {
+    margin-bottom: 10px !important;
+  }
+  p:last-of-type {
+    margin-bottom: 5px !important;
+    margin-top: 10px !important;
+  }
+`
+const Card = styled(MaterialCard)`
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  ul {
+    margin-bottom: 0;
+  }
+  li:last-of-type {
+    margin-bottom: 0;
+  }
+  li {
+    font-weight: 500;
+  }
+`
+const PageTitle = styled(Typography)`
+  font-size: 2em !important;
+  padding-bottom: 15px;
+  font-weight: 700 !important;
+  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+    -2px 2px 3px white;
+  @media (min-width: 700px) {
+    padding-bottom: 20px;
+  }
+  @media (min-width: 1200px) {
+    padding-bottom: 25px;
+  }
+  @media (min-width: 1700px) {
+    padding-bottom: 30px;
+  }
+`
+const CardTitle = styled.h3``
+const MoreContainer = styled.div`
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 15px;
+  grid-row-gap: 25px;
+  @media (min-width: 700px) {
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 25px;
+  }
+  @media (min-width: 1700px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 30px;
+  }
+  p {
+    padding-left: 30px;
+    font-weight: 700;
+    text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+      -2px 2px 3px white;
+    margin: 0;
+  }
+  a {
+    padding-left: 30px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.8);
+    text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+      -2px 2px 3px white;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`
+
+const bgImageStyle = {
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%',
+  zIndex: -1,
+}
+
 const Index = ({ data }) => (
   <ErrorBoundary>
     <Layout>
-      <div>
-        <h1>My Persons</h1>
-        <AuthorList authors={data.hasura.person} />
-      </div>
+      <ScrollContainer>
+        <Container>
+          <Img
+            sizes={data.file.childImageSharp.sizes}
+            fluid={data.file.childImageSharp.fluid}
+            style={bgImageStyle}
+          />
+          <PageTitle align="center" variant="h6" color="inherit" noWrap>
+            Erfassen Sie:
+          </PageTitle>
+          <CardContainer>
+            <Card>
+              <CardTitle>Arten</CardTitle>
+              Vom Aussterben bedrohte Pflanzen-Arten werden gezielt vermehrt und
+              wieder ausgesetzt
+            </Card>
+            <Card>
+              <CardTitle>Sammel-Orte</CardTitle>
+              Hier werden die Arten gesammelt
+            </Card>
+            <Card>
+              <CardTitle>Sammlungen</CardTitle>
+              ...beschreiben das Sammeln einer Art an einem Ort
+            </Card>
+            <Card>
+              <CardTitle>Vermehrungs-Orte</CardTitle>
+              In Gärten und Gärtnereien werden die Arten vermehrt...
+            </Card>
+            <Card>
+              <CardTitle>Kulturen</CardTitle>
+              ...sind Arten aus einer Sammlung an einem Vermehrungs-Ort
+            </Card>
+            <Card>
+              <CardTitle>Beete</CardTitle>
+              In Gärtnereien werden Kulturen auf mehrere Beete verteilt
+            </Card>
+            <Card>
+              <CardTitle>Zählungen</CardTitle>
+              Jährlich wird der Bestand der Kulturen erfasst
+            </Card>
+            <Card>
+              <CardTitle>Personen</CardTitle>
+              Z.B. Freiwillige, welche in ihren Gärten Kulturen pflegen
+            </Card>
+          </CardContainer>
+          <MoreContainer>
+            <a
+              href="https://gabriel-software.ch"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Über uns
+            </a>
+            <a
+              href="mailto:alex@gabriel-software.ch?subject=erfassen.ch"
+              rel="noopener"
+            >
+              Kontakt
+            </a>
+          </MoreContainer>
+        </Container>
+      </ScrollContainer>
     </Layout>
   </ErrorBoundary>
 )
@@ -19,11 +205,15 @@ const Index = ({ data }) => (
 export default Index
 
 export const query = graphql`
-  query AuthorQuery {
-    hasura {
-      person {
-        id
-        name
+  query Query {
+    file(relativePath: { eq: "puls_vulg.jpg" }) {
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid
+        }
+        sizes {
+          ...GatsbyImageSharpSizes
+        }
       }
     }
   }

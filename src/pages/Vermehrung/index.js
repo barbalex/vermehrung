@@ -19,7 +19,7 @@ const Index = ({ data }) => (
 export default Index
 
 export const query = graphql`
-  query VermehrungQuery {
+  query AuthorQuery {
     hasura {
       person {
         id
