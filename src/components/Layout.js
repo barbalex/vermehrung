@@ -27,8 +27,14 @@ const Layout = ({ children }) => (
         <Helmet
           title={data.site.siteMetadata.title}
           meta={[
-            { name: 'description', content: 'Sample' },
-            { name: 'keywords', content: 'sample, something' },
+            {
+              name: 'description',
+              content: 'Bedrohte Pflanzenarten vermehren',
+            },
+            {
+              name: 'keywords',
+              content: 'Naturschutz, Artenschutz, Flora, Pflanzen, Vermehrung',
+            },
           ]}
         >
           <html lang="de" />

@@ -11,7 +11,6 @@ const StyledReflexContainer = styled(ReflexContainer)`
   height: calc(100vh - 64px) !important;
 `
 
-//import AuthorList from '../../components/AuthorList'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
 
