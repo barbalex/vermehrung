@@ -13,6 +13,7 @@ const StyledReflexContainer = styled(ReflexContainer)`
 
 import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
+import ArtTree from './ArtTree'
 
 const Index = ({ data }) => {
   console.log('Vermehrung', { data })
@@ -28,7 +29,7 @@ const Index = ({ data }) => {
               renderOnResizeRate={200}
               renderOnResize={true}
             >
-              <p>Tree</p>
+              <ArtTree />
             </ReflexElement>
             <ReflexSplitter />
             <ReflexElement

@@ -34,18 +34,12 @@ export default () => createGlobalStyle`
   /*
   * seems that overflow:hidden is necessary
   * for all relfex-elements
-  * BUT: map is not shown with it...
   */
 
-  .reflex-element:not(.karte) {
+  .reflex-element {
     border-right: 0 !important;
     border-left: 0 !important;
   }
-
-  /*
-  .reflex-element:not(.karte) > div {
-  overflow: hidden;
-  }*/
 
   .reflex-splitter {
     background-color: #fffde7 !important;

@@ -6,6 +6,7 @@ import teal from '@material-ui/core/colors/teal'
 import createGlobalStyle from './utils/createGlobalStyle'
 import Store from './store'
 import { Provider as MobxProvider } from './storeContext'
+import 'react-reflex/styles.css'
 
 const GlobalStyle = createGlobalStyle()
 const theme = createMuiTheme({
