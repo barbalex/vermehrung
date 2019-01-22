@@ -24,19 +24,44 @@ const Container = styled.div`
 const Node = styled.div`
   padding-left: ${props => `${props.level * 12 - 12}px`};
 `
+const FolderNode = styled(Node)`
+  font-weight: 600;
+`
 
 const ArtTree = ({ data }) => {
-  const aeArten = get(data, 'hasura.ae_art', [])
+  const arten = get(data, 'hasura.ae_art', [])
+  const personen = get(data, 'hasura.person', [])
+  const sOrte = get(data, 'hasura.s_ort', [])
+  const zEW = get(data, 'hasura.zaehlung_einheit_werte', [])
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
 
   return (
     <ErrorBoundary>
       <Container>
-        <Node level={1}>Arten</Node>
-        {aeArten.map(art => (
-          <Node level={2} key={art.id}>
-            {art.name}
+        <FolderNode level={1}>Arten</FolderNode>
+        {arten.map(a => (
+          <Node level={2} key={a.id}>
+            {a.name}
+          </Node>
+        ))}
+        <FolderNode level={1}>Sammel-Orte</FolderNode>
+        {sOrte.map(p => (
+          <Node level={2} key={p.id}>
+            {p.name}
+          </Node>
+        ))}
+        <FolderNode level={1}>Personen</FolderNode>
+        {personen.map(p => (
+          <Node level={2} key={p.id}>
+            {p.name}
+          </Node>
+        ))}
+        <FolderNode level={1}>Werte-Listen</FolderNode>
+        <FolderNode level={2}>Zählungen: Einheiten</FolderNode>
+        {zEW.map(p => (
+          <Node level={3} key={p.id}>
+            {p.text}
           </Node>
         ))}
       </Container>

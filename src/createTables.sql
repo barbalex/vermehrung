@@ -116,17 +116,15 @@ CREATE TABLE beet (
 CREATE INDEX ON beet USING btree (id);
 CREATE INDEX ON beet USING btree (kultur_id);
 
-DROP TABLE IF EXISTS zaehlung_einheit_werte;
+DROP TABLE IF EXISTS zaehlung_einheit_werte CASCADE;
 CREATE TABLE zaehlung_einheit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) DEFAULT NULL
 );
 CREATE INDEX ON zaehlung_einheit_werte USING btree (id);
-CREATE INDEX ON zaehlung_einheit_werte USING btree (code);
 CREATE INDEX ON zaehlung_einheit_werte USING btree (sort);
 COMMENT ON COLUMN zaehlung_einheit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN zaehlung_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -138,7 +136,7 @@ CREATE TABLE zaehlung (
   kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   datum date DEFAULT NULL,
   anzahl integer DEFAULT NULL,
-  einheit integer DEFAULT NULL REFERENCES zaehlung_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  einheit UUID DEFAULT NULL REFERENCES zaehlung_einheit_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null

@@ -110,6 +110,18 @@ export const query = graphql`
           }
         }
       }
+      person {
+        id
+        name
+      }
+      s_ort {
+        id
+        name
+      }
+      zaehlung_einheit_werte {
+        id
+        text
+      }
     }
   }
 `
