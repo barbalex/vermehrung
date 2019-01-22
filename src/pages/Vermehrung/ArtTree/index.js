@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
 
 import ErrorBoundary from '../../../components/ErrorBoundary'
-import ArtList from './ArtList'
 
 const Container = styled.div`
   height: 100%;
@@ -22,18 +21,25 @@ const Container = styled.div`
     display: none !important;
   }
 `
+const Node = styled.div`
+  padding-left: ${props => `${props.level * 12 - 12}px`};
+`
 
-const ArtTree = ({ data, path }) => {
+const ArtTree = ({ data, pathname }) => {
   const aeArten = get(data, 'hasura.ae_art', [])
-  console.log('ArtTree', { aeArten, aeArt0: aeArten[0], path })
+  // eslint-disable-next-line no-unused-vars
+  const [first, ...path] = pathname.split('/')
+  // TODO: build list depending on path
 
   return (
     <ErrorBoundary>
       <Container>
-        <div>
-          Arten
-          <ArtList arten={aeArten} />
-        </div>
+        <Node level={1}>Arten</Node>
+        {aeArten.map(art => (
+          <Node level={2} key={art.id}>
+            {art.name}
+          </Node>
+        ))}
       </Container>
     </ErrorBoundary>
   )

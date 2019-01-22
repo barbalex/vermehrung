@@ -15,8 +15,9 @@ import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
 import ArtTree from './ArtTree'
 
-const Index = ({ data, path }) => {
-  console.log('Vermehrung', { data, path })
+const Index = ({ data, location }) => {
+  const { pathname } = location
+  console.log('Vermehrung', { pathname })
 
   return (
     <ErrorBoundary>
@@ -29,7 +30,7 @@ const Index = ({ data, path }) => {
               renderOnResizeRate={200}
               renderOnResize={true}
             >
-              <ArtTree data={data} />
+              <ArtTree data={data} pathname={pathname} />
             </ReflexElement>
             <ReflexSplitter />
             <ReflexElement
