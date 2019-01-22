@@ -162,11 +162,12 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Vermehrungs-Orte</CardTitle>
-              In Gärten und Gärtnereien werden die Arten vermehrt...
+              In Gärten und Gärtnereien werden die Arten vermehrt
             </Card>
             <Card>
               <CardTitle>Kulturen</CardTitle>
-              ...sind Arten aus einer Sammlung an einem Vermehrungs-Ort
+              Eine Kultur ist eine Art aus einer Sammlung an einem
+              Vermehrungs-Ort
             </Card>
             <Card>
               <CardTitle>Beete</CardTitle>
@@ -174,7 +175,7 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Zählungen</CardTitle>
-              Jährlich wird der Bestand der Kulturen erfasst
+              Jährlich wird der Bestand pro Kultur erfasst
             </Card>
             <Card>
               <CardTitle>Personen</CardTitle>
