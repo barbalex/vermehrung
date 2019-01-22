@@ -1,11 +1,10 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import MaterialCard from '@material-ui/core/Card'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
 
-import AuthorList from '../components/AuthorList'
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 
@@ -123,6 +122,17 @@ const MoreContainer = styled.div`
     }
   }
 `
+const MoreLink = styled(Link)`
+  padding-left: 30px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
+    -2px 2px 3px white;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 const bgImageStyle = {
   position: 'absolute',
@@ -196,6 +206,12 @@ const Index = ({ data }) => (
             >
               Kontakt
             </a>
+            <MoreLink to="/Benutzer-Dokumentation/">
+              Benutzer-Dokumentation
+            </MoreLink>
+            <MoreLink to="/Technische-Dokumentation/">
+              Technische Dokumentation
+            </MoreLink>
           </MoreContainer>
         </Container>
       </ScrollContainer>
