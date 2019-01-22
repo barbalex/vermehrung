@@ -17,7 +17,6 @@ import ArtTree from './ArtTree'
 
 const Index = ({ data, location }) => {
   const { pathname } = location
-  console.log('Vermehrung', { pathname })
 
   return (
     <ErrorBoundary>

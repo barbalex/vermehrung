@@ -29,7 +29,9 @@ const ArtTree = ({ data, pathname }) => {
   const aeArten = get(data, 'hasura.ae_art', [])
   // eslint-disable-next-line no-unused-vars
   const [first, ...path] = pathname.split('/')
-  // TODO: build list depending on path
+  // TODO:
+  // 1. build list depending on path using react-window
+  // 2. every node uses navigate to set url on click
 
   return (
     <ErrorBoundary>
