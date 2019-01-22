@@ -59,19 +59,40 @@ export const query = graphql`
           ae_id
           sammlungsByartId {
             id
+            person_id
+            personBypersonId {
+              id
+              name
+            }
             sOrtBysOrtId {
               id
               name
+              x
+              y
+              bemerkungen
             }
             kultursBysammlungId {
               id
               bemerkungen
               vOrtByvOrtId {
                 id
+                person_id
+                personBypersonId {
+                  id
+                  name
+                }
+                x
+                y
                 bemerkungen
               }
               zaehlungsBykulturId {
                 id
+                datum
+                einheit
+                zaehlungEinheitWerteByeinheit {
+                  id
+                  text
+                }
                 anzahl
                 bemerkungen
               }
