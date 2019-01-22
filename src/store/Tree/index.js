@@ -16,6 +16,9 @@ export default types
     nodes: types.optional(types.array(Node), []),
   })
   .actions(self => ({
+    setActiveNodeArray(val) {
+      self.activeNodeArray = val
+    },
     setNodes(val) {
       self.nodes = val
     },

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useContext } from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
@@ -14,9 +14,19 @@ const StyledReflexContainer = styled(ReflexContainer)`
 import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
 import ArtTree from './ArtTree'
+import storeContext from '../../storeContext'
 
 const Index = ({ data, location }) => {
+  const store = useContext(storeContext)
+  const { setActiveNodeArray } = store.tree
+
+  // fetch path
   const { pathname } = location
+  const path = pathname.split('/').filter(v => !!v && v !== 0)
+  // on path change update activeNodeArray
+  useEffect(() => {
+    setActiveNodeArray(path)
+  }, [path])
 
   return (
     <ErrorBoundary>
