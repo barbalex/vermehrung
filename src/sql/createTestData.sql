@@ -28,17 +28,17 @@ values
  (1,1,1,1,'1a','2018-09-01'),
  (2,2,2,2,'3b','2018-07-05');
 
-insert into kultur_ort (id,person_id)
+insert into garten (id,person_id)
 values
  (1,1),
  (2,2);
  
-insert into kultur (id,kultur_ort_id)
+insert into kultur (id,garten_id)
 values
  (1,1),
  (2,2);
  
-insert into kultur_sammlung (sammlung_id,kultur_id)
+insert into sammlung_in_kultur (sammlung_id,kultur_id)
 values
  (1,1),
  (2,2);

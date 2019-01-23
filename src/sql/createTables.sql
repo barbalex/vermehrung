@@ -1,8 +1,5 @@
 create extension if not exists "uuid-ossp";
 
-drop table if exists v_ort cascade;
-drop table if exists zaehlung_einheit_werte cascade;
-
 drop table if exists person cascade;
 create table person (
   id serial primary key,
@@ -27,8 +24,6 @@ create table person (
 );
 create index on person using btree (id);
 create index on person using btree (name);
-
-drop table if exists public.user cascade;
 
 drop table if exists art cascade;
 create table art (
@@ -101,8 +96,8 @@ create index on sammlung using btree (person_id);
 create index on sammlung using btree (herkunft_id);
 create index on sammlung using btree (datum);
 
-drop table if exists kultur_ort cascade;
-create table kultur_ort (
+drop table if exists garten cascade;
+create table garten (
   id serial primary key,
   person_id integer default null references person (id) on delete cascade on update cascade,
   x integer default null constraint zulaessige_x_koordinate check (x is null or (x > 2485071 and x < 2828516)),
@@ -111,30 +106,28 @@ create table kultur_ort (
   changed date default now(),
   changed_by varchar(20) default null
 );
-create index on kultur_ort using btree (id);
-create index on kultur_ort using btree (person_id);
+create index on garten using btree (id);
+create index on garten using btree (person_id);
 
 drop table if exists kultur cascade;
 create table kultur (
   id serial primary key,
-  kultur_ort_id integer default null references kultur_ort (id) on delete cascade on update cascade,
+  garten_id integer default null references garten (id) on delete cascade on update cascade,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null
 );
 create index on kultur using btree (id);
-create index on kultur using btree (kultur_ort_id);
+create index on kultur using btree (garten_id);
 
-drop table if exists kultur_sammlung cascade;
-create table kultur_sammlung (
+drop table if exists sammlung_in_kultur cascade;
+create table sammlung_in_kultur (
   sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   changed date default now(),
   changed_by varchar(20) default null,
   unique (sammlung_id, kultur_id)
 );
-
-drop table if exists beet cascade;
 
 drop table if exists kultur_event cascade;
 create table kultur_event (
