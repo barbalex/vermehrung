@@ -3,10 +3,10 @@
   "description": "breeding endangered plant species",
   "license": "MIT",
   "scripts": {
-    "dev": "set HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql && set POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql && gatsby develop",
-    "dev_unix": "HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql gatsby develop",
-    "build": "set HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql && set POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql && gatsby build",
-    "serve": "set HASURA_GRAPHQL_URL=https://vermehrung.apflora.ch/v1alpha1/graphql && set POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql && gatsby serve"
+    "dev": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && set POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql && gatsby develop",
+    "dev_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql gatsby develop",
+    "build": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && set POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql && gatsby build",
+    "serve": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && set POSTGRAPHILE_URL=https://arteigenschaften.ch/graphql && gatsby serve"
   },
   "dependencies": {
     "@material-ui/core": "3.9.0",
