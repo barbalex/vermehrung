@@ -226,7 +226,21 @@ CREATE INDEX ON bewegung_zwischenlager_werte USING btree (sort);
 drop table if exists bewegung cascade;
 create table bewegung (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-
+  typ UUID DEFAULT NULL REFERENCES bewegung_typ_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  zaehleinheit UUID DEFAULT NULL REFERENCES zaehleinheit_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  menge integer default null,
+  masseinheit UUID DEFAULT NULL REFERENCES masseinheit_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  von_datum date default null,
+  von_herkunft_id UUID DEFAULT NULL REFERENCES herkunft (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  von_kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  zwischenlager UUID DEFAULT NULL REFERENCES bewegung_zwischenlager_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  nach_datum date default null,
+  nach_kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  nach_ausgepflanzt boolean default false,
+  status UUID DEFAULT NULL REFERENCES bewegung_status_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
 );
 
 -- enable ae as foreign tables
