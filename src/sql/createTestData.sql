@@ -35,8 +35,8 @@ values
  
 insert into kultur (id,garten_id)
 values
- (1,1),
- (2,2);
+ (1,1,1),
+ (2,2,2);
  
 insert into sammlung_in_kultur (sammlung_id,kultur_id)
 values

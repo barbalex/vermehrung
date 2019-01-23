@@ -112,13 +112,17 @@ create index on garten using btree (person_id);
 drop table if exists kultur cascade;
 create table kultur (
   id serial primary key,
+  art_id integer default null references art (id) on delete cascade on update cascade,
   garten_id integer default null references garten (id) on delete cascade on update cascade,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null
+  changed_by varchar(20) default null,
+  unique(art_id,garten_id)
 );
 create index on kultur using btree (id);
 create index on kultur using btree (garten_id);
+alter table kultur add constraint unique_art_garten unique(art_id,garten_id);
+
 
 drop table if exists sammlung_in_kultur cascade;
 create table sammlung_in_kultur (
