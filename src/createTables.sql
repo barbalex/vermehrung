@@ -3,43 +3,28 @@ CREATE EXTENSION if not exists "uuid-ossp";
 DROP TABLE IF EXISTS person CASCADE;
 CREATE TABLE person (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  nr text default null unique,
   name text DEFAULT NULL,
+  adresszusatz text default null,
+  strasse text default null,
+  plz integer default null,
+  ort text default null
   person text DEFAULT NULL,
-  telefon text DEFAULT NULL,
+  telefon_privat text DEFAULT NULL,
+  telefon_geschaeft text DEFAULT NULL,
+  telefon_mobile text DEFAULT NULL,
+  fax_privat text DEFAULT NULL,
+  fax_geschaeft text DEFAULT NULL,
   email text DEFAULT NULL,
+  kein_email boolean default false,
+  bemerkungen text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON person USING btree (id);
 CREATE INDEX ON person USING btree (name);
-COMMENT ON COLUMN person.id IS 'Primärschlüssel';
-COMMENT ON COLUMN person.name IS 'Vor- und Nachname';
-COMMENT ON COLUMN person.person IS 'Strasse, PLZ und Ort';
-COMMENT ON COLUMN person.telefon IS 'Telefonnummer';
-COMMENT ON COLUMN person.email IS 'Email';
-COMMENT ON COLUMN person.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN person.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS public.user CASCADE;
-CREATE TABLE public.user (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  name text UNIQUE,
-  -- allow other attributes to be null
-  -- so names and roles can be set beforehand by topos
-  email text UNIQUE default null,
-  role name DEFAULT NULL,
-  pass text DEFAULT NULL,
-  person_id uuid DEFAULT NULL REFERENCES person (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null,
-  CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-  constraint role_length_maximum_512 check (length(role) < 512),
-  constraint pass_length_minimum_6 check (length(pass) > 5)
-);
-CREATE INDEX ON public.user USING btree (id);
-CREATE INDEX ON public.user USING btree (name);
-CREATE INDEX ON public.user USING btree (person_id);
-COMMENT ON COLUMN public.user.person_id IS 'Datensatz bzw. Fremdschlüssel des Users in der Tabelle "person"';
 
 DROP TABLE IF EXISTS art CASCADE;
 CREATE TABLE art (
@@ -51,35 +36,69 @@ CREATE TABLE art (
 CREATE INDEX ON art USING btree (id);
 CREATE INDEX ON art USING btree (ae_id);
 
-DROP TABLE IF EXISTS s_ort CASCADE;
-CREATE TABLE s_ort (
+DROP TABLE IF EXISTS herkunft CASCADE;
+CREATE TABLE herkunft (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  name text default null,
+  nr text default null unique,
+  lokalname text default null,
+  gemeinde text default null,
+  kanton text default null,
+  land text default null,
   x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
   y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
   bemerkungen text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-CREATE INDEX ON s_ort USING btree (id);
-CREATE INDEX ON s_ort USING btree (name);
+CREATE INDEX ON herkunft USING btree (id);
+CREATE INDEX ON herkunft USING btree (name);
+
+DROP TABLE IF EXISTS zaehleinheit_werte CASCADE;
+CREATE TABLE zaehleinheit_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  wert varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
+);
+CREATE INDEX ON zaehleinheit_werte USING btree (id);
+CREATE INDEX ON zaehleinheit_werte USING btree (sort);
+
+DROP TABLE IF EXISTS masseinheit_werte CASCADE;
+CREATE TABLE masseinheit_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  wert varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
+);
+CREATE INDEX ON masseinheit_werte USING btree (id);
+CREATE INDEX ON masseinheit_werte USING btree (sort);
 
 DROP TABLE IF EXISTS sammlung CASCADE;
 CREATE TABLE sammlung (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   art_id UUID DEFAULT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id UUID DEFAULT NULL REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  s_ort_id UUID DEFAULT NULL REFERENCES s_ort (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  herkunft_id UUID DEFAULT NULL REFERENCES herkunft (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  nr text default null unique,
+  datum date default null,
+  von_anzahl_individuen integer default null,
+  zaehleinheit UUID DEFAULT NULL REFERENCES zaehleinheit_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  menge integer default null,
+  masseinheit UUID DEFAULT NULL REFERENCES masseinheit_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON sammlung USING btree (id);
 CREATE INDEX ON sammlung USING btree (art_id);
 CREATE INDEX ON sammlung USING btree (person_id);
-CREATE INDEX ON sammlung USING btree (s_ort_id);
+CREATE INDEX ON sammlung USING btree (herkunft_id);
+CREATE INDEX ON sammlung USING btree (datum);
 
-DROP TABLE IF EXISTS v_ort CASCADE;
-CREATE TABLE v_ort (
+DROP TABLE IF EXISTS kultur_ort CASCADE;
+CREATE TABLE kultur_ort (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   person_id UUID DEFAULT NULL REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE,
   x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
@@ -88,55 +107,61 @@ CREATE TABLE v_ort (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-CREATE INDEX ON v_ort USING btree (id);
-CREATE INDEX ON v_ort USING btree (person_id);
+CREATE INDEX ON kultur_ort USING btree (id);
+CREATE INDEX ON kultur_ort USING btree (person_id);
 
 DROP TABLE IF EXISTS kultur CASCADE;
 CREATE TABLE kultur (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   sammlung_id UUID DEFAULT NULL REFERENCES sammlung (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  v_ort_id UUID DEFAULT NULL REFERENCES v_ort (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  kultur_ort_id UUID DEFAULT NULL REFERENCES kultur_ort (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bemerkungen text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null,
-  unique (sammlung_id, v_ort_id)
+  unique (sammlung_id, kultur_ort_id)
 );
 CREATE INDEX ON kultur USING btree (id);
 CREATE INDEX ON kultur USING btree (sammlung_id);
-CREATE INDEX ON kultur USING btree (v_ort_id);
+CREATE INDEX ON kultur USING btree (kultur_ort_id);
+
+drop table if exists kultur_sammlung cascade;
+create table kultur_sammlung (
+  sammlung_id UUID DEFAULT NULL REFERENCES sammlung (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null,
+  unique (sammlung_id, kultur_ort_id)
+);
 
 DROP TABLE IF EXISTS beet CASCADE;
-CREATE TABLE beet (
+
+drop table if exists kultur_event cascade;
+create table kultur_event (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  bemerkungen text default null,
+  datum date DEFAULT NULL,
+  event text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-CREATE INDEX ON beet USING btree (id);
-CREATE INDEX ON beet USING btree (kultur_id);
+CREATE INDEX ON zaehlung USING btree (id);
+CREATE INDEX ON zaehlung USING btree (kultur_id);
+CREATE INDEX ON zaehlung USING btree (datum);
 
-DROP TABLE IF EXISTS zaehlung_einheit_werte CASCADE;
-CREATE TABLE zaehlung_einheit_werte (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT NULL
-);
-CREATE INDEX ON zaehlung_einheit_werte USING btree (id);
-CREATE INDEX ON zaehlung_einheit_werte USING btree (sort);
-COMMENT ON COLUMN zaehlung_einheit_werte.id IS 'Primärschlüssel';
-COMMENT ON COLUMN zaehlung_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN zaehlung_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-DROP TABLE IF EXISTS zaehlung CASCADE;
-CREATE TABLE zaehlung (
+drop table if exists kultur_inventar cascade;
+create table kultur_inventar (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   datum date DEFAULT NULL,
-  anzahl integer DEFAULT NULL,
-  einheit UUID DEFAULT NULL REFERENCES zaehlung_einheit_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  kasten text default null,
+  beet text default null,
+  nr text default null,
+  anzahl_pflanzen integer DEFAULT NULL,
+  anz_mutter_pflanzen integer DEFAULT NULL,
+  anz_nicht_auspflanzbereit integer DEFAULT NULL,
+  anz_auspflanzbereit integer DEFAULT NULL,
+  anz_bluehend integer DEFAULT NULL,
+  bluehdatum text default null,
+  instruktion text default null,
   bemerkungen text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
@@ -144,9 +169,65 @@ CREATE TABLE zaehlung (
 CREATE INDEX ON zaehlung USING btree (id);
 CREATE INDEX ON zaehlung USING btree (kultur_id);
 CREATE INDEX ON zaehlung USING btree (datum);
-CREATE INDEX ON zaehlung USING btree (anzahl);
-CREATE INDEX ON zaehlung USING btree (einheit);
-COMMENT ON COLUMN zaehlung.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "zaehlung_einheit_werte"';
+
+DROP TABLE IF EXISTS zaehlung CASCADE;
+CREATE TABLE zaehlung (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  datum date DEFAULT NULL,
+  anzahl_pflanzen integer DEFAULT NULL,
+  anz_mutter_pflanzen integer DEFAULT NULL,
+  anz_nicht_auspflanzbereit integer DEFAULT NULL,
+  anz_auspflanzbereit integer DEFAULT NULL,
+  anz_bluehend integer DEFAULT NULL,
+  bluehdatum text default null,
+  instruktion text default null,
+  bemerkungen text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null
+);
+CREATE INDEX ON zaehlung USING btree (id);
+CREATE INDEX ON zaehlung USING btree (kultur_id);
+CREATE INDEX ON zaehlung USING btree (datum);
+
+DROP TABLE IF EXISTS bewegung_typ_werte CASCADE;
+CREATE TABLE bewegung_typ_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  wert varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
+);
+CREATE INDEX ON bewegung_typ_werte USING btree (id);
+CREATE INDEX ON bewegung_typ_werte USING btree (sort);
+
+DROP TABLE IF EXISTS bewegung_status_werte CASCADE;
+CREATE TABLE bewegung_status_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  wert varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
+);
+CREATE INDEX ON bewegung_status_werte USING btree (id);
+CREATE INDEX ON bewegung_status_werte USING btree (sort);
+
+DROP TABLE IF EXISTS bewegung_zwischenlager_werte CASCADE;
+CREATE TABLE bewegung_zwischenlager_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  wert varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
+);
+CREATE INDEX ON bewegung_zwischenlager_werte USING btree (id);
+CREATE INDEX ON bewegung_zwischenlager_werte USING btree (sort);
+
+drop table if exists bewegung cascade;
+create table bewegung (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+
+);
 
 -- enable ae as foreign tables
 -- see: https://www.percona.com/blog/2018/08/21/foreign-data-wrappers-postgresql-postgres_fdw/
