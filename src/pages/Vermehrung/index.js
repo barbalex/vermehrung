@@ -74,17 +74,15 @@ export const query = graphql`
               id
               name
             }
-            sOrtBysOrtId {
+            herkunftByherkunftId {
               id
-              name
-              x
-              y
-              bemerkungen
+              nr
+              lokalname
             }
             kultursBysammlungId {
               id
               bemerkungen
-              vOrtByvOrtId {
+              kulturOrtBykulturOrtId {
                 id
                 person_id
                 personBypersonId {
@@ -98,12 +96,6 @@ export const query = graphql`
               zaehlungsBykulturId {
                 id
                 datum
-                einheit
-                zaehlungEinheitWerteByeinheit {
-                  id
-                  text
-                }
-                anzahl
                 bemerkungen
               }
             }
