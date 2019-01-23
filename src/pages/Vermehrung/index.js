@@ -61,10 +61,10 @@ export default Index
 export const query = graphql`
   query AuthorQuery {
     hasura {
-      ae_art(where: { artByAeArt: { id: { _is_null: false } } }) {
+      ae_art(where: { ae_art_art: { id: { _is_null: false } } }) {
         id
         name
-        artByAeArt {
+        ae_art_art {
           id
           ae_id
           sammlungsByartId {
