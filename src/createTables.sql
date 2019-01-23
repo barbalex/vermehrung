@@ -8,7 +8,7 @@ CREATE TABLE person (
   adresszusatz text default null,
   strasse text default null,
   plz integer default null,
-  ort text default null
+  ort text default null,
   person text DEFAULT NULL,
   telefon_privat text DEFAULT NULL,
   telefon_geschaeft text DEFAULT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE herkunft (
   changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON herkunft USING btree (id);
-CREATE INDEX ON herkunft USING btree (name);
+CREATE INDEX ON herkunft USING btree (lokalname);
 
 DROP TABLE IF EXISTS zaehleinheit_werte CASCADE;
 CREATE TABLE zaehleinheit_werte (
@@ -130,7 +130,7 @@ create table kultur_sammlung (
   kultur_id UUID DEFAULT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null,
-  unique (sammlung_id, kultur_ort_id)
+  unique (sammlung_id, kultur_id)
 );
 
 DROP TABLE IF EXISTS beet CASCADE;
@@ -242,6 +242,15 @@ create table bewegung (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+CREATE INDEX ON  bewegung USING btree (id);
+CREATE INDEX ON  bewegung USING btree (typ);
+CREATE INDEX ON  bewegung USING btree (zaehleinheit);
+CREATE INDEX ON  bewegung USING btree (masseinheit);
+CREATE INDEX ON  bewegung USING btree (von_herkunft_id);
+CREATE INDEX ON  bewegung USING btree (von_kultur_id);
+CREATE INDEX ON  bewegung USING btree (zwischenlager);
+CREATE INDEX ON  bewegung USING btree (nach_kultur_id);
+CREATE INDEX ON  bewegung USING btree (status);
 
 -- enable ae as foreign tables
 -- see: https://www.percona.com/blog/2018/08/21/foreign-data-wrappers-postgresql-postgres_fdw/
