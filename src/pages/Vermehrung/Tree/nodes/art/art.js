@@ -3,10 +3,10 @@ import get from 'lodash/get'
 import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
-export default ({ nodes: nodesPassed, data }) => {
+export default ({ nodes, data }) => {
   const arten = get(data, 'hasura.ae_art', [])
 
-  const nodes = arten
+  return arten
     .map(el => ({
       nodeType: 'table',
       menuType: 'art',
@@ -17,13 +17,10 @@ export default ({ nodes: nodesPassed, data }) => {
       url: ['Arten', el.id],
       hasChildren: true,
     }))
-    .filter(n => allParentNodesExist(nodesPassed, n))
-    // sort by label
+    .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
       el.sort = [1, index]
       return el
     })
-
-  return nodes
 }

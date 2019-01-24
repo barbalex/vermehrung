@@ -1,15 +1,15 @@
 // @flow
 
 export default () => {
-  const index = 5
-
-  return {
-    nodeType: 'folder',
-    menuType: 'personFolder',
-    id: index,
-    label: 'Personen',
-    url: ['Personen'],
-    sort: [index],
-    hasChildren: true,
-  }
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'personFolder',
+      id: 'personFolder',
+      label: 'Personen',
+      url: ['Personen'],
+      sort: [5],
+      hasChildren: true,
+    },
+  ]
 }

@@ -55,12 +55,12 @@ export default ({ store, data }) => {
   let openNodes = store.tree.openNodes.sort(sort)
 
   let nodes = [
-    buildArtFolder(),
-    buildGartenFolder(),
-    buildHerkunftFolder(),
-    buildLieferungFolder(),
-    buildPersonFolder(),
-    buildWerteListenFolder(),
+    ...buildArtFolder(),
+    ...buildGartenFolder(),
+    ...buildHerkunftFolder(),
+    ...buildLieferungFolder(),
+    ...buildPersonFolder(),
+    ...buildWerteListenFolder(),
   ]
 
   /**
@@ -122,23 +122,23 @@ export default ({ store, data }) => {
     if (url.length === 1 && url[0] === 'Werte-Listen') {
       nodes = [
         ...nodes,
-        buildWLMasseinheitFolder({
+        ...buildWLMasseinheitFolder({
           nodes,
           data,
         }),
-        buildWLZaehleinheitFolder({
+        ...buildWLZaehleinheitFolder({
           nodes,
           data,
         }),
-        buildWLLieferungTypFolder({
+        ...buildWLLieferungTypFolder({
           nodes,
           data,
         }),
-        buildWLLieferungStatusFolder({
+        ...buildWLLieferungStatusFolder({
           nodes,
           data,
         }),
-        buildWLLieferungZwischenlagerFolder({
+        ...buildWLLieferungZwischenlagerFolder({
           nodes,
           data,
         }),

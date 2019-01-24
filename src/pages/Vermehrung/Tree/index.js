@@ -46,8 +46,14 @@ const Tree = ({ data, dimensions }) => {
     listRef.current.scrollToItem(index)
   }, [activeNodeArray, nodes])
 
-  const height = isNaN(dimensions.height) ? 250 : dimensions.height
-  const width = isNaN(dimensions.width) ? 250 : dimensions.width
+  let height = 250
+  if (dimensions && dimensions.height && !isNaN(dimensions.height)) {
+    height = dimensions.height
+  }
+  let width = 250
+  if (dimensions && dimensions.width && !isNaN(dimensions.width)) {
+    width = dimensions.width
+  }
 
   const listRef = React.createRef()
 
@@ -61,11 +67,9 @@ const Tree = ({ data, dimensions }) => {
           width={width}
           ref={listRef}
         >
-          {({ index, style }) => {
-            const node = nodes[index]
-
-            return <Row key={index} style={style} index={index} node={node} />
-          }}
+          {({ index, style }) => (
+            <Row key={index} style={style} index={index} node={nodes[index]} />
+          )}
         </StyledList>
       </Container>
     </ErrorBoundary>

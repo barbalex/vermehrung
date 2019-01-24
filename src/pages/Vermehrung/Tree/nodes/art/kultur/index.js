@@ -4,14 +4,14 @@ import findIndex from 'lodash/findIndex'
 import compareLabel from '../../compareLabel'
 import allParentNodesExist from '../../../allParentNodesExist'
 
-export default ({ nodes: nodesPassed, data, url }) => {
+export default ({ nodes, data, url }) => {
   const arten = get(data, 'hasura.ae_art', [])
   const art = arten.find(a => a.id === url[1])
   const kulturen = get(art, 'ae_art_art.kultursByartId', [])
-  const artNodes = nodesPassed.filter(n => n.parentId === 'artFolder')
+  const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`)
 
-  const nodes = kulturen
+  return kulturen
     .map(el => ({
       nodeType: 'table',
       menuType: 'kultur',
@@ -22,12 +22,10 @@ export default ({ nodes: nodesPassed, data, url }) => {
       url: ['Arten', url[1], 'Kulturen', el.id],
       hasChildren: true,
     }))
-    .filter(n => allParentNodesExist(nodesPassed, n))
+    .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
       el.sort = [1, artIndex, 1, index]
       return el
     })
-
-  return nodes
 }

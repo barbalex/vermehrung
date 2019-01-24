@@ -1,15 +1,13 @@
-// @flow
-
 export default () => {
-  const index = 3
-
-  return {
-    nodeType: 'folder',
-    menuType: 'herkunftFolder',
-    id: index,
-    label: 'Herkünfte',
-    url: ['Herkuenfte'],
-    sort: [index],
-    hasChildren: true,
-  }
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'herkunftFolder',
+      id: 'herkunftFolder',
+      label: 'Herkünfte',
+      url: ['Herkuenfte'],
+      sort: [3],
+      hasChildren: true,
+    },
+  ]
 }
