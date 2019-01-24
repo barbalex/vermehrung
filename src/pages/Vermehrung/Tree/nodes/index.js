@@ -7,7 +7,9 @@ import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import buildArtFolder from './art/artFolder'
 import buildArtArt from './art/art'
 import buildArtSammlungFolder from './art/sammlung/folder'
+import buildArtSammlung from './art/sammlung'
 import buildArtKulturFolder from './art/kultur/folder'
+import buildArtKultur from './art/kultur'
 import buildGartenFolder from './garten/gartenFolder'
 import buildGartenGarten from './garten/garten'
 import buildHerkunftFolder from './herkunft/herkunftFolder'
@@ -219,6 +221,27 @@ export default ({ store, data }) => {
         ...buildWLMasseinheitMasseinheit({
           nodes,
           data,
+        }),
+      ]
+    }
+
+    if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
+      nodes = [
+        ...nodes,
+        ...buildArtKultur({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
+      nodes = [
+        ...nodes,
+        ...buildArtSammlung({
+          nodes,
+          data,
+          url,
         }),
       ]
     }

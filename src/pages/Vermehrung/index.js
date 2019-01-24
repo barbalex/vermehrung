@@ -238,6 +238,10 @@ export const query = graphql`
           sammlungsByartId {
             id
             art_id
+            herkunftByherkunftId {
+              id
+              nr
+            }
             artByartId {
               id
               art_ae_art {
