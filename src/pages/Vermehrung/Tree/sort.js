@@ -1,4 +1,3 @@
-// @flow
 const exists = value => !!value || value === 0
 
 const sort = (a, b, i) => {

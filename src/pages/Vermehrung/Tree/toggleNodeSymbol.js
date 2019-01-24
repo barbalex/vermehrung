@@ -1,4 +1,3 @@
-// @flow
 import isEqual from 'lodash/isEqual'
 
 import isNodeOpen from './isNodeOpen'

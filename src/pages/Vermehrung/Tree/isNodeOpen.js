@@ -1,4 +1,3 @@
-// @flow
 import isEqual from 'lodash/isEqual'
 
 export default (openNodes, url) => {

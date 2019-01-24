@@ -1,4 +1,3 @@
-// @flow
 import isNodeOpen from './isNodeOpen'
 
 export default (openNodes, nodePassed) => {
