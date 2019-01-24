@@ -34,12 +34,14 @@ const singleRowHeight = 23
 
 const Tree = ({ data, dimensions }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray, setNodes } = store.tree
+  const { activeNodeArray /*, setNodes*/ } = store.tree
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
 
   const nodes = buildNodes({ store, data })
-  setNodes(nodes)
+  //setNodes(nodes)
+
+  const listRef = React.createRef()
 
   useEffect(() => {
     const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
@@ -54,8 +56,6 @@ const Tree = ({ data, dimensions }) => {
   if (dimensions && dimensions.width && !isNaN(dimensions.width)) {
     width = dimensions.width
   }
-
-  const listRef = React.createRef()
 
   return (
     <ErrorBoundary>
