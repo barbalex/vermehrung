@@ -1,4 +1,3 @@
-import { navigate } from '@reach/router'
 import isNodeOpen from './isNodeOpen'
 
 export default ({ node, openNodes, store }) => {
@@ -8,7 +7,5 @@ export default ({ node, openNodes, store }) => {
   if (isNodeOpen(openNodes, node.url)) return
 
   let newOpenNodes = [...openNodes, node.url]
-
   setOpenNodes(newOpenNodes)
-  navigate(`/Vermehrung/${node.url.join('/')}`)
 }
