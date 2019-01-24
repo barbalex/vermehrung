@@ -1,4 +1,5 @@
 import uniqBy from 'lodash/uniqBy'
+//import get from 'lodash/get'
 
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
@@ -12,7 +13,24 @@ const compare = (a, b) => {
   return a - b
 }
 
-export default ({ store }) => {
+export default ({ store, data }) => {
+  /*
+  const gaerten = get(data, 'hasura.garten', [])
+  const arten = get(data, 'hasura.ae_art', [])
+  const herkuenfte = get(data, 'hasura.herkunft', [])
+  const lieferungen = get(data, 'hasura.lieferung', [])
+  const personen = get(data, 'hasura.person', [])
+  const masseinheitWerte = get(data, 'hasura.masseinheit_werte', [])
+  const zaehleinheitWerte = get(data, 'hasura.zaehleinheit_werte', [])
+  const lieferungZwischenlagerWerte = get(
+    data,
+    'hasura.lieferung_zwischenlager_werte',
+    [],
+  )
+  const lieferungStatusWerte = get(data, 'hasura.lieferung_status_werte', [])
+  const lieferungTypWerte = get(data, 'hasura.lieferung_typ_werte', [])
+  */
+
   const openNodes = store.tree.openNodes
     .toJSON()
     // need to sort so folders are added in correct order
