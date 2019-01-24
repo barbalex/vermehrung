@@ -17,8 +17,10 @@ import buildPersonPerson from './person/person'
 import buildWerteListenFolder from './werteListen/werteListenFolder'
 import buildWLMasseinheitFolder from './werteListen/masseinheitFolder'
 import buildWLZaehleinheitFolder from './werteListen/zaehleinheitFolder'
+import buildWLZaehleinheitZaehleinheit from './werteListen/zaehleinheit'
 import buildWLLieferungTypFolder from './werteListen/lieferungTypFolder'
 import buildWLLieferungStatusFolder from './werteListen/lieferungStatusFolder'
+import buildWLLieferungStatusStatus from './werteListen/lieferungStatus'
 import buildWLLieferungZwischenlagerFolder from './werteListen/lieferungZwischenlagerFolder'
 
 const compare = (a, b) => {
@@ -130,6 +132,32 @@ export default ({ store, data }) => {
           data,
         }),
         buildWLLieferungZwischenlagerFolder({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (
+      url.length === 2 &&
+      url[0] === 'Werte-Listen' &&
+      url[1] === 'Zaehleinheiten'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildWLZaehleinheitZaehleinheit({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (
+      url.length === 2 &&
+      url[0] === 'Werte-Listen' &&
+      url[1] === 'Lieferung-Status'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildWLLieferungStatusStatus({
           nodes,
           data,
         }),
