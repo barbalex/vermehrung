@@ -4,7 +4,8 @@ import uniqBy from 'lodash/uniqBy'
 
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
-import buildArtFolder from './artFolder'
+import buildArtFolder from './art/artFolder'
+import buildArtArt from './art/art'
 import buildGartenFolder from './gartenFolder'
 import buildHerkunftFolder from './herkunftFolder'
 import buildLieferungFolder from './lieferungFolder'
@@ -40,6 +41,7 @@ export default ({ store, data }) => {
 
   //let openNodes = getSnapshot(store.tree.openNodes)
   let openNodes = store.tree.openNodes.sort(sort)
+  console.log('buildNodes 1', { openNodes })
 
   let nodes = [
     buildArtFolder(),
@@ -59,7 +61,18 @@ export default ({ store, data }) => {
    * for instance if a parent node is not open
    * or some filter is active
    */
-  openNodes.forEach(nodeUrl => {})
+  console.log('buildNodes', { openNodes })
+  openNodes.forEach(url => {
+    if (url.length === 1 && url[0] === 'Arten') {
+      nodes = [
+        ...nodes,
+        ...buildArtArt({
+          nodes,
+          data,
+        }),
+      ]
+    }
+  })
 
   nodes = nodes.filter(n => allParentNodesExist(nodes, n))
   /**

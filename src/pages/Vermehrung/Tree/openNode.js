@@ -1,4 +1,4 @@
-// @flow
+import { navigate } from '@reach/router'
 import isNodeOpen from './isNodeOpen'
 
 export default ({ node, openNodes, store }) => {
@@ -10,4 +10,5 @@ export default ({ node, openNodes, store }) => {
   let newOpenNodes = [...openNodes, node.url]
 
   setOpenNodes(newOpenNodes)
+  navigate(`/Vermehrung/${node.url}`)
 }

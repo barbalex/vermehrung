@@ -18,12 +18,13 @@ import storeContext from '../../storeContext'
 
 const Index = ({ data, location }) => {
   const store = useContext(storeContext)
-  const { setActiveNodeArray } = store.tree
+  const { setActiveNodeArray, activeNodeArray } = store.tree
 
   // fetch path
   const { pathname } = location
   const path = pathname.split('/').filter(v => !!v && v !== 0)
   // on path change update activeNodeArray
+  console.log('Vermehrung', { path, activeNodeArray: activeNodeArray.toJSON() })
   useEffect(() => {
     setActiveNodeArray(path)
   }, [path])
