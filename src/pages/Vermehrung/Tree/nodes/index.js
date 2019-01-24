@@ -15,6 +15,11 @@ import buildLieferungLieferung from './lieferung/lieferung'
 import buildPersonFolder from './person/personFolder'
 import buildPersonPerson from './person/person'
 import buildWerteListenFolder from './werteListen/werteListenFolder'
+import buildWLMasseinheitFolder from './werteListen/masseinheitFolder'
+import buildWLZaehleinheitFolder from './werteListen/zaehleinheitFolder'
+import buildWLLieferungTypFolder from './werteListen/lieferungTypFolder'
+import buildWLLieferungStatusFolder from './werteListen/lieferungStatusFolder'
+import buildWLLieferungZwischenlagerFolder from './werteListen/lieferungZwischenlagerFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -100,6 +105,31 @@ export default ({ store, data }) => {
       nodes = [
         ...nodes,
         ...buildPersonPerson({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Werte-Listen') {
+      nodes = [
+        ...nodes,
+        buildWLMasseinheitFolder({
+          nodes,
+          data,
+        }),
+        buildWLZaehleinheitFolder({
+          nodes,
+          data,
+        }),
+        buildWLLieferungTypFolder({
+          nodes,
+          data,
+        }),
+        buildWLLieferungStatusFolder({
+          nodes,
+          data,
+        }),
+        buildWLLieferungZwischenlagerFolder({
           nodes,
           data,
         }),
