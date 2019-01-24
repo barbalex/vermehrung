@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
+import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   margin-top: 64px;
@@ -16,7 +17,7 @@ import Layout from '../../components/Layout'
 import Tree from './Tree'
 import storeContext from '../../storeContext'
 
-const Index = ({ data, location }) => {
+const Vermehrung = ({ data, location }) => {
   const store = useContext(storeContext)
   const { setActiveNodeArray } = store.tree
 
@@ -56,7 +57,7 @@ const Index = ({ data, location }) => {
   )
 }
 
-export default Index
+export default observer(Vermehrung)
 
 // TODO
 // pass parameters according to activeNodeArray
