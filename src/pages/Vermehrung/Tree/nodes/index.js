@@ -3,6 +3,12 @@ import uniqBy from 'lodash/uniqBy'
 
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
+import buildArtFolder from './artFolder'
+import buildGartenFolder from './gartenFolder'
+import buildHerkunftFolder from './herkunftFolder'
+import buildLieferungFolder from './lieferungFolder'
+import buildPersonFolder from './personFolder'
+import buildWerteListenFolder from './werteListenFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -37,7 +43,14 @@ export default ({ store, data }) => {
     // because every lower folder gets previous nodes passed
     .sort(sort)
 
-  let nodes = []
+  let nodes = [
+    buildArtFolder(),
+    buildGartenFolder(),
+    buildHerkunftFolder(),
+    buildLieferungFolder(),
+    buildPersonFolder(),
+    buildWerteListenFolder(),
+  ]
 
   /**
    * We ALWAYS add an array of nodes,
