@@ -10,5 +10,5 @@ export default ({ node, openNodes, store }) => {
   let newOpenNodes = [...openNodes, node.url]
 
   setOpenNodes(newOpenNodes)
-  navigate(`/Vermehrung/${node.url}`)
+  navigate(`/Vermehrung/${node.url.join('/')}`)
 }

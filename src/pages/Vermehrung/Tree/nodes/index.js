@@ -1,4 +1,3 @@
-import { getSnapshot } from 'mobx-state-tree'
 import uniqBy from 'lodash/uniqBy'
 //import get from 'lodash/get'
 
@@ -6,11 +5,13 @@ import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
 import buildArtFolder from './art/artFolder'
 import buildArtArt from './art/art'
-import buildGartenFolder from './gartenFolder'
-import buildHerkunftFolder from './herkunftFolder'
-import buildLieferungFolder from './lieferungFolder'
-import buildPersonFolder from './personFolder'
-import buildWerteListenFolder from './werteListenFolder'
+import buildGartenFolder from './garten/gartenFolder'
+import buildGartenGarten from './garten/garten'
+import buildHerkunftFolder from './herkunft/herkunftFolder'
+import buildHerkunftHerkunft from './herkunft/herkunft'
+import buildLieferungFolder from './lieferung/lieferungFolder'
+import buildPersonFolder from './person/personFolder'
+import buildWerteListenFolder from './werteListen/werteListenFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -23,9 +24,6 @@ const compare = (a, b) => {
 
 export default ({ store, data }) => {
   /*
-  const gaerten = get(data, 'hasura.garten', [])
-  const arten = get(data, 'hasura.ae_art', [])
-  const herkuenfte = get(data, 'hasura.herkunft', [])
   const lieferungen = get(data, 'hasura.lieferung', [])
   const personen = get(data, 'hasura.person', [])
   const masseinheitWerte = get(data, 'hasura.masseinheit_werte', [])
@@ -39,9 +37,7 @@ export default ({ store, data }) => {
   const lieferungTypWerte = get(data, 'hasura.lieferung_typ_werte', [])
   */
 
-  //let openNodes = getSnapshot(store.tree.openNodes)
   let openNodes = store.tree.openNodes.sort(sort)
-  console.log('buildNodes 1', { openNodes })
 
   let nodes = [
     buildArtFolder(),
@@ -61,12 +57,29 @@ export default ({ store, data }) => {
    * for instance if a parent node is not open
    * or some filter is active
    */
-  console.log('buildNodes', { openNodes })
   openNodes.forEach(url => {
     if (url.length === 1 && url[0] === 'Arten') {
       nodes = [
         ...nodes,
         ...buildArtArt({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Gaerten') {
+      nodes = [
+        ...nodes,
+        ...buildGartenGarten({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Herkuenfte') {
+      nodes = [
+        ...nodes,
+        ...buildHerkunftHerkunft({
           nodes,
           data,
         }),

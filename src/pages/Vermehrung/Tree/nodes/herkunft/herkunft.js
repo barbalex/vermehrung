@@ -5,25 +5,25 @@ import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes: nodesPassed, data }) => {
-  const arten = get(data, 'hasura.ae_art', [])
+  const herkuenfte = get(data, 'hasura.herkunft', [])
 
-  const nodes = arten
+  const nodes = herkuenfte
     .map(el => ({
       nodeType: 'table',
-      menuType: 'art',
-      filterTable: 'art',
+      menuType: 'herkunft',
+      filterTable: 'herkunft',
       id: el.id,
-      parentId: 1,
+      parentId: 3,
       urlLabel: el.id,
-      label: get(el, 'name', '(keine Art gewählt)'),
-      url: ['Arten', el.id],
+      label: get(el, 'lokalname', '(keine Herkunft gewählt)'),
+      url: ['Herkuenfte', el.id],
       hasChildren: true,
     }))
     .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [1, index]
+      el.sort = [3, index]
       return el
     })
 
