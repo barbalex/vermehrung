@@ -13,6 +13,7 @@ import buildHerkunftHerkunft from './herkunft/herkunft'
 import buildLieferungFolder from './lieferung/lieferungFolder'
 import buildLieferungLieferung from './lieferung/lieferung'
 import buildPersonFolder from './person/personFolder'
+import buildPersonPerson from './person/person'
 import buildWerteListenFolder from './werteListen/werteListenFolder'
 
 const compare = (a, b) => {
@@ -26,7 +27,6 @@ const compare = (a, b) => {
 
 export default ({ store, data }) => {
   /*
-  const personen = get(data, 'hasura.person', [])
   const masseinheitWerte = get(data, 'hasura.masseinheit_werte', [])
   const zaehleinheitWerte = get(data, 'hasura.zaehleinheit_werte', [])
   const lieferungZwischenlagerWerte = get(
@@ -91,6 +91,15 @@ export default ({ store, data }) => {
       nodes = [
         ...nodes,
         ...buildLieferungLieferung({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Personen') {
+      nodes = [
+        ...nodes,
+        ...buildPersonPerson({
           nodes,
           data,
         }),
