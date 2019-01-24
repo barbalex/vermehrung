@@ -99,7 +99,7 @@ const TextSpan = styled.span`
   }
 `
 
-const Row = ({ index, style, node, treeName }) => {
+const Row = ({ index, style, node }) => {
   const store = useContext(storeContext)
   const { tree } = store
   const { openNodes, activeNodeArray } = tree
@@ -139,8 +139,8 @@ const Row = ({ index, style, node, treeName }) => {
   return (
     <div style={style}>
       <ContextMenuTrigger
-        id={`${treeName}${node.menuType}`}
-        collect={props => myProps}
+        id={node.menuType}
+        collect={() => myProps}
         nodeId={node.id}
         nodeLabel={node.label}
         key={`${node.menuType}${node.id}`}
