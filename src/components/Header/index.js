@@ -23,10 +23,8 @@ const Spacer = styled.div`
 
 const NavButton = styled(Button)`
   color: white !important;
-  /*border: ${props => (props.active ? '1px white' : 'unset')};*/
   border-color: rgba(255, 255, 255, 0.5) !important;
   font-weight: ${props => (props.active ? '700' : '500')};
-  /*font-weight: 600;*/
 `
 
 const Header = () => {
