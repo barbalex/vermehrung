@@ -5,7 +5,8 @@
     "react/prop-types": 0,
     "react/display-name": "off",
     "no-console": "off",
-    "react-hooks/rules-of-hooks": "error"
+    "react-hooks/rules-of-hooks": "error",
+    "no-unused-vars": 1
   },
   "env": {
     "browser": true,
