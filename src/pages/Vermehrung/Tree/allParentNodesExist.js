@@ -1,4 +1,3 @@
-// @flow
 import isEqual from 'lodash/isEqual'
 
 export default (nodes, nodePassed) => {
@@ -14,8 +13,7 @@ export default (nodes, nodePassed) => {
     n => !(n.length === 1 && n[0] === 'Projekte'),
   )
   if (parentNodes.length === 0) return true
-  // TODO: this is wrong
-  // try creating nodeUrls in the every callback
+
   const nodeUrls = nodes.map(n => n.url)
-  return parentNodes.every(n => nodeUrls.some(n => isEqual(n, nodeUrl)))
+  return parentNodes.every(n => nodeUrls.some(url => isEqual(url, n)))
 }
