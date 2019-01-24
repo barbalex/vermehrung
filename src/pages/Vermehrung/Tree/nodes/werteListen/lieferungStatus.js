@@ -17,7 +17,7 @@ export default ({ nodes: nodesPassed, data }) => {
       urlLabel: el.id,
       label: get(el, 'wert', '(kein Wert)'),
       url: ['Werte-Listen', 'Lieferung-Status', el.id],
-      hasChildren: true,
+      hasChildren: false,
     }))
     .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label

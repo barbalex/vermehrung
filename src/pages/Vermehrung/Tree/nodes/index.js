@@ -16,6 +16,7 @@ import buildPersonFolder from './person/personFolder'
 import buildPersonPerson from './person/person'
 import buildWerteListenFolder from './werteListen/werteListenFolder'
 import buildWLMasseinheitFolder from './werteListen/masseinheitFolder'
+import buildWLMasseinheitMasseinheit from './werteListen/masseinheit'
 import buildWLZaehleinheitFolder from './werteListen/zaehleinheitFolder'
 import buildWLZaehleinheitZaehleinheit from './werteListen/zaehleinheit'
 import buildWLLieferungTypFolder from './werteListen/lieferungTypFolder'
@@ -23,6 +24,7 @@ import buildWLLieferungTypTyp from './werteListen/lieferungTyp'
 import buildWLLieferungStatusFolder from './werteListen/lieferungStatusFolder'
 import buildWLLieferungStatusStatus from './werteListen/lieferungStatus'
 import buildWLLieferungZwischenlagerFolder from './werteListen/lieferungZwischenlagerFolder'
+import buildWLLieferungZwischenlagerZwischenlager from './werteListen/lieferungZwischenlager'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -172,6 +174,32 @@ export default ({ store, data }) => {
       nodes = [
         ...nodes,
         ...buildWLLieferungTypTyp({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (
+      url.length === 2 &&
+      url[0] === 'Werte-Listen' &&
+      url[1] === 'Lieferung-Zwischenlager'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildWLLieferungZwischenlagerZwischenlager({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (
+      url.length === 2 &&
+      url[0] === 'Werte-Listen' &&
+      url[1] === 'Masseinheiten'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildWLMasseinheitMasseinheit({
           nodes,
           data,
         }),

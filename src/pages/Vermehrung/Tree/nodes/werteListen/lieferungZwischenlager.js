@@ -5,25 +5,25 @@ import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes: nodesPassed, data }) => {
-  const werte = get(data, 'hasura.lieferung_typ_werte', [])
+  const werte = get(data, 'hasura.lieferung_zwischenlager_werte', [])
 
   const nodes = werte
     .map(el => ({
       nodeType: 'table',
-      menuType: 'lieferung_typ_werte',
-      filterTable: 'lieferung_typ_werte',
+      menuType: 'lieferung_zwischenlager_werte',
+      filterTable: 'lieferung_zwischenlager_werte',
       id: el.id,
-      parentId: 'lieferungTypFolder',
+      parentId: 'lieferungZwischenlagerFolder',
       urlLabel: el.id,
       label: get(el, 'wert', '(kein Wert)'),
-      url: ['Werte-Listen', 'Lieferung-Typ', el.id],
+      url: ['Werte-Listen', 'Lieferung-Zwischenlager', el.id],
       hasChildren: false,
     }))
     .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [6, 3, index]
+      el.sort = [6, 5, index]
       return el
     })
 
