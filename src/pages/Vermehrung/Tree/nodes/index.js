@@ -3,6 +3,7 @@ import uniqBy from 'lodash/uniqBy'
 
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import buildArtFolder from './art/artFolder'
 import buildArtArt from './art/art'
 import buildGartenFolder from './garten/gartenFolder'
@@ -10,6 +11,7 @@ import buildGartenGarten from './garten/garten'
 import buildHerkunftFolder from './herkunft/herkunftFolder'
 import buildHerkunftHerkunft from './herkunft/herkunft'
 import buildLieferungFolder from './lieferung/lieferungFolder'
+import buildLieferungLieferung from './lieferung/lieferung'
 import buildPersonFolder from './person/personFolder'
 import buildWerteListenFolder from './werteListen/werteListenFolder'
 
@@ -24,7 +26,6 @@ const compare = (a, b) => {
 
 export default ({ store, data }) => {
   /*
-  const lieferungen = get(data, 'hasura.lieferung', [])
   const personen = get(data, 'hasura.person', [])
   const masseinheitWerte = get(data, 'hasura.masseinheit_werte', [])
   const zaehleinheitWerte = get(data, 'hasura.zaehleinheit_werte', [])
@@ -58,6 +59,7 @@ export default ({ store, data }) => {
    * or some filter is active
    */
   openNodes.forEach(url => {
+    if (!allParentNodesAreOpen(openNodes, url)) return
     if (url.length === 1 && url[0] === 'Arten') {
       nodes = [
         ...nodes,
@@ -80,6 +82,15 @@ export default ({ store, data }) => {
       nodes = [
         ...nodes,
         ...buildHerkunftHerkunft({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Lieferungen') {
+      nodes = [
+        ...nodes,
+        ...buildLieferungLieferung({
           nodes,
           data,
         }),
