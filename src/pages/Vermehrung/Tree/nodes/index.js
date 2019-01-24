@@ -1,3 +1,4 @@
+import { getSnapshot } from 'mobx-state-tree'
 import uniqBy from 'lodash/uniqBy'
 //import get from 'lodash/get'
 
@@ -37,11 +38,8 @@ export default ({ store, data }) => {
   const lieferungTypWerte = get(data, 'hasura.lieferung_typ_werte', [])
   */
 
-  const openNodes = store.tree.openNodes
-    .toJSON()
-    // need to sort so folders are added in correct order
-    // because every lower folder gets previous nodes passed
-    .sort(sort)
+  //let openNodes = getSnapshot(store.tree.openNodes)
+  let openNodes = store.tree.openNodes.sort(sort)
 
   let nodes = [
     buildArtFolder(),

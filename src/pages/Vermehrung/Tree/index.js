@@ -32,7 +32,7 @@ const StyledList = styled(List)`
 
 const singleRowHeight = 23
 
-const ArtTree = ({ data, dimensions }) => {
+const Tree = ({ data, dimensions }) => {
   const store = useContext(storeContext)
   const { activeNodeArray, setNodes } = store.tree
   // 1. build list depending on path using react-window
@@ -72,4 +72,4 @@ const ArtTree = ({ data, dimensions }) => {
   )
 }
 
-export default observer(ArtTree)
+export default observer(Tree)
