@@ -13,7 +13,7 @@ const StyledReflexContainer = styled(ReflexContainer)`
 
 import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
-import ArtTree from './ArtTree'
+import Tree from './Tree'
 import storeContext from '../../storeContext'
 
 const Index = ({ data, location }) => {
@@ -39,7 +39,7 @@ const Index = ({ data, location }) => {
               renderOnResizeRate={200}
               renderOnResize={true}
             >
-              <ArtTree data={data} />
+              <Tree data={data} />
             </ReflexElement>
             <ReflexSplitter />
             <ReflexElement
@@ -377,7 +377,6 @@ export const query = graphql`
           }
         }
       }
-
       lieferung {
         id
         personBypersonId {

@@ -19,6 +19,9 @@ export default types
     setActiveNodeArray(val) {
       self.activeNodeArray = val
     },
+    setOpenNodes(val) {
+      self.openNodes = val
+    },
     setNodes(val) {
       self.nodes = val
     },
