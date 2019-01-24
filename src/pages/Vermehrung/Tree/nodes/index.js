@@ -40,19 +40,7 @@ const compare = (a, b) => {
 }
 
 export default ({ store, data }) => {
-  /*
-  const masseinheitWerte = get(data, 'hasura.masseinheit_werte', [])
-  const zaehleinheitWerte = get(data, 'hasura.zaehleinheit_werte', [])
-  const lieferungZwischenlagerWerte = get(
-    data,
-    'hasura.lieferung_zwischenlager_werte',
-    [],
-  )
-  const lieferungStatusWerte = get(data, 'hasura.lieferung_status_werte', [])
-  const lieferungTypWerte = get(data, 'hasura.lieferung_typ_werte', [])
-  */
-
-  let openNodes = store.tree.openNodes.sort(sort)
+  const openNodes = store.tree.openNodes.sort(sort)
 
   let nodes = [
     ...buildArtFolder(),
