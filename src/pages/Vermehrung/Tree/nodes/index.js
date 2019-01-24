@@ -19,6 +19,7 @@ import buildWLMasseinheitFolder from './werteListen/masseinheitFolder'
 import buildWLZaehleinheitFolder from './werteListen/zaehleinheitFolder'
 import buildWLZaehleinheitZaehleinheit from './werteListen/zaehleinheit'
 import buildWLLieferungTypFolder from './werteListen/lieferungTypFolder'
+import buildWLLieferungTypTyp from './werteListen/lieferungTyp'
 import buildWLLieferungStatusFolder from './werteListen/lieferungStatusFolder'
 import buildWLLieferungStatusStatus from './werteListen/lieferungStatus'
 import buildWLLieferungZwischenlagerFolder from './werteListen/lieferungZwischenlagerFolder'
@@ -158,6 +159,19 @@ export default ({ store, data }) => {
       nodes = [
         ...nodes,
         ...buildWLLieferungStatusStatus({
+          nodes,
+          data,
+        }),
+      ]
+    }
+    if (
+      url.length === 2 &&
+      url[0] === 'Werte-Listen' &&
+      url[1] === 'Lieferung-Typ'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildWLLieferungTypTyp({
           nodes,
           data,
         }),
