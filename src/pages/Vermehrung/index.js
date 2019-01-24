@@ -58,61 +58,448 @@ const Index = ({ data, location }) => {
 
 export default Index
 
+// TODO
+// pass parameters according to activeNodeArray
+// to filter only needed parts of the data
 export const query = graphql`
-  query AuthorQuery {
+  query TreeQuery {
     hasura {
+      garten {
+        id
+        personBypersonId {
+          id
+          name
+        }
+        kultursBygartenId {
+          id
+          gartenBygartenId {
+            id
+            personBypersonId {
+              id
+              name
+            }
+          }
+          kulturEventsBykulturId {
+            id
+            datum
+            event
+          }
+          kulturInventarsBykulturId {
+            id
+            datum
+            kasten
+            beet
+            nr
+          }
+          zaehlungsBykulturId {
+            id
+            datum
+          }
+          sammlungInKultursBykulturId {
+            id
+            sammlungBysammlungId {
+              id
+              herkunftByherkunftId {
+                id
+                nr
+              }
+              lieferungsByvonSammlungId {
+                id
+                personBypersonId {
+                  id
+                  name
+                }
+                lieferungTypWerteBytyp {
+                  id
+                  wert
+                }
+                lieferungStatusWerteBystatus {
+                  id
+                  wert
+                }
+                von_datum
+                kulturBynachKulturId {
+                  id
+                  gartenBygartenId {
+                    id
+                    personBypersonId {
+                      id
+                      name
+                    }
+                  }
+                  kulturEventsBykulturId {
+                    id
+                    datum
+                    event
+                  }
+                  kulturInventarsBykulturId {
+                    id
+                    datum
+                    kasten
+                    beet
+                    nr
+                  }
+                  zaehlungsBykulturId {
+                    id
+                    datum
+                  }
+                }
+                nach_ausgepflanzt
+              }
+            }
+          }
+        }
+      }
       ae_art(where: { ae_art_art: { id: { _is_null: false } } }) {
         id
         name
         ae_art_art {
           id
           ae_id
+          kultursByartId {
+            id
+            gartenBygartenId {
+              id
+              personBypersonId {
+                id
+                name
+              }
+            }
+            kulturEventsBykulturId {
+              id
+              datum
+              event
+            }
+            kulturInventarsBykulturId {
+              id
+              datum
+              kasten
+              beet
+              nr
+            }
+            zaehlungsBykulturId {
+              id
+              datum
+            }
+            sammlungInKultursBykulturId {
+              id
+              sammlungBysammlungId {
+                id
+                herkunftByherkunftId {
+                  id
+                  nr
+                }
+                lieferungsByvonSammlungId {
+                  id
+                  personBypersonId {
+                    id
+                    name
+                  }
+                  lieferungTypWerteBytyp {
+                    id
+                    wert
+                  }
+                  lieferungStatusWerteBystatus {
+                    id
+                    wert
+                  }
+                  von_datum
+                  kulturBynachKulturId {
+                    id
+                    gartenBygartenId {
+                      id
+                      personBypersonId {
+                        id
+                        name
+                      }
+                    }
+                    kulturEventsBykulturId {
+                      id
+                      datum
+                      event
+                    }
+                    kulturInventarsBykulturId {
+                      id
+                      datum
+                      kasten
+                      beet
+                      nr
+                    }
+                    zaehlungsBykulturId {
+                      id
+                      datum
+                    }
+                  }
+                  nach_ausgepflanzt
+                }
+              }
+            }
+          }
           sammlungsByartId {
             id
-            person_id
-            personBypersonId {
+            art_id
+            artByartId {
               id
-              name
-            }
-            herkunftByherkunftId {
-              id
-              nr
-              lokalname
-            }
-            kultursBysammlungId {
-              id
-              bemerkungen
-              kulturOrtBykulturOrtId {
+              art_ae_art {
                 id
-                person_id
-                personBypersonId {
+                name
+              }
+            }
+            datum
+            sammlungInKultursBysammlungId {
+              id
+              kulturBykulturId {
+                id
+                gartenBygartenId {
                   id
-                  name
+                  personBypersonId {
+                    id
+                    name
+                  }
                 }
-                x
-                y
-                bemerkungen
               }
-              zaehlungsBykulturId {
+            }
+            lieferungsByvonSammlungId {
+              id
+              personBypersonId {
                 id
-                datum
-                bemerkungen
+                name
               }
+              lieferungTypWerteBytyp {
+                id
+                wert
+              }
+              lieferungStatusWerteBystatus {
+                id
+                wert
+              }
+              von_datum
+              kulturBynachKulturId {
+                id
+                gartenBygartenId {
+                  id
+                  personBypersonId {
+                    id
+                    name
+                  }
+                }
+                kulturEventsBykulturId {
+                  id
+                  datum
+                  event
+                }
+                kulturInventarsBykulturId {
+                  id
+                  datum
+                  kasten
+                  beet
+                  nr
+                }
+                zaehlungsBykulturId {
+                  id
+                  datum
+                }
+              }
+              nach_ausgepflanzt
             }
           }
         }
       }
+      herkunft {
+        id
+        lokalname
+        sammlungsByherkunftId {
+          id
+          art_id
+          artByartId {
+            id
+            art_ae_art {
+              id
+              name
+            }
+          }
+          datum
+          sammlungInKultursBysammlungId {
+            id
+            kulturBykulturId {
+              id
+              gartenBygartenId {
+                id
+                personBypersonId {
+                  id
+                  name
+                }
+              }
+            }
+          }
+          lieferungsByvonSammlungId {
+            id
+            personBypersonId {
+              id
+              name
+            }
+            lieferungTypWerteBytyp {
+              id
+              wert
+            }
+            lieferungStatusWerteBystatus {
+              id
+              wert
+            }
+            von_datum
+            kulturBynachKulturId {
+              id
+              gartenBygartenId {
+                id
+                personBypersonId {
+                  id
+                  name
+                }
+              }
+              kulturEventsBykulturId {
+                id
+                datum
+                event
+              }
+              kulturInventarsBykulturId {
+                id
+                datum
+                kasten
+                beet
+                nr
+              }
+              zaehlungsBykulturId {
+                id
+                datum
+              }
+            }
+            nach_ausgepflanzt
+          }
+        }
+      }
+
+      lieferung {
+        id
+        personBypersonId {
+          id
+          name
+        }
+        lieferungTypWerteBytyp {
+          id
+          wert
+        }
+        lieferungStatusWerteBystatus {
+          id
+          wert
+        }
+        von_datum
+        kulturBynachKulturId {
+          id
+          gartenBygartenId {
+            id
+            personBypersonId {
+              id
+              name
+            }
+          }
+          kulturEventsBykulturId {
+            id
+            datum
+            event
+          }
+          kulturInventarsBykulturId {
+            id
+            datum
+            kasten
+            beet
+            nr
+          }
+          zaehlungsBykulturId {
+            id
+            datum
+          }
+        }
+        nach_ausgepflanzt
+      }
       person {
         id
         name
+        gartensBypersonId {
+          id
+        }
+        sammlungsBypersonId {
+          id
+          artByartId {
+            id
+            art_ae_art {
+              id
+              name
+            }
+          }
+          herkunftByherkunftId {
+            id
+            nr
+          }
+        }
+        lieferungsBypersonId {
+          id
+          personBypersonId {
+            id
+            name
+          }
+          lieferungTypWerteBytyp {
+            id
+            wert
+          }
+          lieferungStatusWerteBystatus {
+            id
+            wert
+          }
+          von_datum
+          kulturBynachKulturId {
+            id
+            artByartId {
+              id
+              art_ae_art {
+                id
+                name
+              }
+            }
+            gartenBygartenId {
+              id
+              personBypersonId {
+                id
+                name
+              }
+            }
+          }
+          nach_ausgepflanzt
+        }
       }
-      s_ort {
+      masseinheit_werte {
         id
-        name
+        wert
+        sort
       }
-      zaehlung_einheit_werte {
+      zaehleinheit_werte {
         id
-        text
+        wert
+        sort
+      }
+      lieferung_zwischenlager_werte {
+        id
+        wert
+        sort
+      }
+      lieferung_status_werte {
+        id
+        wert
+        sort
+      }
+      lieferung_typ_werte {
+        id
+        wert
+        sort
       }
     }
   }

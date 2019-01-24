@@ -33,15 +33,15 @@ values
  (1,1),
  (2,2);
  
-insert into kultur (id,garten_id)
+insert into kultur (id,art_id,garten_id)
 values
  (1,1,1),
  (2,2,2);
  
-insert into sammlung_in_kultur (sammlung_id,kultur_id)
+insert into sammlung_in_kultur (id,sammlung_id,kultur_id)
 values
- (1,1),
- (2,2);
+ (1,1,1),
+ (2,2,2);
 
 insert into kultur_event (id,kultur_id,datum,event)
 values
@@ -58,23 +58,23 @@ values
  (1,1,'2018-10-01',10,4,6,4),
  (2,2,'2017-08-03',20,6,10,10);
 
-insert into bewegung_typ_werte (id,wert)
+insert into lieferung_typ_werte (id,wert)
 values
  (1, 'Lieferung'),
  (2, 'Bestellung');
 
-insert into bewegung_status_werte (id,wert)
+insert into lieferung_status_werte (id,wert)
 values
  (1, 'ausgeführt'),
  (2, 'geplant');
 
-insert into bewegung_zwischenlager_werte (id,wert)
+insert into lieferung_zwischenlager_werte (id,wert)
 values
  (1, 'GAW'),
  (2, 'Winzeler');
 
-insert into bewegung (id,typ,zaehleinheit,menge,masseinheit,von_datum,von_herkunft_id,nach_datum,nach_kultur_id,status)
+insert into lieferung (id,person_id,typ,zaehleinheit,menge,masseinheit,von_datum,von_sammlung_id,nach_datum,nach_kultur_id,status)
 values
- (1,1,1,25,1,'2018-05-04',1,'2018-05-05',1,1),
- (2,2,2,33,2,'2018-07-06',2,'2018-07-06',2,2);
+ (1,1,1,1,25,1,'2018-05-04',1,'2018-05-05',1,1),
+ (2,2,2,2,33,2,'2018-07-06',2,'2018-07-06',2,2);
  

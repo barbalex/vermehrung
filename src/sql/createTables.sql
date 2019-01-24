@@ -126,6 +126,7 @@ alter table kultur add constraint unique_art_garten unique(art_id,garten_id);
 
 drop table if exists sammlung_in_kultur cascade;
 create table sammlung_in_kultur (
+  id serial primary key,
   sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   changed date default now(),
@@ -189,64 +190,66 @@ create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
 
-drop table if exists bewegung_typ_werte cascade;
-create table bewegung_typ_werte (
+drop table if exists lieferung_typ_werte cascade;
+create table lieferung_typ_werte (
   id serial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
   changed_by varchar(20) default null
 );
-create index on bewegung_typ_werte using btree (id);
-create index on bewegung_typ_werte using btree (sort);
+create index on lieferung_typ_werte using btree (id);
+create index on lieferung_typ_werte using btree (sort);
 
-drop table if exists bewegung_status_werte cascade;
-create table bewegung_status_werte (
+drop table if exists lieferung_status_werte cascade;
+create table lieferung_status_werte (
   id serial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
   changed_by varchar(20) default null
 );
-create index on bewegung_status_werte using btree (id);
-create index on bewegung_status_werte using btree (sort);
+create index on lieferung_status_werte using btree (id);
+create index on lieferung_status_werte using btree (sort);
 
-drop table if exists bewegung_zwischenlager_werte cascade;
-create table bewegung_zwischenlager_werte (
+drop table if exists lieferung_zwischenlager_werte cascade;
+create table lieferung_zwischenlager_werte (
   id serial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
   changed_by varchar(20) default null
 );
-create index on bewegung_zwischenlager_werte using btree (id);
-create index on bewegung_zwischenlager_werte using btree (sort);
+create index on lieferung_zwischenlager_werte using btree (id);
+create index on lieferung_zwischenlager_werte using btree (sort);
 
-drop table if exists bewegung cascade;
-create table bewegung (
+drop table if exists lieferung cascade;
+create table lieferung (
   id serial primary key,
-  typ integer default null references bewegung_typ_werte (id) on delete set null on update cascade,
+  person_id integer default null references person (id) on delete cascade on update cascade,
+  typ integer default null references lieferung_typ_werte (id) on delete set null on update cascade,
   zaehleinheit integer default null references zaehleinheit_werte (id) on delete set null on update cascade,
   menge integer default null,
   masseinheit integer default null references masseinheit_werte (id) on delete set null on update cascade,
   von_datum date default null,
-  von_herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
+  von_sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
   von_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
-  zwischenlager integer default null references bewegung_zwischenlager_werte (id) on delete set null on update cascade,
+  zwischenlager integer default null references lieferung_zwischenlager_werte (id) on delete set null on update cascade,
   nach_datum date default null,
   nach_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   nach_ausgepflanzt boolean default false,
-  status integer default null references bewegung_status_werte (id) on delete set null on update cascade,
+  status integer default null references lieferung_status_werte (id) on delete set null on update cascade,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null
 );
-create index on  bewegung using btree (id);
-create index on  bewegung using btree (typ);
-create index on  bewegung using btree (zaehleinheit);
-create index on  bewegung using btree (masseinheit);
-create index on  bewegung using btree (von_herkunft_id);
-create index on  bewegung using btree (von_kultur_id);
-create index on  bewegung using btree (zwischenlager);
-create index on  bewegung using btree (nach_kultur_id);
-create index on  bewegung using btree (status);
+create index on  lieferung using btree (id);
+create index on  lieferung using btree (person_id);
+create index on  lieferung using btree (typ);
+create index on  lieferung using btree (zaehleinheit);
+create index on  lieferung using btree (masseinheit);
+create index on  lieferung using btree (von_sammlung_id);
+create index on  lieferung using btree (von_kultur_id);
+create index on  lieferung using btree (zwischenlager);
+create index on  lieferung using btree (nach_kultur_id);
+create index on  lieferung using btree (status);
