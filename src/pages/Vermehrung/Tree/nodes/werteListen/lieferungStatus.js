@@ -14,7 +14,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'lieferung_status_werte',
       id: el.id,
       parentId: 'lieferungStatusFolder',
-      urlLabel: el.id,
       label: get(el, 'wert', '(kein Wert)'),
       url: ['Werte-Listen', 'Lieferung-Status', el.id],
       hasChildren: false,

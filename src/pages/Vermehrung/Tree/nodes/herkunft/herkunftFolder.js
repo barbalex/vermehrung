@@ -7,7 +7,6 @@ export default () => {
     nodeType: 'folder',
     menuType: 'herkunftFolder',
     id: index,
-    urlLabel: 'Herkuenfte',
     label: 'Herkünfte',
     url: ['Herkuenfte'],
     sort: [index],

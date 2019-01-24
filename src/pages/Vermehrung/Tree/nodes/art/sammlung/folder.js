@@ -8,7 +8,6 @@ export default ({ url, nodes }) => {
     nodeType: 'folder',
     menuType: 'artSammlungenFolder',
     id: `art${url[1]}SammlungenFolder`,
-    urlLabel: 'Sammlungen',
     label: 'Sammlungen',
     url: ['Arten', url[1], 'Sammlungen'],
     sort: [1, artIndex, 2],

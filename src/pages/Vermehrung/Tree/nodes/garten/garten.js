@@ -14,7 +14,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'garten',
       id: el.id,
       parentId: 2,
-      urlLabel: el.id,
       label: get(el, 'personBypersonId.name', '(kein Garten gewählt)'),
       url: ['Gaerten', el.id],
       hasChildren: true,

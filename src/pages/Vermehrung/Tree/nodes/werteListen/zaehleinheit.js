@@ -14,7 +14,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'zaehleinheit_werte',
       id: el.id,
       parentId: 'zaehleinheitenFolder',
-      urlLabel: el.id,
       label: get(el, 'wert', '(kein Wert)'),
       url: ['Werte-Listen', 'Zaehleinheiten', el.id],
       hasChildren: false,

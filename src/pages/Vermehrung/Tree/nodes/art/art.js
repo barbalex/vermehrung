@@ -13,7 +13,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'art',
       id: `art${el.id}`,
       parentId: 'artFolder',
-      urlLabel: el.id,
       label: get(el, 'name', '(keine Art gewählt)'),
       url: ['Arten', el.id],
       hasChildren: true,

@@ -18,7 +18,6 @@ export default ({ nodes: nodesPassed, data, url }) => {
       filterTable: 'sammlung',
       id: `sammlung${el.id}`,
       parentId: `art${url[1]}SammlungenFolder`,
-      urlLabel: el.id,
       label: `${get(el, 'datum', '(kein Datum)')}: ${get(
         el,
         'herkunftByherkunftId.nr',

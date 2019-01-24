@@ -14,7 +14,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'masseinheit_werte',
       id: el.id,
       parentId: 'masseinheitenFolder',
-      urlLabel: el.id,
       label: get(el, 'wert', '(kein Wert)'),
       url: ['Werte-Listen', 'Masseinheiten', el.id],
       hasChildren: false,

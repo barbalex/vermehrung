@@ -14,7 +14,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'lieferung_zwischenlager_werte',
       id: el.id,
       parentId: 'lieferungZwischenlagerFolder',
-      urlLabel: el.id,
       label: get(el, 'wert', '(kein Wert)'),
       url: ['Werte-Listen', 'Lieferung-Zwischenlager', el.id],
       hasChildren: false,

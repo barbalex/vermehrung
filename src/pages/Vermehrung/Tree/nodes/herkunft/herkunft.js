@@ -14,7 +14,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'herkunft',
       id: el.id,
       parentId: 3,
-      urlLabel: el.id,
       label: get(el, 'lokalname', '(keine Herkunft gewählt)'),
       url: ['Herkuenfte', el.id],
       hasChildren: true,

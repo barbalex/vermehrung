@@ -18,7 +18,6 @@ export default ({ nodes: nodesPassed, data, url }) => {
       filterTable: 'kultur',
       id: `kultur${el.id}`,
       parentId: `art${url[1]}KulturenFolder`,
-      urlLabel: el.id,
       label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
       url: ['Arten', url[1], 'Kulturen', el.id],
       hasChildren: true,

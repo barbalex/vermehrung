@@ -14,7 +14,6 @@ export default ({ nodes: nodesPassed, data }) => {
       filterTable: 'lieferung',
       id: el.id,
       parentId: 4,
-      urlLabel: el.id,
       label: `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
         el,
         'personBypersonId.name',

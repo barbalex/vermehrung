@@ -6,7 +6,6 @@ export default () => {
     menuType: 'lieferungStatusFolder',
     id: 'lieferungStatusFolder',
     parentId: 'werteListenFolder',
-    urlLabel: 'Lieferung-Status',
     label: 'Lieferung: Status',
     url: ['Werte-Listen', 'Lieferung-Status'],
     sort: [6, 4],

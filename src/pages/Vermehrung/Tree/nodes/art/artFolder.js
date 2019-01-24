@@ -7,7 +7,6 @@ export default () => {
     nodeType: 'folder',
     menuType: 'artFolder',
     id: 'artFolder',
-    urlLabel: 'Arten',
     label: 'Arten',
     url: ['Arten'],
     sort: [index],

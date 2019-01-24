@@ -7,7 +7,6 @@ export default () => {
     nodeType: 'folder',
     menuType: 'gartenFolder',
     id: index,
-    urlLabel: 'Gaerten',
     label: 'Gärten',
     url: ['Gaerten'],
     sort: [index],
