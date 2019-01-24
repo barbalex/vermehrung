@@ -9,7 +9,7 @@ export default ({ nodes, data, url }) => {
   const art = arten.find(a => a.id === url[1])
   const sammlungen = get(art, 'ae_art_art.sammlungsByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`)
+  const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`) || 0
 
   return sammlungen
     .map(el => ({
