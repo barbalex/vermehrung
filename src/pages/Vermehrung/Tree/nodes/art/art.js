@@ -1,4 +1,3 @@
-// @flow
 import get from 'lodash/get'
 
 import compareLabel from '../compareLabel'
@@ -12,8 +11,8 @@ export default ({ nodes: nodesPassed, data }) => {
       nodeType: 'table',
       menuType: 'art',
       filterTable: 'art',
-      id: el.id,
-      parentId: 1,
+      id: `art${el.id}`,
+      parentId: 'artFolder',
       urlLabel: el.id,
       label: get(el, 'name', '(keine Art gewählt)'),
       url: ['Arten', el.id],

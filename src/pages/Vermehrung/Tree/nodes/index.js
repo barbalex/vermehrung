@@ -6,6 +6,8 @@ import allParentNodesExist from '../allParentNodesExist'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import buildArtFolder from './art/artFolder'
 import buildArtArt from './art/art'
+import buildArtSammlungFolder from './art/sammlung/folder'
+import buildArtKulturFolder from './art/kultur/folder'
 import buildGartenFolder from './garten/gartenFolder'
 import buildGartenGarten from './garten/garten'
 import buildHerkunftFolder from './herkunft/herkunftFolder'
@@ -140,6 +142,21 @@ export default ({ store, data }) => {
         }),
       ]
     }
+
+    if (url.length === 2 && url[0] === 'Arten') {
+      nodes = [
+        ...nodes,
+        ...buildArtSammlungFolder({
+          nodes,
+          url,
+        }),
+        ...buildArtKulturFolder({
+          nodes,
+          url,
+        }),
+      ]
+    }
+
     if (
       url.length === 2 &&
       url[0] === 'Werte-Listen' &&

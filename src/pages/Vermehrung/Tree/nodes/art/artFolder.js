@@ -6,7 +6,7 @@ export default () => {
   return {
     nodeType: 'folder',
     menuType: 'artFolder',
-    id: index,
+    id: 'artFolder',
     urlLabel: 'Arten',
     label: 'Arten',
     url: ['Arten'],
