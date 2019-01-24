@@ -1,3 +1,5 @@
+import { navigate } from '@reach/router'
+
 import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import openNode from './openNode'
@@ -23,4 +25,5 @@ export default ({ node, store }) => {
   }
 
   setActiveNodeArray(newActiveNodeArray)
+  navigate(`/Vermehrung/${node.url.join('/')}`)
 }
