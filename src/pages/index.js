@@ -203,6 +203,16 @@ const Index = ({ data }) => (
               <CardTitle>Personen</CardTitle>
               ...sind z.B. Freiwillige, welche in ihren Gärten Kulturen pflegen
             </Card>
+            <Card>
+              <CardTitle>Interessant?</CardTitle>
+              <a
+                href="https://gabriel-software.ch/Kontakt/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Kontaktieren Sie Alex
+              </a>
+            </Card>
           </CardContainer>
           <MoreContainer>
             <a
