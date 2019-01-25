@@ -204,7 +204,7 @@ const Index = ({ data }) => (
               ...sind z.B. Freiwillige, welche in ihren Gärten Kulturen pflegen
             </Card>
             <Card>
-              <CardTitle>Interessant?</CardTitle>
+              <CardTitle>Interessiert?</CardTitle>
               <a
                 href="https://gabriel-software.ch/Kontakt/"
                 target="_blank"
