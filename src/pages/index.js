@@ -192,7 +192,7 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Inventare</CardTitle>
-              In grösseren Gärtnereien wird pro Kultur ein Inventar aller Beete
+              In grösseren Gärtnereien wird über Kulturen und Beete ein Inventar
               geführt
             </Card>
             <Card>
@@ -205,24 +205,41 @@ const Index = ({ data }) => (
               ...sind z.B. Freiwillige, welche in ihren Gärten Kulturen pflegen
             </Card>
             <Card>
+              <CardTitle>Wer organisiert das?</CardTitle>
+              <a href="//toposmm.ch" target="_blank" rel="noopener noreferrer">
+                Topos
+              </a>
+              &nbsp;im Auftrag der{' '}
+              <a
+                href="//naturschutz.zh.ch"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Fachstelle Naturschutz des Kantons Zürich
+              </a>
+              .
+            </Card>
+            <Card>
               <CardTitle>Interessiert?</CardTitle>
-              Möchten Sie auch Vermehrungen verwalten?&nbsp;
+              Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten?
+              Kontaktieren Sie&nbsp;
               <a
                 href="https://gabriel-software.ch/Kontakt/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Kontaktieren Sie den Entwickler
+                den Entwickler
               </a>
               .<br />
+              <br />
               Sie haben einen Garten und würden gerne bedrohte Pflanzen
-              vermehren?&nbsp;
+              vermehren? Kontaktieren Sie&nbsp;
               <a
-                href="http://toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
+                href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Kontaktieren Sie Topos
+                Topos
               </a>
             </Card>
           </CardContainer>
