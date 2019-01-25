@@ -221,7 +221,7 @@ const Index = ({ data }) => (
             <Card>
               <CardTitle>Interessiert?</CardTitle>
               Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten?
-              Kontaktieren Sie&nbsp;
+              Fragen Sie&nbsp;
               <a
                 href="https://gabriel-software.ch/Kontakt/"
                 target="_blank"
@@ -232,7 +232,7 @@ const Index = ({ data }) => (
               .<br />
               <br />
               Sie haben einen Garten und würden gerne bedrohte Pflanzen
-              vermehren? Kontaktieren Sie&nbsp;
+              vermehren? Fragen Sie&nbsp;
               <a
                 href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
                 target="_blank"
