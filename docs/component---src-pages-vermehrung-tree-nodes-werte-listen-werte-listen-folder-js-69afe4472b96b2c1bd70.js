@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[44],{434:function(e,n,t){"use strict";t.r(n),n.default=function(){return{nodeType:"folder",menuType:"werteListenFolder",id:"werteListenFolder",label:"Werte-Listen",url:["Werte-Listen"],sort:[6],hasChildren:!0}}}}]);
-//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-werte-listen-werte-listen-folder-js-69afe4472b96b2c1bd70.js.map

@@ -1,1 +1,0 @@
-{"errors":[{"message":"Unexpected token B in JSON at position 4","locations":[{"line":2,"column":3}],"path":["hasura"]}],"data":{"hasura":null},"pageContext":{}}

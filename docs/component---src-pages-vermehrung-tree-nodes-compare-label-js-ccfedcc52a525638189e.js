@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[26],{412:function(e,o,a){"use strict";a.r(o),o.default=function(e,o){return e.label.toLowerCase()<o.label.toLowerCase()?-1:e.label.toLowerCase()>o.label.toLowerCase()?1:0}}}]);
-//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-compare-label-js-ccfedcc52a525638189e.js.map

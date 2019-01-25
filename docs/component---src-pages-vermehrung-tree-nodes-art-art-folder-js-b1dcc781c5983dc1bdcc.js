@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[19],{420:function(e,n,r){"use strict";r.r(n),n.default=function(){return{nodeType:"folder",menuType:"artFolder",id:"artFolder",label:"Arten",url:["Arten"],sort:[1],hasChildren:!0}}}}]);
-//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-art-art-folder-js-b1dcc781c5983dc1bdcc.js.map

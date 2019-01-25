@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[29],{428:function(e,n,r){"use strict";r.r(n),n.default=function(){return{nodeType:"folder",menuType:"herkunftFolder",id:3,label:"Herkünfte",url:["Herkuenfte"],sort:[3],hasChildren:!0}}}}]);
-//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-herkunft-herkunft-folder-js-db7fd27177b25ca35b84.js.map

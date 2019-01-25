@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[40],{443:function(e,n,r){"use strict";r.r(n),n.default=function(){return[{nodeType:"folder",menuType:"lieferungZwischenlagerFolder",id:"lieferungZwischenlagerFolder",parentId:"werteListenFolder",label:"Lieferung: Zwischenlager",url:["Werte-Listen","Lieferung-Zwischenlager"],sort:[6,5],hasChildren:!0}]}}}]);
-//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-werte-listen-lieferung-zwischenlager-folder-js-c774d4da9c31c3ae6e9b.js.map

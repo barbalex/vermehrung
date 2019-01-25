@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[34],{432:function(e,n,o){"use strict";o.r(n),n.default=function(){return[{nodeType:"folder",menuType:"personFolder",id:"personFolder",label:"Personen",url:["Personen"],sort:[5],hasChildren:!0}]}}}]);
-//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-person-person-folder-js-abc29d550b57b689ca00.js.map

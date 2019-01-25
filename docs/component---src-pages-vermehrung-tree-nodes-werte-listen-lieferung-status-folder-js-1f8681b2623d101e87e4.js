@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[36],{441:function(e,t,n){"use strict";n.r(t),t.default=function(){return{nodeType:"folder",menuType:"lieferungStatusFolder",id:"lieferungStatusFolder",parentId:"werteListenFolder",label:"Lieferung: Status",url:["Werte-Listen","Lieferung-Status"],sort:[6,4],hasChildren:!0}}}}]);
-//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-werte-listen-lieferung-status-folder-js-1f8681b2623d101e87e4.js.map

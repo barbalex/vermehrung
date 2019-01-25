@@ -10,7 +10,7 @@
     "dev_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
     "prebuild": "if exist docs rmdir docs /q /s",
     "build": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby build",
-    "postbuild": "rename public docs && copyfiles CNAME docs",
+    "postbuild": "rename public docs && copyfiles CNAME docs && copyfiles docs/* public/*",
     "build_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby build",
     "serve": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby serve",
     "serve_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve"

@@ -163,7 +163,7 @@ const Index = ({ data }) => (
               wieder ausgesetzt
             </Card>
             <Card>
-              <CardTitle>Sammel-Orte</CardTitle>
+              <CardTitle>Herkünfte</CardTitle>
               Hier werden die Arten gesammelt
             </Card>
             <Card>
@@ -171,7 +171,7 @@ const Index = ({ data }) => (
               ...beschreiben das Sammeln einer Art an einem Ort
             </Card>
             <Card>
-              <CardTitle>Vermehrungs-Orte</CardTitle>
+              <CardTitle>Gärten</CardTitle>
               In Gärten und Gärtnereien werden die Arten vermehrt
             </Card>
             <Card>
@@ -180,12 +180,14 @@ const Index = ({ data }) => (
               Vermehrungs-Ort
             </Card>
             <Card>
-              <CardTitle>Beete</CardTitle>
-              In Gärtnereien werden Kulturen auf mehrere Beete verteilt
-            </Card>
-            <Card>
               <CardTitle>Zählungen</CardTitle>
               Jährlich wird der Bestand pro Kultur erfasst
+            </Card>
+            <Card>
+              <CardTitle>Lieferungen</CardTitle>
+              Sammlungen und Entnahmen aus Kulturen werden an (andere) Kulturen
+              geliefert oder in der Natur ausgesetzt. Lieferungen können auch
+              geplant oder bestellt werden
             </Card>
             <Card>
               <CardTitle>Personen</CardTitle>
