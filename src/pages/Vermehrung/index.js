@@ -25,14 +25,14 @@ const Vermehrung = ({ data, location }) => {
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
-  // on pathname change update activeNodeArray
-  useEffect(() => {
-    setActiveNodeArray(activeNodeArray)
-  }, [pathname])
-  // set openNodes only on mount
+  // on first render set openNodes
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
   }, [])
+  // when pathname changes, update activeNodeArray
+  useEffect(() => {
+    setActiveNodeArray(activeNodeArray)
+  }, [pathname])
 
   return (
     <ErrorBoundary>
