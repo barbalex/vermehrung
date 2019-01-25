@@ -49,22 +49,16 @@ const Header = () => {
                   Vermehrung
                 </SiteTitle>
                 <Spacer />
-                <NavButton
-                  variant={pathname === '/' ? 'outlined' : 'text'}
-                  component={Link}
-                  to="/"
-                  active={pathname === '/' ? 1 : 0}
-                >
-                  Home
-                </NavButton>
-                <NavButton
-                  variant={pathname === '/Vermehrung/' ? 'outlined' : 'text'}
-                  component={Link}
-                  to="/Vermehrung/"
-                  active={pathname === '/Vermehrung/' ? 1 : 0}
-                >
-                  Vermehrung
-                </NavButton>
+                {!pathname.startsWith('/Vermehrung') && (
+                  <NavButton
+                    variant="text"
+                    component={Link}
+                    to="/Vermehrung/"
+                    active={pathname === '/Vermehrung/' ? 1 : 0}
+                  >
+                    Zu den Daten
+                  </NavButton>
+                )}
                 <Account />
               </Toolbar>
             </AppBar>
