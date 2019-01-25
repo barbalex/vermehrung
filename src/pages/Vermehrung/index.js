@@ -198,6 +198,22 @@ export const query = graphql`
               }
               von_datum
             }
+            lieferungsBynachKulturId {
+              id
+              personBypersonId {
+                id
+                name
+              }
+              lieferungTypWerteBytyp {
+                id
+                wert
+              }
+              lieferungStatusWerteBystatus {
+                id
+                wert
+              }
+              nach_datum
+            }
             sammlungInKultursBykulturId {
               id
               sammlungBysammlungId {

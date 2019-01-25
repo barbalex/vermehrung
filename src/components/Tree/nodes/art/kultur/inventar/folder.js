@@ -17,7 +17,7 @@ export default ({ url, nodes }) => {
       id: `kultur${kulturId}InventarFolder`,
       label: 'Inventare',
       url: ['Arten', artId, 'Kulturen', kulturId, 'Inventare'],
-      sort: [1, artIndex, 1, kulturIndex, 4],
+      sort: [1, artIndex, 1, kulturIndex, 5],
       hasChildren: true,
     },
   ]
