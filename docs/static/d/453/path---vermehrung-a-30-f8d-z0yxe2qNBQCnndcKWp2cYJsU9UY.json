@@ -1,1 +1,0 @@
-{"errors":[{"message":"request to https://vermehrung.apflora.ch/v1alpha1/graphql failed, reason: read ETIMEDOUT","locations":[{"line":2,"column":3}],"path":["hasura"]}],"data":{"hasura":null},"pageContext":{"matchPath":"/Vermehrung/*"}}
