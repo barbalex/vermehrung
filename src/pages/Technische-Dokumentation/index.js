@@ -80,7 +80,7 @@ const Template = ({ data }) => {
             </List>
           </Menu>
           <Doku>
-            <p>Hier erfahren Sie, wie erfassen.ch funktioniert</p>
+            <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
           </Doku>
         </Container>
       </Layout>
