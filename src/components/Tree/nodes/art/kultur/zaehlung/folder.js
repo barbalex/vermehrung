@@ -13,11 +13,11 @@ export default ({ url, nodes }) => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'artKulturEventFolder',
-      id: `kultur${kulturId}EventFolder`,
-      label: 'Events',
-      url: ['Arten', artId, 'Kulturen', kulturId, 'Events'],
-      sort: [1, artIndex, 1, kulturIndex, 3],
+      menuType: 'artKulturZaehlungFolder',
+      id: `kultur${kulturId}ZaehlungFolder`,
+      label: 'Zählungen',
+      url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen'],
+      sort: [1, artIndex, 1, kulturIndex, 1],
       hasChildren: true,
     },
   ]

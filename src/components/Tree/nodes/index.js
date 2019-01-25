@@ -11,6 +11,7 @@ import buildArtSammlung from './art/sammlung'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturEventFolder from './art/kultur/event/folder'
+import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildGartenFolder from './garten/gartenFolder'
 import buildGartenGarten from './garten/garten'
 import buildHerkunftFolder from './herkunft/herkunftFolder'
@@ -238,6 +239,10 @@ export default ({ store, data }) => {
     if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
       nodes = [
         ...nodes,
+        ...buildArtKulturZaehlungFolder({
+          nodes,
+          url,
+        }),
         ...buildArtKulturEventFolder({
           nodes,
           url,
