@@ -159,7 +159,7 @@ const Index = ({ data }) => (
           <CardContainer>
             <Card>
               <CardTitle>Arten</CardTitle>
-              Vom Aussterben bedrohte Pflanzen-Arten werden von Eperten gezielt
+              Vom Aussterben bedrohte Pflanzen-Arten werden von Experten gezielt
               vermehrt und wieder ausgesetzt
             </Card>
             <Card>
@@ -168,7 +168,7 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Sammlungen</CardTitle>
-              ...beschreiben das Sammeln einer Art an einem Ort
+              ...beschreiben das Sammeln von Arten an einem Herkunfts-Ort
             </Card>
             <Card>
               <CardTitle>Gärten</CardTitle>
@@ -180,17 +180,17 @@ const Index = ({ data }) => (
               Eine Kultur ist eine Art aus einer Sammlung in einem Garten
             </Card>
             <Card>
-              <CardTitle>Kultur-Events</CardTitle>
-              Berichten Sie über Ereignisse im Rahmen der Kultur
+              <CardTitle>Events</CardTitle>
+              ...beschreiben Ereignisse im Rahmen der Kultur
             </Card>
             <Card>
-              <CardTitle>Kultur-Inventar</CardTitle>
+              <CardTitle>Inventare</CardTitle>
               In grösseren Gärtnereien wird ein Inventar über die Beete geführt
             </Card>
             <Card>
               <CardTitle>Zählungen</CardTitle>
-              Regelmässig wird der Bestand pro Kultur erfasst, damit Sammlungen
-              und Aussetzungen geplant werden können
+              Regelmässig wird der Bestand einer Kultur erfasst. So können
+              Sammlungen und Aussetzungen geplant werden
             </Card>
             <Card>
               <CardTitle>Lieferungen</CardTitle>
