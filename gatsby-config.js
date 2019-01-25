@@ -44,6 +44,10 @@ module.exports = {
         name: 'benutzerDoku-pages',
       },
     },
+    {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/Vermehrung/*`] },
+    },
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     {
