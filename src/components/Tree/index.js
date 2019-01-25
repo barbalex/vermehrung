@@ -5,8 +5,8 @@ import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 
-import ErrorBoundary from '../../../components/ErrorBoundary'
-import storeContext from '../../../storeContext'
+import ErrorBoundary from '../ErrorBoundary'
+import storeContext from '../../storeContext'
 import Row from './Row'
 import buildNodes from './nodes'
 

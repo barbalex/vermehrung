@@ -14,7 +14,7 @@ const StyledReflexContainer = styled(ReflexContainer)`
 
 import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
-import Tree from './Tree'
+import Tree from '../../components/Tree'
 import storeContext from '../../storeContext'
 
 const Vermehrung = ({ data, location }) => {
