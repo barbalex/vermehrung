@@ -1,9 +1,11 @@
-export default () => {
+export default pathnamePassed => {
   if (typeof window !== 'undefined') {
+    const pathname = pathnamePassed || window.location.pathname
     return (
-      window.location.pathname
+      pathname
         .split('/')
         .filter(e => !!e && e !== 0)
+        .filter(e => e !== 'Vermehrung')
         // need to decode in case of Umlaute
         .map(e => decodeURIComponent(e))
         // convert numbers to numbers

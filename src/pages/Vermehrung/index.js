@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { observer } from 'mobx-react-lite'
 
+import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
+
 const Container = styled.div`
   margin-top: 64px;
   min-height: calc(100vh - 64px);
@@ -23,7 +25,7 @@ const Vermehrung = ({ data, location }) => {
 
   // fetch path
   const { pathname } = location
-  const path = pathname.split('/').filter(v => !!v && v !== 0)
+  const path = activeNodeArrayFromPathname(pathname)
   // on path change update activeNodeArray
   useEffect(() => {
     setActiveNodeArray(path)
