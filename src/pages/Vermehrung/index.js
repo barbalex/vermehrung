@@ -5,6 +5,11 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { observer } from 'mobx-react-lite'
 
 import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
+import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
+import ErrorBoundary from '../../components/ErrorBoundary'
+import Layout from '../../components/Layout'
+import Tree from '../../components/Tree'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   margin-top: 64px;
@@ -14,22 +19,20 @@ const StyledReflexContainer = styled(ReflexContainer)`
   height: calc(100vh - 64px) !important;
 `
 
-import ErrorBoundary from '../../components/ErrorBoundary'
-import Layout from '../../components/Layout'
-import Tree from '../../components/Tree'
-import storeContext from '../../storeContext'
-
 const Vermehrung = ({ data, location }) => {
   const store = useContext(storeContext)
-  const { setActiveNodeArray } = store.tree
+  const { setActiveNodeArray, setOpenNodes } = store.tree
 
-  // fetch path
   const { pathname } = location
-  const path = activeNodeArrayFromPathname(pathname)
-  // on path change update activeNodeArray
+  const activeNodeArray = activeNodeArrayFromPathname(pathname)
+  // on pathname change update activeNodeArray
   useEffect(() => {
-    setActiveNodeArray(path)
-  }, [path])
+    setActiveNodeArray(activeNodeArray)
+  }, [pathname])
+  // set openNodes only on mount
+  useEffect(() => {
+    setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
+  }, [])
 
   return (
     <ErrorBoundary>
