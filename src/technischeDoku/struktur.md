@@ -8,4 +8,4 @@ sort: 2
 
 ![Daten-Struktur](https://github.com/barbalex/vermehrung/raw/master/src/images/structure.png)
 
-Der SQL-Code um die Struktur aufzubauen befindet sich [hier](https://github.com/barbalex/vermehrung/tree/master/src/sql).
+Der SQL-Code, um die Struktur aufzubauen befindet sich [hier](https://github.com/barbalex/vermehrung/tree/master/src/sql).

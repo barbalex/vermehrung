@@ -15,6 +15,8 @@ Zum Beispiel (aber nicht abschliessend):
 
 Etwas weniger gut geeignet ist Safari. Sollte aber funktionieren.<br/><br/>
 
-_Nicht_ funktioniert vermehren.apflora.ch auf dem Internet Explorer.<br/><br/>
+_Nicht_ geeignet ist der Internet Explorer.<br/><br/>
 
-vermehren.apflora.ch funktioniert auf allen **Betriebssystemen**. Allerdings lässt Apple auf iOS keine unabhängigen Browser-Engines zu. Das heisst: Auch wenn Chrome draufsteht, ist Safari drin. Das ist zwar nicht optimal, sollte aber funktionieren.
+vermehren.apflora.ch funktioniert auf allen **Betriebssystemen**. Mehr dazu [hier](/Technische-Dokumentation/PWA/).<br/><br/>
+
+Um Daten zu erfassen brauchen Sie eine Internet-Verbindung.
