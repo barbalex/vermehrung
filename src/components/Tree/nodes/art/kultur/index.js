@@ -17,7 +17,7 @@ export default ({ nodes, data, url }) => {
       menuType: 'kultur',
       filterTable: 'kultur',
       id: `kultur${el.id}`,
-      parentId: `art${url[1]}KulturenFolder`,
+      parentId: `art${url[1]}KulturFolder`,
       label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
       url: ['Arten', url[1], 'Kulturen', el.id],
       hasChildren: true,
