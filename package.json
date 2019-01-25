@@ -3,17 +3,14 @@
   "description": "breeding endangered plant species",
   "license": "MIT",
   "scripts": {
-    "build_comment_1": "remove docs folder because renaming only works if docs folder is not there",
-    "build_comment_2": "rename public to docs so GitHub updates website",
-    "build_comment_3": "copy CNAME file or custom domain will be lost",
-    "dev": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby develop",
-    "dev_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
-    "prebuild": "if exist docs rmdir docs /q /s",
-    "build": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby build",
-    "postbuild": "copyfiles CNAME docs && ncp public docs",
-    "build_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby build",
-    "serve": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby serve",
-    "serve_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve"
+    "build_comment_1": "use cross-env so it works on windows and mac",
+    "build_comment_2": "copy public to docs so github pages update",
+    "build_comment_3": "copy CNAME file to docs or custom domain may be lost",
+    "dev": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
+    "prebuild": "del-cli -f docs",
+    "build": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby build",
+    "postbuild": "ncp public docs && copyfiles CNAME docs",
+    "serve": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve"
   },
   "dependencies": {
     "@material-ui/core": "3.9.0",
@@ -65,6 +62,8 @@
   },
   "devDependencies": {
     "copyfiles": "2.1.0",
-    "ncp": "^2.0.0"
+    "cross-env": "5.2.0",
+    "del-cli": "1.1.0",
+    "ncp": "2.0.0"
   }
 }
