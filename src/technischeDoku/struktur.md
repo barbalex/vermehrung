@@ -6,7 +6,6 @@ title: "Daten-Struktur"
 sort: 2
 ---
 
-Der SQL-Code um die Struktur aufzubauen befindet sich [hier](https://github.com/barbalex/vermehrung/tree/master/src/sql).
-
 ![Daten-Struktur](https://github.com/barbalex/vermehrung/raw/master/src/images/structure.png)
-![Daten-Struktur](/images/structure.png)
+
+Der SQL-Code um die Struktur aufzubauen befindet sich [hier](https://github.com/barbalex/vermehrung/tree/master/src/sql).
