@@ -154,17 +154,17 @@ const Index = ({ data }) => (
             style={bgImageStyle}
           />
           <PageTitle align="center" variant="h6" color="inherit" noWrap>
-            Erfassen Sie:
+            Bedrohte Pflanzen-Arten vermehren:
           </PageTitle>
           <CardContainer>
             <Card>
               <CardTitle>Arten</CardTitle>
-              Vom Aussterben bedrohte Pflanzen-Arten werden gezielt vermehrt und
-              wieder ausgesetzt
+              Vom Aussterben bedrohte Pflanzen-Arten werden von Eperten gezielt
+              vermehrt und wieder ausgesetzt
             </Card>
             <Card>
               <CardTitle>Herkünfte</CardTitle>
-              Hier werden die Arten gesammelt
+              ...sind natürliche Vorkommen. Hier werden die Arten gesammelt
             </Card>
             <Card>
               <CardTitle>Sammlungen</CardTitle>
@@ -172,26 +172,36 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Gärten</CardTitle>
-              In Gärten und Gärtnereien werden die Arten vermehrt
+              In Gärten und Gärtnereien werden die Arten vermehrt und auf das
+              Aussetzen vorbereitet
             </Card>
             <Card>
               <CardTitle>Kulturen</CardTitle>
-              Eine Kultur ist eine Art aus einer Sammlung an einem
-              Vermehrungs-Ort
+              Eine Kultur ist eine Art aus einer Sammlung in einem Garten
+            </Card>
+            <Card>
+              <CardTitle>Kultur-Events</CardTitle>
+              Berichten Sie über Ereignisse im Rahmen der Kultur
+            </Card>
+            <Card>
+              <CardTitle>Kultur-Inventar</CardTitle>
+              In grösseren Gärtnereien wird ein Inventar über die Beete geführt
             </Card>
             <Card>
               <CardTitle>Zählungen</CardTitle>
-              Jährlich wird der Bestand pro Kultur erfasst
+              Regelmässig wird der Bestand pro Kultur erfasst, damit Sammlungen
+              und Aussetzungen geplant werden können
             </Card>
             <Card>
               <CardTitle>Lieferungen</CardTitle>
-              Sammlungen und Entnahmen aus Kulturen werden an (andere) Kulturen
-              geliefert oder in der Natur ausgesetzt. Lieferungen können auch
-              geplant oder bestellt werden
+              Sammlungen und Entnahmen aus Kulturen werden an Kulturen geliefert
+              oder in der Natur ausgesetzt.
+              <br />
+              Lieferungen können auch geplant oder bestellt werden
             </Card>
             <Card>
               <CardTitle>Personen</CardTitle>
-              Z.B. Freiwillige, welche in ihren Gärten Kulturen pflegen
+              ...sind z.B. Freiwillige, welche in ihren Gärten Kulturen pflegen
             </Card>
           </CardContainer>
           <MoreContainer>
