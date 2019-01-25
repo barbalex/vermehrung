@@ -2,12 +2,13 @@ import { types } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
 import Node from './Node'
+import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
 
 export default types
   .model('Tree', {
     activeNodeArray: types.optional(
       types.array(types.union(types.string, types.number)),
-      [],
+      activeNodeArrayFromPathname(),
     ),
     openNodes: types.optional(
       types.array(types.array(types.union(types.string, types.number))),
