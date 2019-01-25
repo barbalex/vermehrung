@@ -174,7 +174,6 @@ const Index = ({ data }) => (
               <CardTitle>Lieferungen</CardTitle>
               Sammlungen werden an Kulturen geliefert. Aus Kulturen werden
               Pflanzen zur Auswilderung geliefert. Oder an andere Kulturen.
-              <br />
               Lieferungen können geplant und bestellt werden
             </Card>
             <Card>
@@ -252,7 +251,7 @@ const Index = ({ data }) => (
               Über uns
             </a>
             <a
-              href="mailto:alex@gabriel-software.ch?subject=erfassen.ch"
+              href="mailto:alex@gabriel-software.ch?subject=vermehrung.apflora.ch"
               rel="noopener"
             >
               Kontakt
