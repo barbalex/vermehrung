@@ -13,10 +13,10 @@ export default ({ url, nodes }) => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'artKulturLieferungFolder',
-      id: `kultur${kulturId}LieferungFolder`,
-      label: 'Lieferungen',
-      url: ['Arten', artId, 'Kulturen', kulturId, 'Lieferungen'],
+      menuType: 'artKulturAbLieferungFolder',
+      id: `kultur${kulturId}AbLieferungFolder`,
+      label: 'Ab-Lieferungen',
+      url: ['Arten', artId, 'Kulturen', kulturId, 'Ab-Lieferungen'],
       sort: [1, artIndex, 1, kulturIndex, 2],
       hasChildren: true,
     },
