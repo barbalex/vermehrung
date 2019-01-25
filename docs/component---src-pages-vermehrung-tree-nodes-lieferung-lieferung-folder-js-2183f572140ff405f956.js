@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[32],{430:function(e,n,r){"use strict";r.r(n),n.default=function(){return{nodeType:"folder",menuType:"lieferungFolder",id:"lieferungFolder",label:"Lieferungen",url:["Lieferungen"],sort:[4],hasChildren:!0}}}}]);
+//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-lieferung-lieferung-folder-js-2183f572140ff405f956.js.map

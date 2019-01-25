@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[38],{439:function(e,n,r){"use strict";r.r(n),n.default=function(){return[{nodeType:"folder",menuType:"lieferungTypFolder",id:"lieferungTypFolder",parentId:"werteListenFolder",label:"Lieferung: Typ",url:["Werte-Listen","Lieferung-Typ"],sort:[6,3],hasChildren:!0}]}}}]);
+//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-werte-listen-lieferung-typ-folder-js-1c0ed85dc234bc72ed31.js.map

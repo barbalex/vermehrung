@@ -1,0 +1,1 @@
+{"errors":[{"message":"request to https://vermehrung.apflora.ch/v1alpha1/graphql failed, reason: connect ECONNREFUSED 206.189.54.57:443","locations":[{"line":2,"column":3}],"path":["hasura"]}],"data":{"hasura":null},"pageContext":{}}

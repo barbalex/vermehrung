@@ -3,9 +3,14 @@
   "description": "breeding endangered plant species",
   "license": "MIT",
   "scripts": {
+    "build_comment_1": "remove docs folder because renaming only works if docs folder is not there",
+    "build_comment_2": "rename public to docs so GitHub updates website",
+    "build_comment_3": "copy CNAME file or custom domain will be lost",
     "dev": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby develop",
     "dev_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
+    "prebuild": "if exist docs rmdir docs /q /s",
     "build": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby build",
+    "postbuild": "rename public docs && copyfiles CNAME docs",
     "build_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby build",
     "serve": "set HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql && gatsby serve",
     "serve_unix": "HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve"
@@ -22,8 +27,8 @@
     "eslint-plugin-import": "2.15.0",
     "eslint-plugin-react": "7.12.4",
     "eslint-plugin-react-hooks": "0.0.0",
-    "gatsby": "2.0.95",
-    "gatsby-image": "2.0.27",
+    "gatsby": "2.0.98",
+    "gatsby-image": "2.0.28",
     "gatsby-link": "2.0.9",
     "gatsby-plugin-create-client-paths": "2.0.3",
     "gatsby-plugin-eslint": "2.0.3",
@@ -57,5 +62,8 @@
     "react-window": "1.5.0",
     "styled-components": "4.1.3",
     "typography": "0.16.18"
+  },
+  "devDependencies": {
+    "copyfiles": "2.1.0"
   }
 }

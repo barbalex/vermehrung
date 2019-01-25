@@ -1,0 +1,1 @@
+{"errors":[{"message":"request to http://157.230.107.167/v1alpha1/graphql failed, reason: connect ECONNREFUSED 157.230.107.167:80","locations":[{"line":2,"column":3}],"path":["hasura"]}],"data":{"hasura":null},"pageContext":{}}

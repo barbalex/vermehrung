@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[27],{426:function(e,n,r){"use strict";r.r(n),n.default=function(){return{nodeType:"folder",menuType:"gartenFolder",id:"gartenFolder",label:"Gärten",url:["Gaerten"],sort:[2],hasChildren:!0}}}}]);
+//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-garten-garten-folder-js-e04ee73a3baf3c2c7ec8.js.map

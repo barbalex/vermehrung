@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[42],{435:function(e,n,i){"use strict";i.r(n),n.default=function(){return{nodeType:"folder",menuType:"masseinheitenFolder",id:"masseinheitenFolder",parentId:"werteListenFolder",label:"Masseinheiten",url:["Werte-Listen","Masseinheiten"],sort:[6,1],hasChildren:!0}}}}]);
+//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-werte-listen-masseinheit-folder-js-0950239fe56ee4a95c52.js.map

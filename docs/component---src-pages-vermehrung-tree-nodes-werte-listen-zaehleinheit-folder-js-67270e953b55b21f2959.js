@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[45],{437:function(e,n,i){"use strict";i.r(n),n.default=function(){return{nodeType:"folder",menuType:"zaehleinheitenFolder",id:"zaehleinheitenFolder",parentId:"werteListenFolder",label:"Zähleinheiten",url:["Werte-Listen","Zaehleinheiten"],sort:[6,2],hasChildren:!0}}}}]);
+//# sourceMappingURL=component---src-pages-vermehrung-tree-nodes-werte-listen-zaehleinheit-folder-js-67270e953b55b21f2959.js.map

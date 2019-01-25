@@ -58,7 +58,7 @@ typings/
 .env
 
 .cache/
-#public
+public
 yarn-error.log
 
 package-lock.json
