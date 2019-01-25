@@ -171,13 +171,20 @@ const Index = ({ data }) => (
               ...beschreiben das Sammeln von Arten an einem Herkunfts-Ort
             </Card>
             <Card>
+              <CardTitle>Lieferungen</CardTitle>
+              Sammlungen werden an Kulturen geliefert. Aus Kulturen werden
+              Pflanzen zur Auswilderung geliefert. Oder an andere Kulturen.
+              <br />
+              Lieferungen können geplant und bestellt werden
+            </Card>
+            <Card>
               <CardTitle>Gärten</CardTitle>
               In Gärten und Gärtnereien werden die Arten vermehrt und auf das
               Aussetzen vorbereitet
             </Card>
             <Card>
               <CardTitle>Kulturen</CardTitle>
-              Eine Kultur ist eine Art aus einer Sammlung in einem Garten
+              Die Pflanzen einer Art in einem Garten bilden eine Kultur
             </Card>
             <Card>
               <CardTitle>Events</CardTitle>
@@ -185,7 +192,8 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Inventare</CardTitle>
-              In grösseren Gärtnereien wird ein Inventar über die Beete geführt
+              In grösseren Gärtnereien wird pro Kultur ein Inventar aller Beete
+              geführt
             </Card>
             <Card>
               <CardTitle>Zählungen</CardTitle>
@@ -193,24 +201,28 @@ const Index = ({ data }) => (
               Sammlungen und Aussetzungen geplant werden
             </Card>
             <Card>
-              <CardTitle>Lieferungen</CardTitle>
-              Sammlungen und Entnahmen aus Kulturen werden an Kulturen geliefert
-              oder in der Natur ausgesetzt.
-              <br />
-              Lieferungen können auch geplant oder bestellt werden
-            </Card>
-            <Card>
               <CardTitle>Personen</CardTitle>
               ...sind z.B. Freiwillige, welche in ihren Gärten Kulturen pflegen
             </Card>
             <Card>
               <CardTitle>Interessiert?</CardTitle>
+              Möchten Sie auch Vermehrungen verwalten?&nbsp;
               <a
                 href="https://gabriel-software.ch/Kontakt/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Kontaktieren Sie den Entwickler
+              </a>
+              .<br />
+              Sie haben einen Garten und würden gerne bedrohte Pflanzen
+              vermehren?&nbsp;
+              <a
+                href="http://toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Kontaktieren Sie Topos
               </a>
             </Card>
           </CardContainer>
