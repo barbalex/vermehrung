@@ -5,11 +5,20 @@ import compareLabel from '../../compareLabel'
 import allParentNodesExist from '../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
+  const artId = url[1]
+  const kulturId = url[3]
   const arten = get(data, 'hasura.ae_art', [])
   const art = arten.find(a => a.id === url[1])
   const kulturen = get(art, 'ae_art_art.kultursByartId', [])
+  const kultur = kulturen.find(k => k.id === kulturId)
+  const zaehlungen = get(kultur, '')
+
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`) || 0
+  const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
+  const kulturNodes = nodes.filter(
+    n => n.parentId === `art${artId}KulturFolder`,
+  )
+  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
 
   return kulturen
     .map(el => ({
