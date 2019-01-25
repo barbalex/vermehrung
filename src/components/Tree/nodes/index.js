@@ -12,6 +12,7 @@ import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturEventFolder from './art/kultur/event/folder'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
+import buildArtKulturInventarFolder from './art/kultur/inventar/folder'
 import buildArtKulturLieferungFolder from './art/kultur/lieferung/folder'
 import buildGartenFolder from './garten/gartenFolder'
 import buildGartenGarten from './garten/garten'
@@ -249,6 +250,10 @@ export default ({ store, data }) => {
           url,
         }),
         ...buildArtKulturEventFolder({
+          nodes,
+          url,
+        }),
+        ...buildArtKulturInventarFolder({
           nodes,
           url,
         }),
