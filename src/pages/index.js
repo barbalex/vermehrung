@@ -210,7 +210,7 @@ const Index = ({ data }) => (
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Kontaktieren Sie Alex
+                Kontaktieren Sie den Entwickler
               </a>
             </Card>
           </CardContainer>

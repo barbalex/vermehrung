@@ -8,6 +8,7 @@ import { Link, navigate } from 'gatsby'
 import { Location } from '@reach/router'
 
 import Account from './Account'
+import More from './More'
 import ErrorBoundary from '../ErrorBoundary'
 
 const SiteTitle = styled(Typography)`
@@ -60,6 +61,7 @@ const Header = () => {
                   </NavButton>
                 )}
                 <Account />
+                <More />
               </Toolbar>
             </AppBar>
           </ErrorBoundary>
