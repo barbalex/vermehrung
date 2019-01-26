@@ -204,7 +204,7 @@ const Index = ({ data }) => (
               </Card>
               <Card>
                 <CardTitle>Personen</CardTitle>
-                ...sind z.B. Freiwillige, welche in ihren Gärten Kulturen
+                Zum Beispiel Freiwillige, welche in ihren Gärten Kulturen
                 pflegen.
               </Card>
               <Card>

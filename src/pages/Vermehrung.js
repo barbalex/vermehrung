@@ -22,6 +22,7 @@ const StyledReflexContainer = styled(ReflexContainer)`
 `
 
 const Vermehrung = ({ data, location }) => {
+  console.log('Vermehrung', { data, location })
   const store = useContext(storeContext)
   const { setActiveNodeArray, setOpenNodes } = store.tree
 
