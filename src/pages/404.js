@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import { graphql, navigate } from 'gatsby'
 import styled from 'styled-components'
@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import materialTheme from '../utils/materialTheme'
+import Vermehrung from './Vermehrung'
 
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);
@@ -62,8 +63,13 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const Index = ({ data }) => {
+const Index = props => {
+  const { data, location } = props
   const onClickBack = useCallback(() => navigate('/'))
+
+  if (location.pathname.startsWith('/Vermehrung')) {
+    return <Vermehrung {...props} />
+  }
 
   return (
     <MuiThemeProvider theme={materialTheme}>

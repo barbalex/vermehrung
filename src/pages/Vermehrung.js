@@ -5,13 +5,13 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { observer } from 'mobx-react-lite'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
-import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
-import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
-import ErrorBoundary from '../../components/ErrorBoundary'
-import Layout from '../../components/Layout'
-import Tree from '../../components/Tree'
-import storeContext from '../../storeContext'
-import materialTheme from '../../utils/materialTheme'
+import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
+import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
+import ErrorBoundary from '../components/ErrorBoundary'
+import Layout from '../components/Layout'
+import Tree from '../components/Tree'
+import storeContext from '../storeContext'
+import materialTheme from '../utils/materialTheme'
 
 const Container = styled.div`
   margin-top: 64px;
