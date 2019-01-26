@@ -67,6 +67,11 @@ const Index = props => {
   const { data, location } = props
   const onClickBack = useCallback(() => navigate('/'))
 
+  /**
+   * On GitHub dynamic routes are not recognized
+   * Need to return Vermehrung on it's dynamic routes
+   * see: https://github.com/gatsbyjs/gatsby/issues/10070#issuecomment-457780674
+   */
   if (location.pathname.startsWith('/Vermehrung')) {
     return <Vermehrung {...props} />
   }
