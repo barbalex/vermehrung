@@ -220,8 +220,8 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Interessiert?</CardTitle>
-              Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten?
-              Fragen Sie&nbsp;
+              Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten? Fragen
+              Sie&nbsp;
               <a
                 href="https://gabriel-software.ch/Kontakt/"
                 target="_blank"
