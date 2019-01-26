@@ -157,7 +157,7 @@ const Index = ({ data }) => (
               style={bgImageStyle}
             />
             <PageTitle align="center" variant="h6" color="inherit" noWrap>
-              Bedrohte Pflanzen-Arten vermehren:
+              Bedrohte Pflanzen vermehren
             </PageTitle>
             <CardContainer>
               <Card>
