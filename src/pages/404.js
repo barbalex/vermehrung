@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import Typography from '@material-ui/core/Typography'
-import { graphql, navigate } from 'gatsby'
+import { navigate } from 'gatsby'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -9,7 +9,8 @@ import Button from '@material-ui/core/Button'
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import materialTheme from '../utils/materialTheme'
-import Vermehrung from './Vermehrung'
+import VermehrungCore from '../components/VermehrungCore'
+import vermehrungQuery from '../utils/vermehrungQuery'
 
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);
@@ -73,7 +74,7 @@ const Index = props => {
    * see: https://github.com/gatsbyjs/gatsby/issues/10070#issuecomment-457780674
    */
   if (location.pathname.startsWith('/Vermehrung')) {
-    return <Vermehrung {...props} />
+    return <VermehrungCore {...props} />
   }
 
   return (
@@ -112,17 +113,4 @@ const Index = props => {
 
 export default Index
 
-export const query = graphql`
-  query Query404 {
-    file(relativePath: { eq: "puls_vulg.jpg" }) {
-      childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid
-        }
-        sizes {
-          ...GatsbyImageSharpSizes
-        }
-      }
-    }
-  }
-`
+export const query = vermehrungQuery
