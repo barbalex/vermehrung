@@ -163,39 +163,39 @@ const Index = ({ data }) => (
               <Card>
                 <CardTitle>Arten</CardTitle>
                 Vom Aussterben bedrohte Pflanzen-Arten werden von Experten
-                gezielt vermehrt und wieder ausgesetzt
+                gezielt vermehrt und wieder ausgesetzt.
               </Card>
               <Card>
                 <CardTitle>Herkünfte</CardTitle>
-                ...sind natürliche Vorkommen. Hier werden die Arten gesammelt
+                ...sind natürliche Vorkommen. Hier werden die Arten gesammelt.
               </Card>
               <Card>
                 <CardTitle>Sammlungen</CardTitle>
-                ...beschreiben das Sammeln von Arten an einem Herkunfts-Ort
+                ...beschreiben das Sammeln von Arten an einem Herkunfts-Ort.
               </Card>
               <Card>
                 <CardTitle>Lieferungen</CardTitle>
                 Sammlungen werden an Kulturen geliefert. Aus Kulturen werden
                 Pflanzen zur Auswilderung geliefert. Oder an andere Kulturen.
-                Lieferungen können geplant und bestellt werden
+                Lieferungen können geplant und bestellt werden.
               </Card>
               <Card>
                 <CardTitle>Gärten</CardTitle>
                 In Gärten und Gärtnereien werden die Arten vermehrt und auf das
-                Aussetzen vorbereitet
+                Aussetzen vorbereitet.
               </Card>
               <Card>
                 <CardTitle>Kulturen</CardTitle>
-                Die Pflanzen einer Art in einem Garten bilden eine Kultur
+                Die Pflanzen einer Art in einem Garten bilden eine Kultur.
               </Card>
               <Card>
                 <CardTitle>Events</CardTitle>
-                ...beschreiben Ereignisse im Rahmen der Kultur
+                ...beschreiben Ereignisse im Rahmen der Kultur.
               </Card>
               <Card>
                 <CardTitle>Inventare</CardTitle>
                 In grösseren Gärtnereien wird über Kulturen und Beete ein
-                Inventar geführt
+                Inventar geführt.
               </Card>
               <Card>
                 <CardTitle>Zählungen</CardTitle>
@@ -205,7 +205,7 @@ const Index = ({ data }) => (
               <Card>
                 <CardTitle>Personen</CardTitle>
                 ...sind z.B. Freiwillige, welche in ihren Gärten Kulturen
-                pflegen
+                pflegen.
               </Card>
               <Card>
                 <CardTitle>Wer organisiert das?</CardTitle>
@@ -228,17 +228,6 @@ const Index = ({ data }) => (
               </Card>
               <Card>
                 <CardTitle>Interessiert?</CardTitle>
-                Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten? Fragen
-                Sie&nbsp;
-                <a
-                  href="https://gabriel-software.ch/Kontakt/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  den Entwickler
-                </a>
-                .<br />
-                <br />
                 Sie haben einen Garten und würden gerne bedrohte Pflanzen
                 vermehren? Fragen Sie&nbsp;
                 <a
@@ -248,6 +237,18 @@ const Index = ({ data }) => (
                 >
                   Topos
                 </a>
+                .<br />
+                <br />
+                Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten? Fragen
+                Sie&nbsp;
+                <a
+                  href="https://gabriel-software.ch/Kontakt/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  den Entwickler
+                </a>
+                .
               </Card>
             </CardContainer>
             <MoreContainer>
