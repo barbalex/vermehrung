@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: "/Benutzer-Dokumentation/Technische-Voraussetzungen"
-date: "2019-01-22"
+date: "2019-01-25"
 title: "Technische Voraussetzungen"
 sort: 1
 ---

@@ -1,11 +1,11 @@
 ---
 typ: 'technDoku'
 path: "/Technische-Dokumentation/Struktur"
-date: "2019-01-23"
+date: "2019-01-25"
 title: "Daten-Struktur"
 sort: 2
 ---
 
 ![Daten-Struktur](https://github.com/barbalex/vermehrung/raw/master/src/images/structure.png)
 
-Der SQL-Code, um die Struktur aufzubauen befindet sich [hier](https://github.com/barbalex/vermehrung/tree/master/src/sql).
+Der zugehörige SQL-Code befindet sich [hier](https://github.com/barbalex/vermehrung/tree/master/src/sql).
