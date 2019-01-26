@@ -5,12 +5,12 @@ import styled from 'styled-components'
 import Img from 'gatsby-image'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import { graphql } from 'gatsby'
 
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import materialTheme from '../utils/materialTheme'
 import VermehrungCore from '../components/VermehrungCore'
-import vermehrungQuery from '../utils/vermehrungQuery'
 
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);
@@ -113,4 +113,17 @@ const Index = props => {
 
 export default Index
 
-export const query = vermehrungQuery
+export const query = graphql`
+  query Query404 {
+    file(relativePath: { eq: "puls_vulg.jpg" }) {
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid
+        }
+        sizes {
+          ...GatsbyImageSharpSizes
+        }
+      }
+    }
+  }
+`

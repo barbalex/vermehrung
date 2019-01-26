@@ -5,7 +5,6 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import materialTheme from '../utils/materialTheme'
 import VermehrungCore from '../components/VermehrungCore'
-import vermehrungQuery from '../utils/vermehrungQuery'
 
 const Vermehrung = props => (
   <MuiThemeProvider theme={materialTheme}>
@@ -17,5 +16,3 @@ const Vermehrung = props => (
   </MuiThemeProvider>
 )
 export default Vermehrung
-
-export const query = vermehrungQuery
