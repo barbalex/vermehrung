@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import Typography from '@material-ui/core/Typography'
 import { graphql, navigate } from 'gatsby'
 import styled from 'styled-components'
