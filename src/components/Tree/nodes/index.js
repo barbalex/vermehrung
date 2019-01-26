@@ -11,6 +11,7 @@ import buildArtSammlung from './art/sammlung'
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturEventFolder from './art/kultur/event/folder'
+import buildArtKulturEventEvent from './art/kultur/event'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildArtKulturZaehlungZaehlung from './art/kultur/zaehlung'
 import buildArtKulturInventarFolder from './art/kultur/inventar/folder'
@@ -307,6 +308,21 @@ export default ({ store, data }) => {
       nodes = [
         ...nodes,
         ...buildArtKulturLieferungZuLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Arten' &&
+      url[2] === 'Kulturen' &&
+      url[4] === 'Events'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildArtKulturEventEvent({
           nodes,
           data,
           url,
