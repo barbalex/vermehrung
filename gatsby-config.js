@@ -51,12 +51,6 @@ module.exports = {
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     {
-      resolve: `@wapps/gatsby-plugin-material-ui`,
-      options: {
-        // Add any options here
-      },
-    },
-    {
       resolve: 'gatsby-plugin-web-font-loader',
       options: {
         google: {

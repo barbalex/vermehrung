@@ -3,6 +3,7 @@ import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { observer } from 'mobx-react-lite'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import activeNodeArrayFromPathname from '../../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../../utils/openNodesFromActiveNodeArray'
@@ -10,6 +11,7 @@ import ErrorBoundary from '../../components/ErrorBoundary'
 import Layout from '../../components/Layout'
 import Tree from '../../components/Tree'
 import storeContext from '../../storeContext'
+import materialTheme from '../../utils/materialTheme'
 
 const Container = styled.div`
   margin-top: 64px;
@@ -35,30 +37,32 @@ const Vermehrung = ({ data, location }) => {
   }, [pathname])
 
   return (
-    <ErrorBoundary>
-      <Layout>
-        <Container>
-          <StyledReflexContainer orientation="vertical">
-            <ReflexElement
-              flex={0.3}
-              propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
-            >
-              <Tree data={data} />
-            </ReflexElement>
-            <ReflexSplitter />
-            <ReflexElement
-              propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
-            >
-              <p>Form</p>
-            </ReflexElement>
-          </StyledReflexContainer>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
+    <MuiThemeProvider theme={materialTheme}>
+      <ErrorBoundary>
+        <Layout>
+          <Container>
+            <StyledReflexContainer orientation="vertical">
+              <ReflexElement
+                flex={0.3}
+                propagateDimensions={true}
+                renderOnResizeRate={200}
+                renderOnResize={true}
+              >
+                <Tree data={data} />
+              </ReflexElement>
+              <ReflexSplitter />
+              <ReflexElement
+                propagateDimensions={true}
+                renderOnResizeRate={200}
+                renderOnResize={true}
+              >
+                <p>Form</p>
+              </ReflexElement>
+            </StyledReflexContainer>
+          </Container>
+        </Layout>
+      </ErrorBoundary>
+    </MuiThemeProvider>
   )
 }
 

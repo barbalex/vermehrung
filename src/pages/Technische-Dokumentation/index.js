@@ -3,10 +3,12 @@ import { graphql, Link } from 'gatsby'
 import styled from 'styled-components'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import Layout from '../../components/Layout'
 import TechnDokuMenuItem from './MenuItem'
 import ErrorBoundary from '../../components/ErrorBoundary'
+import materialTheme from '../../utils/materialTheme'
 
 const Container = styled.div`
   margin-top: 64px;
@@ -61,30 +63,32 @@ const Template = ({ data }) => {
   const { edges } = allMarkdownRemark
 
   return (
-    <ErrorBoundary>
-      <Layout>
-        <Container>
-          <Menu>
-            <MenuTitle>
-              <MenuTitleLink to="/Technische-Dokumentation/">
-                Technische Dokumentation
-              </MenuTitleLink>
-            </MenuTitle>
-            <List component="nav">
-              <Divider />
-              {edges
-                .filter(n => !!n && !!n.node)
-                .map(({ node }) => (
-                  <TechnDokuMenuItem post={node} key={node.id} />
-                ))}
-            </List>
-          </Menu>
-          <Doku>
-            <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
-          </Doku>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
+    <MuiThemeProvider theme={materialTheme}>
+      <ErrorBoundary>
+        <Layout>
+          <Container>
+            <Menu>
+              <MenuTitle>
+                <MenuTitleLink to="/Technische-Dokumentation/">
+                  Technische Dokumentation
+                </MenuTitleLink>
+              </MenuTitle>
+              <List component="nav">
+                <Divider />
+                {edges
+                  .filter(n => !!n && !!n.node)
+                  .map(({ node }) => (
+                    <TechnDokuMenuItem post={node} key={node.id} />
+                  ))}
+              </List>
+            </Menu>
+            <Doku>
+              <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
+            </Doku>
+          </Container>
+        </Layout>
+      </ErrorBoundary>
+    </MuiThemeProvider>
   )
 }
 
