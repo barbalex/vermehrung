@@ -16,6 +16,10 @@ const Container = styled.div`
   height: 100vh;
   position: relative;
 `
+const VContainer = styled.div`
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
+`
 const TextContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -60,9 +64,13 @@ const Index = props => {
    */
   if (location.pathname.startsWith('/Vermehrung')) {
     return (
-      <Layout>
-        <VermehrungCore {...props} />
-      </Layout>
+      <MuiThemeProvider theme={materialTheme}>
+        <VContainer>
+          <Layout>
+            <VermehrungCore {...props} />
+          </Layout>
+        </VContainer>
+      </MuiThemeProvider>
     )
   }
 
