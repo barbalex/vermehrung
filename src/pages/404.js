@@ -10,13 +10,8 @@ import { graphql } from 'gatsby'
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import materialTheme from '../utils/materialTheme'
-import VermehrungCore from '../components/VermehrungCore'
 
 const Container = styled.div`
-  height: 100vh;
-  position: relative;
-`
-const VContainer = styled.div`
   margin-top: 64px;
   min-height: calc(100vh - 64px);
 `
@@ -53,51 +48,35 @@ const bgImageStyle = {
   zIndex: -1,
 }
 
-const Index = props => {
-  const { data, location } = props
+const Index = ({ data }) => {
   const onClickBack = useCallback(() => navigate('/'))
-
-  /**
-   * On GitHub dynamic routes are not recognized
-   * Need to return Vermehrung on it's dynamic routes
-   * see: https://github.com/gatsbyjs/gatsby/issues/10070#issuecomment-457780674
-   */
-  /*if (location.pathname.startsWith('/Vermehrung')) {
-    return (
-      <MuiThemeProvider theme={materialTheme}>
-        <VContainer>
-          <Layout>
-            <VermehrungCore {...props} />
-          </Layout>
-        </VContainer>
-      </MuiThemeProvider>
-    )
-  }*/
 
   return (
     <MuiThemeProvider theme={materialTheme}>
       <ErrorBoundary>
         <Container>
-          <Img
-            sizes={data.file.childImageSharp.sizes}
-            fluid={data.file.childImageSharp.fluid}
-            style={bgImageStyle}
-          />
-          <TextContainer>
-            <PageTitle align="center" variant="h6">
-              Oh je
-            </PageTitle>
-          </TextContainer>
-          <TextContainer>
-            <Text align="center" variant="h6">
-              Diese Seite ist nicht verfügbar.
-            </Text>
-          </TextContainer>
-          <TextContainer>
-            <StyledButton variant="outlined" onClick={onClickBack}>
-              Zurück zur Startseite
-            </StyledButton>
-          </TextContainer>
+          <Layout>
+            <Img
+              sizes={data.file.childImageSharp.sizes}
+              fluid={data.file.childImageSharp.fluid}
+              style={bgImageStyle}
+            />
+            <TextContainer>
+              <PageTitle align="center" variant="h6">
+                Oh je
+              </PageTitle>
+            </TextContainer>
+            <TextContainer>
+              <Text align="center" variant="h6">
+                Diese Seite ist nicht verfügbar.
+              </Text>
+            </TextContainer>
+            <TextContainer>
+              <StyledButton variant="outlined" onClick={onClickBack}>
+                Zurück zur Startseite
+              </StyledButton>
+            </TextContainer>
+          </Layout>
         </Container>
       </ErrorBoundary>
     </MuiThemeProvider>
