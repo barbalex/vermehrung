@@ -65,22 +65,6 @@ module.exports = {
       },
     },
     'gatsby-plugin-react-helmet',
-    {
-      resolve: 'gatsby-source-graphql',
-      options: {
-        typeName: 'HASURA',
-        fieldName: 'hasura',
-        createLink: () =>
-          createHttpLink({
-            uri: `${process.env.HASURA_GRAPHQL_URL}`,
-            headers: {
-              'X-Hasura-Access-Key': secrets.accessKey,
-            },
-            fetch,
-          }),
-        refetchInterval: 10, // Refresh every 60 seconds for new data
-      },
-    },
     'gatsby-plugin-styled-components',
     {
       resolve: 'gatsby-plugin-manifest',

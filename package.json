@@ -43,7 +43,6 @@
     "gatsby-remark-external-links": "0.0.4",
     "gatsby-remark-images": "3.0.1",
     "gatsby-source-filesystem": "2.0.17",
-    "gatsby-source-graphql": "2.0.8",
     "gatsby-transformer-remark": "2.2.0",
     "gatsby-transformer-sharp": "2.1.12",
     "graphql-tag": "^2.10.1",
