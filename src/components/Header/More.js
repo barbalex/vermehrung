@@ -15,6 +15,11 @@ const Container = styled.div`
 `
 const MehrButton = styled(Button)`
   color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 0 !important;
+  &:hover {
+    border-width: 1px !important;
+  }
 `
 
 const MyAppBar = () => {
@@ -41,6 +46,7 @@ const MyAppBar = () => {
     <ErrorBoundary>
       <Container>
         <MehrButton
+          variant="outlined"
           aria-label="Mehr"
           aria-owns={anchorEl ? 'long-menu' : null}
           aria-haspopup="true"
