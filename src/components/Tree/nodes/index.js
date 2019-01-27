@@ -50,6 +50,7 @@ const compare = (a, b) => {
 
 export default ({ store, data, loading }) => {
   const openNodes = store.tree.openNodes.sort(sort)
+  let artArtNodes
 
   let nodes = [
     ...buildArtFolder({ data, loading }),
@@ -72,13 +73,11 @@ export default ({ store, data, loading }) => {
   openNodes.forEach(url => {
     if (!allParentNodesAreOpen(openNodes, url)) return
     if (url.length === 1 && url[0] === 'Arten') {
-      nodes = [
-        ...nodes,
-        ...buildArtArt({
-          nodes,
-          data,
-        }),
-      ]
+      artArtNodes = buildArtArt({
+        nodes,
+        data,
+      })
+      nodes = [...nodes, ...artArtNodes]
     }
     if (url.length === 1 && url[0] === 'Gaerten') {
       nodes = [
