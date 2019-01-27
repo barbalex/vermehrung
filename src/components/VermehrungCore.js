@@ -515,33 +515,30 @@ const Vermehrung = ({ location }) => {
   return (
     <StaticQuery
       query={query}
-      render={data => {
-        console.log('VermehrungCore, data:', data)
-        return (
-          <ErrorBoundary>
-            <Container>
-              <StyledReflexContainer orientation="vertical">
-                <ReflexElement
-                  flex={0.3}
-                  propagateDimensions={true}
-                  renderOnResizeRate={200}
-                  renderOnResize={true}
-                >
-                  <Tree data={data} />
-                </ReflexElement>
-                <ReflexSplitter />
-                <ReflexElement
-                  propagateDimensions={true}
-                  renderOnResizeRate={200}
-                  renderOnResize={true}
-                >
-                  <p>Form</p>
-                </ReflexElement>
-              </StyledReflexContainer>
-            </Container>
-          </ErrorBoundary>
-        )
-      }}
+      render={data => (
+        <ErrorBoundary>
+          <Container>
+            <StyledReflexContainer orientation="vertical">
+              <ReflexElement
+                flex={0.3}
+                propagateDimensions={true}
+                renderOnResizeRate={200}
+                renderOnResize={true}
+              >
+                <Tree data={data} />
+              </ReflexElement>
+              <ReflexSplitter />
+              <ReflexElement
+                propagateDimensions={true}
+                renderOnResizeRate={200}
+                renderOnResize={true}
+              >
+                <p>Form</p>
+              </ReflexElement>
+            </StyledReflexContainer>
+          </Container>
+        </ErrorBoundary>
+      )}
     />
   )
 }
