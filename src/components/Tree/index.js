@@ -4,11 +4,13 @@ import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
+import { useQuery } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../ErrorBoundary'
 import storeContext from '../../storeContext'
 import Row from './Row'
 import buildNodes from './nodes'
+import query from './query'
 
 const Container = styled.div`
   height: 100%;
@@ -32,13 +34,19 @@ const StyledList = styled(List)`
 
 const singleRowHeight = 23
 
-const Tree = ({ data, dimensions }) => {
+const Tree = ({ dimensions }) => {
   const store = useContext(storeContext)
   const { activeNodeArray /*, setNodes*/ } = store.tree
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
 
-  const nodes = buildNodes({ store, data })
+  const { data, error: dataError, loading } = useQuery(query, {
+    suspend: false,
+  })
+
+  console.log('Tree', { data, dataError, loading })
+
+  const nodes = buildNodes({ store, data, loading })
   //setNodes(nodes)
 
   const listRef = React.createRef()
@@ -55,6 +63,10 @@ const Tree = ({ data, dimensions }) => {
   let width = 250
   if (dimensions && dimensions.width && !isNaN(dimensions.width)) {
     width = dimensions.width
+  }
+
+  if (dataError) {
+    return `Fehler beim Laden der Daten: ${dataError.message}`
   }
 
   return (
