@@ -66,4 +66,5 @@ package-lock.json
 
 #my own
 secrets.json
+public
 #now.json
