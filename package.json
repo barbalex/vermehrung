@@ -9,7 +9,7 @@
     "dev": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
     "prebuild": "del-cli -f docs",
     "build": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby build",
-    "postbuild": "ncp public docs && copyfiles CNAME docs",
+    "postbuild": "ncp public docs && copyfiles CNAME docs && copyfiles now.json public",
     "serve": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve"
   },
   "dependencies": {

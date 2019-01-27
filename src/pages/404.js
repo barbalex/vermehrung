@@ -62,7 +62,7 @@ const Index = props => {
    * Need to return Vermehrung on it's dynamic routes
    * see: https://github.com/gatsbyjs/gatsby/issues/10070#issuecomment-457780674
    */
-  if (location.pathname.startsWith('/Vermehrung')) {
+  /*if (location.pathname.startsWith('/Vermehrung')) {
     return (
       <MuiThemeProvider theme={materialTheme}>
         <VContainer>
@@ -72,7 +72,7 @@ const Index = props => {
         </VContainer>
       </MuiThemeProvider>
     )
-  }
+  }*/
 
   return (
     <MuiThemeProvider theme={materialTheme}>

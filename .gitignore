@@ -58,10 +58,12 @@ typings/
 .env
 
 .cache/
-public
+#public
+docs
 yarn-error.log
 
 package-lock.json
 
 #my own
 secrets.json
+now.json
