@@ -194,7 +194,7 @@ const Index = ({ data }) => (
               </Card>
               <Card>
                 <CardTitle>Inventare</CardTitle>
-                In grösseren Gärtnereien wird über Kulturen und Beete ein
+                In grösseren Gärtnereien wird über Kulturen und deren Beete ein
                 Inventar geführt.
               </Card>
               <Card>
