@@ -12,24 +12,9 @@ import Layout from '../components/Layout'
 import materialTheme from '../utils/materialTheme'
 import VermehrungCore from '../components/VermehrungCore'
 
-const ScrollContainer = styled.div`
-  height: calc(100vh - 64px);
-  overflow-y: auto;
-  margin-top: 64px;
-`
 const Container = styled.div`
-  padding: 15px;
+  height: 100vh;
   position: relative;
-  min-height: 100%;
-  @media (min-width: 700px) {
-    padding: 20px;
-  }
-  @media (min-width: 1200px) {
-    padding: 25px;
-  }
-  @media (min-width: 1700px) {
-    padding: 30px;
-  }
 `
 const TextContainer = styled.div`
   display: flex;
@@ -74,38 +59,38 @@ const Index = props => {
    * see: https://github.com/gatsbyjs/gatsby/issues/10070#issuecomment-457780674
    */
   if (location.pathname.startsWith('/Vermehrung')) {
-    return <VermehrungCore {...props} />
+    return (
+      <Layout>
+        <VermehrungCore {...props} />
+      </Layout>
+    )
   }
 
   return (
     <MuiThemeProvider theme={materialTheme}>
       <ErrorBoundary>
-        <Layout>
-          <ScrollContainer>
-            <Container>
-              <Img
-                sizes={data.file.childImageSharp.sizes}
-                fluid={data.file.childImageSharp.fluid}
-                style={bgImageStyle}
-              />
-              <TextContainer>
-                <PageTitle align="center" variant="h6">
-                  Oh je
-                </PageTitle>
-              </TextContainer>
-              <TextContainer>
-                <Text align="center" variant="h6">
-                  Diese Seite ist nicht verfügbar.
-                </Text>
-              </TextContainer>
-              <TextContainer>
-                <StyledButton variant="outlined" onClick={onClickBack}>
-                  Zurück zur Startseite
-                </StyledButton>
-              </TextContainer>
-            </Container>
-          </ScrollContainer>
-        </Layout>
+        <Container>
+          <Img
+            sizes={data.file.childImageSharp.sizes}
+            fluid={data.file.childImageSharp.fluid}
+            style={bgImageStyle}
+          />
+          <TextContainer>
+            <PageTitle align="center" variant="h6">
+              Oh je
+            </PageTitle>
+          </TextContainer>
+          <TextContainer>
+            <Text align="center" variant="h6">
+              Diese Seite ist nicht verfügbar.
+            </Text>
+          </TextContainer>
+          <TextContainer>
+            <StyledButton variant="outlined" onClick={onClickBack}>
+              Zurück zur Startseite
+            </StyledButton>
+          </TextContainer>
+        </Container>
       </ErrorBoundary>
     </MuiThemeProvider>
   )
