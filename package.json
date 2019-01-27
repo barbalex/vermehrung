@@ -7,9 +7,8 @@
     "build_comment_2": "copy CNAME file to docs or custom domain may be lost",
     "build_comment_3": "use cross plattform tools for everything so it works on windows and mac",
     "dev": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
-    "prebuild": "del-cli -f docs",
     "build": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby build",
-    "postbuild": "ncp public docs && copyfiles CNAME docs && copyfiles now.json public",
+    "postbuild": "copyfiles now.json public",
     "serve": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve"
   },
   "dependencies": {
@@ -61,8 +60,6 @@
   },
   "devDependencies": {
     "copyfiles": "2.1.0",
-    "cross-env": "5.2.0",
-    "del-cli": "1.1.0",
-    "ncp": "2.0.0"
+    "cross-env": "5.2.0"
   }
 }
