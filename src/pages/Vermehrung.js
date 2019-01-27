@@ -19,7 +19,52 @@ const StyledReflexContainer = styled(ReflexContainer)`
   height: calc(100vh - 64px) !important;
 `
 
-const query = graphql`
+const Vermehrung = ({ location, data }) => {
+  const store = useContext(storeContext)
+  const { setActiveNodeArray, setOpenNodes } = store.tree
+
+  const { pathname } = location
+  const activeNodeArray = activeNodeArrayFromPathname(pathname)
+  // on first render set openNodes
+  useEffect(() => {
+    setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
+  }, [])
+  // when pathname changes, update activeNodeArray
+  useEffect(() => {
+    setActiveNodeArray(activeNodeArray)
+  }, [pathname])
+
+  return (
+    <ErrorBoundary>
+      <Layout>
+        <Container>
+          <StyledReflexContainer orientation="vertical">
+            <ReflexElement
+              flex={0.3}
+              propagateDimensions={true}
+              renderOnResizeRate={200}
+              renderOnResize={true}
+            >
+              <Tree data={data} />
+            </ReflexElement>
+            <ReflexSplitter />
+            <ReflexElement
+              propagateDimensions={true}
+              renderOnResizeRate={200}
+              renderOnResize={true}
+            >
+              <p>Form</p>
+            </ReflexElement>
+          </StyledReflexContainer>
+        </Container>
+      </Layout>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(Vermehrung)
+
+export const query = graphql`
   query TreeQuery {
     hasura {
       garten {
@@ -497,48 +542,3 @@ const query = graphql`
     }
   }
 `
-
-const Vermehrung = ({ location, data }) => {
-  const store = useContext(storeContext)
-  const { setActiveNodeArray, setOpenNodes } = store.tree
-
-  const { pathname } = location
-  const activeNodeArray = activeNodeArrayFromPathname(pathname)
-  // on first render set openNodes
-  useEffect(() => {
-    setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
-  }, [])
-  // when pathname changes, update activeNodeArray
-  useEffect(() => {
-    setActiveNodeArray(activeNodeArray)
-  }, [pathname])
-
-  return (
-    <ErrorBoundary>
-      <Layout>
-        <Container>
-          <StyledReflexContainer orientation="vertical">
-            <ReflexElement
-              flex={0.3}
-              propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
-            >
-              <Tree data={data} />
-            </ReflexElement>
-            <ReflexSplitter />
-            <ReflexElement
-              propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
-            >
-              <p>Form</p>
-            </ReflexElement>
-          </StyledReflexContainer>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
-  )
-}
-
-export default observer(Vermehrung)
