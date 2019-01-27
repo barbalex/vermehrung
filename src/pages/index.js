@@ -218,7 +218,7 @@ const Index = ({ data }) => (
                 </a>
                 &nbsp;im Auftrag der{' '}
                 <a
-                  href="//naturschutz.zh.ch"
+                  href="//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
