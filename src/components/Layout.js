@@ -18,9 +18,6 @@ const query = graphql`
     }
   }
 `
-const htmlStyle = {
-  overflow: 'hidden',
-}
 
 const Layout = ({ children }) => (
   <StaticQuery
@@ -40,7 +37,7 @@ const Layout = ({ children }) => (
             },
           ]}
         >
-          <html lang="de" style={htmlStyle} />
+          <html lang="de" />
         </Helmet>
         <Header />
         {children}

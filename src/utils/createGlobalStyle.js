@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components'
 
 export default () => createGlobalStyle`
   html {
-    overflow: hidden;
+    overflow: hidden !important;
   }
 
   /* scrollbars */
