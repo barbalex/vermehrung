@@ -6,12 +6,10 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { Link, navigate } from 'gatsby'
 import { Location } from '@reach/router'
-import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import Account from './Account'
 import More from './More'
 import ErrorBoundary from '../ErrorBoundary'
-import materialTheme from '../../utils/materialTheme'
 
 const SiteTitle = styled(Typography)`
   display: none;
@@ -34,44 +32,42 @@ const Header = () => {
   const onClickSiteTitle = useCallback(() => navigate('/'))
 
   return (
-    <MuiThemeProvider theme={materialTheme}>
-      <Location>
-        {({ location }) => {
-          const { pathname } = location
+    <Location>
+      {({ location }) => {
+        const { pathname } = location
 
-          return (
-            <ErrorBoundary>
-              <AppBar position="fixed">
-                <Toolbar>
-                  <SiteTitle
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    title="Home"
-                    onClick={onClickSiteTitle}
+        return (
+          <ErrorBoundary>
+            <AppBar position="fixed">
+              <Toolbar>
+                <SiteTitle
+                  variant="h6"
+                  color="inherit"
+                  noWrap
+                  title="Home"
+                  onClick={onClickSiteTitle}
+                >
+                  Vermehrung
+                </SiteTitle>
+                <Spacer />
+                {!pathname.startsWith('/Vermehrung') && (
+                  <NavButton
+                    variant="text"
+                    component={Link}
+                    to="/Vermehrung/"
+                    active={pathname === '/Vermehrung/' ? 1 : 0}
                   >
-                    Vermehrung
-                  </SiteTitle>
-                  <Spacer />
-                  {!pathname.startsWith('/Vermehrung') && (
-                    <NavButton
-                      variant="text"
-                      component={Link}
-                      to="/Vermehrung/"
-                      active={pathname === '/Vermehrung/' ? 1 : 0}
-                    >
-                      Zu den Daten
-                    </NavButton>
-                  )}
-                  <Account />
-                  <More />
-                </Toolbar>
-              </AppBar>
-            </ErrorBoundary>
-          )
-        }}
-      </Location>
-    </MuiThemeProvider>
+                    Zu den Daten
+                  </NavButton>
+                )}
+                <Account />
+                <More />
+              </Toolbar>
+            </AppBar>
+          </ErrorBoundary>
+        )
+      }}
+    </Location>
   )
 }
 

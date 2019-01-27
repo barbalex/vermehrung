@@ -3,7 +3,10 @@ import React from 'react'
 import createGlobalStyle from './utils/createGlobalStyle'
 import Store from './store'
 import { Provider as MobxProvider } from './storeContext'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import 'react-reflex/styles.css'
+
+import materialTheme from './utils/materialTheme'
 
 const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
@@ -15,12 +18,14 @@ const mobxStore = Store.create()
  */
 
 const App = ({ element }) => (
-  <MobxProvider value={mobxStore}>
-    <>
-      <GlobalStyle />
-      {element}
-    </>
-  </MobxProvider>
+  <MuiThemeProvider theme={materialTheme}>
+    <MobxProvider value={mobxStore}>
+      <>
+        <GlobalStyle />
+        {element}
+      </>
+    </MobxProvider>
+  </MuiThemeProvider>
 )
 
 export default App

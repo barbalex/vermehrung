@@ -3,13 +3,11 @@ import Typography from '@material-ui/core/Typography'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
-import { MuiThemeProvider } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import { graphql } from 'gatsby'
 
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
-import materialTheme from '../utils/materialTheme'
 
 const Container = styled.div`
   margin-top: 64px;
@@ -52,34 +50,32 @@ const Index = ({ data }) => {
   const onClickBack = useCallback(() => navigate('/'))
 
   return (
-    <MuiThemeProvider theme={materialTheme}>
-      <ErrorBoundary>
-        <Container>
-          <Layout>
-            <Img
-              sizes={data.file.childImageSharp.sizes}
-              fluid={data.file.childImageSharp.fluid}
-              style={bgImageStyle}
-            />
-            <TextContainer>
-              <PageTitle align="center" variant="h6">
-                Oh je
-              </PageTitle>
-            </TextContainer>
-            <TextContainer>
-              <Text align="center" variant="h6">
-                Diese Seite ist nicht verfügbar.
-              </Text>
-            </TextContainer>
-            <TextContainer>
-              <StyledButton variant="outlined" onClick={onClickBack}>
-                Zurück zur Startseite
-              </StyledButton>
-            </TextContainer>
-          </Layout>
-        </Container>
-      </ErrorBoundary>
-    </MuiThemeProvider>
+    <ErrorBoundary>
+      <Container>
+        <Layout>
+          <Img
+            sizes={data.file.childImageSharp.sizes}
+            fluid={data.file.childImageSharp.fluid}
+            style={bgImageStyle}
+          />
+          <TextContainer>
+            <PageTitle align="center" variant="h6">
+              Oh je
+            </PageTitle>
+          </TextContainer>
+          <TextContainer>
+            <Text align="center" variant="h6">
+              Diese Seite ist nicht verfügbar.
+            </Text>
+          </TextContainer>
+          <TextContainer>
+            <StyledButton variant="outlined" onClick={onClickBack}>
+              Zurück zur Startseite
+            </StyledButton>
+          </TextContainer>
+        </Layout>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
