@@ -1,0 +1,18 @@
+import get from 'lodash/get'
+
+export default ({ data, loading }) => {
+  const personen = get(data, 'person', [])
+  const nr = loading ? '...' : personen.length
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'personFolder',
+      id: 'personFolder',
+      label: `Personen (${nr})`,
+      url: ['Personen'],
+      sort: [5],
+      hasChildren: true,
+    },
+  ]
+}
