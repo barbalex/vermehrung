@@ -4,7 +4,7 @@ import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
-  const arten = get(data, 'hasura.ae_art', [])
+  const arten = get(data, 'ae_art', [])
 
   return arten
     .map(el => ({

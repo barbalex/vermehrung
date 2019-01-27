@@ -4,7 +4,7 @@ import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
-  const personen = get(data, 'hasura.person', [])
+  const personen = get(data, 'person', [])
 
   return personen
     .map(el => ({

@@ -44,7 +44,12 @@ const Tree = ({ dimensions }) => {
     suspend: false,
   })
 
-  console.log('Tree', { data, dataError, loading })
+  console.log('Tree', {
+    data,
+    dataError,
+    loading,
+    activeNodeArray: activeNodeArray.toJSON(),
+  })
 
   const nodes = buildNodes({ store, data, loading })
   //setNodes(nodes)

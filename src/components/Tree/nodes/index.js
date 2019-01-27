@@ -1,11 +1,11 @@
 import uniqBy from 'lodash/uniqBy'
-//import get from 'lodash/get'
+import { getSnapshot } from 'mobx-state-tree'
 
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import buildArtFolder from './art/artFolder'
-import buildArtArt from './art/art'
+import buildArtFolder from './art/folder'
+import buildArtArt from './art'
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
 import buildArtKulturFolder from './art/kultur/folder'
@@ -48,16 +48,16 @@ const compare = (a, b) => {
   return a - b
 }
 
-export default ({ store, data }) => {
+export default ({ store, data, loading }) => {
   const openNodes = store.tree.openNodes.sort(sort)
 
   let nodes = [
-    ...buildArtFolder(),
-    ...buildGartenFolder(),
-    ...buildHerkunftFolder(),
-    ...buildLieferungFolder(),
-    ...buildPersonFolder(),
-    ...buildWerteListenFolder(),
+    ...buildArtFolder({ data, loading }),
+    ...buildGartenFolder({ data, loading }),
+    ...buildHerkunftFolder({ data, loading }),
+    ...buildLieferungFolder({ data, loading }),
+    ...buildPersonFolder({ data, loading }),
+    ...buildWerteListenFolder({ data, loading }),
   ]
 
   /**

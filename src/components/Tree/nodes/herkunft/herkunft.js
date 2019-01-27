@@ -4,7 +4,7 @@ import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
-  const herkuenfte = get(data, 'hasura.herkunft', [])
+  const herkuenfte = get(data, 'herkunft', [])
 
   return (
     herkuenfte

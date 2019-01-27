@@ -4,7 +4,7 @@ import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
-  const werte = get(data, 'hasura.masseinheit_werte', [])
+  const werte = get(data, 'masseinheit_werte', [])
 
   return werte
     .map(el => ({
