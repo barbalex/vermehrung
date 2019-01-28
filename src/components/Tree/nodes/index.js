@@ -284,18 +284,33 @@ export default ({ store, data, loading }) => {
       ]
     }
     if (url.length === 2 && url[0] === 'Kulturen') {
-      console.log(
-        'todo',
-        buildKulturZaehlungFolder({
+      nodes = [
+        ...nodes,
+        ...buildKulturZaehlungFolder({
           nodes,
           url,
           data,
           loading,
         }),
-      )
-      nodes = [
-        ...nodes,
-        ...buildKulturZaehlungFolder({
+        ...buildKulturZuLieferungFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildKulturAbLieferungFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildKulturEventFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildKulturInventarFolder({
           nodes,
           url,
           data,
@@ -473,6 +488,64 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildSammlungLieferungLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
+      nodes = [
+        ...nodes,
+        ...buildKulturZaehlungZaehlung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 3 &&
+      url[0] === 'Kulturen' &&
+      url[2] === 'Zu-Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildKulturLieferungZuLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 3 &&
+      url[0] === 'Kulturen' &&
+      url[2] === 'Ab-Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildKulturLieferungAbLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Events') {
+      nodes = [
+        ...nodes,
+        ...buildKulturEventEvent({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
+      nodes = [
+        ...nodes,
+        ...buildKulturInventarInventar({
           nodes,
           data,
           url,
