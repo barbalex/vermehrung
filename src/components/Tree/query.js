@@ -412,6 +412,7 @@ export default gql`
       }
       sammlungsBypersonId {
         id
+        datum
         artByartId {
           id
           art_ae_art {

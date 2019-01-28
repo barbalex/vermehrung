@@ -56,7 +56,8 @@ import buildPersonGartenFolder from './person/garten/folder'
 import buildPersonGartenGarten from './person/garten'
 import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
 import buildPersonGartenKulturKultur from './person/garten/kultur'
-import buildPersonSammlungFolder from './person/sammlung/folder'
+import buildPersonGartenSammlungFolder from './person/sammlung/folder'
+import buildPersonGartenSammlungSammlung from './person/sammlung'
 
 import buildWerteListenFolder from './werteListen/folder'
 import buildWLMasseinheitFolder from './werteListen/masseinheit/folder'
@@ -209,7 +210,7 @@ export default ({ store, data, loading }) => {
           data,
           loading,
         }),
-        ...buildPersonSammlungFolder({
+        ...buildPersonGartenSammlungFolder({
           nodes,
           url,
           data,
@@ -343,6 +344,16 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildPersonGartenGarten({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Sammlungen') {
+      nodes = [
+        ...nodes,
+        ...buildPersonGartenSammlungSammlung({
           nodes,
           data,
           url,
