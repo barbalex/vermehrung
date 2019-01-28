@@ -3,8 +3,10 @@ import uniqBy from 'lodash/uniqBy'
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 import buildArtFolder from './art/folder'
 import buildArtArt from './art'
+
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
 import buildArtSammlungLieferungFolder from './art/sammlung/lieferung/folder'
@@ -40,6 +42,8 @@ import buildGartenKulturLieferungZuLieferung from './garten/kultur/zulieferung'
 
 import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunftHerkunft from './herkunft'
+import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
+
 import buildLieferungFolder from './lieferung/folder'
 import buildLieferungLieferung from './lieferung'
 import buildPersonFolder from './person/folder'
@@ -249,6 +253,17 @@ export default ({ store, data, loading }) => {
         ...buildWLMasseinheitMasseinheit({
           nodes,
           data,
+        }),
+      ]
+    }
+    if (url.length === 2 && url[0] === 'Herkuenfte') {
+      nodes = [
+        ...nodes,
+        ...buildHerkunftSammlungFolder({
+          nodes,
+          data,
+          loading,
+          url,
         }),
       ]
     }
