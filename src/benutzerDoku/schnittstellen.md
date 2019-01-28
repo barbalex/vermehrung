@@ -6,7 +6,7 @@ title: "Schnittstellen"
 sort: 3
 ---
 
-Brauchen Sie in anderen Anwendungen Zugriff auf ihre Daten in vermehrung.apflora.ch? Kein Problem: vermehrung.apflora.ch verfügt über eine [GraphQL](https://github.com/facebook/graphql)-Schnittstelle.<br/><br/>
+Brauchen Sie in anderen Anwendungen Zugriff auf Ihre Daten in vermehrung.apflora.ch? Kein Problem: vermehrung.apflora.ch verfügt über eine [GraphQL](https://github.com/facebook/graphql)-Schnittstelle.<br/><br/>
 
 Diese Schnittstelle wird auch von vermehrung.apflora.ch selber benutzt. Es gibt daher kaum eine Funktionalität, welche damit nicht möglich ist, solange man mit ausreichenden Benutzerrechten zugreift.<br/><br/>
 

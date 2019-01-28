@@ -13,6 +13,6 @@ Das geht so:
 - Falls ja: beteiligt euch an der existierenden Diskussion
 - Wenn nicht, könnt ihr einen neuen "Issue" eröffnen
 
-GitHub ist dafür geeignet, weil man die Übersicht behält, priorisieren und den Verlauf dokumentieren kann. Jeder, der sich an einem Issue beteiligt, wird bei neuen Bemerkungen (z.B. wenn der Fehler korrigiert wurde) automatisch per email darüber informiert.<br/><br/>
+GitHub eignet sich, weil man die Übersicht behält, priorisieren und den Verlauf dokumentieren kann. Jeder, der sich an einem Issue beteiligt, wird automatisch per email über neue Bemerkungen (z.B. wenn der Fehler korrigiert wurde) informiert.<br/><br/>
 
 Allerdings ist GitHub öffentlich. Man kann mir daher Anliegen auch per [email](mailto:alex@gabriel-software.ch) melden.

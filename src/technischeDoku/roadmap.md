@@ -13,7 +13,7 @@ Symbole:
 * :ballot_box_with_check:: teilweise erledigt
 * :white_medium_square:: todo
 
-Die gröbsten Schritte sind:
+Die wichtigsten Schritte sind:
 
 - :white_check_mark: Projekt mit Topos besprochen
 - :white_check_mark: Datenstruktur entworfen
