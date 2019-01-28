@@ -51,7 +51,7 @@ const Tree = ({ dimensions }) => {
 
   useEffect(() => {
     const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
-    listRef.current.scrollToItem(index)
+    if (index > -1) listRef.current.scrollToItem(index)
   }, [activeNodeArray, nodes])
 
   let height = 250

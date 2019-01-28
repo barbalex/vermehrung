@@ -279,6 +279,117 @@ export default gql`
         }
       }
     }
+    kultur {
+      id
+      gartenBygartenId {
+        id
+        personBypersonId {
+          id
+          name
+        }
+      }
+      kulturEventsBykulturId {
+        id
+        datum
+        event
+      }
+      kulturInventarsBykulturId {
+        id
+        datum
+        kasten
+        beet
+        nr
+      }
+      zaehlungsBykulturId {
+        id
+        datum
+      }
+      lieferungsByvonKulturId {
+        id
+        personBypersonId {
+          id
+          name
+        }
+        lieferungTypWerteBytyp {
+          id
+          wert
+        }
+        lieferungStatusWerteBystatus {
+          id
+          wert
+        }
+        von_datum
+      }
+      lieferungsBynachKulturId {
+        id
+        personBypersonId {
+          id
+          name
+        }
+        lieferungTypWerteBytyp {
+          id
+          wert
+        }
+        lieferungStatusWerteBystatus {
+          id
+          wert
+        }
+        nach_datum
+      }
+      sammlungInKultursBykulturId {
+        id
+        sammlungBysammlungId {
+          id
+          herkunftByherkunftId {
+            id
+            nr
+          }
+          lieferungsByvonSammlungId {
+            id
+            personBypersonId {
+              id
+              name
+            }
+            lieferungTypWerteBytyp {
+              id
+              wert
+            }
+            lieferungStatusWerteBystatus {
+              id
+              wert
+            }
+            von_datum
+            kulturBynachKulturId {
+              id
+              gartenBygartenId {
+                id
+                personBypersonId {
+                  id
+                  name
+                }
+              }
+              kulturEventsBykulturId {
+                id
+                datum
+                event
+              }
+              kulturInventarsBykulturId {
+                id
+                datum
+                kasten
+                beet
+                nr
+              }
+              zaehlungsBykulturId {
+                id
+                datum
+              }
+            }
+            nach_ausgepflanzt
+          }
+        }
+      }
+    }
     herkunft {
       id
       lokalname

@@ -1,0 +1,18 @@
+import get from 'lodash/get'
+
+export default ({ data, loading }) => {
+  const kulturen = get(data, 'kultur', [])
+  const nr = loading ? '...' : kulturen.length
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'kulturFolder',
+      id: 'kulturFolder',
+      label: `Kulturen (${nr})`,
+      url: ['Kulturen'],
+      sort: [7],
+      hasChildren: true,
+    },
+  ]
+}

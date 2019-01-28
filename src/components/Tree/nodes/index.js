@@ -68,6 +68,8 @@ import buildSammlungKulturKultur from './sammlung/kultur'
 import buildSammlungLieferungFolder from './sammlung/lieferung/folder'
 import buildSammlungLieferungLieferung from './sammlung/lieferung'
 
+import buildKulturFolder from './kultur/folder'
+
 import buildWerteListenFolder from './werteListen/folder'
 import buildWLMasseinheitFolder from './werteListen/masseinheit/folder'
 import buildWLMasseinheitMasseinheit from './werteListen/masseinheit'
@@ -100,6 +102,7 @@ export default ({ store, data, loading }) => {
     ...buildLieferungFolder({ data, loading }),
     ...buildPersonFolder({ data, loading }),
     ...buildSammlungFolder({ data, loading }),
+    ...buildKulturFolder({ data, loading }),
     ...buildWerteListenFolder({ data, loading }),
   ]
 
