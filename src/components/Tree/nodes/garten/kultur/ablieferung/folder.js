@@ -24,8 +24,8 @@ export default ({ url, nodes, data, loading }) => {
       menuType: 'artKulturAbLieferungFolder',
       id: `kultur${kulturId}AbLieferungFolder`,
       label: `Ab-Lieferungen (${nr})`,
-      url: ['Arten', gartenId, 'Kulturen', kulturId, 'Ab-Lieferungen'],
-      sort: [1, gartenIndex, 1, kulturIndex, 3],
+      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Ab-Lieferungen'],
+      sort: [2, gartenIndex, 1, kulturIndex, 3],
       hasChildren: true,
     },
   ]

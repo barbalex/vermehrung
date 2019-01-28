@@ -33,12 +33,12 @@ export default ({ nodes, data, url }) => {
 
       return {
         nodeType: 'table',
-        menuType: 'zaehlung',
-        filterTable: 'zaehlung',
-        id: `zaehlung${el.id}`,
-        parentId: `kultur${kulturId}ZaehlungFolder`,
+        menuType: 'inventar',
+        filterTable: 'inventar',
+        id: `inventar${el.id}`,
+        parentId: `kultur${kulturId}InventarFolder`,
         label,
-        url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
+        url: ['Arten', artId, 'Kulturen', kulturId, 'Inventare', el.id],
         hasChildren: false,
       }
     })

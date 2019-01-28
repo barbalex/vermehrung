@@ -33,19 +33,19 @@ export default ({ nodes, data, url }) => {
 
       return {
         nodeType: 'table',
-        menuType: 'zaehlung',
-        filterTable: 'zaehlung',
-        id: `zaehlung${el.id}`,
-        parentId: `kultur${kulturId}ZaehlungFolder`,
+        menuType: 'inventar',
+        filterTable: 'inventar',
+        id: `inventar${el.id}`,
+        parentId: `kultur${kulturId}InventarFolder`,
         label,
-        url: ['Arten', gartenId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
+        url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Inventare', el.id],
         hasChildren: false,
       }
     })
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [1, gartenIndex, 1, kulturIndex, 5, index]
+      el.sort = [2, gartenIndex, 1, kulturIndex, 5, index]
       return el
     })
 }

@@ -7,6 +7,7 @@ import buildArtFolder from './art/folder'
 import buildArtArt from './art'
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
+
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
 import buildArtKulturEventFolder from './art/kultur/event/folder'
@@ -19,8 +20,23 @@ import buildArtKulturAbLieferungFolder from './art/kultur/ablieferung/folder'
 import buildArtKulturLieferungAbLieferung from './art/kultur/ablieferung'
 import buildArtKulturZuLieferungFolder from './art/kultur/zulieferung/folder'
 import buildArtKulturLieferungZuLieferung from './art/kultur/zulieferung'
+
 import buildGartenFolder from './garten/folder'
 import buildGartenGarten from './garten'
+
+import buildGartenKulturFolder from './garten/kultur/folder'
+import buildGartenKultur from './garten/kultur'
+import buildGartenKulturEventFolder from './garten/kultur/event/folder'
+import buildGartenKulturEventEvent from './garten/kultur/event'
+import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
+import buildGartenKulturZaehlungZaehlung from './garten/kultur/zaehlung'
+import buildGartenKulturInventarFolder from './garten/kultur/inventar/folder'
+import buildGartenKulturInventarInventar from './garten/kultur/inventar'
+import buildGartenKulturAbLieferungFolder from './garten/kultur/ablieferung/folder'
+import buildGartenKulturLieferungAbLieferung from './garten/kultur/ablieferung'
+import buildGartenKulturZuLieferungFolder from './garten/kultur/zulieferung/folder'
+import buildGartenKulturLieferungZuLieferung from './garten/kultur/zulieferung'
+
 import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunftHerkunft from './herkunft'
 import buildLieferungFolder from './lieferung/folder'
@@ -158,6 +174,17 @@ export default ({ store, data, loading }) => {
         }),
       ]
     }
+    if (url.length === 2 && url[0] === 'Gaerten') {
+      nodes = [
+        ...nodes,
+        ...buildGartenKulturFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+      ]
+    }
 
     if (
       url.length === 2 &&
@@ -245,6 +272,16 @@ export default ({ store, data, loading }) => {
         }),
       ]
     }
+    if (url.length === 3 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
+      nodes = [
+        ...nodes,
+        ...buildGartenKultur({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
 
     if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
       nodes = [
@@ -274,6 +311,41 @@ export default ({ store, data, loading }) => {
           loading,
         }),
         ...buildArtKulturInventarFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+      ]
+    }
+    if (url.length === 4 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
+      nodes = [
+        ...nodes,
+        ...buildGartenKulturZaehlungFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildGartenKulturAbLieferungFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildGartenKulturZuLieferungFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildGartenKulturEventFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildGartenKulturInventarFolder({
           nodes,
           url,
           data,
@@ -351,6 +423,82 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildArtKulturEventEvent({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+
+    if (
+      url.length === 5 &&
+      url[0] === 'Gaerten' &&
+      url[2] === 'Kulturen' &&
+      url[4] === 'Zaehlungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildGartenKulturZaehlungZaehlung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Gaerten' &&
+      url[2] === 'Kulturen' &&
+      url[4] === 'Inventare'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildGartenKulturInventarInventar({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Gaerten' &&
+      url[2] === 'Kulturen' &&
+      url[4] === 'Ab-Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildGartenKulturLieferungAbLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Gaerten' &&
+      url[2] === 'Kulturen' &&
+      url[4] === 'Zu-Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildGartenKulturLieferungZuLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Gaerten' &&
+      url[2] === 'Kulturen' &&
+      url[4] === 'Events'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildGartenKulturEventEvent({
           nodes,
           data,
           url,

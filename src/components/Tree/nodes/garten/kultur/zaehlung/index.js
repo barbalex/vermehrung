@@ -28,13 +28,13 @@ export default ({ nodes, data, url }) => {
       id: `zaehlung${el.id}`,
       parentId: `kultur${kulturId}ZaehlungFolder`,
       label: get(el, 'datum', '(kein Datum)'),
-      url: ['Arten', gartenId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
+      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
       hasChildren: false,
     }))
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [1, gartenIndex, 1, kulturIndex, 1, index]
+      el.sort = [2, gartenIndex, 1, kulturIndex, 1, index]
       return el
     })
 }
