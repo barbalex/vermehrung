@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 
-import compareLabel from '../compareLabel'
-import allParentNodesExist from '../../allParentNodesExist'
+import compareLabel from '../../compareLabel'
+import allParentNodesExist from '../../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
   const werte = get(data, 'lieferung_typ_werte', [])
