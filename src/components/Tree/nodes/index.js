@@ -45,6 +45,7 @@ import buildHerkunftHerkunft from './herkunft'
 import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
 import buildHerkunftSammlungSammlung from './herkunft/sammlung'
 import buildHerkunftSammlungLieferungFolder from './herkunft/sammlung/lieferung/folder'
+import buildHerkunftSammlungLieferungLieferung from './herkunft/sammlung/lieferung'
 
 import buildLieferungFolder from './lieferung/folder'
 import buildLieferungLieferung from './lieferung'
@@ -563,7 +564,6 @@ export default ({ store, data, loading }) => {
         }),
       ]
     }
-
     if (
       url.length === 5 &&
       url[0] === 'Arten' &&
@@ -573,6 +573,21 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildArtSammlungLieferungLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Herkuenfte' &&
+      url[2] === 'Sammlungen' &&
+      url[4] === 'Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildHerkunftSammlungLieferungLieferung({
           nodes,
           data,
           url,
