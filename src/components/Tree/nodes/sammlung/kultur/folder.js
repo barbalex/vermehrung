@@ -18,7 +18,7 @@ export default ({ data, loading, url, nodes }) => {
     {
       nodeType: 'folder',
       menuType: 'sammlungKulturFolder',
-      id: `sammlung${sammlungId}kulturFolder`,
+      id: `sammlung${sammlungId}KulturFolder`,
       label: `Kulturen (${nr})`,
       url: ['Sammlungen', sammlungId, 'Kulturen'],
       sort: [6, sammlungIndex, 1],
