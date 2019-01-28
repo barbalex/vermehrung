@@ -52,10 +52,11 @@ import buildLieferungLieferung from './lieferung'
 
 import buildPersonFolder from './person/folder'
 import buildPersonPerson from './person'
-import buildPersonPersonGartenFolder from './person/garten/folder'
-import buildPersonPersonGartenGarten from './person/garten'
-import buildPersonPersonGartenKulturFolder from './person/garten/kultur/folder'
-import buildPersonPersonGartenKulturKultur from './person/garten/kultur'
+import buildPersonGartenFolder from './person/garten/folder'
+import buildPersonGartenGarten from './person/garten'
+import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
+import buildPersonGartenKulturKultur from './person/garten/kultur'
+import buildPersonSammlungFolder from './person/sammlung/folder'
 
 import buildWerteListenFolder from './werteListen/folder'
 import buildWLMasseinheitFolder from './werteListen/masseinheit/folder'
@@ -202,7 +203,13 @@ export default ({ store, data, loading }) => {
     if (url.length === 2 && url[0] === 'Personen') {
       nodes = [
         ...nodes,
-        ...buildPersonPersonGartenFolder({
+        ...buildPersonGartenFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+        ...buildPersonSammlungFolder({
           nodes,
           url,
           data,
@@ -335,7 +342,7 @@ export default ({ store, data, loading }) => {
     if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Gaerten') {
       nodes = [
         ...nodes,
-        ...buildPersonPersonGartenGarten({
+        ...buildPersonGartenGarten({
           nodes,
           data,
           url,
@@ -442,7 +449,7 @@ export default ({ store, data, loading }) => {
     if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Gaerten') {
       nodes = [
         ...nodes,
-        ...buildPersonPersonGartenKulturFolder({
+        ...buildPersonGartenKulturFolder({
           nodes,
           data,
           url,
@@ -640,7 +647,7 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonPersonGartenKulturKultur({
+        ...buildPersonGartenKulturKultur({
           nodes,
           data,
           url,
