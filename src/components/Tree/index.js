@@ -15,6 +15,8 @@ import query from './query'
 const Container = styled.div`
   height: 100%;
   display: flex;
+  padding-top: 5px;
+  padding-bottom: 5px;
   flex-direction: column;
   align-items: stretch;
   border-right-color: rgb(46, 125, 50);

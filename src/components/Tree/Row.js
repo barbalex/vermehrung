@@ -13,6 +13,9 @@ import toggleNodeSymbol from './toggleNodeSymbol'
 import storeContext from '../../storeContext'
 
 const singleRowHeight = 23
+const Container = styled.div`
+  padding-right: 4px;
+`
 const StyledNode = styled.div`
   padding-left: ${props => `${Number(props['data-level']) * 17 - 10}px`};
   height: ${singleRowHeight}px;
@@ -87,6 +90,7 @@ const SymbolSpan = styled.span`
 `
 const TextSpan = styled.span`
   margin-left: 0;
+  padding-right: 4px;
   font-size: 16px !important;
   font-weight: ${props =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
@@ -137,7 +141,7 @@ const Row = ({ index, style, node }) => {
   }, [node, openNodes])
 
   return (
-    <div style={style}>
+    <Container style={style}>
       <ContextMenuTrigger
         id={node.menuType}
         collect={() => myProps}
@@ -185,7 +189,7 @@ const Row = ({ index, style, node }) => {
           </TextSpan>
         </StyledNode>
       </ContextMenuTrigger>
-    </div>
+    </Container>
   )
 }
 
