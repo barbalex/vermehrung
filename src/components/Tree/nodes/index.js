@@ -8,6 +8,7 @@ import buildArtArt from './art'
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
 import buildArtSammlungLieferungFolder from './art/sammlung/lieferung/folder'
+import buildArtSammlungLieferungLieferung from './art/sammlung/lieferung'
 
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
@@ -510,6 +511,22 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildGartenKulturEventEvent({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+
+    if (
+      url.length === 5 &&
+      url[0] === 'Arten' &&
+      url[2] === 'Sammlungen' &&
+      url[4] === 'Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildArtSammlungLieferungLieferung({
           nodes,
           data,
           url,
