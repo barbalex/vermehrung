@@ -29,4 +29,4 @@ Die wichtigsten Schritte sind:
 - :white_medium_square: Volltext-Suche gebaut
 - :white_medium_square: Filter gebaut
 - :white_medium_square: Daten-Laden optimiert
-- ...
+- ...?
