@@ -20,7 +20,7 @@ export default ({ nodes, data }) => {
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [6, 2, index]
+      el.sort = [8, 2, index]
       return el
     })
 }

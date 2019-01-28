@@ -12,7 +12,7 @@ export default ({ data, loading }) => {
       parentId: 'werteListenFolder',
       label: `Lieferung: Zwischenlager (${nr})`,
       url: ['Werte-Listen', 'Lieferung-Zwischenlager'],
-      sort: [6, 5],
+      sort: [8, 5],
       hasChildren: true,
     },
   ]

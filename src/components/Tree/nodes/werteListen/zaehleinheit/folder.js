@@ -12,7 +12,7 @@ export default ({ data, loading }) => {
       parentId: 'werteListenFolder',
       label: `Zähleinheiten (${nr})`,
       url: ['Werte-Listen', 'Zaehleinheiten'],
-      sort: [6, 2],
+      sort: [8, 2],
       hasChildren: true,
     },
   ]

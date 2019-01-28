@@ -12,7 +12,7 @@ export default ({ data, loading }) => {
       parentId: 'werteListenFolder',
       label: `Lieferung: Typ (${nr})`,
       url: ['Werte-Listen', 'Lieferung-Typ'],
-      sort: [6, 3],
+      sort: [8, 3],
       hasChildren: true,
     },
   ]

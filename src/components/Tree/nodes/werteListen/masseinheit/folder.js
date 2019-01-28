@@ -12,7 +12,7 @@ export default ({ data, loading }) => {
       parentId: 'werteListenFolder',
       label: `Masseinheiten (${nr})`,
       url: ['Werte-Listen', 'Masseinheiten'],
-      sort: [6, 1],
+      sort: [8, 1],
       hasChildren: true,
     },
   ]

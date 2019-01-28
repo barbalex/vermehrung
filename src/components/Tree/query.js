@@ -456,6 +456,50 @@ export default gql`
         nach_ausgepflanzt
       }
     }
+    sammlung {
+      id
+      artByartId {
+        id
+        art_ae_art {
+          id
+          name
+        }
+      }
+      herkunftByherkunftId {
+        id
+        nr
+      }
+      datum
+      personBypersonId {
+        id
+        name
+      }
+      lieferungsByvonSammlungId {
+        id
+        von_datum
+        lieferungTypWerteBytyp {
+          id
+          wert
+        }
+        lieferungStatusWerteBystatus {
+          id
+          wert
+        }
+      }
+      sammlungInKultursBysammlungId {
+        id
+        kulturBykulturId {
+          id
+          gartenBygartenId {
+            id
+            personBypersonId {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
     masseinheit_werte {
       id
       wert
