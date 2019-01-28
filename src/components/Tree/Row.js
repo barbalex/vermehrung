@@ -31,7 +31,7 @@ const StyledNode = styled.div`
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   margin-top: ${props =>
-    props['data-nodeisopen'] ? '-6px !important' : '1px !important'};
+    props['data-nodeisopen'] ? '-5px !important' : '1px !important'};
   margin-left: ${props => (props['data-nodeisopen'] ? '-1px !important' : 0)};
   margin-right: ${props => (props['data-nodeisopen'] ? '-5px !important' : 0)};
   padding-left: ${props => (props['data-nodeisopen'] ? '2px' : '2px')};
@@ -47,7 +47,6 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   }
 `
 const StyledChevronRightIcon = styled(ChevronRightIcon)`
-  margin-top: -2px !important;
   padding-left: 2px;
   height: 22px !important;
   width: 26px;
@@ -79,12 +78,12 @@ const SymbolDiv = styled.div`
   cursor: pointer;
 `
 const SymbolSpan = styled.span`
-  padding-right: 8px !important;
+  padding-right: 11px !important;
   padding-left: ${props =>
     props['data-nodeisinactivenodepath'] ? '7px' : '9px'};
   font-weight: ${props =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
-  margin-top: -9px !important;
+  margin-top: -8px !important;
   font-size: 28px !important;
   width: 9px;
 `
