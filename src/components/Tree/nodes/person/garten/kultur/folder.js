@@ -8,6 +8,8 @@ export default ({ url, nodes, data, loading }) => {
   const person = personen.find(p => p.id === personId)
   const gaerten = get(person, 'gartensBypersonId', [])
   const garten = gaerten.find(a => a.id === gartenId)
+  const kulturen = get(garten, 'kultursBygartenId', [])
+  const nr = loading ? '...' : kulturen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -20,14 +22,11 @@ export default ({ url, nodes, data, loading }) => {
     n => n.id === `person${personId}garten${gartenId}`,
   )
 
-  const kulturen = get(garten, 'kultursBygartenId', [])
-  const nr = loading ? '...' : kulturen.length
-
   return [
     {
       nodeType: 'folder',
       menuType: 'personGartenKulturFolder',
-      id: `garten${url[1]}KulturFolder`,
+      id: `person${personId}Garten${gartenId}KulturFolder`,
       label: `Kulturen (${nr})`,
       url: ['Personen', personId, 'Gaerten', gartenId, 'Kulturen'],
       sort: [5, personIndex, 1, gartenIndex, 1],

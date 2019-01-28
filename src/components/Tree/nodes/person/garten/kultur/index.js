@@ -1,32 +1,43 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import compareLabel from '../../compareLabel'
-import allParentNodesExist from '../../../allParentNodesExist'
+import compareLabel from '../../../compareLabel'
+import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
-  const gaerten = get(data, 'garten', [])
-  const garten = gaerten.find(a => a.id === url[1])
+  const personId = url[1]
+  const gartenId = url[3]
+  const personen = get(data, 'person', [])
+  const person = personen.find(p => p.id === personId)
+  const gaerten = get(person, 'gartensBypersonId', [])
+  const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kultursBygartenId', [])
-  const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
-  const gartenIndex =
-    findIndex(gartenNodes, n => n.id === `garten${url[1]}`) || 0
+  const personNodes = nodes.filter(n => n.parentId === 'personFolder')
+  const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+
+  const gartenNodes = nodes.filter(
+    n => n.parentId === `person${personId}gartenFolder`,
+  )
+  const gartenIndex = findIndex(
+    gartenNodes,
+    n => n.id === `person${personId}garten${gartenId}`,
+  )
 
   return kulturen
     .map(el => ({
       nodeType: 'table',
-      menuType: 'kultur',
+      menuType: 'personGartenKultur',
       filterTable: 'kultur',
-      id: `kultur${el.id}`,
-      parentId: `garten${url[1]}KulturFolder`,
-      label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
-      url: ['Gaerten', url[1], 'Kulturen', el.id],
+      id: `person${personId}Garten${url[1]}Kultur${el.id}`,
+      parentId: `person${personId}Garten${gartenId}KulturFolder`,
+      label: get(el, 'artByartId.art_ae_art.name', '(keine Art)'),
+      url: ['Personen', personId, 'Gaerten', gartenId, 'Kulturen', el.id],
       hasChildren: true,
     }))
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [5, gartenIndex, 1, index]
+      el.sort = [5, personIndex, 1, gartenIndex, 1, index]
       return el
     })
 }
