@@ -427,10 +427,6 @@ export default gql`
       }
       lieferungsBypersonId {
         id
-        personBypersonId {
-          id
-          name
-        }
         lieferungTypWerteBytyp {
           id
           wert
