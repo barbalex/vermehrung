@@ -1,5 +1,4 @@
 import uniqBy from 'lodash/uniqBy'
-import { getSnapshot } from 'mobx-state-tree'
 
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
@@ -151,6 +150,8 @@ export default ({ store, data, loading }) => {
         ...buildArtKulturFolder({
           nodes,
           url,
+          data,
+          loading,
         }),
       ]
     }
