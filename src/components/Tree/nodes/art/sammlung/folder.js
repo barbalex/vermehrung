@@ -13,8 +13,8 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'artSammlungenFolder',
-      id: `art${url[1]}SammlungenFolder`,
+      menuType: 'artSammlungFolder',
+      id: `art${url[1]}SammlungFolder`,
       label: `Sammlungen (${nr})`,
       url: ['Arten', url[1], 'Sammlungen'],
       sort: [1, artIndex, 2],

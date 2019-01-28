@@ -17,7 +17,7 @@ export default ({ nodes, data, url }) => {
       menuType: 'sammlung',
       filterTable: 'sammlung',
       id: `sammlung${el.id}`,
-      parentId: `art${url[1]}SammlungFolder`,
+      parentId: `art${url[1]}SammlungenFolder`,
       label: `${get(el, 'datum', '(kein Datum)')}: ${get(
         el,
         'herkunftByherkunftId.nr',
