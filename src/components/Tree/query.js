@@ -399,6 +399,16 @@ export default gql`
       name
       gartensBypersonId {
         id
+        kultursBygartenId {
+          id
+          artByartId {
+            id
+            art_ae_art {
+              id
+              name
+            }
+          }
+        }
       }
       sammlungsBypersonId {
         id
