@@ -14,20 +14,21 @@ export default ({ nodes, data, url }) => {
     findIndex(herkunftNodes, n => n.id === `herkunft${herkunftId}`) || 0
 
   return sammlungen
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'sammlung',
-      filterTable: 'sammlung',
-      id: `sammlung${el.id}`,
-      parentId: `herkunft${herkunftId}SammlungFolder`,
-      label: `${get(el, 'datum', '(kein Datum)')}: ${get(
-        el,
-        'herkunftByherkunftId.nr',
-        '(keine Nr.)',
-      )}`,
-      url: ['Herkuenfte', herkunftId, 'Sammlungen', el.id],
-      hasChildren: true,
-    }))
+    .map(el => {
+      const datum = get(el, 'datum', '(kein Datum)')
+      const artName = get(el, 'artByartId.art_ae_art.name', '(keine Art)')
+      const label = `${datum}: ${artName}`
+      return {
+        nodeType: 'table',
+        menuType: 'sammlung',
+        filterTable: 'sammlung',
+        id: `sammlung${el.id}`,
+        parentId: `herkunft${herkunftId}SammlungFolder`,
+        label,
+        url: ['Herkuenfte', herkunftId, 'Sammlungen', el.id],
+        hasChildren: true,
+      }
+    })
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {

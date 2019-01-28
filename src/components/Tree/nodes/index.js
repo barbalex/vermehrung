@@ -43,6 +43,8 @@ import buildGartenKulturLieferungZuLieferung from './garten/kultur/zulieferung'
 import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunftHerkunft from './herkunft'
 import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
+import buildHerkunftSammlungSammlung from './herkunft/sammlung'
+import buildHerkunftSammlungLieferungFolder from './herkunft/sammlung/lieferung/folder'
 
 import buildLieferungFolder from './lieferung/folder'
 import buildLieferungLieferung from './lieferung'
@@ -298,6 +300,20 @@ export default ({ store, data, loading }) => {
         }),
       ]
     }
+    if (
+      url.length === 3 &&
+      url[0] === 'Herkuenfte' &&
+      url[2] === 'Sammlungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildHerkunftSammlungSammlung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
 
     if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
       nodes = [
@@ -376,6 +392,21 @@ export default ({ store, data, loading }) => {
           nodes,
           url,
           data,
+          loading,
+        }),
+      ]
+    }
+    if (
+      url.length === 4 &&
+      url[0] === 'Herkuenfte' &&
+      url[2] === 'Sammlungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildHerkunftSammlungLieferungFolder({
+          nodes,
+          data,
+          url,
           loading,
         }),
       ]
