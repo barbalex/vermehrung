@@ -118,27 +118,22 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildWLMasseinheitFolder({
-          nodes,
           data,
           loading,
         }),
         ...buildWLZaehleinheitFolder({
-          nodes,
           data,
           loading,
         }),
         ...buildWLLieferungTypFolder({
-          nodes,
           data,
           loading,
         }),
         ...buildWLLieferungStatusFolder({
-          nodes,
           data,
           loading,
         }),
         ...buildWLLieferungZwischenlagerFolder({
-          nodes,
           data,
           loading,
         }),
