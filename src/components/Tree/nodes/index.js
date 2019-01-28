@@ -120,22 +120,27 @@ export default ({ store, data, loading }) => {
         ...buildWLMasseinheitFolder({
           nodes,
           data,
+          loading,
         }),
         ...buildWLZaehleinheitFolder({
           nodes,
           data,
+          loading,
         }),
         ...buildWLLieferungTypFolder({
           nodes,
           data,
+          loading,
         }),
         ...buildWLLieferungStatusFolder({
           nodes,
           data,
+          loading,
         }),
         ...buildWLLieferungZwischenlagerFolder({
           nodes,
           data,
+          loading,
         }),
       ]
     }
@@ -146,6 +151,8 @@ export default ({ store, data, loading }) => {
         ...buildArtSammlungFolder({
           nodes,
           url,
+          data,
+          loading,
         }),
         ...buildArtKulturFolder({
           nodes,
@@ -249,22 +256,32 @@ export default ({ store, data, loading }) => {
         ...buildArtKulturZaehlungFolder({
           nodes,
           url,
+          data,
+          loading,
         }),
         ...buildArtKulturAbLieferungFolder({
           nodes,
           url,
+          data,
+          loading,
         }),
         ...buildArtKulturZuLieferungFolder({
           nodes,
           url,
+          data,
+          loading,
         }),
         ...buildArtKulturEventFolder({
           nodes,
           url,
+          data,
+          loading,
         }),
         ...buildArtKulturInventarFolder({
           nodes,
           url,
+          data,
+          loading,
         }),
       ]
     }
