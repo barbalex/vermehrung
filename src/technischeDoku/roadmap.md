@@ -22,7 +22,7 @@ Die gröbsten Schritte sind:
 - :white_check_mark: Datenbank und GraphQL-Server im Betrieb
 - :white_check_mark: App inklusive Entwicklungs-Umgebung initiiert
 - :white_check_mark: Navigation entworfen
-- :ballot_box_with_check: Navigations-Baum gebaut
+- :white_check_mark: Navigations-Baum gebaut
 - :white_medium_square: Formulare gebaut
 - :white_medium_square: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_medium_square: Authentifikation und Authorisierung gebaut
