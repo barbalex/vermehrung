@@ -70,6 +70,16 @@ import buildSammlungLieferungLieferung from './sammlung/lieferung'
 
 import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
+import buildKulturEventFolder from './kultur/event/folder'
+import buildKulturEventEvent from './kultur/event'
+import buildKulturZaehlungFolder from './kultur/zaehlung/folder'
+import buildKulturZaehlungZaehlung from './kultur/zaehlung'
+import buildKulturInventarFolder from './kultur/inventar/folder'
+import buildKulturInventarInventar from './kultur/inventar'
+import buildKulturAbLieferungFolder from './kultur/ablieferung/folder'
+import buildKulturLieferungAbLieferung from './kultur/ablieferung'
+import buildKulturZuLieferungFolder from './kultur/zulieferung/folder'
+import buildKulturLieferungZuLieferung from './kultur/zulieferung'
 
 import buildWerteListenFolder from './werteListen/folder'
 import buildWLMasseinheitFolder from './werteListen/masseinheit/folder'
@@ -266,6 +276,26 @@ export default ({ store, data, loading }) => {
           loading,
         }),
         ...buildSammlungLieferungFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+      ]
+    }
+    if (url.length === 2 && url[0] === 'Kulturen') {
+      console.log(
+        'todo',
+        buildKulturZaehlungFolder({
+          nodes,
+          url,
+          data,
+          loading,
+        }),
+      )
+      nodes = [
+        ...nodes,
+        ...buildKulturZaehlungFolder({
           nodes,
           url,
           data,
