@@ -5,7 +5,6 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import { navigate } from 'gatsby'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -31,12 +30,9 @@ const query = gql`
       id
       ae_id
     }
-    art {
+    ae_art {
       id
-      art_ae_art {
-        id
-        name
-      }
+      name
     }
   }
 `
@@ -57,10 +53,10 @@ const Art = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let artWerte = get(data, 'art', [])
+  let artWerte = get(data, 'ae_art', [])
   artWerte = artWerte.map(el => ({
     value: el.id,
-    label: get(el, 'art_ae_art.name', '(keine Art)'),
+    label: el.name,
   }))
   artWerte = sortBy(artWerte, 'label')
 
@@ -71,8 +67,8 @@ const Art = () => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation update_art($id: Int!, $aeId: UUID) {
-              update_art(where: { id: { _eq: $id } }, _set: { ae_id: $aeId }) {
+            mutation update_art($id: Int!, $ae_id: UUID) {
+              update_art(where: { id: { _eq: $id } }, _set: { ae_id: $ae_id }) {
                 affected_rows
                 returning {
                   id
@@ -83,7 +79,7 @@ const Art = () => {
           `,
           variables: {
             id: row.id,
-            aeId: value,
+            ae_id: value,
           },
         })
       } catch (error) {
@@ -91,7 +87,6 @@ const Art = () => {
       }
       setErrors({})
       refetch()
-      navigate(`/Vermehrung/Arten/${row.id}`)
     },
     [row],
   )

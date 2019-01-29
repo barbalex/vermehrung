@@ -5,10 +5,10 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import { navigate } from 'gatsby'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
+import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
@@ -74,7 +74,7 @@ const Kultur = () => {
   artWerte = sortBy(artWerte, 'label')
 
   let gartenWerte = get(data, 'garten', [])
-  gartenWerte = artWerte.map(el => ({
+  gartenWerte = gartenWerte.map(el => ({
     value: el.id,
     label: get(el, 'personBypersonId.name', '(kein Name)'),
   }))
@@ -89,8 +89,8 @@ const Kultur = () => {
           mutation: gql`
             mutation update_kultur(
               $id: Int!
-              $art_id: UUID
-              $garten_id: UUID
+              $art_id: Int
+              $garten_id: Int
               $bemerkungen: String
             ) {
               update_kultur(
@@ -113,7 +113,9 @@ const Kultur = () => {
           `,
           variables: {
             id: row.id,
-            [field]: value,
+            art_id: field === 'art_id' ? value : row.art_id,
+            garten_id: field === 'garten_id' ? value : row.garten_id,
+            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
           },
         })
       } catch (error) {
@@ -121,7 +123,6 @@ const Kultur = () => {
       }
       setErrors({})
       refetch()
-      navigate(`/Vermehrung/Arten/${row.id}`)
     },
     [row],
   )
@@ -170,6 +171,15 @@ const Kultur = () => {
             options={gartenWerte}
             saveToDb={saveToDb}
             error={errors.garten_id}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+            multiLine
           />
         </FieldsContainer>
       </Container>
