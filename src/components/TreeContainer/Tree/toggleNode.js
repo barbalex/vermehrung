@@ -21,7 +21,7 @@ export default ({ node, store }) => {
       // leave newActiveNodeArray as it is
     }
   } else if (!nodeIsOpen) {
-    openNode({ node, openNodes, store })
+    openNode({ node, store })
   }
 
   setActiveNodeArray(newActiveNodeArray)

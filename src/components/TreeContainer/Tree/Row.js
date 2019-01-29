@@ -10,7 +10,7 @@ import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import isNodeOpen from './isNodeOpen'
 import toggleNode from './toggleNode'
 import toggleNodeSymbol from './toggleNodeSymbol'
-import storeContext from '../../storeContext'
+import storeContext from '../../../storeContext'
 
 const singleRowHeight = 23
 const Container = styled.div`

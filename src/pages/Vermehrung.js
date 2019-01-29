@@ -7,7 +7,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
-import Tree from '../components/Tree'
+import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import storeContext from '../storeContext'
 

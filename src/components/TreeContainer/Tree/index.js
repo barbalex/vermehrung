@@ -4,22 +4,10 @@ import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
-import { useQuery } from 'react-apollo-hooks'
 
-import ErrorBoundary from '../ErrorBoundary'
-import storeContext from '../../storeContext'
+import ErrorBoundary from '../../ErrorBoundary'
+import storeContext from '../../../storeContext'
 import Row from './Row'
-import buildNodes from './nodes'
-import query from './query'
-import isNodeOpen from './isNodeOpen'
-
-function usePrevious(value) {
-  const ref = useRef()
-  useEffect(() => {
-    ref.current = value
-  })
-  return ref.current
-}
 
 const Container = styled.div`
   height: 100%;
@@ -47,36 +35,7 @@ const singleRowHeight = 23
 
 const Tree = ({ dimensions }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray: aNA, setRefetch, openNodes } = store.tree
-  // 1. build list depending on path using react-window
-  // 2. every node uses navigate to set url on click
-
-  const { data, error: dataError, loading, refetch, networkStatus } = useQuery(
-    query,
-    {
-      suspend: false,
-      notifyOnNetworkStatusChange: true,
-      variables: {
-        isArt: isNodeOpen(openNodes, ['Arten']),
-        isGarten: isNodeOpen(openNodes, ['Gaerten']),
-        isHerkunft: isNodeOpen(openNodes, ['Herkuenfte']),
-        isLieferung: isNodeOpen(openNodes, ['Lieferungen']),
-        isPerson: isNodeOpen(openNodes, ['Personen']),
-        isSammlung: isNodeOpen(openNodes, ['Sammlungen']),
-        isKultur: isNodeOpen(openNodes, ['Kulturen']),
-        isWerteListe: isNodeOpen(openNodes, ['Werte-Listen']),
-      },
-    },
-  )
-
-  console.log('Tree, networkStatus', { networkStatus, loading, data })
-
-  useEffect(() => {
-    setRefetch(refetch)
-  }, [])
-
-  const nodes = buildNodes({ store, data, loading })
-  //setNodes(nodes)
+  const { activeNodeArray: aNA, nodes } = store.tree
 
   const listRef = React.createRef()
 
@@ -92,14 +51,6 @@ const Tree = ({ dimensions }) => {
   let width = 250
   if (dimensions && dimensions.width && !isNaN(dimensions.width)) {
     width = dimensions.width
-  }
-
-  if (dataError) {
-    return (
-      <Container>{`Fehler beim Laden der Daten: ${
-        dataError.message
-      }`}</Container>
-    )
   }
 
   return (
