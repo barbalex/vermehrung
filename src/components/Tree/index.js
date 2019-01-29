@@ -69,7 +69,11 @@ const Tree = ({ dimensions }) => {
   }
 
   if (dataError) {
-    return `Fehler beim Laden der Daten: ${dataError.message}`
+    return (
+      <Container>{`Fehler beim Laden der Daten: ${
+        dataError.message
+      }`}</Container>
+    )
   }
 
   return (
