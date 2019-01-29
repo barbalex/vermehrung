@@ -18,6 +18,9 @@ export default gql`
     $isSammlungKultur: Boolean!
     $isSammlungLieferung: Boolean!
     $isKultur: Boolean!
+    $isKulturZuLieferung: Boolean!
+    $isKulturAbLieferung: Boolean!
+    $isKulturSammlung: Boolean!
     $isWerteListe: Boolean!
   ) {
     garten {
@@ -324,15 +327,15 @@ export default gql`
       }
       lieferungsByvonKulturId @include(if: $isKultur) {
         id
-        personBypersonId {
+        personBypersonId @include(if: $isKulturAbLieferung) {
           id
           name
         }
-        lieferungTypWerteBytyp {
+        lieferungTypWerteBytyp @include(if: $isKulturAbLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus {
+        lieferungStatusWerteBystatus @include(if: $isKulturAbLieferung) {
           id
           wert
         }
@@ -340,15 +343,15 @@ export default gql`
       }
       lieferungsBynachKulturId @include(if: $isKultur) {
         id
-        personBypersonId {
+        personBypersonId @include(if: $isKulturZuLieferung) {
           id
           name
         }
-        lieferungTypWerteBytyp {
+        lieferungTypWerteBytyp @include(if: $isKulturZuLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus {
+        lieferungStatusWerteBystatus @include(if: $isKulturZuLieferung) {
           id
           wert
         }
@@ -356,7 +359,7 @@ export default gql`
       }
       sammlungInKultursBykulturId @include(if: $isKultur) {
         id
-        sammlungBysammlungId {
+        sammlungBysammlungId @include(if: $isKulturSammlung) {
           id
           herkunftByherkunftId {
             id
