@@ -48,7 +48,8 @@ const TreeContainer = ({ dimensions }) => {
     suspend: false,
     notifyOnNetworkStatusChange: true,
     variables: {
-      isArt: isNodeOpen(openNodes, ['Arten']),
+      isArt: openNodes.some(n => n[0] === 'Arten'),
+      isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
       isGarten: isNodeOpen(openNodes, ['Gaerten']),
       isHerkunft: isNodeOpen(openNodes, ['Herkuenfte']),
       isLieferung: isNodeOpen(openNodes, ['Lieferungen']),

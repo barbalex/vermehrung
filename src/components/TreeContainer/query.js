@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 export default gql`
   query TreeQuery(
     $isArt: Boolean!
+    $isArtKultur: Boolean!
     $isGarten: Boolean!
     $isHerkunft: Boolean!
     $isLieferung: Boolean!
@@ -106,30 +107,30 @@ export default gql`
       ae_id
       kultursByartId @include(if: $isArt) {
         id
-        gartenBygartenId {
+        gartenBygartenId @include(if: $isArtKultur) {
           id
           personBypersonId {
             id
             name
           }
         }
-        kulturEventsBykulturId {
+        kulturEventsBykulturId @include(if: $isArtKultur) {
           id
           datum
           event
         }
-        kulturInventarsBykulturId {
+        kulturInventarsBykulturId @include(if: $isArtKultur) {
           id
           datum
           kasten
           beet
           nr
         }
-        zaehlungsBykulturId {
+        zaehlungsBykulturId @include(if: $isArtKultur) {
           id
           datum
         }
-        lieferungsByvonKulturId {
+        lieferungsByvonKulturId @include(if: $isArtKultur) {
           id
           personBypersonId {
             id
@@ -145,7 +146,7 @@ export default gql`
           }
           von_datum
         }
-        lieferungsBynachKulturId {
+        lieferungsBynachKulturId @include(if: $isArtKultur) {
           id
           personBypersonId {
             id
@@ -161,7 +162,7 @@ export default gql`
           }
           nach_datum
         }
-        sammlungInKultursBykulturId {
+        sammlungInKultursBykulturId @include(if: $isArtKultur) {
           id
           sammlungBysammlungId {
             id
