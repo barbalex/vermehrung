@@ -50,6 +50,24 @@ const query = gql`
       name
       ort
     }
+    lieferung_typ_werte {
+      id
+      wert
+      sort
+    }
+    zaehleinheit_werte {
+      id
+      wert
+      sort
+    }
+    masseinheit_werte {
+      id
+      wert
+      sort
+    }
+    sammlung {
+      id
+    }
   }
 `
 
