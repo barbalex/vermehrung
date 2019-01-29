@@ -65,11 +65,11 @@ const Herkunft = () => {
           mutation: gql`
             mutation update_herkunft(
               $id: Int!
-              $nr: string
-              $lokalname: string
-              $gemeinde: string
-              $kanton: string
-              $land: string
+              $nr: String
+              $lokalname: String
+              $gemeinde: String
+              $kanton: String
+              $land: String
               $x: Int
               $y: Int
               $bemerkungen: String

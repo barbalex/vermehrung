@@ -68,7 +68,7 @@ const Art = () => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation update_art($id: Int!, $ae_id: UUID) {
+            mutation update_art($id: Int!, $ae_id: uuid) {
               update_art(where: { id: { _eq: $id } }, _set: { ae_id: $ae_id }) {
                 affected_rows
                 returning {

@@ -4,7 +4,6 @@ export default gql`
   query TreeQuery(
     $isArt: Boolean!
     $isArtKultur: Boolean!
-    $isArtSammlung: Boolean!
     $isGarten: Boolean!
     $isGartenKultur: Boolean!
     $isHerkunft: Boolean!
