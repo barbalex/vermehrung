@@ -5,6 +5,7 @@ import storeContext from '../../storeContext'
 import Art from './Art'
 import Kultur from './Kultur'
 import Garten from './Garten'
+import Herkunft from './Herkunft'
 
 const Data = () => {
   const store = useContext(storeContext)
@@ -19,6 +20,9 @@ const Data = () => {
   }
   if (url.length === 2 && url[0] === 'Gaerten') {
     return <Garten />
+  }
+  if (url.length === 2 && url[0] === 'Herkuenfte') {
+    return <Herkunft />
   }
   if (url.length === 2 && url[0] === 'Personen') {
     return null
@@ -134,6 +138,38 @@ const Data = () => {
   }
   if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Gaerten') {
     return <Garten />
+  }
+  if (url.length === 4 && url[0] === 'Sammlungen' && url[2] === 'Herkuenfte') {
+    return <Herkunft />
+  }
+  if (url.length === 4 && url[0] === 'Sammlungen' && url[2] === 'Kulturen') {
+    return <Kultur />
+  }
+  if (url.length === 4 && url[0] === 'Sammlungen' && url[2] === 'Lieferungen') {
+    return null
+  }
+  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
+    return null
+  }
+  if (
+    url.length === 4 &&
+    url[0] === 'Kulturen' &&
+    url[2] === 'Zu-Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 4 &&
+    url[0] === 'Kulturen' &&
+    url[2] === 'Ab-Lieferungen'
+  ) {
+    return null
+  }
+  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Events') {
+    return null
+  }
+  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
+    return null
   }
 
   if (

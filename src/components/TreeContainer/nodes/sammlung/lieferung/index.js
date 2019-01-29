@@ -36,13 +36,13 @@ export default ({ nodes, data, url }) => {
         parentId: `sammlung${sammlungId}LieferungFolder`,
         label,
         url: ['Sammlungen', sammlungId, 'Lieferungen', el.id],
-        hasChildren: true,
+        hasChildren: false,
       }
     })
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [6, sammlungIndex, 2, index]
+      el.sort = [6, sammlungIndex, 3, index]
       return el
     })
 }

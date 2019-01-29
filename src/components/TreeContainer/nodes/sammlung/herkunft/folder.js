@@ -5,9 +5,8 @@ export default ({ data, loading, url, nodes }) => {
   const sammlungId = url[1]
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const sammlungenInKultur = get(sammlung, 'sammlungInKultursBysammlungId', [])
-  const nr =
-    loading && !sammlungenInKultur.length ? '...' : sammlungenInKultur.length
+  const herkunft = get(sammlung, 'herkunftByherkunftId')
+  const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -18,11 +17,11 @@ export default ({ data, loading, url, nodes }) => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'sammlungKulturFolder',
-      id: `sammlung${sammlungId}KulturFolder`,
-      label: `Kulturen (${nr})`,
-      url: ['Sammlungen', sammlungId, 'Kulturen'],
-      sort: [6, sammlungIndex, 2],
+      menuType: 'sammlungHerkunftFolder',
+      id: `sammlung${sammlungId}HerkunftFolder`,
+      label: `Herkünfte (${nr})`,
+      url: ['Sammlungen', sammlungId, 'Herkuenfte'],
+      sort: [6, sammlungIndex, 1],
       hasChildren: true,
     },
   ]

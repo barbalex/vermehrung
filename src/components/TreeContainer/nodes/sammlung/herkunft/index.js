@@ -8,9 +8,7 @@ export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const kulturen = get(sammlung, 'sammlungInKultursBysammlungId', []).map(
-    s => s.kulturBykulturId,
-  )
+  const herkunft = get(sammlung, 'herkunftByherkunftId', {})
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -18,21 +16,21 @@ export default ({ nodes, data, url }) => {
     n => n.id === `sammlung${sammlungId}`,
   )
 
-  return kulturen
+  return [herkunft]
     .map(el => ({
       nodeType: 'table',
-      menuType: 'sammlungKultur',
-      filterTable: 'kultur',
-      id: `sammlung${sammlungId}Kultur${el.id}`,
-      parentId: `sammlung${sammlungId}KulturFolder`,
-      label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
-      url: ['Sammlungen', sammlungId, 'Kulturen', el.id],
+      menuType: 'sammlungHerkunft',
+      filterTable: 'herkunft',
+      id: `sammlung${sammlungId}Herkunft${el.id}`,
+      parentId: `sammlung${sammlungId}HerkunftFolder`,
+      label: el.nr || '(keine Nr)',
+      url: ['Sammlungen', sammlungId, 'Herkuenfte', el.id],
       hasChildren: false,
     }))
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [6, sammlungIndex, 2, index]
+      el.sort = [6, sammlungIndex, 1, index]
       return el
     })
 }
