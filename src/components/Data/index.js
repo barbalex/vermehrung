@@ -1,0 +1,245 @@
+import React, { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
+
+import storeContext from '../../storeContext'
+import Art from './Art'
+
+const Data = () => {
+  const store = useContext(storeContext)
+  const { activeNodeArray: url } = store.tree
+
+  if (url.length === 1) {
+    return null
+  }
+
+  if (url.length === 2 && url[0] === 'Arten') {
+    return <Art />
+  }
+  if (url.length === 2 && url[0] === 'Gaerten') {
+    return null
+  }
+  if (url.length === 2 && url[0] === 'Personen') {
+    return null
+  }
+  if (url.length === 2 && url[0] === 'Sammlungen') {
+    return null
+  }
+  if (url.length === 2 && url[0] === 'Kulturen') {
+    return null
+  }
+
+  if (
+    url.length === 2 &&
+    url[0] === 'Werte-Listen' &&
+    url[1] === 'Zaehleinheiten'
+  ) {
+    return null
+  }
+  if (
+    url.length === 2 &&
+    url[0] === 'Werte-Listen' &&
+    url[1] === 'Lieferung-Status'
+  ) {
+    return null
+  }
+  if (
+    url.length === 2 &&
+    url[0] === 'Werte-Listen' &&
+    url[1] === 'Lieferung-Typ'
+  ) {
+    return null
+  }
+  if (
+    url.length === 2 &&
+    url[0] === 'Werte-Listen' &&
+    url[1] === 'Lieferung-Zwischenlager'
+  ) {
+    return null
+  }
+  if (
+    url.length === 2 &&
+    url[0] === 'Werte-Listen' &&
+    url[1] === 'Masseinheiten'
+  ) {
+    return null
+  }
+  if (url.length === 2 && url[0] === 'Herkuenfte') {
+    return null
+  }
+
+  if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Gaerten') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Sammlungen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Sammlungen' && url[2] === 'Kulturen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Sammlungen' && url[2] === 'Lieferungen') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
+    return null
+  }
+  if (
+    url.length === 3 &&
+    url[0] === 'Kulturen' &&
+    url[2] === 'Zu-Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 3 &&
+    url[0] === 'Kulturen' &&
+    url[2] === 'Ab-Lieferungen'
+  ) {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Events') {
+    return null
+  }
+  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
+    return null
+  }
+
+  if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
+    return null
+  }
+  if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
+    return null
+  }
+  if (url.length === 4 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
+    return null
+  }
+  if (url.length === 4 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
+    return null
+  }
+  if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Gaerten') {
+    return null
+  }
+
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Zaehlungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Inventare'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Ab-Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Zu-Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Events'
+  ) {
+    return null
+  }
+
+  if (
+    url.length === 5 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Zaehlungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Inventare'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Ab-Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Zu-Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Events'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Sammlungen' &&
+    url[4] === 'Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Herkuenfte' &&
+    url[2] === 'Sammlungen' &&
+    url[4] === 'Lieferungen'
+  ) {
+    return null
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Personen' &&
+    url[2] === 'Gaerten' &&
+    url[4] === 'Kulturen'
+  ) {
+    return null
+  }
+  return null
+}
+
+export default observer(Data)

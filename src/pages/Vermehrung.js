@@ -8,6 +8,7 @@ import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
 import Tree from '../components/Tree'
+import Data from '../components/Data'
 import storeContext from '../storeContext'
 
 const Container = styled.div`
@@ -52,7 +53,7 @@ const Vermehrung = ({ location }) => {
               renderOnResizeRate={200}
               renderOnResize={true}
             >
-              <p>Form</p>
+              <Data />
             </ReflexElement>
           </StyledReflexContainer>
         </Container>
