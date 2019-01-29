@@ -55,7 +55,6 @@ const Kultur = () => {
   const store = useContext(storeContext)
   const { activeNodeArray, refetch } = store.tree
   const id = activeNodeArray[activeNodeArray.length - 1]
-  console.log('Kultur', { id, activeNodeArray })
   const { data, error, loading } = useQuery(query, {
     suspend: false,
     variables: { id },
