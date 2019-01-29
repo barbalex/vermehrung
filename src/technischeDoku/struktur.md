@@ -3,7 +3,7 @@ typ: 'technDoku'
 path: "/Technische-Dokumentation/Struktur"
 date: "2019-01-25"
 title: "Daten-Struktur"
-sort: 2
+sort: 3
 ---
 
 ![Daten-Struktur](https://github.com/barbalex/vermehrung/raw/master/src/images/structure.png)

@@ -3,7 +3,7 @@ typ: 'technDoku'
 path: "/Technische-Dokumentation/Roadmap"
 date: "2019-01-25"
 title: "Roadmap"
-sort: 2
+sort: 4
 ---
 
 vermehrung.apflora.ch ist in Entwicklung. Vorgesehen ist, im Sommer damit arbeiten zu können.<br/><br/>

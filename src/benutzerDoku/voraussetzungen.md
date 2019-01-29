@@ -19,4 +19,4 @@ _Nicht_ geeignet ist der Internet Explorer.<br/><br/>
 
 vermehrung.apflora.ch funktioniert auf allen **Betriebssystemen**. Mehr dazu [hier](/Technische-Dokumentation/PWA/).<br/><br/>
 
-Um Daten zu erfassen brauchen Sie eine Internet-Verbindung.
+Um Daten zu erfassen, brauchen Sie eine Internet-Verbindung.
