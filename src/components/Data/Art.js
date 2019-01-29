@@ -26,8 +26,8 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: UUID!) {
-    art(where: { ae_id: { _eq: $id } }) {
+  query ArtQuery($id: Int!) {
+    art(where: { id: { _eq: $id } }) {
       id
       ae_id
     }
