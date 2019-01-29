@@ -17,7 +17,7 @@ Weil sie aber einige zusätzliche Anforderungen erfüllen, können sie je länge
 Was ist der Vorteil gegenüber einer "normalen" App?
 - Die App funktioniert auf allen Bertriebssystemen und auf allen Geräten mit modernem Browser
 - Sie finden die App im Internet (und auf Windows künftig im App-Store)
-- Sie müssen die App nicht installieren. Sie können aber wählen, sie auf dem Desktop bzw. auf der Starseite zu platzieren. Danach startet sie ohne Browser-Rahmen. Und ist kaum mehr von "normalen" Apps zu unterscheiden.
+- Sie müssen die App nicht installieren. Sie können aber wählen, sie auf dem Desktop bzw. auf der Startseite zu platzieren. Danach startet sie ohne Browser-Rahmen. Und ist kaum mehr von "normalen" Apps zu unterscheiden.
 - Updates erfolgen automatisch
 - Einer neuen Mitarbeiterin schicken Sie einfach Link und Login. Schon kann sie loslegen!
 
