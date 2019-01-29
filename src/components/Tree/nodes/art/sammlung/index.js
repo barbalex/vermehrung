@@ -5,7 +5,7 @@ import compareLabel from '../../compareLabel'
 import allParentNodesExist from '../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
-  const arten = get(data, 'ae_art', [])
+  const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === url[1])
   const sammlungen = get(art, 'ae_art_art.sammlungsByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')

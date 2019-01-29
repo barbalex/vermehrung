@@ -4,7 +4,7 @@ import compareLabel from '../compareLabel'
 import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
-  const arten = get(data, 'ae_art', [])
+  const arten = get(data, 'art', [])
 
   return arten
     .map(el => ({
@@ -13,7 +13,7 @@ export default ({ nodes, data }) => {
       filterTable: 'art',
       id: `art${el.id}`,
       parentId: 'artFolder',
-      label: get(el, 'name', '(keine Art gewählt)'),
+      label: get(el, 'art_ae_art.name', '(keine Art gewählt)'),
       url: ['Arten', el.id],
       hasChildren: true,
     }))

@@ -4,7 +4,7 @@ import get from 'lodash/get'
 export default ({ url, nodes, data, loading }) => {
   const artId = url[1]
   const kulturId = url[3]
-  const arten = get(data, 'ae_art', [])
+  const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'ae_art_art.kultursByartId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
