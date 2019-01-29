@@ -169,110 +169,21 @@ const Data = () => {
     return null
   }
 
-  if (
-    url.length === 5 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Zaehlungen'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Inventare'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Ab-Lieferungen'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Zu-Lieferungen'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Events'
-  ) {
-    return null
+  if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Kulturen') {
+    return <Kultur />
   }
 
-  if (
-    url.length === 5 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Zaehlungen'
-  ) {
+  if (url.length === 5 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
+    return <Kultur />
+  }
+  if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
     return null
   }
-  if (
-    url.length === 5 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Inventare'
-  ) {
+  if (url.length === 5 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
     return null
   }
-  if (
-    url.length === 5 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Ab-Lieferungen'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Zu-Lieferungen'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Events'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Sammlungen' &&
-    url[4] === 'Lieferungen'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Herkuenfte' &&
-    url[2] === 'Sammlungen' &&
-    url[4] === 'Lieferungen'
-  ) {
-    return null
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Personen' &&
-    url[2] === 'Gaerten' &&
-    url[4] === 'Kulturen'
-  ) {
-    return null
+  if (url.length === 5 && url[0] === 'Personen' && url[2] === 'Gaerten') {
+    return <Garten />
   }
   if (
     url.length === 6 &&
