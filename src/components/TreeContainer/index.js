@@ -17,7 +17,6 @@ import { useQuery } from 'react-apollo-hooks'
 
 import storeContext from '../../storeContext'
 import query from './query'
-import isNodeOpen from './isNodeOpen'
 import Tree from './Tree'
 import buildNodes from './nodes'
 
