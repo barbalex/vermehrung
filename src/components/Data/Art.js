@@ -66,6 +66,7 @@ const Art = () => {
   if (loading) {
     return (
       <Container>
+        <FormTitle title="Art" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
