@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -10,6 +10,7 @@ import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -37,6 +38,7 @@ const query = gql`
 `
 
 const Art = () => {
+  const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray } = store.tree
   const aeId = activeNodeArray[1]
@@ -58,11 +60,52 @@ const Art = () => {
     label: el.name,
   }))
 
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = ifIsNumericAsNumber(event.target.value) || null
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation update_art($id: Int!, $aeId: UUID) {
+              update_art(where: { id: { _eq: $id } }, _set: { ae_id: $aeId }) {
+                affected_rows
+                returning {
+                  id
+                  ae_id
+                }
+              }
+            }
+          `,
+          variables: {
+            id: row.id,
+            aeId: value,
+          },
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+    },
+    [row],
+  )
+
   if (loading) {
     return (
       <Container>
         <FormTitle title="Art" />
         <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <FormTitle title="Art" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${
+          error.message
+        }`}</FieldsContainer>
       </Container>
     )
   }
@@ -79,7 +122,7 @@ const Art = () => {
             field="ae_id"
             label="Art"
             options={artWerte}
-            saveToDb={() => 'TODO'}
+            saveToDb={saveToDb}
             error={errors.ae_id}
           />
         </FieldsContainer>
