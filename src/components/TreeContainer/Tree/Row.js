@@ -6,10 +6,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { observer } from 'mobx-react-lite'
 
-import isNodeInActiveNodePath from './isNodeInActiveNodePath'
-import isNodeOpen from './isNodeOpen'
-import toggleNode from './toggleNode'
-import toggleNodeSymbol from './toggleNodeSymbol'
+import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
+import isNodeOpen from '../isNodeOpen'
+import toggleNode from '../toggleNode'
+import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
 
 const singleRowHeight = 23

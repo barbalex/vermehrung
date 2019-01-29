@@ -17,9 +17,9 @@ import { useQuery } from 'react-apollo-hooks'
 
 import storeContext from '../../storeContext'
 import query from './query'
-import isNodeOpen from './Tree/isNodeOpen'
+import isNodeOpen from './isNodeOpen'
 import Tree from './Tree'
-import buildNodes from './Tree/nodes'
+import buildNodes from './nodes'
 
 const Container = styled.div`
   height: 100%;
