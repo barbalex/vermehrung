@@ -4,6 +4,7 @@ export default gql`
   query TreeQuery(
     $isArt: Boolean!
     $isArtKultur: Boolean!
+    $isArtSammlung:Boolean!
     $isGarten: Boolean!
     $isGartenKultur: Boolean!
     $isHerkunft: Boolean!
@@ -229,11 +230,11 @@ export default gql`
       sammlungsByartId @include(if: $isArt) {
         id
         art_id
-        herkunftByherkunftId @include(if: $isArtKultur) {
+        herkunftByherkunftId @include(if: $isArtSammlung) {
           id
           nr
         }
-        artByartId @include(if: $isArtKultur) {
+        artByartId @include(if: $isArtSammlung) {
           id
           art_ae_art {
             id
@@ -241,7 +242,7 @@ export default gql`
           }
         }
         datum
-        sammlungInKultursBysammlungId @include(if: $isArtKultur) {
+        sammlungInKultursBysammlungId @include(if: $isArtSammlung) {
           id
           kulturBykulturId {
             id
@@ -254,7 +255,7 @@ export default gql`
             }
           }
         }
-        lieferungsByvonSammlungId @include(if: $isArtKultur) {
+        lieferungsByvonSammlungId @include(if: $isArtSammlung) {
           id
           personBypersonId {
             id
