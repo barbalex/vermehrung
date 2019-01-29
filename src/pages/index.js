@@ -204,7 +204,7 @@ const Index = ({ data }) => (
               Zum Beispiel Freiwillige, welche in ihren Gärten Kulturen pflegen.
             </Card>
             <Card>
-              <CardTitle>Wer organisiert das?</CardTitle>
+              <CardTitle>Wer organisiert das Projekt?</CardTitle>
               <a href="//toposmm.ch" target="_blank" rel="noopener noreferrer">
                 Topos
               </a>
