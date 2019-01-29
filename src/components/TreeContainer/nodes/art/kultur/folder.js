@@ -7,7 +7,7 @@ export default ({ url, nodes, data, loading }) => {
 
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === url[1])
-  const kulturen = get(art, 'ae_art_art.kultursByartId', [])
+  const kulturen = get(art, 'kultursByartId', [])
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   return [

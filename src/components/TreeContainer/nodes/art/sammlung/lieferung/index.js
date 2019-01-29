@@ -20,7 +20,7 @@ export default ({ nodes, data, url }) => {
 
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const sammlungen = get(art, 'ae_art_art.sammlungsByartId', [])
+  const sammlungen = get(art, 'sammlungsByartId', [])
   const sammlung = sammlungen.find(s => s.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
 

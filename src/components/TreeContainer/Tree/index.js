@@ -35,7 +35,7 @@ const singleRowHeight = 23
 
 const Tree = ({ dimensions }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray: aNA, nodes } = store.tree
+  const { activeNodeArray: aNA, nodesSorted: nodes } = store.tree
 
   const listRef = React.createRef()
 

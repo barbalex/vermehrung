@@ -7,7 +7,7 @@ import allParentNodesExist from '../../../allParentNodesExist'
 export default ({ nodes, data, url }) => {
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === url[1])
-  const sammlungen = get(art, 'ae_art_art.sammlungsByartId', [])
+  const sammlungen = get(art, 'sammlungsByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`) || 0
 
@@ -28,8 +28,5 @@ export default ({ nodes, data, url }) => {
     }))
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [1, artIndex, 2, index]
-      return el
-    })
+    .map((el, index) => ({ ...el, sort: [1, artIndex, 2, index] }))
 }

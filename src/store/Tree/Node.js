@@ -9,6 +9,7 @@ export default types.model('Node', {
   parentId: types.optional(types.union(types.string, types.number), ''),
   label: types.optional(types.union(types.string, types.number), ''),
   url: types.array(types.union(types.string, types.number)),
+  sort: types.array(types.union(types.string, types.number)),
   hasChildren: types.optional(types.boolean, false),
 })
 
@@ -21,5 +22,6 @@ export const defaultValue = {
   parentId: '',
   label: '',
   url: [],
+  sort: [],
   hasChildren: false,
 }

@@ -7,7 +7,7 @@ import allParentNodesExist from '../../../allParentNodesExist'
 export default ({ nodes, data, url }) => {
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === url[1])
-  const kulturen = get(art, 'ae_art_art.kultursByartId', [])
+  const kulturen = get(art, 'kultursByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`) || 0
 
