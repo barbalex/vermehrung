@@ -8,7 +8,7 @@ export default ({ url, nodes, data, loading }) => {
   const gaerten = get(data, 'garten', [])
   const garten = gaerten.find(a => a.id === url[1])
   const kulturen = get(garten, 'kultursBygartenId', [])
-  const nr = loading ? '...' : kulturen.length
+  const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   return [
     {

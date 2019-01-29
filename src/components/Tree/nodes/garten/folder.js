@@ -2,7 +2,7 @@ import get from 'lodash/get'
 
 export default ({ data, loading }) => {
   const gaerten = get(data, 'garten', [])
-  const nr = loading ? '...' : gaerten.length
+  const nr = loading && !gaerten.length ? '...' : gaerten.length
 
   return [
     {

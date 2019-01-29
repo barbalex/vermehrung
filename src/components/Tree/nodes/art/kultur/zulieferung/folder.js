@@ -9,7 +9,7 @@ export default ({ url, nodes, data, loading }) => {
   const kulturen = get(art, 'ae_art_art.kultursByartId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
   const zulieferungen = get(kultur, 'lieferungsBynachKulturId', [])
-  const nr = loading ? '...' : zulieferungen.length
+  const nr = loading && !zulieferungen.length ? '...' : zulieferungen.length
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)

@@ -23,7 +23,7 @@ export default ({ url, nodes, data, loading }) => {
   const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
   const sammlung = sammlungen.find(s => s.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
-  const nr = loading ? '...' : lieferungen.length
+  const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   return [
     {

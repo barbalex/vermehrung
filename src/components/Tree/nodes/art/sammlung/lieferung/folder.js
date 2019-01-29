@@ -20,7 +20,7 @@ export default ({ url, nodes, data, loading }) => {
   const sammlungen = get(art, 'ae_art_art.sammlungsByartId', [])
   const sammlung = sammlungen.find(s => s.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
-  const nr = loading ? '...' : lieferungen.length
+  const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   return [
     {

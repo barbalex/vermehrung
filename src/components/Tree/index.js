@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
@@ -11,6 +11,15 @@ import storeContext from '../../storeContext'
 import Row from './Row'
 import buildNodes from './nodes'
 import query from './query'
+import isNodeOpen from './isNodeOpen'
+
+function usePrevious(value) {
+  const ref = useRef()
+  useEffect(() => {
+    ref.current = value
+  })
+  return ref.current
+}
 
 const Container = styled.div`
   height: 100%;
@@ -38,13 +47,30 @@ const singleRowHeight = 23
 
 const Tree = ({ dimensions }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray, setRefetch /*, setNodes*/ } = store.tree
+  const { activeNodeArray: aNA, setRefetch, openNodes } = store.tree
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
 
-  const { data, error: dataError, loading, refetch } = useQuery(query, {
-    suspend: false,
-  })
+  const { data, error: dataError, loading, refetch, networkStatus } = useQuery(
+    query,
+    {
+      suspend: false,
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        isArt: isNodeOpen(openNodes, ['Arten']),
+        isGarten: isNodeOpen(openNodes, ['Gaerten']),
+        isHerkunft: isNodeOpen(openNodes, ['Herkuenfte']),
+        isLieferung: isNodeOpen(openNodes, ['Lieferungen']),
+        isPerson: isNodeOpen(openNodes, ['Personen']),
+        isSammlung: isNodeOpen(openNodes, ['Sammlungen']),
+        isKultur: isNodeOpen(openNodes, ['Kulturen']),
+        isWerteListe: isNodeOpen(openNodes, ['Werte-Listen']),
+      },
+    },
+  )
+
+  console.log('Tree, networkStatus', { networkStatus, loading, data })
+
   useEffect(() => {
     setRefetch(refetch)
   }, [])
@@ -55,9 +81,9 @@ const Tree = ({ dimensions }) => {
   const listRef = React.createRef()
 
   useEffect(() => {
-    const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
+    const index = findIndex(nodes, node => isEqual(node.url, aNA))
     if (index > -1) listRef.current.scrollToItem(index)
-  }, [activeNodeArray, nodes])
+  }, [aNA, nodes])
 
   let height = 250
   if (dimensions && dimensions.height && !isNaN(dimensions.height)) {

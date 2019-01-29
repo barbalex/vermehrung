@@ -6,7 +6,7 @@ export default ({ data, loading, url, nodes }) => {
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
   const gaerten = get(person, 'gartensBypersonId', [])
-  const nr = loading ? '...' : gaerten.length
+  const nr = loading && !gaerten.length ? '...' : gaerten.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)

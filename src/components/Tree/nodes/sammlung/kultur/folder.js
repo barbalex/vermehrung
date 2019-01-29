@@ -6,7 +6,8 @@ export default ({ data, loading, url, nodes }) => {
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const sammlungenInKultur = get(sammlung, 'sammlungInKultursBysammlungId', [])
-  const nr = loading ? '...' : sammlungenInKultur.length
+  const nr =
+    loading && !sammlungenInKultur.length ? '...' : sammlungenInKultur.length
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(

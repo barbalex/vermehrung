@@ -9,7 +9,7 @@ export default ({ url, nodes, data, loading }) => {
   const kulturen = get(garten, 'kultursBygartenId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
   const inventare = get(kultur, 'kulturInventarsBykulturId', [])
-  const nr = loading ? '...' : inventare.length
+  const nr = loading && !inventare.length ? '...' : inventare.length
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)

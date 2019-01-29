@@ -2,7 +2,7 @@ import get from 'lodash/get'
 
 export default ({ data, loading }) => {
   const werte = get(data, 'zaehleinheit_werte', [])
-  const nr = loading ? '...' : werte.length
+  const nr = loading && !werte.length ? '...' : werte.length
 
   return [
     {
