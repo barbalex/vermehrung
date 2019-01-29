@@ -4,10 +4,16 @@ export default gql`
   query TreeQuery(
     $isArt: Boolean!
     $isArtKultur: Boolean!
+    $isArtSammlung: Boolean!
     $isGarten: Boolean!
+    $isGartenKultur: Boolean!
     $isHerkunft: Boolean!
+    $isHerkunftSammlung: Boolean!
     $isLieferung: Boolean!
     $isPerson: Boolean!
+    $isPersonGarten: Boolean!
+    $isPersonSammlung: Boolean!
+    $isPersonLieferung: Boolean!
     $isSammlung: Boolean!
     $isKultur: Boolean!
     $isWerteListe: Boolean!
@@ -20,30 +26,30 @@ export default gql`
       }
       kultursBygartenId @include(if: $isGarten) {
         id
-        gartenBygartenId {
+        gartenBygartenId @include(if: $isGartenKultur) {
           id
           personBypersonId {
             id
             name
           }
         }
-        kulturEventsBykulturId {
+        kulturEventsBykulturId @include(if: $isGartenKultur) {
           id
           datum
           event
         }
-        kulturInventarsBykulturId {
+        kulturInventarsBykulturId @include(if: $isGartenKultur) {
           id
           datum
           kasten
           beet
           nr
         }
-        zaehlungsBykulturId {
+        zaehlungsBykulturId @include(if: $isGartenKultur) {
           id
           datum
         }
-        sammlungInKultursBykulturId {
+        sammlungInKultursBykulturId @include(if: $isGartenKultur) {
           id
           sammlungBysammlungId {
             id
@@ -219,11 +225,11 @@ export default gql`
       sammlungsByartId @include(if: $isArt) {
         id
         art_id
-        herkunftByherkunftId {
+        herkunftByherkunftId @include(if: $isArtKultur) {
           id
           nr
         }
-        artByartId {
+        artByartId @include(if: $isArtKultur) {
           id
           art_ae_art {
             id
@@ -231,7 +237,7 @@ export default gql`
           }
         }
         datum
-        sammlungInKultursBysammlungId {
+        sammlungInKultursBysammlungId @include(if: $isArtKultur) {
           id
           kulturBykulturId {
             id
@@ -244,7 +250,7 @@ export default gql`
             }
           }
         }
-        lieferungsByvonSammlungId {
+        lieferungsByvonSammlungId @include(if: $isArtKultur) {
           id
           personBypersonId {
             id
@@ -406,7 +412,7 @@ export default gql`
       sammlungsByherkunftId @include(if: $isHerkunft) {
         id
         art_id
-        artByartId {
+        artByartId @include(if: $isHerkunftSammlung) {
           id
           art_ae_art {
             id
@@ -414,7 +420,7 @@ export default gql`
           }
         }
         datum
-        sammlungInKultursBysammlungId {
+        sammlungInKultursBysammlungId @include(if: $isHerkunftSammlung) {
           id
           kulturBykulturId {
             id
@@ -427,7 +433,7 @@ export default gql`
             }
           }
         }
-        lieferungsByvonSammlungId {
+        lieferungsByvonSammlungId @include(if: $isHerkunftSammlung) {
           id
           personBypersonId {
             id
@@ -520,7 +526,7 @@ export default gql`
       name
       gartensBypersonId @include(if: $isPerson) {
         id
-        kultursBygartenId {
+        kultursBygartenId @include(if: $isPersonGarten) {
           id
           artByartId {
             id
@@ -534,30 +540,30 @@ export default gql`
       sammlungsBypersonId @include(if: $isPerson) {
         id
         datum
-        artByartId {
+        artByartId @include(if: $isPersonSammlung) {
           id
           art_ae_art {
             id
             name
           }
         }
-        herkunftByherkunftId {
+        herkunftByherkunftId @include(if: $isPersonSammlung) {
           id
           nr
         }
       }
       lieferungsBypersonId @include(if: $isPerson) {
         id
-        lieferungTypWerteBytyp {
+        lieferungTypWerteBytyp @include(if: $isPersonLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus {
+        lieferungStatusWerteBystatus @include(if: $isPersonLieferung) {
           id
           wert
         }
-        von_datum
-        kulturBynachKulturId {
+        von_datum @include(if: $isPersonLieferung)
+        kulturBynachKulturId @include(if: $isPersonLieferung) {
           id
           artByartId {
             id
@@ -574,7 +580,7 @@ export default gql`
             }
           }
         }
-        nach_ausgepflanzt
+        nach_ausgepflanzt @include(if: $isPersonLieferung)
       }
     }
     sammlung {

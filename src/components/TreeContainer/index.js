@@ -50,13 +50,31 @@ const TreeContainer = ({ dimensions }) => {
     variables: {
       isArt: openNodes.some(n => n[0] === 'Arten'),
       isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
-      isGarten: isNodeOpen(openNodes, ['Gaerten']),
-      isHerkunft: isNodeOpen(openNodes, ['Herkuenfte']),
-      isLieferung: isNodeOpen(openNodes, ['Lieferungen']),
-      isPerson: isNodeOpen(openNodes, ['Personen']),
-      isSammlung: isNodeOpen(openNodes, ['Sammlungen']),
-      isKultur: isNodeOpen(openNodes, ['Kulturen']),
-      isWerteListe: isNodeOpen(openNodes, ['Werte-Listen']),
+      isArtSammlung: openNodes.some(
+        n => n[0] === 'Arten' && n[2] === 'Sammlungen',
+      ),
+      isGarten: openNodes.some(n => n[0] === 'Gaerten'),
+      isGartenKultur: openNodes.some(
+        n => n[0] === 'Gaerten' && n[2] === 'Kulturen',
+      ),
+      isHerkunft: openNodes.some(n => n[0] === 'Herkuenfte'),
+      isHerkunftSammlung: openNodes.some(
+        n => n[0] === 'Herkuenfte' && n[2] === 'Sammlungen',
+      ),
+      isLieferung: openNodes.some(n => n[0] === 'Lieferungen'),
+      isPerson: openNodes.some(n => n[0] === 'Personen'),
+      isPersonGarten: openNodes.some(
+        n => n[0] === 'Personen' && n[2] === 'Gaerten',
+      ),
+      isPersonSammlung: openNodes.some(
+        n => n[0] === 'Personen' && n[2] === 'Sammlungen',
+      ),
+      isPersonLieferung: openNodes.some(
+        n => n[0] === 'Personen' && n[2] === 'Lieferungen',
+      ),
+      isSammlung: openNodes.some(n => n[0] === 'Sammlungen'),
+      isKultur: openNodes.some(n => n[0] === 'Kulturen'),
+      isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
     },
   })
 
