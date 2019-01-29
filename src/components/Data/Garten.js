@@ -26,31 +26,23 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query KulturQuery($id: Int!) {
-    kultur(where: { id: { _eq: $id } }) {
+  query GartenQuery($id: Int!) {
+    garten(where: { id: { _eq: $id } }) {
       id
-      art_id
-      garten_id
+      person_id
+      x
+      y
       bemerkungen
     }
-    art {
+    person {
       id
-      art_ae_art {
-        id
-        name
-      }
-    }
-    garten {
-      id
-      personBypersonId {
-        id
-        name
-      }
+      name
+      ort
     }
   }
 `
 
-const Kultur = () => {
+const Garten = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray, refetch } = store.tree
@@ -62,23 +54,16 @@ const Kultur = () => {
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'kultur', [{}])[0]
+  const row = get(data, 'garten', [{}])[0]
 
   useEffect(() => setErrors({}), [row])
 
-  let artWerte = get(data, 'art', [])
-  artWerte = artWerte.map(el => ({
+  let personWerte = get(data, 'person', [])
+  personWerte = personWerte.map(el => ({
     value: el.id,
-    label: get(el, 'art_ae_art.name') || '(keine Art)',
+    label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
   }))
-  artWerte = sortBy(artWerte, 'label')
-
-  let gartenWerte = get(data, 'garten', [])
-  gartenWerte = gartenWerte.map(el => ({
-    value: el.id,
-    label: get(el, 'personBypersonId.name') || '(kein Name)',
-  }))
-  gartenWerte = sortBy(gartenWerte, 'label')
+  personWerte = sortBy(personWerte, 'label')
 
   const saveToDb = useCallback(
     async event => {
@@ -87,25 +72,28 @@ const Kultur = () => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation update_kultur(
+            mutation update_garten(
               $id: Int!
-              $art_id: Int
-              $garten_id: Int
+              $person_id: Int
+              $x: Int
+              $y: Int
               $bemerkungen: String
             ) {
-              update_kultur(
+              update_garten(
                 where: { id: { _eq: $id } }
                 _set: {
-                  art_id: $art_id
-                  garten_id: $garten_id
+                  person_id: $person_id
+                  x: $x
+                  y: $y
                   bemerkungen: $bemerkungen
                 }
               ) {
                 affected_rows
                 returning {
                   id
-                  art_id
-                  garten_id
+                  person_id
+                  x
+                  y
                   bemerkungen
                 }
               }
@@ -113,8 +101,9 @@ const Kultur = () => {
           `,
           variables: {
             id: row.id,
-            art_id: field === 'art_id' ? value : row.art_id,
-            garten_id: field === 'garten_id' ? value : row.garten_id,
+            person_id: field === 'person_id' ? value : row.person_id,
+            x: field === 'x' ? value : row.x,
+            y: field === 'y' ? value : row.y,
             bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
           },
         })
@@ -130,7 +119,7 @@ const Kultur = () => {
   if (loading) {
     return (
       <Container>
-        <FormTitle title="Kultur" />
+        <FormTitle title="Garten" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
@@ -139,7 +128,7 @@ const Kultur = () => {
   if (error) {
     return (
       <Container>
-        <FormTitle title="Kultur" />
+        <FormTitle title="Garten" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
           error.message
         }`}</FieldsContainer>
@@ -150,27 +139,35 @@ const Kultur = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Kultur" />
+        <FormTitle title="Garten" />
         <FieldsContainer>
           <Select
-            key={`${row.id}art_id`}
-            name="art_id"
-            value={row.art_id}
-            field="art_id"
-            label="Art"
-            options={artWerte}
+            key={`${row.id}person_id`}
+            name="person_id"
+            value={row.person_id}
+            field="person_id"
+            label="Person"
+            options={personWerte}
             saveToDb={saveToDb}
-            error={errors.art_id}
+            error={errors.person_id}
           />
-          <Select
-            key={`${row.id}garten_id`}
-            name="garten_id"
-            value={row.garten_id}
-            field="garten_id"
-            label="Garten"
-            options={gartenWerte}
+          <TextField
+            key={`${row.id}x`}
+            name="x"
+            label="X-Koordinate"
+            value={row.x}
             saveToDb={saveToDb}
-            error={errors.garten_id}
+            error={errors.x}
+            type="number"
+          />
+          <TextField
+            key={`${row.id}y`}
+            name="y"
+            label="Y-Koordinate"
+            value={row.y}
+            saveToDb={saveToDb}
+            error={errors.y}
+            type="number"
           />
           <TextField
             key={`${row.id}bemerkungen`}
@@ -187,4 +184,4 @@ const Kultur = () => {
   )
 }
 
-export default observer(Kultur)
+export default observer(Garten)

@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../storeContext'
 import Art from './Art'
 import Kultur from './Kultur'
+import Garten from './Garten'
 
 const Data = () => {
   const store = useContext(storeContext)
@@ -17,7 +18,7 @@ const Data = () => {
     return <Art />
   }
   if (url.length === 2 && url[0] === 'Gaerten') {
-    return null
+    return <Garten />
   }
   if (url.length === 2 && url[0] === 'Personen') {
     return null
@@ -132,7 +133,7 @@ const Data = () => {
     return null
   }
   if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Gaerten') {
-    return null
+    return <Garten />
   }
 
   if (

@@ -56,7 +56,7 @@ const Art = () => {
   let artWerte = get(data, 'ae_art', [])
   artWerte = artWerte.map(el => ({
     value: el.id,
-    label: el.name,
+    label: el.name || '(kein Artname)',
   }))
   artWerte = sortBy(artWerte, 'label')
 
