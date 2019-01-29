@@ -15,6 +15,9 @@ export default types
     ),
     nodes: types.optional(types.array(Node), []),
   })
+  .volatile(() => ({
+    refetch: () => {},
+  }))
   .actions(self => ({
     setActiveNodeArray(val) {
       self.activeNodeArray = val
@@ -24,6 +27,9 @@ export default types
     },
     setNodes(val) {
       self.nodes = val
+    },
+    setRefetch(func) {
+      self.refetch = func
     },
   }))
   .views(self => ({

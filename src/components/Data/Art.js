@@ -40,7 +40,7 @@ const query = gql`
 const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { activeNodeArray } = store.tree
+  const { activeNodeArray, refetch } = store.tree
   const aeId = activeNodeArray[1]
   const { data, error, loading } = useQuery(query, {
     suspend: false,
@@ -86,6 +86,7 @@ const Art = () => {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
+      refetch()
     },
     [row],
   )

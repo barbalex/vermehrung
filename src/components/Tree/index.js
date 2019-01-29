@@ -38,13 +38,16 @@ const singleRowHeight = 23
 
 const Tree = ({ dimensions }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray /*, setNodes*/ } = store.tree
+  const { activeNodeArray, setRefetch /*, setNodes*/ } = store.tree
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
 
-  const { data, error: dataError, loading } = useQuery(query, {
+  const { data, error: dataError, loading, refetch } = useQuery(query, {
     suspend: false,
   })
+  useEffect(() => {
+    setRefetch(refetch)
+  }, [])
 
   const nodes = buildNodes({ store, data, loading })
   //setNodes(nodes)
