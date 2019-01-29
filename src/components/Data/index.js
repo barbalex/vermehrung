@@ -120,13 +120,13 @@ const Data = () => {
   }
 
   if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
-    return null
+    return <Kultur />
   }
   if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
     return null
   }
   if (url.length === 4 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
-    return null
+    return <Kultur />
   }
   if (url.length === 4 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
     return null
@@ -239,6 +239,14 @@ const Data = () => {
     url[4] === 'Kulturen'
   ) {
     return null
+  }
+  if (
+    url.length === 6 &&
+    url[0] === 'Personen' &&
+    url[2] === 'Gaerten' &&
+    url[4] === 'Kulturen'
+  ) {
+    return <Kultur />
   }
   return null
 }

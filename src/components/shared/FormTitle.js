@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  background-color: #4a148c;
+  background-color: #e9e9e9;
   padding-bottom: 10px;
   flex-shrink: 0;
   display: flex;
@@ -17,7 +17,7 @@ const TitleRow = styled.div`
 `
 const Title = styled.div`
   padding: 8px 8px 0 8px;
-  color: white;
+  /*color: white;*/
   font-weight: bold;
 `
 

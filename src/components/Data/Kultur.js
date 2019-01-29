@@ -54,10 +54,11 @@ const Kultur = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray, refetch } = store.tree
-  const artId = activeNodeArray[1]
+  const id = activeNodeArray[activeNodeArray.length - 1]
+  console.log('Kultur', { id, activeNodeArray })
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id: artId },
+    variables: { id },
   })
 
   const [errors, setErrors] = useState({})
