@@ -5,6 +5,7 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import last from 'lodash/last'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -41,7 +42,7 @@ const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray, refetch } = store.tree
-  const artId = activeNodeArray[1]
+  const artId = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
     variables: { id: artId },

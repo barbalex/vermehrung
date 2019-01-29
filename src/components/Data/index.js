@@ -73,17 +73,14 @@ const Data = () => {
     return null
   }
 
-  if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
-    return null
+  if (url.length === 3 && url[0] === 'Arten') {
+    return <Art />
   }
-  if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
-    return null
+  if (url.length === 3 && url[0] === 'Gaerten') {
+    return <Garten />
   }
-  if (url.length === 3 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
-    return null
-  }
-  if (url.length === 3 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
-    return null
+  if (url.length === 3 && url[0] === 'Herkuenfte') {
+    return <Herkunft />
   }
   if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Gaerten') {
     return null
@@ -100,8 +97,8 @@ const Data = () => {
   if (url.length === 3 && url[0] === 'Sammlungen' && url[2] === 'Lieferungen') {
     return null
   }
-  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
-    return null
+  if (url.length === 3 && url[0] === 'Kulturen') {
+    return <Kultur />
   }
   if (
     url.length === 3 &&
