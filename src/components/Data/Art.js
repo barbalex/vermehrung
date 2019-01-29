@@ -22,10 +22,6 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
-const FieldContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
 
 const query = gql`
   query ArtQuery($id: UUID!) {
@@ -52,7 +48,6 @@ const Art = () => {
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'art', [])[0]
-  console.log('Art', { data, error, loading, row })
 
   useEffect(() => setErrors({}), [row])
 
