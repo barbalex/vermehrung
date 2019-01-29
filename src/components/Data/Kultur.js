@@ -26,10 +26,12 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: Int!) {
-    art(where: { id: { _eq: $id } }) {
+  query KulturQuery($id: Int!) {
+    kultur(where: { id: { _eq: $id } }) {
       id
-      ae_id
+      art_id
+      garten_id
+      bemerkungen
     }
     art {
       id
@@ -38,10 +40,17 @@ const query = gql`
         name
       }
     }
+    garten {
+      id
+      personBypersonId {
+        id
+        name
+      }
+    }
   }
 `
 
-const Art = () => {
+const Kultur = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray, refetch } = store.tree
@@ -53,7 +62,7 @@ const Art = () => {
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'art', [{}])[0]
+  const row = get(data, 'kultur', [{}])[0]
 
   useEffect(() => setErrors({}), [row])
 
@@ -64,6 +73,13 @@ const Art = () => {
   }))
   artWerte = sortBy(artWerte, 'label')
 
+  let gartenWerte = get(data, 'garten', [])
+  gartenWerte = artWerte.map(el => ({
+    value: el.id,
+    label: get(el, 'personBypersonId.name', '(kein Name)'),
+  }))
+  gartenWerte = sortBy(gartenWerte, 'label')
+
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
@@ -71,19 +87,33 @@ const Art = () => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation update_art($id: Int!, $aeId: UUID) {
-              update_art(where: { id: { _eq: $id } }, _set: { ae_id: $aeId }) {
+            mutation update_kultur(
+              $id: Int!
+              $art_id: UUID
+              $garten_id: UUID
+              $bemerkungen: String
+            ) {
+              update_kultur(
+                where: { id: { _eq: $id } }
+                _set: {
+                  art_id: $art_id
+                  garten_id: $garten_id
+                  bemerkungen: $bemerkungen
+                }
+              ) {
                 affected_rows
                 returning {
                   id
-                  ae_id
+                  art_id
+                  garten_id
+                  bemerkungen
                 }
               }
             }
           `,
           variables: {
             id: row.id,
-            aeId: value,
+            [field]: value,
           },
         })
       } catch (error) {
@@ -99,7 +129,7 @@ const Art = () => {
   if (loading) {
     return (
       <Container>
-        <FormTitle title="Art" />
+        <FormTitle title="Kultur" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
@@ -108,7 +138,7 @@ const Art = () => {
   if (error) {
     return (
       <Container>
-        <FormTitle title="Art" />
+        <FormTitle title="Kultur" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
           error.message
         }`}</FieldsContainer>
@@ -119,17 +149,27 @@ const Art = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Art" />
+        <FormTitle title="Kultur" />
         <FieldsContainer>
           <Select
-            key={`${row.id}ae_id`}
-            name="ae_id"
-            value={row.ae_id}
-            field="ae_id"
+            key={`${row.id}art_id`}
+            name="art_id"
+            value={row.art_id}
+            field="art_id"
             label="Art"
             options={artWerte}
             saveToDb={saveToDb}
-            error={errors.ae_id}
+            error={errors.art_id}
+          />
+          <Select
+            key={`${row.id}garten_id`}
+            name="garten_id"
+            value={row.garten_id}
+            field="garten_id"
+            label="Garten"
+            options={gartenWerte}
+            saveToDb={saveToDb}
+            error={errors.garten_id}
           />
         </FieldsContainer>
       </Container>
@@ -137,4 +177,4 @@ const Art = () => {
   )
 }
 
-export default observer(Art)
+export default observer(Kultur)
