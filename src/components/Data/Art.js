@@ -5,6 +5,7 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import { navigate } from 'gatsby'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -26,7 +27,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query ArtQuery($id: UUID!) {
-    art(where: { art_ae_art: { id: { _eq: $id } } }) {
+    art(where: { ae_id: { _eq: $id } }) {
       id
       ae_id
     }
@@ -49,7 +50,7 @@ const Art = () => {
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'art', [])[0]
+  const row = get(data, 'art', [{}])[0]
 
   useEffect(() => setErrors({}), [row])
 
@@ -87,6 +88,7 @@ const Art = () => {
       }
       setErrors({})
       refetch()
+      navigate(`/Vermehrung/Arten/${value}`)
     },
     [row],
   )
