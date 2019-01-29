@@ -42,10 +42,10 @@ const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray, refetch } = store.tree
-  const aeId = activeNodeArray[1]
+  const artId = activeNodeArray[1]
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id: aeId },
+    variables: { id: artId },
   })
 
   const [errors, setErrors] = useState({})
@@ -88,7 +88,7 @@ const Art = () => {
       }
       setErrors({})
       refetch()
-      navigate(`/Vermehrung/Arten/${value}`)
+      navigate(`/Vermehrung/Arten/${row.id}`)
     },
     [row],
   )
@@ -116,7 +116,7 @@ const Art = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle aeId={aeId} title="Art" />
+        <FormTitle title="Art" />
         <FieldsContainer>
           <Select
             key={`${row.id}ae_id`}
