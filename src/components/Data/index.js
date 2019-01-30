@@ -146,8 +146,12 @@ const Data = () => {
   if (url.length === 4 && url[0] === 'Sammlungen' && url[2] === 'Kulturen') {
     return <Kultur />
   }
-  if (url.length === 4 && url[0] === 'Sammlungen' && url[2] === 'Lieferungen') {
-    return null
+  if (
+    url.length === 4 &&
+    url[0] === 'Sammlungen' &&
+    url[2] === 'Aus-Lieferungen'
+  ) {
+    return <Lieferung />
   }
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
     return null
@@ -157,14 +161,14 @@ const Data = () => {
     url[0] === 'Kulturen' &&
     url[2] === 'An-Lieferungen'
   ) {
-    return null
+    return <Lieferung />
   }
   if (
     url.length === 4 &&
     url[0] === 'Kulturen' &&
     url[2] === 'Aus-Lieferungen'
   ) {
-    return null
+    return <Lieferung />
   }
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Events') {
     return null
