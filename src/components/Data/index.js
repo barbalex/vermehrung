@@ -6,6 +6,7 @@ import Art from './Art'
 import Kultur from './Kultur'
 import Garten from './Garten'
 import Herkunft from './Herkunft'
+import Lieferung from './Lieferung'
 
 const Data = () => {
   const store = useContext(storeContext)
@@ -23,6 +24,9 @@ const Data = () => {
   }
   if (url.length === 2 && url[0] === 'Herkuenfte') {
     return <Herkunft />
+  }
+  if (url.length === 2 && url[0] === 'Lieferungen') {
+    return <Lieferung />
   }
   if (url.length === 2 && url[0] === 'Personen') {
     return null

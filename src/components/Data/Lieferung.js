@@ -30,6 +30,7 @@ const query = gql`
   query LieferungQuery($id: Int!) {
     lieferung(where: { id: { _eq: $id } }) {
       id
+      art_id
       person_id
       typ
       zaehleinheit
@@ -55,6 +56,16 @@ const query = gql`
       wert
       sort
     }
+    lieferung_status_werte {
+      id
+      wert
+      sort
+    }
+    lieferung_zwischenlager_werte {
+      id
+      wert
+      sort
+    }
     zaehleinheit_werte {
       id
       wert
@@ -65,8 +76,25 @@ const query = gql`
       wert
       sort
     }
+    art {
+      id
+      art_ae_art {
+        id
+        name
+      }
+    }
     sammlung {
       id
+      datum
+      herkunftByherkunftId {
+        id
+        nr
+      }
+      personBypersonId {
+        id
+        name
+        ort
+      }
     }
   }
 `
@@ -94,6 +122,55 @@ const Lieferung = () => {
   }))
   personWerte = sortBy(personWerte, 'label')
 
+  let artWerte = get(data, 'art', [])
+  artWerte = artWerte.map(el => ({
+    value: el.id,
+    label: get(el, 'art_ae_art.name') || '(kein Artname)',
+  }))
+  artWerte = sortBy(artWerte, 'label')
+
+  let lieferungTypWerte = get(data, 'lieferung_typ_werte', [])
+  lieferungTypWerte = sortBy(lieferungTypWerte, ['sort', 'wert'])
+  lieferungTypWerte = lieferungTypWerte.map(el => ({
+    value: el.id,
+    label: el.wert || '(kein Wert)',
+  }))
+
+  let lieferungStatusWerte = get(data, 'lieferung_status_werte', [])
+  lieferungStatusWerte = sortBy(lieferungStatusWerte, ['sort', 'wert'])
+  lieferungStatusWerte = lieferungStatusWerte.map(el => ({
+    value: el.id,
+    label: el.wert || '(kein Wert)',
+  }))
+
+  let lieferungZwischenlagerWerte = get(
+    data,
+    'lieferung_zwischenlager_werte',
+    [],
+  )
+  lieferungZwischenlagerWerte = sortBy(lieferungZwischenlagerWerte, [
+    'sort',
+    'wert',
+  ])
+  lieferungZwischenlagerWerte = lieferungZwischenlagerWerte.map(el => ({
+    value: el.id,
+    label: el.wert || '(kein Wert)',
+  }))
+
+  let zaehleinheitWerte = get(data, 'zaehleinheit_werte', [])
+  zaehleinheitWerte = sortBy(zaehleinheitWerte, ['sort', 'wert'])
+  zaehleinheitWerte = zaehleinheitWerte.map(el => ({
+    value: el.id,
+    label: el.wert || '(kein Wert)',
+  }))
+
+  let masseinheitWerte = get(data, 'masseinheit_werte', [])
+  masseinheitWerte = sortBy(masseinheitWerte, ['sort', 'wert'])
+  masseinheitWerte = masseinheitWerte.map(el => ({
+    value: el.id,
+    label: el.wert || '(kein Wert)',
+  }))
+
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
@@ -103,26 +180,59 @@ const Lieferung = () => {
           mutation: gql`
             mutation update_lieferung(
               $id: Int!
+              $art_id: Int
               $person_id: Int
-              $x: Int
-              $y: Int
+              $typ: Int
+              $zaehleinheit: Int
+              $menge: Int
+              $masseinheit: Int
+              $von_datum: date
+              $von_sammlung_id: Int
+              $von_kultur_id: Int
+              $zwischenlager: Int
+              $nach_datum: date
+              $nach_kultur_id: Int
+              $nach_ausgepflanzt: Boolean
+              $status: Int
               $bemerkungen: String
             ) {
               update_lieferung(
                 where: { id: { _eq: $id } }
                 _set: {
+                  art_id: $art_id
                   person_id: $person_id
-                  x: $x
-                  y: $y
+                  typ: $typ
+                  zaehleinheit: $zaehleinheit
+                  menge: $menge
+                  masseinheit: $masseinheit
+                  von_datum: $von_datum
+                  von_sammlung_id: $von_sammlung_id
+                  von_kultur_id: $von_kultur_id
+                  zwischenlager: $zwischenlager
+                  nach_datum: $nach_datum
+                  nach_kultur_id: $nach_kultur_id
+                  nach_ausgepflanzt: $nach_ausgepflanzt
+                  status: $status
                   bemerkungen: $bemerkungen
                 }
               ) {
                 affected_rows
                 returning {
                   id
+                  art_id
                   person_id
-                  x
-                  y
+                  typ
+                  zaehleinheit
+                  menge
+                  masseinheit
+                  von_datum
+                  von_sammlung_id
+                  von_kultur_id
+                  zwischenlager
+                  nach_datum
+                  nach_kultur_id
+                  nach_ausgepflanzt
+                  status
                   bemerkungen
                 }
               }
@@ -130,9 +240,25 @@ const Lieferung = () => {
           `,
           variables: {
             id: row.id,
+            art_id: field === 'art_id' ? value : row.art_id,
             person_id: field === 'person_id' ? value : row.person_id,
-            x: field === 'x' ? value : row.x,
-            y: field === 'y' ? value : row.y,
+            typ: field === 'typ' ? value : row.typ,
+            zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
+            menge: field === 'menge' ? value : row.menge,
+            masseinheit: field === 'masseinheit' ? value : row.masseinheit,
+            von_datum: field === 'von_datum' ? value : row.von_datum,
+            von_sammlung_id:
+              field === 'von_sammlung_id' ? value : row.von_sammlung_id,
+            von_kultur_id:
+              field === 'von_kultur_id' ? value : row.von_kultur_id,
+            zwischenlager:
+              field === 'zwischenlager' ? value : row.zwischenlager,
+            nach_datum: field === 'nach_datum' ? value : row.nach_datum,
+            nach_kultur_id:
+              field === 'nach_kultur_id' ? value : row.nach_kultur_id,
+            nach_ausgepflanzt:
+              field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
+            status: field === 'status' ? value : row.status,
             bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
           },
         })
@@ -171,6 +297,16 @@ const Lieferung = () => {
         <FormTitle title="Lieferung" />
         <FieldsContainer>
           <Select
+            key={`${row.id}art_id`}
+            name="art_id"
+            value={row.art_id}
+            field="art_id"
+            label="Art"
+            options={artWerte}
+            saveToDb={saveToDb}
+            error={errors.art_id}
+          />
+          <Select
             key={`${row.id}person_id`}
             name="person_id"
             value={row.person_id}
@@ -179,24 +315,6 @@ const Lieferung = () => {
             options={personWerte}
             saveToDb={saveToDb}
             error={errors.person_id}
-          />
-          <TextField
-            key={`${row.id}x`}
-            name="x"
-            label="X-Koordinate"
-            value={row.x}
-            saveToDb={saveToDb}
-            error={errors.x}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}y`}
-            name="y"
-            label="Y-Koordinate"
-            value={row.y}
-            saveToDb={saveToDb}
-            error={errors.y}
-            type="number"
           />
           <TextField
             key={`${row.id}bemerkungen`}
