@@ -41,7 +41,7 @@ export default ({ nodes, data, url }) => {
       menuType: 'zaehlung',
       filterTable: 'zaehlung',
       id: `zaehlung${el.id}`,
-      parentId: `kultur${kulturId}ZaehlungFolder`,
+      parentId: `person${personId}Garten${gartenId}Kultur${kulturId}ZaehlungFolder`,
       label: get(el, 'datum', '(kein Datum)'),
       url: [
         'Personen',
