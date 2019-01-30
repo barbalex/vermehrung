@@ -471,6 +471,10 @@ export default gql`
       lieferungsByvonSammlungId @include(if: $isSammlung) {
         id
         von_datum @include(if: $isSammlungLieferung)
+        personBypersonId @include(if: $isSammlungLieferung) {
+          id
+          name
+        }
         lieferungTypWerteBytyp @include(if: $isSammlungLieferung) {
           id
           wert
