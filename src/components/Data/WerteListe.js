@@ -52,6 +52,18 @@ const WerteListe = ({ table }) => {
     case 'lieferung_status_werte':
       title = 'Lieferung: Status'
       break
+    case 'lieferung_typ_werte':
+      title = 'Lieferung: Typ'
+      break
+    case 'lieferung_zwischenlager_werte':
+      title = 'Lieferung: Zwischenlager'
+      break
+    case 'masseinheit_werte':
+      title = 'Masseinheiten'
+      break
+    case 'zaehleinheit_werte':
+      title = 'Zähleinheiten'
+      break
     default:
     //
   }
