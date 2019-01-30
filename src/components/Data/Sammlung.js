@@ -168,20 +168,15 @@ const Sammlung = () => {
           mutation: gql`
             mutation update_sammlung(
               $id: Int!
+              $nr: String
               $art_id: Int
+              $herkunft_id: Int
               $person_id: Int
-              $typ: Int
+              $datum: date
+              $von_anzahl_individuen: Int
               $zaehleinheit: Int
               $menge: Int
               $masseinheit: Int
-              $von_datum: date
-              $von_sammlung_id: Int
-              $von_kultur_id: Int
-              $zwischenlager: Int
-              $nach_datum: date
-              $nach_kultur_id: Int
-              $nach_ausgepflanzt: Boolean
-              $status: Int
               $bemerkungen: String
             ) {
               update_sammlung(
