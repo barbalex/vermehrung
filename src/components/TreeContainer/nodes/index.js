@@ -64,6 +64,8 @@ import buildPersonGartenKulturEventFolder from './person/garten/kultur/event/fol
 import buildPersonGartenKulturEventEvent from './person/garten/kultur/event'
 import buildPersonGartenKulturAuslieferungFolder from './person/garten/kultur/auslieferung/folder'
 import buildPersonGartenKulturAuslieferungLieferung from './person/garten/kultur/auslieferung'
+import buildPersonGartenKulturAnlieferungFolder from './person/garten/kultur/anlieferung/folder'
+import buildPersonGartenKulturAnlieferungLieferung from './person/garten/kultur/anlieferung'
 import buildPersonGartenSammlungFolder from './person/sammlung/folder'
 import buildPersonGartenSammlungSammlung from './person/sammlung'
 import buildPersonGartenLieferungFolder from './person/lieferung/folder'
@@ -892,6 +894,11 @@ export default ({ store, data, loading }) => {
           data,
           url,
         }),
+        ...buildPersonGartenKulturAnlieferungFolder({
+          nodes,
+          data,
+          url,
+        }),
       ]
     }
 
@@ -953,6 +960,22 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildPersonGartenKulturAuslieferungLieferung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 7 &&
+      url[0] === 'Personen' &&
+      url[2] === 'Gaerten' &&
+      url[4] === 'Kulturen' &&
+      url[6] === 'An-Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildPersonGartenKulturAnlieferungLieferung({
           nodes,
           data,
           url,
