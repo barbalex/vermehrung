@@ -59,6 +59,7 @@ import buildPersonGartenKulturKultur from './person/garten/kultur'
 import buildPersonGartenKulturZaehlungFolder from './person/garten/kultur/zaehlung/folder'
 import buildPersonGartenKulturZaehlungZaehlung from './person/garten/kultur/zaehlung'
 import buildPersonGartenKulturInventarFolder from './person/garten/kultur/inventar/folder'
+import buildPersonGartenKulturInventarInventar from './person/garten/kultur/inventar'
 import buildPersonGartenSammlungFolder from './person/sammlung/folder'
 import buildPersonGartenSammlungSammlung from './person/sammlung'
 import buildPersonGartenLieferungFolder from './person/lieferung/folder'
@@ -890,6 +891,22 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildPersonGartenKulturZaehlungZaehlung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 7 &&
+      url[0] === 'Personen' &&
+      url[2] === 'Gaerten' &&
+      url[4] === 'Kulturen' &&
+      url[6] === 'Inventare'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildPersonGartenKulturInventarInventar({
           nodes,
           data,
           url,
