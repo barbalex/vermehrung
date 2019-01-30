@@ -17,6 +17,17 @@ const Container = styled.div`
 `
 const StyledReflexContainer = styled(ReflexContainer)`
   height: calc(100vh - 64px) !important;
+  .reflex-splitter {
+    background-color: #fffde7 !important;
+    border-right: none !important;
+    border-left: none !important;
+    background-color: rgba(74, 20, 140, 0.1) !important;
+    width: 7px !important;
+  }
+  .reflex-splitter:hover {
+    background-color: #fff59d !important;
+    cursor: col-resize !important;
+  }
 `
 
 const Vermehrung = ({ location }) => {

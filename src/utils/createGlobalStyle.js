@@ -29,27 +29,4 @@ export default () => createGlobalStyle`
   ::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
   }
-
-
-  /*
-  * seems that overflow:hidden is necessary
-  * for all relfex-elements
-  */
-
-  .reflex-element {
-    border-right: 0 !important;
-    border-left: 0 !important;
-  }
-
-  .reflex-splitter {
-    background-color: #fffde7 !important;
-    border-right: 1px solid #fffde7 !important;
-    border-left: 1px solid #fffde7 !important;
-  }
-
-  .reflex-splitter:hover {
-    background-color: #fff59d !important;
-    border-right: 1px solid #fff59d !important;
-    border-left: 1px solid #fff59d !important;
-  }
 `
