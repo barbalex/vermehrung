@@ -76,12 +76,12 @@ const TreeContainer = ({ dimensions }) => {
       ),
       isSammlung: openNodes.some(n => n[0] === 'Sammlungen'),
       isSammlungLieferung: openNodes.some(
-        n => n[0] === 'Sammlungen' && n[2] === 'Lieferungen',
+        n => n[0] === 'Sammlungen' && n[2] === 'Aus-Lieferungen',
       ),
       isSammlungLieferungKultur: openNodes.some(
         n =>
           n[0] === 'Sammlungen' &&
-          n[2] === 'Lieferungen' &&
+          n[2] === 'Aus-Lieferungen' &&
           n[4] === 'Kulturen',
       ),
       isKultur: openNodes.some(n => n[0] === 'Kulturen'),
