@@ -17,6 +17,7 @@ export default gql`
     $isPersonLieferung: Boolean!
     $isSammlung: Boolean!
     $isSammlungLieferung: Boolean!
+    $isSammlungLieferungKultur: Boolean!
     $isKultur: Boolean!
     $isKulturAnLieferung: Boolean!
     $isKulturAusLieferung: Boolean!
@@ -482,6 +483,64 @@ export default gql`
         lieferungStatusWerteBystatus @include(if: $isSammlungLieferung) {
           id
           wert
+        }
+        kulturBynachKulturId {
+          id
+          gartenBygartenId @include(if: $isSammlungLieferungKultur) {
+            id
+            personBypersonId {
+              id
+              name
+            }
+          }
+          kulturEventsBykulturId @include(if: $isSammlungLieferungKultur) {
+            id
+            datum
+            event
+          }
+          kulturInventarsBykulturId @include(if: $isSammlungLieferungKultur) {
+            id
+            datum
+            kasten
+            beet
+            nr
+          }
+          zaehlungsBykulturId @include(if: $isSammlungLieferungKultur) {
+            id
+            datum
+          }
+          lieferungsByvonKulturId @include(if: $isSammlungLieferungKultur) {
+            id
+            personBypersonId {
+              id
+              name
+            }
+            lieferungTypWerteBytyp {
+              id
+              wert
+            }
+            lieferungStatusWerteBystatus {
+              id
+              wert
+            }
+            von_datum
+          }
+          lieferungsBynachKulturId @include(if: $isSammlungLieferungKultur) {
+            id
+            personBypersonId {
+              id
+              name
+            }
+            lieferungTypWerteBytyp {
+              id
+              wert
+            }
+            lieferungStatusWerteBystatus {
+              id
+              wert
+            }
+            nach_datum
+          }
         }
       }
     }

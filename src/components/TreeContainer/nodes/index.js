@@ -78,6 +78,7 @@ import buildSammlungHerkunftHerkunft from './sammlung/herkunft'
 import buildSammlungAusLieferungFolder from './sammlung/auslieferung/folder'
 import buildSammlungAusLieferungLieferung from './sammlung/auslieferung'
 // TODO: build SammlungKulturFolder and Kultur
+import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultur/folder'
 
 import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
@@ -661,6 +662,21 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildPersonGartenKulturFolder({
+          nodes,
+          data,
+          url,
+          loading,
+        }),
+      ]
+    }
+    if (
+      url.length === 4 &&
+      url[0] === 'Sammlungen' &&
+      url[2] === 'Aus-Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildSammlungAusLieferungKulturFolder({
           nodes,
           data,
           url,
