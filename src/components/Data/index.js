@@ -156,7 +156,7 @@ const Data = () => {
     return <Lieferung />
   }
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
-    return null
+    return <Zaehlung />
   }
   if (
     url.length === 4 &&
@@ -177,9 +177,6 @@ const Data = () => {
   }
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
     return null
-  }
-  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
-    return <Zaehlung />
   }
   if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
     return <Lieferung />
