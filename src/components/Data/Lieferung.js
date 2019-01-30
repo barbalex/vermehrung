@@ -10,6 +10,7 @@ import last from 'lodash/last'
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
+import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
@@ -315,6 +316,53 @@ const Lieferung = () => {
             options={personWerte}
             saveToDb={saveToDb}
             error={errors.person_id}
+          />
+          <Select
+            key={`${row.id}typ`}
+            name="typ"
+            value={row.typ}
+            field="typ"
+            label="Typ"
+            options={lieferungTypWerte}
+            saveToDb={saveToDb}
+            error={errors.typ}
+          />
+          <Select
+            key={`${row.id}zaehleinheit`}
+            name="zaehleinheit"
+            value={row.zaehleinheit}
+            field="zaehleinheit"
+            label="Zähleinheit"
+            options={zaehleinheitWerte}
+            saveToDb={saveToDb}
+            error={errors.zaehleinheit}
+          />
+          <TextField
+            key={`${row.id}menge`}
+            name="menge"
+            label="Menge"
+            value={row.menge}
+            saveToDb={saveToDb}
+            error={errors.menge}
+            type="number"
+          />
+          <Select
+            key={`${row.id}masseinheit`}
+            name="masseinheit"
+            value={row.masseinheit}
+            field="masseinheit"
+            label="Masseinheit"
+            options={masseinheitWerte}
+            saveToDb={saveToDb}
+            error={errors.masseinheit}
+          />
+          <DateFieldWithPicker
+            key={`${row.id}von_datum`}
+            name="von_datum"
+            label="von-Datum"
+            value={row.von_datum}
+            saveToDb={saveToDb}
+            error={errors.von_datum}
           />
           <TextField
             key={`${row.id}bemerkungen`}

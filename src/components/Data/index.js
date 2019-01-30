@@ -201,6 +201,15 @@ const Data = () => {
   ) {
     return <Kultur />
   }
+  if (
+    url.length === 8 &&
+    url[0] === 'Sammlungen' &&
+    url[2] === 'Aus-Lieferungen' &&
+    url[4] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[6])
+  ) {
+    return <Lieferung />
+  }
   return null
 }
 
