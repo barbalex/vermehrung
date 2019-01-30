@@ -20,7 +20,7 @@ export default ({ nodes, data }) => {
           '(keine Person)',
         )}`,
         url: ['Lieferungen', el.id],
-        hasChildren: true,
+        hasChildren: false,
       }))
       .filter(n => allParentNodesExist(nodes, n))
       // sort by label

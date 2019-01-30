@@ -16,11 +16,11 @@ export default ({ nodes, data, url }) => {
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
 
   const gartenNodes = nodes.filter(
-    n => n.parentId === `person${personId}gartenFolder`,
+    n => n.parentId === `person${personId}GartenFolder`,
   )
   const gartenIndex = findIndex(
     gartenNodes,
-    n => n.id === `person${personId}garten${gartenId}`,
+    n => n.id === `person${personId}Garten${gartenId}`,
   )
 
   return kulturen
@@ -28,7 +28,7 @@ export default ({ nodes, data, url }) => {
       nodeType: 'table',
       menuType: 'personGartenKultur',
       filterTable: 'kultur',
-      id: `person${personId}Garten${url[1]}Kultur${el.id}`,
+      id: `person${personId}Garten${gartenId}Kultur${el.id}`,
       parentId: `person${personId}Garten${gartenId}KulturFolder`,
       label: get(el, 'artByartId.art_ae_art.name', '(keine Art)'),
       url: ['Personen', personId, 'Gaerten', gartenId, 'Kulturen', el.id],

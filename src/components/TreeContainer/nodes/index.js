@@ -9,8 +9,8 @@ import buildArtArt from './art'
 
 import buildArtSammlungFolder from './art/sammlung/folder'
 import buildArtSammlung from './art/sammlung'
-import buildArtSammlungLieferungFolder from './art/sammlung/lieferung/folder'
-import buildArtSammlungLieferungLieferung from './art/sammlung/lieferung'
+import buildArtSammlungAusLieferungFolder from './art/sammlung/auslieferung/folder'
+import buildArtSammlungLieferungAusLieferung from './art/sammlung/auslieferung'
 
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
@@ -44,8 +44,8 @@ import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunftHerkunft from './herkunft'
 import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
 import buildHerkunftSammlungSammlung from './herkunft/sammlung'
-import buildHerkunftSammlungLieferungFolder from './herkunft/sammlung/lieferung/folder'
-import buildHerkunftSammlungLieferungLieferung from './herkunft/sammlung/lieferung'
+import buildHerkunftSammlungAusLieferungFolder from './herkunft/sammlung/auslieferung/folder'
+import buildHerkunftSammlungausLieferungLieferung from './herkunft/sammlung/auslieferung'
 
 import buildLieferungFolder from './lieferung/folder'
 import buildLieferungLieferung from './lieferung'
@@ -56,6 +56,7 @@ import buildPersonGartenFolder from './person/garten/folder'
 import buildPersonGartenGarten from './person/garten'
 import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
 import buildPersonGartenKulturKultur from './person/garten/kultur'
+import buildPersonGartenKulturZaehlungFolder from './person/garten/kultur/zaehlung/folder'
 import buildPersonGartenSammlungFolder from './person/sammlung/folder'
 import buildPersonGartenSammlungSammlung from './person/sammlung'
 import buildPersonGartenLieferungFolder from './person/lieferung/folder'
@@ -589,7 +590,7 @@ export default ({ store, data, loading }) => {
     if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
       nodes = [
         ...nodes,
-        ...buildArtSammlungLieferungFolder({
+        ...buildArtSammlungAusLieferungFolder({
           nodes,
           data,
           url,
@@ -639,7 +640,7 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildHerkunftSammlungLieferungFolder({
+        ...buildHerkunftSammlungAusLieferungFolder({
           nodes,
           data,
           url,
@@ -814,11 +815,11 @@ export default ({ store, data, loading }) => {
       url.length === 5 &&
       url[0] === 'Arten' &&
       url[2] === 'Sammlungen' &&
-      url[4] === 'Lieferungen'
+      url[4] === 'Aus-Lieferungen'
     ) {
       nodes = [
         ...nodes,
-        ...buildArtSammlungLieferungLieferung({
+        ...buildArtSammlungLieferungAusLieferung({
           nodes,
           data,
           url,
@@ -829,11 +830,11 @@ export default ({ store, data, loading }) => {
       url.length === 5 &&
       url[0] === 'Herkuenfte' &&
       url[2] === 'Sammlungen' &&
-      url[4] === 'Lieferungen'
+      url[4] === 'Aus-Lieferungen'
     ) {
       nodes = [
         ...nodes,
-        ...buildHerkunftSammlungLieferungLieferung({
+        ...buildHerkunftSammlungausLieferungLieferung({
           nodes,
           data,
           url,
@@ -849,6 +850,21 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildPersonGartenKulturKultur({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 6 &&
+      url[0] === 'Personen' &&
+      url[2] === 'Gaerten' &&
+      url[4] === 'Kulturen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildPersonGartenKulturZaehlungFolder({
           nodes,
           data,
           url,

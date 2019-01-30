@@ -51,7 +51,7 @@ export default ({ nodes, data, url }) => {
           herkunftId,
           'Sammlungen',
           sammlungId,
-          'Lieferungen',
+          'Aus-Lieferungen',
           el.id,
         ],
         hasChildren: true,

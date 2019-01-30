@@ -28,7 +28,7 @@ export default ({ nodes, data, url }) => {
         parentId: `person${personId}SammlungFolder`,
         label,
         url: ['Personen', personId, 'Sammlungen', el.id],
-        hasChildren: true,
+        hasChildren: false,
       }
     })
     .filter(n => allParentNodesExist(nodes, n))

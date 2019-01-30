@@ -15,7 +15,7 @@ export default ({ data, loading, url, nodes }) => {
     {
       nodeType: 'folder',
       menuType: 'personGartenFolder',
-      id: `person${personId}gartenFolder`,
+      id: `person${personId}GartenFolder`,
       label: `Gärten (${nr})`,
       url: ['Personen', personId, 'Gaerten'],
       sort: [5, personIndex, 1],

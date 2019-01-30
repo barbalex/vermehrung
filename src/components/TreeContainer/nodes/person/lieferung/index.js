@@ -34,7 +34,7 @@ export default ({ nodes, data, url }) => {
           parentId: `person${personId}LieferungFolder`,
           label,
           url: ['Personen', personId, 'Lieferungen', el.id],
-          hasChildren: true,
+          hasChildren: false,
         }
       })
       .filter(n => allParentNodesExist(nodes, n))
