@@ -11,8 +11,8 @@ export default ({ url, nodes, data, loading }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kultursBygartenId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const zaehlungen = get(kultur, 'zaehlungsBykulturId', [])
-  const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
+  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
+  const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)

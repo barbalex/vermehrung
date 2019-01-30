@@ -1,24 +1,39 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
+import compareLabel from '../../../../compareLabel'
+import allParentNodesExist from '../../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
-  const gartenId = url[1]
-  const kulturId = url[3]
-  const gaerten = get(data, 'garten', [])
+  const personId = url[1]
+  const gartenId = url[3]
+  const kulturId = url[5]
+  const personen = get(data, 'person', [])
+  const person = personen.find(p => p.id === personId)
+  const gaerten = get(person, 'gartensBypersonId', [])
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kultursBygartenId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
   const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
 
-  const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
-  const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
-  const kulturNodes = nodes.filter(
-    n => n.parentId === `garten${gartenId}KulturFolder`,
+  const personNodes = nodes.filter(n => n.parentId === 'personFolder')
+  const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+
+  const gartenNodes = nodes.filter(
+    n => n.parentId === `person${personId}GartenFolder`,
   )
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const gartenIndex = findIndex(
+    gartenNodes,
+    n => n.id === `person${personId}Garten${gartenId}`,
+  )
+
+  const kulturNodes = nodes.filter(
+    n => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
+  )
+  const kulturIndex = findIndex(
+    kulturNodes,
+    n => n.id === `person${personId}Garten${gartenId}Kultur${kulturId}`,
+  )
 
   return auslieferungen
     .map(el => {
@@ -36,17 +51,28 @@ export default ({ nodes, data, url }) => {
         nodeType: 'table',
         menuType: 'auslieferung',
         filterTable: 'lieferung',
-        id: `lieferung${el.id}`,
-        parentId: `kultur${kulturId}AusLieferungFolder`,
+        id: `person${personId}Garten${gartenId}Kultur${kulturId}Auslieferung${
+          el.id
+        }`,
+        parentId: `person${personId}Garten${gartenId}Kultur${kulturId}AusLieferungFolder`,
         label,
-        url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Lieferungen', el.id],
+        url: [
+          'Personen',
+          personId,
+          'Gaerten',
+          gartenId,
+          'Kulturen',
+          kulturId,
+          'Aus-Lieferungen',
+          el.id,
+        ],
         hasChildren: false,
       }
     })
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [2, gartenIndex, 1, kulturIndex, 3, index]
+      el.sort = [5, personIndex, 1, gartenIndex, 1, kulturIndex, 3, index]
       return el
     })
 }
