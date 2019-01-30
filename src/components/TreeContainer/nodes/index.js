@@ -62,6 +62,7 @@ import buildPersonGartenKulturInventarFolder from './person/garten/kultur/invent
 import buildPersonGartenKulturInventarInventar from './person/garten/kultur/inventar'
 import buildPersonGartenKulturEventFolder from './person/garten/kultur/event/folder'
 import buildPersonGartenKulturEventEvent from './person/garten/kultur/event'
+import buildPersonGartenKulturAuslieferungFolder from './person/garten/kultur/auslieferung/folder'
 import buildPersonGartenSammlungFolder from './person/sammlung/folder'
 import buildPersonGartenSammlungSammlung from './person/sammlung'
 import buildPersonGartenLieferungFolder from './person/lieferung/folder'
@@ -881,6 +882,11 @@ export default ({ store, data, loading }) => {
           url,
         }),
         ...buildPersonGartenKulturEventFolder({
+          nodes,
+          data,
+          url,
+        }),
+        ...buildPersonGartenKulturAuslieferungFolder({
           nodes,
           data,
           url,
