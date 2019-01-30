@@ -55,7 +55,7 @@
     "mobx-react-lite": "0.3.6",
     "mobx-state-tree": "3.10.2",
     "moment": "2.24.0",
-    "prettier": "1.16.1",
+    "prettier": "1.16.2",
     "react": "16.8.0-alpha.1",
     "react-apollo": "2.4.1",
     "react-apollo-hooks": "0.3.1",
