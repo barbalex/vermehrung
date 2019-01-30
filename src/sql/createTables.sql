@@ -9,7 +9,6 @@ create table person (
   strasse text default null,
   plz integer default null,
   ort text default null,
-  person text default null,
   telefon_privat text default null,
   telefon_geschaeft text default null,
   telefon_mobile text default null,
@@ -24,6 +23,7 @@ create table person (
 );
 create index on person using btree (id);
 create index on person using btree (name);
+
 
 drop table if exists art cascade;
 create table art (
