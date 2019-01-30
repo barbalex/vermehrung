@@ -12,17 +12,11 @@ import Row from './Row'
 const Container = styled.div`
   height: 100%;
   display: flex;
-  padding-top: 5px;
-  padding-bottom: 5px;
   flex-direction: column;
   align-items: stretch;
-  border-right-color: rgb(46, 125, 50);
-  border-right-width: 1px;
-  border-right-style: solid;
-  border-left-color: rgb(46, 125, 50);
-  border-left-width: 1px;
-  border-left-style: solid;
   overflow: hidden;
+  padding-top: 5px;
+  padding-bottom: 5px;
   @media print {
     display: none !important;
   }
