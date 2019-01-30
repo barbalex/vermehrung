@@ -1,31 +1,54 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import compareLabel from '../../compareLabel'
-import allParentNodesExist from '../../../allParentNodesExist'
+import compareLabel from '../../../compareLabel'
+import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
-  const arten = get(data, 'art', [])
-  const art = arten.find(a => a.id === url[1])
-  const kulturen = get(art, 'kultursByartId', [])
-  const artNodes = nodes.filter(n => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`) || 0
+  const sammlungId = url[1]
+  const lieferungId = url[3]
+  const sammlungen = get(data, 'sammlung', [])
+  const sammlung = sammlungen.find(p => p.id === sammlungId)
+  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferung = lieferungen.find(p => p.id === lieferungId)
+  const kultur = get(lieferung, 'kulturBynachKulturId', [])
 
-  return kulturen
+  const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
+  const sammlungIndex = findIndex(
+    sammlungNodes,
+    n => n.id === `sammlung${sammlungId}`,
+  )
+
+  const lieferungNodes = nodes.filter(
+    n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
+  )
+  const lieferungIndex = findIndex(
+    lieferungNodes,
+    n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
+  )
+
+  return [kultur]
     .map(el => ({
       nodeType: 'table',
-      menuType: 'kultur',
+      menuType: 'sammlungLieferungKultur',
       filterTable: 'kultur',
-      id: `kultur${el.id}`,
-      parentId: `art${url[1]}KulturFolder`,
+      id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
+      parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
       label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
-      url: ['Arten', url[1], 'Kulturen', el.id],
+      url: [
+        'Sammlungen',
+        sammlungId,
+        'Aus-Lieferungen',
+        lieferungId,
+        'Kulturen',
+        el.id,
+      ],
       hasChildren: true,
     }))
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [1, artIndex, 1, index]
+      el.sort = [6, sammlungIndex, 3, lieferungIndex, 1, index]
       return el
     })
 }

@@ -79,6 +79,7 @@ import buildSammlungAusLieferungFolder from './sammlung/auslieferung/folder'
 import buildSammlungAusLieferungLieferung from './sammlung/auslieferung'
 // TODO: build SammlungKulturFolder and Kultur
 import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultur/folder'
+import buildSammlungAusLieferungKulturKultur from './sammlung/auslieferung/kultur'
 
 import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
@@ -694,6 +695,21 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...buildArtKulturZaehlungZaehlung({
+          nodes,
+          data,
+          url,
+        }),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Sammlungen' &&
+      url[2] === 'Aus-Lieferungen' &&
+      url[4] === 'Kulturen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildSammlungAusLieferungKulturKultur({
           nodes,
           data,
           url,
