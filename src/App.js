@@ -9,6 +9,11 @@ import { Provider as MobxProvider } from './storeContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import 'react-reflex/styles.css'
 
+import moment from 'moment'
+import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
+import MomentUtils from '@date-io/moment'
+import { MuiPickersUtilsProvider } from 'material-ui-pickers'
+
 import materialTheme from './utils/materialTheme'
 import client from '../client'
 
@@ -21,10 +26,16 @@ const App = ({ element }) => (
     <MobxProvider value={mobxStore}>
       <ApolloProvider client={myClient}>
         <ApolloHooksProvider client={myClient}>
-          <>
-            <GlobalStyle />
-            {element}
-          </>
+          <MuiPickersUtilsProvider
+            utils={MomentUtils}
+            moment={moment}
+            locale="de-ch"
+          >
+            <>
+              <GlobalStyle />
+              {element}
+            </>
+          </MuiPickersUtilsProvider>
         </ApolloHooksProvider>
       </ApolloProvider>
     </MobxProvider>

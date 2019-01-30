@@ -86,6 +86,7 @@ const query = gql`
     }
     sammlung {
       id
+      art_id
       datum
       herkunftByherkunftId {
         id
@@ -95,6 +96,18 @@ const query = gql`
         id
         name
         ort
+      }
+    }
+    kultur {
+      id
+      art_id
+      gartenBygartenId {
+        id
+        personBypersonId {
+          id
+          name
+          ort
+        }
       }
     }
   }
@@ -115,6 +128,53 @@ const Lieferung = () => {
   const row = get(data, 'lieferung', [{}])[0]
 
   useEffect(() => setErrors({}), [row])
+
+  let kulturWerte = get(data, 'kultur', []).filter(s => {
+    // only show kulturen of same art
+    if (row.art_id && s.art_id) {
+      return s.art_id === row.art_id
+    }
+    return true
+  })
+  kulturWerte = sortBy(kulturWerte, s => [
+    get(s, 'gartenBygartenId.personBypersonId.name'),
+    get(s, 'gartenBygartenId.personBypersonId.ort'),
+  ])
+  kulturWerte = kulturWerte.map(el => {
+    const name =
+      get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
+    const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+    const label = `${name}${ort ? ` (${ort})` : ''}`
+
+    return {
+      value: el.id,
+      label,
+    }
+  })
+
+  let sammlungWerte = get(data, 'sammlung', []).filter(s => {
+    // only show sammlungen of same art
+    if (row.art_id && s.art_id) {
+      return s.art_id === row.art_id
+    }
+    return true
+  })
+  sammlungWerte = sortBy(sammlungWerte, s => [
+    'datum',
+    get(s, 'herkunftByherkunftId.nr'),
+    get(s, 'personBypersonId.name'),
+  ])
+  sammlungWerte = sammlungWerte.map(el => {
+    const datum = el.datum || '(kein Datum)'
+    const nr = get(el, 'herkunftByherkunftId.nr') || '(keine Nr)'
+    const person = get(el, 'personBypersonId.name') || '(kein Name)'
+    const label = `${datum}: Herkunft ${nr}; ${person}`
+
+    return {
+      value: el.id,
+      label,
+    }
+  })
 
   let personWerte = get(data, 'person', [])
   personWerte = personWerte.map(el => ({
@@ -359,10 +419,30 @@ const Lieferung = () => {
           <DateFieldWithPicker
             key={`${row.id}von_datum`}
             name="von_datum"
-            label="von-Datum"
+            label="von Datum"
             value={row.von_datum}
             saveToDb={saveToDb}
             error={errors.von_datum}
+          />
+          <Select
+            key={`${row.id}von_sammlung_id`}
+            name="von_sammlung_id"
+            value={row.von_sammlung_id}
+            field="von_sammlung_id"
+            label="von Sammlung"
+            options={sammlungWerte}
+            saveToDb={saveToDb}
+            error={errors.von_sammlung_id}
+          />
+          <Select
+            key={`${row.id}von_kultur_id`}
+            name="von_kultur_id"
+            value={row.von_kultur_id}
+            field="von_kultur_id"
+            label="von Kultur"
+            options={kulturWerte}
+            saveToDb={saveToDb}
+            error={errors.von_kultur_id}
           />
           <TextField
             key={`${row.id}bemerkungen`}
