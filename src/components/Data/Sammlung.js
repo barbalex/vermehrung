@@ -34,6 +34,7 @@ const query = gql`
       id
       nr
       art_id
+      person_id
       herkunft_id
       datum
       person_id
@@ -170,8 +171,8 @@ const Sammlung = () => {
               $id: Int!
               $nr: String
               $art_id: Int
-              $herkunft_id: Int
               $person_id: Int
+              $herkunft_id: Int
               $datum: date
               $von_anzahl_individuen: Int
               $zaehleinheit: Int
@@ -182,40 +183,30 @@ const Sammlung = () => {
               update_sammlung(
                 where: { id: { _eq: $id } }
                 _set: {
+                  nr: $nr
                   art_id: $art_id
                   person_id: $person_id
-                  typ: $typ
+                  herkunft_id: $herkunft_id
+                  datum: $datum
+                  von_anzahl_individuen: $von_anzahl_individuen
                   zaehleinheit: $zaehleinheit
                   menge: $menge
                   masseinheit: $masseinheit
-                  von_datum: $von_datum
-                  von_sammlung_id: $von_sammlung_id
-                  von_kultur_id: $von_kultur_id
-                  zwischenlager: $zwischenlager
-                  nach_datum: $nach_datum
-                  nach_kultur_id: $nach_kultur_id
-                  nach_ausgepflanzt: $nach_ausgepflanzt
-                  status: $status
                   bemerkungen: $bemerkungen
                 }
               ) {
                 affected_rows
                 returning {
                   id
+                  nr
                   art_id
                   person_id
-                  typ
+                  herkunft_id
+                  datum
+                  von_anzahl_individuen
                   zaehleinheit
                   menge
                   masseinheit
-                  von_datum
-                  von_sammlung_id
-                  von_kultur_id
-                  zwischenlager
-                  nach_datum
-                  nach_kultur_id
-                  nach_ausgepflanzt
-                  status
                   bemerkungen
                 }
               }
@@ -223,25 +214,18 @@ const Sammlung = () => {
           `,
           variables: {
             id: row.id,
+            nr: field === 'nr' ? value : row.nr,
             art_id: field === 'art_id' ? value : row.art_id,
             person_id: field === 'person_id' ? value : row.person_id,
-            typ: field === 'typ' ? value : row.typ,
+            herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
+            datum: field === 'datum' ? value : row.datum,
+            von_anzahl_individuen:
+              field === 'von_anzahl_individuen'
+                ? value
+                : row.von_anzahl_individuen,
             zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
             menge: field === 'menge' ? value : row.menge,
             masseinheit: field === 'masseinheit' ? value : row.masseinheit,
-            von_datum: field === 'von_datum' ? value : row.von_datum,
-            von_sammlung_id:
-              field === 'von_sammlung_id' ? value : row.von_sammlung_id,
-            von_kultur_id:
-              field === 'von_kultur_id' ? value : row.von_kultur_id,
-            zwischenlager:
-              field === 'zwischenlager' ? value : row.zwischenlager,
-            nach_datum: field === 'nach_datum' ? value : row.nach_datum,
-            nach_kultur_id:
-              field === 'nach_kultur_id' ? value : row.nach_kultur_id,
-            nach_ausgepflanzt:
-              field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
-            status: field === 'status' ? value : row.status,
             bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
           },
         })
@@ -279,6 +263,15 @@ const Sammlung = () => {
       <Container>
         <FormTitle title="Sammlung" />
         <FieldsContainer>
+          <TextField
+            key={`${row.id}nr`}
+            name="nr"
+            label="Nr."
+            value={row.nr}
+            saveToDb={saveToDb}
+            error={errors.nr}
+            type="text"
+          />
           <Select
             key={`${row.id}art_id`}
             name="art_id"
@@ -298,6 +291,23 @@ const Sammlung = () => {
             options={personWerte}
             saveToDb={saveToDb}
             error={errors.person_id}
+          />
+          <DateFieldWithPicker
+            key={`${row.id}datum`}
+            name="datum"
+            label="Datum"
+            value={row.datum}
+            saveToDb={saveToDb}
+            error={errors.datum}
+          />
+          <TextField
+            key={`${row.id}von_anzahl_individuen`}
+            name="von_anzahl_individuen"
+            label="von Anzahl Individuen"
+            value={row.von_anzahl_individuen}
+            saveToDb={saveToDb}
+            error={errors.von_anzahl_individuen}
+            type="number"
           />
           <Select
             key={`${row.id}zaehleinheit`}
@@ -327,60 +337,6 @@ const Sammlung = () => {
             options={masseinheitWerte}
             saveToDb={saveToDb}
             error={errors.masseinheit}
-          />
-          <DateFieldWithPicker
-            key={`${row.id}von_datum`}
-            name="von_datum"
-            label="von Datum"
-            value={row.von_datum}
-            saveToDb={saveToDb}
-            error={errors.von_datum}
-          />
-          <Select
-            key={`${row.id}von_sammlung_id`}
-            name="von_sammlung_id"
-            value={row.von_sammlung_id}
-            field="von_sammlung_id"
-            label="von Sammlung"
-            options={sammlungWerte}
-            saveToDb={saveToDb}
-            error={errors.von_sammlung_id}
-          />
-          <Select
-            key={`${row.id}von_kultur_id`}
-            name="von_kultur_id"
-            value={row.von_kultur_id}
-            field="von_kultur_id"
-            label="von Kultur"
-            options={kulturWerte}
-            saveToDb={saveToDb}
-            error={errors.von_kultur_id}
-          />
-          <DateFieldWithPicker
-            key={`${row.id}nach_datum`}
-            name="nach_datum"
-            label="nach Datum"
-            value={row.nach_datum}
-            saveToDb={saveToDb}
-            error={errors.nach_datum}
-          />
-          <Select
-            key={`${row.id}nach_kultur_id`}
-            name="nach_kultur_id"
-            value={row.nach_kultur_id}
-            field="nach_kultur_id"
-            label="nach Kultur"
-            options={kulturWerte}
-            saveToDb={saveToDb}
-            error={errors.nach_kultur_id}
-          />
-          <RadioButton
-            key={`${row.id}nach_ausgepflanzt`}
-            label="Ausgepflanzt"
-            name="nach_ausgepflanzt"
-            value={row.nach_ausgepflanzt}
-            saveToDb={saveToDb}
-            error={errors.nach_ausgepflanzt}
           />
           <TextField
             key={`${row.id}bemerkungen`}
