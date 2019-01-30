@@ -103,7 +103,7 @@ const Data = () => {
   if (
     url.length === 3 &&
     url[0] === 'Kulturen' &&
-    url[2] === 'Zu-Lieferungen'
+    url[2] === 'An-Lieferungen'
   ) {
     return null
   }
@@ -151,7 +151,7 @@ const Data = () => {
   if (
     url.length === 4 &&
     url[0] === 'Kulturen' &&
-    url[2] === 'Zu-Lieferungen'
+    url[2] === 'An-Lieferungen'
   ) {
     return null
   }

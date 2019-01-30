@@ -8,12 +8,12 @@ export default ({ nodes, data, url }) => {
   const kulturId = url[1]
   const kulturen = get(data, 'kultur', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const zulieferungen = get(kultur, 'lieferungsBynachKulturId', [])
+  const anlieferungen = get(kultur, 'lieferungsBynachKulturId', [])
 
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
 
-  return zulieferungen
+  return anlieferungen
     .map(el => {
       const label = `${get(el, 'nach_datum', '(kein nach-Datum)')}: ${get(
         el,
@@ -27,12 +27,12 @@ export default ({ nodes, data, url }) => {
 
       return {
         nodeType: 'table',
-        menuType: 'zulieferung',
+        menuType: 'anlieferung',
         filterTable: 'lieferung',
         id: `kultur${kulturId}Lieferung${el.id}`,
-        parentId: `kultur${kulturId}ZuLieferungFolder`,
+        parentId: `kultur${kulturId}AnLieferungFolder`,
         label,
-        url: ['Kulturen', kulturId, 'Zu-Lieferungen', el.id],
+        url: ['Kulturen', kulturId, 'An-Lieferungen', el.id],
         hasChildren: false,
       }
     })

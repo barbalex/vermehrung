@@ -15,12 +15,10 @@ export default gql`
     $isPersonSammlung: Boolean!
     $isPersonLieferung: Boolean!
     $isSammlung: Boolean!
-    $isSammlungKultur: Boolean!
     $isSammlungLieferung: Boolean!
     $isKultur: Boolean!
-    $isKulturZuLieferung: Boolean!
+    $isKulturAnLieferung: Boolean!
     $isKulturAbLieferung: Boolean!
-    $isKulturSammlung: Boolean!
     $isWerteListe: Boolean!
   ) {
     garten {
@@ -224,15 +222,15 @@ export default gql`
       }
       lieferungsBynachKulturId @include(if: $isKultur) {
         id
-        personBypersonId @include(if: $isKulturZuLieferung) {
+        personBypersonId @include(if: $isKulturAnLieferung) {
           id
           name
         }
-        lieferungTypWerteBytyp @include(if: $isKulturZuLieferung) {
+        lieferungTypWerteBytyp @include(if: $isKulturAnLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus @include(if: $isKulturZuLieferung) {
+        lieferungStatusWerteBystatus @include(if: $isKulturAnLieferung) {
           id
           wert
         }

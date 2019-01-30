@@ -5,22 +5,22 @@ import compareLabel from '../../../compareLabel'
 import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
-  const gartenId = url[1]
+  const artId = url[1]
   const kulturId = url[3]
-  const gaerten = get(data, 'garten', [])
-  const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const arten = get(data, 'art', [])
+  const art = arten.find(a => a.id === artId)
+  const kulturen = get(art, 'kultursByartId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const zulieferungen = get(kultur, 'lieferungsBynachKulturId', [])
+  const anlieferungen = get(kultur, 'lieferungsBynachKulturId', [])
 
-  const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
-  const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
+  const artNodes = nodes.filter(n => n.parentId === 'artFolder')
+  const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
   const kulturNodes = nodes.filter(
-    n => n.parentId === `garten${gartenId}KulturFolder`,
+    n => n.parentId === `art${artId}KulturFolder`,
   )
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
 
-  return zulieferungen
+  return anlieferungen
     .map(el => {
       const label = `${get(el, 'nach_datum', '(kein nach-Datum)')}: ${get(
         el,
@@ -34,26 +34,19 @@ export default ({ nodes, data, url }) => {
 
       return {
         nodeType: 'table',
-        menuType: 'zulieferung',
+        menuType: 'anlieferung',
         filterTable: 'lieferung',
         id: `lieferung${el.id}`,
-        parentId: `kultur${kulturId}ZuLieferungFolder`,
+        parentId: `kultur${kulturId}AnLieferungFolder`,
         label,
-        url: [
-          'Gaerten',
-          gartenId,
-          'Kulturen',
-          kulturId,
-          'Zu-Lieferungen',
-          el.id,
-        ],
+        url: ['Arten', artId, 'Kulturen', kulturId, 'An-Lieferungen', el.id],
         hasChildren: false,
       }
     })
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [2, gartenIndex, 1, kulturIndex, 2, index]
+      el.sort = [1, artIndex, 1, kulturIndex, 2, index]
       return el
     })
 }
