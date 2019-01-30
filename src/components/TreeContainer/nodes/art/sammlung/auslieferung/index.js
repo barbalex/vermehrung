@@ -51,7 +51,7 @@ export default ({ nodes, data, url }) => {
           'Aus-Lieferungen',
           el.id,
         ],
-        hasChildren: true,
+        hasChildren: false,
       }
     })
     .filter(n => allParentNodesExist(nodes, n))
