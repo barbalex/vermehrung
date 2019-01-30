@@ -1,24 +1,44 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
+import compareLabel from '../../../../compareLabel'
+import allParentNodesExist from '../../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
-  const artId = url[1]
-  const kulturId = url[3]
-  const arten = get(data, 'art', [])
-  const art = arten.find(a => a.id === artId)
-  const kulturen = get(art, 'kultursByartId', [])
-  const kultur = kulturen.find(k => k.id === kulturId)
+  const sammlungId = url[1]
+  const lieferungId = url[3]
+  const kulturId = url[5]
+
+  const sammlungen = get(data, 'sammlung', [])
+  const sammlung = sammlungen.find(p => p.id === sammlungId)
+  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferung = lieferungen.find(p => p.id === lieferungId)
+  const kultur = get(lieferung, 'kulturBynachKulturId', [])
   const events = get(kultur, 'kulturEventsBykulturId', [])
 
-  const artNodes = nodes.filter(n => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
-  const kulturNodes = nodes.filter(
-    n => n.parentId === `art${artId}KulturFolder`,
+  const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
+  const sammlungIndex = findIndex(
+    sammlungNodes,
+    n => n.id === `sammlung${sammlungId}`,
   )
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+
+  const lieferungNodes = nodes.filter(
+    n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
+  )
+  const lieferungIndex = findIndex(
+    lieferungNodes,
+    n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
+  )
+
+  const kulturNodes = nodes.filter(
+    n =>
+      n.parentId === `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
+  )
+  const kulturIndex = findIndex(
+    kulturNodes,
+    n =>
+      n.id === `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`,
+  )
 
   return events
     .map(el => {
@@ -30,19 +50,30 @@ export default ({ nodes, data, url }) => {
 
       return {
         nodeType: 'table',
-        menuType: 'event',
+        menuType: 'sammlungLieferungKulturEvent',
         filterTable: 'event',
-        id: `event${el.id}`,
-        parentId: `kultur${kulturId}EventFolder`,
+        id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Event${
+          el.id
+        }`,
+        parentId: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}EventFolder`,
         label,
-        url: ['Arten', artId, 'Kulturen', kulturId, 'Events', el.id],
+        url: [
+          'Sammlungen',
+          sammlungId,
+          'Aus-Lieferungen',
+          lieferungId,
+          'Kulturen',
+          kulturId,
+          'Events',
+          el.id,
+        ],
         hasChildren: false,
       }
     })
     .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [1, artIndex, 1, kulturIndex, 4, index]
+      el.sort = [6, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 4, index]
       return el
     })
 }
