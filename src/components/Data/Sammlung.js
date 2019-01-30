@@ -11,7 +11,6 @@ import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
-import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
@@ -84,53 +83,6 @@ const Sammlung = () => {
   const row = get(data, 'sammlung', [{}])[0]
 
   useEffect(() => setErrors({}), [row])
-
-  let kulturWerte = get(data, 'kultur', []).filter(s => {
-    // only show kulturen of same art
-    if (row.art_id && s.art_id) {
-      return s.art_id === row.art_id
-    }
-    return true
-  })
-  kulturWerte = sortBy(kulturWerte, s => [
-    get(s, 'gartenBygartenId.personBypersonId.name'),
-    get(s, 'gartenBygartenId.personBypersonId.ort'),
-  ])
-  kulturWerte = kulturWerte.map(el => {
-    const name =
-      get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-    const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
-    const label = `${name}${ort ? ` (${ort})` : ''}`
-
-    return {
-      value: el.id,
-      label,
-    }
-  })
-
-  let sammlungWerte = get(data, 'sammlung', []).filter(s => {
-    // only show sammlungen of same art
-    if (row.art_id && s.art_id) {
-      return s.art_id === row.art_id
-    }
-    return true
-  })
-  sammlungWerte = sortBy(sammlungWerte, s => [
-    'datum',
-    get(s, 'herkunftByherkunftId.nr'),
-    get(s, 'personBypersonId.name'),
-  ])
-  sammlungWerte = sammlungWerte.map(el => {
-    const datum = el.datum || '(kein Datum)'
-    const nr = get(el, 'herkunftByherkunftId.nr') || '(keine Nr)'
-    const person = get(el, 'personBypersonId.name') || '(kein Name)'
-    const label = `${datum}: Herkunft ${nr}; ${person}`
-
-    return {
-      value: el.id,
-      label,
-    }
-  })
 
   let personWerte = get(data, 'person', [])
   personWerte = personWerte.map(el => ({
