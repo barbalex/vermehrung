@@ -11,6 +11,7 @@ import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
+import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
@@ -388,6 +389,16 @@ const Lieferung = () => {
             error={errors.typ}
           />
           <Select
+            key={`${row.id}status`}
+            name="status"
+            value={row.status}
+            field="status"
+            label="Status"
+            options={lieferungStatusWerte}
+            saveToDb={saveToDb}
+            error={errors.status}
+          />
+          <Select
             key={`${row.id}zaehleinheit`}
             name="zaehleinheit"
             value={row.zaehleinheit}
@@ -443,6 +454,42 @@ const Lieferung = () => {
             options={kulturWerte}
             saveToDb={saveToDb}
             error={errors.von_kultur_id}
+          />
+          <Select
+            key={`${row.id}zwischenlager`}
+            name="zwischenlager"
+            value={row.zwischenlager}
+            field="zwischenlager"
+            label="Zwischenlager"
+            options={lieferungZwischenlagerWerte}
+            saveToDb={saveToDb}
+            error={errors.zwischenlager}
+          />
+          <DateFieldWithPicker
+            key={`${row.id}nach_datum`}
+            name="nach_datum"
+            label="nach Datum"
+            value={row.nach_datum}
+            saveToDb={saveToDb}
+            error={errors.nach_datum}
+          />
+          <Select
+            key={`${row.id}nach_kultur_id`}
+            name="nach_kultur_id"
+            value={row.nach_kultur_id}
+            field="nach_kultur_id"
+            label="nach Kultur"
+            options={kulturWerte}
+            saveToDb={saveToDb}
+            error={errors.nach_kultur_id}
+          />
+          <RadioButton
+            key={`${row.id}nach_ausgepflanzt`}
+            label="Ausgepflanzt"
+            name="nach_ausgepflanzt"
+            value={row.nach_ausgepflanzt}
+            saveToDb={saveToDb}
+            error={errors.nach_ausgepflanzt}
           />
           <TextField
             key={`${row.id}bemerkungen`}

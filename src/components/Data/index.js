@@ -176,6 +176,9 @@ const Data = () => {
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
     return null
   }
+  if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
+    return <Lieferung />
+  }
 
   if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Kulturen') {
     return <Kultur />
@@ -195,11 +198,45 @@ const Data = () => {
   }
   if (
     url.length === 6 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[4])
+  ) {
+    return <Lieferung />
+  }
+  if (
+    url.length === 6 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[4])
+  ) {
+    return <Lieferung />
+  }
+  if (
+    url.length === 6 &&
+    url[0] === 'Herkuenfte' &&
+    url[2] === 'Sammlungen' &&
+    url[4] === 'Aus-Lieferungen'
+  ) {
+    return <Lieferung />
+  }
+  if (
+    url.length === 6 &&
     url[0] === 'Personen' &&
     url[2] === 'Gaerten' &&
     url[4] === 'Kulturen'
   ) {
     return <Kultur />
+  }
+
+  if (
+    url.length === 8 &&
+    url[0] === 'Personen' &&
+    url[2] === 'Gaerten' &&
+    url[4] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[6])
+  ) {
+    return <Lieferung />
   }
   if (
     url.length === 8 &&
