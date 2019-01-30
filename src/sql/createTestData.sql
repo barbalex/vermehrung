@@ -37,11 +37,6 @@ insert into kultur (id,art_id,garten_id)
 values
  (1,1,1),
  (2,2,2);
- 
-insert into sammlung_in_kultur (id,sammlung_id,kultur_id)
-values
- (1,1,1),
- (2,2,2);
 
 insert into kultur_event (id,kultur_id,datum,event)
 values
@@ -73,8 +68,8 @@ values
  (1, 'GAW'),
  (2, 'Winzeler');
 
-insert into lieferung (id,person_id,typ,zaehleinheit,menge,masseinheit,von_datum,von_sammlung_id,nach_datum,nach_kultur_id,status)
+insert into lieferung (id,art_id,person_id,typ,zaehleinheit,menge,masseinheit,von_datum,von_sammlung_id,nach_datum,nach_kultur_id,status)
 values
- (1,1,1,1,25,1,'2018-05-04',1,'2018-05-05',1,1),
- (2,2,2,2,33,2,'2018-07-06',2,'2018-07-06',2,2);
+ (1,1,1,1,1,25,1,'2018-05-04',1,'2018-05-05',1,1),
+ (2,1,2,2,2,33,2,'2018-07-06',2,'2018-07-06',2,2);
  

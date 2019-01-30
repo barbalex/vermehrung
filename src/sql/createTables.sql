@@ -123,17 +123,6 @@ create index on kultur using btree (id);
 create index on kultur using btree (garten_id);
 alter table kultur add constraint unique_art_garten unique(art_id,garten_id);
 
-
-drop table if exists sammlung_in_kultur cascade;
-create table sammlung_in_kultur (
-  id serial primary key,
-  sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
-  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
-  changed date default now(),
-  changed_by varchar(20) default null,
-  unique (sammlung_id, kultur_id)
-);
-
 drop table if exists kultur_event cascade;
 create table kultur_event (
   id serial primary key,
@@ -226,6 +215,7 @@ create index on lieferung_zwischenlager_werte using btree (sort);
 drop table if exists lieferung cascade;
 create table lieferung (
   id serial primary key,
+  art_id integer default null references art (id) on delete cascade on update cascade,
   person_id integer default null references person (id) on delete cascade on update cascade,
   typ integer default null references lieferung_typ_werte (id) on delete set null on update cascade,
   zaehleinheit integer default null references zaehleinheit_werte (id) on delete set null on update cascade,

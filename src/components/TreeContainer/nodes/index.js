@@ -65,10 +65,9 @@ import buildSammlungFolder from './sammlung/folder'
 import buildSammlungSammlung from './sammlung'
 import buildSammlungHerkunftFolder from './sammlung/herkunft/folder'
 import buildSammlungHerkunftHerkunft from './sammlung/herkunft'
-import buildSammlungKulturFolder from './sammlung/kultur/folder'
-import buildSammlungKulturKultur from './sammlung/kultur'
 import buildSammlungLieferungFolder from './sammlung/lieferung/folder'
 import buildSammlungLieferungLieferung from './sammlung/lieferung'
+// TODO: build SammlungKulturFolder and Kultur
 
 import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
@@ -268,18 +267,13 @@ export default ({ store, data, loading }) => {
           data,
           loading,
         }),
-        ...buildSammlungKulturFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
         ...buildSammlungLieferungFolder({
           nodes,
           url,
           data,
           loading,
         }),
+        // TODO: build SammlungKulturFolder
       ]
     }
     if (url.length === 2 && url[0] === 'Kulturen') {
@@ -483,16 +477,7 @@ export default ({ store, data, loading }) => {
         }),
       ]
     }
-    if (url.length === 3 && url[0] === 'Sammlungen' && url[2] === 'Kulturen') {
-      nodes = [
-        ...nodes,
-        ...buildSammlungKulturKultur({
-          nodes,
-          data,
-          url,
-        }),
-      ]
-    }
+    // TODO: build SammlungKulturKultur
     if (
       url.length === 3 &&
       url[0] === 'Sammlungen' &&

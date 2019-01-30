@@ -4,7 +4,7 @@ export default gql`
   query TreeQuery(
     $isArt: Boolean!
     $isArtKultur: Boolean!
-    $isArtSammlung:Boolean!
+    $isArtSammlung: Boolean!
     $isGarten: Boolean!
     $isGartenKultur: Boolean!
     $isHerkunft: Boolean!
@@ -53,59 +53,6 @@ export default gql`
         zaehlungsBykulturId @include(if: $isGartenKultur) {
           id
           datum
-        }
-        sammlungInKultursBykulturId @include(if: $isGartenKultur) {
-          id
-          sammlungBysammlungId {
-            id
-            herkunftByherkunftId {
-              id
-              nr
-            }
-            lieferungsByvonSammlungId {
-              id
-              personBypersonId {
-                id
-                name
-              }
-              lieferungTypWerteBytyp {
-                id
-                wert
-              }
-              lieferungStatusWerteBystatus {
-                id
-                wert
-              }
-              von_datum
-              kulturBynachKulturId {
-                id
-                gartenBygartenId {
-                  id
-                  personBypersonId {
-                    id
-                    name
-                  }
-                }
-                kulturEventsBykulturId {
-                  id
-                  datum
-                  event
-                }
-                kulturInventarsBykulturId {
-                  id
-                  datum
-                  kasten
-                  beet
-                  nr
-                }
-                zaehlungsBykulturId {
-                  id
-                  datum
-                }
-              }
-              nach_ausgepflanzt
-            }
-          }
         }
       }
     }
@@ -173,59 +120,6 @@ export default gql`
           }
           nach_datum
         }
-        sammlungInKultursBykulturId @include(if: $isArtKultur) {
-          id
-          sammlungBysammlungId {
-            id
-            herkunftByherkunftId {
-              id
-              nr
-            }
-            lieferungsByvonSammlungId {
-              id
-              personBypersonId {
-                id
-                name
-              }
-              lieferungTypWerteBytyp {
-                id
-                wert
-              }
-              lieferungStatusWerteBystatus {
-                id
-                wert
-              }
-              von_datum
-              kulturBynachKulturId {
-                id
-                gartenBygartenId {
-                  id
-                  personBypersonId {
-                    id
-                    name
-                  }
-                }
-                kulturEventsBykulturId {
-                  id
-                  datum
-                  event
-                }
-                kulturInventarsBykulturId {
-                  id
-                  datum
-                  kasten
-                  beet
-                  nr
-                }
-                zaehlungsBykulturId {
-                  id
-                  datum
-                }
-              }
-              nach_ausgepflanzt
-            }
-          }
-        }
       }
       sammlungsByartId @include(if: $isArt) {
         id
@@ -242,19 +136,6 @@ export default gql`
           }
         }
         datum
-        sammlungInKultursBysammlungId @include(if: $isArtSammlung) {
-          id
-          kulturBykulturId {
-            id
-            gartenBygartenId {
-              id
-              personBypersonId {
-                id
-                name
-              }
-            }
-          }
-        }
         lieferungsByvonSammlungId @include(if: $isArtSammlung) {
           id
           personBypersonId {
@@ -357,59 +238,6 @@ export default gql`
         }
         nach_datum
       }
-      sammlungInKultursBykulturId @include(if: $isKultur) {
-        id
-        sammlungBysammlungId @include(if: $isKulturSammlung) {
-          id
-          herkunftByherkunftId {
-            id
-            nr
-          }
-          lieferungsByvonSammlungId {
-            id
-            personBypersonId {
-              id
-              name
-            }
-            lieferungTypWerteBytyp {
-              id
-              wert
-            }
-            lieferungStatusWerteBystatus {
-              id
-              wert
-            }
-            von_datum
-            kulturBynachKulturId {
-              id
-              gartenBygartenId {
-                id
-                personBypersonId {
-                  id
-                  name
-                }
-              }
-              kulturEventsBykulturId {
-                id
-                datum
-                event
-              }
-              kulturInventarsBykulturId {
-                id
-                datum
-                kasten
-                beet
-                nr
-              }
-              zaehlungsBykulturId {
-                id
-                datum
-              }
-            }
-            nach_ausgepflanzt
-          }
-        }
-      }
     }
     herkunft {
       id
@@ -425,19 +253,6 @@ export default gql`
           }
         }
         datum
-        sammlungInKultursBysammlungId @include(if: $isHerkunftSammlung) {
-          id
-          kulturBykulturId {
-            id
-            gartenBygartenId {
-              id
-              personBypersonId {
-                id
-                name
-              }
-            }
-          }
-        }
         lieferungsByvonSammlungId @include(if: $isHerkunftSammlung) {
           id
           personBypersonId {
@@ -616,19 +431,6 @@ export default gql`
         lieferungStatusWerteBystatus @include(if: $isSammlungLieferung) {
           id
           wert
-        }
-      }
-      sammlungInKultursBysammlungId @include(if: $isSammlung) {
-        id
-        kulturBykulturId @include(if: $isSammlungKultur) {
-          id
-          gartenBygartenId {
-            id
-            personBypersonId {
-              id
-              name
-            }
-          }
         }
       }
     }
