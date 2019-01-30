@@ -51,7 +51,7 @@ const CardContainer = styled.div`
     margin-bottom: 10px !important;
   }
   p:last-of-type {
-    margin-bottom: 5px !important;
+    margin-bottom: 0 !important;
     margin-top: 10px !important;
   }
 `
@@ -172,9 +172,11 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Lieferungen</CardTitle>
-              Sammlungen werden an Kulturen geliefert. Aus Kulturen werden
-              Pflanzen zur Auswilderung geliefert. Oder an andere Kulturen.
-              Lieferungen können geplant und bestellt werden.
+              <p>Sammlungen werden an Kulturen geliefert.</p>
+              <p>
+                Aus Kulturen werden Pflanzen an andere Kulturen oder zur
+                Auswilderung geliefert.
+              </p>
             </Card>
             <Card>
               <CardTitle>Gärten</CardTitle>
@@ -220,27 +222,30 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Interessiert?</CardTitle>
-              Sie haben einen Garten und würden gerne bedrohte Pflanzen
-              vermehren? Fragen Sie&nbsp;
-              <a
-                href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Topos
-              </a>
-              .<br />
-              <br />
-              Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten? Fragen
-              Sie&nbsp;
-              <a
-                href="https://gabriel-software.ch/Kontakt/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                den Entwickler
-              </a>
-              .
+              <p>
+                Sie haben einen Garten und würden gerne bedrohte Pflanzen
+                vermehren? Fragen Sie&nbsp;
+                <a
+                  href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Topos
+                </a>
+                .
+              </p>
+              <p>
+                Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten? Fragen
+                Sie&nbsp;
+                <a
+                  href="https://gabriel-software.ch/Kontakt/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  den Entwickler
+                </a>
+                .
+              </p>
             </Card>
           </CardContainer>
           <MoreContainer>
