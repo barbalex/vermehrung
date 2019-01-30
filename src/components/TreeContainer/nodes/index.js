@@ -84,6 +84,7 @@ import buildSammlungAusLieferungKulturZaehlungFolder from './sammlung/auslieferu
 import buildSammlungAusLieferungKulturZaehlungZaehlung from './sammlung/auslieferung/kultur/zaehlung'
 import buildSammlungAusLieferungKulturInventarFolder from './sammlung/auslieferung/kultur/inventar/folder'
 import buildSammlungAusLieferungKulturInventarInventar from './sammlung/auslieferung/kultur/inventar'
+import buildSammlungAusLieferungKulturEventFolder from './sammlung/auslieferung/kultur/event/folder'
 
 import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
@@ -952,6 +953,12 @@ export default ({ store, data, loading }) => {
           loading,
         }),
         ...buildSammlungAusLieferungKulturInventarFolder({
+          nodes,
+          data,
+          url,
+          loading,
+        }),
+        ...buildSammlungAusLieferungKulturEventFolder({
           nodes,
           data,
           url,
