@@ -1,0 +1,150 @@
+import React, { useContext, useState, useEffect, useCallback } from 'react'
+import { observer } from 'mobx-react-lite'
+import gql from 'graphql-tag'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import styled from 'styled-components'
+import get from 'lodash/get'
+import last from 'lodash/last'
+
+import storeContext from '../../storeContext'
+import TextField from '../shared/TextField'
+import FormTitle from '../shared/FormTitle'
+import ErrorBoundary from '../ErrorBoundary'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+`
+const FieldsContainer = styled.div`
+  padding: 10px;
+  overflow: auto !important;
+  height: 100%;
+`
+
+const WerteListe = ({ table }) => {
+  const client = useApolloClient()
+  const store = useContext(storeContext)
+  const { activeNodeArray, refetch } = store.tree
+  const id = last(activeNodeArray.filter(e => !isNaN(e)))
+  const { data, error, loading } = useQuery(
+    gql`query EventQuery($id: Int!) {
+      ${table}(where: { id: { _eq: $id } }) {
+        id
+        wert
+        sort
+      }
+    }
+  `,
+    {
+      suspend: false,
+      variables: { id },
+    },
+  )
+
+  const [errors, setErrors] = useState({})
+
+  const row = get(data, table, [{}])[0]
+  let title = ''
+  switch (table) {
+    case 'lieferung_status_werte':
+      title = 'Lieferung: Status'
+      break
+    default:
+    //
+  }
+
+  useEffect(() => setErrors({}), [row])
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = ifIsNumericAsNumber(event.target.value) || null
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation update_${table}(
+              $id: Int!
+              $wert: String
+              $sort: smallint
+            ) {
+              update_${table}(
+                where: { id: { _eq: $id } }
+                _set: { wert: $wert, sort: $sort }
+              ) {
+                affected_rows
+                returning {
+                  id
+                  wert
+                  sort
+                }
+              }
+            }
+          `,
+          variables: {
+            id: row.id,
+            wert: field === 'wert' ? value : row.wert,
+            sort: field === 'sort' ? value : row.sort,
+          },
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+      refetch()
+    },
+    [row],
+  )
+
+  if (loading) {
+    return (
+      <Container>
+        <FormTitle title={title} />
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <FormTitle title={title} />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${
+          error.message
+        }`}</FieldsContainer>
+      </Container>
+    )
+  }
+
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle title={title} />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}wert`}
+            name="wert"
+            label="Wert"
+            value={row.wert}
+            saveToDb={saveToDb}
+            error={errors.wert}
+            type="text"
+          />
+          <TextField
+            key={`${row.id}sort`}
+            name="sort"
+            label="Sotierung"
+            value={row.sort}
+            saveToDb={saveToDb}
+            error={errors.sort}
+            type="number"
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(WerteListe)

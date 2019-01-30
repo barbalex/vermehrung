@@ -12,6 +12,7 @@ import Sammlung from './Sammlung'
 import Zaehlung from './Zaehlung'
 import Event from './Event'
 import Inventar from './Inventar'
+import WerteListe from './WerteListe'
 
 const Data = () => {
   const store = useContext(storeContext)
@@ -128,6 +129,13 @@ const Data = () => {
   }
   if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
     return null
+  }
+  if (
+    url.length === 3 &&
+    url[0] === 'Werte-Listen' &&
+    url[1] === 'Lieferung-Status'
+  ) {
+    return <WerteListe table="lieferung_status_werte" />
   }
 
   if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {

@@ -1,10 +1,10 @@
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 
-import compareLabel from '../../compareLabel'
 import allParentNodesExist from '../../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
-  const werte = get(data, 'lieferung_typ_werte', [])
+  const werte = sortBy(get(data, 'lieferung_typ_werte', []), ['sort', 'wert'])
 
   return werte
     .map(el => ({
@@ -18,7 +18,6 @@ export default ({ nodes, data }) => {
       hasChildren: false,
     }))
     .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
     .map((el, index) => {
       el.sort = [8, 3, index]
       return el
