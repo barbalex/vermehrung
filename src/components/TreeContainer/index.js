@@ -79,8 +79,8 @@ const TreeContainer = ({ dimensions }) => {
       isKulturAnLieferung: openNodes.some(
         n => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
       ),
-      isKulturAbLieferung: openNodes.some(
-        n => n[0] === 'Kulturen' && n[2] === 'Ab-Lieferungen',
+      isKulturAusLieferung: openNodes.some(
+        n => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
       ),
       isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
     },

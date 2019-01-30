@@ -8,8 +8,8 @@ export default ({ url, nodes, data, loading }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kultursBygartenId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const ablieferungen = get(kultur, 'lieferungsByvonKulturId', [])
-  const nr = loading && !ablieferungen.length ? '...' : ablieferungen.length
+  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
+  const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
@@ -21,10 +21,10 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'artKulturAbLieferungFolder',
-      id: `kultur${kulturId}AbLieferungFolder`,
-      label: `Ab-Lieferungen (${nr})`,
-      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Ab-Lieferungen'],
+      menuType: 'artKulturAusLieferungFolder',
+      id: `kultur${kulturId}AusLieferungFolder`,
+      label: `Aus-Lieferungen (${nr})`,
+      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Aus-Lieferungen'],
       sort: [2, gartenIndex, 1, kulturIndex, 3],
       hasChildren: true,
     },

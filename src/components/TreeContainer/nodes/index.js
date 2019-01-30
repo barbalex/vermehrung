@@ -20,8 +20,8 @@ import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildArtKulturZaehlungZaehlung from './art/kultur/zaehlung'
 import buildArtKulturInventarFolder from './art/kultur/inventar/folder'
 import buildArtKulturInventarInventar from './art/kultur/inventar'
-import buildArtKulturAbLieferungFolder from './art/kultur/ablieferung/folder'
-import buildArtKulturLieferungAbLieferung from './art/kultur/ablieferung'
+import buildArtKulturAusLieferungFolder from './art/kultur/auslieferung/folder'
+import buildArtKulturLieferungAusLieferung from './art/kultur/auslieferung'
 import buildArtKulturAnLieferungFolder from './art/kultur/anlieferung/folder'
 import buildArtKulturLieferungAnLieferung from './art/kultur/anlieferung'
 
@@ -35,8 +35,8 @@ import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
 import buildGartenKulturZaehlungZaehlung from './garten/kultur/zaehlung'
 import buildGartenKulturInventarFolder from './garten/kultur/inventar/folder'
 import buildGartenKulturInventarInventar from './garten/kultur/inventar'
-import buildGartenKulturAbLieferungFolder from './garten/kultur/ablieferung/folder'
-import buildGartenKulturLieferungAbLieferung from './garten/kultur/ablieferung'
+import buildGartenKulturAusLieferungFolder from './garten/kultur/auslieferung/folder'
+import buildGartenKulturLieferungAusLieferung from './garten/kultur/auslieferung'
 import buildGartenKulturAnLieferungFolder from './garten/kultur/anlieferung/folder'
 import buildGartenKulturLieferungAnLieferung from './garten/kultur/anlieferung'
 
@@ -77,8 +77,8 @@ import buildKulturZaehlungFolder from './kultur/zaehlung/folder'
 import buildKulturZaehlungZaehlung from './kultur/zaehlung'
 import buildKulturInventarFolder from './kultur/inventar/folder'
 import buildKulturInventarInventar from './kultur/inventar'
-import buildKulturAbLieferungFolder from './kultur/ablieferung/folder'
-import buildKulturLieferungAbLieferung from './kultur/ablieferung'
+import buildKulturAusLieferungFolder from './kultur/auslieferung/folder'
+import buildKulturLieferungAusLieferung from './kultur/auslieferung'
 import buildKulturAnLieferungFolder from './kultur/anlieferung/folder'
 import buildKulturLieferungAnLieferung from './kultur/anlieferung'
 
@@ -291,7 +291,7 @@ export default ({ store, data, loading }) => {
           data,
           loading,
         }),
-        ...buildKulturAbLieferungFolder({
+        ...buildKulturAusLieferungFolder({
           nodes,
           url,
           data,
@@ -519,11 +519,11 @@ export default ({ store, data, loading }) => {
     if (
       url.length === 3 &&
       url[0] === 'Kulturen' &&
-      url[2] === 'Ab-Lieferungen'
+      url[2] === 'Aus-Lieferungen'
     ) {
       nodes = [
         ...nodes,
-        ...buildKulturLieferungAbLieferung({
+        ...buildKulturLieferungAusLieferung({
           nodes,
           data,
           url,
@@ -560,7 +560,7 @@ export default ({ store, data, loading }) => {
           data,
           loading,
         }),
-        ...buildArtKulturAbLieferungFolder({
+        ...buildArtKulturAusLieferungFolder({
           nodes,
           url,
           data,
@@ -606,7 +606,7 @@ export default ({ store, data, loading }) => {
           data,
           loading,
         }),
-        ...buildGartenKulturAbLieferungFolder({
+        ...buildGartenKulturAusLieferungFolder({
           nodes,
           url,
           data,
@@ -693,11 +693,11 @@ export default ({ store, data, loading }) => {
       url.length === 5 &&
       url[0] === 'Arten' &&
       url[2] === 'Kulturen' &&
-      url[4] === 'Ab-Lieferungen'
+      url[4] === 'Aus-Lieferungen'
     ) {
       nodes = [
         ...nodes,
-        ...buildArtKulturLieferungAbLieferung({
+        ...buildArtKulturLieferungAusLieferung({
           nodes,
           data,
           url,
@@ -769,11 +769,11 @@ export default ({ store, data, loading }) => {
       url.length === 5 &&
       url[0] === 'Gaerten' &&
       url[2] === 'Kulturen' &&
-      url[4] === 'Ab-Lieferungen'
+      url[4] === 'Aus-Lieferungen'
     ) {
       nodes = [
         ...nodes,
-        ...buildGartenKulturLieferungAbLieferung({
+        ...buildGartenKulturLieferungAusLieferung({
           nodes,
           data,
           url,

@@ -11,7 +11,7 @@ export default ({ nodes, data, url }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kultursBygartenId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const ablieferungen = get(kultur, 'lieferungsByvonKulturId', [])
+  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
@@ -20,7 +20,7 @@ export default ({ nodes, data, url }) => {
   )
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
 
-  return ablieferungen
+  return auslieferungen
     .map(el => {
       const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
         el,
@@ -34,10 +34,10 @@ export default ({ nodes, data, url }) => {
 
       return {
         nodeType: 'table',
-        menuType: 'ablieferung',
+        menuType: 'auslieferung',
         filterTable: 'lieferung',
         id: `lieferung${el.id}`,
-        parentId: `kultur${kulturId}AbLieferungFolder`,
+        parentId: `kultur${kulturId}AusLieferungFolder`,
         label,
         url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Lieferungen', el.id],
         hasChildren: false,
