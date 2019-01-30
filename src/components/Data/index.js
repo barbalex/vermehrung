@@ -11,6 +11,7 @@ import Person from './Person'
 import Sammlung from './Sammlung'
 import Zaehlung from './Zaehlung'
 import Event from './Event'
+import Inventar from './Inventar'
 
 const Data = () => {
   const store = useContext(storeContext)
@@ -178,7 +179,7 @@ const Data = () => {
     return <Event />
   }
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
-    return null
+    return <Inventar />
   }
   if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
     return <Lieferung />
@@ -234,6 +235,14 @@ const Data = () => {
   }
   if (
     url.length === 6 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Inventare'
+  ) {
+    return <Inventar />
+  }
+  if (
+    url.length === 6 &&
     url[0] === 'Gaerten' &&
     url[2] === 'Kulturen' &&
     ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[4])
@@ -255,6 +264,14 @@ const Data = () => {
     url[4] === 'Events'
   ) {
     return <Event />
+  }
+  if (
+    url.length === 6 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Inventare'
+  ) {
+    return <Inventar />
   }
   if (
     url.length === 6 &&
@@ -302,6 +319,15 @@ const Data = () => {
   }
   if (
     url.length === 8 &&
+    url[0] === 'Personen' &&
+    url[2] === 'Gaerten' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Inventare'
+  ) {
+    return <Inventar />
+  }
+  if (
+    url.length === 8 &&
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
     url[4] === 'Kulturen' &&
@@ -326,6 +352,15 @@ const Data = () => {
     url[6] === 'Events'
   ) {
     return <Event />
+  }
+  if (
+    url.length === 8 &&
+    url[0] === 'Sammlungen' &&
+    url[2] === 'Aus-Lieferungen' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Inventare'
+  ) {
+    return <Inventar />
   }
   return null
 }
