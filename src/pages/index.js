@@ -159,29 +159,29 @@ const Index = ({ data }) => (
           <CardContainer>
             <Card>
               <CardTitle>Arten</CardTitle>
-              Vom Aussterben bedrohte Pflanzen-Arten werden von Experten gezielt
-              vermehrt und wieder ausgesetzt.
+              Vom Aussterben bedrohte Pflanzen-Arten werden gesammelt, vermehrt
+              und wieder ausgesetzt.
             </Card>
             <Card>
               <CardTitle>Herkünfte</CardTitle>
-              ...sind natürliche Vorkommen. Hier werden die Arten gesammelt.
+              Hier gibt es noch ursprüngliche Bestände der Arten.
             </Card>
             <Card>
               <CardTitle>Sammlungen</CardTitle>
-              ...beschreiben das Sammeln von Arten an einem Herkunfts-Ort.
+              ...beschreiben das Sammeln von Arten an Herkunfts-Orten.
             </Card>
             <Card>
               <CardTitle>Lieferungen</CardTitle>
               <p>Sammlungen werden an Kulturen geliefert.</p>
               <p>
-                Aus Kulturen werden Pflanzen an andere Kulturen oder zur
-                Auswilderung geliefert.
+                Aus Kulturen werden Pflanzen an andere Kulturen geliefert. Oder
+                sie werden in der Natur ausgesetzt.
               </p>
             </Card>
             <Card>
               <CardTitle>Gärten</CardTitle>
-              In Gärten und Gärtnereien werden die Arten vermehrt und auf das
-              Aussetzen vorbereitet.
+              In Gärten und Gärtnereien werden die Arten in Kultur vermehrt und
+              auf das Aussetzen vorbereitet.
             </Card>
             <Card>
               <CardTitle>Kulturen</CardTitle>
@@ -193,17 +193,17 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Inventare</CardTitle>
-              In grösseren Gärtnereien wird über Kulturen und deren Beete ein
+              In grösseren Gärtnereien wird über Kulturen und deren Beete
               Inventar geführt.
             </Card>
             <Card>
               <CardTitle>Zählungen</CardTitle>
-              Regelmässig wird der Bestand einer Kultur erfasst. So können
-              Sammlungen und Aussetzungen geplant werden
+              Regelmässig wird der Bestand der Kulturen erfasst. So können
+              Sammlungen und Aussetzungen geplant werden.
             </Card>
             <Card>
               <CardTitle>Personen</CardTitle>
-              Zum Beispiel Freiwillige, welche in ihren Gärten Kulturen pflegen.
+              Zum Beispiel Freiwillige, die in ihren Gärten Kulturen pflegen.
             </Card>
             <Card>
               <CardTitle>Wer organisiert das Projekt?</CardTitle>
@@ -235,7 +235,7 @@ const Index = ({ data }) => (
                 .
               </p>
               <p>
-                Brauchen Sie ein Werkzeug, um Vermehrungen zu verwalten? Fragen
+                Sie brauchen ein Werkzeug, um Vermehrungen zu verwalten? Fragen
                 Sie&nbsp;
                 <a
                   href="https://gabriel-software.ch/Kontakt/"
