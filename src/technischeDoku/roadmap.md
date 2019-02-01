@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Technische-Dokumentation/Roadmap"
-date: "2019-01-25"
+date: "2019-01-31"
 title: "Roadmap"
 sort: 4
 ---
@@ -23,10 +23,10 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: App inklusive Entwicklungs-Umgebung initiiert
 - :white_check_mark: Navigation entworfen
 - :white_check_mark: Navigations-Baum gebaut
-- :ballot_box_with_check: Formulare gebaut
+- :white_check_mark: Daten-Laden optimiert
+- :white_check_mark: Formulare gebaut
 - :white_medium_square: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_medium_square: Authentifikation und Authorisierung gebaut
 - :white_medium_square: Volltext-Suche gebaut
 - :white_medium_square: Filter gebaut
-- :white_medium_square: Daten-Laden optimiert
 - ...?

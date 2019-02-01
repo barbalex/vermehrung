@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Technische-Dokumentation/Technologien"
-date: "2019-01-25"
+date: "2019-01-30"
 title: "Verwendete Technologien"
 sort: 2
 ---
