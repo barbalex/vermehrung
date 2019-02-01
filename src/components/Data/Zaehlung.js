@@ -208,14 +208,14 @@ const Zaehlung = () => {
         <FormTitle title="Zaehlung" />
         <FieldsContainer>
           <Select
-            key={`${row.id}von_kultur_id`}
-            name="von_kultur_id"
-            value={row.von_kultur_id}
-            field="von_kultur_id"
-            label="von Kultur"
+            key={`${row.id}kultur_id`}
+            name="kultur_id"
+            value={row.kultur_id}
+            field="kultur_id"
+            label="Kultur"
             options={kulturWerte}
             saveToDb={saveToDb}
-            error={errors.von_kultur_id}
+            error={errors.kultur_id}
           />
           <DateFieldWithPicker
             key={`${row.id}datum`}
