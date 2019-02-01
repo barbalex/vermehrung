@@ -175,7 +175,7 @@ const Index = ({ data }) => (
               <p>Sammlungen werden an Kulturen geliefert.</p>
               <p>
                 Aus Kulturen werden Pflanzen an andere Kulturen geliefert. Oder
-                sie werden in der Natur ausgesetzt.
+                in der Natur ausgesetzt.
               </p>
             </Card>
             <Card>
