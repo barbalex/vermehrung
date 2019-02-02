@@ -147,7 +147,7 @@ const WerteListe = ({ table }) => {
           <TextField
             key={`${row.id}sort`}
             name="sort"
-            label="Sotierung"
+            label="Sortierung"
             value={row.sort}
             saveToDb={saveToDb}
             error={errors.sort}
