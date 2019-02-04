@@ -5,12 +5,14 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
+import upperFirst from 'lodash/upperFirst'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
+import onClickMenuDo from './onClickMenu'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -215,6 +217,10 @@ const Row = ({ index, style, node }) => {
   const onClickNodeSymbol = useCallback(() => {
     toggleNodeSymbol({ node, store })
   }, [node, openNodes])
+  const onClickMenu = useCallback(() => {
+    console.log('node', node)
+    //onClickMenuDo({})
+  }, [node, openNodes, activeNodeArray])
 
   return (
     <Container style={style}>
@@ -260,8 +266,10 @@ const Row = ({ index, style, node }) => {
         </StyledNode>
       </ContextMenuTrigger>
       <ContextMenu id={`cm${node.id}`}>
-        <div className="react-contextmenu-title">Aktionsplan</div>
-        <MenuItem onClick={() => console.log('TODO')}>alle schliessen</MenuItem>
+        <div className="react-contextmenu-title">
+          {upperFirst(node.menuType)}
+        </div>
+        <MenuItem onClick={onClickMenu}>alle schliessen</MenuItem>
       </ContextMenu>
     </Container>
   )
