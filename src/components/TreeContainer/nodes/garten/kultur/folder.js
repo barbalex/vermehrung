@@ -2,21 +2,25 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
+  const gartenId = url[1]
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
-  const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${url[1]}`)
+  const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
 
   const gaerten = get(data, 'garten', [])
-  const garten = gaerten.find(a => a.id === url[1])
+  const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kultursBygartenId', [])
   const nr = loading && !kulturen.length ? '...' : kulturen.length
+
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`garten${gartenId}`)) return []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'artKulturenFolder',
-      id: `garten${url[1]}KulturFolder`,
+      id: `garten${gartenId}KulturFolder`,
       label: `Kulturen (${nr})`,
-      url: ['Gaerten', url[1], 'Kulturen'],
+      url: ['Gaerten', gartenId, 'Kulturen'],
       sort: [2, gartenIndex, 1],
       hasChildren: true,
     },

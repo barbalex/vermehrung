@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const gartenId = url[1]
@@ -18,23 +17,33 @@ export default ({ nodes, data, url }) => {
   const kulturNodes = nodes.filter(
     n => n.parentId === `garten${gartenId}KulturFolder`,
   )
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    n => n.id === `garten${gartenId}Kultur${kulturId}`,
+  )
 
-  return zaehlungen
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'zaehlung',
-      filterTable: 'zaehlung',
-      id: `zaehlung${el.id}`,
-      parentId: `kultur${kulturId}ZaehlungFolder`,
-      label: get(el, 'datum', '(kein Datum)'),
-      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
-      hasChildren: false,
-    }))
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [2, gartenIndex, 1, kulturIndex, 1, index]
-      return el
-    })
+  return (
+    zaehlungen
+      // only show if parent node exists
+      .filter(() =>
+        nodes
+          .map(n => n.id)
+          .includes(`garten${gartenId}Kultur${kulturId}ZaehlungFolder`),
+      )
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'zaehlung',
+        filterTable: 'zaehlung',
+        id: `garten${gartenId}Kultur${kulturId}Zaehlung${el.id}`,
+        parentId: `kultur${kulturId}ZaehlungFolder`,
+        label: get(el, 'datum', '(kein Datum)'),
+        url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
+        hasChildren: false,
+      }))
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [2, gartenIndex, 1, kulturIndex, 1, index]
+        return el
+      })
+  )
 }

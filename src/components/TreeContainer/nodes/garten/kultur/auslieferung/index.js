@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const gartenId = url[1]
@@ -18,42 +17,52 @@ export default ({ nodes, data, url }) => {
   const kulturNodes = nodes.filter(
     n => n.parentId === `garten${gartenId}KulturFolder`,
   )
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    n => n.id === `garten${gartenId}Kultur${kulturId}`,
+  )
 
-  return auslieferungen
-    .map(el => {
-      const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
-        el,
-        'personBypersonId.name',
-        '(kein Name)',
-      )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
-        el,
-        'lieferungStatusWerteBystatus.wert',
-        '(kein Status)',
-      )}`
+  return (
+    auslieferungen
+      // only show if parent node exists
+      .filter(() =>
+        nodes
+          .map(n => n.id)
+          .includes(`garten${gartenId}Kultur${kulturId}AusLieferungFolder`),
+      )
+      .map(el => {
+        const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
+          el,
+          'personBypersonId.name',
+          '(kein Name)',
+        )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
+          el,
+          'lieferungStatusWerteBystatus.wert',
+          '(kein Status)',
+        )}`
 
-      return {
-        nodeType: 'table',
-        menuType: 'auslieferung',
-        filterTable: 'lieferung',
-        id: `lieferung${el.id}`,
-        parentId: `kultur${kulturId}AusLieferungFolder`,
-        label,
-        url: [
-          'Gaerten',
-          gartenId,
-          'Kulturen',
-          kulturId,
-          'Aus-Lieferungen',
-          el.id,
-        ],
-        hasChildren: false,
-      }
-    })
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [2, gartenIndex, 1, kulturIndex, 3, index]
-      return el
-    })
+        return {
+          nodeType: 'table',
+          menuType: 'auslieferung',
+          filterTable: 'lieferung',
+          id: `garten${gartenId}Kultur${kulturId}Lieferung${el.id}`,
+          parentId: `garten${gartenId}Kultur${kulturId}AusLieferungFolder`,
+          label,
+          url: [
+            'Gaerten',
+            gartenId,
+            'Kulturen',
+            kulturId,
+            'Aus-Lieferungen',
+            el.id,
+          ],
+          hasChildren: false,
+        }
+      })
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [2, gartenIndex, 1, kulturIndex, 3, index]
+        return el
+      })
+  )
 }
