@@ -233,7 +233,6 @@ const Row = ({ index, style, node }) => {
           data-url={dataUrl}
           data-nodetype={node.nodeType}
           data-label={node.label}
-          data-menutype={node.menuTitle}
         >
           {useSymbolIcon && (
             <SymbolDiv onClick={onClickNodeSymbol}>
@@ -265,19 +264,21 @@ const Row = ({ index, style, node }) => {
           </TextSpan>
         </StyledNode>
       </ContextMenuTrigger>
-      <ContextMenu id={`cm${node.id}`}>
-        <div className="react-contextmenu-title">{node.menuTitle}</div>
-        <MenuItem onClick={onClickMenu}>neu</MenuItem>
-        {node.nodeType === 'table' && (
-          <MenuItem onClick={onClickMenu}>löschen</MenuItem>
-        )}
-        {node.nodeType === 'folder' && (
-          <>
-            <MenuItem onClick={onClickMenu}>alle schliessen</MenuItem>
-            <MenuItem onClick={onClickMenu}>alle öffnen</MenuItem>
-          </>
-        )}
-      </ContextMenu>
+      {['table', 'folder'].includes(node.nodeType) && (
+        <ContextMenu id={`cm${node.id}`}>
+          <div className="react-contextmenu-title">{node.menuTitle}</div>
+          <MenuItem onClick={onClickMenu}>neu</MenuItem>
+          {node.nodeType === 'table' && (
+            <MenuItem onClick={onClickMenu}>löschen</MenuItem>
+          )}
+          {node.nodeType === 'folder' && (
+            <>
+              <MenuItem onClick={onClickMenu}>alle schliessen</MenuItem>
+              <MenuItem onClick={onClickMenu}>alle öffnen</MenuItem>
+            </>
+          )}
+        </ContextMenu>
+      )}
     </Container>
   )
 }

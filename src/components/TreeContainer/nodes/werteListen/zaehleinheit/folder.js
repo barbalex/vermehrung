@@ -10,7 +10,7 @@ export default ({ data, loading, nodes }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'zaehleinheitenFolder',
+      menuTitle: 'Zähleinheiten',
       id: 'zaehleinheitenFolder',
       parentId: 'werteListenFolder',
       label: `Zähleinheiten (${nr})`,

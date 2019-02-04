@@ -10,7 +10,7 @@ export default ({ data, loading, nodes }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'lieferungZwischenlagerFolder',
+      menuTitle: 'Lieferung: Zwischenlager',
       id: 'lieferungZwischenlagerFolder',
       parentId: 'werteListenFolder',
       label: `Lieferung: Zwischenlager (${nr})`,

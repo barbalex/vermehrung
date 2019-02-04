@@ -1,8 +1,8 @@
 export default () => {
   return [
     {
-      nodeType: 'folder',
-      menuTitle: 'werteListenFolder',
+      nodeType: 'folderFolder',
+      menuTitle: 'Werte-Listen',
       id: 'werteListenFolder',
       label: 'Werte-Listen (5)',
       url: ['Werte-Listen'],

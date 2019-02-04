@@ -10,7 +10,7 @@ export default ({ nodes, data }) => {
       .filter(() => nodes.map(n => n.id).includes('masseinheitenFolder'))
       .map(el => ({
         nodeType: 'table',
-        menuTitle: 'masseinheit_werte',
+        menuTitle: 'Masseinheit',
         filterTable: 'masseinheit_werte',
         id: `masseinheit${el.id}`,
         parentId: 'masseinheitenFolder',
