@@ -4,6 +4,7 @@ import findIndex from 'lodash/findIndex'
 export default ({ url, nodes, data, loading }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
+
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
@@ -16,7 +17,6 @@ export default ({ url, nodes, data, loading }) => {
     sammlungNodes,
     n => n.id === `sammlung${sammlungId}`,
   )
-
   const lieferungNodes = nodes.filter(
     n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
   )
@@ -24,6 +24,14 @@ export default ({ url, nodes, data, loading }) => {
     lieferungNodes,
     n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
+
+  // only return if parent exists
+  if (
+    !nodes
+      .map(n => n.id)
+      .includes(`sammlung${sammlungId}Lieferung${lieferungId}`)
+  )
+    return []
 
   return [
     {

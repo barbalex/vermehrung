@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
@@ -27,28 +26,35 @@ export default ({ nodes, data, url }) => {
     n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
 
-  return [kultur]
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'sammlungLieferungKultur',
-      filterTable: 'kultur',
-      id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
-      parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
-      label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
-      url: [
-        'Sammlungen',
-        sammlungId,
-        'Aus-Lieferungen',
-        lieferungId,
-        'Kulturen',
-        el.id,
-      ],
-      hasChildren: true,
-    }))
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [6, sammlungIndex, 3, lieferungIndex, 1, index]
-      return el
-    })
+  return (
+    [kultur]
+      // only show if parent node exists
+      .filter(() =>
+        nodes
+          .map(n => n.id)
+          .includes(`sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`),
+      )
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'sammlungLieferungKultur',
+        filterTable: 'kultur',
+        id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
+        parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
+        label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
+        url: [
+          'Sammlungen',
+          sammlungId,
+          'Aus-Lieferungen',
+          lieferungId,
+          'Kulturen',
+          el.id,
+        ],
+        hasChildren: true,
+      }))
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [6, sammlungIndex, 3, lieferungIndex, 1, index]
+        return el
+      })
+  )
 }

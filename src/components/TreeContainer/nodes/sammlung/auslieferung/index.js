@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../compareLabel'
-import allParentNodesExist from '../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
@@ -16,33 +15,38 @@ export default ({ nodes, data, url }) => {
     n => n.id === `sammlung${sammlungId}`,
   )
 
-  return lieferungen
-    .map(el => {
-      const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
-        el,
-        'personBypersonId.name',
-        '(kein Name)',
-      )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
-        el,
-        'lieferungStatusWerteBystatus.wert',
-        '(kein Status)',
-      )}`
+  return (
+    lieferungen
+      // only show if parent node exists
+      .filter(() =>
+        nodes.map(n => n.id).includes(`sammlung${sammlungId}LieferungFolder`),
+      )
+      .map(el => {
+        const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
+          el,
+          'personBypersonId.name',
+          '(kein Name)',
+        )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
+          el,
+          'lieferungStatusWerteBystatus.wert',
+          '(kein Status)',
+        )}`
 
-      return {
-        nodeType: 'table',
-        menuType: 'sammlungLieferung',
-        filterTable: 'lieferung',
-        id: `sammlung${sammlungId}Lieferung${el.id}`,
-        parentId: `sammlung${sammlungId}LieferungFolder`,
-        label,
-        url: ['Sammlungen', sammlungId, 'Aus-Lieferungen', el.id],
-        hasChildren: false,
-      }
-    })
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [6, sammlungIndex, 3, index]
-      return el
-    })
+        return {
+          nodeType: 'table',
+          menuType: 'sammlungLieferung',
+          filterTable: 'lieferung',
+          id: `sammlung${sammlungId}Lieferung${el.id}`,
+          parentId: `sammlung${sammlungId}LieferungFolder`,
+          label,
+          url: ['Sammlungen', sammlungId, 'Aus-Lieferungen', el.id],
+          hasChildren: false,
+        }
+      })
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [6, sammlungIndex, 3, index]
+        return el
+      })
+  )
 }

@@ -3,6 +3,7 @@ import findIndex from 'lodash/findIndex'
 
 export default ({ data, loading, url, nodes }) => {
   const sammlungId = url[1]
+
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const herkunft = get(sammlung, 'herkunftByherkunftId')
@@ -13,6 +14,9 @@ export default ({ data, loading, url, nodes }) => {
     sammlungNodes,
     n => n.id === `sammlung${sammlungId}`,
   )
+
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`sammlung${sammlungId}`)) return []
 
   return [
     {

@@ -19,7 +19,6 @@ export default ({ url, nodes, data, loading }) => {
     sammlungNodes,
     n => n.id === `sammlung${sammlungId}`,
   )
-
   const lieferungNodes = nodes.filter(
     n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
   )
@@ -27,7 +26,6 @@ export default ({ url, nodes, data, loading }) => {
     lieferungNodes,
     n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
-
   const kulturNodes = nodes.filter(
     n =>
       n.parentId === `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
@@ -37,6 +35,14 @@ export default ({ url, nodes, data, loading }) => {
     n =>
       n.id === `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`,
   )
+
+  // only return if parent exists
+  if (
+    !nodes
+      .map(n => n.id)
+      .includes(`sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`)
+  )
+    return []
 
   return [
     {
