@@ -22,6 +22,10 @@ export default ({ url, nodes, data, loading }) => {
     n => n.id === `person${personId}Garten${gartenId}`,
   )
 
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`person${personId}Garten${gartenId}`))
+    return []
+
   return [
     {
       nodeType: 'folder',

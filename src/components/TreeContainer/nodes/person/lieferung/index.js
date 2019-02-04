@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../compareLabel'
-import allParentNodesExist from '../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const personId = url[1]
@@ -15,6 +14,10 @@ export default ({ nodes, data, url }) => {
 
   return (
     lieferungen
+      // only show if parent node exists
+      .filter(() =>
+        nodes.map(n => n.id).includes(`person${personId}LieferungFolder`),
+      )
       .map(el => {
         const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
           el,
@@ -37,7 +40,6 @@ export default ({ nodes, data, url }) => {
           hasChildren: false,
         }
       })
-      .filter(n => allParentNodesExist(nodes, n))
       // sort by label
       .sort(compareLabel)
       .map((el, index) => {
