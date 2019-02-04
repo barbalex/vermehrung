@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../../compareLabel'
-import allParentNodesExist from '../../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const personId = url[1]
@@ -18,7 +17,6 @@ export default ({ nodes, data, url }) => {
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
-
   const gartenNodes = nodes.filter(
     n => n.parentId === `person${personId}GartenFolder`,
   )
@@ -26,7 +24,6 @@ export default ({ nodes, data, url }) => {
     gartenNodes,
     n => n.id === `person${personId}Garten${gartenId}`,
   )
-
   const kulturNodes = nodes.filter(
     n => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
   )
@@ -35,44 +32,53 @@ export default ({ nodes, data, url }) => {
     n => n.id === `person${personId}Garten${gartenId}Kultur${kulturId}`,
   )
 
-  return auslieferungen
-    .map(el => {
-      const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
-        el,
-        'personBypersonId.name',
-        '(kein Name)',
-      )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
-        el,
-        'lieferungStatusWerteBystatus.wert',
-        '(kein Status)',
-      )}`
+  return (
+    auslieferungen
+      // only show if parent node exists
+      .filter(() =>
+        nodes
+          .map(n => n.id)
+          .includes(
+            `person${personId}Garten${gartenId}Kultur${kulturId}AusLieferungFolder`,
+          ),
+      )
+      .map(el => {
+        const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
+          el,
+          'personBypersonId.name',
+          '(kein Name)',
+        )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
+          el,
+          'lieferungStatusWerteBystatus.wert',
+          '(kein Status)',
+        )}`
 
-      return {
-        nodeType: 'table',
-        menuType: 'auslieferung',
-        filterTable: 'lieferung',
-        id: `person${personId}Garten${gartenId}Kultur${kulturId}Auslieferung${
-          el.id
-        }`,
-        parentId: `person${personId}Garten${gartenId}Kultur${kulturId}AusLieferungFolder`,
-        label,
-        url: [
-          'Personen',
-          personId,
-          'Gaerten',
-          gartenId,
-          'Kulturen',
-          kulturId,
-          'Aus-Lieferungen',
-          el.id,
-        ],
-        hasChildren: false,
-      }
-    })
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [5, personIndex, 1, gartenIndex, 1, kulturIndex, 3, index]
-      return el
-    })
+        return {
+          nodeType: 'table',
+          menuType: 'auslieferung',
+          filterTable: 'lieferung',
+          id: `person${personId}Garten${gartenId}Kultur${kulturId}Auslieferung${
+            el.id
+          }`,
+          parentId: `person${personId}Garten${gartenId}Kultur${kulturId}AusLieferungFolder`,
+          label,
+          url: [
+            'Personen',
+            personId,
+            'Gaerten',
+            gartenId,
+            'Kulturen',
+            kulturId,
+            'Aus-Lieferungen',
+            el.id,
+          ],
+          hasChildren: false,
+        }
+      })
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [5, personIndex, 1, gartenIndex, 1, kulturIndex, 3, index]
+        return el
+      })
+  )
 }
