@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const herkunftId = url[1]
@@ -18,7 +17,7 @@ export default ({ nodes, data, url }) => {
   )
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    n => n.id === `herkunft${herkunftId}Sammlung${sammlungId}`,
   )
 
   const herkuenfte = get(data, 'herkunft', [])
@@ -43,8 +42,8 @@ export default ({ nodes, data, url }) => {
         nodeType: 'table',
         menuType: 'lieferung',
         filterTable: 'lieferung',
-        id: `lieferung${el.id}`,
-        parentId: `herkunft${herkunftId}SammlungLieferungFolder`,
+        id: `herkunft${herkunftId}Sammlung${sammlungId}Lieferung${el.id}`,
+        parentId: `herkunft${herkunftId}Sammlung${sammlungId}LieferungFolder`,
         label,
         url: [
           'Herkuenfte',
@@ -57,7 +56,6 @@ export default ({ nodes, data, url }) => {
         hasChildren: false,
       }
     })
-    .filter(n => allParentNodesExist(nodes, n))
     .sort(compareLabel)
     .map((el, index) => {
       el.sort = [3, herkunftIndex, 2, sammlungIndex, 1, index]
