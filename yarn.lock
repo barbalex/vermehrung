@@ -742,7 +742,7 @@
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-1.0.2.tgz#05d506572e0811f9b114b043f9ac0c6e7525f022"
   integrity sha512-zhZczfCD/wapSzMhmbsFP4VrLauInavmLSPG1Y/XuGVF3+nuNuH3WtQ+ibsz0/+OgiJAm934OhmuBW1OPxUI5w==
 
-"@date-io/moment@^1.0.2":
+"@date-io/moment@1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-1.0.2.tgz#898ca98d2031376cfed3c7258a8078a26892a501"
   integrity sha512-iQFRMH49cFYH/jzgYhdvmO+YfLRmsBZX293Vcfrvkfk+ovrd2g5KOtP5Je3CBlywfqNOQlCC3tKAxsIvaIDSYw==

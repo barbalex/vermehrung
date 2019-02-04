@@ -12,7 +12,7 @@
     "serve": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve"
   },
   "dependencies": {
-    "@date-io/moment": "^1.0.2",
+    "@date-io/moment": "1.0.2",
     "@material-ui/core": "3.9.2",
     "@material-ui/icons": "3.0.2",
     "@reach/router": "1.2.1",

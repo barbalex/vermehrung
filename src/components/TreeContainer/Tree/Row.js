@@ -1,10 +1,10 @@
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { observer } from 'mobx-react-lite'
+import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -15,6 +15,83 @@ import storeContext from '../../../storeContext'
 const singleRowHeight = 23
 const Container = styled.div`
   padding-right: 4px;
+  .react-contextmenu {
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    background-color: rgb(66, 66, 66);
+    background-clip: padding-box;
+    border: 1px solid grey;
+    border-radius: 0.25rem;
+    outline: none;
+    opacity: 0;
+    pointer-events: none;
+    font-family: 'Roboto', sans-serif;
+    transition: opacity 250ms ease !important;
+    /* no idea why this is needed */
+    margin-top: -70px;
+  }
+  .react-contextmenu.react-contextmenu--visible {
+    color: white;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1000;
+  }
+  .react-contextmenu-title {
+    opacity: 0;
+  }
+  .react-contextmenu--visible .react-contextmenu-title {
+    color: #b3b3b3;
+    padding-left: 10px;
+    padding-right: 15px;
+    padding-bottom: 3px;
+    opacity: 1;
+  }
+  .react-contextmenu-title::after {
+    content: ':';
+  }
+  .react-contextmenu > .react-contextmenu-item {
+    display: inline-block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.5;
+    color: white;
+    text-align: inherit;
+    white-space: nowrap;
+    background: 0 0;
+    border: 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .react-contextmenu-item.active,
+  .react-contextmenu-item:hover {
+    color: #f57c00;
+    border-color: #0275d8;
+    text-decoration: none;
+  }
+
+  .react-contextmenu-divider {
+    border-top: 1px solid grey;
+    margin-top: 4px;
+    margin-bottom: 7px;
+  }
+
+  .react-contextmenu-submenu {
+    padding-right: 27px !important;
+  }
+
+  .react-contextmenu-submenu:after {
+    content: '▶';
+    display: inline-block;
+    position: absolute;
+    right: 7px;
+    bottom: 3px;
+  }
 `
 const StyledNode = styled.div`
   padding-left: ${props => `${Number(props['data-level']) * 17 - 10}px`};
@@ -141,13 +218,7 @@ const Row = ({ index, style, node }) => {
 
   return (
     <Container style={style}>
-      <ContextMenuTrigger
-        id={node.menuType}
-        collect={() => myProps}
-        nodeId={node.id}
-        nodeLabel={node.label}
-        key={`${node.menuType}${node.id}`}
-      >
+      <ContextMenuTrigger id={`cm${node.id}`}>
         <StyledNode
           data-level={level}
           data-nodeisinactivenodepath={nodeIsInActiveNodePath}
@@ -188,6 +259,10 @@ const Row = ({ index, style, node }) => {
           </TextSpan>
         </StyledNode>
       </ContextMenuTrigger>
+      <ContextMenu id={`cm${node.id}`}>
+        <div className="react-contextmenu-title">Aktionsplan</div>
+        <MenuItem onClick={() => console.log('TODO')}>alle schliessen</MenuItem>
+      </ContextMenu>
     </Container>
   )
 }
