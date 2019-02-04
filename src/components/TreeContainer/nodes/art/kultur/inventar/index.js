@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const artId = url[1]
@@ -23,32 +22,39 @@ export default ({ nodes, data, url }) => {
     n => n.id === `art${artId}Kultur${kulturId}`,
   )
 
-  return inventare
-    .map(el => {
-      const datum = get(el, 'datum', '(kein Datum)')
-      const kasten = get(el, 'kasten')
-      const kastenLabel = kasten ? `Kasten: ${kasten}` : '(kein Kasten)'
-      const beet = get(el, 'beet')
-      const beetLabel = beet ? `Beet: ${beet}` : '(kein Beet)'
-      const nr = get(el, 'nr')
-      const nrLabel = nr ? `Nr: ${nr}` : '(keine Nr)'
-      const label = `${datum}: ${kastenLabel}, ${beetLabel}, ${nrLabel}`
+  return (
+    inventare
+      // only show if parent node exists
+      .filter(() =>
+        nodes
+          .map(n => n.id)
+          .includes(`art${artId}Kultur${kulturId}InventarFolder`),
+      )
+      .map(el => {
+        const datum = get(el, 'datum', '(kein Datum)')
+        const kasten = get(el, 'kasten')
+        const kastenLabel = kasten ? `Kasten: ${kasten}` : '(kein Kasten)'
+        const beet = get(el, 'beet')
+        const beetLabel = beet ? `Beet: ${beet}` : '(kein Beet)'
+        const nr = get(el, 'nr')
+        const nrLabel = nr ? `Nr: ${nr}` : '(keine Nr)'
+        const label = `${datum}: ${kastenLabel}, ${beetLabel}, ${nrLabel}`
 
-      return {
-        nodeType: 'table',
-        menuType: 'inventar',
-        filterTable: 'inventar',
-        id: `art${artId}Kultur${kulturId}Inventar${el.id}`,
-        parentId: `art${artId}Kultur${kulturId}InventarFolder`,
-        label,
-        url: ['Arten', artId, 'Kulturen', kulturId, 'Inventare', el.id],
-        hasChildren: false,
-      }
-    })
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [1, artIndex, 1, kulturIndex, 5, index]
-      return el
-    })
+        return {
+          nodeType: 'table',
+          menuType: 'inventar',
+          filterTable: 'inventar',
+          id: `art${artId}Kultur${kulturId}Inventar${el.id}`,
+          parentId: `art${artId}Kultur${kulturId}InventarFolder`,
+          label,
+          url: ['Arten', artId, 'Kulturen', kulturId, 'Inventare', el.id],
+          hasChildren: false,
+        }
+      })
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [1, artIndex, 1, kulturIndex, 5, index]
+        return el
+      })
+  )
 }

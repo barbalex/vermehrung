@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const artId = url[1]
@@ -23,33 +22,40 @@ export default ({ nodes, data, url }) => {
     n => n.id === `art${artId}Kultur${kulturId}`,
   )
 
-  return anlieferungen
-    .map(el => {
-      const label = `${get(el, 'nach_datum', '(kein nach-Datum)')}: ${get(
-        el,
-        'personBypersonId.name',
-        '(kein Name)',
-      )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
-        el,
-        'lieferungStatusWerteBystatus.wert',
-        '(kein Status)',
-      )}`
+  return (
+    anlieferungen
+      // only show if parent node exists
+      .filter(() =>
+        nodes
+          .map(n => n.id)
+          .includes(`art${artId}Kultur${kulturId}AnLieferungFolder`),
+      )
+      .map(el => {
+        const label = `${get(el, 'nach_datum', '(kein nach-Datum)')}: ${get(
+          el,
+          'personBypersonId.name',
+          '(kein Name)',
+        )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
+          el,
+          'lieferungStatusWerteBystatus.wert',
+          '(kein Status)',
+        )}`
 
-      return {
-        nodeType: 'table',
-        menuType: 'anlieferung',
-        filterTable: 'lieferung',
-        id: `art${artId}Kultur${kulturId}Lieferung${el.id}`,
-        parentId: `art${artId}Kultur${kulturId}AnLieferungFolder`,
-        label,
-        url: ['Arten', artId, 'Kulturen', kulturId, 'An-Lieferungen', el.id],
-        hasChildren: false,
-      }
-    })
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [1, artIndex, 1, kulturIndex, 2, index]
-      return el
-    })
+        return {
+          nodeType: 'table',
+          menuType: 'anlieferung',
+          filterTable: 'lieferung',
+          id: `art${artId}Kultur${kulturId}Lieferung${el.id}`,
+          parentId: `art${artId}Kultur${kulturId}AnLieferungFolder`,
+          label,
+          url: ['Arten', artId, 'Kulturen', kulturId, 'An-Lieferungen', el.id],
+          hasChildren: false,
+        }
+      })
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [1, artIndex, 1, kulturIndex, 2, index]
+        return el
+      })
+  )
 }

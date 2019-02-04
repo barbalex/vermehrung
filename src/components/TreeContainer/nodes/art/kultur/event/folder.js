@@ -21,6 +21,9 @@ export default ({ url, nodes, data, loading }) => {
     n => n.id === `art${artId}Kultur${kulturId}`,
   )
 
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`art${artId}Kultur${kulturId}`)) return []
+
   return [
     {
       nodeType: 'folder',

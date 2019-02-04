@@ -4,6 +4,7 @@ import findIndex from 'lodash/findIndex'
 export default ({ url, nodes, data, loading }) => {
   const artId = url[1]
   const kulturId = url[3]
+
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'kultursByartId', [])
@@ -20,6 +21,9 @@ export default ({ url, nodes, data, loading }) => {
     kulturNodes,
     n => n.id === `art${artId}Kultur${kulturId}`,
   )
+
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`art${artId}Kultur${kulturId}`)) return []
 
   return [
     {
