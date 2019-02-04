@@ -11,7 +11,7 @@ export default ({ nodes, data }) => {
       .filter(() => nodes.map(n => n.id).includes('personFolder'))
       .map(el => ({
         nodeType: 'table',
-        menuTitle: 'person',
+        menuTitle: 'Person',
         filterTable: 'person',
         id: `person${el.id}`,
         parentId: 'personFolder',

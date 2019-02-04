@@ -44,7 +44,7 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'personGartenKulturInventarFolder',
+      menuTitle: 'Inventare',
       id: `person${personId}Garten${gartenId}Kultur${kulturId}InventarFolder`,
       label: `Inventare (${nr})`,
       url: [

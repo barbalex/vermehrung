@@ -20,7 +20,7 @@ export default ({ nodes, data, url }) => {
       )
       .map(el => ({
         nodeType: 'table',
-        menuTitle: 'zaehlung',
+        menuTitle: 'Zählung',
         filterTable: 'zaehlung',
         id: `kultur${kulturId}Zaehlung${el.id}`,
         parentId: `kultur${kulturId}ZaehlungFolder`,

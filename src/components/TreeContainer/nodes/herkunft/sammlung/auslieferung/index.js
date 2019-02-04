@@ -40,7 +40,7 @@ export default ({ nodes, data, url }) => {
 
       return {
         nodeType: 'table',
-        menuTitle: 'lieferung',
+        menuTitle: 'Aus-Lieferung',
         filterTable: 'lieferung',
         id: `herkunft${herkunftId}Sammlung${sammlungId}Lieferung${el.id}`,
         parentId: `herkunft${herkunftId}Sammlung${sammlungId}LieferungFolder`,

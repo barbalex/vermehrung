@@ -267,7 +267,16 @@ const Row = ({ index, style, node }) => {
       </ContextMenuTrigger>
       <ContextMenu id={`cm${node.id}`}>
         <div className="react-contextmenu-title">{node.menuTitle}</div>
-        <MenuItem onClick={onClickMenu}>alle schliessen</MenuItem>
+        <MenuItem onClick={onClickMenu}>neu</MenuItem>
+        {node.nodeType === 'table' && (
+          <MenuItem onClick={onClickMenu}>löschen</MenuItem>
+        )}
+        {node.nodeType === 'folder' && (
+          <>
+            <MenuItem onClick={onClickMenu}>alle schliessen</MenuItem>
+            <MenuItem onClick={onClickMenu}>alle öffnen</MenuItem>
+          </>
+        )}
       </ContextMenu>
     </Container>
   )
