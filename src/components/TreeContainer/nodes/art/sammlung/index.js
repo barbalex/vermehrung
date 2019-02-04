@@ -2,31 +2,34 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../compareLabel'
-import allParentNodesExist from '../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
+  const artId = url[1]
   const arten = get(data, 'art', [])
-  const art = arten.find(a => a.id === url[1])
+  const art = arten.find(a => a.id === artId)
   const sammlungen = get(art, 'sammlungsByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, n => n.id === `art${url[1]}`) || 0
+  const artIndex = findIndex(artNodes, n => n.id === `art${artId}`) || 0
 
-  return sammlungen
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'sammlung',
-      filterTable: 'sammlung',
-      id: `sammlung${el.id}`,
-      parentId: `art${url[1]}SammlungFolder`,
-      label: `${get(el, 'datum', '(kein Datum)')}: ${get(
-        el,
-        'herkunftByherkunftId.nr',
-        '(keine Nr.)',
-      )}`,
-      url: ['Arten', url[1], 'Sammlungen', el.id],
-      hasChildren: true,
-    }))
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => ({ ...el, sort: [1, artIndex, 2, index] }))
+  return (
+    sammlungen
+      // only show if parent node exists
+      .filter(() => nodes.map(n => n.id).includes(`art${artId}SammlungFolder`))
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'sammlung',
+        filterTable: 'sammlung',
+        id: `art${artId}Sammlung${el.id}`,
+        parentId: `art${artId}SammlungFolder`,
+        label: `${get(el, 'datum', '(kein Datum)')}: ${get(
+          el,
+          'herkunftByherkunftId.nr',
+          '(keine Nr.)',
+        )}`,
+        url: ['Arten', artId, 'Sammlungen', el.id],
+        hasChildren: true,
+      }))
+      .sort(compareLabel)
+      .map((el, index) => ({ ...el, sort: [1, artIndex, 2, index] }))
+  )
 }

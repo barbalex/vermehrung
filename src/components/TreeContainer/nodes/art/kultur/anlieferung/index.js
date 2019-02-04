@@ -18,7 +18,10 @@ export default ({ nodes, data, url }) => {
   const kulturNodes = nodes.filter(
     n => n.parentId === `art${artId}KulturFolder`,
   )
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    n => n.id === `art${artId}Kultur${kulturId}`,
+  )
 
   return anlieferungen
     .map(el => {
@@ -36,8 +39,8 @@ export default ({ nodes, data, url }) => {
         nodeType: 'table',
         menuType: 'anlieferung',
         filterTable: 'lieferung',
-        id: `lieferung${el.id}`,
-        parentId: `kultur${kulturId}AnLieferungFolder`,
+        id: `art${artId}Kultur${kulturId}Lieferung${el.id}`,
+        parentId: `art${artId}Kultur${kulturId}AnLieferungFolder`,
         label,
         url: ['Arten', artId, 'Kulturen', kulturId, 'An-Lieferungen', el.id],
         hasChildren: false,

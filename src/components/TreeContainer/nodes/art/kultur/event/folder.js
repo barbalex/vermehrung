@@ -16,13 +16,16 @@ export default ({ url, nodes, data, loading }) => {
   const kulturNodes = nodes.filter(
     n => n.parentId === `art${artId}KulturFolder`,
   )
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    n => n.id === `art${artId}Kultur${kulturId}`,
+  )
 
   return [
     {
       nodeType: 'folder',
       menuType: 'artKulturEventFolder',
-      id: `kultur${kulturId}EventFolder`,
+      id: `art${artId}Kultur${kulturId}EventFolder`,
       label: `Events (${nr})`,
       url: ['Arten', artId, 'Kulturen', kulturId, 'Events'],
       sort: [1, artIndex, 1, kulturIndex, 4],

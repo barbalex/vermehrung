@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
-import allParentNodesExist from '../../../../allParentNodesExist'
 
 export default ({ nodes, data, url }) => {
   const artId = url[1]
@@ -15,7 +14,7 @@ export default ({ nodes, data, url }) => {
   )
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    n => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
   const arten = get(data, 'art', [])
@@ -24,40 +23,47 @@ export default ({ nodes, data, url }) => {
   const sammlung = sammlungen.find(s => s.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
 
-  return lieferungen
-    .map(el => {
-      const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
-        el,
-        'personBypersonId.name',
-        '(kein Name)',
-      )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
-        el,
-        'lieferungStatusWerteBystatus.wert',
-        '(kein Status)',
-      )}`
+  return (
+    lieferungen
+      // only show if parent node exists
+      .filter(() =>
+        nodes
+          .map(n => n.id)
+          .includes(`art${artId}Sammlung${sammlungId}LieferungFolder`),
+      )
+      .map(el => {
+        const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
+          el,
+          'personBypersonId.name',
+          '(kein Name)',
+        )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
+          el,
+          'lieferungStatusWerteBystatus.wert',
+          '(kein Status)',
+        )}`
 
-      return {
-        nodeType: 'table',
-        menuType: 'lieferung',
-        filterTable: 'lieferung',
-        id: `lieferung${el.id}`,
-        parentId: `art${artId}SammlungLieferungFolder`,
-        label,
-        url: [
-          'Arten',
-          artId,
-          'Sammlungen',
-          sammlungId,
-          'Aus-Lieferungen',
-          el.id,
-        ],
-        hasChildren: false,
-      }
-    })
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [1, artIndex, 2, sammlungIndex, 1, index]
-      return el
-    })
+        return {
+          nodeType: 'table',
+          menuType: 'lieferung',
+          filterTable: 'lieferung',
+          id: `art${artId}Sammlung${sammlungId}Lieferung${el.id}`,
+          parentId: `art${artId}Sammlung${sammlungId}LieferungFolder`,
+          label,
+          url: [
+            'Arten',
+            artId,
+            'Sammlungen',
+            sammlungId,
+            'Aus-Lieferungen',
+            el.id,
+          ],
+          hasChildren: false,
+        }
+      })
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [1, artIndex, 2, sammlungIndex, 1, index]
+        return el
+      })
+  )
 }

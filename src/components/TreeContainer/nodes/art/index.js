@@ -1,26 +1,28 @@
 import get from 'lodash/get'
 
 import compareLabel from '../compareLabel'
-import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
   const arten = get(data, 'art', [])
 
-  return arten
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'art',
-      filterTable: 'art',
-      id: `art${el.id}`,
-      parentId: 'artFolder',
-      label: get(el, 'art_ae_art.name', '(keine Art gewählt)'),
-      url: ['Arten', el.id],
-      hasChildren: true,
-    }))
-    .filter(n => allParentNodesExist(nodes, n))
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [1, index]
-      return el
-    })
+  return (
+    arten
+      // only show if parent node exists
+      .filter(() => nodes.map(n => n.id).includes('artFolder'))
+      .map(n => ({
+        nodeType: 'table',
+        menuType: 'art',
+        filterTable: 'art',
+        id: `art${n.id}`,
+        parentId: 'artFolder',
+        label: get(n, 'art_ae_art.name', '(keine Art gewählt)'),
+        url: ['Arten', n.id],
+        hasChildren: true,
+      }))
+      .sort(compareLabel)
+      .map((n, index) => {
+        n.sort = [1, index]
+        return n
+      })
+  )
 }

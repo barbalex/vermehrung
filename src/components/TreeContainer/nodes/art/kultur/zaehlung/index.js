@@ -18,15 +18,18 @@ export default ({ nodes, data, url }) => {
   const kulturNodes = nodes.filter(
     n => n.parentId === `art${artId}KulturFolder`,
   )
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    n => n.id === `art${artId}Kultur${kulturId}`,
+  )
 
   return zaehlungen
     .map(el => ({
       nodeType: 'table',
       menuType: 'zaehlung',
       filterTable: 'zaehlung',
-      id: `zaehlung${el.id}`,
-      parentId: `kultur${kulturId}ZaehlungFolder`,
+      id: `art${artId}Kultur${kulturId}Zaehlung${el.id}`,
+      parentId: `art${artId}Kultur${kulturId}ZaehlungFolder`,
       label: get(el, 'datum', '(kein Datum)'),
       url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
       hasChildren: false,

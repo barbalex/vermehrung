@@ -12,7 +12,7 @@ export default ({ url, nodes, data, loading }) => {
   )
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    n => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
   const arten = get(data, 'art', [])
@@ -22,11 +22,15 @@ export default ({ url, nodes, data, loading }) => {
   const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`art${artId}Sammlung${sammlungId}`))
+    return []
+
   return [
     {
       nodeType: 'folder',
       menuType: 'artSammlungLieferungFolder',
-      id: `art${artId}SammlungLieferungFolder`,
+      id: `art${artId}Sammlung${sammlungId}LieferungFolder`,
       label: `Aus-Lieferungen (${nr})`,
       url: ['Arten', artId, 'Sammlungen', sammlungId, 'Aus-Lieferungen'],
       sort: [1, artIndex, 2, sammlungIndex, 1],
