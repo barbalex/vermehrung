@@ -1156,13 +1156,5 @@ export default ({ store, data, loading }) => {
     }
   })
 
-  nodes = nodes.filter(n => allParentNodesExist(nodes, n))
-  /**
-   * There is something weird happening when filtering data
-   * that leads to duplicate nodes
-   * Need to solve that but in the meantime use uniqBy
-   */
-  nodes = uniqBy(nodes, n => n.url.join())
-
   return nodes
 }
