@@ -5,7 +5,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
-import upperFirst from 'lodash/upperFirst'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -181,12 +180,11 @@ const TextSpan = styled.span`
   }
 `
 
-const Row = ({ index, style, node }) => {
+const Row = ({ style, node }) => {
   const store = useContext(storeContext)
   const { tree } = store
   const { openNodes, activeNodeArray } = tree
 
-  const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
   // build symbols
