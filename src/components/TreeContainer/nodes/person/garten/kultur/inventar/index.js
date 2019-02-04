@@ -56,7 +56,7 @@ export default ({ nodes, data, url }) => {
 
         return {
           nodeType: 'table',
-          menuType: 'inventar',
+          menuTitle: 'inventar',
           filterTable: 'inventar',
           id: `person${personId}Garten${gartenId}Kultur${kulturId}Inventar${
             el.id

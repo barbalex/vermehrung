@@ -39,7 +39,7 @@ export default ({ nodes, data, url }) => {
 
         return {
           nodeType: 'table',
-          menuType: 'event',
+          menuTitle: 'event',
           filterTable: 'event',
           id: `garten${gartenId}Kultur${kulturId}Event${el.id}`,
           parentId: `garten${gartenId}Kultur${kulturId}EventFolder`,

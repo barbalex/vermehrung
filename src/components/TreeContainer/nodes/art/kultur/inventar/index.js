@@ -42,7 +42,7 @@ export default ({ nodes, data, url }) => {
 
         return {
           nodeType: 'table',
-          menuType: 'inventar',
+          menuTitle: 'inventar',
           filterTable: 'inventar',
           id: `art${artId}Kultur${kulturId}Inventar${el.id}`,
           parentId: `art${artId}Kultur${kulturId}InventarFolder`,

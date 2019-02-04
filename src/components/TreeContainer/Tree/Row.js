@@ -233,7 +233,7 @@ const Row = ({ index, style, node }) => {
           data-url={dataUrl}
           data-nodetype={node.nodeType}
           data-label={node.label}
-          data-menutype={node.menuType}
+          data-menutype={node.menuTitle}
         >
           {useSymbolIcon && (
             <SymbolDiv onClick={onClickNodeSymbol}>
@@ -266,9 +266,7 @@ const Row = ({ index, style, node }) => {
         </StyledNode>
       </ContextMenuTrigger>
       <ContextMenu id={`cm${node.id}`}>
-        <div className="react-contextmenu-title">
-          {upperFirst(node.menuType)}
-        </div>
+        <div className="react-contextmenu-title">{node.menuTitle}</div>
         <MenuItem onClick={onClickMenu}>alle schliessen</MenuItem>
       </ContextMenu>
     </Container>

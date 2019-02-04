@@ -13,7 +13,7 @@ export default ({ nodes, data }) => {
       .filter(() => nodes.map(n => n.id).includes('lieferungStatusFolder'))
       .map(el => ({
         nodeType: 'table',
-        menuType: 'lieferung_status_werte',
+        menuTitle: 'lieferung_status_werte',
         filterTable: 'lieferung_status_werte',
         id: `lieferungStatus${el.id}`,
         parentId: 'lieferungStatusFolder',

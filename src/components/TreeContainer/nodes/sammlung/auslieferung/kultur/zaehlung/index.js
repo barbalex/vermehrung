@@ -49,7 +49,7 @@ export default ({ nodes, data, url }) => {
       )
       .map(el => ({
         nodeType: 'table',
-        menuType: 'zaehlung',
+        menuTitle: 'zaehlung',
         filterTable: 'artKulturZaehlung',
         id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Zaehlung${
           el.id

@@ -10,7 +10,7 @@ export default ({ data, loading, nodes }) => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'masseinheitenFolder',
+      menuTitle: 'masseinheitenFolder',
       id: 'masseinheitenFolder',
       parentId: 'werteListenFolder',
       label: `Masseinheiten (${nr})`,

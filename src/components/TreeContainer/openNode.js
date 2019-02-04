@@ -18,7 +18,7 @@ export default ({ node: nodeRaw, store }) => {
     hasChildren: false,
     id: 'loadingNode',
     label: 'lade...',
-    menuType: 'none',
+    menuTitle: 'none',
     nodeType: 'table',
     parentId: 'hm',
     url: [...node.url, 1],

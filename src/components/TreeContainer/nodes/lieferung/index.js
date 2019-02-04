@@ -11,7 +11,7 @@ export default ({ nodes, data }) => {
       .filter(() => nodes.map(n => n.id).includes('lieferungFolder'))
       .map(el => ({
         nodeType: 'table',
-        menuType: 'lieferung',
+        menuTitle: 'lieferung',
         filterTable: 'lieferung',
         id: `lieferung${el.id}`,
         parentId: 'lieferungFolder',

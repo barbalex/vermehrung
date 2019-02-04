@@ -53,7 +53,7 @@ export default ({ nodes, data, url }) => {
 
         return {
           nodeType: 'table',
-          menuType: 'event',
+          menuTitle: 'event',
           filterTable: 'event',
           id: `person${personId}Garten${gartenId}Kultur${kulturId}Event${
             el.id

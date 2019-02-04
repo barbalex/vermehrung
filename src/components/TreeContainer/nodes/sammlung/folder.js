@@ -7,7 +7,7 @@ export default ({ data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'sammlungFolder',
+      menuTitle: 'sammlungFolder',
       id: 'sammlungFolder',
       label: `Sammlungen (${nr})`,
       url: ['Sammlungen'],

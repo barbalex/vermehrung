@@ -10,7 +10,7 @@ export default ({ nodes, data }) => {
       .filter(() => nodes.map(n => n.id).includes('zaehleinheitenFolder'))
       .map(el => ({
         nodeType: 'table',
-        menuType: 'zaehleinheit_werte',
+        menuTitle: 'zaehleinheit_werte',
         filterTable: 'zaehleinheit_werte',
         id: `zaehleinheit${el.id}`,
         parentId: 'zaehleinheitenFolder',

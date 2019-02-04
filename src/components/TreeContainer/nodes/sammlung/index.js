@@ -22,7 +22,7 @@ export default ({ nodes, data }) => {
 
         return {
           nodeType: 'table',
-          menuType: 'sammlung',
+          menuTitle: 'sammlung',
           filterTable: 'sammlung',
           id: `sammlung${el.id}`,
           parentId: 'sammlungFolder',

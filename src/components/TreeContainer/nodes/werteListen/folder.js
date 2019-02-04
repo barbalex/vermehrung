@@ -2,7 +2,7 @@ export default () => {
   return [
     {
       nodeType: 'folder',
-      menuType: 'werteListenFolder',
+      menuTitle: 'werteListenFolder',
       id: 'werteListenFolder',
       label: 'Werte-Listen (5)',
       url: ['Werte-Listen'],

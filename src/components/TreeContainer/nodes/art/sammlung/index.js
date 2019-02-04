@@ -17,7 +17,7 @@ export default ({ nodes, data, url }) => {
       .filter(() => nodes.map(n => n.id).includes(`art${artId}SammlungFolder`))
       .map(el => ({
         nodeType: 'table',
-        menuType: 'sammlung',
+        menuTitle: 'sammlung',
         filterTable: 'sammlung',
         id: `art${artId}Sammlung${el.id}`,
         parentId: `art${artId}SammlungFolder`,
