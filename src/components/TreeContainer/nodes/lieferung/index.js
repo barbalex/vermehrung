@@ -1,13 +1,14 @@
 import get from 'lodash/get'
 
 import compareLabel from '../compareLabel'
-import allParentNodesExist from '../../allParentNodesExist'
 
 export default ({ nodes, data }) => {
   const lieferungen = get(data, 'lieferung', [])
 
   return (
     lieferungen
+      // only show if parent node exists
+      .filter(() => nodes.map(n => n.id).includes('lieferungFolder'))
       .map(el => ({
         nodeType: 'table',
         menuType: 'lieferung',
@@ -22,7 +23,6 @@ export default ({ nodes, data }) => {
         url: ['Lieferungen', el.id],
         hasChildren: false,
       }))
-      .filter(n => allParentNodesExist(nodes, n))
       // sort by label
       .sort(compareLabel)
       .map((el, index) => {

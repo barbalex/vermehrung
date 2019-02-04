@@ -11,6 +11,9 @@ export default ({ url, nodes, data, loading }) => {
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
 
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`kultur${kulturId}`)) return []
+
   return [
     {
       nodeType: 'folder',

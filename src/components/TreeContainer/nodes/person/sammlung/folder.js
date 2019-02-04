@@ -11,6 +11,9 @@ export default ({ url, nodes, data, loading }) => {
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
 
+  // only return if parent exists
+  if (!nodes.map(n => n.id).includes(`person${personId}`)) return []
+
   return [
     {
       nodeType: 'folder',
