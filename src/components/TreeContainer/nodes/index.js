@@ -1,7 +1,4 @@
-import uniqBy from 'lodash/uniqBy'
-
 import sort from '../sort'
-import allParentNodesExist from '../allParentNodesExist'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
 import buildArtFolder from './art/folder'
@@ -504,7 +501,6 @@ export default ({ store, data, loading }) => {
         }),
       ]
     }
-    // TODO: build SammlungKulturKultur
     if (
       url.length === 3 &&
       url[0] === 'Sammlungen' &&
