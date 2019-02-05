@@ -1,13 +1,14 @@
 import gql from 'graphql-tag'
 import { navigate } from 'gatsby'
 import get from 'lodash/get'
+//import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 
 export default async ({ node, store, client }) => {
-  console.log('createNew', node)
   // get parent table, parent table id and table from url
   const { activeNodeArray, setActiveNodeArray, refetch } = store.tree
+  const { nodeType, url } = node
 
   // get table and id from url
   let parentTableTitle = null
@@ -18,28 +19,30 @@ export default async ({ node, store, client }) => {
   let fkExists = null
   let fkName = null
 
-  if (node.nodeType === 'table') {
-    tableTitle = node.url.slice(-2)[0]
+  if (nodeType === 'table') {
+    tableTitle = url.slice(-2)[0]
     table = tableFromTitleHash[tableTitle]
-    // need to check for Werte-Listen and top level tables
-    if (node.url.length > 2 && !isNaN(node.url[2])) {
-      parentId = node.url.slice(-3)[0]
+    // need to check for top level tables
+    if (url.length > 2) {
+      parentId = url.slice(-3)[0]
+      // need to check for Werte-Listen
+      if (isNaN(parentId)) parentId = null
     }
-    if (parentId && node.url.length > 3) {
-      parentTableTitle = node.url.slice(-4)[0]
+    if (parentId && url.length > 3) {
+      parentTableTitle = url.slice(-4)[0]
       parentTable = parentTableTitle
         ? tableFromTitleHash[parentTableTitle]
         : null
     }
-  } else if (node.nodeType === 'folder') {
-    tableTitle = node.url.slice(-1)[0]
+  } else if (nodeType === 'folder') {
+    tableTitle = url.slice(-1)[0]
     table = tableFromTitleHash[tableTitle]
     // need to check for Werte-Listen and top level tables
-    if (node.url.length > 1 && !isNaN(node.url[1])) {
-      parentId = node.url.slice(-2)[0]
+    if (url.length > 1 && !isNaN(url[1])) {
+      parentId = url.slice(-2)[0]
     }
-    if (parentId && node.url.length > 2) {
-      parentTableTitle = node.url.slice(-3)[0]
+    if (parentId && url.length > 2) {
+      parentTableTitle = url.slice(-3)[0]
       parentTable = parentTableTitle
         ? tableFromTitleHash[parentTableTitle]
         : null
@@ -52,7 +55,15 @@ export default async ({ node, store, client }) => {
   if (fkExists) object = `{ ${fkName}: ${parentId} }`
   let returning = '{ id }'
   if (fkExists) returning = `{ id, ${fkName} }`
-  // TODO:
+  /*console.log('createNew', {
+    fkExists,
+    fkName,
+    parentId,
+    object,
+    parentTable,
+    node,
+    nodeUrl: getSnapshot(url),
+  })*/
   // add new dataset to table
   const mutation = gql`
     mutation insertDataset {
@@ -71,7 +82,7 @@ export default async ({ node, store, client }) => {
   }
   const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
   if (newObject && newObject.id) {
-    const newActiveNodeArray = [...activeNodeArray, newObject.id]
+    const newActiveNodeArray = [...activeNodeArray.slice(0, -1), newObject.id]
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setActiveNodeArray(newActiveNodeArray)
     refetch()

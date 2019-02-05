@@ -6,7 +6,10 @@ export default types.model('Node', {
   menuTitle: types.optional(types.string, ''),
   id: types.optional(types.union(types.string, types.number), ''),
   parentId: types.optional(types.union(types.string, types.number), ''),
-  label: types.optional(types.union(types.string, types.number), ''),
+  label: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    '',
+  ),
   url: types.array(types.union(types.string, types.number)),
   sort: types.array(types.union(types.string, types.number)),
   hasChildren: types.optional(types.boolean, false),
