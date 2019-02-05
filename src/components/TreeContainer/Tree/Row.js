@@ -5,13 +5,15 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
-import onClickMenuDo from './onClickMenu'
+import createNew from './createNew'
+import deleteDataset from './delete'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -181,6 +183,7 @@ const TextSpan = styled.span`
 `
 
 const Row = ({ style, node }) => {
+  const client = useApolloClient()
   const store = useContext(storeContext)
   const { tree } = store
   const { openNodes, activeNodeArray } = tree
@@ -215,14 +218,15 @@ const Row = ({ style, node }) => {
   const onClickNodeSymbol = useCallback(() => {
     toggleNodeSymbol({ node, store })
   }, [node, openNodes])
-  const onClickNeu = useCallback(() => {
-    console.log('node', node)
-    //onClickMenuDo({})
-  }, [node, openNodes, activeNodeArray])
-  const onClickMenu = useCallback(() => {
-    console.log('node', node)
-    //onClickMenuDo({})
-  }, [node, openNodes, activeNodeArray])
+  const onClickNeu = useCallback(() => createNew({ node, store, client }), [
+    node,
+    openNodes,
+    activeNodeArray,
+  ])
+  const onClickDelete = useCallback(
+    () => deleteDataset({ node, store, client }),
+    [node, openNodes, activeNodeArray],
+  )
 
   return (
     <Container style={style}>
@@ -271,12 +275,16 @@ const Row = ({ style, node }) => {
           <div className="react-contextmenu-title">{node.menuTitle}</div>
           <MenuItem onClick={onClickNeu}>neu</MenuItem>
           {node.nodeType === 'table' && (
-            <MenuItem onClick={onClickMenu}>löschen</MenuItem>
+            <MenuItem onClick={onClickDelete}>löschen</MenuItem>
           )}
           {node.nodeType === 'folder' && (
             <>
-              <MenuItem onClick={onClickMenu}>alle schliessen</MenuItem>
-              <MenuItem onClick={onClickMenu}>alle öffnen</MenuItem>
+              <MenuItem onClick={() => console.log('TODO')}>
+                alle schliessen
+              </MenuItem>
+              <MenuItem onClick={() => console.log('TODO')}>
+                alle öffnen
+              </MenuItem>
             </>
           )}
         </ContextMenu>

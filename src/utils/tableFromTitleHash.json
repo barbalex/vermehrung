@@ -1,0 +1,19 @@
+{
+  "Arten": "art",
+  "Gaerten": "garten",
+  "Kulturen": "kultur",
+  "Events": "kultur_event",
+  "Inventare": "kultur_inventar",
+  "Zaehlungen": "zaehlung",
+  "Aus-Lieferungen": "lieferung",
+  "An-Lieferungen": "lieferung",
+  "Lieferungen": "lieferung",
+  "Sammlungen": "sammlung",
+  "Herkuenfte": "herkunft",
+  "Personen": "person",
+  "Masseinheiten": "masseinheit_werte",
+  "Zaehleinheiten": "zaehleinheit_werte",
+  "Lieferung-Typ": "lieferung_typ_werte",
+  "Lieferung-Status": "lieferung_status_werte",
+  "Lieferung-Zwischenlager": "lieferung_zwischenlager_werte"
+}
