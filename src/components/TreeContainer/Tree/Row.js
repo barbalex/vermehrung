@@ -215,6 +215,10 @@ const Row = ({ style, node }) => {
   const onClickNodeSymbol = useCallback(() => {
     toggleNodeSymbol({ node, store })
   }, [node, openNodes])
+  const onClickNeu = useCallback(() => {
+    console.log('node', node)
+    //onClickMenuDo({})
+  }, [node, openNodes, activeNodeArray])
   const onClickMenu = useCallback(() => {
     console.log('node', node)
     //onClickMenuDo({})
@@ -265,7 +269,7 @@ const Row = ({ style, node }) => {
       {['table', 'folder'].includes(node.nodeType) && (
         <ContextMenu id={`cm${node.id}`}>
           <div className="react-contextmenu-title">{node.menuTitle}</div>
-          <MenuItem onClick={onClickMenu}>neu</MenuItem>
+          <MenuItem onClick={onClickNeu}>neu</MenuItem>
           {node.nodeType === 'table' && (
             <MenuItem onClick={onClickMenu}>löschen</MenuItem>
           )}
