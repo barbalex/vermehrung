@@ -18,7 +18,7 @@ export default ({ nodes, data, url }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Sammlung',
-        filterTable: 'sammlung',
+        table: 'sammlung',
         id: `art${artId}Sammlung${el.id}`,
         parentId: `art${artId}SammlungFolder`,
         label: `${get(el, 'datum', '(kein Datum)')}: ${get(

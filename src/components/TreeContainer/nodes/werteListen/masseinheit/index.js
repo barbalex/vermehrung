@@ -11,7 +11,7 @@ export default ({ nodes, data }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Masseinheit',
-        filterTable: 'masseinheit_werte',
+        table: 'masseinheit_werte',
         id: `masseinheit${el.id}`,
         parentId: 'masseinheitenFolder',
         label: get(el, 'wert', '(kein Wert)'),

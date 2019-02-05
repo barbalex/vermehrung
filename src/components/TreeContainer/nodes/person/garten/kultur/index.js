@@ -34,7 +34,7 @@ export default ({ nodes, data, url }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Kultur',
-        filterTable: 'kultur',
+        table: 'kultur',
         id: `person${personId}Garten${gartenId}Kultur${el.id}`,
         parentId: `person${personId}Garten${gartenId}KulturFolder`,
         label: get(el, 'artByartId.art_ae_art.name', '(keine Art)'),

@@ -50,7 +50,7 @@ export default ({ nodes, data, url }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Zählung',
-        filterTable: 'artKulturZaehlung',
+        table: 'artKulturZaehlung',
         id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Zaehlung${
           el.id
         }`,

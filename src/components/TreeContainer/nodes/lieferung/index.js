@@ -12,7 +12,7 @@ export default ({ nodes, data }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Lieferung',
-        filterTable: 'lieferung',
+        table: 'lieferung',
         id: `lieferung${el.id}`,
         parentId: 'lieferungFolder',
         label: `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(

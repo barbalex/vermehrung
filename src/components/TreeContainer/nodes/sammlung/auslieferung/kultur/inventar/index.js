@@ -60,7 +60,7 @@ export default ({ nodes, data, url }) => {
         return {
           nodeType: 'table',
           menuTitle: 'Inventar',
-          filterTable: 'inventar',
+          table: 'inventar',
           id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Inventar${
             el.id
           }`,

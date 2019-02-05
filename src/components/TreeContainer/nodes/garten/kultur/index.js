@@ -22,7 +22,7 @@ export default ({ nodes, data, url }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Kultur',
-        filterTable: 'kultur',
+        table: 'kultur',
         id: `garten${gartenId}Kultur${el.id}`,
         parentId: `garten${gartenId}KulturFolder`,
         label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),

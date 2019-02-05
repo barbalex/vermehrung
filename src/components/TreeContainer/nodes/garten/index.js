@@ -12,7 +12,7 @@ export default ({ nodes, data }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Garten',
-        filterTable: 'garten',
+        table: 'garten',
         id: `garten${el.id}`,
         parentId: 'gartenFolder',
         label: get(el, 'personBypersonId.name', '(kein Garten gewählt)'),

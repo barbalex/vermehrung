@@ -12,7 +12,7 @@ export default ({ nodes, data }) => {
       .map(n => ({
         nodeType: 'table',
         menuTitle: 'Art',
-        filterTable: 'art',
+        table: 'art',
         id: `art${n.id}`,
         parentId: 'artFolder',
         label: get(n, 'art_ae_art.name', '(keine Art gewählt)'),

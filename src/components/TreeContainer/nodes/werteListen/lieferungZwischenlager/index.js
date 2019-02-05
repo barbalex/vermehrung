@@ -16,7 +16,7 @@ export default ({ nodes, data }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Lieferung: Zwischenlager',
-        filterTable: 'lieferung_zwischenlager_werte',
+        table: 'lieferung_zwischenlager_werte',
         id: `lieferungZwischenlager${el.id}`,
         parentId: 'lieferungZwischenlagerFolder',
         label: get(el, 'wert', '(kein Wert)'),

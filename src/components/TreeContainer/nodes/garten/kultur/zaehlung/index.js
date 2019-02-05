@@ -33,7 +33,7 @@ export default ({ nodes, data, url }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Zählung',
-        filterTable: 'zaehlung',
+        table: 'zaehlung',
         id: `garten${gartenId}Kultur${kulturId}Zaehlung${el.id}`,
         parentId: `kultur${kulturId}ZaehlungFolder`,
         label: get(el, 'datum', '(kein Datum)'),

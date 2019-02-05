@@ -44,7 +44,7 @@ export default ({ nodes, data, url }) => {
         return {
           nodeType: 'table',
           menuTitle: 'An-Lieferung',
-          filterTable: 'lieferung',
+          table: 'lieferung',
           id: `garten${gartenId}Kultur${kulturId}Lieferung${el.id}`,
           parentId: `garten${gartenId}Kultur${kulturId}AnLieferungFolder`,
           label,

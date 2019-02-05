@@ -11,7 +11,7 @@ export default ({ nodes, data }) => {
       .map(el => ({
         nodeType: 'table',
         menuTitle: 'Zähleinheit',
-        filterTable: 'zaehleinheit_werte',
+        table: 'zaehleinheit_werte',
         id: `zaehleinheit${el.id}`,
         parentId: 'zaehleinheitenFolder',
         label: get(el, 'wert', '(kein Wert)'),

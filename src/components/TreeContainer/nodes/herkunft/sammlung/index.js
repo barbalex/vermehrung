@@ -28,7 +28,7 @@ export default ({ nodes, data, url }) => {
         return {
           nodeType: 'table',
           menuTitle: 'Sammlung',
-          filterTable: 'sammlung',
+          table: 'sammlung',
           id: `herkunft${herkunftId}Sammlung${el.id}`,
           parentId: `herkunft${herkunftId}SammlungFolder`,
           label,

@@ -14,7 +14,7 @@ export default ({ node: nodeRaw, store }) => {
   // now add a loading node at the right position
   // to tell the user what is going on
   const loadingNode = {
-    filterTable: 'none',
+    table: 'none',
     hasChildren: false,
     id: 'loadingNode',
     label: 'lade...',
