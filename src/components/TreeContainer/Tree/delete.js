@@ -1,9 +1,10 @@
 import gql from 'graphql-tag'
+import { navigate } from 'gatsby'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 
 export default async ({ node, store, client }) => {
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray, refetch } = store.tree
   // get table and id from url
   const title = node.url.slice(-2)[0]
   const id = node.url.slice(-1)[0]
@@ -23,9 +24,9 @@ export default async ({ node, store, client }) => {
       mutation,
     })
   } catch (error) {
-    console.log('Error deleting dataset', error.message)
+    return console.log('Error deleting dataset', error.message)
   }
-
+  navigate(`/Vermehrung/${activeNodeArray.slice(0, -1).join('/')}`)
   setActiveNodeArray(activeNodeArray.slice(0, -1))
-  store.tree.refetch()
+  refetch()
 }
