@@ -12,6 +12,7 @@ import isNodeOpen from '../isNodeOpen'
 import someChildrenAreOpen from '../someChildrenAreOpen'
 import someChildrenAreClosed from '../someChildrenAreClosed'
 import openAllChildren from '../openAllChildren'
+import closeAllChildren from '../closeAllChildren'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
@@ -230,6 +231,9 @@ const Row = ({ style, node }) => {
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })
   }, [node, openNodes, activeNodeArray])
+  const onClickCloseAllChildren = useCallback(() => {
+    closeAllChildren({ node, openNodes, store })
+  }, [node, openNodes, activeNodeArray])
 
   return (
     <Container style={style}>
@@ -283,7 +287,7 @@ const Row = ({ style, node }) => {
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
               {someChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
-                <MenuItem onClick={() => console.log('TODO')}>
+                <MenuItem onClick={onClickCloseAllChildren}>
                   alle schliessen
                 </MenuItem>
               )}
