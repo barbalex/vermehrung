@@ -5,10 +5,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
+import allChildrenAreOpen from '../allChildrenAreOpen'
+import someChildrenAreOpen from '../someChildrenAreOpen'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
@@ -186,7 +188,7 @@ const Row = ({ style, node }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { tree } = store
-  const { openNodes, activeNodeArray } = tree
+  const { nodes, openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
@@ -218,15 +220,12 @@ const Row = ({ style, node }) => {
   const onClickNodeSymbol = useCallback(() => {
     toggleNodeSymbol({ node, store })
   }, [node, openNodes])
-  const onClickNeu = useCallback(() => createNew({ node, store, client }), [
-    node,
-    openNodes,
-    activeNodeArray,
-  ])
-  const onClickDelete = useCallback(
-    () => deleteDataset({ node, store, client }),
-    [node, openNodes, activeNodeArray],
-  )
+  const onClickNeu = useCallback(() => {
+    createNew({ node, store, client })
+  }, [node, openNodes, activeNodeArray])
+  const onClickDelete = useCallback(() => {
+    deleteDataset({ node, store, client })
+  }, [node, openNodes, activeNodeArray])
 
   return (
     <Container style={style}>
@@ -279,12 +278,17 @@ const Row = ({ style, node }) => {
           )}
           {node.nodeType === 'folder' && (
             <>
-              <MenuItem onClick={() => console.log('TODO')}>
-                alle schliessen
-              </MenuItem>
-              <MenuItem onClick={() => console.log('TODO')}>
-                alle öffnen
-              </MenuItem>
+              {isNodeOpen(openNodes, node.url) &&
+                someChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
+                  <MenuItem onClick={() => console.log('TODO')}>
+                    alle schliessen
+                  </MenuItem>
+                )}
+              {!allChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
+                <MenuItem onClick={() => console.log('TODO')}>
+                  alle öffnen
+                </MenuItem>
+              )}
             </>
           )}
         </ContextMenu>
