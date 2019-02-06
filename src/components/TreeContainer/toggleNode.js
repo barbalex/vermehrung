@@ -5,7 +5,10 @@ import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import openNode from './openNode'
 
 export default ({ node, store }) => {
-  if (!node.url) throw new Error('passed node has no url')
+  if (!node.url) {
+    return console.log('passsed node has no url:', node)
+    //throw new Error('passed node has no url')
+  }
   const { openNodes, activeNodeArray, setActiveNodeArray } = store.tree
 
   const newActiveNodeArray = [...node.url]
