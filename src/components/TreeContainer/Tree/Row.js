@@ -9,8 +9,9 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
-import allChildrenAreOpen from '../allChildrenAreOpen'
 import someChildrenAreOpen from '../someChildrenAreOpen'
+import someChildrenAreClosed from '../someChildrenAreClosed'
+import openAllChildren from '../openAllChildren'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
@@ -226,6 +227,9 @@ const Row = ({ style, node }) => {
   const onClickDelete = useCallback(() => {
     deleteDataset({ node, store, client })
   }, [node, openNodes, activeNodeArray])
+  const onClickOpenAllChildren = useCallback(() => {
+    openAllChildren({ node, openNodes, store })
+  }, [node, openNodes, activeNodeArray])
 
   return (
     <Container style={style}>
@@ -284,8 +288,8 @@ const Row = ({ style, node }) => {
                     alle schliessen
                   </MenuItem>
                 )}
-              {!allChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
-                <MenuItem onClick={() => console.log('TODO')}>
+              {someChildrenAreClosed({ nodes, openNodes, url: node.url }) && (
+                <MenuItem onClick={onClickOpenAllChildren}>
                   alle öffnen
                 </MenuItem>
               )}
