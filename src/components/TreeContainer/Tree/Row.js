@@ -280,14 +280,13 @@ const Row = ({ style, node }) => {
           {node.nodeType === 'table' && (
             <MenuItem onClick={onClickDelete}>löschen</MenuItem>
           )}
-          {node.nodeType === 'folder' && (
+          {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
-              {isNodeOpen(openNodes, node.url) &&
-                someChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
-                  <MenuItem onClick={() => console.log('TODO')}>
-                    alle schliessen
-                  </MenuItem>
-                )}
+              {someChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
+                <MenuItem onClick={() => console.log('TODO')}>
+                  alle schliessen
+                </MenuItem>
+              )}
               {someChildrenAreClosed({ nodes, openNodes, url: node.url }) && (
                 <MenuItem onClick={onClickOpenAllChildren}>
                   alle öffnen
