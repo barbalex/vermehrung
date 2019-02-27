@@ -3,9 +3,6 @@
   "description": "breeding endangered plant species",
   "license": "MIT",
   "scripts": {
-    "build_comment_1": "copy public to docs so github pages update",
-    "build_comment_2": "copy CNAME file to docs or custom domain may be lost",
-    "build_comment_3": "use cross plattform tools for everything so it works on windows and mac",
     "dev": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby develop",
     "build": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby build",
     "postbuild": "copyfiles now.json public",
