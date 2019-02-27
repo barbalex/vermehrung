@@ -616,11 +616,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildKulturLieferungAnLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildKulturLieferungAnLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -630,78 +632,96 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildKulturLieferungAusLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildKulturLieferungAusLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Events') {
       nodes = [
         ...nodes,
-        ...buildKulturEventEvent({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildKulturEventEvent({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
       nodes = [
         ...nodes,
-        ...buildKulturInventarInventar({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildKulturInventarInventar({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
 
     if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
       nodes = [
         ...nodes,
-        ...buildArtKulturZaehlungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildArtKulturAusLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildArtKulturAnLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildArtKulturEventFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildArtKulturInventarFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildArtKulturZaehlungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildArtKulturAusLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildArtKulturAnLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildArtKulturEventFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildArtKulturInventarFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
       ]
     }
     if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
       nodes = [
         ...nodes,
-        ...buildArtSammlungAusLieferungFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildArtSammlungAusLieferungFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
     if (url.length === 4 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
