@@ -1013,11 +1013,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildArtSammlungLieferungAusLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtSammlungLieferungAusLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1028,11 +1030,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildHerkunftSammlungausLieferungLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildHerkunftSammlungausLieferungLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1043,11 +1047,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturKultur({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturKultur({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
 
@@ -1059,31 +1065,41 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturZaehlungFolder({
-          nodes,
-          data,
-          url,
-        }),
-        ...buildPersonGartenKulturInventarFolder({
-          nodes,
-          data,
-          url,
-        }),
-        ...buildPersonGartenKulturEventFolder({
-          nodes,
-          data,
-          url,
-        }),
-        ...buildPersonGartenKulturAuslieferungFolder({
-          nodes,
-          data,
-          url,
-        }),
-        ...buildPersonGartenKulturAnlieferungFolder({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturZaehlungFolder({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturInventarFolder({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturEventFolder({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturAuslieferungFolder({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturAnlieferungFolder({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1094,36 +1110,46 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturZaehlungFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
-        ...buildSammlungAusLieferungKulturInventarFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
-        ...buildSammlungAusLieferungKulturEventFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
-        ...buildSammlungAusLieferungKulturAusLieferungFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
-        ...buildSammlungAusLieferungKulturAnLieferungFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturZaehlungFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturInventarFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturEventFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturAusLieferungFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturAnLieferungFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
 
