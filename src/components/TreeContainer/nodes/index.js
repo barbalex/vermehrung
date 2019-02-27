@@ -1,3 +1,5 @@
+import memoizeOne from 'memoize-one'
+
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
@@ -118,14 +120,14 @@ export default ({ store, data, loading }) => {
   let artArtNodes
 
   let nodes = [
-    ...buildArtFolder({ data, loading }),
-    ...buildGartenFolder({ data, loading }),
-    ...buildHerkunftFolder({ data, loading }),
-    ...buildLieferungFolder({ data, loading }),
-    ...buildPersonFolder({ data, loading }),
-    ...buildSammlungFolder({ data, loading }),
-    ...buildKulturFolder({ data, loading }),
-    ...buildWerteListenFolder({ data, loading }),
+    ...memoizeOne(() => buildArtFolder({ data, loading }))(),
+    ...memoizeOne(() => buildGartenFolder({ data, loading }))(),
+    ...memoizeOne(() => buildHerkunftFolder({ data, loading }))(),
+    ...memoizeOne(() => buildLieferungFolder({ data, loading }))(),
+    ...memoizeOne(() => buildPersonFolder({ data, loading }))(),
+    ...memoizeOne(() => buildSammlungFolder({ data, loading }))(),
+    ...memoizeOne(() => buildKulturFolder({ data, loading }))(),
+    ...memoizeOne(() => buildWerteListenFolder({ data, loading }))(),
   ]
 
   /**
@@ -140,94 +142,118 @@ export default ({ store, data, loading }) => {
   openNodes.forEach(url => {
     if (!allParentNodesAreOpen(openNodes, url)) return
     if (url.length === 1 && url[0] === 'Arten') {
-      artArtNodes = buildArtArt({
-        nodes,
-        data,
-      })
+      artArtNodes = memoizeOne(() =>
+        buildArtArt({
+          nodes,
+          data,
+        }),
+      )()
       nodes = [...nodes, ...artArtNodes]
     }
     if (url.length === 1 && url[0] === 'Gaerten') {
       nodes = [
         ...nodes,
-        ...buildGartenGarten({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildGartenGarten({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (url.length === 1 && url[0] === 'Herkuenfte') {
       nodes = [
         ...nodes,
-        ...buildHerkunftHerkunft({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildHerkunftHerkunft({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (url.length === 1 && url[0] === 'Lieferungen') {
       nodes = [
         ...nodes,
-        ...buildLieferungLieferung({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildLieferungLieferung({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (url.length === 1 && url[0] === 'Personen') {
       nodes = [
         ...nodes,
-        ...buildPersonPerson({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildPersonPerson({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (url.length === 1 && url[0] === 'Sammlungen') {
       nodes = [
         ...nodes,
-        ...buildSammlungSammlung({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungSammlung({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (url.length === 1 && url[0] === 'Kulturen') {
       nodes = [
         ...nodes,
-        ...buildKulturKultur({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildKulturKultur({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (url.length === 1 && url[0] === 'Werte-Listen') {
       nodes = [
         ...nodes,
-        ...buildWLMasseinheitFolder({
-          data,
-          loading,
-          nodes,
-        }),
-        ...buildWLZaehleinheitFolder({
-          data,
-          loading,
-          nodes,
-        }),
-        ...buildWLLieferungTypFolder({
-          data,
-          loading,
-          nodes,
-        }),
-        ...buildWLLieferungStatusFolder({
-          data,
-          loading,
-          nodes,
-        }),
-        ...buildWLLieferungZwischenlagerFolder({
-          data,
-          loading,
-          nodes,
-        }),
+        ...memoizeOne(() =>
+          buildWLMasseinheitFolder({
+            data,
+            loading,
+            nodes,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildWLZaehleinheitFolder({
+            data,
+            loading,
+            nodes,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildWLLieferungTypFolder({
+            data,
+            loading,
+            nodes,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildWLLieferungStatusFolder({
+            data,
+            loading,
+            nodes,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildWLLieferungZwischenlagerFolder({
+            data,
+            loading,
+            nodes,
+          }),
+        )(),
       ]
     }
 
