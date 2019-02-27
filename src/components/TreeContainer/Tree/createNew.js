@@ -78,7 +78,7 @@ export default async ({ node, store, client }) => {
       mutation,
     })
   } catch (error) {
-    return console.log('Error deleting dataset', error.message)
+    return console.log('Error inserting dataset', error.message)
   }
   const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
   if (newObject && newObject.id) {
