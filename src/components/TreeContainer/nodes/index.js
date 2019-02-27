@@ -727,36 +727,46 @@ export default ({ store, data, loading }) => {
     if (url.length === 4 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
       nodes = [
         ...nodes,
-        ...buildGartenKulturZaehlungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildGartenKulturAusLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildGartenKulturAnLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildGartenKulturEventFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildGartenKulturInventarFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKulturZaehlungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildGartenKulturAusLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildGartenKulturAnLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildGartenKulturEventFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildGartenKulturInventarFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
       ]
     }
     if (
@@ -766,23 +776,27 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildHerkunftSammlungAusLieferungFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildHerkunftSammlungAusLieferungFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
     if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Gaerten') {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
     if (
@@ -792,12 +806,14 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturFolder({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturFolder({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
 
@@ -809,11 +825,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildArtKulturZaehlungZaehlung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtKulturZaehlungZaehlung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -824,11 +842,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturKultur({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturKultur({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -839,11 +859,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildArtKulturInventarInventar({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtKulturInventarInventar({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -854,11 +876,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildArtKulturLieferungAusLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtKulturLieferungAusLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -869,11 +893,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildArtKulturLieferungAnLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtKulturLieferungAnLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -884,11 +910,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildArtKulturEventEvent({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtKulturEventEvent({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
 
@@ -900,11 +928,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildGartenKulturZaehlungZaehlung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKulturZaehlungZaehlung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -915,11 +945,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildGartenKulturInventarInventar({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKulturInventarInventar({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -930,11 +962,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildGartenKulturLieferungAusLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKulturLieferungAusLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -945,11 +979,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildGartenKulturLieferungAnLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKulturLieferungAnLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -960,11 +996,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildGartenKulturEventEvent({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKulturEventEvent({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
