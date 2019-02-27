@@ -466,43 +466,51 @@ export default ({ store, data, loading }) => {
     if (url.length === 2 && url[0] === 'Herkuenfte') {
       nodes = [
         ...nodes,
-        ...buildHerkunftSammlungFolder({
-          nodes,
-          data,
-          loading,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildHerkunftSammlungFolder({
+            nodes,
+            data,
+            loading,
+            url,
+          }),
+        )(),
       ]
     }
 
     if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
       nodes = [
         ...nodes,
-        ...buildArtKultur({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtKultur({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
       nodes = [
         ...nodes,
-        ...buildArtSammlung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildArtSammlung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
       nodes = [
         ...nodes,
-        ...buildGartenKultur({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKultur({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -512,41 +520,49 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildHerkunftSammlungSammlung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildHerkunftSammlungSammlung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Gaerten') {
       nodes = [
         ...nodes,
-        ...buildPersonGartenGarten({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenGarten({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Sammlungen') {
       nodes = [
         ...nodes,
-        ...buildPersonGartenSammlungSammlung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenSammlungSammlung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
       nodes = [
         ...nodes,
-        ...buildPersonGartenLieferungLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenLieferungLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -556,11 +572,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungHerkunftHerkunft({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungHerkunftHerkunft({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -570,21 +588,25 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
       nodes = [
         ...nodes,
-        ...buildKulturZaehlungZaehlung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildKulturZaehlungZaehlung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
