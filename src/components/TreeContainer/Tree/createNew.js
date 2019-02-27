@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import { navigate } from 'gatsby'
 import get from 'lodash/get'
+import last from 'lodash/last'
 import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
@@ -57,11 +58,16 @@ export default async ({ node, store, client }) => {
     if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
     // TODO: need to get art_id from kultur and set it
   }
+  if (table === 'lieferung' && parentTable === 'sammlung') {
+    // need to choose von_kultur_id or nach_kultur_id
+    if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
+    // TODO: need to get art_id from sammlung and set it
+  }
   let object = `{}`
   if (fkExists) object = `{ ${fkName}: ${parentId} }`
   let returning = '{ id }'
   if (fkExists) returning = `{ id, ${fkName} }`
-  console.log('createNew', {
+  /*console.log('createNew', {
     fkExists,
     fkName,
     parentId,
@@ -69,7 +75,8 @@ export default async ({ node, store, client }) => {
     parentTable,
     node,
     nodeUrl: getSnapshot(url),
-  })
+    activeNodeArray: activeNodeArray.slice(),
+  })*/
   // add new dataset to table
   const mutation = gql`
     mutation insertDataset {
@@ -87,13 +94,14 @@ export default async ({ node, store, client }) => {
     return console.log('Error inserting dataset', error.message)
   }
   const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
-  console.log('createNew', { newObject })
   if (newObject && newObject.id) {
-    const newActiveNodeArray = [
-      ...activeNodeArray /*.slice(0, -1)*/,
-      newObject.id,
-    ]
-    console.log('createNew', { newActiveNodeArray })
+    let newActiveNodeArray
+    // slice if last is number
+    if (isNaN(last(activeNodeArray.slice()))) {
+      newActiveNodeArray = [...activeNodeArray, newObject.id]
+    } else {
+      newActiveNodeArray = [...activeNodeArray.slice(0, -1), newObject.id]
+    }
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setActiveNodeArray(newActiveNodeArray)
     refetch()
