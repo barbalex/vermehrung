@@ -260,105 +260,131 @@ export default ({ store, data, loading }) => {
     if (url.length === 2 && url[0] === 'Arten') {
       nodes = [
         ...nodes,
-        ...buildArtSammlungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildArtKulturFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildArtSammlungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildArtKulturFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
       ]
     }
     if (url.length === 2 && url[0] === 'Gaerten') {
       nodes = [
         ...nodes,
-        ...buildGartenKulturFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildGartenKulturFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
       ]
     }
     if (url.length === 2 && url[0] === 'Personen') {
       nodes = [
         ...nodes,
-        ...buildPersonGartenFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildPersonGartenSammlungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildPersonGartenLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildPersonGartenSammlungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildPersonGartenLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
       ]
     }
     if (url.length === 2 && url[0] === 'Sammlungen') {
       nodes = [
         ...nodes,
-        ...buildSammlungHerkunftFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildSammlungAusLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungHerkunftFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
         // TODO: build SammlungKulturFolder
       ]
     }
     if (url.length === 2 && url[0] === 'Kulturen') {
       nodes = [
         ...nodes,
-        ...buildKulturZaehlungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildKulturAnLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildKulturAusLieferungFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildKulturEventFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
-        ...buildKulturInventarFolder({
-          nodes,
-          url,
-          data,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildKulturZaehlungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildKulturAnLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildKulturAusLieferungFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildKulturEventFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildKulturInventarFolder({
+            nodes,
+            url,
+            data,
+            loading,
+          }),
+        )(),
       ]
     }
 
@@ -369,10 +395,12 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildWLZaehleinheitZaehleinheit({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildWLZaehleinheitZaehleinheit({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (
@@ -382,10 +410,12 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildWLLieferungStatusStatus({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildWLLieferungStatusStatus({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (
@@ -395,10 +425,12 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildWLLieferungTypTyp({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildWLLieferungTypTyp({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (
@@ -408,10 +440,12 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildWLLieferungZwischenlagerZwischenlager({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildWLLieferungZwischenlagerZwischenlager({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (
@@ -421,10 +455,12 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildWLMasseinheitMasseinheit({
-          nodes,
-          data,
-        }),
+        ...memoizeOne(() =>
+          buildWLMasseinheitMasseinheit({
+            nodes,
+            data,
+          }),
+        )(),
       ]
     }
     if (url.length === 2 && url[0] === 'Herkuenfte') {
