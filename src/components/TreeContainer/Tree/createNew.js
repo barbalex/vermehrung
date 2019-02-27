@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { navigate } from 'gatsby'
 import get from 'lodash/get'
-//import { getSnapshot } from 'mobx-state-tree'
+import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 
@@ -51,11 +51,17 @@ export default async ({ node, store, client }) => {
   // foreign key to parent should exist if parentTable and it's id exist
   fkExists = !!parentId && !!parentTable
   if (fkExists) fkName = `${parentTable}_id`
+  if (table === 'lieferung' && parentTable === 'kultur') {
+    // TODO:
+    // need to choose von_kultur_id or nach_kultur_id
+    if (tableTitle === 'Aus-Lieferungen') fkName = `nach_${parentTable}_id`
+    if (tableTitle === 'An-Lieferungen') fkName = `von_${parentTable}_id`
+  }
   let object = `{}`
   if (fkExists) object = `{ ${fkName}: ${parentId} }`
   let returning = '{ id }'
   if (fkExists) returning = `{ id, ${fkName} }`
-  /*console.log('createNew', {
+  console.log('createNew', {
     fkExists,
     fkName,
     parentId,
@@ -63,7 +69,7 @@ export default async ({ node, store, client }) => {
     parentTable,
     node,
     nodeUrl: getSnapshot(url),
-  })*/
+  })
   // add new dataset to table
   const mutation = gql`
     mutation insertDataset {
