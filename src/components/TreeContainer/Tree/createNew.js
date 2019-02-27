@@ -2,7 +2,6 @@ import gql from 'graphql-tag'
 import { navigate } from 'gatsby'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 
