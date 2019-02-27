@@ -1162,11 +1162,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturZaehlungZaehlung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturZaehlungZaehlung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1178,11 +1180,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturInventarInventar({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturInventarInventar({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1194,11 +1198,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturEventEvent({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturEventEvent({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1210,11 +1216,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturAuslieferungLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturAuslieferungLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1226,11 +1234,13 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildPersonGartenKulturAnlieferungLieferung({
-          nodes,
-          data,
-          url,
-        }),
+        ...memoizeOne(() =>
+          buildPersonGartenKulturAnlieferungLieferung({
+            nodes,
+            data,
+            url,
+          }),
+        )(),
       ]
     }
     if (
@@ -1242,12 +1252,14 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturZaehlungZaehlung({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturZaehlungZaehlung({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
     if (
@@ -1259,12 +1271,14 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturInventarInventar({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturInventarInventar({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
     if (
@@ -1276,12 +1290,14 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturEventEvent({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturEventEvent({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
     if (
@@ -1293,12 +1309,14 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturAusLieferungLieferung({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturAusLieferungLieferung({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
     if (
@@ -1310,12 +1328,14 @@ export default ({ store, data, loading }) => {
     ) {
       nodes = [
         ...nodes,
-        ...buildSammlungAusLieferungKulturAnLieferungLieferung({
-          nodes,
-          data,
-          url,
-          loading,
-        }),
+        ...memoizeOne(() =>
+          buildSammlungAusLieferungKulturAnLieferungLieferung({
+            nodes,
+            data,
+            url,
+            loading,
+          }),
+        )(),
       ]
     }
   })
