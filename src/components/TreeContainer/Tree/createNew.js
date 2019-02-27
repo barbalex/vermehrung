@@ -52,10 +52,10 @@ export default async ({ node, store, client }) => {
   fkExists = !!parentId && !!parentTable
   if (fkExists) fkName = `${parentTable}_id`
   if (table === 'lieferung' && parentTable === 'kultur') {
-    // TODO:
     // need to choose von_kultur_id or nach_kultur_id
-    if (tableTitle === 'Aus-Lieferungen') fkName = `nach_${parentTable}_id`
-    if (tableTitle === 'An-Lieferungen') fkName = `von_${parentTable}_id`
+    if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
+    if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
+    // TODO: need to get art_id from kultur and set it
   }
   let object = `{}`
   if (fkExists) object = `{ ${fkName}: ${parentId} }`
@@ -87,8 +87,13 @@ export default async ({ node, store, client }) => {
     return console.log('Error inserting dataset', error.message)
   }
   const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
+  console.log('createNew', { newObject })
   if (newObject && newObject.id) {
-    const newActiveNodeArray = [...activeNodeArray.slice(0, -1), newObject.id]
+    const newActiveNodeArray = [
+      ...activeNodeArray /*.slice(0, -1)*/,
+      newObject.id,
+    ]
+    console.log('createNew', { newActiveNodeArray })
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setActiveNodeArray(newActiveNodeArray)
     refetch()

@@ -36,7 +36,7 @@ export default ({ nodes, data, url }) => {
           id: `kultur${kulturId}Lieferung${el.id}`,
           parentId: `kultur${kulturId}AusLieferungFolder`,
           label,
-          url: ['Kulturen', kulturId, 'Lieferungen', el.id],
+          url: ['Kulturen', kulturId, 'Aus-Lieferungen', el.id],
           hasChildren: false,
         }
       })
