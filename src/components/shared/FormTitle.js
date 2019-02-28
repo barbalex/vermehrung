@@ -49,6 +49,7 @@ const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
   const store = useContext(storeContext)
   const { isFiltered, show, setShow, empty } = store.filter
   const onClickFilter = useCallback(() => setShow(true))
+  const onClickEmpty = useCallback(() => empty())
 
   return (
     <Container>
@@ -68,8 +69,8 @@ const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
               <MdFilterList />
             </StyledIconButton>
           )}
-          {isFiltered && (
-            <StyledIconButton title="Filter entfernen" onClick={empty}>
+          {isFiltered() && (
+            <StyledIconButton title="Filter entfernen" onClick={onClickEmpty}>
               <MdDeleteSweep />
             </StyledIconButton>
           )}

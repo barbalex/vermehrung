@@ -32,7 +32,9 @@ export default types
     },
     empty() {
       // maybe loop all keys and set values?
-      self = initialValues
+      Object.keys(self)
+        .filter(k => k !== 'show')
+        .forEach(key => (self[key] = initialValues[key]))
     },
     emptyTable({ table }) {
       self[table] = initialValues[table]
