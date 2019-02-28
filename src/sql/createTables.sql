@@ -132,9 +132,9 @@ create table kultur_event (
   changed date default now(),
   changed_by varchar(20) default null
 );
-create index on zaehlung using btree (id);
-create index on zaehlung using btree (kultur_id);
-create index on zaehlung using btree (datum);
+create index on kultur_event using btree (id);
+create index on kultur_event using btree (kultur_id);
+create index on kultur_event using btree (datum);
 
 drop table if exists kultur_inventar cascade;
 create table kultur_inventar (
@@ -155,9 +155,9 @@ create table kultur_inventar (
   changed date default now(),
   changed_by varchar(20) default null
 );
-create index on zaehlung using btree (id);
-create index on zaehlung using btree (kultur_id);
-create index on zaehlung using btree (datum);
+create index on kultur_inventar using btree (id);
+create index on kultur_inventar using btree (kultur_id);
+create index on kultur_inventar using btree (datum);
 
 drop table if exists zaehlung cascade;
 create table zaehlung (
