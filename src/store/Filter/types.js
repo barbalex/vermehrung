@@ -42,7 +42,7 @@ export default types
         Object.values(self[table] || []).filter(v => v || v === 0).length > 0
       )
     },
-    ifFiltered() {
+    isFiltered() {
       const tables = Object.keys(self).filter(t => t !== 'activeTable')
       return tables.some(table => self.tableIsFiltered({ table }))
     },
