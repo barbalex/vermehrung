@@ -14,7 +14,7 @@ import initialValues from './initialValues'
 
 export default types
   .model({
-    activeTable: types.optional(types.maybeNull(types.string), null),
+    show: types.optional(types.boolean, false),
     art,
     event,
     garten,
@@ -43,7 +43,7 @@ export default types
       )
     },
     isFiltered() {
-      const tables = Object.keys(self).filter(t => t !== 'activeTable')
+      const tables = Object.keys(self).filter(t => t !== 'show')
       return tables.some(table => self.tableIsFiltered({ table }))
     },
   }))

@@ -1,0 +1,33 @@
+import types from '../store/Filter/simpleTypes'
+
+export default ({ rows, filter, table }) => {
+  const nodeFilterArray = Object.entries(filter[table]).filter(
+    ([key, value]) => value || value === 0 || value === false,
+  )
+
+  return rows.filter(row => {
+    if (nodeFilterArray.length === 0) return true
+    let type = 'string'
+    return nodeFilterArray.every(([key, value]) => {
+      if (row[key] === null || row[key] === undefined) return false
+      if (table && types[table] && types[table][key]) {
+        type = types[table][key]
+      }
+      if (['number', 'uuid', 'boolean'].includes(type)) {
+        // eslint-disable-next-line eqeqeq
+        return row[key] == value
+      }
+      // must be string or date
+      /**
+       * 16.2.2019:
+       * toLowerCase is obviously ignored
+       * !!!!!!???????
+       * filter in abies alba fro pop name züri to test
+       */
+      return row[key]
+        .toString()
+        .toLowerCase()
+        .includes(value.toString().toLowerCase())
+    })
+  })
+}

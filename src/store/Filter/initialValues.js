@@ -10,7 +10,7 @@ import { initial as sammlung } from './sammlung'
 import { initial as zaehlung } from './zaehlung'
 
 export default {
-  activeTable: null,
+  show: false,
   art,
   event,
   garten,

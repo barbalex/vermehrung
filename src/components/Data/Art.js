@@ -12,6 +12,7 @@ import Select from '../shared/Select'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -26,8 +27,12 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: Int!) {
+  query ArtQuery($id: Int!, $showFilter: Boolean!) {
     art(where: { id: { _eq: $id } }) {
+      id
+      ae_id
+    }
+    rows: art @include(if: $showFilter) {
       id
       ae_id
     }
@@ -41,16 +46,29 @@ const query = gql`
 const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
   const { activeNodeArray, refetch } = store.tree
   const artId = last(activeNodeArray.filter(e => !isNaN(e)))
+  const showFilter = filter.show
+
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id: artId },
+    variables: { id: artId, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'art', [{}])[0]
+  let row
+  let rows
+  let rowsFiltered
+  if (showFilter) {
+    row = filter.art
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = filterNodes({ rows, filter, table: 'art' })
+  } else {
+    row = get(data, 'art', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
