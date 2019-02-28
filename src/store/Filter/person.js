@@ -26,23 +26,23 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  telefonPrivat: types.optional(
+  telefon_privat: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  telefonGeschaeft: types.optional(
+  telefon_geschaeft: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  telefonMobile: types.optional(
+  telefon_mobile: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  faxPrivat: types.optional(
+  fax_privat: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  faxGeschaeft: types.optional(
+  fax_geschaeft: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -50,7 +50,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  keinEmail: types.optional(types.maybeNull(types.boolean), null),
+  kein_email: types.optional(types.maybeNull(types.boolean), null),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -69,13 +69,13 @@ export const initial = {
   strasse: null,
   plz: null,
   ort: null,
-  telefonPrivat: null,
-  telefonGeschaeft: null,
-  telefonMobile: null,
-  faxPrivat: null,
-  faxGeschaeft: null,
+  telefon_privat: null,
+  telefon_geschaeft: null,
+  telefon_mobile: null,
+  fax_privat: null,
+  fax_geschaeft: null,
   email: null,
-  keinEmail: null,
+  kein_email: null,
   bemerkungen: null,
   userId: null,
 }
@@ -88,13 +88,13 @@ export const simpleTypes = {
   strasse: 'string',
   plz: 'number',
   ort: 'string',
-  telefonPrivat: 'string',
-  telefonGeschaeft: 'string',
-  telefonMobile: 'string',
-  faxPrivat: 'string',
-  faxGeschaeft: 'string',
+  telefon_privat: 'string',
+  telefon_geschaeft: 'string',
+  telefon_mobile: 'string',
+  fax_privat: 'string',
+  fax_geschaeft: 'string',
   email: 'string',
-  keinEmail: 'boolean',
+  kein_email: 'boolean',
   bemerkungen: 'string',
   userId: 'string',
 }

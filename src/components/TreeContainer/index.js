@@ -103,7 +103,7 @@ const TreeContainer = ({ dimensions }) => {
      * if the following console.log is not here,
      * url in nodes is undefined!!!!????
      */
-    console.log('TreeContainer, setting nodes')
+    //console.log('TreeContainer, setting nodes')
     setNodes(buildNodes({ store, data, loading }))
   }
 

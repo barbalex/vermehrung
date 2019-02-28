@@ -5,7 +5,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kulturId: types.optional(
+  kultur_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -21,14 +21,14 @@ export const type = types.model({
 
 export const initial = {
   id: null,
-  kulturId: null,
+  kultur_id: null,
   datum: null,
   event: null,
 }
 
 export const simpleTypes = {
   id: 'number',
-  kulturId: 'uuid',
+  kultur_id: 'uuid',
   datum: 'string',
   event: 'string',
 }

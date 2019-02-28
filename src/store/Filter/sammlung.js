@@ -5,15 +5,15 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  artId: types.optional(
+  art_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  personId: types.optional(
+  person_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  herkunftId: types.optional(
+  herkunft_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -25,7 +25,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  vonAnzahlIndividuen: types.optional(types.maybeNull(types.number), null),
+  von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
   zaehleinheit: types.optional(types.maybeNull(types.number), null),
   menge: types.optional(types.maybeNull(types.number), null),
   masseinheit: types.optional(types.maybeNull(types.number), null),
@@ -37,12 +37,12 @@ export const type = types.model({
 
 export const initial = {
   id: null,
-  artId: null,
-  personId: null,
-  herkunftId: null,
+  art_id: null,
+  person_id: null,
+  herkunft_id: null,
   nr: null,
   datum: null,
-  vonAnzahlIndividuen: null,
+  von_anzahl_individuen: null,
   zaehleinheit: null,
   menge: null,
   masseinheit: null,
@@ -51,12 +51,12 @@ export const initial = {
 
 export const simpleTypes = {
   id: 'number',
-  artId: 'string',
-  personId: 'string',
-  herkunftId: 'string',
+  art_id: 'string',
+  person_id: 'string',
+  herkunft_id: 'string',
   nr: 'string',
   datum: 'string',
-  vonAnzahlIndividuen: 'number',
+  von_anzahl_individuen: 'number',
   zaehleinheit: 'number',
   menge: 'number',
   masseinheit: 'number',

@@ -31,11 +31,12 @@ const Symbols = styled.div`
   padding-right: 5px;
 `
 const FilterNumbers = styled.div`
-  padding-top: 11px;
   padding-right: 8px;
   cursor: default;
   user-select: none;
   padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
 `
 const StyledIconButton = styled(IconButton)`
   cursor: pointer;
