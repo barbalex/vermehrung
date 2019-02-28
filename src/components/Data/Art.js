@@ -87,7 +87,6 @@ const Art = () => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
       if (filter.show) {
-        console.log('Art, saveToDb', { field, value })
         filter.setValue({ table: 'art', key: field, value })
       } else {
         try {
