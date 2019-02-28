@@ -8,9 +8,17 @@ export default ({ url, nodes, data, loading, store }) => {
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
 
-  const gaerten = get(data, 'garten', [])
+  const gaerten = filterNodes({
+    rows: get(data, 'garten', []),
+    filter: store.filter,
+    table: 'garten',
+  })
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = filterNodes({
+    rows: get(garten, 'kultursBygartenId', []),
+    filter: store.filter,
+    table: 'kultur',
+  })
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   // only return if parent exists

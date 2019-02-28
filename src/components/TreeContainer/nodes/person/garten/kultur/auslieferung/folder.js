@@ -7,13 +7,29 @@ export default ({ url, nodes, data, loading, store }) => {
   const personId = url[1]
   const gartenId = url[3]
   const kulturId = url[5]
-  const personen = get(data, 'person', [])
+  const personen = filterNodes({
+    rows: get(data, 'person', []),
+    filter: store.filter,
+    table: 'person',
+  })
   const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartensBypersonId', [])
+  const gaerten = filterNodes({
+    rows: get(person, 'gartensBypersonId', []),
+    filter: store.filter,
+    table: 'garten',
+  })
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = filterNodes({
+    rows: get(garten, 'kultursBygartenId', []),
+    filter: store.filter,
+    table: 'kultur',
+  })
   const kultur = kulturen.find(k => k.id === kulturId)
-  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
+  const auslieferungen = filterNodes({
+    rows: get(kultur, 'lieferungsByvonKulturId', []),
+    filter: store.filter,
+    table: 'lieferung',
+  })
   const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

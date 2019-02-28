@@ -6,7 +6,11 @@ import filterNodes from '../../../../../utils/filterNodes'
 export default ({ data, loading, url, nodes, store }) => {
   const sammlungId = url[1]
 
-  const sammlungen = get(data, 'sammlung', [])
+  const sammlungen = filterNodes({
+    rows: get(data, 'sammlung', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const herkunft = get(sammlung, 'herkunftByherkunftId')
   const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0

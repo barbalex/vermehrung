@@ -20,11 +20,23 @@ export default ({ url, nodes, data, loading, store }) => {
     n => n.id === `herkunft${herkunftId}Sammlung${sammlungId}`,
   )
 
-  const herkuenfte = get(data, 'herkunft', [])
+  const herkuenfte = filterNodes({
+    rows: get(data, 'herkunft', []),
+    filter: store.filter,
+    table: 'herkunft',
+  })
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
+  const sammlungen = filterNodes({
+    rows: get(herkunft, 'sammlungsByherkunftId', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = filterNodes({
+    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
+    filter: store.filter,
+    table: 'lieferung',
+  })
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   // only return if parent exists

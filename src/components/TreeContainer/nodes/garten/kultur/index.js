@@ -6,9 +6,17 @@ import filterNodes from '../../../../../utils/filterNodes'
 
 export default ({ nodes, data, url, store }) => {
   const gartenId = url[1]
-  const gaerten = get(data, 'garten', [])
+  const gaerten = filterNodes({
+    rows: get(data, 'garten', []),
+    filter: store.filter,
+    table: 'garten',
+  })
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = filterNodes({
+    rows: get(garten, 'kultursBygartenId', []),
+    filter: store.filter,
+    table: 'kultur',
+  })
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex =

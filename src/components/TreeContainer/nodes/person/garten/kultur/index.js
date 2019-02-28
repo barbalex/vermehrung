@@ -8,11 +8,23 @@ export default ({ nodes, data, url, store }) => {
   const personId = url[1]
   const gartenId = url[3]
 
-  const personen = get(data, 'person', [])
+  const personen = filterNodes({
+    rows: get(data, 'person', []),
+    filter: store.filter,
+    table: 'person',
+  })
   const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartensBypersonId', [])
+  const gaerten = filterNodes({
+    rows: get(person, 'gartensBypersonId', []),
+    filter: store.filter,
+    table: 'garten',
+  })
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = filterNodes({
+    rows: get(garten, 'kultursBygartenId', []),
+    filter: store.filter,
+    table: 'kultur',
+  })
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)

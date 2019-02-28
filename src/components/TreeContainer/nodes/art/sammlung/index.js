@@ -6,14 +6,22 @@ import filterNodes from '../../../../../utils/filterNodes'
 
 export default ({ nodes, data, url, store }) => {
   const artId = url[1]
-  const arten = get(data, 'art', [])
+  const arten = filterNodes({
+    rows: get(data, 'art', []),
+    filter: store.filter,
+    table: 'art',
+  })
   const art = arten.find(a => a.id === artId)
   const sammlungen = get(art, 'sammlungsByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`) || 0
 
   return (
-    sammlungen
+    filterNodes({
+      rows: sammlungen,
+      filter: store.filter,
+      table: 'sammlung',
+    })
       // only show if parent node exists
       .filter(() => nodes.map(n => n.id).includes(`art${artId}SammlungFolder`))
       .map(el => ({

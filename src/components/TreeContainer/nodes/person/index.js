@@ -4,7 +4,11 @@ import compareLabel from '../compareLabel'
 import filterNodes from '../../../../utils/filterNodes'
 
 export default ({ nodes, data, store }) => {
-  const personen = get(data, 'person', [])
+  const personen = filterNodes({
+    rows: get(data, 'person', []),
+    filter: store.filter,
+    table: 'person',
+  })
 
   return (
     personen

@@ -8,9 +8,17 @@ export default ({ url, nodes, data, loading, store }) => {
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
 
-  const arten = get(data, 'art', [])
+  const arten = filterNodes({
+    rows: get(data, 'art', []),
+    filter: store.filter,
+    table: 'art',
+  })
   const art = arten.find(a => a.id === artId)
-  const sammlungen = get(art, 'sammlungsByartId', [])
+  const sammlungen = filterNodes({
+    rows: get(art, 'sammlungsByartId', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   // only return if parent exists

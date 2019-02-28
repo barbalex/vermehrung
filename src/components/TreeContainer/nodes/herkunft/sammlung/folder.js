@@ -12,9 +12,17 @@ export default ({ url, nodes, data, loading, store }) => {
     n => n.id === `herkunft${herkunftId}`,
   )
 
-  const herkuenfte = get(data, 'herkunft', [])
+  const herkuenfte = filterNodes({
+    rows: get(data, 'herkunft', []),
+    filter: store.filter,
+    table: 'herkunft',
+  })
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
+  const sammlungen = filterNodes({
+    rows: get(herkunft, 'sammlungsByherkunftId', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   // only return if parent exists

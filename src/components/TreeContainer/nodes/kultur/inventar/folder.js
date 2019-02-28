@@ -5,9 +5,17 @@ import filterNodes from '../../../../../utils/filterNodes'
 
 export default ({ url, nodes, data, loading, store }) => {
   const kulturId = url[1]
-  const kulturen = get(data, 'kultur', [])
+  const kulturen = filterNodes({
+    rows: get(data, 'kultur', []),
+    filter: store.filter,
+    table: 'kultur',
+  })
   const kultur = kulturen.find(k => k.id === kulturId)
-  const inventare = get(kultur, 'kulturInventarsBykulturId', [])
+  const inventare = filterNodes({
+    rows: get(kultur, 'kulturInventarsBykulturId', []),
+    filter: store.filter,
+    table: 'inventar',
+  })
   const nr = loading && !inventare.length ? '...' : inventare.length
 
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)

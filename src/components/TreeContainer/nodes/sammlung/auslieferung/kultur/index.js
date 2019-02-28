@@ -7,11 +7,23 @@ import filterNodes from '../../../../../../utils/filterNodes'
 export default ({ nodes, data, url, store }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
-  const sammlungen = get(data, 'sammlung', [])
+  const sammlungen = filterNodes({
+    rows: get(data, 'sammlung', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = filterNodes({
+    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
+    filter: store.filter,
+    table: 'lieferung',
+  })
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kultur = get(lieferung, 'kulturBynachKulturId', [])
+  const kulturen = filterNodes({
+    rows: [get(lieferung, 'kulturBynachKulturId', [])],
+    filter: store.filter,
+    table: 'kultur',
+  })
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -28,7 +40,7 @@ export default ({ nodes, data, url, store }) => {
   )
 
   return (
-    [kultur]
+    kulturen
       // only show if parent node exists
       .filter(() =>
         nodes

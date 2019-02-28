@@ -7,9 +7,17 @@ import filterNodes from '../../../../../utils/filterNodes'
 export default ({ nodes, data, url, store }) => {
   const herkunftId = url[1]
 
-  const herkuenfte = get(data, 'herkunft', [])
+  const herkuenfte = filterNodes({
+    rows: get(data, 'herkunft', []),
+    filter: store.filter,
+    table: 'herkunft',
+  })
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
+  const sammlungen = filterNodes({
+    rows: get(herkunft, 'sammlungsByherkunftId', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
 
   const herkunftNodes = nodes.filter(n => n.parentId === 'herkunftFolder')
   const herkunftIndex =

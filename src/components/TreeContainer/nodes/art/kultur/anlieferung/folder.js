@@ -7,11 +7,23 @@ export default ({ url, nodes, data, loading, store }) => {
   const artId = url[1]
   const kulturId = url[3]
 
-  const arten = get(data, 'art', [])
+  const arten = filterNodes({
+    rows: get(data, 'art', []),
+    filter: store.filter,
+    table: 'art',
+  })
   const art = arten.find(a => a.id === artId)
-  const kulturen = get(art, 'kultursByartId', [])
+  const kulturen = filterNodes({
+    rows: get(art, 'kultursByartId', []),
+    filter: store.filter,
+    table: 'kultur',
+  })
   const kultur = kulturen.find(k => k.id === kulturId)
-  const anlieferungen = get(kultur, 'lieferungsBynachKulturId', [])
+  const anlieferungen = filterNodes({
+    rows: get(kultur, 'lieferungsBynachKulturId', []),
+    filter: store.filter,
+    table: 'lieferung',
+  })
   const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')

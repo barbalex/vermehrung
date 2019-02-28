@@ -6,9 +6,17 @@ import filterNodes from '../../../../../utils/filterNodes'
 
 export default ({ nodes, data, url, store }) => {
   const personId = url[1]
-  const personen = get(data, 'person', [])
+  const personen = filterNodes({
+    rows: get(data, 'person', []),
+    filter: store.filter,
+    table: 'person',
+  })
   const person = personen.find(p => p.id === personId)
-  const sammlungen = get(person, 'sammlungsBypersonId', [])
+  const sammlungen = filterNodes({
+    rows: get(person, 'sammlungsBypersonId', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)

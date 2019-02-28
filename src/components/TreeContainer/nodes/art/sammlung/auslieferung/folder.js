@@ -17,11 +17,23 @@ export default ({ url, nodes, data, loading, store }) => {
     n => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
-  const arten = get(data, 'art', [])
+  const arten = filterNodes({
+    rows: get(data, 'art', []),
+    filter: store.filter,
+    table: 'art',
+  })
   const art = arten.find(a => a.id === artId)
-  const sammlungen = get(art, 'sammlungsByartId', [])
+  const sammlungen = filterNodes({
+    rows: get(art, 'sammlungsByartId', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = filterNodes({
+    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
+    filter: store.filter,
+    table: 'lieferung',
+  })
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   // only return if parent exists

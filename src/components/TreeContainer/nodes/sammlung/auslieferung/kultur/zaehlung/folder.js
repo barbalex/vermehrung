@@ -8,12 +8,25 @@ export default ({ url, nodes, data, loading, store }) => {
   const lieferungId = url[3]
   const kulturId = url[5]
 
-  const sammlungen = get(data, 'sammlung', [])
+  const sammlungen = filterNodes({
+    rows: get(data, 'sammlung', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kultur = get(lieferung, 'kulturBynachKulturId', [])
-  const zaehlungen = get(kultur, 'zaehlungsBykulturId', [])
+  const kulturen = filterNodes({
+    rows: [get(lieferung, 'kulturBynachKulturId', [])],
+    filter: store.filter,
+    table: 'kultur',
+  })
+  const zaehlungen = filterNodes({
+    rows:
+      kulturen.length === 0 ? [] : get(kulturen[0], 'zaehlungsBykulturId', []),
+    filter: store.filter,
+    table: 'zaehlung',
+  })
   const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')

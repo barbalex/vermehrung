@@ -5,9 +5,17 @@ import filterNodes from '../../../../../utils/filterNodes'
 
 export default ({ url, nodes, data, loading, store }) => {
   const personId = url[1]
-  const personen = get(data, 'person', [])
+  const personen = filterNodes({
+    rows: get(data, 'person', []),
+    filter: store.filter,
+    table: 'person',
+  })
   const person = personen.find(p => p.id === personId)
-  const sammlungen = get(person, 'sammlungsBypersonId', [])
+  const sammlungen = filterNodes({
+    rows: get(person, 'sammlungsBypersonId', []),
+    filter: store.filter,
+    table: 'sammlung',
+  })
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
