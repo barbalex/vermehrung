@@ -59,8 +59,6 @@ const Art = () => {
 
   const [errors, setErrors] = useState({})
 
-  console.log('Art', { filterArt: filter.art })
-
   let row
   let rows = []
   let rowsFiltered = []

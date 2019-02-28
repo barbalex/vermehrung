@@ -120,14 +120,14 @@ export default ({ store, data, loading }) => {
   let artArtNodes
 
   let nodes = [
-    ...memoizeOne(() => buildArtFolder({ data, loading }))(),
-    ...memoizeOne(() => buildGartenFolder({ data, loading }))(),
-    ...memoizeOne(() => buildHerkunftFolder({ data, loading }))(),
-    ...memoizeOne(() => buildLieferungFolder({ data, loading }))(),
-    ...memoizeOne(() => buildPersonFolder({ data, loading }))(),
-    ...memoizeOne(() => buildSammlungFolder({ data, loading }))(),
-    ...memoizeOne(() => buildKulturFolder({ data, loading }))(),
-    ...memoizeOne(() => buildWerteListenFolder({ data, loading }))(),
+    ...memoizeOne(() => buildArtFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildHerkunftFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildWerteListenFolder({ data, store, loading }))(),
   ]
 
   /**
@@ -146,6 +146,7 @@ export default ({ store, data, loading }) => {
         buildArtArt({
           nodes,
           data,
+          store,
         }),
       )()
       nodes = [...nodes, ...artArtNodes]
@@ -157,6 +158,7 @@ export default ({ store, data, loading }) => {
           buildGartenGarten({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -168,6 +170,7 @@ export default ({ store, data, loading }) => {
           buildHerkunftHerkunft({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -179,6 +182,7 @@ export default ({ store, data, loading }) => {
           buildLieferungLieferung({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -190,6 +194,7 @@ export default ({ store, data, loading }) => {
           buildPersonPerson({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -201,6 +206,7 @@ export default ({ store, data, loading }) => {
           buildSammlungSammlung({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -212,6 +218,7 @@ export default ({ store, data, loading }) => {
           buildKulturKultur({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -222,6 +229,7 @@ export default ({ store, data, loading }) => {
         ...memoizeOne(() =>
           buildWLMasseinheitFolder({
             data,
+            store,
             loading,
             nodes,
           }),
@@ -229,6 +237,7 @@ export default ({ store, data, loading }) => {
         ...memoizeOne(() =>
           buildWLZaehleinheitFolder({
             data,
+            store,
             loading,
             nodes,
           }),
@@ -236,6 +245,7 @@ export default ({ store, data, loading }) => {
         ...memoizeOne(() =>
           buildWLLieferungTypFolder({
             data,
+            store,
             loading,
             nodes,
           }),
@@ -243,6 +253,7 @@ export default ({ store, data, loading }) => {
         ...memoizeOne(() =>
           buildWLLieferungStatusFolder({
             data,
+            store,
             loading,
             nodes,
           }),
@@ -250,6 +261,7 @@ export default ({ store, data, loading }) => {
         ...memoizeOne(() =>
           buildWLLieferungZwischenlagerFolder({
             data,
+            store,
             loading,
             nodes,
           }),
@@ -265,6 +277,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -273,6 +286,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -286,6 +300,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -299,6 +314,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -307,6 +323,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -315,6 +332,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -328,6 +346,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -336,6 +355,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -350,6 +370,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -358,6 +379,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -366,6 +388,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -374,6 +397,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -382,6 +406,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -399,6 +424,7 @@ export default ({ store, data, loading }) => {
           buildWLZaehleinheitZaehleinheit({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -414,6 +440,7 @@ export default ({ store, data, loading }) => {
           buildWLLieferungStatusStatus({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -429,6 +456,7 @@ export default ({ store, data, loading }) => {
           buildWLLieferungTypTyp({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -444,6 +472,7 @@ export default ({ store, data, loading }) => {
           buildWLLieferungZwischenlagerZwischenlager({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -459,6 +488,7 @@ export default ({ store, data, loading }) => {
           buildWLMasseinheitMasseinheit({
             nodes,
             data,
+            store,
           }),
         )(),
       ]
@@ -470,6 +500,7 @@ export default ({ store, data, loading }) => {
           buildHerkunftSammlungFolder({
             nodes,
             data,
+            store,
             loading,
             url,
           }),
@@ -484,6 +515,7 @@ export default ({ store, data, loading }) => {
           buildArtKultur({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -496,6 +528,7 @@ export default ({ store, data, loading }) => {
           buildArtSammlung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -508,6 +541,7 @@ export default ({ store, data, loading }) => {
           buildGartenKultur({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -524,6 +558,7 @@ export default ({ store, data, loading }) => {
           buildHerkunftSammlungSammlung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -536,6 +571,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenGarten({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -548,6 +584,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenSammlungSammlung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -560,6 +597,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenLieferungLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -576,6 +614,7 @@ export default ({ store, data, loading }) => {
           buildSammlungHerkunftHerkunft({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -592,6 +631,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -604,6 +644,7 @@ export default ({ store, data, loading }) => {
           buildKulturZaehlungZaehlung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -620,6 +661,7 @@ export default ({ store, data, loading }) => {
           buildKulturLieferungAnLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -636,6 +678,7 @@ export default ({ store, data, loading }) => {
           buildKulturLieferungAusLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -648,6 +691,7 @@ export default ({ store, data, loading }) => {
           buildKulturEventEvent({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -660,6 +704,7 @@ export default ({ store, data, loading }) => {
           buildKulturInventarInventar({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -674,6 +719,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -682,6 +728,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -690,6 +737,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -698,6 +746,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -706,6 +755,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -718,6 +768,7 @@ export default ({ store, data, loading }) => {
           buildArtSammlungAusLieferungFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -732,6 +783,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -740,6 +792,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -748,6 +801,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -756,6 +810,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -764,6 +819,7 @@ export default ({ store, data, loading }) => {
             nodes,
             url,
             data,
+            store,
             loading,
           }),
         )(),
@@ -780,6 +836,7 @@ export default ({ store, data, loading }) => {
           buildHerkunftSammlungAusLieferungFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -793,6 +850,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -810,6 +868,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -829,6 +888,7 @@ export default ({ store, data, loading }) => {
           buildArtKulturZaehlungZaehlung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -846,6 +906,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturKultur({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -863,6 +924,7 @@ export default ({ store, data, loading }) => {
           buildArtKulturInventarInventar({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -880,6 +942,7 @@ export default ({ store, data, loading }) => {
           buildArtKulturLieferungAusLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -897,6 +960,7 @@ export default ({ store, data, loading }) => {
           buildArtKulturLieferungAnLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -914,6 +978,7 @@ export default ({ store, data, loading }) => {
           buildArtKulturEventEvent({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -932,6 +997,7 @@ export default ({ store, data, loading }) => {
           buildGartenKulturZaehlungZaehlung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -949,6 +1015,7 @@ export default ({ store, data, loading }) => {
           buildGartenKulturInventarInventar({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -966,6 +1033,7 @@ export default ({ store, data, loading }) => {
           buildGartenKulturLieferungAusLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -983,6 +1051,7 @@ export default ({ store, data, loading }) => {
           buildGartenKulturLieferungAnLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1000,6 +1069,7 @@ export default ({ store, data, loading }) => {
           buildGartenKulturEventEvent({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1017,6 +1087,7 @@ export default ({ store, data, loading }) => {
           buildArtSammlungLieferungAusLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1034,6 +1105,7 @@ export default ({ store, data, loading }) => {
           buildHerkunftSammlungausLieferungLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1051,6 +1123,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturKultur({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1069,6 +1142,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturZaehlungFolder({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1076,6 +1150,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturInventarFolder({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1083,6 +1158,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturEventFolder({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1090,6 +1166,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturAuslieferungFolder({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1097,6 +1174,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturAnlieferungFolder({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1114,6 +1192,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturZaehlungFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1122,6 +1201,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturInventarFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1130,6 +1210,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturEventFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1138,6 +1219,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturAusLieferungFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1146,6 +1228,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturAnLieferungFolder({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1166,6 +1249,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturZaehlungZaehlung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1184,6 +1268,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturInventarInventar({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1202,6 +1287,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturEventEvent({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1220,6 +1306,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturAuslieferungLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1238,6 +1325,7 @@ export default ({ store, data, loading }) => {
           buildPersonGartenKulturAnlieferungLieferung({
             nodes,
             data,
+            store,
             url,
           }),
         )(),
@@ -1256,6 +1344,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturZaehlungZaehlung({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1275,6 +1364,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturInventarInventar({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1294,6 +1384,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturEventEvent({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1313,6 +1404,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturAusLieferungLieferung({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
@@ -1332,6 +1424,7 @@ export default ({ store, data, loading }) => {
           buildSammlungAusLieferungKulturAnLieferungLieferung({
             nodes,
             data,
+            store,
             url,
             loading,
           }),
