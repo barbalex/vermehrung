@@ -46,4 +46,7 @@ export default types
       const tables = Object.keys(self).filter(t => t !== 'show')
       return tables.some(table => self.tableIsFiltered({ table }))
     },
+    setShow(val) {
+      self.show = val
+    },
   }))

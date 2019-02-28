@@ -84,6 +84,7 @@ const Art = () => {
 
   const saveToDb = useCallback(
     async event => {
+      // TODO: on show filter, set filter
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
       try {
@@ -135,7 +136,7 @@ const Art = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container showfilter={showFilter}>
         <FormTitle
           title="Art"
           table="art"

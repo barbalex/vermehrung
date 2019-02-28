@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { MdDeleteSweep, MdFilterList } from 'react-icons/md'
@@ -49,7 +49,8 @@ const StyledIconButton = styled(IconButton)`
 
 const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
   const store = useContext(storeContext)
-  const { isFiltered, show } = store.filter
+  const { isFiltered, show, setShow, empty } = store.filter
+  const onClickFilter = useCallback(() => setShow(true))
 
   return (
     <Container>
@@ -63,12 +64,15 @@ const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
                 <FilterNumbers>{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
               )}
             {!show && (
-              <StyledIconButton title={`${title ? title : 'Daten'} filtern`}>
+              <StyledIconButton
+                title={`${title ? title : 'Daten'} filtern`}
+                onClick={onClickFilter}
+              >
                 <MdFilterList />
               </StyledIconButton>
             )}
             {isFiltered && (
-              <StyledIconButton title="Filter entfernen">
+              <StyledIconButton title="Filter entfernen" onClick={empty}>
                 <MdDeleteSweep />
               </StyledIconButton>
             )}
