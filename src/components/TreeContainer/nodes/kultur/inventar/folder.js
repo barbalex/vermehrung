@@ -1,7 +1,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, data, loading, store }) => {
   const kulturId = url[1]
   const kulturen = get(data, 'kultur', [])
   const kultur = kulturen.find(k => k.id === kulturId)

@@ -3,7 +3,7 @@ import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, data, url, store }) => {
   const artId = url[1]
   const kulturId = url[3]
 

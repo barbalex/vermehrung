@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-export default ({ data, loading }) => {
+export default ({ data, loading, store }) => {
   const personen = get(data, 'person', [])
   const nr = loading && !personen.length ? '...' : personen.length
 

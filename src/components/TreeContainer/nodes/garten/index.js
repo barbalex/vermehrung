@@ -2,7 +2,7 @@ import get from 'lodash/get'
 
 import compareLabel from '../compareLabel'
 
-export default ({ nodes, data }) => {
+export default ({ nodes, data, store }) => {
   const gaerten = get(data, 'garten', [])
 
   return (

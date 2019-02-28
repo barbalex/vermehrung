@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-export default ({ data, loading, url, nodes }) => {
+export default ({ data, loading, url, nodes, store }) => {
   const personId = url[1]
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)

@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-export default ({ data, loading, url, nodes }) => {
+export default ({ data, loading, url, nodes, store }) => {
   const sammlungId = url[1]
 
   const sammlungen = get(data, 'sammlung', [])

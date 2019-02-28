@@ -1,7 +1,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, data, loading, store }) => {
   const gartenId = url[1]
   const kulturId = url[3]
   const gaerten = get(data, 'garten', [])

@@ -1,6 +1,6 @@
 import get from 'lodash/get'
 
-export default ({ data, loading }) => {
+export default ({ data, loading, store }) => {
   const lieferungen = get(data, 'lieferung', [])
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 

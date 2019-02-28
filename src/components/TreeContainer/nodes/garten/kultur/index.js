@@ -3,7 +3,7 @@ import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../compareLabel'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, data, url, store }) => {
   const gartenId = url[1]
   const gaerten = get(data, 'garten', [])
   const garten = gaerten.find(a => a.id === gartenId)

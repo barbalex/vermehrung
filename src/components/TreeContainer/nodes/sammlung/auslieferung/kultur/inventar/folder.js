@@ -1,7 +1,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, data, loading, store }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
   const kulturId = url[5]
