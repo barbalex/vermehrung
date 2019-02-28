@@ -28,5 +28,5 @@ Die wichtigsten Schritte sind:
 - :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_medium_square: Authentifikation und Authorisierung gebaut
 - :white_medium_square: Volltext-Suche gebaut
-- :white_medium_square: Filter gebaut
+- :ballot_box_with_check: Filter gebaut
 - ...?
