@@ -87,29 +87,36 @@ const Art = () => {
       // TODO: on show filter, set filter
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_art($id: Int!, $ae_id: uuid) {
-              update_art(where: { id: { _eq: $id } }, _set: { ae_id: $ae_id }) {
-                affected_rows
-                returning {
-                  id
-                  ae_id
+      if (filter.show) {
+        filter.setValue({ table: 'art', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_art($id: Int!, $ae_id: uuid) {
+                update_art(
+                  where: { id: { _eq: $id } }
+                  _set: { ae_id: $ae_id }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    ae_id
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            ae_id: value,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              ae_id: value,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
