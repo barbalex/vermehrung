@@ -2,6 +2,7 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 import compareLabel from '../../../compareLabel'
+import filterNodes from '../../../../../../utils/filterNodes'
 
 export default ({ nodes, data, url, store }) => {
   const gartenId = url[1]

@@ -1,6 +1,8 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
+import filterNodes from '../../../../../utils/filterNodes'
+
 export default ({ url, nodes, data, loading, store }) => {
   const herkunftId = url[1]
 

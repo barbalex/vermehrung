@@ -1,6 +1,8 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
+import filterNodes from '../../../../../utils/filterNodes'
+
 export default ({ data, loading, url, nodes, store }) => {
   const sammlungId = url[1]
 

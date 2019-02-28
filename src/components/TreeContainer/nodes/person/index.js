@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 
 import compareLabel from '../compareLabel'
+import filterNodes from '../../../../utils/filterNodes'
 
 export default ({ nodes, data, store }) => {
   const personen = get(data, 'person', [])

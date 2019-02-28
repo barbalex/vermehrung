@@ -84,7 +84,6 @@ const Art = () => {
 
   const saveToDb = useCallback(
     async event => {
-      // TODO: on show filter, set filter
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
       if (filter.show) {

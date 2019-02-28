@@ -1,5 +1,7 @@
 import get from 'lodash/get'
 
+import filterNodes from '../../../../utils/filterNodes'
+
 export default ({ data, loading, store }) => {
   const kulturen = get(data, 'kultur', [])
   const nr = loading && !kulturen.length ? '...' : kulturen.length

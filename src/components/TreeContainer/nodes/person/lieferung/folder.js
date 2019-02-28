@@ -1,6 +1,8 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
+import filterNodes from '../../../../../utils/filterNodes'
+
 export default ({ data, nodes, loading, url, store }) => {
   const personId = url[1]
   const personen = get(data, 'person', [])

@@ -1,5 +1,7 @@
 import get from 'lodash/get'
 
+import filterNodes from '../../../../utils/filterNodes'
+
 export default ({ data, loading, store }) => {
   const sammlungen = get(data, 'sammlung', [])
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length

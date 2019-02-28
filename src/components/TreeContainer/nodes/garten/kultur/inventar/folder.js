@@ -1,6 +1,8 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import filterNodes from '../../../../../../utils/filterNodes'
+
 export default ({ url, nodes, data, loading, store }) => {
   const gartenId = url[1]
   const kulturId = url[3]
