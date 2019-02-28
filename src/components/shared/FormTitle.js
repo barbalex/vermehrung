@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MdDeleteSweep } from 'react-icons/md'
 
 const Container = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -17,11 +18,13 @@ const TitleRow = styled.div`
 `
 const Title = styled.div`
   padding: 8px 8px 0 8px;
-  /*color: white;*/
   font-weight: bold;
 `
+const Symbols = styled.div`
+  display: flex;
+`
 
-const FormTitle = ({ title }) => (
+const FormTitle = ({ title, rowsLength, rowsFilteredLength }) => (
   <Container>
     <TitleRow>
       <Title>{title}</Title>

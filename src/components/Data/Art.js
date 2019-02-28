@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -59,13 +60,15 @@ const Art = () => {
   const [errors, setErrors] = useState({})
 
   let row
-  let rows
-  let rowsFiltered
+  let rows = []
+  let rowsFiltered = []
   if (showFilter) {
     row = filter.art
     // get filter values length
     rows = get(data, 'rows', [])
-    rowsFiltered = filterNodes({ rows, filter, table: 'art' })
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'art' }),
+    )()
   } else {
     row = get(data, 'art', [{}])[0]
   }
@@ -133,7 +136,11 @@ const Art = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Art" />
+        <FormTitle
+          title="Art"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <Select
             key={`${row.id}ae_id`}

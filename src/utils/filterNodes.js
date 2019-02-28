@@ -2,6 +2,7 @@ import types from '../store/Filter/simpleTypes'
 
 export default ({ rows, filter, table }) => {
   const nodeFilterArray = Object.entries(filter[table]).filter(
+    // eslint-disable-next-line no-unused-vars
     ([key, value]) => value || value === 0 || value === false,
   )
 
@@ -18,12 +19,6 @@ export default ({ rows, filter, table }) => {
         return row[key] == value
       }
       // must be string or date
-      /**
-       * 16.2.2019:
-       * toLowerCase is obviously ignored
-       * !!!!!!???????
-       * filter in abies alba fro pop name züri to test
-       */
       return row[key]
         .toString()
         .toLowerCase()
