@@ -138,6 +138,7 @@ const Art = () => {
       <Container>
         <FormTitle
           title="Art"
+          table="art"
           rowsLength={rows.length}
           rowsFilteredLength={rowsFiltered.length}
         />
