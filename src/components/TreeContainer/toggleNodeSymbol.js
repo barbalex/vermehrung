@@ -15,5 +15,6 @@ export default ({ node: nodeRaw, store }) => {
   } else {
     newOpenNodes.push(node.url)
   }
+  store.filter.setShow(false)
   setOpenNodes(newOpenNodes)
 }

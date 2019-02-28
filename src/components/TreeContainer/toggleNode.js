@@ -26,7 +26,7 @@ export default ({ node, store }) => {
   } else if (!nodeIsOpen) {
     openNode({ node, store })
   }
-
+  store.filter.setShow(false)
   setActiveNodeArray(newActiveNodeArray)
   navigate(`/Vermehrung/${node.url.join('/')}`)
 }

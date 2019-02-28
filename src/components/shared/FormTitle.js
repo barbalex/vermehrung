@@ -9,13 +9,10 @@ const Container = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
   display: flex;
-  flex-direction: column;
   @media print {
     display: none !important;
   }
-`
-const TitleRow = styled.div`
-  display: flex;
+  height: 48px;
   justify-content: space-between;
 `
 const Title = styled.div`
@@ -55,31 +52,29 @@ const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
 
   return (
     <Container>
-      <TitleRow>
-        <Title>{title}</Title>
-        {table && (
-          <Symbols>
-            {show &&
-              (rowsFilteredLength || rowsFilteredLength === 0) &&
-              rowsLength && (
-                <FilterNumbers>{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
-              )}
-            {!show && (
-              <StyledIconButton
-                title={`${title ? title : 'Daten'} filtern`}
-                onClick={onClickFilter}
-              >
-                <MdFilterList />
-              </StyledIconButton>
+      <Title>{title}</Title>
+      {table && (
+        <Symbols>
+          {show &&
+            (rowsFilteredLength || rowsFilteredLength === 0) &&
+            rowsLength && (
+              <FilterNumbers>{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
             )}
-            {isFiltered && (
-              <StyledIconButton title="Filter entfernen" onClick={empty}>
-                <MdDeleteSweep />
-              </StyledIconButton>
-            )}
-          </Symbols>
-        )}
-      </TitleRow>
+          {!show && (
+            <StyledIconButton
+              title={`${title ? title : 'Daten'} filtern`}
+              onClick={onClickFilter}
+            >
+              <MdFilterList />
+            </StyledIconButton>
+          )}
+          {isFiltered && (
+            <StyledIconButton title="Filter entfernen" onClick={empty}>
+              <MdDeleteSweep />
+            </StyledIconButton>
+          )}
+        </Symbols>
+      )}
     </Container>
   )
 }
