@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MdDeleteSweep } from 'react-icons/md'
+import { MdDeleteSweep, MdFilterList } from 'react-icons/md'
 
 const Container = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
