@@ -15,7 +15,11 @@ export default ({ nodes, data, url, store }) => {
     table: 'sammlung',
   })
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = filterNodes({
+    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
+    filter: store.filter,
+    table: 'lieferung',
+  })
   const lieferung = lieferungen.find(p => p.id === lieferungId)
   const kulturen = filterNodes({
     rows: [get(lieferung, 'kulturBynachKulturId', [])],
