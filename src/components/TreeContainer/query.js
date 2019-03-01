@@ -26,19 +26,55 @@ export default gql`
     garten {
       id
       person_id
+      x
+      y
+      bemerkungen
       personBypersonId @include(if: $isGarten) {
         id
+        nr
         name
+        adresszusatz
+        strasse
+        plz
+        ort
+        telefon_privat
+        telefon_geschaeft
+        telefon_mobile
+        fax_privat
+        fax_geschaeft
+        email
+        kein_email
+        bemerkungen
+        user_id
       }
       kultursBygartenId @include(if: $isGarten) {
         id
+        art_id
         garten_id
+        bemerkungen
         gartenBygartenId @include(if: $isGartenKultur) {
           id
           person_id
+          x
+          y
+          bemerkungen
           personBypersonId {
             id
+            nr
             name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            fax_privat
+            fax_geschaeft
+            email
+            kein_email
+            bemerkungen
+            user_id
           }
         }
         kulturEventsBykulturId @include(if: $isGartenKultur) {
@@ -60,21 +96,40 @@ export default gql`
       }
     }
     art {
+      id
+      ae_id
       art_ae_art @include(if: $isArt) {
         id
         name
       }
-      id
-      ae_id
       kultursByartId @include(if: $isArt) {
         id
+        art_id
         garten_id
+        bemerkungen
         gartenBygartenId @include(if: $isArtKultur) {
           id
           person_id
+          x
+          y
+          bemerkungen
           personBypersonId {
             id
+            nr
             name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            fax_privat
+            fax_geschaeft
+            email
+            kein_email
+            bemerkungen
+            user_id
           }
         }
         kulturEventsBykulturId @include(if: $isArtKultur) {
@@ -95,41 +150,91 @@ export default gql`
         }
         lieferungsByvonKulturId @include(if: $isArtKultur) {
           id
+          art_id
           person_id
+          typ
+          zaehleinheit
+          menge
+          masseinheit
+          von_datum
+          von_sammlung_id
+          von_kultur_id
+          zwischenlager
+          nach_datum
+          nach_kultur_id
+          nach_ausgepflanzt
+          status
+          bemerkungen
           personBypersonId {
             id
+            nr
             name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            fax_privat
+            fax_geschaeft
+            email
+            kein_email
+            bemerkungen
+            user_id
           }
-          typ
           lieferungTypWerteBytyp {
             id
             wert
           }
-          status
           lieferungStatusWerteBystatus {
             id
             wert
           }
-          von_datum
         }
         lieferungsBynachKulturId @include(if: $isArtKultur) {
           id
+          art_id
           person_id
+          typ
+          zaehleinheit
+          menge
+          masseinheit
+          von_datum
+          von_sammlung_id
+          von_kultur_id
+          zwischenlager
+          nach_datum
+          nach_kultur_id
+          nach_ausgepflanzt
+          status
+          bemerkungen
           personBypersonId {
             id
+            nr
             name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            fax_privat
+            fax_geschaeft
+            email
+            kein_email
+            bemerkungen
+            user_id
           }
-          typ
           lieferungTypWerteBytyp {
             id
             wert
           }
-          status
           lieferungStatusWerteBystatus {
             id
             wert
           }
-          nach_datum
         }
       }
       sammlungsByartId @include(if: $isArt) {
@@ -147,9 +252,17 @@ export default gql`
         herkunftByherkunftId @include(if: $isArtSammlung) {
           id
           nr
+          lokalname
+          gemeinde
+          kanton
+          land
+          x
+          y
+          bemerkungen
         }
         artByartId @include(if: $isArtSammlung) {
           id
+          ae_id
           art_ae_art {
             id
             name
@@ -157,32 +270,75 @@ export default gql`
         }
         lieferungsByvonSammlungId @include(if: $isArtSammlung) {
           id
+          art_id
           person_id
+          typ
+          zaehleinheit
+          menge
+          masseinheit
+          von_datum
+          von_sammlung_id
+          von_kultur_id
+          zwischenlager
+          nach_datum
+          nach_kultur_id
+          nach_ausgepflanzt
+          status
+          bemerkungen
           personBypersonId {
             id
+            nr
             name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            fax_privat
+            fax_geschaeft
+            email
+            kein_email
+            bemerkungen
+            user_id
           }
-          typ
           lieferungTypWerteBytyp {
             id
             wert
           }
-          status
           lieferungStatusWerteBystatus {
             id
             wert
           }
-          von_datum
-          nach_kultur_id
           kulturBynachKulturId {
             id
+            art_id
             garten_id
+            bemerkungen
             gartenBygartenId {
               id
               person_id
+              x
+              y
+              bemerkungen
               personBypersonId {
                 id
+                nr
                 name
+                adresszusatz
+                strasse
+                plz
+                ort
+                telefon_privat
+                telefon_geschaeft
+                telefon_mobile
+                fax_privat
+                fax_geschaeft
+                email
+                kein_email
+                bemerkungen
+                user_id
               }
             }
             kulturEventsBykulturId {
@@ -202,19 +358,37 @@ export default gql`
               datum
             }
           }
-          nach_ausgepflanzt
         }
       }
     }
     kultur {
       id
+      art_id
       garten_id
+      bemerkungen
       gartenBygartenId @include(if: $isKultur) {
         id
         person_id
+        x
+        y
+        bemerkungen
         personBypersonId {
           id
+          nr
           name
+          adresszusatz
+          strasse
+          plz
+          ort
+          telefon_privat
+          telefon_geschaeft
+          telefon_mobile
+          fax_privat
+          fax_geschaeft
+          email
+          kein_email
+          bemerkungen
+          user_id
         }
       }
       kulturEventsBykulturId @include(if: $isKultur) {
@@ -225,6 +399,8 @@ export default gql`
         kulturBykulturId {
           id
           art_id
+          garten_id
+          bemerkungen
         }
       }
       kulturInventarsBykulturId @include(if: $isKultur) {
@@ -240,46 +416,103 @@ export default gql`
       }
       lieferungsByvonKulturId @include(if: $isKultur) {
         id
+        art_id
         person_id
+        typ
+        zaehleinheit
+        menge
+        masseinheit
+        von_datum
+        von_sammlung_id
+        von_kultur_id
+        zwischenlager
+        nach_datum
+        nach_kultur_id
+        nach_ausgepflanzt
+        status
+        bemerkungen
         personBypersonId @include(if: $isKulturAusLieferung) {
           id
+          nr
           name
+          adresszusatz
+          strasse
+          plz
+          ort
+          telefon_privat
+          telefon_geschaeft
+          telefon_mobile
+          fax_privat
+          fax_geschaeft
+          email
+          kein_email
+          bemerkungen
+          user_id
         }
-        typ
         lieferungTypWerteBytyp @include(if: $isKulturAusLieferung) {
           id
           wert
         }
-        status
         lieferungStatusWerteBystatus @include(if: $isKulturAusLieferung) {
           id
           wert
         }
-        von_datum
       }
       lieferungsBynachKulturId @include(if: $isKultur) {
         id
+        art_id
         person_id
+        typ
+        zaehleinheit
+        menge
+        masseinheit
+        von_datum
+        von_sammlung_id
+        von_kultur_id
+        zwischenlager
+        nach_datum
+        nach_kultur_id
+        nach_ausgepflanzt
+        status
+        bemerkungen
         personBypersonId @include(if: $isKulturAnLieferung) {
           id
+          nr
           name
+          adresszusatz
+          strasse
+          plz
+          ort
+          telefon_privat
+          telefon_geschaeft
+          telefon_mobile
+          fax_privat
+          fax_geschaeft
+          email
+          kein_email
+          bemerkungen
+          user_id
         }
-        typ
         lieferungTypWerteBytyp @include(if: $isKulturAnLieferung) {
           id
           wert
         }
-        status
         lieferungStatusWerteBystatus @include(if: $isKulturAnLieferung) {
           id
           wert
         }
-        nach_datum
       }
     }
     herkunft {
       id
+      nr
       lokalname
+      gemeinde
+      kanton
+      land
+      x
+      y
+      bemerkungen
       sammlungsByherkunftId @include(if: $isHerkunft) {
         id
         art_id
@@ -294,6 +527,7 @@ export default gql`
         bemerkungen
         artByartId @include(if: $isHerkunftSammlung) {
           id
+          ae_id
           art_ae_art {
             id
             name
@@ -301,32 +535,75 @@ export default gql`
         }
         lieferungsByvonSammlungId @include(if: $isHerkunftSammlung) {
           id
+          art_id
           person_id
+          typ
+          zaehleinheit
+          menge
+          masseinheit
+          von_datum
+          von_sammlung_id
+          von_kultur_id
+          zwischenlager
+          nach_datum
+          nach_kultur_id
+          nach_ausgepflanzt
+          status
+          bemerkungen
           personBypersonId {
             id
+            nr
             name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            fax_privat
+            fax_geschaeft
+            email
+            kein_email
+            bemerkungen
+            user_id
           }
-          typ
           lieferungTypWerteBytyp {
             id
             wert
           }
-          status
           lieferungStatusWerteBystatus {
             id
             wert
           }
-          von_datum
-          nach_kultur_id
           kulturBynachKulturId {
             id
+            art_id
             garten_id
+            bemerkungen
             gartenBygartenId {
               id
               person_id
+              x
+              y
+              bemerkungen
               personBypersonId {
                 id
+                nr
                 name
+                adresszusatz
+                strasse
+                plz
+                ort
+                telefon_privat
+                telefon_geschaeft
+                telefon_mobile
+                fax_privat
+                fax_geschaeft
+                email
+                kein_email
+                bemerkungen
+                user_id
               }
             }
             kulturEventsBykulturId {
@@ -346,41 +623,80 @@ export default gql`
               datum
             }
           }
-          nach_ausgepflanzt
         }
       }
     }
     lieferung {
       id
-      person_id
       art_id
+      person_id
+      typ
+      zaehleinheit
+      menge
+      masseinheit
+      von_datum
+      von_sammlung_id
+      von_kultur_id
+      zwischenlager
+      nach_datum
+      nach_kultur_id
+      nach_ausgepflanzt
+      status
+      bemerkungen
       personBypersonId @include(if: $isLieferung) {
         id
+        nr
         name
+        adresszusatz
+        strasse
+        plz
+        ort
+        telefon_privat
+        telefon_geschaeft
+        telefon_mobile
+        fax_privat
+        fax_geschaeft
+        email
+        kein_email
+        bemerkungen
+        user_id
       }
-      typ
       lieferungTypWerteBytyp @include(if: $isLieferung) {
         id
         wert
       }
-      status
       lieferungStatusWerteBystatus @include(if: $isLieferung) {
         id
         wert
       }
-      von_datum
-      von_sammlung_id
-      von_kultur_id
-      nach_kultur_id
       kulturBynachKulturId @include(if: $isLieferung) {
         id
+        art_id
         garten_id
+        bemerkungen
         gartenBygartenId {
           id
           person_id
+          x
+          y
+          bemerkungen
           personBypersonId {
             id
+            nr
             name
+            adresszusatz
+            strasse
+            plz
+            ort
+            telefon_privat
+            telefon_geschaeft
+            telefon_mobile
+            fax_privat
+            fax_geschaeft
+            email
+            kein_email
+            bemerkungen
+            user_id
           }
         }
         kulturEventsBykulturId {
@@ -404,14 +720,35 @@ export default gql`
     }
     person {
       id
+      nr
       name
+      adresszusatz
+      strasse
+      plz
+      ort
+      telefon_privat
+      telefon_geschaeft
+      telefon_mobile
+      fax_privat
+      fax_geschaeft
+      email
+      kein_email
+      bemerkungen
+      user_id
       gartensBypersonId @include(if: $isPerson) {
         id
+        person_id
+        x
+        y
+        bemerkungen
         kultursBygartenId @include(if: $isPersonGarten) {
           id
           art_id
+          garten_id
+          bemerkungen
           artByartId {
             id
+            ae_id
             art_ae_art {
               id
               name
@@ -435,41 +772,91 @@ export default gql`
           }
           lieferungsByvonKulturId @include(if: $isPersonGartenKultur) {
             id
+            art_id
             person_id
+            typ
+            zaehleinheit
+            menge
+            masseinheit
+            von_datum
+            von_sammlung_id
+            von_kultur_id
+            zwischenlager
+            nach_datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            status
+            bemerkungen
             personBypersonId {
               id
+              nr
               name
+              adresszusatz
+              strasse
+              plz
+              ort
+              telefon_privat
+              telefon_geschaeft
+              telefon_mobile
+              fax_privat
+              fax_geschaeft
+              email
+              kein_email
+              bemerkungen
+              user_id
             }
-            typ
             lieferungTypWerteBytyp {
               id
               wert
             }
-            status
             lieferungStatusWerteBystatus {
               id
               wert
             }
-            von_datum
           }
           lieferungsBynachKulturId @include(if: $isPersonGartenKultur) {
             id
+            art_id
             person_id
+            typ
+            zaehleinheit
+            menge
+            masseinheit
+            von_datum
+            von_sammlung_id
+            von_kultur_id
+            zwischenlager
+            nach_datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            status
+            bemerkungen
             personBypersonId {
               id
+              nr
               name
+              adresszusatz
+              strasse
+              plz
+              ort
+              telefon_privat
+              telefon_geschaeft
+              telefon_mobile
+              fax_privat
+              fax_geschaeft
+              email
+              kein_email
+              bemerkungen
+              user_id
             }
-            typ
             lieferungTypWerteBytyp {
               id
               wert
             }
-            status
             lieferungStatusWerteBystatus {
               id
               wert
             }
-            nach_datum
           }
         }
       }
@@ -487,6 +874,7 @@ export default gql`
         bemerkungen
         artByartId @include(if: $isPersonSammlung) {
           id
+          ae_id
           art_ae_art {
             id
             name
@@ -495,43 +883,79 @@ export default gql`
         herkunftByherkunftId @include(if: $isPersonSammlung) {
           id
           nr
+          lokalname
+          gemeinde
+          kanton
+          land
+          x
+          y
+          bemerkungen
         }
       }
       lieferungsBypersonId @include(if: $isPerson) {
         id
+        art_id
+        person_id
         typ
+        zaehleinheit
+        menge
+        masseinheit
+        von_datum
+        von_sammlung_id
+        von_kultur_id
+        zwischenlager
+        nach_datum
+        nach_kultur_id
+        nach_ausgepflanzt
+        status
+        bemerkungen
         lieferungTypWerteBytyp @include(if: $isPersonLieferung) {
           id
           wert
         }
-        status
         lieferungStatusWerteBystatus @include(if: $isPersonLieferung) {
           id
           wert
         }
-        von_datum @include(if: $isPersonLieferung)
-        nach_kultur_id
         kulturBynachKulturId @include(if: $isPersonLieferung) {
           id
           art_id
+          garten_id
+          bemerkungen
           artByartId {
             id
+            ae_id
             art_ae_art {
               id
               name
             }
           }
-          garten_id
           gartenBygartenId {
             id
             person_id
+            x
+            y
+            bemerkungen
             personBypersonId {
               id
+              nr
               name
+              adresszusatz
+              strasse
+              plz
+              ort
+              telefon_privat
+              telefon_geschaeft
+              telefon_mobile
+              fax_privat
+              fax_geschaeft
+              email
+              kein_email
+              bemerkungen
+              user_id
             }
           }
         }
-        nach_ausgepflanzt @include(if: $isPersonLieferung)
       }
     }
     sammlung {
@@ -548,6 +972,7 @@ export default gql`
       bemerkungen
       artByartId @include(if: $isSammlung) {
         id
+        ae_id
         art_ae_art {
           id
           name
@@ -556,39 +981,103 @@ export default gql`
       herkunftByherkunftId @include(if: $isSammlung) {
         id
         nr
+        lokalname
+        gemeinde
+        kanton
+        land
+        x
+        y
+        bemerkungen
       }
       personBypersonId @include(if: $isSammlung) {
         id
+        nr
         name
+        adresszusatz
+        strasse
+        plz
+        ort
+        telefon_privat
+        telefon_geschaeft
+        telefon_mobile
+        fax_privat
+        fax_geschaeft
+        email
+        kein_email
+        bemerkungen
+        user_id
       }
       lieferungsByvonSammlungId @include(if: $isSammlung) {
         id
-        von_datum @include(if: $isSammlungLieferung)
-        person_id @include(if: $isSammlungLieferung)
+        art_id
+        person_id
+        typ
+        zaehleinheit
+        menge
+        masseinheit
+        von_datum
+        von_sammlung_id
+        von_kultur_id
+        zwischenlager
+        nach_datum
+        nach_kultur_id
+        nach_ausgepflanzt
+        status
+        bemerkungen
         personBypersonId @include(if: $isSammlungLieferung) {
           id
+          nr
           name
+          adresszusatz
+          strasse
+          plz
+          ort
+          telefon_privat
+          telefon_geschaeft
+          telefon_mobile
+          fax_privat
+          fax_geschaeft
+          email
+          kein_email
+          bemerkungen
+          user_id
         }
-        typ @include(if: $isSammlungLieferung)
         lieferungTypWerteBytyp @include(if: $isSammlungLieferung) {
           id
           wert
         }
-        status @include(if: $isSammlungLieferung)
         lieferungStatusWerteBystatus @include(if: $isSammlungLieferung) {
           id
           wert
         }
-        nach_kultur_id
         kulturBynachKulturId {
           id
+          art_id
           garten_id
+          bemerkungen
           gartenBygartenId @include(if: $isSammlungLieferungKultur) {
             id
             person_id
+            x
+            y
+            bemerkungen
             personBypersonId {
               id
+              nr
               name
+              adresszusatz
+              strasse
+              plz
+              ort
+              telefon_privat
+              telefon_geschaeft
+              telefon_mobile
+              fax_privat
+              fax_geschaeft
+              email
+              kein_email
+              bemerkungen
+              user_id
             }
           }
           kulturEventsBykulturId @include(if: $isSammlungLieferungKultur) {
@@ -609,41 +1098,91 @@ export default gql`
           }
           lieferungsByvonKulturId @include(if: $isSammlungLieferungKultur) {
             id
+            art_id
             person_id
+            typ
+            zaehleinheit
+            menge
+            masseinheit
+            von_datum
+            von_sammlung_id
+            von_kultur_id
+            zwischenlager
+            nach_datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            status
+            bemerkungen
             personBypersonId {
               id
+              nr
               name
+              adresszusatz
+              strasse
+              plz
+              ort
+              telefon_privat
+              telefon_geschaeft
+              telefon_mobile
+              fax_privat
+              fax_geschaeft
+              email
+              kein_email
+              bemerkungen
+              user_id
             }
-            typ
             lieferungTypWerteBytyp {
               id
               wert
             }
-            status
             lieferungStatusWerteBystatus {
               id
               wert
             }
-            von_datum
           }
           lieferungsBynachKulturId @include(if: $isSammlungLieferungKultur) {
             id
+            art_id
             person_id
+            typ
+            zaehleinheit
+            menge
+            masseinheit
+            von_datum
+            von_sammlung_id
+            von_kultur_id
+            zwischenlager
+            nach_datum
+            nach_kultur_id
+            nach_ausgepflanzt
+            status
+            bemerkungen
             personBypersonId {
               id
+              nr
               name
+              adresszusatz
+              strasse
+              plz
+              ort
+              telefon_privat
+              telefon_geschaeft
+              telefon_mobile
+              fax_privat
+              fax_geschaeft
+              email
+              kein_email
+              bemerkungen
+              user_id
             }
-            typ
             lieferungTypWerteBytyp {
               id
               wert
             }
-            status
             lieferungStatusWerteBystatus {
               id
               wert
             }
-            nach_datum
           }
         }
       }
