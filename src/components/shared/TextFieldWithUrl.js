@@ -50,6 +50,12 @@ const TextFieldWithUrl = ({
     setStateValue(propsValue || propsValue === 0 ? propsValue : '')
   }, [propsValue])
 
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      saveToDb(event)
+    }
+  })
+
   const urls = stateValue ? getUrls(stateValue) : []
 
   return (
@@ -71,6 +77,7 @@ const TextFieldWithUrl = ({
           multiline={multiLine}
           onChange={onChange}
           onBlur={saveToDb}
+          onKeyPress={onKeyPress}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

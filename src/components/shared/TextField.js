@@ -33,6 +33,12 @@ const MyTextField = ({
     setStateValue(value || value === 0 ? value : '')
   }, [value])
 
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      saveToDb(event)
+    }
+  })
+
   return (
     <StyledFormControl
       fullWidth
@@ -49,6 +55,7 @@ const MyTextField = ({
         multiline={multiLine}
         onChange={onChange}
         onBlur={saveToDb}
+        onKeyPress={onKeyPress}
         placeholder={hintText}
       />
       {!!error && (

@@ -43,6 +43,12 @@ const TextFieldWithInfo = ({
     setStateValue(propsValue || propsValue === 0 ? propsValue : '')
   }, [propsValue])
 
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      saveToDb(event)
+    }
+  })
+
   return (
     <StyledFormControl
       fullWidth
@@ -59,6 +65,7 @@ const TextFieldWithInfo = ({
         multiline={multiLine}
         onChange={onChange}
         onBlur={saveToDb}
+        onKeyPress={onKeyPress}
         placeholder={hintText}
         endAdornment={
           <InfoWithPopover>

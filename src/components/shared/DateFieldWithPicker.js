@@ -88,6 +88,12 @@ const DateFieldWithPicker = ({
     setStateValue(propsValue)
   }, [propsValue])
 
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      saveToDb(event)
+    }
+  })
+
   return (
     <>
       <StyledDatePicker
@@ -97,6 +103,7 @@ const DateFieldWithPicker = ({
         value={stateValue}
         onChange={onChange}
         onBlur={onBlur}
+        onKeyPress={onKeyPress}
         disableOpenOnEnter
         animateYearScrolling={false}
         autoOk
