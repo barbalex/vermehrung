@@ -272,7 +272,7 @@ const Inventar = () => {
         />
         <FieldsContainer>
           <Select
-            key={`${row.id}kultur_id`}
+            key={`${row.id}${row.kultur_id}kultur_id`}
             name="kultur_id"
             value={row.kultur_id}
             field="kultur_id"

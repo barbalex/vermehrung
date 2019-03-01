@@ -151,7 +151,7 @@ const Art = () => {
         />
         <FieldsContainer>
           <Select
-            key={`${row.id}ae_id`}
+            key={`${row.id}${row.ae_id}ae_id`}
             name="ae_id"
             value={row.ae_id}
             field="ae_id"

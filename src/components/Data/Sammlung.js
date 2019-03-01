@@ -112,7 +112,7 @@ const Sammlung = () => {
     row = get(data, 'sammlung', [{}])[0]
   }
 
-  console.log('Sammlung', { filterSammlung: filter.sammlung, rowsFiltered })
+  console.group('Sammlung', { row })
 
   useEffect(() => setErrors({}), [row])
 
@@ -266,7 +266,7 @@ const Sammlung = () => {
             type="text"
           />
           <Select
-            key={`${row.id}art_id`}
+            key={`${row.id}${row.art_id}art_id`}
             name="art_id"
             value={row.art_id}
             field="art_id"
@@ -276,7 +276,7 @@ const Sammlung = () => {
             error={errors.art_id}
           />
           <Select
-            key={`${row.id}person_id`}
+            key={`${row.id}${row.person_id}person_id`}
             name="person_id"
             value={row.person_id}
             field="person_id"
@@ -303,7 +303,7 @@ const Sammlung = () => {
             type="number"
           />
           <Select
-            key={`${row.id}zaehleinheit`}
+            key={`${row.id}${row.zaehleinheit}zaehleinheit`}
             name="zaehleinheit"
             value={row.zaehleinheit}
             field="zaehleinheit"
@@ -322,7 +322,7 @@ const Sammlung = () => {
             type="number"
           />
           <Select
-            key={`${row.id}masseinheit`}
+            key={`${row.id}${row.masseinheit}masseinheit`}
             name="masseinheit"
             value={row.masseinheit}
             field="masseinheit"

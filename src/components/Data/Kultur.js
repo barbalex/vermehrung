@@ -185,7 +185,7 @@ const Kultur = () => {
         />
         <FieldsContainer>
           <Select
-            key={`${row.id}art_id`}
+            key={`${row.id}${row.art_id}art_id`}
             name="art_id"
             value={row.art_id}
             field="art_id"
@@ -195,7 +195,7 @@ const Kultur = () => {
             error={errors.art_id}
           />
           <Select
-            key={`${row.id}garten_id`}
+            key={`${row.id}${row.garten_id}garten_id`}
             name="garten_id"
             value={row.garten_id}
             field="garten_id"

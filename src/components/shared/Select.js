@@ -91,13 +91,15 @@ const SharedSelect = ({
     [name],
   )
 
+  const selectValue = options.find(o => o.value === value)
+
   return (
     <Container>
       {label && <Label>{label}</Label>}
       <StyledSelect
         id={field}
         name={field}
-        value={options.find(o => o.value === value)}
+        value={selectValue}
         options={options}
         onChange={onChange}
         hideSelectedOptions

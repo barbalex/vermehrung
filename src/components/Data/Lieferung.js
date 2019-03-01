@@ -402,7 +402,7 @@ const Lieferung = () => {
         />
         <FieldsContainer>
           <Select
-            key={`${row.id}art_id`}
+            key={`${row.id}${row.art_id}art_id`}
             name="art_id"
             value={row.art_id}
             field="art_id"
@@ -412,7 +412,7 @@ const Lieferung = () => {
             error={errors.art_id}
           />
           <Select
-            key={`${row.id}person_id`}
+            key={`${row.id}${row.person_id}person_id`}
             name="person_id"
             value={row.person_id}
             field="person_id"
@@ -422,7 +422,7 @@ const Lieferung = () => {
             error={errors.person_id}
           />
           <Select
-            key={`${row.id}typ`}
+            key={`${row.id}${row.typ}typ`}
             name="typ"
             value={row.typ}
             field="typ"
@@ -432,7 +432,7 @@ const Lieferung = () => {
             error={errors.typ}
           />
           <Select
-            key={`${row.id}status`}
+            key={`${row.id}${row.status}status`}
             name="status"
             value={row.status}
             field="status"
@@ -442,7 +442,7 @@ const Lieferung = () => {
             error={errors.status}
           />
           <Select
-            key={`${row.id}zaehleinheit`}
+            key={`${row.id}${row.zaehleinheit}zaehleinheit`}
             name="zaehleinheit"
             value={row.zaehleinheit}
             field="zaehleinheit"
@@ -461,7 +461,7 @@ const Lieferung = () => {
             type="number"
           />
           <Select
-            key={`${row.id}masseinheit`}
+            key={`${row.id}${row.masseinheit}masseinheit`}
             name="masseinheit"
             value={row.masseinheit}
             field="masseinheit"
@@ -479,7 +479,7 @@ const Lieferung = () => {
             error={errors.von_datum}
           />
           <Select
-            key={`${row.id}von_sammlung_id`}
+            key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
             name="von_sammlung_id"
             value={row.von_sammlung_id}
             field="von_sammlung_id"
@@ -489,7 +489,7 @@ const Lieferung = () => {
             error={errors.von_sammlung_id}
           />
           <Select
-            key={`${row.id}von_kultur_id`}
+            key={`${row.id}${row.von_kultur_id}von_kultur_id`}
             name="von_kultur_id"
             value={row.von_kultur_id}
             field="von_kultur_id"
@@ -499,7 +499,7 @@ const Lieferung = () => {
             error={errors.von_kultur_id}
           />
           <Select
-            key={`${row.id}zwischenlager`}
+            key={`${row.id}${row.zwischenlager}zwischenlager`}
             name="zwischenlager"
             value={row.zwischenlager}
             field="zwischenlager"
@@ -517,7 +517,7 @@ const Lieferung = () => {
             error={errors.nach_datum}
           />
           <Select
-            key={`${row.id}nach_kultur_id`}
+            key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
             name="nach_kultur_id"
             value={row.nach_kultur_id}
             field="nach_kultur_id"

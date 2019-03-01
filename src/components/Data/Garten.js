@@ -175,7 +175,7 @@ const Garten = () => {
         />
         <FieldsContainer>
           <Select
-            key={`${row.id}person_id`}
+            key={`${row.id}${row.person_id}person_id`}
             name="person_id"
             value={row.person_id}
             field="person_id"
