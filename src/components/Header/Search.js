@@ -19,6 +19,7 @@ const SearchIcon = styled(FaSearch)`
 const DelIcon = styled(FaTimes)`
   margin: auto 5px;
   opacity: ${props => (props['data-active'] ? 1 : 0.4)};
+  cursor: ${props => (props['data-active'] ? 'pointer' : 'default')};
 `
 const StyledInput = styled(Input)`
   input {
