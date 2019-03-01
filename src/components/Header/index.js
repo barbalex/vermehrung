@@ -9,6 +9,7 @@ import { Location } from '@reach/router'
 import Account from './Account'
 import More from './More'
 import ErrorBoundary from '../ErrorBoundary'
+import Search from './Search'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -66,6 +67,7 @@ const Header = () => (
                   Zu den Daten
                 </NavButton>
               )}
+              <Search />
               <Account />
               <More />
             </Toolbar>
