@@ -1,141 +1,17 @@
 import gql from 'graphql-tag'
 
-const gartenFragment = gql`
-  fragment GartenFields on garten {
-    id
-    person_id
-    x
-    y
-    bemerkungen
-  }
-`
-const artFragment = gql`
-  fragment ArtFields on art {
-    id
-    ae_id
-    art_ae_art {
-      id
-      name
-    }
-  }
-`
-const kulturFragment = gql`
-  fragment KulturFields on kultur {
-    id
-    art_id
-    garten_id
-    bemerkungen
-  }
-`
-const herkunftFragment = gql`
-  fragment HerkunftFields on herkunft {
-    id
-    nr
-    lokalname
-    gemeinde
-    kanton
-    land
-    x
-    y
-    bemerkungen
-  }
-`
-const lieferungFragment = gql`
-  fragment LieferungFields on lieferung {
-    id
-    art_id
-    person_id
-    typ
-    zaehleinheit
-    menge
-    masseinheit
-    von_datum
-    von_sammlung_id
-    von_kultur_id
-    zwischenlager
-    nach_datum
-    nach_kultur_id
-    nach_ausgepflanzt
-    status
-    bemerkungen
-  }
-`
-const personFragment = gql`
-  fragment PersonFields on person {
-    id
-    nr
-    name
-    adresszusatz
-    strasse
-    plz
-    ort
-    telefon_privat
-    telefon_geschaeft
-    telefon_mobile
-    fax_privat
-    fax_geschaeft
-    email
-    kein_email
-    bemerkungen
-    user_id
-  }
-`
-const sammlungFragment = gql`
-  fragment SammlungFields on sammlung {
-    id
-    art_id
-    person_id
-    herkunft_id
-    nr
-    datum
-    von_anzahl_individuen
-    zaehleinheit
-    menge
-    masseinheit
-    bemerkungen
-  }
-`
-const kulturInventarFragment = gql`
-  fragment KulturInventarFields on kultur_inventar {
-    id
-    kultur_id
-    datum
-    kasten
-    beet
-    nr
-    anzahl_pflanzen
-    anz_mutter_pflanzen
-    anz_nicht_auspflanzbereit
-    anz_auspflanzbereit
-    anz_bluehend
-    bluehdatum
-    instruktion
-    bemerkungen
-  }
-`
-const kulturEventFragment = gql`
-  fragment KulturEventFields on kultur_event {
-    id
-    kultur_id
-    datum
-    event
-  }
-`
-const zaehlungFragment = gql`
-  fragment ZaehlungFields on zaehlung {
-    id
-    kultur_id
-    datum
-    anzahl_pflanzen
-    anz_mutter_pflanzen
-    anz_nicht_auspflanzbereit
-    anz_auspflanzbereit
-    anz_bluehend
-    bluehdatum
-    instruktion
-    bemerkungen
-  }
-`
+import {
+  garten,
+  art,
+  kultur,
+  herkunft,
+  lieferung,
+  person,
+  sammlung,
+  kulturInventar,
+  kulturEvent,
+  zaehlung,
+} from '../../utils/fragments'
 
 export default gql`
   query TreeQuery(
@@ -575,14 +451,14 @@ export default gql`
       sort
     }
   }
-  ${gartenFragment}
-  ${artFragment}
-  ${kulturFragment}
-  ${herkunftFragment}
-  ${lieferungFragment}
-  ${personFragment}
-  ${sammlungFragment}
-  ${kulturInventarFragment}
-  ${kulturEventFragment}
-  ${zaehlungFragment}
+  ${garten}
+  ${art}
+  ${kultur}
+  ${herkunft}
+  ${lieferung}
+  ${person}
+  ${sammlung}
+  ${kulturInventar}
+  ${kulturEvent}
+  ${zaehlung}
 `
