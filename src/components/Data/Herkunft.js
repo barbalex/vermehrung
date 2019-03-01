@@ -46,7 +46,6 @@ const Herkunft = () => {
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
-    suspend: false,
     variables: { id, isFiltered: isFiltered() },
   })
 

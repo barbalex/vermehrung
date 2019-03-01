@@ -45,10 +45,17 @@ export default types
       )
     },
     isFiltered() {
+      // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
       const tables = Object.keys(self).filter(t => t !== 'show')
       return tables.some(table => self.tableIsFiltered({ table }))
     },
     setShow(val) {
       self.show = val
     },
+  }))
+  .views(self => ({
+    /*get isFiltered() {
+      const tables = Object.keys(self).filter(t => t !== 'show')
+      return tables.some(table => self.tableIsFiltered({ table }))
+    },*/
   }))

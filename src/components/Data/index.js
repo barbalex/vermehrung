@@ -18,6 +18,8 @@ const Data = () => {
   const store = useContext(storeContext)
   const { activeNodeArray: url } = store.tree
 
+  console.log('Data')
+
   if (url.length === 1) {
     return null
   }

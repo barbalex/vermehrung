@@ -38,7 +38,6 @@ const WerteListe = ({ table }) => {
     }
   `,
     {
-      suspend: false,
       variables: { id },
     },
   )

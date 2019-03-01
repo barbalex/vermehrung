@@ -49,14 +49,13 @@ const query = gql`
 const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { filter } = store
+  const { filter, tree } = store
   const { isFiltered, show: showFilter } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray, refetch } = tree
   const artId = last(activeNodeArray.filter(e => !isNaN(e)))
 
   const { data, error, loading } = useQuery(query, {
-    suspend: false,
-    variables: { id: artId, isFiltered: isFiltered() },
+    variables: { id: artId, isFiltered:isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
@@ -66,6 +65,8 @@ const Art = () => {
   const rowsFiltered = memoizeOne(() =>
     filterNodes({ rows, filter, table: 'art' }),
   )()
+
+  console.log('Art', { loading, data })
 
   useEffect(() => setErrors({}), [row])
 

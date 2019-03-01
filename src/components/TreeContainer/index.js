@@ -38,8 +38,7 @@ const TreeContainer = ({ dimensions }) => {
   // 2. every node uses navigate to set url on click
 
   const { data, error, loading, refetch } = useQuery(query, {
-    suspend: false,
-    notifyOnNetworkStatusChange: true,
+    //notifyOnNetworkStatusChange: true,
     variables: {
       isArt: openNodes.some(n => n[0] === 'Arten'),
       isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
