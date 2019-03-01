@@ -80,6 +80,62 @@ const personFragment = gql`
     user_id
   }
 `
+const sammlungFragment = gql`
+  fragment SammlungFields on sammlung {
+    id
+    art_id
+    person_id
+    herkunft_id
+    nr
+    datum
+    von_anzahl_individuen
+    zaehleinheit
+    menge
+    masseinheit
+    bemerkungen
+  }
+`
+const kulturInventarFragment = gql`
+  fragment KulturInventarFields on kultur_inventar {
+    id
+    kultur_id
+    datum
+    kasten
+    beet
+    nr
+    anzahl_pflanzen
+    anz_mutter_pflanzen
+    anz_nicht_auspflanzbereit
+    anz_auspflanzbereit
+    anz_bluehend
+    bluehdatum
+    instruktion
+    bemerkungen
+  }
+`
+const kulturEventFragment = gql`
+  fragment KulturEventFields on kultur_event {
+    id
+    kultur_id
+    datum
+    event
+  }
+`
+const zaehlungFragment = gql`
+  fragment ZaehlungFields on zaehlung {
+    id
+    kultur_id
+    datum
+    anzahl_pflanzen
+    anz_mutter_pflanzen
+    anz_nicht_auspflanzbereit
+    anz_auspflanzbereit
+    anz_bluehend
+    bluehdatum
+    instruktion
+    bemerkungen
+  }
+`
 
 export default gql`
   query TreeQuery(
@@ -118,20 +174,13 @@ export default gql`
           }
         }
         kulturEventsBykulturId @include(if: $isGartenKultur) {
-          id
-          datum
-          event
+          ...KulturEventFields
         }
         kulturInventarsBykulturId @include(if: $isGartenKultur) {
-          id
-          datum
-          kasten
-          beet
-          nr
+          ...KulturInventarFields
         }
         zaehlungsBykulturId @include(if: $isGartenKultur) {
-          id
-          datum
+          ...ZaehlungFields
         }
       }
     }
@@ -146,20 +195,13 @@ export default gql`
           }
         }
         kulturEventsBykulturId @include(if: $isArtKultur) {
-          id
-          datum
-          event
+          ...KulturEventFields
         }
         kulturInventarsBykulturId @include(if: $isArtKultur) {
-          id
-          datum
-          kasten
-          beet
-          nr
+          ...KulturInventarFields
         }
         zaehlungsBykulturId @include(if: $isArtKultur) {
-          id
-          datum
+          ...ZaehlungFields
         }
         lieferungsByvonKulturId @include(if: $isArtKultur) {
           ...LieferungFields
@@ -191,17 +233,7 @@ export default gql`
         }
       }
       sammlungsByartId @include(if: $isArt) {
-        id
-        art_id
-        person_id
-        herkunft_id
-        nr
-        datum
-        von_anzahl_individuen
-        zaehleinheit
-        menge
-        masseinheit
-        bemerkungen
+        ...SammlungFields
         herkunftByherkunftId @include(if: $isArtSammlung) {
           ...HerkunftFields
         }
@@ -230,20 +262,13 @@ export default gql`
               }
             }
             kulturEventsBykulturId {
-              id
-              datum
-              event
+              ...KulturEventFields
             }
             kulturInventarsBykulturId {
-              id
-              datum
-              kasten
-              beet
-              nr
+              ...KulturInventarFields
             }
             zaehlungsBykulturId {
-              id
-              datum
+              ...ZaehlungFields
             }
           }
         }
@@ -258,24 +283,16 @@ export default gql`
         }
       }
       kulturEventsBykulturId @include(if: $isKultur) {
-        id
-        datum
-        event
-        kultur_id
+        ...KulturEventFields
         kulturBykulturId {
           ...KulturFields
         }
       }
       kulturInventarsBykulturId @include(if: $isKultur) {
-        id
-        datum
-        kasten
-        beet
-        nr
+        ...KulturInventarFields
       }
       zaehlungsBykulturId @include(if: $isKultur) {
-        id
-        datum
+        ...ZaehlungFields
       }
       lieferungsByvonKulturId @include(if: $isKultur) {
         ...LieferungFields
@@ -309,17 +326,7 @@ export default gql`
     herkunft {
       ...HerkunftFields
       sammlungsByherkunftId @include(if: $isHerkunft) {
-        id
-        art_id
-        person_id
-        herkunft_id
-        nr
-        datum
-        von_anzahl_individuen
-        zaehleinheit
-        menge
-        masseinheit
-        bemerkungen
+        ...SammlungFields
         artByartId @include(if: $isHerkunftSammlung) {
           ...ArtFields
         }
@@ -345,20 +352,13 @@ export default gql`
               }
             }
             kulturEventsBykulturId {
-              id
-              datum
-              event
+              ...KulturEventFields
             }
             kulturInventarsBykulturId {
-              id
-              datum
-              kasten
-              beet
-              nr
+              ...KulturInventarFields
             }
             zaehlungsBykulturId {
-              id
-              datum
+              ...ZaehlungFields
             }
           }
         }
@@ -386,20 +386,13 @@ export default gql`
           }
         }
         kulturEventsBykulturId {
-          id
-          datum
-          event
+          ...KulturEventFields
         }
         kulturInventarsBykulturId {
-          id
-          datum
-          kasten
-          beet
-          nr
+          ...KulturInventarFields
         }
         zaehlungsBykulturId {
-          id
-          datum
+          ...ZaehlungFields
         }
       }
     }
@@ -413,20 +406,13 @@ export default gql`
             ...ArtFields
           }
           kulturEventsBykulturId @include(if: $isPersonGartenKultur) {
-            id
-            datum
-            event
+            ...KulturEventFields
           }
           kulturInventarsBykulturId @include(if: $isPersonGartenKultur) {
-            id
-            datum
-            kasten
-            beet
-            nr
+            ...KulturInventarFields
           }
           zaehlungsBykulturId @include(if: $isPersonGartenKultur) {
-            id
-            datum
+            ...ZaehlungFields
           }
           lieferungsByvonKulturId @include(if: $isPersonGartenKultur) {
             ...LieferungFields
@@ -459,17 +445,7 @@ export default gql`
         }
       }
       sammlungsBypersonId @include(if: $isPerson) {
-        id
-        art_id
-        person_id
-        herkunft_id
-        nr
-        datum
-        von_anzahl_individuen
-        zaehleinheit
-        menge
-        masseinheit
-        bemerkungen
+        ...SammlungFields
         artByartId @include(if: $isPersonSammlung) {
           ...ArtFields
         }
@@ -502,17 +478,7 @@ export default gql`
       }
     }
     sammlung {
-      id
-      art_id
-      person_id
-      herkunft_id
-      nr
-      datum
-      von_anzahl_individuen
-      zaehleinheit
-      menge
-      masseinheit
-      bemerkungen
+      ...SammlungFields
       artByartId @include(if: $isSammlung) {
         ...ArtFields
       }
@@ -544,20 +510,13 @@ export default gql`
             }
           }
           kulturEventsBykulturId @include(if: $isSammlungLieferungKultur) {
-            id
-            datum
-            event
+            ...KulturEventFields
           }
           kulturInventarsBykulturId @include(if: $isSammlungLieferungKultur) {
-            id
-            datum
-            kasten
-            beet
-            nr
+            ...KulturInventarFields
           }
           zaehlungsBykulturId @include(if: $isSammlungLieferungKultur) {
-            id
-            datum
+            ...ZaehlungFields
           }
           lieferungsByvonKulturId @include(if: $isSammlungLieferungKultur) {
             ...LieferungFields
@@ -622,4 +581,7 @@ export default gql`
   ${herkunftFragment}
   ${lieferungFragment}
   ${personFragment}
+  ${sammlungFragment}
+  ${kulturInventarFragment}
+  ${kulturEventFragment}
 `
