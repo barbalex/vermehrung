@@ -112,6 +112,8 @@ const Sammlung = () => {
     row = get(data, 'sammlung', [{}])[0]
   }
 
+  console.log('Sammlung', { filterSammlung: filter.sammlung, rowsFiltered })
+
   useEffect(() => setErrors({}), [row])
 
   let personWerte = get(data, 'person', [])

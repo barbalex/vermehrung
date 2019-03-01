@@ -25,10 +25,12 @@ export default gql`
   ) {
     garten {
       id
+      person_id
       personBypersonId @include(if: $isGarten) {
         id
         name
       }
+      garten_id
       kultursBygartenId @include(if: $isGarten) {
         id
         gartenBygartenId @include(if: $isGartenKultur) {
@@ -183,6 +185,7 @@ export default gql`
     }
     kultur {
       id
+      garten_id
       gartenBygartenId @include(if: $isKultur) {
         id
         personBypersonId {
@@ -190,6 +193,7 @@ export default gql`
           name
         }
       }
+      kultur_id
       kulturEventsBykulturId @include(if: $isKultur) {
         id
         datum
@@ -300,6 +304,8 @@ export default gql`
     }
     lieferung {
       id
+      person_id
+      art_id
       personBypersonId @include(if: $isLieferung) {
         id
         name
@@ -313,6 +319,9 @@ export default gql`
         wert
       }
       von_datum
+      von_sammlung_id
+      von_kultur_id
+      nach_kultur_id
       kulturBynachKulturId @include(if: $isLieferung) {
         id
         gartenBygartenId {
@@ -453,6 +462,7 @@ export default gql`
     }
     sammlung {
       id
+      art_id
       artByartId @include(if: $isSammlung) {
         id
         art_ae_art {
@@ -460,11 +470,13 @@ export default gql`
           name
         }
       }
+      herkunft_id
       herkunftByherkunftId @include(if: $isSammlung) {
         id
         nr
       }
       datum
+      person_id
       personBypersonId @include(if: $isSammlung) {
         id
         name
