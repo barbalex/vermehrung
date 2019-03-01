@@ -64,6 +64,11 @@ const query = gql`
       name
       ort
     }
+    herkunft {
+      id
+      nr
+      lokalname
+    }
     zaehleinheit_werte {
       id
       wert
@@ -120,6 +125,13 @@ const Sammlung = () => {
     label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
   }))
   personWerte = sortBy(personWerte, 'label')
+
+  let herkunftWerte = get(data, 'herkunft', [])
+  herkunftWerte = herkunftWerte.map(el => ({
+    value: el.id,
+    label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
+  }))
+  herkunftWerte = sortBy(herkunftWerte, 'label')
 
   let artWerte = get(data, 'art', [])
   artWerte = artWerte.map(el => ({
@@ -272,6 +284,16 @@ const Sammlung = () => {
             options={artWerte}
             saveToDb={saveToDb}
             error={errors.art_id}
+          />
+          <Select
+            key={`${row.id}${row.herkunft_id}herkunft_id`}
+            name="herkunft_id"
+            value={row.herkunft_id}
+            field="herkunft_id"
+            label="Herkunft"
+            options={herkunftWerte}
+            saveToDb={saveToDb}
+            error={errors.herkunft_id}
           />
           <Select
             key={`${row.id}${row.person_id}person_id`}

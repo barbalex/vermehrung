@@ -20,7 +20,7 @@ export default ({ nodes, data, store }) => {
         table: 'herkunft',
         id: `herkunft${el.id}`,
         parentId: 'herkunftFolder',
-        label: get(el, 'lokalname', '(keine Herkunft gewählt)'),
+        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
         url: ['Herkuenfte', el.id],
         hasChildren: true,
       }))

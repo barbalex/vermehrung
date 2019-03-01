@@ -584,4 +584,5 @@ export default gql`
   ${sammlungFragment}
   ${kulturInventarFragment}
   ${kulturEventFragment}
+  ${zaehlungFragment}
 `
