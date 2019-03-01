@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -14,6 +15,7 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -28,8 +30,18 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query EventQuery($id: Int!) {
+  query EventQuery($id: Int!, $showFilter: Boolean!) {
     kultur_event(where: { id: { _eq: $id } }) {
+      id
+      kultur_id
+      datum
+      event
+      kulturBykulturId {
+        id
+        art_id
+      }
+    }
+    rows: kultur_event @include(if: $showFilter) {
       id
       kultur_id
       datum
@@ -57,16 +69,30 @@ const query = gql`
 const Event = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'kultur_event', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.event
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'event' }),
+    )()
+  } else {
+    row = get(data, 'kultur_event', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -98,41 +124,45 @@ const Event = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_kultur_event(
-              $id: Int!
-              $kultur_id: Int
-              $datum: date
-              $event: String
-            ) {
-              update_kultur_event(
-                where: { id: { _eq: $id } }
-                _set: { kultur_id: $kultur_id, datum: $datum, event: $event }
+      if (filter.show) {
+        filter.setValue({ table: 'event', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_kultur_event(
+                $id: Int!
+                $kultur_id: Int
+                $datum: date
+                $event: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  kultur_id
-                  datum
-                  event
+                update_kultur_event(
+                  where: { id: { _eq: $id } }
+                  _set: { kultur_id: $kultur_id, datum: $datum, event: $event }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    kultur_id
+                    datum
+                    event
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-            datum: field === 'datum' ? value : row.datum,
-            event: field === 'event' ? value : row.event,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              kultur_id: field === 'kultur_id' ? value : row.kultur_id,
+              datum: field === 'datum' ? value : row.datum,
+              event: field === 'event' ? value : row.event,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -159,8 +189,13 @@ const Event = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Event" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Event"
+          table="event"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <Select
             key={`${row.id}kultur_id`}

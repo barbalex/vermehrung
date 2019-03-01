@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -13,6 +14,7 @@ import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -27,8 +29,14 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query KulturQuery($id: Int!) {
+  query KulturQuery($id: Int!, $showFilter: Boolean!) {
     kultur(where: { id: { _eq: $id } }) {
+      id
+      art_id
+      garten_id
+      bemerkungen
+    }
+    rows: kultur @include(if: $showFilter) {
       id
       art_id
       garten_id
@@ -54,16 +62,30 @@ const query = gql`
 const Kultur = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'kultur', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.kultur
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'kultur' }),
+    )()
+  } else {
+    row = get(data, 'kultur', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -85,45 +107,49 @@ const Kultur = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_kultur(
-              $id: Int!
-              $art_id: Int
-              $garten_id: Int
-              $bemerkungen: String
-            ) {
-              update_kultur(
-                where: { id: { _eq: $id } }
-                _set: {
-                  art_id: $art_id
-                  garten_id: $garten_id
-                  bemerkungen: $bemerkungen
-                }
+      if (filter.show) {
+        filter.setValue({ table: 'kultur', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_kultur(
+                $id: Int!
+                $art_id: Int
+                $garten_id: Int
+                $bemerkungen: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  art_id
-                  garten_id
-                  bemerkungen
+                update_kultur(
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    art_id: $art_id
+                    garten_id: $garten_id
+                    bemerkungen: $bemerkungen
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    art_id
+                    garten_id
+                    bemerkungen
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            art_id: field === 'art_id' ? value : row.art_id,
-            garten_id: field === 'garten_id' ? value : row.garten_id,
-            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              art_id: field === 'art_id' ? value : row.art_id,
+              garten_id: field === 'garten_id' ? value : row.garten_id,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -150,8 +176,13 @@ const Kultur = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Kultur" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Kultur"
+          table="kultur"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <Select
             key={`${row.id}art_id`}

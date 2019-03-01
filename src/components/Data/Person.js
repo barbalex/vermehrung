@@ -5,6 +5,7 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
@@ -12,6 +13,7 @@ import FormTitle from '../shared/FormTitle'
 import RadioButton from '../shared/RadioButton'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -26,8 +28,25 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query PersonQuery($id: Int!) {
+  query PersonQuery($id: Int!, $showFilter: Boolean!) {
     person(where: { id: { _eq: $id } }) {
+      id
+      nr
+      name
+      adresszusatz
+      strasse
+      plz
+      ort
+      telefon_privat
+      telefon_geschaeft
+      telefon_mobile
+      fax_privat
+      fax_geschaeft
+      email
+      kein_email
+      bemerkungen
+    }
+    rows: person @include(if: $showFilter) {
       id
       nr
       name
@@ -50,16 +69,30 @@ const query = gql`
 const Person = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'person', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.person
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'person' }),
+    )()
+  } else {
+    row = get(data, 'person', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -67,93 +100,97 @@ const Person = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_person(
-              $id: Int!
-              $nr: String
-              $name: String
-              $adresszusatz: String
-              $strasse: String
-              $plz: Int
-              $ort: String
-              $telefon_privat: String
-              $telefon_geschaeft: String
-              $telefon_mobile: String
-              $fax_privat: String
-              $fax_geschaeft: String
-              $email: String
-              $kein_email: Boolean
-              $bemerkungen: String
-            ) {
-              update_person(
-                where: { id: { _eq: $id } }
-                _set: {
-                  nr: $nr
-                  name: $name
-                  adresszusatz: $adresszusatz
-                  strasse: $strasse
-                  plz: $plz
-                  ort: $ort
-                  telefon_privat: $telefon_privat
-                  telefon_geschaeft: $telefon_geschaeft
-                  telefon_mobile: $telefon_mobile
-                  fax_privat: $fax_privat
-                  fax_geschaeft: $fax_geschaeft
-                  email: $email
-                  kein_email: $kein_email
-                  bemerkungen: $bemerkungen
-                }
+      if (filter.show) {
+        filter.setValue({ table: 'person', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_person(
+                $id: Int!
+                $nr: String
+                $name: String
+                $adresszusatz: String
+                $strasse: String
+                $plz: Int
+                $ort: String
+                $telefon_privat: String
+                $telefon_geschaeft: String
+                $telefon_mobile: String
+                $fax_privat: String
+                $fax_geschaeft: String
+                $email: String
+                $kein_email: Boolean
+                $bemerkungen: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  nr
-                  name
-                  adresszusatz
-                  strasse
-                  plz
-                  ort
-                  telefon_privat
-                  telefon_geschaeft
-                  telefon_mobile
-                  fax_privat
-                  fax_geschaeft
-                  email
-                  kein_email
-                  bemerkungen
+                update_person(
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    nr: $nr
+                    name: $name
+                    adresszusatz: $adresszusatz
+                    strasse: $strasse
+                    plz: $plz
+                    ort: $ort
+                    telefon_privat: $telefon_privat
+                    telefon_geschaeft: $telefon_geschaeft
+                    telefon_mobile: $telefon_mobile
+                    fax_privat: $fax_privat
+                    fax_geschaeft: $fax_geschaeft
+                    email: $email
+                    kein_email: $kein_email
+                    bemerkungen: $bemerkungen
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    nr
+                    name
+                    adresszusatz
+                    strasse
+                    plz
+                    ort
+                    telefon_privat
+                    telefon_geschaeft
+                    telefon_mobile
+                    fax_privat
+                    fax_geschaeft
+                    email
+                    kein_email
+                    bemerkungen
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            nr: field === 'nr' ? value : row.nr,
-            name: field === 'name' ? value : row.name,
-            adresszusatz: field === 'adresszusatz' ? value : row.adresszusatz,
-            strasse: field === 'strasse' ? value : row.strasse,
-            plz: field === 'plz' ? value : row.plz,
-            ort: field === 'ort' ? value : row.ort,
-            telefon_privat:
-              field === 'telefon_privat' ? value : row.telefon_privat,
-            telefon_geschaeft:
-              field === 'telefon_geschaeft' ? value : row.telefon_geschaeft,
-            telefon_mobile:
-              field === 'telefon_mobile' ? value : row.telefon_mobile,
-            fax_privat: field === 'fax_privat' ? value : row.fax_privat,
-            fax_geschaeft:
-              field === 'fax_geschaeft' ? value : row.fax_geschaeft,
-            email: field === 'email' ? value : row.email,
-            kein_email: field === 'kein_email' ? value : row.kein_email,
-            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              nr: field === 'nr' ? value : row.nr,
+              name: field === 'name' ? value : row.name,
+              adresszusatz: field === 'adresszusatz' ? value : row.adresszusatz,
+              strasse: field === 'strasse' ? value : row.strasse,
+              plz: field === 'plz' ? value : row.plz,
+              ort: field === 'ort' ? value : row.ort,
+              telefon_privat:
+                field === 'telefon_privat' ? value : row.telefon_privat,
+              telefon_geschaeft:
+                field === 'telefon_geschaeft' ? value : row.telefon_geschaeft,
+              telefon_mobile:
+                field === 'telefon_mobile' ? value : row.telefon_mobile,
+              fax_privat: field === 'fax_privat' ? value : row.fax_privat,
+              fax_geschaeft:
+                field === 'fax_geschaeft' ? value : row.fax_geschaeft,
+              email: field === 'email' ? value : row.email,
+              kein_email: field === 'kein_email' ? value : row.kein_email,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -180,8 +217,13 @@ const Person = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Person" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Person"
+          table="person"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <TextField
             key={`${row.id}nr`}

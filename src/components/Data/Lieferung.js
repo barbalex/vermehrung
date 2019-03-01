@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -15,6 +16,7 @@ import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -29,8 +31,26 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query LieferungQuery($id: Int!) {
+  query LieferungQuery($id: Int!, $showFilter: Boolean!) {
     lieferung(where: { id: { _eq: $id } }) {
+      id
+      art_id
+      person_id
+      typ
+      zaehleinheit
+      menge
+      masseinheit
+      von_datum
+      von_sammlung_id
+      von_kultur_id
+      zwischenlager
+      nach_datum
+      nach_kultur_id
+      nach_ausgepflanzt
+      status
+      bemerkungen
+    }
+    rows: lieferung @include(if: $showFilter) {
       id
       art_id
       person_id
@@ -117,16 +137,30 @@ const query = gql`
 const Lieferung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'lieferung', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.lieferung
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'lieferung' }),
+    )()
+  } else {
+    row = get(data, 'lieferung', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -237,98 +271,102 @@ const Lieferung = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_lieferung(
-              $id: Int!
-              $art_id: Int
-              $person_id: Int
-              $typ: Int
-              $zaehleinheit: Int
-              $menge: Int
-              $masseinheit: Int
-              $von_datum: date
-              $von_sammlung_id: Int
-              $von_kultur_id: Int
-              $zwischenlager: Int
-              $nach_datum: date
-              $nach_kultur_id: Int
-              $nach_ausgepflanzt: Boolean
-              $status: Int
-              $bemerkungen: String
-            ) {
-              update_lieferung(
-                where: { id: { _eq: $id } }
-                _set: {
-                  art_id: $art_id
-                  person_id: $person_id
-                  typ: $typ
-                  zaehleinheit: $zaehleinheit
-                  menge: $menge
-                  masseinheit: $masseinheit
-                  von_datum: $von_datum
-                  von_sammlung_id: $von_sammlung_id
-                  von_kultur_id: $von_kultur_id
-                  zwischenlager: $zwischenlager
-                  nach_datum: $nach_datum
-                  nach_kultur_id: $nach_kultur_id
-                  nach_ausgepflanzt: $nach_ausgepflanzt
-                  status: $status
-                  bemerkungen: $bemerkungen
-                }
+      if (filter.show) {
+        filter.setValue({ table: 'lieferung', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_lieferung(
+                $id: Int!
+                $art_id: Int
+                $person_id: Int
+                $typ: Int
+                $zaehleinheit: Int
+                $menge: Int
+                $masseinheit: Int
+                $von_datum: date
+                $von_sammlung_id: Int
+                $von_kultur_id: Int
+                $zwischenlager: Int
+                $nach_datum: date
+                $nach_kultur_id: Int
+                $nach_ausgepflanzt: Boolean
+                $status: Int
+                $bemerkungen: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  art_id
-                  person_id
-                  typ
-                  zaehleinheit
-                  menge
-                  masseinheit
-                  von_datum
-                  von_sammlung_id
-                  von_kultur_id
-                  zwischenlager
-                  nach_datum
-                  nach_kultur_id
-                  nach_ausgepflanzt
-                  status
-                  bemerkungen
+                update_lieferung(
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    art_id: $art_id
+                    person_id: $person_id
+                    typ: $typ
+                    zaehleinheit: $zaehleinheit
+                    menge: $menge
+                    masseinheit: $masseinheit
+                    von_datum: $von_datum
+                    von_sammlung_id: $von_sammlung_id
+                    von_kultur_id: $von_kultur_id
+                    zwischenlager: $zwischenlager
+                    nach_datum: $nach_datum
+                    nach_kultur_id: $nach_kultur_id
+                    nach_ausgepflanzt: $nach_ausgepflanzt
+                    status: $status
+                    bemerkungen: $bemerkungen
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    art_id
+                    person_id
+                    typ
+                    zaehleinheit
+                    menge
+                    masseinheit
+                    von_datum
+                    von_sammlung_id
+                    von_kultur_id
+                    zwischenlager
+                    nach_datum
+                    nach_kultur_id
+                    nach_ausgepflanzt
+                    status
+                    bemerkungen
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            art_id: field === 'art_id' ? value : row.art_id,
-            person_id: field === 'person_id' ? value : row.person_id,
-            typ: field === 'typ' ? value : row.typ,
-            zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
-            menge: field === 'menge' ? value : row.menge,
-            masseinheit: field === 'masseinheit' ? value : row.masseinheit,
-            von_datum: field === 'von_datum' ? value : row.von_datum,
-            von_sammlung_id:
-              field === 'von_sammlung_id' ? value : row.von_sammlung_id,
-            von_kultur_id:
-              field === 'von_kultur_id' ? value : row.von_kultur_id,
-            zwischenlager:
-              field === 'zwischenlager' ? value : row.zwischenlager,
-            nach_datum: field === 'nach_datum' ? value : row.nach_datum,
-            nach_kultur_id:
-              field === 'nach_kultur_id' ? value : row.nach_kultur_id,
-            nach_ausgepflanzt:
-              field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
-            status: field === 'status' ? value : row.status,
-            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              art_id: field === 'art_id' ? value : row.art_id,
+              person_id: field === 'person_id' ? value : row.person_id,
+              typ: field === 'typ' ? value : row.typ,
+              zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
+              menge: field === 'menge' ? value : row.menge,
+              masseinheit: field === 'masseinheit' ? value : row.masseinheit,
+              von_datum: field === 'von_datum' ? value : row.von_datum,
+              von_sammlung_id:
+                field === 'von_sammlung_id' ? value : row.von_sammlung_id,
+              von_kultur_id:
+                field === 'von_kultur_id' ? value : row.von_kultur_id,
+              zwischenlager:
+                field === 'zwischenlager' ? value : row.zwischenlager,
+              nach_datum: field === 'nach_datum' ? value : row.nach_datum,
+              nach_kultur_id:
+                field === 'nach_kultur_id' ? value : row.nach_kultur_id,
+              nach_ausgepflanzt:
+                field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
+              status: field === 'status' ? value : row.status,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -355,8 +393,13 @@ const Lieferung = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Lieferung" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Lieferung"
+          table="lieferung"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <Select
             key={`${row.id}art_id`}

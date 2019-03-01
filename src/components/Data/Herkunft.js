@@ -5,12 +5,14 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -25,8 +27,19 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query HerkunftQuery($id: Int!) {
+  query HerkunftQuery($id: Int!, $showFilter: Boolean!) {
     herkunft(where: { id: { _eq: $id } }) {
+      id
+      nr
+      lokalname
+      gemeinde
+      kanton
+      land
+      x
+      y
+      bemerkungen
+    }
+    rows: herkunft @include(if: $showFilter) {
       id
       nr
       lokalname
@@ -43,16 +56,30 @@ const query = gql`
 const Herkunft = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'herkunft', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.herkunft
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'herkunft' }),
+    )()
+  } else {
+    row = get(data, 'herkunft', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -60,65 +87,69 @@ const Herkunft = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_herkunft(
-              $id: Int!
-              $nr: String
-              $lokalname: String
-              $gemeinde: String
-              $kanton: String
-              $land: String
-              $x: Int
-              $y: Int
-              $bemerkungen: String
-            ) {
-              update_herkunft(
-                where: { id: { _eq: $id } }
-                _set: {
-                  nr: $nr
-                  lokalname: $lokalname
-                  gemeinde: $gemeinde
-                  kanton: $kanton
-                  land: $land
-                  x: $x
-                  y: $y
-                  bemerkungen: $bemerkungen
-                }
+      if (filter.show) {
+        filter.setValue({ table: 'herkunft', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_herkunft(
+                $id: Int!
+                $nr: String
+                $lokalname: String
+                $gemeinde: String
+                $kanton: String
+                $land: String
+                $x: Int
+                $y: Int
+                $bemerkungen: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  nr
-                  lokalname
-                  gemeinde
-                  kanton
-                  land
-                  x
-                  y
-                  bemerkungen
+                update_herkunft(
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    nr: $nr
+                    lokalname: $lokalname
+                    gemeinde: $gemeinde
+                    kanton: $kanton
+                    land: $land
+                    x: $x
+                    y: $y
+                    bemerkungen: $bemerkungen
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    nr
+                    lokalname
+                    gemeinde
+                    kanton
+                    land
+                    x
+                    y
+                    bemerkungen
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            nr: field === 'nr' ? value : row.nr,
-            lokalname: field === 'lokalname' ? value : row.lokalname,
-            gemeinde: field === 'gemeinde' ? value : row.gemeinde,
-            kanton: field === 'kanton' ? value : row.kanton,
-            land: field === 'land' ? value : row.land,
-            x: field === 'x' ? value : row.x,
-            y: field === 'y' ? value : row.y,
-            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              nr: field === 'nr' ? value : row.nr,
+              lokalname: field === 'lokalname' ? value : row.lokalname,
+              gemeinde: field === 'gemeinde' ? value : row.gemeinde,
+              kanton: field === 'kanton' ? value : row.kanton,
+              land: field === 'land' ? value : row.land,
+              x: field === 'x' ? value : row.x,
+              y: field === 'y' ? value : row.y,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -145,8 +176,13 @@ const Herkunft = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Herkunft" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Herkunft"
+          table="herkunft"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <TextField
             key={`${row.id}nr`}

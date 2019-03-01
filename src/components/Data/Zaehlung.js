@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -14,6 +15,7 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -28,8 +30,25 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ZaehlungQuery($id: Int!) {
+  query ZaehlungQuery($id: Int!, $showFilter: Boolean!) {
     zaehlung(where: { id: { _eq: $id } }) {
+      id
+      kultur_id
+      datum
+      anzahl_pflanzen
+      anz_mutter_pflanzen
+      anz_nicht_auspflanzbereit
+      anz_auspflanzbereit
+      anz_bluehend
+      bluehdatum
+      instruktion
+      bemerkungen
+      kulturBykulturId {
+        id
+        art_id
+      }
+    }
+    rows: zaehlung @include(if: $showFilter) {
       id
       kultur_id
       datum
@@ -64,16 +83,30 @@ const query = gql`
 const Zaehlung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'zaehlung', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.zaehlung
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'zaehlung' }),
+    )()
+  } else {
+    row = get(data, 'zaehlung', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -105,79 +138,87 @@ const Zaehlung = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_zaehlung(
-              $id: Int!
-              $kultur_id: Int
-              $datum: date
-              $anzahl_pflanzen: Int
-              $anz_mutter_pflanzen: Int
-              $anz_nicht_auspflanzbereit: Int
-              $anz_auspflanzbereit: Int
-              $anz_bluehend: Int
-              $bluehdatum: String
-              $instruktion: String
-              $bemerkungen: String
-            ) {
-              update_zaehlung(
-                where: { id: { _eq: $id } }
-                _set: {
-                  kultur_id: $kultur_id
-                  datum: $datum
-                  anzahl_pflanzen: $anzahl_pflanzen
-                  anz_mutter_pflanzen: $anz_mutter_pflanzen
-                  anz_nicht_auspflanzbereit: $anz_nicht_auspflanzbereit
-                  anz_auspflanzbereit: $anz_auspflanzbereit
-                  anz_bluehend: $anz_bluehend
-                  bluehdatum: $bluehdatum
-                  instruktion: $instruktion
-                  bemerkungen: $bemerkungen
-                }
+      if (filter.show) {
+        filter.setValue({ table: 'zaehlung', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_zaehlung(
+                $id: Int!
+                $kultur_id: Int
+                $datum: date
+                $anzahl_pflanzen: Int
+                $anz_mutter_pflanzen: Int
+                $anz_nicht_auspflanzbereit: Int
+                $anz_auspflanzbereit: Int
+                $anz_bluehend: Int
+                $bluehdatum: String
+                $instruktion: String
+                $bemerkungen: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  kultur_id
-                  datum
-                  anzahl_pflanzen
-                  anz_mutter_pflanzen
-                  anz_nicht_auspflanzbereit
-                  anz_auspflanzbereit
-                  anz_bluehend
-                  bluehdatum
-                  instruktion
-                  bemerkungen
+                update_zaehlung(
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    kultur_id: $kultur_id
+                    datum: $datum
+                    anzahl_pflanzen: $anzahl_pflanzen
+                    anz_mutter_pflanzen: $anz_mutter_pflanzen
+                    anz_nicht_auspflanzbereit: $anz_nicht_auspflanzbereit
+                    anz_auspflanzbereit: $anz_auspflanzbereit
+                    anz_bluehend: $anz_bluehend
+                    bluehdatum: $bluehdatum
+                    instruktion: $instruktion
+                    bemerkungen: $bemerkungen
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    kultur_id
+                    datum
+                    anzahl_pflanzen
+                    anz_mutter_pflanzen
+                    anz_nicht_auspflanzbereit
+                    anz_auspflanzbereit
+                    anz_bluehend
+                    bluehdatum
+                    instruktion
+                    bemerkungen
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-            datum: field === 'datum' ? value : row.datum,
-            anzahl_pflanzen:
-              field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
-            anz_mutter_pflanzen:
-              field === 'anz_mutter_pflanzen' ? value : row.anz_mutter_pflanzen,
-            anz_nicht_auspflanzbereit:
-              field === 'anz_nicht_auspflanzbereit'
-                ? value
-                : row.anz_nicht_auspflanzbereit,
-            anz_auspflanzbereit:
-              field === 'anz_auspflanzbereit' ? value : row.anz_auspflanzbereit,
-            anz_bluehend: field === 'anz_bluehend' ? value : row.anz_bluehend,
-            bluehdatum: field === 'bluehdatum' ? value : row.bluehdatum,
-            instruktion: field === 'instruktion' ? value : row.instruktion,
-            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              kultur_id: field === 'kultur_id' ? value : row.kultur_id,
+              datum: field === 'datum' ? value : row.datum,
+              anzahl_pflanzen:
+                field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
+              anz_mutter_pflanzen:
+                field === 'anz_mutter_pflanzen'
+                  ? value
+                  : row.anz_mutter_pflanzen,
+              anz_nicht_auspflanzbereit:
+                field === 'anz_nicht_auspflanzbereit'
+                  ? value
+                  : row.anz_nicht_auspflanzbereit,
+              anz_auspflanzbereit:
+                field === 'anz_auspflanzbereit'
+                  ? value
+                  : row.anz_auspflanzbereit,
+              anz_bluehend: field === 'anz_bluehend' ? value : row.anz_bluehend,
+              bluehdatum: field === 'bluehdatum' ? value : row.bluehdatum,
+              instruktion: field === 'instruktion' ? value : row.instruktion,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -204,8 +245,13 @@ const Zaehlung = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Zaehlung" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Zaehlung"
+          table="zaehlung"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <Select
             key={`${row.id}kultur_id`}

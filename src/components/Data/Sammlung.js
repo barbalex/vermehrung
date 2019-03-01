@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -14,6 +15,7 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -28,8 +30,22 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query SammlungQuery($id: Int!) {
+  query SammlungQuery($id: Int!, $showFilter: Boolean!) {
     sammlung(where: { id: { _eq: $id } }) {
+      id
+      nr
+      art_id
+      person_id
+      herkunft_id
+      datum
+      person_id
+      von_anzahl_individuen
+      zaehleinheit
+      menge
+      masseinheit
+      bemerkungen
+    }
+    rows: sammlung @include(if: $showFilter) {
       id
       nr
       art_id
@@ -71,16 +87,30 @@ const query = gql`
 const Sammlung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'sammlung', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.sammlung
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'sammlung' }),
+    )()
+  } else {
+    row = get(data, 'sammlung', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -116,76 +146,80 @@ const Sammlung = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_sammlung(
-              $id: Int!
-              $nr: String
-              $art_id: Int
-              $person_id: Int
-              $herkunft_id: Int
-              $datum: date
-              $von_anzahl_individuen: Int
-              $zaehleinheit: Int
-              $menge: Int
-              $masseinheit: Int
-              $bemerkungen: String
-            ) {
-              update_sammlung(
-                where: { id: { _eq: $id } }
-                _set: {
-                  nr: $nr
-                  art_id: $art_id
-                  person_id: $person_id
-                  herkunft_id: $herkunft_id
-                  datum: $datum
-                  von_anzahl_individuen: $von_anzahl_individuen
-                  zaehleinheit: $zaehleinheit
-                  menge: $menge
-                  masseinheit: $masseinheit
-                  bemerkungen: $bemerkungen
-                }
+      if (filter.show) {
+        filter.setValue({ table: 'sammlung', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_sammlung(
+                $id: Int!
+                $nr: String
+                $art_id: Int
+                $person_id: Int
+                $herkunft_id: Int
+                $datum: date
+                $von_anzahl_individuen: Int
+                $zaehleinheit: Int
+                $menge: Int
+                $masseinheit: Int
+                $bemerkungen: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  nr
-                  art_id
-                  person_id
-                  herkunft_id
-                  datum
-                  von_anzahl_individuen
-                  zaehleinheit
-                  menge
-                  masseinheit
-                  bemerkungen
+                update_sammlung(
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    nr: $nr
+                    art_id: $art_id
+                    person_id: $person_id
+                    herkunft_id: $herkunft_id
+                    datum: $datum
+                    von_anzahl_individuen: $von_anzahl_individuen
+                    zaehleinheit: $zaehleinheit
+                    menge: $menge
+                    masseinheit: $masseinheit
+                    bemerkungen: $bemerkungen
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    nr
+                    art_id
+                    person_id
+                    herkunft_id
+                    datum
+                    von_anzahl_individuen
+                    zaehleinheit
+                    menge
+                    masseinheit
+                    bemerkungen
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            nr: field === 'nr' ? value : row.nr,
-            art_id: field === 'art_id' ? value : row.art_id,
-            person_id: field === 'person_id' ? value : row.person_id,
-            herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
-            datum: field === 'datum' ? value : row.datum,
-            von_anzahl_individuen:
-              field === 'von_anzahl_individuen'
-                ? value
-                : row.von_anzahl_individuen,
-            zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
-            menge: field === 'menge' ? value : row.menge,
-            masseinheit: field === 'masseinheit' ? value : row.masseinheit,
-            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              nr: field === 'nr' ? value : row.nr,
+              art_id: field === 'art_id' ? value : row.art_id,
+              person_id: field === 'person_id' ? value : row.person_id,
+              herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
+              datum: field === 'datum' ? value : row.datum,
+              von_anzahl_individuen:
+                field === 'von_anzahl_individuen'
+                  ? value
+                  : row.von_anzahl_individuen,
+              zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
+              menge: field === 'menge' ? value : row.menge,
+              masseinheit: field === 'masseinheit' ? value : row.masseinheit,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -212,8 +246,13 @@ const Sammlung = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Sammlung" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Sammlung"
+          table="sammlung"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <TextField
             key={`${row.id}nr`}

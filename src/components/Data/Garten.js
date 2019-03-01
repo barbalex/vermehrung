@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
+import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -13,6 +14,7 @@ import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -27,8 +29,15 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query GartenQuery($id: Int!) {
+  query GartenQuery($id: Int!, $showFilter: Boolean!) {
     garten(where: { id: { _eq: $id } }) {
+      id
+      person_id
+      x
+      y
+      bemerkungen
+    }
+    rows: garten @include(if: $showFilter) {
       id
       person_id
       x
@@ -46,16 +55,30 @@ const query = gql`
 const Garten = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { filter } = store
+  const showFilter = filter.show
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id },
+    variables: { id, showFilter },
   })
 
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'garten', [{}])[0]
+  let row
+  let rows = []
+  let rowsFiltered = []
+  if (showFilter) {
+    row = filter.garten
+    // get filter values length
+    rows = get(data, 'rows', [])
+    rowsFiltered = memoizeOne(() =>
+      filterNodes({ rows, filter, table: 'garten' }),
+    )()
+  } else {
+    row = get(data, 'garten', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -70,49 +93,53 @@ const Garten = () => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation update_garten(
-              $id: Int!
-              $person_id: Int
-              $x: Int
-              $y: Int
-              $bemerkungen: String
-            ) {
-              update_garten(
-                where: { id: { _eq: $id } }
-                _set: {
-                  person_id: $person_id
-                  x: $x
-                  y: $y
-                  bemerkungen: $bemerkungen
-                }
+      if (filter.show) {
+        filter.setValue({ table: 'garten', key: field, value })
+      } else {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation update_garten(
+                $id: Int!
+                $person_id: Int
+                $x: Int
+                $y: Int
+                $bemerkungen: String
               ) {
-                affected_rows
-                returning {
-                  id
-                  person_id
-                  x
-                  y
-                  bemerkungen
+                update_garten(
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    person_id: $person_id
+                    x: $x
+                    y: $y
+                    bemerkungen: $bemerkungen
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    id
+                    person_id
+                    x
+                    y
+                    bemerkungen
+                  }
                 }
               }
-            }
-          `,
-          variables: {
-            id: row.id,
-            person_id: field === 'person_id' ? value : row.person_id,
-            x: field === 'x' ? value : row.x,
-            y: field === 'y' ? value : row.y,
-            bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+            `,
+            variables: {
+              id: row.id,
+              person_id: field === 'person_id' ? value : row.person_id,
+              x: field === 'x' ? value : row.x,
+              y: field === 'y' ? value : row.y,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+            },
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        refetch()
       }
-      setErrors({})
-      refetch()
     },
     [row],
   )
@@ -139,8 +166,13 @@ const Garten = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Garten" />
+      <Container showfilter={showFilter}>
+        <FormTitle
+          title="Garten"
+          table="garten"
+          rowsLength={rows.length}
+          rowsFilteredLength={rowsFiltered.length}
+        />
         <FieldsContainer>
           <Select
             key={`${row.id}person_id`}
