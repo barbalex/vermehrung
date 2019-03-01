@@ -19,6 +19,12 @@ export const art = gql`
     }
   }
 `
+export const aeArt = gql`
+  fragment AeArtFields on ae_art {
+    id
+    name
+  }
+`
 export const kultur = gql`
   fragment KulturFields on kultur {
     id

@@ -13,7 +13,10 @@ import Select from '../shared/Select'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
-import { art as artFragment } from '../../utils/fragments'
+import {
+  art as artFragment,
+  aeArt as aeArtFragment,
+} from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -36,11 +39,11 @@ const query = gql`
       ...ArtFields
     }
     ae_art {
-      id
-      name
+      ...AeArtFields
     }
   }
   ${artFragment}
+  ${aeArtFragment}
 `
 
 const Art = () => {
