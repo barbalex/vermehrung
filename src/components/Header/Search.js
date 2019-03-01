@@ -10,7 +10,7 @@ const Container = styled.div`
   width: 220px;
   display: flex;
   :hover {
-    background-color: #a459ff;
+    background-color: #9741ff;
   }
 `
 const SearchIcon = styled(FaSearch)`
@@ -25,8 +25,8 @@ const StyledInput = styled(Input)`
   input {
     color: white;
   }
-  &:before,
-  &:after {
+  :before,
+  :after {
     border-bottom: none !important;
   }
 `
