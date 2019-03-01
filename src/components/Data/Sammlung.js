@@ -112,8 +112,6 @@ const Sammlung = () => {
     row = get(data, 'sammlung', [{}])[0]
   }
 
-  console.group('Sammlung', { row })
-
   useEffect(() => setErrors({}), [row])
 
   let personWerte = get(data, 'person', [])
