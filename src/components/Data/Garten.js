@@ -14,6 +14,7 @@ import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import { garten as gartenFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -28,20 +29,12 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query GartenQuery($id: Int!, $showFilter: Boolean!) {
+  query GartenQuery($id: Int!, $isFiltered: Boolean!) {
     garten(where: { id: { _eq: $id } }) {
-      id
-      person_id
-      x
-      y
-      bemerkungen
+      ...GartenFields
     }
-    rows: garten @include(if: $showFilter) {
-      id
-      person_id
-      x
-      y
-      bemerkungen
+    rows: garten @include(if: $isFiltered) {
+      ...GartenFields
     }
     person {
       id
@@ -49,35 +42,28 @@ const query = gql`
       ort
     }
   }
+  ${gartenFragment}
 `
 
 const Garten = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.garten
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'garten' }),
-    )()
-  } else {
-    row = get(data, 'garten', [{}])[0]
-  }
+  const row = showFilter ? filter.garten : get(data, 'garten', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'garten' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

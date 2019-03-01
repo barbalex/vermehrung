@@ -14,6 +14,10 @@ import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import {
+  kultur as kulturFragment,
+  art as artFragment,
+} from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -28,25 +32,15 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query KulturQuery($id: Int!, $showFilter: Boolean!) {
+  query KulturQuery($id: Int!, $isFiltered: Boolean!) {
     kultur(where: { id: { _eq: $id } }) {
-      id
-      art_id
-      garten_id
-      bemerkungen
+      ...KulturFields
     }
-    rows: kultur @include(if: $showFilter) {
-      id
-      art_id
-      garten_id
-      bemerkungen
+    rows: kultur @include(if: $isFiltered) {
+      ...KulturFields
     }
     art {
-      id
-      art_ae_art {
-        id
-        name
-      }
+      ...ArtFields
     }
     garten {
       id
@@ -56,35 +50,29 @@ const query = gql`
       }
     }
   }
+  ${kulturFragment}
+  ${artFragment}
 `
 
 const Kultur = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.kultur
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'kultur' }),
-    )()
-  } else {
-    row = get(data, 'kultur', [{}])[0]
-  }
+  const row = showFilter ? filter.kultur : get(data, 'kultur', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'kultur' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

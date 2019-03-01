@@ -13,6 +13,7 @@ import FormTitle from '../shared/FormTitle'
 import RadioButton from '../shared/RadioButton'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import { person as personFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -27,71 +28,36 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query PersonQuery($id: Int!, $showFilter: Boolean!) {
+  query PersonQuery($id: Int!, $isFiltered: Boolean!) {
     person(where: { id: { _eq: $id } }) {
-      id
-      nr
-      name
-      adresszusatz
-      strasse
-      plz
-      ort
-      telefon_privat
-      telefon_geschaeft
-      telefon_mobile
-      fax_privat
-      fax_geschaeft
-      email
-      kein_email
-      bemerkungen
+      ...PersonFields
     }
-    rows: person @include(if: $showFilter) {
-      id
-      nr
-      name
-      adresszusatz
-      strasse
-      plz
-      ort
-      telefon_privat
-      telefon_geschaeft
-      telefon_mobile
-      fax_privat
-      fax_geschaeft
-      email
-      kein_email
-      bemerkungen
+    rows: person @include(if: $isFiltered) {
+      ...PersonFields
     }
   }
+  ${personFragment}
 `
 
 const Person = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.person
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'person' }),
-    )()
-  } else {
-    row = get(data, 'person', [{}])[0]
-  }
+  const row = showFilter ? filter.person : get(data, 'person', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'person' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

@@ -16,6 +16,10 @@ import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import {
+  lieferung as lieferungFragment,
+  art as artFragment,
+} from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -30,42 +34,12 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query LieferungQuery($id: Int!, $showFilter: Boolean!) {
+  query LieferungQuery($id: Int!, $isFiltered: Boolean!) {
     lieferung(where: { id: { _eq: $id } }) {
-      id
-      art_id
-      person_id
-      typ
-      zaehleinheit
-      menge
-      masseinheit
-      von_datum
-      von_sammlung_id
-      von_kultur_id
-      zwischenlager
-      nach_datum
-      nach_kultur_id
-      nach_ausgepflanzt
-      status
-      bemerkungen
+      ...LieferungFields
     }
-    rows: lieferung @include(if: $showFilter) {
-      id
-      art_id
-      person_id
-      typ
-      zaehleinheit
-      menge
-      masseinheit
-      von_datum
-      von_sammlung_id
-      von_kultur_id
-      zwischenlager
-      nach_datum
-      nach_kultur_id
-      nach_ausgepflanzt
-      status
-      bemerkungen
+    rows: lieferung @include(if: $isFiltered) {
+      ...LieferungFields
     }
     person {
       id
@@ -98,11 +72,7 @@ const query = gql`
       sort
     }
     art {
-      id
-      art_ae_art {
-        id
-        name
-      }
+      ...ArtFields
     }
     sammlung {
       id
@@ -131,35 +101,29 @@ const query = gql`
       }
     }
   }
+  ${lieferungFragment}
+  ${artFragment}
 `
 
 const Lieferung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.lieferung
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'lieferung' }),
-    )()
-  } else {
-    row = get(data, 'lieferung', [{}])[0]
-  }
+  const row = showFilter ? filter.lieferung : get(data, 'lieferung', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'lieferung' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

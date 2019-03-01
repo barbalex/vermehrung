@@ -15,6 +15,7 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import { kulturEvent as kulturEventFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -29,22 +30,16 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query EventQuery($id: Int!, $showFilter: Boolean!) {
+  query EventQuery($id: Int!, $isFiltered: Boolean!) {
     kultur_event(where: { id: { _eq: $id } }) {
-      id
-      kultur_id
-      datum
-      event
+      ...KulturEventFields
       kulturBykulturId {
         id
         art_id
       }
     }
-    rows: kultur_event @include(if: $showFilter) {
-      id
-      kultur_id
-      datum
-      event
+    rows: kultur_event @include(if: $isFiltered) {
+      ...KulturEventFields
       kulturBykulturId {
         id
         art_id
@@ -70,35 +65,28 @@ const query = gql`
       }
     }
   }
+  ${kulturEventFragment}
 `
 
 const Event = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.event
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'event' }),
-    )()
-  } else {
-    row = get(data, 'kultur_event', [{}])[0]
-  }
+  const row = showFilter ? filter.event : get(data, 'kultur_event', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'event' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

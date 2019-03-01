@@ -13,6 +13,7 @@ import Select from '../shared/Select'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import { art as artFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -27,50 +28,41 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: Int!, $showFilter: Boolean!) {
+  query ArtQuery($id: Int!, $isFiltered: Boolean!) {
     art(where: { id: { _eq: $id } }) {
-      id
-      ae_id
+      ...ArtFields
     }
-    rows: art @include(if: $showFilter) {
-      id
-      ae_id
+    rows: art @include(if: $isFiltered) {
+      ...ArtFields
     }
     ae_art {
       id
       name
     }
   }
+  ${artFragment}
 `
 
 const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const artId = last(activeNodeArray.filter(e => !isNaN(e)))
-  const showFilter = filter.show
 
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id: artId, showFilter },
+    variables: { id: artId, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.art
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'art' }),
-    )()
-  } else {
-    row = get(data, 'art', [{}])[0]
-  }
+  const row = showFilter ? filter.art : get(data, 'art', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'art' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

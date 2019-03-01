@@ -12,6 +12,7 @@ import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import { herkunft as herkunftFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -26,59 +27,36 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query HerkunftQuery($id: Int!, $showFilter: Boolean!) {
+  query HerkunftQuery($id: Int!, $isFiltered: Boolean!) {
     herkunft(where: { id: { _eq: $id } }) {
-      id
-      nr
-      lokalname
-      gemeinde
-      kanton
-      land
-      x
-      y
-      bemerkungen
+      ...HerkunftFields
     }
-    rows: herkunft @include(if: $showFilter) {
-      id
-      nr
-      lokalname
-      gemeinde
-      kanton
-      land
-      x
-      y
-      bemerkungen
+    rows: herkunft @include(if: $isFiltered) {
+      ...HerkunftFields
     }
   }
+  ${herkunftFragment}
 `
 
 const Herkunft = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.herkunft
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'herkunft' }),
-    )()
-  } else {
-    row = get(data, 'herkunft', [{}])[0]
-  }
+  const row = showFilter ? filter.herkunft : get(data, 'herkunft', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'herkunft' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

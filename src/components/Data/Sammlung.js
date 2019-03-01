@@ -15,6 +15,10 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import {
+  sammlung as sammlungFragment,
+  art as artFragment,
+} from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -29,34 +33,12 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query SammlungQuery($id: Int!, $showFilter: Boolean!) {
+  query SammlungQuery($id: Int!, $isFiltered: Boolean!) {
     sammlung(where: { id: { _eq: $id } }) {
-      id
-      nr
-      art_id
-      person_id
-      herkunft_id
-      datum
-      person_id
-      von_anzahl_individuen
-      zaehleinheit
-      menge
-      masseinheit
-      bemerkungen
+      ...SammlungFields
     }
-    rows: sammlung @include(if: $showFilter) {
-      id
-      nr
-      art_id
-      person_id
-      herkunft_id
-      datum
-      person_id
-      von_anzahl_individuen
-      zaehleinheit
-      menge
-      masseinheit
-      bemerkungen
+    rows: sammlung @include(if: $isFiltered) {
+      ...SammlungFields
     }
     person {
       id
@@ -79,42 +61,32 @@ const query = gql`
       sort
     }
     art {
-      id
-      art_ae_art {
-        id
-        name
-      }
+      ...ArtFields
     }
   }
+  ${sammlungFragment}
+  ${artFragment}
 `
 
 const Sammlung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.sammlung
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'sammlung' }),
-    )()
-  } else {
-    row = get(data, 'sammlung', [{}])[0]
-  }
+  const row = showFilter ? filter.sammlung : get(data, 'sammlung', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'sammlung' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

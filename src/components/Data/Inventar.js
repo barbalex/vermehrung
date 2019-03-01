@@ -15,6 +15,7 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import { kulturInventar as kulturInventarFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -29,42 +30,16 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query InventarQuery($id: Int!, $showFilter: Boolean!) {
+  query InventarQuery($id: Int!, $isFiltered: Boolean!) {
     kultur_inventar(where: { id: { _eq: $id } }) {
-      id
-      kultur_id
-      datum
-      kasten
-      beet
-      nr
-      anzahl_pflanzen
-      anz_mutter_pflanzen
-      anz_nicht_auspflanzbereit
-      anz_auspflanzbereit
-      anz_bluehend
-      bluehdatum
-      instruktion
-      bemerkungen
+      ...KulturInventarFields
       kulturBykulturId {
         id
         art_id
       }
     }
-    rows: kultur_inventar @include(if: $showFilter) {
-      id
-      kultur_id
-      datum
-      kasten
-      beet
-      nr
-      anzahl_pflanzen
-      anz_mutter_pflanzen
-      anz_nicht_auspflanzbereit
-      anz_auspflanzbereit
-      anz_bluehend
-      bluehdatum
-      instruktion
-      bemerkungen
+    rows: kultur_inventar @include(if: $isFiltered) {
+      ...KulturInventarFields
       kulturBykulturId {
         id
         art_id
@@ -83,35 +58,30 @@ const query = gql`
       }
     }
   }
+  ${kulturInventarFragment}
 `
 
 const Inventar = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.inventar
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'inventar' }),
-    )()
-  } else {
-    row = get(data, 'kultur_inventar', [{}])[0]
-  }
+  const row = showFilter
+    ? filter.inventar
+    : get(data, 'kultur_inventar', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'inventar' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 

@@ -15,6 +15,7 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import { zaehlung as zaehlungFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -29,36 +30,16 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ZaehlungQuery($id: Int!, $showFilter: Boolean!) {
+  query ZaehlungQuery($id: Int!, $isFiltered: Boolean!) {
     zaehlung(where: { id: { _eq: $id } }) {
-      id
-      kultur_id
-      datum
-      anzahl_pflanzen
-      anz_mutter_pflanzen
-      anz_nicht_auspflanzbereit
-      anz_auspflanzbereit
-      anz_bluehend
-      bluehdatum
-      instruktion
-      bemerkungen
+      ...ZaehlungFields
       kulturBykulturId {
         id
         art_id
       }
     }
-    rows: zaehlung @include(if: $showFilter) {
-      id
-      kultur_id
-      datum
-      anzahl_pflanzen
-      anz_mutter_pflanzen
-      anz_nicht_auspflanzbereit
-      anz_auspflanzbereit
-      anz_bluehend
-      bluehdatum
-      instruktion
-      bemerkungen
+    rows: zaehlung @include(if: $isFiltered) {
+      ...ZaehlungFields
       kulturBykulturId {
         id
         art_id
@@ -77,35 +58,28 @@ const query = gql`
       }
     }
   }
+  ${zaehlungFragment}
 `
 
 const Zaehlung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const showFilter = filter.show
+  const { isFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(query, {
     suspend: false,
-    variables: { id, showFilter },
+    variables: { id, isFiltered: isFiltered() },
   })
 
   const [errors, setErrors] = useState({})
 
-  let row
-  let rows = []
-  let rowsFiltered = []
-  if (showFilter) {
-    row = filter.zaehlung
-    // get filter values length
-    rows = get(data, 'rows', [])
-    rowsFiltered = memoizeOne(() =>
-      filterNodes({ rows, filter, table: 'zaehlung' }),
-    )()
-  } else {
-    row = get(data, 'zaehlung', [{}])[0]
-  }
+  const row = showFilter ? filter.zaehlung : get(data, 'zaehlung', [{}])[0]
+  const rows = get(data, 'rows', [])
+  const rowsFiltered = memoizeOne(() =>
+    filterNodes({ rows, filter, table: 'zaehlung' }),
+  )()
 
   useEffect(() => setErrors({}), [row])
 
