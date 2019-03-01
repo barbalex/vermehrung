@@ -21,7 +21,10 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  plz: types.optional(types.maybeNull(types.number), null),
+  plz: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   ort: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

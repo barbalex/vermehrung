@@ -25,14 +25,26 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
-  anzahl_mutter_pflanzen: types.optional(types.maybeNull(types.number), null),
+  anzahl_pflanzen: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  anzahl_mutter_pflanzen: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   anz_nicht_auspflanzbereit: types.optional(
     types.maybeNull(types.number),
     null,
   ),
-  anz_auspflanzbereit: types.optional(types.maybeNull(types.number), null),
-  anz_bluehend: types.optional(types.maybeNull(types.number), null),
+  anz_auspflanzbereit: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  anz_bluehend: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   bluehdatum: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

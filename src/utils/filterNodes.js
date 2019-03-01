@@ -14,9 +14,9 @@ export default ({ rows, filter, table }) => {
       if (table && types[table] && types[table][key]) {
         type = types[table][key]
       }
-      if (['number', 'uuid', 'boolean'].includes(type)) {
+      if (['uuid', 'boolean'].includes(type)) {
         // eslint-disable-next-line eqeqeq
-        return row[key] == value
+        return row[key] === value
       }
       // must be string or date
       return row[key]

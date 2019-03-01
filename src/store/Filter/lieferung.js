@@ -13,24 +13,51 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  typ: types.optional(types.maybeNull(types.number), null),
-  zaehleinheit: types.optional(types.maybeNull(types.number), null),
-  menge: types.optional(types.maybeNull(types.number), null),
-  masseinheit: types.optional(types.maybeNull(types.number), null),
+  typ: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  zaehleinheit: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  menge: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  masseinheit: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   von_datum: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  von_sammlung_id: types.optional(types.maybeNull(types.number), null),
-  von_kultur_id: types.optional(types.maybeNull(types.number), null),
-  zwischenlager: types.optional(types.maybeNull(types.number), null),
+  von_sammlung_id: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  von_kultur_id: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  zwischenlager: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   nach_datum: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  nach_kultur_id: types.optional(types.maybeNull(types.number), null),
+  nach_kultur_id: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   nach_ausgepflanzt: types.optional(types.maybeNull(types.boolean), null),
-  status: types.optional(types.maybeNull(types.number), null),
+  status: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

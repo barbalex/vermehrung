@@ -25,10 +25,22 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
-  zaehleinheit: types.optional(types.maybeNull(types.number), null),
-  menge: types.optional(types.maybeNull(types.number), null),
-  masseinheit: types.optional(types.maybeNull(types.number), null),
+  von_anzahl_individuen: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  zaehleinheit: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  menge: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  masseinheit: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

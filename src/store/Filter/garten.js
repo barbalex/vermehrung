@@ -9,8 +9,14 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  x: types.optional(types.maybeNull(types.number), null),
-  y: types.optional(types.maybeNull(types.number), null),
+  x: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  y: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
