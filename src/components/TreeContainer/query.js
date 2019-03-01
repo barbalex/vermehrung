@@ -135,7 +135,15 @@ export default gql`
       sammlungsByartId @include(if: $isArt) {
         id
         art_id
+        person_id
         herkunft_id
+        nr
+        datum
+        von_anzahl_individuen
+        zaehleinheit
+        menge
+        masseinheit
+        bemerkungen
         herkunftByherkunftId @include(if: $isArtSammlung) {
           id
           nr
@@ -147,7 +155,6 @@ export default gql`
             name
           }
         }
-        datum
         lieferungsByvonSammlungId @include(if: $isArtSammlung) {
           id
           person_id
@@ -214,6 +221,11 @@ export default gql`
         id
         datum
         event
+        kultur_id
+        kulturBykulturId {
+          id
+          art_id
+        }
       }
       kulturInventarsBykulturId @include(if: $isKultur) {
         id
@@ -271,6 +283,15 @@ export default gql`
       sammlungsByherkunftId @include(if: $isHerkunft) {
         id
         art_id
+        person_id
+        herkunft_id
+        nr
+        datum
+        von_anzahl_individuen
+        zaehleinheit
+        menge
+        masseinheit
+        bemerkungen
         artByartId @include(if: $isHerkunftSammlung) {
           id
           art_ae_art {
@@ -278,7 +299,6 @@ export default gql`
             name
           }
         }
-        datum
         lieferungsByvonSammlungId @include(if: $isHerkunftSammlung) {
           id
           person_id
@@ -455,8 +475,16 @@ export default gql`
       }
       sammlungsBypersonId @include(if: $isPerson) {
         id
-        datum
         art_id
+        person_id
+        herkunft_id
+        nr
+        datum
+        von_anzahl_individuen
+        zaehleinheit
+        menge
+        masseinheit
+        bemerkungen
         artByartId @include(if: $isPersonSammlung) {
           id
           art_ae_art {
@@ -464,7 +492,6 @@ export default gql`
             name
           }
         }
-        herkunft_id
         herkunftByherkunftId @include(if: $isPersonSammlung) {
           id
           nr
@@ -510,6 +537,15 @@ export default gql`
     sammlung {
       id
       art_id
+      person_id
+      herkunft_id
+      nr
+      datum
+      von_anzahl_individuen
+      zaehleinheit
+      menge
+      masseinheit
+      bemerkungen
       artByartId @include(if: $isSammlung) {
         id
         art_ae_art {
@@ -517,13 +553,10 @@ export default gql`
           name
         }
       }
-      herkunft_id
       herkunftByherkunftId @include(if: $isSammlung) {
         id
         nr
       }
-      datum
-      person_id
       personBypersonId @include(if: $isSammlung) {
         id
         name
