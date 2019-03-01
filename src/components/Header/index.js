@@ -67,7 +67,7 @@ const Header = () => (
                   Zu den Daten
                 </NavButton>
               )}
-              <Search />
+              {pathname.startsWith('/Vermehrung') && <Search />}
               <Account />
               <More />
             </Toolbar>
