@@ -10,7 +10,6 @@ import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -73,7 +72,7 @@ const WerteListe = ({ table }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value) || null
+      const value = event.target.value || null
       try {
         await client.mutate({
           mutation: gql`

@@ -14,7 +14,6 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import filterNodes from '../../utils/filterNodes'
 
 const Container = styled.div`
@@ -143,7 +142,7 @@ const Inventar = () => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value) || null
+      const value = event.target.value || null
       if (filter.show) {
         filter.setValue({ table: 'inventar', key: field, value })
       } else {
