@@ -54,6 +54,13 @@ const query = gql`
     kultur {
       id
       art_id
+      artByartId {
+        id
+        art_ae_art {
+          id
+          name
+        }
+      }
       gartenBygartenId {
         id
         personBypersonId {
@@ -109,10 +116,13 @@ const Event = () => {
     get(s, 'gartenBygartenId.personBypersonId.ort'),
   ])
   kulturWerte = kulturWerte.map(el => {
-    const name =
+    const personName =
       get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-    const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
-    const label = `${name}${ort ? ` (${ort})` : ''}`
+    const personOrt = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+    const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+    const label = `${artName}; ${personName}${
+      personOrt ? ` (${personOrt})` : ''
+    }`
 
     return {
       value: el.id,
