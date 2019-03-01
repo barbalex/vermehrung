@@ -53,9 +53,3 @@ export default types
       self.show = val
     },
   }))
-  .views(self => ({
-    /*get isFiltered() {
-      const tables = Object.keys(self).filter(t => t !== 'show')
-      return tables.some(table => self.tableIsFiltered({ table }))
-    },*/
-  }))

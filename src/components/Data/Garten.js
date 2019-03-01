@@ -74,8 +74,11 @@ const Garten = () => {
   console.log('Garten:', {
     id,
     isFiltered,
-    tableIsFiltered,
     gartenIsFiltered: tableIsFiltered({ table: 'garten' }),
+    activeNodeArray: activeNodeArray.slice(),
+    data,
+    loading,
+    error,
   })
 
   let personWerte = get(data, 'person', [])

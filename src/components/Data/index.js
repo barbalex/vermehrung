@@ -24,13 +24,13 @@ const Data = () => {
     return null
   }
 
-  if (url.length === 2 && url[0] === 'Arten') {
+  if ([2, 3].includes(url.length) && url[0] === 'Arten') {
     return <Art />
   }
-  if (url.length === 2 && url[0] === 'Gaerten') {
+  if ([2, 3].includes(url.length) && url[0] === 'Gaerten') {
     return <Garten />
   }
-  if (url.length === 2 && url[0] === 'Herkuenfte') {
+  if ([2, 3].includes(url.length) && url[0] === 'Herkuenfte') {
     return <Herkunft />
   }
   if (url.length === 2 && url[0] === 'Lieferungen') {
@@ -46,15 +46,6 @@ const Data = () => {
     return <Kultur />
   }
 
-  if (url.length === 3 && url[0] === 'Arten') {
-    return <Art />
-  }
-  if (url.length === 3 && url[0] === 'Gaerten') {
-    return <Garten />
-  }
-  if (url.length === 3 && url[0] === 'Herkuenfte') {
-    return <Herkunft />
-  }
   if (url.length === 3 && url[0] === 'Personen') {
     return <Person />
   }
