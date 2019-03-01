@@ -18,7 +18,7 @@ const Data = () => {
   const store = useContext(storeContext)
   const { activeNodeArray: url } = store.tree
 
-  console.log('Data')
+  //console.log('Data')
 
   if (url.length === 1) {
     return null
@@ -36,25 +36,16 @@ const Data = () => {
   if (url.length === 2 && url[0] === 'Lieferungen') {
     return <Lieferung />
   }
-  if (url.length === 2 && url[0] === 'Personen') {
+  if ([2, 3].includes && url[0] === 'Personen') {
     return <Person />
   }
-  if (url.length === 2 && url[0] === 'Sammlungen') {
+  if ([2, 3].includes(url.length) && url[0] === 'Sammlungen') {
     return <Sammlung />
   }
-  if (url.length === 2 && url[0] === 'Kulturen') {
+  if ([2, 3].includes(url.length) && url[0] === 'Kulturen') {
     return <Kultur />
   }
 
-  if (url.length === 3 && url[0] === 'Personen') {
-    return <Person />
-  }
-  if (url.length === 3 && url[0] === 'Sammlungen') {
-    return <Sammlung />
-  }
-  if (url.length === 3 && url[0] === 'Kulturen') {
-    return <Kultur />
-  }
   if (
     url.length === 3 &&
     url[0] === 'Werte-Listen' &&

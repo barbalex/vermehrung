@@ -67,7 +67,7 @@ const Art = () => {
     filterNodes({ rows, filter, table: 'art' }),
   )()
 
-  console.log('Art', { loading, data })
+  //console.log('Art', { loading, data })
 
   useEffect(() => setErrors({}), [row])
 

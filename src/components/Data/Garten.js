@@ -71,7 +71,7 @@ const Garten = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  console.log('Garten:', {
+  /*console.log('Garten:', {
     id,
     isFiltered,
     gartenIsFiltered: tableIsFiltered({ table: 'garten' }),
@@ -79,7 +79,7 @@ const Garten = () => {
     data,
     loading,
     error,
-  })
+  })*/
 
   let personWerte = get(data, 'person', [])
   personWerte = personWerte.map(el => ({
