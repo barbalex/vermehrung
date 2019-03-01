@@ -49,11 +49,7 @@ const Garten = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const {
-    isFiltered: runIsFiltered,
-    tableIsFiltered,
-    show: showFilter,
-  } = filter
+  const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
@@ -74,7 +70,6 @@ const Garten = () => {
   /*console.log('Garten:', {
     id,
     isFiltered,
-    gartenIsFiltered: tableIsFiltered({ table: 'garten' }),
     activeNodeArray: activeNodeArray.slice(),
     data,
     loading,
