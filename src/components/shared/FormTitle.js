@@ -47,7 +47,8 @@ const StyledIconButton = styled(IconButton)`
 
 const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
   const store = useContext(storeContext)
-  const { isFiltered, show, setShow, empty } = store.filter
+  const { isFiltered: runIsFiltered, show, setShow, empty } = store.filter
+  const isFiltered = runIsFiltered()
   const onClickFilter = useCallback(() => setShow(!show))
   const onClickEmpty = useCallback(() => empty())
 
@@ -56,7 +57,7 @@ const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
       <Title>{title}</Title>
       {table && (
         <Symbols>
-          {(show || isFiltered()) && (
+          {(show || isFiltered) && (
             <FilterNumbers>{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
           )}
           <StyledIconButton
@@ -65,7 +66,7 @@ const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
           >
             <MdFilterList />
           </StyledIconButton>
-          {isFiltered() && (
+          {isFiltered && (
             <StyledIconButton title="Filter entfernen" onClick={onClickEmpty}>
               <MdDeleteSweep />
             </StyledIconButton>

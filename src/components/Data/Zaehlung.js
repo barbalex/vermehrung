@@ -65,11 +65,12 @@ const Zaehlung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered, show: showFilter } = filter
+  const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
+  const isFiltered = runIsFiltered()
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered: isFiltered() },
+    variables: { id, isFiltered },
   })
 
   const [errors, setErrors] = useState({})

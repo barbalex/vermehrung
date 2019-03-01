@@ -49,11 +49,16 @@ const Garten = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered, tableIsFiltered, show: showFilter } = filter
+  const {
+    isFiltered: runIsFiltered,
+    tableIsFiltered,
+    show: showFilter,
+  } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
+  const isFiltered = runIsFiltered()
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered: isFiltered() },
+    variables: { id, isFiltered },
   })
 
   const [errors, setErrors] = useState({})
@@ -68,7 +73,7 @@ const Garten = () => {
 
   console.log('Garten:', {
     id,
-    isFiltered: isFiltered(),
+    isFiltered,
     tableIsFiltered,
     gartenIsFiltered: tableIsFiltered({ table: 'garten' }),
   })
