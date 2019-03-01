@@ -7,7 +7,7 @@ const Container = styled.div`
   border-radius: 3px;
   background-color: #8624ff;
   margin-right: 5px;
-  width: 200px;
+  width: 220px;
   display: flex;
   :hover {
     background-color: #a459ff;
