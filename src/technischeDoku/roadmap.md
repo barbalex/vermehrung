@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Technische-Dokumentation/Roadmap"
-date: "2019-03-01"
+date: "2019-03-02"
 title: "Roadmap"
 sort: 4
 ---
@@ -27,6 +27,6 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Formulare gebaut
 - :white_check_mark: Filter gebaut
 - :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
+- :ballot_box_with_check: Volltext-Suche gebaut
 - :white_medium_square: Authentifikation und Authorisierung gebaut
-- :white_medium_square: Volltext-Suche gebaut
 - ...?
