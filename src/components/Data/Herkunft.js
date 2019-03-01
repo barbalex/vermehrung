@@ -49,7 +49,7 @@ const Herkunft = () => {
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered },
   })
-  console.log('Herkunft')
+  //console.log('Herkunft')
 
   const [errors, setErrors] = useState({})
 
