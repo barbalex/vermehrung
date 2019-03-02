@@ -57,7 +57,9 @@ const Header = () => (
                 Vermehrung
               </SiteTitle>
               <Spacer />
-              {!pathname.startsWith('/Vermehrung') && (
+              {pathname.startsWith('/Vermehrung') ? (
+                <Search />
+              ) : (
                 <NavButton
                   variant="outlined"
                   component={Link}
@@ -67,7 +69,6 @@ const Header = () => (
                   Zu den Daten
                 </NavButton>
               )}
-              {pathname.startsWith('/Vermehrung') && <Search />}
               <Account />
               <More />
             </Toolbar>
