@@ -77,3 +77,19 @@ from kultur
     inner join person on garten.person_id = person.id
   on kultur.garten_id = garten.id;
 
+SELECT
+  setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'B') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(datum::text, '')), 'A') || ' ' ||
+  setweight(to_tsvector('german', coalesce(event, '')), 'A') as vector
+from kultur_event
+  inner join kultur 
+    inner join art 
+      inner join ae_art on art.ae_id = ae_art.id
+    on kultur.art_id = art.id
+    left join garten
+      inner join person on garten.person_id = person.id
+    on kultur.garten_id = garten.id
+  on kultur_event.kultur_id = kultur.id;
+
+
