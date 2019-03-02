@@ -42,12 +42,12 @@ create function herkunft_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.lokalname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.gemeinde, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.kanton, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.gemeinde, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.kanton, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.land, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.x::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.y::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -85,18 +85,37 @@ create function sammlung_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunftnr, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.nr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.von_anzahl_individuen::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.datum::text, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(zaehleinheit, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.menge::text, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(masseinheit, '')), 'C') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
 
 create trigger tsvupdate_sammlung before insert or update
   on sammlung for each row execute procedure sammlung_trigger();
+
+create function garten_trigger() returns trigger as $$
+  declare
+    personname text;
+  begin
+    select person.name into personname
+    from garten left join person on garten.person_id = person.id
+    where person.id = new.person_id;
+    new.tsv :=
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.x::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.y::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_garten before insert or update
+  on garten for each row execute procedure garten_trigger();

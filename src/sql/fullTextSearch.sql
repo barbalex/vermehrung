@@ -36,8 +36,6 @@ SELECT
 from herkunft
 LIMIT 5;
 
-
-
 SELECT
   setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'B') || ' ' ||
   setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
@@ -58,3 +56,12 @@ from sammlung
   left join herkunft on sammlung.herkunft_id = herkunft.id
   left join zaehleinheit_werte on sammlung.zaehleinheit = zaehleinheit_werte.id
   left join masseinheit_werte on sammlung.masseinheit = masseinheit_werte.id;
+
+SELECT
+  setweight(to_tsvector('simple', coalesce(person.name, '')), 'A') || ' ' ||
+  setweight(to_tsvector('german', coalesce(x::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('german', coalesce(y::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(garten.bemerkungen, '')), 'C') as vector
+from garten
+  left join person on garten.person_id = person.id;
+
