@@ -35,3 +35,26 @@ SELECT
   setweight(to_tsvector('simple', coalesce(bemerkungen, '')), 'C') as vector
 from herkunft
 LIMIT 5;
+
+
+
+SELECT
+  setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'B') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
+  setweight(to_tsvector('german', coalesce(herkunft.nr, '')), 'B') || ' ' ||
+  setweight(to_tsvector('german', coalesce(herkunft.lokalname, '')), 'B') || ' ' ||
+  setweight(to_tsvector('german', coalesce(sammlung.nr, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(sammlung.von_anzahl_individuen::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(sammlung.datum::text, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(zaehleinheit_werte.wert, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(sammlung.menge::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(masseinheit_werte.wert, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(sammlung.bemerkungen, '')), 'D') as vector
+from sammlung
+  inner join art 
+    inner join ae_art on art.ae_id = ae_art.id
+  on sammlung.art_id = art.id
+  left join person on sammlung.person_id = person.id
+  left join herkunft on sammlung.herkunft_id = herkunft.id
+  left join zaehleinheit_werte on sammlung.zaehleinheit = zaehleinheit_werte.id
+  left join masseinheit_werte on sammlung.masseinheit = masseinheit_werte.id;

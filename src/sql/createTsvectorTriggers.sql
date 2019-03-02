@@ -54,3 +54,32 @@ $$ language plpgsql;
 
 create trigger tsvupdate_herkunft before insert or update
   on herkunft for each row execute procedure herkunft_trigger();
+
+create function sammlung_trigger() returns trigger as $$
+  declare
+    artname text;
+  begin
+    select ae_art.name into artname
+    from sammlung
+      inner join art 
+        inner join ae_art on art.ae_id = ae_art.id
+      on sammlung.art_id = art.id
+    where art.id = new.art_id;
+    new.tsv :=
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(herkunft.nr, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(herkunft.lokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(sammlung.nr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlung.von_anzahl_individuen::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlung.datum::text, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(zaehleinheit_werte.wert, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlung.menge::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(masseinheit_werte.wert, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlung.bemerkungen, '')), 'D');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_sammlung before insert or update
+  on sammlung for each row execute procedure sammlung_trigger();
