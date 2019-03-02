@@ -140,3 +140,64 @@ from zaehlung
       inner join person on garten.person_id = person.id
     on kultur.garten_id = garten.id
   on zaehlung.kultur_id = kultur.id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT
+  setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'B') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
+  setweight(to_tsvector('german', coalesce(lieferung_typ_werte.wert, '')), 'B') || ' ' ||
+  setweight(to_tsvector('german', coalesce(lieferung.menge::text, '')), 'B') || ' ' ||
+  setweight(to_tsvector('german', coalesce(masseinheit_werte.wert, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(lieferung.von_datum::text, '')), 'D') || ' ' ||
+
+  setweight(to_tsvector('simple', coalesce(lieferung.datum::text, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(zaehleinheit_werte.wert, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(lieferung.menge::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(masseinheit_werte.wert, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(lieferung.bemerkungen, '')), 'D') as vector
+from lieferung
+  inner join art 
+    inner join ae_art on art.ae_id = ae_art.id
+  on lieferung.art_id = art.id
+  left join person on lieferung.person_id = person.id
+  left join sammlung
+    left join person on sammlung.person_id = person.id
+    left join herkunft on sammlung.herkunft_id = herkunft.id
+  on lieferung.von_sammlung_id = sammlung.id
+  left join kultur on lieferung.von_kultur_id = kultur.id as kultur_von
+  left join herkunft on sammlung.herkunft_id = herkunft.id
+  left join lieferung_typ_werte on lieferung.typ = lieferung_typ_werte.id
+  left join masseinheit_werte on lieferung.masseinheit = masseinheit_werte.id;
+
+
+
+  art_id integer default null references art (id) on delete cascade on update cascade,
+  person_id integer default null references person (id) on delete cascade on update cascade,
+  typ integer default null references lieferung_typ_werte (id) on delete set null on update cascade,
+  zaehleinheit integer default null references zaehleinheit_werte (id) on delete set null on update cascade,
+  menge integer default null,
+  masseinheit integer default null references masseinheit_werte (id) on delete set null on update cascade,
+  von_datum date default null,
+  von_sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
+  von_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  zwischenlager integer default null references lieferung_zwischenlager_werte (id) on delete set null on update cascade,
+  nach_datum date default null,
+  nach_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  nach_ausgepflanzt boolean default false,
+  status integer default null references lieferung_status_werte (id) on delete set null on update cascade,
+  bemerkungen text default null,
