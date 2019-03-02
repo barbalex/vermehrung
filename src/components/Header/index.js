@@ -32,7 +32,6 @@ const Spacer = styled.div`
 const NavButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  font-weight: ${props => (props.active ? '700' : '500')};
   border-width: 0 !important;
   &:hover {
     border-width: 1px !important;
@@ -64,7 +63,6 @@ const Header = () => (
                   variant="outlined"
                   component={Link}
                   to="/Vermehrung/"
-                  active={pathname === '/Vermehrung/' ? 1 : 0}
                 >
                   Zu den Daten
                 </NavButton>
