@@ -27,7 +27,6 @@ create index on person using btree (name);
 --alter table person add column tsv tsvector;
 create index on person using gin (tsv);
 
-
 drop table if exists art cascade;
 create table art (
   id serial primary key,

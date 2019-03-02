@@ -23,3 +23,15 @@ SELECT
 from
   art inner join ae_art on art.ae_id = ae_art.id
 limit 5;
+
+SELECT
+  setweight(to_tsvector('simple', coalesce(nr, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(lokalname, '')), 'A') || ' ' ||
+  setweight(to_tsvector('german', coalesce(gemeinde, '')), 'B') || ' ' ||
+  setweight(to_tsvector('german', coalesce(kanton, '')), 'B') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(land, '')), 'B') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(x::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(y::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(bemerkungen, '')), 'C') as vector
+from herkunft
+LIMIT 5;

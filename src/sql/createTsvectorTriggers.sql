@@ -36,3 +36,21 @@ $$ language plpgsql;
 
 create trigger tsvupdate_art before insert or update
   on art for each row execute procedure art_trigger();
+
+create function herkunft_trigger() returns trigger as $$
+  begin
+    new.tsv :=
+      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.lokalname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.gemeinde, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.kanton, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.land, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.x::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.y::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_herkunft before insert or update
+  on herkunft for each row execute procedure herkunft_trigger();
