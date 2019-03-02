@@ -65,3 +65,15 @@ SELECT
 from garten
   left join person on garten.person_id = person.id;
 
+SELECT
+  setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(person.name, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(kultur.bemerkungen, '')), 'D') as vector
+from kultur
+  inner join art 
+    inner join ae_art on art.ae_id = ae_art.id
+  on kultur.art_id = art.id
+  left join garten
+    inner join person on garten.person_id = person.id
+  on kultur.garten_id = garten.id;
+

@@ -119,3 +119,29 @@ $$ language plpgsql;
 
 create trigger tsvupdate_garten before insert or update
   on garten for each row execute procedure garten_trigger();
+
+create function kultur_trigger() returns trigger as $$
+  declare
+    artname text;
+    personname text;
+  begin
+    select ae_art.name into artname
+    from kultur
+      inner join art 
+        inner join ae_art on art.ae_id = ae_art.id
+      on kultur.art_id = art.id
+    where art.id = new.art_id;
+    select person.name into personname
+    from kultur left join garten
+      inner join person on garten.person_id = person.id
+    on new.garten_id = garten.id;
+    new.tsv :=
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(personname, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'D');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_kultur before insert or update
+  on kultur for each row execute procedure kultur_trigger();
