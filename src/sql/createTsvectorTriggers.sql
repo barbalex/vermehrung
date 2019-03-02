@@ -58,6 +58,11 @@ create trigger tsvupdate_herkunft before insert or update
 create function sammlung_trigger() returns trigger as $$
   declare
     artname text;
+    personname text;
+    herkunftnr text;
+    herkunftlokalname text;
+    zaehleinheit text;
+    masseinheit text;
   begin
     select ae_art.name into artname
     from sammlung
@@ -65,18 +70,30 @@ create function sammlung_trigger() returns trigger as $$
         inner join ae_art on art.ae_id = ae_art.id
       on sammlung.art_id = art.id
     where art.id = new.art_id;
+    select person.name into personname
+    from sammlung left join person on sammlung.person_id = person.id
+    where person.id = new.person_id;
+    select herkunft.nr, herkunft.lokalname into herkunftnr, herkunftlokalname
+    from sammlung left join herkunft on sammlung.herkunft_id = herkunft.id
+    where herkunft.id = new.herkunft_id;
+    select zaehleinheit_werte.wert into zaehleinheit
+    from sammlung left join zaehleinheit_werte on sammlung.zaehleinheit = zaehleinheit_werte.id
+    where zaehleinheit_werte.id = new.zaehleinheit;
+    select masseinheit_werte.wert into masseinheit
+    from sammlung left join masseinheit_werte on sammlung.masseinheit = masseinheit_werte.id
+    where masseinheit_werte.id = new.masseinheit;
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunft.nr, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunft.lokalname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(sammlung.nr, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(sammlung.von_anzahl_individuen::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(sammlung.datum::text, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(zaehleinheit_werte.wert, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(sammlung.menge::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(masseinheit_werte.wert, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(sammlung.bemerkungen, '')), 'D');
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(herkunftnr, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.nr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.von_anzahl_individuen::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.datum::text, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(zaehleinheit, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.menge::text, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(masseinheit, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
