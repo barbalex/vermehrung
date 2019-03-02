@@ -16,4 +16,10 @@ SELECT
   setweight(to_tsvector('simple', coalesce(fax_geschaeft, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(email, '')), 'C') || ' ' ||
   setweight(to_tsvector('german', coalesce(bemerkungen, '')), 'C') as vector
-from person
+from person;
+
+SELECT
+  to_tsvector('simple', coalesce(ae_art.name, '')) as vector
+from
+  art inner join ae_art on art.ae_id = ae_art.id
+limit 5;
