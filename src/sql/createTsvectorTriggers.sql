@@ -211,3 +211,38 @@ $$ language plpgsql;
 
 create trigger tsvupdate_kultur_inventar before insert or update
   on kultur_inventar for each row execute procedure kultur_inventar_trigger();
+
+create function zaehlung_trigger() returns trigger as $$
+  declare
+    artname text;
+    personname text;
+  begin
+    select ae_art.name, person.name into artname, personname
+    from zaehlung
+      inner join kultur 
+        inner join art 
+          inner join ae_art on art.ae_id = ae_art.id
+        on kultur.art_id = art.id
+        left join garten
+          inner join person on garten.person_id = person.id
+        on kultur.garten_id = garten.id
+      on zaehlung.kultur_id = kultur.id
+    where kultur.id = new.kultur_id;
+    new.tsv :=
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.datum::text, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.anzahl_pflanzen::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.anz_nicht_auspflanzbereit::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.anz_auspflanzbereit::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.anz_bluehend::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.bluehdatum, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.instruktion, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_zaehlung before insert or update
+  on zaehlung for each row execute procedure zaehlung_trigger();
