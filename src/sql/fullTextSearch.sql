@@ -4,6 +4,10 @@ SELECT to_tsvector('german', 'Der Tag ist schön und die Sonne scheint');
 SELECT to_tsvector('german', 'Der Tag ist schön und die Sonne scheint') @@ to_tsquery('Sonne');
 select * from art where tsv @@ to_tsquery('carex');
 
+art_search(args: {filter: "abies"}) {
+  id
+}
+
 -- queries
 -- these are not directly built
 -- rather they were used to build the triggers
