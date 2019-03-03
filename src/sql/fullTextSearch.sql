@@ -2,6 +2,7 @@
 -- examples of searching
 SELECT to_tsvector('german', 'Der Tag ist schön und die Sonne scheint');
 SELECT to_tsvector('german', 'Der Tag ist schön und die Sonne scheint') @@ to_tsquery('Sonne');
+select id, tsv from art where tsv @@ to_tsquery('carex');
 
 -- queries
 -- these are not directly built
