@@ -69,6 +69,8 @@ const Container = styled.div`
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     z-index: 2;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
   }
   .react-autosuggest__suggestions-list {
     margin: 0;
