@@ -1,7 +1,11 @@
--- examples
+-- this file is not needed for app execution
+-- examples of searching
 SELECT to_tsvector('german', 'Der Tag ist schön und die Sonne scheint');
 SELECT to_tsvector('german', 'Der Tag ist schön und die Sonne scheint') @@ to_tsquery('Sonne');
 
+-- queries
+-- these are not directly built
+-- rather they were used to build the triggers
 SELECT
   setweight(to_tsvector('simple', coalesce(nr, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(name, '')), 'A') || ' ' ||
