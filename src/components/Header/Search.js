@@ -8,6 +8,7 @@ import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
+import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../storeContext'
 
@@ -197,7 +198,12 @@ const getSectionSuggestions = section => section.suggestions
 
 export default () => {
   const store = useContext(storeContext)
-  const { setActiveNodeArray } = store.tree
+  const {
+    setActiveNodeArray,
+    openNodes: openNodesRaw,
+    setOpenNodes,
+    addOpenNodes,
+  } = store.tree
   const [val, setVal] = useState('')
 
   const { data, error, loading } = useQuery(filterSuggestionsQuery, {
@@ -339,8 +345,6 @@ export default () => {
     ? titledSuggestions
     : loadingSuggestions
 
-  console.log('Search', { titledSuggestions })
-
   const onChange = useCallback(event => setVal(event.target.value))
   const onClickDel = useCallback(() => setVal(''))
   const onSuggestionSelected = useCallback((event, { suggestion }) => {
@@ -368,13 +372,17 @@ export default () => {
         break
       default: {
         // do nothing
-        // TODO:
-        // kultur_event, kultur_inventar and zahelungen
       }
     }
+    store.filter.setShow(false)
     setActiveNodeArray(newActiveNodeArray)
-    navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setVal('')
+    navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
+    // build open nodes
+    const newOpenNodes = newActiveNodeArray.map((n, index) =>
+      newActiveNodeArray.slice(0, index + 1),
+    )
+    addOpenNodes(newOpenNodes)
   })
   const inputProps = {
     value: val,
