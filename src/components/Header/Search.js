@@ -192,7 +192,7 @@ export default () => {
     variables: { run: !!val, filter: val },
   })
 
-  console.log('Search, data', data)
+  //console.log('Search, data', data)
 
   const suggesionsArt = get(data, 'art', []).map(o => ({
     id: o.id,
@@ -207,7 +207,6 @@ export default () => {
   const onChange = useCallback(event => setVal(event.target.value))
   const onClickDel = useCallback(() => setVal(''))
   const onSuggestionSelected = useCallback((event, { suggestion }) => {
-    let url
     let newActiveNodeArray
     // use suggestion.id to set url
     switch (suggestion.type) {
@@ -219,7 +218,11 @@ export default () => {
       case 'Sammlungen':
       case 'Kulturen':
         newActiveNodeArray = [suggestion.type, suggestion.id]
-        url = `/Vermehrung/${suggestion.type}/${suggestion.id}`
+        break
+      case 'Inventare':
+      case 'Events':
+      case 'Zaehlungen':
+        console.log('TODO')
         break
       default: {
         // do nothing
@@ -228,7 +231,7 @@ export default () => {
       }
     }
     setActiveNodeArray(newActiveNodeArray)
-    navigate(url)
+    navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setVal('')
   })
   const inputProps = {
