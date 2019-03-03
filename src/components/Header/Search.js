@@ -204,7 +204,7 @@ export default () => {
     variables: { run: !!val, filter: val },
   })
 
-  console.log('Search, data', data)
+  //console.log('Search, data', data)
 
   const suggestionsArt = get(data, 'art', []).map(o => ({
     id: o.id,
