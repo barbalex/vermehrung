@@ -1,19 +1,19 @@
 create function person_trigger() returns trigger as $$
   begin
     new.tsv :=
-      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'a') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.name, '')), 'a') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.adresszusatz, '')), 'c') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.strasse, '')), 'c') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.plz::text, '')), 'd') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.ort, '')), 'c') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.telefon_privat, '')), 'd') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.telefon_geschaeft, '')), 'd') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.telefon_mobile, '')), 'd') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.fax_privat, '')), 'd') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.fax_geschaeft, '')), 'd') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.email, '')), 'c') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'c');
+      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.name, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.adresszusatz, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.strasse, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.plz::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.ort, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.fax_privat, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.email, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;

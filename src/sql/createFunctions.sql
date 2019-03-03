@@ -7,6 +7,11 @@ returns setof person as
 language sql stable;
 alter function person_search(filter text) owner to postgres;
 
+-- query like this:
+--art_search(args: {filter: "abies"}) {
+--  id--
+--}
+
 drop function if exists art_search(filter text);
 create or replace function art_search(filter text)
 returns setof art as
@@ -15,11 +20,6 @@ returns setof art as
   $$
 language sql stable;
 alter function art_search(filter text) owner to postgres;
-
--- query like this:
---art_search(args: {filter: "abies"}) {
---  id--
---}
 
 drop function if exists herkunft_search(filter text);
 create or replace function herkunft_search(filter text)
