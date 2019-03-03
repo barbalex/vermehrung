@@ -246,3 +246,110 @@ $$ language plpgsql;
 
 create trigger tsvupdate_zaehlung before insert or update
   on zaehlung for each row execute procedure zaehlung_trigger();
+
+create function lieferung_trigger() returns trigger as $$
+  declare
+    artname text;
+    personname text;
+    typ text;
+    status text;
+    zaehleinheit text;
+    masseinheit text;
+    sammlungNr text;
+    sammlungDatum text;
+    sammlungPerson text;
+    sammlungHerkunftNr text;
+    sammlungHerkunftLokalname text;
+    vonKulturPersonName text;
+    zwischenlager text;
+    nachKulturPersonName text;
+  begin
+    select ae_art.name into artname
+    from lieferung
+      inner join art 
+        inner join ae_art on art.ae_id = ae_art.id
+      on lieferung.art_id = art.id
+    where art.id = new.art_id;
+    select person.name into personname
+    from lieferung
+      left join person
+      on lieferung.person_id = person.id
+    where person.id = new.person_id;
+    select lieferung_typ_werte.wert into typ
+    from lieferung
+      left join lieferung_typ_werte
+      on lieferung.typ = lieferung_typ_werte.id
+    where lieferung_typ_werte.id = new.typ;
+    select lieferung_status_werte.wert into status
+    from lieferung
+      left join lieferung_status_werte
+      on lieferung.status = lieferung_status_werte.id
+    where lieferung_status_werte.id = new.status;
+    select zaehleinheit_werte.wert into zaehleinheit
+    from lieferung
+      left join zaehleinheit_werte
+      on lieferung.zaehleinheit = zaehleinheit_werte.id
+    where zaehleinheit_werte.id = new.zaehleinheit;
+    select masseinheit_werte.wert into masseinheit
+    from lieferung
+      left join masseinheit_werte
+      on lieferung.masseinheit = masseinheit_werte.id
+    where masseinheit_werte.id = new.masseinheit;
+    select sammlung.nr, sammlung.datum, sammlungPerson.name, herkunft.nr, herkunft.lokalname
+    into sammlungNr, sammlungDatum, sammlungPerson, sammlungHerkunftNr, sammlungHerkunftLokalname
+    from lieferung
+      left join sammlung
+        left join person as sammlungPerson on sammlung.person_id = person_id
+        left join herkunft on sammlung.herkunft_id = herkunft.id
+      on lieferung.von_sammlung_id = sammlung.id
+    where sammlung.id = new.von_sammlung_id;
+    select vonKulturPerson.name into vonKulturPersonName
+    from lieferung
+      left join kultur as vonKultur
+        inner join garten as vonGarten
+          inner join person as vonKulturPerson on vonGarten.person_id = person_id
+        on vonKultur.garten_id = vonGarten.id
+      on lieferung.von_kultur_id = vonKultur.id
+    where vonKultur.id = new.von_kultur_id;
+    select lieferung_zwischenlager_werte.wert into zwischenlager
+    from lieferung
+      left join lieferung_zwischenlager_werte
+      on lieferung.zwischenlager = lieferung_zwischenlager_werte.id
+    where lieferung_zwischenlager_werte.id = new.zwischenlager;
+    select nachKulturPerson.name into nachKulturPersonName
+    from lieferung
+      left join kultur as nachKultur
+        inner join garten as nachGarten
+          inner join person as nachKulturPerson on nachGarten.person_id = person_id
+        on nachKultur.garten_id = nachGarten.id
+      on lieferung.nach_kultur_id = nachKultur.id
+    where nachKultur.id = new.nach_kultur_id;
+    new.tsv :=
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(typ, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(status, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(zaehleinheit, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.menge::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(masseinheit, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.von_datum::text, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungNr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungDatum::text, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungPerson, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungHerkunftNr, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungHerkunftLokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(vonKulturPersonName, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(zwischenlager, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.nach_datum::text, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(nachKulturPersonName, '')), 'B') || ' ' ||
+      case
+        when new.nach_ausgepflanzt='true' then setweight(to_tsvector('simple', 'ausgepflanzt'), 'A')
+        else ''
+      end || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_lieferung before insert or update
+  on lieferung for each row execute procedure lieferung_trigger();
