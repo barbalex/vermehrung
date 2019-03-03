@@ -62,7 +62,8 @@ const Container = styled.div`
     margin-left: -23px;
     width: ${props => `${props['data-autosuggestwidth']}px`};
     border: 1px solid #aaa;
-    background-color: #fff;
+    /*background-color: #fff;*/
+    background-color: rgb(251, 248, 255);
     font-family: Helvetica, sans-serif;
     font-size: 14px;
     border-bottom-left-radius: 4px;
