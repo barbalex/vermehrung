@@ -6,7 +6,6 @@ module.exports = {
     service: {
       name: 'api',
       url: constants.graphQlUri,
-      // optional headers
       headers: {
         'X-Hasura-Access-Key': secrets.accessKey,
       },
