@@ -242,6 +242,17 @@ export default () => {
     name: get(o, 'von_datum') || '(kein von-Datum)',
     type: 'Lieferungen',
   }))
+  const suggestionsPerson = get(data, 'person', []).map(o => ({
+    id: o.id,
+    name: get(o, 'name') || '(kein Name)',
+    type: 'Personen',
+  }))
+  const suggestionsSammlung = get(data, 'sammlung', []).map(o => ({
+    id: o.id,
+    name: `${get(o, 'nr') || '(keine Nr)'}: ${get(o, 'datum') ||
+      '(kein Datum)'}`,
+    type: 'Sammlungen',
+  }))
   const suggestionsZaehlung = get(data, 'zaehlung', []).map(o => ({
     id: o.id,
     name: get(o, 'datum') || '(kein Datum)',
@@ -256,6 +267,8 @@ export default () => {
     ...suggestionsKulturEvent,
     ...suggestionsKulturInventar,
     ...suggestionsLieferung,
+    ...suggestionsPerson,
+    ...suggestionsSammlung,
     ...suggestionsZaehlung,
   ]
   const titledSuggestions = []
@@ -299,6 +312,18 @@ export default () => {
     titledSuggestions.push({
       title: `Lieferungen (${suggestionsLieferung.length})`,
       suggestions: suggestionsLieferung,
+    })
+  }
+  if (suggestionsPerson.length) {
+    titledSuggestions.push({
+      title: `Personen (${suggestionsPerson.length})`,
+      suggestions: suggestionsPerson,
+    })
+  }
+  if (suggestionsSammlung.length) {
+    titledSuggestions.push({
+      title: `Sammlungen (${suggestionsSammlung.length})`,
+      suggestions: suggestionsSammlung,
     })
   }
   if (suggestionsZaehlung.length) {
