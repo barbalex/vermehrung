@@ -76,7 +76,9 @@ const Container = styled.div`
   }
   .react-autosuggest__suggestion {
     cursor: pointer;
-    padding: 5px 20px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 0 20px;
     color: rgba(0, 0, 0, 0.8);
   }
   .react-autosuggest__suggestion--highlighted {
@@ -89,7 +91,7 @@ const Container = styled.div`
     border-top: 0;
   }
   .react-autosuggest__section-title {
-    padding: 5px 0 5px 10px;
+    padding: 5px 0 0 10px;
     font-size: 12px;
     color: #777;
   }
@@ -234,6 +236,11 @@ export default () => {
     type: 'Inventare',
     parent: o.kultur_id,
   }))
+  const suggestionsLieferung = get(data, 'lieferung', []).map(o => ({
+    id: o.id,
+    name: get(o, 'von_datum') || '(kein von-Datum)',
+    type: 'Lieferungen',
+  }))
   const suggestionsZaehlung = get(data, 'zaehlung', []).map(o => ({
     id: o.id,
     name: get(o, 'datum') || '(kein Datum)',
@@ -247,6 +254,7 @@ export default () => {
     ...suggestionsKultur,
     ...suggestionsKulturEvent,
     ...suggestionsKulturInventar,
+    ...suggestionsLieferung,
     ...suggestionsZaehlung,
   ]
   const titledSuggestions = []
@@ -284,6 +292,12 @@ export default () => {
     titledSuggestions.push({
       title: `Inventare (${suggestionsKulturInventar.length})`,
       suggestions: suggestionsKulturInventar,
+    })
+  }
+  if (suggestionsLieferung.length) {
+    titledSuggestions.push({
+      title: `Lieferungen (${suggestionsLieferung.length})`,
+      suggestions: suggestionsLieferung,
     })
   }
   if (suggestionsZaehlung.length) {
