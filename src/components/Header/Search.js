@@ -110,6 +110,9 @@ const filterSuggestionsQuery = gql`
     }
     garten: garten_search(args: { filter: $filter }) @include(if: $run) {
       ...GartenFields
+      personBypersonId {
+        ...PersonFields
+      }
     }
     herkunft: herkunft_search(args: { filter: $filter }) @include(if: $run) {
       ...HerkunftFields
@@ -192,17 +195,37 @@ export default () => {
     variables: { run: !!val, filter: val },
   })
 
-  //console.log('Search, data', data)
+  console.log('Search, data', data)
 
   const suggesionsArt = get(data, 'art', []).map(o => ({
     id: o.id,
     name: get(o, 'art_ae_art.name') || '(kein Artname)',
     type: 'Arten',
   }))
-  const rawSuggestions = [...suggesionsArt]
+  const suggesionsGarten = get(data, 'garten', []).map(o => ({
+    id: o.id,
+    name: get(o, 'personBypersonId.name') || '(kein Name)',
+    type: 'Gaerten',
+  }))
+  const rawSuggestions = [...suggesionsArt, ...suggesionsGarten]
+  const titledSuggestions = []
+  if (suggesionsArt.length) {
+    titledSuggestions.push({
+      title: `Arten (${suggesionsArt.length})`,
+      suggestions: suggesionsArt,
+    })
+  }
+  if (suggesionsGarten.length) {
+    titledSuggestions.push({
+      title: `Gärten (${suggesionsGarten.length})`,
+      suggestions: suggesionsGarten,
+    })
+  }
   const suggestions = rawSuggestions.length
-    ? [{ title: `Arten (${suggesionsArt.length})`, suggestions: suggesionsArt }]
+    ? titledSuggestions
     : loadingSuggestions
+
+  console.log('Search', { titledSuggestions })
 
   const onChange = useCallback(event => setVal(event.target.value))
   const onClickDel = useCallback(() => setVal(''))
@@ -287,14 +310,6 @@ export default () => {
         inputProps={inputProps}
         focusInputOnSuggestionClick={false}
       />
-      {/*<StyledInput
-        value={val}
-        type="text"
-        onChange={onChange}
-        onBlur={onBlur}
-        onKeyPress={onKeyPress}
-        placeholder="suchen"
-      />*/}
       <DelIcon data-active={!!val} onClick={onClickDel} />
     </Container>
   )
