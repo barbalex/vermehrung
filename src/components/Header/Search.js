@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
 import { navigate } from 'gatsby'
+import get from 'lodash/get'
+import Autosuggest from 'react-autosuggest'
 
 import {
   art as artFragment,
@@ -27,6 +29,63 @@ const Container = styled.div`
   display: flex;
   :hover {
     background-color: #640dce;
+  }
+  .react-autosuggest__container {
+    width: 100%;
+    border-bottom: 1px solid #c6c6c6;
+  }
+  .react-autosuggest__input {
+    width: 100%;
+    border: none;
+    font-size: 16px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0);
+  }
+  .react-autosuggest__input--focused {
+    outline: none;
+  }
+  .react-autosuggest__input--open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .react-autosuggest__suggestions-container {
+    display: none;
+  }
+  .react-autosuggest__suggestions-container--open {
+    display: block;
+    position: absolute;
+    top: 32px;
+    width: ${props => `${props['data-autosuggestwidth']}px`};
+    border: 1px solid #aaa;
+    background-color: #fff;
+    font-family: Helvetica, sans-serif;
+    font-size: 14px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    z-index: 2;
+  }
+  .react-autosuggest__suggestions-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  .react-autosuggest__suggestion {
+    cursor: pointer;
+    padding: 5px 20px;
+  }
+  .react-autosuggest__suggestion--highlighted {
+    background-color: #ddd;
+  }
+  .react-autosuggest__section-container {
+    border-top: 1px dashed #ccc;
+  }
+  .react-autosuggest__section-container--first {
+    border-top: 0;
+  }
+  .react-autosuggest__section-title {
+    padding: 5px 0 5px 10px;
+    font-size: 12px;
+    color: #777;
   }
 `
 const SearchIcon = styled(FaSearch)`
@@ -109,8 +168,37 @@ const filterSuggestionsQuery = gql`
   ${zaehlungFragment}
 `
 
+const loadingSuggestions = [
+  {
+    title: 'Lade Daten',
+    suggestions: [
+      {
+        id: 'none',
+        name: 'Lade daten...',
+        type: 'Arten',
+      },
+    ],
+  },
+]
+
 export default () => {
   const [val, setVal] = useState('')
+
+  const { data, error, loading } = useQuery(filterSuggestionsQuery, {
+    variables: { run: !!val, filter: val },
+  })
+
+  console.log('Search, data', data)
+
+  const suggesionsArt = get(data, 'art', []).map(o => ({
+    id: o.id,
+    name: get(o, 'art_ae_art.name') || '(kein Artname)',
+    type: 'Arten',
+  }))
+  const rawSuggestions = [...suggesionsArt]
+  const suggestions = rawSuggestions.length
+    ? [{ title: `Arten (${suggesionsArt.length})`, suggestions: suggesionsArt }]
+    : loadingSuggestions
 
   const onChange = useCallback(event => setVal(event.target.value))
   const onBlur = useCallback(event =>
@@ -142,12 +230,13 @@ export default () => {
     navigate(url)
     setVal('')
   })
-
-  const { data, error, loading } = useQuery(filterSuggestionsQuery, {
-    variables: { run: !!val, filter: val },
-  })
-
-  console.log('Search, data', data)
+  const inputProps = {
+    value: val,
+    onChange,
+    type: 'search',
+    placeholder: 'suchen',
+    spellCheck: false,
+  }
 
   return (
     <Container>
