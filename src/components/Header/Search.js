@@ -8,7 +8,6 @@ import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
-import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../storeContext'
 
@@ -198,15 +197,10 @@ const getSectionSuggestions = section => section.suggestions
 
 export default () => {
   const store = useContext(storeContext)
-  const {
-    setActiveNodeArray,
-    openNodes: openNodesRaw,
-    setOpenNodes,
-    addOpenNodes,
-  } = store.tree
+  const { setActiveNodeArray, addOpenNodes } = store.tree
   const [val, setVal] = useState('')
 
-  const { data, error, loading } = useQuery(filterSuggestionsQuery, {
+  const { data } = useQuery(filterSuggestionsQuery, {
     variables: { run: !!val, filter: val },
   })
 
