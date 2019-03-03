@@ -26,7 +26,7 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Daten-Laden optimiert
 - :white_check_mark: Formulare gebaut
 - :white_check_mark: Filter gebaut
+- :white_check_mark: Volltext-Suche gebaut
 - :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
-- :ballot_box_with_check: Volltext-Suche gebaut
 - :white_medium_square: Authentifikation und Authorisierung gebaut
 - ...?
