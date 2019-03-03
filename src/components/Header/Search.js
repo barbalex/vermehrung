@@ -4,6 +4,7 @@ import { FaSearch, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
+import { navigate } from 'gatsby'
 
 import {
   art as artFragment,
@@ -120,6 +121,26 @@ export default () => {
     if (event.key === 'Enter') {
       console.log('search ', event.target.value)
     }
+  })
+  const onSuggestionSelected = useCallback((event, { suggestion }) => {
+    let url
+    // use suggestion.id to set url
+    switch (suggestion.type) {
+      case 'Arten':
+      case 'Gaerten':
+      case 'Herkuenfte':
+      case 'Lieferungen':
+      case 'Personen':
+      case 'Sammlungen':
+      case 'Kulturen':
+        url = `/Vermehrung/${suggestion.type}/${suggestion.id}`
+        break
+      default: {
+        // do nothing
+      }
+    }
+    navigate(url)
+    setVal('')
   })
 
   const { data, error, loading } = useQuery(filterSuggestionsQuery, {
