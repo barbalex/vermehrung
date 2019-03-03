@@ -18,6 +18,7 @@
     "apollo-link": "1.2.8",
     "apollo-link-context": "1.0.14",
     "apollo-link-http": "1.5.11",
+    "autosuggest-highlight": "^3.1.1",
     "babel-eslint": "10.0.1",
     "date-fns": "2.0.0-alpha.27",
     "eslint": "5.15.0",

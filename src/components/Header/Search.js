@@ -7,6 +7,8 @@ import { useQuery } from 'react-apollo-hooks'
 import { navigate } from 'gatsby'
 import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
+import match from 'autosuggest-highlight/match'
+import parse from 'autosuggest-highlight/parse'
 
 import {
   art as artFragment,
@@ -33,7 +35,6 @@ const Container = styled.div`
   }
   .react-autosuggest__container {
     width: 100%;
-    border-bottom: 1px solid #c6c6c6;
   }
   .react-autosuggest__input {
     width: 100%;
@@ -41,6 +42,7 @@ const Container = styled.div`
     font-size: 16px;
     padding: 5px;
     background-color: rgba(0, 0, 0, 0);
+    color: white;
   }
   .react-autosuggest__input--focused {
     outline: none;
@@ -73,6 +75,7 @@ const Container = styled.div`
   .react-autosuggest__suggestion {
     cursor: pointer;
     padding: 5px 20px;
+    color: rgba(0, 0, 0, 0.8);
   }
   .react-autosuggest__suggestion--highlighted {
     background-color: #ddd;
@@ -96,17 +99,6 @@ const DelIcon = styled(FaTimes)`
   margin: auto 5px;
   opacity: ${props => (props['data-active'] ? 1 : 0.4)};
   cursor: ${props => (props['data-active'] ? 'pointer' : 'default')};
-`
-const StyledInput = styled(Input)`
-  width: 100%;
-  input {
-    color: white;
-    width: 100%;
-  }
-  :before,
-  :after {
-    border-bottom: none !important;
-  }
 `
 
 const filterSuggestionsQuery = gql`
@@ -183,6 +175,11 @@ const loadingSuggestions = [
     ],
   },
 ]
+const autosuggestWidth = 350
+const getSuggestionValue = suggestion => suggestion && suggestion.name
+const shouldRenderSuggestions = value => value.trim().length > 2
+const renderSectionTitle = section => <strong>{section.title}</strong>
+const getSectionSuggestions = section => section.suggestions
 
 export default () => {
   const [val, setVal] = useState('')
@@ -240,18 +237,65 @@ export default () => {
     placeholder: 'suchen',
     spellCheck: false,
   }
+  const renderSuggestion = useCallback(
+    (suggestion, { query, isHighlighted }) => {
+      const matches = match(suggestion.name, query)
+      const parts = parse(suggestion.name, matches)
+      return (
+        <div>
+          {parts.map((part, index) => {
+            return part.highlight ? (
+              <strong
+                key={String(index)}
+                style={{ fontWeight: '500 !important' }}
+              >
+                {part.text}
+              </strong>
+            ) : (
+              <span
+                key={String(index)}
+                style={{ fontWeight: '300 !important' }}
+              >
+                {part.text}
+              </span>
+            )
+          })}
+        </div>
+      )
+    },
+  )
 
   return (
-    <Container>
+    <Container data-autosuggestwidth={autosuggestWidth}>
       <SearchIcon />
-      <StyledInput
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={() => {
+          // Autosuggest wants this function
+          // could maybe be used to indicate loading?
+        }}
+        onSuggestionsClearRequested={() => {
+          // need this?
+          //console.log('clear requested')
+        }}
+        getSuggestionValue={getSuggestionValue}
+        shouldRenderSuggestions={shouldRenderSuggestions}
+        onSuggestionSelected={onSuggestionSelected}
+        renderSuggestion={renderSuggestion}
+        multiSection={true}
+        renderSectionTitle={renderSectionTitle}
+        getSectionSuggestions={getSectionSuggestions}
+        inputProps={inputProps}
+        focusInputOnSuggestionClick={false}
+      />
+      {/*<StyledInput
         value={val}
         type="text"
         onChange={onChange}
         onBlur={onBlur}
         onKeyPress={onKeyPress}
         placeholder="suchen"
-      />
+      />*/}
       <DelIcon data-active={!!val} onClick={onClickDel} />
     </Container>
   )
