@@ -132,6 +132,9 @@ const filterSuggestionsQuery = gql`
     kulturEvent: kultur_event_search(args: { filter: $filter })
       @include(if: $run) {
       ...KulturEventFields
+      kulturBykulturId {
+        ...KulturFields
+      }
     }
     kulturInventar: kultur_inventar_search(args: { filter: $filter })
       @include(if: $run) {
@@ -197,55 +200,96 @@ export default () => {
 
   console.log('Search, data', data)
 
-  const suggesionsArt = get(data, 'art', []).map(o => ({
+  const suggestionsArt = get(data, 'art', []).map(o => ({
     id: o.id,
     name: get(o, 'art_ae_art.name') || '(kein Artname)',
     type: 'Arten',
   }))
-  const suggesionsGarten = get(data, 'garten', []).map(o => ({
+  const suggestionsGarten = get(data, 'garten', []).map(o => ({
     id: o.id,
     name: get(o, 'personBypersonId.name') || '(kein Name)',
     type: 'Gaerten',
   }))
-  const suggesionsHerkunft = get(data, 'herkunft', []).map(o => ({
+  const suggestionsHerkunft = get(data, 'herkunft', []).map(o => ({
     id: o.id,
     name: `${get(o, 'nr') || '(keine Nr)'}: ${get(o, 'lokalname') ||
       '(kein Lokalname)'}`,
     type: 'Herkuenfte',
   }))
-  const suggesionsKultur = get(data, 'kultur', []).map(o => ({
+  const suggestionsKultur = get(data, 'kultur', []).map(o => ({
     id: o.id,
     name: get(o, 'gartenBygartenId.personBypersonId.name') || '(kein Name)',
     type: 'Kulturen',
   }))
+  const suggestionsKulturEvent = get(data, 'kulturEvent', []).map(o => ({
+    id: o.id,
+    name: `${get(o, 'datum') || '(kein Datum)'}: ${get(o, 'event') ||
+      '(kein Event)'}`,
+    type: 'Events',
+    parent: o.kultur_id,
+  }))
+  const suggestionsKulturInventar = get(data, 'kulturInventar', []).map(o => ({
+    id: o.id,
+    name: get(o, 'datum') || '(kein Datum)',
+    type: 'Inventare',
+    parent: o.kultur_id,
+  }))
+  const suggestionsZaehlung = get(data, 'zaehlung', []).map(o => ({
+    id: o.id,
+    name: get(o, 'datum') || '(kein Datum)',
+    type: 'Zaehlungen',
+    parent: o.kultur_id,
+  }))
   const rawSuggestions = [
-    ...suggesionsArt,
-    ...suggesionsGarten,
-    ...suggesionsHerkunft,
+    ...suggestionsArt,
+    ...suggestionsGarten,
+    ...suggestionsHerkunft,
+    ...suggestionsKultur,
+    ...suggestionsKulturEvent,
+    ...suggestionsKulturInventar,
+    ...suggestionsZaehlung,
   ]
   const titledSuggestions = []
-  if (suggesionsArt.length) {
+  if (suggestionsArt.length) {
     titledSuggestions.push({
-      title: `Arten (${suggesionsArt.length})`,
-      suggestions: suggesionsArt,
+      title: `Arten (${suggestionsArt.length})`,
+      suggestions: suggestionsArt,
     })
   }
-  if (suggesionsGarten.length) {
+  if (suggestionsGarten.length) {
     titledSuggestions.push({
-      title: `Gärten (${suggesionsGarten.length})`,
-      suggestions: suggesionsGarten,
+      title: `Gärten (${suggestionsGarten.length})`,
+      suggestions: suggestionsGarten,
     })
   }
-  if (suggesionsHerkunft.length) {
+  if (suggestionsHerkunft.length) {
     titledSuggestions.push({
-      title: `Herkünfte (${suggesionsHerkunft.length})`,
-      suggestions: suggesionsHerkunft,
+      title: `Herkünfte (${suggestionsHerkunft.length})`,
+      suggestions: suggestionsHerkunft,
     })
   }
-  if (suggesionsKultur.length) {
+  if (suggestionsKultur.length) {
     titledSuggestions.push({
-      title: `Kulturen (${suggesionsKultur.length})`,
-      suggestions: suggesionsKultur,
+      title: `Kulturen (${suggestionsKultur.length})`,
+      suggestions: suggestionsKultur,
+    })
+  }
+  if (suggestionsKulturEvent.length) {
+    titledSuggestions.push({
+      title: `Events (${suggestionsKulturEvent.length})`,
+      suggestions: suggestionsKulturEvent,
+    })
+  }
+  if (suggestionsKulturInventar.length) {
+    titledSuggestions.push({
+      title: `Inventare (${suggestionsKulturInventar.length})`,
+      suggestions: suggestionsKulturInventar,
+    })
+  }
+  if (suggestionsZaehlung.length) {
+    titledSuggestions.push({
+      title: `Zählungen (${suggestionsZaehlung.length})`,
+      suggestions: suggestionsZaehlung,
     })
   }
   const suggestions = rawSuggestions.length
@@ -272,7 +316,12 @@ export default () => {
       case 'Inventare':
       case 'Events':
       case 'Zaehlungen':
-        console.log('TODO')
+        newActiveNodeArray = [
+          'Kulturen',
+          suggestion.parent,
+          suggestion.type,
+          suggestion.id,
+        ]
         break
       default: {
         // do nothing
