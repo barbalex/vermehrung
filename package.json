@@ -47,7 +47,7 @@
     "graphql-tag": "2.10.1",
     "isomorphic-fetch": "2.2.1",
     "lodash": "4.17.11",
-    "material-ui-pickers": "2.2.2",
+    "material-ui-pickers": "2.2.4",
     "memoize-one": "5.0.0",
     "mobx": "5.9.0",
     "mobx-react-lite": "1.1.0",
