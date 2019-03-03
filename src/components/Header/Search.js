@@ -182,7 +182,7 @@ const loadingSuggestions = [
 ]
 const autosuggestWidth = 350
 const getSuggestionValue = suggestion => suggestion && suggestion.name
-const shouldRenderSuggestions = value => value.trim().length > 2
+const shouldRenderSuggestions = value => value.trim().length > 1
 const renderSectionTitle = section => <strong>{section.title}</strong>
 const getSectionSuggestions = section => section.suggestions
 
@@ -207,7 +207,22 @@ export default () => {
     name: get(o, 'personBypersonId.name') || '(kein Name)',
     type: 'Gaerten',
   }))
-  const rawSuggestions = [...suggesionsArt, ...suggesionsGarten]
+  const suggesionsHerkunft = get(data, 'herkunft', []).map(o => ({
+    id: o.id,
+    name: `${get(o, 'nr') || '(keine Nr)'}: ${get(o, 'lokalname') ||
+      '(kein Lokalname)'}`,
+    type: 'Herkuenfte',
+  }))
+  const suggesionsKultur = get(data, 'kultur', []).map(o => ({
+    id: o.id,
+    name: get(o, 'gartenBygartenId.personBypersonId.name') || '(kein Name)',
+    type: 'Kulturen',
+  }))
+  const rawSuggestions = [
+    ...suggesionsArt,
+    ...suggesionsGarten,
+    ...suggesionsHerkunft,
+  ]
   const titledSuggestions = []
   if (suggesionsArt.length) {
     titledSuggestions.push({
@@ -219,6 +234,18 @@ export default () => {
     titledSuggestions.push({
       title: `Gärten (${suggesionsGarten.length})`,
       suggestions: suggesionsGarten,
+    })
+  }
+  if (suggesionsHerkunft.length) {
+    titledSuggestions.push({
+      title: `Herkünfte (${suggesionsHerkunft.length})`,
+      suggestions: suggesionsHerkunft,
+    })
+  }
+  if (suggesionsKultur.length) {
+    titledSuggestions.push({
+      title: `Kulturen (${suggesionsKultur.length})`,
+      suggestions: suggesionsKultur,
     })
   }
   const suggestions = rawSuggestions.length
@@ -267,6 +294,7 @@ export default () => {
   const renderSuggestion = useCallback((suggestion, { query }) => {
     const matches = match(suggestion.name, query)
     const parts = parse(suggestion.name, matches)
+
     return (
       <div>
         {parts.map((part, index) => {
