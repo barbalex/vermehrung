@@ -5,12 +5,12 @@ import styled from 'styled-components'
 
 const Container = styled.div`
   border-radius: 3px;
-  background-color: #6d19d4;
+  background-color: #5f00d4;
   margin-right: 5px;
   width: 220px;
   display: flex;
   :hover {
-    background-color: #8944de;
+    background-color: #640dce;
   }
 `
 const SearchIcon = styled(FaSearch)`
