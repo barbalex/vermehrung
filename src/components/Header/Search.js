@@ -1,5 +1,4 @@
-import React, { useState, useCallback } from 'react'
-import Input from '@material-ui/core/Input'
+import React, { useState, useCallback, useContext } from 'react'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
@@ -9,6 +8,8 @@ import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
+
+import storeContext from '../../storeContext'
 
 import {
   art as artFragment,
@@ -57,7 +58,8 @@ const Container = styled.div`
   .react-autosuggest__suggestions-container--open {
     display: block;
     position: absolute;
-    top: 32px;
+    top: 48px;
+    margin-left: -23px;
     width: ${props => `${props['data-autosuggestwidth']}px`};
     border: 1px solid #aaa;
     background-color: #fff;
@@ -169,7 +171,7 @@ const loadingSuggestions = [
     suggestions: [
       {
         id: 'none',
-        name: 'Lade daten...',
+        name: '',
         type: 'Arten',
       },
     ],
@@ -182,6 +184,8 @@ const renderSectionTitle = section => <strong>{section.title}</strong>
 const getSectionSuggestions = section => section.suggestions
 
 export default () => {
+  const store = useContext(storeContext)
+  const { setActiveNodeArray } = store.tree
   const [val, setVal] = useState('')
 
   const { data, error, loading } = useQuery(filterSuggestionsQuery, {
@@ -201,17 +205,10 @@ export default () => {
     : loadingSuggestions
 
   const onChange = useCallback(event => setVal(event.target.value))
-  const onBlur = useCallback(event =>
-    console.log('search ', event.target.value),
-  )
   const onClickDel = useCallback(() => setVal(''))
-  const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      console.log('search ', event.target.value)
-    }
-  })
   const onSuggestionSelected = useCallback((event, { suggestion }) => {
     let url
+    let newActiveNodeArray
     // use suggestion.id to set url
     switch (suggestion.type) {
       case 'Arten':
@@ -221,12 +218,16 @@ export default () => {
       case 'Personen':
       case 'Sammlungen':
       case 'Kulturen':
+        newActiveNodeArray = [suggestion.type, suggestion.id]
         url = `/Vermehrung/${suggestion.type}/${suggestion.id}`
         break
       default: {
         // do nothing
+        // TODO:
+        // kultur_event, kultur_inventar and zahelungen
       }
     }
+    setActiveNodeArray(newActiveNodeArray)
     navigate(url)
     setVal('')
   })
@@ -237,33 +238,28 @@ export default () => {
     placeholder: 'suchen',
     spellCheck: false,
   }
-  const renderSuggestion = useCallback(
-    (suggestion, { query, isHighlighted }) => {
-      const matches = match(suggestion.name, query)
-      const parts = parse(suggestion.name, matches)
-      return (
-        <div>
-          {parts.map((part, index) => {
-            return part.highlight ? (
-              <strong
-                key={String(index)}
-                style={{ fontWeight: '500 !important' }}
-              >
-                {part.text}
-              </strong>
-            ) : (
-              <span
-                key={String(index)}
-                style={{ fontWeight: '300 !important' }}
-              >
-                {part.text}
-              </span>
-            )
-          })}
-        </div>
-      )
-    },
-  )
+  const renderSuggestion = useCallback((suggestion, { query }) => {
+    const matches = match(suggestion.name, query)
+    const parts = parse(suggestion.name, matches)
+    return (
+      <div>
+        {parts.map((part, index) => {
+          return part.highlight ? (
+            <strong
+              key={String(index)}
+              style={{ fontWeight: '500 !important' }}
+            >
+              {part.text}
+            </strong>
+          ) : (
+            <span key={String(index)} style={{ fontWeight: '300 !important' }}>
+              {part.text}
+            </span>
+          )
+        })}
+      </div>
+    )
+  })
 
   return (
     <Container data-autosuggestwidth={autosuggestWidth}>
