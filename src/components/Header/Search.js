@@ -62,8 +62,8 @@ const Container = styled.div`
     margin-left: -23px;
     width: ${props => `${props['data-autosuggestwidth']}px`};
     border: 1px solid #aaa;
-    /*background-color: #fff;*/
-    background-color: rgb(251, 248, 255);
+    background-color: #fff;
+    /*background-color: rgb(251, 248, 255);*/
     font-family: Helvetica, sans-serif;
     font-size: 14px;
     border-bottom-left-radius: 4px;
@@ -71,6 +71,7 @@ const Container = styled.div`
     z-index: 2;
     max-height: calc(100vh - 60px);
     overflow-y: auto;
+    box-shadow: 3px 3px 3px rgba(74, 20, 140, 0.1);
   }
   .react-autosuggest__suggestions-list {
     margin: 0;
