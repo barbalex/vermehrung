@@ -25,8 +25,9 @@ const Container = styled.div`
   border-radius: 3px;
   background-color: #5f00d4;
   margin-right: 5px;
-  width: 220px;
+  width: 350px;
   display: flex;
+  justify-content: space-between;
   :hover {
     background-color: #640dce;
   }
@@ -97,8 +98,10 @@ const DelIcon = styled(FaTimes)`
   cursor: ${props => (props['data-active'] ? 'pointer' : 'default')};
 `
 const StyledInput = styled(Input)`
+  width: 100%;
   input {
     color: white;
+    width: 100%;
   }
   :before,
   :after {
