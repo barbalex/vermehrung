@@ -63,7 +63,7 @@ export const initial = {
 
 export const simpleTypes = {
   id: 'number',
-  kultur_id: 'string',
+  kultur_id: 'number',
   datum: 'string',
   anzahl_pflanzen: 'number',
   anzahl_mutter_pflanzen: 'number',

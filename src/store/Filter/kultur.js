@@ -28,7 +28,7 @@ export const initial = {
 
 export const simpleTypes = {
   id: 'number',
-  art_id: 'string',
-  garten_id: 'string',
+  art_id: 'number',
+  garten_id: 'number',
   bemerkungen: 'string',
 }

@@ -18,6 +18,7 @@ import {
   kultur as kulturFragment,
   art as artFragment,
 } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -98,37 +99,36 @@ const Kultur = () => {
         filter.setValue({ table: 'kultur', key: field, value })
       } else {
         try {
+          const type = types.lieferung[field]
+          let valueToSet
+          if (value === undefined || value === null) {
+            valueToSet = null
+          } else if (['number', 'boolean'].includes(type)) {
+            valueToSet = value
+          } else {
+            valueToSet = `"${value}"`
+          }
           await client.mutate({
             mutation: gql`
               mutation update_kultur(
                 $id: Int!
-                $art_id: Int
-                $garten_id: Int
-                $bemerkungen: String
               ) {
                 update_kultur(
                   where: { id: { _eq: $id } }
                   _set: {
-                    art_id: $art_id
-                    garten_id: $garten_id
-                    bemerkungen: $bemerkungen
+                    ${field}: ${valueToSet}
                   }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    art_id
-                    garten_id
-                    bemerkungen
+                    ...KulturFields
                   }
                 }
               }
+              ${kulturFragment}
             `,
             variables: {
               id: row.id,
-              art_id: field === 'art_id' ? value : row.art_id,
-              garten_id: field === 'garten_id' ? value : row.garten_id,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
             },
           })
         } catch (error) {

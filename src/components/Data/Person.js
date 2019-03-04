@@ -14,6 +14,7 @@ import RadioButton from '../shared/RadioButton'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
 import { person as personFragment } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -69,85 +70,36 @@ const Person = () => {
         filter.setValue({ table: 'person', key: field, value })
       } else {
         try {
+          const type = types.lieferung[field]
+          let valueToSet
+          if (value === undefined || value === null) {
+            valueToSet = null
+          } else if (['number', 'boolean'].includes(type)) {
+            valueToSet = value
+          } else {
+            valueToSet = `"${value}"`
+          }
           await client.mutate({
             mutation: gql`
               mutation update_person(
                 $id: Int!
-                $nr: String
-                $name: String
-                $adresszusatz: String
-                $strasse: String
-                $plz: Int
-                $ort: String
-                $telefon_privat: String
-                $telefon_geschaeft: String
-                $telefon_mobile: String
-                $fax_privat: String
-                $fax_geschaeft: String
-                $email: String
-                $kein_email: Boolean
-                $bemerkungen: String
               ) {
                 update_person(
                   where: { id: { _eq: $id } }
                   _set: {
-                    nr: $nr
-                    name: $name
-                    adresszusatz: $adresszusatz
-                    strasse: $strasse
-                    plz: $plz
-                    ort: $ort
-                    telefon_privat: $telefon_privat
-                    telefon_geschaeft: $telefon_geschaeft
-                    telefon_mobile: $telefon_mobile
-                    fax_privat: $fax_privat
-                    fax_geschaeft: $fax_geschaeft
-                    email: $email
-                    kein_email: $kein_email
-                    bemerkungen: $bemerkungen
+                    ${field}: ${valueToSet}
                   }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    nr
-                    name
-                    adresszusatz
-                    strasse
-                    plz
-                    ort
-                    telefon_privat
-                    telefon_geschaeft
-                    telefon_mobile
-                    fax_privat
-                    fax_geschaeft
-                    email
-                    kein_email
-                    bemerkungen
+                    ...PersonFields
                   }
                 }
               }
+              ${personFragment}
             `,
             variables: {
               id: row.id,
-              nr: field === 'nr' ? value : row.nr,
-              name: field === 'name' ? value : row.name,
-              adresszusatz: field === 'adresszusatz' ? value : row.adresszusatz,
-              strasse: field === 'strasse' ? value : row.strasse,
-              plz: field === 'plz' ? value : row.plz,
-              ort: field === 'ort' ? value : row.ort,
-              telefon_privat:
-                field === 'telefon_privat' ? value : row.telefon_privat,
-              telefon_geschaeft:
-                field === 'telefon_geschaeft' ? value : row.telefon_geschaeft,
-              telefon_mobile:
-                field === 'telefon_mobile' ? value : row.telefon_mobile,
-              fax_privat: field === 'fax_privat' ? value : row.fax_privat,
-              fax_geschaeft:
-                field === 'fax_geschaeft' ? value : row.fax_geschaeft,
-              email: field === 'email' ? value : row.email,
-              kein_email: field === 'kein_email' ? value : row.kein_email,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
             },
           })
         } catch (error) {

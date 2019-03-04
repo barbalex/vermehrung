@@ -63,9 +63,9 @@ export const initial = {
 
 export const simpleTypes = {
   id: 'number',
-  art_id: 'string',
-  person_id: 'string',
-  herkunft_id: 'string',
+  art_id: 'number',
+  person_id: 'number',
+  herkunft_id: 'number',
   nr: 'string',
   datum: 'string',
   von_anzahl_individuen: 'number',

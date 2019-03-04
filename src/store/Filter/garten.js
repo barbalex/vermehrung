@@ -33,7 +33,7 @@ export const initial = {
 
 export const simpleTypes = {
   id: 'number',
-  person_id: 'uuid',
+  person_id: 'number',
   x: 'number',
   y: 'number',
   bemerkungen: 'string',

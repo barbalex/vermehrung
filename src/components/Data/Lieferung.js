@@ -20,6 +20,7 @@ import {
   lieferung as lieferungFragment,
   art as artFragment,
 } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -233,10 +234,19 @@ const Lieferung = () => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      const value = event.target.value
       if (filter.show) {
         filter.setValue({ table: 'lieferung', key: field, value })
       } else {
+        const type = types.lieferung[field]
+        let valueToSet
+        if (value === undefined || value === null) {
+          valueToSet = null
+        } else if (['number', 'boolean'].includes(type)) {
+          valueToSet = value
+        } else {
+          valueToSet = `"${value}"`
+        }
         try {
           await client.mutate({
             mutation: gql`
@@ -246,7 +256,7 @@ const Lieferung = () => {
                 update_lieferung(
                   where: { id: { _eq: $id } }
                   _set: {
-                    ${field}: ${!isNaN(value) ? value : `"${value}"`}
+                    ${field}: ${valueToSet}
                   }
                 ) {
                   affected_rows
@@ -262,6 +272,7 @@ const Lieferung = () => {
             },
           })
         } catch (error) {
+          console.log(error)
           return setErrors({ [field]: error.message })
         }
         setErrors({})

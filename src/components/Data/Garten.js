@@ -15,6 +15,7 @@ import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
 import { garten as gartenFragment } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -67,15 +68,6 @@ const Garten = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  /*console.log('Garten:', {
-    id,
-    isFiltered,
-    activeNodeArray: activeNodeArray.slice(),
-    data,
-    loading,
-    error,
-  })*/
-
   let personWerte = get(data, 'person', [])
   personWerte = personWerte.map(el => ({
     value: el.id,
@@ -91,41 +83,34 @@ const Garten = () => {
         filter.setValue({ table: 'garten', key: field, value })
       } else {
         try {
+          const type = types.lieferung[field]
+          let valueToSet
+          if (value === undefined || value === null) {
+            valueToSet = null
+          } else if (['number', 'boolean'].includes(type)) {
+            valueToSet = value
+          } else {
+            valueToSet = `"${value}"`
+          }
           await client.mutate({
             mutation: gql`
-              mutation update_garten(
-                $id: Int!
-                $person_id: Int
-                $x: Int
-                $y: Int
-                $bemerkungen: String
-              ) {
+              mutation update_garten($id: Int!) {
                 update_garten(
                   where: { id: { _eq: $id } }
                   _set: {
-                    person_id: $person_id
-                    x: $x
-                    y: $y
-                    bemerkungen: $bemerkungen
+                    ${field}: ${valueToSet}
                   }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    person_id
-                    x
-                    y
-                    bemerkungen
+                    ...GartenFields
                   }
                 }
               }
+              ${gartenFragment}
             `,
             variables: {
               id: row.id,
-              person_id: field === 'person_id' ? value : row.person_id,
-              x: field === 'x' ? value : row.x,
-              y: field === 'y' ? value : row.y,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
             },
           })
         } catch (error) {

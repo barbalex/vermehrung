@@ -16,6 +16,7 @@ import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
 import { kulturInventar as kulturInventarFragment } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -117,87 +118,36 @@ const Inventar = () => {
         filter.setValue({ table: 'inventar', key: field, value })
       } else {
         try {
+          const type = types.lieferung[field]
+          let valueToSet
+          if (value === undefined || value === null) {
+            valueToSet = null
+          } else if (['number', 'boolean'].includes(type)) {
+            valueToSet = value
+          } else {
+            valueToSet = `"${value}"`
+          }
           await client.mutate({
             mutation: gql`
               mutation update_kultur_inventar(
                 $id: Int!
-                $kultur_id: Int
-                $datum: date
-                $kasten: String
-                $beet: String
-                $nr: String
-                $anzahl_pflanzen: Int
-                $anz_mutter_pflanzen: Int
-                $anz_nicht_auspflanzbereit: Int
-                $anz_auspflanzbereit: Int
-                $anz_bluehend: Int
-                $bluehdatum: String
-                $instruktion: String
-                $bemerkungen: String
               ) {
                 update_kultur_inventar(
                   where: { id: { _eq: $id } }
                   _set: {
-                    kultur_id: $kultur_id
-                    datum: $datum
-                    kasten: $kasten
-                    beet: $beet
-                    nr: $nr
-                    anzahl_pflanzen: $anzahl_pflanzen
-                    anz_mutter_pflanzen: $anz_mutter_pflanzen
-                    anz_nicht_auspflanzbereit: $anz_nicht_auspflanzbereit
-                    anz_auspflanzbereit: $anz_auspflanzbereit
-                    anz_bluehend: $anz_bluehend
-                    bluehdatum: $bluehdatum
-                    instruktion: $instruktion
-                    bemerkungen: $bemerkungen
+                    ${field}: ${valueToSet}
                   }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    kultur_id
-                    datum
-                    kasten
-                    beet
-                    nr
-                    anzahl_pflanzen
-                    anz_mutter_pflanzen
-                    anz_nicht_auspflanzbereit
-                    anz_auspflanzbereit
-                    anz_bluehend
-                    bluehdatum
-                    instruktion
-                    bemerkungen
+                    ...KulturInventarFields
                   }
                 }
               }
+              ${kulturInventarFragment}
             `,
             variables: {
               id: row.id,
-              kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-              datum: field === 'datum' ? value : row.datum,
-              kasten: field === 'kasten' ? value : row.kasten,
-              beet: field === 'beet' ? value : row.beet,
-              nr: field === 'nr' ? value : row.nr,
-              anzahl_pflanzen:
-                field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
-              anz_mutter_pflanzen:
-                field === 'anz_mutter_pflanzen'
-                  ? value
-                  : row.anz_mutter_pflanzen,
-              anz_nicht_auspflanzbereit:
-                field === 'anz_nicht_auspflanzbereit'
-                  ? value
-                  : row.anz_nicht_auspflanzbereit,
-              anz_auspflanzbereit:
-                field === 'anz_auspflanzbereit'
-                  ? value
-                  : row.anz_auspflanzbereit,
-              anz_bluehend: field === 'anz_bluehend' ? value : row.anz_bluehend,
-              bluehdatum: field === 'bluehdatum' ? value : row.bluehdatum,
-              instruktion: field === 'instruktion' ? value : row.instruktion,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
             },
           })
         } catch (error) {

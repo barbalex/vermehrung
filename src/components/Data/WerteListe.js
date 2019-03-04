@@ -10,6 +10,7 @@ import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -73,16 +74,24 @@ const WerteListe = ({ table }) => {
       const field = event.target.name
       const value = event.target.value || null
       try {
+        let valueToSet
+        if (value === undefined || value === null) {
+          valueToSet = null
+        } else if (['id', 'sort'].includes(field)) {
+          valueToSet = value
+        } else {
+          valueToSet = `"${value}"`
+        }
         await client.mutate({
           mutation: gql`
             mutation update_${table}(
               $id: Int!
-              $wert: String
-              $sort: smallint
             ) {
               update_${table}(
                 where: { id: { _eq: $id } }
-                _set: { wert: $wert, sort: $sort }
+                _set: {
+                  ${field}: ${valueToSet}
+                }
               ) {
                 affected_rows
                 returning {
@@ -95,8 +104,6 @@ const WerteListe = ({ table }) => {
           `,
           variables: {
             id: row.id,
-            wert: field === 'wert' ? value : row.wert,
-            sort: field === 'sort' ? value : row.sort,
           },
         })
       } catch (error) {

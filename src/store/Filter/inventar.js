@@ -78,7 +78,7 @@ export const initial = {
 
 export const simpleTypes = {
   id: 'number',
-  kultur_id: 'string',
+  kultur_id: 'number',
   datum: 'string',
   kasten: 'string',
   beet: 'string',

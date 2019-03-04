@@ -28,7 +28,7 @@ export const initial = {
 
 export const simpleTypes = {
   id: 'number',
-  kultur_id: 'uuid',
+  kultur_id: 'number',
   datum: 'string',
   event: 'string',
 }

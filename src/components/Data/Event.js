@@ -16,6 +16,7 @@ import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
 import { kulturEvent as kulturEventFragment } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -125,13 +126,22 @@ const Event = () => {
         filter.setValue({ table: 'event', key: field, value })
       } else {
         try {
+          const type = types.lieferung[field]
+          let valueToSet
+          if (value === undefined || value === null) {
+            valueToSet = null
+          } else if (['number', 'boolean'].includes(type)) {
+            valueToSet = value
+          } else {
+            valueToSet = `"${value}"`
+          }
           await client.mutate({
             mutation: gql`
               mutation update_kultur_event($id: Int!) {
                 update_kultur_event(
                   where: { id: { _eq: $id } }
                   _set: { 
-                    ${field}: ${!isNaN(value) ? value : `"${value}"`} }
+                    ${field}: ${valueToSet} }
                 ) {
                   affected_rows
                   returning {

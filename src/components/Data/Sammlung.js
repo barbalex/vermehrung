@@ -19,6 +19,7 @@ import {
   sammlung as sammlungFragment,
   art as artFragment,
 } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -133,68 +134,36 @@ const Sammlung = () => {
         filter.setValue({ table: 'sammlung', key: field, value })
       } else {
         try {
+          const type = types.lieferung[field]
+          let valueToSet
+          if (value === undefined || value === null) {
+            valueToSet = null
+          } else if (['number', 'boolean'].includes(type)) {
+            valueToSet = value
+          } else {
+            valueToSet = `"${value}"`
+          }
           await client.mutate({
             mutation: gql`
               mutation update_sammlung(
                 $id: Int!
-                $nr: String
-                $art_id: Int
-                $person_id: Int
-                $herkunft_id: Int
-                $datum: date
-                $von_anzahl_individuen: Int
-                $zaehleinheit: Int
-                $menge: Int
-                $masseinheit: Int
-                $bemerkungen: String
               ) {
                 update_sammlung(
                   where: { id: { _eq: $id } }
                   _set: {
-                    nr: $nr
-                    art_id: $art_id
-                    person_id: $person_id
-                    herkunft_id: $herkunft_id
-                    datum: $datum
-                    von_anzahl_individuen: $von_anzahl_individuen
-                    zaehleinheit: $zaehleinheit
-                    menge: $menge
-                    masseinheit: $masseinheit
-                    bemerkungen: $bemerkungen
+                    ${field}: ${valueToSet}
                   }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    nr
-                    art_id
-                    person_id
-                    herkunft_id
-                    datum
-                    von_anzahl_individuen
-                    zaehleinheit
-                    menge
-                    masseinheit
-                    bemerkungen
+                    ...SammlungFields
                   }
                 }
               }
+              ${sammlungFragment}
             `,
             variables: {
               id: row.id,
-              nr: field === 'nr' ? value : row.nr,
-              art_id: field === 'art_id' ? value : row.art_id,
-              person_id: field === 'person_id' ? value : row.person_id,
-              herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
-              datum: field === 'datum' ? value : row.datum,
-              von_anzahl_individuen:
-                field === 'von_anzahl_individuen'
-                  ? value
-                  : row.von_anzahl_individuen,
-              zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
-              menge: field === 'menge' ? value : row.menge,
-              masseinheit: field === 'masseinheit' ? value : row.masseinheit,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
             },
           })
         } catch (error) {
