@@ -31,11 +31,11 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: Int!, $isFiltered: Boolean!) {
+  query ArtQuery($id: Int!) {
     art(where: { id: { _eq: $id } }) {
       ...ArtFields
     }
-    rows: art @include(if: $isFiltered) {
+    rows: art {
       ...ArtFields
     }
     ae_art {
@@ -50,19 +50,19 @@ const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter, tree } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
+  const { show: showFilter } = filter
   const { activeNodeArray, refetch } = tree
   const artId = last(activeNodeArray.filter(e => !isNaN(e)))
-  const isFiltered = runIsFiltered()
 
   const { data, error, loading } = useQuery(query, {
-    variables: { id: artId, isFiltered },
+    variables: { id: artId },
   })
 
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.art : get(data, 'art', [{}])[0]
   const rows = get(data, 'rows', [])
+  const artAeIds = rows.map(r => r.ae_id)
   const rowsFiltered = memoizeOne(() =>
     filterNodes({ rows, filter, table: 'art' }),
   )()
@@ -71,11 +71,15 @@ const Art = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let artWerte = get(data, 'ae_art', [])
-  artWerte = artWerte.map(el => ({
-    value: el.id,
-    label: el.name || '(kein Artname)',
-  }))
+  let artWerte = memoizeOne(() =>
+    get(data, 'ae_art', []).filter(a => !artAeIds.includes(a.id)),
+  )()
+  artWerte = memoizeOne(() =>
+    artWerte.map(el => ({
+      value: el.id,
+      label: el.name || '(kein Artname)',
+    })),
+  )()
   artWerte = sortBy(artWerte, 'label')
 
   const saveToDb = useCallback(
