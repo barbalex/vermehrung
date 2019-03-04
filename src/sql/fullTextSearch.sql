@@ -52,7 +52,7 @@ SELECT
   setweight(to_tsvector('german', coalesce(herkunft.lokalname, '')), 'B') || ' ' ||
   setweight(to_tsvector('german', coalesce(sammlung.nr, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(sammlung.von_anzahl_individuen::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(sammlung.datum::text, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(to_char(sammlung.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(zaehleinheit_werte.wert, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(sammlung.menge::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(masseinheit_werte.wert, '')), 'D') || ' ' ||

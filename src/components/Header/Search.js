@@ -8,6 +8,7 @@ import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
+import moment from 'moment'
 
 import storeContext from '../../storeContext'
 
@@ -23,6 +24,9 @@ import {
   sammlung as sammlungFragment,
   zaehlung as zaehlungFragment,
 } from '../../utils/fragments'
+
+const formatDatum = datum =>
+  datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : '(kein Datum)'
 
 const Container = styled.div`
   border-radius: 3px;
@@ -229,20 +233,21 @@ export default () => {
   }))
   const suggestionsKulturEvent = get(data, 'kulturEvent', []).map(o => ({
     id: o.id,
-    name: `${get(o, 'datum') || '(kein Datum)'}: ${get(o, 'event') ||
-      '(kein Event)'}`,
+    name: `${formatDatum(o.datum)}: ${get(o, 'event') || '(kein Event)'}`,
     type: 'Events',
     parent: o.kultur_id,
   }))
   const suggestionsKulturInventar = get(data, 'kulturInventar', []).map(o => ({
     id: o.id,
-    name: get(o, 'datum') || '(kein Datum)',
+    name: formatDatum(o.datum),
     type: 'Inventare',
     parent: o.kultur_id,
   }))
   const suggestionsLieferung = get(data, 'lieferung', []).map(o => ({
     id: o.id,
-    name: get(o, 'von_datum') || '(kein von-Datum)',
+    name: o.datum
+      ? moment(o.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+      : '(kein von-Datum)',
     type: 'Lieferungen',
   }))
   const suggestionsPerson = get(data, 'person', []).map(o => ({
@@ -252,13 +257,12 @@ export default () => {
   }))
   const suggestionsSammlung = get(data, 'sammlung', []).map(o => ({
     id: o.id,
-    name: `${get(o, 'nr') || '(keine Nr)'}: ${get(o, 'datum') ||
-      '(kein Datum)'}`,
+    name: `${get(o, 'nr') || '(keine Nr)'}: ${formatDatum(o.datum)}`,
     type: 'Sammlungen',
   }))
   const suggestionsZaehlung = get(data, 'zaehlung', []).map(o => ({
     id: o.id,
-    name: get(o, 'datum') || '(kein Datum)',
+    name: formatDatum(o.datum),
     type: 'Zaehlungen',
     parent: o.kultur_id,
   }))
