@@ -128,6 +128,8 @@ const WerteListe = ({ table }) => {
     )
   }
 
+  if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container>

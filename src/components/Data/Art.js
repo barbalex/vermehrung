@@ -136,6 +136,8 @@ const Art = () => {
     )
   }
 
+  if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>

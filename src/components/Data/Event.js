@@ -184,6 +184,8 @@ const Event = () => {
     )
   }
 
+  if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>

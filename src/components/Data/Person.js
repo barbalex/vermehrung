@@ -180,6 +180,8 @@ const Person = () => {
     )
   }
 
+  if (!row) return null
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
