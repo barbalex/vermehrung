@@ -73,53 +73,23 @@ const Herkunft = () => {
             mutation: gql`
               mutation update_herkunft(
                 $id: Int!
-                $nr: String
-                $lokalname: String
-                $gemeinde: String
-                $kanton: String
-                $land: String
-                $x: Int
-                $y: Int
-                $bemerkungen: String
               ) {
                 update_herkunft(
                   where: { id: { _eq: $id } }
                   _set: {
-                    nr: $nr
-                    lokalname: $lokalname
-                    gemeinde: $gemeinde
-                    kanton: $kanton
-                    land: $land
-                    x: $x
-                    y: $y
-                    bemerkungen: $bemerkungen
+                    ${field}: ${!isNaN(value) ? value : `"${value}"`}
                   }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    nr
-                    lokalname
-                    gemeinde
-                    kanton
-                    land
-                    x
-                    y
-                    bemerkungen
+                    ...HerkunftFields
                   }
                 }
               }
+              ${herkunftFragment}
             `,
             variables: {
               id: row.id,
-              nr: field === 'nr' ? value : row.nr,
-              lokalname: field === 'lokalname' ? value : row.lokalname,
-              gemeinde: field === 'gemeinde' ? value : row.gemeinde,
-              kanton: field === 'kanton' ? value : row.kanton,
-              land: field === 'land' ? value : row.land,
-              x: field === 'x' ? value : row.x,
-              y: field === 'y' ? value : row.y,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
             },
           })
         } catch (error) {
