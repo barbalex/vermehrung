@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
+import moment from 'moment'
 
 import compareLabel from '../../compareLabel'
 import filterNodes from '../../../../../utils/filterNodes'
@@ -24,19 +25,23 @@ export default ({ nodes, data, url, store }) => {
     })
       // only show if parent node exists
       .filter(() => nodes.map(n => n.id).includes(`art${artId}SammlungFolder`))
-      .map(el => ({
-        nodeType: 'table',
-        menuTitle: 'Sammlung',
-        table: 'sammlung',
-        id: `art${artId}Sammlung${el.id}`,
-        parentId: `art${artId}SammlungFolder`,
-        label: `${get(el, 'datum') || '(kein Datum)'}: ${get(
-          el,
-          'herkunftByherkunftId.nr',
-        ) || '(keine Nr.)'}`,
-        url: ['Arten', artId, 'Sammlungen', el.id],
-        hasChildren: true,
-      }))
+      .map(el => {
+        const datum = el.datum
+          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein Datum)'
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Sammlung',
+          table: 'sammlung',
+          id: `art${artId}Sammlung${el.id}`,
+          parentId: `art${artId}SammlungFolder`,
+          label: `${datum}: ${get(el, 'herkunftByherkunftId.nr') ||
+            '(keine Nr.)'}`,
+          url: ['Arten', artId, 'Sammlungen', el.id],
+          hasChildren: true,
+        }
+      })
       .sort(compareLabel)
       .map((el, index) => ({ ...el, sort: [1, artIndex, 2, index] }))
   )

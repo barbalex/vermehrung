@@ -1,4 +1,5 @@
 import get from 'lodash/get'
+import moment from 'moment'
 
 import compareLabel from '../compareLabel'
 import filterNodes from '../../../../utils/filterNodes'
@@ -20,7 +21,11 @@ export default ({ nodes, data, store }) => {
         const person = get(el, 'personBypersonId.name') || '(keine Person)'
         const herkunft =
           get(el, 'herkunftByherkunftId.nr') || '(keine Herkunft-Nr)'
-        const label = `${datum}: Herkunft ${herkunft}; ${person}; ${art}`
+        const date = datum
+          ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein Datum)'
+        const label = `${el.nr ||
+          '(keine Nr)'}, ${date}: Herkunft ${herkunft}, ${person}; ${art}`
 
         return {
           nodeType: 'table',

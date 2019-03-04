@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
+import moment from 'moment'
 
 import compareLabel from '../../../../compareLabel'
 import filterNodes from '../../../../../../../utils/filterNodes'
@@ -68,10 +69,10 @@ export default ({ nodes, data, url, store }) => {
           ),
       )
       .map(el => {
-        const label = `${get(el, 'datum') || '(kein Datum)'}: ${get(
-          el,
-          'event',
-        ) || '(kein Event)'}`
+        const datum = el.datum
+          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein Datum)'
+        const label = `${datum}: ${get(el, 'event') || '(kein Event)'}`
 
         return {
           nodeType: 'table',

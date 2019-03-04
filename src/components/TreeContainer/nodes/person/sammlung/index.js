@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
+import moment from 'moment'
 
 import compareLabel from '../../compareLabel'
 import filterNodes from '../../../../../utils/filterNodes'
@@ -28,7 +29,9 @@ export default ({ nodes, data, url, store }) => {
         nodes.map(n => n.id).includes(`person${personId}SammlungFolder`),
       )
       .map(el => {
-        const datum = get(el, 'datum') || '(kein Datum)'
+        const datum = el.datum
+          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein Datum)'
         const art = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
         const herkunft =
           get(el, 'herkunftByherkunftId.nr') || '(keine Herkunft-Nr)'

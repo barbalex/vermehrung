@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
+import moment from 'moment'
 
 import compareLabel from '../../../compareLabel'
 import filterNodes from '../../../../../../utils/filterNodes'
@@ -43,16 +44,22 @@ export default ({ nodes, data, url, store }) => {
           .map(n => n.id)
           .includes(`art${artId}Kultur${kulturId}ZaehlungFolder`),
       )
-      .map(el => ({
-        nodeType: 'table',
-        menuTitle: 'Zählung',
-        table: 'zaehlung',
-        id: `art${artId}Kultur${kulturId}Zaehlung${el.id}`,
-        parentId: `art${artId}Kultur${kulturId}ZaehlungFolder`,
-        label: get(el, 'datum') || '(kein Datum)',
-        url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
-        hasChildren: false,
-      }))
+      .map(el => {
+        const datum = el.datum
+          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein Datum)'
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Zählung',
+          table: 'zaehlung',
+          id: `art${artId}Kultur${kulturId}Zaehlung${el.id}`,
+          parentId: `art${artId}Kultur${kulturId}ZaehlungFolder`,
+          label: datum,
+          url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
+          hasChildren: false,
+        }
+      })
       .sort(compareLabel)
       .map((el, index) => {
         el.sort = [1, artIndex, 1, kulturIndex, 1, index]

@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
+import moment from 'moment'
 
 import compareLabel from '../../compareLabel'
 import filterNodes from '../../../../../utils/filterNodes'
@@ -28,7 +29,9 @@ export default ({ nodes, data, url, store }) => {
         nodes.map(n => n.id).includes(`kultur${kulturId}InventarFolder`),
       )
       .map(el => {
-        const datum = get(el, 'datum') || '(kein Datum)'
+        const datum = el.datum
+          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein Datum)'
         const kasten = get(el, 'kasten')
         const kastenLabel = kasten ? `Kasten: ${kasten}` : '(kein Kasten)'
         const beet = get(el, 'beet')

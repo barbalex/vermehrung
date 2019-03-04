@@ -62,7 +62,6 @@ export default async ({ node, store, client }) => {
   let table = null
   let fkExists = null
   let fkName = null
-  let fkNameReturning = null
   let artId = null
 
   if (nodeType === 'table') {
@@ -101,8 +100,7 @@ export default async ({ node, store, client }) => {
     // need to choose von_kultur_id or nach_kultur_id
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
-    fkNameReturning = 'kultur_id'
-    // TODO: need to get art_id from kultur and set it
+    // need to get art_id from kultur and set it
     const query = gql`
       query getArt {
         kultur(where: { id: { _eq: ${parentId} } }) {
@@ -125,16 +123,15 @@ export default async ({ node, store, client }) => {
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
-    fkNameReturning = 'sammlung_id'
-    // TODO: need to get art_id from sammlung and set it
+    // need to get art_id from sammlung and set it
     const query = gql`
-    query getArt {
-      sammlung(where: { id: { _eq: ${parentId} } }) {
-        id
-        art_id
+      query getArt {
+        sammlung(where: { id: { _eq: ${parentId} } }) {
+          id
+          art_id
+        }
       }
-    }
-  `
+    `
     let responce
     try {
       responce = await client.query({
