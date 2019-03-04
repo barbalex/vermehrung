@@ -242,86 +242,23 @@ const Lieferung = () => {
             mutation: gql`
               mutation update_lieferung(
                 $id: Int!
-                $art_id: Int
-                $person_id: Int
-                $typ: Int
-                $zaehleinheit: Int
-                $menge: Int
-                $masseinheit: Int
-                $von_datum: date
-                $von_sammlung_id: Int
-                $von_kultur_id: Int
-                $zwischenlager: Int
-                $nach_datum: date
-                $nach_kultur_id: Int
-                $nach_ausgepflanzt: Boolean
-                $status: Int
-                $bemerkungen: String
               ) {
                 update_lieferung(
                   where: { id: { _eq: $id } }
                   _set: {
-                    art_id: $art_id
-                    person_id: $person_id
-                    typ: $typ
-                    zaehleinheit: $zaehleinheit
-                    menge: $menge
-                    masseinheit: $masseinheit
-                    von_datum: $von_datum
-                    von_sammlung_id: $von_sammlung_id
-                    von_kultur_id: $von_kultur_id
-                    zwischenlager: $zwischenlager
-                    nach_datum: $nach_datum
-                    nach_kultur_id: $nach_kultur_id
-                    nach_ausgepflanzt: $nach_ausgepflanzt
-                    status: $status
-                    bemerkungen: $bemerkungen
+                    ${field}: ${!isNaN(value) ? value : `"${value}"`}
                   }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    art_id
-                    person_id
-                    typ
-                    zaehleinheit
-                    menge
-                    masseinheit
-                    von_datum
-                    von_sammlung_id
-                    von_kultur_id
-                    zwischenlager
-                    nach_datum
-                    nach_kultur_id
-                    nach_ausgepflanzt
-                    status
-                    bemerkungen
+                    ...LieferungFields
                   }
                 }
               }
+              ${lieferungFragment}
             `,
             variables: {
               id: row.id,
-              art_id: field === 'art_id' ? value : row.art_id,
-              person_id: field === 'person_id' ? value : row.person_id,
-              typ: field === 'typ' ? value : row.typ,
-              zaehleinheit: field === 'zaehleinheit' ? value : row.zaehleinheit,
-              menge: field === 'menge' ? value : row.menge,
-              masseinheit: field === 'masseinheit' ? value : row.masseinheit,
-              von_datum: field === 'von_datum' ? value : row.von_datum,
-              von_sammlung_id:
-                field === 'von_sammlung_id' ? value : row.von_sammlung_id,
-              von_kultur_id:
-                field === 'von_kultur_id' ? value : row.von_kultur_id,
-              zwischenlager:
-                field === 'zwischenlager' ? value : row.zwischenlager,
-              nach_datum: field === 'nach_datum' ? value : row.nach_datum,
-              nach_kultur_id:
-                field === 'nach_kultur_id' ? value : row.nach_kultur_id,
-              nach_ausgepflanzt:
-                field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
-              status: field === 'status' ? value : row.status,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
             },
           })
         } catch (error) {
@@ -356,6 +293,8 @@ const Lieferung = () => {
 
   if (!row) return null
 
+  console.log('Lieferung, row', row)
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -367,7 +306,7 @@ const Lieferung = () => {
         />
         <FieldsContainer>
           <Select
-            key={`${row.id}${row.art_id}art_id`}
+            key={`${row.id}art_id`}
             name="art_id"
             value={row.art_id}
             field="art_id"
@@ -377,7 +316,7 @@ const Lieferung = () => {
             error={errors.art_id}
           />
           <Select
-            key={`${row.id}${row.person_id}person_id`}
+            key={`${row.id}person_id`}
             name="person_id"
             value={row.person_id}
             field="person_id"

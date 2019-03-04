@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+//import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../storeContext'
 import Art from './Art'
@@ -17,12 +17,12 @@ import WerteListe from './WerteListe'
 
 const Data = () => {
   const store = useContext(storeContext)
-  const { activeNodeArray: url, openNodes } = store.tree
+  const { activeNodeArray: url } = store.tree
 
-  console.log('Data', {
+  /*console.log('Data', {
     activeNodeArray: url.slice(),
     openNodes: getSnapshot(openNodes),
-  })
+  })*/
 
   if (url.length === 1) {
     return null

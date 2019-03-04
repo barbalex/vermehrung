@@ -50,10 +50,7 @@ const StyledSelect = styled(Select)`
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
     width: ${props => (props.nocaret ? '0' : '1px')};
-  } /*
-  > div > div > div {
-    margin-left: 0;
-  }*/
+  }
   input {
     @media print {
       padding-top: 3px;
