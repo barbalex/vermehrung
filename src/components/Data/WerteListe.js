@@ -10,7 +10,6 @@ import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
