@@ -194,6 +194,7 @@ const Row = ({ style, node }) => {
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
+  console.log('Row', { node, nodeIsInActiveNodePath, nodeIsOpen })
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false

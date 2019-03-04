@@ -7,7 +7,12 @@ import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 
 export default async ({ node, store, client }) => {
   // get parent table, parent table id and table from url
-  const { activeNodeArray, setActiveNodeArray, refetch } = store.tree
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    refetch,
+    addOpenNodes,
+  } = store.tree
   const { nodeType, url } = node
 
   // get table and id from url
@@ -101,8 +106,13 @@ export default async ({ node, store, client }) => {
     } else {
       newActiveNodeArray = [...activeNodeArray.slice(0, -1), newObject.id]
     }
-    navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setActiveNodeArray(newActiveNodeArray)
+    console.log({
+      newActiveNodeArray,
+      activeNodeArray: activeNodeArray.slice(),
+    })
+    addOpenNodes([newActiveNodeArray])
     refetch()
+    navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
   }
 }
