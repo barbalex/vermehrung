@@ -1,14 +1,5 @@
 import gql from 'graphql-tag'
 
-export const garten = gql`
-  fragment GartenFields on garten {
-    id
-    person_id
-    x
-    y
-    bemerkungen
-  }
-`
 export const art = gql`
   fragment ArtFields on art {
     id
@@ -25,11 +16,12 @@ export const aeArt = gql`
     name
   }
 `
-export const kultur = gql`
-  fragment KulturFields on kultur {
+export const garten = gql`
+  fragment GartenFields on garten {
     id
-    art_id
-    garten_id
+    person_id
+    x
+    y
     bemerkungen
   }
 `
@@ -43,6 +35,40 @@ export const herkunft = gql`
     land
     x
     y
+    bemerkungen
+  }
+`
+export const kultur = gql`
+  fragment KulturFields on kultur {
+    id
+    art_id
+    garten_id
+    bemerkungen
+  }
+`
+export const kulturEvent = gql`
+  fragment KulturEventFields on kultur_event {
+    id
+    kultur_id
+    datum
+    event
+  }
+`
+export const kulturInventar = gql`
+  fragment KulturInventarFields on kultur_inventar {
+    id
+    kultur_id
+    datum
+    kasten
+    beet
+    nr
+    anzahl_pflanzen
+    anz_mutter_pflanzen
+    anz_nicht_auspflanzbereit
+    anz_auspflanzbereit
+    anz_bluehend
+    bluehdatum
+    instruktion
     bemerkungen
   }
 `
@@ -99,32 +125,6 @@ export const sammlung = gql`
     menge
     masseinheit
     bemerkungen
-  }
-`
-export const kulturInventar = gql`
-  fragment KulturInventarFields on kultur_inventar {
-    id
-    kultur_id
-    datum
-    kasten
-    beet
-    nr
-    anzahl_pflanzen
-    anz_mutter_pflanzen
-    anz_nicht_auspflanzbereit
-    anz_auspflanzbereit
-    anz_bluehend
-    bluehdatum
-    instruktion
-    bemerkungen
-  }
-`
-export const kulturEvent = gql`
-  fragment KulturEventFields on kultur_event {
-    id
-    kultur_id
-    datum
-    event
   }
 `
 export const zaehlung = gql`

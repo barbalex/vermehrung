@@ -20,7 +20,7 @@ export default ({ nodes, data, store }) => {
         table: 'garten',
         id: `garten${el.id}`,
         parentId: 'gartenFolder',
-        label: get(el, 'personBypersonId.name') || '(kein Garten gewählt)',
+        label: get(el, 'personBypersonId.name') || '(keine Person gewählt)',
         url: ['Gaerten', el.id],
         hasChildren: true,
       }))
