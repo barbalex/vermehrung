@@ -194,7 +194,6 @@ const Row = ({ style, node }) => {
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
-  console.log('Row', { node, nodeIsInActiveNodePath, nodeIsOpen })
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
@@ -209,9 +208,6 @@ const Row = ({ style, node }) => {
     useSymbolSpan = true
     useSymbolIcon = false
   }
-  const dataUrl = JSON.stringify(node.url)
-  const level =
-    node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
 
   const onClickNode = useCallback(() => {
     toggleNode({
@@ -235,6 +231,13 @@ const Row = ({ style, node }) => {
   const onClickCloseAllChildren = useCallback(() => {
     closeAllChildren({ node, openNodes, store })
   }, [node, openNodes, activeNodeArray])
+
+  // for unknows reaseon this happens momentarily when new art is created
+  if (!node.url) return null
+
+  const dataUrl = JSON.stringify(node.url)
+  const level =
+    node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
 
   return (
     <Container style={style}>
