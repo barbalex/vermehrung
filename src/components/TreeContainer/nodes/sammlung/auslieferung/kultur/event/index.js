@@ -68,11 +68,10 @@ export default ({ nodes, data, url, store }) => {
           ),
       )
       .map(el => {
-        const label = `${get(el, 'datum', '(kein Datum)')}: ${get(
+        const label = `${get(el, 'datum') || '(kein Datum)'}: ${get(
           el,
           'event',
-          '(kein Event)',
-        )}`
+        ) || '(kein Event)'}`
 
         return {
           nodeType: 'table',

@@ -14,7 +14,7 @@ export default ({ nodes, data }) => {
         table: 'masseinheit_werte',
         id: `masseinheit${el.id}`,
         parentId: 'masseinheitenFolder',
-        label: get(el, 'wert', '(kein Wert)'),
+        label: get(el, 'wert') || '(kein Wert)',
         url: ['Werte-Listen', 'Masseinheiten', el.id],
         hasChildren: false,
       }))

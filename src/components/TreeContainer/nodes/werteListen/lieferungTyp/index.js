@@ -14,7 +14,7 @@ export default ({ nodes, data }) => {
         table: 'lieferung_typ_werte',
         id: `lieferungTyp${el.id}`,
         parentId: 'lieferungTypFolder',
-        label: get(el, 'wert', '(kein Wert)'),
+        label: get(el, 'wert') || '(kein Wert)',
         url: ['Werte-Listen', 'Lieferung-Typ', el.id],
         hasChildren: false,
       }))

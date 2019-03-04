@@ -19,7 +19,7 @@ export default ({ nodes, data }) => {
         table: 'lieferung_zwischenlager_werte',
         id: `lieferungZwischenlager${el.id}`,
         parentId: 'lieferungZwischenlagerFolder',
-        label: get(el, 'wert', '(kein Wert)'),
+        label: get(el, 'wert') || '(kein Wert)',
         url: ['Werte-Listen', 'Lieferung-Zwischenlager', el.id],
         hasChildren: false,
       }))

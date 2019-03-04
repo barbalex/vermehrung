@@ -17,7 +17,7 @@ export default ({ nodes, data }) => {
         table: 'lieferung_status_werte',
         id: `lieferungStatus${el.id}`,
         parentId: 'lieferungStatusFolder',
-        label: get(el, 'wert', '(kein Wert)'),
+        label: get(el, 'wert') || '(kein Wert)',
         url: ['Werte-Listen', 'Lieferung-Status', el.id],
         hasChildren: false,
       }))

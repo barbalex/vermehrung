@@ -61,15 +61,12 @@ export default ({ nodes, data, url, store }) => {
           ),
       )
       .map(el => {
-        const label = `${get(el, 'nach_datum', '(kein nach-Datum)')}: ${get(
+        const label = `${get(el, 'nach_datum') || '(kein nach-Datum)'}: ${get(
           el,
           'personBypersonId.name',
-          '(kein Name)',
-        )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
-          el,
-          'lieferungStatusWerteBystatus.wert',
-          '(kein Status)',
-        )}`
+        ) || '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
+          '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
+          '(kein Status)'}`
 
         return {
           nodeType: 'table',

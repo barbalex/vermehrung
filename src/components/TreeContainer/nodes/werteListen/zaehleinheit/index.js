@@ -14,7 +14,7 @@ export default ({ nodes, data }) => {
         table: 'zaehleinheit_werte',
         id: `zaehleinheit${el.id}`,
         parentId: 'zaehleinheitenFolder',
-        label: get(el, 'wert', '(kein Wert)'),
+        label: get(el, 'wert') || '(kein Wert)',
         url: ['Werte-Listen', 'Zaehleinheiten', el.id],
         hasChildren: false,
       }))

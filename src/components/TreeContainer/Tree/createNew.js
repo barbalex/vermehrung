@@ -72,16 +72,6 @@ export default async ({ node, store, client }) => {
   if (fkExists) object = `{ ${fkName}: ${parentId} }`
   let returning = '{ id }'
   if (fkExists) returning = `{ id, ${fkName} }`
-  /*console.log('createNew', {
-    fkExists,
-    fkName,
-    parentId,
-    object,
-    parentTable,
-    node,
-    nodeUrl: getSnapshot(url),
-    activeNodeArray: activeNodeArray.slice(),
-  })*/
   // add new dataset to table
   const mutation = gql`
     mutation insertDataset {
@@ -117,7 +107,7 @@ export default async ({ node, store, client }) => {
     })
     // add node.url just in case it was not yet open
     addOpenNodes([newActiveNodeArray, node.url])
-    refetch()
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
+    refetch()
   }
 }

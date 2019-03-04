@@ -30,11 +30,10 @@ export default ({ nodes, data, url, store }) => {
         table: 'sammlung',
         id: `art${artId}Sammlung${el.id}`,
         parentId: `art${artId}SammlungFolder`,
-        label: `${get(el, 'datum', '(kein Datum)')}: ${get(
+        label: `${get(el, 'datum') || '(kein Datum)'}: ${get(
           el,
           'herkunftByherkunftId.nr',
-          '(keine Nr.)',
-        )}`,
+        ) || '(keine Nr.)'}`,
         url: ['Arten', artId, 'Sammlungen', el.id],
         hasChildren: true,
       }))

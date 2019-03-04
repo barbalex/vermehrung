@@ -30,8 +30,8 @@ export default ({ nodes, data, url, store }) => {
         nodes.map(n => n.id).includes(`herkunft${herkunftId}SammlungFolder`),
       )
       .map(el => {
-        const datum = get(el, 'datum', '(kein Datum)')
-        const artName = get(el, 'artByartId.art_ae_art.name', '(keine Art)')
+        const datum = get(el, 'datum') || '(kein Datum)'
+        const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
         const label = `${datum}: ${artName}`
 
         return {

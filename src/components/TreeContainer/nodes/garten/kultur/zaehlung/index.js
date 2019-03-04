@@ -49,7 +49,7 @@ export default ({ nodes, data, url, store }) => {
         table: 'zaehlung',
         id: `garten${gartenId}Kultur${kulturId}Zaehlung${el.id}`,
         parentId: `kultur${kulturId}ZaehlungFolder`,
-        label: get(el, 'datum', '(kein Datum)'),
+        label: get(el, 'datum') || '(kein Datum)',
         url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
         hasChildren: false,
       }))

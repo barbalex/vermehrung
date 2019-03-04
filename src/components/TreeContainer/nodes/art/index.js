@@ -17,7 +17,7 @@ export default ({ nodes, data, store }) =>
       table: 'art',
       id: `art${n.id}`,
       parentId: 'artFolder',
-      label: get(n, 'art_ae_art.name', '(keine Art gewählt)'),
+      label: get(n, 'art_ae_art.name') || '(keine Art gewählt)',
       url: ['Arten', n.id],
       hasChildren: true,
     }))

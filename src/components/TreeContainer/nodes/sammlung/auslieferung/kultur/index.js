@@ -53,7 +53,8 @@ export default ({ nodes, data, url, store }) => {
         table: 'kultur',
         id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
         parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
-        label: get(el, 'gartenBygartenId.personBypersonId.name', '(kein Name)'),
+        label:
+          get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)',
         url: [
           'Sammlungen',
           sammlungId,

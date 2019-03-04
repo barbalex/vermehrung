@@ -28,13 +28,10 @@ export default ({ nodes, data, url, store }) => {
         nodes.map(n => n.id).includes(`person${personId}SammlungFolder`),
       )
       .map(el => {
-        const datum = get(el, 'datum', '(kein Datum)')
-        const art = get(el, 'artByartId.art_ae_art.name', '(keine Art)')
-        const herkunft = get(
-          el,
-          'herkunftByherkunftId.nr',
-          '(keine Herkunft-Nr)',
-        )
+        const datum = get(el, 'datum') || '(kein Datum)'
+        const art = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+        const herkunft =
+          get(el, 'herkunftByherkunftId.nr') || '(keine Herkunft-Nr)'
         const label = `${datum}: Herkunft ${herkunft}: ${art}`
 
         return {

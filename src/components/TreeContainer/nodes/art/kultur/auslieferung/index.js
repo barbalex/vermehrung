@@ -45,15 +45,14 @@ export default ({ nodes, data, url, store }) => {
           .includes(`art${artId}Kultur${kulturId}AusLieferungFolder`),
       )
       .map(el => {
-        const label = `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
+        const label = `${get(el, 'von_datum') || '(kein von-Datum)'}: ${get(
           el,
           'personBypersonId.name',
-          '(kein Name)',
-        )}; ${get(el, 'lieferungTypWerteBytyp.wert', '(kein Typ)')}; ${get(
+        ) || '(kein Name)'}; ${get(
           el,
-          'lieferungStatusWerteBystatus.wert',
-          '(kein Status)',
-        )}`
+          'lieferungTypWerteBytyp.wert',
+          '(kein Typ)',
+        )}; ${get(el, 'lieferungStatusWerteBystatus.wert') || '(kein Status)'}`
 
         return {
           nodeType: 'table',

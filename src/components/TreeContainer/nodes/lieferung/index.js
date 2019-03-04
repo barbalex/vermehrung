@@ -20,11 +20,10 @@ export default ({ nodes, data, store }) => {
         table: 'lieferung',
         id: `lieferung${el.id}`,
         parentId: 'lieferungFolder',
-        label: `${get(el, 'von_datum', '(kein von-Datum)')}: ${get(
+        label: `${get(el, 'von_datum') || '(kein von-Datum)'}: ${get(
           el,
           'personBypersonId.name',
-          '(keine Person)',
-        )}`,
+        ) || '(keine Person)'}`,
         url: ['Lieferungen', el.id],
         hasChildren: false,
       }))

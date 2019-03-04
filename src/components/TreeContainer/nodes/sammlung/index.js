@@ -16,13 +16,10 @@ export default ({ nodes, data, store }) => {
       .filter(() => nodes.map(n => n.id).includes('sammlungFolder'))
       .map(el => {
         const { datum } = el
-        const art = get(el, 'artByartId.art_ae_art.name', '(keine Art)')
-        const person = get(el, 'personBypersonId.name', '(keine Person)')
-        const herkunft = get(
-          el,
-          'herkunftByherkunftId.nr',
-          '(keine Herkunft-Nr)',
-        )
+        const art = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+        const person = get(el, 'personBypersonId.name') || '(keine Person)'
+        const herkunft =
+          get(el, 'herkunftByherkunftId.nr') || '(keine Herkunft-Nr)'
         const label = `${datum}: Herkunft ${herkunft}; ${person}; ${art}`
 
         return {

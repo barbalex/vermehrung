@@ -28,11 +28,10 @@ export default ({ nodes, data, url, store }) => {
         nodes.map(n => n.id).includes(`kultur${kulturId}EventFolder`),
       )
       .map(el => {
-        const label = `${get(el, 'datum', '(kein Datum)')}: ${get(
+        const label = `${get(el, 'datum') || '(kein Datum)'}: ${get(
           el,
           'event',
-          '(kein Event)',
-        )}`
+        ) || '(kein Event)'}`
 
         return {
           nodeType: 'table',
