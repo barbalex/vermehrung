@@ -304,8 +304,6 @@ const Lieferung = () => {
 
   if (!row) return null
 
-  console.log('Lieferung, row', row)
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>

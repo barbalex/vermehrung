@@ -195,7 +195,8 @@ const loadingSuggestions = [
 ]
 const autosuggestWidth = 350
 const getSuggestionValue = suggestion => suggestion && suggestion.name
-const shouldRenderSuggestions = value => value.trim().length > 1
+const shouldRenderSuggestions = value =>
+  value && value.trim && value.trim().length > 1
 const renderSectionTitle = section => <strong>{section.title}</strong>
 const getSectionSuggestions = section => section.suggestions
 
@@ -412,6 +413,8 @@ export default () => {
       </div>
     )
   })
+
+  //console.log('Search, val', val)
 
   return (
     <Container data-autosuggestwidth={autosuggestWidth}>
