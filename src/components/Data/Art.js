@@ -62,7 +62,7 @@ const Art = () => {
 
   const row = showFilter ? filter.art : get(data, 'art', [{}])[0]
   const rows = get(data, 'rows', [])
-  const artAeIds = rows.map(r => r.ae_id)
+  const artAeIds = rows.filter(r => r.id !== row.id).map(r => r.ae_id)
   const rowsFiltered = memoizeOne(() =>
     filterNodes({ rows, filter, table: 'art' }),
   )()
