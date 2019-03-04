@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
+import moment from 'moment'
 
 import compareLabel from '../../../../compareLabel'
 import filterNodes from '../../../../../../../utils/filterNodes'
@@ -68,10 +69,11 @@ export default ({ nodes, data, url, store }) => {
           ),
       )
       .map(el => {
-        const label = `${get(el, 'nach_datum') || '(kein nach-Datum)'}: ${get(
-          el,
-          'personBypersonId.name',
-        ) || '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
+        const nach_datum = el.von_datum
+          ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein von-Datum)'
+        const label = `${nach_datum}: ${get(el, 'personBypersonId.name') ||
+          '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
           '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
           '(kein Status)'}`
 

@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
+import moment from 'moment'
 
 import compareLabel from '../../compareLabel'
 import filterNodes from '../../../../../utils/filterNodes'
@@ -31,10 +32,11 @@ export default ({ nodes, data, url, store }) => {
         nodes.map(n => n.id).includes(`sammlung${sammlungId}LieferungFolder`),
       )
       .map(el => {
-        const label = `${get(el, 'von_datum') || '(kein von-Datum)'}: ${get(
-          el,
-          'personBypersonId.name',
-        ) || '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
+        const von_datum = el.von_datum
+          ? moment(el.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein von-Datum)'
+        const label = `${von_datum}: ${get(el, 'personBypersonId.name') ||
+          '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
           '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
           '(kein Status)'}`
 
