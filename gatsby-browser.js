@@ -13,3 +13,5 @@ import App from './src/App'
  * as db needs to be created async
  */
 export const wrapRootElement = ({ element }) => <App element={element} />
+
+exports.onServiceWorkerUpdateFound = () => window.location.reload(true)
