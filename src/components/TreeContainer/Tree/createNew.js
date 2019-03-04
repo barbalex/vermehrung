@@ -12,6 +12,7 @@ export default async ({ node, store, client }) => {
     setActiveNodeArray,
     refetch,
     addOpenNodes,
+    openNodes,
   } = store.tree
   const { nodeType, url } = node
 
@@ -101,17 +102,21 @@ export default async ({ node, store, client }) => {
   if (newObject && newObject.id) {
     let newActiveNodeArray
     // slice if last is number
-    if (isNaN(last(activeNodeArray.slice()))) {
-      newActiveNodeArray = [...activeNodeArray, newObject.id]
+    if (isNaN(last(node.url))) {
+      newActiveNodeArray = [...node.url, newObject.id]
     } else {
-      newActiveNodeArray = [...activeNodeArray.slice(0, -1), newObject.id]
+      newActiveNodeArray = [...node.url.slice(0, -1), newObject.id]
     }
     setActiveNodeArray(newActiveNodeArray)
     console.log({
+      nodeUrl: node.url.slice(),
       newActiveNodeArray,
       activeNodeArray: activeNodeArray.slice(),
+      newObject,
+      openNodes: openNodes.slice(),
     })
-    addOpenNodes([newActiveNodeArray])
+    // add node.url just in case it was not yet open
+    addOpenNodes([newActiveNodeArray, node.url])
     refetch()
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
   }
