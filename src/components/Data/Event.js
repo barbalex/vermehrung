@@ -127,31 +127,22 @@ const Event = () => {
         try {
           await client.mutate({
             mutation: gql`
-              mutation update_kultur_event(
-                $id: Int!
-                $kultur_id: Int
-                $datum: date
-                $event: String
-              ) {
+              mutation update_kultur_event($id: Int!) {
                 update_kultur_event(
                   where: { id: { _eq: $id } }
-                  _set: { kultur_id: $kultur_id, datum: $datum, event: $event }
+                  _set: { 
+                    ${field}: ${!isNaN(value) ? value : `"${value}"`} }
                 ) {
                   affected_rows
                   returning {
-                    id
-                    kultur_id
-                    datum
-                    event
+                    ...KulturEventFields
                   }
                 }
               }
+              ${kulturEventFragment}
             `,
             variables: {
               id: row.id,
-              kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-              datum: field === 'datum' ? value : row.datum,
-              event: field === 'event' ? value : row.event,
             },
           })
         } catch (error) {
