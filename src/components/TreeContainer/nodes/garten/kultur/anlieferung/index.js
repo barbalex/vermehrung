@@ -47,7 +47,7 @@ export default ({ nodes, data, url, store }) => {
       .map(el => {
         const nach_datum = el.von_datum
           ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein von-Datum)'
+          : '(kein nach-Datum)'
         const label = `${nach_datum}: ${get(el, 'personBypersonId.name') ||
           '(kein Name)'}; ${get(
           el,

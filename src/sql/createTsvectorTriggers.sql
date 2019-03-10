@@ -89,7 +89,10 @@ create function sammlung_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.von_anzahl_individuen::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(zaehleinheit, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.menge::text, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(masseinheit, '')), 'C') || ' ' ||
@@ -165,7 +168,10 @@ create function kultur_event_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.event, '')), 'A');
     return new;
   end
@@ -193,7 +199,10 @@ create function kultur_inventar_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.kasten, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.beet, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.nr, '')), 'B') || ' ' ||
@@ -231,7 +240,10 @@ create function zaehlung_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.anzahl_pflanzen::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.anz_nicht_auspflanzbereit::text, '')), 'D') || ' ' ||
@@ -332,7 +344,10 @@ create function lieferung_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(zaehleinheit, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.menge::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('german', coalesce(masseinheit, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(to_char(new.von_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungNr, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungDatum, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungPerson, '')), 'B') || ' ' ||
@@ -340,7 +355,10 @@ create function lieferung_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(sammlungHerkunftLokalname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(vonKulturPersonName, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(zwischenlager, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(to_char(new.nach_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(nachKulturPersonName, '')), 'B') || ' ' ||
       case
         when new.nach_ausgepflanzt='true' then setweight(to_tsvector('simple', 'ausgepflanzt'), 'A')
