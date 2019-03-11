@@ -140,8 +140,8 @@ export default async ({ node, store, client }) => {
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
-    artId = get(responce, 'data.kultur[0].art_id')
-    console.log({ responce, artId })
+    artId = get(responce, 'data.sammlung[0].art_id')
+    console.log({ responce, artId, parentId })
   }
   let object = `{}`
   if (fkExists)
