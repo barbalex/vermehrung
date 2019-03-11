@@ -34,8 +34,7 @@ export default ({ nodes, data, url, store }) => {
         table: 'kultur',
         id: `garten${gartenId}Kultur${el.id}`,
         parentId: `garten${gartenId}KulturFolder`,
-        label:
-          get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)',
+        label: get(el, 'artByartId.art_ae_art.name') || '(keine Art)',
         url: ['Gaerten', gartenId, 'Kulturen', el.id],
         hasChildren: true,
       }))

@@ -43,6 +43,9 @@ export default gql`
       }
       kultursBygartenId @include(if: $isGarten) {
         ...KulturFields
+        artByartId {
+          ...ArtFields
+        }
         gartenBygartenId @include(if: $isGartenKultur) {
           ...GartenFields
           personBypersonId {
