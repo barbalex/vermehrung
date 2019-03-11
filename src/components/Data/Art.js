@@ -99,11 +99,11 @@ const Art = () => {
                 ) {
                   affected_rows
                   returning {
-                    id
-                    ae_id
+                    ...ArtFields
                   }
                 }
               }
+              ${artFragment}
             `,
             variables: {
               id: row.id,
