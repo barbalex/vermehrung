@@ -40,7 +40,7 @@ const Data = () => {
   if (url.length === 2 && url[0] === 'Lieferungen') {
     return <Lieferung />
   }
-  if ([2, 3].includes && url[0] === 'Personen') {
+  if ([2, 3].includes(url.length) && url[0] === 'Personen') {
     return <Person />
   }
   if ([2, 3].includes(url.length) && url[0] === 'Sammlungen') {
