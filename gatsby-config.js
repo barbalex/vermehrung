@@ -69,13 +69,15 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
+        scope: 'https://vermehrung.apflora.ch/',
         name: 'vermehrung.apflora.ch',
         short_name: 'vermehrung',
         start_url: '/',
         background_color: '#2e0c58',
         theme_color: '#2e0c58',
-        display: 'minimal-ui',
+        display: 'standalone',
         icon: 'src/images/seedling.png',
+        include_favicon: true,
       },
     },
     {
