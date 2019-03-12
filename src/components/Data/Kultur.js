@@ -68,6 +68,19 @@ const artQuery = gql`
   ${kulturFragment}
   ${artFragment}
 `
+const gartenQuery = gql`
+    garten {
+      id
+      personBypersonId {
+        id
+        name
+      }
+    }
+  }
+  ${kulturFragment}
+  ${artFragment}
+  ${gartenFragment}
+`
 
 const Kultur = () => {
   const client = useApolloClient()
@@ -106,17 +119,14 @@ const Kultur = () => {
     dataArt,
   })
 
-  // TODO:
-  // if row.person_id exists: do not list names already included with this person
   let artWerte = get(dataArt, 'art', [])
-  if (gartenId) {
-    // filter artWerte
-    artWerte = artWerte.filter(a => {
+    // do not include arten already in this garten
+    .filter(a => {
       const kulturs = get(a, 'kultursByartId', []) || []
       const gartenIds = kulturs.map(k => k.garten_id)
+      // bot do show choosen art
       return a.id === row.art_id || !gartenIds.includes(row.garten_id)
     })
-  }
   artWerte = artWerte.map(el => ({
     value: el.id,
     label: get(el, 'art_ae_art.name') || '(keine Art)',
@@ -130,20 +140,6 @@ const Kultur = () => {
     value: el.id,
     label: get(el, 'personBypersonId.name') || '(kein Name)',
   }))
-  if (row.art_id) {
-    // 1. find all kulturs with this art_id
-    const query = gql`
-      query anotherKulturQuery($art_id: Int!) {
-        kultur(where: { art_id: { _eq: $art_id } }) {
-          ...KulturFields
-        }
-      }
-      ${kulturFragment}
-      ${artFragment}
-    `
-    // 2. make list of their person_id's
-    // 3. remove these person's gartens from list
-  }
   gartenWerte = sortBy(gartenWerte, 'label')
 
   const saveToDb = useCallback(
@@ -211,6 +207,17 @@ const Kultur = () => {
         <FormTitle title="Kultur" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
           error.message
+        }`}</FieldsContainer>
+      </Container>
+    )
+  }
+
+  if (errorArt) {
+    return (
+      <Container>
+        <FormTitle title="Kultur" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${
+          errorArt.message
         }`}</FieldsContainer>
       </Container>
     )
