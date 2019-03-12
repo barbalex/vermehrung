@@ -38,11 +38,16 @@ const query = gql`
     rows: art {
       ...ArtFields
     }
+  }
+  ${artFragment}
+`
+
+const aeArtQuery = gql`
+  query aeArtQuery {
     ae_art {
       ...AeArtFields
     }
   }
-  ${artFragment}
   ${aeArtFragment}
 `
 
@@ -57,6 +62,11 @@ const Art = () => {
   const { data, error, loading } = useQuery(query, {
     variables: { id: artId },
   })
+  const {
+    data: aeArtData,
+    error: aeArtError,
+    loading: aeArtLoading,
+  } = useQuery(aeArtQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -72,7 +82,7 @@ const Art = () => {
   useEffect(() => setErrors({}), [row])
 
   let artWerte = memoizeOne(() =>
-    get(data, 'ae_art', []).filter(a => !artAeIds.includes(a.id)),
+    get(aeArtData, 'ae_art', []).filter(a => !artAeIds.includes(a.id)),
   )()
   artWerte = memoizeOne(() =>
     artWerte.map(el => ({
@@ -139,6 +149,16 @@ const Art = () => {
       </Container>
     )
   }
+  if (aeArtError) {
+    return (
+      <Container>
+        <FormTitle title="Art" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${
+          aeArtError.message
+        }`}</FieldsContainer>
+      </Container>
+    )
+  }
 
   if (!row) return null
 
@@ -159,6 +179,7 @@ const Art = () => {
             field="ae_id"
             label="Art"
             options={artWerte}
+            loading={aeArtLoading}
             saveToDb={saveToDb}
             error={errors.ae_id}
           />

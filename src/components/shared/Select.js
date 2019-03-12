@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
+import TextField from './TextField'
 
 const Container = styled.div`
   display: flex;
@@ -71,6 +72,7 @@ const SharedSelect = ({
   name,
   error,
   options,
+  loading,
   maxHeight = null,
   noCaret = false,
   saveToDb,
@@ -88,7 +90,10 @@ const SharedSelect = ({
     [name],
   )
 
-  const selectValue = options.find(o => o.value === value)
+  // show ... whyle options are loading
+  const loadingOptions = [{ value, label: '...' }]
+  const optionsToUse = loading && value ? loadingOptions : options
+  const selectValue = optionsToUse.find(o => o.value === value)
 
   return (
     <Container>
@@ -97,7 +102,7 @@ const SharedSelect = ({
         id={field}
         name={field}
         value={selectValue}
-        options={options}
+        options={optionsToUse}
         onChange={onChange}
         hideSelectedOptions
         placeholder=""
