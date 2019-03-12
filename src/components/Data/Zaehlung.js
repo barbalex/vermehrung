@@ -46,6 +46,11 @@ const query = gql`
         art_id
       }
     }
+  }
+  ${zaehlungFragment}
+`
+const kulturQuery = gql`
+  query kulturQuery {
     kultur {
       id
       art_id
@@ -59,7 +64,6 @@ const query = gql`
       }
     }
   }
-  ${zaehlungFragment}
 `
 
 const Zaehlung = () => {
@@ -69,10 +73,16 @@ const Zaehlung = () => {
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
+
   const isFiltered = runIsFiltered()
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered },
   })
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -84,7 +94,7 @@ const Zaehlung = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let kulturWerte = get(data, 'kultur', []).filter(s => {
+  let kulturWerte = get(kulturData, 'kultur', []).filter(s => {
     // only show kulturen of same art
     const s_art = get(s, 'kulturBykulturId.art_id')
     if (row.art_id && s_art) {
@@ -167,12 +177,13 @@ const Zaehlung = () => {
     )
   }
 
-  if (error) {
+  const errorToShow = error || kulturError
+  if (errorToShow) {
     return (
       <Container>
         <FormTitle title="Zaehlung" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
+          errorToShow.message
         }`}</FieldsContainer>
       </Container>
     )
@@ -197,6 +208,7 @@ const Zaehlung = () => {
             field="kultur_id"
             label="Kultur"
             options={kulturWerte}
+            loading={kulturLoading}
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />

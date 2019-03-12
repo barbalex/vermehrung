@@ -37,13 +37,17 @@ const query = gql`
     rows: garten @include(if: $isFiltered) {
       ...GartenFields
     }
+  }
+  ${gartenFragment}
+`
+const personQuery = gql`
+  query personQuery {
     person {
       id
       name
       ort
     }
   }
-  ${gartenFragment}
 `
 
 const Garten = () => {
@@ -52,11 +56,17 @@ const Garten = () => {
   const { filter } = store
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
+
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered },
   })
+  const {
+    data: personData,
+    error: personError,
+    loading: personLoading,
+  } = useQuery(personQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -68,7 +78,7 @@ const Garten = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let personWerte = get(data, 'person', [])
+  let personWerte = get(personData, 'person', [])
   personWerte = personWerte.map(el => ({
     value: el.id,
     label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
@@ -142,6 +152,16 @@ const Garten = () => {
       </Container>
     )
   }
+  if (personError) {
+    return (
+      <Container>
+        <FormTitle title="Garten" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${
+          personError.message
+        }`}</FieldsContainer>
+      </Container>
+    )
+  }
 
   if (!row) return null
 
@@ -162,6 +182,7 @@ const Garten = () => {
             field="person_id"
             label="Person"
             options={personWerte}
+            loading={personLoading}
             saveToDb={saveToDb}
             error={errors.person_id}
           />

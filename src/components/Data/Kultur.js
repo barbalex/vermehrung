@@ -44,13 +44,6 @@ const query = gql`
     rows: kultur @include(if: $isFiltered) {
       ...KulturFields
     }
-    garten {
-      id
-      personBypersonId {
-        id
-        name
-      }
-    }
   }
   ${kulturFragment}
   ${artFragment}
@@ -211,34 +204,13 @@ const Kultur = () => {
     )
   }
 
-  if (error) {
+  const errorToShow = error || errorArt || errorGarten
+  if (errorToShow) {
     return (
       <Container>
         <FormTitle title="Kultur" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (errorArt) {
-    return (
-      <Container>
-        <FormTitle title="Kultur" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          errorArt.message
-        }`}</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (errorGarten) {
-    return (
-      <Container>
-        <FormTitle title="Kultur" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          errorGarten.message
+          errorToShow.message
         }`}</FieldsContainer>
       </Container>
     )

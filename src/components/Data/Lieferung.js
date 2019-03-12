@@ -42,11 +42,62 @@ const query = gql`
     rows: lieferung @include(if: $isFiltered) {
       ...LieferungFields
     }
+  }
+  ${lieferungFragment}
+`
+const sammlungQuery = gql`
+  query sammlungQuery {
+    sammlung {
+      id
+      art_id
+      datum
+      herkunftByherkunftId {
+        id
+        nr
+      }
+      personBypersonId {
+        id
+        name
+        ort
+      }
+    }
+  }
+`
+const kulturQuery = gql`
+  query kulturQuery {
+    kultur {
+      id
+      art_id
+      gartenBygartenId {
+        id
+        personBypersonId {
+          id
+          name
+          ort
+        }
+      }
+    }
+  }
+`
+const artQuery = gql`
+  query artQuery {
+    art {
+      ...ArtFields
+    }
+  }
+  ${artFragment}
+`
+const personQuery = gql`
+  query personQuery {
     person {
       id
       name
       ort
     }
+  }
+`
+const werteQuery = gql`
+  query werteQuery {
     lieferung_typ_werte {
       id
       wert
@@ -72,38 +123,7 @@ const query = gql`
       wert
       sort
     }
-    art {
-      ...ArtFields
-    }
-    sammlung {
-      id
-      art_id
-      datum
-      herkunftByherkunftId {
-        id
-        nr
-      }
-      personBypersonId {
-        id
-        name
-        ort
-      }
-    }
-    kultur {
-      id
-      art_id
-      gartenBygartenId {
-        id
-        personBypersonId {
-          id
-          name
-          ort
-        }
-      }
-    }
   }
-  ${lieferungFragment}
-  ${artFragment}
 `
 
 const Lieferung = () => {
@@ -112,11 +132,35 @@ const Lieferung = () => {
   const { filter } = store
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
+
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered },
   })
+  const {
+    data: sammlungData,
+    error: sammlungError,
+    loading: sammlungLoading,
+  } = useQuery(sammlungQuery)
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery)
+  const { data: artData, error: artError, loading: artLoading } = useQuery(
+    artQuery,
+  )
+  const {
+    data: personData,
+    error: personError,
+    loading: personLoading,
+  } = useQuery(personQuery)
+  const {
+    data: werteData,
+    error: werteError,
+    loading: werteLoading,
+  } = useQuery(werteQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -128,7 +172,7 @@ const Lieferung = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let kulturWerte = get(data, 'kultur', []).filter(s => {
+  let kulturWerte = get(kulturData, 'kultur', []).filter(s => {
     // only show kulturen of same art
     if (row.art_id && s.art_id) {
       return s.art_id === row.art_id
@@ -151,7 +195,7 @@ const Lieferung = () => {
     }
   })
 
-  let sammlungWerte = get(data, 'sammlung', []).filter(s => {
+  let sammlungWerte = get(sammlungData, 'sammlung', []).filter(s => {
     // only show sammlungen of same art
     if (row.art_id && s.art_id) {
       return s.art_id === row.art_id
@@ -175,28 +219,28 @@ const Lieferung = () => {
     }
   })
 
-  let personWerte = get(data, 'person', [])
+  let personWerte = get(personData, 'person', [])
   personWerte = personWerte.map(el => ({
     value: el.id,
     label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
   }))
   personWerte = sortBy(personWerte, 'label')
 
-  let artWerte = get(data, 'art', [])
+  let artWerte = get(artData, 'art', [])
   artWerte = artWerte.map(el => ({
     value: el.id,
     label: get(el, 'art_ae_art.name') || '(kein Artname)',
   }))
   artWerte = sortBy(artWerte, 'label')
 
-  let lieferungTypWerte = get(data, 'lieferung_typ_werte', [])
+  let lieferungTypWerte = get(werteData, 'lieferung_typ_werte', [])
   lieferungTypWerte = sortBy(lieferungTypWerte, ['sort', 'wert'])
   lieferungTypWerte = lieferungTypWerte.map(el => ({
     value: el.id,
     label: el.wert || '(kein Wert)',
   }))
 
-  let lieferungStatusWerte = get(data, 'lieferung_status_werte', [])
+  let lieferungStatusWerte = get(werteData, 'lieferung_status_werte', [])
   lieferungStatusWerte = sortBy(lieferungStatusWerte, ['sort', 'wert'])
   lieferungStatusWerte = lieferungStatusWerte.map(el => ({
     value: el.id,
@@ -204,7 +248,7 @@ const Lieferung = () => {
   }))
 
   let lieferungZwischenlagerWerte = get(
-    data,
+    werteData,
     'lieferung_zwischenlager_werte',
     [],
   )
@@ -217,14 +261,14 @@ const Lieferung = () => {
     label: el.wert || '(kein Wert)',
   }))
 
-  let zaehleinheitWerte = get(data, 'zaehleinheit_werte', [])
+  let zaehleinheitWerte = get(werteData, 'zaehleinheit_werte', [])
   zaehleinheitWerte = sortBy(zaehleinheitWerte, ['sort', 'wert'])
   zaehleinheitWerte = zaehleinheitWerte.map(el => ({
     value: el.id,
     label: el.wert || '(kein Wert)',
   }))
 
-  let masseinheitWerte = get(data, 'masseinheit_werte', [])
+  let masseinheitWerte = get(werteData, 'masseinheit_werte', [])
   masseinheitWerte = sortBy(masseinheitWerte, ['sort', 'wert'])
   masseinheitWerte = masseinheitWerte.map(el => ({
     value: el.id,
@@ -291,12 +335,19 @@ const Lieferung = () => {
     )
   }
 
-  if (error) {
+  const errorToShow =
+    error ||
+    sammlungError ||
+    kulturError ||
+    artError ||
+    personError ||
+    werteError
+  if (errorToShow) {
     return (
       <Container>
         <FormTitle title="Lieferung" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
+          errorToShow.message
         }`}</FieldsContainer>
       </Container>
     )
@@ -321,6 +372,7 @@ const Lieferung = () => {
             field="art_id"
             label="Art"
             options={artWerte}
+            loading={artLoading}
             saveToDb={saveToDb}
             error={errors.art_id}
           />
@@ -331,6 +383,7 @@ const Lieferung = () => {
             field="person_id"
             label="Person"
             options={personWerte}
+            loading={personLoading}
             saveToDb={saveToDb}
             error={errors.person_id}
           />
@@ -341,6 +394,7 @@ const Lieferung = () => {
             field="typ"
             label="Typ"
             options={lieferungTypWerte}
+            loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.typ}
           />
@@ -351,6 +405,7 @@ const Lieferung = () => {
             field="status"
             label="Status"
             options={lieferungStatusWerte}
+            loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.status}
           />
@@ -361,6 +416,7 @@ const Lieferung = () => {
             field="zaehleinheit"
             label="Zähleinheit"
             options={zaehleinheitWerte}
+            loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.zaehleinheit}
           />
@@ -380,6 +436,7 @@ const Lieferung = () => {
             field="masseinheit"
             label="Masseinheit"
             options={masseinheitWerte}
+            loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.masseinheit}
           />
@@ -398,6 +455,7 @@ const Lieferung = () => {
             field="von_sammlung_id"
             label="von Sammlung"
             options={sammlungWerte}
+            loading={sammlungLoading}
             saveToDb={saveToDb}
             error={errors.von_sammlung_id}
           />
@@ -408,6 +466,7 @@ const Lieferung = () => {
             field="von_kultur_id"
             label="von Kultur"
             options={kulturWerte}
+            loading={kulturLoading}
             saveToDb={saveToDb}
             error={errors.von_kultur_id}
           />
@@ -418,6 +477,7 @@ const Lieferung = () => {
             field="zwischenlager"
             label="Zwischenlager"
             options={lieferungZwischenlagerWerte}
+            loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.zwischenlager}
           />
@@ -436,6 +496,7 @@ const Lieferung = () => {
             field="nach_kultur_id"
             label="nach Kultur"
             options={kulturWerte}
+            loading={kulturLoading}
             saveToDb={saveToDb}
             error={errors.nach_kultur_id}
           />

@@ -139,22 +139,13 @@ const Art = () => {
     )
   }
 
-  if (error) {
+  const errorToShow = error || aeArtError
+  if (errorToShow) {
     return (
       <Container>
         <FormTitle title="Art" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
-      </Container>
-    )
-  }
-  if (aeArtError) {
-    return (
-      <Container>
-        <FormTitle title="Art" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          aeArtError.message
+          errorToShow.message
         }`}</FieldsContainer>
       </Container>
     )

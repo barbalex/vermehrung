@@ -46,6 +46,11 @@ const query = gql`
         art_id
       }
     }
+  }
+  ${kulturEventFragment}
+`
+const kulturQuery = gql`
+  query kulturQuery {
     kultur {
       id
       art_id
@@ -75,11 +80,18 @@ const Event = () => {
   const { filter } = store
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
+
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered },
   })
+
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -91,7 +103,7 @@ const Event = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let kulturWerte = get(data, 'kultur', []).filter(s => {
+  let kulturWerte = get(kulturData, 'kultur', []).filter(s => {
     // only show kulturen of same art
     const s_art = get(s, 'kulturBykulturId.art_id')
     if (row.art_id && s_art) {
@@ -184,6 +196,16 @@ const Event = () => {
       </Container>
     )
   }
+  if (kulturError) {
+    return (
+      <Container>
+        <FormTitle title="Event" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${
+          kulturError.message
+        }`}</FieldsContainer>
+      </Container>
+    )
+  }
 
   if (!row) return null
 
@@ -204,6 +226,7 @@ const Event = () => {
             field="kultur_id"
             label="Kultur"
             options={kulturWerte}
+            loading={kulturLoading}
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />

@@ -41,6 +41,12 @@ const query = gql`
     rows: sammlung @include(if: $isFiltered) {
       ...SammlungFields
     }
+  }
+  ${sammlungFragment}
+  ${artFragment}
+`
+const dataQuery = gql`
+  query dataQuery {
     person {
       id
       name
@@ -51,6 +57,15 @@ const query = gql`
       nr
       lokalname
     }
+    art {
+      ...ArtFields
+    }
+  }
+  ${sammlungFragment}
+  ${artFragment}
+`
+const werteQuery = gql`
+  query werteQuery {
     zaehleinheit_werte {
       id
       wert
@@ -61,12 +76,7 @@ const query = gql`
       wert
       sort
     }
-    art {
-      ...ArtFields
-    }
   }
-  ${sammlungFragment}
-  ${artFragment}
 `
 
 const Sammlung = () => {
@@ -75,11 +85,20 @@ const Sammlung = () => {
   const { filter } = store
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
+
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered },
   })
+  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
+    dataQuery,
+  )
+  const {
+    data: werteData,
+    error: werteError,
+    loading: werteLoading,
+  } = useQuery(werteQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -91,35 +110,35 @@ const Sammlung = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let personWerte = get(data, 'person', [])
+  let personWerte = get(dataData, 'person', [])
   personWerte = personWerte.map(el => ({
     value: el.id,
     label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
   }))
   personWerte = sortBy(personWerte, 'label')
 
-  let herkunftWerte = get(data, 'herkunft', [])
+  let herkunftWerte = get(dataData, 'herkunft', [])
   herkunftWerte = herkunftWerte.map(el => ({
     value: el.id,
     label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
   }))
   herkunftWerte = sortBy(herkunftWerte, 'label')
 
-  let artWerte = get(data, 'art', [])
+  let artWerte = get(dataData, 'art', [])
   artWerte = artWerte.map(el => ({
     value: el.id,
     label: get(el, 'art_ae_art.name') || '(kein Artname)',
   }))
   artWerte = sortBy(artWerte, 'label')
 
-  let zaehleinheitWerte = get(data, 'zaehleinheit_werte', [])
+  let zaehleinheitWerte = get(werteData, 'zaehleinheit_werte', [])
   zaehleinheitWerte = sortBy(zaehleinheitWerte, ['sort', 'wert'])
   zaehleinheitWerte = zaehleinheitWerte.map(el => ({
     value: el.id,
     label: el.wert || '(kein Wert)',
   }))
 
-  let masseinheitWerte = get(data, 'masseinheit_werte', [])
+  let masseinheitWerte = get(werteData, 'masseinheit_werte', [])
   masseinheitWerte = sortBy(masseinheitWerte, ['sort', 'wert'])
   masseinheitWerte = masseinheitWerte.map(el => ({
     value: el.id,
@@ -185,12 +204,13 @@ const Sammlung = () => {
     )
   }
 
-  if (error) {
+  const errorToShow = error || dataError || werteError
+  if (errorToShow) {
     return (
       <Container>
         <FormTitle title="Sammlung" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
+          errorToShow.message
         }`}</FieldsContainer>
       </Container>
     )
@@ -224,6 +244,7 @@ const Sammlung = () => {
             field="art_id"
             label="Art"
             options={artWerte}
+            loading={dataLoading}
             saveToDb={saveToDb}
             error={errors.art_id}
           />
@@ -234,6 +255,7 @@ const Sammlung = () => {
             field="herkunft_id"
             label="Herkunft"
             options={herkunftWerte}
+            loading={dataLoading}
             saveToDb={saveToDb}
             error={errors.herkunft_id}
           />
@@ -244,6 +266,7 @@ const Sammlung = () => {
             field="person_id"
             label="Person"
             options={personWerte}
+            loading={dataLoading}
             saveToDb={saveToDb}
             error={errors.person_id}
           />
@@ -271,6 +294,7 @@ const Sammlung = () => {
             field="zaehleinheit"
             label="Zähleinheit"
             options={zaehleinheitWerte}
+            loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.zaehleinheit}
           />
@@ -290,6 +314,7 @@ const Sammlung = () => {
             field="masseinheit"
             label="Masseinheit"
             options={masseinheitWerte}
+            loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.masseinheit}
           />
