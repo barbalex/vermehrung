@@ -83,6 +83,7 @@ const SharedSelectCreatable = ({
   name,
   error,
   options: optionsIn,
+  loading,
   onClickLocate,
   maxHeight = null,
   noCaret = false,
@@ -129,6 +130,10 @@ const SharedSelectCreatable = ({
     options.push({ label: value, value })
   }
 
+  // show ... whyle options are loading
+  const loadingOptions = [{ value, label: '...' }]
+  const optionsToUse = loading && value ? loadingOptions : options
+
   return (
     <Container>
       {label && <Label>{label}</Label>}
@@ -136,8 +141,8 @@ const SharedSelectCreatable = ({
         <StyledSelect
           id={field}
           name={field}
-          value={options.find(o => o.value === value)}
-          options={options}
+          value={optionsToUse.find(o => o.value === value)}
+          options={optionsToUse}
           onChange={onChange}
           onBlur={onBlur}
           onInputChange={onInputChange}
