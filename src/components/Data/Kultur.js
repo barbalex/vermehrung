@@ -17,6 +17,7 @@ import filterNodes from '../../utils/filterNodes'
 import {
   kultur as kulturFragment,
   art as artFragment,
+  garten as gartenFragment,
 } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 
@@ -36,18 +37,31 @@ const query = gql`
   query KulturQuery($id: Int!, $isFiltered: Boolean!) {
     kultur(where: { id: { _eq: $id } }) {
       ...KulturFields
+      gartenBygartenId {
+        ...GartenFields
+      }
     }
     rows: kultur @include(if: $isFiltered) {
       ...KulturFields
-    }
-    art {
-      ...ArtFields
     }
     garten {
       id
       personBypersonId {
         id
         name
+      }
+    }
+  }
+  ${kulturFragment}
+  ${artFragment}
+  ${gartenFragment}
+`
+const artQuery = gql`
+  query artQuery($include: Boolean!) {
+    art {
+      ...ArtFields
+      kultursByartId @include(if: $include) {
+        ...KulturFields
       }
     }
   }
@@ -77,18 +91,59 @@ const Kultur = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let artWerte = get(data, 'art', [])
+  const gartenId = row.garten_id
+  const { data: dataArt, error: errorArt, loading: loadingArt } = useQuery(
+    artQuery,
+    {
+      variables: { include: !!gartenId },
+    },
+  )
+
+  console.log('Kultur', {
+    row,
+    data,
+    gartenId,
+    dataArt,
+  })
+
+  // TODO:
+  // if row.person_id exists: do not list names already included with this person
+  let artWerte = get(dataArt, 'art', [])
+  if (gartenId) {
+    // filter artWerte
+    artWerte = artWerte.filter(a => {
+      const kulturs = get(a, 'kultursByartId', []) || []
+      const gartenIds = kulturs.map(k => k.garten_id)
+      return a.id === row.art_id || !gartenIds.includes(row.garten_id)
+    })
+  }
   artWerte = artWerte.map(el => ({
     value: el.id,
     label: get(el, 'art_ae_art.name') || '(keine Art)',
   }))
   artWerte = sortBy(artWerte, 'label')
 
+  // TODO:
+  // if row includes art_id: do not list names already included with this species
   let gartenWerte = get(data, 'garten', [])
   gartenWerte = gartenWerte.map(el => ({
     value: el.id,
     label: get(el, 'personBypersonId.name') || '(kein Name)',
   }))
+  if (row.art_id) {
+    // 1. find all kulturs with this art_id
+    const query = gql`
+      query anotherKulturQuery($art_id: Int!) {
+        kultur(where: { art_id: { _eq: $art_id } }) {
+          ...KulturFields
+        }
+      }
+      ${kulturFragment}
+      ${artFragment}
+    `
+    // 2. make list of their person_id's
+    // 3. remove these person's gartens from list
+  }
   gartenWerte = sortBy(gartenWerte, 'label')
 
   const saveToDb = useCallback(

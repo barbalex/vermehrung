@@ -193,6 +193,7 @@ export default async ({ node, store, client }) => {
     // add node.url just in case it was not yet open
     addOpenNodes([newActiveNodeArray, node.url])
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
-    refetch()
+    setTimeout(()=>refetch())
+    //refetch()
   }
 }
