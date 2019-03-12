@@ -138,8 +138,6 @@ const Kultur = () => {
   }))
   artWerte = sortBy(artWerte, 'label')
 
-  // TODO:
-  // if row includes art_id: do not list names already included with this species
   let gartenWerte = get(dataGarten, 'garten', [])
     // do not include garten of persons already culturing this art
     .filter(a => {
