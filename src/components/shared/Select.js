@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-import TextField from './TextField'
 
 const Container = styled.div`
   display: flex;
