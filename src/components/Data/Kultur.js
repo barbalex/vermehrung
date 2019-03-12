@@ -69,16 +69,19 @@ const artQuery = gql`
   ${artFragment}
 `
 const gartenQuery = gql`
+  query gartenQuery($include: Boolean!) {
     garten {
       id
       personBypersonId {
         id
         name
       }
+      kultursBygartenId @include(if: $include) {
+        ...KulturFields
+      }
     }
   }
   ${kulturFragment}
-  ${artFragment}
   ${gartenFragment}
 `
 
@@ -112,11 +115,13 @@ const Kultur = () => {
     },
   )
 
-  console.log('Kultur', {
-    row,
-    data,
-    gartenId,
-    dataArt,
+  const artId = row.art_id
+  const {
+    data: dataGarten,
+    error: errorGarten,
+    loading: loadingGarten,
+  } = useQuery(gartenQuery, {
+    variables: { include: !!artId },
   })
 
   let artWerte = get(dataArt, 'art', [])
@@ -135,7 +140,14 @@ const Kultur = () => {
 
   // TODO:
   // if row includes art_id: do not list names already included with this species
-  let gartenWerte = get(data, 'garten', [])
+  let gartenWerte = get(dataGarten, 'garten', [])
+    // do not include garten of persons already culturing this art
+    .filter(a => {
+      const kulturs = get(a, 'kultursBygartenId', []) || []
+      const artIds = kulturs.map(k => k.art_id)
+      // bot do show choosen garten
+      return a.id === row.garten_id || !artIds.includes(row.art_id)
+    })
   gartenWerte = gartenWerte.map(el => ({
     value: el.id,
     label: get(el, 'personBypersonId.name') || '(kein Name)',
@@ -223,6 +235,17 @@ const Kultur = () => {
     )
   }
 
+  if (errorGarten) {
+    return (
+      <Container>
+        <FormTitle title="Kultur" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${
+          errorGarten.message
+        }`}</FieldsContainer>
+      </Container>
+    )
+  }
+
   if (!row) return null
 
   return (
@@ -242,6 +265,7 @@ const Kultur = () => {
             field="art_id"
             label="Art"
             options={artWerte}
+            loading={loadingArt}
             saveToDb={saveToDb}
             error={errors.art_id}
           />
@@ -252,6 +276,7 @@ const Kultur = () => {
             field="garten_id"
             label="Garten"
             options={gartenWerte}
+            loading={loadingGarten}
             saveToDb={saveToDb}
             error={errors.garten_id}
           />
