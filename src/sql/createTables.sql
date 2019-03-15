@@ -2,7 +2,7 @@ create extension if not exists "uuid-ossp";
 
 drop table if exists person cascade;
 create table person (
-  id serial primary key,
+  id bigserial primary key,
   nr text default null unique,
   name text default null,
   adresszusatz text default null,
@@ -29,7 +29,7 @@ create index on person using gin (tsv);
 
 drop table if exists art cascade;
 create table art (
-  id serial primary key,
+  id bigserial primary key,
   ae_id uuid default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -42,7 +42,7 @@ create index on art using gin (tsv);
 
 drop table if exists herkunft cascade;
 create table herkunft (
-  id serial primary key,
+  id bigserial primary key,
   nr text default null unique,
   lokalname text default null,
   gemeinde text default null,
@@ -62,7 +62,7 @@ create index on herkunft using gin (tsv);
 
 drop table if exists sammlung cascade;
 create table sammlung (
-  id serial primary key,
+  id bigserial primary key,
   art_id integer default null references art (id) on delete cascade on update cascade,
   person_id integer default null references person (id) on delete cascade on update cascade,
   herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
@@ -87,7 +87,7 @@ create index on sammlung using gin (tsv);
 
 drop table if exists garten cascade;
 create table garten (
-  id serial primary key,
+  id bigserial primary key,
   person_id integer default null references person (id) on delete cascade on update cascade,
   x integer default null constraint zulaessige_x_koordinate check (x is null or (x > 2485071 and x < 2828516)),
   y integer default null constraint zulaessige_y_koordinate check (y is null or (y > 1075346 and y < 1299942)),
@@ -103,7 +103,7 @@ create index on garten using gin (tsv);
 
 drop table if exists kultur cascade;
 create table kultur (
-  id serial primary key,
+  id bigserial primary key,
   art_id integer default null references art (id) on delete cascade on update cascade,
   garten_id integer default null references garten (id) on delete cascade on update cascade,
   bemerkungen text default null,
@@ -120,7 +120,7 @@ create index on kultur using gin (tsv);
 
 drop table if exists kultur_event cascade;
 create table kultur_event (
-  id serial primary key,
+  id bigserial primary key,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
   event text default null,
@@ -136,7 +136,7 @@ create index on kultur_event using gin (tsv);
 
 drop table if exists kultur_inventar cascade;
 create table kultur_inventar (
-  id serial primary key,
+  id bigserial primary key,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
   kasten text default null,
@@ -162,7 +162,7 @@ create index on kultur_inventar using gin (tsv);
 
 drop table if exists zaehlung cascade;
 create table zaehlung (
-  id serial primary key,
+  id bigserial primary key,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
   anzahl_pflanzen integer default null,
@@ -185,7 +185,7 @@ create index on zaehlung using gin (tsv);
 
 drop table if exists lieferung cascade;
 create table lieferung (
-  id serial primary key,
+  id bigserial primary key,
   art_id integer default null references art (id) on delete cascade on update cascade,
   person_id integer default null references person (id) on delete cascade on update cascade,
   typ integer default null references lieferung_typ_werte (id) on delete set null on update cascade,
@@ -220,7 +220,7 @@ create index on lieferung using gin (tsv);
 
 drop table if exists zaehleinheit_werte cascade;
 create table zaehleinheit_werte (
-  id serial primary key,
+  id bigserial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
@@ -231,7 +231,7 @@ create index on zaehleinheit_werte using btree (sort);
 
 drop table if exists masseinheit_werte cascade;
 create table masseinheit_werte (
-  id serial primary key,
+  id bigserial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
@@ -242,7 +242,7 @@ create index on masseinheit_werte using btree (sort);
 
 drop table if exists lieferung_typ_werte cascade;
 create table lieferung_typ_werte (
-  id serial primary key,
+  id bigserial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
@@ -253,7 +253,7 @@ create index on lieferung_typ_werte using btree (sort);
 
 drop table if exists lieferung_status_werte cascade;
 create table lieferung_status_werte (
-  id serial primary key,
+  id bigserial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
@@ -264,7 +264,7 @@ create index on lieferung_status_werte using btree (sort);
 
 drop table if exists lieferung_zwischenlager_werte cascade;
 create table lieferung_zwischenlager_werte (
-  id serial primary key,
+  id bigserial primary key,
   wert varchar(50) default null,
   sort smallint default null,
   changed date default now(),
