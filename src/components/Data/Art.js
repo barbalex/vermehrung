@@ -43,12 +43,18 @@ const query = gql`
 `
 
 const aeArtQuery = gql`
-  query aeArtQuery {
-    ae_art {
-      ...AeArtFields
+  query aeArtQuery($id: Int!) {
+    ae_art(
+      where: {
+        ae_art_art: { _or: [{ id: { _is_null: true } }, { id: { _eq: $id } }] }
+      }
+
+      order_by: { name: asc_nulls_first }
+    ) {
+      value: id
+      label: name
     }
   }
-  ${aeArtFragment}
 `
 
 const Art = () => {
@@ -66,7 +72,7 @@ const Art = () => {
     data: aeArtData,
     error: aeArtError,
     loading: aeArtLoading,
-  } = useQuery(aeArtQuery)
+  } = useQuery(aeArtQuery, { variables: { id: artId } })
 
   const [errors, setErrors] = useState({})
 
@@ -81,16 +87,12 @@ const Art = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let artWerte = memoizeOne(() =>
-    get(aeArtData, 'ae_art', []).filter(a => !artAeIds.includes(a.id)),
-  )()
-  artWerte = memoizeOne(() =>
-    artWerte.map(el => ({
-      value: el.id,
-      label: el.name || '(kein Artname)',
+  const artWerte = memoizeOne(() =>
+    get(aeArtData, 'ae_art', []).map(el => ({
+      value: el.value,
+      label: el.label || '(kein Artname)',
     })),
   )()
-  artWerte = sortBy(artWerte, 'label')
 
   const saveToDb = useCallback(
     async event => {
