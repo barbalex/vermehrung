@@ -1,15 +1,8 @@
 import get from 'lodash/get'
 import moment from 'moment'
 
-import compareLabel from '../compareLabel'
-import filterNodes from '../../../../utils/filterNodes'
-
-export default ({ nodes, data, store }) => {
-  const sammlungen = filterNodes({
-    rows: get(data, 'sammlung', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+export default ({ nodes, data }) => {
+  const sammlungen = get(data, 'sammlung', [])
 
   return (
     sammlungen
@@ -38,7 +31,6 @@ export default ({ nodes, data, store }) => {
           hasChildren: true,
         }
       })
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [6, index]
         return el
