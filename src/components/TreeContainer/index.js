@@ -19,7 +19,6 @@ import storeContext from '../../storeContext'
 import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
-import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
 
 const Container = styled.div`
