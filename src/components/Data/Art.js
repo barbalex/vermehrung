@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 
@@ -78,7 +77,6 @@ const Art = () => {
 
   const row = showFilter ? filter.art : get(data, 'art', [{}])[0]
   const rows = get(data, 'rows', [])
-  const artAeIds = rows.filter(r => r.id !== row.id).map(r => r.ae_id)
   const rowsFiltered = memoizeOne(() =>
     filterNodes({ rows, filter, table: 'art' }),
   )()

@@ -1,5 +1,12 @@
 import types from '../store/Filter/simpleTypes'
 
+/**
+ * TODO:
+ * This is bad
+ * because it bogs down cpu
+ * pass filter directly to query instead
+ */
+
 export default ({ rows, filter, table }) => {
   const nodeFilterArray = Object.entries(filter[table]).filter(
     // eslint-disable-next-line no-unused-vars
