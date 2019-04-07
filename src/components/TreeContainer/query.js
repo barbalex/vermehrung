@@ -36,12 +36,14 @@ export default gql`
     $isKulturAusLieferung: Boolean!
     $isWerteListe: Boolean!
   ) {
-    garten(order_by: {personBypersonId: {name: asc_nulls_first}}) {
+    garten(order_by: { personBypersonId: { name: asc_nulls_first } }) {
       ...GartenFields
       personBypersonId @include(if: $isGarten) {
         ...PersonFields
       }
-      kultursBygartenId(order_by: {artByartId:{art_ae_art:{name:asc_nulls_first}}}) @include(if: $isGarten) {
+      kultursBygartenId(
+        order_by: { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+      ) @include(if: $isGarten) {
         ...KulturFields
         artByartId {
           ...ArtFields

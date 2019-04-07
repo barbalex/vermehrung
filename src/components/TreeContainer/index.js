@@ -19,6 +19,7 @@ import storeContext from '../../storeContext'
 import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -33,9 +34,23 @@ const Container = styled.div`
 
 const TreeContainer = ({ dimensions }) => {
   const store = useContext(storeContext)
+  const { filter } = store
   const { setRefetch, openNodes, setNodes } = store.tree
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
+
+  const gartenFilter = { id: { _is_null: false } }
+  const gartenFilterValues = Object.entries(filter.garten).filter(
+    e => e[1] || e[1] === 0,
+  )
+  gartenFilterValues.forEach(([key, value]) => {
+    const type = types.garten[key] || 'string'
+    if (type === 'string') {
+      gartenFilter[key] = { _ilike: `%${value}%` }
+    } else {
+      gartenFilter[key] = { _eq: value }
+    }
+  })
 
   const { data, error, loading, refetch } = useQuery(query, {
     //notifyOnNetworkStatusChange: true,
