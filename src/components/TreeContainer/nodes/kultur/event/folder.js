@@ -1,21 +1,11 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../utils/filterNodes'
-
-export default ({ url, nodes, data, loading, store }) => {
+export default ({ url, nodes, data, loading }) => {
   const kulturId = url[1]
-  const kulturen = filterNodes({
-    rows: get(data, 'kultur', []),
-    filter: store.filter,
-    table: 'kultur',
-  })
+  const kulturen = get(data, 'kultur', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = filterNodes({
-    rows: get(kultur, 'kulturEventsBykulturId', []),
-    filter: store.filter,
-    table: 'event',
-  })
+  const events = get(kultur, 'kulturEventsBykulturId', [])
   const nr = loading && !events.length ? '...' : events.length
 
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)

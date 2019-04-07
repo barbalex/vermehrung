@@ -1,13 +1,7 @@
 import get from 'lodash/get'
 
-import filterNodes from '../../../../utils/filterNodes'
-
-export default ({ data, loading, store }) => {
-  const herkuenfte = filterNodes({
-    rows: get(data, 'herkunft', []),
-    filter: store.filter,
-    table: 'herkunft',
-  })
+export default ({ data, loading }) => {
+  const herkuenfte = get(data, 'herkunft', [])
   const nr = loading && !herkuenfte.length ? '...' : herkuenfte.length
 
   return [

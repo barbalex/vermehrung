@@ -1,21 +1,11 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../utils/filterNodes'
-
-export default ({ url, nodes, data, loading, store }) => {
+export default ({ url, nodes, data, loading }) => {
   const personId = url[1]
-  const personen = filterNodes({
-    rows: get(data, 'person', []),
-    filter: store.filter,
-    table: 'person',
-  })
+  const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const sammlungen = filterNodes({
-    rows: get(person, 'sammlungsBypersonId', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(person, 'sammlungsBypersonId', [])
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

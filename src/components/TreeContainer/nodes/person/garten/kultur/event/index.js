@@ -2,36 +2,17 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import compareLabel from '../../../../compareLabel'
-import filterNodes from '../../../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const personId = url[1]
   const gartenId = url[3]
   const kulturId = url[5]
-  const personen = filterNodes({
-    rows: get(data, 'person', []),
-    filter: store.filter,
-    table: 'person',
-  })
+  const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const gaerten = filterNodes({
-    rows: get(person, 'gartensBypersonId', []),
-    filter: store.filter,
-    table: 'garten',
-  })
+  const gaerten = get(person, 'gartensBypersonId', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = filterNodes({
-    rows: get(garten, 'kultursBygartenId', []),
-    filter: store.filter,
-    table: 'kultur',
-  })
+  const kulturen = get(garten, 'kultursBygartenId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = filterNodes({
-    rows: get(kultur, 'kulturEventsBykulturId', []),
-    filter: store.filter,
-    table: 'event',
-  })
+  const events = get(kultur, 'kulturEventsBykulturId', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -90,7 +71,6 @@ export default ({ nodes, data, url, store }) => {
           hasChildren: false,
         }
       })
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [5, personIndex, 1, gartenIndex, 1, kulturIndex, 4, index]
         return el

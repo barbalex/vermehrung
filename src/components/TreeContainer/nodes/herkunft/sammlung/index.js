@@ -2,23 +2,12 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import compareLabel from '../../compareLabel'
-import filterNodes from '../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const herkunftId = url[1]
 
-  const herkuenfte = filterNodes({
-    rows: get(data, 'herkunft', []),
-    filter: store.filter,
-    table: 'herkunft',
-  })
+  const herkuenfte = get(data, 'herkunft', [])
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = filterNodes({
-    rows: get(herkunft, 'sammlungsByherkunftId', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
 
   const herkunftNodes = nodes.filter(n => n.parentId === 'herkunftFolder')
   const herkunftIndex =
@@ -48,7 +37,6 @@ export default ({ nodes, data, url, store }) => {
           hasChildren: true,
         }
       })
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [3, herkunftIndex, 2, index]
         return el

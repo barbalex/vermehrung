@@ -1,16 +1,10 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../utils/filterNodes'
-
-export default ({ data, loading, url, nodes, store }) => {
+export default ({ data, loading, url, nodes }) => {
   const sammlungId = url[1]
 
-  const sammlungen = filterNodes({
-    rows: get(data, 'sammlung', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const herkunft = get(sammlung, 'herkunftByherkunftId')
   const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0

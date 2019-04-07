@@ -1,35 +1,17 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../../../utils/filterNodes'
-
-export default ({ url, nodes, data, loading, store }) => {
+export default ({ url, nodes, data, loading }) => {
   const personId = url[1]
   const gartenId = url[3]
   const kulturId = url[5]
-  const personen = filterNodes({
-    rows: get(data, 'person', []),
-    filter: store.filter,
-    table: 'person',
-  })
+  const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const gaerten = filterNodes({
-    rows: get(person, 'gartensBypersonId', []),
-    filter: store.filter,
-    table: 'garten',
-  })
+  const gaerten = get(person, 'gartensBypersonId', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = filterNodes({
-    rows: get(garten, 'kultursBygartenId', []),
-    filter: store.filter,
-    table: 'kultur',
-  })
+  const kulturen = get(garten, 'kultursBygartenId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const auslieferungen = filterNodes({
-    rows: get(kultur, 'lieferungsByvonKulturId', []),
-    filter: store.filter,
-    table: 'lieferung',
-  })
+  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
   const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

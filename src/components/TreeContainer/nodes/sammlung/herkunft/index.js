@@ -1,16 +1,9 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import compareLabel from '../../compareLabel'
-import filterNodes from '../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
-  const sammlungen = filterNodes({
-    rows: get(data, 'sammlung', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const herkunft = get(sammlung, 'herkunftByherkunftId', {})
 
@@ -36,7 +29,6 @@ export default ({ nodes, data, url, store }) => {
         url: ['Sammlungen', sammlungId, 'Herkuenfte', el.id],
         hasChildren: false,
       }))
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [6, sammlungIndex, 1, index]
         return el

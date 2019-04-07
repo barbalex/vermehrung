@@ -1,17 +1,8 @@
 import get from 'lodash/get'
 
-import compareLabel from '../compareLabel'
-import filterNodes from '../../../../utils/filterNodes'
-
-export default ({ nodes, data, store }) => {
-  const personen = filterNodes({
-    rows: get(data, 'person', []),
-    filter: store.filter,
-    table: 'person',
-  })
-
+export default ({ nodes, data }) => {
   return (
-    personen
+    get(data, 'person', [])
       // only show if parent node exists
       .filter(() => nodes.map(n => n.id).includes('personFolder'))
       .map(el => ({
@@ -24,7 +15,6 @@ export default ({ nodes, data, store }) => {
         url: ['Personen', el.id],
         hasChildren: true,
       }))
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [5, index]
         return el

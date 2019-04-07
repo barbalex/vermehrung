@@ -1,14 +1,7 @@
 import get from 'lodash/get'
 
-import compareLabel from '../compareLabel'
-import filterNodes from '../../../../utils/filterNodes'
-
-export default ({ nodes, data, store }) => {
-  const herkuenfte = filterNodes({
-    rows: get(data, 'herkunft', []),
-    filter: store.filter,
-    table: 'herkunft',
-  })
+export default ({ nodes, data }) => {
+  const herkuenfte = get(data, 'herkunft', [])
 
   return (
     herkuenfte
@@ -24,8 +17,6 @@ export default ({ nodes, data, store }) => {
         url: ['Herkuenfte', el.id],
         hasChildren: true,
       }))
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [3, index]
         return el

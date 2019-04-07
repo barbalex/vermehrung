@@ -2,22 +2,11 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import compareLabel from '../../compareLabel'
-import filterNodes from '../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const personId = url[1]
-  const personen = filterNodes({
-    rows: get(data, 'person', []),
-    filter: store.filter,
-    table: 'person',
-  })
+  const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const lieferungen = filterNodes({
-    rows: get(person, 'lieferungsBypersonId', []),
-    filter: store.filter,
-    table: 'lieferung',
-  })
+  const lieferungen = get(person, 'lieferungsBypersonId', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -48,8 +37,6 @@ export default ({ nodes, data, url, store }) => {
           hasChildren: false,
         }
       })
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [5, personIndex, 3, index]
         return el

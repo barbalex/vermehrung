@@ -2,39 +2,20 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import compareLabel from '../../../../compareLabel'
-import filterNodes from '../../../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
   const kulturId = url[5]
 
-  const sammlungen = filterNodes({
-    rows: get(data, 'sammlung', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = filterNodes({
-    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
-    filter: store.filter,
-    table: 'lieferung',
-  })
+  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kulturen = filterNodes({
-    rows: [get(lieferung, 'kulturBynachKulturId', [])],
-    filter: store.filter,
-    table: 'kultur',
-  })
-  const inventare = filterNodes({
-    rows:
-      kulturen.length === 0
-        ? []
-        : get(kulturen[0], 'kulturInventarsBykulturId', []),
-    filter: store.filter,
-    table: 'inventar',
-  })
+  const kulturen = [get(lieferung, 'kulturBynachKulturId', [])]
+  const inventare =
+    kulturen.length === 0
+      ? []
+      : get(kulturen[0], 'kulturInventarsBykulturId', [])
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -102,7 +83,6 @@ export default ({ nodes, data, url, store }) => {
           hasChildren: false,
         }
       })
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [
           6,

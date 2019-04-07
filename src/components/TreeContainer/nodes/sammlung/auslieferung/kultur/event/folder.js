@@ -1,38 +1,18 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../../../utils/filterNodes'
-
-export default ({ url, nodes, data, loading, store }) => {
+export default ({ url, nodes, data, loading }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
   const kulturId = url[5]
 
-  const sammlungen = filterNodes({
-    rows: get(data, 'sammlung', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = filterNodes({
-    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
-    filter: store.filter,
-    table: 'lieferung',
-  })
+  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kulturen = filterNodes({
-    rows: [get(lieferung, 'kulturBynachKulturId', [])],
-    filter: store.filter,
-    table: 'kultur',
-  })
-  const events = filterNodes({
-    rows:
-      kulturen.length === 0
-        ? []
-        : get(kulturen[0], 'kulturEventsBykulturId', []),
-    filter: store.filter,
-    table: 'event',
-  })
+  const kulturen = [get(lieferung, 'kulturBynachKulturId', [])]
+  const events =
+    kulturen.length === 0 ? [] : get(kulturen[0], 'kulturEventsBykulturId', [])
   const nr = loading && !events.length ? '...' : events.length
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
