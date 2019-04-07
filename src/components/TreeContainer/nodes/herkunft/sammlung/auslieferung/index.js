@@ -2,10 +2,7 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import compareLabel from '../../../compareLabel'
-import filterNodes from '../../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const herkunftId = url[1]
   const sammlungId = url[3]
 
@@ -22,23 +19,11 @@ export default ({ nodes, data, url, store }) => {
     n => n.id === `herkunft${herkunftId}Sammlung${sammlungId}`,
   )
 
-  const herkuenfte = filterNodes({
-    rows: get(data, 'herkunft', []),
-    filter: store.filter,
-    table: 'herkunft',
-  })
+  const herkuenfte = get(data, 'herkunft', [])
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = filterNodes({
-    rows: get(herkunft, 'sammlungsByherkunftId', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
   const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = filterNodes({
-    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
-    filter: store.filter,
-    table: 'lieferung',
-  })
+  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
 
   return lieferungen
     .map(el => {
@@ -71,7 +56,6 @@ export default ({ nodes, data, url, store }) => {
         hasChildren: false,
       }
     })
-    .sort(compareLabel)
     .map((el, index) => {
       el.sort = [3, herkunftIndex, 2, sammlungIndex, 1, index]
       return el
