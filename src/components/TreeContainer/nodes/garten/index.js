@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 
-import compareLabel from '../compareLabel'
 import filterNodes from '../../../../utils/filterNodes'
 
 export default ({ nodes, data, store }) => {
@@ -24,7 +23,6 @@ export default ({ nodes, data, store }) => {
         url: ['Gaerten', el.id],
         hasChildren: true,
       }))
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [2, index]
         return el

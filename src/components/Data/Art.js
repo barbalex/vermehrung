@@ -14,7 +14,6 @@ import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
 import {
   art as artFragment,
-  aeArt as aeArtFragment,
 } from '../../utils/fragments'
 
 const Container = styled.div`
