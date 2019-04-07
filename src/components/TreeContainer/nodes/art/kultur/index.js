@@ -1,15 +1,9 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const artId = url[1]
-  const arten = filterNodes({
-    rows: get(data, 'art', []),
-    filter: store.filter,
-    table: 'art',
-  })
+  const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'kultursByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')

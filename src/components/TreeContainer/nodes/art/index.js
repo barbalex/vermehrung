@@ -1,14 +1,7 @@
 import get from 'lodash/get'
 
-import compareLabel from '../compareLabel'
-import filterNodes from '../../../../utils/filterNodes'
-
-export default ({ nodes, data, store }) =>
-  filterNodes({
-    rows: get(data, 'art', []),
-    filter: store.filter,
-    table: 'art',
-  })
+export default ({ nodes, data }) =>
+  get(data, 'art', [])
     // only show if parent node exists
     .filter(() => nodes.map(n => n.id).includes('artFolder'))
     .map(n => ({
@@ -21,7 +14,6 @@ export default ({ nodes, data, store }) =>
       url: ['Arten', n.id],
       hasChildren: true,
     }))
-    .sort(compareLabel)
     .map((n, index) => {
       n.sort = [1, index]
       return n

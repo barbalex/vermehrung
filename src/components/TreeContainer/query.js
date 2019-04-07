@@ -15,8 +15,13 @@ import {
 
 export default gql`
   query TreeQuery(
+    $artFilter: art_bool_exp!
     $gartenFilter: garten_bool_exp!
     $kulturFilter: kultur_bool_exp!
+    $herkunftFilter: herkunft_bool_exp!
+    $personFilter: person_bool_exp!
+    $sammlungFilter: sammlung_bool_exp!
+    $lieferungFilter: lieferung_bool_exp!
     $isArt: Boolean!
     $isArtKultur: Boolean!
     $isArtSammlung: Boolean!
@@ -71,7 +76,10 @@ export default gql`
         }
       }
     }
-    art {
+    art(
+      where: $artFilter
+      order_by: { art_ae_art: { name: asc_nulls_first } }
+    ) {
       ...ArtFields
       kultursByartId(
         where: $kulturFilter
@@ -164,7 +172,13 @@ export default gql`
         }
       }
     }
-    kultur(where: $kulturFilter) {
+    kultur(
+      where: $kulturFilter
+      order_by: [
+        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
+        { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+      ]
+    ) {
       ...KulturFields
       artByartId {
         ...ArtFields
@@ -299,7 +313,10 @@ export default gql`
         personBypersonId {
           ...PersonFields
         }
-        kultursBygartenId(where: $kulturFilter) @include(if: $isPersonGarten) {
+        kultursBygartenId(
+          where: $kulturFilter
+          order_by: { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+        ) @include(if: $isPersonGarten) {
           ...KulturFields
           artByartId {
             ...ArtFields
