@@ -51,10 +51,24 @@ const TreeContainer = ({ dimensions }) => {
       gartenFilter[key] = { _eq: value }
     }
   })
+  const kulturFilter = { id: { _is_null: false } }
+  const kulturFilterValues = Object.entries(filter.kultur).filter(
+    e => e[1] || e[1] === 0,
+  )
+  kulturFilterValues.forEach(([key, value]) => {
+    const type = types.kultur[key] || 'string'
+    if (type === 'string') {
+      kulturFilter[key] = { _ilike: `%${value}%` }
+    } else {
+      kulturFilter[key] = { _eq: value }
+    }
+  })
 
   const { data, error, loading, refetch } = useQuery(query, {
     //notifyOnNetworkStatusChange: true,
     variables: {
+      gartenFilter,
+      kulturFilter,
       isArt: openNodes.some(n => n[0] === 'Arten'),
       isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
       isArtSammlung: openNodes.some(

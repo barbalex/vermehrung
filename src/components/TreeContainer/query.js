@@ -15,6 +15,8 @@ import {
 
 export default gql`
   query TreeQuery(
+    $gartenFilter: garten_bool_exp!
+    $kulturFilter: kultur_bool_exp!
     $isArt: Boolean!
     $isArtKultur: Boolean!
     $isArtSammlung: Boolean!
@@ -36,12 +38,16 @@ export default gql`
     $isKulturAusLieferung: Boolean!
     $isWerteListe: Boolean!
   ) {
-    garten(order_by: { personBypersonId: { name: asc_nulls_first } }) {
+    garten(
+      where: $gartenFilter
+      order_by: { personBypersonId: { name: asc_nulls_first } }
+    ) {
       ...GartenFields
       personBypersonId @include(if: $isGarten) {
         ...PersonFields
       }
       kultursBygartenId(
+        where: $kulturFilter
         order_by: { artByartId: { art_ae_art: { name: asc_nulls_first } } }
       ) @include(if: $isGarten) {
         ...KulturFields
@@ -67,7 +73,10 @@ export default gql`
     }
     art {
       ...ArtFields
-      kultursByartId @include(if: $isArt) {
+      kultursByartId(
+        where: $kulturFilter
+        order_by: { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+      ) @include(if: $isArt) {
         ...KulturFields
         gartenBygartenId @include(if: $isArtKultur) {
           ...GartenFields
@@ -155,7 +164,7 @@ export default gql`
         }
       }
     }
-    kultur {
+    kultur(where: $kulturFilter) {
       ...KulturFields
       artByartId {
         ...ArtFields
@@ -282,12 +291,15 @@ export default gql`
     }
     person {
       ...PersonFields
-      gartensBypersonId @include(if: $isPerson) {
+      gartensBypersonId(
+        where: $gartenFilter
+        order_by: { personBypersonId: { name: asc_nulls_first } }
+      ) @include(if: $isPerson) {
         ...GartenFields
         personBypersonId {
           ...PersonFields
         }
-        kultursBygartenId @include(if: $isPersonGarten) {
+        kultursBygartenId(where: $kulturFilter) @include(if: $isPersonGarten) {
           ...KulturFields
           artByartId {
             ...ArtFields

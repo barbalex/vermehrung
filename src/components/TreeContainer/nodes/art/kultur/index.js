@@ -1,7 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import compareLabel from '../../compareLabel'
 import filterNodes from '../../../../../utils/filterNodes'
 
 export default ({ nodes, data, url, store }) => {
@@ -12,11 +11,7 @@ export default ({ nodes, data, url, store }) => {
     table: 'art',
   })
   const art = arten.find(a => a.id === artId)
-  const kulturen = filterNodes({
-    rows: get(art, 'kultursByartId', []),
-    filter: store.filter,
-    table: 'kultur',
-  })
+  const kulturen = get(art, 'kultursByartId', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`) || 0
 
@@ -35,7 +30,6 @@ export default ({ nodes, data, url, store }) => {
         url: ['Arten', artId, 'Kulturen', el.id],
         hasChildren: true,
       }))
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [1, artIndex, 1, index]
         return el

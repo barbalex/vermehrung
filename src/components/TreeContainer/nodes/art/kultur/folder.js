@@ -14,11 +14,7 @@ export default ({ url, nodes, data, loading, store }) => {
     table: 'art',
   })
   const art = arten.find(a => a.id === artId)
-  const kulturen = filterNodes({
-    rows: get(art, 'kultursByartId', []),
-    filter: store.filter,
-    table: 'kultur',
-  })
+  const kulturen = get(art, 'kultursByartId', [])
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   // only return if parent exists

@@ -11,11 +11,7 @@ export default ({ data, loading, url, nodes, store }) => {
     table: 'person',
   })
   const person = personen.find(p => p.id === personId)
-  const gaerten = filterNodes({
-    rows: get(person, 'gartensBypersonId', []),
-    filter: store.filter,
-    table: 'garten',
-  })
+  const gaerten = get(person, 'gartensBypersonId', [])
   const nr = loading && !gaerten.length ? '...' : gaerten.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

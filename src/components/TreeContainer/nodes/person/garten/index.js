@@ -1,7 +1,6 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import compareLabel from '../../compareLabel'
 import filterNodes from '../../../../../utils/filterNodes'
 
 export default ({ nodes, data, url, store }) => {
@@ -12,11 +11,7 @@ export default ({ nodes, data, url, store }) => {
     table: 'person',
   })
   const person = personen.find(p => p.id === personId)
-  const gaerten = filterNodes({
-    rows: get(person, 'gartensBypersonId', []),
-    filter: store.filter,
-    table: 'garten',
-  })
+  const gaerten = get(person, 'gartensBypersonId', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -37,7 +32,6 @@ export default ({ nodes, data, url, store }) => {
         url: ['Personen', personId, 'Gaerten', el.id],
         hasChildren: true,
       }))
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [5, personIndex, 1, index]
         return el
