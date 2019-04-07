@@ -1,28 +1,14 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../../utils/filterNodes'
-
-export default ({ url, nodes, data, loading, store }) => {
+export default ({ url, nodes, data, loading }) => {
   const artId = url[1]
   const kulturId = url[3]
-  const arten = filterNodes({
-    rows: get(data, 'art', []),
-    filter: store.filter,
-    table: 'art',
-  })
+  const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const kulturen = filterNodes({
-    rows: get(art, 'kultursByartId', []),
-    filter: store.filter,
-    table: 'kultur',
-  })
+  const kulturen = get(art, 'kultursByartId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const auslieferungen = filterNodes({
-    rows: get(kultur, 'lieferungsByvonKulturId', []),
-    filter: store.filter,
-    table: 'lieferung',
-  })
+  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
   const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')

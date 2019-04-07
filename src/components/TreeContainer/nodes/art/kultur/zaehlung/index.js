@@ -2,29 +2,14 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import compareLabel from '../../../compareLabel'
-import filterNodes from '../../../../../../utils/filterNodes'
-
-export default ({ nodes, data, url, store }) => {
+export default ({ nodes, data, url }) => {
   const artId = url[1]
   const kulturId = url[3]
-  const arten = filterNodes({
-    rows: get(data, 'art', []),
-    filter: store.filter,
-    table: 'art',
-  })
+  const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const kulturen = filterNodes({
-    rows: get(art, 'kultursByartId', []),
-    filter: store.filter,
-    table: 'kultur',
-  })
+  const kulturen = get(art, 'kultursByartId', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const zaehlungen = filterNodes({
-    rows: get(kultur, 'zaehlungsBykulturId', []),
-    filter: store.filter,
-    table: 'zaehlung',
-  })
+  const zaehlungen = get(kultur, 'zaehlungsBykulturId', [])
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
@@ -60,7 +45,6 @@ export default ({ nodes, data, url, store }) => {
           hasChildren: false,
         }
       })
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [1, artIndex, 1, kulturIndex, 1, index]
         return el

@@ -1,9 +1,7 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
-import filterNodes from '../../../../../../utils/filterNodes'
-
-export default ({ url, nodes, data, loading, store }) => {
+export default ({ url, nodes, data, loading }) => {
   const artId = url[1]
   const sammlungId = url[3]
 
@@ -17,23 +15,11 @@ export default ({ url, nodes, data, loading, store }) => {
     n => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
-  const arten = filterNodes({
-    rows: get(data, 'art', []),
-    filter: store.filter,
-    table: 'art',
-  })
+  const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const sammlungen = filterNodes({
-    rows: get(art, 'sammlungsByartId', []),
-    filter: store.filter,
-    table: 'sammlung',
-  })
+  const sammlungen = get(art, 'sammlungsByartId', [])
   const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = filterNodes({
-    rows: get(sammlung, 'lieferungsByvonSammlungId', []),
-    filter: store.filter,
-    table: 'lieferung',
-  })
+  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   // only return if parent exists
