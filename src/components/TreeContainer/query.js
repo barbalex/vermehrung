@@ -559,7 +559,8 @@ export default gql`
       wert
       sort
     }
-    lieferung_status_werte @include(if: $isWerteListe) {
+    lieferung_status_werte(order_by: [{ sort: asc }, { wert: asc }])
+      @include(if: $isWerteListe) {
       id
       wert
       sort
