@@ -47,11 +47,10 @@ const aeArtQuery = gql`
       where: {
         ae_art_art: { _or: [{ id: { _is_null: true } }, { id: { _eq: $id } }] }
       }
-
       order_by: { name: asc_nulls_first }
     ) {
-      value: id
-      label: name
+      id
+      name
     }
   }
 `
@@ -87,8 +86,8 @@ const Art = () => {
 
   const artWerte = memoizeOne(() =>
     get(aeArtData, 'ae_art', []).map(el => ({
-      value: el.value,
-      label: el.label || '(kein Artname)',
+      value: el.id,
+      label: el.name || '(kein Artname)',
     })),
   )()
 

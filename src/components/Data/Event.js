@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 
@@ -52,9 +51,16 @@ const query = gql`
   }
   ${kulturEventFragment}
 `
+// gartenBygartenId.personBypersonId.name
 const kulturQuery = gql`
   query kulturQuery {
-    kultur {
+    kultur(
+      order_by: [
+        { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
+        { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
+      ]
+    ) {
       id
       art_id
       artByartId {
@@ -105,32 +111,32 @@ const Event = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  let kulturWerte = get(kulturData, 'kultur', []).filter(s => {
-    // only show kulturen of same art
-    const s_art = get(s, 'kulturBykulturId.art_id')
-    if (row.art_id && s_art) {
-      return s_art === row.art_id
-    }
-    return true
-  })
-  kulturWerte = sortBy(kulturWerte, s => [
-    get(s, 'gartenBygartenId.personBypersonId.name'),
-    get(s, 'gartenBygartenId.personBypersonId.ort'),
-  ])
-  kulturWerte = kulturWerte.map(el => {
-    const personName =
-      get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-    const personOrt = get(el, 'gartenBygartenId.personBypersonId.ort') || null
-    const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
-    const label = `${artName}; ${personName}${
-      personOrt ? ` (${personOrt})` : ''
-    }`
+  const kulturWerte = memoizeOne(() =>
+    get(kulturData, 'kultur', [])
+      .filter(s => {
+        // only show kulturen of same art
+        const s_art = get(s, 'kulturBykulturId.art_id')
+        if (row.art_id && s_art) {
+          return s_art === row.art_id
+        }
+        return true
+      })
+      .map(el => {
+        const personName =
+          get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
+        const personOrt =
+          get(el, 'gartenBygartenId.personBypersonId.ort') || null
+        const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+        const label = `${artName}; ${personName}${
+          personOrt ? ` (${personOrt})` : ''
+        }`
 
-    return {
-      value: el.id,
-      label,
-    }
-  })
+        return {
+          value: el.id,
+          label,
+        }
+      }),
+  )()
 
   const saveToDb = useCallback(
     async event => {

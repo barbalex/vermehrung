@@ -119,6 +119,7 @@ const TreeContainer = ({ dimensions }) => {
   }
 
   if (error) {
+    console.log(error)
     return (
       <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
     )
