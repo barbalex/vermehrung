@@ -14,9 +14,9 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import { kulturEvent as kulturEventFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
+import queryFromTable from '../../utils/queryFromTable'
 
 const Container = styled.div`
   height: 100%;
@@ -31,7 +31,11 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query EventQuery($id: Int!, $isFiltered: Boolean!) {
+  query EventQuery(
+    $id: Int!
+    $filter: kultur_event_bool_exp!
+    $isFiltered: Boolean!
+  ) {
     kultur_event(where: { id: { _eq: $id } }) {
       ...KulturEventFields
       kulturBykulturId {
@@ -39,12 +43,11 @@ const query = gql`
         art_id
       }
     }
-    rows: kultur_event @include(if: $isFiltered) {
-      ...KulturEventFields
-      kulturBykulturId {
-        id
-        art_id
-      }
+    rowsUnfiltered: kultur_event @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: kultur_event(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${kulturEventFragment}
@@ -83,8 +86,9 @@ const Event = () => {
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const eventFilter = queryFromTable({ store, table: 'event' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: eventFilter },
   })
 
   const {
@@ -96,10 +100,8 @@ const Event = () => {
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.event : get(data, 'kultur_event', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'event' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
 
@@ -215,7 +217,7 @@ const Event = () => {
         <FormTitle
           title="Event"
           table="event"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>

@@ -12,9 +12,7 @@ import Select from '../shared/Select'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
-import {
-  art as artFragment,
-} from '../../utils/fragments'
+import { art as artFragment } from '../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -29,14 +27,14 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: Int!, $filter: art_bool_exp!) {
-    art(where:  {id: { _eq: $id } }) {
+  query ArtQuery($id: Int!, $filter: art_bool_exp!, $isFiltered: Boolean!) {
+    art(where: { id: { _eq: $id } }) {
       ...ArtFields
     }
-    rowsUnfiltered: art {
+    rowsUnfiltered: art @include(if: $isFiltered) {
       id
     }
-    rowsFiltered: art(where: $filter) {
+    rowsFiltered: art(where: $filter) @include(if: $isFiltered) {
       id
     }
   }
@@ -62,13 +60,14 @@ const Art = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter, tree } = store
-  const { show: showFilter } = filter
+  const { show: showFilter, isFiltered: runIsFiltered } = filter
+  const isFiltered = runIsFiltered()
   const { activeNodeArray, refetch } = tree
 
   const artId = last(activeNodeArray.filter(e => !isNaN(e)))
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(query, {
-    variables: {id: artId, filter: artFilter },
+    variables: { id: artId, filter: artFilter, isFiltered },
   })
   const {
     data: aeArtData,

@@ -14,6 +14,7 @@ import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
+import queryFromTable from '../../utils/queryFromTable'
 import {
   kultur as kulturFragment,
   art as artFragment,

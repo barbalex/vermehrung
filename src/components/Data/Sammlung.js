@@ -20,6 +20,7 @@ import {
   art as artFragment,
 } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
+import queryFromTable from '../../utils/queryFromTable'
 
 const Container = styled.div`
   height: 100%;

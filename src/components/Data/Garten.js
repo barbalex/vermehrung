@@ -16,6 +16,7 @@ import ErrorBoundary from '../ErrorBoundary'
 import filterNodes from '../../utils/filterNodes'
 import { garten as gartenFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
+import queryFromTable from '../../utils/queryFromTable'
 
 const Container = styled.div`
   height: 100%;
