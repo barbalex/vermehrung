@@ -11,7 +11,7 @@ import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
+import queryFromTable from '../../utils/queryFromTable'
 import {
   art as artFragment,
 } from '../../utils/fragments'
@@ -29,12 +29,15 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: Int!) {
-    art(where: { id: { _eq: $id } }) {
+  query ArtQuery($id: Int!, $filter: art_bool_exp!) {
+    art(where:  {id: { _eq: $id } }) {
       ...ArtFields
     }
-    rows: art {
-      ...ArtFields
+    rowsUnfiltered: art {
+      id
+    }
+    rowsFiltered: art(where: $filter) {
+      id
     }
   }
   ${artFragment}
@@ -61,10 +64,11 @@ const Art = () => {
   const { filter, tree } = store
   const { show: showFilter } = filter
   const { activeNodeArray, refetch } = tree
-  const artId = last(activeNodeArray.filter(e => !isNaN(e)))
 
+  const artId = last(activeNodeArray.filter(e => !isNaN(e)))
+  const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id: artId },
+    variables: {id: artId, filter: artFilter },
   })
   const {
     data: aeArtData,
@@ -75,10 +79,8 @@ const Art = () => {
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.art : get(data, 'art', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'art' }),
-  )()
+  const rows = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   //console.log('Art', { loading, data })
 
