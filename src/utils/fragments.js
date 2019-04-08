@@ -8,6 +8,9 @@ export const art = gql`
       id
       name
     }
+    label {
+      label
+    }
   }
 `
 export const aeArt = gql`

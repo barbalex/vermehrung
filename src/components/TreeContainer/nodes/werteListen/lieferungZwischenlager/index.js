@@ -1,14 +1,9 @@
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
+import memoizeOne from 'memoize-one'
 
-export default ({ nodes, data }) => {
-  const werte = sortBy(get(data, 'lieferung_zwischenlager_werte', []), [
-    'sort',
-    'wert',
-  ])
-
-  return (
-    werte
+export default ({ nodes, data }) =>
+  memoizeOne(() =>
+    get(data, 'lieferung_zwischenlager_werte', [])
       // only show if parent node exists
       .filter(() =>
         nodes.map(n => n.id).includes('lieferungZwischenlagerFolder'),
@@ -26,6 +21,5 @@ export default ({ nodes, data }) => {
       .map((el, index) => {
         el.sort = [8, 5, index]
         return el
-      })
-  )
-}
+      }),
+  )()

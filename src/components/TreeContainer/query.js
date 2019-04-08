@@ -544,17 +544,20 @@ export default gql`
         }
       }
     }
-    masseinheit_werte @include(if: $isWerteListe) {
+    masseinheit_werte(order_by: [{ sort: asc }, { wert: asc }])
+      @include(if: $isWerteListe) {
       id
       wert
       sort
     }
-    zaehleinheit_werte @include(if: $isWerteListe) {
+    zaehleinheit_werte(order_by: [{ sort: asc }, { wert: asc }])
+      @include(if: $isWerteListe) {
       id
       wert
       sort
     }
-    lieferung_zwischenlager_werte @include(if: $isWerteListe) {
+    lieferung_zwischenlager_werte(order_by: [{ sort: asc }, { wert: asc }])
+      @include(if: $isWerteListe) {
       id
       wert
       sort
@@ -565,7 +568,8 @@ export default gql`
       wert
       sort
     }
-    lieferung_typ_werte @include(if: $isWerteListe) {
+    lieferung_typ_werte(order_by: [{ sort: asc }, { wert: asc }])
+      @include(if: $isWerteListe) {
       id
       wert
       sort
