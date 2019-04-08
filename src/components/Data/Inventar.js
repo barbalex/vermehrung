@@ -32,7 +32,11 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query InventarQuery($id: Int!, $isFiltered: Boolean!) {
+  query InventarQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: kultur_inventar_bool_exp!
+  ) {
     kultur_inventar(where: { id: { _eq: $id } }) {
       ...KulturInventarFields
       kulturBykulturId {
@@ -40,12 +44,11 @@ const query = gql`
         art_id
       }
     }
-    rows: kultur_inventar @include(if: $isFiltered) {
-      ...KulturInventarFields
-      kulturBykulturId {
-        id
-        art_id
-      }
+    rowsUnfiltered: kultur_inventar @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: kultur_inventar(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${kulturInventarFragment}
@@ -76,8 +79,9 @@ const Inventar = () => {
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const inventarFilter = queryFromTable({ store, table: 'inventar' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: inventarFilter },
   })
   const {
     data: kulturData,
@@ -90,10 +94,8 @@ const Inventar = () => {
   const row = showFilter
     ? filter.inventar
     : get(data, 'kultur_inventar', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'inventar' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
 
@@ -209,7 +211,7 @@ const Inventar = () => {
         <FormTitle
           title="Inventar"
           table="inventar"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>

@@ -5,13 +5,11 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import { herkunft as herkunftFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
@@ -29,12 +27,19 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query HerkunftQuery($id: Int!, $isFiltered: Boolean!) {
+  query HerkunftQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: herkunft_bool_exp!
+  ) {
     herkunft(where: { id: { _eq: $id } }) {
       ...HerkunftFields
     }
-    rows: herkunft @include(if: $isFiltered) {
-      ...HerkunftFields
+    rowsUnfiltered: herkunft @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: herkunft(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${herkunftFragment}
@@ -46,20 +51,19 @@ const Herkunft = () => {
   const { filter } = store
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
+
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: herkunftFilter },
   })
-  //console.log('Herkunft')
 
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.herkunft : get(data, 'herkunft', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'herkunft' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
 
@@ -141,7 +145,7 @@ const Herkunft = () => {
         <FormTitle
           title="Herkunft"
           table="herkunft"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>

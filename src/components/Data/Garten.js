@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 
@@ -13,7 +12,6 @@ import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import { garten as gartenFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
@@ -31,19 +29,26 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query GartenQuery($id: Int!, $isFiltered: Boolean!) {
+  query GartenQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: garten_bool_exp!
+  ) {
     garten(where: { id: { _eq: $id } }) {
       ...GartenFields
     }
-    rows: garten @include(if: $isFiltered) {
-      ...GartenFields
+    rowsUnfiltered: garten @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: garten(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${gartenFragment}
 `
 const personQuery = gql`
   query personQuery {
-    person {
+    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
       name
       ort
@@ -60,8 +65,9 @@ const Garten = () => {
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const gartenFilter = queryFromTable({ store, table: 'garten' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: gartenFilter },
   })
   const {
     data: personData,
@@ -72,19 +78,17 @@ const Garten = () => {
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.garten : get(data, 'garten', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'garten' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
 
-  let personWerte = get(personData, 'person', [])
-  personWerte = personWerte.map(el => ({
-    value: el.id,
-    label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-  }))
-  personWerte = sortBy(personWerte, 'label')
+  const personWerte = memoizeOne(() =>
+    get(personData, 'person', []).map(el => ({
+      value: el.id,
+      label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+    })),
+  )()
 
   const saveToDb = useCallback(
     async event => {
@@ -172,7 +176,7 @@ const Garten = () => {
         <FormTitle
           title="Garten"
           table="garten"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>

@@ -80,8 +80,6 @@ const Art = () => {
   const rows = get(data, 'rowsUnfiltered', [])
   const rowsFiltered = get(data, 'rowsFiltered', [])
 
-  //console.log('Art', { loading, data })
-
   useEffect(() => setErrors({}), [row])
 
   const artWerte = memoizeOne(() =>
