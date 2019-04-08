@@ -5,11 +5,7 @@ export const art = gql`
     id
     ae_id
     art_ae_art {
-      id
       name
-    }
-    label {
-      label
     }
   }
 `
