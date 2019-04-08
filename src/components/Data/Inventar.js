@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 
@@ -14,7 +13,6 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import { kulturInventar as kulturInventarFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
@@ -54,8 +52,14 @@ const query = gql`
   ${kulturInventarFragment}
 `
 const kulturQuery = gql`
-  query kulturQuery {
-    kultur {
+  query kulturQuery($filter: kultur_bool_exp!) {
+    kultur(
+      where: $filter
+      order_by: [
+        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
+        { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
+      ]
+    ) {
       id
       art_id
       gartenBygartenId {
@@ -83,11 +87,6 @@ const Inventar = () => {
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered, filter: inventarFilter },
   })
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery(kulturQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -97,31 +96,34 @@ const Inventar = () => {
   const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
   const rowsFiltered = get(data, 'rowsFiltered', [])
 
+  // only show kulturen of same art
+  const artId = get(row, 'kulturBykulturId.art_id')
+  const kulturFilter = artId
+    ? { art_id: { _eq: artId } }
+    : { id: { _is_null: true } }
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery, {
+    variables: { filter: kulturFilter },
+  })
+
   useEffect(() => setErrors({}), [row])
 
-  let kulturWerte = get(kulturData, 'kultur', []).filter(s => {
-    // only show kulturen of same art
-    const s_art = get(s, 'kulturBykulturId.art_id')
-    if (row.art_id && s_art) {
-      return s_art === row.art_id
-    }
-    return true
-  })
-  kulturWerte = sortBy(kulturWerte, s => [
-    get(s, 'gartenBygartenId.personBypersonId.name'),
-    get(s, 'gartenBygartenId.personBypersonId.ort'),
-  ])
-  kulturWerte = kulturWerte.map(el => {
-    const name =
-      get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-    const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
-    const label = `${name}${ort ? ` (${ort})` : ''}`
+  const kulturWerte = memoizeOne(() =>
+    get(kulturData, 'kultur', []).map(el => {
+      const name =
+        get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
+      const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+      const label = `${name}${ort ? ` (${ort})` : ''}`
 
-    return {
-      value: el.id,
-      label,
-    }
-  })
+      return {
+        value: el.id,
+        label,
+      }
+    }),
+  )()
 
   const saveToDb = useCallback(
     async event => {
