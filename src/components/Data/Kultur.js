@@ -13,7 +13,6 @@ import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import queryFromTable from '../../utils/queryFromTable'
 import {
   kultur as kulturFragment,
@@ -35,15 +34,28 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query KulturQuery($id: Int!, $isFiltered: Boolean!) {
+  query KulturQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: kultur_bool_exp!
+  ) {
     kultur(where: { id: { _eq: $id } }) {
       ...KulturFields
       gartenBygartenId {
         ...GartenFields
+        kultursBygartenId(
+          where: { artByartId: { ae_id: { _is_null: false } } }
+        ) {
+          id
+          art_id
+        }
       }
     }
-    rows: kultur @include(if: $isFiltered) {
-      ...KulturFields
+    rowsUnfiltered: kultur @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: kultur(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${kulturFragment}
@@ -51,20 +63,16 @@ const query = gql`
   ${gartenFragment}
 `
 const artQuery = gql`
-  query artQuery($include: Boolean!) {
-    art {
+  query artQuery($include: Boolean!, $filter: art_bool_exp!) {
+    art(where: $filter, order_by: { art_ae_art: { name: asc_nulls_first } }) {
       ...ArtFields
-      kultursByartId @include(if: $include) {
-        ...KulturFields
-      }
     }
   }
-  ${kulturFragment}
   ${artFragment}
 `
 const gartenQuery = gql`
   query gartenQuery($include: Boolean!) {
-    garten {
+    garten(order_by: { personBypersonId: { name: asc_nulls_first } }) {
       id
       personBypersonId {
         id
@@ -85,27 +93,38 @@ const Kultur = () => {
   const { filter } = store
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
+
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const kulturFilter = queryFromTable({ store, table: 'kultur' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: kulturFilter },
   })
 
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.kultur : get(data, 'kultur', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'kultur' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
 
-  const gartenId = row.garten_id
+  // do not show other arten in this garten
+  const otherArtenInThisGarten = get(
+    row,
+    'gartenBygartenId.kultursBygartenId',
+    [],
+  )
+    .map(k => k.art_id)
+    // do show own art
+    .filter(k => k !== row.art_id)
+  const artFilter = otherArtenInThisGarten.length
+    ? { id: { _nin: otherArtenInThisGarten }, ae_id: { _is_null: false } }
+    : { ae_id: { _is_null: false } }
   const { data: dataArt, error: errorArt, loading: loadingArt } = useQuery(
     artQuery,
     {
-      variables: { include: !!gartenId },
+      variables: { include: !!row.garten_id, filter: artFilter },
     },
   )
 
@@ -118,33 +137,26 @@ const Kultur = () => {
     variables: { include: !!artId },
   })
 
-  let artWerte = get(dataArt, 'art', [])
-    // do not include arten already in this garten
-    .filter(a => {
-      const kulturs = get(a, 'kultursByartId', []) || []
-      const gartenIds = kulturs.map(k => k.garten_id)
-      // bot do show choosen art
-      return a.id === row.art_id || !gartenIds.includes(row.garten_id)
-    })
-  artWerte = artWerte.map(el => ({
-    value: el.id,
-    label: get(el, 'art_ae_art.name') || '(keine Art)',
-  }))
-  artWerte = sortBy(artWerte, 'label')
+  const artWerte = memoizeOne(() =>
+    get(dataArt, 'art', []).map(el => ({
+      value: el.id,
+      label: get(el, 'art_ae_art.name') || '(keine Art)',
+    })),
+  )()
 
-  let gartenWerte = get(dataGarten, 'garten', [])
+  const gartenWerte = get(dataGarten, 'garten', [])
     // do not include garten of persons already culturing this art
+    // TODO: move this to query
     .filter(a => {
       const kulturs = get(a, 'kultursBygartenId', []) || []
       const artIds = kulturs.map(k => k.art_id)
       // bot do show choosen garten
       return a.id === row.garten_id || !artIds.includes(row.art_id)
     })
-  gartenWerte = gartenWerte.map(el => ({
-    value: el.id,
-    label: get(el, 'personBypersonId.name') || '(kein Name)',
-  }))
-  gartenWerte = sortBy(gartenWerte, 'label')
+    .map(el => ({
+      value: el.id,
+      label: get(el, 'personBypersonId.name') || '(kein Name)',
+    }))
 
   const saveToDb = useCallback(
     async event => {
@@ -225,7 +237,7 @@ const Kultur = () => {
         <FormTitle
           title="Kultur"
           table="kultur"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>

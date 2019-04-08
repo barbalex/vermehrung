@@ -53,12 +53,13 @@ const query = gql`
 `
 // gartenBygartenId.personBypersonId.name
 const kulturQuery = gql`
-  query kulturQuery {
+  query kulturQuery($filter: kultur_bool_exp!) {
     kultur(
+      where: $filter
       order_by: [
-        { artByartId: { art_ae_art: { name: asc_nulls_first } } }
         { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
         { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
+        { artByartId: { art_ae_art: { name: asc_nulls_first } } }
       ]
     ) {
       id
@@ -97,45 +98,42 @@ const Event = () => {
     variables: { id, isFiltered, filter: eventFilter },
   })
 
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery(kulturQuery)
-
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.event : get(data, 'kultur_event', [{}])[0]
   const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
   const rowsFiltered = get(data, 'rowsFiltered', [])
 
+  // only show kulturen of same art
+  const artId = get(row, 'kulturBykulturId.art_id')
+  const kulturFilter = artId
+    ? { art_id: { _eq: artId } }
+    : { id: { _is_null: true } }
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery, {
+    variables: { filter: kulturFilter },
+  })
+
   useEffect(() => setErrors({}), [row])
 
   const kulturWerte = memoizeOne(() =>
-    get(kulturData, 'kultur', [])
-      .filter(s => {
-        // only show kulturen of same art
-        const s_art = get(s, 'kulturBykulturId.art_id')
-        if (row.art_id && s_art) {
-          return s_art === row.art_id
-        }
-        return true
-      })
-      .map(el => {
-        const personName =
-          get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-        const personOrt =
-          get(el, 'gartenBygartenId.personBypersonId.ort') || null
-        const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
-        const label = `${artName}; ${personName}${
-          personOrt ? ` (${personOrt})` : ''
-        }`
+    get(kulturData, 'kultur', []).map(el => {
+      const personName =
+        get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
+      const personOrt = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+      const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+      const label = `${personName}${
+        personOrt ? ` (${personOrt})` : ''
+      }: ${artName}`
 
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      return {
+        value: el.id,
+        label,
+      }
+    }),
   )()
 
   const saveToDb = useCallback(
