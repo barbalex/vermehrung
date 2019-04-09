@@ -9,6 +9,7 @@ import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
+import SelectLoadingOptions from '../shared/SelectLoadingOptions'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
@@ -71,6 +72,7 @@ const Art = () => {
   const { data, error, loading } = useQuery(query, {
     variables: { id: artId, filter: artFilter, isFiltered },
   })
+
   const {
     data: aeArtData,
     error: aeArtError,
@@ -173,6 +175,19 @@ const Art = () => {
             loading={aeArtLoading}
             saveToDb={saveToDb}
             error={errors.ae_id}
+          />
+          <SelectLoadingOptions
+            key={`${row.id}ae_id2`}
+            field="ae_id"
+            valueLabelPath="label"
+            label="Art"
+            row={row}
+            saveToDb={saveToDb}
+            error={errors.ae_id}
+            query={aeArtQuery}
+            variables={{ id: artId }}
+            filter={val => ({ name: { _like: `%${val}%` }, id: artId })}
+            queryNodesName="ae_art"
           />
         </FieldsContainer>
       </Container>
