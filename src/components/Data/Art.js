@@ -45,7 +45,10 @@ const aeArtQuery = gql`
   query aeArtQuery($id: Int!) {
     ae_art(
       where: {
-        ae_art_art: { _or: [{ id: { _is_null: true } }, { id: { _eq: $id } }] }
+        _or: [
+          { _not: { ae_art_art: { id: { _is_null: false } } } }
+          { ae_art_art: { id: { _eq: $id } } }
+        ]
       }
       order_by: { name: asc_nulls_first }
     ) {
