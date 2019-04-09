@@ -5,14 +5,12 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import RadioButton from '../shared/RadioButton'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import { person as personFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
@@ -30,12 +28,19 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query PersonQuery($id: Int!, $isFiltered: Boolean!) {
+  query PersonQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: person_bool_exp!
+  ) {
     person(where: { id: { _eq: $id } }) {
       ...PersonFields
     }
-    rows: person @include(if: $isFiltered) {
-      ...PersonFields
+    rowsUnfiltered: person @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: person(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${personFragment}
@@ -47,19 +52,19 @@ const Person = () => {
   const { filter } = store
   const { isFiltered: runIsFiltered, show: showFilter } = filter
   const { activeNodeArray, refetch } = store.tree
+
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const personFilter = queryFromTable({ store, table: 'person' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: personFilter },
   })
 
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.person : get(data, 'person', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'person' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
 
@@ -141,7 +146,7 @@ const Person = () => {
         <FormTitle
           title="Person"
           table="person"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>

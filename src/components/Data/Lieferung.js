@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 
