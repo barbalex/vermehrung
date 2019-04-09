@@ -62,7 +62,7 @@ const query = gql`
   ${gartenFragment}
 `
 const artQuery = gql`
-  query artQuery($include: Boolean!, $filter: art_bool_exp!) {
+  query artQuery($filter: art_bool_exp!) {
     art(where: $filter, order_by: { art_ae_art: { name: asc_nulls_first } }) {
       ...ArtFields
     }
@@ -123,7 +123,7 @@ const Kultur = () => {
   const { data: dataArt, error: errorArt, loading: loadingArt } = useQuery(
     artQuery,
     {
-      variables: { include: !!row.garten_id, filter: artFilter },
+      variables: { filter: artFilter },
     },
   )
 
@@ -149,7 +149,7 @@ const Kultur = () => {
     .filter(a => {
       const kulturs = get(a, 'kultursBygartenId', []) || []
       const artIds = kulturs.map(k => k.art_id)
-      // bot do show choosen garten
+      // do show choosen garten
       return a.id === row.garten_id || !artIds.includes(row.art_id)
     })
     .map(el => ({
