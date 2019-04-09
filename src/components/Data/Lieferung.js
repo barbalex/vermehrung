@@ -101,7 +101,7 @@ const kulturQuery = gql`
 `
 const artQuery = gql`
   query artQuery {
-    art {
+    art(order_by: { art_ae_art: { name: asc } }) {
       ...ArtFields
     }
   }
@@ -109,7 +109,7 @@ const artQuery = gql`
 `
 const personQuery = gql`
   query personQuery {
-    person {
+    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
       name
       ort
@@ -118,27 +118,27 @@ const personQuery = gql`
 `
 const werteQuery = gql`
   query werteQuery {
-    lieferung_typ_werte {
+    lieferung_typ_werte(order_by: [{ sort: asc }, { wert: asc }]) {
       id
       wert
       sort
     }
-    lieferung_status_werte {
+    lieferung_status_werte(order_by: [{ sort: asc }, { wert: asc }]) {
       id
       wert
       sort
     }
-    lieferung_zwischenlager_werte {
+    lieferung_zwischenlager_werte(order_by: [{ sort: asc }, { wert: asc }]) {
       id
       wert
       sort
     }
-    zaehleinheit_werte {
+    zaehleinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
       id
       wert
       sort
     }
-    masseinheit_werte {
+    masseinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
       id
       wert
       sort
@@ -236,61 +236,54 @@ const Lieferung = () => {
     }),
   )()
 
-  let personWerte = get(personData, 'person', [])
-  personWerte = personWerte.map(el => ({
-    value: el.id,
-    label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-  }))
-  personWerte = sortBy(personWerte, 'label')
+  const personWerte = memoizeOne(() =>
+    get(personData, 'person', []).map(el => ({
+      value: el.id,
+      label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+    })),
+  )()
 
-  let artWerte = get(artData, 'art', [])
-  artWerte = artWerte.map(el => ({
-    value: el.id,
-    label: get(el, 'art_ae_art.name') || '(kein Artname)',
-  }))
-  artWerte = sortBy(artWerte, 'label')
+  const artWerte = memoizeOne(() =>
+    get(artData, 'art', []).map(el => ({
+      value: el.id,
+      label: get(el, 'art_ae_art.name') || '(kein Artname)',
+    })),
+  )()
 
-  let lieferungTypWerte = get(werteData, 'lieferung_typ_werte', [])
-  lieferungTypWerte = sortBy(lieferungTypWerte, ['sort', 'wert'])
-  lieferungTypWerte = lieferungTypWerte.map(el => ({
-    value: el.id,
-    label: el.wert || '(kein Wert)',
-  }))
+  const lieferungTypWerte = memoizeOne(() =>
+    get(werteData, 'lieferung_typ_werte', []).map(el => ({
+      value: el.id,
+      label: el.wert || '(kein Wert)',
+    })),
+  )()
 
-  let lieferungStatusWerte = get(werteData, 'lieferung_status_werte', [])
-  lieferungStatusWerte = sortBy(lieferungStatusWerte, ['sort', 'wert'])
-  lieferungStatusWerte = lieferungStatusWerte.map(el => ({
-    value: el.id,
-    label: el.wert || '(kein Wert)',
-  }))
+  const lieferungStatusWerte = memoizeOne(() =>
+    get(werteData, 'lieferung_status_werte', []).map(el => ({
+      value: el.id,
+      label: el.wert || '(kein Wert)',
+    })),
+  )()
 
-  let lieferungZwischenlagerWerte = get(
-    werteData,
-    'lieferung_zwischenlager_werte',
-    [],
-  )
-  lieferungZwischenlagerWerte = sortBy(lieferungZwischenlagerWerte, [
-    'sort',
-    'wert',
-  ])
-  lieferungZwischenlagerWerte = lieferungZwischenlagerWerte.map(el => ({
-    value: el.id,
-    label: el.wert || '(kein Wert)',
-  }))
+  const lieferungZwischenlagerWerte = memoizeOne(() =>
+    get(werteData, 'lieferung_zwischenlager_werte', []).map(el => ({
+      value: el.id,
+      label: el.wert || '(kein Wert)',
+    })),
+  )()
 
-  let zaehleinheitWerte = get(werteData, 'zaehleinheit_werte', [])
-  zaehleinheitWerte = sortBy(zaehleinheitWerte, ['sort', 'wert'])
-  zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-    value: el.id,
-    label: el.wert || '(kein Wert)',
-  }))
+  const zaehleinheitWerte = memoizeOne(() =>
+    get(werteData, 'zaehleinheit_werte', []).map(el => ({
+      value: el.id,
+      label: el.wert || '(kein Wert)',
+    })),
+  )()
 
-  let masseinheitWerte = get(werteData, 'masseinheit_werte', [])
-  masseinheitWerte = sortBy(masseinheitWerte, ['sort', 'wert'])
-  masseinheitWerte = masseinheitWerte.map(el => ({
-    value: el.id,
-    label: el.wert || '(kein Wert)',
-  }))
+  const masseinheitWerte = memoizeOne(() =>
+    get(werteData, 'masseinheit_werte', []).map(el => ({
+      value: el.id,
+      label: el.wert || '(kein Wert)',
+    })),
+  )()
 
   const saveToDb = useCallback(
     async event => {
