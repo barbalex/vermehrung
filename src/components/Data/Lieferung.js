@@ -53,8 +53,15 @@ const query = gql`
   ${lieferungFragment}
 `
 const sammlungQuery = gql`
-  query sammlungQuery {
-    sammlung {
+  query sammlungQuery($filter: sammlung_bool_exp!) {
+    sammlung(
+      where: $filter
+      order_by: [
+        { datum: asc_nulls_first }
+        { herkunftByherkunftId: { nr: asc_nulls_first } }
+        { personBypersonId: { name: asc_nulls_first } }
+      ]
+    ) {
       id
       art_id
       datum
@@ -153,12 +160,6 @@ const Lieferung = () => {
     variables: { id, isFiltered, filter: lieferungFilter },
   })
 
-  const {
-    data: sammlungData,
-    error: sammlungError,
-    loading: sammlungLoading,
-  } = useQuery(sammlungQuery)
-
   const { data: artData, error: artError, loading: artLoading } = useQuery(
     artQuery,
   )
@@ -180,6 +181,17 @@ const Lieferung = () => {
   const row = showFilter ? filter.lieferung : get(data, 'lieferung', [{}])[0]
   const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
   const rowsFiltered = get(data, 'rowsFiltered', [])
+
+  const sammlungFilter = row.art_id
+    ? { art_id: { _eq: row.art_id } }
+    : { id: { _is_null: false } }
+  const {
+    data: sammlungData,
+    error: sammlungError,
+    loading: sammlungLoading,
+  } = useQuery(sammlungQuery, {
+    variables: { filter: sammlungFilter },
+  })
 
   // show only kulturen of row.art_id
   // beware: row.art_id can be null
@@ -210,29 +222,19 @@ const Lieferung = () => {
     }),
   )()
 
-  let sammlungWerte = get(sammlungData, 'sammlung', []).filter(s => {
-    // only show sammlungen of same art
-    if (row.art_id && s.art_id) {
-      return s.art_id === row.art_id
-    }
-    return true
-  })
-  sammlungWerte = sortBy(sammlungWerte, s => [
-    'datum',
-    get(s, 'herkunftByherkunftId.nr'),
-    get(s, 'personBypersonId.name'),
-  ])
-  sammlungWerte = sammlungWerte.map(el => {
-    const datum = el.datum || '(kein Datum)'
-    const nr = get(el, 'herkunftByherkunftId.nr') || '(keine Nr)'
-    const person = get(el, 'personBypersonId.name') || '(kein Name)'
-    const label = `${datum}: Herkunft ${nr}; ${person}`
+  const sammlungWerte = memoizeOne(() =>
+    get(sammlungData, 'sammlung', []).map(el => {
+      const datum = el.datum || '(kein Datum)'
+      const nr = get(el, 'herkunftByherkunftId.nr') || '(keine Nr)'
+      const person = get(el, 'personBypersonId.name') || '(kein Name)'
+      const label = `${datum}: Herkunft ${nr}; ${person}`
 
-    return {
-      value: el.id,
-      label,
-    }
-  })
+      return {
+        value: el.id,
+        label,
+      }
+    }),
+  )()
 
   let personWerte = get(personData, 'person', [])
   personWerte = personWerte.map(el => ({
