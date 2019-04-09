@@ -1,12 +1,16 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -14,7 +18,6 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import {
   sammlung as sammlungFragment,
   art as artFragment,
@@ -35,30 +38,38 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query SammlungQuery($id: Int!, $isFiltered: Boolean!) {
+  query SammlungQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: sammlung_bool_exp!
+  ) {
     sammlung(where: { id: { _eq: $id } }) {
       ...SammlungFields
     }
-    rows: sammlung @include(if: $isFiltered) {
-      ...SammlungFields
+    rowsUnfiltered: sammlung @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: sammlung(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${sammlungFragment}
-  ${artFragment}
 `
 const dataQuery = gql`
   query dataQuery {
-    person {
+    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
       name
       ort
     }
-    herkunft {
+    herkunft(
+      order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
+    ) {
       id
       nr
       lokalname
     }
-    art {
+    art(order_by: { art_ae_art: { name: asc } }) {
       ...ArtFields
     }
   }
@@ -67,12 +78,12 @@ const dataQuery = gql`
 `
 const werteQuery = gql`
   query werteQuery {
-    zaehleinheit_werte {
+    zaehleinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
       id
       wert
       sort
     }
-    masseinheit_werte {
+    masseinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
       id
       wert
       sort
@@ -89,8 +100,9 @@ const Sammlung = () => {
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: sammlungFilter },
   })
   const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
     dataQuery,
@@ -104,47 +116,55 @@ const Sammlung = () => {
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.sammlung : get(data, 'sammlung', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'sammlung' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
 
-  let personWerte = get(dataData, 'person', [])
-  personWerte = personWerte.map(el => ({
-    value: el.id,
-    label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-  }))
-  personWerte = sortBy(personWerte, 'label')
+  const personWerte = useMemo(
+    () =>
+      get(dataData, 'person', []).map(el => ({
+        value: el.id,
+        label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+      })),
+    [dataLoading],
+  )
 
-  let herkunftWerte = get(dataData, 'herkunft', [])
-  herkunftWerte = herkunftWerte.map(el => ({
-    value: el.id,
-    label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
-  }))
-  herkunftWerte = sortBy(herkunftWerte, 'label')
+  const herkunftWerte = useMemo(
+    () =>
+      get(dataData, 'herkunft', []).map(el => ({
+        value: el.id,
+        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
+      })),
+    [dataLoading],
+  )
 
-  let artWerte = get(dataData, 'art', [])
-  artWerte = artWerte.map(el => ({
-    value: el.id,
-    label: get(el, 'art_ae_art.name') || '(kein Artname)',
-  }))
-  artWerte = sortBy(artWerte, 'label')
+  const artWerte = useMemo(
+    () =>
+      get(dataData, 'art', []).map(el => ({
+        value: el.id,
+        label: get(el, 'art_ae_art.name') || '(kein Artname)',
+      })),
+    [dataLoading],
+  )
 
-  let zaehleinheitWerte = get(werteData, 'zaehleinheit_werte', [])
-  zaehleinheitWerte = sortBy(zaehleinheitWerte, ['sort', 'wert'])
-  zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-    value: el.id,
-    label: el.wert || '(kein Wert)',
-  }))
+  const zaehleinheitWerte = useMemo(
+    () =>
+      get(werteData, 'zaehleinheit_werte', []).map(el => ({
+        value: el.id,
+        label: el.wert || '(kein Wert)',
+      })),
+    [werteLoading],
+  )
 
-  let masseinheitWerte = get(werteData, 'masseinheit_werte', [])
-  masseinheitWerte = sortBy(masseinheitWerte, ['sort', 'wert'])
-  masseinheitWerte = masseinheitWerte.map(el => ({
-    value: el.id,
-    label: el.wert || '(kein Wert)',
-  }))
+  const masseinheitWerte = useMemo(
+    () =>
+      get(werteData, 'masseinheit_werte', []).map(el => ({
+        value: el.id,
+        label: el.wert || '(kein Wert)',
+      })),
+    [werteLoading],
+  )
 
   const saveToDb = useCallback(
     async event => {
@@ -225,7 +245,7 @@ const Sammlung = () => {
         <FormTitle
           title="Sammlung"
           table="sammlung"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>
