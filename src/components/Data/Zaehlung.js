@@ -1,12 +1,16 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -14,7 +18,6 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import { zaehlung as zaehlungFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
@@ -32,7 +35,11 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ZaehlungQuery($id: Int!, $isFiltered: Boolean!) {
+  query ZaehlungQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: zaehlung_bool_exp!
+  ) {
     zaehlung(where: { id: { _eq: $id } }) {
       ...ZaehlungFields
       kulturBykulturId {
@@ -40,19 +47,24 @@ const query = gql`
         art_id
       }
     }
-    rows: zaehlung @include(if: $isFiltered) {
-      ...ZaehlungFields
-      kulturBykulturId {
-        id
-        art_id
-      }
+    rowsUnfiltered: zaehlung @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: zaehlung(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${zaehlungFragment}
 `
 const kulturQuery = gql`
-  query kulturQuery {
-    kultur {
+  query kulturQuery($filter: kultur_bool_exp!) {
+    kultur(
+      where: $filter
+      order_by: [
+        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
+        { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
+      ]
+    ) {
       id
       art_id
       gartenBygartenId {
@@ -76,48 +88,48 @@ const Zaehlung = () => {
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
 
   const isFiltered = runIsFiltered()
+  const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: zaehlungFilter },
   })
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery(kulturQuery)
 
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.zaehlung : get(data, 'zaehlung', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'zaehlung' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
+
+  const artId = get(row, 'kulturBykulturId.art_id')
+  const kulturFilter = artId
+    ? { art_id: { _eq: artId } }
+    : { id: { _is_null: false } }
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery, {
+    variables: {
+      filter: kulturFilter,
+    },
+  })
 
   useEffect(() => setErrors({}), [row])
 
-  let kulturWerte = get(kulturData, 'kultur', []).filter(s => {
-    // only show kulturen of same art
-    const s_art = get(s, 'kulturBykulturId.art_id')
-    if (row.art_id && s_art) {
-      return s_art === row.art_id
-    }
-    return true
-  })
-  kulturWerte = sortBy(kulturWerte, s => [
-    get(s, 'gartenBygartenId.personBypersonId.name'),
-    get(s, 'gartenBygartenId.personBypersonId.ort'),
-  ])
-  kulturWerte = kulturWerte.map(el => {
-    const name =
-      get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-    const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
-    const label = `${name}${ort ? ` (${ort})` : ''}`
+  const kulturWerte = useMemo(
+    () =>
+      get(kulturData, 'kultur', []).map(el => {
+        const name =
+          get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
+        const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+        const label = `${name}${ort ? ` (${ort})` : ''}`
 
-    return {
-      value: el.id,
-      label,
-    }
-  })
+        return {
+          value: el.id,
+          label,
+        }
+      }),
+    [kulturLoading],
+  )
 
   const saveToDb = useCallback(
     async event => {
@@ -198,7 +210,7 @@ const Zaehlung = () => {
         <FormTitle
           title="Zaehlung"
           table="zaehlung"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>
