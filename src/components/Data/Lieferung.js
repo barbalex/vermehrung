@@ -15,7 +15,6 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
-import filterNodes from '../../utils/filterNodes'
 import queryFromTable from '../../utils/queryFromTable'
 import {
   lieferung as lieferungFragment,
@@ -36,12 +35,19 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query LieferungQuery($id: Int!, $isFiltered: Boolean!) {
+  query LieferungQuery(
+    $id: Int!
+    $isFiltered: Boolean!
+    $filter: lieferung_bool_exp!
+  ) {
     lieferung(where: { id: { _eq: $id } }) {
       ...LieferungFields
     }
-    rows: lieferung @include(if: $isFiltered) {
-      ...LieferungFields
+    rowsUnfiltered: lieferung @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: lieferung(where: $filter) @include(if: $isFiltered) {
+      id
     }
   }
   ${lieferungFragment}
@@ -65,8 +71,14 @@ const sammlungQuery = gql`
   }
 `
 const kulturQuery = gql`
-  query kulturQuery {
-    kultur {
+  query kulturQuery($filter: kultur_bool_exp!) {
+    kultur(
+      where: $filter
+      order_by: [
+        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
+        { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
+      ]
+    ) {
       id
       art_id
       gartenBygartenId {
@@ -136,27 +148,27 @@ const Lieferung = () => {
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
+  const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered },
+    variables: { id, isFiltered, filter: lieferungFilter },
   })
+
   const {
     data: sammlungData,
     error: sammlungError,
     loading: sammlungLoading,
   } = useQuery(sammlungQuery)
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery(kulturQuery)
+
   const { data: artData, error: artError, loading: artLoading } = useQuery(
     artQuery,
   )
+
   const {
     data: personData,
     error: personError,
     loading: personLoading,
   } = useQuery(personQuery)
+
   const {
     data: werteData,
     error: werteError,
@@ -166,35 +178,37 @@ const Lieferung = () => {
   const [errors, setErrors] = useState({})
 
   const row = showFilter ? filter.lieferung : get(data, 'lieferung', [{}])[0]
-  const rows = get(data, 'rows', [])
-  const rowsFiltered = memoizeOne(() =>
-    filterNodes({ rows, filter, table: 'lieferung' }),
-  )()
+  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
+  const rowsFiltered = get(data, 'rowsFiltered', [])
+
+  // show only kulturen of row.art_id
+  // beware: row.art_id can be null
+  const kulturFilter = row.art_id
+    ? { art_id: { _eq: row.art_id } }
+    : { id: { _is_null: false } }
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery, {
+    variables: { filter: kulturFilter },
+  })
 
   useEffect(() => setErrors({}), [row])
 
-  let kulturWerte = get(kulturData, 'kultur', []).filter(s => {
-    // only show kulturen of same art
-    if (row.art_id && s.art_id) {
-      return s.art_id === row.art_id
-    }
-    return true
-  })
-  kulturWerte = sortBy(kulturWerte, s => [
-    get(s, 'gartenBygartenId.personBypersonId.name'),
-    get(s, 'gartenBygartenId.personBypersonId.ort'),
-  ])
-  kulturWerte = kulturWerte.map(el => {
-    const name =
-      get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-    const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
-    const label = `${name}${ort ? ` (${ort})` : ''}`
+  const kulturWerte = memoizeOne(() =>
+    get(kulturData, 'kultur', []).map(el => {
+      const name =
+        get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
+      const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+      const label = `${name}${ort ? ` (${ort})` : ''}`
 
-    return {
-      value: el.id,
-      label,
-    }
-  })
+      return {
+        value: el.id,
+        label,
+      }
+    }),
+  )()
 
   let sammlungWerte = get(sammlungData, 'sammlung', []).filter(s => {
     // only show sammlungen of same art
@@ -362,7 +376,7 @@ const Lieferung = () => {
         <FormTitle
           title="Lieferung"
           table="lieferung"
-          rowsLength={rows.length}
+          rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>
