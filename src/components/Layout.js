@@ -5,7 +5,7 @@
  */
 import React from 'react'
 import Helmet from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql } from 'gatsby'
 
 import Header from './Header'
 
@@ -19,31 +19,30 @@ const query = graphql`
   }
 `
 
-const Layout = ({ children }) => (
-  <StaticQuery
-    query={query}
-    render={data => (
-      <>
-        <Helmet
-          title={data.site.siteMetadata.title}
-          meta={[
-            {
-              name: 'description',
-              content: 'Bedrohte Pflanzenarten vermehren',
-            },
-            {
-              name: 'keywords',
-              content: 'Naturschutz, Artenschutz, Flora, Pflanzen, Vermehrung',
-            },
-          ]}
-        >
-          <html lang="de" />
-        </Helmet>
-        <Header />
-        {children}
-      </>
-    )}
-  />
-)
+const Layout = ({ children }) => {
+  const data = useStaticQuery(query)
+
+  return (
+    <>
+      <Helmet
+        title={data.site.siteMetadata.title}
+        meta={[
+          {
+            name: 'description',
+            content: 'Bedrohte Pflanzenarten vermehren',
+          },
+          {
+            name: 'keywords',
+            content: 'Naturschutz, Artenschutz, Flora, Pflanzen, Vermehrung',
+          },
+        ]}
+      >
+        <html lang="de" />
+      </Helmet>
+      <Header />
+      {children}
+    </>
+  )
+}
 
 export default Layout
