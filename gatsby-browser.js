@@ -15,4 +15,4 @@ import App from './src/App'
 export const wrapRootElement = ({ element }) => <App element={element} />
 
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
-export const onServiceWorkerUpdateFound = () => window.location.reload(true)
+export const onServiceWorkerUpdateReady = () => window.location.reload(true)
