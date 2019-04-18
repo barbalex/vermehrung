@@ -37,7 +37,7 @@ const Filter = ({ filter, setFilter }) => {
         autoCorrect="off"
         autoCapitalize="off"
         endAdornment={
-          !!filter ? (
+          filter ? (
             <InputAdornment
               position="end"
               onClick={onClickEmptyFilter}

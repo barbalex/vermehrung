@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import { navigate } from 'gatsby'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import { getSnapshot } from 'mobx-state-tree'
+//import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 import {
@@ -45,13 +45,7 @@ const fragmentFieldsNames = {
 
 export default async ({ node, store, client }) => {
   // get parent table, parent table id and table from url
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    refetch,
-    addOpenNodes,
-    openNodes,
-  } = store.tree
+  const { setActiveNodeArray, refetch, addOpenNodes } = store.tree
   const { nodeType, url } = node
 
   // get table and id from url
