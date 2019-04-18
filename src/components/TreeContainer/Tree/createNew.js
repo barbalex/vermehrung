@@ -118,7 +118,7 @@ export default async ({ node, store, client }) => {
       return console.log('Error querying parent kultur', error.message)
     }
     artId = get(responce, 'data.kultur[0].art_id')
-    console.log({ responce, artId })
+    //console.log({ responce, artId })
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
@@ -141,7 +141,7 @@ export default async ({ node, store, client }) => {
       return console.log('Error querying parent kultur', error.message)
     }
     artId = get(responce, 'data.sammlung[0].art_id')
-    console.log({ responce, artId, parentId })
+    //console.log({ responce, artId, parentId })
   }
   let object = `{}`
   if (fkExists)
@@ -182,18 +182,18 @@ export default async ({ node, store, client }) => {
       newActiveNodeArray = [...node.url.slice(0, -1), newObject.id]
     }
     setActiveNodeArray(newActiveNodeArray)
-    console.log({
+    /*console.log({
       responce,
       nodeUrl: node.url.slice(),
       newActiveNodeArray,
       activeNodeArray: activeNodeArray.slice(),
       newObject,
       openNodes: getSnapshot(openNodes),
-    })
+    })*/
     // add node.url just in case it was not yet open
     addOpenNodes([newActiveNodeArray, node.url])
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
-    setTimeout(()=>refetch())
+    setTimeout(() => refetch())
     //refetch()
   }
 }

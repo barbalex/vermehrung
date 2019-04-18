@@ -1,7 +1,7 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import MaterialCard from '@material-ui/core/Card'
-import { graphql, Link } from 'gatsby'
+import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import Img from 'gatsby-image'
 
@@ -85,54 +85,6 @@ const PageTitle = styled(Typography)`
   }
 `
 const CardTitle = styled.h3``
-const MoreContainer = styled.div`
-  margin-top: 80px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column-gap: 15px;
-  grid-row-gap: 25px;
-  @media (min-width: 700px) {
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 20px;
-  }
-  @media (min-width: 1200px) {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 25px;
-  }
-  @media (min-width: 1700px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-column-gap: 30px;
-  }
-  p {
-    padding-left: 30px;
-    font-weight: 700;
-    text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
-      -2px 2px 3px white;
-    margin: 0;
-  }
-  a {
-    padding-left: 30px;
-    font-weight: 700;
-    color: rgba(0, 0, 0, 0.8);
-    text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
-      -2px 2px 3px white;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`
-const MoreLink = styled(Link)`
-  padding-left: 30px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.8);
-  text-shadow: 2px 2px 3px white, -2px -2px 3px white, 2px -2px 3px white,
-    -2px 2px 3px white;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
-`
 
 const bgImageStyle = {
   position: 'absolute',
@@ -248,27 +200,6 @@ const Index = ({ data }) => (
               </p>
             </Card>
           </CardContainer>
-          <MoreContainer>
-            <a
-              href="https://gabriel-software.ch"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Über uns
-            </a>
-            <a
-              href="mailto:alex@gabriel-software.ch?subject=vermehrung.apflora.ch"
-              rel="noopener"
-            >
-              Kontakt
-            </a>
-            <MoreLink to="/Benutzer-Dokumentation/">
-              Benutzer-Dokumentation
-            </MoreLink>
-            <MoreLink to="/Technische-Dokumentation/">
-              Technische Dokumentation
-            </MoreLink>
-          </MoreContainer>
         </Container>
       </ScrollContainer>
     </Layout>

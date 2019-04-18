@@ -43,7 +43,6 @@ const Header = () => (
   <Location>
     {({ location }) => {
       const { pathname } = location
-      console.log({ pathname })
 
       return (
         <ErrorBoundary>
