@@ -7,41 +7,39 @@ import { Location } from '@reach/router'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
-import ErrorBoundary from '../components/ErrorBoundary'
-
 const ListItem = styled(MListItem)`
   background-color: ${props =>
     props.active === 'true' ? '#eaeaea' : 'unset'} !important;
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
 `
 
-const TechnDokuMenuItem = ({ post }) => {
+const MenuItem = ({ node }) => {
   const onClickMenuItem = useCallback(
-    () => navigate(`${post.frontmatter.path}/`),
-    [post],
+    () => navigate(`${node.frontmatter.path}/`),
+    [node],
   )
 
   return (
     <Location>
       {({ location }) => {
         const active = (
-          `${post.frontmatter.path}/` === location.pathname
+          `${node.frontmatter.path}/` === location.pathname
         ).toString()
 
         return (
-          <ErrorBoundary>
-            <>
-              <ListItem button onClick={onClickMenuItem} active={active}>
-                <ListItemText onClick={onClickMenuItem}>
-                  {get(post, 'frontmatter.title', '(Titel fehlt)')}
-                </ListItemText>
-              </ListItem>
-              <Divider />
-            </>
-          </ErrorBoundary>
+          <>
+            <ListItem button onClick={onClickMenuItem} active={active}>
+              <ListItemText onClick={onClickMenuItem}>
+                {get(node, 'frontmatter.title', '(Titel fehlt)')}
+              </ListItemText>
+            </ListItem>
+            <Divider />
+          </>
         )
       }}
     </Location>
   )
 }
 
-export default TechnDokuMenuItem
+export default MenuItem
