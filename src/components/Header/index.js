@@ -32,7 +32,8 @@ const Spacer = styled.div`
 const NavButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 0 !important;
+  border-width: ${props => (props.active ? '1px !important' : '0 !important')};
+  text-transform: none !important;
   &:hover {
     border-width: 1px !important;
   }
@@ -42,6 +43,7 @@ const Header = () => (
   <Location>
     {({ location }) => {
       const { pathname } = location
+      console.log({ pathname })
 
       return (
         <ErrorBoundary>
@@ -57,18 +59,38 @@ const Header = () => (
               </SiteTitle>
               <Spacer />
               {pathname.startsWith('/Vermehrung') ? (
-                <Search />
+                <>
+                  <Search />
+                  <Account />
+                  <More />
+                </>
               ) : (
-                <NavButton
-                  variant="outlined"
-                  component={Link}
-                  to="/Vermehrung/"
-                >
-                  Zu den Daten
-                </NavButton>
+                <>
+                  <NavButton
+                    variant="outlined"
+                    active={pathname.startsWith('/Benutzer-Dokumentation')}
+                    component={Link}
+                    to="/Benutzer-Dokumentation/"
+                  >
+                    Benutzer-Dokumentation
+                  </NavButton>
+                  <NavButton
+                    variant="outlined"
+                    active={pathname.startsWith('/Technische-Dokumentation')}
+                    component={Link}
+                    to="/Technische-Dokumentation/"
+                  >
+                    Technische Dokumentation
+                  </NavButton>
+                  <NavButton
+                    variant="outlined"
+                    component={Link}
+                    to="/Vermehrung/"
+                  >
+                    Daten bearbeiten
+                  </NavButton>
+                </>
               )}
-              <Account />
-              <More />
             </Toolbar>
           </AppBar>
         </ErrorBoundary>

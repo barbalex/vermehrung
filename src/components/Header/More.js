@@ -33,10 +33,6 @@ const MyAppBar = () => {
     setAnchorEl(null)
     navigate('/Technische-Dokumentation/')
   })
-  const onClickKontakt = useCallback(() => {
-    setAnchorEl(null)
-    window.open('https://gabriel-software.ch/Kontakt')
-  })
   const onClickMehrButton = useCallback(event =>
     setAnchorEl(event.currentTarget),
   )
@@ -64,7 +60,6 @@ const MyAppBar = () => {
           <MenuItem onClick={onClickTechDocs}>
             Technische Dokumentation
           </MenuItem>
-          <MenuItem onClick={onClickKontakt}>Kontakt</MenuItem>
         </Menu>
       </Container>
     </ErrorBoundary>
