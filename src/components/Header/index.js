@@ -32,7 +32,8 @@ const Spacer = styled.div`
 const NavButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: ${props => (props.active ? '1px !important' : '0 !important')};
+  border-width: ${props =>
+    props.active === 'true' ? '1px !important' : '0 !important'};
   text-transform: none !important;
   &:hover {
     border-width: 1px !important;
@@ -67,7 +68,9 @@ const Header = () => (
                 <>
                   <NavButton
                     variant="outlined"
-                    active={pathname.startsWith('/Benutzer-Dokumentation')}
+                    active={pathname
+                      .startsWith('/Benutzer-Dokumentation')
+                      .toString()}
                     component={Link}
                     to="/Benutzer-Dokumentation/"
                   >
@@ -75,7 +78,9 @@ const Header = () => (
                   </NavButton>
                   <NavButton
                     variant="outlined"
-                    active={pathname.startsWith('/Technische-Dokumentation')}
+                    active={pathname
+                      .startsWith('/Technische-Dokumentation')
+                      .toString()}
                     component={Link}
                     to="/Technische-Dokumentation/"
                   >
