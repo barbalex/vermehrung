@@ -30,7 +30,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query GartenQuery(
-    $id: Int!
+    $id: bigint!
     $isFiltered: Boolean!
     $filter: garten_bool_exp!
   ) {
@@ -109,7 +109,7 @@ const Garten = () => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_garten($id: Int!) {
+              mutation update_garten($id: bigint!) {
                 update_garten(
                   where: { id: { _eq: $id } }
                   _set: {

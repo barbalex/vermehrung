@@ -39,7 +39,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query SammlungQuery(
-    $id: Int!
+    $id: bigint!
     $isFiltered: Boolean!
     $filter: sammlung_bool_exp!
   ) {
@@ -186,7 +186,7 @@ const Sammlung = () => {
           await client.mutate({
             mutation: gql`
               mutation update_sammlung(
-                $id: Int!
+                $id: bigint!
               ) {
                 update_sammlung(
                   where: { id: { _eq: $id } }

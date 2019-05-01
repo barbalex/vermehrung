@@ -31,7 +31,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query EventQuery(
-    $id: Int!
+    $id: bigint!
     $filter: kultur_event_bool_exp!
     $isFiltered: Boolean!
   ) {
@@ -154,7 +154,7 @@ const Event = () => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_kultur_event($id: Int!) {
+              mutation update_kultur_event($id: bigint!) {
                 update_kultur_event(
                   where: { id: { _eq: $id } }
                   _set: { 

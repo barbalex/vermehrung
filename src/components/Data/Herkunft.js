@@ -28,7 +28,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query HerkunftQuery(
-    $id: Int!
+    $id: bigint!
     $isFiltered: Boolean!
     $filter: herkunft_bool_exp!
   ) {
@@ -87,7 +87,7 @@ const Herkunft = () => {
           await client.mutate({
             mutation: gql`
               mutation update_herkunft(
-                $id: Int!
+                $id: bigint!
               ) {
                 update_herkunft(
                   where: { id: { _eq: $id } }

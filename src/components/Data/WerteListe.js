@@ -29,7 +29,7 @@ const WerteListe = ({ table }) => {
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const { data, error, loading } = useQuery(
-    gql`query EventQuery($id: Int!) {
+    gql`query EventQuery($id: bigint!) {
       ${table}(where: { id: { _eq: $id } }) {
         id
         wert
@@ -84,7 +84,7 @@ const WerteListe = ({ table }) => {
         await client.mutate({
           mutation: gql`
             mutation update_${table}(
-              $id: Int!
+              $id: bigint!
             ) {
               update_${table}(
                 where: { id: { _eq: $id } }

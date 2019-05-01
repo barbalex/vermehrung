@@ -29,7 +29,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query PersonQuery(
-    $id: Int!
+    $id: bigint!
     $isFiltered: Boolean!
     $filter: person_bool_exp!
   ) {
@@ -88,7 +88,7 @@ const Person = () => {
           await client.mutate({
             mutation: gql`
               mutation update_person(
-                $id: Int!
+                $id: bigint!
               ) {
                 update_person(
                   where: { id: { _eq: $id } }

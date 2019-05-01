@@ -31,7 +31,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query InventarQuery(
-    $id: Int!
+    $id: bigint!
     $isFiltered: Boolean!
     $filter: kultur_inventar_bool_exp!
   ) {
@@ -144,7 +144,7 @@ const Inventar = () => {
           await client.mutate({
             mutation: gql`
               mutation update_kultur_inventar(
-                $id: Int!
+                $id: bigint!
               ) {
                 update_kultur_inventar(
                   where: { id: { _eq: $id } }

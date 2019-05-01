@@ -36,7 +36,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query ZaehlungQuery(
-    $id: Int!
+    $id: bigint!
     $isFiltered: Boolean!
     $filter: zaehlung_bool_exp!
   ) {
@@ -150,7 +150,7 @@ const Zaehlung = () => {
           await client.mutate({
             mutation: gql`
               mutation update_zaehlung(
-                $id: Int!
+                $id: bigint!
               ) {
                 update_zaehlung(
                   where: { id: { _eq: $id } }

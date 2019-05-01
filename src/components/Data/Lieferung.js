@@ -35,7 +35,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query LieferungQuery(
-    $id: Int!
+    $id: bigint!
     $isFiltered: Boolean!
     $filter: lieferung_bool_exp!
   ) {
@@ -303,7 +303,7 @@ const Lieferung = () => {
           await client.mutate({
             mutation: gql`
               mutation update_lieferung(
-                $id: Int!
+                $id: bigint!
               ) {
                 update_lieferung(
                   where: { id: { _eq: $id } }

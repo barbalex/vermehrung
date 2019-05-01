@@ -28,7 +28,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ArtQuery($id: Int!, $filter: art_bool_exp!, $isFiltered: Boolean!) {
+  query ArtQuery($id: bigint!, $filter: art_bool_exp!, $isFiltered: Boolean!) {
     art(where: { id: { _eq: $id } }) {
       ...ArtFields
     }
@@ -43,7 +43,7 @@ const query = gql`
 `
 
 const aeArtQuery = gql`
-  query aeArtQuery($id: Int!) {
+  query aeArtQuery($id: bigint!) {
     ae_art(
       where: {
         _or: [
@@ -104,7 +104,7 @@ const Art = () => {
         try {
           await client.mutate({
             mutation: gql`
-              mutation update_art($id: Int!, $ae_id: uuid) {
+              mutation update_art($id: bigint!, $ae_id: uuid) {
                 update_art(
                   where: { id: { _eq: $id } }
                   _set: { ae_id: $ae_id }
