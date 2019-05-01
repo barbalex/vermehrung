@@ -1,5 +1,60 @@
 create extension if not exists "uuid-ossp";
 
+drop table if exists zaehleinheit_werte cascade;
+create table zaehleinheit_werte (
+  id bigserial primary key,
+  wert varchar(50) default null,
+  sort smallint default null,
+  changed date default now(),
+  changed_by varchar(20) default null
+);
+create index on zaehleinheit_werte using btree (id);
+create index on zaehleinheit_werte using btree (sort);
+
+drop table if exists masseinheit_werte cascade;
+create table masseinheit_werte (
+  id bigserial primary key,
+  wert varchar(50) default null,
+  sort smallint default null,
+  changed date default now(),
+  changed_by varchar(20) default null
+);
+create index on masseinheit_werte using btree (id);
+create index on masseinheit_werte using btree (sort);
+
+drop table if exists lieferung_typ_werte cascade;
+create table lieferung_typ_werte (
+  id bigserial primary key,
+  wert varchar(50) default null,
+  sort smallint default null,
+  changed date default now(),
+  changed_by varchar(20) default null
+);
+create index on lieferung_typ_werte using btree (id);
+create index on lieferung_typ_werte using btree (sort);
+
+drop table if exists lieferung_status_werte cascade;
+create table lieferung_status_werte (
+  id bigserial primary key,
+  wert varchar(50) default null,
+  sort smallint default null,
+  changed date default now(),
+  changed_by varchar(20) default null
+);
+create index on lieferung_status_werte using btree (id);
+create index on lieferung_status_werte using btree (sort);
+
+drop table if exists lieferung_zwischenlager_werte cascade;
+create table lieferung_zwischenlager_werte (
+  id bigserial primary key,
+  wert varchar(50) default null,
+  sort smallint default null,
+  changed date default now(),
+  changed_by varchar(20) default null
+);
+create index on lieferung_zwischenlager_werte using btree (id);
+create index on lieferung_zwischenlager_werte using btree (sort);
+
 drop table if exists person cascade;
 create table person (
   id bigserial primary key,
@@ -217,58 +272,3 @@ create index on lieferung using btree (nach_kultur_id);
 create index on lieferung using btree (status);
 --alter table lieferung add column tsv tsvector;
 create index on lieferung using gin (tsv);
-
-drop table if exists zaehleinheit_werte cascade;
-create table zaehleinheit_werte (
-  id bigserial primary key,
-  wert varchar(50) default null,
-  sort smallint default null,
-  changed date default now(),
-  changed_by varchar(20) default null
-);
-create index on zaehleinheit_werte using btree (id);
-create index on zaehleinheit_werte using btree (sort);
-
-drop table if exists masseinheit_werte cascade;
-create table masseinheit_werte (
-  id bigserial primary key,
-  wert varchar(50) default null,
-  sort smallint default null,
-  changed date default now(),
-  changed_by varchar(20) default null
-);
-create index on masseinheit_werte using btree (id);
-create index on masseinheit_werte using btree (sort);
-
-drop table if exists lieferung_typ_werte cascade;
-create table lieferung_typ_werte (
-  id bigserial primary key,
-  wert varchar(50) default null,
-  sort smallint default null,
-  changed date default now(),
-  changed_by varchar(20) default null
-);
-create index on lieferung_typ_werte using btree (id);
-create index on lieferung_typ_werte using btree (sort);
-
-drop table if exists lieferung_status_werte cascade;
-create table lieferung_status_werte (
-  id bigserial primary key,
-  wert varchar(50) default null,
-  sort smallint default null,
-  changed date default now(),
-  changed_by varchar(20) default null
-);
-create index on lieferung_status_werte using btree (id);
-create index on lieferung_status_werte using btree (sort);
-
-drop table if exists lieferung_zwischenlager_werte cascade;
-create table lieferung_zwischenlager_werte (
-  id bigserial primary key,
-  wert varchar(50) default null,
-  sort smallint default null,
-  changed date default now(),
-  changed_by varchar(20) default null
-);
-create index on lieferung_zwischenlager_werte using btree (id);
-create index on lieferung_zwischenlager_werte using btree (sort);
