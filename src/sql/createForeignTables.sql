@@ -8,6 +8,10 @@ create user fdw_user with encrypted password 'secret';
 grant select on table ae.v_vermehrung_arten to fdw_user;
 
 -- on vermehrung
+CREATE EXTENSION postgres_fdw;
+CREATE SERVER ae_server
+  FOREIGN DATA WRAPPER postgres_fdw
+  OPTIONS (host '207.154.212.35', port '5432', dbname 'ae');
 -- need to use this view
 -- because joining tables is way too slow
 create foreign table ae_art (
@@ -15,3 +19,8 @@ create foreign table ae_art (
   name text
 )
 server ae_server options (schema_name 'ae', table_name 'v_vermehrung_arten');
+
+CREATE USER MAPPING
+    FOR doadmin
+ SERVER ae_server
+OPTIONS (user 'fdw_user', password 'secret');

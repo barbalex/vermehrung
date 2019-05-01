@@ -8,9 +8,9 @@ export default ({ nodes, data, url }) => {
 
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const kulturen = get(art, 'kultursByartId', [])
+  const kulturen = get(art, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const anlieferungen = get(kultur, 'lieferungsBynachKulturId', [])
+  const anlieferungen = get(kultur, 'lieferungsByNachKulturId', [])
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
@@ -36,11 +36,11 @@ export default ({ nodes, data, url }) => {
           : '(kein nach-Datum)'
         const label = `${nach_datum}: ${get(
           el,
-          'personBypersonId.name',
+          'person.name',
           '(kein Name)',
-        )}; ${get(el, 'lieferungTypWerteBytyp.wert') || '(kein Typ)'}; ${get(
+        )}; ${get(el, 'lieferung_typ_werte.wert') || '(kein Typ)'}; ${get(
           el,
-          'lieferungStatusWerteBystatus.wert',
+          'lieferung_status_werte.wert',
         ) || '(kein Status)'}`
 
         return {

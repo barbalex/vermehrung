@@ -8,7 +8,7 @@ export default ({ url, nodes, data, loading }) => {
 
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const sammlungen = get(art, 'sammlungsByartId', [])
+  const sammlungen = get(art, 'sammlungs', [])
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   // only return if parent exists

@@ -37,7 +37,7 @@ const query = gql`
   ) {
     kultur_inventar(where: { id: { _eq: $id } }) {
       ...KulturInventarFields
-      kulturBykulturId {
+      kultur {
         id
         art_id
       }
@@ -56,15 +56,15 @@ const kulturQuery = gql`
     kultur(
       where: $filter
       order_by: [
-        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
-        { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
+        { garten: { person: { name: asc_nulls_first } } }
+        { garten: { person: { ort: asc_nulls_first } } }
       ]
     ) {
       id
       art_id
-      gartenBygartenId {
+      garten {
         id
-        personBypersonId {
+        person {
           id
           name
           ort
@@ -97,7 +97,7 @@ const Inventar = () => {
   const rowsFiltered = get(data, 'rowsFiltered', [])
 
   // only show kulturen of same art
-  const artId = get(row, 'kulturBykulturId.art_id')
+  const artId = get(row, 'kultur.art_id')
   const kulturFilter = artId
     ? { art_id: { _eq: artId } }
     : { id: { _is_null: true } }
@@ -113,9 +113,8 @@ const Inventar = () => {
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
-      const name =
-        get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-      const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+      const name = get(el, 'garten.person.name') || '(kein Name)'
+      const ort = get(el, 'garten.person.ort') || null
       const label = `${name}${ort ? ` (${ort})` : ''}`
 
       return {

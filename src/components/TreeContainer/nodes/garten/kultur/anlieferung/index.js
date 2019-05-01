@@ -7,9 +7,9 @@ export default ({ nodes, data, url }) => {
   const kulturId = url[3]
   const gaerten = get(data, 'garten', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const anlieferungen = get(kultur, 'lieferungsBynachKulturId', [])
+  const anlieferungen = get(kultur, 'lieferungsByNachKulturId', [])
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
@@ -33,12 +33,12 @@ export default ({ nodes, data, url }) => {
         const nach_datum = el.von_datum
           ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein nach-Datum)'
-        const label = `${nach_datum}: ${get(el, 'personBypersonId.name') ||
+        const label = `${nach_datum}: ${get(el, 'person.name') ||
           '(kein Name)'}; ${get(
           el,
-          'lieferungTypWerteBytyp.wert',
+          'lieferung_typ_werte.wert',
           '(kein Typ)',
-        )}; ${get(el, 'lieferungStatusWerteBystatus.wert') || '(kein Status)'}`
+        )}; ${get(el, 'lieferung_status_werte.wert') || '(kein Status)'}`
 
         return {
           nodeType: 'table',

@@ -9,11 +9,11 @@ export default ({ nodes, data, url }) => {
 
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartensBypersonId', [])
+  const gaerten = get(person, 'gartens', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const zaehlungen = get(kultur, 'zaehlungsBykulturId', [])
+  const zaehlungen = get(kultur, 'zaehlungs', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)

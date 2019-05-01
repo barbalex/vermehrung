@@ -6,7 +6,7 @@ export default ({ nodes, data, url }) => {
   const kulturId = url[1]
   const kulturen = get(data, 'kultur', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
+  const auslieferungen = get(kultur, 'lieferungsByVonKulturId', [])
 
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
@@ -22,9 +22,9 @@ export default ({ nodes, data, url }) => {
           ? moment(el.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein von-Datum)'
 
-        const label = `${von_datum}: ${get(el, 'personBypersonId.name') ||
-          '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
-          '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
+        const label = `${von_datum}: ${get(el, 'person.name') ||
+          '(kein Name)'}; ${get(el, 'lieferung_typ_werte.wert') ||
+          '(kein Typ)'}; ${get(el, 'lieferung_status_werte.wert') ||
           '(kein Status)'}`
 
         return {

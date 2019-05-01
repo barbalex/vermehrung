@@ -6,9 +6,9 @@ export default ({ url, nodes, data, loading }) => {
   const kulturId = url[3]
   const gaerten = get(data, 'garten', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const anlieferungen = get(kultur, 'lieferungsBynachKulturId', [])
+  const anlieferungen = get(kultur, 'lieferungsByNachKulturId', [])
   const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')

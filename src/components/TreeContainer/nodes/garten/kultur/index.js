@@ -5,7 +5,7 @@ export default ({ nodes, data, url }) => {
   const gartenId = url[1]
   const gaerten = get(data, 'garten', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = get(garten, 'kulturs', [])
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex =
@@ -23,7 +23,7 @@ export default ({ nodes, data, url }) => {
         table: 'kultur',
         id: `garten${gartenId}Kultur${el.id}`,
         parentId: `garten${gartenId}KulturFolder`,
-        label: get(el, 'artByartId.art_ae_art.name') || '(keine Art)',
+        label: get(el, 'art.art_ae_art.name') || '(keine Art)',
         url: ['Gaerten', gartenId, 'Kulturen', el.id],
         hasChildren: true,
       }))

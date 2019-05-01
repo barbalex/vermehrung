@@ -10,10 +10,9 @@ export default ({ nodes, data }) => {
       .filter(() => nodes.map(n => n.id).includes('sammlungFolder'))
       .map(el => {
         const { datum } = el
-        const art = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
-        const person = get(el, 'personBypersonId.name') || '(keine Person)'
-        const herkunft =
-          get(el, 'herkunftByherkunftId.nr') || '(keine Herkunft-Nr)'
+        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
+        const person = get(el, 'person.name') || '(keine Person)'
+        const herkunft = get(el, 'herkunft.nr') || '(keine Herkunft-Nr)'
         const date = datum
           ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'

@@ -57,18 +57,18 @@ const sammlungQuery = gql`
       where: $filter
       order_by: [
         { datum: asc_nulls_first }
-        { herkunftByherkunftId: { nr: asc_nulls_first } }
-        { personBypersonId: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+        { person: { name: asc_nulls_first } }
       ]
     ) {
       id
       art_id
       datum
-      herkunftByherkunftId {
+      herkunft {
         id
         nr
       }
-      personBypersonId {
+      person {
         id
         name
         ort
@@ -81,15 +81,15 @@ const kulturQuery = gql`
     kultur(
       where: $filter
       order_by: [
-        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
-        { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
+        { garten: { person: { name: asc_nulls_first } } }
+        { garten: { person: { ort: asc_nulls_first } } }
       ]
     ) {
       id
       art_id
-      gartenBygartenId {
+      garten {
         id
-        personBypersonId {
+        person {
           id
           name
           ort
@@ -209,9 +209,8 @@ const Lieferung = () => {
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
-      const name =
-        get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-      const ort = get(el, 'gartenBygartenId.personBypersonId.ort') || null
+      const name = get(el, 'garten.person.name') || '(kein Name)'
+      const ort = get(el, 'garten.person.ort') || null
       const label = `${name}${ort ? ` (${ort})` : ''}`
 
       return {
@@ -224,8 +223,8 @@ const Lieferung = () => {
   const sammlungWerte = memoizeOne(() =>
     get(sammlungData, 'sammlung', []).map(el => {
       const datum = el.datum || '(kein Datum)'
-      const nr = get(el, 'herkunftByherkunftId.nr') || '(keine Nr)'
-      const person = get(el, 'personBypersonId.name') || '(kein Name)'
+      const nr = get(el, 'herkunft.nr') || '(keine Nr)'
+      const person = get(el, 'person.name') || '(kein Name)'
       const label = `${datum}: Herkunft ${nr}; ${person}`
 
       return {

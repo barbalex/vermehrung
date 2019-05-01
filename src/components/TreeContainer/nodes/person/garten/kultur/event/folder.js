@@ -7,11 +7,11 @@ export default ({ url, nodes, data, loading }) => {
   const kulturId = url[5]
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartensBypersonId', [])
+  const gaerten = get(person, 'gartens', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'kulturEventsBykulturId', [])
+  const events = get(kultur, 'kultur_events', [])
   const nr = loading && !events.length ? '...' : events.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

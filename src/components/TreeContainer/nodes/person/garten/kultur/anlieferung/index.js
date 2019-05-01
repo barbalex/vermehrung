@@ -9,11 +9,11 @@ export default ({ nodes, data, url }) => {
 
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartensBypersonId', [])
+  const gaerten = get(person, 'gartens', [])
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kultursBygartenId', [])
+  const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const anlieferungen = get(kultur, 'lieferungsBynachKulturId', [])
+  const anlieferungen = get(kultur, 'lieferungsByNachKulturId', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -46,9 +46,9 @@ export default ({ nodes, data, url }) => {
         const nach_datum = el.von_datum
           ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein nach-Datum)'
-        const label = `${nach_datum}: ${get(el, 'personBypersonId.name') ||
-          '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
-          '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
+        const label = `${nach_datum}: ${get(el, 'person.name') ||
+          '(kein Name)'}; ${get(el, 'lieferung_typ_werte.wert') ||
+          '(kein Typ)'}; ${get(el, 'lieferung_status_werte.wert') ||
           '(kein Status)'}`
 
         return {

@@ -6,7 +6,7 @@ export default ({ nodes, data, url }) => {
   const artId = url[1]
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const sammlungen = get(art, 'sammlungsByartId', [])
+  const sammlungen = get(art, 'sammlungs', [])
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`) || 0
 
@@ -25,8 +25,7 @@ export default ({ nodes, data, url }) => {
           table: 'sammlung',
           id: `art${artId}Sammlung${el.id}`,
           parentId: `art${artId}SammlungFolder`,
-          label: `${datum}: ${get(el, 'herkunftByherkunftId.nr') ||
-            '(keine Nr.)'}`,
+          label: `${datum}: ${get(el, 'herkunft.nr') || '(keine Nr.)'}`,
           url: ['Arten', artId, 'Sammlungen', el.id],
           hasChildren: true,
         }

@@ -7,7 +7,7 @@ export default ({ nodes, data, url }) => {
 
   const herkuenfte = get(data, 'herkunft', [])
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
+  const sammlungen = get(herkunft, 'sammlungs', [])
 
   const herkunftNodes = nodes.filter(n => n.parentId === 'herkunftFolder')
   const herkunftIndex =
@@ -23,7 +23,7 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'
-        const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+        const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
         const label = `${datum}: ${artName}`
 
         return {

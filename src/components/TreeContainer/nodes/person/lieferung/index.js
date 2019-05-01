@@ -6,7 +6,7 @@ export default ({ nodes, data, url }) => {
   const personId = url[1]
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const lieferungen = get(person, 'lieferungsBypersonId', [])
+  const lieferungen = get(person, 'lieferungs', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -21,9 +21,9 @@ export default ({ nodes, data, url }) => {
         const von_datum = el.von_datum
           ? moment(el.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein von-Datum)'
-        const label = `${von_datum}: ${get(el, 'personBypersonId.name') ||
-          '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
-          '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
+        const label = `${von_datum}: ${get(el, 'person.name') ||
+          '(kein Name)'}; ${get(el, 'lieferung_typ_werte.wert') ||
+          '(kein Typ)'}; ${get(el, 'lieferung_status_werte.wert') ||
           '(kein Status)'}`
 
         return {

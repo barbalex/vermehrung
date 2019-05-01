@@ -8,11 +8,11 @@ export default ({ url, nodes, data, loading }) => {
 
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kulturen = [get(lieferung, 'kulturBynachKulturId', [])]
+  const kulturen = [get(lieferung, 'kulturByNachKulturId', [])]
   const zaehlungen =
-    kulturen.length === 0 ? [] : get(kulturen[0], 'zaehlungsBykulturId', [])
+    kulturen.length === 0 ? [] : get(kulturen[0], 'zaehlungs', [])
   const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')

@@ -6,7 +6,7 @@ export default ({ data, loading, url, nodes }) => {
 
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const herkunft = get(sammlung, 'herkunftByherkunftId')
+  const herkunft = get(sammlung, 'herkunft')
   const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')

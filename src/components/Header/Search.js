@@ -120,7 +120,7 @@ const filterSuggestionsQuery = gql`
     }
     garten: garten_search(args: { filter: $filter }) @include(if: $run) {
       ...GartenFields
-      personBypersonId {
+      person {
         ...PersonFields
       }
     }
@@ -129,12 +129,12 @@ const filterSuggestionsQuery = gql`
     }
     kultur: kultur_search(args: { filter: $filter }) @include(if: $run) {
       ...KulturFields
-      artByartId {
+      art {
         ...ArtFields
       }
-      gartenBygartenId {
+      garten {
         id
-        personBypersonId {
+        person {
           ...PersonFields
         }
       }
@@ -142,7 +142,7 @@ const filterSuggestionsQuery = gql`
     kulturEvent: kultur_event_search(args: { filter: $filter })
       @include(if: $run) {
       ...KulturEventFields
-      kulturBykulturId {
+      kultur {
         ...KulturFields
       }
     }
@@ -158,10 +158,10 @@ const filterSuggestionsQuery = gql`
     }
     sammlung: sammlung_search(args: { filter: $filter }) @include(if: $run) {
       ...SammlungFields
-      artByartId {
+      art {
         ...ArtFields
       }
-      personBypersonId {
+      person {
         ...PersonFields
       }
     }
@@ -216,7 +216,7 @@ export default () => {
   }))
   const suggestionsGarten = get(data, 'garten', []).map(o => ({
     id: o.id,
-    name: get(o, 'personBypersonId.name') || '(kein Name)',
+    name: get(o, 'person.name') || '(kein Name)',
     type: 'Gaerten',
   }))
   const suggestionsHerkunft = get(data, 'herkunft', []).map(o => ({
@@ -227,7 +227,7 @@ export default () => {
   }))
   const suggestionsKultur = get(data, 'kultur', []).map(o => ({
     id: o.id,
-    name: get(o, 'gartenBygartenId.personBypersonId.name') || '(kein Name)',
+    name: get(o, 'garten.person.name') || '(kein Name)',
     type: 'Kulturen',
   }))
   const suggestionsKulturEvent = get(data, 'kulturEvent', []).map(o => ({

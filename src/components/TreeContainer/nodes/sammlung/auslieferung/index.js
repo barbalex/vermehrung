@@ -8,7 +8,7 @@ export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = get(sammlung, 'lieferungs', [])
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -26,9 +26,9 @@ export default ({ nodes, data, url }) => {
         const von_datum = el.von_datum
           ? moment(el.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein von-Datum)'
-        const label = `${von_datum}: ${get(el, 'personBypersonId.name') ||
-          '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
-          '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
+        const label = `${von_datum}: ${get(el, 'person.name') ||
+          '(kein Name)'}; ${get(el, 'lieferung_typ_werte.wert') ||
+          '(kein Typ)'}; ${get(el, 'lieferung_status_werte.wert') ||
           '(kein Status)'}`
 
         return {

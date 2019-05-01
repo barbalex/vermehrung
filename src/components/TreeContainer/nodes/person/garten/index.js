@@ -5,7 +5,7 @@ export default ({ nodes, data, url }) => {
   const personId = url[1]
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartensBypersonId', [])
+  const gaerten = get(person, 'gartens', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -22,7 +22,7 @@ export default ({ nodes, data, url }) => {
         table: 'garten',
         id: `person${personId}Garten${el.id}`,
         parentId: `person${personId}GartenFolder`,
-        label: get(el, 'personBypersonId.name') || '(kein Garten gewählt)',
+        label: get(el, 'person.name') || '(kein Garten gewählt)',
         url: ['Personen', personId, 'Gaerten', el.id],
         hasChildren: true,
       }))

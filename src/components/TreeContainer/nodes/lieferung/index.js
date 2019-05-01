@@ -19,8 +19,7 @@ export default ({ nodes, data }) => {
           table: 'lieferung',
           id: `lieferung${el.id}`,
           parentId: 'lieferungFolder',
-          label: `${von_datum}: ${get(el, 'personBypersonId.name') ||
-            '(keine Person)'}`,
+          label: `${von_datum}: ${get(el, 'person.name') || '(keine Person)'}`,
           url: ['Lieferungen', el.id],
           hasChildren: false,
         }

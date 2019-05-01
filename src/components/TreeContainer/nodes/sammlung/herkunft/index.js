@@ -5,7 +5,7 @@ export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const herkunft = get(sammlung, 'herkunftByherkunftId', {})
+  const herkunft = get(sammlung, 'herkunft', {})
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(

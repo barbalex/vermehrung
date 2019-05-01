@@ -40,11 +40,9 @@ const query = gql`
   ) {
     kultur(where: { id: { _eq: $id } }) {
       ...KulturFields
-      gartenBygartenId {
+      garten {
         ...GartenFields
-        kultursBygartenId(
-          where: { artByartId: { ae_id: { _is_null: false } } }
-        ) {
+        kulturs(where: { art: { ae_id: { _is_null: false } } }) {
           id
           art_id
         }
@@ -71,13 +69,13 @@ const artQuery = gql`
 `
 const gartenQuery = gql`
   query gartenQuery($include: Boolean!) {
-    garten(order_by: { personBypersonId: { name: asc_nulls_first } }) {
+    garten(order_by: { person: { name: asc_nulls_first } }) {
       id
-      personBypersonId {
+      person {
         id
         name
       }
-      kultursBygartenId @include(if: $include) {
+      kulturs @include(if: $include) {
         ...KulturFields
       }
     }
@@ -109,11 +107,7 @@ const Kultur = () => {
   useEffect(() => setErrors({}), [row])
 
   // do not show other arten in this garten
-  const otherArtenInThisGarten = get(
-    row,
-    'gartenBygartenId.kultursBygartenId',
-    [],
-  )
+  const otherArtenInThisGarten = get(row, 'garten.kulturs', [])
     .map(k => k.art_id)
     // do show own art
     .filter(k => k !== row.art_id)
@@ -147,14 +141,14 @@ const Kultur = () => {
     // do not include garten of persons already culturing this art
     // TODO: move this to query
     .filter(a => {
-      const kulturs = get(a, 'kultursBygartenId', []) || []
+      const kulturs = get(a, 'kulturs', []) || []
       const artIds = kulturs.map(k => k.art_id)
       // do show choosen garten
       return a.id === row.garten_id || !artIds.includes(row.art_id)
     })
     .map(el => ({
       value: el.id,
-      label: get(el, 'personBypersonId.name') || '(kein Name)',
+      label: get(el, 'person.name') || '(kein Name)',
     }))
 
   const saveToDb = useCallback(

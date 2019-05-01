@@ -12,7 +12,7 @@ export default ({ url, nodes, data, loading }) => {
 
   const herkuenfte = get(data, 'herkunft', [])
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
+  const sammlungen = get(herkunft, 'sammlungs', [])
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   // only return if parent exists

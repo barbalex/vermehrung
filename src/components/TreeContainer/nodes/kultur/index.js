@@ -8,9 +8,8 @@ export default ({ nodes, data }) => {
       // only show if parent node exists
       .filter(() => nodes.map(n => n.id).includes('kulturFolder'))
       .map(el => {
-        const person =
-          get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-        const art = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+        const person = get(el, 'garten.person.name') || '(kein Name)'
+        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
 
         return {
           nodeType: 'table',

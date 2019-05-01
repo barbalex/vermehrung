@@ -6,9 +6,9 @@ export default ({ url, nodes, data, loading }) => {
   const kulturId = url[3]
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const kulturen = get(art, 'kultursByartId', [])
+  const kulturen = get(art, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const auslieferungen = get(kultur, 'lieferungsByvonKulturId', [])
+  const auslieferungen = get(kultur, 'lieferungsByVonKulturId', [])
   const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')

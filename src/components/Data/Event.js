@@ -37,7 +37,7 @@ const query = gql`
   ) {
     kultur_event(where: { id: { _eq: $id } }) {
       ...KulturEventFields
-      kulturBykulturId {
+      kultur {
         id
         art_id
       }
@@ -51,29 +51,29 @@ const query = gql`
   }
   ${kulturEventFragment}
 `
-// gartenBygartenId.personBypersonId.name
+// garten.person.name
 const kulturQuery = gql`
   query kulturQuery($filter: kultur_bool_exp!) {
     kultur(
       where: $filter
       order_by: [
-        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
-        { gartenBygartenId: { personBypersonId: { ort: asc_nulls_first } } }
-        { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+        { garten: { person: { name: asc_nulls_first } } }
+        { garten: { person: { ort: asc_nulls_first } } }
+        { art: { art_ae_art: { name: asc_nulls_first } } }
       ]
     ) {
       id
       art_id
-      artByartId {
+      art {
         id
         art_ae_art {
           id
           name
         }
       }
-      gartenBygartenId {
+      garten {
         id
-        personBypersonId {
+        person {
           id
           name
           ort
@@ -105,7 +105,7 @@ const Event = () => {
   const rowsFiltered = get(data, 'rowsFiltered', [])
 
   // only show kulturen of same art
-  const artId = get(row, 'kulturBykulturId.art_id')
+  const artId = get(row, 'kultur.art_id')
   const kulturFilter = artId
     ? { art_id: { _eq: artId } }
     : { id: { _is_null: true } }
@@ -121,10 +121,9 @@ const Event = () => {
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
-      const personName =
-        get(el, 'gartenBygartenId.personBypersonId.name') || '(kein Name)'
-      const personOrt = get(el, 'gartenBygartenId.personBypersonId.ort') || null
-      const artName = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
+      const personName = get(el, 'garten.person.name') || '(kein Name)'
+      const personOrt = get(el, 'garten.person.ort') || null
+      const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
       const label = `${personName}${
         personOrt ? ` (${personOrt})` : ''
       }: ${artName}`

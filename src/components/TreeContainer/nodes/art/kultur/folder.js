@@ -8,7 +8,7 @@ export default ({ url, nodes, data, loading }) => {
 
   const arten = get(data, 'art', [])
   const art = arten.find(a => a.id === artId)
-  const kulturen = get(art, 'kultursByartId', [])
+  const kulturen = get(art, 'kulturs', [])
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   // only return if parent exists

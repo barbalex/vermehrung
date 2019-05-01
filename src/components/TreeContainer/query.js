@@ -48,40 +48,40 @@ export default gql`
   ) {
     garten(
       where: $gartenFilter
-      order_by: { personBypersonId: { name: asc_nulls_first } }
+      order_by: { person: { name: asc_nulls_first } }
     ) {
       ...GartenFields
-      personBypersonId @include(if: $isGarten) {
+      person @include(if: $isGarten) {
         ...PersonFields
       }
-      kultursBygartenId(
+      kulturs(
         where: $kulturFilter
-        order_by: { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+        order_by: { art: { art_ae_art: { name: asc_nulls_first } } }
       ) @include(if: $isGarten) {
         ...KulturFields
-        artByartId {
+        art {
           ...ArtFields
         }
-        gartenBygartenId @include(if: $isGartenKultur) {
+        garten @include(if: $isGartenKultur) {
           ...GartenFields
-          personBypersonId {
+          person {
             ...PersonFields
           }
         }
-        kulturEventsBykulturId(
+        kultur_events(
           where: $kulturEventFilter
           #order_by: [{ datum: desc_nulls_first }, { event: asc }] errors???
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isGartenKultur) {
           ...KulturEventFields
         }
-        kulturInventarsBykulturId(
+        kultur_inventars(
           where: $kulturInventarFilter
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isGartenKultur) {
           ...KulturInventarFields
         }
-        zaehlungsBykulturId(
+        zaehlungs(
           where: $zaehlungFilter
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isGartenKultur) {
@@ -94,118 +94,116 @@ export default gql`
       order_by: { art_ae_art: { name: asc_nulls_first } }
     ) {
       ...ArtFields
-      kultursByartId(
+      kulturs(
         where: $kulturFilter
-        order_by: { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+        order_by: { art: { art_ae_art: { name: asc_nulls_first } } }
       ) @include(if: $isArt) {
         ...KulturFields
-        gartenBygartenId @include(if: $isArtKultur) {
+        garten @include(if: $isArtKultur) {
           ...GartenFields
-          personBypersonId {
+          person {
             ...PersonFields
           }
         }
-        kulturEventsBykulturId(
+        kultur_events(
           where: $kulturEventFilter
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...KulturEventFields
         }
-        kulturInventarsBykulturId(
+        kultur_inventars(
           where: $kulturInventarFilter
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...KulturInventarFields
         }
-        zaehlungsBykulturId(
+        zaehlungs(
           where: $zaehlungFilter
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...ZaehlungFields
         }
-        lieferungsByvonKulturId(
+        lieferungsByVonKulturId(
           where: $lieferungFilter
           order_by: { von_datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...LieferungFields
-          personBypersonId {
+          person {
             ...PersonFields
           }
-          lieferungTypWerteBytyp {
+          lieferung_typ_werte {
             id
             wert
           }
-          lieferungStatusWerteBystatus {
+          lieferung_status_werte {
             id
             wert
           }
         }
-        lieferungsBynachKulturId(
+        lieferungsByNachKulturId(
           where: $lieferungFilter
           order_by: { nach_datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...LieferungFields
-          personBypersonId {
+          person {
             ...PersonFields
           }
-          lieferungTypWerteBytyp {
+          lieferung_typ_werte {
             id
             wert
           }
-          lieferungStatusWerteBystatus {
+          lieferung_status_werte {
             id
             wert
           }
         }
       }
-      sammlungsByartId(
-        where: $sammlungFilter
-        order_by: { datum: desc_nulls_first }
-      ) @include(if: $isArt) {
+      sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
+        @include(if: $isArt) {
         ...SammlungFields
-        herkunftByherkunftId @include(if: $isArtSammlung) {
+        herkunft @include(if: $isArtSammlung) {
           ...HerkunftFields
         }
-        artByartId @include(if: $isArtSammlung) {
+        art @include(if: $isArtSammlung) {
           ...ArtFields
         }
-        lieferungsByvonSammlungId(
+        lieferungs(
           where: $lieferungFilter
           order_by: { von_datum: desc_nulls_first }
         ) @include(if: $isArtSammlung) {
           ...LieferungFields
-          personBypersonId {
+          person {
             ...PersonFields
           }
-          lieferungTypWerteBytyp {
+          lieferung_typ_werte {
             id
             wert
           }
-          lieferungStatusWerteBystatus {
+          lieferung_status_werte {
             id
             wert
           }
-          kulturBynachKulturId {
+          kulturByNachKulturId {
             ...KulturFields
-            gartenBygartenId {
+            garten {
               ...GartenFields
-              personBypersonId {
+              person {
                 ...PersonFields
               }
             }
-            kulturEventsBykulturId(
+            kultur_events(
               where: $kulturEventFilter
               order_by: { datum: desc_nulls_first }
             ) {
               ...KulturEventFields
             }
-            kulturInventarsBykulturId(
+            kultur_inventars(
               where: $kulturInventarFilter
               order_by: { datum: desc_nulls_first }
             ) {
               ...KulturInventarFields
             }
-            zaehlungsBykulturId(
+            zaehlungs(
               where: $zaehlungFilter
               order_by: { datum: desc_nulls_first }
             ) {
@@ -218,71 +216,69 @@ export default gql`
     kultur(
       where: $kulturFilter
       order_by: [
-        { gartenBygartenId: { personBypersonId: { name: asc_nulls_first } } }
-        { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+        { garten: { person: { name: asc_nulls_first } } }
+        { art: { art_ae_art: { name: asc_nulls_first } } }
       ]
     ) {
       ...KulturFields
-      artByartId {
+      art {
         ...ArtFields
       }
-      gartenBygartenId @include(if: $isKultur) {
+      garten @include(if: $isKultur) {
         ...GartenFields
-        personBypersonId {
+        person {
           ...PersonFields
         }
       }
-      kulturEventsBykulturId(
+      kultur_events(
         where: $kulturEventFilter
         order_by: { datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...KulturEventFields
-        kulturBykulturId {
+        kultur {
           ...KulturFields
         }
       }
-      kulturInventarsBykulturId(
+      kultur_inventars(
         where: $kulturInventarFilter
         order_by: { datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...KulturInventarFields
       }
-      zaehlungsBykulturId(
-        where: $zaehlungFilter
-        order_by: { datum: desc_nulls_first }
-      ) @include(if: $isKultur) {
+      zaehlungs(where: $zaehlungFilter, order_by: { datum: desc_nulls_first })
+        @include(if: $isKultur) {
         ...ZaehlungFields
       }
-      lieferungsByvonKulturId(
+      lieferungsByVonKulturId(
         where: $lieferungFilter
         order_by: { von_datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...LieferungFields
-        personBypersonId @include(if: $isKulturAusLieferung) {
+        person @include(if: $isKulturAusLieferung) {
           ...PersonFields
         }
-        lieferungTypWerteBytyp @include(if: $isKulturAusLieferung) {
+        lieferung_typ_werte @include(if: $isKulturAusLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus @include(if: $isKulturAusLieferung) {
+        lieferung_status_werte @include(if: $isKulturAusLieferung) {
           id
           wert
         }
       }
-      lieferungsBynachKulturId(
+      lieferungsByNachKulturId(
         where: $lieferungFilter
         order_by: { nach_datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...LieferungFields
-        personBypersonId @include(if: $isKulturAnLieferung) {
+        person @include(if: $isKulturAnLieferung) {
           ...PersonFields
         }
-        lieferungTypWerteBytyp @include(if: $isKulturAnLieferung) {
+        lieferung_typ_werte @include(if: $isKulturAnLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus @include(if: $isKulturAnLieferung) {
+        lieferung_status_werte @include(if: $isKulturAnLieferung) {
           id
           wert
         }
@@ -293,45 +289,43 @@ export default gql`
       order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
     ) {
       ...HerkunftFields
-      sammlungsByherkunftId(
-        where: $sammlungFilter
-        order_by: { datum: desc_nulls_first }
-      ) @include(if: $isHerkunft) {
+      sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
+        @include(if: $isHerkunft) {
         ...SammlungFields
-        artByartId @include(if: $isHerkunftSammlung) {
+        art @include(if: $isHerkunftSammlung) {
           ...ArtFields
         }
-        lieferungsByvonSammlungId(
+        lieferungs(
           where: $lieferungFilter
           order_by: { von_datum: desc_nulls_first }
         ) @include(if: $isHerkunftSammlung) {
           ...LieferungFields
-          personBypersonId {
+          person {
             ...PersonFields
           }
-          lieferungTypWerteBytyp {
+          lieferung_typ_werte {
             id
             wert
           }
-          lieferungStatusWerteBystatus {
+          lieferung_status_werte {
             id
             wert
           }
-          kulturBynachKulturId {
+          kulturByNachKulturId {
             ...KulturFields
-            gartenBygartenId {
+            garten {
               ...GartenFields
-              personBypersonId {
+              person {
                 ...PersonFields
               }
             }
-            kulturEventsBykulturId {
+            kultur_events {
               ...KulturEventFields
             }
-            kulturInventarsBykulturId {
+            kultur_inventars {
               ...KulturInventarFields
             }
-            zaehlungsBykulturId(
+            zaehlungs(
               where: $zaehlungFilter
               order_by: { datum: desc_nulls_first }
             ) {
@@ -346,126 +340,124 @@ export default gql`
       order_by: { von_datum: desc_nulls_first }
     ) {
       ...LieferungFields
-      personBypersonId @include(if: $isLieferung) {
+      person @include(if: $isLieferung) {
         ...PersonFields
       }
-      lieferungTypWerteBytyp @include(if: $isLieferung) {
+      lieferung_typ_werte @include(if: $isLieferung) {
         id
         wert
       }
-      lieferungStatusWerteBystatus @include(if: $isLieferung) {
+      lieferung_status_werte @include(if: $isLieferung) {
         id
         wert
       }
-      kulturBynachKulturId @include(if: $isLieferung) {
+      kulturByNachKulturId @include(if: $isLieferung) {
         ...KulturFields
-        gartenBygartenId {
+        garten {
           ...GartenFields
-          personBypersonId {
+          person {
             ...PersonFields
           }
         }
-        kulturEventsBykulturId {
+        kultur_events {
           ...KulturEventFields
         }
-        kulturInventarsBykulturId {
+        kultur_inventars {
           ...KulturInventarFields
         }
-        zaehlungsBykulturId {
+        zaehlungs {
           ...ZaehlungFields
         }
       }
     }
     person(where: $personFilter, order_by: { name: asc_nulls_first }) {
       ...PersonFields
-      gartensBypersonId(
+      gartens(
         where: $gartenFilter
-        order_by: { personBypersonId: { name: asc_nulls_first } }
+        order_by: { person: { name: asc_nulls_first } }
       ) @include(if: $isPerson) {
         ...GartenFields
-        personBypersonId {
+        person {
           ...PersonFields
         }
-        kultursBygartenId(
+        kulturs(
           where: $kulturFilter
-          order_by: { artByartId: { art_ae_art: { name: asc_nulls_first } } }
+          order_by: { art: { art_ae_art: { name: asc_nulls_first } } }
         ) @include(if: $isPersonGarten) {
           ...KulturFields
-          artByartId {
+          art {
             ...ArtFields
           }
-          kulturEventsBykulturId @include(if: $isPersonGartenKultur) {
+          kultur_events @include(if: $isPersonGartenKultur) {
             ...KulturEventFields
           }
-          kulturInventarsBykulturId @include(if: $isPersonGartenKultur) {
+          kultur_inventars @include(if: $isPersonGartenKultur) {
             ...KulturInventarFields
           }
-          zaehlungsBykulturId @include(if: $isPersonGartenKultur) {
+          zaehlungs @include(if: $isPersonGartenKultur) {
             ...ZaehlungFields
           }
-          lieferungsByvonKulturId @include(if: $isPersonGartenKultur) {
+          lieferungsByVonKulturId @include(if: $isPersonGartenKultur) {
             ...LieferungFields
-            personBypersonId {
+            person {
               ...PersonFields
             }
-            lieferungTypWerteBytyp {
+            lieferung_typ_werte {
               id
               wert
             }
-            lieferungStatusWerteBystatus {
+            lieferung_status_werte {
               id
               wert
             }
           }
-          lieferungsBynachKulturId(
+          lieferungsByNachKulturId(
             where: $lieferungFilter
             order_by: { nach_datum: desc_nulls_first }
           ) @include(if: $isPersonGartenKultur) {
             ...LieferungFields
-            personBypersonId {
+            person {
               ...PersonFields
             }
-            lieferungTypWerteBytyp {
+            lieferung_typ_werte {
               id
               wert
             }
-            lieferungStatusWerteBystatus {
+            lieferung_status_werte {
               id
               wert
             }
           }
         }
       }
-      sammlungsBypersonId(
-        where: $sammlungFilter
-        order_by: { datum: desc_nulls_first }
-      ) @include(if: $isPerson) {
+      sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
+        @include(if: $isPerson) {
         ...SammlungFields
-        artByartId @include(if: $isPersonSammlung) {
+        art @include(if: $isPersonSammlung) {
           ...ArtFields
         }
-        herkunftByherkunftId @include(if: $isPersonSammlung) {
+        herkunft @include(if: $isPersonSammlung) {
           ...HerkunftFields
         }
       }
-      lieferungsBypersonId @include(if: $isPerson) {
+      lieferungs @include(if: $isPerson) {
         ...LieferungFields
-        lieferungTypWerteBytyp @include(if: $isPersonLieferung) {
+        lieferung_typ_werte @include(if: $isPersonLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus @include(if: $isPersonLieferung) {
+        lieferung_status_werte @include(if: $isPersonLieferung) {
           id
           wert
         }
-        kulturBynachKulturId @include(if: $isPersonLieferung) {
+        kulturByNachKulturId @include(if: $isPersonLieferung) {
           ...KulturFields
-          artByartId {
+          art {
             ...ArtFields
           }
-          gartenBygartenId {
+          garten {
             ...GartenFields
-            personBypersonId {
+            person {
               ...PersonFields
             }
           }
@@ -474,69 +466,69 @@ export default gql`
     }
     sammlung(where: $sammlungFilter, order_by: { datum: desc_nulls_first }) {
       ...SammlungFields
-      artByartId @include(if: $isSammlung) {
+      art @include(if: $isSammlung) {
         ...ArtFields
       }
-      herkunftByherkunftId @include(if: $isSammlung) {
+      herkunft @include(if: $isSammlung) {
         ...HerkunftFields
       }
-      personBypersonId @include(if: $isSammlung) {
+      person @include(if: $isSammlung) {
         ...PersonFields
       }
-      lieferungsByvonSammlungId @include(if: $isSammlung) {
+      lieferungs @include(if: $isSammlung) {
         ...LieferungFields
-        personBypersonId @include(if: $isSammlungLieferung) {
+        person @include(if: $isSammlungLieferung) {
           ...PersonFields
         }
-        lieferungTypWerteBytyp @include(if: $isSammlungLieferung) {
+        lieferung_typ_werte @include(if: $isSammlungLieferung) {
           id
           wert
         }
-        lieferungStatusWerteBystatus @include(if: $isSammlungLieferung) {
+        lieferung_status_werte @include(if: $isSammlungLieferung) {
           id
           wert
         }
-        kulturBynachKulturId {
+        kulturByNachKulturId {
           ...KulturFields
-          gartenBygartenId @include(if: $isSammlungLieferungKultur) {
+          garten @include(if: $isSammlungLieferungKultur) {
             ...GartenFields
-            personBypersonId {
+            person {
               ...PersonFields
             }
           }
-          kulturEventsBykulturId @include(if: $isSammlungLieferungKultur) {
+          kultur_events @include(if: $isSammlungLieferungKultur) {
             ...KulturEventFields
           }
-          kulturInventarsBykulturId @include(if: $isSammlungLieferungKultur) {
+          kultur_inventars @include(if: $isSammlungLieferungKultur) {
             ...KulturInventarFields
           }
-          zaehlungsBykulturId @include(if: $isSammlungLieferungKultur) {
+          zaehlungs @include(if: $isSammlungLieferungKultur) {
             ...ZaehlungFields
           }
-          lieferungsByvonKulturId @include(if: $isSammlungLieferungKultur) {
+          lieferungsByVonKulturId @include(if: $isSammlungLieferungKultur) {
             ...LieferungFields
-            personBypersonId {
+            person {
               ...PersonFields
             }
-            lieferungTypWerteBytyp {
+            lieferung_typ_werte {
               id
               wert
             }
-            lieferungStatusWerteBystatus {
+            lieferung_status_werte {
               id
               wert
             }
           }
-          lieferungsBynachKulturId @include(if: $isSammlungLieferungKultur) {
+          lieferungsByNachKulturId @include(if: $isSammlungLieferungKultur) {
             ...LieferungFields
-            personBypersonId {
+            person {
               ...PersonFields
             }
-            lieferungTypWerteBytyp {
+            lieferung_typ_werte {
               id
               wert
             }
-            lieferungStatusWerteBystatus {
+            lieferung_status_werte {
               id
               wert
             }

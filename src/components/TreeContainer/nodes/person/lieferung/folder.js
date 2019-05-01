@@ -5,7 +5,7 @@ export default ({ data, nodes, loading, url }) => {
   const personId = url[1]
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const lieferungen = get(person, 'lieferungsBypersonId', [])
+  const lieferungen = get(person, 'lieferungs', [])
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

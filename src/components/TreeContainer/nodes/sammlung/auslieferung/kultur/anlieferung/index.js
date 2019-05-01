@@ -9,13 +9,13 @@ export default ({ nodes, data, url }) => {
 
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kulturen = [get(lieferung, 'kulturBynachKulturId', [])]
+  const kulturen = [get(lieferung, 'kulturByNachKulturId', [])]
   const anlieferungen =
     kulturen.length === 0
       ? []
-      : get(kulturen[0], 'lieferungsBynachKulturId', [])
+      : get(kulturen[0], 'lieferungsByNachKulturId', [])
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -53,9 +53,9 @@ export default ({ nodes, data, url }) => {
         const nach_datum = el.von_datum
           ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein nach-Datum)'
-        const label = `${nach_datum}: ${get(el, 'personBypersonId.name') ||
-          '(kein Name)'}; ${get(el, 'lieferungTypWerteBytyp.wert') ||
-          '(kein Typ)'}; ${get(el, 'lieferungStatusWerteBystatus.wert') ||
+        const label = `${nach_datum}: ${get(el, 'person.name') ||
+          '(kein Name)'}; ${get(el, 'lieferung_typ_werte.wert') ||
+          '(kein Typ)'}; ${get(el, 'lieferung_status_werte.wert') ||
           '(kein Status)'}`
 
         return {

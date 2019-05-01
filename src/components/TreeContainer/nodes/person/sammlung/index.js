@@ -6,7 +6,7 @@ export default ({ nodes, data, url }) => {
   const personId = url[1]
   const personen = get(data, 'person', [])
   const person = personen.find(p => p.id === personId)
-  const sammlungen = get(person, 'sammlungsBypersonId', [])
+  const sammlungen = get(person, 'sammlungs', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -21,9 +21,8 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'
-        const art = get(el, 'artByartId.art_ae_art.name') || '(keine Art)'
-        const herkunft =
-          get(el, 'herkunftByherkunftId.nr') || '(keine Herkunft-Nr)'
+        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
+        const herkunft = get(el, 'herkunft.nr') || '(keine Herkunft-Nr)'
         const label = `${datum}: Herkunft ${herkunft}: ${art}`
 
         return {

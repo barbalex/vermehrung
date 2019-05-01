@@ -21,9 +21,9 @@ export default ({ nodes, data, url }) => {
 
   const herkuenfte = get(data, 'herkunft', [])
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungsByherkunftId', [])
+  const sammlungen = get(herkunft, 'sammlungs', [])
   const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungsByvonSammlungId', [])
+  const lieferungen = get(sammlung, 'lieferungs', [])
 
   return lieferungen
     .map(el => {
@@ -31,12 +31,12 @@ export default ({ nodes, data, url }) => {
         ? moment(el.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
         : '(kein von-Datum)'
 
-      const label = `${von_datum}: ${get(el, 'personBypersonId.name') ||
+      const label = `${von_datum}: ${get(el, 'person.name') ||
         '(kein Name)'}; ${get(
         el,
-        'lieferungTypWerteBytyp.wert',
+        'lieferung_typ_werte.wert',
         '(kein Typ)',
-      )}; ${get(el, 'lieferungStatusWerteBystatus.wert') || '(kein Status)'}`
+      )}; ${get(el, 'lieferung_status_werte.wert') || '(kein Status)'}`
 
       return {
         nodeType: 'table',
