@@ -1,4 +1,5 @@
 // see: https://auth0.com/blog/securing-gatsby-with-auth0/
+// also: https://docs.hasura.io/1.0/graphql/manual/guides/integrations/auth0-jwt.html
 
 import auth0 from 'auth0-js'
 import { navigate } from 'gatsby'
@@ -53,7 +54,7 @@ const setSession = (cb = () => {}) => (err, authResult) => {
     tokens.expiresAt = expiresAt
     user = authResult.idTokenPayload
     localStorage.setItem('isLoggedIn', true)
-    // TODO: navigat to original url
+    // TODO: navigate to original url
     navigate('/Vermehrung')
     cb()
   }

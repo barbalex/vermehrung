@@ -6,8 +6,6 @@ import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-//import Signup from './Signup'
-//import Login from './Login'
 import ErrorBoundary from '../ErrorBoundary'
 import storeContext from '../../storeContext'
 import { getProfile, logout } from '../../utils/auth'
@@ -48,11 +46,6 @@ const Account = () => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickMenu = useCallback(event => setAnchorEl(event.currentTarget), [])
   const onCloseMenu = useCallback(() => setAnchorEl(null), [])
-  const onClickSignup = useCallback(() => {
-    setAnchorEl(null)
-    console.log('TODO')
-    // authState.setSignupOpen(!signupOpen)
-  }, [])
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
     logout()
@@ -60,7 +53,7 @@ const Account = () => {
 
   const user = getProfile()
   const { picture } = user
-  console.log('Account', { user, picture })
+  //console.log('Account', { user })
 
   return (
     <ErrorBoundary>
@@ -104,7 +97,6 @@ const Account = () => {
           onClose={onCloseMenu}
         >
           <MenuItem onClick={onClickLogout}>Abmelden</MenuItem>
-          <MenuItem onClick={onClickSignup}>Konto erstellen</MenuItem>
         </Menu>
       </>
     </ErrorBoundary>
