@@ -32,7 +32,7 @@ const StyledAvatar = styled(Avatar)`
   width: 1.6em !important;
   cursor: pointer;
   img {
-    margin-top: 1.4em;
+    margin-top: 1.2em;
   }
 `
 const StyledUserIcon = styled(UserIcon)`
