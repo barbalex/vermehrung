@@ -37,7 +37,7 @@ export const login = () => {
     return
   }
 
-  auth.authorize()
+  auth.authorize({ language: 'de' })
 }
 
 const setSession = (cb = () => {}) => (err, authResult) => {
