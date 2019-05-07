@@ -7,7 +7,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
-import { login, isAuthenticated, getProfile } from '../utils/auth'
+import { login, isAuthenticated } from '../utils/auth'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import storeContext from '../storeContext'
@@ -50,9 +50,6 @@ const Vermehrung = ({ location }) => {
     login()
     return <p>Öffne login...</p>
   }
-
-  const user = getProfile()
-  console.log('Vermehrung', { user })
 
   return (
     <ErrorBoundary>

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react'
-import IconButton from '@material-ui/core/IconButton'
+import Avatar from '@material-ui/core/Avatar'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
@@ -10,6 +10,7 @@ import { observer } from 'mobx-react-lite'
 //import Login from './Login'
 import ErrorBoundary from '../ErrorBoundary'
 import storeContext from '../../storeContext'
+import { getProfile, logout } from '../../utils/auth'
 
 const IconContainer = styled.div`
   position: relative;
@@ -28,6 +29,18 @@ const UserNameDiv = styled.div`
   /* ensure cursor is not changed */
   z-index: -1;
 `
+const StyledAvatar = styled(Avatar)`
+  height: 1.6em !important;
+  width: 1.6em !important;
+  cursor: pointer;
+  img {
+    margin-top: 1.4em;
+  }
+`
+const StyledUserIcon = styled(UserIcon)`
+  height: 1.6em;
+  width: 1.6em;
+`
 
 const Account = () => {
   const store = useContext(storeContext)
@@ -40,30 +53,40 @@ const Account = () => {
     console.log('TODO')
     // authState.setSignupOpen(!signupOpen)
   }, [])
-  const onClickLogin = useCallback(() => {
-    setAnchorEl(null)
-    console.log('TODO')
-    // authState.setLoginOpen(!loginOpen)
-  }, [])
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
-    console.log('TODO')
-    // authState.logOut()
+    logout()
   }, [])
+
+  const user = getProfile()
+  const { picture } = user
+  console.log('Account', { user, picture })
 
   return (
     <ErrorBoundary>
       <>
         <IconContainer>
-          <IconButton
-            aria-haspopup="true"
-            aria-label="Konto"
-            onClick={onClickMenu}
-            color="inherit"
-            title="Konto"
-          >
-            <UserIcon />
-          </IconButton>
+          {picture ? (
+            <StyledAvatar
+              aria-haspopup="true"
+              aria-label="Konto"
+              onClick={onClickMenu}
+              title="Konto"
+              alt="Konto"
+              src={picture}
+            />
+          ) : (
+            <StyledAvatar
+              aria-haspopup="true"
+              aria-label="Konto"
+              onClick={onClickMenu}
+              title="Konto"
+              alt="Konto"
+            >
+              <StyledUserIcon />
+            </StyledAvatar>
+          )}
+
           <UserNameDiv>{email || ''}</UserNameDiv>
         </IconContainer>
         <Menu
@@ -80,12 +103,9 @@ const Account = () => {
           open={!!anchorEl}
           onClose={onCloseMenu}
         >
-          {!email && <MenuItem onClick={onClickLogin}>Anmelden</MenuItem>}
-          {email && <MenuItem onClick={onClickLogout}>Abmelden</MenuItem>}
+          <MenuItem onClick={onClickLogout}>Abmelden</MenuItem>
           <MenuItem onClick={onClickSignup}>Konto erstellen</MenuItem>
         </Menu>
-        {/*signupOpen && <Signup />*/}
-        {/*loginOpen && <Login />*/}
       </>
     </ErrorBoundary>
   )

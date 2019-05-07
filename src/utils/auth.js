@@ -53,6 +53,7 @@ const setSession = (cb = () => {}) => (err, authResult) => {
     tokens.expiresAt = expiresAt
     user = authResult.idTokenPayload
     localStorage.setItem('isLoggedIn', true)
+    // TODO: navigat to original url
     navigate('/Vermehrung')
     cb()
   }
@@ -68,4 +69,14 @@ export const handleAuthentication = () => {
 
 export const getProfile = () => {
   return user
+}
+
+export const silentAuth = callback => {
+  if (!isAuthenticated()) return callback()
+  auth.checkSession({}, setSession(callback))
+}
+
+export const logout = () => {
+  localStorage.setItem('isLoggedIn', false)
+  auth.logout()
 }
