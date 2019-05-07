@@ -30,9 +30,11 @@ const UserNameDiv = styled.div`
 const StyledAvatar = styled(Avatar)`
   height: 1.6em !important;
   width: 1.6em !important;
+  margin-right: 5px;
+  margin-left: 5px;
   cursor: pointer;
   img {
-    margin-top: 1.2em;
+    margin-top: 1.15em;
   }
 `
 const StyledUserIcon = styled(UserIcon)`
