@@ -40,7 +40,7 @@ export const login = () => {
   auth.authorize({ language: 'de' })
 }
 
-const setSession = (cb = () => {}) => (err, authResult) => {
+const setSession = (cb = () => {}, doNotNavigate) => (err, authResult) => {
   if (err) {
     navigate('/')
     cb()
@@ -54,8 +54,8 @@ const setSession = (cb = () => {}) => (err, authResult) => {
     tokens.expiresAt = expiresAt
     user = authResult.idTokenPayload
     localStorage.setItem('isLoggedIn', true)
-    // TODO: navigate to original url
-    navigate('/Vermehrung')
+    // TODO: navigate to original url?
+    !doNotNavigate && navigate('/Vermehrung')
     cb()
   }
 }
@@ -74,7 +74,8 @@ export const getProfile = () => {
 
 export const silentAuth = callback => {
   if (!isAuthenticated()) return callback()
-  auth.checkSession({}, setSession(callback))
+  // pass doNotNavigate to not change url
+  auth.checkSession({}, setSession(callback, 'doNotNavigate'))
 }
 
 export const logout = () => {
