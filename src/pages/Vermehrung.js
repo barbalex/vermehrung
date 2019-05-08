@@ -85,7 +85,7 @@ const Vermehrung = ({ location }) => {
 
   if (!isAuthenticated()) {
     login()
-    return <p>Öffne login...</p>
+    return <Container>Öffne login...</Container>
   }
 
   return (
