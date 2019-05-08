@@ -1,6 +1,12 @@
-import React, { useEffect, useContext } from 'react'
+import React, {
+  useEffect,
+  useContext,
+  useCallback,
+  useState,
+  useRef,
+} from 'react'
 import styled from 'styled-components'
-import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
+import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../components/ErrorBoundary'
@@ -16,18 +22,31 @@ const Container = styled.div`
   margin-top: 64px;
   min-height: calc(100vh - 64px);
 `
-const StyledReflexContainer = styled(ReflexContainer)`
+const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
-  .reflex-splitter {
-    background-color: #fffde7 !important;
-    border-right: none !important;
-    border-left: none !important;
-    background-color: rgba(74, 20, 140, 0.1) !important;
-    width: 7px !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
   }
-  .reflex-splitter:hover {
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
     background-color: #fff59d !important;
-    cursor: col-resize !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
   }
 `
 
@@ -37,14 +56,32 @@ const Vermehrung = ({ location }) => {
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
+
+  const [dimensions, setDimensions] = useState({ height: 200, width: 200 })
+  const containerEl = useRef(null)
+
   // on first render set openNodes
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
+    setDimensions({
+      height: containerEl.current.clientHeight,
+      width: containerEl.current.clientWidth,
+    })
   }, [])
   // when pathname changes, update activeNodeArray
   useEffect(() => {
     setActiveNodeArray(activeNodeArray)
   }, [pathname])
+  const onChange = useCallback(() => {
+    if (containerEl.current && containerEl.current.clientWidth) {
+      setDimensions({
+        height: containerEl.current.clientHeight,
+        width: containerEl.current.clientWidth,
+      })
+    } else {
+      setDimensions({ height: 200, width: 200 })
+    }
+  })
 
   if (!isAuthenticated()) {
     login()
@@ -54,25 +91,16 @@ const Vermehrung = ({ location }) => {
   return (
     <ErrorBoundary>
       <Layout>
-        <Container>
-          <StyledReflexContainer orientation="vertical">
-            <ReflexElement
-              flex={0.3}
-              propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
-            >
-              <Tree />
-            </ReflexElement>
-            <ReflexSplitter />
-            <ReflexElement
-              propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
-            >
-              <Data />
-            </ReflexElement>
-          </StyledReflexContainer>
+        <Container ref={containerEl}>
+          <StyledSplitPane
+            split="vertical"
+            size="33%"
+            minSize={200}
+            onDragFinished={onChange}
+          >
+            <Tree dimensions={dimensions} />
+            <Data />
+          </StyledSplitPane>
         </Container>
       </Layout>
     </ErrorBoundary>

@@ -7,7 +7,6 @@ import createGlobalStyle from './utils/createGlobalStyle'
 import Store from './store'
 import { Provider as MobxProvider } from './storeContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
-import 'react-reflex/styles.css'
 import { silentAuth } from './utils/auth'
 
 import moment from 'moment'
