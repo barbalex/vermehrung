@@ -140,14 +140,6 @@
         });
       }
 
-      function loginWithGoogle() {
-        webAuth.authorize({
-          connection: 'google-oauth2'
-        }, function (err) {
-          if (err) displayError(err);
-        });
-      }
-
       function displayError(err) {
         var errorMessage = document.getElementById('error-message');
         errorMessage.innerHTML = err.description;
@@ -155,8 +147,6 @@
       }
 
       document.getElementById('btn-login').addEventListener('click', login);
-      document.getElementById('btn-google').addEventListener('click', loginWithGoogle);
-      document.getElementById('btn-signup').addEventListener('click', signup);
     });
   </script>
 </body>
