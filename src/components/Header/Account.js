@@ -1,31 +1,18 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import axios from 'axios'
 
 import ErrorBoundary from '../ErrorBoundary'
-import storeContext from '../../storeContext'
 import { getProfile, logout } from '../../utils/auth'
 
 const IconContainer = styled.div`
   position: relative;
   padding-left: 10px;
-`
-const UserNameDiv = styled.div`
-  position: absolute;
-  bottom: 0;
-  font-size: 10px;
-  width: 60px;
-  left: 5px;
-  text-align: center;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  /* ensure cursor is not changed */
-  z-index: -1;
 `
 const StyledAvatar = styled(Avatar)`
   height: 1.6em !important;
@@ -43,9 +30,8 @@ const StyledUserIcon = styled(UserIcon)`
 `
 
 const Account = () => {
-  const store = useContext(storeContext)
-  const { email /*, signupOpen, loginOpen*/ } = store
   const [anchorEl, setAnchorEl] = useState(null)
+  const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
   const onClickMenu = useCallback(event => setAnchorEl(event.currentTarget), [])
   const onCloseMenu = useCallback(() => setAnchorEl(null), [])
   const onClickLogout = useCallback(() => {
@@ -54,8 +40,34 @@ const Account = () => {
   }, [])
 
   const user = getProfile()
-  const { picture } = user
-  //console.log('Account', { user })
+  const { picture, email } = user
+
+  const onClickReset = useCallback(async () => {
+    setResetTitle('...')
+    try {
+      axios.post(
+        `https://${process.env.AUTH0_DOMAIN}/dbconnections/change_password`,
+        {
+          client_id: process.env.AUTH0_CLIENTID,
+          email,
+          connection: 'Username-Password-Authentication',
+        },
+      )
+    } catch (error) {
+      setResetTitle('Fehler: Passwort nicht zurückgesetzt')
+      setTimeout(() => {
+        setResetTitle('Passwort zurücksetzen')
+        setAnchorEl(null)
+      }, 5000)
+    }
+    setResetTitle('Email ist unterwegs!')
+    setTimeout(() => {
+      setResetTitle('Passwort zurücksetzen')
+      setAnchorEl(null)
+    }, 5000)
+  }, [])
+
+  console.log('Account', { user, resetTitle })
 
   return (
     <ErrorBoundary>
@@ -81,8 +93,6 @@ const Account = () => {
               <StyledUserIcon />
             </StyledAvatar>
           )}
-
-          <UserNameDiv>{email || ''}</UserNameDiv>
         </IconContainer>
         <Menu
           id="menu-appbar"
@@ -99,6 +109,7 @@ const Account = () => {
           onClose={onCloseMenu}
         >
           <MenuItem onClick={onClickLogout}>Abmelden</MenuItem>
+          <MenuItem onClick={onClickReset}>{resetTitle}</MenuItem>
         </Menu>
       </>
     </ErrorBoundary>
