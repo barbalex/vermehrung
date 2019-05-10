@@ -11,7 +11,9 @@ import { getProfile } from './src/utils/auth'
 const client = () => {
   const authLink = setContext(async (_, { headers }) => {
     const user = getProfile()
+    // add hasura claims to pass roles
     const claims = user['https://hasura.io/jwt/claims']
+
     return {
       headers: {
         ...headers,
