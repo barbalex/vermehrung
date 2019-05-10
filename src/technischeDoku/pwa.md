@@ -20,6 +20,3 @@ Was ist der Vorteil gegenüber einer "normalen" App?
 - Sie müssen die App nicht installieren. Sie können aber wählen, sie auf dem Desktop bzw. auf der Startseite zu platzieren. Danach startet sie ohne Browser-Rahmen. Und ist kaum mehr von "normalen" Apps zu unterscheiden.
 - Updates erfolgen automatisch
 - Einer neuen Mitarbeiterin schicken Sie einfach Link und Login. Schon kann sie loslegen!
-
-Ist Ihnen aufgefallen, dass Apple oben nicht zusammen mit Google und Microsoft erwähnt wurde?<br/><br/>
-Apple verdient sein Geld mit dem App-Store. 30% der Erlöse gehen an Apple. Bei PWA's gehen 100% an die Entwickler. Daher führt Apple die für Progressive Web Apps nützlichen Technologien auffällig langsam ein. Darum funktionieren Progressive Web Apps auf Android und Windows besser als auf MacOS, und vor allem als auf iOS (iPhone, iPad). Trotzdem funktionieren sie auch auf Apple-Geräten. Sie sind eben auch eine Web-App.

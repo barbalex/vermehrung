@@ -27,8 +27,9 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Formulare gebaut
 - :white_check_mark: Filter gebaut
 - :white_check_mark: Volltext-Suche gebaut
+- :white_check_mark: Authentifikation und Authorisierung gebaut
+- :white_check_mark: Rollen werden durchgesetzt
 - :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
-- :white_medium_square: Authentifikation und Authorisierung gebaut
 - :white_medium_square: Bilder können erfasst werden
-- :white_medium_square: Alle Funktionalitäten mit Topos bereinigt
+- :white_medium_square: Funktionalitäten mit Topos bereinigt
 - :white_medium_square: Produktive Version 1.0.0 live schalten
