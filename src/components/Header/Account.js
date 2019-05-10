@@ -67,7 +67,7 @@ const Account = () => {
     }, 5000)
   }, [])
 
-  console.log('Account', { user, resetTitle })
+  //console.log('Account', { user })
 
   return (
     <ErrorBoundary>

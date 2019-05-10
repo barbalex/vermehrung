@@ -6,14 +6,20 @@ import { ApolloLink } from 'apollo-link'
 
 import constants from './src/utils/constants.json'
 import secrets from './secrets.json'
+import { getProfile } from './src/utils/auth'
 
 const client = () => {
-  const authLink = setContext(async (_, { headers }) => ({
-    headers: {
-      ...headers,
-      'X-Hasura-Access-Key': secrets.accessKey,
-    },
-  }))
+  const authLink = setContext(async (_, { headers }) => {
+    const user = getProfile()
+    const claims = user['https://hasura.io/jwt/claims']
+    return {
+      headers: {
+        ...headers,
+        'X-Hasura-Access-Key': secrets.accessKey,
+        ...claims,
+      },
+    }
+  })
 
   const cache = new InMemoryCache()
   // apollo-link-batch-http did not work
