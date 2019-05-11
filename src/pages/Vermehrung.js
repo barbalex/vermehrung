@@ -64,8 +64,8 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
     setDimensions({
-      height: containerEl.current.clientHeight,
-      width: containerEl.current.clientWidth,
+      height: containerEl.current ? containerEl.current.clientHeight : 200,
+      width: containerEl.current ? containerEl.current.clientWidth : 200,
     })
   }, [])
   // when pathname changes, update activeNodeArray
@@ -75,8 +75,8 @@ const Vermehrung = ({ location }) => {
   const onChange = useCallback(() => {
     if (containerEl.current && containerEl.current.clientWidth) {
       setDimensions({
-        height: containerEl.current.clientHeight,
-        width: containerEl.current.clientWidth,
+        height: containerEl.current ? containerEl.current.clientHeight : 200,
+        width: containerEl.current ? containerEl.current.clientWidth : 200,
       })
     } else {
       setDimensions({ height: 200, width: 200 })
@@ -84,6 +84,7 @@ const Vermehrung = ({ location }) => {
   })
 
   if (!isAuthenticated()) {
+    console.log('not authenticated')
     login()
     return <Container>Öffne login...</Container>
   }
