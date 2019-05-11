@@ -41,11 +41,11 @@ const Tree = ({ dimensions }) => {
   }, [aNA, nodes])
 
   let height = 250
-  if (dimensions && dimensions.height && !isNaN(dimensions.height)) {
+  if (dimensions && dimensions.height) {
     height = dimensions.height
   }
   let width = 250
-  if (dimensions && dimensions.width && !isNaN(dimensions.width)) {
+  if (dimensions && dimensions.width) {
     width = dimensions.width
   }
 

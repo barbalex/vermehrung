@@ -66,7 +66,7 @@ const Vermehrung = ({ location }) => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
   }, [])
   useEffect(() => {
-    console.log('Vermehrung, useEffect', {
+    console.log('Vermehrung, useLayoutEffect', {
       containerEl,
       containerElCurrent: containerEl.current,
     })
@@ -74,7 +74,7 @@ const Vermehrung = ({ location }) => {
       height: containerEl.current ? containerEl.current.clientHeight : 200,
       width: containerEl.current ? containerEl.current.clientWidth : 200,
     })
-  }, [containerEl])
+  }, [])
   // when pathname changes, update activeNodeArray
   useEffect(() => {
     setActiveNodeArray(activeNodeArray)
@@ -82,8 +82,8 @@ const Vermehrung = ({ location }) => {
   const onChange = useCallback(() => {
     if (containerEl.current && containerEl.current.clientWidth) {
       setDimensions({
-        height: containerEl.current ? containerEl.current.clientHeight : 200,
-        width: containerEl.current ? containerEl.current.clientWidth : 200,
+        height: containerEl.current.clientHeight,
+        width: containerEl.current.clientWidth,
       })
     } else {
       setDimensions({ height: 200, width: 200 })
