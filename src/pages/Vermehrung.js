@@ -98,6 +98,7 @@ const Vermehrung = ({ location }) => {
   console.log('Vermehrung', {
     containerEl,
     containerElCurrent: containerEl.current,
+    dimensions,
   })
 
   if (!isAuthenticated()) {

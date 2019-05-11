@@ -7,7 +7,8 @@ export default ({ store, table }) => {
   const filterValues = Object.entries(storeFilter[table])
     .filter(e => e[1] || e[1] === 0)
     // ensure no '' values
-    .filter(v => !!v)
+    // eslint-disable-next-line no-unused-vars
+    .filter(([key, value]) => !!value)
   filterValues.forEach(([key, value]) => {
     const type = types[table][key] || 'string'
     if (type === 'string') {
