@@ -4,7 +4,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import { Location } from '@reach/router'
 
 import ErrorBoundary from '../ErrorBoundary'
 
@@ -37,39 +36,26 @@ const NavButton = styled(Button)`
 `
 
 const HeaderHome = () => (
-  <Location>
-    {({ location }) => {
-      const { pathname } = location
-
-      return (
-        <ErrorBoundary>
-          <AppBar position="fixed">
-            <Toolbar>
-              <SiteTitle
-                variant="outlined"
-                component={Link}
-                to="/"
-                title="Home"
-              >
-                Vermehrung
-              </SiteTitle>
-              <Spacer />
-              <NavButton
-                variant="outlined"
-                component={Link}
-                to="/Dokumentation/Benutzer/"
-              >
-                Dokumentation
-              </NavButton>
-              <NavButton variant="outlined" component={Link} to="/Vermehrung/">
-                Daten bearbeiten
-              </NavButton>
-            </Toolbar>
-          </AppBar>
-        </ErrorBoundary>
-      )
-    }}
-  </Location>
+  <ErrorBoundary>
+    <AppBar position="fixed">
+      <Toolbar>
+        <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+          Vermehrung
+        </SiteTitle>
+        <Spacer />
+        <NavButton
+          variant="outlined"
+          component={Link}
+          to="/Dokumentation/Benutzer/"
+        >
+          Dokumentation
+        </NavButton>
+        <NavButton variant="outlined" component={Link} to="/Vermehrung/">
+          Daten bearbeiten
+        </NavButton>
+      </Toolbar>
+    </AppBar>
+  </ErrorBoundary>
 )
 
 export default HeaderHome
