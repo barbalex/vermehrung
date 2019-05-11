@@ -32,6 +32,7 @@ const NavButton = styled(Button)`
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-width: 0 !important;
   text-transform: none !important;
+  margin-right: 5px !important;
   &:hover {
     border-width: 1px !important;
   }
