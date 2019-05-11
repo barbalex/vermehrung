@@ -4,8 +4,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import { Location } from '@reach/router'
-
 import Account from './Account'
 //import More from './More'
 import ErrorBoundary from '../../ErrorBoundary'
@@ -32,6 +30,7 @@ const Spacer = styled.div`
 const NavButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 0 !important;
   text-transform: none !important;
   &:hover {
     border-width: 1px !important;
@@ -39,43 +38,26 @@ const NavButton = styled(Button)`
 `
 
 const HeaderVermehrung = () => (
-  <Location>
-    {({ location }) => {
-      const { pathname } = location
-
-      return (
-        <ErrorBoundary>
-          <AppBar position="fixed">
-            <Toolbar>
-              <SiteTitle
-                variant="outlined"
-                component={Link}
-                to="/"
-                title="Home"
-              >
-                Vermehrung
-              </SiteTitle>
-              <Spacer />
-              <Search />
-              <Account />
-              <NavButton
-                variant={
-                  pathname.startsWith('/Dokumentation/Benutzer')
-                    ? 'outlined'
-                    : 'text'
-                }
-                component={Link}
-                to="/Dokumentation/Benutzer/"
-              >
-                Dokumentation
-              </NavButton>
-              {/*<More />*/}
-            </Toolbar>
-          </AppBar>
-        </ErrorBoundary>
-      )
-    }}
-  </Location>
+  <ErrorBoundary>
+    <AppBar position="fixed">
+      <Toolbar>
+        <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+          Vermehrung
+        </SiteTitle>
+        <Spacer />
+        <Search />
+        <Account />
+        <NavButton
+          variant="outlined"
+          component={Link}
+          to="/Dokumentation/Benutzer/"
+        >
+          Dokumentation
+        </NavButton>
+        {/*<More />*/}
+      </Toolbar>
+    </AppBar>
+  </ErrorBoundary>
 )
 
 export default HeaderVermehrung

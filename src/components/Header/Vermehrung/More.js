@@ -7,8 +7,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { navigate } from 'gatsby'
 
-import ErrorBoundary from '../../ErrorBoundary'
-
 const Container = styled.div`
   margin-top: auto;
   margin-bottom: auto;
@@ -39,30 +37,26 @@ const MyAppBar = () => {
   const onClose = useCallback(() => setAnchorEl(null))
 
   return (
-    <ErrorBoundary>
-      <Container>
-        <MehrButton
-          variant="outlined"
-          aria-label="Mehr"
-          aria-owns={anchorEl ? 'long-menu' : null}
-          aria-haspopup="true"
-          onClick={onClickMehrButton}
-        >
-          Mehr
-        </MehrButton>
-        <Menu
-          id="long-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={onClose}
-        >
-          <MenuItem onClick={onClickUserDocs}>Benutzer-Dokumentation</MenuItem>
-          <MenuItem onClick={onClickTechDocs}>
-            Technische Dokumentation
-          </MenuItem>
-        </Menu>
-      </Container>
-    </ErrorBoundary>
+    <Container>
+      <MehrButton
+        variant="outlined"
+        aria-label="Mehr"
+        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-haspopup="true"
+        onClick={onClickMehrButton}
+      >
+        Mehr
+      </MehrButton>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={onClose}
+      >
+        <MenuItem onClick={onClickUserDocs}>Benutzer-Dokumentation</MenuItem>
+        <MenuItem onClick={onClickTechDocs}>Technische Dokumentation</MenuItem>
+      </Menu>
+    </Container>
   )
 }
 

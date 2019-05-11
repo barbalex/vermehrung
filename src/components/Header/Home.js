@@ -29,6 +29,7 @@ const Spacer = styled.div`
 const NavButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 0 !important;
   text-transform: none !important;
   &:hover {
     border-width: 1px !important;
@@ -54,15 +55,13 @@ const HeaderHome = () => (
               </SiteTitle>
               <Spacer />
               <NavButton
-                variant={
-                  pathname.startsWith('/Dokumentation') ? 'outlined' : 'text'
-                }
+                variant="outlined"
                 component={Link}
                 to="/Dokumentation/Benutzer/"
               >
                 Dokumentation
               </NavButton>
-              <NavButton variant="text" component={Link} to="/Vermehrung/">
+              <NavButton variant="outlined" component={Link} to="/Vermehrung/">
                 Daten bearbeiten
               </NavButton>
             </Toolbar>
