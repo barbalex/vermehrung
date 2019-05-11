@@ -95,10 +95,20 @@ const Vermehrung = ({ location }) => {
   }, [])
   if (loading) return null
 
+  /**
+   * ISSUE
+   * containerEl contains object with key current
+   * containerEl.current is null AT THE SAME MOMENT!!!!!!!!!!!!
+   * ALSO:
+   * aeArtQuery gets filter _like:"%%" from queryFromTable
+   * maybe only when user does not have personId?
+   * WHICH IS ABSOLUTELY WRONG AND IMPOSSIBLE
+   */
   console.log('Vermehrung', {
     containerEl,
     containerElCurrent: containerEl.current,
     dimensions,
+    storeFilter: store.filter,
   })
 
   if (!isAuthenticated()) {
