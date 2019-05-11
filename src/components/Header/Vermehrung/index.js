@@ -45,8 +45,6 @@ const HeaderVermehrung = () => (
           Vermehrung
         </SiteTitle>
         <Spacer />
-        <Search />
-        <Account />
         <NavButton
           variant="outlined"
           component={Link}
@@ -54,6 +52,8 @@ const HeaderVermehrung = () => (
         >
           Dokumentation
         </NavButton>
+        <Search />
+        <Account />
         {/*<More />*/}
       </Toolbar>
     </AppBar>
