@@ -36,14 +36,14 @@ export const login = () => {
   if (!isBrowser) {
     return
   }
-
   auth.authorize({ language: 'de' })
 }
 
-const setSession = (cb = () => {}, doNotNavigate) => (err, authResult) => {
+const setSession = ({ callback, nav, store }) => (err, authResult) => {
   if (err) {
+    store.addError(err)
     navigate('/')
-    cb()
+    callback && callback()
     return
   }
 
@@ -55,27 +55,26 @@ const setSession = (cb = () => {}, doNotNavigate) => (err, authResult) => {
     user = authResult.idTokenPayload
     localStorage.setItem('isLoggedIn', true)
     // TODO: navigate to original url?
-    !doNotNavigate && navigate('/Vermehrung')
-    cb()
+    nav && navigate('/Vermehrung')
+    callback && callback()
   }
 }
 
-export const handleAuthentication = () => {
+export const handleAuthentication = store => {
   if (!isBrowser) {
     return
   }
-
-  auth.parseHash(setSession())
+  auth.parseHash(setSession({ callback: null, nav: true, store }))
 }
 
 export const getProfile = () => {
   return user
 }
 
-export const silentAuth = callback => {
+export const silentAuth = ({ callback, store }) => {
   if (!isAuthenticated()) return callback()
   // pass doNotNavigate to not change url
-  auth.checkSession({}, setSession(callback, 'doNotNavigate'))
+  auth.checkSession({}, setSession({ callback, nav: false, store }))
 }
 
 export const logout = () => {

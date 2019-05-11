@@ -13,7 +13,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
-import { login, isAuthenticated } from '../utils/auth'
+import { login, isAuthenticated, silentAuth } from '../utils/auth'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import storeContext from '../storeContext'
@@ -57,17 +57,24 @@ const Vermehrung = ({ location }) => {
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
 
+  const [loading, setLoading] = useState(true)
   const [dimensions, setDimensions] = useState({ height: 200, width: 200 })
   const containerEl = useRef(null)
 
   // on first render set openNodes
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
+  }, [])
+  useEffect(() => {
+    console.log('Vermehrung, useEffect', {
+      containerEl,
+      containerElCurrent: containerEl.current,
+    })
     setDimensions({
       height: containerEl.current ? containerEl.current.clientHeight : 200,
       width: containerEl.current ? containerEl.current.clientWidth : 200,
     })
-  }, [])
+  }, [containerEl])
   // when pathname changes, update activeNodeArray
   useEffect(() => {
     setActiveNodeArray(activeNodeArray)
@@ -82,9 +89,18 @@ const Vermehrung = ({ location }) => {
       setDimensions({ height: 200, width: 200 })
     }
   })
+  const handleCheckSession = useCallback(() => setLoading(false))
+  useEffect(() => {
+    silentAuth({ callback: handleCheckSession, store })
+  }, [])
+  if (loading) return null
+
+  console.log('Vermehrung', {
+    containerEl,
+    containerElCurrent: containerEl.current,
+  })
 
   if (!isAuthenticated()) {
-    console.log('not authenticated')
     login()
     return <Container>Öffne login...</Container>
   }
