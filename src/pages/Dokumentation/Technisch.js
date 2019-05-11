@@ -2,9 +2,9 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
-import Layout from '../components/Layout'
-import Sidebar from '../templates/Sidebar'
-import ErrorBoundary from '../components/ErrorBoundary'
+import Layout from '../../components/Layout'
+import Sidebar from '../../templates/Sidebar'
+import ErrorBoundary from '../../components/ErrorBoundary'
 
 const Container = styled.div`
   margin-top: 64px;
@@ -42,12 +42,12 @@ const Template = ({ data }) => {
       <Layout>
         <Container>
           <Sidebar
-            title="Benutzer-Dokumentation"
-            titleLink="/Dokumentation/Benutzer/"
+            title="Technische Dokumentation"
+            titleLink="/Dokumentation/Technisch/"
             edges={edges}
           />
           <Doku>
-            <p>Hoffentlich nützliche Infos für Sie</p>
+            <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
           </Doku>
         </Container>
       </Layout>
@@ -59,7 +59,7 @@ export const pageQuery = graphql`
   query {
     allMarkdownRemark(
       sort: { order: ASC, fields: [frontmatter___sort] }
-      filter: { fileAbsolutePath: { regex: "/(/benutzerDoku)/.*.md$/" } }
+      filter: { fileAbsolutePath: { regex: "/(/technischeDoku)/.*.md$/" } }
     ) {
       edges {
         node {

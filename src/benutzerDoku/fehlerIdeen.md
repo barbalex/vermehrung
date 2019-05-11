@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: "/Benutzer-Dokumentation/Fehler-Ideen"
+path: "/Dokumentation/Benutzer/Fehler-Ideen"
 date: "2019-01-23"
 title: "Fehler, Ideen, Vorschläge melden"
 sort: 3

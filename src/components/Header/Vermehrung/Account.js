@@ -7,8 +7,8 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import axios from 'axios'
 
-import ErrorBoundary from '../ErrorBoundary'
-import { getProfile, logout } from '../../utils/auth'
+import ErrorBoundary from '../../ErrorBoundary'
+import { getProfile, logout } from '../../../utils/auth'
 
 const IconContainer = styled.div`
   position: relative;

@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: "/Benutzer-Dokumentation/Open-Source"
+path: "/Dokumentation/Benutzer/Open-Source"
 date: "2019-01-25"
 title: "Open Source"
 sort: 2

@@ -10,7 +10,7 @@ import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import moment from 'moment'
 
-import storeContext from '../../storeContext'
+import storeContext from '../../../storeContext'
 
 import {
   art as artFragment,
@@ -23,7 +23,7 @@ import {
   person as personFragment,
   sammlung as sammlungFragment,
   zaehlung as zaehlungFragment,
-} from '../../utils/fragments'
+} from '../../../utils/fragments'
 
 const formatDatum = datum =>
   datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : '(kein Datum)'

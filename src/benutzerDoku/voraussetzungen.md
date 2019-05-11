@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: "/Benutzer-Dokumentation/Technische-Voraussetzungen"
+path: "/Dokumentation/Benutzer/Technische-Voraussetzungen"
 date: "2019-01-25"
 title: "Technische Voraussetzungen"
 sort: 1
@@ -17,6 +17,6 @@ Etwas weniger gut geeignet ist Safari. Sollte aber funktionieren.<br/><br/>
 
 _Nicht_ geeignet ist der Internet Explorer.<br/><br/>
 
-vermehrung.apflora.ch funktioniert auf allen **Betriebssystemen**. Mehr dazu [hier](/Technische-Dokumentation/PWA/).<br/><br/>
+vermehrung.apflora.ch funktioniert auf allen **Betriebssystemen**. Mehr dazu [hier](/Dokumentation/Technisch/PWA/).<br/><br/>
 
 Um Daten zu erfassen, brauchen Sie eine Internet-Verbindung.

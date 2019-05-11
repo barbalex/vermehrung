@@ -1,6 +1,6 @@
 ---
 typ: 'technDoku'
-path: "/Technische-Dokumentation/PWA"
+path: "/Dokumentation/Technisch/PWA"
 date: "2019-01-21"
 title: "Progressive Web App"
 sort: 1

@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { navigate } from 'gatsby'
 
-import ErrorBoundary from '../ErrorBoundary'
+import ErrorBoundary from '../../ErrorBoundary'
 
 const Container = styled.div`
   margin-top: auto;
@@ -27,11 +27,11 @@ const MyAppBar = () => {
 
   const onClickUserDocs = useCallback(() => {
     setAnchorEl(null)
-    navigate('/Benutzer-Dokumentation/')
+    navigate('/Dokumentation/Benutzer/')
   })
   const onClickTechDocs = useCallback(() => {
     setAnchorEl(null)
-    navigate('/Technische-Dokumentation/')
+    navigate('/Dokumentation/Technisch/')
   })
   const onClickMehrButton = useCallback(event =>
     setAnchorEl(event.currentTarget),
