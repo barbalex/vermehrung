@@ -8,13 +8,13 @@ import React, {
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
-import useWindowSize from '@rehooks/window-size'
 
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
 import { login, isAuthenticated, silentAuth } from '../utils/auth'
+import getWindowSize from '../utils/getWindowSize'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import storeContext from '../storeContext'
@@ -72,7 +72,7 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     silentAuth({ callback: handleCheckSession, store })
   }, [])
-  const windowSize = useWindowSize()
+  const windowSize = getWindowSize()
   useEffect(() => {
     /**
      * Problem
@@ -83,8 +83,8 @@ const Vermehrung = ({ location }) => {
      * Solution: calculate values from window size
      */
     setDimensions({
-      height: windowSize.innerHeight - 64,
-      width: windowSize.innerWidth * treeWidthInPercentOfScreen,
+      height: windowSize.height - 64,
+      width: windowSize.width * treeWidthInPercentOfScreen,
     })
   }, [])
   // when pathname changes, update activeNodeArray
