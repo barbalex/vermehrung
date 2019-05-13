@@ -8,6 +8,7 @@ import React, {
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
+import useWindowSize from '@rehooks/window-size'
 
 import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
@@ -65,20 +66,30 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
   }, [])
+  const handleCheckSession = useCallback(() => setLoading(false))
   useEffect(() => {
-    console.log('Vermehrung, useLayoutEffect', {
-      containerEl,
-      containerElCurrent: containerEl.current,
-    })
+    silentAuth({ callback: handleCheckSession, store })
+  }, [])
+  const windowSize = useWindowSize()
+  useEffect(() => {
+    /**
+     * Problem
+     * using containerEl.current.clientHeight does not work on first load
+     * containerEl contains object with key current
+     * containerEl.current is null AT THE SAME MOMENT!!!!!!!!!!!!
+     * no idea why
+     * Solution: calculate values from window size
+     */
     setDimensions({
-      height: containerEl.current ? containerEl.current.clientHeight : 200,
-      width: containerEl.current ? containerEl.current.clientWidth : 200,
+      height: windowSize.innerHeight * 0.33 - 64,
+      width: windowSize.innerWidth * 0.33,
     })
   }, [])
   // when pathname changes, update activeNodeArray
   useEffect(() => {
     setActiveNodeArray(activeNodeArray)
   }, [pathname])
+
   const onChange = useCallback(() => {
     if (containerEl.current && containerEl.current.clientWidth) {
       setDimensions({
@@ -89,27 +100,14 @@ const Vermehrung = ({ location }) => {
       setDimensions({ height: 200, width: 200 })
     }
   })
-  const handleCheckSession = useCallback(() => setLoading(false))
-  useEffect(() => {
-    silentAuth({ callback: handleCheckSession, store })
-  }, [])
   if (loading) return null
 
   /**
    * ISSUE
-   * containerEl contains object with key current
-   * containerEl.current is null AT THE SAME MOMENT!!!!!!!!!!!!
-   * ALSO:
    * aeArtQuery gets filter _like:"%%" from queryFromTable
    * maybe only when user does not have personId?
    * WHICH IS ABSOLUTELY WRONG AND IMPOSSIBLE
    */
-  console.log('Vermehrung', {
-    containerEl,
-    containerElCurrent: containerEl.current,
-    dimensions,
-    storeFilter: store.filter,
-  })
 
   if (!isAuthenticated()) {
     login()
