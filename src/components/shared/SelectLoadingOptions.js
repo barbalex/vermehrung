@@ -108,6 +108,7 @@ const SelectTypable = ({
       }
       const { data } = result
       const options = get(data, `${queryNodesName}.nodes`, [])
+      console.log('SelectLoadingOptionsm, loadOptions', { options })
       cb(options)
     },
     [filter],
@@ -128,6 +129,8 @@ const SelectTypable = ({
     value: row[field] || '',
     label: get(row, valueLabelPath) || '',
   }
+
+  console.log('SelectLoadingOptions', { value })
 
   return (
     <Container data-id={field}>
