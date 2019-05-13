@@ -51,6 +51,8 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
+const treeWidthInPercentOfScreen = 33
+
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const { setActiveNodeArray, setOpenNodes } = store.tree
@@ -81,8 +83,8 @@ const Vermehrung = ({ location }) => {
      * Solution: calculate values from window size
      */
     setDimensions({
-      height: windowSize.innerHeight * 0.33 - 64,
-      width: windowSize.innerWidth * 0.33,
+      height: windowSize.innerHeight - 64,
+      width: windowSize.innerWidth * treeWidthInPercentOfScreen,
     })
   }, [])
   // when pathname changes, update activeNodeArray
@@ -120,7 +122,7 @@ const Vermehrung = ({ location }) => {
         <Container ref={containerEl}>
           <StyledSplitPane
             split="vertical"
-            size="33%"
+            size={`${treeWidthInPercentOfScreen}%`}
             minSize={200}
             onDragFinished={onChange}
           >
