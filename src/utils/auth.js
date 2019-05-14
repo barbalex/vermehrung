@@ -36,7 +36,7 @@ export const login = () => {
   if (!isBrowser) {
     return
   }
-  auth.authorize({ language: 'de' })
+  auth.authorize()
 }
 
 const setSession = ({ callback, nav, store }) => (err, authResult) => {
@@ -73,7 +73,7 @@ export const getProfile = () => {
 
 export const silentAuth = ({ callback, store }) => {
   if (!isAuthenticated()) return callback()
-  // pass doNotNavigate to not change url
+  // pass 'nav: false' to not change url
   auth.checkSession({}, setSession({ callback, nav: false, store }))
 }
 
