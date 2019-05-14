@@ -5,7 +5,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-link'
 
 import constants from './src/utils/constants.json'
-import secrets from './secrets.json'
 import { getProfile } from './src/utils/auth'
 
 const client = () => {
@@ -17,7 +16,7 @@ const client = () => {
     return {
       headers: {
         ...headers,
-        'X-Hasura-Access-Key': secrets.accessKey,
+        'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
         ...claims,
       },
     }

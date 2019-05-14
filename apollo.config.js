@@ -1,4 +1,3 @@
-const secrets = require('./secrets.json')
 const constants = require('./src/utils/constants.json')
 
 module.exports = {
@@ -7,7 +6,7 @@ module.exports = {
       name: 'api',
       url: constants.graphQlUri,
       headers: {
-        'X-Hasura-Access-Key': secrets.accessKey,
+        'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
       },
     },
   },
