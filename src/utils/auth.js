@@ -108,12 +108,15 @@ export const patchUserMetadata = ({ userId, userMetadata }) =>
 export const signup = async ({ email, personId }) => {
   // 1. signup user
   try {
-    auth.signup({
-      connection: 'Username-Password-Authentication',
-      email,
-      password: process.env.AUTH0_USER_INITIAL_PASSWORD,
-      user_metadata: { personId },
-    })
+    auth.signup(
+      {
+        connection: 'Username-Password-Authentication',
+        email,
+        password: process.env.AUTH0_USER_INITIAL_PASSWORD,
+        user_metadata: { personId },
+      },
+      () => console.log('done'),
+    )
   } catch (error) {
     throw error
   }

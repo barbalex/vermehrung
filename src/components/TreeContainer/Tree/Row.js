@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import { useApolloClient } from 'react-apollo-hooks'
 import last from 'lodash/last'
+import gql from 'graphql-tag'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -19,7 +20,7 @@ import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import { signup } from '../../../utils/auth'
+import { signup, getProfile } from '../../../utils/auth'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -210,6 +211,9 @@ const Row = ({ style, node }) => {
     useSymbolSpan = true
     useSymbolIcon = false
   }
+  const user = getProfile()
+  const claims = user['https://hasura.io/jwt/claims'] || {}
+  const role = claims['x-hasura-role']
 
   const onClickNode = useCallback(() => {
     toggleNode({
@@ -228,11 +232,30 @@ const Row = ({ style, node }) => {
     deleteDataset({ node, store, client })
   }, [node, openNodes, activeNodeArray])
 
-  const onClickSignup = useCallback(() => {
-    // TODO
-    const personId = last(node.url)
-    // TODO: get email
-    signup({ email, personId })
+  const onClickSignup = useCallback(async () => {
+    const personId = last(node.url).toString()
+    // TODO: fetch email of this person
+    let result
+    try {
+      result = await client.query({
+        query: gql`
+          query getPerson($id: Int!) {
+            person (where: { id: { _eq: ${personId} } }) {
+              id
+              email
+            }
+          }
+        `,
+        variables: { id: personId },
+      })
+    } catch (error) {
+      console.log(error)
+    }
+    //console.log({ result, data: result.data, email: result.data.email })
+    signup({
+      email: result.data.person[0].email,
+      personId: personId.toString(),
+    })
   }, [node, openNodes, activeNodeArray])
 
   const onClickOpenAllChildren = useCallback(() => {
@@ -248,8 +271,6 @@ const Row = ({ style, node }) => {
   const dataUrl = JSON.stringify(node.url)
   const level =
     node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
-
-  console.log('node', node)
 
   return (
     <Container style={style}>
@@ -300,9 +321,11 @@ const Row = ({ style, node }) => {
           {node.nodeType === 'table' && (
             <MenuItem onClick={onClickDelete}>löschen</MenuItem>
           )}
-          {node.nodeType === 'table' && node.menuTitle === 'Person' && (
-            <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
-          )}
+          {node.nodeType === 'table' &&
+            node.menuTitle === 'Person' &&
+            role === 'manager' && (
+              <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
+            )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
               {someChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
