@@ -30,6 +30,7 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Authentifikation und Authorisierung gebaut
 - :white_check_mark: Rollen werden durchgesetzt
 - :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
+- :ballot_box_with_check: Benutzer können verwaltet werden
 - :white_medium_square: Bilder können erfasst werden
 - :white_medium_square: Funktionalitäten mit Topos bereinigt
 - :white_medium_square: Produktive Version 1.0.0 live schalten
