@@ -249,6 +249,8 @@ const Row = ({ style, node }) => {
   const level =
     node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
 
+  console.log('node', node)
+
   return (
     <Container style={style}>
       <ContextMenuTrigger id={`cm${node.id}`}>
@@ -298,7 +300,7 @@ const Row = ({ style, node }) => {
           {node.nodeType === 'table' && (
             <MenuItem onClick={onClickDelete}>löschen</MenuItem>
           )}
-          {node.nodeType === 'table' && node.table === 'person' && (
+          {node.nodeType === 'table' && node.menuTitle === 'Person' && (
             <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
           )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
