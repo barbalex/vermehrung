@@ -3,6 +3,7 @@
 
 import auth0 from 'auth0-js'
 import { navigate } from 'gatsby'
+import axios from 'axios'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -11,10 +12,14 @@ const auth = isBrowser
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENTID,
       redirectUri: process.env.AUTH0_CALLBACK,
+      audience: 'https://vermehrung.eu.auth0.com/api/v2/',
       responseType: 'token id_token',
-      scope: 'openid profile email',
+      scope:
+        'read:current_user update:current_user_metadata openid profile email',
     })
   : {}
+
+let auth0Manage
 
 const tokens = {
   accessToken: false,
@@ -57,6 +62,11 @@ const setSession = ({ callback, nav, store }) => (err, authResult) => {
     // TODO: navigate to original url?
     nav && navigate('/Vermehrung')
     callback && callback()
+    isBrowser
+    auth0Manage = new auth0.Management({
+      domain: process.env.AUTH0_DOMAIN,
+      token: tokens.accessToken,
+    })
   }
 }
 
@@ -80,4 +90,45 @@ export const silentAuth = ({ callback, store }) => {
 export const logout = () => {
   localStorage.setItem('isLoggedIn', false)
   auth.logout()
+}
+
+export const patchUserMetadata = ({ userId, userMetadata }) =>
+  auth0Manage.patchUserMetadata(userId, userMetadata, () => {
+    console.log('done')
+  })
+
+/***
+ * TODO
+ * add functionality to
+ * create new user:
+ * - add email
+ * - add personId to metadata
+ * - user gets email to set password
+ */
+export const signup = async ({ email, personId }) => {
+  // 1. signup user
+  try {
+    auth.signup({
+      connection: 'Username-Password-Authentication',
+      email,
+      password: process.env.AUTH0_USER_INITIAL_PASSWORD,
+      user_metadata: { personId },
+    })
+  } catch (error) {
+    throw error
+  }
+
+  // 2. make him change password
+  try {
+    axios.post(
+      `https://${process.env.AUTH0_DOMAIN}/dbconnections/change_password`,
+      {
+        client_id: process.env.AUTH0_CLIENTID,
+        email,
+        connection: 'Username-Password-Authentication',
+      },
+    )
+  } catch (error) {
+    throw error
+  }
 }
