@@ -137,27 +137,30 @@ export default async ({ node, store, client }) => {
     artId = get(responce, 'data.sammlung[0].art_id')
     //console.log({ responce, artId, parentId })
   }
-  let object = `{}`
-  if (fkExists)
-    object = `{ ${fkName}: ${parentId}${artId ? `, art_id: ${artId}` : ''} }`
-  let returning = '{ id }'
-  if (fkExists) returning = `{ ...${fragmentFieldsNames[table]} }`
-  console.log('createNew', {
-    object,
-    table,
-    returning,
-    parentTable,
-    tableTitle,
-  })
-  // add new dataset to table
-  const mutation = gql`
-    mutation insertDataset {
-      insert_${table} (objects: [${object}]) {
-        returning ${returning}
+  let mutation
+  if (fkExists) {
+    const returning = `{ ...${fragmentFieldsNames[table]} }`
+    mutation = gql`
+      mutation insertDataset {
+        insert_${table} (objects: [
+          {
+            ${fkName}: ${parentId}${artId ? `, art_id: ${artId}` : ''}
+          }
+        ]) {
+          returning ${returning}
+        }
       }
-    }
-    ${fragments[table]}
-  `
+      ${fragments[table]}
+    `
+  } else {
+    mutation = gql`
+      mutation insertDataset {
+        insert_${table} (objects: [{}]) {
+          returning { id }
+        }
+      }
+    `
+  }
   let responce
   try {
     responce = await client.mutate({
