@@ -12,10 +12,10 @@ const auth = isBrowser
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENTID,
       redirectUri: process.env.AUTH0_CALLBACK,
-      audience: 'https://vermehrung.eu.auth0.com/api/v2/',
+      audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
       responseType: 'token id_token',
       scope:
-        'read:current_user update:current_user_metadata openid profile email',
+        'create:users read:current_user update:current_user_metadata openid profile email',
     })
   : {}
 
@@ -44,7 +44,7 @@ export const login = () => {
   auth.authorize()
 }
 
-const setSession = ({ callback, nav, store }) => (err, authResult) => {
+const setSession = ({ callback, nav, store }) => async (err, authResult) => {
   if (err) {
     store.addError(err)
     navigate('/')
@@ -63,10 +63,28 @@ const setSession = ({ callback, nav, store }) => (err, authResult) => {
     nav && navigate('/Vermehrung')
     callback && callback()
     isBrowser
-    auth0Manage = new auth0.Management({
-      domain: process.env.AUTH0_DOMAIN,
-      token: tokens.accessToken,
-    })
+    console.log('1', { authResult })
+
+    const claims = user['https://hasura.io/jwt/claims'] || {}
+    const role = claims['x-hasura-role']
+    if (role === 'manager') {
+      auth.checkSession(
+        {
+          audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
+          scope: 'create:users',
+        },
+        (err, authResult) => {
+          console.log('2', { err, authResult })
+          auth0Manage = new auth0.Management({
+            domain: process.env.AUTH0_DOMAIN,
+            token: tokens.accessToken,
+          })
+          axios.defaults.headers.common['Authorization'] = `Bearer ${
+            tokens.accessToken
+          }`
+        },
+      )
+    }
   }
 }
 
@@ -107,8 +125,9 @@ export const patchUserMetadata = ({ userId, userMetadata }) =>
  */
 export const signup = async ({ email, personId }) => {
   // 1. signup user
+  let resp1
   try {
-    auth.signup(
+    /*auth.signup(
       {
         connection: 'Username-Password-Authentication',
         email,
@@ -116,14 +135,23 @@ export const signup = async ({ email, personId }) => {
         user_metadata: { personId },
       },
       () => console.log('done'),
+    )*/
+    resp1 = await axios.post(
+      `https://${process.env.AUTH0_DOMAIN}/api/v2/users`,
+      {
+        email,
+        user_metadata: { personId },
+      },
     )
   } catch (error) {
     throw error
   }
+  console.log({ resp1 })
 
   // 2. make him change password
+  let resp2
   try {
-    axios.post(
+    resp2 = await axios.post(
       `https://${process.env.AUTH0_DOMAIN}/dbconnections/change_password`,
       {
         client_id: process.env.AUTH0_CLIENTID,
@@ -134,4 +162,5 @@ export const signup = async ({ email, personId }) => {
   } catch (error) {
     throw error
   }
+  console.log({ resp2 })
 }
