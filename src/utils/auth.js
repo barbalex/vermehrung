@@ -12,7 +12,8 @@ const auth = isBrowser
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENTID,
       redirectUri: process.env.AUTH0_CALLBACK,
-      audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
+      // did not work, extra config needed?
+      //audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
       responseType: 'token id_token',
       scope:
         'create:users read:current_user update:current_user_metadata openid profile email',
@@ -47,6 +48,7 @@ export const login = () => {
 const setSession = ({ callback, nav, store }) => async (err, authResult) => {
   if (err) {
     store.addError(err)
+    console.log(err)
     navigate('/')
     callback && callback()
     return
@@ -65,6 +67,8 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
     isBrowser
     console.log('1', { authResult })
 
+    /*
+    // did not work, extra config needed?
     const claims = user['https://hasura.io/jwt/claims'] || {}
     const role = claims['x-hasura-role']
     if (role === 'manager') {
@@ -84,7 +88,7 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
           }`
         },
       )
-    }
+    }*/
   }
 }
 
