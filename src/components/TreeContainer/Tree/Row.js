@@ -6,6 +6,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import { useApolloClient } from 'react-apollo-hooks'
+import last from 'lodash/last'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -18,6 +19,7 @@ import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
+import { signup } from '../../../utils/auth'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -225,6 +227,14 @@ const Row = ({ style, node }) => {
   const onClickDelete = useCallback(() => {
     deleteDataset({ node, store, client })
   }, [node, openNodes, activeNodeArray])
+
+  const onClickSignup = useCallback(() => {
+    // TODO
+    const personId = last(node.url)
+    // TODO: get email
+    signup({ email, personId })
+  }, [node, openNodes, activeNodeArray])
+
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })
   }, [node, openNodes, activeNodeArray])
@@ -287,6 +297,9 @@ const Row = ({ style, node }) => {
           <MenuItem onClick={onClickNeu}>neu</MenuItem>
           {node.nodeType === 'table' && (
             <MenuItem onClick={onClickDelete}>löschen</MenuItem>
+          )}
+          {node.nodeType === 'table' && node.table === 'person' && (
+            <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
           )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
