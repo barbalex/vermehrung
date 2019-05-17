@@ -60,7 +60,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        scope: 'https://vermehrung.apflora.ch/',
+        scope: '/',
         name: 'vermehrung.apflora.ch',
         short_name: 'vermehrung',
         start_url: '/',
