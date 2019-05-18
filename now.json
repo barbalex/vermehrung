@@ -3,7 +3,7 @@
   "name": "vermehrung",
   "alias": "vermehrung.apflora.ch",
   "env": {
-    "HASURA_GRAPHQL_URL": "https://api.vermehrung.apflora.ch/v1alpha1/graphql"
+    "HASURA_GRAPHQL_URL": "https://api.vermehrung.apflora.ch/v1/graphql"
   },
   "routes": [{
     "src": "/Vermehrung/.*",

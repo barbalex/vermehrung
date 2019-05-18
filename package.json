@@ -6,7 +6,6 @@
     "dev": "gatsby develop",
     "build": "gatsby build",
     "postbuild": "copyfiles now.json public",
-    "serve_old": "cross-env HASURA_GRAPHQL_URL=https://api.vermehrung.apflora.ch/v1alpha1/graphql gatsby serve",
     "serve": "gatsby serve"
   },
   "dependencies": {
