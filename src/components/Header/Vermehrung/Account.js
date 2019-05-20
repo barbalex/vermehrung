@@ -46,7 +46,7 @@ const Account = () => {
     setResetTitle('...')
     try {
       axios.post(
-        `https://${process.env.AUTH0_DOMAIN}/dbconnections/change_password`,
+        `https://${process.env.AUTH0_DOMAIN2}/dbconnections/change_password`,
         {
           client_id: process.env.AUTH0_CLIENTID,
           email,

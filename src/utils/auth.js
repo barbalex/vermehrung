@@ -65,20 +65,16 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
     nav && navigate('/Vermehrung')
     callback && callback()
     isBrowser
-    console.log('1', { authResult })
 
-    /*
-    // did not work, extra config needed?
     const claims = user['https://hasura.io/jwt/claims'] || {}
     const role = claims['x-hasura-role']
     if (role === 'manager') {
       auth.checkSession(
         {
-          audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
+          audience: `https://${process.env.AUTH0_DOMAIN2}/api/v2/`,
           scope: 'create:users',
         },
-        (err, authResult) => {
-          console.log('2', { err, authResult })
+        () => {
           auth0Manage = new auth0.Management({
             domain: process.env.AUTH0_DOMAIN,
             token: tokens.accessToken,
@@ -88,7 +84,7 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
           }`
         },
       )
-    }*/
+    }
   }
 }
 
@@ -114,57 +110,31 @@ export const logout = () => {
   auth.logout()
 }
 
+// not in use
 export const patchUserMetadata = ({ userId, userMetadata }) =>
   auth0Manage.patchUserMetadata(userId, userMetadata, () => {
     console.log('done')
   })
 
 /***
- * TODO
- * add functionality to
+ * functionality to
  * create new user:
  * - add email
  * - add personId to metadata
  * - user gets email to set password
  */
 export const signup = async ({ email, personId }) => {
-  // 1. signup user
-  let resp1
-  try {
-    /*auth.signup(
-      {
-        connection: 'Username-Password-Authentication',
-        email,
-        password: process.env.AUTH0_USER_INITIAL_PASSWORD,
-        user_metadata: { personId },
-      },
-      () => console.log('done'),
-    )*/
-    resp1 = await axios.post(
-      `https://${process.env.AUTH0_DOMAIN}/api/v2/users`,
-      {
-        email,
-        user_metadata: { personId },
-      },
-    )
-  } catch (error) {
-    throw error
-  }
-  console.log({ resp1 })
-
-  // 2. make him change password
-  let resp2
-  try {
-    resp2 = await axios.post(
-      `https://${process.env.AUTH0_DOMAIN}/dbconnections/change_password`,
-      {
-        client_id: process.env.AUTH0_CLIENTID,
-        email,
-        connection: 'Username-Password-Authentication',
-      },
-    )
-  } catch (error) {
-    throw error
-  }
-  console.log({ resp2 })
+  auth.signup(
+    {
+      connection: 'Username-Password-Authentication',
+      email,
+      password: process.env.AUTH0_USER_INITIAL_PASSWORD,
+      user_metadata: { personId },
+    },
+    (err, resp) => {
+      console.log('signup:', { err, resp })
+      // TODO: inform that user will receive email to verify account
+      // TODO: if err.code === 'user_exists' && err.statusCode === 400, inform
+    },
+  )
 }

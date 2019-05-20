@@ -234,7 +234,7 @@ const Row = ({ style, node }) => {
 
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
-    // TODO: fetch email of this person
+    // fetch email of this person
     let result
     try {
       result = await client.query({
