@@ -96,7 +96,7 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
               },
             })
             .then(users => console.log({ users }))
-            .finally(error => console.log(error))
+            .finally(error => console.log({ error }))
         },
       )
     }
