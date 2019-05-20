@@ -72,16 +72,31 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
       auth.checkSession(
         {
           audience: `https://${process.env.AUTH0_DOMAIN2}/api/v2/`,
-          scope: 'create:users',
+          scope: 'create:users read:users',
         },
         () => {
           auth0Manage = new auth0.Management({
-            domain: process.env.AUTH0_DOMAIN,
+            domain: process.env.AUTH0_DOMAIN2,
             token: tokens.accessToken,
           })
+          console.log({ auth0Manage })
+          store.setAuth0ManagementToken(auth0Manage.baseOptions.token)
           axios.defaults.headers.common['Authorization'] = `Bearer ${
             tokens.accessToken
           }`
+          // on first load fetch users if user is manager
+          const claim = user['https://hasura.io/jwt/claims']
+          const role = claim ? claim['x-hasura-role'] : null
+          if (role !== 'manager') return
+
+          axios
+            .get(`https://${process.env.AUTH0_DOMAIN2}/api/v2/users`, {
+              headers: {
+                Authorization: `Bearer ${auth0Manage.baseOptions.token}`,
+              },
+            })
+            .then(users => console.log({ users }))
+            .finally(error => console.log(error))
         },
       )
     }
