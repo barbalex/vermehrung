@@ -265,11 +265,6 @@ const Row = ({ style, node }) => {
     })
   }, [node, openNodes, activeNodeArray])
 
-  const onClickSignoff = useCallback(
-    () => signoff({ account_id: node.accountId, store, client }),
-    [node],
-  )
-
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })
   }, [node, openNodes, activeNodeArray])
@@ -339,12 +334,6 @@ const Row = ({ style, node }) => {
             role === 'manager' &&
             !node.accountId && (
               <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
-            )}
-          {node.nodeType === 'table' &&
-            node.menuTitle === 'Person' &&
-            role === 'manager' &&
-            node.accountId && (
-              <MenuItem onClick={onClickSignoff}>Konto löschen</MenuItem>
             )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
