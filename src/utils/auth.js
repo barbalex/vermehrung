@@ -126,6 +126,9 @@ export const patchUserMetadata = ({ userId, userMetadata }) =>
     console.log('done')
   })
 
+/**
+ * This does not work
+ */
 export const signoff = async ({ account_id, store, client }) => {
   // 1. get token for management api
   let res1
@@ -133,7 +136,7 @@ export const signoff = async ({ account_id, store, client }) => {
     res1 = await axios.post(
       `https://${process.env.AUTH0_DOMAIN2}/oauth/token`,
       {
-        grant_type: 'client_credentials',
+        grant_type: 'Authorization Code',
         client_id: process.env.AUTH0_CLIENTID,
         client_secret: process.env.AUTH0_MACHINE_ID,
         audience: `https://${process.env.AUTH0_DOMAIN2}/api/v2/`,
