@@ -21,6 +21,7 @@ const myTypes = types
   // so need to define this as volatile
   .volatile(() => ({
     auth0Users: [],
+    auth0Token: '',
     auth0ManagementToken: '',
     notifications: [],
   }))
@@ -42,6 +43,9 @@ const myTypes = types
     },
     setAuth0ManagementToken(token) {
       self.auth0ManagementToken = token
+    },
+    setAuth0Token(token) {
+      self.auth0Token = token
     },
     setTechnDokuFilter(val) {
       self.technDokuFilter = val

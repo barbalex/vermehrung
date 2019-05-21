@@ -13,7 +13,7 @@ export default types.model('Node', {
   url: types.array(types.union(types.string, types.number)),
   sort: types.array(types.union(types.string, types.number)),
   hasChildren: types.optional(types.boolean, false),
-  hasAccount: types.optional(types.boolean, false),
+  accountId: types.optional(types.string, ''),
 })
 
 export const defaultValue = {
@@ -26,5 +26,5 @@ export const defaultValue = {
   url: [],
   sort: [],
   hasChildren: false,
-  hasAccount: false,
+  accountId: false,
 }

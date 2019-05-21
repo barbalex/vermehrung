@@ -21,7 +21,7 @@ import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import { signup, getProfile } from '../../../utils/auth'
+import { signup, signoff, getProfile } from '../../../utils/auth'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -265,6 +265,11 @@ const Row = ({ style, node }) => {
     })
   }, [node, openNodes, activeNodeArray])
 
+  const onClickSignoff = useCallback(
+    () => signoff({ account_id: node.accountId, store, client }),
+    [node],
+  )
+
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })
   }, [node, openNodes, activeNodeArray])
@@ -278,8 +283,6 @@ const Row = ({ style, node }) => {
   const dataUrl = JSON.stringify(node.url)
   const level =
     node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
-
-  console.log('node', node)
 
   return (
     <Container style={style}>
@@ -321,7 +324,7 @@ const Row = ({ style, node }) => {
           >
             {node.label}
           </TextSpan>
-          {node.hasAccount && <StyledAccountIcon />}
+          {node.accountId && <StyledAccountIcon title="hat ein Konto" />}
         </StyledNode>
       </ContextMenuTrigger>
       {['table', 'folder'].includes(node.nodeType) && (
@@ -334,8 +337,14 @@ const Row = ({ style, node }) => {
           {node.nodeType === 'table' &&
             node.menuTitle === 'Person' &&
             role === 'manager' &&
-            !node.hasAccount && (
+            !node.accountId && (
               <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
+            )}
+          {node.nodeType === 'table' &&
+            node.menuTitle === 'Person' &&
+            role === 'manager' &&
+            node.accountId && (
+              <MenuItem onClick={onClickSignoff}>Konto löschen</MenuItem>
             )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>

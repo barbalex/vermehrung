@@ -19,7 +19,7 @@ const auth = isBrowser
       //audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
       responseType: 'token id_token',
       scope:
-        'create:users read:current_user update:current_user_metadata openid profile email',
+        'create:users read:current_user update:current_user_metadata delete:users openid profile email',
     })
   : {}
 
@@ -63,6 +63,7 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
   }
 
   if (authResult && authResult.accessToken && authResult.idToken) {
+    store.setAuth0Token(authResult.accessToken)
     let expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
     tokens.accessToken = authResult.accessToken
     tokens.idToken = authResult.idToken
@@ -87,7 +88,6 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
             domain: process.env.AUTH0_DOMAIN2,
             token: tokens.accessToken,
           })
-          console.log({ auth0Manage, user })
           store.setAuth0ManagementToken(auth0Manage.baseOptions.token)
           axios.defaults.headers.common['Authorization'] = `Bearer ${
             tokens.accessToken
@@ -126,11 +126,52 @@ export const patchUserMetadata = ({ userId, userMetadata }) =>
     console.log('done')
   })
 
+export const signoff = async ({ account_id, store, client }) => {
+  // 1. get token for management api
+  let res1
+  try {
+    res1 = await axios.post(
+      `https://${process.env.AUTH0_DOMAIN2}/oauth/token`,
+      {
+        grant_type: 'client_credentials',
+        client_id: process.env.AUTH0_CLIENTID,
+        client_secret: process.env.AUTH0_MACHINE_ID,
+        audience: `https://${process.env.AUTH0_DOMAIN2}/api/v2/`,
+      },
+    )
+  } catch (error) {
+    store.enqueNotification({
+      message: `Das Konto konnte nicht gelöscht werden: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+  console.log('res1', res1)
+
+  let res2
+  try {
+    res2 = await axios.delete(
+      `https://${process.env.AUTH0_DOMAIN2}/api/v2/users/${account_id}`,
+      { headers: { Authorization: `Bearer ${res1.access_token}` } },
+    )
+  } catch (error) {
+    store.enqueNotification({
+      message: `Das Konto konnte nicht gelöscht werden: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+  console.log('auth, signoff, res2', res2)
+}
+
 /***
  * functionality to
  * create new user:
  * - add email
- * - add personId to metadata
+ * - add personId to metadata auth0-side
+ * - add auth0-id to person data vermehrung-side
  * - user gets email to set password
  */
 export const signup = async ({ email, personId, store, client }) => {
@@ -143,7 +184,6 @@ export const signup = async ({ email, personId, store, client }) => {
     },
     async (err, resp) => {
       if (!err) {
-        console.log('signup, will enqueNotification')
         store.enqueNotification({
           message: `Für ${email} wurde ein Konto erstellt`,
           options: {
