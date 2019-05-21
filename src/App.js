@@ -16,7 +16,6 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 
 import materialTheme from './utils/materialTheme'
 import client from '../client'
-import Errors from './components/Errors'
 import Notifier from './components/Notifier'
 import NotificationDismisser from './components/NotificationDismisser'
 
@@ -43,7 +42,6 @@ const App = ({ element }) => (
               <>
                 <GlobalStyle />
                 {element}
-                <Errors />
                 <Notifier />
               </>
             </SnackbarProvider>

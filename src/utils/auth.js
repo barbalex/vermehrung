@@ -47,7 +47,12 @@ export const login = () => {
 
 const setSession = ({ callback, nav, store }) => async (err, authResult) => {
   if (err) {
-    store.addError(err)
+    store.enqueNotification({
+      message: err.message,
+      options: {
+        variant: 'error',
+      },
+    })
     console.log(err)
     navigate('/')
     callback && callback()
