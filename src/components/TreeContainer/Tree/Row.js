@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import { useApolloClient } from 'react-apollo-hooks'
@@ -161,6 +162,10 @@ const StyledMoreHorizIcon = styled(MoreHorizIcon)`
     color: #f57c00 !important;
   }
 `
+const StyledAccountIcon = styled(AccountIcon)`
+  margin-top: 3px;
+  font-size: 1.1em;
+`
 const SymbolDiv = styled.div`
   cursor: pointer;
 `
@@ -256,6 +261,7 @@ const Row = ({ style, node }) => {
       email: result.data.person[0].email,
       personId: personId.toString(),
       store,
+      client,
     })
   }, [node, openNodes, activeNodeArray])
 
@@ -272,6 +278,8 @@ const Row = ({ style, node }) => {
   const dataUrl = JSON.stringify(node.url)
   const level =
     node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
+
+  console.log('node', node)
 
   return (
     <Container style={style}>
@@ -313,6 +321,7 @@ const Row = ({ style, node }) => {
           >
             {node.label}
           </TextSpan>
+          {node.hasAccount && <StyledAccountIcon />}
         </StyledNode>
       </ContextMenuTrigger>
       {['table', 'folder'].includes(node.nodeType) && (
@@ -324,7 +333,8 @@ const Row = ({ style, node }) => {
           )}
           {node.nodeType === 'table' &&
             node.menuTitle === 'Person' &&
-            role === 'manager' && (
+            role === 'manager' &&
+            !node.hasAccount && (
               <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
             )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (

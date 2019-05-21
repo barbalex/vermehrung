@@ -4,6 +4,9 @@
 import auth0 from 'auth0-js'
 import { navigate } from 'gatsby'
 import axios from 'axios'
+import gql from 'graphql-tag'
+
+import { person as personFragment } from './fragments'
 
 const isBrowser = typeof window !== 'undefined'
 
@@ -130,7 +133,7 @@ export const patchUserMetadata = ({ userId, userMetadata }) =>
  * - add personId to metadata
  * - user gets email to set password
  */
-export const signup = async ({ email, personId, store }) => {
+export const signup = async ({ email, personId, store, client }) => {
   auth.signup(
     {
       connection: 'Username-Password-Authentication',
@@ -138,7 +141,7 @@ export const signup = async ({ email, personId, store }) => {
       password: process.env.AUTH0_USER_INITIAL_PASSWORD,
       user_metadata: { personId },
     },
-    (err, resp) => {
+    async (err, resp) => {
       if (!err) {
         console.log('signup, will enqueNotification')
         store.enqueNotification({
@@ -153,7 +156,30 @@ export const signup = async ({ email, personId, store }) => {
             variant: 'info',
           },
         })
-        // TODO: save resp.Id to mark users with account
+        // save resp.Id to mark users with account
+        client.mutate({
+          mutation: gql`
+            mutation update_person(
+              $id: bigint!
+            ) {
+              update_person(
+                where: { id: { _eq: $id } }
+                _set: {
+                  account_id: "${resp.Id}"
+                }
+              ) {
+                affected_rows
+                returning {
+                  ...PersonFields
+                }
+              }
+            }
+            ${personFragment}
+          `,
+          variables: {
+            id: personId,
+          },
+        })
       } else {
         if (err.code === 'user_exists' && err.statusCode === 400) {
           return store.enqueNotification({

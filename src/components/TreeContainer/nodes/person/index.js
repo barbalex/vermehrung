@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 
 export default ({ nodes, data }) => {
+  console.log('nodes, person, personData', get(data, 'person', []))
   return (
     get(data, 'person', [])
       // only show if parent node exists
@@ -14,6 +15,7 @@ export default ({ nodes, data }) => {
         label: get(el, 'name') || '(kein Name)',
         url: ['Personen', el.id],
         hasChildren: true,
+        hasAccount: !!el.account_id,
       }))
       .map((el, index) => {
         el.sort = [5, index]

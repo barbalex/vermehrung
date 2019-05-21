@@ -75,7 +75,8 @@ create table person (
   user_id uuid default null,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  account_id text default null
 );
 create index on person using btree (id);
 create index on person using btree (name);
