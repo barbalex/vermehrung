@@ -149,21 +149,22 @@ export const signup = async ({ email, personId, store }) => {
           },
         })
         // TODO: save resp.Id to mark users with account
-      }
-      if (err.code === 'user_exists' && err.statusCode === 400) {
-        return store.enqueNotification({
-          message: `${email} hat schon ein Konto`,
+      } else {
+        if (err.code === 'user_exists' && err.statusCode === 400) {
+          return store.enqueNotification({
+            message: `${email} hat schon ein Konto`,
+            options: {
+              variant: 'warning',
+            },
+          })
+        }
+        store.enqueNotification({
+          message: `Sorry, das hat nicht funktioniert`,
           options: {
-            variant: 'warning',
+            variant: 'error',
           },
         })
       }
-      store.enqueNotification({
-        message: `Sorry, das hat nicht funktioniert`,
-        options: {
-          variant: 'error',
-        },
-      })
     },
   )
 }
