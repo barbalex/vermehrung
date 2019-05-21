@@ -38,7 +38,6 @@ const myTypes = types
       ]
     },
     removeNotification(note) {
-      console.log('Store, removeNotification, note:', note)
       self.notifications = self.notifications.filter(n => n.key !== note)
     },
     setAuth0Users(users) {

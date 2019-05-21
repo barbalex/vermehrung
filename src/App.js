@@ -18,6 +18,7 @@ import materialTheme from './utils/materialTheme'
 import client from '../client'
 import Errors from './components/Errors'
 import Notifier from './components/Notifier'
+import NotificationDismisser from './components/NotificationDismisser'
 
 const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
@@ -33,7 +34,12 @@ const App = ({ element }) => (
             moment={moment}
             locale="de-ch"
           >
-            <SnackbarProvider maxSnack={5} preventDuplicate>
+            <SnackbarProvider
+              maxSnack={5}
+              preventDuplicate
+              autoHideDuration={10000}
+              action={key => <NotificationDismisser nKey={key} />}
+            >
               <>
                 <GlobalStyle />
                 {element}
