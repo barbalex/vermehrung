@@ -57,6 +57,8 @@ const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const { setActiveNodeArray, setOpenNodes } = store.tree
 
+  console.log('Vermehrung', { notifications: store.notifications })
+
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
 

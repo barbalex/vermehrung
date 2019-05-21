@@ -1,6 +1,7 @@
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
+import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
 
 import createGlobalStyle from './utils/createGlobalStyle'
@@ -16,6 +17,7 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import materialTheme from './utils/materialTheme'
 import client from '../client'
 import Errors from './components/Errors'
+import Notifier from './components/Notifier'
 
 const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
@@ -31,11 +33,14 @@ const App = ({ element }) => (
             moment={moment}
             locale="de-ch"
           >
-            <>
-              <GlobalStyle />
-              {element}
-              <Errors />
-            </>
+            <SnackbarProvider maxSnack={5} preventDuplicate>
+              <>
+                <GlobalStyle />
+                {element}
+                <Errors />
+                <Notifier />
+              </>
+            </SnackbarProvider>
           </MuiPickersUtilsProvider>
         </ApolloHooksProvider>
       </ApolloProvider>

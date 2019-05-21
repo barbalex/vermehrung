@@ -4,6 +4,7 @@ import uniqBy from 'lodash/uniqBy'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
+import { action } from 'mobx'
 
 const myTypes = types
   .model({
@@ -24,8 +25,22 @@ const myTypes = types
     errors: [],
     auth0Users: [],
     auth0ManagementToken: '',
+    notifications: [],
   }))
   .actions(self => ({
+    enqueNotification(note) {
+      self.notifications = [
+        ...self.notifications,
+        {
+          key: new Date().getTime() + Math.random(),
+          ...note,
+        },
+      ]
+    },
+    removeNotification(note) {
+      console.log('Store, removeNotification, note:', note)
+      self.notifications = self.notifications.filter(n => n.key !== note)
+    },
     setAuth0Users(users) {
       self.auth0Users = users
     },

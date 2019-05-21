@@ -79,24 +79,11 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
             domain: process.env.AUTH0_DOMAIN2,
             token: tokens.accessToken,
           })
-          console.log({ auth0Manage })
+          console.log({ auth0Manage, user })
           store.setAuth0ManagementToken(auth0Manage.baseOptions.token)
           axios.defaults.headers.common['Authorization'] = `Bearer ${
             tokens.accessToken
           }`
-          // on first load fetch users if user is manager
-          const claim = user['https://hasura.io/jwt/claims']
-          const role = claim ? claim['x-hasura-role'] : null
-          if (role !== 'manager') return
-
-          axios
-            .get(`https://${process.env.AUTH0_DOMAIN2}/api/v2/users`, {
-              headers: {
-                Authorization: `Bearer ${auth0Manage.baseOptions.token}`,
-              },
-            })
-            .then(users => console.log({ users }))
-            .finally(error => console.log({ error }))
         },
       )
     }
@@ -138,7 +125,7 @@ export const patchUserMetadata = ({ userId, userMetadata }) =>
  * - add personId to metadata
  * - user gets email to set password
  */
-export const signup = async ({ email, personId }) => {
+export const signup = async ({ email, personId, store }) => {
   auth.signup(
     {
       connection: 'Username-Password-Authentication',
@@ -147,9 +134,36 @@ export const signup = async ({ email, personId }) => {
       user_metadata: { personId },
     },
     (err, resp) => {
-      console.log('signup:', { err, resp })
-      // TODO: inform that user will receive email to verify account
-      // TODO: if err.code === 'user_exists' && err.statusCode === 400, inform
+      if (!err) {
+        console.log('signup, will enqueNotification')
+        store.enqueNotification({
+          message: `Für ${email} wurde ein Konto erstellt`,
+          options: {
+            variant: 'success',
+          },
+        })
+        store.enqueNotification({
+          message: `Benutzer ${email} erhält nun ein Email, um ein Passwort zu setzen`,
+          options: {
+            variant: 'info',
+          },
+        })
+        // TODO: save resp.Id to mark users with account
+      }
+      if (err.code === 'user_exists' && err.statusCode === 400) {
+        return store.enqueNotification({
+          message: `${email} hat schon ein Konto`,
+          options: {
+            variant: 'warning',
+          },
+        })
+      }
+      store.enqueNotification({
+        message: `Sorry, das hat nicht funktioniert`,
+        options: {
+          variant: 'error',
+        },
+      })
     },
   )
 }

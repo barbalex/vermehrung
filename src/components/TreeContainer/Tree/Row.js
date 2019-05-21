@@ -255,6 +255,7 @@ const Row = ({ style, node }) => {
     signup({
       email: result.data.person[0].email,
       personId: personId.toString(),
+      store,
     })
   }, [node, openNodes, activeNodeArray])
 
