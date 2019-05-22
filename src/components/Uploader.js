@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import Button from '@material-ui/core/Button'
 
 if (typeof window !== 'undefined') {
-  window.UPLOADCARE_PUBLIC_KEY = process.env.UPLOADCARE_PUBLIC_KEYUPLOADCARE_LOCALE =
-    'de'
+  window.UPLOADCARE_PUBLIC_KEY = process.env.UPLOADCARE_PUBLIC_KEY
+  window.UPLOADCARE_LOCALE = 'de'
   window.UPLOADCARE_TABS =
     'file camera url gdrive gphotos dropbox instagram onedrive'
   window.UPLOADCARE_EFFECTS = 'crop'
-  //window.UPLOADCARE_IMAGE_SHRINK = '2056x2056'
+  window.UPLOADCARE_IMAGE_SHRINK = '2056x2056'
   window.UPLOADCARE_IMAGES_ONLY = true
-  //window.UPLOADCARE_PREVIEW_STEP = true
+  window.UPLOADCARE_PREVIEW_STEP = true
+  window.UPLOADCARE_IMAGES_ONLY = false
 }
 
 const uploadcare = require('uploadcare-widget')

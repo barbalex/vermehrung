@@ -222,24 +222,21 @@ const Herkunft = () => {
             error={errors.bemerkungen}
             multiLine
           />
-          <p>
-            <label htmlFor="file">Your file:</label>{' '}
-            <Uploader
-              id="file"
-              name="file"
-              onChange={file => {
-                console.log('File changed: ', file)
+          <Uploader
+            id="file"
+            name="file"
+            onChange={file => {
+              console.log('File changed: ', file)
 
-                if (file) {
-                  file.progress(info =>
-                    console.log('File progress: ', info.progress),
-                  )
-                  file.done(info => console.log('File uploaded: ', info))
-                }
-              }}
-              onUploadComplete={info => console.log('Upload completed:', info)}
-            />
-          </p>
+              if (file) {
+                file.progress(info =>
+                  console.log('File progress: ', info.progress),
+                )
+                file.done(info => console.log('File uploaded: ', info))
+              }
+            }}
+            onUploadComplete={info => console.log('Upload completed:', info)}
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
