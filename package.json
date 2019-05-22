@@ -71,7 +71,8 @@
     "react-typography": "0.16.19",
     "react-window": "1.8.1",
     "styled-components": "4.2.0",
-    "typography": "0.16.19"
+    "typography": "0.16.19",
+    "uploadcare-widget": "3.7.5"
   },
   "devDependencies": {
     "copyfiles": "2.1.0",
