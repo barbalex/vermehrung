@@ -129,7 +129,7 @@ export const patchUserMetadata = ({ userId, userMetadata }) =>
 /**
  * This does not work
  */
-export const signoff = async ({ account_id, store, client }) => {
+export const signoff = async ({ account_id, store }) => {
   // 1. get token for management api
   let res1
   try {
