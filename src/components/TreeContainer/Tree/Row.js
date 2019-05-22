@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import { useApolloClient } from 'react-apollo-hooks'
 import last from 'lodash/last'
+import get from 'lodash/get'
 import gql from 'graphql-tag'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
@@ -21,7 +22,7 @@ import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import { signup, signoff, getProfile } from '../../../utils/auth'
+import { signup, getProfile } from '../../../utils/auth'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -197,7 +198,7 @@ const TextSpan = styled.span`
 const Row = ({ style, node }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { tree } = store
+  const { tree, enqueNotification } = store
   const { nodes, openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -254,11 +255,24 @@ const Row = ({ style, node }) => {
         variables: { id: personId },
       })
     } catch (error) {
-      console.log(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
-    //console.log({ result, data: result.data, email: result.data.email })
+    const email = get(result, 'data.person[0].email')
+    if (!email) {
+      return enqueNotification({
+        message: 'Eine email-Adresse muss erfasst sein',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
     signup({
-      email: result.data.person[0].email,
+      email,
       personId: personId.toString(),
       store,
       client,
