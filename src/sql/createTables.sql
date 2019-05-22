@@ -116,6 +116,17 @@ create index on herkunft using btree (lokalname);
 --alter table herkunft add column tsv tsvector;
 create index on herkunft using gin (tsv);
 
+drop table if exists herkunft_file;
+create table herkunft_file (
+  herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  beschreibung text default null
+);
+create index on herkunft_file using btree (herkunft_id);
+create index on herkunft_file using btree (file_id);
+create index on herkunft_file using btree (file_mime_type);
+
 drop table if exists sammlung cascade;
 create table sammlung (
   id bigserial primary key,
