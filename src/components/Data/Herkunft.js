@@ -14,6 +14,7 @@ import ErrorBoundary from '../ErrorBoundary'
 import { herkunft as herkunftFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
+import Uploader from '../Uploader'
 
 const Container = styled.div`
   height: 100%;
@@ -221,13 +222,24 @@ const Herkunft = () => {
             error={errors.bemerkungen}
             multiLine
           />
-          <Button
-            variant="outlined"
-            aria-label="Bilder hochladen"
-            onClick={onClickUpload}
-          >
-            Bilder hochladen
-          </Button>
+          <p>
+            <label htmlFor="file">Your file:</label>{' '}
+            <Uploader
+              id="file"
+              name="file"
+              onChange={file => {
+                console.log('File changed: ', file)
+
+                if (file) {
+                  file.progress(info =>
+                    console.log('File progress: ', info.progress),
+                  )
+                  file.done(info => console.log('File uploaded: ', info))
+                }
+              }}
+              onUploadComplete={info => console.log('Upload completed:', info)}
+            />
+          </p>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
