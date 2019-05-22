@@ -121,6 +121,7 @@ create table herkunft_file (
   herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
+  name text default null,
   beschreibung text default null
 );
 create index on herkunft_file using btree (herkunft_id);
