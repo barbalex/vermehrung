@@ -4,7 +4,7 @@ if (typeof window !== 'undefined') {
   window.UPLOADCARE_PUBLIC_KEY = process.env.UPLOADCARE_PUBLIC_KEY
   window.UPLOADCARE_LOCALE = 'de'
   window.UPLOADCARE_TABS =
-    'file camera url gdrive gphotos dropbox instagram onedrive'
+    'file camera url gdrive gphotos dropbox onedrive box instagram'
   window.UPLOADCARE_EFFECTS = 'crop'
   window.UPLOADCARE_IMAGE_SHRINK = '2056x2056'
   window.UPLOADCARE_IMAGES_ONLY = true
@@ -75,6 +75,9 @@ class Uploader extends Component {
       <input
         type="hidden"
         ref={input => (this.uploader = input)}
+        data-image-shrink="2056x2056"
+        //data-multiple="true"
+        //data-multiple-min="1"
         {...attributes}
       />
     )
