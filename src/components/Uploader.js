@@ -76,7 +76,6 @@ class Uploader extends Component {
         type="hidden"
         ref={input => (this.uploader = input)}
         data-image-shrink="2400x1600"
-        data-filename="test.jpg"
         //data-multiple="true"
         //data-multiple-min="1"
         {...attributes}

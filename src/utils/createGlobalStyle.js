@@ -29,4 +29,32 @@ export default () => createGlobalStyle`
   ::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
   }
+
+  /* uploadcare */
+  .uploadcare--button {
+    background-color: #4a148c;
+    background: #4a148c;
+    border: 1px solid #4a148c;
+  }
+  .uploadcare--button:focus {
+    color: #4a148c;
+    outline: 2px solid rgba(74,20,140,.5);
+  }
+  .uploadcare--button_primary:hover {
+    background: rgba(74,20,140,.8);
+    border-color: rgba(74,20,140,.8);
+  }
+  .uploadcare--widget__button,
+  .uploadcare--widget__button:active,
+  .uploadcare--widget__button:focus {
+    background:none;
+    color: black;
+    border: 1px solid black;
+    outline: none;
+  }
+  .uploadcare--widget__button:hover{
+    background: rgba(74,20,140,0.8);
+    border: 1px solid rgba(74,20,140,0.8);
+    color: white;
+  }
 `
