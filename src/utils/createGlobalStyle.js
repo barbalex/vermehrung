@@ -35,14 +35,16 @@ export default () => createGlobalStyle`
     background-color: #4a148c;
     background: #4a148c;
     border: 1px solid #4a148c;
+    color: white;
   }
   .uploadcare--button:focus {
     color: #4a148c;
     outline: 2px solid rgba(74,20,140,.5);
   }
-  .uploadcare--button_primary:hover {
+  .uploadcare--button:hover {
     background: rgba(74,20,140,.8);
     border-color: rgba(74,20,140,.8);
+    color: white;
   }
   .uploadcare--widget__button,
   .uploadcare--widget__button:active,
