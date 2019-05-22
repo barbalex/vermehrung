@@ -5,6 +5,7 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import Button from '@material-ui/core/Button'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
@@ -66,6 +67,10 @@ const Herkunft = () => {
   const rowsFiltered = get(data, 'rowsFiltered', [])
 
   useEffect(() => setErrors({}), [row])
+
+  const onClickUpload = useCallback(() => {
+    // TODO
+  }, [row])
 
   const saveToDb = useCallback(
     async event => {
@@ -216,6 +221,13 @@ const Herkunft = () => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Button
+            variant="outlined"
+            aria-label="Bilder hochladen"
+            onClick={onClickUpload}
+          >
+            Bilder hochladen
+          </Button>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
