@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, useMemo } from 'react'
+import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -110,7 +110,7 @@ const Files = ({ parentId, parent }) => {
   const images = files.filter(f => isImageFile(f))
   const imageUrls = images.map(
     f =>
-      `https://ucarecdn.com/${f.file_id}/-/resize/800x/-/quality/lightest/${
+      `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${
         f.name
       }`,
   )
@@ -135,8 +135,6 @@ const Files = ({ parentId, parent }) => {
     )
   }
 
-  console.log({ title: images[imageIndex].name })
-
   return (
     <ErrorBoundary>
       <Container>
@@ -150,7 +148,7 @@ const Files = ({ parentId, parent }) => {
               variant="outlined"
               onClick={onClickLightboxButton}
             >
-              Bilder anzeigen
+              Bilder gross anzeigen
             </LightboxButton>
           )}
         </ButtonsContainer>

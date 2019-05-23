@@ -3,8 +3,10 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from 'react-apollo-hooks'
 import styled from 'styled-components'
-import { FaTimes } from 'react-icons/fa'
+import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -22,8 +24,9 @@ const Container = styled.div`
 const Img = styled.img`
   margin-right: 5px;
   width: 80px;
-  height: 45px;
+  height: 50px;
   object-fit: contain;
+  margin-bottom: 1rem;
 `
 const ImgReplacement = styled.div`
   min-width: 80px;
@@ -37,8 +40,29 @@ const DelIcon = styled(IconButton)`
   color: red !important;
   margin-bottom: 20px !important;
 `
+const DownloadIcon = styled(IconButton)`
+  margin-bottom: 20px !important;
+`
 const Spacer = styled.div`
   min-width: 10px;
+`
+const DateiTypField = styled.div`
+  min-width: 200px;
+  flex-grow: 0;
+`
+const DateiNameField = styled.div`
+  min-width: 215px;
+  flex-grow: 0;
+`
+const MenuTitle = styled.h3`
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  &:focus {
+    outline: none;
+  }
 `
 
 const File = ({ file, parent, refetch }) => {
@@ -46,6 +70,9 @@ const File = ({ file, parent, refetch }) => {
   const store = useContext(storeContext)
 
   const [errors, setErrors] = useState({})
+
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
+  const delMenuOpen = Boolean(delMenuAnchorEl)
 
   useEffect(() => setErrors({}), [file])
 
@@ -78,6 +105,10 @@ const File = ({ file, parent, refetch }) => {
     // batch delete unneeded files using the api
     // https://uploadcare.com/docs/api_reference/rest/accessing_files
   }, [file])
+  const onClickDownload = useCallback(
+    () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
+    [file],
+  )
 
   const saveToDb = useCallback(
     async event => {
@@ -141,27 +172,31 @@ const File = ({ file, parent, refetch }) => {
         ) : (
           <ImgReplacement>...</ImgReplacement>
         )}
-        <TextField
-          key={`${file.id}fileMimeType`}
-          name="fileMimeType"
-          label="Datei-Typ"
-          value={file.file_mime_type}
-          saveToDb={saveToDb}
-          error={errors.file_mime_type}
-          disabled
-          schrinkLabel
-        />
+        <DateiTypField>
+          <TextField
+            key={`${file.id}fileMimeType`}
+            name="fileMimeType"
+            label="Datei-Typ"
+            value={file.file_mime_type}
+            saveToDb={saveToDb}
+            error={errors.file_mime_type}
+            disabled
+            schrinkLabel
+          />
+        </DateiTypField>
         <Spacer />
-        <TextField
-          key={`${file.id}name`}
-          name="name"
-          label="Datei-Name"
-          value={file.name}
-          saveToDb={saveToDb}
-          error={errors.name}
-          disabled
-          schrinkLabel
-        />
+        <DateiNameField>
+          <TextField
+            key={`${file.id}name`}
+            name="name"
+            label="Datei-Name"
+            value={file.name}
+            saveToDb={saveToDb}
+            error={errors.name}
+            disabled
+            schrinkLabel
+          />
+        </DateiNameField>
         <Spacer />
         <TextField
           key={`${file.id}beschreibung`}
@@ -174,9 +209,34 @@ const File = ({ file, parent, refetch }) => {
           schrinkLabel
         />
         <Spacer />
-        <DelIcon title="löschen" onClick={onClickDelete}>
+        <DownloadIcon title="herunterladen" onClick={onClickDownload}>
+          <FaDownload />
+        </DownloadIcon>
+        <DelIcon
+          title="löschen"
+          aria-label="löschen"
+          aria-owns={delMenuOpen ? 'delMenu' : undefined}
+          aria-haspopup="true"
+          onClick={event => setDelMenuAnchorEl(event.currentTarget)}
+        >
           <FaTimes />
         </DelIcon>
+        <Menu
+          id="delMenu"
+          anchorEl={delMenuAnchorEl}
+          open={delMenuOpen}
+          onClose={() => setDelMenuAnchorEl(null)}
+          PaperProps={{
+            style: {
+              maxHeight: 48 * 4.5,
+              width: 200,
+            },
+          }}
+        >
+          <MenuTitle>Wirklich löschen?</MenuTitle>
+          <MenuItem onClick={onClickDelete}>ja</MenuItem>
+          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+        </Menu>
       </Container>
     </ErrorBoundary>
   )
