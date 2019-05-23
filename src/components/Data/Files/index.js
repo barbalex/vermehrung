@@ -20,6 +20,17 @@ const Container = styled.div`
 const H4 = styled.h4`
   margin-bottom: 1rem;
 `
+const Hr = styled.hr`
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 2px solid rgba(74, 20, 140, 0.1);
+  margin: 1em 0;
+  padding: 0;
+  margin-left: -10px;
+  margin-right: -10px;
+  background: none;
+`
 
 const queryObject = {
   herkunft: gql`
@@ -61,6 +72,7 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
+        <Hr />
         <H4>Dateien</H4>
         <Uploader
           id="file"
