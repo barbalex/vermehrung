@@ -56,7 +56,6 @@ const Files = ({ parentId, parent }) => {
   })
 
   const files = get(data, `${parent}_file`, [])
-  console.log('Files:', { files, data })
 
   const onClickUpload = useCallback(() => {
     // TODO

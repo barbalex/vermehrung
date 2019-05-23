@@ -3,6 +3,8 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from 'react-apollo-hooks'
 import styled from 'styled-components'
+import { FaTimes } from 'react-icons/fa'
+import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -12,7 +14,9 @@ import types from '../../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   display: flex;
+  flex-wrap: nowrap;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  width: 100%;
 `
 const Img = styled.img`
   margin-right: 5px;
@@ -23,9 +27,17 @@ const Img = styled.img`
 const ImgReplacement = styled.div`
   min-width: 80px;
   margin-right: 5px;
+  text-align: center;
   color: rgba(0, 0, 0, 0.38);
   font-size: 1rem;
   padding-top: 19px;
+`
+const DelIcon = styled(IconButton)`
+  color: red !important;
+  margin-bottom: 20px !important;
+`
+const Spacer = styled.div`
+  min-width: 10px;
 `
 
 const File = ({ file }) => {
@@ -102,7 +114,7 @@ const File = ({ file }) => {
             }/-/resize/80x/-/quality/lightest/${file.name}`}
           />
         ) : (
-          <ImgReplacement>(kein Bild)</ImgReplacement>
+          <ImgReplacement>...</ImgReplacement>
         )}
         <TextField
           key={`${file.id}fileMimeType`}
@@ -114,6 +126,7 @@ const File = ({ file }) => {
           disabled
           schrinkLabel
         />
+        <Spacer />
         <TextField
           key={`${file.id}name`}
           name="name"
@@ -124,6 +137,7 @@ const File = ({ file }) => {
           disabled
           schrinkLabel
         />
+        <Spacer />
         <TextField
           key={`${file.id}beschreibung`}
           name="beschreibung"
@@ -134,6 +148,10 @@ const File = ({ file }) => {
           multiLine
           schrinkLabel
         />
+        <Spacer />
+        <DelIcon title="löschen">
+          <FaTimes />
+        </DelIcon>
       </Container>
     </ErrorBoundary>
   )
