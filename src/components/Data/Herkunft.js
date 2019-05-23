@@ -68,10 +68,6 @@ const Herkunft = () => {
 
   useEffect(() => setErrors({}), [row])
 
-  const onClickUpload = useCallback(() => {
-    // TODO
-  }, [row])
-
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name

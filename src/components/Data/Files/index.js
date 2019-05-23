@@ -51,15 +51,47 @@ const Files = ({ parentId, parent }) => {
   const store = useContext(storeContext)
 
   const query = queryObject[parent]
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, refetch } = useQuery(query, {
     variables: { parentId },
   })
 
   const files = get(data, `${parent}_file`, [])
 
-  const onClickUpload = useCallback(() => {
-    // TODO
-  }, [parentId])
+  const onChangeUploader = useCallback(
+    file => {
+      if (file) {
+        file.done(async info => {
+          const mutation = gql`
+            mutation insertFile {
+              insert_${parent}_file (objects: [{
+                file_id: "${info.uuid}",
+                file_mime_type: "${info.mimeType}",
+                herkunft_id: ${parentId},
+                name: "${info.name}"
+              }]) {
+                returning { ${parent}_id }
+              }
+            }
+          `
+          try {
+            await client.mutate({
+              mutation,
+            })
+          } catch (error) {
+            return store.enqueNotification({
+              message: error.message,
+              options: {
+                variant: 'error',
+              },
+            })
+          }
+          //console.log('File uploaded: ', { info, responce })
+          refetch()
+        })
+      }
+    },
+    [parentId, refetch],
+  )
 
   if (loading) {
     return 'Lade...'
@@ -76,48 +108,15 @@ const Files = ({ parentId, parent }) => {
       <Container>
         <Hr />
         <H4>Dateien</H4>
-        <Uploader
-          id="file"
-          name="file"
-          onChange={file => {
-            //console.log('File changed: ', file)
-            if (file) {
-              file.done(async info => {
-                const mutation = gql`
-                  mutation insertFile {
-                    insert_${parent}_file (objects: [{
-                      file_id: "${info.uuid}",
-                      file_mime_type: "${info.mimeType}",
-                      herkunft_id: ${parentId},
-                      name: "${info.name}"
-                    }]) {
-                      returning { ${parent}_id }
-                    }
-                  }
-                `
-                console.log('File uploaded: ', { mutation })
-                let responce
-                try {
-                  responce = await client.mutate({
-                    mutation,
-                  })
-                } catch (error) {
-                  console.log('Error inserting dataset', error.message)
-                  return store.enqueNotification({
-                    message: error.message,
-                    options: {
-                      variant: 'error',
-                    },
-                  })
-                }
-                console.log('File uploaded: ', { info, responce })
-              })
-            }
-          }}
-        />
+        <Uploader id="file" name="file" onChange={onChangeUploader} />
         <Spacer />
         {files.map(file => (
-          <File key={file.file_id} file={file} />
+          <File
+            key={file.file_id}
+            file={file}
+            parent={parent}
+            refetch={refetch}
+          />
         ))}
       </Container>
     </ErrorBoundary>

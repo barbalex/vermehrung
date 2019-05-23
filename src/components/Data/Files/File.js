@@ -40,14 +40,41 @@ const Spacer = styled.div`
   min-width: 10px;
 `
 
-const File = ({ file }) => {
+const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { refetch } = store.tree
 
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [file])
+
+  const onClickDelete = useCallback(async () => {
+    console.log('File', { file, parent })
+    // 1. remove dataset
+    try {
+      await client.mutate({
+        mutation: gql`
+          mutation deleteDataset {
+            delete_${parent}_file (where: {file_id: {_eq: "${file.file_id}"}}) {
+              returning {
+                id
+              }
+            }
+          }
+        `,
+      })
+    } catch (error) {
+      console.log(error)
+      return store.enqueNotification({
+        message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    refetch()
+    // TODO: 2. remove file
+  }, [file])
 
   const saveToDb = useCallback(
     async event => {
@@ -149,7 +176,7 @@ const File = ({ file }) => {
           schrinkLabel
         />
         <Spacer />
-        <DelIcon title="löschen">
+        <DelIcon title="löschen" onClick={onClickDelete}>
           <FaTimes />
         </DelIcon>
       </Container>
