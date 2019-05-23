@@ -73,7 +73,10 @@ const File = ({ file, parent, refetch }) => {
       })
     }
     refetch()
-    // TODO: 2. remove file
+    // 2. remove file
+    // actually no: not secure
+    // batch delete unneeded files using the api
+    // https://uploadcare.com/docs/api_reference/rest/accessing_files
   }, [file])
 
   const saveToDb = useCallback(
