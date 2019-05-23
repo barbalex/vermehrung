@@ -20,6 +20,13 @@ const Img = styled.img`
   height: 45px;
   object-fit: contain;
 `
+const ImgReplacement = styled.div`
+  min-width: 80px;
+  margin-right: 5px;
+  color: rgba(0, 0, 0, 0.38);
+  font-size: 1rem;
+  padding-top: 19px;
+`
 
 const File = ({ file }) => {
   const client = useApolloClient()
@@ -78,16 +85,25 @@ const File = ({ file }) => {
 
   if (!file) return null
 
+  const isImage =
+    file.file_mime_type &&
+    (file.file_mime_type.toLowerCase().includes('jpeg') ||
+      file.file_mime_type.toLowerCase().includes('png'))
+
   console.log('File, file:', file)
 
   return (
     <ErrorBoundary>
       <Container>
-        <Img
-          src={`https://ucarecdn.com/${
-            file.file_id
-          }/-/resize/80x/-/quality/lightest/${file.name}`}
-        />
+        {isImage ? (
+          <Img
+            src={`https://ucarecdn.com/${
+              file.file_id
+            }/-/resize/80x/-/quality/lightest/${file.name}`}
+          />
+        ) : (
+          <ImgReplacement>(kein Bild)</ImgReplacement>
+        )}
         <TextField
           key={`${file.id}fileMimeType`}
           name="fileMimeType"

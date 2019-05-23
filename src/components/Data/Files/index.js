@@ -18,7 +18,7 @@ const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const H4 = styled.h4`
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 `
 const Hr = styled.hr`
   display: block;
@@ -30,6 +30,9 @@ const Hr = styled.hr`
   margin-left: -10px;
   margin-right: -10px;
   background: none;
+`
+const Spacer = styled.div`
+  height: 10px;
 `
 
 const queryObject = {
@@ -113,6 +116,7 @@ const Files = ({ parentId, parent }) => {
             }
           }}
         />
+        <Spacer />
         {files.map(file => (
           <File key={file.file_id} file={file} />
         ))}
