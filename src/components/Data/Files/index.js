@@ -1,15 +1,19 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import Lightbox from 'react-image-lightbox'
+import Button from '@material-ui/core/Button'
 
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../ErrorBoundary'
 import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
 import Uploader from '../../Uploader'
 import File from './File'
+import 'react-image-lightbox/style.css'
+import isImageFile from './isImageFile'
 
 const Container = styled.div`
   height: 100%;
@@ -34,6 +38,13 @@ const Hr = styled.hr`
 const Spacer = styled.div`
   height: 10px;
 `
+const ButtonsContainer = styled.div`
+  display: flex;
+`
+const LightboxButton = styled(Button)`
+  margin-left: 10px !important;
+  text-transform: none !important;
+`
 
 const queryObject = {
   herkunft: gql`
@@ -49,6 +60,9 @@ const queryObject = {
 const Files = ({ parentId, parent }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+
+  const [imageIndex, setImageIndex] = useState(0)
+  const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
   const query = queryObject[parent]
   const { data, error, loading, refetch } = useQuery(query, {
@@ -93,6 +107,24 @@ const Files = ({ parentId, parent }) => {
     [parentId, refetch],
   )
 
+  const images = files.filter(f => isImageFile(f))
+  const imageUrls = images.map(
+    f =>
+      `https://ucarecdn.com/${f.file_id}/-/resize/800x/-/quality/lightest/${
+        f.name
+      }`,
+  )
+  const onClickLightboxButton = useCallback(() => setLightboxIsOpen(true), [])
+  const onCloseLightboxRequest = useCallback(() => setLightboxIsOpen(false), [])
+  const onMovePrevImageRequest = useCallback(
+    () => setImageIndex((imageIndex + images.length - 1) % images.length),
+    [imageIndex, images.length],
+  )
+  const onMoveNextImageRequest = useCallback(
+    () => setImageIndex((imageIndex + 1) % images.length),
+    [imageIndex, images.length],
+  )
+
   if (loading) {
     return 'Lade...'
   }
@@ -103,12 +135,42 @@ const Files = ({ parentId, parent }) => {
     )
   }
 
+  console.log({ title: images[imageIndex].name })
+
   return (
     <ErrorBoundary>
       <Container>
         <Hr />
         <H4>Dateien</H4>
-        <Uploader id="file" name="file" onChange={onChangeUploader} />
+        <ButtonsContainer>
+          <Uploader id="file" name="file" onChange={onChangeUploader} />
+          {images.length && (
+            <LightboxButton
+              color="primary"
+              variant="outlined"
+              onClick={onClickLightboxButton}
+            >
+              Bilder anzeigen
+            </LightboxButton>
+          )}
+        </ButtonsContainer>
+        {lightboxIsOpen && (
+          <Lightbox
+            mainSrc={imageUrls[imageIndex]}
+            nextSrc={imageUrls[(imageIndex + 1) % images.length]}
+            prevSrc={
+              imageUrls[(imageIndex + images.length - 1) % images.length]
+            }
+            onCloseRequest={onCloseLightboxRequest}
+            onMovePrevRequest={onMovePrevImageRequest}
+            onMoveNextRequest={onMoveNextImageRequest}
+            imageTitle={images[imageIndex].name || ''}
+            imageCaption={images[imageIndex].beschreibung || ''}
+            wrapperClassName="lightbox"
+            nextLabel="Nächstes Bild"
+            prevLabel="Voriges Bild"
+          />
+        )}
         <Spacer />
         {files.map(file => (
           <File

@@ -11,6 +11,7 @@ import TextField from '../../shared/TextField'
 import ErrorBoundary from '../../ErrorBoundary'
 import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
+import isImageFile from './isImageFile'
 
 const Container = styled.div`
   display: flex;
@@ -49,7 +50,6 @@ const File = ({ file, parent, refetch }) => {
   useEffect(() => setErrors({}), [file])
 
   const onClickDelete = useCallback(async () => {
-    console.log('File', { file, parent })
     // 1. remove dataset
     try {
       await client.mutate({
@@ -127,12 +127,7 @@ const File = ({ file, parent, refetch }) => {
 
   if (!file) return null
 
-  const isImage =
-    file.file_mime_type &&
-    (file.file_mime_type.toLowerCase().includes('jpeg') ||
-      file.file_mime_type.toLowerCase().includes('png'))
-
-  console.log('File, file:', file)
+  const isImage = isImageFile(file)
 
   return (
     <ErrorBoundary>

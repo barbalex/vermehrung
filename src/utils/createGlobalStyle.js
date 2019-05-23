@@ -59,4 +59,10 @@ export default () => createGlobalStyle`
     border: 1px solid rgba(74,20,140,0.8);
     color: white;
   }
+  
+  /* lightbox */
+  .lightbox .ril-toolbar{
+    margin-top: 64px;
+  }
+
 `
