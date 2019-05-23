@@ -142,7 +142,7 @@ const Files = ({ parentId, parent }) => {
         <H4>Dateien</H4>
         <ButtonsContainer>
           <Uploader id="file" name="file" onChange={onChangeUploader} />
-          {images.length && (
+          {!!images.length && (
             <LightboxButton
               color="primary"
               variant="outlined"
