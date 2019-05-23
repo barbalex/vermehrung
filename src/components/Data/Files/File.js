@@ -11,14 +11,14 @@ import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 
 const Container = styled.div`
-  height: 100%;
   display: flex;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
-const FieldsContainer = styled.div`
-  padding: 10px;
-  overflow: auto !important;
-  height: 100%;
+const Img = styled.img`
+  margin-right: 5px;
+  width: 80px;
+  height: 45px;
+  object-fit: contain;
 `
 
 const File = ({ file }) => {
@@ -47,7 +47,7 @@ const File = ({ file }) => {
         await client.mutate({
           mutation: gql`
               mutation update_herkunft_file(
-                $file_id: bigint!
+                $file_id: uuid!
               ) {
                 update_herkunft_file(
                   where: { file_id: { _eq: $file_id } }
@@ -64,7 +64,7 @@ const File = ({ file }) => {
               ${herkunftFileFragment}
             `,
           variables: {
-            file_id: file.fileId,
+            file_id: file.file_id,
           },
         })
       } catch (error) {
@@ -78,15 +78,15 @@ const File = ({ file }) => {
 
   if (!file) return null
 
+  console.log('File, file:', file)
+
   return (
     <ErrorBoundary>
       <Container>
-        <img
-          width="25%"
-          height="50px"
+        <Img
           src={`https://ucarecdn.com/${
             file.file_id
-          }/-/resize/1000x/-/quality/lightest/${file.name}`}
+          }/-/resize/80x/-/quality/lightest/${file.name}`}
         />
         <TextField
           key={`${file.id}fileMimeType`}
@@ -96,6 +96,7 @@ const File = ({ file }) => {
           saveToDb={saveToDb}
           error={errors.file_mime_type}
           disabled
+          schrinkLabel
         />
         <TextField
           key={`${file.id}name`}
@@ -105,14 +106,17 @@ const File = ({ file }) => {
           saveToDb={saveToDb}
           error={errors.name}
           disabled
+          schrinkLabel
         />
         <TextField
           key={`${file.id}beschreibung`}
           name="beschreibung"
-          label="Lokalname"
+          label="Beschreibung"
           value={file.beschreibung}
           saveToDb={saveToDb}
           error={errors.beschreibung}
+          multiLine
+          schrinkLabel
         />
       </Container>
     </ErrorBoundary>

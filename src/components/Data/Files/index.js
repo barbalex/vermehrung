@@ -17,6 +17,9 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
+const H4 = styled.h4`
+  margin-bottom: 1rem;
+`
 
 const queryObject = {
   herkunft: gql`
@@ -58,6 +61,7 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
+        <H4>Dateien</H4>
         <Uploader
           id="file"
           name="file"

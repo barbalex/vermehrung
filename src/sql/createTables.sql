@@ -118,12 +118,14 @@ create index on herkunft using gin (tsv);
 
 drop table if exists herkunft_file;
 create table herkunft_file (
+  id bigserial primary key,
   herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
   beschreibung text default null
 );
+create index on herkunft using btree (id);
 create index on herkunft_file using btree (herkunft_id);
 create index on herkunft_file using btree (file_id);
 create index on herkunft_file using btree (file_mime_type);

@@ -24,6 +24,7 @@ const MyTextField = ({
   helperText = '',
   error,
   saveToDb,
+  schrinkLabel = false,
 }) => {
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
@@ -39,6 +40,10 @@ const MyTextField = ({
     }
   })
 
+  // once schrink is set, need to manually control ist
+  // schrink if value exists or schrinkLabel was passed
+  const schrink = schrinkLabel || (!!value || value === 0)
+
   return (
     <StyledFormControl
       fullWidth
@@ -46,7 +51,9 @@ const MyTextField = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
     >
-      <InputLabel htmlFor={label}>{label}</InputLabel>
+      <InputLabel htmlFor={label} shrink={schrink}>
+        {label}
+      </InputLabel>
       <Input
         id={label}
         name={name}
