@@ -5,7 +5,6 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import Button from '@material-ui/core/Button'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'

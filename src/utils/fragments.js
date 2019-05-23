@@ -38,6 +38,15 @@ export const herkunft = gql`
     bemerkungen
   }
 `
+export const herkunftFile = gql`
+  fragment HerkunftFileFields on herkunftFile {
+    herkunftId
+    fileId
+    fileMimeType
+    name
+    beschreibung
+  }
+`
 export const kultur = gql`
   fragment KulturFields on kultur {
     id
