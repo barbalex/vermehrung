@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const queryObject = {
   herkunft: gql`
-    query FileQuery($parentId: uuid!) {
+    query FileQuery($parentId: Int!) {
       herkunft_file(where: { herkunft_id: { _eq: $parentId } }) {
         ...HerkunftFileFields
       }

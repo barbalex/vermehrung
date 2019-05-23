@@ -39,10 +39,10 @@ export const herkunft = gql`
   }
 `
 export const herkunftFile = gql`
-  fragment HerkunftFileFields on herkunftFile {
-    herkunftId
-    fileId
-    fileMimeType
+  fragment HerkunftFileFields on herkunft_file {
+    herkunft_id
+    file_id
+    file_mime_type
     name
     beschreibung
   }

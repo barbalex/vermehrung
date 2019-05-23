@@ -14,6 +14,7 @@ import { herkunft as herkunftFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
 import Uploader from '../Uploader'
+import Files from './Files'
 
 const Container = styled.div`
   height: 100%;
@@ -221,6 +222,7 @@ const Herkunft = () => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Files parentId={row.id} parent="herkunft" />
           <Uploader
             id="file"
             name="file"
