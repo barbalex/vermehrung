@@ -38,7 +38,8 @@ const Files = ({ parentId, parent }) => {
     variables: { parentId },
   })
 
-  const files = get(data, parent, [{}])
+  const files = get(data, `${parent}_file`, [])
+  console.log('Files:', { files, data })
 
   const onClickUpload = useCallback(() => {
     // TODO
@@ -57,24 +58,48 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
-        {files.map(file => (
-          <File key={file.fileId} file={file} />
-        ))}
         <Uploader
           id="file"
           name="file"
           onChange={file => {
-            console.log('File changed: ', file)
-
+            //console.log('File changed: ', file)
             if (file) {
-              file.progress(info =>
-                console.log('File progress: ', info.progress),
-              )
-              file.done(info => console.log('File uploaded: ', info))
+              file.done(async info => {
+                const mutation = gql`
+                  mutation insertFile {
+                    insert_${parent}_file (objects: [{
+                      file_id: "${info.uuid}",
+                      file_mime_type: "${info.mimeType}",
+                      herkunft_id: ${parentId},
+                      name: "${info.name}"
+                    }]) {
+                      returning { ${parent}_id }
+                    }
+                  }
+                `
+                console.log('File uploaded: ', { mutation })
+                let responce
+                try {
+                  responce = await client.mutate({
+                    mutation,
+                  })
+                } catch (error) {
+                  console.log('Error inserting dataset', error.message)
+                  return store.enqueNotification({
+                    message: error.message,
+                    options: {
+                      variant: 'error',
+                    },
+                  })
+                }
+                console.log('File uploaded: ', { info, responce })
+              })
             }
           }}
-          onUploadComplete={info => console.log('Upload completed:', info)}
         />
+        {files.map(file => (
+          <File key={file.file_id} file={file} />
+        ))}
       </Container>
     </ErrorBoundary>
   )

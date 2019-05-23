@@ -13,7 +13,6 @@ import ErrorBoundary from '../ErrorBoundary'
 import { herkunft as herkunftFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
-import Uploader from '../Uploader'
 import Files from './Files'
 
 const Container = styled.div`
@@ -223,21 +222,6 @@ const Herkunft = () => {
             multiLine
           />
           <Files parentId={row.id} parent="herkunft" />
-          <Uploader
-            id="file"
-            name="file"
-            onChange={file => {
-              console.log('File changed: ', file)
-
-              if (file) {
-                file.progress(info =>
-                  console.log('File progress: ', info.progress),
-                )
-                file.done(info => console.log('File uploaded: ', info))
-              }
-            }}
-            onUploadComplete={info => console.log('Upload completed:', info)}
-          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
