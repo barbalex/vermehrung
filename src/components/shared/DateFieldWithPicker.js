@@ -4,7 +4,7 @@
  * setting null of cours makes react log errors
  */
 import React, { useEffect, useState, useCallback } from 'react'
-import { DatePicker } from 'material-ui-pickers'
+import { KeyboardDatePicker } from '@material-ui/pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import moment from 'moment'
 import format from 'date-fns/format'
@@ -12,7 +12,7 @@ import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-const StyledDatePicker = styled(DatePicker)`
+const StyledDatePicker = styled(KeyboardDatePicker)`
   padding-bottom: 19px !important;
   > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
@@ -22,6 +22,10 @@ const StyledDatePicker = styled(DatePicker)`
       display: none;
     }
   }
+`
+const StyledFormHelperText = styled(FormHelperText)`
+  margin-top: -10px !important;
+  margin-bottom: ${props => (props.active ? '10px !important' : '0')};
 `
 
 const DateFieldWithPicker = ({
@@ -34,32 +38,42 @@ const DateFieldWithPicker = ({
   const [stateValue, setStateValue] = useState(
     isValid(propsValue) ? propsValue : null,
   )
+  const [internalError, setInternalError] = useState(null)
 
   const onChange = useCallback(
-    valuePassed => {
-      /**
-       * change happens when data is picked in picker
-       * so is never null or otherwise invalid
-       * oops: it is null if clear button is clicked!
-       */
-      if (!moment(valuePassed).isValid()) {
+    (datePassed, valuePassed) => setStateValue(valuePassed),
+    [name],
+  )
+
+  const onAccept = useCallback(
+    datePassed => {
+      if (!moment(datePassed).isValid()) {
         const fakeEvent = { target: { value: null, name } }
-        saveToDb(fakeEvent)
-        return setStateValue(null)
+        return saveToDb(fakeEvent)
       }
-      const newValue = format(new Date(valuePassed), 'yyyy-MM-dd')
+      const newValue = format(new Date(datePassed), 'yyyy-MM-dd')
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
-      setStateValue(newValue)
+      setInternalError(null)
     },
     [name],
   )
   const onBlur = useCallback(
     event => {
-      const { value } = event.target
-      // do not change anything of there are no values
+      const { value: valuePassed } = event.target
+      // value is masked "__.__.__"
+      const value = valuePassed
+        .replace('_.__.__', '')
+        .replace('.__.__', '')
+        .replace('__.__', '')
+        .replace('_.__', '')
+        .replace('.__', '')
+        .replace('__', '')
+        .replace('_', '')
+      // do not change anything if there are no values
       // test validity using moment because date-fns isValid('1') is false
       if (!moment(value).isValid()) {
+        if (value) setInternalError(`"${value}" ist kein zulässiges Datum`)
         const fakeEvent = { target: { value: null, name } }
         saveToDb(fakeEvent)
         return setStateValue(null)
@@ -80,6 +94,7 @@ const DateFieldWithPicker = ({
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
       setStateValue(newValue)
+      setInternalError(null)
     },
     [name],
   )
@@ -87,6 +102,9 @@ const DateFieldWithPicker = ({
   useEffect(() => {
     setStateValue(propsValue)
   }, [propsValue])
+  useEffect(() => {
+    setInternalError(null)
+  }, [name])
 
   const onKeyPress = useCallback(event => {
     if (event.key === 'Enter') {
@@ -97,15 +115,16 @@ const DateFieldWithPicker = ({
   return (
     <>
       <StyledDatePicker
-        keyboard
         label={label}
         format="DD.MM.YYYY"
         value={stateValue}
         onChange={onChange}
+        onAccept={onAccept}
         onBlur={onBlur}
         onKeyPress={onKeyPress}
         disableOpenOnEnter
         animateYearScrolling={false}
+        mask=""
         autoOk
         clearable={true}
         clearLabel="leeren"
@@ -117,8 +136,14 @@ const DateFieldWithPicker = ({
         okLabel="speichern"
         fullWidth
       />
-      {!!error && (
-        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      {(!!error || internalError) && (
+        <StyledFormHelperText
+          id={`${label}ErrorText`}
+          error
+          active={error || internalError}
+        >
+          {error || internalError}
+        </StyledFormHelperText>
       )}
     </>
   )

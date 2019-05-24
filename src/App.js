@@ -12,7 +12,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
 import MomentUtils from '@date-io/moment'
-import { MuiPickersUtilsProvider } from 'material-ui-pickers'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 
 import materialTheme from './utils/materialTheme'
 import client from '../client'
