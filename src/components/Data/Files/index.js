@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -67,6 +67,11 @@ const Files = ({ parentId, parent }) => {
   const query = queryObject[parent]
   const { data, error, loading, refetch } = useQuery(query, {
     variables: { parentId },
+  })
+
+  setTimeout(() => {
+    const b = document.getElementsByClassName('uploadcare--widget__button')[0]
+    if (b) b.innerHTML = 'Neue Datei hochladen'
   })
 
   const files = get(data, `${parent}_file`, [])
@@ -141,7 +146,12 @@ const Files = ({ parentId, parent }) => {
         <Hr />
         <H4>Dateien</H4>
         <ButtonsContainer>
-          <Uploader id="file" name="file" onChange={onChangeUploader} />
+          <Uploader
+            id="file"
+            name="file"
+            onChange={onChangeUploader}
+            content="test"
+          />
           {!!images.length && (
             <LightboxButton
               color="primary"
