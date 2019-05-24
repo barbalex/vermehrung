@@ -42,7 +42,10 @@ const LightboxButton = styled(Button)`
 const queryObject = {
   herkunft: gql`
     query FileQuery($parentId: Int!) {
-      herkunft_file(where: { herkunft_id: { _eq: $parentId } }) {
+      herkunft_file(
+        order_by: { name: asc }
+        where: { herkunft_id: { _eq: $parentId } }
+      ) {
         ...HerkunftFileFields
       }
     }
