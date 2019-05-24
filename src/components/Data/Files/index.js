@@ -158,7 +158,7 @@ const Files = ({ parentId, parent }) => {
               variant="outlined"
               onClick={onClickLightboxButton}
             >
-              Bilder gross anzeigen
+              Bilder in Gallerie öffnen
             </LightboxButton>
           )}
         </ButtonsContainer>

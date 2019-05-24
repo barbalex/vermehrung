@@ -54,10 +54,22 @@ export default () => createGlobalStyle`
     border: 1px solid black;
     outline: none;
   }
-  .uploadcare--widget__button:hover{
-    background: rgba(74,20,140,0.8);
-    border: 1px solid rgba(74,20,140,0.8);
-    color: white;
+  .uploadcare--widget__button {
+    color: #4a148c;
+    font-size: 0.875rem;
+    line-height: 24.5px;
+    font-weight: 500;
+    border: 1px solid rgba(74, 20, 140, 0.5);
+    border-radius: 4px;
+    padding: 5px 16px;
+  }
+  .uploadcare--widget__button:hover {
+    color: #4a148c;
+    font-size: 0.875rem;
+    line-height: 24.5px;
+    font-weight: 500;
+    border: 1px solid #4a148c;
+    background-color: rgba(74, 20, 140, 0.08);
   }
   
   /* lightbox */
