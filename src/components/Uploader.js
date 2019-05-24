@@ -10,6 +10,20 @@ if (typeof window !== 'undefined') {
   window.UPLOADCARE_IMAGES_ONLY = true
   window.UPLOADCARE_PREVIEW_STEP = true
   window.UPLOADCARE_IMAGES_ONLY = false
+  window.UPLOADCARE_LOCALE_TRANSLATIONS = {
+    buttons: {
+      choose: {
+        files: {
+          one: 'Neue Datei hochladen',
+          other: 'Neue Dateien hochladen',
+        },
+        images: {
+          one: 'Neues Bild hochladen',
+          other: 'Neue Bilder hochladen',
+        },
+      },
+    },
+  }
 }
 
 const uploadcare = require('uploadcare-widget')
@@ -38,6 +52,10 @@ class Uploader extends Component {
       widget.onUploadComplete(onUploadComplete)
     }
     widget.onDialogOpen(dialog => (this.dialog = dialog))
+    // reset widget after upload
+    widget.onUploadComplete(function() {
+      widget.value(null)
+    })
   }
 
   componentWillUnmount() {

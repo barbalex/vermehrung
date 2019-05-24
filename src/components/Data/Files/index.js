@@ -69,17 +69,13 @@ const Files = ({ parentId, parent }) => {
     variables: { parentId },
   })
 
-  setTimeout(() => {
-    const b = document.getElementsByClassName('uploadcare--widget__button')[0]
-    if (b) b.innerHTML = 'Neue Datei hochladen'
-  })
-
   const files = get(data, `${parent}_file`, [])
 
   const onChangeUploader = useCallback(
     file => {
       if (file) {
         file.done(async info => {
+          //console.log({ info })
           const mutation = gql`
             mutation insertFile {
               insert_${parent}_file (objects: [{
@@ -106,6 +102,7 @@ const Files = ({ parentId, parent }) => {
           }
           //console.log('File uploaded: ', { info, responce })
           refetch()
+          // TODO: reinitiate uploader
         })
       }
     },

@@ -54,7 +54,8 @@ export default () => createGlobalStyle`
     border: 1px solid black;
     outline: none;
   }
-  .uploadcare--widget__button {
+  .uploadcare--widget__button,
+  .uploadcare--widget__button:focus {
     color: #4a148c;
     font-size: 0.875rem;
     line-height: 24.5px;
