@@ -17,7 +17,7 @@ import isImageFile from './isImageFile'
 
 const Container = styled.div`
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
   width: 100%;
 `
@@ -53,6 +53,9 @@ const DateiTypField = styled.div`
 const DateiNameField = styled.div`
   min-width: 215px;
   flex-grow: 0;
+`
+const BeschreibungField = styled.div`
+  flex-grow: 1;
 `
 const MenuTitle = styled.h3`
   padding-top: 8px;
@@ -198,16 +201,18 @@ const File = ({ file, parent, refetch }) => {
           />
         </DateiNameField>
         <Spacer />
-        <TextField
-          key={`${file.id}beschreibung`}
-          name="beschreibung"
-          label="Beschreibung"
-          value={file.beschreibung}
-          saveToDb={saveToDb}
-          error={errors.beschreibung}
-          multiLine
-          schrinkLabel
-        />
+        <BeschreibungField>
+          <TextField
+            key={`${file.id}beschreibung`}
+            name="beschreibung"
+            label="Beschreibung"
+            value={file.beschreibung}
+            saveToDb={saveToDb}
+            error={errors.beschreibung}
+            multiLine
+            schrinkLabel
+          />
+        </BeschreibungField>
         <Spacer />
         <DownloadIcon title="herunterladen" onClick={onClickDownload}>
           <FaDownload />

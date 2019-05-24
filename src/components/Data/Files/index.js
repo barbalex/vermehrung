@@ -16,7 +16,6 @@ import 'react-image-lightbox/style.css'
 import isImageFile from './isImageFile'
 
 const Container = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
