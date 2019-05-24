@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { signature, expire } from '../utils/uploadcareSignature'
 
 if (typeof window !== 'undefined') {
   window.UPLOADCARE_PUBLIC_KEY = process.env.UPLOADCARE_PUBLIC_KEY
@@ -24,6 +25,8 @@ if (typeof window !== 'undefined') {
       },
     },
   }
+  window.UPLOADCARE_SECURE_SIGNATURE = signature
+  window.UPLOADCARE_SECURE_EXPIRE = expire
 }
 
 const uploadcare = require('uploadcare-widget')

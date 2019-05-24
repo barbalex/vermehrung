@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState, useEffect } from 'react'
+import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -23,17 +23,11 @@ const Container = styled.div`
 `
 const H4 = styled.h4`
   margin-bottom: 0.5rem;
-`
-const Hr = styled.hr`
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 2px solid rgba(74, 20, 140, 0.1);
-  margin: 1em 0;
-  padding: 0;
+  background-color: rgba(74, 20, 140, 0.1);
   margin-left: -10px;
   margin-right: -10px;
-  background: none;
+  margin-bottom: 15px;
+  padding: 10px;
 `
 const Spacer = styled.div`
   height: 10px;
@@ -140,7 +134,6 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <Hr />
         <H4>Dateien</H4>
         <ButtonsContainer>
           <Uploader

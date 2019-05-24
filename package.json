@@ -51,6 +51,7 @@
     "isomorphic-fetch": "2.2.1",
     "lodash": "4.17.11",
     "material-ui-pickers": "2.2.4",
+    "md5-hex": "3.0.0",
     "memoize-one": "5.0.4",
     "mobx": "5.9.4",
     "mobx-react-lite": "1.3.2",
