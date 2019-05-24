@@ -878,7 +878,7 @@
   dependencies:
     "@babel/runtime" "^7.2.0"
 
-"@material-ui/pickers@^3.0.0":
+"@material-ui/pickers@3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@material-ui/pickers/-/pickers-3.0.0.tgz#cd99933e5701fa5aeea1862418b43fc399398e15"
   integrity sha512-tjnKWHudaZ089Gsxvio/8DxDVUmPIx/RRi1O66haAGGJmahoI9ICDU8lwpoU828nY7f3mQN7lSrca9bdAdrLoA==
@@ -1693,10 +1693,10 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-auth0-js@9.10.3:
-  version "9.10.3"
-  resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-9.10.3.tgz#a64ad8de992350c6e071cc277e1c09af18346586"
-  integrity sha512-H2jYCaPi6ZFnoECX0gcCDLBHoq/cFzNAAbAAoZuEqkQFYRNTDIsXk8zw3Vdm9pOX8SXl9JfdjSeML7TXlXVPvw==
+auth0-js@9.10.4:
+  version "9.10.4"
+  resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-9.10.4.tgz#1cccfa2bdb3ea1d001805f22a31c0a40c6ec9480"
+  integrity sha512-FKwwA0E9NDrn/MxCzeftA5wx6YCos9wINhuvXeFHDdx+Lis7ykR46kBXJF4+dYjDdC5QhQ7W0cAp6bBS5gS75Q==
   dependencies:
     base64-js "^1.2.0"
     idtoken-verifier "^1.2.0"
@@ -12974,9 +12974,9 @@ wrappy@1:
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
 write-file-atomic@^2.0.0:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/write-file-atomic/-/write-file-atomic-2.4.2.tgz#a7181706dfba17855d221140a9c06e15fcdd87b9"
-  integrity sha512-s0b6vB3xIVRLWywa6X9TOMA7k9zio0TMOsl9ZnDkliA/cfJlpHXAscj0gbHVJiTdIuAYpIyqS5GW91fqm6gG5g==
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/write-file-atomic/-/write-file-atomic-2.4.3.tgz#1fd2e9ae1df3e75b8d8c367443c692d4ca81f481"
+  integrity sha512-GaETH5wwsX+GcnzhPgKcKjJ6M2Cq3/iZp1WyY/X1CSqrW+jVNM9Y7D8EC2sM4ZG/V8wZlSniJnCKWPmBYAucRQ==
   dependencies:
     graceful-fs "^4.1.11"
     imurmurhash "^0.1.4"
