@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 
@@ -39,18 +40,8 @@ const LightboxButton = styled(Button)`
   text-transform: none !important;
 `
 
-const queryObject = {
-  herkunft: gql`
-    query FileQuery($parentId: Int!) {
-      herkunft_file(
-        order_by: { name: asc }
-        where: { herkunft_id: { _eq: $parentId } }
-      ) {
-        ...HerkunftFileFields
-      }
-    }
-    ${herkunftFileFragment}
-  `,
+const fragmentObject = {
+  herkunft: herkunftFileFragment,
 }
 
 const Files = ({ parentId, parent }) => {
@@ -59,6 +50,22 @@ const Files = ({ parentId, parent }) => {
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
+
+  const fieldsName = `${upperFirst(parent)}FileFields`
+  const fragment = fragmentObject[parent]
+  const queryObject = {
+    herkunft: gql`
+    query FileQuery($parentId: Int!) {
+      ${parent}_file(
+        order_by: { name: asc }
+        where: { herkunft_id: { _eq: $parentId } }
+      ) {
+        ...${fieldsName}
+      }
+    }
+    ${fragment}
+  `,
+  }
 
   const query = queryObject[parent]
   const { data, error, loading, refetch } = useQuery(query, {
@@ -77,7 +84,7 @@ const Files = ({ parentId, parent }) => {
               insert_${parent}_file (objects: [{
                 file_id: "${info.uuid}",
                 file_mime_type: "${info.mimeType}",
-                herkunft_id: ${parentId},
+                ${parent}_id: ${parentId},
                 name: "${info.name}"
               }]) {
                 returning { ${parent}_id }
