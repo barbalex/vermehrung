@@ -14,6 +14,7 @@ import ErrorBoundary from '../../ErrorBoundary'
 import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import isImageFile from './isImageFile'
+//import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 
 const Container = styled.div`
   display: flex;
@@ -106,6 +107,34 @@ const File = ({ file, parent, refetch }) => {
     // actually no: not secure
     // batch delete unneeded files using the api
     // https://uploadcare.com/docs/api_reference/rest/accessing_files
+    // also: following does not work due to
+    // 1. cors issue, 2. "Date is an unsafe header"...
+    /*
+    const verb = 'DELETE'
+    const uri = `/files/${file.file_id}/storage`
+    const signature = uploadcareApiSignature({ verb, uri })
+    let res
+    try {
+      res = await axios.delete(`https://api.uploadcare.com${uri}`, {
+        mode: 'no-cors',
+        withCredentials: true,
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+          'Access-Control-Allow-Credentials': 'true',
+          Accept: 'application/vnd.uploadcare-v0.5+json',
+          Date: new Date().toISOString(),
+          Authorization: `Uploadcare ${
+            process.env.UPLOADCARE_PUBLIC_KEY
+          }:${signature}`,
+        },
+      })
+    } catch (error) {
+      console.log(error)
+    }
+    console.log('File, onClickDelete', { res, file })*/
   }, [file])
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
