@@ -37,7 +37,6 @@ const ImgReplacement = styled.div`
   padding-top: 19px;
 `
 const DelIcon = styled(IconButton)`
-  color: red !important;
   margin-bottom: 20px !important;
 `
 const DownloadIcon = styled(IconButton)`
