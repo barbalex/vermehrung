@@ -12,7 +12,6 @@ import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
 import ErrorBoundary from '../../ErrorBoundary'
 import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 
@@ -146,12 +145,9 @@ const File = ({ file, parent, refetch }) => {
       const field = event.target.name
       const value = event.target.value || null
       try {
-        const type = types.lieferung[field]
         let valueToSet
         if (value === undefined || value === null) {
           valueToSet = null
-        } else if (['number', 'boolean'].includes(type)) {
-          valueToSet = value
         } else {
           valueToSet = `"${value}"`
         }
