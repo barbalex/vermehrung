@@ -122,7 +122,6 @@ const DateFieldWithPicker = ({
         onAccept={onAccept}
         onBlur={onBlur}
         onKeyPress={onKeyPress}
-        disableOpenOnEnter
         animateYearScrolling={false}
         mask=""
         autoOk
