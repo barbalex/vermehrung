@@ -59,7 +59,7 @@ const BeschreibungField = styled.div`
 `
 const MenuTitle = styled.h3`
   padding-top: 8px;
-  padding-left: 16px;
+  padding-left: 15px;
   padding-right: 16px;
   padding-bottom: 0;
   margin-bottom: 3px;
@@ -261,11 +261,11 @@ const File = ({ file, parent, refetch }) => {
           PaperProps={{
             style: {
               maxHeight: 48 * 4.5,
-              width: 200,
+              width: 120,
             },
           }}
         >
-          <MenuTitle>Wirklich löschen?</MenuTitle>
+          <MenuTitle>löschen?</MenuTitle>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </Menu>
