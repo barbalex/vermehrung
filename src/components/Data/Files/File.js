@@ -22,7 +22,7 @@ const Container = styled.div`
   width: 100%;
 `
 const Img = styled.img`
-  margin-right: 5px;
+  margin-right: 10px;
   width: 80px;
   height: 50px;
   object-fit: contain;
@@ -30,7 +30,7 @@ const Img = styled.img`
 `
 const ImgReplacement = styled.div`
   min-width: 80px;
-  margin-right: 5px;
+  margin-right: 10px;
   text-align: center;
   color: rgba(0, 0, 0, 0.38);
   font-size: 1rem;
@@ -44,7 +44,7 @@ const DownloadIcon = styled(IconButton)`
   margin-bottom: 20px !important;
 `
 const Spacer = styled.div`
-  min-width: 10px;
+  min-width: 12px;
 `
 const DateiTypField = styled.div`
   min-width: 200px;
@@ -213,7 +213,6 @@ const File = ({ file, parent, refetch }) => {
             schrinkLabel
           />
         </BeschreibungField>
-        <Spacer />
         <DownloadIcon title="herunterladen" onClick={onClickDownload}>
           <FaDownload />
         </DownloadIcon>
