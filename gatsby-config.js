@@ -84,8 +84,10 @@ module.exports = {
             resolve: 'gatsby-remark-images',
             options: {
               maxWidth: 740,
+              linkImagesToOriginal: false,
             },
           },
+          'gatsby-remark-images-zoom',
           {
             resolve: 'gatsby-remark-autolink-headers',
             options: {
