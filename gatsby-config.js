@@ -87,7 +87,6 @@ module.exports = {
               linkImagesToOriginal: false,
             },
           },
-          'gatsby-remark-images-zoom',
           {
             resolve: 'gatsby-remark-autolink-headers',
             options: {
@@ -121,6 +120,7 @@ module.exports = {
               rel: 'nofollow',
             },
           },
+          'gatsby-remark-images-zoom',
         ],
       },
     },
