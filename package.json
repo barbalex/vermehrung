@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "gatsby develop",
-    "build": "gatsby build",
+    "build": "gatsby clean && gatsby build",
     "postbuild": "copyfiles now.json public",
     "serve": "gatsby serve"
   },
