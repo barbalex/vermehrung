@@ -147,6 +147,7 @@ drop table if exists kultur cascade;
 create table kultur (
   id bigserial primary key,
   art_id integer default null references art (id) on delete cascade on update cascade,
+  herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
   garten_id integer default null references garten (id) on delete cascade on update cascade,
   bemerkungen text default null,
   changed date default now(),
@@ -156,8 +157,9 @@ create table kultur (
 );
 create index on kultur using btree (id);
 create index on kultur using btree (garten_id);
-alter table kultur add constraint unique_art_garten unique(art_id,garten_id);
+alter table kultur add constraint unique_art_herkunft_garten unique(art_id,garten_id,herkunft_id);
 create index on kultur using gin (tsv);
+--alter table kultur add constraint fk_kultur_herkunft foreign key (herkunft_id) references herkunft (id) on delete cascade on update cascade;
 
 drop table if exists kultur_event cascade;
 create table kultur_event (
