@@ -1,19 +1,25 @@
+DROP TRIGGER IF EXISTS tsvupdate_person ON person;
+DROP FUNCTION IF EXISTS person_trigger();
 create function person_trigger() returns trigger as $$
   begin
-    new.tsv :=
-      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.name, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.adresszusatz, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.strasse, '')), 'C') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.plz::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.ort, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.fax_privat, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.email, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+    if new.aktiv = True then
+      new.tsv :=
+        setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.name, '')), 'A') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.adresszusatz, '')), 'C') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.strasse, '')), 'C') || ' ' ||
+        setweight(to_tsvector('simple', coalesce(new.plz::text, '')), 'D') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.ort, '')), 'C') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.fax_privat, '')), 'D') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.email, '')), 'C') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+    else
+      new.tsv := '';
+    end if;
     return new;
   end
 $$ language plpgsql;
