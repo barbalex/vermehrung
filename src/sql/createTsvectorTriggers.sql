@@ -93,7 +93,7 @@ create function sammlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.menge_beschrieben, ''), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.menge_beschrieben, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
@@ -321,7 +321,7 @@ create function lieferung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.menge_beschrieben, ''), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.menge_beschrieben, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(nachKulturPersonName, '')), 'B') || ' ' ||
       case
         when new.nach_ausgepflanzt='true' then setweight(to_tsvector('simple', 'ausgepflanzt'), 'A')
