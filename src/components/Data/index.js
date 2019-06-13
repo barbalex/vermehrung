@@ -13,16 +13,10 @@ import Sammlung from './Sammlung'
 import Zaehlung from './Zaehlung'
 import Event from './Event'
 import Inventar from './Inventar'
-import WerteListe from './WerteListe'
 
 const Data = () => {
   const store = useContext(storeContext)
   const { activeNodeArray: url } = store.tree
-
-  /*console.log('Data', {
-    activeNodeArray: url.slice(),
-    openNodes: getSnapshot(openNodes),
-  })*/
 
   if (url.length === 1) {
     return null
