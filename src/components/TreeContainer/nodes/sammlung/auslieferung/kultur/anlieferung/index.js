@@ -54,17 +54,13 @@ export default ({ nodes, data, url }) => {
           ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein nach-Datum)'
         const label = `${nach_datum}: ${get(el, 'person.name') ||
-          '(kein Name)'}; ${get(el, 'lieferung_typ_werte.wert') ||
-          '(kein Typ)'}; ${get(el, 'lieferung_status_werte.wert') ||
-          '(kein Status)'}`
+          '(kein Name)'}`
 
         return {
           nodeType: 'table',
           menuTitle: 'An-Lieferung',
           table: 'lieferung',
-          id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Lieferung${
-            el.id
-          }`,
+          id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Lieferung${el.id}`,
           parentId: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}AnLieferungFolder`,
           label,
           url: [

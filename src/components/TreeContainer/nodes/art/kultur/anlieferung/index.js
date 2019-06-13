@@ -34,14 +34,7 @@ export default ({ nodes, data, url }) => {
         const nach_datum = el.von_datum
           ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein nach-Datum)'
-        const label = `${nach_datum}: ${get(
-          el,
-          'person.name',
-          '(kein Name)',
-        )}; ${get(el, 'lieferung_typ_werte.wert') || '(kein Typ)'}; ${get(
-          el,
-          'lieferung_status_werte.wert',
-        ) || '(kein Status)'}`
+        const label = `${nach_datum}: ${get(el, 'person.name', '(kein Name)')}`
 
         return {
           nodeType: 'table',

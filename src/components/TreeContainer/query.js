@@ -131,14 +131,6 @@ export default gql`
           person {
             ...PersonFields
           }
-          lieferung_typ_werte {
-            id
-            wert
-          }
-          lieferung_status_werte {
-            id
-            wert
-          }
         }
         lieferungsByNachKulturId(
           where: $lieferungFilter
@@ -147,14 +139,6 @@ export default gql`
           ...LieferungFields
           person {
             ...PersonFields
-          }
-          lieferung_typ_werte {
-            id
-            wert
-          }
-          lieferung_status_werte {
-            id
-            wert
           }
         }
       }
@@ -174,14 +158,6 @@ export default gql`
           ...LieferungFields
           person {
             ...PersonFields
-          }
-          lieferung_typ_werte {
-            id
-            wert
-          }
-          lieferung_status_werte {
-            id
-            wert
           }
           kulturByNachKulturId {
             ...KulturFields
@@ -257,14 +233,6 @@ export default gql`
         person @include(if: $isKulturAusLieferung) {
           ...PersonFields
         }
-        lieferung_typ_werte @include(if: $isKulturAusLieferung) {
-          id
-          wert
-        }
-        lieferung_status_werte @include(if: $isKulturAusLieferung) {
-          id
-          wert
-        }
       }
       lieferungsByNachKulturId(
         where: $lieferungFilter
@@ -273,14 +241,6 @@ export default gql`
         ...LieferungFields
         person @include(if: $isKulturAnLieferung) {
           ...PersonFields
-        }
-        lieferung_typ_werte @include(if: $isKulturAnLieferung) {
-          id
-          wert
-        }
-        lieferung_status_werte @include(if: $isKulturAnLieferung) {
-          id
-          wert
         }
       }
     }
@@ -302,14 +262,6 @@ export default gql`
           ...LieferungFields
           person {
             ...PersonFields
-          }
-          lieferung_typ_werte {
-            id
-            wert
-          }
-          lieferung_status_werte {
-            id
-            wert
           }
           kulturByNachKulturId {
             ...KulturFields
@@ -342,14 +294,6 @@ export default gql`
       ...LieferungFields
       person @include(if: $isLieferung) {
         ...PersonFields
-      }
-      lieferung_typ_werte @include(if: $isLieferung) {
-        id
-        wert
-      }
-      lieferung_status_werte @include(if: $isLieferung) {
-        id
-        wert
       }
       kulturByNachKulturId @include(if: $isLieferung) {
         ...KulturFields
@@ -402,14 +346,6 @@ export default gql`
             person {
               ...PersonFields
             }
-            lieferung_typ_werte {
-              id
-              wert
-            }
-            lieferung_status_werte {
-              id
-              wert
-            }
           }
           lieferungsByNachKulturId(
             where: $lieferungFilter
@@ -418,14 +354,6 @@ export default gql`
             ...LieferungFields
             person {
               ...PersonFields
-            }
-            lieferung_typ_werte {
-              id
-              wert
-            }
-            lieferung_status_werte {
-              id
-              wert
             }
           }
         }
@@ -442,14 +370,6 @@ export default gql`
       }
       lieferungs @include(if: $isPerson) {
         ...LieferungFields
-        lieferung_typ_werte @include(if: $isPersonLieferung) {
-          id
-          wert
-        }
-        lieferung_status_werte @include(if: $isPersonLieferung) {
-          id
-          wert
-        }
         kulturByNachKulturId @include(if: $isPersonLieferung) {
           ...KulturFields
           art {
@@ -480,14 +400,6 @@ export default gql`
         person @include(if: $isSammlungLieferung) {
           ...PersonFields
         }
-        lieferung_typ_werte @include(if: $isSammlungLieferung) {
-          id
-          wert
-        }
-        lieferung_status_werte @include(if: $isSammlungLieferung) {
-          id
-          wert
-        }
         kulturByNachKulturId {
           ...KulturFields
           garten @include(if: $isSammlungLieferungKultur) {
@@ -510,27 +422,11 @@ export default gql`
             person {
               ...PersonFields
             }
-            lieferung_typ_werte {
-              id
-              wert
-            }
-            lieferung_status_werte {
-              id
-              wert
-            }
           }
           lieferungsByNachKulturId @include(if: $isSammlungLieferungKultur) {
             ...LieferungFields
             person {
               ...PersonFields
-            }
-            lieferung_typ_werte {
-              id
-              wert
-            }
-            lieferung_status_werte {
-              id
-              wert
             }
           }
         }
