@@ -84,16 +84,19 @@ export const lieferung = gql`
   fragment LieferungFields on lieferung {
     id
     art_id
+    herkunft_id
     person_id
-    typ
     von_datum
     von_sammlung_id
     von_kultur_id
-    zwischenlager
     nach_datum
     nach_kultur_id
     nach_ausgepflanzt
-    status
+    von_anzahl_individuen
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
+    menge_beschrieben
+    ausgefuehrt
     bemerkungen
   }
 `

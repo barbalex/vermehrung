@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -115,22 +121,14 @@ const personQuery = gql`
     }
   }
 `
-const werteQuery = gql`
-  query werteQuery {
-    lieferung_typ_werte(order_by: [{ sort: asc }, { wert: asc }]) {
+const dataQuery = gql`
+  query dataQuery {
+    herkunft(
+      order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
+    ) {
       id
-      wert
-      sort
-    }
-    lieferung_status_werte(order_by: [{ sort: asc }, { wert: asc }]) {
-      id
-      wert
-      sort
-    }
-    lieferung_zwischenlager_werte(order_by: [{ sort: asc }, { wert: asc }]) {
-      id
-      wert
-      sort
+      nr
+      lokalname
     }
   }
 `
@@ -158,12 +156,6 @@ const Lieferung = () => {
     error: personError,
     loading: personLoading,
   } = useQuery(personQuery)
-
-  const {
-    data: werteData,
-    error: werteError,
-    loading: werteLoading,
-  } = useQuery(werteQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -194,6 +186,10 @@ const Lieferung = () => {
   } = useQuery(kulturQuery, {
     variables: { filter: kulturFilter },
   })
+
+  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
+    dataQuery,
+  )
 
   useEffect(() => setErrors({}), [row])
 
@@ -238,26 +234,14 @@ const Lieferung = () => {
     })),
   )()
 
-  const lieferungTypWerte = memoizeOne(() =>
-    get(werteData, 'lieferung_typ_werte', []).map(el => ({
-      value: el.id,
-      label: el.wert || '(kein Wert)',
-    })),
-  )()
-
-  const lieferungStatusWerte = memoizeOne(() =>
-    get(werteData, 'lieferung_status_werte', []).map(el => ({
-      value: el.id,
-      label: el.wert || '(kein Wert)',
-    })),
-  )()
-
-  const lieferungZwischenlagerWerte = memoizeOne(() =>
-    get(werteData, 'lieferung_zwischenlager_werte', []).map(el => ({
-      value: el.id,
-      label: el.wert || '(kein Wert)',
-    })),
-  )()
+  const herkunftWerte = useMemo(
+    () =>
+      get(dataData, 'herkunft', []).map(el => ({
+        value: el.id,
+        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
+      })),
+    [dataLoading],
+  )
 
   const saveToDb = useCallback(
     async event => {
@@ -323,9 +307,9 @@ const Lieferung = () => {
     error ||
     sammlungError ||
     kulturError ||
+    dataError ||
     artError ||
-    personError ||
-    werteError
+    personError
   if (errorToShow) {
     return (
       <Container>
@@ -359,6 +343,17 @@ const Lieferung = () => {
             error={errors.art_id}
           />
           <Select
+            key={`${row.id}${row.herkunft_id}herkunft_id`}
+            name="herkunft_id"
+            value={row.herkunft_id}
+            field="herkunft_id"
+            label="Herkunft"
+            options={herkunftWerte}
+            loading={dataLoading}
+            saveToDb={saveToDb}
+            error={errors.herkunft_id}
+          />
+          <Select
             key={`${row.id}person_id`}
             name="person_id"
             value={row.person_id}
@@ -368,28 +363,6 @@ const Lieferung = () => {
             loading={personLoading}
             saveToDb={saveToDb}
             error={errors.person_id}
-          />
-          <Select
-            key={`${row.id}${row.typ}typ`}
-            name="typ"
-            value={row.typ}
-            field="typ"
-            label="Typ"
-            options={lieferungTypWerte}
-            loading={werteLoading}
-            saveToDb={saveToDb}
-            error={errors.typ}
-          />
-          <Select
-            key={`${row.id}${row.status}status`}
-            name="status"
-            value={row.status}
-            field="status"
-            label="Status"
-            options={lieferungStatusWerte}
-            loading={werteLoading}
-            saveToDb={saveToDb}
-            error={errors.status}
           />
           <DateFieldWithPicker
             key={`${row.id}von_datum`}
@@ -421,17 +394,6 @@ const Lieferung = () => {
             saveToDb={saveToDb}
             error={errors.von_kultur_id}
           />
-          <Select
-            key={`${row.id}${row.zwischenlager}zwischenlager`}
-            name="zwischenlager"
-            value={row.zwischenlager}
-            field="zwischenlager"
-            label="Zwischenlager"
-            options={lieferungZwischenlagerWerte}
-            loading={werteLoading}
-            saveToDb={saveToDb}
-            error={errors.zwischenlager}
-          />
           <DateFieldWithPicker
             key={`${row.id}nach_datum`}
             name="nach_datum"
@@ -458,6 +420,14 @@ const Lieferung = () => {
             value={row.nach_ausgepflanzt}
             saveToDb={saveToDb}
             error={errors.nach_ausgepflanzt}
+          />
+          <RadioButton
+            key={`${row.id}ausgefuehrt`}
+            label="Ausgeführt"
+            name="ausgefuehrt"
+            value={row.ausgefuehrt}
+            saveToDb={saveToDb}
+            error={errors.ausgefuehrt}
           />
           <TextField
             key={`${row.id}bemerkungen`}

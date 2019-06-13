@@ -50,42 +50,6 @@ const Data = () => {
     return <Kultur />
   }
 
-  if (
-    url.length === 3 &&
-    url[0] === 'Werte-Listen' &&
-    url[1] === 'Lieferung-Status'
-  ) {
-    return <WerteListe table="lieferung_status_werte" />
-  }
-  if (
-    url.length === 3 &&
-    url[0] === 'Werte-Listen' &&
-    url[1] === 'Lieferung-Typ'
-  ) {
-    return <WerteListe table="lieferung_typ_werte" />
-  }
-  if (
-    url.length === 3 &&
-    url[0] === 'Werte-Listen' &&
-    url[1] === 'Lieferung-Zwischenlager'
-  ) {
-    return <WerteListe table="lieferung_zwischenlager_werte" />
-  }
-  if (
-    url.length === 3 &&
-    url[0] === 'Werte-Listen' &&
-    url[1] === 'Masseinheiten'
-  ) {
-    return <WerteListe table="masseinheit_werte" />
-  }
-  if (
-    url.length === 3 &&
-    url[0] === 'Werte-Listen' &&
-    url[1] === 'Zaehleinheiten'
-  ) {
-    return <WerteListe table="zaehleinheit_werte" />
-  }
-
   if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
     return <Kultur />
   }

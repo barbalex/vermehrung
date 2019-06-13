@@ -254,16 +254,19 @@ drop table if exists lieferung cascade;
 create table lieferung (
   id bigserial primary key,
   art_id integer default null references art (id) on delete cascade on update cascade,
+  herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
   person_id integer default null references person (id) on delete cascade on update cascade,
-  typ integer default null references lieferung_typ_werte (id) on delete set null on update cascade,
   von_datum date default null,
   von_sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
   von_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
-  zwischenlager integer default null references lieferung_zwischenlager_werte (id) on delete set null on update cascade,
   nach_datum date default null,
   nach_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   nach_ausgepflanzt boolean default false,
-  status integer default null references lieferung_status_werte (id) on delete set null on update cascade,
+  von_anzahl_individuen integer default null,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  menge_beschrieben text default null,
+  ausgefuehrt boolean default false,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -271,10 +274,13 @@ create table lieferung (
 );
 create index on lieferung using btree (id);
 create index on lieferung using btree (person_id);
-create index on lieferung using btree (typ);
 create index on lieferung using btree (von_sammlung_id);
 create index on lieferung using btree (von_kultur_id);
-create index on lieferung using btree (zwischenlager);
 create index on lieferung using btree (nach_kultur_id);
-create index on lieferung using btree (status);
+create index on lieferung using btree (von_anzahl_individuen);
+create index on lieferung using btree (anzahl_pflanzen);
+create index on lieferung using btree (anzahl_auspflanzbereit);
+create index on lieferung using btree (ausgefuehrt);
 create index on lieferung using gin (tsv);
+
+--alter table lieferung add constraint fk_lieferung_herkunft foreign key (herkunft_id) references herkunft (id) on delete cascade on update cascade;

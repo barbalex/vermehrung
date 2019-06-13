@@ -61,6 +61,8 @@ $$ language plpgsql;
 create trigger tsvupdate_herkunft before insert or update
   on herkunft for each row execute procedure herkunft_trigger();
 
+DROP TRIGGER IF EXISTS tsvupdate_sammlung ON sammlung;
+DROP FUNCTION IF EXISTS sammlung_trigger();
 create function sammlung_trigger() returns trigger as $$
   declare
     artname text;
@@ -91,6 +93,7 @@ create function sammlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.menge_beschrieben, ''), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
@@ -252,6 +255,8 @@ $$ language plpgsql;
 create trigger tsvupdate_zaehlung before insert or update
   on zaehlung for each row execute procedure zaehlung_trigger();
 
+DROP TRIGGER IF EXISTS tsvupdate_lieferung ON lieferung;
+DROP FUNCTION IF EXISTS lieferung_trigger();
 create function lieferung_trigger() returns trigger as $$
   declare
     artname text;
@@ -316,10 +321,15 @@ create function lieferung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.menge_beschrieben, ''), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(nachKulturPersonName, '')), 'B') || ' ' ||
       case
         when new.nach_ausgepflanzt='true' then setweight(to_tsvector('simple', 'ausgepflanzt'), 'A')
         else ''
+      end || ' ' ||
+      case
+        when new.ausgefuehrt='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
+        else setweight(to_tsvector('simple', 'geplant'), 'A')
       end || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
