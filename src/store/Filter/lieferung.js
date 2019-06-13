@@ -17,18 +17,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  zaehleinheit: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  menge: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  masseinheit: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   von_datum: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -69,9 +57,6 @@ export const initial = {
   art_id: null,
   person_id: null,
   typ: null,
-  zaehleinheit: null,
-  menge: null,
-  masseinheit: null,
   von_datum: null,
   von_sammlung_id: null,
   von_kultur_id: null,
@@ -88,9 +73,6 @@ export const simpleTypes = {
   art_id: 'number',
   person_id: 'number',
   typ: 'number',
-  zaehleinheit: 'number',
-  menge: 'number',
-  masseinheit: 'number',
   von_datum: 'string',
   von_sammlung_id: 'number',
   von_kultur_id: 'number',

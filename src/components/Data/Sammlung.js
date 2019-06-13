@@ -76,20 +76,6 @@ const dataQuery = gql`
   ${sammlungFragment}
   ${artFragment}
 `
-const werteQuery = gql`
-  query werteQuery {
-    zaehleinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
-      id
-      wert
-      sort
-    }
-    masseinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
-      id
-      wert
-      sort
-    }
-  }
-`
 
 const Sammlung = () => {
   const client = useApolloClient()
@@ -107,11 +93,6 @@ const Sammlung = () => {
   const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
     dataQuery,
   )
-  const {
-    data: werteData,
-    error: werteError,
-    loading: werteLoading,
-  } = useQuery(werteQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -146,24 +127,6 @@ const Sammlung = () => {
         label: get(el, 'art_ae_art.name') || '(kein Artname)',
       })),
     [dataLoading],
-  )
-
-  const zaehleinheitWerte = useMemo(
-    () =>
-      get(werteData, 'zaehleinheit_werte', []).map(el => ({
-        value: el.id,
-        label: el.wert || '(kein Wert)',
-      })),
-    [werteLoading],
-  )
-
-  const masseinheitWerte = useMemo(
-    () =>
-      get(werteData, 'masseinheit_werte', []).map(el => ({
-        value: el.id,
-        label: el.wert || '(kein Wert)',
-      })),
-    [werteLoading],
   )
 
   const saveToDb = useCallback(
@@ -225,14 +188,12 @@ const Sammlung = () => {
     )
   }
 
-  const errorToShow = error || dataError || werteError
+  const errorToShow = error || dataError
   if (errorToShow) {
     return (
       <Container>
         <FormTitle title="Sammlung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          errorToShow.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -307,37 +268,6 @@ const Sammlung = () => {
             saveToDb={saveToDb}
             error={errors.von_anzahl_individuen}
             type="number"
-          />
-          <Select
-            key={`${row.id}${row.zaehleinheit}zaehleinheit`}
-            name="zaehleinheit"
-            value={row.zaehleinheit}
-            field="zaehleinheit"
-            label="Zähleinheit"
-            options={zaehleinheitWerte}
-            loading={werteLoading}
-            saveToDb={saveToDb}
-            error={errors.zaehleinheit}
-          />
-          <TextField
-            key={`${row.id}menge`}
-            name="menge"
-            label="Menge"
-            value={row.menge}
-            saveToDb={saveToDb}
-            error={errors.menge}
-            type="number"
-          />
-          <Select
-            key={`${row.id}${row.masseinheit}masseinheit`}
-            name="masseinheit"
-            value={row.masseinheit}
-            field="masseinheit"
-            label="Masseinheit"
-            options={masseinheitWerte}
-            loading={werteLoading}
-            saveToDb={saveToDb}
-            error={errors.masseinheit}
           />
           <TextField
             key={`${row.id}bemerkungen`}

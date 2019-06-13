@@ -144,9 +144,9 @@ create table sammlung (
   nr text default null unique,
   datum date default null,
   von_anzahl_individuen integer default null,
-  zaehleinheit integer default null references zaehleinheit_werte (id) on delete set null on update cascade,
-  menge integer default null,
-  masseinheit integer default null references masseinheit_werte (id) on delete set null on update cascade,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  menge_beschrieben text default null,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -157,7 +157,8 @@ create index on sammlung using btree (art_id);
 create index on sammlung using btree (person_id);
 create index on sammlung using btree (herkunft_id);
 create index on sammlung using btree (datum);
---alter table sammlung add column tsv tsvector;
+create index on sammlung using btree (anzahl_pflanzen);
+create index on sammlung using btree (anzahl_auspflanzbereit);
 create index on sammlung using gin (tsv);
 
 drop table if exists garten cascade;
@@ -219,8 +220,7 @@ create table kultur_inventar (
   nr text default null,
   anzahl_pflanzen integer default null,
   anz_mutter_pflanzen integer default null,
-  anz_nicht_auspflanzbereit integer default null,
-  anz_auspflanzbereit integer default null,
+  anzahl_auspflanzbereit integer default null,
   anz_bluehend integer default null,
   bluehdatum text default null,
   instruktion text default null,
@@ -242,8 +242,7 @@ create table zaehlung (
   datum date default null,
   anzahl_pflanzen integer default null,
   anz_mutter_pflanzen integer default null,
-  anz_nicht_auspflanzbereit integer default null,
-  anz_auspflanzbereit integer default null,
+  anzahl_auspflanzbereit integer default null,
   anz_bluehend integer default null,
   bluehdatum text default null,
   instruktion text default null,
@@ -264,9 +263,6 @@ create table lieferung (
   art_id integer default null references art (id) on delete cascade on update cascade,
   person_id integer default null references person (id) on delete cascade on update cascade,
   typ integer default null references lieferung_typ_werte (id) on delete set null on update cascade,
-  zaehleinheit integer default null references zaehleinheit_werte (id) on delete set null on update cascade,
-  menge integer default null,
-  masseinheit integer default null references masseinheit_werte (id) on delete set null on update cascade,
   von_datum date default null,
   von_sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
   von_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
@@ -283,8 +279,6 @@ create table lieferung (
 create index on lieferung using btree (id);
 create index on lieferung using btree (person_id);
 create index on lieferung using btree (typ);
-create index on lieferung using btree (zaehleinheit);
-create index on lieferung using btree (masseinheit);
 create index on lieferung using btree (von_sammlung_id);
 create index on lieferung using btree (von_kultur_id);
 create index on lieferung using btree (zwischenlager);

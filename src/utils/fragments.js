@@ -73,8 +73,7 @@ export const kulturInventar = gql`
     nr
     anzahl_pflanzen
     anz_mutter_pflanzen
-    anz_nicht_auspflanzbereit
-    anz_auspflanzbereit
+    anzahl_auspflanzbereit
     anz_bluehend
     bluehdatum
     instruktion
@@ -87,9 +86,6 @@ export const lieferung = gql`
     art_id
     person_id
     typ
-    zaehleinheit
-    menge
-    masseinheit
     von_datum
     von_sammlung_id
     von_kultur_id
@@ -133,9 +129,8 @@ export const sammlung = gql`
     nr
     datum
     von_anzahl_individuen
-    zaehleinheit
-    menge
-    masseinheit
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
     bemerkungen
   }
 `
@@ -146,8 +141,7 @@ export const zaehlung = gql`
     datum
     anzahl_pflanzen
     anz_mutter_pflanzen
-    anz_nicht_auspflanzbereit
-    anz_auspflanzbereit
+    anzahl_auspflanzbereit
     anz_bluehend
     bluehdatum
     instruktion

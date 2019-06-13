@@ -103,18 +103,6 @@ import buildKulturLieferungAusLieferung from './kultur/auslieferung'
 import buildKulturAnLieferungFolder from './kultur/anlieferung/folder'
 import buildKulturLieferungAnLieferung from './kultur/anlieferung'
 
-import buildWerteListenFolder from './werteListen/folder'
-import buildWLMasseinheitFolder from './werteListen/masseinheit/folder'
-import buildWLMasseinheitMasseinheit from './werteListen/masseinheit'
-import buildWLZaehleinheitFolder from './werteListen/zaehleinheit/folder'
-import buildWLZaehleinheitZaehleinheit from './werteListen/zaehleinheit'
-import buildWLLieferungTypFolder from './werteListen/lieferungTyp/folder'
-import buildWLLieferungTypTyp from './werteListen/lieferungTyp'
-import buildWLLieferungStatusFolder from './werteListen/lieferungStatus/folder'
-import buildWLLieferungStatusStatus from './werteListen/lieferungStatus'
-import buildWLLieferungZwischenlagerFolder from './werteListen/lieferungZwischenlager/folder'
-import buildWLLieferungZwischenlagerZwischenlager from './werteListen/lieferungZwischenlager'
-
 export default ({ store, data, loading }) => {
   const openNodes = store.tree.openNodes.sort(sort)
   let artArtNodes
@@ -127,7 +115,6 @@ export default ({ store, data, loading }) => {
     ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildWerteListenFolder({ data, store, loading }))(),
   ]
 
   /**
@@ -219,51 +206,6 @@ export default ({ store, data, loading }) => {
             nodes,
             data,
             store,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 1 && url[0] === 'Werte-Listen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildWLMasseinheitFolder({
-            data,
-            store,
-            loading,
-            nodes,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildWLZaehleinheitFolder({
-            data,
-            store,
-            loading,
-            nodes,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildWLLieferungTypFolder({
-            data,
-            store,
-            loading,
-            nodes,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildWLLieferungStatusFolder({
-            data,
-            store,
-            loading,
-            nodes,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildWLLieferungZwischenlagerFolder({
-            data,
-            store,
-            loading,
-            nodes,
           }),
         )(),
       ]
@@ -413,86 +355,6 @@ export default ({ store, data, loading }) => {
       ]
     }
 
-    if (
-      url.length === 2 &&
-      url[0] === 'Werte-Listen' &&
-      url[1] === 'Zaehleinheiten'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildWLZaehleinheitZaehleinheit({
-            nodes,
-            data,
-            store,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 2 &&
-      url[0] === 'Werte-Listen' &&
-      url[1] === 'Lieferung-Status'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildWLLieferungStatusStatus({
-            nodes,
-            data,
-            store,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 2 &&
-      url[0] === 'Werte-Listen' &&
-      url[1] === 'Lieferung-Typ'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildWLLieferungTypTyp({
-            nodes,
-            data,
-            store,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 2 &&
-      url[0] === 'Werte-Listen' &&
-      url[1] === 'Lieferung-Zwischenlager'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildWLLieferungZwischenlagerZwischenlager({
-            nodes,
-            data,
-            store,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 2 &&
-      url[0] === 'Werte-Listen' &&
-      url[1] === 'Masseinheiten'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildWLMasseinheitMasseinheit({
-            nodes,
-            data,
-            store,
-          }),
-        )(),
-      ]
-    }
     if (url.length === 2 && url[0] === 'Herkuenfte') {
       nodes = [
         ...nodes,

@@ -194,9 +194,7 @@ const Zaehlung = () => {
     return (
       <Container>
         <FormTitle title="Zaehlung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          errorToShow.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -251,21 +249,12 @@ const Zaehlung = () => {
             type="number"
           />
           <TextField
-            key={`${row.id}anz_nicht_auspflanzbereit`}
-            name="anz_nicht_auspflanzbereit"
-            label="Anzahl nicht auspflanz-bereit"
-            value={row.anz_nicht_auspflanzbereit}
-            saveToDb={saveToDb}
-            error={errors.anz_nicht_auspflanzbereit}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}anz_auspflanzbereit`}
-            name="anz_auspflanzbereit"
+            key={`${row.id}anzahl_auspflanzbereit`}
+            name="anzahl_auspflanzbereit"
             label="Anzahl auspflanz-bereit"
-            value={row.anz_auspflanzbereit}
+            value={row.anzahl_auspflanzbereit}
             saveToDb={saveToDb}
-            error={errors.anz_auspflanzbereit}
+            error={errors.anzahl_auspflanzbereit}
             type="number"
           />
           <TextField

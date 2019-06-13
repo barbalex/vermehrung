@@ -132,16 +132,6 @@ const werteQuery = gql`
       wert
       sort
     }
-    zaehleinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
-      id
-      wert
-      sort
-    }
-    masseinheit_werte(order_by: [{ sort: asc }, { wert: asc }]) {
-      id
-      wert
-      sort
-    }
   }
 `
 
@@ -269,20 +259,6 @@ const Lieferung = () => {
     })),
   )()
 
-  const zaehleinheitWerte = memoizeOne(() =>
-    get(werteData, 'zaehleinheit_werte', []).map(el => ({
-      value: el.id,
-      label: el.wert || '(kein Wert)',
-    })),
-  )()
-
-  const masseinheitWerte = memoizeOne(() =>
-    get(werteData, 'masseinheit_werte', []).map(el => ({
-      value: el.id,
-      label: el.wert || '(kein Wert)',
-    })),
-  )()
-
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
@@ -354,9 +330,7 @@ const Lieferung = () => {
     return (
       <Container>
         <FormTitle title="Lieferung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          errorToShow.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -416,37 +390,6 @@ const Lieferung = () => {
             loading={werteLoading}
             saveToDb={saveToDb}
             error={errors.status}
-          />
-          <Select
-            key={`${row.id}${row.zaehleinheit}zaehleinheit`}
-            name="zaehleinheit"
-            value={row.zaehleinheit}
-            field="zaehleinheit"
-            label="Zähleinheit"
-            options={zaehleinheitWerte}
-            loading={werteLoading}
-            saveToDb={saveToDb}
-            error={errors.zaehleinheit}
-          />
-          <TextField
-            key={`${row.id}menge`}
-            name="menge"
-            label="Menge"
-            value={row.menge}
-            saveToDb={saveToDb}
-            error={errors.menge}
-            type="number"
-          />
-          <Select
-            key={`${row.id}${row.masseinheit}masseinheit`}
-            name="masseinheit"
-            value={row.masseinheit}
-            field="masseinheit"
-            label="Masseinheit"
-            options={masseinheitWerte}
-            loading={werteLoading}
-            saveToDb={saveToDb}
-            error={errors.masseinheit}
           />
           <DateFieldWithPicker
             key={`${row.id}von_datum`}

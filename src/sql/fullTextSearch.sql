@@ -53,18 +53,13 @@ SELECT
   setweight(to_tsvector('german', coalesce(sammlung.nr, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(sammlung.von_anzahl_individuen::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(to_char(sammlung.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehleinheit_werte.wert, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(sammlung.menge::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(masseinheit_werte.wert, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(sammlung.bemerkungen, '')), 'D') as vector
 from sammlung
   inner join art 
     inner join ae_art on art.ae_id = ae_art.id
   on sammlung.art_id = art.id
   left join person on sammlung.person_id = person.id
-  left join herkunft on sammlung.herkunft_id = herkunft.id
-  left join zaehleinheit_werte on sammlung.zaehleinheit = zaehleinheit_werte.id
-  left join masseinheit_werte on sammlung.masseinheit = masseinheit_werte.id;
+  left join herkunft on sammlung.herkunft_id = herkunft.id;
 
 SELECT
   setweight(to_tsvector('simple', coalesce(person.name, '')), 'A') || ' ' ||
@@ -110,8 +105,7 @@ SELECT
   setweight(to_tsvector('simple', coalesce(kultur_inventar.nr, '')), 'B') || ' ' ||
   setweight(to_tsvector('simple', coalesce(kultur_inventar.anzahl_pflanzen::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(kultur_inventar.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.anz_nicht_auspflanzbereit::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.anz_auspflanzbereit::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(kultur_inventar.anzahl_auspflanzbereit::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(kultur_inventar.anz_bluehend::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(kultur_inventar.bluehdatum, '')), 'D') || ' ' ||
   setweight(to_tsvector('german', coalesce(kultur_inventar.instruktion, '')), 'C') || ' ' ||
@@ -133,8 +127,7 @@ SELECT
   setweight(to_tsvector('simple', coalesce(zaehlung.datum::text, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(zaehlung.anzahl_pflanzen::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(zaehlung.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.anz_nicht_auspflanzbereit::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.anz_auspflanzbereit::text, '')), 'D') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(zaehlung.anzahl_auspflanzbereit::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(zaehlung.anz_bluehend::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(zaehlung.bluehdatum, '')), 'D') || ' ' ||
   setweight(to_tsvector('german', coalesce(zaehlung.instruktion, '')), 'C') || ' ' ||
@@ -153,11 +146,6 @@ from zaehlung
 SELECT
   setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(person.name, '')), 'A') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(lieferung_typ_werte.wert, '')), 'A') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(lieferung_status_werte.wert, '')), 'A') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehleinheit_werte.wert, '')), 'A') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(lieferung.menge::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(masseinheit_werte.wert, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(lieferung.von_datum::text, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(sammlung.nr, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(sammlung.datum::text, '')), 'B') || ' ' ||
@@ -165,7 +153,6 @@ SELECT
   setweight(to_tsvector('simple', coalesce(herkunft.nr, '')), 'B') || ' ' ||
   setweight(to_tsvector('simple', coalesce(herkunft.lokalname, '')), 'B') || ' ' ||
   setweight(to_tsvector('simple', coalesce(vonKulturPerson.name, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(lieferung_zwischenlager_werte.wert, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(lieferung.nach_datum::text, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(nachKulturPerson.name, '')), 'B') || ' ' ||
   case
@@ -178,10 +165,6 @@ from lieferung
     inner join ae_art on art.ae_id = ae_art.id
   on lieferung.art_id = art.id
   left join person on lieferung.person_id = person.id
-  left join lieferung_typ_werte on lieferung.typ = lieferung_typ_werte.id
-  left join lieferung_status_werte on lieferung.status = lieferung_status_werte.id
-  left join zaehleinheit_werte on lieferung.zaehleinheit = zaehleinheit_werte.id
-  left join masseinheit_werte on lieferung.masseinheit = masseinheit_werte.id
   left join sammlung
     left join person as sammlungPerson on sammlung.person_id = person_id
     left join herkunft on sammlung.herkunft_id = herkunft.id
@@ -191,7 +174,6 @@ from lieferung
       inner join person as vonKulturPerson on vonGarten.person_id = person_id
     on vonKultur.garten_id = vonGarten.id
   on lieferung.von_kultur_id = vonKultur.id
-  left join lieferung_zwischenlager_werte on lieferung.masseinheit = lieferung_zwischenlager_werte.id
   left join kultur as nachKultur
     inner join garten as nachGarten
       inner join person as nachKulturPerson on nachGarten.person_id = person_id

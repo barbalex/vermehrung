@@ -187,9 +187,7 @@ const Inventar = () => {
     return (
       <Container>
         <FormTitle title="Inventar" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -197,9 +195,7 @@ const Inventar = () => {
     return (
       <Container>
         <FormTitle title="Inventar" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          kulturError.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${kulturError.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -281,21 +277,12 @@ const Inventar = () => {
             type="number"
           />
           <TextField
-            key={`${row.id}anz_nicht_auspflanzbereit`}
-            name="anz_nicht_auspflanzbereit"
-            label="Anzahl nicht auspflanz-bereit"
-            value={row.anz_nicht_auspflanzbereit}
-            saveToDb={saveToDb}
-            error={errors.anz_nicht_auspflanzbereit}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}anz_auspflanzbereit`}
-            name="anz_auspflanzbereit"
+            key={`${row.id}anzahl_auspflanzbereit`}
+            name="anzahl_auspflanzbereit"
             label="Anzahl auspflanz-bereit"
-            value={row.anz_auspflanzbereit}
+            value={row.anzahl_auspflanzbereit}
             saveToDb={saveToDb}
-            error={errors.anz_auspflanzbereit}
+            error={errors.anzahl_auspflanzbereit}
             type="number"
           />
           <TextField

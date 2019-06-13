@@ -29,18 +29,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  zaehleinheit: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  menge: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  masseinheit: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -55,9 +43,6 @@ export const initial = {
   nr: null,
   datum: null,
   von_anzahl_individuen: null,
-  zaehleinheit: null,
-  menge: null,
-  masseinheit: null,
   bemerkungen: null,
 }
 
@@ -69,8 +54,5 @@ export const simpleTypes = {
   nr: 'string',
   datum: 'string',
   von_anzahl_individuen: 'number',
-  zaehleinheit: 'number',
-  menge: 'number',
-  masseinheit: 'number',
   bemerkungen: 'string',
 }
