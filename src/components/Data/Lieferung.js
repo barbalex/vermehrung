@@ -421,6 +421,42 @@ const Lieferung = () => {
             saveToDb={saveToDb}
             error={errors.nach_ausgepflanzt}
           />
+          <TextField
+            key={`${row.id}von_anzahl_individuen`}
+            name="von_anzahl_individuen"
+            label="von Anzahl Individuen"
+            value={row.von_anzahl_individuen}
+            saveToDb={saveToDb}
+            error={errors.von_anzahl_individuen}
+            type="number"
+          />
+          <TextField
+            key={`${row.id}anzahl_pflanzen`}
+            name="anzahl_pflanzen"
+            label="Anzahl Pflanzen"
+            value={row.anzahl_pflanzen}
+            saveToDb={saveToDb}
+            error={errors.anzahl_pflanzen}
+            type="number"
+          />
+          <TextField
+            key={`${row.id}anzahl_auspflanzbereit`}
+            name="anzahl_auspflanzbereit"
+            label="Anzahl auspflanzbereit"
+            value={row.anzahl_auspflanzbereit}
+            saveToDb={saveToDb}
+            error={errors.anzahl_auspflanzbereit}
+            type="number"
+          />
+          <TextField
+            key={`${row.id}menge_beschrieben`}
+            name="menge_beschrieben"
+            label="Menge textlich beschrieben"
+            value={row.menge_beschrieben}
+            saveToDb={saveToDb}
+            error={errors.menge_beschrieben}
+            type="text"
+          />
           <RadioButton
             key={`${row.id}ausgefuehrt`}
             label="Ausgeführt"
