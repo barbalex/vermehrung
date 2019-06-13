@@ -16,6 +16,7 @@ import memoizeOne from 'memoize-one'
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
+import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
@@ -294,6 +295,22 @@ const Kultur = () => {
             saveToDb={saveToDb}
             error={errors.garten_id}
           />
+          <RadioButton
+            key={`${row.id}zwischenlager`}
+            label="Zwischenlager"
+            name="zwischenlager"
+            value={row.zwischenlager}
+            saveToDb={saveToDb}
+            error={errors.zwischenlager}
+          />
+          <RadioButton
+            key={`${row.id}erhaltungskultur`}
+            label="Erhaltungskultur"
+            name="erhaltungskultur"
+            value={row.erhaltungskultur}
+            saveToDb={saveToDb}
+            error={errors.erhaltungskultur}
+          />
           <TextField
             key={`${row.id}von_anzahl_individuen`}
             name="von_anzahl_individuen"
@@ -302,6 +319,14 @@ const Kultur = () => {
             saveToDb={saveToDb}
             error={errors.von_anzahl_individuen}
             type="number"
+          />
+          <RadioButton
+            key={`${row.id}aktiv`}
+            label="Aktiv"
+            name="aktiv"
+            value={row.aktiv}
+            saveToDb={saveToDb}
+            error={errors.aktiv}
           />
           <TextField
             key={`${row.id}bemerkungen`}
