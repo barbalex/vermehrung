@@ -32,6 +32,7 @@ Die wichtigsten Schritte sind:
 - :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_check_mark: Benutzer können verwaltet werden
 - :white_check_mark: Grundlegende Funktionalitäten mit Topos bereinigt
+- :ballot_box_with_check: Funktionalitäten gemäss Bereinigung angepasst
 - :ballot_box_with_check: Bilder können erfasst werden
 - :white_medium_square: Funktionalitäten mit Topos bereinigt
 - :white_medium_square: Produktive Version 1.0.0 live schalten
