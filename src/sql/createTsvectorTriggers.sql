@@ -121,25 +121,46 @@ $$ language plpgsql;
 create trigger tsvupdate_garten before insert or update
   on garten for each row execute procedure garten_trigger();
 
+DROP TRIGGER IF EXISTS tsvupdate_kultur ON kultur;
+DROP FUNCTION IF EXISTS kultur_trigger();
 create function kultur_trigger() returns trigger as $$
   declare
     artname text;
     personname text;
+    herkunftnr text;
+    herkunftlokalname text;
   begin
-    select ae_art.name into artname
-    from kultur
-      inner join art 
-        inner join ae_art on art.ae_id = ae_art.id
-      on kultur.art_id = art.id
-    where art.id = new.art_id;
-    select person.name into personname
-    from kultur left join garten
-      inner join person on garten.person_id = person.id
-    on new.garten_id = garten.id;
-    new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
-  setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
-  setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'D');
+    if new.aktiv = True then
+      select ae_art.name into artname
+      from kultur
+        inner join art 
+          inner join ae_art on art.ae_id = ae_art.id
+        on kultur.art_id = art.id
+      where art.id = new.art_id;
+      select person.name into personname
+      from kultur left join garten
+        inner join person on garten.person_id = person.id
+      on new.garten_id = garten.id;
+      select herkunft.nr, herkunft.lokalname into herkunftnr, herkunftlokalname
+      from kultur left join herkunft on kultur.herkunft_id = herkunft.id
+      where herkunft.id = new.herkunft_id;
+       new.tsv :=
+        setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
+        setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
+        setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
+        setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+        setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'D') || ' ' ||
+        case
+          when new.zwischenlager='true' then setweight(to_tsvector('german', 'zwischenlager'), 'A')
+          else ''
+        end || ' ' ||
+        case
+          when new.erhaltungskultur='true' then setweight(to_tsvector('german', 'erhaltungskultur'), 'A')
+          else ''
+        end;
+    else
+      new.tsv := '';
+    end if;
     return new;
   end
 $$ language plpgsql;

@@ -149,14 +149,23 @@ create table kultur (
   art_id integer default null references art (id) on delete cascade on update cascade,
   herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
   garten_id integer default null references garten (id) on delete cascade on update cascade,
+  zwischenlager boolean default false,
+  erhaltungskultur boolean default false,
+  von_anzahl_individuen integer default null,
   bemerkungen text default null,
+  aktiv boolean default true,
   changed date default now(),
   changed_by varchar(20) default null,
-  unique(art_id,garten_id),
   tsv tsvector
 );
 create index on kultur using btree (id);
+create index on kultur using btree (art_id);
 create index on kultur using btree (garten_id);
+create index on kultur using btree (herkunft_id);
+create index on kultur using btree (zwischenlager);
+create index on kultur using btree (erhaltungskultur);
+create index on kultur using btree (von_anzahl_individuen);
+create index on kultur using btree (aktiv);
 alter table kultur add constraint unique_art_herkunft_garten unique(art_id,garten_id,herkunft_id);
 create index on kultur using gin (tsv);
 --alter table kultur add constraint fk_kultur_herkunft foreign key (herkunft_id) references herkunft (id) on delete cascade on update cascade;

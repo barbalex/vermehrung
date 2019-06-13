@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -83,6 +89,17 @@ const gartenQuery = gql`
   ${kulturFragment}
   ${gartenFragment}
 `
+const dataQuery = gql`
+  query dataQuery {
+    herkunft(
+      order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
+    ) {
+      id
+      nr
+      lokalname
+    }
+  }
+`
 
 const Kultur = () => {
   const client = useApolloClient()
@@ -97,6 +114,9 @@ const Kultur = () => {
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered, filter: kulturFilter },
   })
+  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
+    dataQuery,
+  )
 
   const [errors, setErrors] = useState({})
 
@@ -150,6 +170,15 @@ const Kultur = () => {
       value: el.id,
       label: get(el, 'person.name') || '(kein Name)',
     }))
+
+  const herkunftWerte = useMemo(
+    () =>
+      get(dataData, 'herkunft', []).map(el => ({
+        value: el.id,
+        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
+      })),
+    [dataLoading],
+  )
 
   const saveToDb = useCallback(
     async event => {
@@ -210,14 +239,12 @@ const Kultur = () => {
     )
   }
 
-  const errorToShow = error || errorArt || errorGarten
+  const errorToShow = error || errorArt || errorGarten || dataError
   if (errorToShow) {
     return (
       <Container>
         <FormTitle title="Kultur" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          errorToShow.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -246,6 +273,17 @@ const Kultur = () => {
             error={errors.art_id}
           />
           <Select
+            key={`${row.id}${row.herkunft_id}herkunft_id`}
+            name="herkunft_id"
+            value={row.herkunft_id}
+            field="herkunft_id"
+            label="Herkunft"
+            options={herkunftWerte}
+            loading={dataLoading}
+            saveToDb={saveToDb}
+            error={errors.herkunft_id}
+          />
+          <Select
             key={`${row.id}${row.garten_id}garten_id`}
             name="garten_id"
             value={row.garten_id}
@@ -255,6 +293,15 @@ const Kultur = () => {
             loading={loadingGarten}
             saveToDb={saveToDb}
             error={errors.garten_id}
+          />
+          <TextField
+            key={`${row.id}von_anzahl_individuen`}
+            name="von_anzahl_individuen"
+            label="von Anzahl Individuen"
+            value={row.von_anzahl_individuen}
+            saveToDb={saveToDb}
+            error={errors.von_anzahl_individuen}
+            type="number"
           />
           <TextField
             key={`${row.id}bemerkungen`}

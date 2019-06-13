@@ -52,7 +52,12 @@ export const kultur = gql`
   fragment KulturFields on kultur {
     id
     art_id
+    herkunft_id
     garten_id
+    zwischenlager
+    erhaltungskultur
+    von_anzahl_individuen
+    aktiv
     bemerkungen
   }
 `
