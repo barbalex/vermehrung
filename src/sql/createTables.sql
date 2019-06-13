@@ -72,15 +72,20 @@ create table person (
   email text default null,
   kein_email boolean default false,
   bemerkungen text default null,
-  user_id uuid default null,
   changed date default now(),
   changed_by varchar(20) default null,
   tsv tsvector,
-  account_id text default null
+  account_id text default null,
+  kommerziell boolean default false,
+  info boolean default false,
+  aktiv boolean default true,
 );
 create index on person using btree (id);
 create index on person using btree (name);
---alter table person add column tsv tsvector;
+create index on person using btree (account_id);
+create index on person using btree (aktiv);
+create index on person using btree (kommerziell);
+create index on person using btree (info);
 create index on person using gin (tsv);
 
 drop table if exists art cascade;

@@ -58,10 +58,13 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  userId: types.optional(
+  accountId: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  kommerziell: types.optional(types.maybeNull(types.boolean), null),
+  info: types.optional(types.maybeNull(types.boolean), null),
+  aktiv: types.optional(types.maybeNull(types.boolean), null),
 })
 
 export const initial = {
@@ -80,7 +83,10 @@ export const initial = {
   email: null,
   kein_email: null,
   bemerkungen: null,
-  userId: null,
+  accountId: null,
+  kommerziell: null,
+  info: null,
+  aktiv: null,
 }
 
 export const simpleTypes = {
@@ -99,5 +105,8 @@ export const simpleTypes = {
   email: 'string',
   kein_email: 'boolean',
   bemerkungen: 'string',
-  userId: 'string',
+  accountId: 'string',
+  kommerziell: 'boolean',
+  info: 'boolean',
+  aktiv: 'boolean',
 }

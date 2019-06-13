@@ -118,8 +118,10 @@ export const person = gql`
     email
     kein_email
     bemerkungen
-    user_id
     account_id
+    kommerziell
+    info
+    aktiv
   }
 `
 export const sammlung = gql`
