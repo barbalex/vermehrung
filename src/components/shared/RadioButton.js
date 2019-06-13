@@ -9,6 +9,9 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 // without slight padding radio is slightly cut off!
+const Container = styled.div`
+  display: block;
+`
 const StyledFormControl = styled(FormControl)`
   padding-left: 1px !important;
   padding-bottom: 15px !important;
@@ -37,25 +40,27 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
   }, [value, name])
 
   return (
-    <StyledFormControl
-      component="fieldset"
-      error={!!error}
-      aria-describedby={`${label}ErrorText`}
-    >
-      <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <RadioGroup
-        aria-label={label}
-        value={value === null ? 'false' : value.toString()}
+    <Container>
+      <StyledFormControl
+        component="fieldset"
+        error={!!error}
+        aria-describedby={`${label}ErrorText`}
       >
-        <FormControlLabel
-          value="true"
-          control={<StyledRadio onClick={onClickButton} color="primary" />}
-        />
-      </RadioGroup>
-      {!!error && (
-        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      )}
-    </StyledFormControl>
+        <StyledFormLabel component="legend">{label}</StyledFormLabel>
+        <RadioGroup
+          aria-label={label}
+          value={value === null ? 'false' : value.toString()}
+        >
+          <FormControlLabel
+            value="true"
+            control={<StyledRadio onClick={onClickButton} color="primary" />}
+          />
+        </RadioGroup>
+        {!!error && (
+          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+        )}
+      </StyledFormControl>
+    </Container>
   )
 }
 
