@@ -10,6 +10,7 @@ import memoizeOne from 'memoize-one'
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
+import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import { garten as gartenFragment } from '../../utils/fragments'
@@ -151,9 +152,7 @@ const Garten = () => {
     return (
       <Container>
         <FormTitle title="Garten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -161,9 +160,7 @@ const Garten = () => {
     return (
       <Container>
         <FormTitle title="Garten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          personError.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${personError.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -208,6 +205,14 @@ const Garten = () => {
             saveToDb={saveToDb}
             error={errors.y}
             type="number"
+          />
+          <RadioButton
+            key={`${row.id}aktiv`}
+            label="Aktiv"
+            name="aktiv"
+            value={row.aktiv}
+            saveToDb={saveToDb}
+            error={errors.aktiv}
           />
           <TextField
             key={`${row.id}bemerkungen`}

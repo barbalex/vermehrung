@@ -22,6 +22,7 @@ export const garten = gql`
     person_id
     x
     y
+    aktiv
     bemerkungen
   }
 `

@@ -132,6 +132,7 @@ create table garten (
   person_id integer default null references person (id) on delete cascade on update cascade,
   x integer default null constraint zulaessige_x_koordinate check (x is null or (x > 2485071 and x < 2828516)),
   y integer default null constraint zulaessige_y_koordinate check (y is null or (y > 1075346 and y < 1299942)),
+  aktiv boolean default true,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -139,6 +140,7 @@ create table garten (
 );
 create index on garten using btree (id);
 create index on garten using btree (person_id);
+create index on garten using btree (aktiv);
 create index on garten using gin (tsv);
 
 drop table if exists kultur cascade;
