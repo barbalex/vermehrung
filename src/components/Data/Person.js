@@ -131,9 +131,7 @@ const Person = () => {
     return (
       <Container>
         <FormTitle title="Person" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -254,6 +252,30 @@ const Person = () => {
             value={row.kein_email}
             saveToDb={saveToDb}
             error={errors.kein_email}
+          />
+          <RadioButton
+            key={`${row.id}kommerziell`}
+            label="Kommerziell"
+            name="kommerziell"
+            value={row.kommerziell}
+            saveToDb={saveToDb}
+            error={errors.kommerziell}
+          />
+          <RadioButton
+            key={`${row.id}info`}
+            label="Info"
+            name="info"
+            value={row.info}
+            saveToDb={saveToDb}
+            error={errors.info}
+          />
+          <RadioButton
+            key={`${row.id}aktiv`}
+            label="Aktiv"
+            name="aktiv"
+            value={row.aktiv}
+            saveToDb={saveToDb}
+            error={errors.aktiv}
           />
           <TextField
             key={`${row.id}bemerkungen`}
