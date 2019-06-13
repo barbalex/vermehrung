@@ -166,9 +166,7 @@ create index on kultur using btree (zwischenlager);
 create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
-alter table kultur add constraint unique_art_herkunft_garten unique(art_id,garten_id,herkunft_id);
 create index on kultur using gin (tsv);
---alter table kultur add constraint fk_kultur_herkunft foreign key (herkunft_id) references herkunft (id) on delete cascade on update cascade;
 
 drop table if exists kultur_event cascade;
 create table kultur_event (
