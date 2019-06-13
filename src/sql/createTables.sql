@@ -98,7 +98,6 @@ create table art (
 );
 create index on art using btree (id);
 create index on art using btree (ae_id);
---alter table art add column tsv tsvector;
 create index on art using gin (tsv);
 
 drop table if exists herkunft cascade;
@@ -118,7 +117,6 @@ create table herkunft (
 );
 create index on herkunft using btree (id);
 create index on herkunft using btree (lokalname);
---alter table herkunft add column tsv tsvector;
 create index on herkunft using gin (tsv);
 
 drop table if exists herkunft_file;
@@ -174,7 +172,6 @@ create table garten (
 );
 create index on garten using btree (id);
 create index on garten using btree (person_id);
---alter table garten add column tsv tsvector;
 create index on garten using gin (tsv);
 
 drop table if exists kultur cascade;
@@ -191,7 +188,6 @@ create table kultur (
 create index on kultur using btree (id);
 create index on kultur using btree (garten_id);
 alter table kultur add constraint unique_art_garten unique(art_id,garten_id);
---alter table kultur add column tsv tsvector;
 create index on kultur using gin (tsv);
 
 drop table if exists kultur_event cascade;
@@ -207,7 +203,6 @@ create table kultur_event (
 create index on kultur_event using btree (id);
 create index on kultur_event using btree (kultur_id);
 create index on kultur_event using btree (datum);
---alter table kultur_event add column tsv tsvector;
 create index on kultur_event using gin (tsv);
 
 drop table if exists kultur_inventar cascade;
@@ -232,7 +227,6 @@ create table kultur_inventar (
 create index on kultur_inventar using btree (id);
 create index on kultur_inventar using btree (kultur_id);
 create index on kultur_inventar using btree (datum);
---alter table kultur_inventar add column tsv tsvector;
 create index on kultur_inventar using gin (tsv);
 
 drop table if exists zaehlung cascade;
@@ -254,7 +248,6 @@ create table zaehlung (
 create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
---alter table zaehlung add column tsv tsvector;
 create index on zaehlung using gin (tsv);
 
 drop table if exists lieferung cascade;
@@ -284,5 +277,4 @@ create index on lieferung using btree (von_kultur_id);
 create index on lieferung using btree (zwischenlager);
 create index on lieferung using btree (nach_kultur_id);
 create index on lieferung using btree (status);
---alter table lieferung add column tsv tsvector;
 create index on lieferung using gin (tsv);
