@@ -1,66 +1,23 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient } from 'react-apollo-hooks'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import last from 'lodash/last'
 
-import storeContext from '../../../storeContext'
-import TextField from '../../shared/TextField'
-import ErrorBoundary from '../../ErrorBoundary'
-import { teilzaehlung as teilzaehlungFragment } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
-import queryFromTable from '../../../utils/queryFromTable'
+import TextField from '../../../shared/TextField'
+import ErrorBoundary from '../../../ErrorBoundary'
+import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
+import types from '../../../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 
-const query = gql`
-  query TeilzaehlungQuery(
-    $id: bigint!
-    $isFiltered: Boolean!
-    $filter: teilzaehlung_bool_exp!
-  ) {
-    teilzaehlung(where: { id: { _eq: $id } }) {
-      ...TeilzaehlungFields
-      kultur {
-        id
-        art_id
-      }
-    }
-    rowsUnfiltered: teilzaehlung @include(if: $isFiltered) {
-      id
-    }
-    rowsFiltered: teilzaehlung(where: $filter) @include(if: $isFiltered) {
-      id
-    }
-  }
-  ${teilzaehlungFragment}
-`
-
-const Teilzaehlung = () => {
+const Teilzaehlung = ({ teilzaehlung: row }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
-  const { filter } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
-  const { activeNodeArray, refetch } = store.tree
-
-  const id = last(activeNodeArray.filter(e => !isNaN(e)))
-  const isFiltered = runIsFiltered()
-  const teilzaehlungFilter = queryFromTable({ store, table: 'teilzaehlung' })
-  const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered, filter: teilzaehlungFilter },
-  })
 
   const [errors, setErrors] = useState({})
-
-  const row = showFilter
-    ? filter.teilzaehlung
-    : get(data, 'teilzaehlung', [{}])[0]
 
   useEffect(() => setErrors({}), [row])
 
@@ -68,21 +25,18 @@ const Teilzaehlung = () => {
     async event => {
       const field = event.target.name
       const value = event.target.value || null
-      if (filter.show) {
-        filter.setValue({ table: 'teilzaehlung', key: field, value })
-      } else {
-        try {
-          const type = types.lieferung[field]
-          let valueToSet
-          if (value === undefined || value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${value}"`
-          }
-          await client.mutate({
-            mutation: gql`
+      try {
+        const type = types.lieferung[field]
+        let valueToSet
+        if (value === undefined || value === null) {
+          valueToSet = null
+        } else if (['number', 'boolean'].includes(type)) {
+          valueToSet = value
+        } else {
+          valueToSet = `"${value}"`
+        }
+        await client.mutate({
+          mutation: gql`
               mutation update_teilzaehlung(
                 $id: bigint!
               ) {
@@ -100,35 +54,23 @@ const Teilzaehlung = () => {
               }
               ${teilzaehlungFragment}
             `,
-            variables: {
-              id: row.id,
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
-        refetch()
+          variables: {
+            id: row.id,
+          },
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
       }
+      setErrors({})
     },
     [row],
   )
-
-  if (loading) {
-    return <Container>Lade...</Container>
-  }
-
-  if (error) {
-    return (
-      <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
-    )
-  }
 
   if (!row) return null
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container>
         <TextField
           key={`${row.id}ort`}
           name="ort"

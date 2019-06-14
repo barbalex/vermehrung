@@ -21,6 +21,7 @@ import ErrorBoundary from '../../ErrorBoundary'
 import { zaehlung as zaehlungFragment } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
+import Teilzaehlungen from './Teilzaehlungen'
 
 const Container = styled.div`
   height: 100%;
@@ -248,6 +249,7 @@ const Zaehlung = () => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Teilzaehlungen zaehlId={row.id} />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
