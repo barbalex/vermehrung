@@ -287,7 +287,10 @@ const Zaehlung = () => {
                 multiLine
               />
             )}
-            <Teilzaehlungen zaehlId={row.id} kulturZaehlungFelder={kulturZaehlungFelder} />
+            <Teilzaehlungen
+              zaehlId={row.id}
+              kulturZaehlungFelder={kulturZaehlungFelder}
+            />
             <Button variant="outlined" onClick={onClickChooseFields}>
               Felder wählen
             </Button>
@@ -300,7 +303,7 @@ const Zaehlung = () => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {'Felder für Zählungen wählen:'}
+            {'Felder für Zählungen dieser Kultur wählen:'}
           </DialogTitle>
           <ZaehlungFields
             kulturZaehlungFelder={kulturZaehlungFelder}
