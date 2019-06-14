@@ -134,6 +134,9 @@ const DateFieldWithPicker = ({
         cancelLabel="schliessen"
         okLabel="speichern"
         fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
       />
       {(!!error || internalError) && (
         <StyledFormHelperText

@@ -38,6 +38,23 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+const TitleRow = styled.div`
+  background-color: rgba(74, 20, 140, 0.05);
+  flex-shrink: 0;
+  display: flex;
+  height: 40px;
+  justify-content: space-between;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+  margin-top: ${props => (props['data-first'] ? '-10px' : 'unset')};
+  padding: 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
 
 const query = gql`
   query LieferungQuery(
@@ -331,6 +348,9 @@ const Lieferung = () => {
           rowsFilteredLength={rowsFiltered.length}
         />
         <FieldsContainer>
+          <TitleRow data-first>
+            <Title>was</Title>
+          </TitleRow>
           <Select
             key={`${row.id}art_id`}
             name="art_id"
@@ -342,84 +362,14 @@ const Lieferung = () => {
             saveToDb={saveToDb}
             error={errors.art_id}
           />
-          <Select
-            key={`${row.id}${row.herkunft_id}herkunft_id`}
-            name="herkunft_id"
-            value={row.herkunft_id}
-            field="herkunft_id"
-            label="Herkunft"
-            options={herkunftWerte}
-            loading={dataLoading}
+          <TextField
+            key={`${row.id}anzahl_pflanzen`}
+            name="anzahl_pflanzen"
+            label="Anzahl Pflanzen"
+            value={row.anzahl_pflanzen}
             saveToDb={saveToDb}
-            error={errors.herkunft_id}
-          />
-          <Select
-            key={`${row.id}person_id`}
-            name="person_id"
-            value={row.person_id}
-            field="person_id"
-            label="Person"
-            options={personWerte}
-            loading={personLoading}
-            saveToDb={saveToDb}
-            error={errors.person_id}
-          />
-          <DateFieldWithPicker
-            key={`${row.id}von_datum`}
-            name="von_datum"
-            label="von Datum"
-            value={row.von_datum}
-            saveToDb={saveToDb}
-            error={errors.von_datum}
-          />
-          <Select
-            key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-            name="von_sammlung_id"
-            value={row.von_sammlung_id}
-            field="von_sammlung_id"
-            label="von Sammlung"
-            options={sammlungWerte}
-            loading={sammlungLoading}
-            saveToDb={saveToDb}
-            error={errors.von_sammlung_id}
-          />
-          <Select
-            key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-            name="von_kultur_id"
-            value={row.von_kultur_id}
-            field="von_kultur_id"
-            label="von Kultur"
-            options={kulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.von_kultur_id}
-          />
-          <DateFieldWithPicker
-            key={`${row.id}nach_datum`}
-            name="nach_datum"
-            label="nach Datum"
-            value={row.nach_datum}
-            saveToDb={saveToDb}
-            error={errors.nach_datum}
-          />
-          <Select
-            key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-            name="nach_kultur_id"
-            value={row.nach_kultur_id}
-            field="nach_kultur_id"
-            label="nach Kultur"
-            options={kulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.nach_kultur_id}
-          />
-          <RadioButton
-            key={`${row.id}nach_ausgepflanzt`}
-            label="Ausgepflanzt"
-            name="nach_ausgepflanzt"
-            value={row.nach_ausgepflanzt}
-            saveToDb={saveToDb}
-            error={errors.nach_ausgepflanzt}
+            error={errors.anzahl_pflanzen}
+            type="number"
           />
           <TextField
             key={`${row.id}von_anzahl_individuen`}
@@ -428,15 +378,6 @@ const Lieferung = () => {
             value={row.von_anzahl_individuen}
             saveToDb={saveToDb}
             error={errors.von_anzahl_individuen}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}anzahl_pflanzen`}
-            name="anzahl_pflanzen"
-            label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
-            saveToDb={saveToDb}
-            error={errors.anzahl_pflanzen}
             type="number"
           />
           <TextField
@@ -456,6 +397,94 @@ const Lieferung = () => {
             saveToDb={saveToDb}
             error={errors.menge_beschrieben}
             type="text"
+          />
+          <TitleRow>
+            <Title>von</Title>
+          </TitleRow>
+          <Select
+            key={`${row.id}${row.herkunft_id}herkunft_id`}
+            name="herkunft_id"
+            value={row.herkunft_id}
+            field="herkunft_id"
+            label="Herkunft"
+            options={herkunftWerte}
+            loading={dataLoading}
+            saveToDb={saveToDb}
+            error={errors.herkunft_id}
+          />
+          <DateFieldWithPicker
+            key={`${row.id}von_datum`}
+            name="von_datum"
+            label="Datum"
+            value={row.von_datum}
+            saveToDb={saveToDb}
+            error={errors.von_datum}
+          />
+          <Select
+            key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
+            name="von_sammlung_id"
+            value={row.von_sammlung_id}
+            field="von_sammlung_id"
+            label="Sammlung"
+            options={sammlungWerte}
+            loading={sammlungLoading}
+            saveToDb={saveToDb}
+            error={errors.von_sammlung_id}
+          />
+          <Select
+            key={`${row.id}${row.von_kultur_id}von_kultur_id`}
+            name="von_kultur_id"
+            value={row.von_kultur_id}
+            field="von_kultur_id"
+            label="Kultur"
+            options={kulturWerte}
+            loading={kulturLoading}
+            saveToDb={saveToDb}
+            error={errors.von_kultur_id}
+          />
+          <TitleRow>
+            <Title>nach</Title>
+          </TitleRow>
+          <DateFieldWithPicker
+            key={`${row.id}nach_datum`}
+            name="nach_datum"
+            label="Datum"
+            value={row.nach_datum}
+            saveToDb={saveToDb}
+            error={errors.nach_datum}
+          />
+          <Select
+            key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+            name="nach_kultur_id"
+            value={row.nach_kultur_id}
+            field="nach_kultur_id"
+            label="Kultur"
+            options={kulturWerte}
+            loading={kulturLoading}
+            saveToDb={saveToDb}
+            error={errors.nach_kultur_id}
+          />
+          <RadioButton
+            key={`${row.id}nach_ausgepflanzt`}
+            label="Ausgepflanzt"
+            name="nach_ausgepflanzt"
+            value={row.nach_ausgepflanzt}
+            saveToDb={saveToDb}
+            error={errors.nach_ausgepflanzt}
+          />
+          <TitleRow>
+            <Title>wer</Title>
+          </TitleRow>
+          <Select
+            key={`${row.id}person_id`}
+            name="person_id"
+            value={row.person_id}
+            field="person_id"
+            label="Person"
+            options={personWerte}
+            loading={personLoading}
+            saveToDb={saveToDb}
+            error={errors.person_id}
           />
           <RadioButton
             key={`${row.id}ausgefuehrt`}
