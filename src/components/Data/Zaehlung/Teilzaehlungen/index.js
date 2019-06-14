@@ -55,7 +55,7 @@ const mutation = gql`
   ${teilzaehlungFragment}
 `
 
-const Teilzaehlungen = ({ zaehlId }) => {
+const Teilzaehlungen = ({ zaehlId, kulturZaehlungFelder }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -117,6 +117,7 @@ const Teilzaehlungen = ({ zaehlId }) => {
           <Teilzaehlung
             key={r.id}
             teilzaehlung={r}
+            kulturZaehlungFelder={kulturZaehlungFelder}
             index={index}
             refetch={refetch}
           />

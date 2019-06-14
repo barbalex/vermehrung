@@ -58,7 +58,12 @@ const mutation = gql`
   }
 `
 
-const Teilzaehlung = ({ teilzaehlung: row, index, refetch }) => {
+const Teilzaehlung = ({
+  teilzaehlung: row,
+  kulturZaehlungFelder,
+  index,
+  refetch,
+}) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -132,22 +137,32 @@ const Teilzaehlung = ({ teilzaehlung: row, index, refetch }) => {
 
   if (!row) return null
 
+  const {
+    tz_ort,
+    tz_anzahl_mutterpflanzen,
+    tz_menge_beschrieben,
+    tz_erscheinung,
+    tz_bemerkungen,
+  } = kulturZaehlungFelder
+
   return (
     <ErrorBoundary>
       <>
         {!!index && <TopLine />}
         <Container>
-          <Ort>
-            <TextField
-              key={`${row.id}ort`}
-              name="ort"
-              label="Ort"
-              value={row.ort}
-              saveToDb={saveToDb}
-              error={errors.ort}
-              type="text"
-            />
-          </Ort>
+          {!!tz_ort && (
+            <Ort>
+              <TextField
+                key={`${row.id}ort`}
+                name="ort"
+                label="Ort"
+                value={row.ort}
+                saveToDb={saveToDb}
+                error={errors.ort}
+                type="text"
+              />
+            </Ort>
+          )}
           <Anzahl>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
@@ -170,50 +185,58 @@ const Teilzaehlung = ({ teilzaehlung: row, index, refetch }) => {
               type="number"
             />
           </Anzahl>
-          <Anzahl>
-            <TextField
-              key={`${row.id}anzahl_mutterpflanzen`}
-              name="anzahl_mutterpflanzen"
-              label="Anzahl Mutter-Pflanzen"
-              value={row.anzahl_mutterpflanzen}
-              saveToDb={saveToDb}
-              error={errors.anzahl_mutterpflanzen}
-              type="number"
-            />
-          </Anzahl>
-          <Other>
-            <TextField
-              key={`${row.id}menge_beschrieben`}
-              name="menge_beschrieben"
-              label="Menge textlich beschrieben"
-              value={row.menge_beschrieben}
-              saveToDb={saveToDb}
-              error={errors.menge_beschrieben}
-              type="text"
-            />
-          </Other>
-          <Other>
-            <TextField
-              key={`${row.id}erscheinung`}
-              name="erscheinung"
-              label="Erscheinung, z.B. Verpackung"
-              value={row.erscheinung}
-              saveToDb={saveToDb}
-              error={errors.erscheinung}
-              type="text"
-            />
-          </Other>
-          <Last>
-            <TextField
-              key={`${row.id}bemerkungen`}
-              name="bemerkungen"
-              label="Bemerkungen"
-              value={row.bemerkungen}
-              saveToDb={saveToDb}
-              error={errors.bemerkungen}
-              multiLine
-            />
-          </Last>
+          {!!tz_anzahl_mutterpflanzen && (
+            <Anzahl>
+              <TextField
+                key={`${row.id}anzahl_mutterpflanzen`}
+                name="anzahl_mutterpflanzen"
+                label="Anzahl Mutter-Pflanzen"
+                value={row.anzahl_mutterpflanzen}
+                saveToDb={saveToDb}
+                error={errors.anzahl_mutterpflanzen}
+                type="number"
+              />
+            </Anzahl>
+          )}
+          {!!tz_menge_beschrieben && (
+            <Other>
+              <TextField
+                key={`${row.id}menge_beschrieben`}
+                name="menge_beschrieben"
+                label="Menge textlich beschrieben"
+                value={row.menge_beschrieben}
+                saveToDb={saveToDb}
+                error={errors.menge_beschrieben}
+                type="text"
+              />
+            </Other>
+          )}
+          {!!tz_erscheinung && (
+            <Other>
+              <TextField
+                key={`${row.id}erscheinung`}
+                name="erscheinung"
+                label="Erscheinung, z.B. Verpackung"
+                value={row.erscheinung}
+                saveToDb={saveToDb}
+                error={errors.erscheinung}
+                type="text"
+              />
+            </Other>
+          )}
+          {!!tz_bemerkungen && (
+            <Last>
+              <TextField
+                key={`${row.id}bemerkungen`}
+                name="bemerkungen"
+                label="Bemerkungen"
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={errors.bemerkungen}
+                multiLine
+              />
+            </Last>
+          )}
           <div>
             <IconButton
               aria-label="löschen"

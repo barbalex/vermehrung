@@ -11,6 +11,10 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Button from '@material-ui/core/Button'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -25,6 +29,7 @@ import {
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import Teilzaehlungen from './Teilzaehlungen'
+import ZaehlungFields from './ZaehlungFields'
 
 const Container = styled.div`
   height: 100%;
@@ -36,6 +41,12 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
+`
+const StyledDialog = styled(Dialog)`
+  overflow-y: hidden;
+  .MuiDialog-paper {
+    overflow-y: hidden;
+  }
 `
 
 const query = gql`
@@ -49,6 +60,9 @@ const query = gql`
       kultur {
         id
         art_id
+        kultur_zaehlung_felders {
+          ...KulturZaehlungFelderFields
+        }
       }
     }
     rowsUnfiltered: zaehlung @include(if: $isFiltered) {
@@ -59,6 +73,7 @@ const query = gql`
     }
   }
   ${zaehlungFragment}
+  ${kulturZaehlungFelderFragment}
 `
 const kulturQuery = gql`
   query kulturQuery($filter: kultur_bool_exp!) {
@@ -71,9 +86,6 @@ const kulturQuery = gql`
     ) {
       id
       art_id
-      kultur_zaehlung_felders {
-        tz_anzahl_mutterpflanzen
-      }
       garten {
         id
         person {
@@ -96,9 +108,21 @@ const Zaehlung = () => {
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, refetch: refetchQuery } = useQuery(query, {
     variables: { id, isFiltered, filter: zaehlungFilter },
   })
+
+  const [zaehlungFieldsDialogOpen, setZaehlungFieldsDialogOpen] = useState(
+    false,
+  )
+  const closeZaehlungFieldsDialog = useCallback(
+    () => setZaehlungFieldsDialogOpen(false),
+    [],
+  )
+  const onClickChooseFields = useCallback(
+    () => setZaehlungFieldsDialogOpen(true),
+    [],
+  )
 
   const [errors, setErrors] = useState({})
 
@@ -208,56 +232,85 @@ const Zaehlung = () => {
 
   if (!row) return null
 
+  const kulturZaehlungFelder = row.kultur.kultur_zaehlung_felders[0]
+  const { z_instruktion, z_bemerkungen } = kulturZaehlungFelder
+
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        <FormTitle
-          title="Zaehlung"
-          table="zaehlung"
-          rowsLength={rowsUnfiltered.length}
-          rowsFilteredLength={rowsFiltered.length}
-        />
-        <FieldsContainer>
-          <Select
-            key={`${row.id}${row.kultur_id}kultur_id`}
-            name="kultur_id"
-            value={row.kultur_id}
-            field="kultur_id"
-            label="Kultur"
-            options={kulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.kultur_id}
+      <>
+        <Container showfilter={showFilter}>
+          <FormTitle
+            title="Zaehlung"
+            table="zaehlung"
+            rowsLength={rowsUnfiltered.length}
+            rowsFilteredLength={rowsFiltered.length}
           />
-          <DateFieldWithPicker
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={errors.datum}
+          <FieldsContainer>
+            <Select
+              key={`${row.id}${row.kultur_id}kultur_id`}
+              name="kultur_id"
+              value={row.kultur_id}
+              field="kultur_id"
+              label="Kultur"
+              options={kulturWerte}
+              loading={kulturLoading}
+              saveToDb={saveToDb}
+              error={errors.kultur_id}
+            />
+            <DateFieldWithPicker
+              key={`${row.id}datum`}
+              name="datum"
+              label="Datum"
+              value={row.datum}
+              saveToDb={saveToDb}
+              error={errors.datum}
+            />
+            {!!z_instruktion && (
+              <TextField
+                key={`${row.id}instruktion`}
+                name="instruktion"
+                label="Instruktion"
+                value={row.instruktion}
+                saveToDb={saveToDb}
+                error={errors.instruktion}
+                multiline
+              />
+            )}
+            {!!z_bemerkungen && (
+              <TextField
+                key={`${row.id}bemerkungen`}
+                name="bemerkungen"
+                label="Bemerkungen"
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={errors.bemerkungen}
+                multiLine
+              />
+            )}
+            <Teilzaehlungen zaehlId={row.id} kulturZaehlungFelder={kulturZaehlungFelder} />
+            <Button variant="outlined" onClick={onClickChooseFields}>
+              Felder wählen
+            </Button>
+          </FieldsContainer>
+        </Container>
+        <StyledDialog
+          open={zaehlungFieldsDialogOpen}
+          onClose={closeZaehlungFieldsDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {'Felder für Zählungen wählen:'}
+          </DialogTitle>
+          <ZaehlungFields
+            kulturZaehlungFelder={kulturZaehlungFelder}
+            refetch={refetchQuery}
           />
-          <TextField
-            key={`${row.id}instruktion`}
-            name="instruktion"
-            label="Instruktion"
-            value={row.instruktion}
-            saveToDb={saveToDb}
-            error={errors.instruktion}
-            multiline
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors.bemerkungen}
-            multiLine
-          />
-          <Teilzaehlungen zaehlId={row.id} />
-        </FieldsContainer>
-      </Container>
+          <DialogActions>
+            <Button onClick={closeZaehlungFieldsDialog}>schliessen</Button>
+          </DialogActions>
+        </StyledDialog>
+      </>
     </ErrorBoundary>
   )
 }
