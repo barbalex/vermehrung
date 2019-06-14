@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from 'react-apollo-hooks'
 import styled from 'styled-components'
+import IconButton from '@material-ui/core/IconButton'
+import { FaRegTrashAlt } from 'react-icons/fa'
 
 import TextField from '../../../shared/TextField'
 import ErrorBoundary from '../../../ErrorBoundary'
 import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
 import types from '../../../../store/Filter/simpleTypes'
+import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -45,8 +48,20 @@ const TopLine = styled.div`
   margin-bottom: 10px;
 `
 
-const Teilzaehlung = ({ teilzaehlung: row, index }) => {
+const mutation = gql`
+  mutation deleteDataset($id: bigint!) {
+    delete_teilzaehlung(where: { id: { _eq: $id } }) {
+      returning {
+        id
+      }
+    }
+  }
+`
+
+const Teilzaehlung = ({ teilzaehlung: row, index, refetch }) => {
   const client = useApolloClient()
+  const store = useContext(storeContext)
+  const { enqueNotification } = store
 
   const [errors, setErrors] = useState({})
 
@@ -96,6 +111,24 @@ const Teilzaehlung = ({ teilzaehlung: row, index }) => {
     },
     [row],
   )
+  const onClickDelete = useCallback(async () => {
+    try {
+      await client.mutate({
+        mutation,
+        variables: {
+          id: row.id,
+        },
+      })
+    } catch (error) {
+      return enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    refetch()
+  }, [row])
 
   if (!row) return null
 
@@ -181,6 +214,15 @@ const Teilzaehlung = ({ teilzaehlung: row, index }) => {
               multiLine
             />
           </Last>
+          <div>
+            <IconButton
+              aria-label="löschen"
+              title="löschen"
+              onClick={onClickDelete}
+            >
+              <FaRegTrashAlt />
+            </IconButton>
+          </div>
         </Container>
       </>
     </ErrorBoundary>

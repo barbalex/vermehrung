@@ -35,7 +35,10 @@ const Title = styled.div`
 
 const query = gql`
   query TeilzaehlungenQuery($zaehlId: Int) {
-    teilzaehlung(where: { zaehlung_id: { _eq: $zaehlId } }) {
+    teilzaehlung(
+      where: { zaehlung_id: { _eq: $zaehlId } }
+      order_by: { ort: asc_nulls_first }
+    ) {
       ...TeilzaehlungFields
     }
   }
@@ -73,7 +76,7 @@ const Teilzaehlungen = ({ zaehlId }) => {
       })
     } catch (error) {
       return enqueNotification({
-        message: `Error inserting dataset: ${error.message}`,
+        message: error.message,
         options: {
           variant: 'error',
         },
@@ -111,7 +114,12 @@ const Teilzaehlungen = ({ zaehlId }) => {
           </div>
         </TitleRow>
         {rows.map((r, index) => (
-          <Teilzaehlung key={r.id} teilzaehlung={r} index={index} />
+          <Teilzaehlung
+            key={r.id}
+            teilzaehlung={r}
+            index={index}
+            refetch={refetch}
+          />
         ))}
       </Container>
     </ErrorBoundary>
