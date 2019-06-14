@@ -45,7 +45,12 @@ const fragmentFieldsNames = {
 
 export default async ({ node, store, client }) => {
   // get parent table, parent table id and table from url
-  const { setActiveNodeArray, refetch, addOpenNodes } = store.tree
+  const {
+    setActiveNodeArray,
+    refetch,
+    addOpenNodes,
+    enqueNotification,
+  } = store.tree
   const { nodeType, url } = node
 
   // get table and id from url
@@ -167,7 +172,12 @@ export default async ({ node, store, client }) => {
       mutation,
     })
   } catch (error) {
-    return console.log('Error inserting dataset', error.message)
+    return enqueNotification({
+      message: `Error inserting dataset: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
   if (newObject && newObject.id) {

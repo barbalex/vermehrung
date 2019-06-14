@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -25,9 +25,9 @@ const TitleRow = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
+  padding: 0 8px;
 `
 const Title = styled.div`
-  padding-left: 8px;
   font-weight: bold;
   margin-top: auto;
   margin-bottom: auto;
@@ -41,16 +41,46 @@ const query = gql`
   }
   ${teilzaehlungFragment}
 `
+const mutation = gql`
+  mutation insertDataset($zaehlId: Int!) {
+    insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
+      returning {
+        ...TeilzaehlungFields
+      }
+    }
+  }
+  ${teilzaehlungFragment}
+`
 
 const Teilzaehlungen = ({ zaehlId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { enqueNotification } = store
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, refetch } = useQuery(query, {
     variables: { zaehlId },
   })
 
   const rows = get(data, 'teilzaehlung', [])
+
+  const onClickNew = useCallback(async () => {
+    try {
+      await client.mutate({
+        mutation,
+        variables: {
+          zaehlId,
+        },
+      })
+    } catch (error) {
+      return enqueNotification({
+        message: `Error inserting dataset: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    refetch()
+  }, [])
 
   if (loading) {
     return <Container>Lade...</Container>
@@ -70,13 +100,19 @@ const Teilzaehlungen = ({ zaehlId }) => {
       <Container>
         <TitleRow>
           <Title>Teil-Zählungen</Title>
+          <div>
+            <IconButton
+              aria-label="Neu"
+              title="Neue Teil-Zählung"
+              onClick={onClickNew}
+            >
+              <FaPlus />
+            </IconButton>
+          </div>
         </TitleRow>
         {rows.map((r, index) => (
           <Teilzaehlung key={r.id} teilzaehlung={r} index={index} />
         ))}
-        <IconButton aria-label="Neu">
-          <FaPlus />
-        </IconButton>
       </Container>
     </ErrorBoundary>
   )
