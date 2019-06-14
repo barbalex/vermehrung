@@ -97,53 +97,6 @@ from kultur_event
   on kultur_event.kultur_id = kultur.id;
 
 SELECT
-  setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.datum::text, '')), 'A') || ' ' ||
-  setweight(to_tsvector('german', coalesce(kultur_inventar.kasten, '')), 'B') || ' ' ||
-  setweight(to_tsvector('german', coalesce(kultur_inventar.beet, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.nr, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.anzahl_pflanzen::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.anzahl_auspflanzbereit::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.anz_bluehend::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(kultur_inventar.bluehdatum, '')), 'D') || ' ' ||
-  setweight(to_tsvector('german', coalesce(kultur_inventar.instruktion, '')), 'C') || ' ' ||
-  setweight(to_tsvector('german', coalesce(kultur_inventar.bemerkungen, '')), 'C')
-  as vector
-from kultur_inventar
-  inner join kultur 
-    inner join art 
-      inner join ae_art on art.ae_id = ae_art.id
-    on kultur.art_id = art.id
-    left join garten
-      inner join person on garten.person_id = person.id
-    on kultur.garten_id = garten.id
-  on kultur_inventar.kultur_id = kultur.id;
-
-SELECT
-  setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.datum::text, '')), 'A') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.anzahl_pflanzen::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.anzahl_auspflanzbereit::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.anz_bluehend::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(zaehlung.bluehdatum, '')), 'D') || ' ' ||
-  setweight(to_tsvector('german', coalesce(zaehlung.instruktion, '')), 'C') || ' ' ||
-  setweight(to_tsvector('german', coalesce(zaehlung.bemerkungen, '')), 'C')
-  as vector
-from zaehlung
-  inner join kultur 
-    inner join art 
-      inner join ae_art on art.ae_id = ae_art.id
-    on kultur.art_id = art.id
-    left join garten
-      inner join person on garten.person_id = person.id
-    on kultur.garten_id = garten.id
-  on zaehlung.kultur_id = kultur.id;
-
-SELECT
   setweight(to_tsvector('simple', coalesce(ae_art.name, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(person.name, '')), 'A') || ' ' ||
   setweight(to_tsvector('simple', coalesce(lieferung.von_datum::text, '')), 'A') || ' ' ||

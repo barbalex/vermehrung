@@ -18,7 +18,6 @@ import {
   herkunft as herkunftFragment,
   kultur as kulturFragment,
   kulturEvent as kulturEventFragment,
-  kulturInventar as kulturInventarFragment,
   lieferung as lieferungFragment,
   person as personFragment,
   sammlung as sammlungFragment,
@@ -146,10 +145,6 @@ const filterSuggestionsQuery = gql`
         ...KulturFields
       }
     }
-    kulturInventar: kultur_inventar_search(args: { filter: $filter })
-      @include(if: $run) {
-      ...KulturInventarFields
-    }
     lieferung: lieferung_search(args: { filter: $filter }) @include(if: $run) {
       ...LieferungFields
     }
@@ -174,7 +169,6 @@ const filterSuggestionsQuery = gql`
   ${herkunftFragment}
   ${kulturFragment}
   ${kulturEventFragment}
-  ${kulturInventarFragment}
   ${lieferungFragment}
   ${personFragment}
   ${sammlungFragment}
@@ -236,12 +230,6 @@ export default () => {
     type: 'Events',
     parent: o.kultur_id,
   }))
-  const suggestionsKulturInventar = get(data, 'kulturInventar', []).map(o => ({
-    id: o.id,
-    name: formatDatum(o.datum),
-    type: 'Inventare',
-    parent: o.kultur_id,
-  }))
   const suggestionsLieferung = get(data, 'lieferung', []).map(o => ({
     id: o.id,
     name: o.von_datum
@@ -271,7 +259,6 @@ export default () => {
     ...suggestionsHerkunft,
     ...suggestionsKultur,
     ...suggestionsKulturEvent,
-    ...suggestionsKulturInventar,
     ...suggestionsLieferung,
     ...suggestionsPerson,
     ...suggestionsSammlung,
@@ -306,12 +293,6 @@ export default () => {
     titledSuggestions.push({
       title: `Events (${suggestionsKulturEvent.length})`,
       suggestions: suggestionsKulturEvent,
-    })
-  }
-  if (suggestionsKulturInventar.length) {
-    titledSuggestions.push({
-      title: `Inventare (${suggestionsKulturInventar.length})`,
-      suggestions: suggestionsKulturInventar,
     })
   }
   if (suggestionsLieferung.length) {
@@ -357,7 +338,6 @@ export default () => {
       case 'Kulturen':
         newActiveNodeArray = [suggestion.type, suggestion.id]
         break
-      case 'Inventare':
       case 'Events':
       case 'Zaehlungen':
         newActiveNodeArray = [

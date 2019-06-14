@@ -69,23 +69,6 @@ export const kulturEvent = gql`
     event
   }
 `
-export const kulturInventar = gql`
-  fragment KulturInventarFields on kultur_inventar {
-    id
-    kultur_id
-    datum
-    kasten
-    beet
-    nr
-    anzahl_pflanzen
-    anz_mutter_pflanzen
-    anzahl_auspflanzbereit
-    anz_bluehend
-    bluehdatum
-    instruktion
-    bemerkungen
-  }
-`
 export const lieferung = gql`
   fragment LieferungFields on lieferung {
     id
@@ -148,12 +131,20 @@ export const zaehlung = gql`
     id
     kultur_id
     datum
-    anzahl_pflanzen
-    anz_mutter_pflanzen
-    anzahl_auspflanzbereit
-    anz_bluehend
-    bluehdatum
     instruktion
+    bemerkungen
+  }
+`
+export const teilzaehlung = gql`
+  fragment TeilzaehlungFields on teilzaehlung {
+    id
+    zaehlung_id
+    ort
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
+    anzahl_mutterpflanzen
+    menge_beschrieben
+    erscheinung
     bemerkungen
   }
 `

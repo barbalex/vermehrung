@@ -199,46 +199,9 @@ $$ language plpgsql;
 create trigger tsvupdate_kultur_event before insert or update
   on kultur_event for each row execute procedure kultur_event_trigger();
 
-create function kultur_inventar_trigger() returns trigger as $$
-  declare
-    artname text;
-    personname text;
-  begin
-    select ae_art.name, person.name into artname, personname
-    from kultur_inventar
-      inner join kultur 
-        inner join art 
-          inner join ae_art on art.ae_id = ae_art.id
-        on kultur.art_id = art.id
-        left join garten
-          inner join person on garten.person_id = person.id
-        on kultur.garten_id = garten.id
-      on kultur_inventar.kultur_id = kultur.id
-    where kultur.id = new.kultur_id;
-    new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.kasten, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.beet, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anzahl_pflanzen::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anzahl_auspflanzbereit::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anz_bluehend::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bluehdatum, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.instruktion, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
-    return new;
-  end
-$$ language plpgsql;
-
-create trigger tsvupdate_kultur_inventar before insert or update
-  on kultur_inventar for each row execute procedure kultur_inventar_trigger();
-
+-- TODO: add ort and more from teilzaehlungen
+DROP TRIGGER IF EXISTS tsvupdate_zaehlung ON zaehlung;
+DROP FUNCTION IF EXISTS zaehlung_trigger();
 create function zaehlung_trigger() returns trigger as $$
   declare
     artname text;
@@ -262,11 +225,6 @@ create function zaehlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anzahl_pflanzen::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anz_mutter_pflanzen::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anzahl_auspflanzbereit::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.anz_bluehend::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bluehdatum, '')), 'D') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.instruktion, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;

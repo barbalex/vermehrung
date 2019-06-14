@@ -11,11 +11,11 @@ import {
   herkunft,
   kultur,
   kulturEvent,
-  kulturInventar,
   lieferung,
   person,
   sammlung,
   zaehlung,
+  teilzaehlung,
 } from '../../../utils/fragments'
 
 const fragments = {
@@ -24,11 +24,11 @@ const fragments = {
   herkunft: herkunft,
   kultur: kultur,
   kultur_event: kulturEvent,
-  kultur_inventar: kulturInventar,
   lieferung: lieferung,
   person: person,
   sammlung: sammlung,
   zaehlung: zaehlung,
+  teilzaehlung: teilzaehlung,
 }
 const fragmentFieldsNames = {
   art: 'ArtFields',
@@ -36,11 +36,11 @@ const fragmentFieldsNames = {
   herkunft: 'HerkunftFields',
   kultur: 'KulturFields',
   kultur_event: 'KulturEventFields',
-  kultur_inventar: 'KulturInventarFields',
   lieferung: 'LieferungFields',
   person: 'PersonFields',
   sammlung: 'SammlungFields',
   zaehlung: 'ZaehlungFields',
+  teilzaehlung: 'TeilzaehlungFields',
 }
 
 export default async ({ node, store, client }) => {

@@ -8,7 +8,6 @@ import {
   lieferung,
   person,
   sammlung,
-  kulturInventar,
   kulturEvent,
   zaehlung,
 } from '../../utils/fragments'
@@ -19,7 +18,6 @@ export default gql`
     $gartenFilter: garten_bool_exp!
     $kulturFilter: kultur_bool_exp!
     $kulturEventFilter: kultur_event_bool_exp!
-    $kulturInventarFilter: kultur_inventar_bool_exp!
     $herkunftFilter: herkunft_bool_exp!
     $personFilter: person_bool_exp!
     $sammlungFilter: sammlung_bool_exp!
@@ -75,12 +73,6 @@ export default gql`
         ) @include(if: $isGartenKultur) {
           ...KulturEventFields
         }
-        kultur_inventars(
-          where: $kulturInventarFilter
-          order_by: { datum: desc_nulls_first }
-        ) @include(if: $isGartenKultur) {
-          ...KulturInventarFields
-        }
         zaehlungs(
           where: $zaehlungFilter
           order_by: { datum: desc_nulls_first }
@@ -110,12 +102,6 @@ export default gql`
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...KulturEventFields
-        }
-        kultur_inventars(
-          where: $kulturInventarFilter
-          order_by: { datum: desc_nulls_first }
-        ) @include(if: $isArtKultur) {
-          ...KulturInventarFields
         }
         zaehlungs(
           where: $zaehlungFilter
@@ -173,12 +159,6 @@ export default gql`
             ) {
               ...KulturEventFields
             }
-            kultur_inventars(
-              where: $kulturInventarFilter
-              order_by: { datum: desc_nulls_first }
-            ) {
-              ...KulturInventarFields
-            }
             zaehlungs(
               where: $zaehlungFilter
               order_by: { datum: desc_nulls_first }
@@ -214,12 +194,6 @@ export default gql`
         kultur {
           ...KulturFields
         }
-      }
-      kultur_inventars(
-        where: $kulturInventarFilter
-        order_by: { datum: desc_nulls_first }
-      ) @include(if: $isKultur) {
-        ...KulturInventarFields
       }
       zaehlungs(where: $zaehlungFilter, order_by: { datum: desc_nulls_first })
         @include(if: $isKultur) {
@@ -274,9 +248,6 @@ export default gql`
             kultur_events {
               ...KulturEventFields
             }
-            kultur_inventars {
-              ...KulturInventarFields
-            }
             zaehlungs(
               where: $zaehlungFilter
               order_by: { datum: desc_nulls_first }
@@ -306,9 +277,6 @@ export default gql`
         kultur_events {
           ...KulturEventFields
         }
-        kultur_inventars {
-          ...KulturInventarFields
-        }
         zaehlungs {
           ...ZaehlungFields
         }
@@ -334,9 +302,6 @@ export default gql`
           }
           kultur_events @include(if: $isPersonGartenKultur) {
             ...KulturEventFields
-          }
-          kultur_inventars @include(if: $isPersonGartenKultur) {
-            ...KulturInventarFields
           }
           zaehlungs @include(if: $isPersonGartenKultur) {
             ...ZaehlungFields
@@ -411,9 +376,6 @@ export default gql`
           kultur_events @include(if: $isSammlungLieferungKultur) {
             ...KulturEventFields
           }
-          kultur_inventars @include(if: $isSammlungLieferungKultur) {
-            ...KulturInventarFields
-          }
           zaehlungs @include(if: $isSammlungLieferungKultur) {
             ...ZaehlungFields
           }
@@ -470,7 +432,6 @@ export default gql`
   ${lieferung}
   ${person}
   ${sammlung}
-  ${kulturInventar}
   ${kulturEvent}
   ${zaehlung}
 `

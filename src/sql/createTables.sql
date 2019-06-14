@@ -183,30 +183,6 @@ create index on kultur_event using btree (kultur_id);
 create index on kultur_event using btree (datum);
 create index on kultur_event using gin (tsv);
 
-drop table if exists kultur_inventar cascade;
-create table kultur_inventar (
-  id bigserial primary key,
-  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
-  datum date default null,
-  kasten text default null,
-  beet text default null,
-  nr text default null,
-  anzahl_pflanzen integer default null,
-  anz_mutter_pflanzen integer default null,
-  anzahl_auspflanzbereit integer default null,
-  anz_bluehend integer default null,
-  bluehdatum text default null,
-  instruktion text default null,
-  bemerkungen text default null,
-  changed date default now(),
-  changed_by varchar(20) default null,
-  tsv tsvector
-);
-create index on kultur_inventar using btree (id);
-create index on kultur_inventar using btree (kultur_id);
-create index on kultur_inventar using btree (datum);
-create index on kultur_inventar using gin (tsv);
-
 drop table if exists zaehlung cascade;
 create table zaehlung (
   id bigserial primary key,
@@ -227,6 +203,7 @@ drop table if exists teilzaehlung cascade;
 create table teilzaehlung (
   id bigserial primary key,
   zaehlung_id integer default null references zaehlung (id) on delete cascade on update cascade,
+  ort text default null,
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   anzahl_mutterpflanzen integer default null,
@@ -237,12 +214,13 @@ create table teilzaehlung (
   changed_by varchar(20) default null,
   tsv tsvector
 );
-create index on zaehlung using btree (id);
-create index on zaehlung using btree (zaehlung_id);
-create index on zaehlung using btree (anzahl_pflanzen);
-create index on zaehlung using btree (anzahl_auspflanzbereit);
-create index on zaehlung using btree (anzahl_mutterpflanzen);
-create index on zaehlung using gin (tsv);
+create index on teilzaehlung using btree (id);
+create index on teilzaehlung using btree (zaehlung_id);
+create index on teilzaehlung using btree (ort);
+create index on teilzaehlung using btree (anzahl_pflanzen);
+create index on teilzaehlung using btree (anzahl_auspflanzbereit);
+create index on teilzaehlung using btree (anzahl_mutterpflanzen);
+create index on teilzaehlung using gin (tsv);
 
 drop table if exists lieferung cascade;
 create table lieferung (

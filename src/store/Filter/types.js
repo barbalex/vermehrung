@@ -4,12 +4,12 @@ import { type as art } from './art'
 import { type as event } from './event'
 import { type as garten } from './garten'
 import { type as herkunft } from './herkunft'
-import { type as inventar } from './inventar'
 import { type as kultur } from './kultur'
 import { type as lieferung } from './lieferung'
 import { type as person } from './person'
 import { type as sammlung } from './sammlung'
 import { type as zaehlung } from './zaehlung'
+import { type as teilzaehlung } from './teilzaehlung'
 import initialValues from './initialValues'
 
 export default types
@@ -19,12 +19,12 @@ export default types
     event,
     garten,
     herkunft,
-    inventar,
     kultur,
     lieferung,
     person,
     sammlung,
     zaehlung,
+    teilzaehlung,
   })
   .actions(self => ({
     setValue({ table, key, value }) {

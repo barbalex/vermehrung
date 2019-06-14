@@ -33,11 +33,6 @@ values
  (1,1,'2018-10-01','umgepflanzt'),
  (2,2,'2017-08-03','Unkraut entfernt');
 
-insert into kultur_inventar (id,kultur_id,datum,kasten,beet,nr,anzahl_pflanzen,anz_mutter_pflanzen,anzahl_auspflanzbereit)
-values
- (1,1,'2018-10-01','1','3','5',10,4,4),
- (2,2,'2017-08-03','2','1','3',20,6,10);
-
 insert into zaehlung (id,kultur_id,datum,anzahl_pflanzen,anz_mutter_pflanzen,anzahl_auspflanzbereit)
 values
  (1,1,'2018-10-01',10,4,4),

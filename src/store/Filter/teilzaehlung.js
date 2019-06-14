@@ -5,47 +5,26 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kultur_id: types.optional(
+  zaehlung_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  datum: types.optional(
+  ort: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kasten: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  beet: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  nr: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  anzahl_pflanzen: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  anzahl_mutter_pflanzen: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  anzahl_auspflanzbereit: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
+  anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
+  anzahl_mutter_pflanzen: types.optional(types.maybeNull(types.number), null),
+  anzahl_auspflanzbereit: types.optional(types.maybeNull(types.number), null),
   anz_bluehend: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  bluehdatum: types.optional(
+  menge_beschrieben: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  instruktion: types.optional(
+  erscheinung: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -57,32 +36,26 @@ export const type = types.model({
 
 export const initial = {
   id: null,
-  kultur_id: null,
-  datum: null,
-  kasten: null,
-  beet: null,
-  nr: null,
+  zaehlung_id: null,
+  ort: null,
   anzahl_pflanzen: null,
   anzahl_mutter_pflanzen: null,
   anzahl_auspflanzbereit: null,
   anz_bluehend: null,
-  bluehdatum: null,
-  instruktion: null,
+  menge_beschrieben: null,
+  erscheinung: null,
   bemerkungen: null,
 }
 
 export const simpleTypes = {
   id: 'number',
-  kultur_id: 'number',
-  datum: 'string',
-  kasten: 'string',
-  beet: 'string',
-  nr: 'string',
+  zaehlung_id: 'number',
+  ort: 'string',
   anzahl_pflanzen: 'number',
   anzahl_mutter_pflanzen: 'number',
   anzahl_auspflanzbereit: 'number',
   anz_bluehend: 'number',
-  bluehdatum: 'string',
-  instruktion: 'string',
+  menge_beschrieben: 'string',
+  erscheinung: 'string',
   bemerkungen: 'string',
 }

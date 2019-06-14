@@ -17,8 +17,6 @@ import buildArtKulturEventFolder from './art/kultur/event/folder'
 import buildArtKulturEventEvent from './art/kultur/event'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildArtKulturZaehlungZaehlung from './art/kultur/zaehlung'
-import buildArtKulturInventarFolder from './art/kultur/inventar/folder'
-import buildArtKulturInventarInventar from './art/kultur/inventar'
 import buildArtKulturAusLieferungFolder from './art/kultur/auslieferung/folder'
 import buildArtKulturLieferungAusLieferung from './art/kultur/auslieferung'
 import buildArtKulturAnLieferungFolder from './art/kultur/anlieferung/folder'
@@ -32,8 +30,6 @@ import buildGartenKulturEventFolder from './garten/kultur/event/folder'
 import buildGartenKulturEventEvent from './garten/kultur/event'
 import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
 import buildGartenKulturZaehlungZaehlung from './garten/kultur/zaehlung'
-import buildGartenKulturInventarFolder from './garten/kultur/inventar/folder'
-import buildGartenKulturInventarInventar from './garten/kultur/inventar'
 import buildGartenKulturAusLieferungFolder from './garten/kultur/auslieferung/folder'
 import buildGartenKulturLieferungAusLieferung from './garten/kultur/auslieferung'
 import buildGartenKulturAnLieferungFolder from './garten/kultur/anlieferung/folder'
@@ -57,8 +53,6 @@ import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
 import buildPersonGartenKulturKultur from './person/garten/kultur'
 import buildPersonGartenKulturZaehlungFolder from './person/garten/kultur/zaehlung/folder'
 import buildPersonGartenKulturZaehlungZaehlung from './person/garten/kultur/zaehlung'
-import buildPersonGartenKulturInventarFolder from './person/garten/kultur/inventar/folder'
-import buildPersonGartenKulturInventarInventar from './person/garten/kultur/inventar'
 import buildPersonGartenKulturEventFolder from './person/garten/kultur/event/folder'
 import buildPersonGartenKulturEventEvent from './person/garten/kultur/event'
 import buildPersonGartenKulturAuslieferungFolder from './person/garten/kultur/auslieferung/folder'
@@ -81,8 +75,6 @@ import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultu
 import buildSammlungAusLieferungKulturKultur from './sammlung/auslieferung/kultur'
 import buildSammlungAusLieferungKulturZaehlungFolder from './sammlung/auslieferung/kultur/zaehlung/folder'
 import buildSammlungAusLieferungKulturZaehlungZaehlung from './sammlung/auslieferung/kultur/zaehlung'
-import buildSammlungAusLieferungKulturInventarFolder from './sammlung/auslieferung/kultur/inventar/folder'
-import buildSammlungAusLieferungKulturInventarInventar from './sammlung/auslieferung/kultur/inventar'
 import buildSammlungAusLieferungKulturEventFolder from './sammlung/auslieferung/kultur/event/folder'
 import buildSammlungAusLieferungKulturEventEvent from './sammlung/auslieferung/kultur/event'
 import buildSammlungAusLieferungKulturAusLieferungFolder from './sammlung/auslieferung/kultur/auslieferung/folder'
@@ -96,8 +88,6 @@ import buildKulturEventFolder from './kultur/event/folder'
 import buildKulturEventEvent from './kultur/event'
 import buildKulturZaehlungFolder from './kultur/zaehlung/folder'
 import buildKulturZaehlungZaehlung from './kultur/zaehlung'
-import buildKulturInventarFolder from './kultur/inventar/folder'
-import buildKulturInventarInventar from './kultur/inventar'
 import buildKulturAusLieferungFolder from './kultur/auslieferung/folder'
 import buildKulturLieferungAusLieferung from './kultur/auslieferung'
 import buildKulturAnLieferungFolder from './kultur/anlieferung/folder'
@@ -343,15 +333,6 @@ export default ({ store, data, loading }) => {
             loading,
           }),
         )(),
-        ...memoizeOne(() =>
-          buildKulturInventarFolder({
-            nodes,
-            url,
-            data,
-            store,
-            loading,
-          }),
-        )(),
       ]
     }
 
@@ -559,19 +540,6 @@ export default ({ store, data, loading }) => {
         )(),
       ]
     }
-    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Inventare') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturInventarInventar({
-            nodes,
-            data,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
 
     if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
       nodes = [
@@ -605,15 +573,6 @@ export default ({ store, data, loading }) => {
         )(),
         ...memoizeOne(() =>
           buildArtKulturEventFolder({
-            nodes,
-            url,
-            data,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildArtKulturInventarFolder({
             nodes,
             url,
             data,
@@ -669,15 +628,6 @@ export default ({ store, data, loading }) => {
         )(),
         ...memoizeOne(() =>
           buildGartenKulturEventFolder({
-            nodes,
-            url,
-            data,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildGartenKulturInventarFolder({
             nodes,
             url,
             data,
@@ -778,24 +728,6 @@ export default ({ store, data, loading }) => {
       url.length === 5 &&
       url[0] === 'Arten' &&
       url[2] === 'Kulturen' &&
-      url[4] === 'Inventare'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturInventarInventar({
-            nodes,
-            data,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 5 &&
-      url[0] === 'Arten' &&
-      url[2] === 'Kulturen' &&
       url[4] === 'Aus-Lieferungen'
     ) {
       nodes = [
@@ -857,24 +789,6 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildGartenKulturZaehlungZaehlung({
-            nodes,
-            data,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 5 &&
-      url[0] === 'Gaerten' &&
-      url[2] === 'Kulturen' &&
-      url[4] === 'Inventare'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildGartenKulturInventarInventar({
             nodes,
             data,
             store,
@@ -1009,14 +923,6 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildPersonGartenKulturInventarFolder({
-            nodes,
-            data,
-            store,
-            url,
-          }),
-        )(),
-        ...memoizeOne(() =>
           buildPersonGartenKulturEventFolder({
             nodes,
             data,
@@ -1052,15 +958,6 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturZaehlungFolder({
-            nodes,
-            data,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturInventarFolder({
             nodes,
             data,
             store,
@@ -1109,25 +1006,6 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildPersonGartenKulturZaehlungZaehlung({
-            nodes,
-            data,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Inventare'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturInventarInventar({
             nodes,
             data,
             store,
@@ -1204,26 +1082,6 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturZaehlungZaehlung({
-            nodes,
-            data,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Inventare'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturInventarInventar({
             nodes,
             data,
             store,
