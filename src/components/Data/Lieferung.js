@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -16,6 +10,7 @@ import memoizeOne from 'memoize-one'
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
+import TextFieldNonUpdatable from '../shared/TextFieldNonUpdatable'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
@@ -87,6 +82,7 @@ const sammlungQuery = gql`
       id
       art_id
       datum
+      herkunft_id
       herkunft {
         id
         nr
@@ -110,6 +106,7 @@ const kulturQuery = gql`
     ) {
       id
       art_id
+      herkunft_id
       garten {
         id
         person {
@@ -138,11 +135,9 @@ const personQuery = gql`
     }
   }
 `
-const dataQuery = gql`
-  query dataQuery {
-    herkunft(
-      order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
-    ) {
+const herkunftQuery = gql`
+  query herkunftQuery($id: bigint!) {
+    herkunft(where: { id: { _eq: $id } }) {
       id
       nr
       lokalname
@@ -204,9 +199,16 @@ const Lieferung = () => {
     variables: { filter: kulturFilter },
   })
 
-  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
-    dataQuery,
-  )
+  // need to query herkunft separate from regular query
+  // because herkunft was not updated when using value from that ??!!
+  const { data: herkunftData, error: herkunftError } = useQuery(herkunftQuery, {
+    variables: { id: row.herkunft_id },
+  })
+  const herkunft = get(herkunftData, 'herkunft', [])[0]
+  const herkunftValue = herkunft
+    ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.lokalname ||
+        'kein Lokalname'}`
+    : ''
 
   useEffect(() => setErrors({}), [row])
 
@@ -250,15 +252,6 @@ const Lieferung = () => {
       label: get(el, 'art_ae_art.name') || '(kein Artname)',
     })),
   )()
-
-  const herkunftWerte = useMemo(
-    () =>
-      get(dataData, 'herkunft', []).map(el => ({
-        value: el.id,
-        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
-      })),
-    [dataLoading],
-  )
 
   const saveToDb = useCallback(
     async event => {
@@ -304,6 +297,96 @@ const Lieferung = () => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
+        // if field was 'von_sammlung_id' or 'von_kultur_id'
+        // need to set herkunft_id
+        if (['von_sammlung_id', 'von_kultur_id'].includes(field)) {
+          if (field === 'von_sammlung_id') {
+            let herkunft_id = null
+            if (valueToSet) {
+              const res = await client.query({
+                query: gql`
+                  query getSammlung($id: bigint!) {
+                    sammlung(where: { id: { _eq: $id } }) {
+                      id
+                      herkunft_id
+                    }
+                  }
+                `,
+                variables: {
+                  id: valueToSet,
+                },
+              })
+              herkunft_id = get(res, 'data.sammlung[0].herkunft_id') || null
+            }
+            await client.mutate({
+              mutation: gql`
+                mutation update_lieferung(
+                  $id: bigint!
+                ) {
+                  update_lieferung(
+                    where: { id: { _eq: $id } }
+                    _set: {
+                      herkunft_id: ${herkunft_id}
+                      von_kultur_id: null
+                    }
+                  ) {
+                    affected_rows
+                    returning {
+                      ...LieferungFields
+                    }
+                  }
+                }
+                ${lieferungFragment}
+              `,
+              variables: {
+                id: row.id,
+              },
+            })
+          }
+          if (field === 'von_kultur_id') {
+            let herkunft_id = null
+            if (valueToSet) {
+              const res = await client.query({
+                query: gql`
+                  query getKultur($id: bigint!) {
+                    kultur(where: { id: { _eq: $id } }) {
+                      id
+                      herkunft_id
+                    }
+                  }
+                `,
+                variables: {
+                  id: valueToSet,
+                },
+              })
+              herkunft_id = get(res, 'data.kultur[0].herkunft_id') || null
+            }
+            await client.mutate({
+              mutation: gql`
+                mutation update_lieferung(
+                  $id: bigint!
+                ) {
+                  update_lieferung(
+                    where: { id: { _eq: $id } }
+                    _set: {
+                      herkunft_id: ${herkunft_id}
+                      von_sammlung_id: null
+                    }
+                  ) {
+                    affected_rows
+                    returning {
+                      ...LieferungFields
+                    }
+                  }
+                }
+                ${lieferungFragment}
+              `,
+              variables: {
+                id: row.id,
+              },
+            })
+          }
+        }
         setErrors({})
         refetch()
       }
@@ -324,8 +407,8 @@ const Lieferung = () => {
     error ||
     sammlungError ||
     kulturError ||
-    dataError ||
     artError ||
+    herkunftError ||
     personError
   if (errorToShow) {
     return (
@@ -401,17 +484,6 @@ const Lieferung = () => {
           <TitleRow>
             <Title>von</Title>
           </TitleRow>
-          <Select
-            key={`${row.id}${row.herkunft_id}herkunft_id`}
-            name="herkunft_id"
-            value={row.herkunft_id}
-            field="herkunft_id"
-            label="Herkunft"
-            options={herkunftWerte}
-            loading={dataLoading}
-            saveToDb={saveToDb}
-            error={errors.herkunft_id}
-          />
           <DateFieldWithPicker
             key={`${row.id}von_datum`}
             name="von_datum"
@@ -441,6 +513,15 @@ const Lieferung = () => {
             loading={kulturLoading}
             saveToDb={saveToDb}
             error={errors.von_kultur_id}
+          />
+          <TextFieldNonUpdatable
+            key={`${row.id}herkunft_id`}
+            name="herkunft_id"
+            label="Herkunft"
+            value={herkunftValue}
+            saveToDb={saveToDb}
+            error={errors.herkunft_id}
+            message="Ändern Sie Sammlung oder Kultur, um die Herkunft zu ändern"
           />
           <TitleRow>
             <Title>nach</Title>

@@ -13,12 +13,16 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const MyTextField = ({ label, value = '' }) => {
+const MyTextField = ({
+  label,
+  value = '',
+  message = 'Dieser Wert ist nicht veränderbar',
+}) => {
   const [error, setError] = useState(null)
   const onChange = useCallback(() => {
-    setError('Dieser Wert ist nicht veränderbar')
+    setError(message)
     // can fire after component was unmounted...
-    setTimeout(() => setError(null), 5000)
+    setTimeout(() => setError(null), 7000)
   })
 
   return (
