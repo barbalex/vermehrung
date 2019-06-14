@@ -18,7 +18,10 @@ import TextField from '../../shared/TextField'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import FormTitle from '../../shared/FormTitle'
 import ErrorBoundary from '../../ErrorBoundary'
-import { zaehlung as zaehlungFragment } from '../../../utils/fragments'
+import {
+  zaehlung as zaehlungFragment,
+  kultur_zaehlung_felder as kulturZaehlungFelderFragment,
+} from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import Teilzaehlungen from './Teilzaehlungen'
@@ -68,6 +71,9 @@ const kulturQuery = gql`
     ) {
       id
       art_id
+      kultur_zaehlung_felders {
+        tz_anzahl_mutterpflanzen
+      }
       garten {
         id
         person {

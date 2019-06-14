@@ -20,3 +20,26 @@ select zaehlung.id from zaehlung
 left join teilzaehlung
 on teilzaehlung.zaehlung_id = zaehlung.id
 where teilzaehlung.zaehlung_id is null;
+
+
+DROP TRIGGER IF EXISTS kultur_has_zaehlung_felder ON kultur;
+DROP FUNCTION IF EXISTS kultur_has_zaehlung_felder();
+CREATE FUNCTION kultur_has_zaehlung_felder() RETURNS trigger AS $kultur_has_zaehlung_felder$
+BEGIN
+  INSERT INTO
+    kultur_zaehlung_felder (kultur_id)
+  VALUES (NEW.id);
+  RETURN NEW;
+END;
+$kultur_has_zaehlung_felder$ LANGUAGE plpgsql;
+
+CREATE TRIGGER kultur_has_zaehlung_felder AFTER INSERT ON kultur
+  FOR EACH ROW EXECUTE PROCEDURE kultur_has_zaehlung_felder();
+
+-- in case this trigger was not working
+-- add kultur where they are missing
+insert into kultur_zaehlung_felder (kultur_id)
+select kultur.id from kultur
+left join kultur_zaehlung_felder
+on kultur_zaehlung_felder.kultur_id = kultur.id
+where kultur_zaehlung_felder.kultur_id is null;

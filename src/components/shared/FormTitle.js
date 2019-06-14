@@ -14,9 +14,9 @@ const Container = styled.div`
   }
   height: 48px;
   justify-content: space-between;
+  padding 0 10px;
 `
 const Title = styled.div`
-  padding-left: 8px;
   font-weight: bold;
   margin-top: auto;
   margin-bottom: auto;
@@ -25,7 +25,6 @@ const Symbols = styled.div`
   display: flex;
   margin-top: auto;
   margin-bottom: auto;
-  padding-right: 5px;
 `
 const FilterNumbers = styled.div`
   padding-right: 8px;

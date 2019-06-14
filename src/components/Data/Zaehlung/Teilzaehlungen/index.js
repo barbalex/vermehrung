@@ -25,7 +25,7 @@ const TitleRow = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
-  padding: 0 8px;
+  padding: 0 10px;
 `
 const Title = styled.div`
   font-weight: bold;

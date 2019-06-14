@@ -21,19 +21,19 @@ const Ort = styled.div`
   flex-basis: 100px;
   flex-shrink: 1;
   flex-grow: 1;
-  margin-right: 8px;
+  margin-right: 10px;
 `
 const Anzahl = styled.div`
   flex-basis: 200px;
   flex-shrink: 1;
   flex-grow: 1;
-  margin-right: 8px;
+  margin-right: 10px;
 `
 const Other = styled.div`
   flex-basis: 250px;
   flex-shrink: 5;
   flex-grow: 10;
-  margin-right: 8px;
+  margin-right: 10px;
 `
 const Last = styled.div`
   flex-basis: 350px;
@@ -161,23 +161,23 @@ const Teilzaehlung = ({ teilzaehlung: row, index, refetch }) => {
           </Anzahl>
           <Anzahl>
             <TextField
-              key={`${row.id}anzahl_mutter_pflanzen`}
-              name="anzahl_mutter_pflanzen"
-              label="Anzahl Mutter-Pflanzen"
-              value={row.anzahl_mutter_pflanzen}
-              saveToDb={saveToDb}
-              error={errors.anzahl_mutter_pflanzen}
-              type="number"
-            />
-          </Anzahl>
-          <Anzahl>
-            <TextField
               key={`${row.id}anzahl_auspflanzbereit`}
               name="anzahl_auspflanzbereit"
               label="Anzahl auspflanz-bereit"
               value={row.anzahl_auspflanzbereit}
               saveToDb={saveToDb}
               error={errors.anzahl_auspflanzbereit}
+              type="number"
+            />
+          </Anzahl>
+          <Anzahl>
+            <TextField
+              key={`${row.id}anzahl_mutterpflanzen`}
+              name="anzahl_mutterpflanzen"
+              label="Anzahl Mutter-Pflanzen"
+              value={row.anzahl_mutterpflanzen}
+              saveToDb={saveToDb}
+              error={errors.anzahl_mutterpflanzen}
               type="number"
             />
           </Anzahl>

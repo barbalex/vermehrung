@@ -222,6 +222,21 @@ create index on teilzaehlung using btree (anzahl_auspflanzbereit);
 create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using gin (tsv);
 
+
+drop table if exists kultur_zaehlung_felder cascade;
+create table kultur_zaehlung_felder (
+  kultur_id integer unique not null references kultur (id) on delete cascade on update cascade,
+  z_instruktion boolean default true,
+  z_bemerkungen boolean default true,
+  tz_ort boolean default true,
+  tz_anzahl_mutterpflanzen boolean default true,
+  tz_menge_beschrieben boolean default true,
+  tz_erscheinung boolean default true,
+  tz_bemerkungen boolean default true
+);
+create index on kultur_zaehlung_felder using btree (kultur_id);
+
+
 drop table if exists lieferung cascade;
 create table lieferung (
   id bigserial primary key,
