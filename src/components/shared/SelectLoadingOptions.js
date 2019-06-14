@@ -130,7 +130,7 @@ const SelectTypable = ({
     label: get(row, valueLabelPath) || '',
   }
 
-  console.log('SelectLoadingOptions', { value })
+  //console.log('SelectLoadingOptions', { value })
 
   return (
     <Container data-id={field}>
