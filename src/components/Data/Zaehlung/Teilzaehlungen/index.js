@@ -11,8 +11,24 @@ import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragment
 import Teilzaehlung from './Teilzaehlung'
 
 const Container = styled.div`
-  height: 100%;
   display: flex;
+  flex-direction: column;
+`
+const TitleRow = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  height: 48px;
+  justify-content: space-between;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+`
+const Title = styled.div`
+  padding-left: 8px;
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
 `
 
 const query = gql`
@@ -50,8 +66,11 @@ const Teilzaehlungen = ({ zaehlId }) => {
   return (
     <ErrorBoundary>
       <Container>
-        {rows.map(r => (
-          <Teilzaehlung key={r.id} teilzaehlung={r} />
+        <TitleRow>
+          <Title>Teil-Zählungen</Title>
+        </TitleRow>
+        {rows.map((r, index) => (
+          <Teilzaehlung key={r.id} teilzaehlung={r} index={index} />
         ))}
       </Container>
     </ErrorBoundary>

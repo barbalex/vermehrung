@@ -24,7 +24,7 @@ const MyTextField = ({
   helperText = '',
   error,
   saveToDb,
-  schrinkLabel = false,
+  schrinkLabel = true,
 }) => {
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
