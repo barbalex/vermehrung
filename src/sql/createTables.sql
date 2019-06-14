@@ -212,11 +212,6 @@ create table zaehlung (
   id bigserial primary key,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
-  anzahl_pflanzen integer default null,
-  anz_mutter_pflanzen integer default null,
-  anzahl_auspflanzbereit integer default null,
-  anz_bluehend integer default null,
-  bluehdatum text default null,
   instruktion text default null,
   bemerkungen text default null,
   changed date default now(),
@@ -226,6 +221,27 @@ create table zaehlung (
 create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
+create index on zaehlung using gin (tsv);
+
+drop table if exists teilzaehlung cascade;
+create table teilzaehlung (
+  id bigserial primary key,
+  zaehlung_id integer default null references zaehlung (id) on delete cascade on update cascade,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  anzahl_mutterpflanzen integer default null,
+  menge_beschrieben text default null,
+  erscheinung text default null,
+  bemerkungen text default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  tsv tsvector
+);
+create index on zaehlung using btree (id);
+create index on zaehlung using btree (zaehlung_id);
+create index on zaehlung using btree (anzahl_pflanzen);
+create index on zaehlung using btree (anzahl_auspflanzbereit);
+create index on zaehlung using btree (anzahl_mutterpflanzen);
 create index on zaehlung using gin (tsv);
 
 drop table if exists lieferung cascade;
