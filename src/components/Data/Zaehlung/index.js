@@ -231,51 +231,6 @@ const Zaehlung = () => {
             error={errors.datum}
           />
           <TextField
-            key={`${row.id}anzahl_pflanzen`}
-            name="anzahl_pflanzen"
-            label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
-            saveToDb={saveToDb}
-            error={errors.anzahl_pflanzen}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}anz_mutter_pflanzen`}
-            name="anz_mutter_pflanzen"
-            label="Anzahl Mutter-Pflanzen"
-            value={row.anz_mutter_pflanzen}
-            saveToDb={saveToDb}
-            error={errors.anz_mutter_pflanzen}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}anzahl_auspflanzbereit`}
-            name="anzahl_auspflanzbereit"
-            label="Anzahl auspflanz-bereit"
-            value={row.anzahl_auspflanzbereit}
-            saveToDb={saveToDb}
-            error={errors.anzahl_auspflanzbereit}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}anz_bluehend`}
-            name="anz_bluehend"
-            label="Anzahl blühend"
-            value={row.anz_bluehend}
-            saveToDb={saveToDb}
-            error={errors.anz_bluehend}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}bluehdatum`}
-            name="bluehdatum"
-            label="Blüh-Datum"
-            value={row.bluehdatum}
-            saveToDb={saveToDb}
-            error={errors.bluehdatum}
-            type="text"
-          />
-          <TextField
             key={`${row.id}instruktion`}
             name="instruktion"
             label="Instruktion"
