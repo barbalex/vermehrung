@@ -102,7 +102,7 @@ const Teilzaehlung = ({ teilzaehlung: row, index }) => {
   return (
     <ErrorBoundary>
       <>
-        {index && <TopLine />}
+        {!!index && <TopLine />}
         <Container>
           <Ort>
             <TextField

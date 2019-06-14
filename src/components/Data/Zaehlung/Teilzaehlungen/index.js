@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import IconButton from '@material-ui/core/IconButton'
+import { FaPlus } from 'react-icons/fa'
 
 import storeContext from '../../../../storeContext'
 import ErrorBoundary from '../../../ErrorBoundary'
@@ -72,6 +74,9 @@ const Teilzaehlungen = ({ zaehlId }) => {
         {rows.map((r, index) => (
           <Teilzaehlung key={r.id} teilzaehlung={r} index={index} />
         ))}
+        <IconButton aria-label="Neu">
+          <FaPlus />
+        </IconButton>
       </Container>
     </ErrorBoundary>
   )
