@@ -1,12 +1,12 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Open-Source"
-date: "2019-01-25"
+date: "2019-06-15"
 title: "Open Source"
 sort: 2
 ---
 
-vermehrung.apflora.ch wird von [Gabriel-Software](//gabriel-software.ch) für [Topos](//toposmm.ch) entwickelt und soll im Rahmen des [Aktionsplans Flora der Fachstelle Naturschutz des Kantons Zürich](//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html) eingesetzt werden.<br/><br/>
+vermehrung.apflora.ch wird von [Gabriel-Software](//gabriel-software.ch) für die [Fachstelle Naturschutz des Kantons Zürich](//naturschutz.zh.ch) entwickelt und soll im Rahmen des [Aktionsplans Flora](//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html) eingesetzt werden.<br/><br/>
 
 Der Code ist [open source](//github.com/barbalex/vermehrung/blob/master/LICENSE). Es steht allen frei, ihn zu kopieren und die App selber zu betreiben.<br/><br/>
 
