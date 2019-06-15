@@ -6,6 +6,6 @@ title: "Daten-Struktur"
 sort: 3
 ---
 
-![Daten-Struktur](https://github.com/barbalex/vermehrung/raw/master/src/images/structure.png)
+![Daten-Struktur](_media/structure.png)
 
 Der zugehörige SQL-Code befindet sich [hier](https://github.com/barbalex/vermehrung/tree/master/src/sql).
