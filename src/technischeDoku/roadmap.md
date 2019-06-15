@@ -23,16 +23,23 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: App inklusive Entwicklungs-Umgebung initiiert
 - :white_check_mark: Navigation entworfen
 - :white_check_mark: Navigations-Baum gebaut
-- :white_check_mark: Daten-Laden optimiert
+- :ballot_box_with_check: Daten-Laden optimiert
 - :white_check_mark: Formulare gebaut
-- :white_check_mark: Filter gebaut
+- :ballot_box_with_check: Filter gebaut
 - :white_check_mark: Volltext-Suche gebaut
 - :white_check_mark: Authentifikation und Authorisierung gebaut
-- :white_check_mark: Rollen werden durchgesetzt
+- :ballot_box_with_check: Rollen werden durchgesetzt
 - :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_check_mark: Benutzer können verwaltet werden
-- :white_check_mark: Grundlegende Funktionalitäten mit Topos bereinigt
+- :ballot_box_with_check: Grundlegende Funktionalitäten mit Topos bereinigt
+- :white_check_mark: Auftrag ist erteilt
 - :ballot_box_with_check: Funktionalitäten gemäss Bereinigung angepasst
-- :ballot_box_with_check: Bilder können erfasst werden
+- :ballot_box_with_check: Bilder und Dateien können erfasst werden
+- :white_medium_square: nicht aktive Personen, Gärten und Kulturen können ein-/ausgeblendet werden
+- :white_medium_square: PostGIS für Koordinaten benutzen
+- :white_medium_square: Übersichten bauen für: Kultur, Garten, Art
+- :white_medium_square: Übersichten können gedruckt werden
+- :white_medium_square: Daten können exportiert werden
+- :white_medium_square: Qualitätskontrollen bauen
 - :white_medium_square: Funktionalitäten mit Topos bereinigt
 - :white_medium_square: Produktive Version 1.0.0 live schalten
