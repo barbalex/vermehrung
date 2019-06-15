@@ -6,7 +6,7 @@ title: "Roadmap"
 sort: 4
 ---
 
-vermehrung.apflora.ch ist in Entwicklung. Vorgesehen ist, im Sommer damit arbeiten zu können.<br/><br/>
+vermehrung.apflora.ch ist in Entwicklung. Ziel ist, dass ab 2020 damit gearbeitet wird.<br/><br/>
 
 Symbole:
 * :white_check_mark:: erledigt
