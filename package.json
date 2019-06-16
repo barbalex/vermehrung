@@ -9,7 +9,7 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "@date-io/moment": "1.3.6",
+    "@date-io/moment": "1.3.7",
     "@material-ui/core": "4.1.1",
     "@material-ui/icons": "4.2.0",
     "@material-ui/pickers": "3.1.1",
