@@ -16,6 +16,7 @@ const myTypes = types
       types.union(types.string, types.number),
       '',
     ),
+    hideInactive: types.optional(types.maybeNull(types.boolean), true),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -26,6 +27,16 @@ const myTypes = types
     notifications: [],
   }))
   .actions(self => ({
+    setHideInactive(val) {
+      self.hideInactive = val
+      // TODO:
+      // set filters for person,garten,sammlung
+      const key = 'aktiv'
+      const value = val
+      self.filter.setValue({ table: 'person', key, value })
+      self.filter.setValue({ table: 'garten', key, value })
+      self.filter.setValue({ table: 'kultur', key, value })
+    },
     enqueNotification(note) {
       self.notifications = [
         ...self.notifications,

@@ -23,6 +23,8 @@ const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
 const myClient = client()
 
+if (typeof window !== 'undefined') window.store = mobxStore
+
 const App = ({ element }) => (
   <MuiThemeProvider theme={materialTheme}>
     <MobxProvider value={mobxStore}>
