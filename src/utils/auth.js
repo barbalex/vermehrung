@@ -50,16 +50,17 @@ export const login = () => {
 
 const setSession = ({ callback, nav, store }) => async (err, authResult) => {
   if (err) {
-    store.enqueNotification({
-      message: err.message,
+    console.log('auth.js, setSession Error:', err.description)
+    /*store.enqueNotification({
+      message: err.description,
       options: {
         variant: 'error',
       },
-    })
-    console.log(err)
-    navigate('/')
-    callback && callback()
-    return
+    })*/
+    return auth.authorize()
+    //
+    //navigate('/')
+    //callback && callback()
   }
 
   if (authResult && authResult.accessToken && authResult.idToken) {
@@ -89,9 +90,9 @@ const setSession = ({ callback, nav, store }) => async (err, authResult) => {
             token: tokens.accessToken,
           })
           store.setAuth0ManagementToken(auth0Manage.baseOptions.token)
-          axios.defaults.headers.common['Authorization'] = `Bearer ${
-            tokens.accessToken
-          }`
+          axios.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${tokens.accessToken}`
         },
       )
     }
