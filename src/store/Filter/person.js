@@ -64,7 +64,7 @@ export const type = types.model({
   ),
   kommerziell: types.optional(types.maybeNull(types.boolean), null),
   info: types.optional(types.maybeNull(types.boolean), null),
-  aktiv: types.optional(types.maybeNull(types.boolean), null),
+  aktiv: types.optional(types.maybeNull(types.boolean), true),
 })
 
 export const initial = {
@@ -86,7 +86,7 @@ export const initial = {
   accountId: null,
   kommerziell: null,
   info: null,
-  aktiv: null,
+  aktiv: true,
 }
 
 export const simpleTypes = {

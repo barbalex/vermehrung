@@ -21,7 +21,7 @@ export const type = types.model({
   zwischenlager: types.optional(types.maybeNull(types.boolean), null),
   erhaltungskultur: types.optional(types.maybeNull(types.boolean), null),
   von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
-  aktiv: types.optional(types.maybeNull(types.boolean), null),
+  aktiv: types.optional(types.maybeNull(types.boolean), true),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -37,7 +37,7 @@ export const initial = {
   zwischenlager: null,
   erhaltungskultur: null,
   von_anzahl_individuen: null,
-  aktiv: null,
+  aktiv: true,
   bemerkungen: null,
 }
 
