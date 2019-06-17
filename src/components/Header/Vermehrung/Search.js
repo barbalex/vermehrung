@@ -11,6 +11,7 @@ import parse from 'autosuggest-highlight/parse'
 import moment from 'moment'
 
 import storeContext from '../../../storeContext'
+import queryFromTable from '../../../utils/queryFromTable'
 
 import {
   art as artFragment,
@@ -113,11 +114,18 @@ const DelIcon = styled(FaTimes)`
 `
 
 const filterSuggestionsQuery = gql`
-  query filterSuggestionsQuery($filter: String!, $run: Boolean!) {
+  query filterSuggestionsQuery(
+    $filter: String!
+    $run: Boolean!
+    $personFilter: person_bool_exp!
+    $gartenFilter: garten_bool_exp!
+    $kulturFilter: kultur_bool_exp!
+  ) {
     art: art_search(args: { filter: $filter }) @include(if: $run) {
       ...ArtFields
     }
-    garten: garten_search(args: { filter: $filter }) @include(if: $run) {
+    garten: garten_search(args: { filter: $filter }, where: $gartenFilter)
+      @include(if: $run) {
       ...GartenFields
       person {
         ...PersonFields
@@ -126,7 +134,8 @@ const filterSuggestionsQuery = gql`
     herkunft: herkunft_search(args: { filter: $filter }) @include(if: $run) {
       ...HerkunftFields
     }
-    kultur: kultur_search(args: { filter: $filter }) @include(if: $run) {
+    kultur: kultur_search(args: { filter: $filter }, where: $kulturFilter)
+      @include(if: $run) {
       ...KulturFields
       art {
         ...ArtFields
@@ -148,7 +157,8 @@ const filterSuggestionsQuery = gql`
     lieferung: lieferung_search(args: { filter: $filter }) @include(if: $run) {
       ...LieferungFields
     }
-    person: person_search(args: { filter: $filter }) @include(if: $run) {
+    person: person_search(args: { filter: $filter }, where: $personFilter)
+      @include(if: $run) {
       ...PersonFields
     }
     sammlung: sammlung_search(args: { filter: $filter }) @include(if: $run) {
@@ -200,7 +210,13 @@ export default () => {
   const [val, setVal] = useState('')
 
   const { data } = useQuery(filterSuggestionsQuery, {
-    variables: { run: !!val, filter: val },
+    variables: {
+      run: !!val,
+      filter: val,
+      personFilter: queryFromTable({ store, table: 'person' }),
+      gartenFilter: queryFromTable({ store, table: 'garten' }),
+      kulturFilter: queryFromTable({ store, table: 'kultur' }),
+    },
   })
 
   const suggestionsArt = get(data, 'art', []).map(o => ({

@@ -2,24 +2,20 @@ DROP TRIGGER IF EXISTS tsvupdate_person ON person;
 DROP FUNCTION IF EXISTS person_trigger();
 create function person_trigger() returns trigger as $$
   begin
-    if new.aktiv = True then
-      new.tsv :=
-        setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.name, '')), 'A') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.adresszusatz, '')), 'C') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.strasse, '')), 'C') || ' ' ||
-        setweight(to_tsvector('simple', coalesce(new.plz::text, '')), 'D') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.ort, '')), 'C') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.fax_privat, '')), 'D') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.email, '')), 'C') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
-    else
-      new.tsv := '';
-    end if;
+    new.tsv :=
+      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.name, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.adresszusatz, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.strasse, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.plz::text, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.ort, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.fax_privat, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.email, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -27,6 +23,8 @@ $$ language plpgsql;
 create trigger tsvupdate_person before insert or update
   on person for each row execute procedure person_trigger();
 
+DROP TRIGGER IF EXISTS tsvupdate_art ON art;
+DROP FUNCTION IF EXISTS art_trigger();
 create function art_trigger() returns trigger as $$
   declare
     artname text;
@@ -43,6 +41,8 @@ $$ language plpgsql;
 create trigger tsvupdate_art before insert or update
   on art for each row execute procedure art_trigger();
 
+DROP TRIGGER IF EXISTS tsvupdate_herkunft ON herkunft;
+DROP FUNCTION IF EXISTS herkunft_trigger();
 create function herkunft_trigger() returns trigger as $$
   begin
     new.tsv :=
@@ -102,6 +102,8 @@ $$ language plpgsql;
 create trigger tsvupdate_sammlung before insert or update
   on sammlung for each row execute procedure sammlung_trigger();
 
+DROP TRIGGER IF EXISTS tsvupdate_garten ON garten;
+DROP FUNCTION IF EXISTS garten_trigger();
 create function garten_trigger() returns trigger as $$
   declare
     personname text;
@@ -130,37 +132,33 @@ create function kultur_trigger() returns trigger as $$
     herkunftnr text;
     herkunftlokalname text;
   begin
-    if new.aktiv = True then
-      select ae_art.name into artname
-      from kultur
-        inner join art 
-          inner join ae_art on art.ae_id = ae_art.id
-        on kultur.art_id = art.id
-      where art.id = new.art_id;
-      select person.name into personname
-      from kultur left join garten
-        inner join person on garten.person_id = person.id
-      on new.garten_id = garten.id;
-      select herkunft.nr, herkunft.lokalname into herkunftnr, herkunftlokalname
-      from kultur left join herkunft on kultur.herkunft_id = herkunft.id
-      where herkunft.id = new.herkunft_id;
-       new.tsv :=
-        setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
-        setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
-        setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
-        setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
-        setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'D') || ' ' ||
-        case
-          when new.zwischenlager='true' then setweight(to_tsvector('german', 'zwischenlager'), 'A')
-          else ''
-        end || ' ' ||
-        case
-          when new.erhaltungskultur='true' then setweight(to_tsvector('german', 'erhaltungskultur'), 'A')
-          else ''
-        end;
-    else
-      new.tsv := '';
-    end if;
+    select ae_art.name into artname
+    from kultur
+      inner join art 
+        inner join ae_art on art.ae_id = ae_art.id
+      on kultur.art_id = art.id
+    where art.id = new.art_id;
+    select person.name into personname
+    from kultur left join garten
+      inner join person on garten.person_id = person.id
+    on new.garten_id = garten.id;
+    select herkunft.nr, herkunft.lokalname into herkunftnr, herkunftlokalname
+    from kultur left join herkunft on kultur.herkunft_id = herkunft.id
+    where herkunft.id = new.herkunft_id;
+      new.tsv :=
+      setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'D') || ' ' ||
+      case
+        when new.zwischenlager='true' then setweight(to_tsvector('german', 'zwischenlager'), 'A')
+        else ''
+      end || ' ' ||
+      case
+        when new.erhaltungskultur='true' then setweight(to_tsvector('german', 'erhaltungskultur'), 'A')
+        else ''
+      end;
     return new;
   end
 $$ language plpgsql;
@@ -168,6 +166,8 @@ $$ language plpgsql;
 create trigger tsvupdate_kultur before insert or update
   on kultur for each row execute procedure kultur_trigger();
 
+DROP TRIGGER IF EXISTS tsvupdate_kultur_event ON kultur_event;
+DROP FUNCTION IF EXISTS kultur_event_trigger();
 create function kultur_event_trigger() returns trigger as $$
   declare
     artname text;
