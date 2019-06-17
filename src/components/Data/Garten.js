@@ -16,6 +16,7 @@ import ErrorBoundary from '../ErrorBoundary'
 import { garten as gartenFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
+import Files from './Files'
 
 const Container = styled.div`
   height: 100%;
@@ -223,6 +224,7 @@ const Garten = () => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Files parentId={row.id} parent="garten" />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

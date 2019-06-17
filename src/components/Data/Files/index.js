@@ -10,7 +10,14 @@ import Button from '@material-ui/core/Button'
 
 import storeContext from '../../../storeContext'
 import ErrorBoundary from '../../ErrorBoundary'
-import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
+import {
+  herkunftFile as herkunftFileFragment,
+  sammlungFile as sammlungFileFragment,
+  personFile as personFileFragment,
+  gartenFile as gartenFileFragment,
+  kulturFile as kulturFileFragment,
+  lieferungFile as lieferungFileFragment,
+} from '../../../utils/fragments'
 import Uploader from '../../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'
@@ -42,6 +49,11 @@ const LightboxButton = styled(Button)`
 
 const fragmentObject = {
   herkunft: herkunftFileFragment,
+  sammlung: sammlungFileFragment,
+  person: personFileFragment,
+  garten: gartenFileFragment,
+  kultur: kulturFileFragment,
+  lieferung: lieferungFileFragment,
 }
 
 const Files = ({ parentId, parent }) => {
@@ -54,11 +66,11 @@ const Files = ({ parentId, parent }) => {
   const fieldsName = `${upperFirst(parent)}FileFields`
   const fragment = fragmentObject[parent]
   const queryObject = {
-    herkunft: gql`
+    [parent]: gql`
     query FileQuery($parentId: Int!) {
       ${parent}_file(
         order_by: { name: asc }
-        where: { herkunft_id: { _eq: $parentId } }
+        where: { ${parent}_id: { _eq: $parentId } }
       ) {
         ...${fieldsName}
       }
@@ -115,9 +127,7 @@ const Files = ({ parentId, parent }) => {
   const images = files.filter(f => isImageFile(f))
   const imageUrls = images.map(
     f =>
-      `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${
-        f.name
-      }`,
+      `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${f.name}`,
   )
   const onClickLightboxButton = useCallback(() => setLightboxIsOpen(true), [])
   const onCloseLightboxRequest = useCallback(() => setLightboxIsOpen(false), [])

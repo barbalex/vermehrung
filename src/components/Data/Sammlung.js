@@ -24,6 +24,7 @@ import {
 } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
+import Files from './Files'
 
 const Container = styled.div`
   height: 100%;
@@ -305,6 +306,7 @@ const Sammlung = () => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Files parentId={row.id} parent="sammlung" />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

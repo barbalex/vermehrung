@@ -26,6 +26,7 @@ import {
   garten as gartenFragment,
 } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
+import Files from './Files'
 
 const Container = styled.div`
   height: 100%;
@@ -337,6 +338,7 @@ const Kultur = () => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Files parentId={row.id} parent="kultur" />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

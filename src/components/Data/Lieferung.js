@@ -21,6 +21,7 @@ import {
   art as artFragment,
 } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
+import Files from './Files'
 
 const Container = styled.div`
   height: 100%;
@@ -202,7 +203,7 @@ const Lieferung = () => {
   // need to query herkunft separate from regular query
   // because herkunft was not updated when using value from that ??!!
   const { data: herkunftData, error: herkunftError } = useQuery(herkunftQuery, {
-    variables: { id: row.herkunft_id },
+    variables: { id: row.herkunft_id || 0 },
   })
   const herkunft = get(herkunftData, 'herkunft', [])[0]
   const herkunftValue = herkunft
@@ -584,6 +585,7 @@ const Lieferung = () => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Files parentId={row.id} parent="lieferung" />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

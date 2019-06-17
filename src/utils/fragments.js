@@ -26,6 +26,15 @@ export const garten = gql`
     bemerkungen
   }
 `
+export const gartenFile = gql`
+  fragment GartenFileFields on garten_file {
+    garten_id
+    file_id
+    file_mime_type
+    name
+    beschreibung
+  }
+`
 export const herkunft = gql`
   fragment HerkunftFields on herkunft {
     id
@@ -61,6 +70,15 @@ export const kultur = gql`
     bemerkungen
   }
 `
+export const kulturFile = gql`
+  fragment KulturFileFields on kultur_file {
+    kultur_id
+    file_id
+    file_mime_type
+    name
+    beschreibung
+  }
+`
 export const kulturEvent = gql`
   fragment KulturEventFields on kultur_event {
     id
@@ -89,6 +107,15 @@ export const lieferung = gql`
     bemerkungen
   }
 `
+export const lieferungFile = gql`
+  fragment LieferungFileFields on lieferung_file {
+    lieferung_id
+    file_id
+    file_mime_type
+    name
+    beschreibung
+  }
+`
 export const person = gql`
   fragment PersonFields on person {
     id
@@ -112,6 +139,15 @@ export const person = gql`
     aktiv
   }
 `
+export const personFile = gql`
+  fragment PersonFileFields on person_file {
+    person_id
+    file_id
+    file_mime_type
+    name
+    beschreibung
+  }
+`
 export const sammlung = gql`
   fragment SammlungFields on sammlung {
     id
@@ -124,6 +160,15 @@ export const sammlung = gql`
     anzahl_pflanzen
     anzahl_auspflanzbereit
     bemerkungen
+  }
+`
+export const sammlungFile = gql`
+  fragment SammlungFileFields on sammlung_file {
+    sammlung_id
+    file_id
+    file_mime_type
+    name
+    beschreibung
   }
 `
 export const zaehlung = gql`

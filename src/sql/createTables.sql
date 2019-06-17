@@ -55,6 +55,20 @@ create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using gin (tsv);
 
+drop table if exists person_file;
+create table person_file (
+  id bigserial primary key,
+  person_id integer default null references person (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on person using btree (id);
+create index on person_file using btree (person_id);
+create index on person_file using btree (file_id);
+create index on person_file using btree (file_mime_type);
+
 drop table if exists art cascade;
 create table art (
   id bigserial primary key,
@@ -126,6 +140,20 @@ create index on sammlung using btree (anzahl_pflanzen);
 create index on sammlung using btree (anzahl_auspflanzbereit);
 create index on sammlung using gin (tsv);
 
+drop table if exists sammlung_file;
+create table sammlung_file (
+  id bigserial primary key,
+  sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on sammlung using btree (id);
+create index on sammlung_file using btree (sammlung_id);
+create index on sammlung_file using btree (file_id);
+create index on sammlung_file using btree (file_mime_type);
+
 drop table if exists garten cascade;
 create table garten (
   id bigserial primary key,
@@ -142,6 +170,20 @@ create index on garten using btree (id);
 create index on garten using btree (person_id);
 create index on garten using btree (aktiv);
 create index on garten using gin (tsv);
+
+drop table if exists garten_file;
+create table garten_file (
+  id bigserial primary key,
+  garten_id integer default null references garten (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on garten using btree (id);
+create index on garten_file using btree (garten_id);
+create index on garten_file using btree (file_id);
+create index on garten_file using btree (file_mime_type);
 
 drop table if exists kultur cascade;
 create table kultur (
@@ -167,6 +209,20 @@ create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
 create index on kultur using gin (tsv);
+
+drop table if exists kultur_file;
+create table kultur_file (
+  id bigserial primary key,
+  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on kultur using btree (id);
+create index on kultur_file using btree (kultur_id);
+create index on kultur_file using btree (file_id);
+create index on kultur_file using btree (file_mime_type);
 
 drop table if exists kultur_event cascade;
 create table kultur_event (
@@ -269,6 +325,20 @@ create index on lieferung using btree (anzahl_pflanzen);
 create index on lieferung using btree (anzahl_auspflanzbereit);
 create index on lieferung using btree (ausgefuehrt);
 create index on lieferung using gin (tsv);
+
+drop table if exists lieferung_file;
+create table lieferung_file (
+  id bigserial primary key,
+  lieferung_id integer default null references lieferung (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on lieferung using btree (id);
+create index on lieferung_file using btree (lieferung_id);
+create index on lieferung_file using btree (file_id);
+create index on lieferung_file using btree (file_mime_type);
 
 --alter table lieferung add constraint fk_lieferung_herkunft foreign key (herkunft_id) references herkunft (id) on delete cascade on update cascade;
 
