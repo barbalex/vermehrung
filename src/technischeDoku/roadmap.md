@@ -33,10 +33,10 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Benutzer können verwaltet werden
 - :ballot_box_with_check: Grundlegende Funktionalitäten mit Topos bereinigt
 - :white_check_mark: Auftrag ist erteilt
-- :ballot_box_with_check: Funktionalitäten gemäss Bereinigung angepasst
-- :ballot_box_with_check: Bilder und Dateien können erfasst werden
-- :white_medium_square: nicht aktive Personen, Gärten und Kulturen können ein-/ausgeblendet werden
-- :white_medium_square: PostGIS für Koordinaten benutzen
+- :white_check_mark: Funktionalitäten gemäss erster Bereinigung angepasst
+- :white_check_mark: Bilder und Dateien können erfasst werden
+- :white_check_mark: nicht aktive Personen, Gärten und Kulturen können ein-/ausgeblendet werden
+- :white_check_mark: PostGIS für Koordinaten benutzen
 - :white_medium_square: Übersichten bauen für: Kultur, Garten, Art
 - :white_medium_square: Übersichten können gedruckt werden
 - :white_medium_square: Daten können exportiert werden
