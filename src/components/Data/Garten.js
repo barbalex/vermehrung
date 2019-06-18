@@ -17,6 +17,7 @@ import { garten as gartenFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
 import Files from './Files'
+import Coordinates from '../shared/Coordinates'
 
 const Container = styled.div`
   height: 100%;
@@ -68,7 +69,7 @@ const Garten = () => {
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, refetch: refetchForm } = useQuery(query, {
     variables: { id, isFiltered, filter: gartenFilter },
   })
   const {
@@ -207,6 +208,9 @@ const Garten = () => {
             error={errors.y}
             type="number"
           />
+          {!showFilter && (
+            <Coordinates row={row} refetchForm={refetchForm} table="garten" />
+          )}
           <RadioButton
             key={`${row.id}aktiv`}
             label="Aktiv"

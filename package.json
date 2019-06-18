@@ -60,6 +60,7 @@
     "moment": "2.24.0",
     "notistack": "0.8.6",
     "prettier": "1.18.2",
+    "proj4": "^2.5.0",
     "react": "16.8.6",
     "react-apollo": "2.5.6",
     "react-apollo-hooks": "0.4.5",

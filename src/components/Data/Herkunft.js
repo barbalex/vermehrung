@@ -14,6 +14,7 @@ import { herkunft as herkunftFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
 import Files from './Files'
+import Coordinates from '../shared/Coordinates'
 
 const Container = styled.div`
   height: 100%;
@@ -57,7 +58,7 @@ const Herkunft = () => {
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered, filter: herkunftFilter },
+    variables: { id, isFiltered, filter: herkunftFilter, refetch },
   })
 
   const [errors, setErrors] = useState({})
@@ -131,9 +132,7 @@ const Herkunft = () => {
     return (
       <Container>
         <FormTitle title="Herkunft" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -208,6 +207,9 @@ const Herkunft = () => {
             error={errors.y}
             type="number"
           />
+          {!showFilter && (
+            <Coordinates row={row} refetchForm={refetch} table="herkunft" />
+          )}
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"

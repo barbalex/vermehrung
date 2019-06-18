@@ -24,6 +24,13 @@ export const garten = gql`
     y
     aktiv
     bemerkungen
+    computed {
+      id
+      lv95_x
+      lv95_y
+      wgs84_lat
+      wgs84_long
+    }
   }
 `
 export const gartenFile = gql`
@@ -46,6 +53,13 @@ export const herkunft = gql`
     x
     y
     bemerkungen
+    computed {
+      id
+      lv95_x
+      lv95_y
+      wgs84_lat
+      wgs84_long
+    }
   }
 `
 export const herkunftFile = gql`
