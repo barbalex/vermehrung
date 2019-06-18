@@ -20,8 +20,6 @@ export const garten = gql`
   fragment GartenFields on garten {
     id
     person_id
-    x
-    y
     aktiv
     bemerkungen
     computed {
@@ -50,8 +48,6 @@ export const herkunft = gql`
     gemeinde
     kanton
     land
-    x
-    y
     bemerkungen
     computed {
       id

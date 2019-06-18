@@ -25,14 +25,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  x: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  y: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -46,8 +38,6 @@ export const initial = {
   gemeinde: null,
   kanton: null,
   land: null,
-  x: null,
-  y: null,
   bemerkungen: null,
 }
 
@@ -58,7 +48,5 @@ export const simpleTypes = {
   gemeinde: 'string',
   kanton: 'string',
   land: 'string',
-  x: 'number',
-  y: 'number',
   bemerkungen: 'string',
 }

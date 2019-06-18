@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -37,6 +37,9 @@ const StyledFormControl = styled(FormControl)`
   > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
+`
+const LeftFormControl = styled(StyledFormControl)`
+  padding-right: 8px !important;
 `
 const Row = styled.div`
   display: flex;
@@ -218,7 +221,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
   return (
     <>
       <Row>
-        <StyledFormControl
+        <LeftFormControl
           fullWidth
           error={!!wgs84LatError}
           aria-describedby={`${id}wgs84LatErrorText`}
@@ -246,7 +249,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
               {wgs84LatError}
             </FormHelperText>
           )}
-        </StyledFormControl>
+        </LeftFormControl>
         <StyledFormControl
           fullWidth
           error={!!wgs84LongError}
@@ -278,7 +281,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
         </StyledFormControl>
       </Row>
       <Row>
-        <StyledFormControl
+        <LeftFormControl
           fullWidth
           error={!!xError}
           aria-describedby={`${id}lv95XErrorText`}
@@ -303,7 +306,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
               {xError}
             </FormHelperText>
           )}
-        </StyledFormControl>
+        </LeftFormControl>
         <StyledFormControl
           fullWidth
           error={!!yError}

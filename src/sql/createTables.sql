@@ -89,8 +89,6 @@ create table herkunft (
   gemeinde text default null,
   kanton text default null,
   land text default null,
-  x integer default null constraint zulaessige_x_koordinate check (x is null or (x > 2485071 and x < 2828516)),
-  y integer default null constraint zulaessige_y_koordinate check (y is null or (y > 1075346 and y < 1299942)),
   geom_point geometry(Point, 4326) default null,
   bemerkungen text default null,
   changed date default now(),
@@ -159,8 +157,6 @@ drop table if exists garten cascade;
 create table garten (
   id bigserial primary key,
   person_id integer default null references person (id) on delete cascade on update cascade,
-  x integer default null constraint zulaessige_x_koordinate check (x is null or (x > 2485071 and x < 2828516)),
-  y integer default null constraint zulaessige_y_koordinate check (y is null or (y > 1075346 and y < 1299942)),
   geom_point geometry(Point, 4326) default null,
   aktiv boolean default true,
   bemerkungen text default null,

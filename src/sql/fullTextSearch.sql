@@ -39,8 +39,6 @@ SELECT
   setweight(to_tsvector('german', coalesce(gemeinde, '')), 'B') || ' ' ||
   setweight(to_tsvector('german', coalesce(kanton, '')), 'B') || ' ' ||
   setweight(to_tsvector('simple', coalesce(land, '')), 'B') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(x::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('simple', coalesce(y::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(bemerkungen, '')), 'C') as vector
 from herkunft
 LIMIT 5;
@@ -63,8 +61,6 @@ from sammlung
 
 SELECT
   setweight(to_tsvector('simple', coalesce(person.name, '')), 'A') || ' ' ||
-  setweight(to_tsvector('german', coalesce(x::text, '')), 'D') || ' ' ||
-  setweight(to_tsvector('german', coalesce(y::text, '')), 'D') || ' ' ||
   setweight(to_tsvector('simple', coalesce(garten.bemerkungen, '')), 'C') as vector
 from garten
   left join person on garten.person_id = person.id;

@@ -190,24 +190,6 @@ const Garten = () => {
             saveToDb={saveToDb}
             error={errors.person_id}
           />
-          <TextField
-            key={`${row.id}x`}
-            name="x"
-            label="X-Koordinate"
-            value={row.x}
-            saveToDb={saveToDb}
-            error={errors.x}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}y`}
-            name="y"
-            label="Y-Koordinate"
-            value={row.y}
-            saveToDb={saveToDb}
-            error={errors.y}
-            type="number"
-          />
           {!showFilter && (
             <Coordinates row={row} refetchForm={refetchForm} table="garten" />
           )}

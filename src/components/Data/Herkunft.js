@@ -139,8 +139,6 @@ const Herkunft = () => {
 
   if (!row) return null
 
-  console.log('Herkunft', { row })
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -190,24 +188,6 @@ const Herkunft = () => {
             value={row.land}
             saveToDb={saveToDb}
             error={errors.land}
-          />
-          <TextField
-            key={`${row.id}x`}
-            name="x"
-            label="X-Koordinate"
-            value={row.x}
-            saveToDb={saveToDb}
-            error={errors.x}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}y`}
-            name="y"
-            label="Y-Koordinate"
-            value={row.y}
-            saveToDb={saveToDb}
-            error={errors.y}
-            type="number"
           />
           {!showFilter && (
             <Coordinates row={row} refetchForm={refetch} table="herkunft" />

@@ -9,14 +9,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  x: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
-  y: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -27,8 +19,6 @@ export const type = types.model({
 export const initial = {
   id: null,
   person_id: null,
-  x: null,
-  y: null,
   bemerkungen: null,
   aktiv: true,
 }
@@ -36,8 +26,6 @@ export const initial = {
 export const simpleTypes = {
   id: 'number',
   person_id: 'number',
-  x: 'number',
-  y: 'number',
   bemerkungen: 'string',
   aktiv: 'boolean',
 }

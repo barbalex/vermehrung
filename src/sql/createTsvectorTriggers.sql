@@ -51,8 +51,6 @@ create function herkunft_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(new.gemeinde, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.kanton, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.land, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.x::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.y::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
@@ -113,8 +111,6 @@ create function garten_trigger() returns trigger as $$
     where person.id = new.person_id;
     new.tsv :=
       setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.x::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.y::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
