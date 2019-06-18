@@ -32,7 +32,7 @@ export default ({ url, nodes, data, loading }) => {
       id: `garten${gartenId}Kultur${kulturId}EventFolder`,
       label: `Events (${nr})`,
       url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Events'],
-      sort: [2, gartenIndex, 1, kulturIndex, 4],
+      sort: [4, gartenIndex, 1, kulturIndex, 4],
       hasChildren: true,
     },
   ]

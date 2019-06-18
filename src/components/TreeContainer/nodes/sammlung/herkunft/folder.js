@@ -25,7 +25,7 @@ export default ({ data, loading, url, nodes }) => {
       id: `sammlung${sammlungId}HerkunftFolder`,
       label: `Herkünfte (${nr})`,
       url: ['Sammlungen', sammlungId, 'Herkuenfte'],
-      sort: [6, sammlungIndex, 1],
+      sort: [3, sammlungIndex, 1],
       hasChildren: true,
     },
   ]

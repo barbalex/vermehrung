@@ -44,7 +44,7 @@ export default ({ url, nodes, data, loading }) => {
         sammlungId,
         'Aus-Lieferungen',
       ],
-      sort: [3, herkunftIndex, 2, sammlungIndex, 1],
+      sort: [2, herkunftIndex, 2, sammlungIndex, 1],
       hasChildren: true,
     },
   ]

@@ -50,9 +50,7 @@ export default ({ nodes, data, url }) => {
         nodeType: 'table',
         menuTitle: 'Zählung',
         table: 'artKulturZaehlung',
-        id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Zaehlung${
-          el.id
-        }`,
+        id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Zaehlung${el.id}`,
         parentId: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}ZaehlungFolder`,
         label: get(el, 'datum') || '(kein Datum)',
         url: [
@@ -69,7 +67,7 @@ export default ({ nodes, data, url }) => {
       }))
       .map((el, index) => {
         el.sort = [
-          6,
+          3,
           sammlungIndex,
           3,
           lieferungIndex,

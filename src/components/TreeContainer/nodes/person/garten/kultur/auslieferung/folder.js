@@ -56,7 +56,7 @@ export default ({ url, nodes, data, loading }) => {
         kulturId,
         'Aus-Lieferungen',
       ],
-      sort: [5, personIndex, 1, gartenIndex, 1, kulturIndex, 3],
+      sort: [7, personIndex, 1, gartenIndex, 1, kulturIndex, 3],
       hasChildren: true,
     },
   ]

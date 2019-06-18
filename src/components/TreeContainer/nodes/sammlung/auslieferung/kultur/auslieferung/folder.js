@@ -60,7 +60,7 @@ export default ({ url, nodes, data, loading }) => {
         kulturId,
         'Aus-Lieferungen',
       ],
-      sort: [6, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 3],
+      sort: [3, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 3],
       hasChildren: true,
     },
   ]

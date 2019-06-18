@@ -75,7 +75,7 @@ export default ({ nodes, data, url }) => {
       })
       .map((el, index) => {
         el.sort = [
-          6,
+          3,
           sammlungIndex,
           3,
           lieferungIndex,

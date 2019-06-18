@@ -16,6 +16,6 @@ export default ({ nodes, data }) =>
       accountId: el.account_id || '',
     }))
     .map((el, index) => {
-      el.sort = [5, index]
+      el.sort = [7, index]
       return el
     })

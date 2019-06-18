@@ -46,7 +46,7 @@ export default ({ url, nodes, data, loading }) => {
         lieferungId,
         'Kulturen',
       ],
-      sort: [6, sammlungIndex, 3, lieferungIndex, 1],
+      sort: [3, sammlungIndex, 3, lieferungIndex, 1],
       hasChildren: true,
     },
   ]

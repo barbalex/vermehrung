@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'personFolder',
       label: `Personen (${nr})`,
       url: ['Personen'],
-      sort: [5],
+      sort: [7],
       hasChildren: true,
     },
   ]

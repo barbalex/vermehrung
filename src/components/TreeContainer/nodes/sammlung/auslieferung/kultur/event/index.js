@@ -57,9 +57,7 @@ export default ({ nodes, data, url }) => {
           nodeType: 'table',
           menuTitle: 'Event',
           table: 'event',
-          id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Event${
-            el.id
-          }`,
+          id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Event${el.id}`,
           parentId: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}EventFolder`,
           label,
           url: [
@@ -77,7 +75,7 @@ export default ({ nodes, data, url }) => {
       })
       .map((el, index) => {
         el.sort = [
-          6,
+          3,
           sammlungIndex,
           3,
           lieferungIndex,

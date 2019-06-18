@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'sammlungFolder',
       label: `Sammlungen (${nr})`,
       url: ['Sammlungen'],
-      sort: [6],
+      sort: [3],
       hasChildren: true,
     },
   ]

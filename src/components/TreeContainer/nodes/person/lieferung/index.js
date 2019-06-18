@@ -35,7 +35,7 @@ export default ({ nodes, data, url }) => {
         }
       })
       .map((el, index) => {
-        el.sort = [5, personIndex, 3, index]
+        el.sort = [7, personIndex, 3, index]
         return el
       })
   )

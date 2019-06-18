@@ -30,7 +30,7 @@ export default ({ nodes, data, url }) => {
         hasChildren: false,
       }))
       .map((el, index) => {
-        el.sort = [6, sammlungIndex, 1, index]
+        el.sort = [3, sammlungIndex, 1, index]
         return el
       })
   )

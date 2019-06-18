@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'gartenFolder',
       label: `Gärten (${nr})`,
       url: ['Gaerten'],
-      sort: [2],
+      sort: [4],
       hasChildren: true,
     },
   ]

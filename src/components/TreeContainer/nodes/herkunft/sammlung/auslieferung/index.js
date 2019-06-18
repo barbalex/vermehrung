@@ -52,7 +52,7 @@ export default ({ nodes, data, url }) => {
       }
     })
     .map((el, index) => {
-      el.sort = [3, herkunftIndex, 2, sammlungIndex, 1, index]
+      el.sort = [2, herkunftIndex, 2, sammlungIndex, 1, index]
       return el
     })
 }

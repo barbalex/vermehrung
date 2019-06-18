@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'herkunftFolder',
       label: `Herkünfte (${nr})`,
       url: ['Herkuenfte'],
-      sort: [3],
+      sort: [2],
       hasChildren: true,
     },
   ]

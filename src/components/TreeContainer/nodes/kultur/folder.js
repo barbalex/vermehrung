@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'kulturFolder',
       label: `Kulturen (${nr})`,
       url: ['Kulturen'],
-      sort: [7],
+      sort: [5],
       hasChildren: true,
     },
   ]
