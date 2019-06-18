@@ -206,8 +206,22 @@ create function zaehlung_trigger() returns trigger as $$
   declare
     artname text;
     personname text;
+    orte text;
+    mengen_beschrieben text;
+    erscheinungen text;
   begin
-    select ae_art.name, person.name into artname, personname
+    select
+      ae_art.name,
+      person.name,
+      string_agg(tz.ort, ' '),
+      string_agg(tz.menge_beschrieben, ' '),
+      string_agg(tz.erscheinung, ' ')
+    into
+      artname,
+      personname,
+      orte,
+      mengen_beschrieben,
+      erscheinungen
     from zaehlung
       inner join kultur 
         inner join art 
@@ -217,15 +231,21 @@ create function zaehlung_trigger() returns trigger as $$
           inner join person on garten.person_id = person.id
         on kultur.garten_id = garten.id
       on zaehlung.kultur_id = kultur.id
-    where kultur.id = new.kultur_id;
+      inner join teilzaehlung tz
+      on tz.zaehlung_id = zaehlung.id
+    where kultur.id = new.kultur_id
+    group by ae_art.name, person.name, zaehlung.id;
     new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.instruktion, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(orte, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(mengen_beschrieben, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(erscheinungen, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
