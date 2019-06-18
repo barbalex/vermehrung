@@ -120,7 +120,7 @@ module.exports = {
               rel: 'nofollow',
             },
           },
-          'gatsby-remark-images-zoom',
+          'gatsby-remark-images-medium-zoom',
         ],
       },
     },
