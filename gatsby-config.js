@@ -120,7 +120,12 @@ module.exports = {
               rel: 'nofollow',
             },
           },
-          'gatsby-remark-images-medium-zoom',
+          {
+            resolve: `gatsby-remark-images-medium-zoom`, // point!
+            options: {
+              background: 'rgba(128,128,128,0.5)',
+            },
+          },
         ],
       },
     },
