@@ -199,7 +199,6 @@ $$ language plpgsql;
 create trigger tsvupdate_kultur_event before insert or update
   on kultur_event for each row execute procedure kultur_event_trigger();
 
--- TODO: add ort and more from teilzaehlungen
 DROP TRIGGER IF EXISTS tsvupdate_zaehlung ON zaehlung;
 DROP FUNCTION IF EXISTS zaehlung_trigger();
 create function zaehlung_trigger() returns trigger as $$
