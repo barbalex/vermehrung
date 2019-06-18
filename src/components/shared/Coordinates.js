@@ -9,7 +9,6 @@ import { useApolloClient } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import upperFirst from 'lodash/upperFirst'
 
-import storeContext from '../../storeContext'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import epsg2056to4326 from '../../utils/epsg2056to4326'
 import {
@@ -28,6 +27,10 @@ import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
 } from '../../utils/wgs84LongIsValid'
+import {
+  herkunft as herkunftFragment,
+  garten as gartenFragment,
+} from '../../utils/fragments'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -39,33 +42,36 @@ const Row = styled.div`
   display: flex;
 `
 
+const fragments = {
+  herkunft: herkunftFragment,
+  garten: gartenFragment,
+}
+
 const Coordinates = ({ row, refetchForm, table }) => {
   const { id, computed } = row
-  const { lv95X, lv95Y, wgs84Lat, wgs84Long } = computed
+  const { lv95_x, lv95_y, wgs84_lat, wgs84_long } = computed
 
   const client = useApolloClient()
-  const store = useContext(storeContext)
-  const { refetch } = store
 
-  const [lv95XState, setLv95XState] = useState(lv95X || '')
-  const [lv95YState, setLv95YState] = useState(lv95Y || '')
+  const [lv95XState, setLv95XState] = useState(lv95_x || '')
+  const [lv95YState, setLv95YState] = useState(lv95_y || '')
   const [xError, setXError] = useState('')
   const [yError, setYError] = useState('')
 
-  const [wgs84LatState, setWgs84LatState] = useState(wgs84Lat || '')
-  const [wgs84LongState, setWgs84LongState] = useState(wgs84Long || '')
+  const [wgs84LatState, setWgs84LatState] = useState(wgs84_lat || '')
+  const [wgs84LongState, setWgs84LongState] = useState(wgs84_long || '')
   const [wgs84LatError, setWgs84LatError] = useState('')
   const [wgs84LongError, setWgs84LongError] = useState('')
 
   // ensure state is updated when changed from outside
   useEffect(() => {
-    setLv95XState(lv95X || '')
-    setLv95YState(lv95Y || '')
-  }, [lv95X, lv95Y])
+    setLv95XState(lv95_x || '')
+    setLv95YState(lv95_y || '')
+  }, [lv95_x, lv95_y])
   useEffect(() => {
-    setWgs84LatState(wgs84Lat || '')
-    setWgs84LongState(wgs84Long || '')
-  }, [wgs84Lat, wgs84Long])
+    setWgs84LatState(wgs84_lat || '')
+    setWgs84LongState(wgs84_long || '')
+  }, [wgs84_lat, wgs84_long])
 
   const onChangeX = useCallback(event => {
     const value = ifIsNumericAsNumber(event.target.value)
@@ -78,7 +84,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       if (!isValid) return setXError(xMessage)
       setXError('')
       // only save if changed
-      if (value === lv95X) return
+      if (value === lv95_x) return
       if ((value && lv95YState) || (!value && !lv95YState)) {
         saveToDbLv95(value, lv95YState)
       }
@@ -96,7 +102,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       if (!isValid) return setYError(yMessage)
       setYError('')
       // only save if changed
-      if (value === lv95Y) return
+      if (value === lv95_y) return
       if ((value && lv95XState) || (!value && !lv95XState))
         saveToDbLv95(lv95XState, value)
     },
@@ -114,7 +120,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       if (!isValid) return setWgs84LatError(wgs84LatMessage)
       setWgs84LatError('')
       // only save if changed
-      if (value === wgs84Lat) return
+      if (value === wgs84_lat) return
       if ((value && wgs84LongState) || (!value && !wgs84LongState)) {
         saveToDbWgs84(value, wgs84LongState)
       }
@@ -132,7 +138,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       if (!isValid) return setWgs84LongError(wgs84LongMessage)
       setWgs84LongError('')
       // only save if changed
-      if (value === wgs84Long) return
+      if (value === wgs84_long) return
       if ((value && wgs84LatState) || (!value && !wgs84LatState)) {
         saveToDbWgs84(wgs84LatState, value)
       }
@@ -143,15 +149,22 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const saveToDbLv95 = useCallback((x, y) => {
     let geomPoint = null
     if (x && y) {
-      const [lat, long] = epsg2056to4326(x, y)
-      geomPoint = `SRID=4326;POINT(${long} ${lat})`
+      geomPoint = {
+        type: 'Point',
+        coordinates: epsg2056to4326(x, y),
+        crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+      }
     }
     saveToDb(geomPoint, 'lv95')
   }, [])
   const saveToDbWgs84 = useCallback((lat, long) => {
     let geomPoint = null
     if (lat && long) {
-      geomPoint = `SRID=4326;POINT(${long} ${lat})`
+      geomPoint = {
+        type: 'Point',
+        coordinates: [long, lat],
+        crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+      }
     }
     saveToDb(geomPoint, 'wgs84')
   }, [])
@@ -159,32 +172,32 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const saveToDb = useCallback(
     async (geomPoint, projection) => {
       try {
-        const mutationName = `update${upperFirst(table)}ById`
-        const patchName = `${table}Patch`
+        const fragment = fragments[table]
+        const Fields = `${upperFirst(table)}Fields`
+        const mutationName = `update_${table}`
         await client.mutate({
           mutation: gql`
             mutation ${mutationName}(
-              $id: UUID!
-              $geomPoint: String
-              $changedBy: String
+              $id: bigint!
+              $geomPoint: geometry
             ) {
               ${mutationName}(
-                input: {
-                  id: $id
-                  ${patchName}: { geomPoint: $geomPoint, changedBy: $changedBy }
-                }
-              ) {
-                ${table} {
-                  id
-                  geomPoint
-                }
+                  where: { id: { _eq: $id } }
+                  _set: {
+                    geom_point: $geomPoint
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    ...${Fields}
+                  }
               }
             }
+            ${fragment}
           `,
           variables: {
             id: row.id,
             geomPoint,
-            changedBy: store.user.name,
           },
         })
       } catch (error) {
@@ -192,9 +205,6 @@ const Coordinates = ({ row, refetchForm, table }) => {
           ? setYError(error.message)
           : setWgs84LatError(error.message)
       }
-      // update on map
-      if (table === 'pop' && refetch.popForMap) refetch.popForMap()
-      if (table === 'tpop' && refetch.tpopForMap) refetch.tpopForMap()
       // refetch form
       refetchForm()
       setYError('')
@@ -213,13 +223,13 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!wgs84LatError}
           aria-describedby={`${id}wgs84LatErrorText`}
         >
-          <InputLabel htmlFor={`${id}wgs84Lat`} shrink>
+          <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
             Breitengrad
           </InputLabel>
           <Input
-            id={`${id}wgs84Lat`}
-            data-id="wgs84Lat"
-            name="wgs84Lat"
+            id={`${id}wgs84_lat`}
+            data-id="wgs84_lat"
+            name="wgs84_lat"
             value={wgs84LatState}
             type="number"
             onChange={onChangeWgs84Lat}
@@ -242,13 +252,13 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!wgs84LongError}
           aria-describedby={`${id}wgs84LongErrorText`}
         >
-          <InputLabel htmlFor={`${id}wgs84Long`} shrink>
+          <InputLabel htmlFor={`${id}wgs84_long`} shrink>
             Längengrad
           </InputLabel>
           <Input
-            id={`${id}wgs84Long`}
-            data-id="wgs84Long"
-            name="wgs84Long"
+            id={`${id}wgs84_long`}
+            data-id="wgs84_long"
+            name="wgs84_long"
             value={wgs84LongState}
             type="number"
             onChange={onChangeWgs84Long}
@@ -273,13 +283,13 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!xError}
           aria-describedby={`${id}lv95XErrorText`}
         >
-          <InputLabel htmlFor={`${id}lv95X`} shrink>
+          <InputLabel htmlFor={`${id}lv95_x`} shrink>
             X-Koordinate
           </InputLabel>
           <Input
-            id={`${id}lv95X`}
-            data-id="lv95X"
-            name="lv95X"
+            id={`${id}lv95_x`}
+            data-id="lv95_x"
+            name="lv95_x"
             value={lv95XState}
             type="number"
             onChange={onChangeX}
@@ -299,13 +309,13 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!yError}
           aria-describedby={`${id}lv95YErrorText`}
         >
-          <InputLabel htmlFor={`${id}lv95Y`} shrink>
+          <InputLabel htmlFor={`${id}lv95_y`} shrink>
             Y-Koordinate
           </InputLabel>
           <Input
-            id={`${id}lv95Y`}
-            data-id="lv95Y"
-            name="lv95Y"
+            id={`${id}lv95_y`}
+            data-id="lv95_y"
+            name="lv95_y"
             value={lv95YState}
             type="number"
             onChange={onChangeY}

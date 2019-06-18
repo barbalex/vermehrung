@@ -139,6 +139,8 @@ const Herkunft = () => {
 
   if (!row) return null
 
+  console.log('Herkunft', { row })
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
