@@ -9,6 +9,7 @@ import last from 'lodash/last'
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
+import FilterTitle from '../shared/FilterTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import { herkunft as herkunftFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
@@ -20,7 +21,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -63,9 +64,14 @@ const Herkunft = ({ filter: showFilter }) => {
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.herkunft : get(data, 'herkunft', [{}])[0]
-  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
-  const rowsFiltered = get(data, 'rowsFiltered', [])
+  let row
+  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const filteredNr = get(data, 'rowsFiltered', []).length
+  if (showFilter) {
+    row = filter.herkunft
+  } else {
+    row = get(data, 'herkunft', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -142,13 +148,22 @@ const Herkunft = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          title="Herkunft"
-          table="herkunft"
-          rowsLength={rowsUnfiltered.length}
-          rowsFilteredLength={rowsFiltered.length}
-          filter={showFilter}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Herkunft"
+            table="herkunft"
+            totalNr={totalNr}
+            filteredNr={filteredNr}
+          />
+        ) : (
+          <FormTitle
+            title="Herkunft"
+            table="herkunft"
+            rowsLength={totalNr}
+            rowsFilteredLength={filteredNr}
+            filter={showFilter}
+          />
+        )}
         <FieldsContainer>
           <TextField
             key={`${row.id}nr`}

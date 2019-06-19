@@ -17,6 +17,7 @@ import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
+import FilterTitle from '../shared/FilterTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import {
   sammlung as sammlungFragment,
@@ -30,7 +31,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -97,9 +98,14 @@ const Sammlung = ({ filter: showFilter }) => {
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.sammlung : get(data, 'sammlung', [{}])[0]
-  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
-  const rowsFiltered = get(data, 'rowsFiltered', [])
+  let row
+  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const filteredNr = get(data, 'rowsFiltered', []).length
+  if (showFilter) {
+    row = filter.sammlung
+  } else {
+    row = get(data, 'sammlung', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -204,13 +210,22 @@ const Sammlung = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          title="Sammlung"
-          table="sammlung"
-          rowsLength={rowsUnfiltered.length}
-          rowsFilteredLength={rowsFiltered.length}
-          filter={showFilter}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Sammlung"
+            table="sammlung"
+            totalNr={totalNr}
+            filteredNr={filteredNr}
+          />
+        ) : (
+          <FormTitle
+            title="Sammlung"
+            table="sammlung"
+            rowsLength={totalNr}
+            rowsFilteredLength={filteredNr}
+            filter={showFilter}
+          />
+        )}
         <FieldsContainer>
           <TextField
             key={`${row.id}nr`}

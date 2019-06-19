@@ -12,6 +12,7 @@ import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
+import FilterTitle from '../shared/FilterTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import { kulturEvent as kulturEventFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
@@ -21,7 +22,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -100,9 +101,14 @@ const Event = ({ filter: showFilter }) => {
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.event : get(data, 'kultur_event', [{}])[0]
-  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
-  const rowsFiltered = get(data, 'rowsFiltered', [])
+  let row
+  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const filteredNr = get(data, 'rowsFiltered', []).length
+  if (showFilter) {
+    row = filter.event
+  } else {
+    row = get(data, 'kultur_event', [{}])[0]
+  }
 
   // only show kulturen of same art
   const artId = get(row, 'kultur.art_id')
@@ -213,13 +219,22 @@ const Event = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          title="Event"
-          table="event"
-          rowsLength={rowsUnfiltered.length}
-          rowsFilteredLength={rowsFiltered.length}
-          filter={showFilter}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Event"
+            table="event"
+            totalNr={totalNr}
+            filteredNr={filteredNr}
+          />
+        ) : (
+          <FormTitle
+            title="Event"
+            table="event"
+            rowsLength={totalNr}
+            rowsFilteredLength={filteredNr}
+            filter={showFilter}
+          />
+        )}
         <FieldsContainer>
           <Select
             key={`${row.id}${row.kultur_id}kultur_id`}

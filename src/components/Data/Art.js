@@ -11,6 +11,7 @@ import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import SelectLoadingOptions from '../shared/SelectLoadingOptions'
 import FormTitle from '../shared/FormTitle'
+import FilterTitle from '../shared/FilterTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
 import { art as artFragment } from '../../utils/fragments'
@@ -19,7 +20,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -81,9 +82,14 @@ const Art = ({ filter: showFilter }) => {
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.art : get(data, 'art', [{}])[0]
-  const rows = get(data, 'rowsUnfiltered', [])
-  const rowsFiltered = get(data, 'rowsFiltered', [])
+  let row
+  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const filteredNr = get(data, 'rowsFiltered', []).length
+  if (showFilter) {
+    row = filter.art
+  } else {
+    row = get(data, 'art', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -156,13 +162,22 @@ const Art = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          title="Art"
-          table="art"
-          rowsLength={rows.length}
-          rowsFilteredLength={rowsFiltered.length}
-          filter={showFilter}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Art"
+            table="art"
+            totalNr={totalNr}
+            filteredNr={filteredNr}
+          />
+        ) : (
+          <FormTitle
+            title="Art"
+            table="art"
+            rowsLength={totalNr}
+            rowsFilteredLength={filteredNr}
+            filter={showFilter}
+          />
+        )}
         <FieldsContainer>
           <Select
             key={`${row.id}${row.ae_id}ae_id`}

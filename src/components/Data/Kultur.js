@@ -18,6 +18,7 @@ import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
+import FilterTitle from '../shared/FilterTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
 import {
@@ -32,7 +33,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -122,9 +123,14 @@ const Kultur = ({ filter: showFilter }) => {
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.kultur : get(data, 'kultur', [{}])[0]
-  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
-  const rowsFiltered = get(data, 'rowsFiltered', [])
+  let row
+  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const filteredNr = get(data, 'rowsFiltered', []).length
+  if (showFilter) {
+    row = filter.kultur
+  } else {
+    row = get(data, 'kultur', [{}])[0]
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -256,13 +262,22 @@ const Kultur = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          title="Kultur"
-          table="kultur"
-          rowsLength={rowsUnfiltered.length}
-          rowsFilteredLength={rowsFiltered.length}
-          filter={showFilter}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Kultur"
+            table="kultur"
+            totalNr={totalNr}
+            filteredNr={filteredNr}
+          />
+        ) : (
+          <FormTitle
+            title="Kultur"
+            table="kultur"
+            rowsLength={totalNr}
+            rowsFilteredLength={filteredNr}
+            filter={showFilter}
+          />
+        )}
         <FieldsContainer>
           <Select
             key={`${row.id}${row.art_id}art_id`}

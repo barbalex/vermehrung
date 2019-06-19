@@ -21,6 +21,7 @@ import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
 import ErrorBoundary from '../../ErrorBoundary'
 import {
   zaehlung as zaehlungFragment,
@@ -35,7 +36,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -98,6 +99,8 @@ const kulturQuery = gql`
   }
 `
 
+const filterKulturZaehlungFelder = { z_instruktion: true, z_bemerkungen: true }
+
 const Zaehlung = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -126,9 +129,14 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.zaehlung : get(data, 'zaehlung', [{}])[0]
-  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
-  const rowsFiltered = get(data, 'rowsFiltered', [])
+  let row
+  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const filteredNr = get(data, 'rowsFiltered', []).length
+  if (showFilter) {
+    row = filter.zaehlung
+  } else {
+    row = get(data, 'zaehlung', [{}])[0]
+  }
 
   const artId = get(row, 'kultur.art_id')
   const kulturFilter = artId
@@ -232,20 +240,36 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   if (!row) return null
 
-  const kulturZaehlungFelder = row.kultur.kultur_zaehlung_felders[0]
-  const { z_instruktion, z_bemerkungen } = kulturZaehlungFelder
+  const kulturZaehlungFelder = showFilter
+    ? {}
+    : row.kultur.kultur_zaehlung_felders[0]
+  const z_instruktion = showFilter
+    ? true
+    : get(row, 'kultur.kultur_zaehlung_felders[0].z_instruktion')
+  const z_bemerkungen = showFilter
+    ? true
+    : get(row, 'kultur.kultur_zaehlung_felders[0].z_bemerkungen')
 
   return (
     <ErrorBoundary>
       <>
         <Container showfilter={showFilter}>
-          <FormTitle
-            title="Zaehlung"
-            table="zaehlung"
-            rowsLength={rowsUnfiltered.length}
-            rowsFilteredLength={rowsFiltered.length}
-            filter={showFilter}
-          />
+          {showFilter ? (
+            <FilterTitle
+              title="Zählung"
+              table="zaehlung"
+              totalNr={totalNr}
+              filteredNr={filteredNr}
+            />
+          ) : (
+            <FormTitle
+              title="Zählung"
+              table="zaehlung"
+              rowsLength={totalNr}
+              rowsFilteredLength={filteredNr}
+              filter={showFilter}
+            />
+          )}
           <FieldsContainer>
             <Select
               key={`${row.id}${row.kultur_id}kultur_id`}
@@ -288,13 +312,18 @@ const Zaehlung = ({ filter: showFilter }) => {
                 multiLine
               />
             )}
-            <Teilzaehlungen
-              zaehlId={row.id}
-              kulturZaehlungFelder={kulturZaehlungFelder}
-            />
-            <Button variant="outlined" onClick={onClickChooseFields}>
-              Felder wählen
-            </Button>
+            {!showFilter && (
+              <>
+                <Teilzaehlungen
+                  zaehlId={row.id}
+                  kulturZaehlungFelder={kulturZaehlungFelder}
+                />
+
+                <Button variant="outlined" onClick={onClickChooseFields}>
+                  Felder wählen
+                </Button>
+              </>
+            )}
           </FieldsContainer>
         </Container>
         <StyledDialog

@@ -14,6 +14,7 @@ import TextFieldNonUpdatable from '../shared/TextFieldNonUpdatable'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
+import FilterTitle from '../shared/FilterTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
 import {
@@ -27,7 +28,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -172,9 +173,14 @@ const Lieferung = ({ filter: showFilter }) => {
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.lieferung : get(data, 'lieferung', [{}])[0]
-  const rowsUnfiltered = get(data, 'rowsUnfiltered', [])
-  const rowsFiltered = get(data, 'rowsFiltered', [])
+  let row
+  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const filteredNr = get(data, 'rowsFiltered', []).length
+  if (showFilter) {
+    row = filter.lieferung
+  } else {
+    row = get(data, 'lieferung', [{}])[0]
+  }
 
   const sammlungFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -425,13 +431,22 @@ const Lieferung = ({ filter: showFilter }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          title="Lieferung"
-          table="lieferung"
-          rowsLength={rowsUnfiltered.length}
-          rowsFilteredLength={rowsFiltered.length}
-          filter={showFilter}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Lieferung"
+            table="lieferung"
+            totalNr={totalNr}
+            filteredNr={filteredNr}
+          />
+        ) : (
+          <FormTitle
+            title="Lieferung"
+            table="lieferung"
+            rowsLength={totalNr}
+            rowsFilteredLength={filteredNr}
+            filter={showFilter}
+          />
+        )}
         <FieldsContainer>
           <TitleRow data-first>
             <Title>was</Title>

@@ -26,7 +26,7 @@ import isImageFile from './isImageFile'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const H4 = styled.h4`
   margin-bottom: 0.5rem;

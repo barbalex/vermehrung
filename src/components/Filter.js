@@ -3,7 +3,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 
-import ErrorBoundary from './shared/ErrorBoundary'
+import ErrorBoundary from './ErrorBoundary'
 import Art from './Data/Art'
 import Garten from './Data/Garten'
 import Herkunft from './Data/Herkunft'
@@ -18,7 +18,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #ffd3a7;
+  background-color: #fff3e0;
 `
 const StyledTabs = styled(Tabs)`
   [role='tab'][aria-selected='false'],
@@ -28,9 +28,10 @@ const StyledTabs = styled(Tabs)`
 `
 const StyledTab = styled(Tab)`
   min-width: 70px !important;
+  text-transform: none !important;
 `
 const TitleRow = styled.div`
-  background-color: #d84315;
+  background-color: #e65100;
 `
 const Title = styled.div`
   padding: 10px 10px 0 10px;
@@ -66,6 +67,9 @@ export default () => {
     event: 'Event Filter',
     person: 'Person Filter',
   }
+
+  // TODO:
+  // on mount set active tab according to visible form, if a form is visible
 
   return (
     <ErrorBoundary>
