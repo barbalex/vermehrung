@@ -17,6 +17,7 @@ import { login, isAuthenticated, silentAuth } from '../utils/auth'
 import getWindowSize from '../utils/getWindowSize'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
+import Filter from '../components/Filter'
 import storeContext from '../storeContext'
 
 const Container = styled.div`
@@ -136,7 +137,7 @@ const Vermehrung = ({ location }) => {
                 onDragFinished={onChange}
               >
                 <Data />
-                <Data filter />
+                <Filter />
               </StyledSplitPane>
             </StyledSplitPane>
           </Container>
