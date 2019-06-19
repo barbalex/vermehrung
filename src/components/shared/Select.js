@@ -64,6 +64,11 @@ const StyledSelect = styled(Select)`
   }
 `
 
+const emptyValue = {
+  value: '',
+  label: '',
+}
+
 const SharedSelect = ({
   value,
   field = '',
@@ -92,7 +97,7 @@ const SharedSelect = ({
   // show ... whyle options are loading
   const loadingOptions = [{ value, label: '...' }]
   const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find(o => o.value === value)
+  const selectValue = optionsToUse.find(o => o.value === value) || emptyValue
 
   return (
     <Container>
