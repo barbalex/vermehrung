@@ -35,7 +35,7 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Auftrag ist erteilt
 - :white_check_mark: Funktionalitäten gemäss erster Bereinigung angepasst
 - :white_check_mark: Bilder und Dateien können erfasst werden
-- :white_check_mark: nicht aktive Personen, Gärten und Kulturen können ein-/ausgeblendet werden
+- :white_check_mark: Nicht aktive Personen, Gärten und Kulturen können ein-/ausgeblendet werden
 - :white_check_mark: PostGIS für Koordinaten benutzen
 - :white_medium_square: Übersichten bauen für: Kultur, Garten, Art
 - :white_medium_square: Übersichten können gedruckt werden
