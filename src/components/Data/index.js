@@ -1,279 +1,52 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-//import { getSnapshot } from 'mobx-state-tree'
+import loadable from '@loadable/component'
 
 import storeContext from '../../storeContext'
-import Art from './Art'
-import Kultur from './Kultur'
-import Garten from './Garten'
-import Herkunft from './Herkunft'
-import Lieferung from './Lieferung'
-import Person from './Person'
-import Sammlung from './Sammlung'
-import Zaehlung from './Zaehlung'
-import Event from './Event'
 
 const Data = () => {
-  const store = useContext(storeContext)
-  const { activeNodeArray: url } = store.tree
+  const { activeForm } = useContext(storeContext)
 
-  if (url.length === 1) {
-    return null
+  switch (activeForm) {
+    case 'art': {
+      const Art = loadable(() => import('./Art'))
+      return <Art />
+    }
+    case 'herkunft': {
+      const Herkunft = loadable(() => import('./Herkunft'))
+      return <Herkunft />
+    }
+    case 'sammlung': {
+      const Sammlung = loadable(() => import('./Sammlung'))
+      return <Sammlung />
+    }
+    case 'garten': {
+      const Garten = loadable(() => import('./Garten'))
+      return <Garten />
+    }
+    case 'kultur': {
+      const Kultur = loadable(() => import('./Kultur'))
+      return <Kultur />
+    }
+    case 'lieferung': {
+      const Lieferung = loadable(() => import('./Lieferung'))
+      return <Lieferung />
+    }
+    case 'person': {
+      const Person = loadable(() => import('./Person'))
+      return <Person />
+    }
+    case 'zaehlung': {
+      const Zaehlung = loadable(() => import('./Zaehlung'))
+      return <Zaehlung />
+    }
+    case 'event': {
+      const Event = loadable(() => import('./Event'))
+      return <Event />
+    }
+    default:
+      return null
   }
-
-  if ([2, 3].includes(url.length) && url[0] === 'Arten') {
-    return <Art />
-  }
-  if ([2, 3].includes(url.length) && url[0] === 'Gaerten') {
-    return <Garten />
-  }
-  if ([2, 3].includes(url.length) && url[0] === 'Herkuenfte') {
-    return <Herkunft />
-  }
-  if (url.length === 2 && url[0] === 'Lieferungen') {
-    return <Lieferung />
-  }
-  if ([2, 3].includes(url.length) && url[0] === 'Personen') {
-    return <Person />
-  }
-  if ([2, 3].includes(url.length) && url[0] === 'Sammlungen') {
-    return <Sammlung />
-  }
-  if ([2, 3].includes(url.length) && url[0] === 'Kulturen') {
-    return <Kultur />
-  }
-
-  if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
-    return <Kultur />
-  }
-  if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
-    return <Sammlung />
-  }
-  if (url.length === 4 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
-    return <Kultur />
-  }
-  if (url.length === 4 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
-    return <Sammlung />
-  }
-  if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Gaerten') {
-    return <Garten />
-  }
-  if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Sammlungen') {
-    return <Sammlung />
-  }
-  if (url.length === 4 && url[0] === 'Sammlungen' && url[2] === 'Herkuenfte') {
-    return <Herkunft />
-  }
-  if (url.length === 4 && url[0] === 'Sammlungen' && url[2] === 'Kulturen') {
-    return <Kultur />
-  }
-  if (
-    url.length === 4 &&
-    url[0] === 'Sammlungen' &&
-    url[2] === 'Aus-Lieferungen'
-  ) {
-    return <Lieferung />
-  }
-  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
-    return <Zaehlung />
-  }
-  if (
-    url.length === 4 &&
-    url[0] === 'Kulturen' &&
-    url[2] === 'An-Lieferungen'
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 4 &&
-    url[0] === 'Kulturen' &&
-    url[2] === 'Aus-Lieferungen'
-  ) {
-    return <Lieferung />
-  }
-  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Events') {
-    return <Event />
-  }
-  if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
-    return <Lieferung />
-  }
-
-  if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Kulturen') {
-    return <Kultur />
-  }
-
-  if (url.length === 5 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
-    return <Kultur />
-  }
-  if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
-    return <Sammlung />
-  }
-  if (url.length === 5 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
-    return <Sammlung />
-  }
-  if (url.length === 5 && url[0] === 'Personen' && url[2] === 'Gaerten') {
-    return <Garten />
-  }
-  if (
-    url.length === 5 &&
-    url[0] === 'Sammlungen' &&
-    url[2] === 'Aus-Lieferungen'
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[4])
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Sammlungen' &&
-    url[4] === 'Aus-Lieferungen'
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Zaehlungen'
-  ) {
-    return <Zaehlung />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Arten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Events'
-  ) {
-    return <Event />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[4])
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Zaehlungen'
-  ) {
-    return <Zaehlung />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Gaerten' &&
-    url[2] === 'Kulturen' &&
-    url[4] === 'Events'
-  ) {
-    return <Event />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Herkuenfte' &&
-    url[2] === 'Sammlungen' &&
-    url[4] === 'Aus-Lieferungen'
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Personen' &&
-    url[2] === 'Gaerten' &&
-    url[4] === 'Kulturen'
-  ) {
-    return <Kultur />
-  }
-  if (
-    url.length === 6 &&
-    url[0] === 'Sammlungen' &&
-    url[2] === 'Aus-Lieferungen' &&
-    url[4] === 'Kulturen'
-  ) {
-    return <Kultur />
-  }
-
-  if (
-    url.length === 7 &&
-    url[0] === 'Sammlungen' &&
-    url[2] === 'Aus-Lieferungen' &&
-    url[4] === 'Kulturen'
-  ) {
-    return <Kultur />
-  }
-  if (
-    url.length === 7 &&
-    url[0] === 'Personen' &&
-    url[2] === 'Gaerten' &&
-    url[4] === 'Kulturen'
-  ) {
-    return <Kultur />
-  }
-
-  if (
-    url.length === 8 &&
-    url[0] === 'Personen' &&
-    url[2] === 'Gaerten' &&
-    url[4] === 'Kulturen' &&
-    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[6])
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 8 &&
-    url[0] === 'Personen' &&
-    url[2] === 'Gaerten' &&
-    url[4] === 'Kulturen' &&
-    url[6] === 'Zaehlungen'
-  ) {
-    return <Zaehlung />
-  }
-  if (
-    url.length === 8 &&
-    url[0] === 'Personen' &&
-    url[2] === 'Gaerten' &&
-    url[4] === 'Kulturen' &&
-    url[6] === 'Events'
-  ) {
-    return <Event />
-  }
-  if (
-    url.length === 8 &&
-    url[0] === 'Sammlungen' &&
-    url[2] === 'Aus-Lieferungen' &&
-    url[4] === 'Kulturen' &&
-    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[6])
-  ) {
-    return <Lieferung />
-  }
-  if (
-    url.length === 8 &&
-    url[0] === 'Sammlungen' &&
-    url[2] === 'Aus-Lieferungen' &&
-    url[4] === 'Kulturen' &&
-    url[6] === 'Zaehlungen'
-  ) {
-    return <Zaehlung />
-  }
-  if (
-    url.length === 8 &&
-    url[0] === 'Sammlungen' &&
-    url[2] === 'Aus-Lieferungen' &&
-    url[4] === 'Kulturen' &&
-    url[6] === 'Events'
-  ) {
-    return <Event />
-  }
-  return null
 }
 
 export default observer(Data)

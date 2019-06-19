@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
+import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
 
 const myTypes = types
   .model({
@@ -63,6 +64,11 @@ const myTypes = types
     },
     setBenutzerDokuFilter(val) {
       self.benutzerDokuFilter = val
+    },
+  }))
+  .views(self => ({
+    get activeForm() {
+      return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
     },
   }))
 
