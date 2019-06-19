@@ -15,6 +15,7 @@ import FilterTitle from '../shared/FilterTitle'
 import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
 import { art as artFragment } from '../../utils/fragments'
+import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
@@ -104,8 +105,15 @@ const Art = ({ filter: showFilter }) => {
     async event => {
       const field = event.target.name
       const value = event.target.value || null
-      if (filter.show) {
-        filter.setValue({ table: 'art', key: field, value })
+      const type = types.art[field]
+      if (showFilter) {
+        let valueToSet = value
+        if (value === '') {
+          valueToSet = null
+        } else if (['number'].includes(type)) {
+          valueToSet = +value
+        }
+        filter.setValue({ table: 'art', key: field, value: valueToSet })
       } else {
         try {
           await client.mutate({

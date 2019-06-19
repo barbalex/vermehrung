@@ -264,10 +264,16 @@ const Lieferung = ({ filter: showFilter }) => {
     async event => {
       const field = event.target.name
       const value = event.target.value
-      if (filter.show) {
-        filter.setValue({ table: 'lieferung', key: field, value })
+      const type = types.lieferung[field]
+      if (showFilter) {
+        let valueToSet = value
+        if (value === '') {
+          valueToSet = null
+        } else if (['number'].includes(type)) {
+          valueToSet = +value
+        }
+        filter.setValue({ table: 'lieferung', key: field, value: valueToSet })
       } else {
-        const type = types.lieferung[field]
         let valueToSet
         if (value === undefined || value === null) {
           valueToSet = null

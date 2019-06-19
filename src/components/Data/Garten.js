@@ -103,11 +103,17 @@ const Garten = ({ filter: showFilter }) => {
     async event => {
       const field = event.target.name
       const value = event.target.value || null
-      if (filter.show) {
-        filter.setValue({ table: 'garten', key: field, value })
+      const type = types.garten[field]
+      if (showFilter) {
+        let valueToSet = value
+        if (value === '') {
+          valueToSet = null
+        } else if (['number'].includes(type)) {
+          valueToSet = +value
+        }
+        filter.setValue({ table: 'garten', key: field, value: valueToSet })
       } else {
         try {
-          const type = types.lieferung[field]
           let valueToSet
           if (value === undefined || value === null) {
             valueToSet = null
