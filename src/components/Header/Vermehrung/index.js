@@ -48,24 +48,19 @@ const HideActiveDiv = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 14px;
-  min-width: 40px;
-  padding-left: 8px;
-  > div {
-    color: white !important;
-  }
+  padding-left: 9px;
+  margin-top: 5px;
 `
 const StyledSwitch = styled(Switch)`
-  margin-left: -5px;
-  margin-top: -18px;
+  margin-left: -4px;
+  margin-top: -8px;
 `
-const StyledLabel = styled.div`
-  margin-top: 10px;
+const StyledLabel = styled.label`
   cursor: text;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: -2px;
   pointer-events: none;
   user-select: none;
-  padding-bottom: 8px;
 `
 
 const HeaderVermehrung = () => {
@@ -104,11 +99,12 @@ const HeaderVermehrung = () => {
           </FilterButton>
           <HideActiveDiv>
             <StyledLabel
-              label="nur aktive"
               title={`Inaktive Personen, Gärten und Kulturen ${
                 hideInactive ? 'anzeigen' : 'verbergen'
               }`}
-            />
+            >
+              nur aktive
+            </StyledLabel>
             <StyledSwitch
               checked={hideInactive}
               onChange={onClickHideActive}
