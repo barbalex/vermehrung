@@ -288,7 +288,7 @@ const Person = ({ filter: showFilter }) => {
           />
           <RadioButton
             key={`${row.id}aktiv`}
-            label="Aktiv"
+            label="aktiv"
             name="aktiv"
             value={row.aktiv}
             saveToDb={saveToDb}
