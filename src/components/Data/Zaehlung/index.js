@@ -99,8 +99,6 @@ const kulturQuery = gql`
   }
 `
 
-const filterKulturZaehlungFelder = { z_instruktion: true, z_bemerkungen: true }
-
 const Zaehlung = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
