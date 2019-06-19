@@ -105,7 +105,9 @@ const Zaehlung = ({ filter: showFilter }) => {
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
-  const id = last(activeNodeArray.filter(e => !isNaN(e)))
+  const id = showFilter
+    ? 99999999999999
+    : last(activeNodeArray.filter(e => !isNaN(e)))
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
@@ -242,7 +244,7 @@ const Zaehlung = ({ filter: showFilter }) => {
     )
   }
 
-  if (!row) return null
+  if (!row || (!showFilter && filter.show)) return null
 
   const kulturZaehlungFelder = showFilter
     ? {}

@@ -69,7 +69,9 @@ const Art = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
   const { activeNodeArray, refetch } = tree
 
-  const artId = last(activeNodeArray.filter(e => !isNaN(e)))
+  const artId = showFilter
+    ? 99999999999999
+    : last(activeNodeArray.filter(e => !isNaN(e)))
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(query, {
     variables: { id: artId, filter: artFilter, isFiltered },
@@ -165,7 +167,7 @@ const Art = ({ filter: showFilter }) => {
     )
   }
 
-  if (!row) return null
+  if (!row || (!showFilter && filter.show)) return null
 
   return (
     <ErrorBoundary>

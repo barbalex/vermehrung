@@ -154,7 +154,9 @@ const Lieferung = ({ filter: showFilter }) => {
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
 
-  const id = last(activeNodeArray.filter(e => !isNaN(e)))
+  const id = showFilter
+    ? 99999999999999
+    : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
   const { data, error, loading } = useQuery(query, {
@@ -432,7 +434,7 @@ const Lieferung = ({ filter: showFilter }) => {
     )
   }
 
-  if (!row) return null
+  if (!row || (!showFilter && filter.show)) return null
 
   return (
     <ErrorBoundary>
