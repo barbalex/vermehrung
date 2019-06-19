@@ -109,7 +109,7 @@ const Index = ({ data }) => (
             style={bgImageStyle}
           />
           <PageTitle align="center" variant="h6" color="inherit" noWrap>
-            Bedrohte Pflanzen vermehren
+            Bedrohte Pflanzenarten vermehren
           </PageTitle>
           <CardContainer>
             <Card>
@@ -126,14 +126,6 @@ const Index = ({ data }) => (
               ...beschreiben das Sammeln von Arten an Herkunfts-Orten.
             </Card>
             <Card>
-              <CardTitle>Lieferungen</CardTitle>
-              <p>Sammlungen werden an Kulturen geliefert.</p>
-              <p>
-                Aus Kulturen werden Pflanzen an andere Kulturen geliefert. Oder
-                in der Natur ausgesetzt.
-              </p>
-            </Card>
-            <Card>
               <CardTitle>Gärten</CardTitle>
               In Gärten und Gärtnereien werden die Arten in Kultur vermehrt und
               auf das Aussetzen vorbereitet.
@@ -143,18 +135,26 @@ const Index = ({ data }) => (
               Die Pflanzen einer Art in einem Garten bilden eine Kultur.
             </Card>
             <Card>
-              <CardTitle>Events</CardTitle>
-              ...beschreiben Ereignisse im Rahmen der Kultur.
-            </Card>
-            <Card>
-              <CardTitle>Inventare</CardTitle>
-              In grösseren Gärtnereien wird über Kulturen und deren Beete
-              Inventar geführt.
+              <CardTitle>Lieferungen</CardTitle>
+              <p>Sammlungen werden an Kulturen geliefert.</p>
+              <p>
+                Aus Kulturen werden Pflanzen an andere Kulturen geliefert. Oder
+                in geeigneten Lebensräumen ausgesetzt.
+              </p>
             </Card>
             <Card>
               <CardTitle>Zählungen</CardTitle>
               Regelmässig wird der Bestand der Kulturen erfasst. So können
               Sammlungen und Aussetzungen geplant werden.
+            </Card>
+            <Card>
+              <CardTitle>Inventare</CardTitle>
+              In grösseren Gärten wird über Kulturen und deren Beete Inventar
+              geführt.
+            </Card>
+            <Card>
+              <CardTitle>Events</CardTitle>
+              ...beschreiben Ereignisse im Rahmen der Kultur.
             </Card>
             <Card>
               <CardTitle>Personen</CardTitle>
@@ -178,8 +178,8 @@ const Index = ({ data }) => (
             <Card>
               <CardTitle>Interessiert?</CardTitle>
               <p>
-                Sie haben einen Garten und würden gerne bedrohte Pflanzen
-                vermehren? Fragen Sie&nbsp;
+                Sie haben einen Garten und möchten bedrohte Pflanzen vermehren?
+                Fragen Sie&nbsp;
                 <a
                   href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
                   target="_blank"
@@ -197,7 +197,7 @@ const Index = ({ data }) => (
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  den Entwickler
+                  Gabriel-Software
                 </a>
                 .
               </p>
