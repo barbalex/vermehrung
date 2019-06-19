@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../storeContext'
 
 const Container = styled.div`
-  background-color: #ffd3a7;
+  background-color: #ffe0b2;
   padding-bottom: 10px;
   flex-shrink: 0;
   display: flex;
