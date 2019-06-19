@@ -41,6 +41,16 @@ export const initial = {
   bemerkungen: null,
 }
 
+export const empty = {
+  id: null,
+  nr: null,
+  lokalname: null,
+  gemeinde: null,
+  kanton: null,
+  land: null,
+  bemerkungen: null,
+}
+
 export const simpleTypes = {
   id: 'number',
   nr: 'string',

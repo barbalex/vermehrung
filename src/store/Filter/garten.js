@@ -23,6 +23,13 @@ export const initial = {
   aktiv: true,
 }
 
+export const empty = {
+  id: null,
+  person_id: null,
+  bemerkungen: null,
+  aktiv: null,
+}
+
 export const simpleTypes = {
   id: 'number',
   person_id: 'number',

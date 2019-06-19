@@ -16,6 +16,11 @@ export const initial = {
   ae_id: null,
 }
 
+export const empty = {
+  id: null,
+  ae_id: null,
+}
+
 export const simpleTypes = {
   id: 'number',
   ae_id: 'uuid',

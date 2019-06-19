@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 
 import { type as art } from './art'
 import { type as event } from './event'
@@ -11,7 +11,7 @@ import { type as person } from './person'
 import { type as sammlung } from './sammlung'
 import { type as zaehlung } from './zaehlung'
 import { type as teilzaehlung } from './teilzaehlung'
-import initialValues from './initialValues'
+import emptyValues from './emptyValues'
 
 export default types
   .model({
@@ -33,13 +33,19 @@ export default types
       self[table][key] = value
     },
     empty() {
+      const parent = getParent(self)
+      parent.setHideInactive(false)
       // maybe loop all keys and set values?
       Object.keys(self)
         .filter(k => k !== 'show')
-        .forEach(key => (self[key] = initialValues[key]))
+        .forEach(key => (self[key] = emptyValues[key]))
     },
     emptyTable({ table }) {
-      self[table] = initialValues[table]
+      if (['person', 'garten', 'kultur'].includes(table)) {
+        const parent = getParent(self)
+        parent.setHideInactive(false)
+      }
+      self[table] = emptyValues[table]
     },
     tableIsFiltered({ table }) {
       return (

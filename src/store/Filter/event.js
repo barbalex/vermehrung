@@ -26,6 +26,13 @@ export const initial = {
   event: null,
 }
 
+export const empty = {
+  id: null,
+  kultur_id: null,
+  datum: null,
+  event: null,
+}
+
 export const simpleTypes = {
   id: 'number',
   kultur_id: 'number',

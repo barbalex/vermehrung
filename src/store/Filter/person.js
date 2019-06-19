@@ -89,6 +89,28 @@ export const initial = {
   aktiv: true,
 }
 
+export const empty = {
+  id: null,
+  nr: null,
+  name: null,
+  adresszusatz: null,
+  strasse: null,
+  plz: null,
+  ort: null,
+  telefon_privat: null,
+  telefon_geschaeft: null,
+  telefon_mobile: null,
+  fax_privat: null,
+  fax_geschaeft: null,
+  email: null,
+  kein_email: null,
+  bemerkungen: null,
+  accountId: null,
+  kommerziell: null,
+  info: null,
+  aktiv: null,
+}
+
 export const simpleTypes = {
   id: 'number',
   nr: 'string',

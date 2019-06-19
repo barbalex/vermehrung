@@ -41,6 +41,18 @@ export const initial = {
   bemerkungen: null,
 }
 
+export const empty = {
+  id: null,
+  art_id: null,
+  herkunft_id: null,
+  garten_id: null,
+  zwischenlager: null,
+  erhaltungskultur: null,
+  von_anzahl_individuen: null,
+  aktiv: null,
+  bemerkungen: null,
+}
+
 export const simpleTypes = {
   id: 'number',
   art_id: 'number',

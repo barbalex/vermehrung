@@ -31,6 +31,14 @@ export const initial = {
   bemerkungen: null,
 }
 
+export const empty = {
+  id: null,
+  kultur_id: null,
+  datum: null,
+  instruktion: null,
+  bemerkungen: null,
+}
+
 export const simpleTypes = {
   id: 'number',
   kultur_id: 'number',

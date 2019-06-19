@@ -43,6 +43,17 @@ export const initial = {
   tz_bemerkungen: null,
 }
 
+export const empty = {
+  kultur_id: null,
+  z_instruktion: null,
+  z_bemerkungen: null,
+  tz_ort: null,
+  tz_anzahl_mutterpflanzen: null,
+  tz_menge_beschrieben: null,
+  tz_erscheinung: null,
+  tz_bemerkungen: null,
+}
+
 export const simpleTypes = {
   kultur_id: 'number',
   z_instruktion: 'string',
