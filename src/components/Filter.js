@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
@@ -13,6 +13,7 @@ import Person from './Data/Person'
 import Sammlung from './Data/Sammlung'
 import Event from './Data/Event'
 import Zaehlung from './Data/Zaehlung'
+import storeContext from '../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -40,7 +41,8 @@ const Title = styled.div`
 `
 
 export default () => {
-  const [activeTab, setActiveTab] = useState('art')
+  const { activeForm } = useContext(storeContext)
+  const [activeTab, setActiveTab] = useState(activeForm)
 
   const onChangeTab = useCallback((event, value) => setActiveTab(value))
 
@@ -67,9 +69,6 @@ export default () => {
     event: 'Event Filter',
     person: 'Person Filter',
   }
-
-  // TODO:
-  // on mount set active tab according to visible form, if a form is visible
 
   return (
     <ErrorBoundary>
