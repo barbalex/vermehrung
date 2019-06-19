@@ -1,7 +1,6 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import { MdDeleteSweep, MdFilterList } from 'react-icons/md'
+import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
 
@@ -34,15 +33,6 @@ const FilterNumbers = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-const StyledIconButton = styled(IconButton)`
-  cursor: pointer;
-  pointer-events: auto;
-  padding-top: 5px;
-  font-size: 25px;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-right: 5px;
-`
 
 const FormTitle = ({
   title,
@@ -52,10 +42,8 @@ const FormTitle = ({
   filter,
 }) => {
   const store = useContext(storeContext)
-  const { isFiltered: runIsFiltered, show, setShow, empty } = store.filter
+  const { isFiltered: runIsFiltered, show } = store.filter
   const isFiltered = runIsFiltered()
-  const onClickFilter = useCallback(() => setShow(!show))
-  const onClickEmpty = useCallback(() => empty())
 
   const titleText = filter ? `${title} Filter` : title
 
@@ -67,21 +55,10 @@ const FormTitle = ({
           {(show || isFiltered) && (
             <FilterNumbers>{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
           )}
-          <StyledIconButton
-            title={`${show ? 'Daten bearbeiten' : 'Daten filtern'}`}
-            onClick={onClickFilter}
-          >
-            <MdFilterList />
-          </StyledIconButton>
-          {isFiltered && (
-            <StyledIconButton title="Filter entfernen" onClick={onClickEmpty}>
-              <MdDeleteSweep />
-            </StyledIconButton>
-          )}
         </Symbols>
       )}
     </Container>
   )
 }
 
-export default FormTitle
+export default observer(FormTitle)
