@@ -32,7 +32,7 @@ const Container = styled.div`
   border-radius: 3px;
   background-color: #5f00d4;
   margin-right: 5px;
-  width: 350px;
+  width: 250px;
   display: flex;
   justify-content: space-between;
   :hover {

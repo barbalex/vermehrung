@@ -31,7 +31,7 @@ const SiteTitle = styled(Button)`
 const Spacer = styled.div`
   flex-grow: 1;
 `
-const NavButton = styled(Button)`
+const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   border-width: 0 !important;
@@ -41,10 +41,14 @@ const NavButton = styled(Button)`
     border-width: 1px !important;
   }
 `
+const FilterButton = styled(StyledButton)`
+  border-width: ${props =>
+    props['data-active'] ? '1px !important' : '0 !important'};
+`
 const HideActiveDiv = styled.div`
   display: flex;
   flex-direction: column;
-  padding-right: 5px;
+  padding-right: 10px;
   min-width: 40px;
   padding-left: 10px;
   > div {
@@ -58,10 +62,14 @@ const StyledSwitch = styled(Switch)`
 
 const HeaderVermehrung = () => {
   const store = useContext(storeContext)
-  const { setHideInactive, hideInactive } = store
+  const { setHideInactive, hideInactive, filter } = store
+  const { show: showFilter, setShow: setShowFilter } = filter
 
   const onClickHideActive = useCallback(() => setHideInactive(!hideInactive), [
     hideInactive,
+  ])
+  const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
+    showFilter,
   ])
 
   return (
@@ -72,14 +80,20 @@ const HeaderVermehrung = () => {
             Vermehrung
           </SiteTitle>
           <Spacer />
-          <NavButton
+          <StyledButton
             variant="outlined"
             component={Link}
             to="/Dokumentation/Benutzer/"
           >
             Dokumentation
-          </NavButton>
-          <Search />
+          </StyledButton>
+          <FilterButton
+            variant="outlined"
+            onClick={onClickFilter}
+            data-active={showFilter}
+          >
+            Filter
+          </FilterButton>
           <HideActiveDiv>
             <Label
               label="Inaktive"
@@ -96,6 +110,7 @@ const HeaderVermehrung = () => {
               }`}
             />
           </HideActiveDiv>
+          <Search />
           <Account />
           {/*<More />*/}
         </Toolbar>
