@@ -12,7 +12,6 @@ import Account from './Account'
 import ErrorBoundary from '../../ErrorBoundary'
 import Search from './Search'
 import storeContext from '../../../storeContext'
-import Label from '../../shared/Label'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -48,16 +47,25 @@ const FilterButton = styled(StyledButton)`
 const HideActiveDiv = styled.div`
   display: flex;
   flex-direction: column;
-  padding-right: 10px;
+  padding-right: 14px;
   min-width: 40px;
-  padding-left: 10px;
+  padding-left: 8px;
   > div {
     color: white !important;
   }
 `
 const StyledSwitch = styled(Switch)`
-  margin-left: -13px;
+  margin-left: -5px;
   margin-top: -18px;
+`
+const StyledLabel = styled.div`
+  margin-top: 10px;
+  cursor: text;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  user-select: none;
+  padding-bottom: 8px;
 `
 
 const HeaderVermehrung = () => {
@@ -95,8 +103,8 @@ const HeaderVermehrung = () => {
             Filter
           </FilterButton>
           <HideActiveDiv>
-            <Label
-              label="Inaktive"
+            <StyledLabel
+              label="nur aktive"
               title={`Inaktive Personen, Gärten und Kulturen ${
                 hideInactive ? 'anzeigen' : 'verbergen'
               }`}
