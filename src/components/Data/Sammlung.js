@@ -209,6 +209,7 @@ const Sammlung = ({ filter: showFilter }) => {
           table="sammlung"
           rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
+          filter={showFilter}
         />
         <FieldsContainer>
           <TextField

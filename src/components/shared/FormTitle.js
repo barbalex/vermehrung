@@ -44,16 +44,24 @@ const StyledIconButton = styled(IconButton)`
   padding-right: 5px;
 `
 
-const FormTitle = ({ title, table, rowsLength, rowsFilteredLength }) => {
+const FormTitle = ({
+  title,
+  table,
+  rowsLength,
+  rowsFilteredLength,
+  filter,
+}) => {
   const store = useContext(storeContext)
   const { isFiltered: runIsFiltered, show, setShow, empty } = store.filter
   const isFiltered = runIsFiltered()
   const onClickFilter = useCallback(() => setShow(!show))
   const onClickEmpty = useCallback(() => empty())
 
+  const titleText = filter ? `${title} Filter` : title
+
   return (
     <Container>
-      <Title>{title}</Title>
+      <Title>{titleText}</Title>
       {table && (
         <Symbols>
           {(show || isFiltered) && (

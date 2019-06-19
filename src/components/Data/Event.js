@@ -218,6 +218,7 @@ const Event = ({ filter: showFilter }) => {
           table="event"
           rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
+          filter={showFilter}
         />
         <FieldsContainer>
           <Select

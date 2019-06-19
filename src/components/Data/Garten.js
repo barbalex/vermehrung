@@ -177,6 +177,7 @@ const Garten = ({ filter: showFilter }) => {
           table="garten"
           rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
+          filter={showFilter}
         />
         <FieldsContainer>
           <Select

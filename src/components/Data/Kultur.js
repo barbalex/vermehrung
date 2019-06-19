@@ -261,6 +261,7 @@ const Kultur = ({ filter: showFilter }) => {
           table="kultur"
           rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
+          filter={showFilter}
         />
         <FieldsContainer>
           <Select

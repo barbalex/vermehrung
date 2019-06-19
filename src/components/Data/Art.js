@@ -161,6 +161,7 @@ const Art = ({ filter: showFilter }) => {
           table="art"
           rowsLength={rows.length}
           rowsFilteredLength={rowsFiltered.length}
+          filter={showFilter}
         />
         <FieldsContainer>
           <Select

@@ -430,6 +430,7 @@ const Lieferung = ({ filter: showFilter }) => {
           table="lieferung"
           rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
+          filter={showFilter}
         />
         <FieldsContainer>
           <TitleRow data-first>

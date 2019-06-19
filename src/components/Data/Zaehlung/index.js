@@ -244,6 +244,7 @@ const Zaehlung = ({ filter: showFilter }) => {
             table="zaehlung"
             rowsLength={rowsUnfiltered.length}
             rowsFilteredLength={rowsFiltered.length}
+            filter={showFilter}
           />
           <FieldsContainer>
             <Select

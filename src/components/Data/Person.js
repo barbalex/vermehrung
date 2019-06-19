@@ -147,6 +147,7 @@ const Person = ({ filter: showFilter }) => {
           table="person"
           rowsLength={rowsUnfiltered.length}
           rowsFilteredLength={rowsFiltered.length}
+          filter={showFilter}
         />
         <FieldsContainer>
           <TextField
