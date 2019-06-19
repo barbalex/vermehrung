@@ -118,34 +118,6 @@ const Vermehrung = ({ location }) => {
     return <Container>Öffne login...</Container>
   }
 
-  if (showFilter) {
-    return (
-      <ErrorBoundary>
-        <Layout>
-          <Container ref={containerEl}>
-            <StyledSplitPane
-              split="vertical"
-              size={`${treeWidthInPercentOfScreen}%`}
-              minSize={200}
-              onDragFinished={onChange}
-            >
-              <Tree dimensions={dimensions} />
-              <StyledSplitPane
-                split="vertical"
-                size="50%"
-                minSize={100}
-                onDragFinished={onChange}
-              >
-                <Data />
-                <Filter />
-              </StyledSplitPane>
-            </StyledSplitPane>
-          </Container>
-        </Layout>
-      </ErrorBoundary>
-    )
-  }
-
   return (
     <ErrorBoundary>
       <Layout>
@@ -157,7 +129,7 @@ const Vermehrung = ({ location }) => {
             onDragFinished={onChange}
           >
             <Tree dimensions={dimensions} />
-            <Data />
+            {showFilter ? <Filter /> : <Data />}
           </StyledSplitPane>
         </Container>
       </Layout>
