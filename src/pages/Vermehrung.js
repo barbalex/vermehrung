@@ -56,6 +56,7 @@ const treeWidthInPercentOfScreen = 33
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const { setActiveNodeArray, setOpenNodes } = store.tree
+  const showFilter = store.filter.show
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
@@ -114,6 +115,34 @@ const Vermehrung = ({ location }) => {
   if (!isAuthenticated()) {
     login()
     return <Container>Öffne login...</Container>
+  }
+
+  if (showFilter) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <Container ref={containerEl}>
+            <StyledSplitPane
+              split="vertical"
+              size={`${treeWidthInPercentOfScreen}%`}
+              minSize={200}
+              onDragFinished={onChange}
+            >
+              <Tree dimensions={dimensions} />
+              <StyledSplitPane
+                split="vertical"
+                size="50%"
+                minSize={100}
+                onDragFinished={onChange}
+              >
+                <Data />
+                <Data filter />
+              </StyledSplitPane>
+            </StyledSplitPane>
+          </Container>
+        </Layout>
+      </ErrorBoundary>
+    )
   }
 
   return (

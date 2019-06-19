@@ -84,11 +84,11 @@ const kulturQuery = gql`
   ${kulturEventFragment}
 `
 
-const Event = () => {
+const Event = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
+  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
@@ -195,9 +195,7 @@ const Event = () => {
     return (
       <Container>
         <FormTitle title="Event" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -205,9 +203,7 @@ const Event = () => {
     return (
       <Container>
         <FormTitle title="Event" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          kulturError.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${kulturError.message}`}</FieldsContainer>
       </Container>
     )
   }

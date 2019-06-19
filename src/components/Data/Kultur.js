@@ -103,11 +103,11 @@ const dataQuery = gql`
   }
 `
 
-const Kultur = () => {
+const Kultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
+  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
@@ -338,7 +338,7 @@ const Kultur = () => {
             error={errors.bemerkungen}
             multiLine
           />
-          <Files parentId={row.id} parent="kultur" />
+          {!showFilter && <Files parentId={row.id} parent="kultur" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

@@ -47,11 +47,11 @@ const query = gql`
   ${herkunftFragment}
 `
 
-const Herkunft = () => {
+const Herkunft = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
+  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
@@ -201,7 +201,7 @@ const Herkunft = () => {
             error={errors.bemerkungen}
             multiLine
           />
-          <Files parentId={row.id} parent="herkunft" />
+          {!showFilter && <Files parentId={row.id} parent="herkunft" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

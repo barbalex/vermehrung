@@ -59,11 +59,11 @@ const aeArtQuery = gql`
   }
 `
 
-const Art = () => {
+const Art = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter, tree } = store
-  const { show: showFilter, isFiltered: runIsFiltered } = filter
+  const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, refetch } = tree
 
@@ -146,9 +146,7 @@ const Art = () => {
     return (
       <Container>
         <FormTitle title="Art" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          errorToShow.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
   }

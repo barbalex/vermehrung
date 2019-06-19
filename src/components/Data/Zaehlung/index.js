@@ -98,11 +98,11 @@ const kulturQuery = gql`
   }
 `
 
-const Zaehlung = () => {
+const Zaehlung = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
+  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
 

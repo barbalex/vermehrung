@@ -127,9 +127,7 @@ const WerteListe = ({ table }) => {
     return (
       <Container>
         <FormTitle title={title} />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${
-          error.message
-        }`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }

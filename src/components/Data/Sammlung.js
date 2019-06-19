@@ -78,11 +78,11 @@ const dataQuery = gql`
   ${artFragment}
 `
 
-const Sammlung = () => {
+const Sammlung = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
+  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
@@ -306,7 +306,7 @@ const Sammlung = () => {
             error={errors.bemerkungen}
             multiLine
           />
-          <Files parentId={row.id} parent="sammlung" />
+          {!showFilter && <Files parentId={row.id} parent="sammlung" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

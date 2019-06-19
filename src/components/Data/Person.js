@@ -47,11 +47,11 @@ const query = gql`
   ${personFragment}
 `
 
-const Person = () => {
+const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
-  const { isFiltered: runIsFiltered, show: showFilter } = filter
+  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, refetch } = store.tree
 
   const id = last(activeNodeArray.filter(e => !isNaN(e)))
@@ -287,7 +287,7 @@ const Person = () => {
             error={errors.bemerkungen}
             multiLine
           />
-          <Files parentId={row.id} parent="person" />
+          {!showFilter && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
