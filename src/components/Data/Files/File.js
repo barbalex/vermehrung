@@ -7,10 +7,10 @@ import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
-import ErrorBoundary from '../../ErrorBoundary'
 import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
@@ -192,9 +192,7 @@ const File = ({ file, parent, refetch }) => {
       <Container>
         {isImage ? (
           <Img
-            src={`https://ucarecdn.com/${
-              file.file_id
-            }/-/resize/80x/-/quality/lightest/${file.name}`}
+            src={`https://ucarecdn.com/${file.file_id}/-/resize/80x/-/quality/lightest/${file.name}`}
           />
         ) : (
           <ImgReplacement>...</ImgReplacement>

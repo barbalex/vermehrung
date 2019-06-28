@@ -7,9 +7,9 @@ import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
-import ErrorBoundary from '../../ErrorBoundary'
 import {
   herkunftFile as herkunftFileFragment,
   sammlungFile as sammlungFileFragment,

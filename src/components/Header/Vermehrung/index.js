@@ -6,10 +6,10 @@ import Switch from '@material-ui/core/Switch'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
+import ErrorBoundary from 'react-error-boundary'
 
 import Account from './Account'
 //import More from './More'
-import ErrorBoundary from '../../ErrorBoundary'
 import Search from './Search'
 import storeContext from '../../../storeContext'
 

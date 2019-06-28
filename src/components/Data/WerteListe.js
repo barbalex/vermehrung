@@ -5,11 +5,11 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
-import ErrorBoundary from '../ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;

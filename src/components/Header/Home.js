@@ -4,8 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-
-import ErrorBoundary from '../ErrorBoundary'
+import ErrorBoundary from 'react-error-boundary'
 
 const SiteTitle = styled(Button)`
   display: none;

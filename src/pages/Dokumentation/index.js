@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../../components/Layout'
 
@@ -32,13 +33,15 @@ const Doku = styled.div`
 
 const Template = () => {
   return (
-    <Layout>
-      <Container>
-        <Doku>
-          <p>{`Bitte wählen Sie einen Bereich.`}</p>
-        </Doku>
-      </Container>
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Container>
+          <Doku>
+            <p>{`Bitte wählen Sie einen Bereich.`}</p>
+          </Doku>
+        </Container>
+      </Layout>
+    </ErrorBoundary>
   )
 }
 

@@ -5,13 +5,13 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
 import RadioButton from '../shared/RadioButton'
-import ErrorBoundary from '../ErrorBoundary'
 import { person as personFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
@@ -56,8 +56,8 @@ const Person = ({ filter: showFilter }) => {
   const { activeNodeArray, refetch } = store.tree
 
   const id = showFilter
-  ? 99999999999999
-  : last(activeNodeArray.filter(e => !isNaN(e)))
+    ? 99999999999999
+    : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
   const { data, error, loading } = useQuery(query, {

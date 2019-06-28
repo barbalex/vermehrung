@@ -6,8 +6,8 @@ import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import axios from 'axios'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from '../../ErrorBoundary'
 import { getProfile, logout } from '../../../utils/auth'
 
 const IconContainer = styled.div`

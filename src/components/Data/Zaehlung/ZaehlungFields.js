@@ -6,9 +6,9 @@ import styled from 'styled-components'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import DialogContent from '@material-ui/core/DialogContent'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
-import ErrorBoundary from '../../ErrorBoundary'
 import { kultur_zaehlung_felder as kulturZaehlungFelderFragment } from '../../../utils/fragments'
 
 const StyledDialogContent = styled(DialogContent)`

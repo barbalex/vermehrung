@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -15,7 +16,6 @@ import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
-import ErrorBoundary from '../ErrorBoundary'
 import queryFromTable from '../../utils/queryFromTable'
 import {
   lieferung as lieferungFragment,

@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
+import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
 import Sidebar from '../templates/Sidebar'
@@ -36,18 +37,20 @@ const Template = ({ data }) => {
   const { edges } = allMarkdownRemark
 
   return (
-    <Layout>
-      <Container>
-        <Sidebar
-          title="Technische Dokumentation"
-          titleLink="/Dokumentation/Technisch/"
-          edges={edges}
-        />
-        <Doku>
-          <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
-        </Doku>
-      </Container>
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Container>
+          <Sidebar
+            title="Technische Dokumentation"
+            titleLink="/Dokumentation/Technisch/"
+            edges={edges}
+          />
+          <Doku>
+            <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
+          </Doku>
+        </Container>
+      </Layout>
+    </ErrorBoundary>
   )
 }
 

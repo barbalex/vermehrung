@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
+import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
 import Sidebar from '../templates/Sidebar'
@@ -36,18 +37,20 @@ const Template = ({ data }) => {
   const { edges } = allMarkdownRemark
 
   return (
-    <Layout>
-      <Container>
-        <Sidebar
-          title="Benutzer-Dokumentation"
-          titleLink="/Dokumentation/Benutzer/"
-          edges={edges}
-        />
-        <Doku>
-          <p>Hoffentlich nützliche Infos für Sie</p>
-        </Doku>
-      </Container>
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Container>
+          <Sidebar
+            title="Benutzer-Dokumentation"
+            titleLink="/Dokumentation/Benutzer/"
+            edges={edges}
+          />
+          <Doku>
+            <p>Hoffentlich nützliche Infos für Sie</p>
+          </Doku>
+        </Container>
+      </Layout>
+    </ErrorBoundary>
   )
 }
 

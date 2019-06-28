@@ -6,9 +6,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
-import ErrorBoundary from '../../../ErrorBoundary'
 import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
 import Teilzaehlung from './Teilzaehlung'
 

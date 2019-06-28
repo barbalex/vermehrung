@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from '../../ErrorBoundary'
 import storeContext from '../../../storeContext'
 import Row from './Row'
 

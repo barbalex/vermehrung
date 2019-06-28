@@ -8,6 +8,7 @@ import React, {
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
+import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
@@ -117,19 +118,21 @@ const Vermehrung = ({ location }) => {
   }
 
   return (
-    <Layout>
-      <Container ref={containerEl}>
-        <StyledSplitPane
-          split="vertical"
-          size={`${treeWidthInPercentOfScreen}%`}
-          minSize={200}
-          onDragFinished={onChange}
-        >
-          <Tree dimensions={dimensions} />
-          {showFilter ? <Filter /> : <Data />}
-        </StyledSplitPane>
-      </Container>
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Container ref={containerEl}>
+          <StyledSplitPane
+            split="vertical"
+            size={`${treeWidthInPercentOfScreen}%`}
+            minSize={200}
+            onDragFinished={onChange}
+          >
+            <Tree dimensions={dimensions} />
+            {showFilter ? <Filter /> : <Data />}
+          </StyledSplitPane>
+        </Container>
+      </Layout>
+    </ErrorBoundary>
   )
 }
 

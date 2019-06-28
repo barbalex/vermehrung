@@ -15,6 +15,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
+import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -22,7 +23,6 @@ import TextField from '../../shared/TextField'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import ErrorBoundary from '../../ErrorBoundary'
 import {
   zaehlung as zaehlungFragment,
   kultur_zaehlung_felder as kulturZaehlungFelderFragment,
