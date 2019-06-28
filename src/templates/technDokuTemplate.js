@@ -3,11 +3,9 @@ import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
 import Layout from '../components/Layout'
-import ErrorBoundary from '../components/ErrorBoundary'
 import Sidebar from './Sidebar'
 
 const Container = styled.div`
-  margin-top: 64px;
   height: calc(100vh - 64px);
   display: flex;
 `
@@ -44,22 +42,20 @@ const TechnDokuTemplate = ({ data }) => {
   const { edges } = allMarkdownRemark
 
   return (
-    <ErrorBoundary>
-      <Layout>
-        <Container>
-          <Sidebar
-            title="Technische Dokumentation"
-            titleLink="/Dokumentation/Technisch/"
-            edges={edges}
-          />
-          <Doku>
-            <h1>{frontmatter.title}</h1>
-            <DokuDate>{frontmatter.date}</DokuDate>
-            <div dangerouslySetInnerHTML={{ __html: html }} />
-          </Doku>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
+    <Layout>
+      <Container>
+        <Sidebar
+          title="Technische Dokumentation"
+          titleLink="/Dokumentation/Technisch/"
+          edges={edges}
+        />
+        <Doku>
+          <h1>{frontmatter.title}</h1>
+          <DokuDate>{frontmatter.date}</DokuDate>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        </Doku>
+      </Container>
+    </Layout>
   )
 }
 

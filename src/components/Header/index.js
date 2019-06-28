@@ -25,7 +25,7 @@ const Header = () => (
 
       return (
         <ErrorBoundary>
-          <StyledAppBar position="fixed">
+          <StyledAppBar position="static">
             <Toolbar>
               {isHome ? <Home /> : isVermehrung ? <Vermehrung /> : <Doku />}
             </Toolbar>

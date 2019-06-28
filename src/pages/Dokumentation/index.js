@@ -2,10 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import Layout from '../../components/Layout'
-import ErrorBoundary from '../../components/ErrorBoundary'
 
 const Container = styled.div`
-  margin-top: 64px;
   height: calc(100vh - 64px);
   display: flex;
   background-color: #fffde7;
@@ -34,15 +32,13 @@ const Doku = styled.div`
 
 const Template = () => {
   return (
-    <ErrorBoundary>
-      <Layout>
-        <Container>
-          <Doku>
-            <p>{`Bitte wählen Sie einen Bereich.`}</p>
-          </Doku>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
+    <Layout>
+      <Container>
+        <Doku>
+          <p>{`Bitte wählen Sie einen Bereich.`}</p>
+        </Doku>
+      </Container>
+    </Layout>
   )
 }
 

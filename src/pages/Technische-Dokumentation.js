@@ -4,10 +4,8 @@ import styled from 'styled-components'
 
 import Layout from '../components/Layout'
 import Sidebar from '../templates/Sidebar'
-import ErrorBoundary from '../components/ErrorBoundary'
 
 const Container = styled.div`
-  margin-top: 64px;
   height: calc(100vh - 64px);
   display: flex;
 `
@@ -38,20 +36,18 @@ const Template = ({ data }) => {
   const { edges } = allMarkdownRemark
 
   return (
-    <ErrorBoundary>
-      <Layout>
-        <Container>
-          <Sidebar
-            title="Technische Dokumentation"
-            titleLink="/Dokumentation/Technisch/"
-            edges={edges}
-          />
-          <Doku>
-            <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
-          </Doku>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
+    <Layout>
+      <Container>
+        <Sidebar
+          title="Technische Dokumentation"
+          titleLink="/Dokumentation/Technisch/"
+          edges={edges}
+        />
+        <Doku>
+          <p>Hier erfahren Sie, wie vermehrung.apflora.ch funktioniert</p>
+        </Doku>
+      </Container>
+    </Layout>
   )
 }
 

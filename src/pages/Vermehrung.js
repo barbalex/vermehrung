@@ -9,7 +9,6 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 
-import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
@@ -21,7 +20,6 @@ import Filter from '../components/Filter'
 import storeContext from '../storeContext'
 
 const Container = styled.div`
-  margin-top: 64px;
   min-height: calc(100vh - 64px);
 `
 const StyledSplitPane = styled(SplitPane)`
@@ -119,21 +117,19 @@ const Vermehrung = ({ location }) => {
   }
 
   return (
-    <ErrorBoundary>
-      <Layout>
-        <Container ref={containerEl}>
-          <StyledSplitPane
-            split="vertical"
-            size={`${treeWidthInPercentOfScreen}%`}
-            minSize={200}
-            onDragFinished={onChange}
-          >
-            <Tree dimensions={dimensions} />
-            {showFilter ? <Filter /> : <Data />}
-          </StyledSplitPane>
-        </Container>
-      </Layout>
-    </ErrorBoundary>
+    <Layout>
+      <Container ref={containerEl}>
+        <StyledSplitPane
+          split="vertical"
+          size={`${treeWidthInPercentOfScreen}%`}
+          minSize={200}
+          onDragFinished={onChange}
+        >
+          <Tree dimensions={dimensions} />
+          {showFilter ? <Filter /> : <Data />}
+        </StyledSplitPane>
+      </Container>
+    </Layout>
   )
 }
 

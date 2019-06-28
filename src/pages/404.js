@@ -6,11 +6,9 @@ import Img from 'gatsby-image'
 import Button from '@material-ui/core/Button'
 import { graphql } from 'gatsby'
 
-import ErrorBoundary from '../components/ErrorBoundary'
 import Layout from '../components/Layout'
 
 const Container = styled.div`
-  margin-top: 64px;
   min-height: calc(100vh - 64px);
 `
 const TextContainer = styled.div`
@@ -50,32 +48,30 @@ const Index = ({ data }) => {
   const onClickBack = useCallback(() => navigate('/'))
 
   return (
-    <ErrorBoundary>
-      <Container>
-        <Layout>
-          <Img
-            sizes={data.file.childImageSharp.sizes}
-            fluid={data.file.childImageSharp.fluid}
-            style={bgImageStyle}
-          />
-          <TextContainer>
-            <PageTitle align="center" variant="h6">
-              Oh je
-            </PageTitle>
-          </TextContainer>
-          <TextContainer>
-            <Text align="center" variant="h6">
-              Diese Seite ist nicht verfügbar.
-            </Text>
-          </TextContainer>
-          <TextContainer>
-            <StyledButton variant="outlined" onClick={onClickBack}>
-              Zurück zur Startseite
-            </StyledButton>
-          </TextContainer>
-        </Layout>
-      </Container>
-    </ErrorBoundary>
+    <Container>
+      <Layout>
+        <Img
+          sizes={data.file.childImageSharp.sizes}
+          fluid={data.file.childImageSharp.fluid}
+          style={bgImageStyle}
+        />
+        <TextContainer>
+          <PageTitle align="center" variant="h6">
+            Oh je
+          </PageTitle>
+        </TextContainer>
+        <TextContainer>
+          <Text align="center" variant="h6">
+            Diese Seite ist nicht verfügbar.
+          </Text>
+        </TextContainer>
+        <TextContainer>
+          <StyledButton variant="outlined" onClick={onClickBack}>
+            Zurück zur Startseite
+          </StyledButton>
+        </TextContainer>
+      </Layout>
+    </Container>
   )
 }
 
