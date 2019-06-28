@@ -72,10 +72,4 @@ export default () => createGlobalStyle`
     border: 1px solid #4a148c;
     background-color: rgba(74, 20, 140, 0.08);
   }
-  
-  /* lightbox */
-  .lightbox .ril-toolbar{
-    margin-top: 64px;
-  }
-
 `
