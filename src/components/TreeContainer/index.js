@@ -98,6 +98,8 @@ const TreeContainer = ({ dimensions }) => {
     },
   })
 
+  console.log('TreeContainer', { data, error, loading, refetch })
+
   useEffect(() => {
     setRefetch(refetch)
     // fetch on first load to show loading state
@@ -107,7 +109,7 @@ const TreeContainer = ({ dimensions }) => {
 
   // do not set nodes when data is empty
   // which happens while query is loading again
-  if (Object.keys(data).length > 0) {
+  if (!loading && Object.keys(data).length > 0) {
     /**
      * WEIRDO
      * if the following console.log is not here,
