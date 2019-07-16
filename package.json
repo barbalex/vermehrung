@@ -74,10 +74,10 @@
     "react-select": "3.0.4",
     "react-split-pane": "0.1.87",
     "react-typography": "0.16.19",
-    "react-window": "1.8.3",
-    "styled-components": "4.3.1",
+    "react-window": "1.8.5",
+    "styled-components": "4.3.2",
     "typography": "0.16.19",
-    "uploadcare-widget": "3.7.5"
+    "uploadcare-widget": "3.7.6"
   },
   "devDependencies": {
     "copyfiles": "2.1.0"
