@@ -1,8 +1,3 @@
-/**
- * for unknown reason need to set null
- * if set '' (as React wants) value is shown and set as Unknown :-(
- * setting null of cours makes react log errors
- */
 import React, { useEffect, useState, useCallback } from 'react'
 import { KeyboardDatePicker } from '@material-ui/pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
