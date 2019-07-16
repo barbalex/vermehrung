@@ -1,3 +1,9 @@
+/**
+ * using both date-fns and moment.js
+ * because wanted to migrate to date-fns
+ * but realized that still need moment.js
+ * to enalbe lazy input of date in textfield
+ */
 import React, { useEffect, useState, useCallback } from 'react'
 import { KeyboardDatePicker } from '@material-ui/pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
