@@ -61,13 +61,14 @@ const DateFieldWithPicker = ({
   const onBlur = useCallback(
     event => {
       const { value: valuePassed } = event.target
-      // value is masked "__.__.__"
+      // value is masked "_._.____"
+      // remove masking to enable working with moment
       const value = valuePassed
-        .replace('_.__.__', '')
-        .replace('.__.__', '')
-        .replace('__.__', '')
-        .replace('_.__', '')
-        .replace('.__', '')
+        .replace('._.____', '')
+        .replace('_.____', '')
+        .replace('.____', '')
+        .replace('____', '')
+        .replace('___', '')
         .replace('__', '')
         .replace('_', '')
       // do not change anything if there are no values
@@ -81,11 +82,12 @@ const DateFieldWithPicker = ({
 
       // write a real date to db
       /**
-       * would prefer to use data-fns for this but is not yet possible, see:
-       * https://github.com/date-fns/date-fns/issues/219
-       *
-       * Actually: moment not only parses the date. Which data-fns v2 can.
-       * It also gets "3", "3.1", 3.1.17" and adds missing month / year from now
+       * create new data using moment to enable shortcutting inputs
+       * moment not only parses the date. It also adds missing parts from now():
+       * for instance if entering data on 01.01.2020:
+       * 3      => 03.01.2020
+       * 3.2    => 03.02.2020
+       * 3.2.17 => 03.02.2017
        * This is great and not possible with date-fns?
        * https://github.com/date-fns/date-fns/issues/219#issuecomment-424090895
        */
@@ -116,7 +118,7 @@ const DateFieldWithPicker = ({
     <>
       <StyledDatePicker
         label={label}
-        format="DD.MM.YYYY"
+        format="D.M.YYYY"
         value={stateValue}
         onChange={onChange}
         onAccept={onAccept}
