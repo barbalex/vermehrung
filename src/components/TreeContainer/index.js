@@ -98,8 +98,6 @@ const TreeContainer = ({ dimensions }) => {
     },
   })
 
-  console.log('TreeContainer', { data, error, loading, refetch })
-
   useEffect(() => {
     setRefetch(refetch)
     // fetch on first load to show loading state
