@@ -65,7 +65,9 @@ const DateFieldWithPicker = ({
       // value is masked "_._.____"
       // remove masking to enable working with moment
       const value = valuePassed
-        .replace('._.____', '')
+        .replace('_.__.____', '')
+        .replace('.__.____', '')
+        .replace('__.____', '')
         .replace('_.____', '')
         .replace('.____', '')
         .replace('____', '')
@@ -74,7 +76,7 @@ const DateFieldWithPicker = ({
         .replace('_', '')
       // do not change anything if there are no values
       // test validity using moment because date-fns isValid('1') is false
-      if (!moment(value).isValid()) {
+      if (!moment(value, 'DD.MM.YYYY').isValid()) {
         if (value) setInternalError(`"${value}" ist kein zulässiges Datum`)
         const fakeEvent = { target: { value: null, name } }
         saveToDb(fakeEvent)
@@ -119,7 +121,7 @@ const DateFieldWithPicker = ({
     <>
       <StyledDatePicker
         label={label}
-        format="D.M.YYYY"
+        format="DD.MM.YYYY"
         value={stateValue}
         onChange={onChange}
         onAccept={onAccept}
