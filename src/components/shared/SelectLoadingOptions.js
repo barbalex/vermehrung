@@ -10,7 +10,7 @@ import React, { useCallback } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import get from 'lodash/get'
 
 const Container = styled.div`

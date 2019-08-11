@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt } from 'react-icons/fa'

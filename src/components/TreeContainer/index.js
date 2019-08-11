@@ -13,7 +13,7 @@
 import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 
 import storeContext from '../../storeContext'
 import query from './query'

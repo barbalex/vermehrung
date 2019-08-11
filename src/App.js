@@ -1,6 +1,5 @@
 import React from 'react'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
+import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
 
@@ -29,7 +28,6 @@ const App = ({ element }) => (
   <MuiThemeProvider theme={materialTheme}>
     <MobxProvider value={mobxStore}>
       <ApolloProvider client={myClient}>
-        <ApolloHooksProvider client={myClient}>
           <MuiPickersUtilsProvider
             utils={MomentUtils}
             moment={moment}
@@ -48,7 +46,6 @@ const App = ({ element }) => (
               </>
             </SnackbarProvider>
           </MuiPickersUtilsProvider>
-        </ApolloHooksProvider>
       </ApolloProvider>
     </MobxProvider>
   </MuiThemeProvider>
