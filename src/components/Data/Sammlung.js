@@ -109,7 +109,7 @@ const Sammlung = ({ filter: showFilter }) => {
     row = get(data, 'sammlung', [{}])[0]
   }
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const personWerte = useMemo(
     () =>

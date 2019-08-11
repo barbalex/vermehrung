@@ -125,7 +125,7 @@ const Event = ({ filter: showFilter }) => {
     variables: { filter: kulturFilter },
   })
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {

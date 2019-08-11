@@ -152,7 +152,7 @@ const Zaehlung = ({ filter: showFilter }) => {
     },
   })
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const kulturWerte = useMemo(
     () =>

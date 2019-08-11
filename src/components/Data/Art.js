@@ -94,7 +94,7 @@ const Art = ({ filter: showFilter }) => {
     row = get(data, 'art', [{}])[0]
   }
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const artWerte = memoizeOne(() =>
     get(aeArtData, 'ae_art', []).map(el => ({

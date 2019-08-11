@@ -66,7 +66,7 @@ const WerteListe = ({ table }) => {
     //
   }
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const saveToDb = useCallback(
     async event => {

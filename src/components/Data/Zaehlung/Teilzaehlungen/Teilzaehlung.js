@@ -70,7 +70,7 @@ const Teilzaehlung = ({
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const saveToDb = useCallback(
     async event => {

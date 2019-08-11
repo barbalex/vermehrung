@@ -75,7 +75,7 @@ const Person = ({ filter: showFilter }) => {
     row = get(data, 'person', [{}])[0]
   }
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const saveToDb = useCallback(
     async event => {

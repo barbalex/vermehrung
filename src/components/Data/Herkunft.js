@@ -75,7 +75,7 @@ const Herkunft = ({ filter: showFilter }) => {
     row = get(data, 'herkunft', [{}])[0]
   }
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const saveToDb = useCallback(
     async event => {

@@ -219,7 +219,7 @@ const Lieferung = ({ filter: showFilter }) => {
         'kein Lokalname'}`
     : ''
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {setErrors({})}, [row])
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
