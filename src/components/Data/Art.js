@@ -94,7 +94,9 @@ const Art = ({ filter: showFilter }) => {
     row = get(data, 'art', [{}])[0]
   }
 
-  useEffect(() => {setErrors({})}, [row])
+  useEffect(() => {
+    setErrors({})
+  }, [row.id])
 
   const artWerte = memoizeOne(() =>
     get(aeArtData, 'ae_art', []).map(el => ({
@@ -145,7 +147,7 @@ const Art = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [row.id],
   )
 
   if (loading) {

@@ -134,7 +134,9 @@ const Kultur = ({ filter: showFilter }) => {
     row = get(data, 'kultur', [{}])[0]
   }
 
-  useEffect(() => {setErrors({})}, [row])
+  useEffect(() => {
+    setErrors({})
+  }, [row.id])
 
   // do not show other arten in this garten
   const otherArtenInThisGarten = get(row, 'garten.kulturs', [])
@@ -243,7 +245,7 @@ const Kultur = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [row.id],
   )
 
   if (loading) {

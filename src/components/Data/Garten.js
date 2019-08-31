@@ -92,7 +92,7 @@ const Garten = ({ filter: showFilter }) => {
     row = get(data, 'garten', [{}])[0]
   }
 
-  useEffect(() => {setErrors({})}, [row])
+  useEffect(() => {setErrors({})}, [row.id])
 
   const personWerte = memoizeOne(() =>
     get(personData, 'person', []).map(el => ({
@@ -152,7 +152,7 @@ const Garten = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [row.id],
   )
 
   if (loading) {

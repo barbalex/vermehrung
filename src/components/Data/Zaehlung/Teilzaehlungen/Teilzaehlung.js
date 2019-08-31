@@ -70,7 +70,7 @@ const Teilzaehlung = ({
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => {setErrors({})}, [row])
+  useEffect(() => {setErrors({})}, [row.id])
 
   const saveToDb = useCallback(
     async event => {
@@ -114,7 +114,7 @@ const Teilzaehlung = ({
       }
       setErrors({})
     },
-    [row],
+    [row.id],
   )
   const onClickDelete = useCallback(async () => {
     try {
@@ -133,7 +133,7 @@ const Teilzaehlung = ({
       })
     }
     refetch()
-  }, [row])
+  }, [row.id])
 
   if (!row) return null
 

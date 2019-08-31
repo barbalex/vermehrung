@@ -215,7 +215,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       setWgs84LatError('')
       setWgs84LongError('')
     },
-    [row],
+    [row.id],
   )
 
   return (

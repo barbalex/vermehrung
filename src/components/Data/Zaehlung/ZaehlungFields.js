@@ -62,7 +62,7 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
       }
       refetch()
     },
-    [row],
+    [row.id],
   )
 
   const {
