@@ -1,4 +1,4 @@
-// @flow
+// no more in use
 import React, { useState, useCallback } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -18,6 +18,11 @@ const MehrButton = styled(Button)`
   &:hover {
     border-width: 1px !important;
   }
+`
+const Version = styled.div`
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.87);
+  user-select: none;
 `
 
 const MyAppBar = () => {
@@ -55,6 +60,7 @@ const MyAppBar = () => {
       >
         <MenuItem onClick={onClickUserDocs}>Benutzer-Dokumentation</MenuItem>
         <MenuItem onClick={onClickTechDocs}>Technische Dokumentation</MenuItem>
+        <Version>Version: 0.3.0 vom 13.09.2019</Version>
       </Menu>
     </Container>
   )
