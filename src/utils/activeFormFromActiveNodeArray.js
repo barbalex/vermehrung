@@ -1,6 +1,6 @@
 export default url => {
   if (url.length === 1) {
-    return 'none'
+    return null
   }
 
   if ([2, 3].includes(url.length) && url[0] === 'Arten') {
@@ -255,5 +255,5 @@ export default url => {
   ) {
     return 'event'
   }
-  return 'none'
+  return null
 }
