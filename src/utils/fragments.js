@@ -98,14 +98,6 @@ export const kulturEvent = gql`
     event
   }
 `
-export const teilkultur = gql`
-  fragment TeilkulturFields on teilkultur {
-    id
-    kultur_id
-    name
-    bemerkungen
-  }
-`
 export const lieferung = gql`
   fragment LieferungFields on lieferung {
     id
@@ -188,6 +180,14 @@ export const sammlungFile = gql`
     file_mime_type
     name
     beschreibung
+  }
+`
+export const teilkultur = gql`
+  fragment TeilkulturFields on teilkultur {
+    id
+    kultur_id
+    name
+    bemerkungen
   }
 `
 export const zaehlung = gql`

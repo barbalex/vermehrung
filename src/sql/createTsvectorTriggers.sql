@@ -125,6 +125,7 @@ DROP FUNCTION IF EXISTS kultur_trigger();
 create function kultur_trigger() returns trigger as $$
   declare
     artname text;
+    gartenname text;
     personname text;
     herkunftnr text;
     herkunftlokalname text;
@@ -135,7 +136,7 @@ create function kultur_trigger() returns trigger as $$
         inner join ae_art on art.ae_id = ae_art.id
       on kultur.art_id = art.id
     where art.id = new.art_id;
-    select person.name into personname
+    select person.name, garten.name into personname, gartenname
     from kultur left join garten
       inner join person on garten.person_id = person.id
     on new.garten_id = garten.id;
@@ -144,7 +145,8 @@ create function kultur_trigger() returns trigger as $$
     where herkunft.id = new.herkunft_id;
       new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(gartenname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'D') || ' ' ||
