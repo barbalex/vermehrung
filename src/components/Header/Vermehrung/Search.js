@@ -226,7 +226,7 @@ export default () => {
   }))
   const suggestionsGarten = get(data, 'garten', []).map(o => ({
     id: o.id,
-    name: get(o, 'person.name') || '(kein Name)',
+    name: o.name || `(${get(o, 'person.name') || 'kein Name'})`,
     type: 'Gaerten',
   }))
   const suggestionsHerkunft = get(data, 'herkunft', []).map(o => ({

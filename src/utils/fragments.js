@@ -19,6 +19,7 @@ export const aeArt = gql`
 export const garten = gql`
   fragment GartenFields on garten {
     id
+    name
     person_id
     aktiv
     bemerkungen

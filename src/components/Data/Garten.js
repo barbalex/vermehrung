@@ -92,7 +92,9 @@ const Garten = ({ filter: showFilter }) => {
     row = get(data, 'garten', [{}])[0]
   }
 
-  useEffect(() => {setErrors({})}, [row.id])
+  useEffect(() => {
+    setErrors({})
+  }, [row.id])
 
   const personWerte = memoizeOne(() =>
     get(personData, 'person', []).map(el => ({
@@ -205,6 +207,14 @@ const Garten = ({ filter: showFilter }) => {
           />
         )}
         <FieldsContainer>
+          <TextField
+            key={`${row.id}name`}
+            name="name"
+            label="Name"
+            value={row.name}
+            saveToDb={saveToDb}
+            error={errors.name}
+          />
           <Select
             key={`${row.id}${row.person_id}person_id`}
             name="person_id"

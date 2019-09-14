@@ -110,7 +110,8 @@ create function garten_trigger() returns trigger as $$
     from garten left join person on garten.person_id = person.id
     where person.id = new.person_id;
     new.tsv :=
-      setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.name, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end

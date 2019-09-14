@@ -60,7 +60,8 @@ from sammlung
   left join herkunft on sammlung.herkunft_id = herkunft.id;
 
 SELECT
-  setweight(to_tsvector('simple', coalesce(person.name, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(garten.name, '')), 'A') || ' ' ||
+  setweight(to_tsvector('simple', coalesce(person.name, '')), 'B') || ' ' ||
   setweight(to_tsvector('simple', coalesce(garten.bemerkungen, '')), 'C') as vector
 from garten
   left join person on garten.person_id = person.id;

@@ -154,6 +154,7 @@ create index on sammlung_file using btree (file_mime_type);
 drop table if exists garten cascade;
 create table garten (
   id bigserial primary key,
+  name text default null,
   person_id integer default null references person (id) on delete cascade on update cascade,
   geom_point geometry(Point, 4326) default null,
   aktiv boolean default true,
@@ -163,6 +164,7 @@ create table garten (
   tsv tsvector
 );
 create index on garten using btree (id);
+create index on garten using btree (name);
 create index on garten using btree (person_id);
 create index on garten using btree (aktiv);
 create index on garten using gin (tsv);
