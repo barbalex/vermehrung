@@ -146,7 +146,9 @@ const Event = ({ filter: showFilter }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      let value = event.target.value || null
+      if (event.target.value === false) value = false
+      if (event.target.value === 0) value = 0
       const type = types.event[field]
       if (showFilter) {
         let valueToSet = value

@@ -143,7 +143,9 @@ const File = ({ file, parent, refetch }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      let value = event.target.value || null
+      if (event.target.value === false) value = false
+      if (event.target.value === 0) value = 0
       try {
         let valueToSet
         if (value === undefined || value === null) {

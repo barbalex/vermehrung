@@ -1,9 +1,7 @@
 import React, { useCallback } from 'react'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
+import Checkbox from '@material-ui/core/Checkbox'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -24,20 +22,34 @@ const StyledFormLabel = styled(FormLabel)`
   user-select: none;
   pointer-events: none;
 `
-const StyledRadio = styled(Radio)`
+const StyledCheckbox = styled(Checkbox)`
   height: 2px !important;
+  width: 24px;
 `
 
 const RadioButton = ({ label, name, value, error, saveToDb }) => {
   const onClickButton = useCallback(() => {
+    let newValue = null
+    if (value === true) newValue = false
+    if (value === false) newValue = null
+    if (value === null) newValue = true
     const fakeEvent = {
       target: {
-        value: !value,
+        value: newValue,
         name,
       },
     }
     saveToDb(fakeEvent)
   }, [value, name])
+
+  const indeterminate = value === null
+  const checked = value === true
+  const title =
+    value === true
+      ? `Ja. Nach nächstem Klick 'Nein'`
+      : value === false
+      ? `Nein. Nach nächstem Klick 'Unbestimmt'`
+      : `Unbestimmt. Nach nächstem Klick 'Ja'`
 
   return (
     <Container>
@@ -47,15 +59,14 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
         aria-describedby={`${label}ErrorText`}
       >
         <StyledFormLabel component="legend">{label}</StyledFormLabel>
-        <RadioGroup
-          aria-label={label}
-          value={value === null ? 'false' : value.toString()}
-        >
-          <FormControlLabel
-            value="true"
-            control={<StyledRadio onClick={onClickButton} color="primary" />}
-          />
-        </RadioGroup>
+        <StyledCheckbox
+          data-id={name}
+          onClick={onClickButton}
+          color="primary"
+          checked={checked}
+          indeterminate={indeterminate}
+          title={title}
+        />
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
         )}
