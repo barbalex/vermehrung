@@ -251,9 +251,6 @@ const Zaehlung = ({ filter: showFilter }) => {
   const kulturZaehlungFelder = showFilter
     ? {}
     : row.kultur.kultur_zaehlung_felders[0]
-  const z_instruktion = showFilter
-    ? true
-    : get(row, 'kultur.kultur_zaehlung_felders[0].z_instruktion')
   const z_bemerkungen = showFilter
     ? true
     : get(row, 'kultur.kultur_zaehlung_felders[0].z_bemerkungen')
@@ -298,17 +295,6 @@ const Zaehlung = ({ filter: showFilter }) => {
               saveToDb={saveToDb}
               error={errors.datum}
             />
-            {!!z_instruktion && (
-              <TextField
-                key={`${row.id}instruktion`}
-                name="instruktion"
-                label="Instruktion"
-                value={row.instruktion}
-                saveToDb={saveToDb}
-                error={errors.instruktion}
-                multiline
-              />
-            )}
             {!!z_bemerkungen && (
               <TextField
                 key={`${row.id}bemerkungen`}

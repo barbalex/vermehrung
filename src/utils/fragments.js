@@ -187,7 +187,6 @@ export const zaehlung = gql`
     id
     kultur_id
     datum
-    instruktion
     bemerkungen
   }
 `
@@ -207,7 +206,6 @@ export const teilzaehlung = gql`
 export const kultur_zaehlung_felder = gql`
   fragment KulturZaehlungFelderFields on kultur_zaehlung_felder {
     kultur_id
-    z_instruktion
     z_bemerkungen
     tz_ort
     tz_anzahl_mutterpflanzen

@@ -238,7 +238,6 @@ create function zaehlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.instruktion, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(orte, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(mengen_beschrieben, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(erscheinungen, '')), 'C') || ' ' ||

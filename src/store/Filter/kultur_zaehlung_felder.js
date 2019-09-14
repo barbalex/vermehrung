@@ -5,10 +5,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  z_instruktion: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   z_bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -34,7 +30,6 @@ export const type = types.model({
 
 export const initial = {
   kultur_id: null,
-  z_instruktion: null,
   z_bemerkungen: null,
   tz_ort: null,
   tz_anzahl_mutterpflanzen: null,
@@ -45,7 +40,6 @@ export const initial = {
 
 export const empty = {
   kultur_id: null,
-  z_instruktion: null,
   z_bemerkungen: null,
   tz_ort: null,
   tz_anzahl_mutterpflanzen: null,
@@ -56,7 +50,6 @@ export const empty = {
 
 export const simpleTypes = {
   kultur_id: 'number',
-  z_instruktion: 'string',
   z_bemerkungen: 'string',
   tz_ort: 'string',
   tz_anzahl_mutterpflanzen: 'number',

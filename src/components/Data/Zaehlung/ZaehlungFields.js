@@ -66,7 +66,6 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
   )
 
   const {
-    z_instruktion,
     z_bemerkungen,
     tz_ort,
     tz_anzahl_mutterpflanzen,
@@ -78,19 +77,6 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
   return (
     <ErrorBoundary>
       <StyledDialogContent>
-        <FormControlLabel
-          value={z_instruktion === null ? 'false' : z_instruktion.toString()}
-          control={
-            <Radio
-              color="primary"
-              checked={!!z_instruktion}
-              onClick={saveToDb}
-              name="z_instruktion"
-            />
-          }
-          label="Instruktion"
-          labelPlacement="end"
-        />
         <FormControlLabel
           value={z_bemerkungen === null ? 'false' : z_bemerkungen.toString()}
           control={

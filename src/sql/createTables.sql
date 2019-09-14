@@ -242,7 +242,6 @@ create table zaehlung (
   id bigserial primary key,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
-  instruktion text default null,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -279,7 +278,6 @@ create index on teilzaehlung using gin (tsv);
 drop table if exists kultur_zaehlung_felder cascade;
 create table kultur_zaehlung_felder (
   kultur_id integer unique not null references kultur (id) on delete cascade on update cascade,
-  z_instruktion boolean default true,
   z_bemerkungen boolean default true,
   tz_ort boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
