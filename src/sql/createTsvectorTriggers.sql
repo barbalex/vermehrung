@@ -168,9 +168,10 @@ DROP FUNCTION IF EXISTS kultur_event_trigger();
 create function kultur_event_trigger() returns trigger as $$
   declare
     artname text;
+    gartenname text;
     personname text;
   begin
-    select ae_art.name, person.name into artname, personname
+    select ae_art.name, garten.name, person.name into artname, gartenname, personname
     from kultur_event
       inner join kultur 
         inner join art 
@@ -183,12 +184,44 @@ create function kultur_event_trigger() returns trigger as $$
     where kultur.id = new.kultur_id;
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.event, '')), 'A');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_kultur_event before insert or update
+  on kultur_event for each row execute procedure kultur_event_trigger();
+
+DROP TRIGGER IF EXISTS tsvupdate_teilkultur ON teilkultur;
+DROP FUNCTION IF EXISTS teilkultur_trigger();
+create function teilkultur_trigger() returns trigger as $$
+  declare
+    artname text;
+    gartenname text;
+    personname text;
+  begin
+    select ae_art.name, garten.name, person.name into artname, gartenname, personname
+    from teilkultur
+      inner join kultur 
+        inner join art 
+          inner join ae_art on art.ae_id = ae_art.id
+        on kultur.art_id = art.id
+        left join garten
+          inner join person on garten.person_id = person.id
+        on kultur.garten_id = garten.id
+      on teilkultur.kultur_id = kultur.id
+    where kultur.id = new.kultur_id;
+    new.tsv :=
+      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.name, '')), 'A');
     return new;
   end
 $$ language plpgsql;
