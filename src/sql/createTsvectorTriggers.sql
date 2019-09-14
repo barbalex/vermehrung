@@ -163,8 +163,8 @@ $$ language plpgsql;
 create trigger tsvupdate_kultur before insert or update
   on kultur for each row execute procedure kultur_trigger();
 
-DROP TRIGGER IF EXISTS tsvupdate_kultur_event ON kultur_event;
-DROP FUNCTION IF EXISTS kultur_event_trigger();
+DROP TRIGGER IF EXISTS kultur_event_trigger ON kultur_event cascade;
+DROP FUNCTION IF EXISTS kultur_event_trigger() cascade;
 create function kultur_event_trigger() returns trigger as $$
   declare
     artname text;
@@ -226,8 +226,8 @@ create function teilkultur_trigger() returns trigger as $$
   end
 $$ language plpgsql;
 
-create trigger tsvupdate_kultur_event before insert or update
-  on kultur_event for each row execute procedure kultur_event_trigger();
+create trigger tsvupdate_teilkultur before insert or update
+  on teilkultur for each row execute procedure teilkultur_trigger();
 
 DROP TRIGGER IF EXISTS tsvupdate_zaehlung ON zaehlung;
 DROP FUNCTION IF EXISTS zaehlung_trigger();
