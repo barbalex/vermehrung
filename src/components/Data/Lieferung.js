@@ -219,7 +219,9 @@ const Lieferung = ({ filter: showFilter }) => {
         'kein Lokalname'}`
     : ''
 
-  useEffect(() => {setErrors({})}, [row.id])
+  useEffect(() => {
+    setErrors({})
+  }, [row.id])
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
@@ -495,6 +497,15 @@ const Lieferung = ({ filter: showFilter }) => {
             value={row.anzahl_auspflanzbereit}
             saveToDb={saveToDb}
             error={errors.anzahl_auspflanzbereit}
+            type="number"
+          />
+          <TextField
+            key={`${row.id}gramm_samen`}
+            name="gramm_samen"
+            label="Gramm Samen"
+            value={row.gramm_samen}
+            saveToDb={saveToDb}
+            error={errors.gramm_samen}
             type="number"
           />
           <TextField

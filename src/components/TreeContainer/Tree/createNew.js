@@ -45,12 +45,8 @@ const fragmentFieldsNames = {
 
 export default async ({ node, store, client }) => {
   // get parent table, parent table id and table from url
-  const {
-    setActiveNodeArray,
-    refetch,
-    addOpenNodes,
-    enqueNotification,
-  } = store.tree
+  const { enqueNotification } = store
+  const { setActiveNodeArray, refetch, addOpenNodes } = store.tree
   const { nodeType, url } = node
 
   // get table and id from url

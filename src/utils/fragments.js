@@ -112,6 +112,7 @@ export const lieferung = gql`
     von_anzahl_individuen
     anzahl_pflanzen
     anzahl_auspflanzbereit
+    gramm_samen
     menge_beschrieben
     ausgefuehrt
     bemerkungen
