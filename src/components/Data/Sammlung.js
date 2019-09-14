@@ -308,15 +308,6 @@ const Sammlung = ({ filter: showFilter }) => {
             type="number"
           />
           <TextField
-            key={`${row.id}anzahl_auspflanzbereit`}
-            name="anzahl_auspflanzbereit"
-            label="Anzahl auspflanzbereit"
-            value={row.anzahl_auspflanzbereit}
-            saveToDb={saveToDb}
-            error={errors.anzahl_auspflanzbereit}
-            type="number"
-          />
-          <TextField
             key={`${row.id}menge_beschrieben`}
             name="menge_beschrieben"
             label="Menge textlich beschrieben"

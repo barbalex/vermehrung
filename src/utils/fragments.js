@@ -168,7 +168,6 @@ export const sammlung = gql`
     datum
     von_anzahl_individuen
     anzahl_pflanzen
-    anzahl_auspflanzbereit
     bemerkungen
   }
 `
