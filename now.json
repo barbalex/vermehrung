@@ -1,7 +1,6 @@
 {
   "version": 2,
   "name": "vermehrung",
-  "alias": "vermehrung.apflora.ch",
   "env": {
     "HASURA_GRAPHQL_URL": "https://api.vermehrung.apflora.ch/v1/graphql"
   },
