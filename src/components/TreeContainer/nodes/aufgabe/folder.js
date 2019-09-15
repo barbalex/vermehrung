@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'aufgabeFolder',
       label: `Aufgaben (${nr})`,
       url: ['Aufgaben'],
-      sort: [7],
+      sort: [8],
       hasChildren: true,
     },
   ]

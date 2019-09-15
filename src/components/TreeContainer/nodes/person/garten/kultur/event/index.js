@@ -47,7 +47,7 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'
-        const label = `${datum}: ${get(el, 'event') || '(kein Event)'}`
+        const label = `${datum}: ${get(el, 'event') || '(nicht beschrieben)'}`
 
         return {
           nodeType: 'table',
@@ -70,7 +70,7 @@ export default ({ nodes, data, url }) => {
         }
       })
       .map((el, index) => {
-        el.sort = [10, personIndex, 1, gartenIndex, 1, kulturIndex, 4, index]
+        el.sort = [11, personIndex, 1, gartenIndex, 1, kulturIndex, 4, index]
         return el
       })
   )

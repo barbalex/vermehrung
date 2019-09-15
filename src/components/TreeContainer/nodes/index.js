@@ -54,6 +54,9 @@ import buildZaehlungZaehlung from './zaehlung'
 import buildAufgabeFolder from './aufgabe/folder'
 import buildAufgabeAufgabe from './aufgabe'
 
+import buildEventFolder from './event/folder'
+import buildEventEvent from './event'
+
 import buildPersonFolder from './person/folder'
 import buildPersonPerson from './person'
 import buildPersonGartenFolder from './person/garten/folder'
@@ -92,8 +95,8 @@ import buildSammlungAusLieferungKulturAnLieferungLieferung from './sammlung/ausl
 
 import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
-import buildEventFolder from './kultur/event/folder'
-import buildEventEvent from './kultur/event'
+import buildKulturEventFolder from './kultur/event/folder'
+import buildKulturEventEvent from './kultur/event'
 import buildKulturZaehlungFolder from './kultur/zaehlung/folder'
 import buildKulturZaehlungZaehlung from './kultur/zaehlung'
 import buildKulturAusLieferungFolder from './kultur/auslieferung/folder'
@@ -113,6 +116,7 @@ export default ({ store, data, loading }) => {
     ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildAufgabeFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
@@ -192,6 +196,18 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildAufgabeAufgabe({
+            nodes,
+            data,
+            store,
+          }),
+        )(),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Events') {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildEventEvent({
             nodes,
             data,
             store,
@@ -372,7 +388,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildEventFolder({
+          buildKulturEventFolder({
             nodes,
             url,
             data,
@@ -578,7 +594,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildEventEvent({
+          buildKulturEventEvent({
             nodes,
             data,
             store,

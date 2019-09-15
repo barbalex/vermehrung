@@ -10,7 +10,7 @@ export default ({ nodes, data }) => {
       .map(el => {
         return {
           nodeType: 'table',
-          menuTitle: 'Zählung',
+          menuTitle: 'Aufgabe',
           table: 'aufgabe',
           id: `aufgabe${el.id}`,
           parentId: 'aufgabeFolder',
@@ -20,7 +20,7 @@ export default ({ nodes, data }) => {
         }
       })
       .map((el, index) => {
-        el.sort = [7, index]
+        el.sort = [8, index]
         return el
       })
   )

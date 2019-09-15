@@ -21,6 +21,12 @@ export default url => {
   if (url.length === 2 && url[0] === 'Zaehlungen') {
     return 'zaehlung'
   }
+  if (url.length === 2 && url[0] === 'Aufgaben') {
+    return 'aufgabe'
+  }
+  if (url.length === 2 && url[0] === 'Events') {
+    return 'event'
+  }
   if ([2, 3].includes(url.length) && url[0] === 'Personen') {
     return 'person'
   }

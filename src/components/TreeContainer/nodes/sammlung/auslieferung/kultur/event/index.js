@@ -50,7 +50,7 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'
-        const label = `${datum}: ${get(el, 'event') || '(kein Event)'}`
+        const label = `${datum}: ${get(el, 'event') || '(nicht beschrieben)'}`
 
         return {
           nodeType: 'table',

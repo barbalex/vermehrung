@@ -241,7 +241,8 @@ export default () => {
   }))
   const suggestionsEvent = get(data, 'event', []).map(o => ({
     id: o.id,
-    name: `${formatDatum(o.datum)}: ${get(o, 'event') || '(kein Event)'}`,
+    name: `${formatDatum(o.datum)}: ${get(o, 'event') ||
+      '(nicht beschrieben)'}`,
     type: 'Events',
     parent: o.kultur_id,
   }))
