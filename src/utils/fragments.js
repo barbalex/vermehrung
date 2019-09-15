@@ -16,6 +16,17 @@ export const aeArt = gql`
     name
   }
 `
+export const aufgabe = gql`
+  fragment AufgabeFields on aufgabe {
+    id
+    kultur_id
+    teilkultur_id
+    person_id
+    aufgabe
+    erledigt
+    frist
+  }
+`
 export const garten = gql`
   fragment GartenFields on garten {
     id
