@@ -373,25 +373,26 @@ create function aufgabe_trigger() returns trigger as $$
   declare
     artname text;
     gartenname text;
+    personname text;
     teilkulturname text;
   begin
-    select ae_art.name, garten.name, teilkultur.name into artname, gartenname, teilkulturname
+    select ae_art.name, garten.name, teilkultur.name, person.name into artname, gartenname, teilkulturname, personname
     from aufgabe
+      left join teilkultur
+      on aufgabe.teilkultur_id = teilkultur.id
+      left join person on aufgabe.person_id = person.id
       inner join kultur 
         inner join art 
           inner join ae_art on art.ae_id = ae_art.id
         on kultur.art_id = art.id
         left join garten
-          inner join person on garten.person_id = person.id
         on kultur.garten_id = garten.id
       on aufgabe.kultur_id = kultur.id
-      inner join teilkultur
-      on aufgabe.teilkultur_id = teilkultur.id
     where kultur.id = new.kultur_id;
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.person_id, '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'MM'), '')), 'A') || ' ' ||

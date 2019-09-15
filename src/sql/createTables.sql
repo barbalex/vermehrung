@@ -324,7 +324,6 @@ create table kultur_zaehlung_felder (
 );
 create index on kultur_zaehlung_felder using btree (kultur_id);
 
-
 drop table if exists lieferung cascade;
 create table lieferung (
   id bigserial primary key,
