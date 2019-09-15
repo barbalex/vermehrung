@@ -15,12 +15,12 @@ export default ({ nodes, data }) => {
           id: `teilkultur${el.id}`,
           parentId: 'teilkulturFolder',
           label: el.name || '(kein Name)',
-          url: ['Lieferungen', el.id],
+          url: ['Teilkulturen', el.id],
           hasChildren: false,
         }
       })
       .map((el, index) => {
-        el.sort = [7, index]
+        el.sort = [6, index]
         return el
       })
   )

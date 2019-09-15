@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'teilkulturFolder',
       label: `Teilkulturen (${nr})`,
       url: ['Teilkulturen'],
-      sort: [7],
+      sort: [6],
       hasChildren: true,
     },
   ]

@@ -53,9 +53,8 @@ const query = gql`
 `
 // garten.person.name
 const kulturQuery = gql`
-  query kulturQuery($filter: kultur_bool_exp!) {
+  query kulturQuery {
     kultur(
-      where: $filter
       order_by: [
         { garten: { person: { name: asc_nulls_first } } }
         { garten: { person: { ort: asc_nulls_first } } }
@@ -111,18 +110,11 @@ const Teilkultur = ({ filter: showFilter }) => {
     row = get(data, 'teilkultur', [{}])[0]
   }
 
-  // only show kulturen of same art
-  const artId = get(row, 'kultur.art_id')
-  const kulturFilter = artId
-    ? { art_id: { _eq: artId } }
-    : { id: { _is_null: true } }
   const {
     data: kulturData,
     error: kulturError,
     loading: kulturLoading,
-  } = useQuery(kulturQuery, {
-    variables: { filter: kulturFilter },
-  })
+  } = useQuery(kulturQuery)
 
   useEffect(() => {
     setErrors({})
@@ -269,7 +261,7 @@ const Teilkultur = ({ filter: showFilter }) => {
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
-            label="Name"
+            label="Bemerkungen"
             value={row.bemerkungen}
             saveToDb={saveToDb}
             error={errors.bemerkungen}
