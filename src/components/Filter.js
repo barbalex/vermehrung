@@ -72,7 +72,7 @@ export default () => {
     lieferung: 'Lieferung Filter',
     person: 'Person Filter',
     sammlung: 'Sammlung Filter',
-    teilkultur: 'Teilzählung Filter',
+    teilkultur: 'TeilKultur Filter',
     zaehlung: 'Zählung Filter',
   }
 
