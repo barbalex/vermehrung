@@ -18,6 +18,9 @@ export default url => {
   if (url.length === 2 && url[0] === 'Teilkulturen') {
     return 'teilkultur'
   }
+  if (url.length === 2 && url[0] === 'Zaehlungen') {
+    return 'zaehlung'
+  }
   if ([2, 3].includes(url.length) && url[0] === 'Personen') {
     return 'person'
   }

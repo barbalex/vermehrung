@@ -48,6 +48,12 @@ import buildLieferungLieferung from './lieferung'
 import buildTeilkulturFolder from './teilkultur/folder'
 import buildTeilkulturTeilkultur from './teilkultur'
 
+import buildZaehlungFolder from './zaehlung/folder'
+import buildZaehlungZaehlung from './zaehlung'
+
+import buildAufgabeFolder from './aufgabe/folder'
+import buildAufgabeAufgabe from './aufgabe'
+
 import buildPersonFolder from './person/folder'
 import buildPersonPerson from './person'
 import buildPersonGartenFolder from './person/garten/folder'
@@ -73,7 +79,6 @@ import buildSammlungHerkunftFolder from './sammlung/herkunft/folder'
 import buildSammlungHerkunftHerkunft from './sammlung/herkunft'
 import buildSammlungAusLieferungFolder from './sammlung/auslieferung/folder'
 import buildSammlungAusLieferungLieferung from './sammlung/auslieferung'
-// TODO: build SammlungKulturFolder and Kultur
 import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultur/folder'
 import buildSammlungAusLieferungKulturKultur from './sammlung/auslieferung/kultur'
 import buildSammlungAusLieferungKulturZaehlungFolder from './sammlung/auslieferung/kultur/zaehlung/folder'
@@ -106,6 +111,8 @@ export default ({ store, data, loading }) => {
     ...memoizeOne(() => buildHerkunftFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildAufgabeFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
@@ -161,6 +168,30 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildLieferungLieferung({
+            nodes,
+            data,
+            store,
+          }),
+        )(),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Zaehlungen') {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildZaehlungZaehlung({
+            nodes,
+            data,
+            store,
+          }),
+        )(),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Aufgaben') {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildAufgabeAufgabe({
             nodes,
             data,
             store,

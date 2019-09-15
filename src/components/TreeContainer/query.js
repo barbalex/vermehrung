@@ -173,6 +173,9 @@ export default gql`
     aufgabe(where: $aufgabeFilter, order_by: { aufgabe: asc_nulls_first }) {
       ...AufgabeFields
     }
+    zaehlung(order_by: { datum: desc_nulls_first }) {
+      ...ZaehlungFields
+    }
     teilkultur(where: $teilkulturFilter, order_by: { name: asc_nulls_first }) {
       ...TeilkulturFields
     }

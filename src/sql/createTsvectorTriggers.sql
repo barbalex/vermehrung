@@ -333,7 +333,6 @@ $$ language plpgsql;
 create trigger tsvupdate_lieferung before insert or update
   on lieferung for each row execute procedure lieferung_trigger();
 
-DROP TRIGGER IF EXISTS event_trigger ON event cascade;
 DROP FUNCTION IF EXISTS event_trigger() cascade;
 create function event_trigger() returns trigger as $$
   declare

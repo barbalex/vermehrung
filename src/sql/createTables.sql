@@ -259,7 +259,7 @@ create table aufgabe (
   teilkultur_id integer default null references teilkultur (id) on delete set null on update cascade,
   person_id integer default null references person (id) on delete set null on update cascade,
   aufgabe text default null,
-  erledigt boolean default true,
+  erledigt boolean default false,
   frist date default null,
   changed date default now(),
   changed_by varchar(20) default null,

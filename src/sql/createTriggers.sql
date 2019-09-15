@@ -1,6 +1,6 @@
 
-DROP TRIGGER IF EXISTS zaehlung_has_teilzaehlung ON teilzaehlung;
-DROP FUNCTION IF EXISTS zaehlung_has_teilzaehlung();
+DROP TRIGGER IF EXISTS zaehlung_has_teilzaehlung ON teilzaehlung cascade;
+DROP FUNCTION IF EXISTS zaehlung_has_teilzaehlung() cascade;
 CREATE FUNCTION zaehlung_has_teilzaehlung() RETURNS trigger AS $zaehlung_has_teilzaehlung$
 BEGIN
   INSERT INTO
@@ -22,8 +22,8 @@ on teilzaehlung.zaehlung_id = zaehlung.id
 where teilzaehlung.zaehlung_id is null;
 
 
-DROP TRIGGER IF EXISTS kultur_has_zaehlung_felder ON kultur;
-DROP FUNCTION IF EXISTS kultur_has_zaehlung_felder();
+DROP TRIGGER IF EXISTS kultur_has_zaehlung_felder ON kultur cascade;
+DROP FUNCTION IF EXISTS kultur_has_zaehlung_felder() cascade;
 CREATE FUNCTION kultur_has_zaehlung_felder() RETURNS trigger AS $kultur_has_zaehlung_felder$
 BEGIN
   INSERT INTO

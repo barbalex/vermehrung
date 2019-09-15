@@ -134,18 +134,11 @@ const Aufgabe = ({ filter: showFilter }) => {
     row = get(data, 'aufgabe', [{}])[0]
   }
 
-  // only show kulturen of same art
-  const artId = get(row, 'kultur.art_id')
-  const kulturFilter = artId
-    ? { art_id: { _eq: artId } }
-    : { id: { _is_null: true } }
   const {
     data: kulturData,
     error: kulturError,
     loading: kulturLoading,
-  } = useQuery(kulturQuery, {
-    variables: { filter: kulturFilter },
-  })
+  } = useQuery(kulturQuery)
   const {
     data: personData,
     error: personError,
