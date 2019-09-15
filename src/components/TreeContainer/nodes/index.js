@@ -13,8 +13,8 @@ import buildArtSammlungLieferungAusLieferung from './art/sammlung/auslieferung'
 
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
-import buildArtKulturEventFolder from './art/kultur/event/folder'
-import buildArtKulturEventEvent from './art/kultur/event'
+import buildArtEventFolder from './art/kultur/event/folder'
+import buildArtEventEvent from './art/kultur/event'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildArtKulturZaehlungZaehlung from './art/kultur/zaehlung'
 import buildArtKulturAusLieferungFolder from './art/kultur/auslieferung/folder'
@@ -26,8 +26,8 @@ import buildGartenFolder from './garten/folder'
 import buildGartenGarten from './garten'
 import buildGartenKulturFolder from './garten/kultur/folder'
 import buildGartenKultur from './garten/kultur'
-import buildGartenKulturEventFolder from './garten/kultur/event/folder'
-import buildGartenKulturEventEvent from './garten/kultur/event'
+import buildGartenEventFolder from './garten/kultur/event/folder'
+import buildGartenEventEvent from './garten/kultur/event'
 import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
 import buildGartenKulturZaehlungZaehlung from './garten/kultur/zaehlung'
 import buildGartenKulturAusLieferungFolder from './garten/kultur/auslieferung/folder'
@@ -53,8 +53,8 @@ import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
 import buildPersonGartenKulturKultur from './person/garten/kultur'
 import buildPersonGartenKulturZaehlungFolder from './person/garten/kultur/zaehlung/folder'
 import buildPersonGartenKulturZaehlungZaehlung from './person/garten/kultur/zaehlung'
-import buildPersonGartenKulturEventFolder from './person/garten/kultur/event/folder'
-import buildPersonGartenKulturEventEvent from './person/garten/kultur/event'
+import buildPersonGartenEventFolder from './person/garten/kultur/event/folder'
+import buildPersonGartenEventEvent from './person/garten/kultur/event'
 import buildPersonGartenKulturAuslieferungFolder from './person/garten/kultur/auslieferung/folder'
 import buildPersonGartenKulturAuslieferungLieferung from './person/garten/kultur/auslieferung'
 import buildPersonGartenKulturAnlieferungFolder from './person/garten/kultur/anlieferung/folder'
@@ -75,8 +75,8 @@ import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultu
 import buildSammlungAusLieferungKulturKultur from './sammlung/auslieferung/kultur'
 import buildSammlungAusLieferungKulturZaehlungFolder from './sammlung/auslieferung/kultur/zaehlung/folder'
 import buildSammlungAusLieferungKulturZaehlungZaehlung from './sammlung/auslieferung/kultur/zaehlung'
-import buildSammlungAusLieferungKulturEventFolder from './sammlung/auslieferung/kultur/event/folder'
-import buildSammlungAusLieferungKulturEventEvent from './sammlung/auslieferung/kultur/event'
+import buildSammlungAusLieferungEventFolder from './sammlung/auslieferung/kultur/event/folder'
+import buildSammlungAusLieferungEventEvent from './sammlung/auslieferung/kultur/event'
 import buildSammlungAusLieferungKulturAusLieferungFolder from './sammlung/auslieferung/kultur/auslieferung/folder'
 import buildSammlungAusLieferungKulturAusLieferungLieferung from './sammlung/auslieferung/kultur/auslieferung'
 import buildSammlungAusLieferungKulturAnLieferungFolder from './sammlung/auslieferung/kultur/anlieferung/folder'
@@ -84,8 +84,8 @@ import buildSammlungAusLieferungKulturAnLieferungLieferung from './sammlung/ausl
 
 import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
-import buildKulturEventFolder from './kultur/event/folder'
-import buildKulturEventEvent from './kultur/event'
+import buildEventFolder from './kultur/event/folder'
+import buildEventEvent from './kultur/event'
 import buildKulturZaehlungFolder from './kultur/zaehlung/folder'
 import buildKulturZaehlungZaehlung from './kultur/zaehlung'
 import buildKulturAusLieferungFolder from './kultur/auslieferung/folder'
@@ -325,7 +325,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildKulturEventFolder({
+          buildEventFolder({
             nodes,
             url,
             data,
@@ -531,7 +531,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildKulturEventEvent({
+          buildEventEvent({
             nodes,
             data,
             store,
@@ -572,7 +572,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildArtKulturEventFolder({
+          buildArtEventFolder({
             nodes,
             url,
             data,
@@ -627,7 +627,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildGartenKulturEventFolder({
+          buildGartenEventFolder({
             nodes,
             url,
             data,
@@ -769,7 +769,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildArtKulturEventEvent({
+          buildArtEventEvent({
             nodes,
             data,
             store,
@@ -842,7 +842,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildGartenKulturEventEvent({
+          buildGartenEventEvent({
             nodes,
             data,
             store,
@@ -923,7 +923,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildPersonGartenKulturEventFolder({
+          buildPersonGartenEventFolder({
             nodes,
             data,
             store,
@@ -966,7 +966,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturEventFolder({
+          buildSammlungAusLieferungEventFolder({
             nodes,
             data,
             store,
@@ -1024,7 +1024,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildPersonGartenKulturEventEvent({
+          buildPersonGartenEventEvent({
             nodes,
             data,
             store,
@@ -1101,7 +1101,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturEventEvent({
+          buildSammlungAusLieferungEventEvent({
             nodes,
             data,
             store,

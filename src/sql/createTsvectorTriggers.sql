@@ -333,16 +333,16 @@ $$ language plpgsql;
 create trigger tsvupdate_lieferung before insert or update
   on lieferung for each row execute procedure lieferung_trigger();
 
-DROP TRIGGER IF EXISTS kultur_event_trigger ON kultur_event cascade;
-DROP FUNCTION IF EXISTS kultur_event_trigger() cascade;
-create function kultur_event_trigger() returns trigger as $$
+DROP TRIGGER IF EXISTS event_trigger ON event cascade;
+DROP FUNCTION IF EXISTS event_trigger() cascade;
+create function event_trigger() returns trigger as $$
   declare
     artname text;
     gartenname text;
     personname text;
   begin
     select ae_art.name, garten.name, person.name into artname, gartenname, personname
-    from kultur_event
+    from event
       inner join kultur 
         inner join art 
           inner join ae_art on art.ae_id = ae_art.id
@@ -350,7 +350,7 @@ create function kultur_event_trigger() returns trigger as $$
         left join garten
           inner join person on garten.person_id = person.id
         on kultur.garten_id = garten.id
-      on kultur_event.kultur_id = kultur.id
+      on event.kultur_id = kultur.id
     where kultur.id = new.kultur_id;
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
@@ -365,8 +365,8 @@ create function kultur_event_trigger() returns trigger as $$
   end
 $$ language plpgsql;
 
-create trigger tsvupdate_kultur_event before insert or update
-  on kultur_event for each row execute procedure kultur_event_trigger();
+create trigger tsvupdate_event before insert or update
+  on event for each row execute procedure event_trigger();
 
 DROP TRIGGER IF EXISTS aufgabe_trigger ON aufgabe cascade;
 DROP FUNCTION IF EXISTS aufgabe_trigger() cascade;

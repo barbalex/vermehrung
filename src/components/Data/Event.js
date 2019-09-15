@@ -14,7 +14,7 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
-import { kulturEvent as kulturEventFragment } from '../../utils/fragments'
+import { event as eventFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
 
@@ -33,24 +33,24 @@ const FieldsContainer = styled.div`
 const query = gql`
   query EventQuery(
     $id: bigint!
-    $filter: kultur_event_bool_exp!
+    $filter: event_bool_exp!
     $isFiltered: Boolean!
   ) {
-    kultur_event(where: { id: { _eq: $id } }) {
-      ...KulturEventFields
+    event(where: { id: { _eq: $id } }) {
+      ...EventFields
       kultur {
         id
         art_id
       }
     }
-    rowsUnfiltered: kultur_event @include(if: $isFiltered) {
+    rowsUnfiltered: event @include(if: $isFiltered) {
       id
     }
-    rowsFiltered: kultur_event(where: $filter) @include(if: $isFiltered) {
+    rowsFiltered: event(where: $filter) @include(if: $isFiltered) {
       id
     }
   }
-  ${kulturEventFragment}
+  ${eventFragment}
 `
 // garten.person.name
 const kulturQuery = gql`
@@ -82,7 +82,7 @@ const kulturQuery = gql`
       }
     }
   }
-  ${kulturEventFragment}
+  ${eventFragment}
 `
 
 const Event = ({ filter: showFilter }) => {
@@ -109,7 +109,7 @@ const Event = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.event
   } else {
-    row = get(data, 'kultur_event', [{}])[0]
+    row = get(data, 'event', [{}])[0]
   }
 
   // only show kulturen of same art
@@ -125,7 +125,9 @@ const Event = ({ filter: showFilter }) => {
     variables: { filter: kulturFilter },
   })
 
-  useEffect(() => {setErrors({})}, [row.id])
+  useEffect(() => {
+    setErrors({})
+  }, [row.id])
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
@@ -170,19 +172,19 @@ const Event = ({ filter: showFilter }) => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_kultur_event($id: bigint!) {
-                update_kultur_event(
+              mutation update_event($id: bigint!) {
+                update_event(
                   where: { id: { _eq: $id } }
                   _set: { 
                     ${field}: ${valueToSet} }
                 ) {
                   affected_rows
                   returning {
-                    ...KulturEventFields
+                    ...EventFields
                   }
                 }
               }
-              ${kulturEventFragment}
+              ${eventFragment}
             `,
             variables: {
               id: row.id,

@@ -8,7 +8,7 @@ import {
   lieferung,
   person,
   sammlung,
-  kulturEvent,
+  event,
   zaehlung,
 } from '../../utils/fragments'
 
@@ -17,7 +17,7 @@ export default gql`
     $artFilter: art_bool_exp!
     $gartenFilter: garten_bool_exp!
     $kulturFilter: kultur_bool_exp!
-    $kulturEventFilter: kultur_event_bool_exp!
+    $eventFilter: event_bool_exp!
     $herkunftFilter: herkunft_bool_exp!
     $personFilter: person_bool_exp!
     $sammlungFilter: sammlung_bool_exp!
@@ -66,12 +66,12 @@ export default gql`
             ...PersonFields
           }
         }
-        kultur_events(
-          where: $kulturEventFilter
+        events(
+          where: $eventFilter
           #order_by: [{ datum: desc_nulls_first }, { event: asc }] errors???
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isGartenKultur) {
-          ...KulturEventFields
+          ...EventFields
         }
         zaehlungs(
           where: $zaehlungFilter
@@ -97,11 +97,9 @@ export default gql`
             ...PersonFields
           }
         }
-        kultur_events(
-          where: $kulturEventFilter
-          order_by: { datum: desc_nulls_first }
-        ) @include(if: $isArtKultur) {
-          ...KulturEventFields
+        events(where: $eventFilter, order_by: { datum: desc_nulls_first })
+          @include(if: $isArtKultur) {
+          ...EventFields
         }
         zaehlungs(
           where: $zaehlungFilter
@@ -153,11 +151,8 @@ export default gql`
                 ...PersonFields
               }
             }
-            kultur_events(
-              where: $kulturEventFilter
-              order_by: { datum: desc_nulls_first }
-            ) {
-              ...KulturEventFields
+            events(where: $eventFilter, order_by: { datum: desc_nulls_first }) {
+              ...EventFields
             }
             zaehlungs(
               where: $zaehlungFilter
@@ -186,11 +181,9 @@ export default gql`
           ...PersonFields
         }
       }
-      kultur_events(
-        where: $kulturEventFilter
-        order_by: { datum: desc_nulls_first }
-      ) @include(if: $isKultur) {
-        ...KulturEventFields
+      events(where: $eventFilter, order_by: { datum: desc_nulls_first })
+        @include(if: $isKultur) {
+        ...EventFields
         kultur {
           ...KulturFields
         }
@@ -245,8 +238,8 @@ export default gql`
                 ...PersonFields
               }
             }
-            kultur_events {
-              ...KulturEventFields
+            events {
+              ...EventFields
             }
             zaehlungs(
               where: $zaehlungFilter
@@ -274,8 +267,8 @@ export default gql`
             ...PersonFields
           }
         }
-        kultur_events {
-          ...KulturEventFields
+        events {
+          ...EventFields
         }
         zaehlungs {
           ...ZaehlungFields
@@ -300,8 +293,8 @@ export default gql`
           art {
             ...ArtFields
           }
-          kultur_events @include(if: $isPersonGartenKultur) {
-            ...KulturEventFields
+          events @include(if: $isPersonGartenKultur) {
+            ...EventFields
           }
           zaehlungs @include(if: $isPersonGartenKultur) {
             ...ZaehlungFields
@@ -373,8 +366,8 @@ export default gql`
               ...PersonFields
             }
           }
-          kultur_events @include(if: $isSammlungLieferungKultur) {
-            ...KulturEventFields
+          events @include(if: $isSammlungLieferungKultur) {
+            ...EventFields
           }
           zaehlungs @include(if: $isSammlungLieferungKultur) {
             ...ZaehlungFields
@@ -432,6 +425,6 @@ export default gql`
   ${lieferung}
   ${person}
   ${sammlung}
-  ${kulturEvent}
+  ${event}
   ${zaehlung}
 `

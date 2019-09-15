@@ -101,8 +101,8 @@ export const kulturFile = gql`
     beschreibung
   }
 `
-export const kulturEvent = gql`
-  fragment KulturEventFields on kultur_event {
+export const event = gql`
+  fragment EventFields on event {
     id
     kultur_id
     datum

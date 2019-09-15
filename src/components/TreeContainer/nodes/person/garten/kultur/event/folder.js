@@ -11,7 +11,7 @@ export default ({ url, nodes, data, loading }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'kultur_events', [])
+  const events = get(kultur, 'events', [])
   const nr = loading && !events.length ? '...' : events.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

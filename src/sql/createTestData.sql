@@ -28,7 +28,7 @@ values
  (1,1,1),
  (2,2,2);
 
-insert into kultur_event (id,kultur_id,datum,event)
+insert into event (id,kultur_id,datum,event)
 values
  (1,1,'2018-10-01','umgepflanzt'),
  (2,2,'2017-08-03','Unkraut entfernt');

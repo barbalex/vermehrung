@@ -18,7 +18,7 @@ import {
   garten as gartenFragment,
   herkunft as herkunftFragment,
   kultur as kulturFragment,
-  kulturEvent as kulturEventFragment,
+  event as eventFragment,
   lieferung as lieferungFragment,
   person as personFragment,
   sammlung as sammlungFragment,
@@ -147,9 +147,8 @@ const filterSuggestionsQuery = gql`
         }
       }
     }
-    kulturEvent: kultur_event_search(args: { filter: $filter })
-      @include(if: $run) {
-      ...KulturEventFields
+    event: event_search(args: { filter: $filter }) @include(if: $run) {
+      ...EventFields
       kultur {
         ...KulturFields
       }
@@ -178,7 +177,7 @@ const filterSuggestionsQuery = gql`
   ${gartenFragment}
   ${herkunftFragment}
   ${kulturFragment}
-  ${kulturEventFragment}
+  ${eventFragment}
   ${lieferungFragment}
   ${personFragment}
   ${sammlungFragment}
@@ -240,7 +239,7 @@ export default () => {
     name: get(o, 'garten.person.name') || '(kein Name)',
     type: 'Kulturen',
   }))
-  const suggestionsKulturEvent = get(data, 'kulturEvent', []).map(o => ({
+  const suggestionsEvent = get(data, 'event', []).map(o => ({
     id: o.id,
     name: `${formatDatum(o.datum)}: ${get(o, 'event') || '(kein Event)'}`,
     type: 'Events',
@@ -274,7 +273,7 @@ export default () => {
     ...suggestionsGarten,
     ...suggestionsHerkunft,
     ...suggestionsKultur,
-    ...suggestionsKulturEvent,
+    ...suggestionsEvent,
     ...suggestionsLieferung,
     ...suggestionsPerson,
     ...suggestionsSammlung,
@@ -305,10 +304,10 @@ export default () => {
       suggestions: suggestionsKultur,
     })
   }
-  if (suggestionsKulturEvent.length) {
+  if (suggestionsEvent.length) {
     titledSuggestions.push({
-      title: `Events (${suggestionsKulturEvent.length})`,
-      suggestions: suggestionsKulturEvent,
+      title: `Events (${suggestionsEvent.length})`,
+      suggestions: suggestionsEvent,
     })
   }
   if (suggestionsLieferung.length) {

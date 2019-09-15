@@ -222,8 +222,8 @@ create index on kultur_file using btree (kultur_id);
 create index on kultur_file using btree (file_id);
 create index on kultur_file using btree (file_mime_type);
 
-drop table if exists kultur_event cascade;
-create table kultur_event (
+drop table if exists event cascade;
+create table event (
   id bigserial primary key,
   kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
@@ -232,10 +232,10 @@ create table kultur_event (
   changed_by varchar(20) default null,
   tsv tsvector
 );
-create index on kultur_event using btree (id);
-create index on kultur_event using btree (kultur_id);
-create index on kultur_event using btree (datum);
-create index on kultur_event using gin (tsv);
+create index on event using btree (id);
+create index on event using btree (kultur_id);
+create index on event using btree (datum);
+create index on event using gin (tsv);
 
 drop table if exists teilkultur cascade;
 create table teilkultur (

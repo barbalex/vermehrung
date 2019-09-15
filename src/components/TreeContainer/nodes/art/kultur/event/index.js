@@ -9,7 +9,7 @@ export default ({ nodes, data, url }) => {
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'kultur_events', [])
+  const events = get(kultur, 'events', [])
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)

@@ -44,7 +44,7 @@ const TreeContainer = ({ dimensions }) => {
       artFilter: queryFromTable({ store, table: 'art' }),
       gartenFilter: queryFromTable({ store, table: 'garten' }),
       kulturFilter: queryFromTable({ store, table: 'kultur' }),
-      kulturEventFilter: queryFromTable({ store, table: 'event' }),
+      eventFilter: queryFromTable({ store, table: 'event' }),
       herkunftFilter: queryFromTable({ store, table: 'herkunft' }),
       personFilter: queryFromTable({ store, table: 'person' }),
       sammlungFilter: queryFromTable({ store, table: 'sammlung' }),
