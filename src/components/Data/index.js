@@ -3,6 +3,8 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
 import Art from './Art'
+import Aufgabe from './Aufgabe'
+import Event from './Event'
 import Herkunft from './Herkunft'
 import Sammlung from './Sammlung'
 import Garten from './Garten'
@@ -10,7 +12,7 @@ import Kultur from './Kultur'
 import Lieferung from './Lieferung'
 import Person from './Person'
 import Zaehlung from './Zaehlung'
-import Event from './Event'
+import Teilkultur from './Teilkultur'
 
 const Data = () => {
   const { activeForm } = useContext(storeContext)
@@ -19,14 +21,17 @@ const Data = () => {
     case 'art': {
       return <Art />
     }
-    case 'herkunft': {
-      return <Herkunft />
+    case 'aufgabe': {
+      return <Aufgabe />
     }
-    case 'sammlung': {
-      return <Sammlung />
+    case 'event': {
+      return <Event />
     }
     case 'garten': {
       return <Garten />
+    }
+    case 'herkunft': {
+      return <Herkunft />
     }
     case 'kultur': {
       return <Kultur />
@@ -37,11 +42,14 @@ const Data = () => {
     case 'person': {
       return <Person />
     }
+    case 'sammlung': {
+      return <Sammlung />
+    }
+    case 'teilkultur': {
+      return <Teilkultur />
+    }
     case 'zaehlung': {
       return <Zaehlung />
-    }
-    case 'event': {
-      return <Event />
     }
     default:
       return null

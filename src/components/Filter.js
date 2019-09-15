@@ -5,13 +5,15 @@ import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 
 import Art from './Data/Art'
+import Aufgabe from './Data/Aufgabe'
+import Event from './Data/Event'
 import Garten from './Data/Garten'
 import Herkunft from './Data/Herkunft'
 import Kultur from './Data/Kultur'
 import Lieferung from './Data/Lieferung'
 import Person from './Data/Person'
 import Sammlung from './Data/Sammlung'
-import Event from './Data/Event'
+import Teilzaehlung from './Data/Teilzaehlung'
 import Zaehlung from './Data/Zaehlung'
 import storeContext from '../storeContext'
 
@@ -48,26 +50,30 @@ export default () => {
 
   const formObject = {
     art: <Art filter />,
+    aufgabe: <Aufgabe filter />,
+    event: <Event filter />,
     herkunft: <Herkunft filter />,
-    sammlung: <Sammlung filter />,
     garten: <Garten filter />,
     kultur: <Kultur filter />,
-    zaehlung: <Zaehlung filter />,
     lieferung: <Lieferung filter />,
-    event: <Event filter />,
     person: <Person filter />,
+    sammlung: <Sammlung filter />,
+    teilzaehlung: <Teilzaehlung filter />,
+    zaehlung: <Zaehlung filter />,
   }
   const form = formObject[activeTab]
   const titleObject = {
     art: 'Art Filter',
-    herkunft: 'Herkunft Filter',
-    sammlung: 'Sammlung Filter',
-    garten: 'Garten Filter',
-    kultur: 'Kultur Filter',
-    zaehlung: 'Zählung Filter',
-    lieferung: 'Lieferung Filter',
+    aufgabe: 'Aufgabe Filter',
     event: 'Event Filter',
+    garten: 'Garten Filter',
+    herkunft: 'Herkunft Filter',
+    kultur: 'Kultur Filter',
+    lieferung: 'Lieferung Filter',
     person: 'Person Filter',
+    sammlung: 'Sammlung Filter',
+    teilzaehlung: 'Teilzählung Filter',
+    zaehlung: 'Zählung Filter',
   }
 
   return (
@@ -90,10 +96,16 @@ export default () => {
             <StyledTab label="Kultur" value="kultur" data-id="kultur" />
             <StyledTab label="Zählung" value="zaehlung" data-id="zaehlung" />
             <StyledTab
+              label="Teilzählung"
+              value="teilzaehlung"
+              data-id="teilzaehlung"
+            />
+            <StyledTab
               label="Lieferung"
               value="lieferung"
               data-id="lieferung"
             />
+            <StyledTab label="Aufgabe" value="aufgabe" data-id="aufgabe" />
             <StyledTab label="Event" value="event" data-id="event" />
             <StyledTab label="Person" value="person" data-id="person" />
           </StyledTabs>
