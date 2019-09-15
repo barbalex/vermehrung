@@ -133,10 +133,10 @@ const Event = ({ filter: showFilter }) => {
     get(kulturData, 'kultur', []).map(el => {
       const personName = get(el, 'garten.person.name') || '(kein Name)'
       const personOrt = get(el, 'garten.person.ort') || null
+      const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
+      const gartenName = el.garten.name || personLabel
       const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
-      const label = `${personName}${
-        personOrt ? ` (${personOrt})` : ''
-      }: ${artName}`
+      const label = `${gartenName}: ${artName}`
 
       return {
         value: el.id,

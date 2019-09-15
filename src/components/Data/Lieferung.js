@@ -111,6 +111,7 @@ const kulturQuery = gql`
       herkunft_id
       garten {
         id
+        name
         person {
           id
           name
@@ -225,9 +226,10 @@ const Lieferung = ({ filter: showFilter }) => {
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
-      const name = get(el, 'garten.person.name') || '(kein Name)'
-      const ort = get(el, 'garten.person.ort') || null
-      const label = `${name}${ort ? ` (${ort})` : ''}`
+      const personName = get(el, 'garten.person.name') || '(kein Name)'
+      const personOrt = get(el, 'garten.person.ort') || null
+      const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
+      const label = el.garten.name || personLabel
 
       return {
         value: el.id,
