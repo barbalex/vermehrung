@@ -63,9 +63,8 @@ const query = gql`
 `
 // garten.person.name
 const kulturQuery = gql`
-  query kulturQuery($filter: kultur_bool_exp!) {
+  query kulturQuery {
     kultur(
-      where: $filter
       order_by: [
         { garten: { person: { name: asc_nulls_first } } }
         { garten: { person: { ort: asc_nulls_first } } }
@@ -149,9 +148,10 @@ const Aufgabe = ({ filter: showFilter }) => {
     setErrors({})
   }, [row.id])
 
+  const kulturs = get(kulturData, 'kultur', []) || []
   const kulturWerte = useMemo(
     () =>
-      get(kulturData, 'kultur', []).map(el => {
+      kulturs.map(el => {
         const personName = get(el, 'garten.person.name') || '(kein Name)'
         const personOrt = get(el, 'garten.person.ort') || null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
@@ -164,15 +164,16 @@ const Aufgabe = ({ filter: showFilter }) => {
           label,
         }
       }),
-    [kulturData],
+    [kulturs],
   )
   const teilkulturWerte = useMemo(() => {
-    const teilkulturs = get(kulturWerte, 'teilkulturs', []) || []
-    return teilkulturs.map(t => ({
+    const kultur = kulturs.find(k => k.id === row.kultur_id)
+    const tks = get(kultur, 'teilkulturs', []) || []
+    return tks.map(t => ({
       value: t.id,
       label: t.name || '(kein Name)',
     }))
-  }, [kulturWerte])
+  }, [kulturs, row.id])
 
   const personWerte = useMemo(
     () =>
