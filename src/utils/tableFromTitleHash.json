@@ -1,9 +1,11 @@
 {
   "Arten": "art",
+  "Aufgaben": "aufgabe",
   "Gaerten": "garten",
   "Kulturen": "kultur",
   "Events": "event",
   "Teilzaehlungen": "teilzaehlung",
+  "Teilkulturen": "teilkultur",
   "Zaehlungen": "zaehlung",
   "Aus-Lieferungen": "lieferung",
   "An-Lieferungen": "lieferung",

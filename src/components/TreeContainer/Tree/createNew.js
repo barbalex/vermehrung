@@ -7,6 +7,7 @@ import last from 'lodash/last'
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 import {
   art,
+  aufgabe,
   garten,
   herkunft,
   kultur,
@@ -15,11 +16,13 @@ import {
   person,
   sammlung,
   zaehlung,
+  teilkultur,
   teilzaehlung,
 } from '../../../utils/fragments'
 
 const fragments = {
   art: art,
+  aufgabe: aufgabe,
   garten: garten,
   herkunft: herkunft,
   kultur: kultur,
@@ -28,10 +31,12 @@ const fragments = {
   person: person,
   sammlung: sammlung,
   zaehlung: zaehlung,
+  teilkultur: teilkultur,
   teilzaehlung: teilzaehlung,
 }
 const fragmentFieldsNames = {
   art: 'ArtFields',
+  aufgabe: 'AufgabeFields',
   garten: 'GartenFields',
   herkunft: 'HerkunftFields',
   kultur: 'KulturFields',
@@ -40,6 +45,7 @@ const fragmentFieldsNames = {
   person: 'PersonFields',
   sammlung: 'SammlungFields',
   zaehlung: 'ZaehlungFields',
+  teilkultur: 'TeilkulturFields',
   teilzaehlung: 'TeilzaehlungFields',
 }
 

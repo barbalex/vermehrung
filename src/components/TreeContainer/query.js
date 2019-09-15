@@ -1,29 +1,34 @@
 import gql from 'graphql-tag'
 
 import {
-  garten,
   art,
-  kultur,
+  aufgabe,
+  event,
+  garten,
   herkunft,
+  kultur,
   lieferung,
   person,
   sammlung,
-  event,
+  teilkultur,
   zaehlung,
 } from '../../utils/fragments'
 
 export default gql`
   query TreeQuery(
     $artFilter: art_bool_exp!
+    $aufgabeFilter: aufgabe_bool_exp!
     $gartenFilter: garten_bool_exp!
     $kulturFilter: kultur_bool_exp!
     $eventFilter: event_bool_exp!
     $herkunftFilter: herkunft_bool_exp!
     $personFilter: person_bool_exp!
     $sammlungFilter: sammlung_bool_exp!
+    $teilkulturFilter: teilkultur_bool_exp!
     $zaehlungFilter: zaehlung_bool_exp!
     $lieferungFilter: lieferung_bool_exp!
     $isArt: Boolean!
+    $isAufgabe: Boolean!
     $isArtKultur: Boolean!
     $isArtSammlung: Boolean!
     $isGarten: Boolean!
@@ -42,6 +47,7 @@ export default gql`
     $isKultur: Boolean!
     $isKulturAnLieferung: Boolean!
     $isKulturAusLieferung: Boolean!
+    $isTeilkultur: Boolean!
     $isWerteListe: Boolean!
   ) {
     garten(
@@ -163,6 +169,12 @@ export default gql`
           }
         }
       }
+    }
+    aufgabe(where: $aufgabeFilter, order_by: { aufgabe: asc_nulls_first }) {
+      ...AufgabeFields
+    }
+    teilkultur(where: $teilkulturFilter, order_by: { name: asc_nulls_first }) {
+      ...TeilkulturFields
     }
     kultur(
       where: $kulturFilter
@@ -418,13 +430,15 @@ export default gql`
       sort
     }
   }
-  ${garten}
   ${art}
+  ${aufgabe}
+  ${event}
+  ${garten}
   ${kultur}
   ${herkunft}
   ${lieferung}
   ${person}
   ${sammlung}
-  ${event}
+  ${teilkultur}
   ${zaehlung}
 `

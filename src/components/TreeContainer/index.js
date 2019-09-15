@@ -42,6 +42,7 @@ const TreeContainer = ({ dimensions }) => {
     //notifyOnNetworkStatusChange: true,
     variables: {
       artFilter: queryFromTable({ store, table: 'art' }),
+      aufgabeFilter: queryFromTable({ store, table: 'aufgabe' }),
       gartenFilter: queryFromTable({ store, table: 'garten' }),
       kulturFilter: queryFromTable({ store, table: 'kultur' }),
       eventFilter: queryFromTable({ store, table: 'event' }),
@@ -49,8 +50,10 @@ const TreeContainer = ({ dimensions }) => {
       personFilter: queryFromTable({ store, table: 'person' }),
       sammlungFilter: queryFromTable({ store, table: 'sammlung' }),
       lieferungFilter: queryFromTable({ store, table: 'lieferung' }),
+      teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
       zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
       isArt: openNodes.some(n => n[0] === 'Arten'),
+      isAufgabe: openNodes.some(n => n[0] === 'Aufgaben'),
       isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
       isArtSammlung: openNodes.some(
         n => n[0] === 'Arten' && n[2] === 'Sammlungen',
@@ -87,6 +90,7 @@ const TreeContainer = ({ dimensions }) => {
           n[2] === 'Aus-Lieferungen' &&
           n[4] === 'Kulturen',
       ),
+      isTeilkultur: openNodes.some(n => n[0] === 'Teilkulturen'),
       isKultur: openNodes.some(n => n[0] === 'Kulturen'),
       isKulturAnLieferung: openNodes.some(
         n => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
@@ -101,7 +105,6 @@ const TreeContainer = ({ dimensions }) => {
   useEffect(() => {
     setRefetch(refetch)
     // fetch on first load to show loading state
-    //console.log('TreeContainer, setting nodes')
     setNodes(buildNodes({ store, data, loading }))
   }, [])
 
@@ -113,7 +116,6 @@ const TreeContainer = ({ dimensions }) => {
      * if the following console.log is not here,
      * url in nodes is undefined!!!!????
      */
-    //console.log('TreeContainer, setting nodes')
     setNodes(buildNodes({ store, data, loading }))
   }
 

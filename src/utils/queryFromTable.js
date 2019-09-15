@@ -16,6 +16,5 @@ export default ({ store, table }) => {
     }
   })
 
-  //console.log('queryFromTable', { filter })
   return filter
 }

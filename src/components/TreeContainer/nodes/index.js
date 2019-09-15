@@ -45,6 +45,9 @@ import buildHerkunftSammlungausLieferungLieferung from './herkunft/sammlung/ausl
 import buildLieferungFolder from './lieferung/folder'
 import buildLieferungLieferung from './lieferung'
 
+import buildTeilkulturFolder from './teilkultur/folder'
+import buildTeilkulturTeilkultur from './teilkultur'
+
 import buildPersonFolder from './person/folder'
 import buildPersonPerson from './person'
 import buildPersonGartenFolder from './person/garten/folder'
@@ -102,6 +105,7 @@ export default ({ store, data, loading }) => {
     ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildHerkunftFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
@@ -157,6 +161,18 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildLieferungLieferung({
+            nodes,
+            data,
+            store,
+          }),
+        )(),
+      ]
+    }
+    if (url.length === 1 && url[0] === 'Teilkulturen') {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildTeilkulturTeilkultur({
             nodes,
             data,
             store,
