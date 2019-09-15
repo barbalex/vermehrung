@@ -94,12 +94,12 @@ export default () => {
             <StyledTab label="Sammlung" value="sammlung" data-id="sammlung" />
             <StyledTab label="Garten" value="garten" data-id="garten" />
             <StyledTab label="Kultur" value="kultur" data-id="kultur" />
-            <StyledTab label="Zählung" value="zaehlung" data-id="zaehlung" />
             <StyledTab
               label="Teilkultur"
               value="teilkultur"
               data-id="teilkultur"
             />
+            <StyledTab label="Zählung" value="zaehlung" data-id="zaehlung" />
             <StyledTab
               label="Lieferung"
               value="lieferung"
