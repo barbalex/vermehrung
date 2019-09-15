@@ -13,7 +13,7 @@ import Kultur from './Data/Kultur'
 import Lieferung from './Data/Lieferung'
 import Person from './Data/Person'
 import Sammlung from './Data/Sammlung'
-import Teilzaehlung from './Data/Teilzaehlung'
+import Teilkultur from './Data/Teilkultur'
 import Zaehlung from './Data/Zaehlung'
 import storeContext from '../storeContext'
 
@@ -58,7 +58,7 @@ export default () => {
     lieferung: <Lieferung filter />,
     person: <Person filter />,
     sammlung: <Sammlung filter />,
-    teilzaehlung: <Teilzaehlung filter />,
+    teilkultur: <Teilkultur filter />,
     zaehlung: <Zaehlung filter />,
   }
   const form = formObject[activeTab]
@@ -72,7 +72,7 @@ export default () => {
     lieferung: 'Lieferung Filter',
     person: 'Person Filter',
     sammlung: 'Sammlung Filter',
-    teilzaehlung: 'Teilzählung Filter',
+    teilkultur: 'Teilzählung Filter',
     zaehlung: 'Zählung Filter',
   }
 
@@ -96,9 +96,9 @@ export default () => {
             <StyledTab label="Kultur" value="kultur" data-id="kultur" />
             <StyledTab label="Zählung" value="zaehlung" data-id="zaehlung" />
             <StyledTab
-              label="Teilzählung"
-              value="teilzaehlung"
-              data-id="teilzaehlung"
+              label="Teilkultur"
+              value="teilkultur"
+              data-id="teilkultur"
             />
             <StyledTab
               label="Lieferung"

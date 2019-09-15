@@ -1,6 +1,7 @@
 import { types, getParent } from 'mobx-state-tree'
 
 import { type as art } from './art'
+import { type as aufgabe } from './aufgabe'
 import { type as event } from './event'
 import { type as garten } from './garten'
 import { type as herkunft } from './herkunft'
@@ -11,12 +12,14 @@ import { type as person } from './person'
 import { type as sammlung } from './sammlung'
 import { type as zaehlung } from './zaehlung'
 import { type as teilzaehlung } from './teilzaehlung'
+import { type as teilkultur } from './teilkultur'
 import emptyValues from './emptyValues'
 
 export default types
   .model({
     show: types.optional(types.boolean, false),
     art,
+    aufgabe,
     event,
     garten,
     herkunft,
@@ -27,6 +30,7 @@ export default types
     sammlung,
     zaehlung,
     teilzaehlung,
+    teilkultur,
   })
   .actions(self => ({
     setValue({ table, key, value }) {
