@@ -92,3 +92,12 @@ returns setof lieferung as
   $$
 language sql stable;
 -- alter function lieferung_search(filter text) owner to postgres;
+
+drop function if exists aufgabe_search(filter text);
+create or replace function aufgabe_search(filter text)
+returns setof aufgabe as
+  $$
+    select * from aufgabe where tsv @@ to_tsquery($1);
+  $$
+language sql stable;
+-- alter function aufgabe_search(filter text) owner to postgres;

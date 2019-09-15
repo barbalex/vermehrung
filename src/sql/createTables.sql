@@ -252,6 +252,28 @@ create index on teilkultur using btree (kultur_id);
 create index on teilkultur using btree (name);
 create index on teilkultur using gin (tsv);
 
+drop table if exists aufgabe cascade;
+create table aufgabe (
+  id bigserial primary key,
+  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  teilkultur_id integer default null references teilkultur (id) on delete set null on update cascade,
+  person_id integer default null references person (id) on delete set null on update cascade,
+  aufgabe text default null,
+  erledigt boolean default true,
+  frist date default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  tsv tsvector
+);
+create index on aufgabe using btree (id);
+create index on aufgabe using btree (kultur_id);
+create index on aufgabe using btree (teilkultur_id);
+create index on aufgabe using btree (person_id);
+create index on aufgabe using btree (aufgabe);
+create index on aufgabe using btree (erledigt);
+create index on aufgabe using btree (frist);
+create index on aufgabe using gin (tsv);
+
 drop table if exists zaehlung cascade;
 create table zaehlung (
   id bigserial primary key,

@@ -165,41 +165,6 @@ $$ language plpgsql;
 create trigger tsvupdate_kultur before insert or update
   on kultur for each row execute procedure kultur_trigger();
 
-DROP TRIGGER IF EXISTS kultur_event_trigger ON kultur_event cascade;
-DROP FUNCTION IF EXISTS kultur_event_trigger() cascade;
-create function kultur_event_trigger() returns trigger as $$
-  declare
-    artname text;
-    gartenname text;
-    personname text;
-  begin
-    select ae_art.name, garten.name, person.name into artname, gartenname, personname
-    from kultur_event
-      inner join kultur 
-        inner join art 
-          inner join ae_art on art.ae_id = ae_art.id
-        on kultur.art_id = art.id
-        left join garten
-          inner join person on garten.person_id = person.id
-        on kultur.garten_id = garten.id
-      on kultur_event.kultur_id = kultur.id
-    where kultur.id = new.kultur_id;
-    new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.event, '')), 'A');
-    return new;
-  end
-$$ language plpgsql;
-
-create trigger tsvupdate_kultur_event before insert or update
-  on kultur_event for each row execute procedure kultur_event_trigger();
-
 DROP TRIGGER IF EXISTS tsvupdate_teilkultur ON teilkultur;
 DROP FUNCTION IF EXISTS teilkultur_trigger();
 create function teilkultur_trigger() returns trigger as $$
@@ -367,3 +332,75 @@ $$ language plpgsql;
 
 create trigger tsvupdate_lieferung before insert or update
   on lieferung for each row execute procedure lieferung_trigger();
+
+DROP TRIGGER IF EXISTS kultur_event_trigger ON kultur_event cascade;
+DROP FUNCTION IF EXISTS kultur_event_trigger() cascade;
+create function kultur_event_trigger() returns trigger as $$
+  declare
+    artname text;
+    gartenname text;
+    personname text;
+  begin
+    select ae_art.name, garten.name, person.name into artname, gartenname, personname
+    from kultur_event
+      inner join kultur 
+        inner join art 
+          inner join ae_art on art.ae_id = ae_art.id
+        on kultur.art_id = art.id
+        left join garten
+          inner join person on garten.person_id = person.id
+        on kultur.garten_id = garten.id
+      on kultur_event.kultur_id = kultur.id
+    where kultur.id = new.kultur_id;
+    new.tsv :=
+      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.event, '')), 'A');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_kultur_event before insert or update
+  on kultur_event for each row execute procedure kultur_event_trigger();
+
+DROP TRIGGER IF EXISTS aufgabe_trigger ON aufgabe cascade;
+DROP FUNCTION IF EXISTS aufgabe_trigger() cascade;
+create function aufgabe_trigger() returns trigger as $$
+  declare
+    artname text;
+    gartenname text;
+    teilkulturname text;
+  begin
+    select ae_art.name, garten.name, teilkultur.name into artname, gartenname, teilkulturname
+    from aufgabe
+      inner join kultur 
+        inner join art 
+          inner join ae_art on art.ae_id = ae_art.id
+        on kultur.art_id = art.id
+        left join garten
+          inner join person on garten.person_id = person.id
+        on kultur.garten_id = garten.id
+      on aufgabe.kultur_id = kultur.id
+      inner join teilkultur
+      on aufgabe.teilkultur_id = teilkultur.id
+    where kultur.id = new.kultur_id;
+    new.tsv :=
+      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.person_id, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('german', coalesce(new.aufgabe, '')), 'A');
+    return new;
+  end
+$$ language plpgsql;
+
+create trigger tsvupdate_aufgabe before insert or update
+  on aufgabe for each row execute procedure aufgabe_trigger();
