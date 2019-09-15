@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'lieferungFolder',
       label: `Lieferungen (${nr})`,
       url: ['Lieferungen'],
-      sort: [8],
+      sort: [9],
       hasChildren: true,
     },
   ]

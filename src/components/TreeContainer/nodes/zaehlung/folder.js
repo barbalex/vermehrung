@@ -11,7 +11,7 @@ export default ({ data, loading }) => {
       id: 'zaehlungFolder',
       label: `Zählungen (${nr})`,
       url: ['Zaehlungen'],
-      sort: [7],
+      sort: [8],
       hasChildren: true,
     },
   ]
