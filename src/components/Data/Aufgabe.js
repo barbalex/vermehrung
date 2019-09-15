@@ -1,20 +1,29 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
+import RadioButton from '../shared/RadioButton'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
-import { aufgabe as aufgabeFragment } from '../../utils/fragments'
+import {
+  aufgabe as aufgabeFragment,
+  teilkultur as teilkulturFragment,
+} from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
 
@@ -80,9 +89,22 @@ const kulturQuery = gql`
           ort
         }
       }
+      teilkulturs(order_by: { name: asc_nulls_last }) {
+        ...TeilkulturFields
+      }
     }
   }
   ${aufgabeFragment}
+  ${teilkulturFragment}
+`
+const personQuery = gql`
+  query personQuery {
+    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
+      id
+      name
+      ort
+    }
+  }
 `
 
 const Aufgabe = ({ filter: showFilter }) => {
@@ -124,26 +146,49 @@ const Aufgabe = ({ filter: showFilter }) => {
   } = useQuery(kulturQuery, {
     variables: { filter: kulturFilter },
   })
+  const {
+    data: personData,
+    error: personError,
+    loading: personLoading,
+  } = useQuery(personQuery)
 
   useEffect(() => {
     setErrors({})
   }, [row.id])
 
-  const kulturWerte = memoizeOne(() =>
-    get(kulturData, 'kultur', []).map(el => {
-      const personName = get(el, 'garten.person.name') || '(kein Name)'
-      const personOrt = get(el, 'garten.person.ort') || null
-      const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-      const gartenName = el.garten.name || personLabel
-      const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
-      const label = `${gartenName}: ${artName}`
+  const kulturWerte = useMemo(
+    () =>
+      get(kulturData, 'kultur', []).map(el => {
+        const personName = get(el, 'garten.person.name') || '(kein Name)'
+        const personOrt = get(el, 'garten.person.ort') || null
+        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
+        const gartenName = el.garten.name || personLabel
+        const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
+        const label = `${gartenName}: ${artName}`
 
-      return {
+        return {
+          value: el.id,
+          label,
+        }
+      }),
+    [kulturData],
+  )
+  const teilkulturWerte = useMemo(() => {
+    const teilkulturs = get(kulturWerte, 'teilkulturs', []) || []
+    return teilkulturs.map(t => ({
+      value: t.id,
+      label: t.name || '(kein Name)',
+    }))
+  }, [kulturWerte])
+
+  const personWerte = useMemo(
+    () =>
+      get(personData, 'person', []).map(el => ({
         value: el.id,
-        label,
-      }
-    }),
-  )()
+        label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+      })),
+    [personData],
+  )
 
   const saveToDb = useCallback(
     async aufgabe => {
@@ -225,6 +270,14 @@ const Aufgabe = ({ filter: showFilter }) => {
       </Container>
     )
   }
+  if (personError) {
+    return (
+      <Container>
+        <FormTitle title="Aufgabe" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${personError.message}`}</FieldsContainer>
+      </Container>
+    )
+  }
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -259,22 +312,52 @@ const Aufgabe = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />
-          <DateFieldWithPicker
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
+          <Select
+            key={`${row.id}${row.teilkultur_id}teilkultur_id`}
+            name="teilkultur_id"
+            value={row.teilkultur_id}
+            field="teilkultur_id"
+            label="Teilkultur"
+            options={teilkulturWerte}
+            loading={kulturLoading}
             saveToDb={saveToDb}
-            error={errors.datum}
+            error={errors.teilkultur_id}
           />
           <TextField
-            key={`${row.id}event`}
-            name="event"
-            label="Event"
-            value={row.event}
+            key={`${row.id}aufgabe`}
+            name="aufgabe"
+            label="Aufgabe"
+            value={row.aufgabe}
             saveToDb={saveToDb}
-            error={errors.event}
+            error={errors.aufgabe}
             multiline
+          />
+          <Select
+            key={`${row.id}${row.person_id}person_id`}
+            name="person_id"
+            value={row.person_id}
+            field="person_id"
+            label="Wer"
+            options={personWerte}
+            loading={personLoading}
+            saveToDb={saveToDb}
+            error={errors.person_id}
+          />
+          <DateFieldWithPicker
+            key={`${row.id}frist`}
+            name="frist"
+            label="Frist"
+            value={row.frist}
+            saveToDb={saveToDb}
+            error={errors.frist}
+          />
+          <RadioButton
+            key={`${row.id}erledigt`}
+            label="erledigt"
+            name="erledigt"
+            value={row.erledigt}
+            saveToDb={saveToDb}
+            error={errors.erledigt}
           />
         </FieldsContainer>
       </Container>

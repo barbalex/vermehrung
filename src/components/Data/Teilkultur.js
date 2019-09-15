@@ -14,7 +14,7 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
-import { event as eventFragment } from '../../utils/fragments'
+import { teilkultur as teilkulturFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
 
@@ -31,26 +31,26 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query EventQuery(
+  query TeilkulturQuery(
     $id: bigint!
-    $filter: event_bool_exp!
+    $filter: teilkultur_bool_exp!
     $isFiltered: Boolean!
   ) {
-    event(where: { id: { _eq: $id } }) {
-      ...EventFields
+    teilkultur(where: { id: { _eq: $id } }) {
+      ...TeilkulturFields
       kultur {
         id
         art_id
       }
     }
-    rowsUnfiltered: event @include(if: $isFiltered) {
+    rowsUnfiltered: teilkultur @include(if: $isFiltered) {
       id
     }
-    rowsFiltered: event(where: $filter) @include(if: $isFiltered) {
+    rowsFiltered: teilkultur(where: $filter) @include(if: $isFiltered) {
       id
     }
   }
-  ${eventFragment}
+  ${teilkulturFragment}
 `
 // garten.person.name
 const kulturQuery = gql`
@@ -82,10 +82,10 @@ const kulturQuery = gql`
       }
     }
   }
-  ${eventFragment}
+  ${teilkulturFragment}
 `
 
-const Event = ({ filter: showFilter }) => {
+const Teilkultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
@@ -96,9 +96,9 @@ const Event = ({ filter: showFilter }) => {
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
-  const eventFilter = queryFromTable({ store, table: 'event' })
+  const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })
   const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered, filter: eventFilter },
+    variables: { id, isFiltered, filter: teilkulturFilter },
   })
 
   const [errors, setErrors] = useState({})
@@ -107,9 +107,9 @@ const Event = ({ filter: showFilter }) => {
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
   if (showFilter) {
-    row = filter.event
+    row = filter.teilkultur
   } else {
-    row = get(data, 'event', [{}])[0]
+    row = get(data, 'teilkultur', [{}])[0]
   }
 
   // only show kulturen of same art
@@ -146,12 +146,12 @@ const Event = ({ filter: showFilter }) => {
   )()
 
   const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      let value = event.target.value || null
-      if (event.target.value === false) value = false
-      if (event.target.value === 0) value = 0
-      const type = types.event[field]
+    async teilkultur => {
+      const field = teilkultur.target.name
+      let value = teilkultur.target.value || null
+      if (teilkultur.target.value === false) value = false
+      if (teilkultur.target.value === 0) value = 0
+      const type = types.teilkultur[field]
       if (showFilter) {
         let valueToSet = value
         if (value === '') {
@@ -159,7 +159,7 @@ const Event = ({ filter: showFilter }) => {
         } else if (['number'].includes(type)) {
           valueToSet = +value
         }
-        filter.setValue({ table: 'event', key: field, value: valueToSet })
+        filter.setValue({ table: 'teilkultur', key: field, value: valueToSet })
       } else {
         try {
           let valueToSet
@@ -172,19 +172,19 @@ const Event = ({ filter: showFilter }) => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_event($id: bigint!) {
-                update_event(
+              mutation update_teilkultur($id: bigint!) {
+                update_teilkultur(
                   where: { id: { _eq: $id } }
                   _set: { 
                     ${field}: ${valueToSet} }
                 ) {
                   affected_rows
                   returning {
-                    ...EventFields
+                    ...TeilkulturFields
                   }
                 }
               }
-              ${eventFragment}
+              ${teilkulturFragment}
             `,
             variables: {
               id: row.id,
@@ -203,7 +203,7 @@ const Event = ({ filter: showFilter }) => {
   if (loading) {
     return (
       <Container>
-        <FormTitle title="Event" />
+        <FormTitle title="Teilkultur" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
@@ -212,7 +212,7 @@ const Event = ({ filter: showFilter }) => {
   if (error) {
     return (
       <Container>
-        <FormTitle title="Event" />
+        <FormTitle title="Teilkultur" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
@@ -220,7 +220,7 @@ const Event = ({ filter: showFilter }) => {
   if (kulturError) {
     return (
       <Container>
-        <FormTitle title="Event" />
+        <FormTitle title="Teilkultur" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${kulturError.message}`}</FieldsContainer>
       </Container>
     )
@@ -233,15 +233,15 @@ const Event = ({ filter: showFilter }) => {
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Event"
-            table="event"
+            title="Teilkultur"
+            table="teilkultur"
             totalNr={totalNr}
             filteredNr={filteredNr}
           />
         ) : (
           <FormTitle
-            title="Event"
-            table="event"
+            title="Teilkultur"
+            table="teilkultur"
             rowsLength={totalNr}
             rowsFilteredLength={filteredNr}
             filter={showFilter}
@@ -259,21 +259,21 @@ const Event = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />
-          <DateFieldWithPicker
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
+          <TextField
+            key={`${row.id}name`}
+            name="name"
+            label="Name"
+            value={row.name}
             saveToDb={saveToDb}
-            error={errors.datum}
+            error={errors.name}
           />
           <TextField
-            key={`${row.id}event`}
-            name="event"
-            label="Event"
-            value={row.event}
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Name"
+            value={row.bemerkungen}
             saveToDb={saveToDb}
-            error={errors.event}
+            error={errors.bemerkungen}
             multiline
           />
         </FieldsContainer>
@@ -282,4 +282,4 @@ const Event = ({ filter: showFilter }) => {
   )
 }
 
-export default observer(Event)
+export default observer(Teilkultur)

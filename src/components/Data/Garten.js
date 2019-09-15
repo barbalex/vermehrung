@@ -1,11 +1,16 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../storeContext'
@@ -96,12 +101,14 @@ const Garten = ({ filter: showFilter }) => {
     setErrors({})
   }, [row.id])
 
-  const personWerte = memoizeOne(() =>
-    get(personData, 'person', []).map(el => ({
-      value: el.id,
-      label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-    })),
-  )()
+  const personWerte = useMemo(
+    () =>
+      get(personData, 'person', []).map(el => ({
+        value: el.id,
+        label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+      })),
+    [personData],
+  )
 
   const saveToDb = useCallback(
     async event => {
