@@ -1,41 +1,37 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
-import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const kulturId = url[1]
   const kulturen = get(data, 'kultur', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'events', [])
+  const teilkulturs = get(kultur, 'teilkulturs', [])
 
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
 
   return (
-    events
+    teilkulturs
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`kultur${kulturId}EventFolder`),
+        nodes.map(n => n.id).includes(`kultur${kulturId}TeilkulturFolder`),
       )
       .map(el => {
-        const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)'
-        const label = `${datum}: ${get(el, 'event') || '(nicht beschrieben)'}`
+        const label = el.name || '(kein Name)'
 
         return {
           nodeType: 'table',
-          menuTitle: 'Event',
-          table: 'event',
-          id: `kultur${kulturId}Event${el.id}`,
-          parentId: `kultur${kulturId}EventFolder`,
+          menuTitle: 'Teilkultur',
+          table: 'teilkultur',
+          id: `kultur${kulturId}Teilkultur${el.id}`,
+          parentId: `kultur${kulturId}TeilkulturFolder`,
           label,
-          url: ['Kulturen', kulturId, 'Events', el.id],
+          url: ['Kulturen', kulturId, 'Teilkulturen', el.id],
           hasChildren: false,
         }
       })
       .map((el, index) => {
-        el.sort = [5, kulturIndex, 4, index]
+        el.sort = [5, kulturIndex, 1, index]
         return el
       })
   )

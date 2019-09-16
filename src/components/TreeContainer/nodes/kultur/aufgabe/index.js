@@ -6,36 +6,37 @@ export default ({ nodes, data, url }) => {
   const kulturId = url[1]
   const kulturen = get(data, 'kultur', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'events', [])
+  const aufgaben = get(kultur, 'aufgaben', [])
 
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
 
   return (
-    events
+    aufgaben
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`kultur${kulturId}EventFolder`),
+        nodes.map(n => n.id).includes(`kultur${kulturId}AufgabeFolder`),
       )
       .map(el => {
-        const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)'
-        const label = `${datum}: ${get(el, 'event') || '(nicht beschrieben)'}`
+        const frist = el.frist
+          ? moment(el.frist, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : null
+        const aufgabe = get(el, 'aufgabe') || '(nicht beschrieben)'
+        const label = frist ? `${aufgabe} (${frist})` : aufgabe
 
         return {
           nodeType: 'table',
-          menuTitle: 'Event',
-          table: 'event',
-          id: `kultur${kulturId}Event${el.id}`,
-          parentId: `kultur${kulturId}EventFolder`,
+          menuTitle: 'Aufgabe',
+          table: 'aufgabe',
+          id: `kultur${kulturId}Aufgabe${el.id}`,
+          parentId: `kultur${kulturId}AufgabeFolder`,
           label,
-          url: ['Kulturen', kulturId, 'Events', el.id],
+          url: ['Kulturen', kulturId, 'Aufgaben', el.id],
           hasChildren: false,
         }
       })
       .map((el, index) => {
-        el.sort = [5, kulturIndex, 4, index]
+        el.sort = [5, kulturIndex, 3, index]
         return el
       })
   )

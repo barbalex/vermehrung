@@ -206,6 +206,24 @@ export default gql`
           ...KulturFields
         }
       }
+      aufgaben(
+        where: $aufgabeFilter
+        order_by: { frist: desc_nulls_first, aufgabe: asc_nulls_first }
+      ) @include(if: $isKultur) {
+        ...AufgabeFields
+        kultur {
+          ...KulturFields
+        }
+      }
+      teilkulturs(
+        where: $teilkulturFilter
+        order_by: { name: asc_nulls_first }
+      ) @include(if: $isKultur) {
+        ...TeilkulturFields
+        kultur {
+          ...KulturFields
+        }
+      }
       zaehlungs(where: $zaehlungFilter, order_by: { datum: desc_nulls_first })
         @include(if: $isKultur) {
         ...ZaehlungFields
