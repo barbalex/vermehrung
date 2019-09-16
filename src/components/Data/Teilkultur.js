@@ -72,6 +72,7 @@ const kulturQuery = gql`
       }
       garten {
         id
+        name
         person {
           id
           name
