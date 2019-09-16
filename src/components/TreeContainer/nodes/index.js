@@ -132,6 +132,7 @@ export default ({ store, data, loading }) => {
    * or some filter is active
    */
   openNodes.forEach(url => {
+    //console.log('nodes, url:', url.slice())
     if (!allParentNodesAreOpen(openNodes, url)) return
     if (url.length === 1 && url[0] === 'Arten') {
       artArtNodes = memoizeOne(() =>

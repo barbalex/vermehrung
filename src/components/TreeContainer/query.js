@@ -179,6 +179,9 @@ export default gql`
     teilkultur(where: $teilkulturFilter, order_by: { name: asc_nulls_first }) {
       ...TeilkulturFields
     }
+    event(order_by: { datum: desc_nulls_first, event: asc_nulls_first }) {
+      ...EventFields
+    }
     kultur(
       where: $kulturFilter
       order_by: [

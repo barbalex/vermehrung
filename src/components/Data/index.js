@@ -16,6 +16,7 @@ import Teilkultur from './Teilkultur'
 
 const Data = () => {
   const { activeForm } = useContext(storeContext)
+  //console.log('Daten, activeForm:', activeForm)
 
   switch (activeForm) {
     case 'art': {
