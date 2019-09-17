@@ -357,6 +357,14 @@ const Kultur = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.aktiv}
           />
+          <Checkbox2States
+            key={`${row.id}teilkulturen`}
+            label="Mit Teilkulturen arbeiten"
+            name="teilkulturen"
+            value={row.teilkulturen}
+            saveToDb={saveToDb}
+            error={errors.teilkulturen}
+          />
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"

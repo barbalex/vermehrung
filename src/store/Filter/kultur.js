@@ -22,6 +22,7 @@ export const type = types.model({
   erhaltungskultur: types.optional(types.boolean, false),
   von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
   aktiv: types.optional(types.boolean, true),
+  teilkulturen: types.optional(types.boolean, false),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -38,6 +39,7 @@ export const initial = {
   erhaltungskultur: false,
   von_anzahl_individuen: null,
   aktiv: true,
+  teilkulturen: false,
   bemerkungen: null,
 }
 
@@ -50,6 +52,7 @@ export const empty = {
   erhaltungskultur: false,
   von_anzahl_individuen: null,
   aktiv: true,
+  teilkulturen: false,
   bemerkungen: null,
 }
 
@@ -62,5 +65,6 @@ export const simpleTypes = {
   erhaltungskultur: 'boolean',
   von_anzahl_individuen: 'number',
   aktiv: 'boolean',
+  teilkulturen: 'boolean',
   bemerkungen: 'string',
 }

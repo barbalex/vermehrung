@@ -97,6 +97,7 @@ export const kultur = gql`
     erhaltungskultur
     von_anzahl_individuen
     aktiv
+    teilkulturen
     bemerkungen
   }
 `

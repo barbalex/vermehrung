@@ -196,6 +196,7 @@ create table kultur (
   von_anzahl_individuen integer default null,
   bemerkungen text default null,
   aktiv boolean default true,
+  teilkulturen boolean default false,
   changed date default now(),
   changed_by varchar(20) default null,
   tsv tsvector
@@ -208,6 +209,7 @@ create index on kultur using btree (zwischenlager);
 create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
+create index on kultur using btree (teilkulturen);
 create index on kultur using gin (tsv);
 
 drop table if exists kultur_file;
