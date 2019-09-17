@@ -145,7 +145,7 @@ const Teilzaehlung = ({
     tz_ort,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
-    tz_erscheinung,
+    tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
   } = kulturZaehlungFelder
 
@@ -215,15 +215,15 @@ const Teilzaehlung = ({
               />
             </Other>
           )}
-          {!!tz_erscheinung && (
+          {!!tz_auspflanzbereit_beschreibung && (
             <Other>
               <TextField
-                key={`${row.id}erscheinung`}
-                name="erscheinung"
-                label="Erscheinung, z.B. Verpackung"
-                value={row.erscheinung}
+                key={`${row.id}auspflanzbereit_beschreibung`}
+                name="auspflanzbereit_beschreibung"
+                label="Beschreibung auspflanzbereit"
+                value={row.auspflanzbereit_beschreibung}
                 saveToDb={saveToDb}
-                error={errors.erscheinung}
+                error={errors.auspflanzbereit_beschreibung}
                 type="text"
               />
             </Other>

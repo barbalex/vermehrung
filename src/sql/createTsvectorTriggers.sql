@@ -203,23 +203,25 @@ create function zaehlung_trigger() returns trigger as $$
   declare
     artname text;
     personname text;
-    orte text;
+    teilkulturname text;
     mengen_beschrieben text;
-    erscheinungen text;
+    auspflanzbereit_beschreibungen text;
   begin
     select
       ae_art.name,
       person.name,
-      string_agg(tz.ort, ' '),
+      string_agg(teilkultur.name, ' '),
       string_agg(tz.andere_menge, ' '),
-      string_agg(tz.erscheinung, ' ')
+      string_agg(tz.auspflanzbereit_beschreibung, ' ')
     into
       artname,
       personname,
-      orte,
+      teilkulturname,
       mengen_beschrieben,
-      erscheinungen
+      auspflanzbereit_beschreibungen
     from zaehlung
+      left join teilkultur
+      on kultur.id = teilkultur.kultur_id
       inner join kultur 
         inner join art 
           inner join ae_art on art.ae_id = ae_art.id
@@ -235,13 +237,13 @@ create function zaehlung_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(teilkulturname, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(orte, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(mengen_beschrieben, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(erscheinungen, '')), 'C') || ' ' ||
+      setweight(to_tsvector('german', coalesce(auspflanzbereit_beschreibungen, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end

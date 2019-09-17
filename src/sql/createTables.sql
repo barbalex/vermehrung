@@ -295,12 +295,12 @@ drop table if exists teilzaehlung cascade;
 create table teilzaehlung (
   id bigserial primary key,
   zaehlung_id integer default null references zaehlung (id) on delete cascade on update cascade,
-  ort text default null,
+  teilkultur_id integer default null references teilkultur (id) on delete set null on update cascade,
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   anzahl_mutterpflanzen integer default null,
   andere_menge text default null,
-  erscheinung text default null,
+  auspflanzbereit_beschreibung text default null,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -308,7 +308,7 @@ create table teilzaehlung (
 );
 create index on teilzaehlung using btree (id);
 create index on teilzaehlung using btree (zaehlung_id);
-create index on teilzaehlung using btree (ort);
+create index on teilzaehlung using btree (teilkultur_id);
 create index on teilzaehlung using btree (anzahl_pflanzen);
 create index on teilzaehlung using btree (anzahl_auspflanzbereit);
 create index on teilzaehlung using btree (anzahl_mutterpflanzen);
@@ -321,7 +321,7 @@ create table kultur_zaehlung_felder (
   tz_ort boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
   tz_andere_menge boolean default true,
-  tz_erscheinung boolean default true,
+  tz_auspflanzbereit_beschreibung boolean default true,
   tz_bemerkungen boolean default true
 );
 create index on kultur_zaehlung_felder using btree (kultur_id);

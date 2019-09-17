@@ -116,7 +116,7 @@ export const kultur_zaehlung_felder = gql`
     tz_ort
     tz_anzahl_mutterpflanzen
     tz_andere_menge
-    tz_erscheinung
+    tz_auspflanzbereit_beschreibung
     tz_bemerkungen
   }
 `
@@ -217,12 +217,12 @@ export const teilzaehlung = gql`
   fragment TeilzaehlungFields on teilzaehlung {
     id
     zaehlung_id
-    ort
+    teilkultur_id
     anzahl_pflanzen
     anzahl_auspflanzbereit
     anzahl_mutterpflanzen
     andere_menge
-    erscheinung
+    auspflanzbereit_beschreibung
     bemerkungen
   }
 `

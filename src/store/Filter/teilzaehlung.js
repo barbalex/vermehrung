@@ -24,7 +24,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  erscheinung: types.optional(
+  auspflanzbereit_beschreibung: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -42,7 +42,7 @@ export const initial = {
   anzahl_mutterpflanzen: null,
   anzahl_auspflanzbereit: null,
   andere_menge: null,
-  erscheinung: null,
+  auspflanzbereit_beschreibung: null,
   bemerkungen: null,
 }
 
@@ -54,7 +54,7 @@ export const empty = {
   anzahl_mutterpflanzen: null,
   anzahl_auspflanzbereit: null,
   andere_menge: null,
-  erscheinung: null,
+  auspflanzbereit_beschreibung: null,
   bemerkungen: null,
 }
 
@@ -66,6 +66,6 @@ export const simpleTypes = {
   anzahl_mutterpflanzen: 'number',
   anzahl_auspflanzbereit: 'number',
   andere_menge: 'string',
-  erscheinung: 'string',
+  auspflanzbereit_beschreibung: 'string',
   bemerkungen: 'string',
 }
