@@ -220,9 +220,9 @@ create function zaehlung_trigger() returns trigger as $$
       mengen_beschrieben,
       auspflanzbereit_beschreibungen
     from zaehlung
-      left join teilkultur
-      on kultur.id = teilkultur.kultur_id
       inner join kultur 
+        left join teilkultur
+        on kultur.id = teilkultur.kultur_id
         inner join art 
           inner join ae_art on art.ae_id = ae_art.id
         on kultur.art_id = art.id
