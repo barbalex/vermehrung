@@ -8,6 +8,7 @@ import { FaRegTrashAlt } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextField'
+import Select from '../../shared/Select'
 import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
 import types from '../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../storeContext'
@@ -62,6 +63,7 @@ const Teilzaehlung = ({
   teilzaehlung: row,
   kulturZaehlungFelder,
   teilkulturenWerte,
+  teilkulturenLoading,
   index,
   refetch,
 }) => {
@@ -154,6 +156,17 @@ const Teilzaehlung = ({
       <>
         {!!index && <TopLine />}
         <Container>
+          <Select
+            key={`${row.id}teilkultur_id`}
+            name="teilkultur_id"
+            value={row.teilkultur_id}
+            field="teilkultur_id"
+            label="Teilkultur"
+            options={teilkulturenWerte}
+            loading={teilkulturenLoading}
+            saveToDb={saveToDb}
+            error={errors.teilkultur_id}
+          />
           <Ort>
             <TextField
               key={`${row.id}ort`}

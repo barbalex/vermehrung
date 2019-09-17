@@ -81,12 +81,13 @@ const Teilzaehlungen = ({ row, kulturZaehlungFelder }) => {
   const { data, error, loading, refetch } = useQuery(query, {
     variables: { zaehlId: row.id },
   })
-  const { data: teilkulturenData, error: teilkulturenError } = useQuery(
-    teilkulturenQuery,
-    {
-      variables: { kulturId: row.kultur_id },
-    },
-  )
+  const {
+    data: teilkulturenData,
+    error: teilkulturenError,
+    loading: teilkulturenLoading,
+  } = useQuery(teilkulturenQuery, {
+    variables: { kulturId: row.kultur_id },
+  })
   const teilkulturenWerte = useMemo(() => {
     const data = get(teilkulturenData, 'teilkultur', []) || []
     return data.map(el => ({
@@ -154,6 +155,7 @@ const Teilzaehlungen = ({ row, kulturZaehlungFelder }) => {
             teilzaehlung={r}
             kulturZaehlungFelder={kulturZaehlungFelder}
             teilkulturenWerte={teilkulturenWerte}
+            teilkulturenLoading={teilkulturenLoading}
             index={index}
             refetch={refetch}
           />
