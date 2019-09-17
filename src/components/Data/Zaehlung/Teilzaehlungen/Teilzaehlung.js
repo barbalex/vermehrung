@@ -8,7 +8,7 @@ import { FaRegTrashAlt } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextField'
-import Select from '../../shared/Select'
+import Select from '../../../shared/Select'
 import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
 import types from '../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../storeContext'
@@ -18,27 +18,33 @@ const Container = styled.div`
   flex-wrap: wrap;
   width: 100%;
 `
-const Ort = styled.div`
-  flex-basis: 100px;
+const Teilkultur = styled.div`
+  flex-basis: 230px;
   flex-shrink: 1;
   flex-grow: 1;
   margin-right: 10px;
 `
 const Anzahl = styled.div`
-  flex-basis: 200px;
-  flex-shrink: 1;
+  flex-basis: 170px;
+  flex-shrink: 0;
   flex-grow: 1;
   margin-right: 10px;
 `
 const Other = styled.div`
   flex-basis: 250px;
   flex-shrink: 5;
-  flex-grow: 10;
+  flex-grow: 2;
+  margin-right: 10px;
+`
+const Auspflanzbereit = styled.div`
+  flex-basis: 350px;
+  flex-shrink: 2;
+  flex-grow: 30;
   margin-right: 10px;
 `
 const Last = styled.div`
   flex-basis: 350px;
-  flex-shrink: 5;
+  flex-shrink: 2;
   flex-grow: 30;
 `
 const TopLine = styled.div`
@@ -156,28 +162,19 @@ const Teilzaehlung = ({
       <>
         {!!index && <TopLine />}
         <Container>
-          <Select
-            key={`${row.id}teilkultur_id`}
-            name="teilkultur_id"
-            value={row.teilkultur_id}
-            field="teilkultur_id"
-            label="Teilkultur"
-            options={teilkulturenWerte}
-            loading={teilkulturenLoading}
-            saveToDb={saveToDb}
-            error={errors.teilkultur_id}
-          />
-          <Ort>
-            <TextField
-              key={`${row.id}ort`}
-              name="ort"
-              label="Ort"
-              value={row.ort}
+          <Teilkultur>
+            <Select
+              key={`${row.id}teilkultur_id`}
+              name="teilkultur_id"
+              value={row.teilkultur_id}
+              field="teilkultur_id"
+              label="Teilkultur"
+              options={teilkulturenWerte}
+              loading={teilkulturenLoading}
               saveToDb={saveToDb}
-              error={errors.ort}
-              type="text"
+              error={errors.teilkultur_id}
             />
-          </Ort>
+          </Teilkultur>
           <Anzahl>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
@@ -227,7 +224,7 @@ const Teilzaehlung = ({
             </Other>
           )}
           {!!tz_auspflanzbereit_beschreibung && (
-            <Other>
+            <Auspflanzbereit>
               <TextField
                 key={`${row.id}auspflanzbereit_beschreibung`}
                 name="auspflanzbereit_beschreibung"
@@ -237,7 +234,7 @@ const Teilzaehlung = ({
                 error={errors.auspflanzbereit_beschreibung}
                 type="text"
               />
-            </Other>
+            </Auspflanzbereit>
           )}
           {!!tz_bemerkungen && (
             <Last>

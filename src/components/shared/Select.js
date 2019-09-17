@@ -9,6 +9,7 @@ const Container = styled.div`
 `
 const Label = styled.div`
   font-size: 12px;
+  height: 12px !important;
   color: rgb(0, 0, 0, 0.54);
 `
 const Error = styled.div`
@@ -23,6 +24,8 @@ const StyledSelect = styled(Select)`
     border-left: none;
     border-right: none;
     border-radius: 0;
+    min-height: 36px !important;
+    height: 36px !important;
   }
   .react-select__control:hover {
     border-bottom-width: 2px;
