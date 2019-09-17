@@ -67,10 +67,10 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
 
   const {
     z_bemerkungen,
-    tz_ort,
+    tz_teilkultur_id,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
-    tz_erscheinung,
+    tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
   } = row
 
@@ -78,29 +78,18 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
     <ErrorBoundary>
       <StyledDialogContent>
         <FormControlLabel
-          value={z_bemerkungen === null ? 'false' : z_bemerkungen.toString()}
+          value={
+            tz_teilkultur_id === null ? 'false' : tz_teilkultur_id.toString()
+          }
           control={
             <Radio
               color="primary"
-              checked={!!z_bemerkungen}
+              checked={!!tz_teilkultur_id}
               onClick={saveToDb}
-              name="z_bemerkungen"
+              name="tz_teilkultur_id"
             />
           }
-          label="Bemerkungen zur Zählung"
-          labelPlacement="end"
-        />
-        <FormControlLabel
-          value={tz_ort === null ? 'false' : tz_ort.toString()}
-          control={
-            <Radio
-              color="primary"
-              checked={!!tz_ort}
-              onClick={saveToDb}
-              name="tz_ort"
-            />
-          }
-          label="Ort"
+          label="Teilkultur"
           labelPlacement="end"
         />
         <FormControlLabel
@@ -136,16 +125,33 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
           labelPlacement="end"
         />
         <FormControlLabel
-          value={tz_erscheinung === null ? 'false' : tz_erscheinung.toString()}
+          value={
+            tz_auspflanzbereit_beschreibung === null
+              ? 'false'
+              : tz_auspflanzbereit_beschreibung.toString()
+          }
           control={
             <Radio
               color="primary"
-              checked={!!tz_erscheinung}
+              checked={!!tz_auspflanzbereit_beschreibung}
               onClick={saveToDb}
-              name="tz_erscheinung"
+              name="tz_auspflanzbereit_beschreibung"
             />
           }
-          label="Erscheinung, z.B. Verpackung"
+          label="Beschreibung auspflanzbereit"
+          labelPlacement="end"
+        />
+        <FormControlLabel
+          value={z_bemerkungen === null ? 'false' : z_bemerkungen.toString()}
+          control={
+            <Radio
+              color="primary"
+              checked={!!z_bemerkungen}
+              onClick={saveToDb}
+              name="z_bemerkungen"
+            />
+          }
+          label="Bemerkungen zur Zählung"
           labelPlacement="end"
         />
         <FormControlLabel

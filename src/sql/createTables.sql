@@ -319,7 +319,7 @@ drop table if exists kultur_zaehlung_felder cascade;
 create table kultur_zaehlung_felder (
   kultur_id integer unique not null references kultur (id) on delete cascade on update cascade,
   z_bemerkungen boolean default true,
-  tz_ort boolean default true,
+  tz_teilkultur_id boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
   tz_andere_menge boolean default true,
   tz_auspflanzbereit_beschreibung boolean default true,

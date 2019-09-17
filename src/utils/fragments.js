@@ -113,7 +113,7 @@ export const kultur_zaehlung_felder = gql`
   fragment KulturZaehlungFelderFields on kultur_zaehlung_felder {
     kultur_id
     z_bemerkungen
-    tz_ort
+    tz_teilkultur_id
     tz_anzahl_mutterpflanzen
     tz_andere_menge
     tz_auspflanzbereit_beschreibung

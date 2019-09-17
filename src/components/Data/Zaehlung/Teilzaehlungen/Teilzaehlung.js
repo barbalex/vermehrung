@@ -151,6 +151,7 @@ const Teilzaehlung = ({
   if (!row) return null
 
   const {
+    tz_teilkultur_id,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
@@ -162,19 +163,21 @@ const Teilzaehlung = ({
       <>
         {!!index && <TopLine />}
         <Container>
-          <Teilkultur>
-            <Select
-              key={`${row.id}teilkultur_id`}
-              name="teilkultur_id"
-              value={row.teilkultur_id}
-              field="teilkultur_id"
-              label="Teilkultur"
-              options={teilkulturenWerte}
-              loading={teilkulturenLoading}
-              saveToDb={saveToDb}
-              error={errors.teilkultur_id}
-            />
-          </Teilkultur>
+          {!!tz_teilkultur_id && (
+            <Teilkultur>
+              <Select
+                key={`${row.id}teilkultur_id`}
+                name="teilkultur_id"
+                value={row.teilkultur_id}
+                field="teilkultur_id"
+                label="Teilkultur"
+                options={teilkulturenWerte}
+                loading={teilkulturenLoading}
+                saveToDb={saveToDb}
+                error={errors.teilkultur_id}
+              />
+            </Teilkultur>
+          )}
           <Anzahl>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
