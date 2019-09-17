@@ -13,7 +13,7 @@ import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import TextFieldNonUpdatable from '../shared/TextFieldNonUpdatable'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
-import RadioButton from '../shared/RadioButton'
+import Checkbox2States from '../shared/Checkbox2States'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
 import queryFromTable from '../../utils/queryFromTable'
@@ -583,7 +583,7 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.nach_kultur_id}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}nach_ausgepflanzt`}
             label="Ausgepflanzt"
             name="nach_ausgepflanzt"
@@ -605,7 +605,7 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.person_id}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}ausgefuehrt`}
             label="Ausgeführt"
             name="ausgefuehrt"

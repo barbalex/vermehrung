@@ -17,7 +17,7 @@ import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
-import RadioButton from '../shared/RadioButton'
+import Checkbox2States from '../shared/Checkbox2States'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
 import {
@@ -346,7 +346,7 @@ const Aufgabe = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.frist}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}erledigt`}
             label="erledigt"
             name="erledigt"

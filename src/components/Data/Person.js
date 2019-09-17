@@ -11,7 +11,7 @@ import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
-import RadioButton from '../shared/RadioButton'
+import Checkbox2States from '../shared/Checkbox2States'
 import { person as personFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
@@ -75,7 +75,9 @@ const Person = ({ filter: showFilter }) => {
     row = get(data, 'person', [{}])[0]
   }
 
-  useEffect(() => {setErrors({})}, [row.id])
+  useEffect(() => {
+    setErrors({})
+  }, [row.id])
 
   const saveToDb = useCallback(
     async event => {
@@ -272,7 +274,7 @@ const Person = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.email}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}kein_email`}
             label="Kein Email"
             name="kein_email"
@@ -280,7 +282,7 @@ const Person = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kein_email}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}kommerziell`}
             label="Kommerziell"
             name="kommerziell"
@@ -288,7 +290,7 @@ const Person = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kommerziell}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}info`}
             label="Info"
             name="info"
@@ -296,7 +298,7 @@ const Person = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.info}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}aktiv`}
             label="aktiv"
             name="aktiv"

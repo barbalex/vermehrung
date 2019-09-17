@@ -21,7 +21,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  erledigt: types.optional(types.maybeNull(types.boolean), false),
+  erledigt: types.optional(types.boolean, false),
   frist: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

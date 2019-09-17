@@ -17,7 +17,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  aktiv: types.optional(types.maybeNull(types.boolean), true),
+  aktiv: types.optional(types.boolean, true),
 })
 
 export const initial = {
@@ -33,7 +33,7 @@ export const empty = {
   name: null,
   person_id: null,
   bemerkungen: null,
-  aktiv: null,
+  aktiv: true,
 }
 
 export const simpleTypes = {

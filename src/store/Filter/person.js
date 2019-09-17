@@ -53,7 +53,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kein_email: types.optional(types.maybeNull(types.boolean), null),
+  kein_email: types.optional(types.boolean, false),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -62,9 +62,9 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kommerziell: types.optional(types.maybeNull(types.boolean), null),
-  info: types.optional(types.maybeNull(types.boolean), null),
-  aktiv: types.optional(types.maybeNull(types.boolean), true),
+  kommerziell: types.optional(types.boolean, false),
+  info: types.optional(types.boolean, false),
+  aktiv: types.optional(types.boolean, true),
 })
 
 export const initial = {
@@ -81,11 +81,11 @@ export const initial = {
   fax_privat: null,
   fax_geschaeft: null,
   email: null,
-  kein_email: null,
+  kein_email: false,
   bemerkungen: null,
   accountId: null,
-  kommerziell: null,
-  info: null,
+  kommerziell: false,
+  info: false,
   aktiv: true,
 }
 
@@ -103,11 +103,11 @@ export const empty = {
   fax_privat: null,
   fax_geschaeft: null,
   email: null,
-  kein_email: null,
+  kein_email: false,
   bemerkungen: null,
   accountId: null,
-  kommerziell: null,
-  info: null,
+  kommerziell: false,
+  info: false,
   aktiv: null,
 }
 

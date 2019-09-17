@@ -17,7 +17,7 @@ import ErrorBoundary from 'react-error-boundary'
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
-import RadioButton from '../shared/RadioButton'
+import Checkbox2States from '../shared/Checkbox2States'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
 import queryFromTable from '../../utils/queryFromTable'
@@ -324,7 +324,7 @@ const Kultur = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.garten_id}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}zwischenlager`}
             label="Zwischenlager"
             name="zwischenlager"
@@ -332,7 +332,7 @@ const Kultur = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.zwischenlager}
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}erhaltungskultur`}
             label="Erhaltungskultur"
             name="erhaltungskultur"
@@ -349,7 +349,7 @@ const Kultur = ({ filter: showFilter }) => {
             error={errors.von_anzahl_individuen}
             type="number"
           />
-          <RadioButton
+          <Checkbox2States
             key={`${row.id}aktiv`}
             label="aktiv"
             name="aktiv"

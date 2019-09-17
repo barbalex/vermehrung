@@ -27,29 +27,18 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-const RadioButton = ({ label, name, value, error, saveToDb }) => {
+const Checkbox2States = ({ label, name, value, error, saveToDb }) => {
   const onClickButton = useCallback(() => {
-    let newValue = null
-    if (value === true) newValue = false
-    if (value === false) newValue = null
-    if (value === null) newValue = true
     const fakeEvent = {
       target: {
-        value: newValue,
+        value: !value,
         name,
       },
     }
     saveToDb(fakeEvent)
   }, [value, name])
 
-  const indeterminate = value === null
   const checked = value === true
-  const title =
-    value === true
-      ? `Ja. Nach nächstem Klick 'Nein'`
-      : value === false
-      ? `Nein. Nach nächstem Klick 'Unbestimmt'`
-      : `Unbestimmt. Nach nächstem Klick 'Ja'`
 
   return (
     <Container>
@@ -64,8 +53,6 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
           onClick={onClickButton}
           color="primary"
           checked={checked}
-          indeterminate={indeterminate}
-          title={title}
         />
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
@@ -75,8 +62,4 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
   )
 }
 
-RadioButton.defaultProps = {
-  value: 'false',
-}
-
-export default observer(RadioButton)
+export default observer(Checkbox2States)
