@@ -62,7 +62,7 @@ const teilkulturenQuery = gql`
   }
   ${teilkulturFragment}
 `
-const mutation = gql`
+const insertTeilzaehlungMutation = gql`
   mutation insertDataset($zaehlId: Int!) {
     insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
       returning {
@@ -101,7 +101,7 @@ const Teilzaehlungen = ({ row, kulturZaehlungFelder }) => {
   const onClickNew = useCallback(async () => {
     try {
       await client.mutate({
-        mutation,
+        insertTeilzaehlungMutation,
         variables: {
           zaehlId: row.id,
         },
@@ -130,8 +130,6 @@ const Teilzaehlungen = ({ row, kulturZaehlungFelder }) => {
       <Container>{`Fehler beim Laden der Teilkulturen: ${teilkulturenError.message}`}</Container>
     )
   }
-
-  if (rows.length === 0) return null
 
   // TODO: enable adding new row
   return (
