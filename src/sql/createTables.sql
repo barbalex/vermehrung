@@ -325,7 +325,12 @@ create table kultur_zaehlung_felder (
   tz_anzahl_mutterpflanzen boolean default true,
   tz_andere_menge boolean default true,
   tz_auspflanzbereit_beschreibung boolean default true,
-  tz_bemerkungen boolean default true
+  tz_bemerkungen boolean default true,
+  tk_bemerkungen boolean default true,
+  ag_teilkultur_id boolean default true,
+  ag_erledigt boolean default true,
+  ag_person_id boolean default true,
+  ag_frist boolean default true
 );
 create index on kultur_zaehlung_felder using btree (kultur_id);
 
