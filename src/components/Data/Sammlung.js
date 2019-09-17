@@ -308,12 +308,21 @@ const Sammlung = ({ filter: showFilter }) => {
             type="number"
           />
           <TextField
-            key={`${row.id}menge_beschrieben`}
-            name="menge_beschrieben"
-            label="Menge textlich beschrieben"
-            value={row.menge_beschrieben}
+            key={`${row.id}gramm_samen`}
+            name="gramm_samen"
+            label="Gramm Samen"
+            value={row.gramm_samen}
             saveToDb={saveToDb}
-            error={errors.menge_beschrieben}
+            error={errors.gramm_samen}
+            type="number"
+          />
+          <TextField
+            key={`${row.id}andere_menge`}
+            name="andere_menge"
+            label={`Andere Menge (z.B. "3 Zwiebeln")`}
+            value={row.andere_menge}
+            saveToDb={saveToDb}
+            error={errors.andere_menge}
             type="text"
           />
           <TextField

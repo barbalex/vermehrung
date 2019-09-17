@@ -123,7 +123,8 @@ create table sammlung (
   datum date default null,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
-  menge_beschrieben text default null,
+  gramm_samen integer default null,
+  andere_menge text default null,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -135,6 +136,7 @@ create index on sammlung using btree (person_id);
 create index on sammlung using btree (herkunft_id);
 create index on sammlung using btree (datum);
 create index on sammlung using btree (anzahl_pflanzen);
+create index on sammlung using btree (gramm_samen);
 create index on sammlung using gin (tsv);
 
 drop table if exists sammlung_file;
@@ -297,7 +299,7 @@ create table teilzaehlung (
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   anzahl_mutterpflanzen integer default null,
-  menge_beschrieben text default null,
+  andere_menge text default null,
   erscheinung text default null,
   bemerkungen text default null,
   changed date default now(),
@@ -318,7 +320,7 @@ create table kultur_zaehlung_felder (
   z_bemerkungen boolean default true,
   tz_ort boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
-  tz_menge_beschrieben boolean default true,
+  tz_andere_menge boolean default true,
   tz_erscheinung boolean default true,
   tz_bemerkungen boolean default true
 );
@@ -340,7 +342,7 @@ create table lieferung (
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   gramm_samen integer default null,
-  menge_beschrieben text default null,
+  andere_menge text default null,
   ausgefuehrt boolean default false,
   bemerkungen text default null,
   changed date default now(),

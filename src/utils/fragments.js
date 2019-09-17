@@ -27,6 +27,14 @@ export const aufgabe = gql`
     frist
   }
 `
+export const event = gql`
+  fragment EventFields on event {
+    id
+    kultur_id
+    datum
+    event
+  }
+`
 export const garten = gql`
   fragment GartenFields on garten {
     id
@@ -101,12 +109,15 @@ export const kulturFile = gql`
     beschreibung
   }
 `
-export const event = gql`
-  fragment EventFields on event {
-    id
+export const kultur_zaehlung_felder = gql`
+  fragment KulturZaehlungFelderFields on kultur_zaehlung_felder {
     kultur_id
-    datum
-    event
+    z_bemerkungen
+    tz_ort
+    tz_anzahl_mutterpflanzen
+    tz_andere_menge
+    tz_erscheinung
+    tz_bemerkungen
   }
 `
 export const lieferung = gql`
@@ -125,7 +136,7 @@ export const lieferung = gql`
     anzahl_pflanzen
     anzahl_auspflanzbereit
     gramm_samen
-    menge_beschrieben
+    andere_menge
     ausgefuehrt
     bemerkungen
   }
@@ -181,6 +192,7 @@ export const sammlung = gql`
     datum
     von_anzahl_individuen
     anzahl_pflanzen
+    andere_menge
     bemerkungen
   }
 `
@@ -201,14 +213,6 @@ export const teilkultur = gql`
     bemerkungen
   }
 `
-export const zaehlung = gql`
-  fragment ZaehlungFields on zaehlung {
-    id
-    kultur_id
-    datum
-    bemerkungen
-  }
-`
 export const teilzaehlung = gql`
   fragment TeilzaehlungFields on teilzaehlung {
     id
@@ -217,19 +221,16 @@ export const teilzaehlung = gql`
     anzahl_pflanzen
     anzahl_auspflanzbereit
     anzahl_mutterpflanzen
-    menge_beschrieben
+    andere_menge
     erscheinung
     bemerkungen
   }
 `
-export const kultur_zaehlung_felder = gql`
-  fragment KulturZaehlungFelderFields on kultur_zaehlung_felder {
+export const zaehlung = gql`
+  fragment ZaehlungFields on zaehlung {
+    id
     kultur_id
-    z_bemerkungen
-    tz_ort
-    tz_anzahl_mutterpflanzen
-    tz_menge_beschrieben
-    tz_erscheinung
-    tz_bemerkungen
+    datum
+    bemerkungen
   }
 `

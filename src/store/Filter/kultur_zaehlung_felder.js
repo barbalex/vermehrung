@@ -14,7 +14,7 @@ export const type = types.model({
     null,
   ),
   tz_anzahl_mutterpflanzen: types.optional(types.maybeNull(types.number), null),
-  tz_menge_beschrieben: types.optional(
+  tz_andere_menge: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -33,7 +33,7 @@ export const initial = {
   z_bemerkungen: null,
   tz_ort: null,
   tz_anzahl_mutterpflanzen: null,
-  tz_menge_beschrieben: null,
+  tz_andere_menge: null,
   tz_erscheinung: null,
   tz_bemerkungen: null,
 }
@@ -43,7 +43,7 @@ export const empty = {
   z_bemerkungen: null,
   tz_ort: null,
   tz_anzahl_mutterpflanzen: null,
-  tz_menge_beschrieben: null,
+  tz_andere_menge: null,
   tz_erscheinung: null,
   tz_bemerkungen: null,
 }
@@ -53,7 +53,7 @@ export const simpleTypes = {
   z_bemerkungen: 'string',
   tz_ort: 'string',
   tz_anzahl_mutterpflanzen: 'number',
-  tz_menge_beschrieben: 'string',
+  tz_andere_menge: 'string',
   tz_erscheinung: 'string',
   tz_bemerkungen: 'string',
 }

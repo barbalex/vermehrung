@@ -70,7 +70,9 @@ const Teilzaehlung = ({
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => {setErrors({})}, [row.id])
+  useEffect(() => {
+    setErrors({})
+  }, [row.id])
 
   const saveToDb = useCallback(
     async event => {
@@ -142,7 +144,7 @@ const Teilzaehlung = ({
   const {
     tz_ort,
     tz_anzahl_mutterpflanzen,
-    tz_menge_beschrieben,
+    tz_andere_menge,
     tz_erscheinung,
     tz_bemerkungen,
   } = kulturZaehlungFelder
@@ -200,15 +202,15 @@ const Teilzaehlung = ({
               />
             </Anzahl>
           )}
-          {!!tz_menge_beschrieben && (
+          {!!tz_andere_menge && (
             <Other>
               <TextField
-                key={`${row.id}menge_beschrieben`}
-                name="menge_beschrieben"
-                label="Menge textlich beschrieben"
-                value={row.menge_beschrieben}
+                key={`${row.id}andere_menge`}
+                name="andere_menge"
+                label={`Andere Menge (z.B. "3 Zwiebeln")`}
+                value={row.andere_menge}
                 saveToDb={saveToDb}
-                error={errors.menge_beschrieben}
+                error={errors.andere_menge}
                 type="text"
               />
             </Other>

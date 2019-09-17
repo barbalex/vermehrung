@@ -69,7 +69,7 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
     z_bemerkungen,
     tz_ort,
     tz_anzahl_mutterpflanzen,
-    tz_menge_beschrieben,
+    tz_andere_menge,
     tz_erscheinung,
     tz_bemerkungen,
   } = row
@@ -122,19 +122,17 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
         />
         <FormControlLabel
           value={
-            tz_menge_beschrieben === null
-              ? 'false'
-              : tz_menge_beschrieben.toString()
+            tz_andere_menge === null ? 'false' : tz_andere_menge.toString()
           }
           control={
             <Radio
               color="primary"
-              checked={!!tz_menge_beschrieben}
+              checked={!!tz_andere_menge}
               onClick={saveToDb}
-              name="tz_menge_beschrieben"
+              name="tz_andere_menge"
             />
           }
-          label="Menge textlich beschrieben"
+          label={`Andere Menge (z.B. "3 Zwiebeln")`}
           labelPlacement="end"
         />
         <FormControlLabel
