@@ -61,6 +61,7 @@ const mutation = gql`
 const Teilzaehlung = ({
   teilzaehlung: row,
   kulturZaehlungFelder,
+  teilkulturenWerte,
   index,
   refetch,
 }) => {
@@ -142,7 +143,6 @@ const Teilzaehlung = ({
   if (!row) return null
 
   const {
-    tz_ort,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
@@ -154,19 +154,17 @@ const Teilzaehlung = ({
       <>
         {!!index && <TopLine />}
         <Container>
-          {!!tz_ort && (
-            <Ort>
-              <TextField
-                key={`${row.id}ort`}
-                name="ort"
-                label="Ort"
-                value={row.ort}
-                saveToDb={saveToDb}
-                error={errors.ort}
-                type="text"
-              />
-            </Ort>
-          )}
+          <Ort>
+            <TextField
+              key={`${row.id}ort`}
+              name="ort"
+              label="Ort"
+              value={row.ort}
+              saveToDb={saveToDb}
+              error={errors.ort}
+              type="text"
+            />
+          </Ort>
           <Anzahl>
             <TextField
               key={`${row.id}anzahl_pflanzen`}

@@ -312,6 +312,7 @@ create index on teilzaehlung using btree (teilkultur_id);
 create index on teilzaehlung using btree (anzahl_pflanzen);
 create index on teilzaehlung using btree (anzahl_auspflanzbereit);
 create index on teilzaehlung using btree (anzahl_mutterpflanzen);
+create index on teilzaehlung using btree (andere_menge);
 create index on teilzaehlung using gin (tsv);
 
 drop table if exists kultur_zaehlung_felder cascade;

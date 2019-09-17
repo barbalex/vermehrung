@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
@@ -9,7 +9,10 @@ import { FaPlus } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
-import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
+import {
+  teilzaehlung as teilzaehlungFragment,
+  teilkultur as teilkulturFragment,
+} from '../../../../utils/fragments'
 import Teilzaehlung from './Teilzaehlung'
 
 const Container = styled.div`
@@ -37,12 +40,27 @@ const query = gql`
   query TeilzaehlungenQuery($zaehlId: Int) {
     teilzaehlung(
       where: { zaehlung_id: { _eq: $zaehlId } }
-      order_by: { ort: asc_nulls_first }
+      order_by: { teilkultur: { name: asc_nulls_first } }
     ) {
       ...TeilzaehlungFields
+      teilkultur {
+        ...TeilkulturFields
+      }
     }
   }
   ${teilzaehlungFragment}
+  ${teilkulturFragment}
+`
+const teilkulturenQuery = gql`
+  query TeilkulturenQuery($kulturId: Int) {
+    teilkultur(
+      where: { kultur_id: { _eq: $kulturId } }
+      order_by: { name: asc_nulls_first }
+    ) {
+      ...TeilkulturFields
+    }
+  }
+  ${teilkulturFragment}
 `
 const mutation = gql`
   mutation insertDataset($zaehlId: Int!) {
@@ -55,14 +73,27 @@ const mutation = gql`
   ${teilzaehlungFragment}
 `
 
-const Teilzaehlungen = ({ zaehlId, kulturZaehlungFelder }) => {
+const Teilzaehlungen = ({ row, kulturZaehlungFelder }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
   const { data, error, loading, refetch } = useQuery(query, {
-    variables: { zaehlId },
+    variables: { zaehlId: row.id },
   })
+  const { data: teilkulturenData, error: teilkulturenError } = useQuery(
+    teilkulturenQuery,
+    {
+      variables: { kulturId: row.kultur_id },
+    },
+  )
+  const teilkulturenWerte = useMemo(() => {
+    const data = get(teilkulturenData, 'teilkultur', []) || []
+    return data.map(el => ({
+      value: el.id,
+      label: el.name,
+    }))
+  }, [teilkulturenData])
 
   const rows = get(data, 'teilzaehlung', [])
 
@@ -71,7 +102,7 @@ const Teilzaehlungen = ({ zaehlId, kulturZaehlungFelder }) => {
       await client.mutate({
         mutation,
         variables: {
-          zaehlId,
+          zaehlId: row.id,
         },
       })
     } catch (error) {
@@ -88,10 +119,14 @@ const Teilzaehlungen = ({ zaehlId, kulturZaehlungFelder }) => {
   if (loading) {
     return <Container>Lade...</Container>
   }
-
   if (error) {
     return (
       <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
+    )
+  }
+  if (teilkulturenError) {
+    return (
+      <Container>{`Fehler beim Laden der Teilkulturen: ${teilkulturenError.message}`}</Container>
     )
   }
 
@@ -118,6 +153,7 @@ const Teilzaehlungen = ({ zaehlId, kulturZaehlungFelder }) => {
             key={r.id}
             teilzaehlung={r}
             kulturZaehlungFelder={kulturZaehlungFelder}
+            teilkulturenWerte={teilkulturenWerte}
             index={index}
             refetch={refetch}
           />

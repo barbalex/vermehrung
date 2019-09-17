@@ -313,7 +313,7 @@ const Zaehlung = ({ filter: showFilter }) => {
             {!showFilter && (
               <>
                 <Teilzaehlungen
-                  zaehlId={row.id}
+                  row={row}
                   kulturZaehlungFelder={kulturZaehlungFelder}
                 />
 
