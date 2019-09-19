@@ -1,56 +1,17 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import IconButton from '@material-ui/core/IconButton'
-import { FaPlus } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../../../storeContext'
-import {
-  teilzaehlung as teilzaehlungFragment,
-  teilkultur as teilkulturFragment,
-} from '../../../../utils/fragments'
+import { teilkultur as teilkulturFragment } from '../../../../utils/fragments'
 import Teilzaehlung from './Teilzaehlung'
-import Settings from './Settings'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-`
-const TitleRow = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  height: 48px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-
-const query = gql`
-  query TeilzaehlungenQuery($zaehlId: Int) {
-    teilzaehlung(
-      where: { zaehlung_id: { _eq: $zaehlId } }
-      order_by: { teilkultur: { name: asc_nulls_first } }
-    ) {
-      ...TeilzaehlungFields
-      teilkultur {
-        ...TeilkulturFields
-      }
-    }
-  }
-  ${teilzaehlungFragment}
-  ${teilkulturFragment}
 `
 const teilkulturenQuery = gql`
   query TeilkulturenQuery($kulturId: Int) {
@@ -63,16 +24,6 @@ const teilkulturenQuery = gql`
   }
   ${teilkulturFragment}
 `
-const insertTeilzaehlungMutation = gql`
-  mutation insertDataset($zaehlId: Int!) {
-    insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
-      returning {
-        ...TeilzaehlungFields
-      }
-    }
-  }
-  ${teilzaehlungFragment}
-`
 
 const TeilzaehlungenRows = ({
   zaehlung,
@@ -80,8 +31,6 @@ const TeilzaehlungenRows = ({
   kulturFelderResult,
   refetchTz,
 }) => {
-  //console.log('Teilzaehlung', { zaehlung })
-
   const {
     data: teilkulturenData,
     error: teilkulturenError,
@@ -103,7 +52,6 @@ const TeilzaehlungenRows = ({
     )
   }
 
-  // TODO: enable adding new row
   return (
     <ErrorBoundary>
       {rows.map((r, index) => (

@@ -27,14 +27,13 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
   const { enqueNotification } = store
 
   const { data, error, loading, refetch } = kulturFelderResult
-  const kulturFelder = get(data, 'kultur_felder[0]', {}) || {}
   const {
     tz_teilkultur_id,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = kulturFelder
+  } = get(data, 'kultur_felder[0]', {}) || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -215,9 +214,9 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
             />
           </MenuItem>
           <Info>
-            Nicht aufgeführte Felder sind zwingend.
+            Zwingende Felder sind nicht aufgelistet.
             <br />
-            Die Wahl gilt nur für diese Kultur.
+            Die Wahl gilt (nur) für diese Kultur.
           </Info>
         </Menu>
       )}

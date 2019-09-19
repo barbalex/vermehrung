@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt } from 'react-icons/fa'
@@ -10,10 +10,7 @@ import get from 'lodash/get'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
-import {
-  kulturFelder as kulturFelderFragment,
-  teilzaehlung as teilzaehlungFragment,
-} from '../../../../utils/fragments'
+import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import types from '../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../storeContext'

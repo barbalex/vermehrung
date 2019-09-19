@@ -38,7 +38,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const query = gql`
+const teilzaehlungenQuery = gql`
   query TeilzaehlungenQuery($zaehlId: Int) {
     teilzaehlung(
       where: { zaehlung_id: { _eq: $zaehlId } }
@@ -77,7 +77,7 @@ const Teilzaehlungen = ({ zaehlung }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = useQuery(query, {
+  const { data, error, loading, refetch } = useQuery(teilzaehlungenQuery, {
     variables: { zaehlId: zaehlung.id },
   })
   const rows = get(data, 'teilzaehlung', [])
