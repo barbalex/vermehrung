@@ -6,7 +6,7 @@ import { type as event } from './event'
 import { type as garten } from './garten'
 import { type as herkunft } from './herkunft'
 import { type as kultur } from './kultur'
-import { type as kultur_zaehlung_felder } from './kultur_zaehlung_felder'
+import { type as kultur_felder } from './kultur_felder'
 import { type as lieferung } from './lieferung'
 import { type as person } from './person'
 import { type as sammlung } from './sammlung'
@@ -24,7 +24,7 @@ export default types
     garten,
     herkunft,
     kultur,
-    kultur_zaehlung_felder,
+    kultur_felder,
     lieferung,
     person,
     sammlung,

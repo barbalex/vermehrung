@@ -67,7 +67,7 @@ const mutation = gql`
 
 const Teilzaehlung = ({
   teilzaehlung: row,
-  kulturZaehlungFelder,
+  kulturFelder,
   teilkulturenWerte,
   teilkulturenLoading,
   index,
@@ -156,7 +156,7 @@ const Teilzaehlung = ({
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = kulturZaehlungFelder
+  } = kulturFelder
 
   return (
     <ErrorBoundary>

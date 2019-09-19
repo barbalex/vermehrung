@@ -73,7 +73,7 @@ const insertTeilzaehlungMutation = gql`
   ${teilzaehlungFragment}
 `
 
-const Teilzaehlungen = ({ row, kulturZaehlungFelder }) => {
+const Teilzaehlungen = ({ row, kulturFelder }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -151,7 +151,7 @@ const Teilzaehlungen = ({ row, kulturZaehlungFelder }) => {
           <Teilzaehlung
             key={r.id}
             teilzaehlung={r}
-            kulturZaehlungFelder={kulturZaehlungFelder}
+            kulturFelder={kulturFelder}
             teilkulturenWerte={teilkulturenWerte}
             teilkulturenLoading={teilkulturenLoading}
             index={index}

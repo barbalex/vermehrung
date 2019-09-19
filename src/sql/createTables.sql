@@ -317,8 +317,8 @@ create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using btree (andere_menge);
 create index on teilzaehlung using gin (tsv);
 
-drop table if exists kultur_zaehlung_felder cascade;
-create table kultur_zaehlung_felder (
+drop table if exists kultur_felder cascade;
+create table kultur_felder (
   kultur_id integer unique not null references kultur (id) on delete cascade on update cascade,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
@@ -332,7 +332,7 @@ create table kultur_zaehlung_felder (
   ag_person_id boolean default true,
   ag_frist boolean default true
 );
-create index on kultur_zaehlung_felder using btree (kultur_id);
+create index on kultur_felder using btree (kultur_id);
 
 drop table if exists lieferung cascade;
 create table lieferung (

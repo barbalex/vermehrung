@@ -25,7 +25,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
   zaehlung as zaehlungFragment,
-  kultur_zaehlung_felder as kulturZaehlungFelderFragment,
+  kultur_felder as kulturFelderFragment,
 } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
@@ -61,7 +61,7 @@ const query = gql`
       kultur {
         id
         art_id
-        kultur_zaehlung_felders {
+        kultur_felders {
           ...KulturZaehlungFelderFields
         }
       }
@@ -74,7 +74,7 @@ const query = gql`
     }
   }
   ${zaehlungFragment}
-  ${kulturZaehlungFelderFragment}
+  ${kulturFelderFragment}
 `
 const kulturQuery = gql`
   query kulturQuery($filter: kultur_bool_exp!) {
@@ -252,12 +252,12 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const kulturZaehlungFelder = showFilter
+  const kulturFelder = showFilter
     ? {}
-    : row.kultur.kultur_zaehlung_felders[0]
+    : row.kultur.kultur_felders[0]
   const z_bemerkungen = showFilter
     ? true
-    : get(row, 'kultur.kultur_zaehlung_felders[0].z_bemerkungen')
+    : get(row, 'kultur.kultur_felders[0].z_bemerkungen')
 
   return (
     <ErrorBoundary>
@@ -314,7 +314,7 @@ const Zaehlung = ({ filter: showFilter }) => {
               <>
                 <Teilzaehlungen
                   row={row}
-                  kulturZaehlungFelder={kulturZaehlungFelder}
+                  kulturFelder={kulturFelder}
                 />
 
                 <Button variant="outlined" onClick={onClickChooseFields}>
@@ -334,7 +334,7 @@ const Zaehlung = ({ filter: showFilter }) => {
             {'Felder für Zählungen dieser Kultur wählen:'}
           </DialogTitle>
           <ZaehlungFields
-            kulturZaehlungFelder={kulturZaehlungFelder}
+            kulturFelder={kulturFelder}
             refetch={refetchQuery}
           />
           <DialogActions>

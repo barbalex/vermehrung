@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
-import { kultur_zaehlung_felder as kulturZaehlungFelderFragment } from '../../../utils/fragments'
+import { kultur_felder as kulturFelderFragment } from '../../../utils/fragments'
 
 const StyledDialogContent = styled(DialogContent)`
   display: flex;
@@ -19,7 +19,7 @@ const Comment = styled.div`
   padding-top: 15px;
 `
 
-const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
+const ZaehlungFields = ({ kulturFelder: row, refetch }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -31,10 +31,10 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
       try {
         await client.mutate({
           mutation: gql`
-              mutation update_kultur_zaehlung_felder(
+              mutation update_kultur_felder(
                 $id: Int!
               ) {
-                update_kultur_zaehlung_felder(
+                update_kultur_felder(
                   where: { kultur_id: { _eq: $id } }
                   _set: {
                     ${field}: ${!value}
@@ -46,7 +46,7 @@ const ZaehlungFields = ({ kulturZaehlungFelder: row, refetch }) => {
                   }
                 }
               }
-              ${kulturZaehlungFelderFragment}
+              ${kulturFelderFragment}
             `,
           variables: {
             id: row.kultur_id,

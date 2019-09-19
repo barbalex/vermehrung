@@ -110,8 +110,8 @@ export const kulturFile = gql`
     beschreibung
   }
 `
-export const kultur_zaehlung_felder = gql`
-  fragment KulturZaehlungFelderFields on kultur_zaehlung_felder {
+export const kultur_felder = gql`
+  fragment KulturZaehlungFelderFields on kultur_felder {
     kultur_id
     z_bemerkungen
     tz_teilkultur_id

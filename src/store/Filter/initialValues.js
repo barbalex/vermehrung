@@ -4,7 +4,7 @@ import { initial as event } from './event'
 import { initial as garten } from './garten'
 import { initial as herkunft } from './herkunft'
 import { initial as kultur } from './kultur'
-import { initial as kultur_zaehlung_felder } from './kultur_zaehlung_felder'
+import { initial as kultur_felder } from './kultur_felder'
 import { initial as lieferung } from './lieferung'
 import { initial as person } from './person'
 import { initial as sammlung } from './sammlung'
@@ -20,7 +20,7 @@ export default {
   garten,
   herkunft,
   kultur,
-  kultur_zaehlung_felder,
+  kultur_felder,
   lieferung,
   person,
   sammlung,

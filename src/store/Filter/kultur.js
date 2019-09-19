@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-import { type as kultur_zaehlung_felder } from './kultur_zaehlung_felder'
+import { type as kultur_felder } from './kultur_felder'
 
 export const type = types.model({
   id: types.optional(
@@ -27,7 +27,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kultur_zaehlung_felders: types.maybe(kultur_zaehlung_felder),
+  kultur_felders: types.maybe(kultur_felder),
 })
 
 export const initial = {
