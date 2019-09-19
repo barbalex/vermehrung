@@ -142,7 +142,7 @@ export const lieferung = gql`
     anzahl_auspflanzbereit
     gramm_samen
     andere_menge
-    ausgefuehrt
+    geplant
     bemerkungen
   }
 `

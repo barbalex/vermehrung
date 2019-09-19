@@ -325,7 +325,7 @@ create function lieferung_trigger() returns trigger as $$
         else ''
       end || ' ' ||
       case
-        when new.ausgefuehrt='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
+        when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
         else setweight(to_tsvector('simple', 'geplant'), 'A')
       end || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');

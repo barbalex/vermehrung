@@ -360,7 +360,7 @@ create table lieferung (
   anzahl_auspflanzbereit integer default null,
   gramm_samen integer default null,
   andere_menge text default null,
-  ausgefuehrt boolean default false,
+  geplant boolean default false,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -375,7 +375,7 @@ create index on lieferung using btree (von_anzahl_individuen);
 create index on lieferung using btree (anzahl_pflanzen);
 create index on lieferung using btree (anzahl_auspflanzbereit);
 create index on lieferung using btree (gramm_samen);
-create index on lieferung using btree (ausgefuehrt);
+create index on lieferung using btree (geplant);
 create index on lieferung using gin (tsv);
 
 drop table if exists lieferung_file;

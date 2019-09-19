@@ -606,12 +606,12 @@ const Lieferung = ({ filter: showFilter }) => {
             error={errors.person_id}
           />
           <Checkbox2States
-            key={`${row.id}ausgefuehrt`}
-            label="Ausgeführt"
-            name="ausgefuehrt"
-            value={row.ausgefuehrt}
+            key={`${row.id}geplant`}
+            label="Geplant"
+            name="geplant"
+            value={row.geplant}
             saveToDb={saveToDb}
-            error={errors.ausgefuehrt}
+            error={errors.geplant}
           />
           <TextField
             key={`${row.id}bemerkungen`}
