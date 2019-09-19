@@ -334,6 +334,18 @@ create table kultur_felder (
 create index on kultur_felder using btree (kultur_id);
 COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
 
+
+
+drop table if exists person_felder cascade;
+create table person_felder (
+  person_id integer unique not null references person (id) on delete cascade on update cascade,
+  ga_bemerkungen boolean default true,
+  hk_kanton boolean default true,
+  hk_land boolean default true,
+  hk_bemkerungen boolean default true
+);
+create index on person_felder using btree (person_id);
+
 drop table if exists lieferung cascade;
 create table lieferung (
   id bigserial primary key,
