@@ -196,7 +196,6 @@ create table kultur (
   von_anzahl_individuen integer default null,
   bemerkungen text default null,
   aktiv boolean default true,
-  teilkulturen boolean default false,
   changed date default now(),
   changed_by varchar(20) default null,
   tsv tsvector
@@ -326,12 +325,14 @@ create table kultur_felder (
   tz_andere_menge boolean default true,
   tz_auspflanzbereit_beschreibung boolean default true,
   tz_bemerkungen boolean default true,
+  tk boolean default false,
   tk_bemerkungen boolean default true,
   ag_teilkultur_id boolean default true,
   ag_geplant boolean default true,
   ag_person_id boolean default true
 );
 create index on kultur_felder using btree (kultur_id);
+COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists lieferung cascade;
 create table lieferung (
