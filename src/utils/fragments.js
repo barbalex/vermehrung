@@ -214,8 +214,8 @@ export const sammlung = gql`
     datum
     von_anzahl_individuen
     anzahl_pflanzen
-    andere_menge
     gramm_samen
+    andere_menge
     bemerkungen
   }
 `
