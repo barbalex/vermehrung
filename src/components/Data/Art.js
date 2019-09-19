@@ -16,7 +16,6 @@ import FilterTitle from '../shared/FilterTitle'
 import queryFromTable from '../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import { art as artFragment } from '../../utils/fragments'
-import types from '../../store/Filter/simpleTypes'
 
 const Container = styled.div`
   height: 100%;
