@@ -1,5 +1,4 @@
 import { types } from 'mobx-state-tree'
-import { type as kultur_felder } from './kultur_felder'
 
 export const type = types.model({
   id: types.optional(
