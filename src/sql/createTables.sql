@@ -158,6 +158,9 @@ create table garten (
   id bigserial primary key,
   name text default null,
   person_id integer default null references person (id) on delete cascade on update cascade,
+  strasse text default null,
+  plz integer default null,
+  ort text default null,
   geom_point geometry(Point, 4326) default null,
   aktiv boolean default true,
   bemerkungen text default null,
@@ -168,6 +171,9 @@ create table garten (
 create index on garten using btree (id);
 create index on garten using btree (name);
 create index on garten using btree (person_id);
+create index on garten using btree (strasse);
+create index on garten using btree (plz);
+create index on garten using btree (ort);
 create index on garten using btree (aktiv);
 create index on garten using gin (tsv);
 
@@ -339,10 +345,15 @@ COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
 drop table if exists person_felder cascade;
 create table person_felder (
   person_id integer unique not null references person (id) on delete cascade on update cascade,
+  ga_strasse boolean default true,
+  ga_plz boolean default true,
+  ga_ort boolean default true,
+  ga_geom_point boolean default true,
   ga_bemerkungen boolean default true,
   hk_kanton boolean default true,
   hk_land boolean default true,
-  hk_bemkerungen boolean default true
+  hk_bemerkungen boolean default true,
+  hk_geom_point boolean default true
 );
 create index on person_felder using btree (person_id);
 

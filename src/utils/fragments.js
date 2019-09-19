@@ -40,6 +40,9 @@ export const garten = gql`
     id
     name
     person_id
+    strasse
+    plz
+    ort
     aktiv
     bemerkungen
     computed {
@@ -177,6 +180,19 @@ export const person = gql`
     kommerziell
     info
     aktiv
+  }
+`
+export const personFelder = gql`
+  fragment PersonFelderFields on person_felder {
+    person_id
+    ga_strasse
+    ga_plz
+    ga_ort
+    ga_geom_point
+    ga_bemerkungen
+    hk_kanton
+    hk_land
+    hk_bemkerungen
   }
 `
 export const personFile = gql`

@@ -13,6 +13,18 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  strasse: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  plz: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  ort: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -24,6 +36,9 @@ export const initial = {
   id: null,
   name: null,
   person_id: null,
+  strasse: null,
+  plz: null,
+  ort: null,
   bemerkungen: null,
   aktiv: true,
 }
@@ -32,6 +47,9 @@ export const empty = {
   id: null,
   name: null,
   person_id: null,
+  strasse: null,
+  plz: null,
+  ort: null,
   bemerkungen: null,
   aktiv: true,
 }
@@ -40,6 +58,9 @@ export const simpleTypes = {
   id: 'number',
   name: 'string',
   person_id: 'number',
+  strasse: 'string',
+  plz: 'number',
+  ort: 'string',
   bemerkungen: 'string',
   aktiv: 'boolean',
 }

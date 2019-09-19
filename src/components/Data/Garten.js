@@ -233,6 +233,31 @@ const Garten = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.person_id}
           />
+          <TextField
+            key={`${row.id}strasse`}
+            name="strasse"
+            label="Strasse"
+            value={row.strasse}
+            saveToDb={saveToDb}
+            error={errors.strasse}
+          />
+          <TextField
+            key={`${row.id}plz`}
+            name="plz"
+            label="PLZ"
+            value={row.plz}
+            saveToDb={saveToDb}
+            error={errors.plz}
+            type="number"
+          />
+          <TextField
+            key={`${row.id}ort`}
+            name="ort"
+            label="Ort"
+            value={row.ort}
+            saveToDb={saveToDb}
+            error={errors.ort}
+          />
           {!showFilter && (
             <Coordinates row={row} refetchForm={refetchForm} table="garten" />
           )}
