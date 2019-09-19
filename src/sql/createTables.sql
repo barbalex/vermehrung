@@ -261,8 +261,8 @@ create table aufgabe (
   teilkultur_id integer default null references teilkultur (id) on delete set null on update cascade,
   person_id integer default null references person (id) on delete set null on update cascade,
   aufgabe text default null,
-  erledigt boolean default false,
-  frist date default null,
+  geplant boolean default false,
+  datum date default null,
   changed date default now(),
   changed_by varchar(20) default null,
   tsv tsvector
@@ -272,8 +272,8 @@ create index on aufgabe using btree (kultur_id);
 create index on aufgabe using btree (teilkultur_id);
 create index on aufgabe using btree (person_id);
 create index on aufgabe using btree (aufgabe);
-create index on aufgabe using btree (erledigt);
-create index on aufgabe using btree (frist);
+create index on aufgabe using btree (geplant);
+create index on aufgabe using btree (datum);
 create index on aufgabe using gin (tsv);
 
 drop table if exists zaehlung cascade;

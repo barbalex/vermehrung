@@ -62,7 +62,7 @@ const query = gql`
         id
         art_id
         kultur_felders {
-          ...KulturZaehlungFelderFields
+          ...KulturFelderFields
         }
       }
     }

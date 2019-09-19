@@ -208,7 +208,7 @@ export default gql`
       }
       aufgaben(
         where: $aufgabeFilter
-        order_by: { frist: desc_nulls_first, aufgabe: asc_nulls_first }
+        order_by: { datum: desc_nulls_first, aufgabe: asc_nulls_first }
       ) @include(if: $isKultur) {
         ...AufgabeFields
         kultur {

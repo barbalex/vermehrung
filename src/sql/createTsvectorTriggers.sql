@@ -396,10 +396,10 @@ create function aufgabe_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.frist, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.aufgabe, '')), 'A');
     return new;
   end

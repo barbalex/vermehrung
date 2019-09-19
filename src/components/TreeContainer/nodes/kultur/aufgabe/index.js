@@ -18,11 +18,11 @@ export default ({ nodes, data, url }) => {
         nodes.map(n => n.id).includes(`kultur${kulturId}AufgabeFolder`),
       )
       .map(el => {
-        const frist = el.frist
-          ? moment(el.frist, 'YYYY-MM-DD').format('YYYY.MM.DD')
+        const datum = el.datum
+          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : null
         const aufgabe = get(el, 'aufgabe') || '(nicht beschrieben)'
-        const label = frist ? `${aufgabe} (${frist})` : aufgabe
+        const label = datum ? `${aufgabe} (${datum})` : aufgabe
 
         return {
           nodeType: 'table',

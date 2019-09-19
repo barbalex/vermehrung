@@ -23,8 +23,8 @@ export const aufgabe = gql`
     teilkultur_id
     person_id
     aufgabe
-    erledigt
-    frist
+    geplant
+    datum
   }
 `
 export const event = gql`
@@ -110,7 +110,7 @@ export const kulturFile = gql`
   }
 `
 export const kultur_felder = gql`
-  fragment KulturZaehlungFelderFields on kultur_felder {
+  fragment KulturFelderFields on kultur_felder {
     kultur_id
     tk
     tk_bemerkungen

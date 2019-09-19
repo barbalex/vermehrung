@@ -339,20 +339,20 @@ const Aufgabe = ({ filter: showFilter }) => {
             error={errors.person_id}
           />
           <DateFieldWithPicker
-            key={`${row.id}frist`}
-            name="frist"
-            label="Frist"
-            value={row.frist}
+            key={`${row.id}datum`}
+            name="datum"
+            label="Datum"
+            value={row.datum}
             saveToDb={saveToDb}
-            error={errors.frist}
+            error={errors.datum}
           />
           <Checkbox2States
-            key={`${row.id}erledigt`}
-            label="erledigt"
-            name="erledigt"
-            value={row.erledigt}
+            key={`${row.id}geplant`}
+            label="geplant"
+            name="geplant"
+            value={row.geplant}
             saveToDb={saveToDb}
-            error={errors.erledigt}
+            error={errors.geplant}
           />
         </FieldsContainer>
       </Container>

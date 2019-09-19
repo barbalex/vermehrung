@@ -42,7 +42,7 @@ const ZaehlungFields = ({ kulturFelder: row, refetch }) => {
                 ) {
                   affected_rows
                   returning {
-                    ...KulturZaehlungFelderFields
+                    ...KulturFelderFields
                   }
                 }
               }

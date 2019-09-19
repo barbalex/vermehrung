@@ -21,8 +21,8 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  erledigt: types.optional(types.boolean, false),
-  frist: types.optional(
+  geplant: types.optional(types.boolean, false),
+  datum: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
@@ -34,8 +34,8 @@ export const initial = {
   teilkultur_id: null,
   person_id: null,
   aufgabe: null,
-  erledigt: false,
-  frist: null,
+  geplant: false,
+  datum: null,
 }
 
 export const empty = {
@@ -44,8 +44,8 @@ export const empty = {
   teilkultur_id: null,
   person_id: null,
   aufgabe: null,
-  erledigt: null,
-  frist: null,
+  geplant: null,
+  datum: null,
 }
 
 export const simpleTypes = {
@@ -54,6 +54,6 @@ export const simpleTypes = {
   teilkultur_id: 'number',
   person_id: 'number',
   aufgabe: 'string',
-  erledigt: 'boolean',
-  frist: 'string',
+  geplant: 'boolean',
+  datum: 'string',
 }
