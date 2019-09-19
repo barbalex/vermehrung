@@ -109,11 +109,12 @@ export const kulturFile = gql`
     beschreibung
   }
 `
-export const kultur_felder = gql`
+export const kulturFelder = gql`
   fragment KulturFelderFields on kultur_felder {
     kultur_id
     tk
     tk_bemerkungen
+    z_geplant
     z_bemerkungen
     tz_teilkultur_id
     tz_anzahl_mutterpflanzen
@@ -236,6 +237,7 @@ export const zaehlung = gql`
     id
     kultur_id
     datum
+    geplant
     bemerkungen
   }
 `

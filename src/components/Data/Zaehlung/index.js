@@ -20,12 +20,13 @@ import ErrorBoundary from 'react-error-boundary'
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
+import Checkbox2States from '../../shared/Checkbox2States'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
   zaehlung as zaehlungFragment,
-  kultur_felder as kulturFelderFragment,
+  kulturFelder as kulturFelderFragment,
 } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
@@ -252,9 +253,7 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const kulturFelder = showFilter
-    ? {}
-    : row.kultur.kultur_felders[0]
+  const kulturFelder = showFilter ? {} : row.kultur.kultur_felders[0]
   const z_bemerkungen = showFilter
     ? true
     : get(row, 'kultur.kultur_felders[0].z_bemerkungen')
@@ -299,6 +298,14 @@ const Zaehlung = ({ filter: showFilter }) => {
               saveToDb={saveToDb}
               error={errors.datum}
             />
+            <Checkbox2States
+              key={`${row.id}geplant`}
+              label="geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors.geplant}
+            />
             {!!z_bemerkungen && (
               <TextField
                 key={`${row.id}bemerkungen`}
@@ -312,10 +319,7 @@ const Zaehlung = ({ filter: showFilter }) => {
             )}
             {!showFilter && (
               <>
-                <Teilzaehlungen
-                  row={row}
-                  kulturFelder={kulturFelder}
-                />
+                <Teilzaehlungen row={row} kulturFelder={kulturFelder} />
 
                 <Button variant="outlined" onClick={onClickChooseFields}>
                   Felder wählen
@@ -333,10 +337,7 @@ const Zaehlung = ({ filter: showFilter }) => {
           <DialogTitle id="alert-dialog-title">
             {'Felder für Zählungen dieser Kultur wählen:'}
           </DialogTitle>
-          <ZaehlungFields
-            kulturFelder={kulturFelder}
-            refetch={refetchQuery}
-          />
+          <ZaehlungFields kulturFelder={kulturFelder} refetch={refetchQuery} />
           <DialogActions>
             <Button onClick={closeZaehlungFieldsDialog}>schliessen</Button>
           </DialogActions>

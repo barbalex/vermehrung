@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
-import { kultur_felder as kulturFelderFragment } from '../../../utils/fragments'
+import { kulturFelder as kulturFelderFragment } from '../../../utils/fragments'
 
 const StyledDialogContent = styled(DialogContent)`
   display: flex;
