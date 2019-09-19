@@ -16,6 +16,7 @@ import FilterTitle from '../shared/FilterTitle'
 import { teilkultur as teilkulturFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -138,24 +139,21 @@ const Teilkultur = ({ filter: showFilter }) => {
   )()
 
   const saveToDb = useCallback(
-    async teilkultur => {
-      const field = teilkultur.target.name
-      let value = teilkultur.target.value || null
-      if (teilkultur.target.value === false) value = false
-      if (teilkultur.target.value === 0) value = 0
+    async event => {
+      const field = event.target.name
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
       const type = types.teilkultur[field]
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       if (showFilter) {
-        let valueToSet = value
-        if (value === '') {
-          valueToSet = null
-        } else if (['number'].includes(type)) {
-          valueToSet = +value
-        }
-        filter.setValue({ table: 'teilkultur', key: field, value: valueToSet })
+        filter.setValue({ table: 'teilkultur', key: field, value })
       } else {
         try {
           let valueToSet
-          if (value === undefined || value === null) {
+          if (value === null) {
             valueToSet = null
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
@@ -189,7 +187,7 @@ const Teilkultur = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row.id],
+    [row],
   )
 
   if (loading) {

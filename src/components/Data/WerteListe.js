@@ -10,6 +10,7 @@ import ErrorBoundary from 'react-error-boundary'
 import storeContext from '../../storeContext'
 import TextField from '../shared/TextField'
 import FormTitle from '../shared/FormTitle'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -73,12 +74,15 @@ const WerteListe = ({ table }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value || null
-      if (event.target.value === false) value = false
-      if (event.target.value === 0) value = 0
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       try {
         let valueToSet
-        if (value === undefined || value === null) {
+        if (value === null) {
           valueToSet = null
         } else if (['id', 'sort'].includes(field)) {
           valueToSet = value
@@ -115,7 +119,7 @@ const WerteListe = ({ table }) => {
       setErrors({})
       refetch()
     },
-    [row.id],
+    [row],
   )
 
   if (loading) {

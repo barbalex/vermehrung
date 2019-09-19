@@ -25,6 +25,7 @@ import {
 } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import Files from './Files'
 
 const Container = styled.div`
@@ -37,6 +38,12 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
+`
+const FieldRow = styled.div`
+  display: flex;
+  > div:not(:last-of-type) {
+    padding-right: 8px;
+  }
 `
 
 const query = gql`
@@ -75,7 +82,6 @@ const dataQuery = gql`
       ...ArtFields
     }
   }
-  ${sammlungFragment}
   ${artFragment}
 `
 
@@ -143,22 +149,19 @@ const Sammlung = ({ filter: showFilter }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value || null
-      if (event.target.value === false) value = false
-      if (event.target.value === 0) value = 0
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
       const type = types.sammlung[field]
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       if (showFilter) {
-        let valueToSet = value
-        if (value === '') {
-          valueToSet = null
-        } else if (['number'].includes(type)) {
-          valueToSet = +value
-        }
-        filter.setValue({ table: 'sammlung', key: field, value: valueToSet })
+        filter.setValue({ table: 'sammlung', key: field, value })
       } else {
         try {
           let valueToSet
-          if (value === undefined || value === null) {
+          if (value === null) {
             valueToSet = null
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
@@ -195,7 +198,7 @@ const Sammlung = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row.id],
+    [row],
   )
 
   if (loading) {
@@ -290,15 +293,6 @@ const Sammlung = ({ filter: showFilter }) => {
             error={errors.datum}
           />
           <TextField
-            key={`${row.id}von_anzahl_individuen`}
-            name="von_anzahl_individuen"
-            label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
-            saveToDb={saveToDb}
-            error={errors.von_anzahl_individuen}
-            type="number"
-          />
-          <TextField
             key={`${row.id}anzahl_pflanzen`}
             name="anzahl_pflanzen"
             label="Anzahl Pflanzen"
@@ -307,24 +301,35 @@ const Sammlung = ({ filter: showFilter }) => {
             error={errors.anzahl_pflanzen}
             type="number"
           />
-          <TextField
-            key={`${row.id}gramm_samen`}
-            name="gramm_samen"
-            label="Gramm Samen"
-            value={row.gramm_samen}
-            saveToDb={saveToDb}
-            error={errors.gramm_samen}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}andere_menge`}
-            name="andere_menge"
-            label={`Andere Menge (z.B. "3 Zwiebeln")`}
-            value={row.andere_menge}
-            saveToDb={saveToDb}
-            error={errors.andere_menge}
-            type="text"
-          />
+          <FieldRow>
+            <TextField
+              key={`${row.id}gramm_samen`}
+              name="gramm_samen"
+              label="Gramm Samen"
+              value={row.gramm_samen}
+              saveToDb={saveToDb}
+              error={errors.gramm_samen}
+              type="number"
+            />
+            <TextField
+              key={`${row.id}andere_menge`}
+              name="andere_menge"
+              label={`Andere Menge (z.B. "3 Zwiebeln")`}
+              value={row.andere_menge}
+              saveToDb={saveToDb}
+              error={errors.andere_menge}
+              type="text"
+            />
+            <TextField
+              key={`${row.id}von_anzahl_individuen`}
+              name="von_anzahl_individuen"
+              label="von Anzahl Individuen"
+              value={row.von_anzahl_individuen}
+              saveToDb={saveToDb}
+              error={errors.von_anzahl_individuen}
+              type="number"
+            />
+          </FieldRow>
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"

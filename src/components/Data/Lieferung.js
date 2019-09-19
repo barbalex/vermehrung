@@ -17,6 +17,7 @@ import Checkbox2States from '../shared/Checkbox2States'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
 import queryFromTable from '../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import {
   lieferung as lieferungFragment,
   art as artFragment,
@@ -269,19 +270,18 @@ const Lieferung = ({ filter: showFilter }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
       const type = types.lieferung[field]
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       if (showFilter) {
-        let valueToSet = value
-        if (value === '') {
-          valueToSet = null
-        } else if (['number'].includes(type)) {
-          valueToSet = +value
-        }
-        filter.setValue({ table: 'lieferung', key: field, value: valueToSet })
+        filter.setValue({ table: 'lieferung', key: field, value })
       } else {
         let valueToSet
-        if (value === undefined || value === null) {
+        if (value === null) {
           valueToSet = null
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
@@ -410,7 +410,7 @@ const Lieferung = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row.id],
+    [row],
   )
 
   if (loading) {

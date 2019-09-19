@@ -10,6 +10,7 @@ import ErrorBoundary from 'react-error-boundary'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
+import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import types from '../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../storeContext'
 
@@ -86,13 +87,16 @@ const Teilzaehlung = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value || null
-      if (event.target.value === false) value = false
-      if (event.target.value === 0) value = 0
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
+      const type = types.lieferung[field]
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       try {
-        const type = types.lieferung[field]
         let valueToSet
-        if (value === undefined || value === null) {
+        if (value === null) {
           valueToSet = null
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
@@ -127,7 +131,7 @@ const Teilzaehlung = ({
       }
       setErrors({})
     },
-    [row.id],
+    [row],
   )
   const onClickDelete = useCallback(async () => {
     try {

@@ -14,6 +14,7 @@ import FilterTitle from '../shared/FilterTitle'
 import { herkunft as herkunftFragment } from '../../utils/fragments'
 import types from '../../store/Filter/simpleTypes'
 import queryFromTable from '../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import Files from './Files'
 import Coordinates from '../shared/Coordinates'
 
@@ -82,22 +83,19 @@ const Herkunft = ({ filter: showFilter }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value || null
-      if (event.target.value === false) value = false
-      if (event.target.value === 0) value = 0
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
       const type = types.herkunft[field]
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       if (showFilter) {
-        let valueToSet = value
-        if (value === '') {
-          valueToSet = null
-        } else if (['number'].includes(type)) {
-          valueToSet = +value
-        }
-        filter.setValue({ table: 'herkunft', key: field, value: valueToSet })
+        filter.setValue({ table: 'herkunft', key: field, value })
       } else {
         try {
           let valueToSet
-          if (value === undefined || value === null) {
+          if (value === null) {
             valueToSet = null
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
@@ -134,7 +132,7 @@ const Herkunft = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row.id],
+    [row],
   )
 
   if (loading) {

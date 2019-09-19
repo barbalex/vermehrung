@@ -10,6 +10,7 @@ import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import { kulturFelder as kulturFelderFragment } from '../../../utils/fragments'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 
 const StyledDialogContent = styled(DialogContent)`
   display: flex;
@@ -62,7 +63,7 @@ const ZaehlungFields = ({ kulturFelder: row, refetch }) => {
       }
       refetch()
     },
-    [row.id],
+    [row],
   )
 
   const {

@@ -21,6 +21,7 @@ import Checkbox2States from '../shared/Checkbox2States'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
 import queryFromTable from '../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import {
   kultur as kulturFragment,
   art as artFragment,
@@ -195,22 +196,19 @@ const Kultur = ({ filter: showFilter }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value || null
-      if (event.target.value === false) value = false
-      if (event.target.value === 0) value = 0
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
       const type = types.kultur[field]
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       if (showFilter) {
-        let valueToSet = value
-        if (value === '') {
-          valueToSet = null
-        } else if (['number'].includes(type)) {
-          valueToSet = +value
-        }
-        filter.setValue({ table: 'kultur', key: field, value: valueToSet })
+        filter.setValue({ table: 'kultur', key: field, value })
       } else {
         try {
           let valueToSet
-          if (value === undefined || value === null) {
+          if (value === null) {
             valueToSet = null
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
@@ -247,7 +245,7 @@ const Kultur = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row.id],
+    [row],
   )
 
   if (loading) {
