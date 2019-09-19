@@ -97,7 +97,6 @@ export const kultur = gql`
     erhaltungskultur
     von_anzahl_individuen
     aktiv
-    teilkulturen
     bemerkungen
   }
 `
@@ -113,12 +112,17 @@ export const kulturFile = gql`
 export const kultur_felder = gql`
   fragment KulturZaehlungFelderFields on kultur_felder {
     kultur_id
+    tk
+    tk_bemerkungen
     z_bemerkungen
     tz_teilkultur_id
     tz_anzahl_mutterpflanzen
     tz_andere_menge
     tz_auspflanzbereit_beschreibung
     tz_bemerkungen
+    ag_teilkultur_id
+    ag_geplant
+    ag_person_id
   }
 `
 export const lieferung = gql`
