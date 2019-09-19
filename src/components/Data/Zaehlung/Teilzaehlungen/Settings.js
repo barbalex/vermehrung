@@ -15,6 +15,12 @@ import styled from 'styled-components'
 import storeContext from '../../../../storeContext'
 import { kulturFelder as kulturFelderFragment } from '../../../../utils/fragments'
 
+const Title = styled.div`
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 800;
+  user-select: none;
+`
 const Info = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.4);
@@ -122,6 +128,7 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
+          <Title>Felder für Teil-Zählungen wählen:</Title>
           <MenuItem>
             <FormControlLabel
               value={
