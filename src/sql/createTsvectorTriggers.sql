@@ -92,7 +92,7 @@ create function sammlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.andere_menge, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.gramm_samen, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.gramm_samen::text, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
