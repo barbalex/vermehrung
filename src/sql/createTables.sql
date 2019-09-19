@@ -328,9 +328,8 @@ create table kultur_felder (
   tz_bemerkungen boolean default true,
   tk_bemerkungen boolean default true,
   ag_teilkultur_id boolean default true,
-  ag_erledigt boolean default true,
-  ag_person_id boolean default true,
-  ag_frist boolean default true
+  ag_geplant boolean default true,
+  ag_person_id boolean default true
 );
 create index on kultur_felder using btree (kultur_id);
 
