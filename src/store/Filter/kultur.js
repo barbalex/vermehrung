@@ -27,7 +27,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kultur_felders: types.maybe(kultur_felder),
 })
 
 export const initial = {
