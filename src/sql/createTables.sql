@@ -334,8 +334,6 @@ create table kultur_felder (
 create index on kultur_felder using btree (kultur_id);
 COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
 
-
-
 drop table if exists person_felder cascade;
 create table person_felder (
   person_id integer unique not null references person (id) on delete cascade on update cascade,
