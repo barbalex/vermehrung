@@ -10,7 +10,6 @@ import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import { kulturFelder as kulturFelderFragment } from '../../../utils/fragments'
-import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 
 const StyledDialogContent = styled(DialogContent)`
   display: flex;
