@@ -11,10 +11,6 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Button from '@material-ui/core/Button'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
@@ -32,7 +28,6 @@ import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
-import ZaehlungFields from './ZaehlungFields'
 
 const Container = styled.div`
   height: 100%;
@@ -45,14 +40,8 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
-const StyledDialog = styled(Dialog)`
-  overflow-y: hidden;
-  .MuiDialog-paper {
-    overflow-y: hidden;
-  }
-`
 
-const query = gql`
+const zaehlungQuery = gql`
   query ZaehlungQuery(
     $id: bigint!
     $isFiltered: Boolean!
@@ -114,21 +103,9 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
-  const { data, error, loading, refetch: refetchQuery } = useQuery(query, {
+  const { data, error, loading } = useQuery(zaehlungQuery, {
     variables: { id, isFiltered, filter: zaehlungFilter },
   })
-
-  const [zaehlungFieldsDialogOpen, setZaehlungFieldsDialogOpen] = useState(
-    false,
-  )
-  const closeZaehlungFieldsDialog = useCallback(
-    () => setZaehlungFieldsDialogOpen(false),
-    [],
-  )
-  const onClickChooseFields = useCallback(
-    () => setZaehlungFieldsDialogOpen(true),
-    [],
-  )
 
   const [errors, setErrors] = useState({})
 
@@ -256,6 +233,9 @@ const Zaehlung = ({ filter: showFilter }) => {
     ? true
     : get(row, 'kultur.kultur_felders[0].z_bemerkungen')
 
+  console.log('Zaehlung, row:', row)
+  console.log('Zaehlung, kulturFelder:', kulturFelder)
+
   return (
     <ErrorBoundary>
       <>
@@ -315,31 +295,9 @@ const Zaehlung = ({ filter: showFilter }) => {
                 multiLine
               />
             )}
-            {!showFilter && (
-              <>
-                <Teilzaehlungen row={row} kulturFelder={kulturFelder} />
-
-                <Button variant="outlined" onClick={onClickChooseFields}>
-                  Felder wählen
-                </Button>
-              </>
-            )}
+            {!showFilter && <Teilzaehlungen zaehlung={row} />}
           </FieldsContainer>
         </Container>
-        <StyledDialog
-          open={zaehlungFieldsDialogOpen}
-          onClose={closeZaehlungFieldsDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {'Felder für Zählungen dieser Kultur wählen:'}
-          </DialogTitle>
-          <ZaehlungFields kulturFelder={kulturFelder} refetch={refetchQuery} />
-          <DialogActions>
-            <Button onClick={closeZaehlungFieldsDialog}>schliessen</Button>
-          </DialogActions>
-        </StyledDialog>
       </>
     </ErrorBoundary>
   )

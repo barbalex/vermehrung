@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
+import get from 'lodash/get'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
-import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
+import {
+  kulturFelder as kulturFelderFragment,
+  teilzaehlung as teilzaehlungFragment,
+} from '../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import types from '../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../storeContext'
@@ -68,15 +72,23 @@ const mutation = gql`
 
 const Teilzaehlung = ({
   teilzaehlung: row,
-  kulturFelder,
   teilkulturenWerte,
   teilkulturenLoading,
   index,
-  refetch,
+  kulturFelderResult,
+  refetchTz,
 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
+
+  const {
+    tz_teilkultur_id,
+    tz_anzahl_mutterpflanzen,
+    tz_andere_menge,
+    tz_auspflanzbereit_beschreibung,
+    tz_bemerkungen,
+  } = get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
 
   const [errors, setErrors] = useState({})
 
@@ -149,18 +161,8 @@ const Teilzaehlung = ({
         },
       })
     }
-    refetch()
+    refetchTz()
   }, [row.id])
-
-  if (!row) return null
-
-  const {
-    tz_teilkultur_id,
-    tz_anzahl_mutterpflanzen,
-    tz_andere_menge,
-    tz_auspflanzbereit_beschreibung,
-    tz_bemerkungen,
-  } = kulturFelder
 
   return (
     <ErrorBoundary>

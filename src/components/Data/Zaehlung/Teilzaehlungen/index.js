@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
@@ -10,10 +10,12 @@ import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
 import {
+  kulturFelder as kulturFelderFragment,
   teilzaehlung as teilzaehlungFragment,
   teilkultur as teilkulturFragment,
 } from '../../../../utils/fragments'
-import Teilzaehlung from './Teilzaehlung'
+import TeilzaehlungenRows from './TeilzaehlungenRows'
+import Settings from './Settings'
 
 const Container = styled.div`
   display: flex;
@@ -51,17 +53,6 @@ const query = gql`
   ${teilzaehlungFragment}
   ${teilkulturFragment}
 `
-const teilkulturenQuery = gql`
-  query TeilkulturenQuery($kulturId: Int) {
-    teilkultur(
-      where: { kultur_id: { _eq: $kulturId } }
-      order_by: { name: asc_nulls_first }
-    ) {
-      ...TeilkulturFields
-    }
-  }
-  ${teilkulturFragment}
-`
 const insertTeilzaehlungMutation = gql`
   mutation insertDataset($zaehlId: Int!) {
     insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
@@ -72,38 +63,35 @@ const insertTeilzaehlungMutation = gql`
   }
   ${teilzaehlungFragment}
 `
+const kulturFelderQuery = gql`
+  query kulturFelderQuery($kulturId: Int) {
+    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
+      ...KulturFelderFields
+    }
+  }
+  ${kulturFelderFragment}
+`
 
-const Teilzaehlungen = ({ row, kulturFelder }) => {
+const Teilzaehlungen = ({ zaehlung }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
   const { data, error, loading, refetch } = useQuery(query, {
-    variables: { zaehlId: row.id },
+    variables: { zaehlId: zaehlung.id },
   })
-  const {
-    data: teilkulturenData,
-    error: teilkulturenError,
-    loading: teilkulturenLoading,
-  } = useQuery(teilkulturenQuery, {
-    variables: { kulturId: row.kultur_id },
-  })
-  const teilkulturenWerte = useMemo(() => {
-    const data = get(teilkulturenData, 'teilkultur', []) || []
-    return data.map(el => ({
-      value: el.id,
-      label: el.name,
-    }))
-  }, [teilkulturenData])
-
   const rows = get(data, 'teilzaehlung', [])
+
+  const kulturFelderResult = useQuery(kulturFelderQuery, {
+    variables: { kulturId: zaehlung.kultur_id },
+  })
 
   const onClickNew = useCallback(async () => {
     try {
       await client.mutate({
-        insertTeilzaehlungMutation,
+        mutation: insertTeilzaehlungMutation,
         variables: {
-          zaehlId: row.id,
+          zaehlId: zaehlung.id,
         },
       })
     } catch (error) {
@@ -125,19 +113,17 @@ const Teilzaehlungen = ({ row, kulturFelder }) => {
       <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
     )
   }
-  if (teilkulturenError) {
-    return (
-      <Container>{`Fehler beim Laden der Teilkulturen: ${teilkulturenError.message}`}</Container>
-    )
-  }
 
-  // TODO: enable adding new row
   return (
     <ErrorBoundary>
       <Container>
         <TitleRow>
           <Title>Teil-Zählungen</Title>
           <div>
+            <Settings
+              kulturId={zaehlung.kultur_id}
+              kulturFelderResult={kulturFelderResult}
+            />
             <IconButton
               aria-label="Neu"
               title="Neue Teil-Zählung"
@@ -147,17 +133,12 @@ const Teilzaehlungen = ({ row, kulturFelder }) => {
             </IconButton>
           </div>
         </TitleRow>
-        {rows.map((r, index) => (
-          <Teilzaehlung
-            key={r.id}
-            teilzaehlung={r}
-            kulturFelder={kulturFelder}
-            teilkulturenWerte={teilkulturenWerte}
-            teilkulturenLoading={teilkulturenLoading}
-            index={index}
-            refetch={refetch}
-          />
-        ))}
+        <TeilzaehlungenRows
+          rows={rows}
+          kulturFelderResult={kulturFelderResult}
+          zaehlung={zaehlung}
+          refetchTz={refetch}
+        />
       </Container>
     </ErrorBoundary>
   )
