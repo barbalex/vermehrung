@@ -53,6 +53,12 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+const FieldRow = styled.div`
+  display: flex;
+  > div:not(:last-of-type) {
+    padding-right: 8px;
+  }
+`
 
 const query = gql`
   query LieferungQuery(
@@ -484,15 +490,6 @@ const Lieferung = ({ filter: showFilter }) => {
             type="number"
           />
           <TextField
-            key={`${row.id}von_anzahl_individuen`}
-            name="von_anzahl_individuen"
-            label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
-            saveToDb={saveToDb}
-            error={errors.von_anzahl_individuen}
-            type="number"
-          />
-          <TextField
             key={`${row.id}anzahl_auspflanzbereit`}
             name="anzahl_auspflanzbereit"
             label="Anzahl auspflanzbereit"
@@ -501,24 +498,35 @@ const Lieferung = ({ filter: showFilter }) => {
             error={errors.anzahl_auspflanzbereit}
             type="number"
           />
-          <TextField
-            key={`${row.id}gramm_samen`}
-            name="gramm_samen"
-            label="Gramm Samen"
-            value={row.gramm_samen}
-            saveToDb={saveToDb}
-            error={errors.gramm_samen}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}andere_menge`}
-            name="andere_menge"
-            label={`Andere Menge (z.B. "3 Zwiebeln")`}
-            value={row.andere_menge}
-            saveToDb={saveToDb}
-            error={errors.andere_menge}
-            type="text"
-          />
+          <FieldRow>
+            <TextField
+              key={`${row.id}gramm_samen`}
+              name="gramm_samen"
+              label="Gramm Samen"
+              value={row.gramm_samen}
+              saveToDb={saveToDb}
+              error={errors.gramm_samen}
+              type="number"
+            />
+            <TextField
+              key={`${row.id}andere_menge`}
+              name="andere_menge"
+              label={`Andere Menge (z.B. "3 Zwiebeln")`}
+              value={row.andere_menge}
+              saveToDb={saveToDb}
+              error={errors.andere_menge}
+              type="text"
+            />
+            <TextField
+              key={`${row.id}von_anzahl_individuen`}
+              name="von_anzahl_individuen"
+              label="von Anzahl Individuen"
+              value={row.von_anzahl_individuen}
+              saveToDb={saveToDb}
+              error={errors.von_anzahl_individuen}
+              type="number"
+            />
+          </FieldRow>
           <TitleRow>
             <Title>von</Title>
           </TitleRow>
