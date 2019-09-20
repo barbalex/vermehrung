@@ -127,11 +127,7 @@ const SettingsZaehlungen = ({ aufgabeResult }) => {
           <Title>Felder für Aufgaben wählen:</Title>
           <MenuItem>
             <FormControlLabel
-              value={
-                ag_teilkultur_id === null
-                  ? 'false'
-                  : ag_teilkultur_id.toString()
-              }
+              value={ag_teilkultur_id === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -146,7 +142,7 @@ const SettingsZaehlungen = ({ aufgabeResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_person_id === null ? 'false' : ag_person_id.toString()}
+              value={ag_person_id === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -161,7 +157,7 @@ const SettingsZaehlungen = ({ aufgabeResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_datum === null ? 'false' : ag_datum.toString()}
+              value={ag_datum === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -176,7 +172,7 @@ const SettingsZaehlungen = ({ aufgabeResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_geplant === null ? 'false' : ag_geplant.toString()}
+              value={ag_geplant === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"

@@ -132,11 +132,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           <Title>Felder für Teil-Zählungen wählen:</Title>
           <MenuItem>
             <FormControlLabel
-              value={
-                tz_teilkultur_id === null
-                  ? 'false'
-                  : tz_teilkultur_id.toString()
-              }
+              value={tz_teilkultur_id === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -151,11 +147,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                tz_anzahl_mutterpflanzen === null
-                  ? 'false'
-                  : tz_anzahl_mutterpflanzen.toString()
-              }
+              value={tz_anzahl_mutterpflanzen === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -170,9 +162,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                tz_andere_menge === null ? 'false' : tz_andere_menge.toString()
-              }
+              value={tz_andere_menge === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -188,9 +178,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           <MenuItem>
             <FormControlLabel
               value={
-                tz_auspflanzbereit_beschreibung === null
-                  ? 'false'
-                  : tz_auspflanzbereit_beschreibung.toString()
+                tz_auspflanzbereit_beschreibung === true ? 'true' : 'false'
               }
               control={
                 <Radio
@@ -206,9 +194,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                tz_bemerkungen === null ? 'false' : tz_bemerkungen.toString()
-              }
+              value={tz_bemerkungen === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"

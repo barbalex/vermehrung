@@ -136,7 +136,7 @@ const SettingsKultur = ({ kulturId, kulturFelderResult }) => {
           <Title>Optionen für diese Kultur:</Title>
           <MenuItem>
             <FormControlLabel
-              value={tk === null ? 'false' : tk.toString()}
+              value={tk === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"

@@ -27,18 +27,23 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTeilkulturen = ({ kulturId, kulturFelderResult }) => {
+const SettingsTeilkulturen = ({ teilkulturResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = kulturFelderResult
-  const { tk_bemerkungen } = get(data, 'kultur_felder', {}) || {}
+  const { data, error, loading, refetch } = teilkulturResult
+  console.log('SettingsTeilkulturen, data:', data)
+  const { tk_bemerkungen } =
+    get(data, 'teilkultur[0].kultur.kultur_felder') || {}
+  console.log('SettingsTeilkulturen, tk_bemerkungen:', tk_bemerkungen)
 
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
       const value = event.target.value === 'true'
+      const kulturId = get(data, 'teilkultur[0].kultur_id')
+      console.log('SettingsTeilkulturen, kulturId:', kulturId)
       try {
         await client.mutate({
           mutation: gql`
@@ -73,7 +78,7 @@ const SettingsTeilkulturen = ({ kulturId, kulturFelderResult }) => {
       }
       refetch()
     },
-    [refetch, kulturId],
+    [refetch, data],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
@@ -125,9 +130,7 @@ const SettingsTeilkulturen = ({ kulturId, kulturFelderResult }) => {
           <Title>Felder für Teilkulturen wählen:</Title>
           <MenuItem>
             <FormControlLabel
-              value={
-                tk_bemerkungen === null ? 'false' : tk_bemerkungen.toString()
-              }
+              value={tk_bemerkungen === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"

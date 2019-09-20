@@ -132,7 +132,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           <Title>Felder für Gärten wählen:</Title>
           <MenuItem>
             <FormControlLabel
-              value={ga_strasse === null ? 'false' : ga_strasse.toString()}
+              value={ga_strasse === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -147,7 +147,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ga_plz === null ? 'false' : ga_plz.toString()}
+              value={ga_plz === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -162,7 +162,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ga_ort === null ? 'false' : ga_ort.toString()}
+              value={ga_ort === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -178,7 +178,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           <MenuItem>
             <FormControlLabel
               value={
-                ga_geom_point === null ? 'false' : ga_geom_point.toString()
+                ga_geom_point === true ? 'true' : 'false'
               }
               control={
                 <Radio
@@ -194,7 +194,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ga_aktiv === null ? 'false' : ga_aktiv.toString()}
+              value={ga_aktiv  === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -210,7 +210,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           <MenuItem>
             <FormControlLabel
               value={
-                ga_bemerkungen === null ? 'false' : ga_bemerkungen.toString()
+                ga_bemerkungen  === true ? 'true' : 'false'
               }
               control={
                 <Radio

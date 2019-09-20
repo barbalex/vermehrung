@@ -27,7 +27,7 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ kulturId, zaehlungResult }) => {
+const SettingsZaehlungen = ({ zaehlungResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -36,6 +36,7 @@ const SettingsZaehlungen = ({ kulturId, zaehlungResult }) => {
   const zaehlung = get(data, 'zaehlung', [{}])[0]
   const { z_geplant, z_bemerkungen } =
     get(zaehlung, 'kultur.kultur_felder') || {}
+  const kulturId = get(zaehlung, 'kultur.id')
 
   const saveToDb = useCallback(
     async event => {
@@ -127,7 +128,7 @@ const SettingsZaehlungen = ({ kulturId, zaehlungResult }) => {
           <Title>Felder für Zählungen wählen:</Title>
           <MenuItem>
             <FormControlLabel
-              value={z_geplant === null ? 'false' : z_geplant.toString()}
+              value={z_geplant === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -142,9 +143,7 @@ const SettingsZaehlungen = ({ kulturId, zaehlungResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                z_bemerkungen === null ? 'false' : z_bemerkungen.toString()
-              }
+              value={z_bemerkungen === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"

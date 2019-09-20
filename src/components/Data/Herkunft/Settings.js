@@ -126,7 +126,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           <Title>Felder für Herkünfte wählen:</Title>
           <MenuItem>
             <FormControlLabel
-              value={hk_kanton === null ? 'false' : hk_kanton.toString()}
+              value={hk_kanton === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -141,7 +141,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={hk_land === null ? 'false' : hk_land.toString()}
+              value={hk_land === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -156,9 +156,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                hk_geom_point === null ? 'false' : hk_geom_point.toString()
-              }
+              value={hk_geom_point === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -173,9 +171,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                hk_bemerkungen === null ? 'false' : hk_bemerkungen.toString()
-              }
+              value={hk_bemerkungen === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"

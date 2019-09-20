@@ -76,6 +76,9 @@ const teilkulturQuery = gql`
       kultur {
         id
         art_id
+        kultur_felder {
+          ...KulturFelderFields
+        }
       }
     }
     rowsUnfiltered: teilkultur @include(if: $isFiltered) {
@@ -86,6 +89,7 @@ const teilkulturQuery = gql`
     }
   }
   ${teilkulturFragment}
+  ${kulturFelderFragment}
 `
 // garten.person.name
 const kulturQuery = gql`
@@ -119,14 +123,6 @@ const kulturQuery = gql`
   }
   ${teilkulturFragment}
 `
-const kulturFelderQuery = gql`
-  query kulturFelderQuery($kulturId: Int) {
-    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
-      ...KulturFelderFields
-    }
-  }
-  ${kulturFelderFragment}
-`
 
 const Teilkultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -140,9 +136,10 @@ const Teilkultur = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })
-  const { data, error, loading } = useQuery(teilkulturQuery, {
+  const teilkulturResult = useQuery(teilkulturQuery, {
     variables: { id, isFiltered, filter: teilkulturFilter },
   })
+  const { data, error, loading } = teilkulturResult
 
   const [errors, setErrors] = useState({})
 
@@ -152,24 +149,24 @@ const Teilkultur = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.teilkultur
   } else {
-    row = get(data, 'teilkultur', [{}])[0]
+    row = get(data, 'teilkultur[0]') || {}
   }
+  console.log('Teilkultur, row:', row)
 
   const {
     data: kulturData,
     error: kulturError,
     loading: kulturLoading,
   } = useQuery(kulturQuery)
+  console.log('Teilkultur, kulturData:', kulturData)
 
-  const kulturFelderResult = useQuery(kulturFelderQuery, {
-    variables: { kulturId: row.kultur_id },
-  })
-  const { tk_bemerkungen } =
-    get(kulturFelderResult.data, 'kultur_felder', {}) || {}
+  const { tk_bemerkungen } = get(row, 'kultur.kultur_felder', {}) || {}
+  console.log('Teilkultur, tk_bemerkungen:', tk_bemerkungen)
 
   useEffect(() => {
     setErrors({})
   }, [row.id])
+  console.log('Teilkultur, after useEffect:')
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
@@ -186,6 +183,7 @@ const Teilkultur = ({ filter: showFilter }) => {
       }
     }),
   )()
+  console.log('Teilkultur, kulturWerte:', kulturWerte)
 
   const saveToDb = useCallback(
     async event => {
@@ -281,10 +279,7 @@ const Teilkultur = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Teilkultur</Title>
             <TitleSymbols>
-              <Settings
-                kulturId={row.kultur_id}
-                kulturFelderResult={kulturFelderResult}
-              />
+              <Settings teilkulturResult={teilkulturResult} />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}
