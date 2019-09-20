@@ -13,26 +13,59 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../storeContext'
-import Select from '../shared/Select'
-import TextField from '../shared/TextField'
-import DateFieldWithPicker from '../shared/DateFieldWithPicker'
-import Checkbox2States from '../shared/Checkbox2States'
-import FormTitle from '../shared/FormTitle'
-import FilterTitle from '../shared/FilterTitle'
+import storeContext from '../../../storeContext'
+import Select from '../../shared/Select'
+import TextField from '../../shared/TextField'
+import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
+import Checkbox2States from '../../shared/Checkbox2States'
+import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
 import {
   aufgabe as aufgabeFragment,
+  kulturFelder as kulturFelderFragment,
   teilkultur as teilkulturFragment,
-} from '../../utils/fragments'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
-import types from '../../store/Filter/simpleTypes'
-import queryFromTable from '../../utils/queryFromTable'
+} from '../../../utils/fragments'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
+import types from '../../../store/Filter/simpleTypes'
+import queryFromTable from '../../../utils/queryFromTable'
+import Settings from './Settings'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+`
+const TitleContainer = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+  padding 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleSymbols = styled.div`
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleFilterNumbers = styled.div`
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -106,6 +139,14 @@ const personQuery = gql`
       ort
     }
   }
+`
+const kulturFelderQuery = gql`
+  query kulturFelderQuery($kulturId: Int) {
+    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
+      ...KulturFelderFields
+    }
+  }
+  ${kulturFelderFragment}
 `
 
 const Aufgabe = ({ filter: showFilter }) => {
@@ -185,6 +226,12 @@ const Aufgabe = ({ filter: showFilter }) => {
       })),
     [personData],
   )
+
+  const kulturFelderResult = useQuery(kulturFelderQuery, {
+    variables: { kulturId: row.kultur_id },
+  })
+  const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
+    get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -285,13 +332,18 @@ const Aufgabe = ({ filter: showFilter }) => {
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle
-            title="Aufgabe"
-            table="aufgabe"
-            rowsLength={totalNr}
-            rowsFilteredLength={filteredNr}
-            filter={showFilter}
-          />
+          <TitleContainer>
+            <Title>Aufgabe</Title>
+            <TitleSymbols>
+              <Settings
+                kulturId={row.kultur_id}
+                kulturFelderResult={kulturFelderResult}
+              />
+              {(store.filter.show || isFiltered) && (
+                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+              )}
+            </TitleSymbols>
+          </TitleContainer>
         )}
         <FieldsContainer>
           <Select
@@ -305,17 +357,19 @@ const Aufgabe = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />
-          <Select
-            key={`${row.id}${row.teilkultur_id}teilkultur_id`}
-            name="teilkultur_id"
-            value={row.teilkultur_id}
-            field="teilkultur_id"
-            label="Teilkultur"
-            options={teilkulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.teilkultur_id}
-          />
+          {ag_teilkultur_id && (
+            <Select
+              key={`${row.id}${row.teilkultur_id}teilkultur_id`}
+              name="teilkultur_id"
+              value={row.teilkultur_id}
+              field="teilkultur_id"
+              label="Teilkultur"
+              options={teilkulturWerte}
+              loading={kulturLoading}
+              saveToDb={saveToDb}
+              error={errors.teilkultur_id}
+            />
+          )}
           <TextField
             key={`${row.id}aufgabe`}
             name="aufgabe"
@@ -325,33 +379,39 @@ const Aufgabe = ({ filter: showFilter }) => {
             error={errors.aufgabe}
             multiline
           />
-          <Select
-            key={`${row.id}${row.person_id}person_id`}
-            name="person_id"
-            value={row.person_id}
-            field="person_id"
-            label="Wer"
-            options={personWerte}
-            loading={personLoading}
-            saveToDb={saveToDb}
-            error={errors.person_id}
-          />
-          <DateFieldWithPicker
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={errors.datum}
-          />
-          <Checkbox2States
-            key={`${row.id}geplant`}
-            label="geplant"
-            name="geplant"
-            value={row.geplant}
-            saveToDb={saveToDb}
-            error={errors.geplant}
-          />
+          {ag_person_id && (
+            <Select
+              key={`${row.id}${row.person_id}person_id`}
+              name="person_id"
+              value={row.person_id}
+              field="person_id"
+              label="Wer"
+              options={personWerte}
+              loading={personLoading}
+              saveToDb={saveToDb}
+              error={errors.person_id}
+            />
+          )}
+          {ag_datum && (
+            <DateFieldWithPicker
+              key={`${row.id}datum`}
+              name="datum"
+              label="Datum"
+              value={row.datum}
+              saveToDb={saveToDb}
+              error={errors.datum}
+            />
+          )}
+          {ag_geplant && (
+            <Checkbox2States
+              key={`${row.id}geplant`}
+              label="geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors.geplant}
+            />
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

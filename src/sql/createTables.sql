@@ -337,7 +337,8 @@ create table kultur_felder (
   tk_bemerkungen boolean default true,
   ag_teilkultur_id boolean default true,
   ag_geplant boolean default true,
-  ag_person_id boolean default true
+  ag_person_id boolean default true,
+  ag_datum boolean default true
 );
 create index on kultur_felder using btree (kultur_id);
 COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';

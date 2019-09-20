@@ -115,18 +115,19 @@ export const kulturFile = gql`
 export const kulturFelder = gql`
   fragment KulturFelderFields on kultur_felder {
     kultur_id
-    tk
-    tk_bemerkungen
-    z_geplant
-    z_bemerkungen
-    tz_teilkultur_id
-    tz_anzahl_mutterpflanzen
-    tz_andere_menge
-    tz_auspflanzbereit_beschreibung
-    tz_bemerkungen
-    ag_teilkultur_id
+    ag_datum
     ag_geplant
     ag_person_id
+    ag_teilkultur_id
+    tk
+    tk_bemerkungen
+    tz_andere_menge
+    tz_anzahl_mutterpflanzen
+    tz_auspflanzbereit_beschreibung
+    tz_teilkultur_id
+    tz_bemerkungen
+    z_bemerkungen
+    z_geplant
   }
 `
 export const lieferung = gql`

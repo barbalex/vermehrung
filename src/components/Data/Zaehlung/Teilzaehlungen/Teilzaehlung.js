@@ -166,7 +166,7 @@ const Teilzaehlung = ({
       <>
         {!!index && <TopLine />}
         <Container>
-          {!!tz_teilkultur_id && (
+          {tz_teilkultur_id && (
             <Teilkultur>
               <Select
                 key={`${row.id}teilkultur_id`}
@@ -203,7 +203,7 @@ const Teilzaehlung = ({
               type="number"
             />
           </Anzahl>
-          {!!tz_anzahl_mutterpflanzen && (
+          {tz_anzahl_mutterpflanzen && (
             <Anzahl>
               <TextField
                 key={`${row.id}anzahl_mutterpflanzen`}
@@ -216,7 +216,7 @@ const Teilzaehlung = ({
               />
             </Anzahl>
           )}
-          {!!tz_andere_menge && (
+          {tz_andere_menge && (
             <Other>
               <TextField
                 key={`${row.id}andere_menge`}
@@ -229,7 +229,7 @@ const Teilzaehlung = ({
               />
             </Other>
           )}
-          {!!tz_auspflanzbereit_beschreibung && (
+          {tz_auspflanzbereit_beschreibung && (
             <Auspflanzbereit>
               <TextField
                 key={`${row.id}auspflanzbereit_beschreibung`}
@@ -242,7 +242,7 @@ const Teilzaehlung = ({
               />
             </Auspflanzbereit>
           )}
-          {!!tz_bemerkungen && (
+          {tz_bemerkungen && (
             <Last>
               <TextField
                 key={`${row.id}bemerkungen`}

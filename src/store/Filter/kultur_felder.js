@@ -14,6 +14,7 @@ export const type = types.model({
   ag_teilkultur_id: types.optional(types.boolean, true),
   ag_geplant: types.optional(types.boolean, true),
   ag_person_id: types.optional(types.boolean, true),
+  ag_datum: types.optional(types.boolean, true),
 })
 
 export const initial = {
@@ -30,6 +31,7 @@ export const initial = {
   ag_teilkultur_id: true,
   ag_geplant: true,
   ag_person_id: true,
+  ag_datum: true,
 }
 
 export const empty = {
@@ -46,6 +48,7 @@ export const empty = {
   ag_teilkultur_id: true,
   ag_geplant: true,
   ag_person_id: true,
+  ag_datum: true,
 }
 
 export const simpleTypes = {
@@ -62,4 +65,5 @@ export const simpleTypes = {
   ag_teilkultur_id: 'boolean',
   ag_geplant: 'boolean',
   ag_person_id: 'boolean',
+  ag_datum: 'boolean',
 }
