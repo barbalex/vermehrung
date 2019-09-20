@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Telkulturen"
 date: "2019-09-20"
 title: "Teil-Kulturen"
-sort: 3
+sort: 4
 ---
 
 Grössere Gärten oder gärtnerische Betriebe organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: "Beete", "Kästen", "Reihen".<br/>
