@@ -228,13 +228,9 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const kulturFelder = showFilter ? {} : row.kultur.kultur_felders[0]
   const z_bemerkungen = showFilter
     ? true
     : get(row, 'kultur.kultur_felders[0].z_bemerkungen')
-
-  console.log('Zaehlung, row:', row)
-  console.log('Zaehlung, kulturFelder:', kulturFelder)
 
   return (
     <ErrorBoundary>
