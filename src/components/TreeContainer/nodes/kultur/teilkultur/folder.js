@@ -2,10 +2,12 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
-  console.log('kultur > teilkulturFolder')
   const kulturId = url[1]
   const kulturen = get(data, 'kultur', [])
   const kultur = kulturen.find(k => k.id === kulturId)
+  const tk = get(kultur, 'kultur_felder.tk')
+  if (!tk) return []
+
   const teilkulturs = get(kultur, 'teilkulturs', [])
   const nr = loading && !teilkulturs.length ? '...' : teilkulturs.length
 

@@ -60,17 +60,22 @@ const insertTeilzaehlungMutation = gql`
   ${teilzaehlungFragment}
 `
 
-const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
+const Teilzaehlungen = ({ zaehlungResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = useQuery(teilzaehlungenQuery, {
-    variables: { zaehlId: zaehlung.id },
-  })
+  const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
+
+  const { data, error, loading, refetch: refetchTeilzaehlungen } = useQuery(
+    teilzaehlungenQuery,
+    {
+      variables: { zaehlId: zaehlung.id },
+    },
+  )
   const rows = get(data, 'teilzaehlung', [])
 
-  const { tk } = get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
+  const { tk } = get(zaehlung, 'kultur.kultur_felder') || {}
 
   const onClickNew = useCallback(async () => {
     try {
@@ -88,7 +93,7 @@ const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
         },
       })
     }
-    refetch()
+    refetchTeilzaehlungen()
   }, [])
 
   const showNew = rows.length === 0 || tk
@@ -111,7 +116,7 @@ const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
           <div>
             <Settings
               kulturId={zaehlung.kultur_id}
-              kulturFelderResult={kulturFelderResult}
+              zaehlungResult={zaehlungResult}
             />
             {showNew && (
               <IconButton
@@ -126,9 +131,8 @@ const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
         </TitleRow>
         <TeilzaehlungenRows
           rows={rows}
-          kulturFelderResult={kulturFelderResult}
-          zaehlung={zaehlung}
-          refetchTz={refetch}
+          zaehlungResult={zaehlungResult}
+          refetchTz={refetchTeilzaehlungen}
         />
       </Container>
     </ErrorBoundary>

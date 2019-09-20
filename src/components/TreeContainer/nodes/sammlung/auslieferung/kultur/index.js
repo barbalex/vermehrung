@@ -39,7 +39,8 @@ export default ({ nodes, data, url }) => {
         id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
         parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
         label:
-          el.garten.name || `(${get(el, 'garten.person.name') || 'kein Name'})`,
+          get(el, 'garten.name') ||
+          `(${get(el, 'garten.person.name') || 'kein Name'})`,
         url: [
           'Sammlungen',
           sammlungId,

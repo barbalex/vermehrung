@@ -9,7 +9,8 @@ export default ({ nodes, data }) => {
       .filter(() => nodes.map(n => n.id).includes('kulturFolder'))
       .map(el => {
         const garten =
-          el.garten.name || `(${get(el, 'garten.person.name') || 'kein Name'})`
+          get(el, 'garten.name') ||
+          `(${get(el, 'garten.person.name') || 'kein Name'})`
         const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
 
         return {

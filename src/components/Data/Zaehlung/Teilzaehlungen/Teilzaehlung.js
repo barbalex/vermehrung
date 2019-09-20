@@ -72,13 +72,14 @@ const Teilzaehlung = ({
   teilkulturenWerte,
   teilkulturenLoading,
   index,
-  kulturFelderResult,
+  zaehlungResult,
   refetchTz,
 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
+  const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
   const {
     tk,
     tz_teilkultur_id,
@@ -86,7 +87,7 @@ const Teilzaehlung = ({
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
+  } = get(zaehlung, 'kultur.kultur_felder') || {}
 
   const [errors, setErrors] = useState({})
 

@@ -60,7 +60,7 @@ const FieldRow = styled.div`
   }
 `
 
-const query = gql`
+const lieferungQuery = gql`
   query LieferungQuery(
     $id: bigint!
     $isFiltered: Boolean!
@@ -167,7 +167,7 @@ const Lieferung = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery(lieferungQuery, {
     variables: { id, isFiltered, filter: lieferungFilter },
   })
 
@@ -236,7 +236,7 @@ const Lieferung = ({ filter: showFilter }) => {
       const personName = get(el, 'garten.person.name') || '(kein Name)'
       const personOrt = get(el, 'garten.person.ort') || null
       const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-      const label = el.garten.name || personLabel
+      const label = get(el, 'garten.name') || personLabel
 
       return {
         value: el.id,

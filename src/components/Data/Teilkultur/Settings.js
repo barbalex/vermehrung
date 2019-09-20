@@ -33,7 +33,7 @@ const SettingsTeilkulturen = ({ kulturId, kulturFelderResult }) => {
   const { enqueNotification } = store
 
   const { data, error, loading, refetch } = kulturFelderResult
-  const { tk_bemerkungen } = get(data, 'kultur_felder[0]', {}) || {}
+  const { tk_bemerkungen } = get(data, 'kultur_felder', {}) || {}
 
   const saveToDb = useCallback(
     async event => {

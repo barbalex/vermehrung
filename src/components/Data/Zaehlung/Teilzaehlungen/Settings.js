@@ -27,19 +27,20 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
+const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = kulturFelderResult
+  const { data, error, loading, refetch } = zaehlungResult
+  const zaehlung = get(data, 'zaehlung', [{}])[0]
   const {
     tz_teilkultur_id,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = get(data, 'kultur_felder[0]', {}) || {}
+  } = get(zaehlung, 'kultur.kultur_felder') || {}
 
   const saveToDb = useCallback(
     async event => {

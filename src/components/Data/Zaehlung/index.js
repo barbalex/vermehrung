@@ -84,7 +84,7 @@ const zaehlungQuery = gql`
       kultur {
         id
         art_id
-        kultur_felders {
+        kultur_felder {
           ...KulturFelderFields
         }
       }
@@ -121,13 +121,6 @@ const kulturQuery = gql`
       }
     }
   }
-`
-const kulturFelderQuery = gql`
-  query kulturFelderQuery($kulturId: Int) {
-    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
-      ...KulturFelderFields
-    }
-  }
   ${kulturFelderFragment}
 `
 
@@ -136,16 +129,17 @@ const Zaehlung = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray, refetch: refetchTree } = store.tree
   const id = showFilter
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
-  const { data, error, loading } = useQuery(zaehlungQuery, {
+  const zaehlungResult = useQuery(zaehlungQuery, {
     variables: { id, isFiltered, filter: zaehlungFilter },
   })
+  const { data, error, loading } = zaehlungResult
 
   const [errors, setErrors] = useState({})
 
@@ -157,12 +151,6 @@ const Zaehlung = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'zaehlung', [{}])[0]
   }
-
-  const kulturFelderResult = useQuery(kulturFelderQuery, {
-    variables: { kulturId: row.kultur_id },
-  })
-  const { z_geplant, z_bemerkungen } =
-    get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
 
   const artId = get(row, 'kultur.art_id')
   const kulturFilter = artId
@@ -178,6 +166,8 @@ const Zaehlung = ({ filter: showFilter }) => {
     },
   })
 
+  const { z_geplant, z_bemerkungen } = get(row, 'kultur.kultur_felder') || {}
+
   useEffect(() => {
     setErrors({})
   }, [row.id])
@@ -188,7 +178,7 @@ const Zaehlung = ({ filter: showFilter }) => {
         const personName = get(el, 'garten.person.name') || '(kein Name)'
         const personOrt = get(el, 'garten.person.ort') || null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const label = el.garten.name || personLabel
+        const label = get(el, 'garten.name') || personLabel
 
         return {
           value: el.id,
@@ -247,7 +237,7 @@ const Zaehlung = ({ filter: showFilter }) => {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
+        refetchTree()
       }
     },
     [row],
@@ -291,7 +281,7 @@ const Zaehlung = ({ filter: showFilter }) => {
               <TitleSymbols>
                 <Settings
                   kulturId={row.kultur_id}
-                  kulturFelderResult={kulturFelderResult}
+                  zaehlungResult={zaehlungResult}
                 />
                 {(store.filter.show || isFiltered) && (
                   <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
@@ -340,12 +330,7 @@ const Zaehlung = ({ filter: showFilter }) => {
                 multiLine
               />
             )}
-            {!showFilter && (
-              <Teilzaehlungen
-                zaehlung={row}
-                kulturFelderResult={kulturFelderResult}
-              />
-            )}
+            {!showFilter && <Teilzaehlungen zaehlungResult={zaehlungResult} />}
           </FieldsContainer>
         </Container>
       </>

@@ -27,13 +27,15 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
+const SettingsZaehlungen = ({ kulturId, zaehlungResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = kulturFelderResult
-  const { z_geplant, z_bemerkungen } = get(data, 'kultur_felder[0]', {}) || {}
+  const { data, error, loading, refetch: refetchZaehlung } = zaehlungResult
+  const zaehlung = get(data, 'zaehlung', [{}])[0]
+  const { z_geplant, z_bemerkungen } =
+    get(zaehlung, 'kultur.kultur_felder') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -71,9 +73,9 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
           },
         })
       }
-      refetch()
+      refetchZaehlung()
     },
-    [refetch, kulturId],
+    [refetchZaehlung, kulturId],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

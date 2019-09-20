@@ -20,7 +20,8 @@ export default ({ nodes, data, url }) => {
         id: `art${artId}Kultur${el.id}`,
         parentId: `art${artId}KulturFolder`,
         label:
-          el.garten.name || `(${get(el, 'garten.person.name') || 'kein Name'})`,
+          get(el, 'garten.name') ||
+          `(${get(el, 'garten.person.name') || 'kein Name'})`,
         url: ['Arten', artId, 'Kulturen', el.id],
         hasChildren: true,
       }))

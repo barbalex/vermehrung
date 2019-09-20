@@ -27,14 +27,15 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
+const SettingsZaehlungen = ({ aufgabeResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = kulturFelderResult
+  const { error, loading, refetch } = aufgabeResult
+  const kulturId = get(aufgabeResult, 'data.aufgabe[0].kultur.id')
   const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
-    get(data, 'kultur_felder[0]', {}) || {}
+    get(aufgabeResult, 'data.aufgabe[0].kultur.kultur_felder') || {}
 
   const saveToDb = useCallback(
     async event => {

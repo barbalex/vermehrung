@@ -229,9 +229,6 @@ export default gql`
         ...TeilkulturFields
         kultur {
           ...KulturFields
-          kultur_felder {
-            tk
-          }
         }
       }
       zaehlungs(where: $zaehlungFilter, order_by: { datum: desc_nulls_first })

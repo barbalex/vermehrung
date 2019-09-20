@@ -179,7 +179,7 @@ const Kultur = ({ filter: showFilter }) => {
   const kulturFelderResult = useQuery(kulturFelderQuery, {
     variables: { kulturId: row.id },
   })
-  const { tk } = get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
+  const { tk } = get(kulturFelderResult.data, 'kultur_felder', {}) || {}
 
   useEffect(() => {
     setErrors({})

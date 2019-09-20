@@ -84,6 +84,9 @@ const aufgabeQuery = gql`
       kultur {
         id
         art_id
+        kultur_felder {
+          ...KulturFelderFields
+        }
       }
     }
     rowsUnfiltered: aufgabe @include(if: $isFiltered) {
@@ -94,6 +97,7 @@ const aufgabeQuery = gql`
     }
   }
   ${aufgabeFragment}
+  ${kulturFelderFragment}
 `
 // garten.person.name
 const kulturQuery = gql`
@@ -140,30 +144,23 @@ const personQuery = gql`
     }
   }
 `
-const kulturFelderQuery = gql`
-  query kulturFelderQuery($kulturId: Int) {
-    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
-      ...KulturFelderFields
-    }
-  }
-  ${kulturFelderFragment}
-`
 
 const Aufgabe = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray, refetch: refetchTree } = store.tree
 
   const id = showFilter
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const aufgabeFilter = queryFromTable({ store, table: 'aufgabe' })
-  const { data, error, loading } = useQuery(aufgabeQuery, {
+  const aufgabeResult = useQuery(aufgabeQuery, {
     variables: { id, isFiltered, filter: aufgabeFilter },
   })
+  const { data, error, loading } = aufgabeResult
 
   const [errors, setErrors] = useState({})
 
@@ -173,7 +170,7 @@ const Aufgabe = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.aufgabe
   } else {
-    row = get(data, 'aufgabe', [{}])[0]
+    row = get(data, 'aufgabe[0]') || {}
   }
 
   const {
@@ -198,7 +195,7 @@ const Aufgabe = ({ filter: showFilter }) => {
         const personName = get(el, 'garten.person.name') || '(kein Name)'
         const personOrt = get(el, 'garten.person.ort') || null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const gartenName = el.garten.name || personLabel
+        const gartenName = get(el, 'garten.name') || personLabel
         const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
         const label = `${gartenName}: ${artName}`
 
@@ -227,11 +224,8 @@ const Aufgabe = ({ filter: showFilter }) => {
     [personData],
   )
 
-  const kulturFelderResult = useQuery(kulturFelderQuery, {
-    variables: { kulturId: row.kultur_id },
-  })
   const { tk, ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
-    get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
+    get(row, 'kultur.kultur_felder') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -279,7 +273,7 @@ const Aufgabe = ({ filter: showFilter }) => {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
+        refetchTree()
       }
     },
     [row],
@@ -337,7 +331,7 @@ const Aufgabe = ({ filter: showFilter }) => {
             <TitleSymbols>
               <Settings
                 kulturId={row.kultur_id}
-                kulturFelderResult={kulturFelderResult}
+                aufgabeResult={aufgabeResult}
               />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>

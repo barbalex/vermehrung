@@ -135,7 +135,7 @@ const Event = ({ filter: showFilter }) => {
       const personName = get(el, 'garten.person.name') || '(kein Name)'
       const personOrt = get(el, 'garten.person.ort') || null
       const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-      const gartenName = el.garten.name || personLabel
+      const gartenName = get(el, 'garten.name') || personLabel
       const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
       const label = `${gartenName}: ${artName}`
 

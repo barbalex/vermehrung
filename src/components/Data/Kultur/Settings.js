@@ -35,7 +35,7 @@ const SettingsKultur = ({ kulturId, kulturFelderResult }) => {
   const { refetch: refetchTree } = store.tree
 
   const { data, error, loading, refetch } = kulturFelderResult
-  const { tk } = get(data, 'kultur_felder[0]', {}) || {}
+  const { tk } = get(data, 'kultur_felder', {}) || {}
 
   const saveToDb = useCallback(
     async event => {
