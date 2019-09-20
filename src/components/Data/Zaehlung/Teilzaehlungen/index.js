@@ -45,9 +45,6 @@ const teilzaehlungenQuery = gql`
       order_by: { teilkultur: { name: asc_nulls_first } }
     ) {
       ...TeilzaehlungFields
-      teilkultur {
-        ...TeilkulturFields
-      }
     }
   }
   ${teilzaehlungFragment}
