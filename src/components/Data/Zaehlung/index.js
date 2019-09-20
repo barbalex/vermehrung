@@ -28,12 +28,44 @@ import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
+import Settings from './Settings'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+`
+const TitleContainer = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+  padding 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleSymbols = styled.div`
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleFilterNumbers = styled.div`
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -90,6 +122,14 @@ const kulturQuery = gql`
     }
   }
 `
+const kulturFelderQuery = gql`
+  query kulturFelderQuery($kulturId: Int) {
+    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
+      ...KulturFelderFields
+    }
+  }
+  ${kulturFelderFragment}
+`
 
 const Zaehlung = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -117,6 +157,12 @@ const Zaehlung = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'zaehlung', [{}])[0]
   }
+
+  const kulturFelderResult = useQuery(kulturFelderQuery, {
+    variables: { kulturId: row.kultur_id },
+  })
+  const { z_geplant, z_bemerkungen } =
+    get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
 
   const artId = get(row, 'kultur.art_id')
   const kulturFilter = artId
@@ -228,10 +274,6 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const z_bemerkungen = showFilter
-    ? true
-    : get(row, 'kultur.kultur_felders[0].z_bemerkungen')
-
   return (
     <ErrorBoundary>
       <>
@@ -244,13 +286,18 @@ const Zaehlung = ({ filter: showFilter }) => {
               filteredNr={filteredNr}
             />
           ) : (
-            <FormTitle
-              title="Zählung"
-              table="zaehlung"
-              rowsLength={totalNr}
-              rowsFilteredLength={filteredNr}
-              filter={showFilter}
-            />
+            <TitleContainer>
+              <Title>Zählung</Title>
+              <TitleSymbols>
+                <Settings
+                  kulturId={row.kultur_id}
+                  kulturFelderResult={kulturFelderResult}
+                />
+                {(store.filter.show || isFiltered) && (
+                  <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+                )}
+              </TitleSymbols>
+            </TitleContainer>
           )}
           <FieldsContainer>
             <Select
@@ -272,15 +319,17 @@ const Zaehlung = ({ filter: showFilter }) => {
               saveToDb={saveToDb}
               error={errors.datum}
             />
-            <Checkbox2States
-              key={`${row.id}geplant`}
-              label="geplant"
-              name="geplant"
-              value={row.geplant}
-              saveToDb={saveToDb}
-              error={errors.geplant}
-            />
-            {!!z_bemerkungen && (
+            {z_geplant && (
+              <Checkbox2States
+                key={`${row.id}geplant`}
+                label="geplant"
+                name="geplant"
+                value={row.geplant}
+                saveToDb={saveToDb}
+                error={errors.geplant}
+              />
+            )}
+            {z_bemerkungen && (
               <TextField
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"
@@ -291,7 +340,12 @@ const Zaehlung = ({ filter: showFilter }) => {
                 multiLine
               />
             )}
-            {!showFilter && <Teilzaehlungen zaehlung={row} />}
+            {!showFilter && (
+              <Teilzaehlungen
+                zaehlung={row}
+                kulturFelderResult={kulturFelderResult}
+              />
+            )}
           </FieldsContainer>
         </Container>
       </>

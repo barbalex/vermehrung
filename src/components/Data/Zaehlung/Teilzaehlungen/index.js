@@ -10,7 +10,6 @@ import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
 import {
-  kulturFelder as kulturFelderFragment,
   teilzaehlung as teilzaehlungFragment,
   teilkultur as teilkulturFragment,
 } from '../../../../utils/fragments'
@@ -60,16 +59,8 @@ const insertTeilzaehlungMutation = gql`
   }
   ${teilzaehlungFragment}
 `
-const kulturFelderQuery = gql`
-  query kulturFelderQuery($kulturId: Int) {
-    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
-      ...KulturFelderFields
-    }
-  }
-  ${kulturFelderFragment}
-`
 
-const Teilzaehlungen = ({ zaehlung }) => {
+const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -78,10 +69,6 @@ const Teilzaehlungen = ({ zaehlung }) => {
     variables: { zaehlId: zaehlung.id },
   })
   const rows = get(data, 'teilzaehlung', [])
-
-  const kulturFelderResult = useQuery(kulturFelderQuery, {
-    variables: { kulturId: zaehlung.kultur_id },
-  })
 
   const onClickNew = useCallback(async () => {
     try {

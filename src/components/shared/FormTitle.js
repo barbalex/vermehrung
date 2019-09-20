@@ -32,6 +32,8 @@ const FilterNumbers = styled.div`
   padding-right: 5px;
   margin-top: auto;
   margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
 `
 
 const FormTitle = ({
