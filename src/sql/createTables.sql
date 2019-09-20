@@ -350,6 +350,7 @@ create table person_felder (
   ga_plz boolean default true,
   ga_ort boolean default true,
   ga_geom_point boolean default true,
+  ga_aktiv boolean default true,
   ga_bemerkungen boolean default true,
   hk_kanton boolean default true,
   hk_land boolean default true,

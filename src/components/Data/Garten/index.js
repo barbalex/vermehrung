@@ -26,6 +26,7 @@ import {
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
+import { getProfile } from '../../../utils/auth'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
@@ -141,11 +142,20 @@ const Garten = ({ filter: showFilter }) => {
     row = get(data, 'garten', [{}])[0]
   }
 
+  const user = getProfile()
+  const userPersonId =
+    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
   const personFelderResult = useQuery(personFelderQuery, {
-    variables: { personrId: row.person_id },
+    variables: { personId: userPersonId },
   })
-  const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
-    get(personFelderResult.data, 'person_felder[0]', {}) || {}
+  const {
+    ga_strasse,
+    ga_plz,
+    ga_ort,
+    ga_geom_point,
+    ga_aktiv,
+    ga_bemerkungen,
+  } = get(personFelderResult.data, 'person_felder[0]', {}) || {}
 
   useEffect(() => {
     setErrors({})
@@ -262,13 +272,18 @@ const Garten = ({ filter: showFilter }) => {
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle
-            title="Garten"
-            table="garten"
-            rowsLength={totalNr}
-            rowsFilteredLength={filteredNr}
-            filter={showFilter}
-          />
+          <TitleContainer>
+            <Title>Garten</Title>
+            <TitleSymbols>
+              <Settings
+                personId={userPersonId}
+                personFelderResult={personFelderResult}
+              />
+              {(store.filter.show || isFiltered) && (
+                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+              )}
+            </TitleSymbols>
+          </TitleContainer>
         )}
         <FieldsContainer>
           <TextField
@@ -290,51 +305,61 @@ const Garten = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.person_id}
           />
-          <TextField
-            key={`${row.id}strasse`}
-            name="strasse"
-            label="Strasse"
-            value={row.strasse}
-            saveToDb={saveToDb}
-            error={errors.strasse}
-          />
-          <TextField
-            key={`${row.id}plz`}
-            name="plz"
-            label="PLZ"
-            value={row.plz}
-            saveToDb={saveToDb}
-            error={errors.plz}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}ort`}
-            name="ort"
-            label="Ort"
-            value={row.ort}
-            saveToDb={saveToDb}
-            error={errors.ort}
-          />
-          {!showFilter && (
+          {ga_strasse && (
+            <TextField
+              key={`${row.id}strasse`}
+              name="strasse"
+              label="Strasse"
+              value={row.strasse}
+              saveToDb={saveToDb}
+              error={errors.strasse}
+            />
+          )}
+          {ga_plz && (
+            <TextField
+              key={`${row.id}plz`}
+              name="plz"
+              label="PLZ"
+              value={row.plz}
+              saveToDb={saveToDb}
+              error={errors.plz}
+              type="number"
+            />
+          )}
+          {ga_ort && (
+            <TextField
+              key={`${row.id}ort`}
+              name="ort"
+              label="Ort"
+              value={row.ort}
+              saveToDb={saveToDb}
+              error={errors.ort}
+            />
+          )}
+          {!showFilter && ga_geom_point && (
             <Coordinates row={row} refetchForm={refetchForm} table="garten" />
           )}
-          <Checkbox2States
-            key={`${row.id}aktiv`}
-            label="aktiv"
-            name="aktiv"
-            value={row.aktiv}
-            saveToDb={saveToDb}
-            error={errors.aktiv}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors.bemerkungen}
-            multiLine
-          />
+          {ga_aktiv && (
+            <Checkbox2States
+              key={`${row.id}aktiv`}
+              label="aktiv"
+              name="aktiv"
+              value={row.aktiv}
+              saveToDb={saveToDb}
+              error={errors.aktiv}
+            />
+          )}
+          {ga_bemerkungen && (
+            <TextField
+              key={`${row.id}bemerkungen`}
+              name="bemerkungen"
+              label="Bemerkungen"
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={errors.bemerkungen}
+              multiLine
+            />
+          )}
           {!showFilter && <Files parentId={row.id} parent="garten" />}
         </FieldsContainer>
       </Container>

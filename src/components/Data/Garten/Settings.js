@@ -13,7 +13,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
-import { kulturFelder as kulturFelderFragment } from '../../../utils/fragments'
+import { personFelder as personFelderFragment } from '../../../utils/fragments'
 
 const Title = styled.div`
   padding: 12px 16px;
@@ -27,14 +27,20 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
+const SettingsGarten = ({ personId, personFelderResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = kulturFelderResult
-  const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
-    get(data, 'kultur_felder[0]', {}) || {}
+  const { data, error, loading, refetch } = personFelderResult
+  const {
+    ga_strasse,
+    ga_plz,
+    ga_ort,
+    ga_geom_point,
+    ga_aktiv,
+    ga_bemerkungen,
+  } = get(data, 'person_felder[0]', {}) || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -43,25 +49,25 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
       try {
         await client.mutate({
           mutation: gql`
-              mutation update_kultur_felder(
-                $kulturId: Int!
+              mutation update_person_felder(
+                $personId: Int!
               ) {
-                update_kultur_felder(
-                  where: { kultur_id: { _eq: $kulturId } }
+                update_person_felder(
+                  where: { person_id: { _eq: $personId } }
                   _set: {
                     ${field}: ${!value}
                   }
                 ) {
                   affected_rows
                   returning {
-                    ...KulturFelderFields
+                    ...PersonFelderFields
                   }
                 }
               }
-              ${kulturFelderFragment}
+              ${personFelderFragment}
             `,
           variables: {
-            kulturId,
+            personId,
           },
         })
       } catch (error) {
@@ -74,7 +80,7 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
       }
       refetch()
     },
-    [refetch, kulturId],
+    [refetch, personId],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
@@ -126,72 +132,102 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
           <Title>Felder für Gärten wählen:</Title>
           <MenuItem>
             <FormControlLabel
+              value={ga_strasse === null ? 'false' : ga_strasse.toString()}
+              control={
+                <Radio
+                  color="primary"
+                  checked={!!ga_strasse}
+                  onClick={saveToDb}
+                  name="ga_strasse"
+                />
+              }
+              label="Strasse"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={ga_plz === null ? 'false' : ga_plz.toString()}
+              control={
+                <Radio
+                  color="primary"
+                  checked={!!ga_plz}
+                  onClick={saveToDb}
+                  name="ga_plz"
+                />
+              }
+              label="PLZ"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={ga_ort === null ? 'false' : ga_ort.toString()}
+              control={
+                <Radio
+                  color="primary"
+                  checked={!!ga_ort}
+                  onClick={saveToDb}
+                  name="ga_ort"
+                />
+              }
+              label="Ort"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
               value={
-                ag_teilkultur_id === null
-                  ? 'false'
-                  : ag_teilkultur_id.toString()
+                ga_geom_point === null ? 'false' : ga_geom_point.toString()
               }
               control={
                 <Radio
                   color="primary"
-                  checked={!!ag_teilkultur_id}
+                  checked={!!ga_geom_point}
                   onClick={saveToDb}
-                  name="ag_teilkultur_id"
+                  name="ga_geom_point"
                 />
               }
-              label="Teilkultur"
+              label="Koordinaten"
               labelPlacement="end"
             />
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_person_id === null ? 'false' : ag_person_id.toString()}
+              value={ga_aktiv === null ? 'false' : ga_aktiv.toString()}
               control={
                 <Radio
                   color="primary"
-                  checked={!!ag_person_id}
+                  checked={!!ga_aktiv}
                   onClick={saveToDb}
-                  name="ag_person_id"
+                  name="ga_aktiv"
                 />
               }
-              label="Wer"
+              label="aktiv"
               labelPlacement="end"
             />
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_datum === null ? 'false' : ag_datum.toString()}
+              value={
+                ga_bemerkungen === null ? 'false' : ga_bemerkungen.toString()
+              }
               control={
                 <Radio
                   color="primary"
-                  checked={!!ag_datum}
+                  checked={!!ga_bemerkungen}
                   onClick={saveToDb}
-                  name="ag_datum"
+                  name="ga_bemerkungen"
                 />
               }
-              label="Datum"
-              labelPlacement="end"
-            />
-          </MenuItem>
-          <MenuItem>
-            <FormControlLabel
-              value={ag_geplant === null ? 'false' : ag_geplant.toString()}
-              control={
-                <Radio
-                  color="primary"
-                  checked={!!ag_geplant}
-                  onClick={saveToDb}
-                  name="ag_geplant"
-                />
-              }
-              label="geplant"
+              label="Bemerkungen"
               labelPlacement="end"
             />
           </MenuItem>
           <Info>
             Zwingende Felder sind nicht aufgelistet.
             <br />
-            Die Wahl gilt alle Gärten.
+            Die Wahl gilt für alle Gärten.
           </Info>
         </Menu>
       )}
@@ -199,4 +235,4 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
   )
 }
 
-export default observer(SettingsZaehlungen)
+export default observer(SettingsGarten)

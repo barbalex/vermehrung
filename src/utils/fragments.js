@@ -190,10 +190,11 @@ export const personFelder = gql`
     ga_plz
     ga_ort
     ga_geom_point
+    ga_aktiv
     ga_bemerkungen
     hk_kanton
     hk_land
-    hk_bemkerungen
+    hk_bemerkungen
   }
 `
 export const personFile = gql`
