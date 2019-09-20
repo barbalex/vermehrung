@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import styled from 'styled-components'
@@ -27,14 +28,13 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
+const SettingsKultur = ({ kulturId, kulturFelderResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
   const { data, error, loading, refetch } = kulturFelderResult
-  const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
-    get(data, 'kultur_felder[0]', {}) || {}
+  const { tk } = get(data, 'kultur_felder[0]', {}) || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -86,11 +86,19 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
+
   const onClose = useCallback(() => setAnchorEl(null))
   const onClickConfig = useCallback(
     event => setAnchorEl(event.currentTarget),
     [],
   )
+  const openOptionDocs = useCallback(() => {
+    setAnchorEl(null)
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Telkulturen',
+      )
+  }, [])
 
   if (error) {
     return (
@@ -123,80 +131,36 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <Title>Felder für Aufgaben wählen:</Title>
+          <Title>Optionen für diese Kultur:</Title>
           <MenuItem>
             <FormControlLabel
-              value={
-                ag_teilkultur_id === null
-                  ? 'false'
-                  : ag_teilkultur_id.toString()
-              }
+              value={tk === null ? 'false' : tk.toString()}
               control={
                 <Radio
                   color="primary"
-                  checked={ag_teilkultur_id}
+                  checked={tk}
                   onClick={saveToDb}
-                  name="ag_teilkultur_id"
+                  name="tk"
                 />
               }
-              label="Teilkultur"
+              label="Mit Teil-Kulturen arbeiten"
               labelPlacement="end"
             />
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openOptionDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
           </MenuItem>
-          <MenuItem>
-            <FormControlLabel
-              value={ag_person_id === null ? 'false' : ag_person_id.toString()}
-              control={
-                <Radio
-                  color="primary"
-                  checked={ag_person_id}
-                  onClick={saveToDb}
-                  name="ag_person_id"
-                />
-              }
-              label="Wer"
-              labelPlacement="end"
-            />
-          </MenuItem>
-          <MenuItem>
-            <FormControlLabel
-              value={ag_datum === null ? 'false' : ag_datum.toString()}
-              control={
-                <Radio
-                  color="primary"
-                  checked={ag_datum}
-                  onClick={saveToDb}
-                  name="ag_datum"
-                />
-              }
-              label="Datum"
-              labelPlacement="end"
-            />
-          </MenuItem>
-          <MenuItem>
-            <FormControlLabel
-              value={ag_geplant === null ? 'false' : ag_geplant.toString()}
-              control={
-                <Radio
-                  color="primary"
-                  checked={ag_geplant}
-                  onClick={saveToDb}
-                  name="ag_geplant"
-                />
-              }
-              label="geplant"
-              labelPlacement="end"
-            />
-          </MenuItem>
-          <Info>
-            Zwingende Felder sind nicht aufgelistet.
-            <br />
-            Die Wahl gilt (nur) für diese Kultur.
-          </Info>
+          <Info>Die Wahl gilt (nur) für diese Kultur.</Info>
         </Menu>
       )}
     </ErrorBoundary>
   )
 }
 
-export default observer(SettingsZaehlungen)
+export default observer(SettingsKultur)

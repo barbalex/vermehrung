@@ -84,6 +84,7 @@ module.exports = {
             resolve: 'gatsby-remark-images',
             options: {
               maxWidth: 2000,
+              wrapperStyle: 'margin-left: 0;',
               linkImagesToOriginal: false,
             },
           },
@@ -126,6 +127,7 @@ module.exports = {
               background: 'rgba(128,128,128,0.5)',
             },
           },
+          'gatsby-remark-copy-linked-files',
         ],
       },
     },

@@ -130,7 +130,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!hk_kanton}
+                  checked={hk_kanton}
                   onClick={saveToDb}
                   name="hk_kanton"
                 />
@@ -145,7 +145,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!hk_land}
+                  checked={hk_land}
                   onClick={saveToDb}
                   name="hk_land"
                 />
@@ -162,7 +162,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!hk_geom_point}
+                  checked={hk_geom_point}
                   onClick={saveToDb}
                   name="hk_geom_point"
                 />
@@ -179,7 +179,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!hk_bemerkungen}
+                  checked={hk_bemerkungen}
                   onClick={saveToDb}
                   name="hk_bemerkungen"
                 />

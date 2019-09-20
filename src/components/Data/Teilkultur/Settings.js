@@ -131,7 +131,7 @@ const SettingsTeilkulturen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!tk_bemerkungen}
+                  checked={tk_bemerkungen}
                   onClick={saveToDb}
                   name="tk_bemerkungen"
                 />

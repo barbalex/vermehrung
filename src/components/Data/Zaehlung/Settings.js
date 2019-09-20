@@ -129,7 +129,7 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!z_geplant}
+                  checked={z_geplant}
                   onClick={saveToDb}
                   name="z_geplant"
                 />
@@ -146,7 +146,7 @@ const SettingsZaehlungen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!z_bemerkungen}
+                  checked={z_bemerkungen}
                   onClick={saveToDb}
                   name="z_bemerkungen"
                 />

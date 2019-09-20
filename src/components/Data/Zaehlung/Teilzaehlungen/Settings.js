@@ -139,7 +139,7 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!tz_teilkultur_id}
+                  checked={tz_teilkultur_id}
                   onClick={saveToDb}
                   name="tz_teilkultur_id"
                 />
@@ -158,7 +158,7 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!tz_anzahl_mutterpflanzen}
+                  checked={tz_anzahl_mutterpflanzen}
                   onClick={saveToDb}
                   name="tz_anzahl_mutterpflanzen"
                 />
@@ -175,7 +175,7 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!tz_andere_menge}
+                  checked={tz_andere_menge}
                   onClick={saveToDb}
                   name="tz_andere_menge"
                 />
@@ -194,7 +194,7 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!tz_auspflanzbereit_beschreibung}
+                  checked={tz_auspflanzbereit_beschreibung}
                   onClick={saveToDb}
                   name="tz_auspflanzbereit_beschreibung"
                 />
@@ -211,7 +211,7 @@ const SettingsTeilzaehlungen = ({ kulturId, kulturFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!tz_bemerkungen}
+                  checked={tz_bemerkungen}
                   onClick={saveToDb}
                   name="tz_bemerkungen"
                 />

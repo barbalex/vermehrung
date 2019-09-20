@@ -5948,6 +5948,20 @@ gatsby-remark-autolink-headers@2.1.11:
     mdast-util-to-string "^1.0.6"
     unist-util-visit "^1.4.1"
 
+gatsby-remark-copy-linked-files@^2.1.20:
+  version "2.1.20"
+  resolved "https://registry.yarnpkg.com/gatsby-remark-copy-linked-files/-/gatsby-remark-copy-linked-files-2.1.20.tgz#3504949b6e19f25091914de04909782de0239088"
+  integrity sha512-bw+Lf3u9foV1uEbYxLTkfIXbNrjOn3vGwJ33zXw+uzF5fAsC0IDeSN0/wNsvshDsBVUpjafS0rG7jyWFYxpg6g==
+  dependencies:
+    "@babel/runtime" "^7.6.0"
+    cheerio "^1.0.0-rc.3"
+    fs-extra "^8.1.0"
+    is-relative-url "^3.0.0"
+    lodash "^4.17.15"
+    path-is-inside "^1.0.2"
+    probe-image-size "^4.1.1"
+    unist-util-visit "^1.4.1"
+
 gatsby-remark-emojis@0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/gatsby-remark-emojis/-/gatsby-remark-emojis-0.3.2.tgz#5d8edb4e303dc9e05ee554d080dc486be6d3c810"

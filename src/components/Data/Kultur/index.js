@@ -14,21 +14,23 @@ import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../storeContext'
-import Select from '../shared/Select'
-import TextField from '../shared/TextField'
-import Checkbox2States from '../shared/Checkbox2States'
-import FormTitle from '../shared/FormTitle'
-import FilterTitle from '../shared/FilterTitle'
-import queryFromTable from '../../utils/queryFromTable'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import storeContext from '../../../storeContext'
+import Select from '../../shared/Select'
+import TextField from '../../shared/TextField'
+import Checkbox2States from '../../shared/Checkbox2States'
+import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
+import queryFromTable from '../../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
-  kultur as kulturFragment,
   art as artFragment,
   garten as gartenFragment,
-} from '../../utils/fragments'
-import types from '../../store/Filter/simpleTypes'
-import Files from './Files'
+  kultur as kulturFragment,
+  kulturFelder as kulturFelderFragment,
+} from '../../../utils/fragments'
+import types from '../../../store/Filter/simpleTypes'
+import Files from '../Files'
+import Settings from './Settings'
 
 const Container = styled.div`
   height: 100%;
@@ -36,13 +38,44 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
+const TitleContainer = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+  padding 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleSymbols = styled.div`
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleFilterNumbers = styled.div`
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
+`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
 `
 
-const query = gql`
+const kulturQuery = gql`
   query KulturQuery(
     $id: bigint!
     $isFiltered: Boolean!
@@ -104,6 +137,14 @@ const dataQuery = gql`
     }
   }
 `
+const kulturFelderQuery = gql`
+  query kulturFelderQuery($kulturId: Int) {
+    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
+      ...KulturFelderFields
+    }
+  }
+  ${kulturFelderFragment}
+`
 
 const Kultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -117,7 +158,7 @@ const Kultur = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const kulturFilter = queryFromTable({ store, table: 'kultur' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery(kulturQuery, {
     variables: { id, isFiltered, filter: kulturFilter },
   })
   const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
@@ -134,6 +175,11 @@ const Kultur = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'kultur', [{}])[0]
   }
+
+  const kulturFelderResult = useQuery(kulturFelderQuery, {
+    variables: { kulturId: row.id },
+  })
+  const { tk } = get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
 
   useEffect(() => {
     setErrors({})
@@ -280,13 +326,18 @@ const Kultur = ({ filter: showFilter }) => {
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle
-            title="Kultur"
-            table="kultur"
-            rowsLength={totalNr}
-            rowsFilteredLength={filteredNr}
-            filter={showFilter}
-          />
+          <TitleContainer>
+            <Title>Kultur</Title>
+            <TitleSymbols>
+              <Settings
+                kulturId={row.id}
+                kulturFelderResult={kulturFelderResult}
+              />
+              {(store.filter.show || isFiltered) && (
+                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+              )}
+            </TitleSymbols>
+          </TitleContainer>
         )}
         <FieldsContainer>
           <Select

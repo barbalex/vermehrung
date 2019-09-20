@@ -136,7 +136,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!ga_strasse}
+                  checked={ga_strasse}
                   onClick={saveToDb}
                   name="ga_strasse"
                 />
@@ -151,7 +151,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!ga_plz}
+                  checked={ga_plz}
                   onClick={saveToDb}
                   name="ga_plz"
                 />
@@ -166,7 +166,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!ga_ort}
+                  checked={ga_ort}
                   onClick={saveToDb}
                   name="ga_ort"
                 />
@@ -183,7 +183,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!ga_geom_point}
+                  checked={ga_geom_point}
                   onClick={saveToDb}
                   name="ga_geom_point"
                 />
@@ -198,7 +198,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!ga_aktiv}
+                  checked={ga_aktiv}
                   onClick={saveToDb}
                   name="ga_aktiv"
                 />
@@ -215,7 +215,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
               control={
                 <Radio
                   color="primary"
-                  checked={!!ga_bemerkungen}
+                  checked={ga_bemerkungen}
                   onClick={saveToDb}
                   name="ga_bemerkungen"
                 />
