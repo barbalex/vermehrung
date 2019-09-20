@@ -28,23 +28,38 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
-const H4 = styled.h4`
-  margin-bottom: 0.5rem;
+const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  height: 38px;
+  justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 15px;
-  padding: 10px;
+  padding: 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+// center buttons
+const Buttons = styled.div`
+  margin-top: 2px;
 `
 const Spacer = styled.div`
   height: 10px;
 `
-const ButtonsContainer = styled.div`
-  display: flex;
-`
 const LightboxButton = styled(Button)`
   margin-left: 10px !important;
   text-transform: none !important;
+  border: none !important;
+  /*&:active,
+  &:hover,
+  &:focus {
+    border: 1px solid rgba(74, 20, 140, 0.5) !important;
+  }*/
 `
 
 const fragmentObject = {
@@ -153,24 +168,26 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <H4>Dateien</H4>
-        <ButtonsContainer>
-          <Uploader
-            id="file"
-            name="file"
-            onChange={onChangeUploader}
-            content="test"
-          />
-          {!!images.length && (
-            <LightboxButton
-              color="primary"
-              variant="outlined"
-              onClick={onClickLightboxButton}
-            >
-              Bilder in Gallerie öffnen
-            </LightboxButton>
-          )}
-        </ButtonsContainer>
+        <TitleRow>
+          <Title>Dateien</Title>
+          <Buttons>
+            <Uploader
+              id="file"
+              name="file"
+              onChange={onChangeUploader}
+              content="test"
+            />
+            {!!images.length && (
+              <LightboxButton
+                color="primary"
+                variant="outlined"
+                onClick={onClickLightboxButton}
+              >
+                Bilder in Gallerie öffnen
+              </LightboxButton>
+            )}
+          </Buttons>
+        </TitleRow>
         {lightboxIsOpen && (
           <Lightbox
             mainSrc={imageUrls[imageIndex]}
