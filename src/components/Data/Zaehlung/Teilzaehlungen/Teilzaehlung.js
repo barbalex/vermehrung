@@ -80,6 +80,7 @@ const Teilzaehlung = ({
   const { enqueNotification } = store
 
   const {
+    tk,
     tz_teilkultur_id,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
@@ -166,7 +167,7 @@ const Teilzaehlung = ({
       <>
         {!!index && <TopLine />}
         <Container>
-          {tz_teilkultur_id && (
+          {tk && tz_teilkultur_id && (
             <Teilkultur>
               <Select
                 key={`${row.id}teilkultur_id`}

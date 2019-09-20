@@ -70,6 +70,8 @@ const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
   })
   const rows = get(data, 'teilzaehlung', [])
 
+  const { tk } = get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
+
   const onClickNew = useCallback(async () => {
     try {
       await client.mutate({
@@ -89,6 +91,9 @@ const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
     refetch()
   }, [])
 
+  const showNew = rows.length === 0 || tk
+  const title = tk ? 'Teil-Zählungen' : 'Mengen'
+
   if (loading) {
     return <Container>Lade...</Container>
   }
@@ -102,19 +107,21 @@ const Teilzaehlungen = ({ zaehlung, kulturFelderResult }) => {
     <ErrorBoundary>
       <Container>
         <TitleRow>
-          <Title>Teil-Zählungen</Title>
+          <Title>{title}</Title>
           <div>
             <Settings
               kulturId={zaehlung.kultur_id}
               kulturFelderResult={kulturFelderResult}
             />
-            <IconButton
-              aria-label="Neu"
-              title="Neue Teil-Zählung"
-              onClick={onClickNew}
-            >
-              <FaPlus />
-            </IconButton>
+            {showNew && (
+              <IconButton
+                aria-label="Neu"
+                title="Neue Teil-Zählung"
+                onClick={onClickNew}
+              >
+                <FaPlus />
+              </IconButton>
+            )}
           </div>
         </TitleRow>
         <TeilzaehlungenRows

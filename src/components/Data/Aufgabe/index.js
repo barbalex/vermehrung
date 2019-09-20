@@ -230,7 +230,7 @@ const Aufgabe = ({ filter: showFilter }) => {
   const kulturFelderResult = useQuery(kulturFelderQuery, {
     variables: { kulturId: row.kultur_id },
   })
-  const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
+  const { tk, ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
     get(kulturFelderResult.data, 'kultur_felder[0]', {}) || {}
 
   const saveToDb = useCallback(
@@ -357,7 +357,7 @@ const Aufgabe = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />
-          {ag_teilkultur_id && (
+          {tk && ag_teilkultur_id && (
             <Select
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               name="teilkultur_id"

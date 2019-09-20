@@ -7,6 +7,7 @@ import {
   garten,
   herkunft,
   kultur,
+  kulturFelder,
   lieferung,
   person,
   sammlung,
@@ -178,6 +179,12 @@ export default gql`
     }
     teilkultur(where: $teilkulturFilter, order_by: { name: asc_nulls_first }) {
       ...TeilkulturFields
+      kultur {
+        ...KulturFields
+        kultur_felder {
+          tk
+        }
+      }
     }
     event(order_by: { datum: desc_nulls_first, event: asc_nulls_first }) {
       ...EventFields
@@ -222,6 +229,9 @@ export default gql`
         ...TeilkulturFields
         kultur {
           ...KulturFields
+          kultur_felder {
+            tk
+          }
         }
       }
       zaehlungs(where: $zaehlungFilter, order_by: { datum: desc_nulls_first })
@@ -245,6 +255,9 @@ export default gql`
         person @include(if: $isKulturAnLieferung) {
           ...PersonFields
         }
+      }
+      kultur_felder @include(if: $isKultur) {
+        ...KulturFelderFields
       }
     }
     herkunft(
@@ -459,6 +472,7 @@ export default gql`
   ${event}
   ${garten}
   ${kultur}
+  ${kulturFelder}
   ${herkunft}
   ${lieferung}
   ${person}
