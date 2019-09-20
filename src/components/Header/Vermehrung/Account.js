@@ -41,6 +41,7 @@ const Account = () => {
 
   const user = getProfile()
   const { picture, email } = user
+  console.log('Account, user:', user)
 
   const onClickReset = useCallback(async () => {
     setResetTitle('...')

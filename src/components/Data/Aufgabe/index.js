@@ -73,7 +73,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
+const aufgabeQuery = gql`
   query AufgabeQuery(
     $id: bigint!
     $filter: aufgabe_bool_exp!
@@ -161,7 +161,7 @@ const Aufgabe = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const aufgabeFilter = queryFromTable({ store, table: 'aufgabe' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery(aufgabeQuery, {
     variables: { id, isFiltered, filter: aufgabeFilter },
   })
 
