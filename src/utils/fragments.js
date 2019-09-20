@@ -195,6 +195,7 @@ export const personFelder = gql`
     hk_kanton
     hk_land
     hk_bemerkungen
+    hk_geom_point
   }
 `
 export const personFile = gql`

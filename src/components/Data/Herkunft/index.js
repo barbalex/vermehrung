@@ -7,16 +7,21 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../storeContext'
-import TextField from '../shared/TextField'
-import FormTitle from '../shared/FormTitle'
-import FilterTitle from '../shared/FilterTitle'
-import { herkunft as herkunftFragment } from '../../utils/fragments'
-import types from '../../store/Filter/simpleTypes'
-import queryFromTable from '../../utils/queryFromTable'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
-import Files from './Files'
-import Coordinates from '../shared/Coordinates'
+import storeContext from '../../../storeContext'
+import TextField from '../../shared/TextField'
+import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
+import {
+  herkunft as herkunftFragment,
+  personFelder as personFelderFragment,
+} from '../../../utils/fragments'
+import types from '../../../store/Filter/simpleTypes'
+import queryFromTable from '../../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
+import Files from '../Files'
+import Coordinates from '../../shared/Coordinates'
+import { getProfile } from '../../../utils/auth'
+import Settings from './Settings'
 
 const Container = styled.div`
   height: 100%;
@@ -24,13 +29,44 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
+const TitleContainer = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+  padding 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleSymbols = styled.div`
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleFilterNumbers = styled.div`
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
+`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
 `
 
-const query = gql`
+const herkunftQuery = gql`
   query HerkunftQuery(
     $id: bigint!
     $isFiltered: Boolean!
@@ -48,6 +84,14 @@ const query = gql`
   }
   ${herkunftFragment}
 `
+const personFelderQuery = gql`
+  query personFelderQuery($personId: Int) {
+    person_felder(where: { person_id: { _eq: $personId } }) {
+      ...PersonFelderFields
+    }
+  }
+  ${personFelderFragment}
+`
 
 const Herkunft = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -61,7 +105,7 @@ const Herkunft = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery(herkunftQuery, {
     variables: { id, isFiltered, filter: herkunftFilter, refetch },
   })
 
@@ -75,6 +119,15 @@ const Herkunft = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'herkunft', [{}])[0]
   }
+
+  const user = getProfile()
+  const userPersonId =
+    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
+  const personFelderResult = useQuery(personFelderQuery, {
+    variables: { personId: userPersonId },
+  })
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
+    get(personFelderResult.data, 'person_felder[0]', {}) || {}
 
   useEffect(() => {
     setErrors({})
@@ -166,13 +219,18 @@ const Herkunft = ({ filter: showFilter }) => {
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle
-            title="Herkunft"
-            table="herkunft"
-            rowsLength={totalNr}
-            rowsFilteredLength={filteredNr}
-            filter={showFilter}
-          />
+          <TitleContainer>
+            <Title>Herkunft</Title>
+            <TitleSymbols>
+              <Settings
+                personId={userPersonId}
+                personFelderResult={personFelderResult}
+              />
+              {(store.filter.show || isFiltered) && (
+                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+              )}
+            </TitleSymbols>
+          </TitleContainer>
         )}
         <FieldsContainer>
           <TextField
@@ -199,34 +257,40 @@ const Herkunft = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.gemeinde}
           />
-          <TextField
-            key={`${row.id}kanton`}
-            name="kanton"
-            label="Kanton"
-            value={row.kanton}
-            saveToDb={saveToDb}
-            error={errors.kanton}
-          />
-          <TextField
-            key={`${row.id}land`}
-            name="land"
-            label="Land"
-            value={row.land}
-            saveToDb={saveToDb}
-            error={errors.land}
-          />
-          {!showFilter && (
+          {hk_kanton && (
+            <TextField
+              key={`${row.id}kanton`}
+              name="kanton"
+              label="Kanton"
+              value={row.kanton}
+              saveToDb={saveToDb}
+              error={errors.kanton}
+            />
+          )}
+          {hk_land && (
+            <TextField
+              key={`${row.id}land`}
+              name="land"
+              label="Land"
+              value={row.land}
+              saveToDb={saveToDb}
+              error={errors.land}
+            />
+          )}
+          {!showFilter && hk_geom_point && (
             <Coordinates row={row} refetchForm={refetch} table="herkunft" />
           )}
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors.bemerkungen}
-            multiLine
-          />
+          {hk_bemerkungen && (
+            <TextField
+              key={`${row.id}bemerkungen`}
+              name="bemerkungen"
+              label="Bemerkungen"
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={errors.bemerkungen}
+              multiLine
+            />
+          )}
           {!showFilter && <Files parentId={row.id} parent="herkunft" />}
         </FieldsContainer>
       </Container>
