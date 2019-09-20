@@ -40,7 +40,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-  } = get(data, 'person_felder[0]', {}) || {}
+  } = get(data, 'person_felder[0]') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -177,9 +177,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                ga_geom_point === true ? 'true' : 'false'
-              }
+              value={ga_geom_point === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -194,7 +192,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ga_aktiv  === true ? 'true' : 'false'}
+              value={ga_aktiv === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
@@ -209,9 +207,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={
-                ga_bemerkungen  === true ? 'true' : 'false'
-              }
+              value={ga_bemerkungen === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"

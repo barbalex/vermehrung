@@ -83,6 +83,9 @@ const kulturQuery = gql`
   ) {
     kultur(where: { id: { _eq: $id } }) {
       ...KulturFields
+      kultur_felder {
+        ...KulturFelderFields
+      }
       garten {
         ...GartenFields
         kulturs(where: { art: { ae_id: { _is_null: false } } }) {
@@ -101,6 +104,7 @@ const kulturQuery = gql`
   ${kulturFragment}
   ${artFragment}
   ${gartenFragment}
+  ${kulturFelderFragment}
 `
 const artQuery = gql`
   query artQuery($filter: art_bool_exp!) {
@@ -137,14 +141,6 @@ const dataQuery = gql`
     }
   }
 `
-const kulturFelderQuery = gql`
-  query kulturFelderQuery($kulturId: Int) {
-    kultur_felder(where: { kultur_id: { _eq: $kulturId } }) {
-      ...KulturFelderFields
-    }
-  }
-  ${kulturFelderFragment}
-`
 
 const Kultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -158,9 +154,10 @@ const Kultur = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const kulturFilter = queryFromTable({ store, table: 'kultur' })
-  const { data, error, loading } = useQuery(kulturQuery, {
+  const kulturResult = useQuery(kulturQuery, {
     variables: { id, isFiltered, filter: kulturFilter },
   })
+  const { data, error, loading } = kulturResult
   const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
     dataQuery,
   )
@@ -173,13 +170,8 @@ const Kultur = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.kultur
   } else {
-    row = get(data, 'kultur', [{}])[0]
+    row = get(data, 'kultur[0]') || {}
   }
-
-  const kulturFelderResult = useQuery(kulturFelderQuery, {
-    variables: { kulturId: row.id },
-  })
-  const { tk } = get(kulturFelderResult.data, 'kultur_felder', {}) || {}
 
   useEffect(() => {
     setErrors({})
@@ -329,10 +321,7 @@ const Kultur = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Kultur</Title>
             <TitleSymbols>
-              <Settings
-                kulturId={row.id}
-                kulturFelderResult={kulturFelderResult}
-              />
+              <Settings kulturResult={kulturResult} />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

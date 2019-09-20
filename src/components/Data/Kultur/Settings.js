@@ -28,14 +28,15 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsKultur = ({ kulturId, kulturFelderResult }) => {
+const SettingsKultur = ({ kulturResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
   const { refetch: refetchTree } = store.tree
 
-  const { data, error, loading, refetch } = kulturFelderResult
-  const { tk } = get(data, 'kultur_felder', {}) || {}
+  const { data, error, loading, refetch } = kulturResult
+  const { tk } = get(data, 'kultur[0].kultur_felder') || {}
+  const kulturId = get(data, 'kultur[0].id')
 
   const saveToDb = useCallback(
     async event => {
