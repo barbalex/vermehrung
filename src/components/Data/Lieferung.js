@@ -410,24 +410,26 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.art_id}
           />
-          <TextField
-            key={`${row.id}anzahl_pflanzen`}
-            name="anzahl_pflanzen"
-            label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
-            saveToDb={saveToDb}
-            error={errors.anzahl_pflanzen}
-            type="number"
-          />
-          <TextField
-            key={`${row.id}anzahl_auspflanzbereit`}
-            name="anzahl_auspflanzbereit"
-            label="Anzahl auspflanzbereit"
-            value={row.anzahl_auspflanzbereit}
-            saveToDb={saveToDb}
-            error={errors.anzahl_auspflanzbereit}
-            type="number"
-          />
+          <FieldRow>
+            <TextField
+              key={`${row.id}anzahl_pflanzen`}
+              name="anzahl_pflanzen"
+              label="Anzahl Pflanzen"
+              value={row.anzahl_pflanzen}
+              saveToDb={saveToDb}
+              error={errors.anzahl_pflanzen}
+              type="number"
+            />
+            <TextField
+              key={`${row.id}anzahl_auspflanzbereit`}
+              name="anzahl_auspflanzbereit"
+              label="Anzahl auspflanzbereit"
+              value={row.anzahl_auspflanzbereit}
+              saveToDb={saveToDb}
+              error={errors.anzahl_auspflanzbereit}
+              type="number"
+            />
+          </FieldRow>
           <FieldRow>
             <TextField
               key={`${row.id}gramm_samen`}
