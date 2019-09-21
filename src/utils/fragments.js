@@ -134,7 +134,6 @@ export const lieferung = gql`
   fragment LieferungFields on lieferung {
     id
     art_id
-    herkunft_id
     person_id
     von_datum
     von_sammlung_id

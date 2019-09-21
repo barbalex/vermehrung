@@ -9,10 +9,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  herkunft_id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   person_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -60,7 +56,6 @@ export const type = types.model({
 export const initial = {
   id: null,
   art_id: null,
-  herkunft_id: null,
   person_id: null,
   von_datum: null,
   von_sammlung_id: null,
@@ -80,7 +75,6 @@ export const initial = {
 export const empty = {
   id: null,
   art_id: null,
-  herkunft_id: null,
   person_id: null,
   von_datum: null,
   von_sammlung_id: null,
@@ -100,7 +94,6 @@ export const empty = {
 export const simpleTypes = {
   id: 'number',
   art_id: 'number',
-  herkunft_id: 'number',
   person_id: 'number',
   von_datum: 'string',
   von_sammlung_id: 'number',

@@ -13,7 +13,6 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
 import TextField from '../shared/TextField'
-import TextFieldNonUpdatable from '../shared/TextFieldNonUpdatable'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import Checkbox2States from '../shared/Checkbox2States'
 import FormTitle from '../shared/FormTitle'
@@ -62,6 +61,15 @@ const FieldRow = styled.div`
     padding-right: 8px;
   }
 `
+const Herkunft = styled.div`
+  height: 54px;
+  user-select: none;
+`
+const HerkunftLabel = styled.div`
+  color: rgb(0, 0, 0, 0.54);
+  font-size: 12px;
+  padding-bottom: 2px;
+`
 
 const lieferungQuery = gql`
   query LieferungQuery(
@@ -71,6 +79,24 @@ const lieferungQuery = gql`
   ) {
     lieferung(where: { id: { _eq: $id } }) {
       ...LieferungFields
+      sammlung {
+        id
+        herkunft {
+          id
+          nr
+          lokalname
+          gemeinde
+        }
+      }
+      kulturByVonKulturId {
+        id
+        herkunft {
+          id
+          nr
+          lokalname
+          gemeinde
+        }
+      }
     }
     rowsUnfiltered: lieferung @include(if: $isFiltered) {
       id
@@ -148,29 +174,20 @@ const personQuery = gql`
     }
   }
 `
-const herkunftQuery = gql`
-  query herkunftQuery($id: bigint!) {
-    herkunft(where: { id: { _eq: $id } }) {
-      id
-      nr
-      lokalname
-    }
-  }
-`
 
 const Lieferung = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray, refetch: refetchTree } = store.tree
 
   const id = showFilter
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
-  const { data, error, loading } = useQuery(lieferungQuery, {
+  const { data, error, loading, refetch } = useQuery(lieferungQuery, {
     variables: { id, isFiltered, filter: lieferungFilter },
   })
 
@@ -219,15 +236,12 @@ const Lieferung = ({ filter: showFilter }) => {
     variables: { filter: kulturFilter },
   })
 
-  // need to query herkunft separate from regular query
-  // because herkunft was not updated when using value from that ??!!
-  const { data: herkunftData, error: herkunftError } = useQuery(herkunftQuery, {
-    variables: { id: row.herkunft_id || 0 },
-  })
-  const herkunft = get(herkunftData, 'herkunft', [])[0]
+  const herkunftBySammlung = get(row, 'sammlung.herkunft')
+  const herkunftByKultur = get(row, 'kulturByVonKulturId.herkunft')
+  const herkunft = herkunftBySammlung || herkunftByKultur
   const herkunftValue = herkunft
     ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.lokalname ||
-        'kein Lokalname'}`
+        'kein Lokalname'}, ${herkunft.gemeinde || 'keine Gemeinde'}`
     : ''
 
   useEffect(() => {
@@ -325,98 +339,12 @@ const Lieferung = ({ filter: showFilter }) => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
-        // if field was 'von_sammlung_id' or 'von_kultur_id'
-        // need to set herkunft_id
-        if (['von_sammlung_id', 'von_kultur_id'].includes(field)) {
-          if (field === 'von_sammlung_id') {
-            let herkunft_id = null
-            if (valueToSet) {
-              const res = await client.query({
-                query: gql`
-                  query getSammlung($id: bigint!) {
-                    sammlung(where: { id: { _eq: $id } }) {
-                      id
-                      herkunft_id
-                    }
-                  }
-                `,
-                variables: {
-                  id: valueToSet,
-                },
-              })
-              herkunft_id = get(res, 'data.sammlung[0].herkunft_id') || null
-            }
-            await client.mutate({
-              mutation: gql`
-                mutation update_lieferung(
-                  $id: bigint!
-                ) {
-                  update_lieferung(
-                    where: { id: { _eq: $id } }
-                    _set: {
-                      herkunft_id: ${herkunft_id}
-                      von_kultur_id: null
-                    }
-                  ) {
-                    affected_rows
-                    returning {
-                      ...LieferungFields
-                    }
-                  }
-                }
-                ${lieferungFragment}
-              `,
-              variables: {
-                id: row.id,
-              },
-            })
-          }
-          if (field === 'von_kultur_id') {
-            let herkunft_id = null
-            if (valueToSet) {
-              const res = await client.query({
-                query: gql`
-                  query getKultur($id: bigint!) {
-                    kultur(where: { id: { _eq: $id } }) {
-                      id
-                      herkunft_id
-                    }
-                  }
-                `,
-                variables: {
-                  id: valueToSet,
-                },
-              })
-              herkunft_id = get(res, 'data.kultur[0].herkunft_id') || null
-            }
-            await client.mutate({
-              mutation: gql`
-                mutation update_lieferung(
-                  $id: bigint!
-                ) {
-                  update_lieferung(
-                    where: { id: { _eq: $id } }
-                    _set: {
-                      herkunft_id: ${herkunft_id}
-                      von_sammlung_id: null
-                    }
-                  ) {
-                    affected_rows
-                    returning {
-                      ...LieferungFields
-                    }
-                  }
-                }
-                ${lieferungFragment}
-              `,
-              variables: {
-                id: row.id,
-              },
-            })
-          }
+        if (['von_kultur_id', 'von_sammlung_id'].includes(field)) {
+          // ensure Herkunft updates
+          refetch()
         }
         setErrors({})
-        refetch()
+        refetchTree()
       }
     },
     [row],
@@ -436,12 +364,7 @@ const Lieferung = ({ filter: showFilter }) => {
   }
 
   const errorToShow =
-    error ||
-    sammlungError ||
-    kulturError ||
-    artError ||
-    herkunftError ||
-    personError
+    error || sammlungError || kulturError || artError || personError
   if (errorToShow) {
     return (
       <Container>
@@ -567,15 +490,12 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.von_kultur_id}
           />
-          <TextFieldNonUpdatable
-            key={`${row.id}herkunft_id`}
-            name="herkunft_id"
-            label="Herkunft"
-            value={herkunftValue}
-            saveToDb={saveToDb}
-            error={errors.herkunft_id}
-            message="Ändern Sie Sammlung oder Kultur, um die Herkunft zu ändern"
-          />
+          {herkunftValue && (
+            <Herkunft>
+              <HerkunftLabel>Herkunft</HerkunftLabel>
+              {herkunftValue}
+            </Herkunft>
+          )}
           <TitleRow>
             <Title>nach</Title>
           </TitleRow>
