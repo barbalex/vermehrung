@@ -366,7 +366,7 @@ create table lieferung (
   person_id integer default null references person (id) on delete cascade on update cascade,
   von_sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
   von_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
-  nach_datum date default null,
+  datum date default null,
   nach_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
@@ -385,6 +385,7 @@ create index on lieferung using btree (person_id);
 create index on lieferung using btree (von_sammlung_id);
 create index on lieferung using btree (von_kultur_id);
 create index on lieferung using btree (nach_kultur_id);
+create index on lieferung using btree (datum);
 create index on lieferung using btree (von_anzahl_individuen);
 create index on lieferung using btree (anzahl_pflanzen);
 create index on lieferung using btree (anzahl_auspflanzbereit);

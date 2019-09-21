@@ -137,7 +137,7 @@ export const lieferung = gql`
     person_id
     von_sammlung_id
     von_kultur_id
-    nach_datum
+    datum
     nach_kultur_id
     nach_ausgepflanzt
     von_anzahl_individuen

@@ -116,7 +116,7 @@ export default gql`
         }
         lieferungsByVonKulturId(
           where: $lieferungFilter
-          order_by: { nach_datum: desc_nulls_first }
+          order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...LieferungFields
           person {
@@ -125,7 +125,7 @@ export default gql`
         }
         lieferungsByNachKulturId(
           where: $lieferungFilter
-          order_by: { nach_datum: desc_nulls_first }
+          order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...LieferungFields
           person {
@@ -144,7 +144,7 @@ export default gql`
         }
         lieferungs(
           where: $lieferungFilter
-          order_by: { nach_datum: desc_nulls_first }
+          order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtSammlung) {
           ...LieferungFields
           person {
@@ -237,7 +237,7 @@ export default gql`
       }
       lieferungsByVonKulturId(
         where: $lieferungFilter
-        order_by: { nach_datum: desc_nulls_first }
+        order_by: { datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...LieferungFields
         person @include(if: $isKulturAusLieferung) {
@@ -246,7 +246,7 @@ export default gql`
       }
       lieferungsByNachKulturId(
         where: $lieferungFilter
-        order_by: { nach_datum: desc_nulls_first }
+        order_by: { datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...LieferungFields
         person @include(if: $isKulturAnLieferung) {
@@ -270,7 +270,7 @@ export default gql`
         }
         lieferungs(
           where: $lieferungFilter
-          order_by: { nach_datum: desc_nulls_first }
+          order_by: { datum: desc_nulls_first }
         ) @include(if: $isHerkunftSammlung) {
           ...LieferungFields
           person {
@@ -297,10 +297,7 @@ export default gql`
         }
       }
     }
-    lieferung(
-      where: $lieferungFilter
-      order_by: { nach_datum: desc_nulls_first }
-    ) {
+    lieferung(where: $lieferungFilter, order_by: { datum: desc_nulls_first }) {
       ...LieferungFields
       person @include(if: $isLieferung) {
         ...PersonFields
@@ -353,7 +350,7 @@ export default gql`
           }
           lieferungsByNachKulturId(
             where: $lieferungFilter
-            order_by: { nach_datum: desc_nulls_first }
+            order_by: { datum: desc_nulls_first }
           ) @include(if: $isPersonGartenKultur) {
             ...LieferungFields
             person {

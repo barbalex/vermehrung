@@ -38,8 +38,8 @@ values
  (1,1,'2018-10-01',10,4,4),
  (2,2,'2017-08-03',20,6,10);
 
-insert into lieferung (id,art_id,person_id,nach_datum,von_sammlung_id,nach_datum,nach_kultur_id)
+insert into lieferung (id,art_id,person_id,datum,von_sammlung_id,nach_kultur_id)
 values
- (1,1,1,'2018-05-04',1,'2018-05-05',1),
- (2,1,2,'2018-07-06',2,'2018-07-06',2);
+ (1,1,1,'2018-05-04',1,1),
+ (2,1,2,'2018-07-06',2,2);
  

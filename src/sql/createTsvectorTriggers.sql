@@ -304,20 +304,20 @@ create function lieferung_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungNr, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungDatum, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungPerson, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungHerkunftNr, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungHerkunftLokalname, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(vonKulturPersonName, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.andere_menge, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(nachKulturPersonName, '')), 'B') || ' ' ||
       case

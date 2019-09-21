@@ -491,14 +491,6 @@ const Lieferung = ({ filter: showFilter }) => {
           <TitleRow>
             <Title>nach</Title>
           </TitleRow>
-          <DateFieldWithPicker
-            key={`${row.id}nach_datum`}
-            name="nach_datum"
-            label="Datum"
-            value={row.nach_datum}
-            saveToDb={saveToDb}
-            error={errors.nach_datum}
-          />
           <Select
             key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
             name="nach_kultur_id"
@@ -517,6 +509,17 @@ const Lieferung = ({ filter: showFilter }) => {
             value={row.nach_ausgepflanzt}
             saveToDb={saveToDb}
             error={errors.nach_ausgepflanzt}
+          />
+          <TitleRow>
+            <Title>wann</Title>
+          </TitleRow>
+          <DateFieldWithPicker
+            key={`${row.id}datum`}
+            name="datum"
+            label="Datum"
+            value={row.datum}
+            saveToDb={saveToDb}
+            error={errors.datum}
           />
           <TitleRow>
             <Title>wer</Title>
