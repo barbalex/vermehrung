@@ -1,7 +1,7 @@
 {
   "name": "vermehrung.apflora.ch",
   "description": "breeding endangered plant species",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "license": "MIT",
   "scripts": {
     "dev": "gatsby develop",
@@ -31,7 +31,7 @@
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-react": "7.14.3",
     "eslint-plugin-react-hooks": "2.0.1",
-    "gatsby": "2.15.19",
+    "gatsby": "2.15.20",
     "gatsby-image": "2.2.20",
     "gatsby-link": "2.2.15",
     "gatsby-plugin-create-client-paths": "2.1.9",
@@ -49,7 +49,7 @@
     "gatsby-remark-external-links": "0.0.4",
     "gatsby-remark-images": "3.1.23",
     "gatsby-remark-images-medium-zoom": "1.2.1",
-    "gatsby-source-filesystem": "2.1.25",
+    "gatsby-source-filesystem": "2.1.26",
     "gatsby-transformer-remark": "2.6.24",
     "gatsby-transformer-sharp": "2.2.16",
     "graphql-tag": "2.10.1",
