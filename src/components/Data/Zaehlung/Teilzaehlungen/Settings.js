@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import styled from 'styled-components'
@@ -15,6 +16,11 @@ import styled from 'styled-components'
 import storeContext from '../../../../storeContext'
 import { kulturFelder as kulturFelderFragment } from '../../../../utils/fragments'
 
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+`
 const Title = styled.div`
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.6);
@@ -90,6 +96,13 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
       },
     })
   }, [])
+  const openSettingsDocs = useCallback(() => {
+    setAnchorEl(null)
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Felder-blenden',
+      )
+  }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null))
@@ -129,7 +142,18 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           open={Boolean(anchorEl)}
           onClose={onClose}
         >
-          <Title>Felder für Teil-Zählungen wählen:</Title>
+          <TitleRow>
+            <Title>Felder für Teil-Zählungen wählen:</Title>
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openSettingsDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </TitleRow>
           <MenuItem>
             <FormControlLabel
               value={tz_teilkultur_id === true ? 'true' : 'false'}

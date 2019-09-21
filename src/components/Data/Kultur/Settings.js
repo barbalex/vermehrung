@@ -99,7 +99,7 @@ const SettingsKultur = ({ kulturResult }) => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
       window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Telkulturen',
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Teilkulturen',
       )
   }, [])
 

@@ -1,6 +1,6 @@
 ---
 typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Telkulturen"
+path: "/Dokumentation/Benutzer/Teilkulturen"
 date: "2019-09-20"
 title: "Teil-Kulturen"
 sort: 4
