@@ -523,23 +523,6 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.datum}
           />
-          <TitleRow>
-            <Title>wer</Title>
-          </TitleRow>
-          <Select
-            key={`${row.id}person_id`}
-            name="person_id"
-            value={row.person_id}
-            field="person_id"
-            label="Person"
-            options={personWerte}
-            loading={personLoading}
-            saveToDb={saveToDb}
-            error={errors.person_id}
-          />
-          <TitleRow>
-            <Title>mehr</Title>
-          </TitleRow>
           <FieldRow>
             <Checkbox2States
               key={`${row.id}geplant`}
@@ -559,6 +542,20 @@ const Lieferung = ({ filter: showFilter }) => {
               </IconButton>
             </div>
           </FieldRow>
+          <TitleRow>
+            <Title>wer</Title>
+          </TitleRow>
+          <Select
+            key={`${row.id}person_id`}
+            name="person_id"
+            value={row.person_id}
+            field="person_id"
+            label="Person"
+            options={personWerte}
+            loading={personLoading}
+            saveToDb={saveToDb}
+            error={errors.person_id}
+          />
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
