@@ -364,7 +364,6 @@ create table lieferung (
   id bigserial primary key,
   art_id integer default null references art (id) on delete cascade on update cascade,
   person_id integer default null references person (id) on delete cascade on update cascade,
-  von_datum date default null,
   von_sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
   von_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
   nach_datum date default null,

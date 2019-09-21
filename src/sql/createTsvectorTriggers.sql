@@ -304,10 +304,10 @@ create function lieferung_trigger() returns trigger as $$
     new.tsv :=
       setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.von_datum, 'DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'YYYY'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'MM'), '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(to_char(new.nach_datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungNr, '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungDatum, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungPerson, '')), 'B') || ' ' ||

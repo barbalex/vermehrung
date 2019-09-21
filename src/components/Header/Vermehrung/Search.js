@@ -249,9 +249,9 @@ export default () => {
   }))
   const suggestionsLieferung = get(data, 'lieferung', []).map(o => ({
     id: o.id,
-    name: o.von_datum
-      ? moment(o.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-      : '(kein von-Datum)',
+    name: o.nach_datum
+      ? moment(o.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+      : '(kein nach-Datum)',
     type: 'Lieferungen',
   }))
   const suggestionsPerson = get(data, 'person', []).map(o => ({

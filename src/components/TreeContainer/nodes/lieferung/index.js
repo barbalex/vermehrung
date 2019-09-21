@@ -9,8 +9,8 @@ export default ({ nodes, data }) => {
       // only show if parent node exists
       .filter(() => nodes.map(n => n.id).includes('lieferungFolder'))
       .map(el => {
-        const von_datum = el.von_datum
-          ? moment(el.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+        const nach_datum = el.nach_datum
+          ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein von-Datum)'
 
         return {
@@ -19,7 +19,7 @@ export default ({ nodes, data }) => {
           table: 'lieferung',
           id: `lieferung${el.id}`,
           parentId: 'lieferungFolder',
-          label: `${von_datum}: ${get(el, 'person.name') || '(keine Person)'}`,
+          label: `${nach_datum}: ${get(el, 'person.name') || '(keine Person)'}`,
           url: ['Lieferungen', el.id],
           hasChildren: false,
         }

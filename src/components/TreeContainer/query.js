@@ -116,7 +116,7 @@ export default gql`
         }
         lieferungsByVonKulturId(
           where: $lieferungFilter
-          order_by: { von_datum: desc_nulls_first }
+          order_by: { nach_datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...LieferungFields
           person {
@@ -144,7 +144,7 @@ export default gql`
         }
         lieferungs(
           where: $lieferungFilter
-          order_by: { von_datum: desc_nulls_first }
+          order_by: { nach_datum: desc_nulls_first }
         ) @include(if: $isArtSammlung) {
           ...LieferungFields
           person {
@@ -237,7 +237,7 @@ export default gql`
       }
       lieferungsByVonKulturId(
         where: $lieferungFilter
-        order_by: { von_datum: desc_nulls_first }
+        order_by: { nach_datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...LieferungFields
         person @include(if: $isKulturAusLieferung) {
@@ -270,7 +270,7 @@ export default gql`
         }
         lieferungs(
           where: $lieferungFilter
-          order_by: { von_datum: desc_nulls_first }
+          order_by: { nach_datum: desc_nulls_first }
         ) @include(if: $isHerkunftSammlung) {
           ...LieferungFields
           person {
@@ -299,7 +299,7 @@ export default gql`
     }
     lieferung(
       where: $lieferungFilter
-      order_by: { von_datum: desc_nulls_first }
+      order_by: { nach_datum: desc_nulls_first }
     ) {
       ...LieferungFields
       person @include(if: $isLieferung) {

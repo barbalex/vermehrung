@@ -135,7 +135,6 @@ export const lieferung = gql`
     id
     art_id
     person_id
-    von_datum
     von_sammlung_id
     von_kultur_id
     nach_datum

@@ -23,10 +23,11 @@ export default ({ nodes, data, url }) => {
         nodes.map(n => n.id).includes(`sammlung${sammlungId}LieferungFolder`),
       )
       .map(el => {
-        const von_datum = el.von_datum
-          ? moment(el.von_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+        const nach_datum = el.nach_datum
+          ? moment(el.nach_datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein von-Datum)'
-        const label = `${von_datum}: ${get(el, 'person.name') || '(kein Name)'}`
+        const label = `${nach_datum}: ${get(el, 'person.name') ||
+          '(kein Name)'}`
 
         return {
           nodeType: 'table',

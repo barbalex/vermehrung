@@ -460,14 +460,6 @@ const Lieferung = ({ filter: showFilter }) => {
           <TitleRow>
             <Title>von</Title>
           </TitleRow>
-          <DateFieldWithPicker
-            key={`${row.id}von_datum`}
-            name="von_datum"
-            label="Datum"
-            value={row.von_datum}
-            saveToDb={saveToDb}
-            error={errors.von_datum}
-          />
           <Select
             key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
             name="von_sammlung_id"
