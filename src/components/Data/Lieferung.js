@@ -7,6 +7,8 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
+import IconButton from '@material-ui/core/IconButton'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import storeContext from '../../storeContext'
 import Select from '../shared/Select'
@@ -55,6 +57,7 @@ const Title = styled.div`
 `
 const FieldRow = styled.div`
   display: flex;
+  justify-content: space-between;
   > div:not(:last-of-type) {
     padding-right: 8px;
   }
@@ -418,6 +421,10 @@ const Lieferung = ({ filter: showFilter }) => {
     },
     [row],
   )
+  const openPlanenDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
+  }, [])
 
   if (loading) {
     return (
@@ -613,14 +620,25 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.person_id}
           />
-          <Checkbox2States
-            key={`${row.id}geplant`}
-            label="Geplant"
-            name="geplant"
-            value={row.geplant}
-            saveToDb={saveToDb}
-            error={errors.geplant}
-          />
+          <FieldRow>
+            <Checkbox2States
+              key={`${row.id}geplant`}
+              label="Geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors.geplant}
+            />
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openPlanenDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </FieldRow>
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
