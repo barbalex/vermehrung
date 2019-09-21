@@ -39,17 +39,14 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
   const { enqueNotification } = store
 
   const { data, error, loading, refetch } = teilkulturResult
-  console.log('SettingsTeilkulturen, data:', data)
   const { tk_bemerkungen } =
     get(data, 'teilkultur[0].kultur.kultur_felder') || {}
-  console.log('SettingsTeilkulturen, tk_bemerkungen:', tk_bemerkungen)
 
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
       const value = event.target.value === 'true'
       const kulturId = get(data, 'teilkultur[0].kultur_id')
-      console.log('SettingsTeilkulturen, kulturId:', kulturId)
       try {
         await client.mutate({
           mutation: gql`

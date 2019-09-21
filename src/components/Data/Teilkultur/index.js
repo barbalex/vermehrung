@@ -151,22 +151,18 @@ const Teilkultur = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'teilkultur[0]') || {}
   }
-  console.log('Teilkultur, row:', row)
 
   const {
     data: kulturData,
     error: kulturError,
     loading: kulturLoading,
   } = useQuery(kulturQuery)
-  console.log('Teilkultur, kulturData:', kulturData)
 
   const { tk_bemerkungen } = get(row, 'kultur.kultur_felder', {}) || {}
-  console.log('Teilkultur, tk_bemerkungen:', tk_bemerkungen)
 
   useEffect(() => {
     setErrors({})
   }, [row.id])
-  console.log('Teilkultur, after useEffect:')
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map(el => {
@@ -183,7 +179,6 @@ const Teilkultur = ({ filter: showFilter }) => {
       }
     }),
   )()
-  console.log('Teilkultur, kulturWerte:', kulturWerte)
 
   const saveToDb = useCallback(
     async event => {
