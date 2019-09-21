@@ -535,6 +535,9 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.person_id}
           />
+          <TitleRow>
+            <Title>mehr</Title>
+          </TitleRow>
           <FieldRow>
             <Checkbox2States
               key={`${row.id}geplant`}
