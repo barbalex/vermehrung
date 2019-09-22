@@ -72,11 +72,16 @@ const dataQuery = gql`
       ort
     }
     herkunft(
-      order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
+      order_by: [
+        { nr: asc_nulls_first }
+        { gemeinde: asc_nulls_first }
+        { lokalname: asc_nulls_first }
+      ]
     ) {
       id
       nr
       lokalname
+      gemeinde
     }
     art(order_by: { art_ae_art: { name: asc } }) {
       ...ArtFields
@@ -132,7 +137,8 @@ const Sammlung = ({ filter: showFilter }) => {
     () =>
       get(dataData, 'herkunft', []).map(el => ({
         value: el.id,
-        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
+        label: `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
+          '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`,
       })),
     [dataLoading],
   )
