@@ -67,6 +67,7 @@ create function sammlung_trigger() returns trigger as $$
     personname text;
     herkunftnr text;
     herkunftlokalname text;
+    herkunftgemeinde text;
   begin
     select ae_art.name into artname
     from sammlung
@@ -77,7 +78,7 @@ create function sammlung_trigger() returns trigger as $$
     select person.name into personname
     from sammlung left join person on sammlung.person_id = person.id
     where person.id = new.person_id;
-    select herkunft.nr, herkunft.lokalname into herkunftnr, herkunftlokalname
+    select herkunft.nr, herkunft.lokalname, herkunft.gemeinde into herkunftnr, herkunftlokalname, herkunftgemeinde
     from sammlung left join herkunft on sammlung.herkunft_id = herkunft.id
     where herkunft.id = new.herkunft_id;
     new.tsv :=
@@ -85,6 +86,7 @@ create function sammlung_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(herkunftgemeinde, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.von_anzahl_individuen::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
@@ -130,6 +132,7 @@ create function kultur_trigger() returns trigger as $$
     personname text;
     herkunftnr text;
     herkunftlokalname text;
+    herkunftgemeinde text;
   begin
     select ae_art.name into artname
     from kultur
@@ -141,7 +144,7 @@ create function kultur_trigger() returns trigger as $$
     from kultur left join garten
       inner join person on garten.person_id = person.id
     on new.garten_id = garten.id;
-    select herkunft.nr, herkunft.lokalname into herkunftnr, herkunftlokalname
+    select herkunft.nr, herkunft.lokalname, herkunft.gemeinde into herkunftnr, herkunftlokalname, herkunftgemeinde
     from kultur left join herkunft on kultur.herkunft_id = herkunft.id
     where herkunft.id = new.herkunft_id;
       new.tsv :=
@@ -150,6 +153,7 @@ create function kultur_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(herkunftgemeinde, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'D') || ' ' ||
       case
         when new.zwischenlager='true' then setweight(to_tsvector('german', 'zwischenlager'), 'A')
@@ -263,6 +267,7 @@ create function lieferung_trigger() returns trigger as $$
     sammlungPerson text;
     sammlungHerkunftNr text;
     sammlungHerkunftLokalname text;
+    sammlungHerkunftGemeinde text;
     vonKulturPersonName text;
     nachKulturPersonName text;
   begin
@@ -277,8 +282,8 @@ create function lieferung_trigger() returns trigger as $$
       left join person
       on lieferung.person_id = person.id
     where person.id = new.person_id;
-    select sammlung.nr, to_char(sammlung.datum, 'YYYY.MM.DD'), sammlungPerson.name, herkunft.nr, herkunft.lokalname
-    into sammlungNr, sammlungDatum, sammlungPerson, sammlungHerkunftNr, sammlungHerkunftLokalname
+    select sammlung.nr, to_char(sammlung.datum, 'YYYY.MM.DD'), sammlungPerson.name, herkunft.nr, herkunft.lokalname, herkunft.gemeinde
+    into sammlungNr, sammlungDatum, sammlungPerson, sammlungHerkunftNr, sammlungHerkunftLokalname, sammlungHerkunftGemeinde
     from lieferung
       left join sammlung
         left join person as sammlungPerson on sammlung.person_id = person_id
@@ -313,6 +318,7 @@ create function lieferung_trigger() returns trigger as $$
       setweight(to_tsvector('german', coalesce(sammlungPerson, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungHerkunftNr, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(sammlungHerkunftLokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('german', coalesce(sammlungHerkunftGemeinde, '')), 'B') || ' ' ||
       setweight(to_tsvector('german', coalesce(vonKulturPersonName, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
