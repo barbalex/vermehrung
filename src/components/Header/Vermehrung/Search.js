@@ -229,8 +229,8 @@ export default () => {
   }))
   const suggestionsHerkunft = get(data, 'herkunft', []).map(o => ({
     id: o.id,
-    name: `${get(o, 'nr') || '(keine Nr)'}: ${get(o, 'lokalname') ||
-      '(kein Lokalname)'}`,
+    name: `${get(o, 'nr') || '(keine Nr)'}: ${get(o, 'gemeinde') ||
+      '(keine Gemeinde)'}, ${get(o, 'lokalname') || '(kein Lokalname)'}`,
     type: 'Herkuenfte',
   }))
   const suggestionsKultur = get(data, 'kultur', []).map(o => ({
