@@ -12,7 +12,7 @@ export default ({ nodes, data, url }) => {
   const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
   const kulturen = [get(lieferung, 'kulturByNachKulturId', [])]
-  const events = kulturen.length === 0 ? [] : get(kulturen[0], 'events', [])
+  const aufgaben = kulturen.length === 0 ? [] : get(kulturen[0], 'aufgaben', [])
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -37,7 +37,7 @@ export default ({ nodes, data, url }) => {
   )
 
   return (
-    events
+    aufgaben
       // only show if parent node exists
       .filter(() =>
         nodes
@@ -50,13 +50,13 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'
-        const label = `${datum}: ${get(el, 'event') || '(nicht beschrieben)'}`
+        const label = `${datum}: ${get(el, 'aufgabe') || '(nicht beschrieben)'}`
 
         return {
           nodeType: 'table',
-          menuTitle: 'Event',
-          table: 'event',
-          id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Event${el.id}`,
+          menuTitle: 'Aufgabe',
+          table: 'aufgabe',
+          id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}Aufgabe${el.id}`,
           parentId: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}EventFolder`,
           label,
           url: [
@@ -66,7 +66,7 @@ export default ({ nodes, data, url }) => {
             lieferungId,
             'Kulturen',
             kulturId,
-            'Events',
+            'Aufgaben',
             el.id,
           ],
           hasChildren: false,

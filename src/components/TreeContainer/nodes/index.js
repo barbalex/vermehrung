@@ -83,8 +83,8 @@ import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultu
 import buildSammlungAusLieferungKulturKultur from './sammlung/auslieferung/kultur'
 import buildSammlungAusLieferungKulturZaehlungFolder from './sammlung/auslieferung/kultur/zaehlung/folder'
 import buildSammlungAusLieferungKulturZaehlungZaehlung from './sammlung/auslieferung/kultur/zaehlung'
-import buildSammlungAusLieferungAufgabeFolder from './sammlung/auslieferung/kultur/event/folder'
-import buildSammlungAusLieferungEventEvent from './sammlung/auslieferung/kultur/event'
+import buildSammlungAusLieferungKulturAufgabeFolder from './sammlung/auslieferung/kultur/aufgabe/folder'
+import buildSammlungAusLieferungKulturAufgabeAufgabe from './sammlung/auslieferung/kultur/aufgabe'
 import buildSammlungAusLieferungKulturAusLieferungFolder from './sammlung/auslieferung/kultur/auslieferung/folder'
 import buildSammlungAusLieferungKulturAusLieferungLieferung from './sammlung/auslieferung/kultur/auslieferung'
 import buildSammlungAusLieferungKulturAnLieferungFolder from './sammlung/auslieferung/kultur/anlieferung/folder'
@@ -1053,7 +1053,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildSammlungAusLieferungAufgabeFolder({
+          buildSammlungAusLieferungKulturAufgabeFolder({
             nodes,
             data,
             store,
@@ -1188,7 +1188,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildSammlungAusLieferungEventEvent({
+          buildSammlungAusLieferungKulturAufgabeAufgabe({
             nodes,
             data,
             store,

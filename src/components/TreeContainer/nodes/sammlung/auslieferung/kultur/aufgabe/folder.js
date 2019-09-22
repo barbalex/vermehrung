@@ -11,8 +11,8 @@ export default ({ url, nodes, data, loading }) => {
   const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
   const kulturen = [get(lieferung, 'kulturByNachKulturId', [])]
-  const events = kulturen.length === 0 ? [] : get(kulturen[0], 'events', [])
-  const nr = loading && !events.length ? '...' : events.length
+  const aufgaben = kulturen.length === 0 ? [] : get(kulturen[0], 'aufgaben', [])
+  const nr = loading && !aufgaben.length ? '...' : aufgaben.length
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -47,9 +47,9 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'Events',
+      menuTitle: 'Aufgaben',
       id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}EventFolder`,
-      label: `Events (${nr})`,
+      label: `Aufgaben (${nr})`,
       url: [
         'Sammlungen',
         sammlungId,
@@ -57,7 +57,7 @@ export default ({ url, nodes, data, loading }) => {
         lieferungId,
         'Kulturen',
         kulturId,
-        'Events',
+        'Aufgaben',
       ],
       sort: [3, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 4],
       hasChildren: true,
