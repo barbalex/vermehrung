@@ -131,7 +131,8 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Kulturen</CardTitle>
-              Die Pflanzen einer Art in einem Garten bilden eine Kultur.
+              Die Pflanzen einer Art einer Herkunft in einem Garten bilden eine
+              Kultur.
             </Card>
             <Card>
               <CardTitle>Lieferungen</CardTitle>
@@ -143,8 +144,9 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Zählungen</CardTitle>
-              Regelmässig wird der Bestand der Kulturen erfasst. So können
-              Sammlungen und Aussetzungen geplant werden.
+              Regelmässig wird der Bestand der Kulturen erfasst und die
+              Vermehrung geplant. So können Sammlungen und Aussetzungen geplant
+              werden.
             </Card>
             <Card>
               <CardTitle>Inventare</CardTitle>
@@ -152,12 +154,13 @@ const Index = ({ data }) => (
               geführt.
             </Card>
             <Card>
-              <CardTitle>Events</CardTitle>
-              ...beschreiben Ereignisse im Rahmen der Kultur.
+              <CardTitle>Aufgaben und Ereignisse</CardTitle>
+              ...erleichtern Management und Dokumentation des Projekts.
             </Card>
             <Card>
               <CardTitle>Personen</CardTitle>
-              Zum Beispiel Freiwillige, die in ihren Gärten Kulturen pflegen.
+              Die am Projekt beteiligten. Zum Beispiel Freiwillige, die in ihren
+              Gärten Kulturen pflegen.
             </Card>
             <Card>
               <CardTitle>Wer organisiert das Projekt?</CardTitle>
