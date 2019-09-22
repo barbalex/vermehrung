@@ -33,6 +33,22 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'
+        const anz =
+          get(el, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') ||
+          '-'
+        const anzAb =
+          get(
+            el,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+          ) || '-'
+        const anzMu =
+          get(
+            el,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+          ) || '-'
+        const numbers = `${anz}/${anzAb}/${anzMu}`
+        const geplant = el.geplant ? ' geplant' : ''
+        const label = `${datum}: ${numbers}${geplant}`
 
         return {
           nodeType: 'table',
@@ -40,7 +56,7 @@ export default ({ nodes, data, url }) => {
           table: 'zaehlung',
           id: `art${artId}Kultur${kulturId}Zaehlung${el.id}`,
           parentId: `art${artId}Kultur${kulturId}ZaehlungFolder`,
-          label: datum,
+          label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
           hasChildren: false,
         }

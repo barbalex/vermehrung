@@ -78,6 +78,7 @@ const Teilzaehlung = ({
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
+  const { refetch: refetchTree } = store.tree
 
   const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
   const {
@@ -140,6 +141,16 @@ const Teilzaehlung = ({
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
+      // update tree if numbers were changed
+      if (
+        [
+          'anzahl_pflanzen',
+          'anzahl_auspflanzbereit',
+          'anzahl_mutterpflanzen',
+          'geplant',
+        ].includes(field)
+      )
+        refetchTree()
       setErrors({})
     },
     [row],
