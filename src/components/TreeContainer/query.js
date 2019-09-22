@@ -491,36 +491,6 @@ export default gql`
         }
       }
     }
-    masseinheit_werte(order_by: [{ sort: asc }, { wert: asc }])
-      @include(if: $isWerteListe) {
-      id
-      wert
-      sort
-    }
-    zaehleinheit_werte(order_by: [{ sort: asc }, { wert: asc }])
-      @include(if: $isWerteListe) {
-      id
-      wert
-      sort
-    }
-    lieferung_zwischenlager_werte(order_by: [{ sort: asc }, { wert: asc }])
-      @include(if: $isWerteListe) {
-      id
-      wert
-      sort
-    }
-    lieferung_status_werte(order_by: [{ sort: asc }, { wert: asc }])
-      @include(if: $isWerteListe) {
-      id
-      wert
-      sort
-    }
-    lieferung_typ_werte(order_by: [{ sort: asc }, { wert: asc }])
-      @include(if: $isWerteListe) {
-      id
-      wert
-      sort
-    }
   }
   ${art}
   ${aufgabe}

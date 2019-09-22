@@ -1,27 +1,5 @@
 create extension if not exists "uuid-ossp";
 
-drop table if exists zaehleinheit_werte cascade;
-create table zaehleinheit_werte (
-  id bigserial primary key,
-  wert varchar(50) default null,
-  sort smallint default null,
-  changed date default now(),
-  changed_by varchar(20) default null
-);
-create index on zaehleinheit_werte using btree (id);
-create index on zaehleinheit_werte using btree (sort);
-
-drop table if exists masseinheit_werte cascade;
-create table masseinheit_werte (
-  id bigserial primary key,
-  wert varchar(50) default null,
-  sort smallint default null,
-  changed date default now(),
-  changed_by varchar(20) default null
-);
-create index on masseinheit_werte using btree (id);
-create index on masseinheit_werte using btree (sort);
-
 drop table if exists person cascade;
 create table person (
   id bigserial primary key,
@@ -64,7 +42,7 @@ create table person_file (
   name text default null,
   beschreibung text default null
 );
-create index on person using btree (id);
+create index on person_file using btree (id);
 create index on person_file using btree (person_id);
 create index on person_file using btree (file_id);
 create index on person_file using btree (file_mime_type);
@@ -90,7 +68,7 @@ create table art_file (
   name text default null,
   beschreibung text default null
 );
-create index on art using btree (id);
+create index on art_file using btree (id);
 create index on art_file using btree (art_id);
 create index on art_file using btree (file_id);
 create index on art_file using btree (file_mime_type);
@@ -110,6 +88,8 @@ create table herkunft (
   tsv tsvector
 );
 create index on herkunft using btree (id);
+create index on herkunft using btree (nr);
+create index on herkunft using btree (gemeinde);
 create index on herkunft using btree (lokalname);
 create index on herkunft using gin (tsv);
 
@@ -122,7 +102,7 @@ create table herkunft_file (
   name text default null,
   beschreibung text default null
 );
-create index on herkunft using btree (id);
+create index on herkunft_file using btree (id);
 create index on herkunft_file using btree (herkunft_id);
 create index on herkunft_file using btree (file_id);
 create index on herkunft_file using btree (file_mime_type);
@@ -148,6 +128,7 @@ create index on sammlung using btree (id);
 create index on sammlung using btree (art_id);
 create index on sammlung using btree (person_id);
 create index on sammlung using btree (herkunft_id);
+create index on sammlung using btree (nr);
 create index on sammlung using btree (datum);
 create index on sammlung using btree (anzahl_pflanzen);
 create index on sammlung using btree (gramm_samen);
@@ -162,7 +143,7 @@ create table sammlung_file (
   name text default null,
   beschreibung text default null
 );
-create index on sammlung using btree (id);
+create index on sammlung_file using btree (id);
 create index on sammlung_file using btree (sammlung_id);
 create index on sammlung_file using btree (file_id);
 create index on sammlung_file using btree (file_mime_type);
@@ -200,7 +181,7 @@ create table garten_file (
   name text default null,
   beschreibung text default null
 );
-create index on garten using btree (id);
+create index on garten_file using btree (id);
 create index on garten_file using btree (garten_id);
 create index on garten_file using btree (file_id);
 create index on garten_file using btree (file_mime_type);
@@ -222,8 +203,8 @@ create table kultur (
 );
 create index on kultur using btree (id);
 create index on kultur using btree (art_id);
-create index on kultur using btree (garten_id);
 create index on kultur using btree (herkunft_id);
+create index on kultur using btree (garten_id);
 create index on kultur using btree (zwischenlager);
 create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
@@ -239,7 +220,7 @@ create table kultur_file (
   name text default null,
   beschreibung text default null
 );
-create index on kultur using btree (id);
+create index on kultur_file using btree (id);
 create index on kultur_file using btree (kultur_id);
 create index on kultur_file using btree (file_id);
 create index on kultur_file using btree (file_mime_type);
@@ -380,15 +361,18 @@ create table lieferung (
   tsv tsvector
 );
 create index on lieferung using btree (id);
+create index on lieferung using btree (art_id);
 create index on lieferung using btree (person_id);
 create index on lieferung using btree (von_sammlung_id);
 create index on lieferung using btree (von_kultur_id);
 create index on lieferung using btree (nach_kultur_id);
 create index on lieferung using btree (datum);
+create index on lieferung using btree (nach_ausgepflanzt);
 create index on lieferung using btree (von_anzahl_individuen);
 create index on lieferung using btree (anzahl_pflanzen);
 create index on lieferung using btree (anzahl_auspflanzbereit);
 create index on lieferung using btree (gramm_samen);
+create index on lieferung using btree (andere_menge);
 create index on lieferung using btree (geplant);
 create index on lieferung using gin (tsv);
 
@@ -401,13 +385,7 @@ create table lieferung_file (
   name text default null,
   beschreibung text default null
 );
-create index on lieferung using btree (id);
+create index on lieferung_file using btree (id);
 create index on lieferung_file using btree (lieferung_id);
 create index on lieferung_file using btree (file_id);
 create index on lieferung_file using btree (file_mime_type);
-
---alter table lieferung add constraint fk_lieferung_herkunft foreign key (herkunft_id) references herkunft (id) on delete cascade on update cascade;
-
-drop table if exists lieferung_typ_werte cascade;
-drop table if exists lieferung_status_werte cascade;
-drop table if exists lieferung_zwischenlager_werte cascade;

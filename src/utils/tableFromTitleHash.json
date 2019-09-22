@@ -11,10 +11,5 @@
   "Lieferungen": "lieferung",
   "Sammlungen": "sammlung",
   "Herkuenfte": "herkunft",
-  "Personen": "person",
-  "Masseinheiten": "masseinheit_werte",
-  "Zaehleinheiten": "zaehleinheit_werte",
-  "Lieferung-Typ": "lieferung_typ_werte",
-  "Lieferung-Status": "lieferung_status_werte",
-  "Lieferung-Zwischenlager": "lieferung_zwischenlager_werte"
+  "Personen": "person"
 }
