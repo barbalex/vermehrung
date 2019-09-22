@@ -233,6 +233,15 @@ const Aufgabe = ({ filter: showFilter }) => {
   const { tk, ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
     get(row, 'kultur.kultur_felder') || {}
 
+  console.log('Aufgabe', {
+    tk,
+    ag_datum,
+    ag_teilkultur_id,
+    ag_geplant,
+    ag_person_id,
+    row,
+  })
+
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
@@ -361,7 +370,7 @@ const Aufgabe = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />
-          {tk && ag_teilkultur_id && (
+          {((tk && ag_teilkultur_id) || showFilter) && (
             <Select
               key={`${row.id}${row.teilkultur_id}teilkultur_id`}
               name="teilkultur_id"
@@ -383,7 +392,7 @@ const Aufgabe = ({ filter: showFilter }) => {
             error={errors.aufgabe}
             multiline
           />
-          {ag_person_id && (
+          {(ag_person_id || showFilter) && (
             <Select
               key={`${row.id}${row.person_id}person_id`}
               name="person_id"
@@ -396,7 +405,7 @@ const Aufgabe = ({ filter: showFilter }) => {
               error={errors.person_id}
             />
           )}
-          {ag_datum && (
+          {(ag_datum || showFilter) && (
             <DateFieldWithPicker
               key={`${row.id}datum`}
               name="datum"
@@ -406,7 +415,7 @@ const Aufgabe = ({ filter: showFilter }) => {
               error={errors.datum}
             />
           )}
-          {ag_geplant && (
+          {(ag_geplant || showFilter) && (
             <FieldRow>
               <Checkbox2States
                 key={`${row.id}geplant`}

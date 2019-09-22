@@ -319,7 +319,7 @@ const Zaehlung = ({ filter: showFilter }) => {
               saveToDb={saveToDb}
               error={errors.datum}
             />
-            {z_geplant && (
+            {(z_geplant || showFilter) && (
               <FieldRow>
                 <Checkbox2States
                   key={`${row.id}geplant`}
@@ -340,7 +340,7 @@ const Zaehlung = ({ filter: showFilter }) => {
                 </div>
               </FieldRow>
             )}
-            {z_bemerkungen && (
+            {(z_bemerkungen || showFilter) && (
               <TextField
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"

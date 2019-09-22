@@ -301,7 +301,7 @@ const Teilkultur = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.name}
           />
-          {tk_bemerkungen && (
+          {(tk_bemerkungen || showFilter) && (
             <TextField
               key={`${row.id}bemerkungen`}
               name="bemerkungen"
