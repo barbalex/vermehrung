@@ -172,8 +172,7 @@ const SymbolDiv = styled.div`
 `
 const SymbolSpan = styled.span`
   padding-right: 11px !important;
-  padding-left: ${props =>
-    props['data-nodeisinactivenodepath'] ? '9px' : '9px'};
+  padding-left: 9px;
   font-weight: ${props =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   margin-top: -10px !important;

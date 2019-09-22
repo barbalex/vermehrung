@@ -132,18 +132,12 @@ export default gql`
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...LieferungFields
-          person {
-            ...PersonFields
-          }
         }
         lieferungsByNachKulturId(
           where: $lieferungFilter
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...LieferungFields
-          person {
-            ...PersonFields
-          }
         }
       }
       sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
