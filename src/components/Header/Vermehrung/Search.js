@@ -18,7 +18,6 @@ import {
   garten as gartenFragment,
   herkunft as herkunftFragment,
   kultur as kulturFragment,
-  event as eventFragment,
   lieferung as lieferungFragment,
   person as personFragment,
   sammlung as sammlungFragment,
@@ -178,7 +177,6 @@ const filterSuggestionsQuery = gql`
   ${gartenFragment}
   ${herkunftFragment}
   ${kulturFragment}
-  ${eventFragment}
   ${lieferungFragment}
   ${personFragment}
   ${sammlungFragment}
@@ -240,11 +238,11 @@ export default () => {
     name: get(o, 'garten.person.name') || '(kein Name)',
     type: 'Kulturen',
   }))
-  const suggestionsEvent = get(data, 'event', []).map(o => ({
+  const suggestionsAufgabe = get(data, 'aufgabe', []).map(o => ({
     id: o.id,
-    name: `${formatDatum(o.datum)}: ${get(o, 'event') ||
+    name: `${formatDatum(o.datum)}: ${get(o, 'aufgabe') ||
       '(nicht beschrieben)'}`,
-    type: 'Events',
+    type: 'Aufgaben',
     parent: o.kultur_id,
   }))
   const suggestionsLieferung = get(data, 'lieferung', []).map(o => ({
@@ -275,7 +273,7 @@ export default () => {
     ...suggestionsGarten,
     ...suggestionsHerkunft,
     ...suggestionsKultur,
-    ...suggestionsEvent,
+    ...suggestionsAufgabe,
     ...suggestionsLieferung,
     ...suggestionsPerson,
     ...suggestionsSammlung,
@@ -306,10 +304,10 @@ export default () => {
       suggestions: suggestionsKultur,
     })
   }
-  if (suggestionsEvent.length) {
+  if (suggestionsAufgabe.length) {
     titledSuggestions.push({
-      title: `Events (${suggestionsEvent.length})`,
-      suggestions: suggestionsEvent,
+      title: `Events (${suggestionsAufgabe.length})`,
+      suggestions: suggestionsAufgabe,
     })
   }
   if (suggestionsLieferung.length) {

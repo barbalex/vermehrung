@@ -10,8 +10,8 @@ import { type as lieferung } from './lieferung'
 import { type as person } from './person'
 import { type as sammlung } from './sammlung'
 import { type as zaehlung } from './zaehlung'
-import { type as teilzaehlung } from './teilzaehlung'
 import { type as teilkultur } from './teilkultur'
+import { type as teilzaehlung } from './teilzaehlung'
 import emptyValues from './emptyValues'
 
 export default types

@@ -27,10 +27,10 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'Events',
-      id: `art${artId}Kultur${kulturId}EventFolder`,
-      label: `Events (${nr})`,
-      url: ['Arten', artId, 'Kulturen', kulturId, 'Events'],
+      menuTitle: 'Aufgaben',
+      id: `art${artId}Kultur${kulturId}AufgabeFolder`,
+      label: `Aufgaben (${nr})`,
+      url: ['Arten', artId, 'Kulturen', kulturId, 'Aufgaben'],
       sort: [1, artIndex, 1, kulturIndex, 4],
       hasChildren: true,
     },

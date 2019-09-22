@@ -23,5 +23,5 @@ export const empty = {
 
 export const simpleTypes = {
   id: 'number',
-  ae_id: 'uuid',
+  ae_id: 'string',
 }

@@ -8,8 +8,8 @@ export default ({ url, nodes, data, loading }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'events', [])
-  const nr = loading && !events.length ? '...' : events.length
+  const aufgaben = get(kultur, 'aufgaben', [])
+  const nr = loading && !aufgaben.length ? '...' : aufgaben.length
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
@@ -28,10 +28,10 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'Events',
-      id: `garten${gartenId}Kultur${kulturId}EventFolder`,
-      label: `Events (${nr})`,
-      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Events'],
+      menuTitle: 'Aufgaben',
+      id: `garten${gartenId}Kultur${kulturId}AufgabeFolder`,
+      label: `Aufgaben (${nr})`,
+      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Aufgaben'],
       sort: [4, gartenIndex, 1, kulturIndex, 4],
       hasChildren: true,
     },

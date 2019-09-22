@@ -12,7 +12,7 @@ export default ({ nodes, data, url }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'events', [])
+  const aufgaben = get(kultur, 'aufgaben', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -34,7 +34,7 @@ export default ({ nodes, data, url }) => {
   )
 
   return (
-    events
+    aufgaben
       // only show if parent node exists
       .filter(() =>
         nodes
@@ -47,13 +47,13 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : '(kein Datum)'
-        const label = `${datum}: ${get(el, 'event') || '(nicht beschrieben)'}`
+        const label = `${datum}: ${get(el, 'aufgabe') || '(nicht beschrieben)'}`
 
         return {
           nodeType: 'table',
-          menuTitle: 'Event',
-          table: 'event',
-          id: `person${personId}Garten${gartenId}Kultur${kulturId}Event${el.id}`,
+          menuTitle: 'Aufgabe',
+          table: 'aufgabe',
+          id: `person${personId}Garten${gartenId}Kultur${kulturId}Aufgabe${el.id}`,
           parentId: `person${personId}Garten${gartenId}Kultur${kulturId}EventFolder`,
           label,
           url: [
@@ -63,7 +63,7 @@ export default ({ nodes, data, url }) => {
             gartenId,
             'Kulturen',
             kulturId,
-            'Events',
+            'Aufgaben',
             el.id,
           ],
           hasChildren: false,

@@ -6,7 +6,6 @@ import ErrorBoundary from 'react-error-boundary'
 
 import Art from './Data/Art'
 import Aufgabe from './Data/Aufgabe'
-import Event from './Data/Event'
 import Garten from './Data/Garten'
 import Herkunft from './Data/Herkunft'
 import Kultur from './Data/Kultur'
@@ -51,7 +50,6 @@ export default () => {
   const formObject = {
     art: <Art filter />,
     aufgabe: <Aufgabe filter />,
-    event: <Event filter />,
     herkunft: <Herkunft filter />,
     garten: <Garten filter />,
     kultur: <Kultur filter />,
@@ -65,7 +63,6 @@ export default () => {
   const titleObject = {
     art: 'Art Filter',
     aufgabe: 'Aufgabe Filter',
-    event: 'Event Filter',
     garten: 'Garten Filter',
     herkunft: 'Herkunft Filter',
     kultur: 'Kultur Filter',
@@ -106,7 +103,6 @@ export default () => {
               data-id="lieferung"
             />
             <StyledTab label="Aufgabe" value="aufgabe" data-id="aufgabe" />
-            <StyledTab label="Event" value="event" data-id="event" />
             <StyledTab label="Person" value="person" data-id="person" />
           </StyledTabs>
         </TitleRow>
