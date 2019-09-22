@@ -80,6 +80,15 @@ export default gql`
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isGartenKultur) {
           ...ZaehlungFields
+          teilzaehlungs_aggregate {
+            aggregate {
+              sum {
+                anzahl_pflanzen
+                anzahl_auspflanzbereit
+                anzahl_mutterpflanzen
+              }
+            }
+          }
         }
       }
     }
@@ -108,6 +117,15 @@ export default gql`
           order_by: { datum: desc_nulls_first }
         ) @include(if: $isArtKultur) {
           ...ZaehlungFields
+          teilzaehlungs_aggregate {
+            aggregate {
+              sum {
+                anzahl_pflanzen
+                anzahl_auspflanzbereit
+                anzahl_mutterpflanzen
+              }
+            }
+          }
         }
         lieferungsByVonKulturId(
           where: $lieferungFilter
@@ -164,6 +182,15 @@ export default gql`
               order_by: { datum: desc_nulls_first }
             ) {
               ...ZaehlungFields
+              teilzaehlungs_aggregate {
+                aggregate {
+                  sum {
+                    anzahl_pflanzen
+                    anzahl_auspflanzbereit
+                    anzahl_mutterpflanzen
+                  }
+                }
+              }
             }
           }
         }
@@ -174,6 +201,15 @@ export default gql`
     }
     zaehlung(order_by: { datum: desc_nulls_first }) {
       ...ZaehlungFields
+      teilzaehlungs_aggregate {
+        aggregate {
+          sum {
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            anzahl_mutterpflanzen
+          }
+        }
+      }
     }
     teilkultur(where: $teilkulturFilter, order_by: { name: asc_nulls_first }) {
       ...TeilkulturFields
@@ -222,6 +258,15 @@ export default gql`
       zaehlungs(where: $zaehlungFilter, order_by: { datum: desc_nulls_first })
         @include(if: $isKultur) {
         ...ZaehlungFields
+        teilzaehlungs_aggregate {
+          aggregate {
+            sum {
+              anzahl_pflanzen
+              anzahl_auspflanzbereit
+              anzahl_mutterpflanzen
+            }
+          }
+        }
       }
       lieferungsByVonKulturId(
         where: $lieferungFilter
@@ -280,6 +325,15 @@ export default gql`
               order_by: { datum: desc_nulls_first }
             ) {
               ...ZaehlungFields
+              teilzaehlungs_aggregate {
+                aggregate {
+                  sum {
+                    anzahl_pflanzen
+                    anzahl_auspflanzbereit
+                    anzahl_mutterpflanzen
+                  }
+                }
+              }
             }
           }
         }
@@ -303,6 +357,15 @@ export default gql`
         }
         zaehlungs {
           ...ZaehlungFields
+          teilzaehlungs_aggregate {
+            aggregate {
+              sum {
+                anzahl_pflanzen
+                anzahl_auspflanzbereit
+                anzahl_mutterpflanzen
+              }
+            }
+          }
         }
       }
     }
@@ -329,6 +392,15 @@ export default gql`
           }
           zaehlungs @include(if: $isPersonGartenKultur) {
             ...ZaehlungFields
+            teilzaehlungs_aggregate {
+              aggregate {
+                sum {
+                  anzahl_pflanzen
+                  anzahl_auspflanzbereit
+                  anzahl_mutterpflanzen
+                }
+              }
+            }
           }
           lieferungsByVonKulturId @include(if: $isPersonGartenKultur) {
             ...LieferungFields
@@ -402,6 +474,15 @@ export default gql`
           }
           zaehlungs @include(if: $isSammlungLieferungKultur) {
             ...ZaehlungFields
+            teilzaehlungs_aggregate {
+              aggregate {
+                sum {
+                  anzahl_pflanzen
+                  anzahl_auspflanzbereit
+                  anzahl_mutterpflanzen
+                }
+              }
+            }
           }
           lieferungsByVonKulturId @include(if: $isSammlungLieferungKultur) {
             ...LieferungFields
