@@ -10,6 +10,15 @@ export const art = gql`
     }
   }
 `
+export const artFile = gql`
+  fragment ArtFileFields on art_file {
+    art_id
+    file_id
+    file_mime_type
+    name
+    beschreibung
+  }
+`
 export const aeArt = gql`
   fragment AeArtFields on ae_art {
     id

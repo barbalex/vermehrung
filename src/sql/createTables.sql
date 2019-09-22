@@ -81,6 +81,20 @@ create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using gin (tsv);
 
+drop table if exists art_file;
+create table art_file (
+  id bigserial primary key,
+  art_id integer default null references art (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on art using btree (id);
+create index on art_file using btree (art_id);
+create index on art_file using btree (file_id);
+create index on art_file using btree (file_mime_type);
+
 drop table if exists herkunft cascade;
 create table herkunft (
   id bigserial primary key,

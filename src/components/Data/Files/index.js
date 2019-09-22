@@ -11,6 +11,7 @@ import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import {
+  artFile as artFileFragment,
   herkunftFile as herkunftFileFragment,
   sammlungFile as sammlungFileFragment,
   personFile as personFileFragment,
@@ -63,6 +64,7 @@ const LightboxButton = styled(Button)`
 `
 
 const fragmentObject = {
+  art: artFileFragment,
   herkunft: herkunftFileFragment,
   sammlung: sammlungFileFragment,
   person: personFileFragment,

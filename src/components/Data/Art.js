@@ -16,6 +16,7 @@ import FilterTitle from '../shared/FilterTitle'
 import queryFromTable from '../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import { art as artFragment } from '../../utils/fragments'
+import Files from './Files'
 
 const Container = styled.div`
   height: 100%;
@@ -213,6 +214,7 @@ const Art = ({ filter: showFilter }) => {
             filter={val => ({ name: { _like: `%${val}%` }, id: artId })}
             queryNodesName="ae_art"
           />
+          {!showFilter && <Files parentId={row.id} parent="art" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

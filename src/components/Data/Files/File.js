@@ -8,10 +8,19 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ErrorBoundary from 'react-error-boundary'
+import upperFirst from 'lodash/upperFirst'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
-import { herkunftFile as herkunftFileFragment } from '../../../utils/fragments'
+import {
+  artFile as artFileFragment,
+  herkunftFile as herkunftFileFragment,
+  sammlungFile as sammlungFileFragment,
+  personFile as personFileFragment,
+  gartenFile as gartenFileFragment,
+  kulturFile as kulturFileFragment,
+  lieferungFile as lieferungFileFragment,
+} from '../../../utils/fragments'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 
@@ -66,6 +75,16 @@ const MenuTitle = styled.h3`
     outline: none;
   }
 `
+
+const fragmentObject = {
+  art: artFileFragment,
+  herkunft: herkunftFileFragment,
+  sammlung: sammlungFileFragment,
+  person: personFileFragment,
+  garten: gartenFileFragment,
+  kultur: kulturFileFragment,
+  lieferung: lieferungFileFragment,
+}
 
 const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
@@ -153,12 +172,13 @@ const File = ({ file, parent, refetch }) => {
         } else {
           valueToSet = `"${value}"`
         }
+        const fragment = fragmentObject[parent]
         await client.mutate({
           mutation: gql`
-              mutation update_herkunft_file(
+              mutation update_${parent}_file(
                 $file_id: uuid!
               ) {
-                update_herkunft_file(
+                update_${parent}_file(
                   where: { file_id: { _eq: $file_id } }
                   _set: {
                     ${field}: ${valueToSet}
@@ -166,11 +186,11 @@ const File = ({ file, parent, refetch }) => {
                 ) {
                   affected_rows
                   returning {
-                    ...HerkunftFileFields
+                    ...${upperFirst(parent)}FileFields
                   }
                 }
               }
-              ${herkunftFileFragment}
+              ${fragment}
             `,
           variables: {
             file_id: file.file_id,
