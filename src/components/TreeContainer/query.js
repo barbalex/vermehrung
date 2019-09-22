@@ -267,18 +267,12 @@ export default gql`
         order_by: { datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...LieferungFields
-        person @include(if: $isKulturAusLieferung) {
-          ...PersonFields
-        }
       }
       lieferungsByNachKulturId(
         where: $lieferungFilter
         order_by: { datum: desc_nulls_first }
       ) @include(if: $isKultur) {
         ...LieferungFields
-        person @include(if: $isKulturAnLieferung) {
-          ...PersonFields
-        }
       }
       kultur_felder @include(if: $isKultur) {
         ...KulturFelderFields
@@ -398,18 +392,12 @@ export default gql`
           }
           lieferungsByVonKulturId @include(if: $isPersonGartenKultur) {
             ...LieferungFields
-            person {
-              ...PersonFields
-            }
           }
           lieferungsByNachKulturId(
             where: $lieferungFilter
             order_by: { datum: desc_nulls_first }
           ) @include(if: $isPersonGartenKultur) {
             ...LieferungFields
-            person {
-              ...PersonFields
-            }
           }
         }
       }
@@ -480,15 +468,9 @@ export default gql`
           }
           lieferungsByVonKulturId @include(if: $isSammlungLieferungKultur) {
             ...LieferungFields
-            person {
-              ...PersonFields
-            }
           }
           lieferungsByNachKulturId @include(if: $isSammlungLieferungKultur) {
             ...LieferungFields
-            person {
-              ...PersonFields
-            }
           }
         }
       }

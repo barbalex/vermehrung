@@ -20,8 +20,14 @@ export default ({ nodes, data, url }) => {
       .map(el => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)'
-        const label = `${datum}: ${get(el, 'person.name') || '(kein Name)'}`
+          : 'kein Datum'
+        const anz = get(el, 'anzahl_pflanzen') || '-'
+        const anzAb = get(el, 'anzahl_auspflanzbereit') || '-'
+        const numbers = `${anz
+          .toString()
+          .padStart(3, '\u00A0')}/${anzAb.toString().padStart(3, '\u00A0')}`
+        const geplant = el.geplant ? ' geplant' : ''
+        const label = `${datum}: ${numbers}${geplant}`
 
         return {
           nodeType: 'table',
@@ -32,6 +38,7 @@ export default ({ nodes, data, url }) => {
           label,
           url: ['Personen', personId, 'Lieferungen', el.id],
           hasChildren: false,
+          mono: true,
         }
       })
       .map((el, index) => {

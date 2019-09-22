@@ -32,7 +32,7 @@ export default ({ nodes, data, url }) => {
       .map(el => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)'
+          : 'kein Datum'
         const anz =
           get(el, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') ||
           '-'

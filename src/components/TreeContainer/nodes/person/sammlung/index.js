@@ -20,7 +20,7 @@ export default ({ nodes, data, url }) => {
       .map(el => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)'
+          : 'kein Datum'
         const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
         const herkunft = get(el, 'herkunft.nr') || '(keine Herkunft-Nr)'
         const label = `${datum}: Herkunft ${herkunft}: ${art}`

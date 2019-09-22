@@ -15,7 +15,7 @@ export default ({ nodes, data }) => {
         const herkunft = get(el, 'herkunft.nr') || '(keine Herkunft-Nr)'
         const date = datum
           ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)'
+          : 'kein Datum'
         const label = `${el.nr ||
           '(keine Nr)'}, ${date}: Herkunft ${herkunft}, ${person}; ${art}`
 

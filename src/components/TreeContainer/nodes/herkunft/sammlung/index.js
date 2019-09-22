@@ -22,7 +22,7 @@ export default ({ nodes, data, url }) => {
       .map(el => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)'
+          : 'kein Datum'
         const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
         const label = `${datum}: ${artName}`
 
