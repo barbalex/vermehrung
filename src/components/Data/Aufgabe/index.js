@@ -233,15 +233,6 @@ const Aufgabe = ({ filter: showFilter }) => {
   const { tk, ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
     get(row, 'kultur.kultur_felder') || {}
 
-  console.log('Aufgabe', {
-    tk,
-    ag_datum,
-    ag_teilkultur_id,
-    ag_geplant,
-    ag_person_id,
-    row,
-  })
-
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
