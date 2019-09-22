@@ -240,8 +240,8 @@ const Lieferung = ({ filter: showFilter }) => {
   const herkunftByKultur = get(row, 'kulturByVonKulturId.herkunft')
   const herkunft = herkunftBySammlung || herkunftByKultur
   const herkunftValue = herkunft
-    ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.lokalname ||
-        'kein Lokalname'}, ${herkunft.gemeinde || 'keine Gemeinde'}`
+    ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
+        '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
 
   useEffect(() => {
