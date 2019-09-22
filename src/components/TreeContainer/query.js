@@ -280,7 +280,11 @@ export default gql`
     }
     herkunft(
       where: $herkunftFilter
-      order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
+      order_by: [
+        { nr: asc_nulls_first }
+        { gemeinde: asc_nulls_first }
+        { lokalname: asc_nulls_first }
+      ]
     ) {
       ...HerkunftFields
       sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
