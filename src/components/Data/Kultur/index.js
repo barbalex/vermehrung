@@ -130,14 +130,19 @@ const gartenQuery = gql`
   ${kulturFragment}
   ${gartenFragment}
 `
-const dataQuery = gql`
-  query dataQuery {
+const herkunftQuery = gql`
+  query herkunftQuery {
     herkunft(
-      order_by: [{ nr: asc_nulls_first }, { lokalname: asc_nulls_first }]
+      order_by: [
+        { nr: asc_nulls_first }
+        { gemeinde: asc_nulls_first }
+        { lokalname: asc_nulls_first }
+      ]
     ) {
       id
       nr
       lokalname
+      gemeinde
     }
   }
 `
@@ -158,9 +163,11 @@ const Kultur = ({ filter: showFilter }) => {
     variables: { id, isFiltered, filter: kulturFilter },
   })
   const { data, error, loading } = kulturResult
-  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
-    dataQuery,
-  )
+  const {
+    data: herkunftData,
+    error: herkunftError,
+    loading: herkunftLoading,
+  } = useQuery(herkunftQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -224,11 +231,12 @@ const Kultur = ({ filter: showFilter }) => {
 
   const herkunftWerte = useMemo(
     () =>
-      get(dataData, 'herkunft', []).map(el => ({
+      get(herkunftData, 'herkunft', []).map(el => ({
         value: el.id,
-        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
+        label: `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
+          '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`,
       })),
-    [dataLoading],
+    [herkunftLoading],
   )
 
   const saveToDb = useCallback(
@@ -295,7 +303,7 @@ const Kultur = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error || errorArt || errorGarten || dataError
+  const errorToShow = error || errorArt || errorGarten || herkunftError
   if (errorToShow) {
     return (
       <Container>
@@ -347,7 +355,7 @@ const Kultur = ({ filter: showFilter }) => {
             field="herkunft_id"
             label="Herkunft"
             options={herkunftWerte}
-            loading={dataLoading}
+            loading={herkunftLoading}
             saveToDb={saveToDb}
             error={errors.herkunft_id}
           />
