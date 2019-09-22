@@ -25,7 +25,8 @@ export default ({ nodes, data, url }) => {
           table: 'sammlung',
           id: `art${artId}Sammlung${el.id}`,
           parentId: `art${artId}SammlungFolder`,
-          label: `${datum}: ${get(el, 'herkunft.nr') || '(keine Nr.)'}`,
+          label: `${datum}: ${get(el, 'herkunft.gemeinde') ||
+            '(keine Gemeinde)'}, ${get(el, 'herkunft.nr') || '(keine Nr.)'}`,
           url: ['Arten', artId, 'Sammlungen', el.id],
           hasChildren: true,
         }
