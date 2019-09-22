@@ -13,7 +13,8 @@ export default ({ nodes, data }) => {
         table: 'herkunft',
         id: `herkunft${el.id}`,
         parentId: 'herkunftFolder',
-        label: `${el.nr || '(keine Nr)'}: ${el.lokalname || 'kein Lokalname'}`,
+        label: `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
+          '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`,
         url: ['Herkuenfte', el.id],
         hasChildren: true,
       }))
