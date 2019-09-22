@@ -14,6 +14,7 @@ export default types.model('Node', {
   sort: types.array(types.union(types.string, types.number)),
   hasChildren: types.optional(types.boolean, false),
   accountId: types.optional(types.string, ''),
+  mono: types.optional(types.boolean, false),
 })
 
 export const defaultValue = {
@@ -27,4 +28,5 @@ export const defaultValue = {
   sort: [],
   hasChildren: false,
   accountId: false,
+  mono: false,
 }

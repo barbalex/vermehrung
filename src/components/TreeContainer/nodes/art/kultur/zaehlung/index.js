@@ -46,7 +46,11 @@ export default ({ nodes, data, url }) => {
             el,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ) || '-'
-        const numbers = `${anz}/${anzAb}/${anzMu}`
+        const numbers = `${anz
+          .toString()
+          .padStart(3, '\u00A0')}/${anzAb
+          .toString()
+          .padStart(3, '\u00A0')}/${anzMu.toString().padStart(3, '\u00A0')}`
         const geplant = el.geplant ? ' geplant' : ''
         const label = `${datum}: ${numbers}${geplant}`
 
@@ -59,6 +63,7 @@ export default ({ nodes, data, url }) => {
           label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
           hasChildren: false,
+          mono: true,
         }
       })
       .map((el, index) => {

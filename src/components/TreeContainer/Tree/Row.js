@@ -173,17 +173,19 @@ const SymbolDiv = styled.div`
 const SymbolSpan = styled.span`
   padding-right: 11px !important;
   padding-left: ${props =>
-    props['data-nodeisinactivenodepath'] ? '7px' : '9px'};
+    props['data-nodeisinactivenodepath'] ? '9px' : '9px'};
   font-weight: ${props =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
-  margin-top: -8px !important;
+  margin-top: -10px !important;
   font-size: 28px !important;
   width: 9px;
 `
 const TextSpan = styled.span`
   margin-left: 0;
   padding-right: 4px;
-  font-size: 16px !important;
+  font-family: ${props => (props['data-mono'] ? 'Roboto Mono' : 'Roboto')};
+  font-size: ${props =>
+    props['data-mono'] ? '15px !important' : '16px !important'};
   font-weight: ${props =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   white-space: nowrap;
@@ -330,6 +332,7 @@ const Row = ({ style, node }) => {
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
             node={node}
             onClick={onClickNode}
+            data-mono={!!node.mono}
           >
             {node.label}
           </TextSpan>
