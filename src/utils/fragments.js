@@ -36,14 +36,6 @@ export const aufgabe = gql`
     datum
   }
 `
-export const event = gql`
-  fragment EventFields on event {
-    id
-    kultur_id
-    datum
-    event
-  }
-`
 export const garten = gql`
   fragment GartenFields on garten {
     id

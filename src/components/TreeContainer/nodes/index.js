@@ -13,8 +13,8 @@ import buildArtSammlungLieferungAusLieferung from './art/sammlung/auslieferung'
 
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
-import buildArtEventFolder from './art/kultur/event/folder'
-import buildArtEventEvent from './art/kultur/event'
+import buildArtKulturAufgabeFolder from './art/kultur/aufgabe/folder'
+import buildArtKulturAufgabeAufgabe from './art/kultur/aufgabe'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
 import buildArtKulturZaehlungZaehlung from './art/kultur/zaehlung'
 import buildArtKulturAusLieferungFolder from './art/kultur/auslieferung/folder'
@@ -688,7 +688,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildArtEventFolder({
+          buildArtKulturAufgabeFolder({
             nodes,
             url,
             data,
@@ -885,7 +885,7 @@ export default ({ store, data, loading }) => {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildArtEventEvent({
+          buildArtKulturAufgabeAufgabe({
             nodes,
             data,
             store,

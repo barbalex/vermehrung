@@ -8,8 +8,8 @@ export default ({ url, nodes, data, loading }) => {
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'events', [])
-  const nr = loading && !events.length ? '...' : events.length
+  const aufgaben = get(kultur, 'aufgaben', [])
+  const nr = loading && !aufgaben.length ? '...' : aufgaben.length
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)

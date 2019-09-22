@@ -25,9 +25,6 @@ export default url => {
   if (url.length === 2 && url[0] === 'Aufgaben') {
     return 'aufgabe'
   }
-  if (url.length === 2 && url[0] === 'Events') {
-    return 'event'
-  }
   if ([2, 3].includes(url.length) && url[0] === 'Personen') {
     return 'person'
   }
@@ -86,8 +83,8 @@ export default url => {
   ) {
     return 'lieferung'
   }
-  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Events') {
-    return 'event'
+  if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Aufgaben') {
+    return 'aufgabe'
   }
   if (url.length === 4 && url[0] === 'Kulturen' && url[2] === 'Teilkulturen') {
     return 'teilkultur'
@@ -147,9 +144,9 @@ export default url => {
     url.length === 6 &&
     url[0] === 'Arten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Events'
+    url[4] === 'Aufgaben'
   ) {
-    return 'event'
+    return 'aufgabe'
   }
   if (
     url.length === 6 &&
@@ -179,9 +176,9 @@ export default url => {
     url.length === 6 &&
     url[0] === 'Gaerten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Events'
+    url[4] === 'Aufgaben'
   ) {
-    return 'event'
+    return 'aufgabe'
   }
   if (
     url.length === 6 &&
@@ -256,9 +253,9 @@ export default url => {
     url[0] === 'Personen' &&
     url[2] === 'Gaerten' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Aufgaben'
   ) {
-    return 'event'
+    return 'aufgabe'
   }
   if (
     url.length === 8 &&
@@ -292,9 +289,9 @@ export default url => {
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Events'
+    url[6] === 'Aufgaben'
   ) {
-    return 'event'
+    return 'aufgabe'
   }
   if (
     url.length === 8 &&

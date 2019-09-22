@@ -1,6 +1,5 @@
 import { initial as art } from './art'
 import { initial as aufgabe } from './aufgabe'
-import { initial as event } from './event'
 import { initial as garten } from './garten'
 import { initial as herkunft } from './herkunft'
 import { initial as kultur } from './kultur'
@@ -16,7 +15,6 @@ export default {
   show: false,
   art,
   aufgabe,
-  event,
   garten,
   herkunft,
   kultur,

@@ -2,7 +2,6 @@ import { types, getParent } from 'mobx-state-tree'
 
 import { type as art } from './art'
 import { type as aufgabe } from './aufgabe'
-import { type as event } from './event'
 import { type as garten } from './garten'
 import { type as herkunft } from './herkunft'
 import { type as kultur } from './kultur'
@@ -20,7 +19,6 @@ export default types
     show: types.optional(types.boolean, false),
     art,
     aufgabe,
-    event,
     garten,
     herkunft,
     kultur,
