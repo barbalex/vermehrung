@@ -28,11 +28,6 @@ values
  (1,1,1),
  (2,2,2);
 
-insert into event (id,kultur_id,datum,event)
-values
- (1,1,'2018-10-01','umgepflanzt'),
- (2,2,'2017-08-03','Unkraut entfernt');
-
 insert into zaehlung (id,kultur_id,datum,anzahl_pflanzen,anz_mutter_pflanzen,anzahl_auspflanzbereit)
 values
  (1,1,'2018-10-01',10,4,4),

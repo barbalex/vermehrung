@@ -57,15 +57,6 @@ returns setof kultur as
 language sql stable;
 -- alter function kultur_search(filter text) owner to postgres;
 
-drop function if exists event_search(filter text);
-create or replace function event_search(filter text)
-returns setof event as
-  $$
-    select * from event where tsv @@ to_tsquery($1);
-  $$
-language sql stable;
--- alter function event_search(filter text) owner to postgres;
-
 drop function if exists teilkultur_search(filter text);
 create or replace function teilkultur_search(filter text)
 returns setof teilkultur as

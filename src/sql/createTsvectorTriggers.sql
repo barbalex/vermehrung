@@ -336,40 +336,6 @@ $$ language plpgsql;
 create trigger tsvupdate_lieferung before insert or update
   on lieferung for each row execute procedure lieferung_trigger();
 
-DROP FUNCTION IF EXISTS event_trigger() cascade;
-create function event_trigger() returns trigger as $$
-  declare
-    artname text;
-    gartenname text;
-    personname text;
-  begin
-    select ae_art.name, garten.name, person.name into artname, gartenname, personname
-    from event
-      inner join kultur 
-        inner join art 
-          inner join ae_art on art.ae_id = ae_art.id
-        on kultur.art_id = art.id
-        left join garten
-          inner join person on garten.person_id = person.id
-        on kultur.garten_id = garten.id
-      on event.kultur_id = kultur.id
-    where kultur.id = new.kultur_id;
-    new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.event, '')), 'A');
-    return new;
-  end
-$$ language plpgsql;
-
-create trigger tsvupdate_event before insert or update
-  on event for each row execute procedure event_trigger();
-
 DROP TRIGGER IF EXISTS aufgabe_trigger ON aufgabe cascade;
 DROP FUNCTION IF EXISTS aufgabe_trigger() cascade;
 create function aufgabe_trigger() returns trigger as $$

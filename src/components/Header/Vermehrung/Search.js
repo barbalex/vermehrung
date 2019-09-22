@@ -147,8 +147,8 @@ const filterSuggestionsQuery = gql`
         }
       }
     }
-    event: event_search(args: { filter: $filter }) @include(if: $run) {
-      ...EventFields
+    aufgabe: aufgabe_search(args: { filter: $filter }) @include(if: $run) {
+      ...AufgabeFields
       kultur {
         ...KulturFields
       }
@@ -306,7 +306,7 @@ export default () => {
   }
   if (suggestionsAufgabe.length) {
     titledSuggestions.push({
-      title: `Events (${suggestionsAufgabe.length})`,
+      title: `Aufgaben (${suggestionsAufgabe.length})`,
       suggestions: suggestionsAufgabe,
     })
   }
@@ -353,7 +353,7 @@ export default () => {
       case 'Kulturen':
         newActiveNodeArray = [suggestion.type, suggestion.id]
         break
-      case 'Events':
+      case 'Aufgaben':
       case 'Zaehlungen':
         newActiveNodeArray = [
           'Kulturen',

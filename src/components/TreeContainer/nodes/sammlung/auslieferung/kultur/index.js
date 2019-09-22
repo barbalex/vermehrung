@@ -5,12 +5,10 @@ export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
   const sammlungen = get(data, 'sammlung', [])
-  console.log('nodes sammlung auslieferung kultur, sammlungen:', sammlungen)
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
   const kultur = get(lieferung, 'kulturByNachKulturId')
-  console.log('nodes sammlung auslieferung kultur, kultur:', kultur)
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
