@@ -90,6 +90,18 @@ export default gql`
             }
           }
         }
+        lieferungsByVonKulturId(
+          where: $lieferungFilter
+          order_by: { datum: desc_nulls_first }
+        ) @include(if: $isGartenKultur) {
+          ...LieferungFields
+        }
+        lieferungsByNachKulturId(
+          where: $lieferungFilter
+          order_by: { datum: desc_nulls_first }
+        ) @include(if: $isGartenKultur) {
+          ...LieferungFields
+        }
       }
     }
     art(

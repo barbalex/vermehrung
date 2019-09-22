@@ -19,16 +19,21 @@ export default ({ nodes, data, url }) => {
       .filter(() =>
         nodes.map(n => n.id).includes(`sammlung${sammlungId}HerkunftFolder`),
       )
-      .map(el => ({
-        nodeType: 'table',
-        menuTitle: 'Herkunft',
-        table: 'herkunft',
-        id: `sammlung${sammlungId}Herkunft${el.id}`,
-        parentId: `sammlung${sammlungId}HerkunftFolder`,
-        label: el.nr || '(keine Nr)',
-        url: ['Sammlungen', sammlungId, 'Herkuenfte', el.id],
-        hasChildren: false,
-      }))
+      .map(el => {
+        const label = `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
+          '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Herkunft',
+          table: 'herkunft',
+          id: `sammlung${sammlungId}Herkunft${el.id}`,
+          parentId: `sammlung${sammlungId}HerkunftFolder`,
+          label,
+          url: ['Sammlungen', sammlungId, 'Herkuenfte', el.id],
+          hasChildren: false,
+        }
+      })
       .map((el, index) => {
         el.sort = [3, sammlungIndex, 1, index]
         return el

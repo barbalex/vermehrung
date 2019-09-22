@@ -11,6 +11,13 @@ export default ({ url, nodes, data, loading }) => {
   const anlieferungen = get(kultur, 'lieferungsByNachKulturId', [])
   const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
 
+  console.log('garten kultur anlieferungFolder', {
+    gaerten,
+    kulturen,
+    kultur,
+    anlieferungen,
+  })
+
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
   const kulturNodes = nodes.filter(
