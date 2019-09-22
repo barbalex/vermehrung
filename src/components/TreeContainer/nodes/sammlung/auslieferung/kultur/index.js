@@ -5,10 +5,12 @@ export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
   const sammlungen = get(data, 'sammlung', [])
+  console.log('nodes sammlung auslieferung kultur, sammlungen:', sammlungen)
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kulturen = [get(lieferung, 'kulturByNachKulturId', [])]
+  const kultur = get(lieferung, 'kulturByNachKulturId')
+  console.log('nodes sammlung auslieferung kultur, kultur:', kultur)
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -24,36 +26,38 @@ export default ({ nodes, data, url }) => {
     n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
 
-  return (
-    kulturen
-      // only show if parent node exists
-      .filter(() =>
-        nodes
-          .map(n => n.id)
-          .includes(`sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`),
-      )
-      .map(el => ({
-        nodeType: 'table',
-        menuTitle: 'Kultur',
-        table: 'kultur',
-        id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
-        parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
-        label:
-          get(el, 'garten.name') ||
-          `(${get(el, 'garten.person.name') || 'kein Name'})`,
-        url: [
-          'Sammlungen',
-          sammlungId,
-          'Aus-Lieferungen',
-          lieferungId,
-          'Kulturen',
-          el.id,
-        ],
-        hasChildren: true,
-      }))
-      .map((el, index) => {
-        el.sort = [3, sammlungIndex, 3, lieferungIndex, 1, index]
-        return el
-      })
+  // only return if parent exists
+  if (
+    !nodes
+      .map(n => n.id)
+      .includes(`sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`)
   )
+    return []
+
+  if (!kultur) return []
+
+  return [kultur]
+    .map(el => ({
+      nodeType: 'table',
+      menuTitle: 'Kultur',
+      table: 'kultur',
+      id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
+      parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
+      label:
+        get(el, 'garten.name') ||
+        `(${get(el, 'garten.person.name') || 'kein Name'})`,
+      url: [
+        'Sammlungen',
+        sammlungId,
+        'Aus-Lieferungen',
+        lieferungId,
+        'Kulturen',
+        el.id,
+      ],
+      hasChildren: true,
+    }))
+    .map((el, index) => {
+      el.sort = [3, sammlungIndex, 3, lieferungIndex, 1, index]
+      return el
+    })
 }

@@ -102,8 +102,6 @@ import buildKulturAusLieferungFolder from './kultur/auslieferung/folder'
 import buildKulturLieferungAusLieferung from './kultur/auslieferung'
 import buildKulturAufgabeFolder from './kultur/aufgabe/folder'
 import buildKulturAufgabeAufgabe from './kultur/aufgabe'
-import buildKulturEventFolder from './kultur/event/folder'
-import buildKulturEventEvent from './kultur/event'
 
 export default ({ store, data, loading }) => {
   const openNodes = store.tree.openNodes.sort(sort)
@@ -378,15 +376,6 @@ export default ({ store, data, loading }) => {
         )(),
         ...memoizeOne(() =>
           buildKulturAusLieferungFolder({
-            nodes,
-            url,
-            data,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildKulturEventFolder({
             nodes,
             url,
             data,

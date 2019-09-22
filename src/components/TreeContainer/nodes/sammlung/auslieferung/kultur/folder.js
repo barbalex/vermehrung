@@ -9,8 +9,8 @@ export default ({ url, nodes, data, loading }) => {
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kulturen = [get(lieferung, 'kulturByNachKulturId', [])]
-  const nr = loading && !kulturen.length ? '...' : kulturen.length
+  const kultur = get(lieferung, 'kulturByNachKulturId')
+  const nr = loading && !!kultur ? 1 : 0
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -38,7 +38,7 @@ export default ({ url, nodes, data, loading }) => {
       nodeType: 'folder',
       menuTitle: 'Kulturen',
       id: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
-      label: `Kulturen (${nr})`,
+      label: `Kultur (${nr})`,
       url: [
         'Sammlungen',
         sammlungId,
