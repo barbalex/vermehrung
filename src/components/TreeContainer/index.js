@@ -105,7 +105,7 @@ const TreeContainer = ({ dimensions }) => {
     setRefetch(refetch)
     // fetch on first load to show loading state
     setNodes(buildNodes({ store, data, loading }))
-  }, [])
+  }, [data, loading, refetch, setNodes, setRefetch, store])
 
   // do not set nodes when data is empty
   // which happens while query is loading again

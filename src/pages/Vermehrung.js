@@ -68,11 +68,11 @@ const Vermehrung = ({ location }) => {
   // on first render set openNodes
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
-  }, [])
-  const handleCheckSession = useCallback(() => setLoading(false))
+  }, [activeNodeArray, setOpenNodes])
+  const handleCheckSession = useCallback(() => setLoading(false), [])
   useEffect(() => {
     silentAuth({ callback: handleCheckSession, store })
-  }, [])
+  }, [handleCheckSession, store])
   const windowSize = getWindowSize()
   useEffect(() => {
     /**
@@ -87,11 +87,11 @@ const Vermehrung = ({ location }) => {
       height: windowSize.height - 64,
       width: windowSize.width * treeWidthInPercentOfScreen,
     })
-  }, [])
+  }, [windowSize.height, windowSize.width])
   // when pathname changes, update activeNodeArray
   useEffect(() => {
     setActiveNodeArray(activeNodeArray)
-  }, [pathname])
+  }, [activeNodeArray, pathname, setActiveNodeArray])
 
   const onChange = useCallback(() => {
     if (containerEl.current && containerEl.current.clientWidth) {
@@ -102,7 +102,7 @@ const Vermehrung = ({ location }) => {
     } else {
       setDimensions({ height: 200, width: 200 })
     }
-  })
+  }, [])
   if (loading) return null
 
   /**

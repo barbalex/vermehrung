@@ -77,7 +77,7 @@ const SettingsKultur = ({ kulturResult }) => {
       refetch()
       refetchTree()
     },
-    [refetch, refetchTree, kulturId],
+    [refetch, refetchTree, client, kulturId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
@@ -86,11 +86,11 @@ const SettingsKultur = ({ kulturResult }) => {
         variant: 'error',
       },
     })
-  }, [])
+  }, [enqueNotification, error.message])
 
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const onClose = useCallback(() => setAnchorEl(null))
+  const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
     event => setAnchorEl(event.currentTarget),
     [],

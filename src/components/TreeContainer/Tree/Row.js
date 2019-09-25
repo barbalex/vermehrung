@@ -228,16 +228,16 @@ const Row = ({ style, node }) => {
       activeNodeArray,
       store,
     })
-  }, [node, openNodes, activeNodeArray])
+  }, [node, activeNodeArray, store])
   const onClickNodeSymbol = useCallback(() => {
     toggleNodeSymbol({ node, store })
-  }, [node, openNodes])
+  }, [node, store])
   const onClickNeu = useCallback(() => {
     createNew({ node, store, client })
-  }, [node, openNodes, activeNodeArray])
+  }, [node, store, client])
   const onClickDelete = useCallback(() => {
     deleteDataset({ node, store, client })
-  }, [node, openNodes, activeNodeArray])
+  }, [node, store, client])
 
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
@@ -278,14 +278,14 @@ const Row = ({ style, node }) => {
       store,
       client,
     })
-  }, [node, openNodes, activeNodeArray])
+  }, [node.url, store, client, enqueNotification])
 
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })
-  }, [node, openNodes, activeNodeArray])
+  }, [node, openNodes, store])
   const onClickCloseAllChildren = useCallback(() => {
     closeAllChildren({ node, openNodes, store })
-  }, [node, openNodes, activeNodeArray])
+  }, [node, openNodes, store])
 
   // for unknows reaseon this happens momentarily when new art is created
   if (!node.url) return null

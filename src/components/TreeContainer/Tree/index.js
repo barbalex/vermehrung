@@ -38,7 +38,7 @@ const Tree = ({ dimensions }) => {
   useEffect(() => {
     const index = findIndex(nodes, node => isEqual(node.url, aNA))
     if (index > -1) listRef.current.scrollToItem(index)
-  }, [aNA, nodes])
+  }, [aNA, listRef, nodes])
 
   let height = 250
   if (dimensions && dimensions.height) {
