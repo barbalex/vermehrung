@@ -70,7 +70,7 @@ export default ({ nodes, data, url }) => {
         }
       })
       .map((el, index) => {
-        el.sort = [11, personIndex, 1, gartenIndex, 1, kulturIndex, 5, index]
+        el.sort = [10, personIndex, 2, gartenIndex, 1, kulturIndex, 5, index]
         return el
       })
   )
