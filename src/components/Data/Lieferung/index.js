@@ -1,30 +1,37 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
-import storeContext from '../../storeContext'
-import Select from '../shared/Select'
-import TextField from '../shared/TextField'
-import DateFieldWithPicker from '../shared/DateFieldWithPicker'
-import Checkbox2States from '../shared/Checkbox2States'
-import FormTitle from '../shared/FormTitle'
-import FilterTitle from '../shared/FilterTitle'
-import queryFromTable from '../../utils/queryFromTable'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
+import storeContext from '../../../storeContext'
+import Select from '../../shared/Select'
+import TextField from '../../shared/TextField'
+import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
+import Checkbox2States from '../../shared/Checkbox2States'
+import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
+import queryFromTable from '../../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
   lieferung as lieferungFragment,
   art as artFragment,
-} from '../../utils/fragments'
-import types from '../../store/Filter/simpleTypes'
-import Files from './Files'
+} from '../../../utils/fragments'
+import types from '../../../store/Filter/simpleTypes'
+import Files from '../Files'
+import updateLieferung from './updateLieferung'
+import updateLieferungArtId from './updateLieferungArtId'
 
 const Container = styled.div`
   height: 100%;
@@ -223,20 +230,6 @@ const Lieferung = ({ filter: showFilter }) => {
     variables: { filter: sammlungFilter },
   })
 
-  // show only kulturen of row.art_id
-  // beware: row.art_id can be null
-  // TODO: only kulturen of same herkunft!
-  const kulturFilter = row.art_id
-    ? { art_id: { _eq: row.art_id } }
-    : { id: { _is_null: false } }
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery(kulturQuery, {
-    variables: { filter: kulturFilter },
-  })
-
   const herkunftBySammlung = get(row, 'sammlung.herkunft')
   const herkunftByKultur = get(row, 'kulturByVonKulturId.herkunft')
   const herkunft = herkunftBySammlung || herkunftByKultur
@@ -245,51 +238,110 @@ const Lieferung = ({ filter: showFilter }) => {
         '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
 
+  // show only kulturen of row.art_id
+  // beware: row.art_id can be null
+  const vonKulturFilter = row.art_id
+    ? { art_id: { _eq: row.art_id } }
+    : { id: { _is_null: false } }
+  const {
+    data: vonKulturData,
+    error: vonKulturError,
+    loading: vonKulturLoading,
+  } = useQuery(kulturQuery, {
+    variables: { filter: vonKulturFilter },
+  })
+  // only kulturen of same herkunft!
+  // beware: herkunft.id can be null
+  let nachKulturFilter = { id: { _is_null: false } }
+  if (row.art_id && herkunft && herkunft.id) {
+    nachKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+    }
+  }
+  if (row.art_id && herkunft && herkunft.id && row.von_kultur_id) {
+    nachKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+      id: { _neq: row.von_kultur_id },
+    }
+  }
+  const {
+    data: nachKulturData,
+    error: nachKulturError,
+    loading: nachKulturLoading,
+  } = useQuery(kulturQuery, {
+    variables: { filter: nachKulturFilter },
+  })
+
   useEffect(() => {
     setErrors({})
   }, [row.id])
 
-  const kulturWerte = memoizeOne(() =>
-    get(kulturData, 'kultur', []).map(el => {
-      const personName = get(el, 'garten.person.name') || '(kein Name)'
-      const personOrt = get(el, 'garten.person.ort') || null
-      const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-      const label = get(el, 'garten.name') || personLabel
+  const vonKulturWerte = useMemo(
+    () =>
+      get(vonKulturData, 'kultur', []).map(el => {
+        const personName = get(el, 'garten.person.name') || '(kein Name)'
+        const personOrt = get(el, 'garten.person.ort') || null
+        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
+        const label = get(el, 'garten.name') || personLabel
 
-      return {
+        return {
+          value: el.id,
+          label,
+        }
+      }),
+    [vonKulturData],
+  )
+  const nachKulturWerte = useMemo(
+    () =>
+      get(nachKulturData, 'kultur', []).map(el => {
+        const personName = get(el, 'garten.person.name') || '(kein Name)'
+        const personOrt = get(el, 'garten.person.ort') || null
+        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
+        const label = get(el, 'garten.name') || personLabel
+
+        return {
+          value: el.id,
+          label,
+        }
+      }),
+    [nachKulturData],
+  )
+
+  const sammlungWerte = useMemo(
+    () =>
+      get(sammlungData, 'sammlung', []).map(el => {
+        const datum = el.datum || '(kein Datum)'
+        const nr = get(el, 'herkunft.nr') || '(keine Nr)'
+        const person = get(el, 'person.name') || '(kein Name)'
+        const label = `${datum}: Herkunft ${nr}; ${person}`
+
+        return {
+          value: el.id,
+          label,
+        }
+      }),
+    [sammlungData],
+  )
+
+  const personWerte = useMemo(
+    () =>
+      get(personData, 'person', []).map(el => ({
         value: el.id,
-        label,
-      }
-    }),
-  )()
+        label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+      })),
+    [personData],
+  )
 
-  const sammlungWerte = memoizeOne(() =>
-    get(sammlungData, 'sammlung', []).map(el => {
-      const datum = el.datum || '(kein Datum)'
-      const nr = get(el, 'herkunft.nr') || '(keine Nr)'
-      const person = get(el, 'person.name') || '(kein Name)'
-      const label = `${datum}: Herkunft ${nr}; ${person}`
-
-      return {
+  const artWerte = useMemo(
+    () =>
+      get(artData, 'art', []).map(el => ({
         value: el.id,
-        label,
-      }
-    }),
-  )()
-
-  const personWerte = memoizeOne(() =>
-    get(personData, 'person', []).map(el => ({
-      value: el.id,
-      label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-    })),
-  )()
-
-  const artWerte = memoizeOne(() =>
-    get(artData, 'art', []).map(el => ({
-      value: el.id,
-      label: get(el, 'art_ae_art.name') || '(kein Artname)',
-    })),
-  )()
+        label: get(el, 'art_ae_art.name') || '(kein Artname)',
+      })),
+    [artData],
+  )
 
   const saveToDb = useCallback(
     async event => {
@@ -314,24 +366,10 @@ const Lieferung = ({ filter: showFilter }) => {
         }
         try {
           await client.mutate({
-            mutation: gql`
-              mutation update_lieferung(
-                $id: bigint!
-              ) {
-                update_lieferung(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...LieferungFields
-                  }
-                }
-              }
-              ${lieferungFragment}
-            `,
+            mutation:
+              field === 'art_id'
+                ? updateLieferungArtId({ field, valueToSet })
+                : updateLieferung({ field, valueToSet }),
             variables: {
               id: row.id,
             },
@@ -340,15 +378,16 @@ const Lieferung = ({ filter: showFilter }) => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
-        if (['von_kultur_id', 'von_sammlung_id'].includes(field)) {
+        if (['von_kultur_id', 'von_sammlung_id', 'art_id'].includes(field)) {
           // ensure Herkunft updates
-          refetch()
+          //console.log('Lieferung, refetch:', refetch)
+          !!refetch && refetch()
         }
         setErrors({})
         refetchTree()
       }
     },
-    [row],
+    [client, filter, refetch, refetchTree, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
@@ -365,7 +404,12 @@ const Lieferung = ({ filter: showFilter }) => {
   }
 
   const errorToShow =
-    error || sammlungError || kulturError || artError || personError
+    error ||
+    sammlungError ||
+    vonKulturError ||
+    nachKulturError ||
+    artError ||
+    personError
   if (errorToShow) {
     return (
       <Container>
@@ -460,34 +504,40 @@ const Lieferung = ({ filter: showFilter }) => {
               type="number"
             />
           </FieldRow>
-          <TitleRow>
-            <Title>von</Title>
-          </TitleRow>
-          <Select
-            key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-            name="von_sammlung_id"
-            value={row.von_sammlung_id}
-            field="von_sammlung_id"
-            label="Sammlung"
-            options={sammlungWerte}
-            loading={sammlungLoading}
-            saveToDb={saveToDb}
-            error={errors.von_sammlung_id}
-          />
-          <Select
-            key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-            name="von_kultur_id"
-            value={row.von_kultur_id}
-            field="von_kultur_id"
-            label="Kultur"
-            options={kulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.von_kultur_id}
-          />
+          {row.art_id && (
+            <>
+              <TitleRow>
+                <Title>von</Title>
+              </TitleRow>
+              <Select
+                key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
+                name="von_sammlung_id"
+                value={row.von_sammlung_id}
+                field="von_sammlung_id"
+                label="Sammlung"
+                options={sammlungWerte}
+                loading={sammlungLoading}
+                saveToDb={saveToDb}
+                error={errors.von_sammlung_id}
+              />
+              <Select
+                key={`${row.id}${row.von_kultur_id}von_kultur_id`}
+                name="von_kultur_id"
+                value={row.von_kultur_id}
+                field="von_kultur_id"
+                label="Kultur (nur Kulturen derselben Art)"
+                options={vonKulturWerte}
+                loading={vonKulturLoading}
+                saveToDb={saveToDb}
+                error={errors.von_kultur_id}
+              />
+            </>
+          )}
           {herkunftValue && (
             <Herkunft>
-              <HerkunftLabel>Herkunft</HerkunftLabel>
+              <HerkunftLabel>{`Herkunft (berechnet aus ${
+                row.von_kultur_id ? 'von-Kultur' : 'Sammlung'
+              })`}</HerkunftLabel>
               {herkunftValue}
             </Herkunft>
           )}
@@ -501,9 +551,11 @@ const Lieferung = ({ filter: showFilter }) => {
                 name="nach_kultur_id"
                 value={row.nach_kultur_id}
                 field="nach_kultur_id"
-                label="Kultur"
-                options={kulturWerte}
-                loading={kulturLoading}
+                label={`Kultur (Kulturen derselben Art und Herkunft${
+                  row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                })`}
+                options={nachKulturWerte}
+                loading={nachKulturLoading}
                 saveToDb={saveToDb}
                 error={errors.nach_kultur_id}
               />
