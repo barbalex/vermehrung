@@ -191,7 +191,7 @@ const Zaehlung = ({ filter: showFilter }) => {
           label,
         }
       }),
-    [kulturLoading],
+    [kulturData],
   )
 
   const saveToDb = useCallback(
@@ -246,7 +246,7 @@ const Zaehlung = ({ filter: showFilter }) => {
         refetchTree()
       }
     },
-    [row],
+    [client, filter, refetchTree, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

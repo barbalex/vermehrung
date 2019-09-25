@@ -70,8 +70,10 @@ const HeaderVermehrung = () => {
 
   const onClickHideActive = useCallback(() => setHideInactive(!hideInactive), [
     hideInactive,
+    setHideInactive,
   ])
   const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
+    setShowFilter,
     showFilter,
   ])
 

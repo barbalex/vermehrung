@@ -338,44 +338,47 @@ export default () => {
     ? titledSuggestions
     : loadingSuggestions
 
-  const onChange = useCallback(event => setVal(event.target.value))
-  const onClickDel = useCallback(() => setVal(''))
-  const onSuggestionSelected = useCallback((event, { suggestion }) => {
-    let newActiveNodeArray
-    // use suggestion.id to set url
-    switch (suggestion.type) {
-      case 'Arten':
-      case 'Gaerten':
-      case 'Herkuenfte':
-      case 'Lieferungen':
-      case 'Personen':
-      case 'Sammlungen':
-      case 'Kulturen':
-        newActiveNodeArray = [suggestion.type, suggestion.id]
-        break
-      case 'Aufgaben':
-      case 'Zaehlungen':
-        newActiveNodeArray = [
-          'Kulturen',
-          suggestion.parent,
-          suggestion.type,
-          suggestion.id,
-        ]
-        break
-      default: {
-        // do nothing
+  const onChange = useCallback(event => setVal(event.target.value), [])
+  const onClickDel = useCallback(() => setVal(''), [])
+  const onSuggestionSelected = useCallback(
+    (event, { suggestion }) => {
+      let newActiveNodeArray
+      // use suggestion.id to set url
+      switch (suggestion.type) {
+        case 'Arten':
+        case 'Gaerten':
+        case 'Herkuenfte':
+        case 'Lieferungen':
+        case 'Personen':
+        case 'Sammlungen':
+        case 'Kulturen':
+          newActiveNodeArray = [suggestion.type, suggestion.id]
+          break
+        case 'Aufgaben':
+        case 'Zaehlungen':
+          newActiveNodeArray = [
+            'Kulturen',
+            suggestion.parent,
+            suggestion.type,
+            suggestion.id,
+          ]
+          break
+        default: {
+          // do nothing
+        }
       }
-    }
-    store.filter.setShow(false)
-    setActiveNodeArray(newActiveNodeArray)
-    setVal('')
-    navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
-    // build open nodes
-    const newOpenNodes = newActiveNodeArray.map((n, index) =>
-      newActiveNodeArray.slice(0, index + 1),
-    )
-    addOpenNodes(newOpenNodes)
-  })
+      store.filter.setShow(false)
+      setActiveNodeArray(newActiveNodeArray)
+      setVal('')
+      navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
+      // build open nodes
+      const newOpenNodes = newActiveNodeArray.map((n, index) =>
+        newActiveNodeArray.slice(0, index + 1),
+      )
+      addOpenNodes(newOpenNodes)
+    },
+    [addOpenNodes, setActiveNodeArray, store.filter],
+  )
   const inputProps = {
     value: val,
     onChange,
@@ -405,7 +408,7 @@ export default () => {
         })}
       </div>
     )
-  })
+  }, [])
 
   //console.log('Search, val', val)
 

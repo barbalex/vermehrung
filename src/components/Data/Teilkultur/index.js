@@ -229,7 +229,7 @@ const Teilkultur = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [client, filter, refetch, row, showFilter],
   )
 
   if (loading) {

@@ -81,7 +81,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
       }
       refetch()
     },
-    [refetch, data],
+    [data, refetch, client, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
@@ -90,7 +90,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
         variant: 'error',
       },
     })
-  }, [])
+  }, [enqueNotification, error.message])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
@@ -100,7 +100,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClose = useCallback(() => setAnchorEl(null))
+  const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
     event => setAnchorEl(event.currentTarget),
     [],

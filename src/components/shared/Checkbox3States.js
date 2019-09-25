@@ -40,7 +40,7 @@ const Checkbox3States = ({ label, name, value, error, saveToDb }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [value, name])
+  }, [value, name, saveToDb])
 
   const indeterminate = value === null
   const checked = value === true
