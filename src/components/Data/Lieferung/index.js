@@ -97,6 +97,19 @@ const lieferungQuery = gql`
       }
       kulturByVonKulturId {
         id
+        art_id
+        herkunft_id
+        herkunft {
+          id
+          nr
+          lokalname
+          gemeinde
+        }
+      }
+      kulturByNachKulturId {
+        id
+        art_id
+        herkunft_id
         herkunft {
           id
           nr
@@ -131,6 +144,8 @@ const sammlungQuery = gql`
       herkunft {
         id
         nr
+        lokalname
+        gemeinde
       }
       person {
         id
@@ -230,19 +245,45 @@ const Lieferung = ({ filter: showFilter }) => {
     variables: { filter: sammlungFilter },
   })
 
+  const isAnlieferung =
+    activeNodeArray[activeNodeArray.length - 2] === 'An-Lieferungen'
+  const isAuslieferung =
+    activeNodeArray[activeNodeArray.length - 2] === 'Aus-Lieferungen'
+
+  const herkunftByKultur = isAnlieferung
+    ? get(row, 'kulturByNachKulturId.herkunft')
+    : get(row, 'kulturByVonKulturId.herkunft')
   const herkunftBySammlung = get(row, 'sammlung.herkunft')
-  const herkunftByKultur = get(row, 'kulturByVonKulturId.herkunft')
-  const herkunft = herkunftBySammlung || herkunftByKultur
+  const herkunft = herkunftByKultur || herkunftBySammlung
+  const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
   const herkunftValue = herkunft
     ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
         '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
 
-  // show only kulturen of row.art_id
-  // beware: row.art_id can be null
-  const vonKulturFilter = row.art_id
-    ? { art_id: { _eq: row.art_id } }
-    : { id: { _is_null: false } }
+  // beware: art_id, herkunft_id and nach_kultur_id can be null
+  let vonKulturFilter = { id: { _is_null: false } }
+  // show only kulturen of art_id
+  if (row.art_id) {
+    vonKulturFilter = {
+      art_id: { _eq: row.art_id },
+    }
+  }
+  // show only kulturen with same herkunft
+  if (row.art_id && herkunft && herkunft.id) {
+    vonKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+    }
+  }
+  // can't be delivered to same kultur it came from
+  if (row.art_id && herkunft && herkunft.id && row.nach_kultur_id) {
+    vonKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+      id: { _neq: row.nach_kultur_id },
+    }
+  }
   const {
     data: vonKulturData,
     error: vonKulturError,
@@ -251,14 +292,22 @@ const Lieferung = ({ filter: showFilter }) => {
     variables: { filter: vonKulturFilter },
   })
   // only kulturen of same herkunft!
-  // beware: herkunft.id can be null
+  // beware: art_id, herkunft_id and von_kultur_id can be null
   let nachKulturFilter = { id: { _is_null: false } }
+  // show only kulturen of art_id
+  if (row.art_id) {
+    nachKulturFilter = {
+      art_id: { _eq: row.art_id },
+    }
+  }
+  // show only kulturen with same herkunft
   if (row.art_id && herkunft && herkunft.id) {
     nachKulturFilter = {
       art_id: { _eq: row.art_id },
       herkunft_id: { _eq: herkunft.id },
     }
   }
+  // can't be delivered to same kultur it came from
   if (row.art_id && herkunft && herkunft.id && row.von_kultur_id) {
     nachKulturFilter = {
       art_id: { _eq: row.art_id },
@@ -380,7 +429,7 @@ const Lieferung = ({ filter: showFilter }) => {
         }
         if (['von_kultur_id', 'von_sammlung_id', 'art_id'].includes(field)) {
           // ensure Herkunft updates
-          //console.log('Lieferung, refetch:', refetch)
+          console.log('Lieferung, refetch:', refetch)
           !!refetch && refetch()
         }
         setErrors({})
@@ -455,6 +504,12 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.art_id}
           />
+          {herkunftValue && (
+            <Herkunft>
+              <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
+              {herkunftValue}
+            </Herkunft>
+          )}
           <FieldRow>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
@@ -504,7 +559,7 @@ const Lieferung = ({ filter: showFilter }) => {
               type="number"
             />
           </FieldRow>
-          {row.art_id && (
+          {row.art_id && !isAuslieferung && (
             <>
               <TitleRow>
                 <Title>von</Title>
@@ -533,15 +588,7 @@ const Lieferung = ({ filter: showFilter }) => {
               />
             </>
           )}
-          {herkunftValue && (
-            <Herkunft>
-              <HerkunftLabel>{`Herkunft (berechnet aus ${
-                row.von_kultur_id ? 'Kultur' : 'Sammlung'
-              })`}</HerkunftLabel>
-              {herkunftValue}
-            </Herkunft>
-          )}
-          {herkunft && (
+          {herkunft && !isAnlieferung && (
             <>
               <TitleRow>
                 <Title>nach</Title>
