@@ -90,7 +90,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
         variant: 'error',
       },
     })
-  }, [enqueNotification, error.message])
+  }, [enqueNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&

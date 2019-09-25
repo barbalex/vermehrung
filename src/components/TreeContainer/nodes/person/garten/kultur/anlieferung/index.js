@@ -46,11 +46,11 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
-        const anz = get(el, 'anzahl_pflanzen') || '-'
-        const anzAb = get(el, 'anzahl_auspflanzbereit') || '-'
+        const anz = get(el, 'anzahl_pflanzen') || '_'
+        const anzAb = get(el, 'anzahl_auspflanzbereit') || '_'
         const numbers = `${anz
           .toString()
-          .padStart(3, '\u00A0')}/${anzAb.toString().padStart(3, '\u00A0')}`
+          .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`
         const geplant = el.geplant ? ' geplant' : ''
         const label = `${datum}: ${numbers}${geplant}`
 

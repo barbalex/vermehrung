@@ -10,7 +10,7 @@ export default ({ url, nodes, data, loading }) => {
   const lieferungen = get(sammlung, 'lieferungs', [])
   const lieferung = lieferungen.find(p => p.id === lieferungId)
   const kultur = get(lieferung, 'kulturByNachKulturId')
-  const nr = loading && !!kultur ? 1 : 0
+  const nr = loading || !kultur ? 0 : 1
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(

@@ -95,7 +95,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
         variant: 'error',
       },
     })
-  }, [enqueNotification, error.message])
+  }, [enqueNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&

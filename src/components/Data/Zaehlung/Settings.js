@@ -91,7 +91,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
         variant: 'error',
       },
     })
-  }, [enqueNotification, error.message])
+  }, [enqueNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&

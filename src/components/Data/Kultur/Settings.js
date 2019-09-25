@@ -86,7 +86,7 @@ const SettingsKultur = ({ kulturResult }) => {
         variant: 'error',
       },
     })
-  }, [enqueNotification, error.message])
+  }, [enqueNotification, error])
 
   const [anchorEl, setAnchorEl] = useState(null)
 
