@@ -15,6 +15,7 @@ Die Ziele dienen als Grundlage:
 
 Priorität 1: Haupt-Ziele
 
+- Gewährleisten, dass Herkünfte bekannt sind und innerhalb von Kulturen nicht vermischt werden
 - Übersichten über Pflanzen und auspflanz-bereite Pflanzen.
   Als Grundlage, um Auspflanzungen zu planen
 - Obiges auch für frei wählbare Termine in der Zukunft<br/>
@@ -30,7 +31,7 @@ Priorität 2: Voraussetzungen, um die Haupt-Ziele zu erreichen
 - Effiziente und quell-nahe Erfassung und Nutzung
 - Möglichkeit für MitarbeiterInnen, sich rasch einen Überblick über wichtige Aspekte von Kulturen/Gärten/Arten zu schaffen und auszudrucken (welche und wofür?)
 - In grossen Gärten: Übersicht über die (räumliche) Organisation der Kulturen.
-  Um eine effiziente Bereitstellung für Lieferungen zu ermöglichen
+  Um eine effiziente Bereitstellung von Lieferungen zu ermöglichen
 - Die Daten sind nur für MitarbeiterInnen sichtbar
 - Die Sichtbarkeit von Daten kann auf Gärten der jeweiligen Mitarbeiterin eingeschränkt werden
 
