@@ -132,7 +132,7 @@ const Person = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [client, filter, refetch, row, showFilter],
   )
 
   if (loading) {

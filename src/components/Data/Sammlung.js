@@ -130,7 +130,7 @@ const Sammlung = ({ filter: showFilter }) => {
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [dataLoading],
+    [dataData],
   )
 
   const herkunftWerte = useMemo(
@@ -140,7 +140,7 @@ const Sammlung = ({ filter: showFilter }) => {
         label: `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
           '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`,
       })),
-    [dataLoading],
+    [dataData],
   )
 
   const artWerte = useMemo(
@@ -149,7 +149,7 @@ const Sammlung = ({ filter: showFilter }) => {
         value: el.id,
         label: get(el, 'art_ae_art.name') || '(kein Artname)',
       })),
-    [dataLoading],
+    [dataData],
   )
 
   const saveToDb = useCallback(
@@ -204,7 +204,7 @@ const Sammlung = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [client, filter, refetch, row, showFilter],
   )
 
   if (loading) {

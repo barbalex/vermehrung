@@ -86,7 +86,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
       }
       refetch()
     },
-    [refetch, personId],
+    [refetch, client, personId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
@@ -95,7 +95,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
         variant: 'error',
       },
     })
-  }, [])
+  }, [enqueNotification, error.message])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
@@ -105,7 +105,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClose = useCallback(() => setAnchorEl(null))
+  const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
     event => setAnchorEl(event.currentTarget),
     [],
