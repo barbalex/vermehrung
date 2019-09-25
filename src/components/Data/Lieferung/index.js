@@ -514,7 +514,7 @@ const Lieferung = ({ filter: showFilter }) => {
                 name="von_sammlung_id"
                 value={row.von_sammlung_id}
                 field="von_sammlung_id"
-                label="Sammlung"
+                label="Sammlung (nur solche derselben Art)"
                 options={sammlungWerte}
                 loading={sammlungLoading}
                 saveToDb={saveToDb}
@@ -525,7 +525,7 @@ const Lieferung = ({ filter: showFilter }) => {
                 name="von_kultur_id"
                 value={row.von_kultur_id}
                 field="von_kultur_id"
-                label="Kultur (nur Kulturen derselben Art)"
+                label="Kultur (nur solche derselben Art)"
                 options={vonKulturWerte}
                 loading={vonKulturLoading}
                 saveToDb={saveToDb}
@@ -536,7 +536,7 @@ const Lieferung = ({ filter: showFilter }) => {
           {herkunftValue && (
             <Herkunft>
               <HerkunftLabel>{`Herkunft (berechnet aus ${
-                row.von_kultur_id ? 'von-Kultur' : 'Sammlung'
+                row.von_kultur_id ? 'Kultur' : 'Sammlung'
               })`}</HerkunftLabel>
               {herkunftValue}
             </Herkunft>
