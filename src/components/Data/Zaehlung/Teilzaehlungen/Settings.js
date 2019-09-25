@@ -212,7 +212,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
                   name="tz_auspflanzbereit_beschreibung"
                 />
               }
-              label="Beschreibung auspflanzbereit"
+              label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
               labelPlacement="end"
             />
           </MenuItem>

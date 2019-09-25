@@ -247,7 +247,7 @@ const Teilzaehlung = ({
               <TextField
                 key={`${row.id}auspflanzbereit_beschreibung`}
                 name="auspflanzbereit_beschreibung"
-                label="Beschreibung auspflanzbereit"
+                label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
                 value={row.auspflanzbereit_beschreibung}
                 saveToDb={saveToDb}
                 error={errors.auspflanzbereit_beschreibung}
