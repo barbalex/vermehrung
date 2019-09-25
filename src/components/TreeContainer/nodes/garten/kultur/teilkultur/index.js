@@ -9,7 +9,7 @@ export default ({ nodes, data, url }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const aufgaben = get(kultur, 'aufgaben', [])
+  const teilkulturen = get(kultur, 'teilkulturs', [])
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
@@ -22,32 +22,36 @@ export default ({ nodes, data, url }) => {
   )
 
   return (
-    aufgaben
+    teilkulturen
       // only show if parent node exists
       .filter(() =>
         nodes
           .map(n => n.id)
-          .includes(`garten${gartenId}Kultur${kulturId}AufgabeFolder`),
+          .includes(`garten${gartenId}Kultur${kulturId}TeilkulturFolder`),
       )
       .map(el => {
-        const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : 'kein Datum'
-        const label = `${datum}: ${get(el, 'aufgabe') || '(nicht beschrieben)'}`
+        const label = el.name || '(kein Name)'
 
         return {
           nodeType: 'table',
-          menuTitle: 'Aufgabe',
-          table: 'aufgabe',
-          id: `garten${gartenId}Kultur${kulturId}Aufgabe${el.id}`,
-          parentId: `garten${gartenId}Kultur${kulturId}AufgabeFolder`,
+          menuTitle: 'Teilkultur',
+          table: 'teilkultur',
+          id: `garten${gartenId}Kultur${kulturId}Teilkultur${el.id}`,
+          parentId: `garten${gartenId}Kultur${kulturId}TeilkulturFolder`,
           label,
-          url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Aufgaben', el.id],
+          url: [
+            'Gaerten',
+            gartenId,
+            'Kulturen',
+            kulturId,
+            'Teilkulturen',
+            el.id,
+          ],
           hasChildren: false,
         }
       })
       .map((el, index) => {
-        el.sort = [4, gartenIndex, 1, kulturIndex, 5, index]
+        el.sort = [4, gartenIndex, 1, kulturIndex, 1, index]
         return el
       })
   )

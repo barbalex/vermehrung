@@ -26,6 +26,8 @@ import buildGartenFolder from './garten/folder'
 import buildGartenGarten from './garten'
 import buildGartenKulturFolder from './garten/kultur/folder'
 import buildGartenKultur from './garten/kultur'
+import buildGartenKulturTeilkulturFolder from './garten/kultur/teilkultur/folder'
+import buildGartenKulturTeilkulturTeilkultur from './garten/kultur/teilkultur'
 import buildGartenKulturAufgabeFolder from './garten/kultur/aufgabe/folder'
 import buildGartenKulturAufgabeAufgabe from './garten/kultur/aufgabe'
 import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
@@ -711,6 +713,15 @@ export default ({ store, data, loading }) => {
             loading,
           }),
         )(),
+        ...memoizeOne(() =>
+          buildGartenKulturTeilkulturFolder({
+            nodes,
+            url,
+            data,
+            store,
+            loading,
+          }),
+        )(),
       ]
     }
     if (
@@ -919,6 +930,24 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildGartenKulturAufgabeAufgabe({
+            nodes,
+            data,
+            store,
+            url,
+          }),
+        )(),
+      ]
+    }
+    if (
+      url.length === 5 &&
+      url[0] === 'Gaerten' &&
+      url[2] === 'Kulturen' &&
+      url[4] === 'Teilkulturen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildGartenKulturTeilkulturTeilkultur({
             nodes,
             data,
             store,

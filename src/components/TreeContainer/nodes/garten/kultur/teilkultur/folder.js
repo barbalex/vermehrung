@@ -8,8 +8,10 @@ export default ({ url, nodes, data, loading }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const anlieferungen = get(kultur, 'lieferungsByNachKulturId', [])
-  const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
+  const tk = get(kultur, 'kultur_felder.tk')
+  if (!tk) return []
+  const teilkulturen = get(kultur, 'teilkulturs', [])
+  const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
@@ -28,11 +30,11 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'An-Lieferungen',
-      id: `garten${gartenId}Kultur${kulturId}AnLieferungFolder`,
-      label: `An-Lieferungen (${nr})`,
-      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'An-Lieferungen'],
-      sort: [4, gartenIndex, 1, kulturIndex, 3],
+      menuTitle: 'Teilkulturen',
+      id: `garten${gartenId}Kultur${kulturId}TeilkulturFolder`,
+      label: `Teilkulturen (${nr})`,
+      url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Teilkulturen'],
+      sort: [4, gartenIndex, 1, kulturIndex, 1],
       hasChildren: true,
     },
   ]
