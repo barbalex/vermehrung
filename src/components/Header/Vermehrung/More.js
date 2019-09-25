@@ -31,15 +31,16 @@ const MyAppBar = () => {
   const onClickUserDocs = useCallback(() => {
     setAnchorEl(null)
     navigate('/Dokumentation/Benutzer/')
-  })
+  }, [])
   const onClickTechDocs = useCallback(() => {
     setAnchorEl(null)
     navigate('/Dokumentation/Technisch/')
-  })
-  const onClickMehrButton = useCallback(event =>
-    setAnchorEl(event.currentTarget),
+  }, [])
+  const onClickMehrButton = useCallback(
+    event => setAnchorEl(event.currentTarget),
+    [],
   )
-  const onClose = useCallback(() => setAnchorEl(null))
+  const onClose = useCallback(() => setAnchorEl(null), [])
 
   return (
     <Container>

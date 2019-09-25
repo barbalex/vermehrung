@@ -153,7 +153,7 @@ const Teilzaehlung = ({
         refetchTree()
       setErrors({})
     },
-    [row],
+    [client, refetchTree, row],
   )
   const onClickDelete = useCallback(async () => {
     try {
@@ -172,7 +172,7 @@ const Teilzaehlung = ({
       })
     }
     refetchTz()
-  }, [row.id])
+  }, [client, enqueNotification, refetchTz, row.id])
 
   return (
     <ErrorBoundary>

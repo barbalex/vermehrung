@@ -94,7 +94,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
       })
     }
     refetchTeilzaehlungen()
-  }, [])
+  }, [client, enqueNotification, refetchTeilzaehlungen, zaehlung.id])
 
   const showNew = rows.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'

@@ -82,7 +82,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
       }
       refetchZaehlung()
     },
-    [refetchZaehlung, kulturId],
+    [refetchZaehlung, client, kulturId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
@@ -91,7 +91,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
         variant: 'error',
       },
     })
-  }, [])
+  }, [enqueNotification, error.message])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
@@ -101,7 +101,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClose = useCallback(() => setAnchorEl(null))
+  const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
     event => setAnchorEl(event.currentTarget),
     [],

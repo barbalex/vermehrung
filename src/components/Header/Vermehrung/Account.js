@@ -65,7 +65,7 @@ const Account = () => {
       setResetTitle('Passwort zurücksetzen')
       setAnchorEl(null)
     }, 5000)
-  }, [])
+  }, [email])
 
   //console.log('Account', { user })
 
