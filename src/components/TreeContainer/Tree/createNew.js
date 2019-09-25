@@ -99,18 +99,17 @@ export default async ({ node, store, client }) => {
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
     // need to get art_id from kultur and set it
-    const query = gql`
-      query getArt {
-        kultur(where: { id: { _eq: ${parentId} } }) {
-          id
-          art_id
-        }
-      }
-    `
     let responce
     try {
       responce = await client.query({
-        query,
+        query: gql`
+        query getArt {
+          kultur(where: { id: { _eq: ${parentId} } }) {
+            id
+            art_id
+          }
+        }
+      `,
       })
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
