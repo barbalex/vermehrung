@@ -9,7 +9,7 @@ import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
 import TextField from '../../../shared/TextField'
-import Select from '../../../shared/Select'
+import Select from '../../../shared/SelectCreatable'
 import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import types from '../../../../store/Filter/simpleTypes'
@@ -68,9 +68,11 @@ const mutation = gql`
 `
 
 const Teilzaehlung = ({
+  kulturId,
   teilzaehlung: row,
   teilkulturenWerte,
   teilkulturenLoading,
+  refetchTeilkulturen,
   index,
   zaehlungResult,
   refetchTz,
@@ -174,6 +176,8 @@ const Teilzaehlung = ({
     refetchTz()
   }, [client, enqueNotification, refetchTz, row.id])
 
+  console.log('Teilzaehlung, teilkultur_id:', row.teilkultur_id)
+
   return (
     <ErrorBoundary>
       <>
@@ -191,6 +195,11 @@ const Teilzaehlung = ({
                 loading={teilkulturenLoading}
                 saveToDb={saveToDb}
                 error={errors.teilkultur_id}
+                creatablePropertiesToPass={{ kultur_id: kulturId }}
+                creatablePropertyName="name"
+                creatableIdField="id"
+                table="teilkultur"
+                callback={refetchTeilkulturen}
               />
             </Teilkultur>
           )}

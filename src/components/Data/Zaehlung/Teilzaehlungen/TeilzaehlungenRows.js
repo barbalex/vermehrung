@@ -25,12 +25,13 @@ const teilkulturenQuery = gql`
   ${teilkulturFragment}
 `
 
-const TeilzaehlungenRows = ({ rows, zaehlungResult, refetchTz }) => {
+const TeilzaehlungenRows = ({ kulturId, rows, zaehlungResult, refetchTz }) => {
   const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
   const {
     data: teilkulturenData,
     error: teilkulturenError,
     loading: teilkulturenLoading,
+    refetch: refetchTeilkulturen,
   } = useQuery(teilkulturenQuery, {
     variables: { kulturId: zaehlung.kultur_id },
   })
@@ -54,9 +55,11 @@ const TeilzaehlungenRows = ({ rows, zaehlungResult, refetchTz }) => {
         <Teilzaehlung
           key={r.id}
           index={index}
+          kulturId={kulturId}
           teilzaehlung={r}
           teilkulturenWerte={teilkulturenWerte}
           teilkulturenLoading={teilkulturenLoading}
+          refetchTeilkulturen={refetchTeilkulturen}
           zaehlungResult={zaehlungResult}
           refetchTz={refetchTz}
         />

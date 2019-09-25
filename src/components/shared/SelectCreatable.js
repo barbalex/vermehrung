@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useContext } from 'react'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
@@ -91,10 +92,13 @@ const SharedSelect = ({
   table,
   creatablePropertiesToPass = {},
   creatablePropertyName,
+  creatableIdField,
+  callback,
 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
+  const { refetch: refetchTree } = store.tree
 
   const onChange = useCallback(
     async (option, actionMeta) => {
@@ -110,7 +114,7 @@ const SharedSelect = ({
           responce = await client.mutate({
             mutation: gql`
             mutation insertDataset {
-              insert_${table} (objects: [{${creatablePropertyName}: ${option.label}, ${propertiesToPass}}]) {
+              insert_${table} (objects: [{${creatablePropertyName}: "${option.label}", ${propertiesToPass}}]) {
                 returning { id }
               }
             }
@@ -129,12 +133,14 @@ const SharedSelect = ({
           // 2. update value using new id
           const fakeEvent = {
             target: {
-              name: option.label,
+              name,
               value: newObject.id,
             },
           }
           saveToDb(fakeEvent)
         }
+        !!callback && callback()
+        refetchTree()
         return
       }
       // now update value
@@ -148,6 +154,7 @@ const SharedSelect = ({
     },
     [
       client,
+      creatableIdField,
       creatablePropertiesToPass,
       creatablePropertyName,
       enqueNotification,
@@ -179,6 +186,7 @@ const SharedSelect = ({
         maxheight={maxHeight}
         classNamePrefix="react-select"
         nocaret={noCaret}
+        formatCreateLabel={val => `"${val}" als neue Teilkultur aufnehmen`}
       />
       {error && <Error>{error}</Error>}
     </Container>

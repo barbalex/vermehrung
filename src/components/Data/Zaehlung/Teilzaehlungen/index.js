@@ -133,6 +133,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
           rows={rows}
           zaehlungResult={zaehlungResult}
           refetchTz={refetchTeilzaehlungen}
+          kulturId={zaehlung.kultur_id}
         />
       </Container>
     </ErrorBoundary>
