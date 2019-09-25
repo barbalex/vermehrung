@@ -45,7 +45,7 @@ export default () => {
   const { activeForm } = useContext(storeContext)
   const [activeTab, setActiveTab] = useState(activeForm || 'art')
 
-  const onChangeTab = useCallback((event, value) => setActiveTab(value))
+  const onChangeTab = useCallback((event, value) => setActiveTab(value), [])
 
   const formObject = {
     art: <Art filter />,

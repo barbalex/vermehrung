@@ -36,7 +36,7 @@ const Checkbox2States = ({ label, name, value, error, saveToDb }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [value, name])
+  }, [value, name, saveToDb])
 
   const checked = value === true
 
