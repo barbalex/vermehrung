@@ -225,6 +225,7 @@ const Lieferung = ({ filter: showFilter }) => {
 
   // show only kulturen of row.art_id
   // beware: row.art_id can be null
+  // TODO: only kulturen of same herkunft!
   const kulturFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }
     : { id: { _is_null: false } }
@@ -490,28 +491,32 @@ const Lieferung = ({ filter: showFilter }) => {
               {herkunftValue}
             </Herkunft>
           )}
-          <TitleRow>
-            <Title>nach</Title>
-          </TitleRow>
-          <Select
-            key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-            name="nach_kultur_id"
-            value={row.nach_kultur_id}
-            field="nach_kultur_id"
-            label="Kultur"
-            options={kulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.nach_kultur_id}
-          />
-          <Checkbox2States
-            key={`${row.id}nach_ausgepflanzt`}
-            label="Ausgepflanzt"
-            name="nach_ausgepflanzt"
-            value={row.nach_ausgepflanzt}
-            saveToDb={saveToDb}
-            error={errors.nach_ausgepflanzt}
-          />
+          {herkunft && (
+            <>
+              <TitleRow>
+                <Title>nach</Title>
+              </TitleRow>
+              <Select
+                key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+                name="nach_kultur_id"
+                value={row.nach_kultur_id}
+                field="nach_kultur_id"
+                label="Kultur"
+                options={kulturWerte}
+                loading={kulturLoading}
+                saveToDb={saveToDb}
+                error={errors.nach_kultur_id}
+              />
+              <Checkbox2States
+                key={`${row.id}nach_ausgepflanzt`}
+                label="Ausgepflanzt"
+                name="nach_ausgepflanzt"
+                value={row.nach_ausgepflanzt}
+                saveToDb={saveToDb}
+                error={errors.nach_ausgepflanzt}
+              />
+            </>
+          )}
           <TitleRow>
             <Title>wann</Title>
           </TitleRow>
