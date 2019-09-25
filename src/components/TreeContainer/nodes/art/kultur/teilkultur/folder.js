@@ -8,8 +8,10 @@ export default ({ url, nodes, data, loading }) => {
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const zaehlungen = get(kultur, 'zaehlungs', [])
-  const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
+  const tk = get(kultur, 'kultur_felder.tk')
+  if (!tk) return []
+  const teilkulturen = get(kultur, 'teilkulturs', [])
+  const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
@@ -27,11 +29,11 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'Zählungen',
-      id: `art${artId}Kultur${kulturId}ZaehlungFolder`,
-      label: `Zählungen (${nr})`,
-      url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen'],
-      sort: [1, artIndex, 1, kulturIndex, 2],
+      menuTitle: 'Teilkulturen',
+      id: `art${artId}Kultur${kulturId}TeilkulturFolder`,
+      label: `Teilkulturen (${nr})`,
+      url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen'],
+      sort: [1, artIndex, 1, kulturIndex, 1],
       hasChildren: true,
     },
   ]

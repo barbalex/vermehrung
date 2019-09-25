@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
-import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const artId = url[1]
@@ -9,7 +8,7 @@ export default ({ nodes, data, url }) => {
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const aufgaben = get(kultur, 'aufgaben', [])
+  const teilkulturen = get(kultur, 'teilkulturs', [])
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
@@ -22,32 +21,29 @@ export default ({ nodes, data, url }) => {
   )
 
   return (
-    aufgaben
+    teilkulturen
       // only show if parent node exists
       .filter(() =>
         nodes
           .map(n => n.id)
-          .includes(`art${artId}Kultur${kulturId}AufgabeFolder`),
+          .includes(`art${artId}Kultur${kulturId}TeilkulturFolder`),
       )
       .map(el => {
-        const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : 'kein Datum'
-        const label = `${datum}: ${get(el, 'aufgabe') || '(nicht beschrieben)'}`
+        const label = el.name || '(kein Name)'
 
         return {
           nodeType: 'table',
-          menuTitle: 'Aufgabe',
-          table: 'aufgabe',
-          id: `art${artId}Kultur${kulturId}Aufgabe${el.id}`,
-          parentId: `art${artId}Kultur${kulturId}AufgabeFolder`,
+          menuTitle: 'Teilkultur',
+          table: 'teilkultur',
+          id: `art${artId}Kultur${kulturId}Teilkultur${el.id}`,
+          parentId: `art${artId}Kultur${kulturId}TeilkulturFolder`,
           label,
-          url: ['Arten', artId, 'Kulturen', kulturId, 'Aufgaben', el.id],
+          url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen', el.id],
           hasChildren: false,
         }
       })
       .map((el, index) => {
-        el.sort = [1, artIndex, 1, kulturIndex, 5, index]
+        el.sort = [1, artIndex, 1, kulturIndex, 1, index]
         return el
       })
   )

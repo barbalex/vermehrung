@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
-import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const personId = url[1]
@@ -12,10 +11,11 @@ export default ({ nodes, data, url }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const auslieferungen = get(kultur, 'lieferungsByVonKulturId', [])
+  const teilkulturen = get(kultur, 'teilkulturs', [])
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+
   const gartenNodes = nodes.filter(
     n => n.parentId === `person${personId}GartenFolder`,
   )
@@ -23,6 +23,7 @@ export default ({ nodes, data, url }) => {
     gartenNodes,
     n => n.id === `person${personId}Garten${gartenId}`,
   )
+
   const kulturNodes = nodes.filter(
     n => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
   )
@@ -32,33 +33,24 @@ export default ({ nodes, data, url }) => {
   )
 
   return (
-    auslieferungen
+    teilkulturen
       // only show if parent node exists
       .filter(() =>
         nodes
           .map(n => n.id)
           .includes(
-            `person${personId}Garten${gartenId}Kultur${kulturId}AusLieferungFolder`,
+            `person${personId}Garten${gartenId}Kultur${kulturId}TeilkulturFolder`,
           ),
       )
       .map(el => {
-        const datum = el.datum
-          ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : 'kein Datum'
-        const anz = get(el, 'anzahl_pflanzen') || '-'
-        const anzAb = get(el, 'anzahl_auspflanzbereit') || '-'
-        const numbers = `${anz
-          .toString()
-          .padStart(3, '\u00A0')}/${anzAb.toString().padStart(3, '\u00A0')}`
-        const geplant = el.geplant ? ' geplant' : ''
-        const label = `${datum}: ${numbers}${geplant}`
+        const label = el.name || '(kein Name)'
 
         return {
           nodeType: 'table',
-          menuTitle: 'Aus-Lieferung',
-          table: 'lieferung',
-          id: `person${personId}Garten${gartenId}Kultur${kulturId}Auslieferung${el.id}`,
-          parentId: `person${personId}Garten${gartenId}Kultur${kulturId}AusLieferungFolder`,
+          menuTitle: 'Teilkultur',
+          table: 'teilkultur',
+          id: `person${personId}Garten${gartenId}Kultur${kulturId}Teilkultur${el.id}`,
+          parentId: `person${personId}Garten${gartenId}Kultur${kulturId}TeilkulturFolder`,
           label,
           url: [
             'Personen',
@@ -67,15 +59,14 @@ export default ({ nodes, data, url }) => {
             gartenId,
             'Kulturen',
             kulturId,
-            'Aus-Lieferungen',
+            'Teilkulturen',
             el.id,
           ],
           hasChildren: false,
-          mono: true,
         }
       })
       .map((el, index) => {
-        el.sort = [11, personIndex, 1, gartenIndex, 1, kulturIndex, 4, index]
+        el.sort = [11, personIndex, 1, gartenIndex, 1, kulturIndex, 1, index]
         return el
       })
   )

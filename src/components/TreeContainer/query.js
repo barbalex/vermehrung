@@ -163,6 +163,18 @@ export default gql`
         ) @include(if: $isArtKultur) {
           ...LieferungFields
         }
+        teilkulturs(
+          where: $teilkulturFilter
+          order_by: { name: asc_nulls_first }
+        ) @include(if: $isArtKultur) {
+          ...TeilkulturFields
+          kultur {
+            ...KulturFields
+          }
+        }
+        kultur_felder @include(if: $isArtKultur) {
+          ...KulturFelderFields
+        }
       }
       sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
         @include(if: $isArt) {
@@ -426,6 +438,18 @@ export default gql`
             order_by: { datum: desc_nulls_first }
           ) @include(if: $isPersonGartenKultur) {
             ...LieferungFields
+          }
+          teilkulturs(
+            where: $teilkulturFilter
+            order_by: { name: asc_nulls_first }
+          ) @include(if: $isPersonGartenKultur) {
+            ...TeilkulturFields
+            kultur {
+              ...KulturFields
+            }
+          }
+          kultur_felder @include(if: $isPersonGartenKultur) {
+            ...KulturFelderFields
           }
         }
       }

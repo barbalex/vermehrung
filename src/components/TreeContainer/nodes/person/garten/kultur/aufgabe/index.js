@@ -40,7 +40,7 @@ export default ({ nodes, data, url }) => {
         nodes
           .map(n => n.id)
           .includes(
-            `person${personId}Garten${gartenId}Kultur${kulturId}EventFolder`,
+            `person${personId}Garten${gartenId}Kultur${kulturId}AufgabeFolder`,
           ),
       )
       .map(el => {
@@ -54,7 +54,7 @@ export default ({ nodes, data, url }) => {
           menuTitle: 'Aufgabe',
           table: 'aufgabe',
           id: `person${personId}Garten${gartenId}Kultur${kulturId}Aufgabe${el.id}`,
-          parentId: `person${personId}Garten${gartenId}Kultur${kulturId}EventFolder`,
+          parentId: `person${personId}Garten${gartenId}Kultur${kulturId}AufgabeFolder`,
           label,
           url: [
             'Personen',
@@ -70,7 +70,7 @@ export default ({ nodes, data, url }) => {
         }
       })
       .map((el, index) => {
-        el.sort = [11, personIndex, 1, gartenIndex, 1, kulturIndex, 4, index]
+        el.sort = [11, personIndex, 1, gartenIndex, 1, kulturIndex, 5, index]
         return el
       })
   )

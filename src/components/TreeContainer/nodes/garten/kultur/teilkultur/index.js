@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
-import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const gartenId = url[1]

@@ -31,7 +31,7 @@ export default ({ url, nodes, data, loading }) => {
       id: `art${artId}Kultur${kulturId}AusLieferungFolder`,
       label: `Aus-Lieferungen (${nr})`,
       url: ['Arten', artId, 'Kulturen', kulturId, 'Aus-Lieferungen'],
-      sort: [1, artIndex, 1, kulturIndex, 3],
+      sort: [1, artIndex, 1, kulturIndex, 4],
       hasChildren: true,
     },
   ]
