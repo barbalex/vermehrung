@@ -228,7 +228,7 @@ const Garten = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [client, filter, refetch, row, showFilter],
   )
 
   //console.log('Garten, row:', row)

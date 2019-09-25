@@ -153,7 +153,7 @@ const File = ({ file, parent, refetch }) => {
       console.log(error)
     }
     console.log('File, onClickDelete', { res, file })*/
-  }, [file])
+  }, [client, file.file_id, parent, refetch, store])
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
     [file],
@@ -202,7 +202,7 @@ const File = ({ file, parent, refetch }) => {
       setErrors({})
       refetch()
     },
-    [file],
+    [client, file.file_id, parent, refetch],
   )
 
   if (!file) return null

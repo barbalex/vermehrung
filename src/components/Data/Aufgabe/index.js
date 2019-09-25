@@ -219,7 +219,7 @@ const Aufgabe = ({ filter: showFilter }) => {
       value: t.id,
       label: t.name || '(kein Name)',
     }))
-  }, [kulturs, row.id])
+  }, [kulturs, row.kultur_id])
 
   const personWerte = useMemo(
     () =>
@@ -282,7 +282,7 @@ const Aufgabe = ({ filter: showFilter }) => {
         refetchTree()
       }
     },
-    [row],
+    [client, filter, refetchTree, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

@@ -138,7 +138,7 @@ const Files = ({ parentId, parent }) => {
         })
       }
     },
-    [parentId, refetch],
+    [client, parent, parentId, refetch, store],
   )
 
   const images = files.filter(f => isImageFile(f))
