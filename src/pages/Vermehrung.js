@@ -66,6 +66,8 @@ const Vermehrung = ({ location }) => {
   const containerEl = useRef(null)
 
   // on first render set openNodes
+  // DO NOT add deps to useEffet's array or
+  // it is not possible to open multiple branches in tree
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
