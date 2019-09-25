@@ -236,7 +236,7 @@ const Kultur = ({ filter: showFilter }) => {
         label: `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
           '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`,
       })),
-    [herkunftLoading],
+    [herkunftData],
   )
 
   const saveToDb = useCallback(
@@ -291,7 +291,7 @@ const Kultur = ({ filter: showFilter }) => {
         refetch()
       }
     },
-    [row],
+    [client, filter, refetch, row, showFilter],
   )
 
   if (loading) {
