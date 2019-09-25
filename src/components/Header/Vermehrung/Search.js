@@ -3,7 +3,6 @@ import { FaSearch, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
-import { navigate } from 'gatsby'
 import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
@@ -370,7 +369,6 @@ export default () => {
       store.filter.setShow(false)
       setActiveNodeArray(newActiveNodeArray)
       setVal('')
-      navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
       // build open nodes
       const newOpenNodes = newActiveNodeArray.map((n, index) =>
         newActiveNodeArray.slice(0, index + 1),

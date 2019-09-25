@@ -1,5 +1,6 @@
 import { types } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
+import { navigate } from '@reach/router'
 
 import Node from './Node'
 
@@ -28,8 +29,9 @@ export default types
     refetch: () => {},
   }))
   .actions(self => ({
-    setActiveNodeArray(val) {
+    setActiveNodeArray(val, nonavigate) {
       self.activeNodeArray = val
+      !nonavigate && navigate(`/Vermehrung/${val.join('/')}`)
     },
     setOpenNodes(val) {
       // need set to ensure contained arrays are unique

@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import { navigate } from 'gatsby'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 
@@ -26,7 +25,6 @@ export default async ({ node, store, client }) => {
   } catch (error) {
     return console.log('Error deleting dataset', error.message)
   }
-  navigate(`/Vermehrung/${activeNodeArray.slice(0, -1).join('/')}`)
   setActiveNodeArray(activeNodeArray.slice(0, -1))
   refetch()
 }

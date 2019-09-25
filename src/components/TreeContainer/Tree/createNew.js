@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import { navigate } from 'gatsby'
 import get from 'lodash/get'
 import last from 'lodash/last'
 //import { getSnapshot } from 'mobx-state-tree'
@@ -189,7 +188,6 @@ export default async ({ node, store, client }) => {
     setActiveNodeArray(newActiveNodeArray)
     // add node.url just in case it was not yet open
     addOpenNodes([newActiveNodeArray, node.url])
-    navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setTimeout(() => refetch())
   }
 }

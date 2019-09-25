@@ -1,5 +1,3 @@
-import { navigate } from '@reach/router'
-
 import isNodeOpen from './isNodeOpen'
 import openNode from './openNode'
 
@@ -10,6 +8,8 @@ export default ({ node, store }) => {
   }
   const { openNodes, setActiveNodeArray } = store.tree
 
+  console.log('toggleNode')
+
   const newActiveNodeArray = [...node.url]
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
   if (!nodeIsOpen) {
@@ -17,5 +17,4 @@ export default ({ node, store }) => {
   }
   store.filter.setShow(false)
   setActiveNodeArray(newActiveNodeArray)
-  navigate(`/Vermehrung/${node.url.join('/')}`)
 }

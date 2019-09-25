@@ -55,7 +55,7 @@ const treeWidthInPercentOfScreen = 33
 
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
-  const { setActiveNodeArray, setOpenNodes } = store.tree
+  const { setOpenNodes, setActiveNodeArray } = store.tree
   const showFilter = store.filter.show
 
   const { pathname } = location
@@ -89,8 +89,10 @@ const Vermehrung = ({ location }) => {
     })
   }, [windowSize.height, windowSize.width])
   // when pathname changes, update activeNodeArray
+  // seems no more needed?
   useEffect(() => {
-    setActiveNodeArray(activeNodeArray)
+    // need not to navigate or app is blocked
+    setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
   const onChange = useCallback(() => {
