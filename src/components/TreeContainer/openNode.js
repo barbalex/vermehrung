@@ -9,7 +9,7 @@ export default ({ node: nodeRaw, store }) => {
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(openNodes, node.url)) return
 
-  console.log('openNode opening:', node.url)
+  //  console.log('openNode opening:', node.url)
   addOpenNodes([node.url])
   // now add a loading node at the right position
   // to tell the user what is going on

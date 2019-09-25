@@ -68,7 +68,7 @@ const Vermehrung = ({ location }) => {
   // on first render set openNodes
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
-  }, [activeNodeArray, setOpenNodes])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const handleCheckSession = useCallback(() => setLoading(false), [])
   useEffect(() => {
     silentAuth({ callback: handleCheckSession, store })

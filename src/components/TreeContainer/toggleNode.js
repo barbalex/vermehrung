@@ -8,7 +8,7 @@ export default ({ node, store }) => {
   }
   const { openNodes, setActiveNodeArray } = store.tree
 
-  console.log('toggleNode')
+  //console.log('toggleNode')
 
   const newActiveNodeArray = [...node.url]
   const nodeIsOpen = isNodeOpen(openNodes, node.url)

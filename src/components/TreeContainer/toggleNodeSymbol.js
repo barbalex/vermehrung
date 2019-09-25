@@ -15,7 +15,6 @@ export default ({ node: nodeRaw, store }) => {
     newOpenNodes = newOpenNodes.filter(n => !isEqual(n, node.url))
     setOpenNodes(newOpenNodes)
   } else {
-    //newOpenNodes.push(node.url)
     addOpenNodes([node.url])
   }
 }

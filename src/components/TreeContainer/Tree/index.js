@@ -31,8 +31,6 @@ const Tree = ({ dimensions }) => {
   const store = useContext(storeContext)
   const { activeNodeArray: aNA, nodesSorted: nodes } = store.tree
 
-  //console.log('Tree, nodesSorted:', nodes)
-
   const listRef = React.createRef()
 
   useEffect(() => {
