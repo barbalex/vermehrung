@@ -187,18 +187,9 @@ export default async ({ node, store, client }) => {
       newActiveNodeArray = [...node.url.slice(0, -1), newObject.id]
     }
     setActiveNodeArray(newActiveNodeArray)
-    /*console.log({
-      responce,
-      nodeUrl: node.url.slice(),
-      newActiveNodeArray,
-      activeNodeArray: activeNodeArray.slice(),
-      newObject,
-      openNodes: getSnapshot(openNodes),
-    })*/
     // add node.url just in case it was not yet open
     addOpenNodes([newActiveNodeArray, node.url])
     navigate(`/Vermehrung/${newActiveNodeArray.join('/')}`)
     setTimeout(() => refetch())
-    //refetch()
   }
 }
