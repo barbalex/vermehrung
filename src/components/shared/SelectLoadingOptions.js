@@ -111,19 +111,22 @@ const SelectTypable = ({
       console.log('SelectLoadingOptionsm, loadOptions', { options })
       cb(options)
     },
-    [filter],
+    [client, filter, query, queryNodesName, variables],
   )
 
-  const onChange = useCallback(option => {
-    const value = option && option.value ? option.value : null
-    const fakeEvent = {
-      target: {
-        name: field,
-        value,
-      },
-    }
-    saveToDb(fakeEvent)
-  })
+  const onChange = useCallback(
+    option => {
+      const value = option && option.value ? option.value : null
+      const fakeEvent = {
+        target: {
+          name: field,
+          value,
+        },
+      }
+      saveToDb(fakeEvent)
+    },
+    [field, saveToDb],
+  )
 
   const value = {
     value: row[field] || '',

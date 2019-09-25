@@ -50,7 +50,10 @@ const FilterTitle = ({ title, table, totalNr, filteredNr }) => {
   const existsTableFilter = tableIsFiltered({
     table,
   })
-  const onEmptyTable = useCallback(() => emptyTable({ table }), [table])
+  const onEmptyTable = useCallback(() => emptyTable({ table }), [
+    emptyTable,
+    table,
+  ])
 
   return (
     <Container>

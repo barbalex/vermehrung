@@ -92,7 +92,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
         saveToDbLv95(value, lv95YState)
       }
     },
-    [lv95YState],
+    [lv95YState, lv95_x, saveToDbLv95],
   )
   const onChangeY = useCallback(event => {
     const value = ifIsNumericAsNumber(event.target.value)
@@ -109,7 +109,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       if ((value && lv95XState) || (!value && !lv95XState))
         saveToDbLv95(lv95XState, value)
     },
-    [lv95XState],
+    [lv95XState, lv95_y, saveToDbLv95],
   )
 
   const onChangeWgs84Lat = useCallback(event => {
@@ -128,7 +128,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
         saveToDbWgs84(value, wgs84LongState)
       }
     },
-    [wgs84LongState],
+    [saveToDbWgs84, wgs84LongState, wgs84_lat],
   )
   const onChangeWgs84Long = useCallback(event => {
     const value = ifIsNumericAsNumber(event.target.value)
@@ -146,31 +146,37 @@ const Coordinates = ({ row, refetchForm, table }) => {
         saveToDbWgs84(wgs84LatState, value)
       }
     },
-    [wgs84LatState],
+    [saveToDbWgs84, wgs84LatState, wgs84_long],
   )
 
-  const saveToDbLv95 = useCallback((x, y) => {
-    let geomPoint = null
-    if (x && y) {
-      geomPoint = {
-        type: 'Point',
-        coordinates: epsg2056to4326(x, y),
-        crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+  const saveToDbLv95 = useCallback(
+    (x, y) => {
+      let geomPoint = null
+      if (x && y) {
+        geomPoint = {
+          type: 'Point',
+          coordinates: epsg2056to4326(x, y),
+          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+        }
       }
-    }
-    saveToDb(geomPoint, 'lv95')
-  }, [])
-  const saveToDbWgs84 = useCallback((lat, long) => {
-    let geomPoint = null
-    if (lat && long) {
-      geomPoint = {
-        type: 'Point',
-        coordinates: [long, lat],
-        crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+      saveToDb(geomPoint, 'lv95')
+    },
+    [saveToDb],
+  )
+  const saveToDbWgs84 = useCallback(
+    (lat, long) => {
+      let geomPoint = null
+      if (lat && long) {
+        geomPoint = {
+          type: 'Point',
+          coordinates: [long, lat],
+          crs: { type: 'name', properties: { name: 'EPSG:4326' } },
+        }
       }
-    }
-    saveToDb(geomPoint, 'wgs84')
-  }, [])
+      saveToDb(geomPoint, 'wgs84')
+    },
+    [saveToDb],
+  )
 
   const saveToDb = useCallback(
     async (geomPoint, projection) => {
@@ -215,7 +221,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       setWgs84LatError('')
       setWgs84LongError('')
     },
-    [row.id],
+    [client, refetchForm, row.id, table],
   )
 
   return (

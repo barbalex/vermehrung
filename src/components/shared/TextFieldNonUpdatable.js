@@ -23,7 +23,7 @@ const MyTextField = ({
     setError(message)
     // can fire after component was unmounted...
     setTimeout(() => setError(null), 7000)
-  })
+  }, [message])
 
   return (
     <StyledFormControl
