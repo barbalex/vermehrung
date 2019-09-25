@@ -35,7 +35,6 @@ const TextFieldWithUrl = ({
   type = 'text',
   multiLine = false,
   disabled = false,
-  hintText = '',
   error,
   saveToDb,
 }) => {
@@ -43,18 +42,24 @@ const TextFieldWithUrl = ({
     propsValue || propsValue === 0 ? propsValue : '',
   )
 
-  const onChange = useCallback(event => setStateValue(event.target.value))
-  const onOpen = useCallback(e => window.open(e.target.dataset.url, '_blank'))
+  const onChange = useCallback(event => setStateValue(event.target.value), [])
+  const onOpen = useCallback(
+    e => window.open(e.target.dataset.url, '_blank'),
+    [],
+  )
 
   useEffect(() => {
     setStateValue(propsValue || propsValue === 0 ? propsValue : '')
   }, [propsValue])
 
-  const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      saveToDb(event)
-    }
-  })
+  const onKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        saveToDb(event)
+      }
+    },
+    [saveToDb],
+  )
 
   const urls = stateValue ? getUrls(stateValue) : []
 

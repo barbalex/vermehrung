@@ -46,7 +46,7 @@ const bgImageStyle = {
 }
 
 const Index = ({ data }) => {
-  const onClickBack = useCallback(() => navigate('/'))
+  const onClickBack = useCallback(() => navigate('/'), [])
 
   return (
     <ErrorBoundary>
