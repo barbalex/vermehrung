@@ -31,7 +31,7 @@ export default ({ url, nodes, data, loading }) => {
       id: `art${artId}Kultur${kulturId}ZaehlungFolder`,
       label: `Zählungen (${nr})`,
       url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen'],
-      sort: [1, artIndex, 1, kulturIndex, 2],
+      sort: [1, artIndex, 2, kulturIndex, 2],
       hasChildren: true,
     },
   ]

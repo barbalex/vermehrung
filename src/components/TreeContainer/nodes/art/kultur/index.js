@@ -26,7 +26,7 @@ export default ({ nodes, data, url }) => {
         hasChildren: true,
       }))
       .map((el, index) => {
-        el.sort = [1, artIndex, 1, index]
+        el.sort = [1, artIndex, 2, index]
         return el
       })
   )

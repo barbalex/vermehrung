@@ -33,7 +33,7 @@ export default ({ url, nodes, data, loading }) => {
       id: `art${artId}Sammlung${sammlungId}LieferungFolder`,
       label: `Aus-Lieferungen (${nr})`,
       url: ['Arten', artId, 'Sammlungen', sammlungId, 'Aus-Lieferungen'],
-      sort: [1, artIndex, 2, sammlungIndex, 1],
+      sort: [1, artIndex, 1, sammlungIndex, 1],
       hasChildren: true,
     },
   ]
