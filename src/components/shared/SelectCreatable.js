@@ -1,7 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import CreatableSelect from 'react-select/Creatable'
+import React, { useCallback, useContext } from 'react'
+import gql from 'graphql-tag'
+import get from 'lodash/get'
+import Select from 'react-select/creatable'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
+import { useApolloClient } from '@apollo/react-hooks'
+
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -10,13 +14,14 @@ const Container = styled.div`
 `
 const Label = styled.div`
   font-size: 12px;
+  height: 12px !important;
   color: rgb(0, 0, 0, 0.54);
 `
 const Error = styled.div`
   font-size: 12px;
   color: red;
 `
-const StyledSelect = styled(CreatableSelect)`
+const StyledSelect = styled(Select)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: rgba(0, 0, 0, 0.1);
@@ -24,6 +29,8 @@ const StyledSelect = styled(CreatableSelect)`
     border-left: none;
     border-right: none;
     border-radius: 0;
+    min-height: 36px !important;
+    height: 36px !important;
   }
   .react-select__control:hover {
     border-bottom-width: 2px;
@@ -51,10 +58,7 @@ const StyledSelect = styled(CreatableSelect)`
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
     width: ${props => (props.nocaret ? '0' : '1px')};
-  } /*
-  > div > div > div {
-    margin-left: 0;
-  }*/
+  }
   input {
     @media print {
       padding-top: 3px;
@@ -68,22 +72,72 @@ const StyledSelect = styled(CreatableSelect)`
   }
 `
 
-const SharedSelectCreatable = ({
+const emptyValue = {
+  value: '',
+  label: '',
+}
+
+const SharedSelect = ({
   value,
   field = '',
   label,
   name,
   error,
-  options: optionsIn,
+  options,
   loading,
   maxHeight = null,
   noCaret = false,
   saveToDb,
+  table,
+  creatablePropertiesToPass = {},
+  creatablePropertyName,
 }) => {
-  const [stateValue, setStateValue] = useState(null)
+  const client = useApolloClient()
+  const store = useContext(storeContext)
+  const { enqueNotification } = store
 
   const onChange = useCallback(
-    option => {
+    async (option, actionMeta) => {
+      // if action is create-option
+      // need to first create new dataset
+      if (actionMeta.action === 'create-option') {
+        // 1. create new dataset
+        let responce
+        try {
+          const propertiesToPass = Object.entries(creatablePropertiesToPass)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(', ')
+          responce = await client.mutate({
+            mutation: gql`
+            mutation insertDataset {
+              insert_${table} (objects: [{${creatablePropertyName}: ${option.label}, ${propertiesToPass}}]) {
+                returning { id }
+              }
+            }
+          `,
+          })
+        } catch (error) {
+          return enqueNotification({
+            message: `Error inserting dataset: ${error.message}`,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+        const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
+        if (newObject && newObject.id) {
+          // 2. update value using new id
+          const fakeEvent = {
+            target: {
+              name: option.label,
+              value: newObject.id,
+            },
+          }
+          saveToDb(fakeEvent)
+        }
+        return
+      }
+      // now update value
       const fakeEvent = {
         target: {
           name,
@@ -92,35 +146,21 @@ const SharedSelectCreatable = ({
       }
       saveToDb(fakeEvent)
     },
-    [name, saveToDb],
+    [
+      client,
+      creatablePropertiesToPass,
+      creatablePropertyName,
+      enqueNotification,
+      name,
+      saveToDb,
+      table,
+    ],
   )
-  const onInputChange = useCallback(value => setStateValue(value), [])
-  const onBlur = useCallback(() => {
-    if (stateValue) {
-      const fakeEvent = {
-        target: {
-          name,
-          value: stateValue,
-        },
-      }
-      saveToDb(fakeEvent)
-    }
-  }, [stateValue, name, saveToDb])
-
-  useEffect(() => {
-    setStateValue(value)
-  }, [value])
-
-  // need to add value to options list if it is not yet included
-  const valuesArray = optionsIn.map(o => o.value)
-  const options = [...optionsIn]
-  if (value && !valuesArray.includes(value)) {
-    options.push({ label: value, value })
-  }
 
   // show ... whyle options are loading
   const loadingOptions = [{ value, label: '...' }]
   const optionsToUse = loading && value ? loadingOptions : options
+  const selectValue = optionsToUse.find(o => o.value === value) || emptyValue
 
   return (
     <Container>
@@ -128,11 +168,9 @@ const SharedSelectCreatable = ({
       <StyledSelect
         id={field}
         name={field}
-        defaultValue={optionsToUse.find(o => o.value === value)}
+        value={selectValue}
         options={optionsToUse}
         onChange={onChange}
-        onBlur={onBlur}
-        onInputChange={onInputChange}
         hideSelectedOptions
         placeholder=""
         isClearable
@@ -147,4 +185,4 @@ const SharedSelectCreatable = ({
   )
 }
 
-export default observer(SharedSelectCreatable)
+export default SharedSelect
