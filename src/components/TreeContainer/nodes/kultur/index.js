@@ -12,6 +12,8 @@ export default ({ nodes, data }) => {
           get(el, 'garten.name') ||
           `(${get(el, 'garten.person.name') || 'kein Name'})`
         const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
+        const herkunft = get(el, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        const label = `${art}, von: ${herkunft}, in: ${garten}`
 
         return {
           nodeType: 'table',
@@ -19,7 +21,7 @@ export default ({ nodes, data }) => {
           table: 'kultur',
           id: `kultur${el.id}`,
           parentId: 'kulturFolder',
-          label: `${garten}: ${art}`,
+          label,
           url: ['Kulturen', el.id],
           hasChildren: true,
         }

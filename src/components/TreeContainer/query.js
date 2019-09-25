@@ -62,6 +62,10 @@ export default gql`
         order_by: { art: { art_ae_art: { name: asc_nulls_first } } }
       ) @include(if: $isGarten) {
         ...KulturFields
+        herkunft {
+          id
+          nr
+        }
         art {
           ...ArtFields
         }
@@ -258,6 +262,10 @@ export default gql`
       ]
     ) {
       ...KulturFields
+      herkunft {
+        id
+        nr
+      }
       art {
         ...ArtFields
       }
@@ -412,6 +420,10 @@ export default gql`
           order_by: { art: { art_ae_art: { name: asc_nulls_first } } }
         ) @include(if: $isPersonGarten) {
           ...KulturFields
+          herkunft {
+            id
+            nr
+          }
           art {
             ...ArtFields
           }

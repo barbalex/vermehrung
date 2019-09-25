@@ -29,16 +29,22 @@ export default ({ nodes, data, url }) => {
           .map(n => n.id)
           .includes(`person${personId}Garten${gartenId}KulturFolder`),
       )
-      .map(el => ({
-        nodeType: 'table',
-        menuTitle: 'Kultur',
-        table: 'kultur',
-        id: `person${personId}Garten${gartenId}Kultur${el.id}`,
-        parentId: `person${personId}Garten${gartenId}KulturFolder`,
-        label: get(el, 'art.art_ae_art.name') || '(keine Art)',
-        url: ['Personen', personId, 'Gaerten', gartenId, 'Kulturen', el.id],
-        hasChildren: true,
-      }))
+      .map(el => {
+        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
+        const herkunft = get(el, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        const label = `${art}, von: ${herkunft}`
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Kultur',
+          table: 'kultur',
+          id: `person${personId}Garten${gartenId}Kultur${el.id}`,
+          parentId: `person${personId}Garten${gartenId}KulturFolder`,
+          label,
+          url: ['Personen', personId, 'Gaerten', gartenId, 'Kulturen', el.id],
+          hasChildren: true,
+        }
+      })
       .map((el, index) => {
         el.sort = [10, personIndex, 2, gartenIndex, 1, index]
         return el

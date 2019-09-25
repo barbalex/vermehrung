@@ -17,16 +17,22 @@ export default ({ nodes, data, url }) => {
       .filter(() =>
         nodes.map(n => n.id).includes(`garten${gartenId}KulturFolder`),
       )
-      .map(el => ({
-        nodeType: 'table',
-        menuTitle: 'Kultur',
-        table: 'kultur',
-        id: `garten${gartenId}Kultur${el.id}`,
-        parentId: `garten${gartenId}KulturFolder`,
-        label: get(el, 'art.art_ae_art.name') || '(keine Art)',
-        url: ['Gaerten', gartenId, 'Kulturen', el.id],
-        hasChildren: true,
-      }))
+      .map(el => {
+        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
+        const herkunft = get(el, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        const label = `${art}, von: ${herkunft}`
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Kultur',
+          table: 'kultur',
+          id: `garten${gartenId}Kultur${el.id}`,
+          parentId: `garten${gartenId}KulturFolder`,
+          label,
+          url: ['Gaerten', gartenId, 'Kulturen', el.id],
+          hasChildren: true,
+        }
+      })
       .map((el, index) => {
         el.sort = [4, gartenIndex, 1, index]
         return el

@@ -13,18 +13,24 @@ export default ({ nodes, data, url }) => {
     kulturen
       // only show if parent node exists
       .filter(() => nodes.map(n => n.id).includes(`art${artId}KulturFolder`))
-      .map(el => ({
-        nodeType: 'table',
-        menuTitle: 'Kultur',
-        table: 'kultur',
-        id: `art${artId}Kultur${el.id}`,
-        parentId: `art${artId}KulturFolder`,
-        label:
+      .map(el => {
+        const garten =
           get(el, 'garten.name') ||
-          `(${get(el, 'garten.person.name') || 'kein Name'})`,
-        url: ['Arten', artId, 'Kulturen', el.id],
-        hasChildren: true,
-      }))
+          `(${get(el, 'garten.person.name') || 'kein Name'})`
+        const herkunft = get(el, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        const label = `von: ${herkunft}, in: ${garten}`
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Kultur',
+          table: 'kultur',
+          id: `art${artId}Kultur${el.id}`,
+          parentId: `art${artId}KulturFolder`,
+          label,
+          url: ['Arten', artId, 'Kulturen', el.id],
+          hasChildren: true,
+        }
+      })
       .map((el, index) => {
         el.sort = [1, artIndex, 2, index]
         return el
