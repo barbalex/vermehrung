@@ -30,6 +30,7 @@ import herkunftQuery from './herkunftQuery'
 import gartenQuery from './gartenQuery'
 import kulturQuery from './kulturQuery'
 import artQuery from './artQuery'
+import Timeline from './Timeline'
 
 const Container = styled.div`
   height: 100%;
@@ -47,18 +48,6 @@ const TitleContainer = styled.div`
   height: 48px;
   justify-content: space-between;
   padding 0 10px;
-`
-const TitleRow = styled.div`
-  background-color: rgba(74, 20, 140, 0.05);
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  margin-top: ${props => (props['data-first'] ? '-10px' : 'unset')};
-  padding: 0 10px;
 `
 const Title = styled.div`
   font-weight: bold;
@@ -138,7 +127,7 @@ const Kultur = ({ filter: showFilter }) => {
     },
   )
 
-  const artId = row.art_id
+  const artId = row.art_id || 999999999
   const {
     data: dataGarten,
     error: errorGarten,
@@ -154,49 +143,31 @@ const Kultur = ({ filter: showFilter }) => {
     })),
   )()
 
-  const gartenWerte = get(dataGarten, 'garten', [])
-    // do not include garten of persons already culturing this art
-    // TODO: move this to query
-    .filter(a => {
-      const kulturs = get(a, 'kulturs', []) || []
-      const artIds = kulturs.map(k => k.art_id)
-      // do show choosen garten
-      return a.id === row.garten_id || !artIds.includes(row.art_id)
-    })
-    .map(el => ({
-      value: el.id,
-      label: get(el, 'person.name') || '(kein Name)',
-    }))
+  const gartenWerte =
+    get(dataGarten, 'garten') ||
+    []
+      // do not include garten of persons already culturing this art
+      // TODO: move this to query
+      .filter(a => {
+        const kulturs = get(a, 'kulturs', []) || []
+        const artIds = kulturs.map(k => k.art_id)
+        // do show choosen garten
+        return a.id === row.garten_id || !artIds.includes(row.art_id)
+      })
+      .map(el => ({
+        value: el.id,
+        label: get(el, 'person.name') || '(kein Name)',
+      }))
 
   const herkunftWerte = useMemo(
     () =>
-      get(herkunftData, 'herkunft', []).map(el => ({
+      (get(herkunftData, 'herkunft') || []).map(el => ({
         value: el.id,
         label: `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
           '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`,
       })),
     [herkunftData],
   )
-
-  const anLieferungen = get(row, 'lieferungsByNachKulturId')
-  const anLieferungenUngeplant = anLieferungen.filter(l => !l.geplant)
-  const anLieferungenGeplant = anLieferungen.filter(l => l.geplant)
-  const anLieferungGeplantToIgnore = anLieferungenGeplant.filter(
-    lg =>
-      // check if more recent anLieferungenUngeplant exists
-      !anLieferungenUngeplant.some(lu => lu.datum >= lg.datum),
-  )
-  const anLieferungGeplantToIgnoreIds = anLieferungGeplantToIgnore.map(
-    l => l.id,
-  )
-  const anLieferungGeplantToInclude = anLieferungenGeplant.filter(
-    lg => !anLieferungGeplantToIgnoreIds.includes(lg.id),
-  )
-  console.log('Kultur', {
-    anLieferungenUngeplant,
-    anLieferungGeplantToInclude,
-    anLieferungGeplantToIgnore,
-  })
 
   const saveToDb = useCallback(
     async event => {
@@ -373,9 +344,7 @@ const Kultur = ({ filter: showFilter }) => {
           />
           {!showFilter && (
             <>
-              <TitleRow>
-                <Title>Zeit-Achse</Title>
-              </TitleRow>
+              <Timeline row={row} />
               <Files parentId={row.id} parent="kultur" />
             </>
           )}
