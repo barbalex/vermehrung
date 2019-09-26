@@ -39,10 +39,9 @@ const Kultur = ({ row }) => {
   const anLieferungenGeplant = anLieferungen
     .filter(l => l.geplant)
     .filter(l => l.datum)
-  const anLieferungGeplantToIgnore = anLieferungenGeplant.filter(
-    lg =>
-      // check if more recent anLieferungenUngeplant exists
-      !anLieferungenUngeplant.some(lu => lu.datum >= lg.datum),
+  const anLieferungGeplantToIgnore = anLieferungenGeplant.filter(lg =>
+    // check if more recent anLieferungenUngeplant exists
+    anLieferungenUngeplant.every(lu => lu.datum >= lg.datum),
   )
   const anLieferungGeplantToIgnoreIds = anLieferungGeplantToIgnore.map(
     l => l.id,
@@ -57,10 +56,9 @@ const Kultur = ({ row }) => {
   const ausLieferungenGeplant = ausLieferungen
     .filter(l => l.geplant)
     .filter(l => l.datum)
-  const ausLieferungGeplantToIgnore = ausLieferungenGeplant.filter(
-    lg =>
-      // check if more recent ausLieferungenUngeplant exists
-      !ausLieferungenUngeplant.some(lu => lu.datum >= lg.datum),
+  const ausLieferungGeplantToIgnore = ausLieferungenGeplant.filter(lg =>
+    // check if more recent ausLieferungenUngeplant exists
+    ausLieferungenUngeplant.every(lu => lu.datum >= lg.datum),
   )
   const ausLieferungGeplantToIgnoreIds = ausLieferungGeplantToIgnore.map(
     l => l.id,
@@ -68,26 +66,44 @@ const Kultur = ({ row }) => {
   const ausLieferungGeplantToInclude = ausLieferungenGeplant.filter(
     lg => !ausLieferungGeplantToIgnoreIds.includes(lg.id),
   )
-  /*console.log('Kultur', {
-    anLieferungenUngeplant,
-    anLieferungGeplantToInclude,
-    anLieferungGeplantToIgnore,
-    ausLieferungenUngeplant,
-    ausLieferungGeplantToInclude,
-    ausLieferungGeplantToIgnore,
-  })*/
-  const anlUgData = anLieferungenUngeplant.map(l => ({
+  const anLieferungenUngeplantData = anLieferungenUngeplant.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung-Pflanzen': l.anzahl_pflanzen,
     'Lieferung-auspflanzbereit': l.anzahl_auspflanzbereit,
-    typ: 'ausgeführt',
   }))
-  const auslUgData = ausLieferungenUngeplant.map(l => ({
+  const ausLieferungenUngeplantData = ausLieferungenUngeplant.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung-Pflanzen': -l.anzahl_pflanzen,
     'Lieferung-auspflanzbereit': -l.anzahl_auspflanzbereit,
   }))
-  const lieferungen = sortBy([...anlUgData, ...auslUgData], 'datum')
+  const anLieferungenGeplantData = anLieferungGeplantToInclude.map(l => ({
+    datum: new Date(l.datum).getTime(),
+    'Lieferung-Pflanzen geplant': l.anzahl_pflanzen,
+    'Lieferung-auspflanzbereit geplant': l.anzahl_auspflanzbereit,
+  }))
+  const ausLieferungenGeplantData = ausLieferungGeplantToInclude.map(l => ({
+    datum: new Date(l.datum).getTime(),
+    'Lieferung-Pflanzen geplant': -l.anzahl_pflanzen,
+    'Lieferung-auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
+  }))
+  const lieferungen = sortBy(
+    [
+      ...anLieferungenUngeplantData,
+      ...ausLieferungenUngeplantData,
+      ...anLieferungenGeplantData,
+      ...ausLieferungenGeplantData,
+    ],
+    'datum',
+  )
+  console.log('Kultur', {
+    anLieferungenUngeplantData,
+    ausLieferungenUngeplantData,
+    anLieferungenGeplantData,
+    ausLieferungenGeplantData,
+    ausLieferungGeplantToIgnore,
+    anLieferungGeplantToIgnore,
+  })
+
   const renderCustomAxisTick = ({ x, y, payload }) => {
     return (
       <g transform={`translate(${x},${y})`}>
@@ -116,7 +132,7 @@ const Kultur = ({ row }) => {
         width={800}
         height={400}
         data={lieferungen}
-        margin={{ top: 5, right: 30, left: 20, bottom: 40 }}
+        margin={{ top: 5, right: 30, left: 20, bottom: 60 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="datum" tick={renderCustomAxisTick} />
@@ -124,7 +140,9 @@ const Kultur = ({ row }) => {
         <Tooltip />
         <Legend />
         <Bar dataKey="Lieferung-Pflanzen" fill="#8884d8" />
+        <Bar dataKey="Lieferung-Pflanzen geplant" fill="#d8d8f3" />
         <Bar dataKey="Lieferung-auspflanzbereit" fill="#82ca9d" />
+        <Bar dataKey="Lieferung-auspflanzbereit geplant" fill="#dbf0e3" />
       </BarChart>
     </ErrorBoundary>
   )
