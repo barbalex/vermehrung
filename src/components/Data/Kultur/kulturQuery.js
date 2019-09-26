@@ -30,26 +30,31 @@ export default gql`
       }
       ausLieferungs: lieferungsByVonKulturId(
         where: { datum: { _is_null: false } }
+        order_by: { datum: asc }
       ) {
         ...LieferungFields
       }
       ausLieferungsGeplant: lieferungsByVonKulturId(
         where: { geplant: { _eq: true }, datum: { _is_null: false } }
+        order_by: { datum: asc }
       ) {
         ...LieferungFields
       }
       anLieferungs: lieferungsByNachKulturId(
         where: { geplant: { _eq: false }, datum: { _is_null: false } }
+        order_by: { datum: asc }
       ) {
         ...LieferungFields
       }
       anLieferungsGeplant: lieferungsByNachKulturId(
         where: { geplant: { _eq: true }, datum: { _is_null: false } }
+        order_by: { datum: asc }
       ) {
         ...LieferungFields
       }
       zaehlungs: zaehlungs(
         where: { geplant: { _eq: false }, datum: { _is_null: false } }
+        order_by: { datum: asc }
       ) {
         ...ZaehlungFields
         teilzaehlungs_aggregate {
@@ -64,6 +69,7 @@ export default gql`
       }
       zaehlungsGeplant: zaehlungs(
         where: { geplant: { _eq: true }, datum: { _is_null: false } }
+        order_by: { datum: asc }
       ) {
         ...ZaehlungFields
         teilzaehlungs_aggregate {
