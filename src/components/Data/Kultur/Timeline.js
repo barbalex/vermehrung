@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import groupBy from 'lodash/groupBy'
 import ErrorBoundary from 'react-error-boundary'
 import {
   ComposedChart,
@@ -13,6 +14,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts'
+import { Object } from 'core-js'
 
 const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.05);
@@ -79,15 +81,23 @@ const Kultur = ({ row }) => {
   }))
 
   const zaehlungen = get(row, 'zaehlungs') || []
-  const zaehlungenGeplant = get(row, 'zaehlungsGeplant') || []
-  const zaehlungGeplantToIgnore = zaehlungenGeplant.filter(lg =>
+  const lastZaehlung = zaehlungen.slice(-1)[0]
+  const zaehlungenGeplantAll = get(row, 'zaehlungsGeplant') || []
+  const zaehlungGeplantToIgnore = zaehlungenGeplantAll.filter(lg =>
     // check if more recent zaehlungen exists
     zaehlungen.every(lu => lu.datum >= lg.datum),
   )
   const zaehlungGeplantToIgnoreIds = zaehlungGeplantToIgnore.map(l => l.id)
-  const zaehlungGeplantToInclude = zaehlungenGeplant.filter(
-    lg => !zaehlungGeplantToIgnoreIds.includes(lg.id),
-  )
+  const zaehlungenGeplant = [
+    ...zaehlungenGeplantAll.filter(
+      lg => !zaehlungGeplantToIgnoreIds.includes(lg.id),
+    ),
+    // ad last zaehlung to connect lines
+    lastZaehlung,
+  ]
+  //console.log('Kultur, zaehlungen:', zaehlungen)
+  //console.log('Kultur, zaehlungenGeplant:', zaehlungenGeplant)
+  // TODO: need to add last zaehlung to zaehlungenGeplant to connect lines
   const zaehlungenData = zaehlungen.map(l => ({
     datum: new Date(l.datum).getTime(),
     Pflanzen: get(l, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen'),
@@ -100,18 +110,38 @@ const Kultur = ({ row }) => {
       'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
     ),
   }))
-  const zaehlungenGeplantData = anLieferungGeplantToInclude.map(l => ({
+  const zaehlungenGeplantData = zaehlungenGeplant.map(l => ({
     datum: new Date(l.datum).getTime(),
-    Pflanzen: get(l, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen'),
-    auspflanzbereit: get(
+    'Pflanzen geplant': get(
+      l,
+      'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+    ),
+    'auspflanzbereit geplant': get(
       l,
       'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
     ),
-    Mutterpflanzen: get(
+    'Mutterpflanzen geplant': get(
       l,
       'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
     ),
   }))
+  const zaehlungenDataGroupedByDatum = groupBy(
+    [...zaehlungenData, ...zaehlungenGeplantData],
+    'datum',
+  )
+  console.log(
+    'Kultur, zaehlungenDataGroupedByDatum:',
+    zaehlungenDataGroupedByDatum,
+  )
+  const zaehlungenDataCombined = Object.entries(
+    zaehlungenDataGroupedByDatum,
+  ).map(([key, value]) => ({ [key]: value.reduce(Object.assign) }))
+  /*const zaehlungenDataCombined = Object.values(
+    zaehlungenDataGroupedByDatum,
+  ).reduce(Object.assign)*/
+  //.flatMap(o => o)
+
+  console.log('Kultur, zaehlungenDataCombined:', zaehlungenDataCombined)
   const allData = sortBy(
     [
       ...anLieferungenData,
@@ -124,14 +154,11 @@ const Kultur = ({ row }) => {
     'datum',
   )
 
-  console.log('Kultur', {
-    anLieferungenData,
-    ausLieferungenData,
-    anLieferungenGeplantData,
-    ausLieferungenGeplantData,
-    zaehlungenData,
-    zaehlungenGeplantData,
-  })
+  //console.log('Kultur, allData:', allData)
+  /*console.log(
+    'Kultur, zaehlungenDataCombinedGroupedByDatum:',
+    groupBy(zaehlungenDataCombined, 'datum'),
+  )*/
 
   const renderCustomAxisTick = ({ x, y, payload }) => {
     return (
@@ -189,6 +216,24 @@ const Kultur = ({ row }) => {
           connectNulls={true}
           dataKey="Mutterpflanzen"
           stroke="#ff7300"
+        />
+        <Line
+          type="monotone"
+          connectNulls={true}
+          dataKey="Pflanzen geplant"
+          stroke="#d8d8f3"
+        />
+        <Line
+          type="monotone"
+          connectNulls={true}
+          dataKey="auspflanzbereit geplant"
+          stroke="#dbf0e3"
+        />
+        <Line
+          type="monotone"
+          connectNulls={true}
+          dataKey="Mutterpflanzen geplant"
+          stroke="#ffe3cc"
         />
       </ComposedChart>
     </ErrorBoundary>

@@ -39,7 +39,7 @@ export default gql`
         ...LieferungFields
       }
       anLieferungs: lieferungsByNachKulturId(
-        where: { datum: { _is_null: false } }
+        where: { geplant: { _eq: false }, datum: { _is_null: false } }
       ) {
         ...LieferungFields
       }
@@ -48,7 +48,9 @@ export default gql`
       ) {
         ...LieferungFields
       }
-      zaehlungs: zaehlungs(where: { datum: { _is_null: false } }) {
+      zaehlungs: zaehlungs(
+        where: { geplant: { _eq: false }, datum: { _is_null: false } }
+      ) {
         ...ZaehlungFields
         teilzaehlungs_aggregate {
           aggregate {
