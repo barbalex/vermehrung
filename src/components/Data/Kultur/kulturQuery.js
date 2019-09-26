@@ -6,6 +6,8 @@ import {
   kultur as kulturFragment,
   kulturFelder as kulturFelderFragment,
   lieferung as lieferungFragment,
+  zaehlung as zahlungsFragment,
+  teilzaehlung as teilzaehlungFragment,
 } from '../../../utils/fragments'
 
 export default gql`
@@ -26,11 +28,51 @@ export default gql`
           art_id
         }
       }
-      lieferungsByVonKulturId {
+      ausLieferungs: lieferungsByVonKulturId(
+        where: { datum: { _is_null: false } }
+      ) {
         ...LieferungFields
       }
-      lieferungsByNachKulturId {
+      ausLieferungsGeplant: lieferungsByVonKulturId(
+        where: { geplant: { _eq: true }, datum: { _is_null: false } }
+      ) {
         ...LieferungFields
+      }
+      anLieferungs: lieferungsByNachKulturId(
+        where: { datum: { _is_null: false } }
+      ) {
+        ...LieferungFields
+      }
+      anLieferungsGeplant: lieferungsByNachKulturId(
+        where: { geplant: { _eq: true }, datum: { _is_null: false } }
+      ) {
+        ...LieferungFields
+      }
+      zaehlungs: zaehlungs(where: { datum: { _is_null: false } }) {
+        ...ZaehlungFields
+        teilzaehlungs_aggregate {
+          aggregate {
+            sum {
+              anzahl_pflanzen
+              anzahl_auspflanzbereit
+              anzahl_mutterpflanzen
+            }
+          }
+        }
+      }
+      zaehlungsGeplant: zaehlungs(
+        where: { geplant: { _eq: true }, datum: { _is_null: false } }
+      ) {
+        ...ZaehlungFields
+        teilzaehlungs_aggregate {
+          aggregate {
+            sum {
+              anzahl_pflanzen
+              anzahl_auspflanzbereit
+              anzahl_mutterpflanzen
+            }
+          }
+        }
       }
     }
     rowsUnfiltered: kultur @include(if: $isFiltered) {
@@ -45,4 +87,6 @@ export default gql`
   ${gartenFragment}
   ${kulturFelderFragment}
   ${lieferungFragment}
+  ${zahlungsFragment}
+  ${teilzaehlungFragment}
 `

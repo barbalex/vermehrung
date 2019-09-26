@@ -4,8 +4,9 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import ErrorBoundary from 'react-error-boundary'
 import {
-  BarChart,
+  ComposedChart,
   Bar,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -32,16 +33,11 @@ const Title = styled.div`
 `
 
 const Kultur = ({ row }) => {
-  const anLieferungen = get(row, 'lieferungsByNachKulturId') || []
-  const anLieferungenUngeplant = anLieferungen
-    .filter(l => !l.geplant)
-    .filter(l => l.datum)
-  const anLieferungenGeplant = anLieferungen
-    .filter(l => l.geplant)
-    .filter(l => l.datum)
+  const anLieferungen = get(row, 'anLieferungs') || []
+  const anLieferungenGeplant = get(row, 'anLieferungsGeplant') || []
   const anLieferungGeplantToIgnore = anLieferungenGeplant.filter(lg =>
-    // check if more recent anLieferungenUngeplant exists
-    anLieferungenUngeplant.every(lu => lu.datum >= lg.datum),
+    // check if more recent anLieferungen exists
+    anLieferungen.every(lu => lu.datum >= lg.datum),
   )
   const anLieferungGeplantToIgnoreIds = anLieferungGeplantToIgnore.map(
     l => l.id,
@@ -49,16 +45,11 @@ const Kultur = ({ row }) => {
   const anLieferungGeplantToInclude = anLieferungenGeplant.filter(
     lg => !anLieferungGeplantToIgnoreIds.includes(lg.id),
   )
-  const ausLieferungen = get(row, 'lieferungsByVonKulturId') || []
-  const ausLieferungenUngeplant = ausLieferungen
-    .filter(l => !l.geplant)
-    .filter(l => l.datum)
-  const ausLieferungenGeplant = ausLieferungen
-    .filter(l => l.geplant)
-    .filter(l => l.datum)
+  const ausLieferungen = get(row, 'ausLieferungs') || []
+  const ausLieferungenGeplant = get(row, 'ausLieferungsGeplant') || []
   const ausLieferungGeplantToIgnore = ausLieferungenGeplant.filter(lg =>
-    // check if more recent ausLieferungenUngeplant exists
-    ausLieferungenUngeplant.every(lu => lu.datum >= lg.datum),
+    // check if more recent ausLieferungen exists
+    ausLieferungen.every(lu => lu.datum >= lg.datum),
   )
   const ausLieferungGeplantToIgnoreIds = ausLieferungGeplantToIgnore.map(
     l => l.id,
@@ -66,12 +57,12 @@ const Kultur = ({ row }) => {
   const ausLieferungGeplantToInclude = ausLieferungenGeplant.filter(
     lg => !ausLieferungGeplantToIgnoreIds.includes(lg.id),
   )
-  const anLieferungenUngeplantData = anLieferungenUngeplant.map(l => ({
+  const anLieferungenData = anLieferungen.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung-Pflanzen': l.anzahl_pflanzen,
     'Lieferung-auspflanzbereit': l.anzahl_auspflanzbereit,
   }))
-  const ausLieferungenUngeplantData = ausLieferungenUngeplant.map(l => ({
+  const ausLieferungenData = ausLieferungen.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung-Pflanzen': -l.anzahl_pflanzen,
     'Lieferung-auspflanzbereit': -l.anzahl_auspflanzbereit,
@@ -86,22 +77,60 @@ const Kultur = ({ row }) => {
     'Lieferung-Pflanzen geplant': -l.anzahl_pflanzen,
     'Lieferung-auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
   }))
-  const lieferungen = sortBy(
+
+  const zaehlungen = get(row, 'zaehlungs') || []
+  const zaehlungenGeplant = get(row, 'zaehlungsGeplant') || []
+  const zaehlungGeplantToIgnore = zaehlungenGeplant.filter(lg =>
+    // check if more recent zaehlungen exists
+    zaehlungen.every(lu => lu.datum >= lg.datum),
+  )
+  const zaehlungGeplantToIgnoreIds = zaehlungGeplantToIgnore.map(l => l.id)
+  const zaehlungGeplantToInclude = zaehlungenGeplant.filter(
+    lg => !zaehlungGeplantToIgnoreIds.includes(lg.id),
+  )
+  const zaehlungenData = zaehlungen.map(l => ({
+    datum: new Date(l.datum).getTime(),
+    Pflanzen: get(l, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen'),
+    auspflanzbereit: get(
+      l,
+      'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+    ),
+    Mutterpflanzen: get(
+      l,
+      'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+    ),
+  }))
+  const zaehlungenGeplantData = anLieferungGeplantToInclude.map(l => ({
+    datum: new Date(l.datum).getTime(),
+    Pflanzen: get(l, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen'),
+    auspflanzbereit: get(
+      l,
+      'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+    ),
+    Mutterpflanzen: get(
+      l,
+      'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+    ),
+  }))
+  const allData = sortBy(
     [
-      ...anLieferungenUngeplantData,
-      ...ausLieferungenUngeplantData,
+      ...anLieferungenData,
+      ...ausLieferungenData,
       ...anLieferungenGeplantData,
       ...ausLieferungenGeplantData,
+      ...zaehlungenData,
+      ...zaehlungenGeplantData,
     ],
     'datum',
   )
+
   console.log('Kultur', {
-    anLieferungenUngeplantData,
-    ausLieferungenUngeplantData,
+    anLieferungenData,
+    ausLieferungenData,
     anLieferungenGeplantData,
     ausLieferungenGeplantData,
-    ausLieferungGeplantToIgnore,
-    anLieferungGeplantToIgnore,
+    zaehlungenData,
+    zaehlungenGeplantData,
   })
 
   const renderCustomAxisTick = ({ x, y, payload }) => {
@@ -128,10 +157,10 @@ const Kultur = ({ row }) => {
       <TitleRow>
         <Title>Zeit-Achse</Title>
       </TitleRow>
-      <BarChart
+      <ComposedChart
         width={800}
         height={400}
-        data={lieferungen}
+        data={allData}
         margin={{ top: 5, right: 30, left: 20, bottom: 60 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
@@ -143,7 +172,25 @@ const Kultur = ({ row }) => {
         <Bar dataKey="Lieferung-Pflanzen geplant" fill="#d8d8f3" />
         <Bar dataKey="Lieferung-auspflanzbereit" fill="#82ca9d" />
         <Bar dataKey="Lieferung-auspflanzbereit geplant" fill="#dbf0e3" />
-      </BarChart>
+        <Line
+          type="monotone"
+          connectNulls={true}
+          dataKey="Pflanzen"
+          stroke="#8884d8"
+        />
+        <Line
+          type="monotone"
+          connectNulls={true}
+          dataKey="auspflanzbereit"
+          stroke="#82ca9d"
+        />
+        <Line
+          type="monotone"
+          connectNulls={true}
+          dataKey="Mutterpflanzen"
+          stroke="#ff7300"
+        />
+      </ComposedChart>
     </ErrorBoundary>
   )
 }
