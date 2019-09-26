@@ -244,8 +244,6 @@ const Kultur = ({ row }) => {
     </text>
   )
   const CustomTooltip = ({ payload, label, active }) => {
-    console.log('CustomTooltip', { payload, label, active })
-
     if (active) {
       return (
         <Popup>
