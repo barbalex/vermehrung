@@ -22,15 +22,14 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import {
-  art as artFragment,
-  garten as gartenFragment,
-  kultur as kulturFragment,
-  kulturFelder as kulturFelderFragment,
-} from '../../../utils/fragments'
+import { kultur as kulturFragment } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import Files from '../Files'
 import Settings from './Settings'
+import herkunftQuery from './herkunftQuery'
+import gartenQuery from './gartenQuery'
+import kulturQuery from './kulturQuery'
+import artQuery from './artQuery'
 
 const Container = styled.div`
   height: 100%;
@@ -48,6 +47,18 @@ const TitleContainer = styled.div`
   height: 48px;
   justify-content: space-between;
   padding 0 10px;
+`
+const TitleRow = styled.div`
+  background-color: rgba(74, 20, 140, 0.05);
+  flex-shrink: 0;
+  display: flex;
+  height: 40px;
+  justify-content: space-between;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+  margin-top: ${props => (props['data-first'] ? '-10px' : 'unset')};
+  padding: 0 10px;
 `
 const Title = styled.div`
   font-weight: bold;
@@ -73,78 +84,6 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
-`
-
-const kulturQuery = gql`
-  query KulturQuery(
-    $id: bigint!
-    $isFiltered: Boolean!
-    $filter: kultur_bool_exp!
-  ) {
-    kultur(where: { id: { _eq: $id } }) {
-      ...KulturFields
-      kultur_felder {
-        ...KulturFelderFields
-      }
-      garten {
-        ...GartenFields
-        kulturs(where: { art: { ae_id: { _is_null: false } } }) {
-          id
-          art_id
-        }
-      }
-    }
-    rowsUnfiltered: kultur @include(if: $isFiltered) {
-      id
-    }
-    rowsFiltered: kultur(where: $filter) @include(if: $isFiltered) {
-      id
-    }
-  }
-  ${kulturFragment}
-  ${artFragment}
-  ${gartenFragment}
-  ${kulturFelderFragment}
-`
-const artQuery = gql`
-  query artQuery($filter: art_bool_exp!) {
-    art(where: $filter, order_by: { art_ae_art: { name: asc_nulls_first } }) {
-      ...ArtFields
-    }
-  }
-  ${artFragment}
-`
-const gartenQuery = gql`
-  query gartenQuery($include: Boolean!) {
-    garten(order_by: { person: { name: asc_nulls_first } }) {
-      id
-      person {
-        id
-        name
-      }
-      kulturs @include(if: $include) {
-        ...KulturFields
-      }
-    }
-  }
-  ${kulturFragment}
-  ${gartenFragment}
-`
-const herkunftQuery = gql`
-  query herkunftQuery {
-    herkunft(
-      order_by: [
-        { nr: asc_nulls_first }
-        { gemeinde: asc_nulls_first }
-        { lokalname: asc_nulls_first }
-      ]
-    ) {
-      id
-      nr
-      lokalname
-      gemeinde
-    }
-  }
 `
 
 const Kultur = ({ filter: showFilter }) => {
@@ -238,6 +177,26 @@ const Kultur = ({ filter: showFilter }) => {
       })),
     [herkunftData],
   )
+
+  const anLieferungen = get(row, 'lieferungsByNachKulturId')
+  const anLieferungenUngeplant = anLieferungen.filter(l => !l.geplant)
+  const anLieferungenGeplant = anLieferungen.filter(l => l.geplant)
+  const anLieferungGeplantToIgnore = anLieferungenGeplant.filter(
+    lg =>
+      // check if more recent anLieferungenUngeplant exists
+      !anLieferungenUngeplant.some(lu => lu.datum >= lg.datum),
+  )
+  const anLieferungGeplantToIgnoreIds = anLieferungGeplantToIgnore.map(
+    l => l.id,
+  )
+  const anLieferungGeplantToInclude = anLieferungenGeplant.filter(
+    lg => !anLieferungGeplantToIgnoreIds.includes(lg.id),
+  )
+  console.log('Kultur', {
+    anLieferungenUngeplant,
+    anLieferungGeplantToInclude,
+    anLieferungGeplantToIgnore,
+  })
 
   const saveToDb = useCallback(
     async event => {
@@ -412,7 +371,14 @@ const Kultur = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          {!showFilter && <Files parentId={row.id} parent="kultur" />}
+          {!showFilter && (
+            <>
+              <TitleRow>
+                <Title>Zeit-Achse</Title>
+              </TitleRow>
+              <Files parentId={row.id} parent="kultur" />
+            </>
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
