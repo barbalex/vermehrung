@@ -2,7 +2,7 @@
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Zeitachse-Kultur"
 date: "2019-09-20"
-title: "Zeit-Achse Kultur"
+title: "Zeit-Achse für Kulturen"
 sort: 4
 ---
 
@@ -36,11 +36,12 @@ Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.
 Als Grundlage werden verwendet:
 
 - Anzahlen aus durchgeführten Zählungen
-- Anzahlen aus geplanten Zählungen: Berücksichtigt werden geplante Zählungen, wenn danach keine Zählung durchgeführt wurde
-- Anzahlen aus Lieferungen: Erfolgt eine Lieferung, wird eine neue Anzahl aus der letzten Zählung davor und der Anzahl, die geliefert wurde summiert und in die Linie integriert
+- Anzahlen aus geplanten Zählungen, die _nach der letzten durchgeführten Zählung_ geplant sind
+- Anzahlen aus durchgeführten Lieferungen: Zu den Anzahlen aus letzten Zählung davor wird summiert, was in der Zwischenzeit geliefert wurde
+- Anzahlen aus geplanten Lieferungen, die _nach der letzten durchgeführten Zählung_ geplant sind
 
 #### Punkte für ignorierte Zählungen
-- Geplante Zählungen, nach denen eine Zählung durchgeführt wurde, werden nicht als Teil der Linien berücksichtigt. Stattdessen werden sie in unabhängigen Punkten dargestellt
+- Geplante Zählungen, nach denen eine Zählung durchgeführt wurde, werden nicht als Teil der Linien berücksichtigt. Stattdessen werden sie in separaten Punkten dargestellt
 
 #### Säulen für Lieferungen
 
