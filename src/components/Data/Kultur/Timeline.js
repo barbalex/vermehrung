@@ -55,6 +55,7 @@ const PTitle = styled.div`
 const Kultur = ({ row }) => {
   const zaehlungen = get(row, 'zaehlungs') || []
   const lastZaehlung = zaehlungen.slice(-1)[0]
+  const firstZaehlung = zaehlungen.slice(0)
   const zaehlungenGeplantAll = get(row, 'zaehlungsGeplant') || []
   const zaehlungGeplantIgnored = zaehlungenGeplantAll.filter(zg =>
     // check if more recent zaehlungen exists
@@ -190,22 +191,36 @@ const Kultur = ({ row }) => {
     'datum',
   )
   const anLieferungenData = anLieferungen.map(l => {
-    const lastZaehlung =
+    const previousZaehlung =
       zaehlungenForLine.reverse().find(z => z.datum < l.datum) || {}
-    const lastZaehlungDatum = lastZaehlung ? lastZaehlung.datum : '1900-01-01'
+    const lastZaehlungDatum = previousZaehlung
+      ? previousZaehlung.datum
+      : '1900-01-01'
+    const lastAnLieferung =
+      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
+    const lastAusLieferung =
+      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
+    const allSorted = sortBy(
+      [previousZaehlung, lastAnLieferung, lastAusLieferung].filter(
+        o => !!o.datum,
+      ),
+      'datum',
+    )
+    const lastOfAll = allSorted.reverse().find(z => z.datum < l.datum) || {}
     const anLieferungenSince = anLieferungenForLine.filter(
-      l => l.datum > lastZaehlungDatum,
+      l => l.datum > lastOfAll.datum,
     )
-    console.log('Timeline, anLieferungenSince:', anLieferungenSince)
     const ausLieferungenSince = ausLieferungenForLine.filter(
-      l => l.datum > lastZaehlungDatum,
+      l => l.datum > lastOfAll.datum,
     )
-    console.log('Timeline, ausLieferungenSince:', ausLieferungenSince)
     // summ all counts since
     const sumAnzahlPflanzen =
       (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
       (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
-    console.log('Timeline, sumAnzahlPflanzen:', sumAnzahlPflanzen)
     const sumAnzahlAuspflanzbereit =
       (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
       (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
@@ -219,22 +234,44 @@ const Kultur = ({ row }) => {
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
       'Lieferung Bemerkungen': l.bemerkungen,
     }
-    if (l.datum < lastZaehlungDatum) {
+    if (l.datum < lastZaehlung.datum) {
       data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
       data['Zählung Pflanzen auspflanzbereit'] =
+        sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
+    } else {
+      data['Zählung Pflanzen geplant'] = sumAnzahlPflanzen + l.anzahl_pflanzen
+      data['Zählung Pflanzen auspflanzbereit geplant'] =
         sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
     }
     return data
   })
   const ausLieferungenData = ausLieferungen.map(l => {
-    const lastZaehlung =
+    const previousZaehlung =
       zaehlungenForLine.reverse().find(z => z.datum < l.datum) || {}
-    const lastZaehlungDatum = lastZaehlung ? lastZaehlung.datum : '1900-01-01'
+    const lastZaehlungDatum = previousZaehlung
+      ? previousZaehlung.datum
+      : '1900-01-01'
+    const lastAnLieferung =
+      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
+    const lastAusLieferung =
+      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
+    const allSorted = sortBy(
+      [previousZaehlung, lastAnLieferung, lastAusLieferung].filter(
+        o => !!o.datum,
+      ),
+      'datum',
+    )
+    const lastOfAll = allSorted.reverse().find(z => z.datum < l.datum) || {}
+
     const anLieferungenSince = anLieferungenForLine.filter(
-      l => l.datum > lastZaehlungDatum,
+      l => l.datum > lastOfAll.datum,
     )
     const ausLieferungenSince = ausLieferungenForLine.filter(
-      l => l.datum > lastZaehlungDatum,
+      l => l.datum > lastOfAll.datum,
     )
     // summ all counts since
     const sumAnzahlPflanzen =
@@ -253,10 +290,16 @@ const Kultur = ({ row }) => {
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
       'Lieferung Bemerkungen': l.bemerkungen,
     }
-    if (l.datum < lastZaehlungDatum) {
+    if (l.datum < lastZaehlung.datum) {
       data['Zählung Pflanzen'] =
         max([sumAnzahlPflanzen, l.anzahl_pflanzen]) - l.anzahl_pflanzen
       data['Zählung Pflanzen auspflanzbereit'] =
+        max([sumAnzahlAuspflanzbereit, l.anzahl_auspflanzbereit]) -
+        l.anzahl_auspflanzbereit
+    } else {
+      data['Zählung Pflanzen geplant'] =
+        max([sumAnzahlPflanzen, l.anzahl_pflanzen]) - l.anzahl_pflanzen
+      data['Zählung Pflanzen auspflanzbereit geplant'] =
         max([sumAnzahlAuspflanzbereit, l.anzahl_auspflanzbereit]) -
         l.anzahl_auspflanzbereit
     }
