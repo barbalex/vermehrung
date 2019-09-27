@@ -78,20 +78,25 @@ const Kultur = ({ row }) => {
 
     return {
       datum: new Date(l.datum).getTime(),
-      Pflanzen: get(l, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen'),
-      'Pflanzen auspflanzbereit': get(
+      'Zählung Pflanzen': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+      ),
+      'Zählung Pflanzen auspflanzbereit': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
       ),
-      Mutterpflanzen: get(
+      'Zählung Mutterpflanzen': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
       ),
-      'Andere Mengen': teilzaehlungs.map(t => t.andere_menge).join(', '),
-      'Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+      'Zählung andere Mengen': teilzaehlungs
+        .map(t => t.andere_menge)
+        .join(', '),
+      'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
         .map(t => t.auspflanzbereit_beschreibung)
         .join(', '),
-      Bemerkungen: teilzaehlungs.map(t => t.bemerkungen).join(', '),
+      'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
     }
   })
   const zaehlungenGeplantData = zaehlungenGeplant.map(l => {
@@ -99,23 +104,25 @@ const Kultur = ({ row }) => {
 
     return {
       datum: new Date(l.datum).getTime(),
-      'Pflanzen geplant': get(
+      'Zählung Pflanzen geplant': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
       ),
-      'Pflanzen auspflanzbereit geplant': get(
+      'Zählung Pflanzen auspflanzbereit geplant': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
       ),
-      'Mutterpflanzen geplant': get(
+      'Zählung Mutterpflanzen geplant': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
       ),
-      'Andere Mengen': teilzaehlungs.map(t => t.andere_menge).join(', '),
-      'Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+      'Zählung andere Mengen': teilzaehlungs
+        .map(t => t.andere_menge)
+        .join(', '),
+      'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
         .map(t => t.auspflanzbereit_beschreibung)
         .join(', '),
-      Bemerkungen: teilzaehlungs.map(t => t.bemerkungen).join(', '),
+      'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
     }
   })
   const zaehlungenGeplantIgnoredData = zaehlungGeplantIgnored.map(l => {
@@ -123,23 +130,25 @@ const Kultur = ({ row }) => {
 
     return {
       datum: new Date(l.datum).getTime(),
-      'Pflanzen geplant, ignoriert': get(
+      'Zählung Pflanzen geplant, ignoriert': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
       ),
-      'Pflanzen auspflanzbereit geplant, ignoriert': get(
+      'Zählung Pflanzen auspflanzbereit geplant, ignoriert': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
       ),
-      'Mutterpflanzen geplant, ignoriert': get(
+      'Zählung Mutterpflanzen geplant, ignoriert': get(
         l,
         'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
       ),
-      'Andere Mengen': teilzaehlungs.map(t => t.andere_menge).join(', '),
-      'Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+      'Zählung andere Mengen': teilzaehlungs
+        .map(t => t.andere_menge)
+        .join(', '),
+      'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
         .map(t => t.auspflanzbereit_beschreibung)
         .join(', '),
-      Bemerkungen: teilzaehlungs.map(t => t.bemerkungen).join(', '),
+      'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
     }
   })
   const zaehlungenDataGroupedByDatum = groupBy(
@@ -189,14 +198,14 @@ const Kultur = ({ row }) => {
     return {
       datum: new Date(l.datum).getTime(),
       'Lieferung Pflanzen': l.anzahl_pflanzen,
-      Pflanzen: (lastOfAll.anzahl_pflanzen || 0) + l.anzahl_pflanzen,
+      'Zählung Pflanzen': (lastOfAll.anzahl_pflanzen || 0) + l.anzahl_pflanzen,
       'Lieferung Pflanzen auspflanzbereit': l.anzahl_auspflanzbereit,
-      'Pflanzen auspflanzbereit':
+      'Zählung Pflanzen auspflanzbereit':
         (lastOfAll.anzahl_auspflanzbereit || 0) + l.anzahl_auspflanzbereit,
-      'Andere Mengen': l.andere_menge,
+      'Lieferung andere Mengen': l.andere_menge,
       'Lieferung Gramm Samen': l.gramm_samen,
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-      Bemerkungen: l.bemerkungen,
+      'Lieferung Bemerkungen': l.bemerkungen,
     }
   })
   const ausLieferungenData = ausLieferungen.map(l => {
@@ -215,55 +224,55 @@ const Kultur = ({ row }) => {
     return {
       datum: new Date(l.datum).getTime(),
       'Lieferung Pflanzen': -l.anzahl_pflanzen,
-      Pflanzen:
+      'Zählung Pflanzen':
         max([lastOfAll.anzahl_pflanzen, l.anzahl_pflanzen]) - l.anzahl_pflanzen,
       'Lieferung Pflanzen auspflanzbereit': -l.anzahl_auspflanzbereit,
-      'Pflanzen auspflanzbereit':
+      'Zählung Pflanzen auspflanzbereit':
         max([lastOfAll.anzahl_auspflanzbereit, l.anzahl_auspflanzbereit]) -
         l.anzahl_auspflanzbereit,
-      'Andere Mengen': l.andere_menge,
+      'Lieferung andere Mengen': l.andere_menge,
       'Lieferung Gramm Samen': l.gramm_samen,
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-      Bemerkungen: l.bemerkungen,
+      'Lieferung Bemerkungen': l.bemerkungen,
     }
   })
   const anLieferungenGeplantData = anLieferungGeplantIncluded.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant': l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant': l.anzahl_auspflanzbereit,
-    'Andere Mengen': l.andere_menge,
+    'Lieferung andere Mengen': l.andere_menge,
     'Lieferung Gramm Samen': l.gramm_samen,
     'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-    Bemerkungen: l.bemerkungen,
+    'Lieferung Bemerkungen': l.bemerkungen,
   }))
   const anLieferungenGeplantIgnoredData = anLieferungGeplantIgnored.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
       l.anzahl_auspflanzbereit,
-    'Andere Mengen': l.andere_menge,
+    'Lieferung andere Mengen': l.andere_menge,
     'Lieferung Gramm Samen': l.gramm_samen,
     'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-    Bemerkungen: l.bemerkungen,
+    'Lieferung Bemerkungen': l.bemerkungen,
   }))
   const ausLieferungenGeplantData = ausLieferungGeplantIncluded.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant': -l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
-    'Andere Mengen': l.andere_menge,
+    'Lieferung andere Mengen': l.andere_menge,
     'Lieferung Gramm Samen': l.gramm_samen,
     'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-    Bemerkungen: l.bemerkungen,
+    'Lieferung Bemerkungen': l.bemerkungen,
   }))
   const ausLieferungenGeplantIgnoredData = ausLieferungGeplantIgnored.map(
     l => ({
       datum: new Date(l.datum).getTime(),
       'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
       'Lieferung Pflanzen auspflanzbereit geplant, ignoriert': -l.anzahl_auspflanzbereit,
-      'Andere Mengen': l.andere_menge,
+      'Lieferung andere Mengen': l.andere_menge,
       'Lieferung Gramm Samen': l.gramm_samen,
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-      Bemerkungen: l.bemerkungen,
+      'Lieferung Bemerkungen': l.bemerkungen,
     }),
   )
 
@@ -340,28 +349,53 @@ const Kultur = ({ row }) => {
                         o.payload['Lieferung Gramm Samen']
                       }`}</li>
                     )}
-                    {o.payload['Andere Mengen'] && (
-                      <li key={`${o.dataKey}2`}>{`Andere Mengen: ${
-                        o.payload['Andere Mengen']
+                    {o.payload['Zählung andere Mengen'] && (
+                      <li key={`${o.dataKey}2`}>{`Zählung andere Mengen: ${
+                        o.payload['Zählung andere Mengen']
+                      }`}</li>
+                    )}
+                    {o.payload['Lieferung andere Mengen'] && (
+                      <li key={`${o.dataKey}3`}>{`Lieferung andere Mengen: ${
+                        o.payload['Lieferung andere Mengen']
                       }`}</li>
                     )}
                     {o.payload['Lieferung von Anzahl Individuen'] && (
                       <li
-                        key={`${o.dataKey}3`}
+                        key={`${o.dataKey}4`}
                       >{`Lieferung von Anzahl Individuen: ${
                         o.payload['Lieferung von Anzahl Individuen']
                       }`}</li>
                     )}
-                    {o.payload['Beschreibung auspflanzbereite Pflanzen'] && (
+                    {o.payload[
+                      'Zählung Beschreibung auspflanzbereite Pflanzen'
+                    ] && (
                       <li
-                        key={`${o.dataKey}4`}
-                      >{`Beschreibung auspflanzbereite Pflanzen: ${
-                        o.payload['Beschreibung auspflanzbereite Pflanzen']
+                        key={`${o.dataKey}5`}
+                      >{`Zählung Beschreibung auspflanzbereite Pflanzen: ${
+                        o.payload[
+                          'Zählung Beschreibung auspflanzbereite Pflanzen'
+                        ]
                       }`}</li>
                     )}
-                    {o.payload['Bemerkungen'] && (
-                      <li key={`${o.dataKey}5`}>{`Bemerkungen: ${
-                        o.payload['Bemerkungen']
+                    {o.payload[
+                      'Lieferung Beschreibung auspflanzbereite Pflanzen'
+                    ] && (
+                      <li
+                        key={`${o.dataKey}6`}
+                      >{`Lieferung Beschreibung auspflanzbereite Pflanzen: ${
+                        o.payload[
+                          'Lieferung Beschreibung auspflanzbereite Pflanzen'
+                        ]
+                      }`}</li>
+                    )}
+                    {o.payload['Zählung Bemerkungen'] && (
+                      <li key={`${o.dataKey}7`}>{`Zählung Bemerkungen: ${
+                        o.payload['Zählung Bemerkungen']
+                      }`}</li>
+                    )}
+                    {o.payload['Lieferung Bemerkungen'] && (
+                      <li key={`${o.dataKey}8`}>{`Lieferung Bemerkungen: ${
+                        o.payload['Lieferung Bemerkungen']
                       }`}</li>
                     )}
                   </>
@@ -412,34 +446,34 @@ const Kultur = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Pflanzen"
+            dataKey="Zählung Pflanzen"
             stroke="#4a148c"
             label={<LabelZaehlung />}
           />
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Pflanzen auspflanzbereit"
+            dataKey="Zählung Pflanzen auspflanzbereit"
             stroke="#01792D"
             label={<LabelZaehlung />}
           />
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Mutterpflanzen"
+            dataKey="Zählung Mutterpflanzen"
             stroke="#F91F3F"
             label={<LabelZaehlung />}
           />
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Pflanzen geplant"
+            dataKey="Zählung Pflanzen geplant"
             stroke="#d8d8f3"
             label={<LabelZaehlung />}
           />
           <Line
             type="basis"
-            dataKey="Pflanzen geplant, ignoriert"
+            dataKey="Zählung Pflanzen geplant, ignoriert"
             legendType="circle"
             stroke="#d8d8f3"
             label={<LabelZaehlung />}
@@ -447,13 +481,13 @@ const Kultur = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Pflanzen auspflanzbereit geplant"
+            dataKey="Zählung Pflanzen auspflanzbereit geplant"
             stroke="#dbf0e3"
             label={<LabelZaehlung />}
           />
           <Line
             type="basis"
-            dataKey="Pflanzen auspflanzbereit geplant, ignoriert"
+            dataKey="Zählung Pflanzen auspflanzbereit geplant, ignoriert"
             legendType="circle"
             stroke="#dbf0e3"
             label={<LabelZaehlung />}
@@ -461,13 +495,13 @@ const Kultur = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Mutterpflanzen geplant"
+            dataKey="Zählung Mutterpflanzen geplant"
             stroke="#FCAFBB"
             label={<LabelZaehlung />}
           />
           <Line
             type="basis"
-            dataKey="Mutterpflanzen geplant, ignoriert"
+            dataKey="Zählung Mutterpflanzen geplant, ignoriert"
             legendType="circle"
             stroke="#FCAFBB"
             label={<LabelZaehlung />}
