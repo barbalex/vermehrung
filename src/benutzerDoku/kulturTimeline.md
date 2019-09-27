@@ -28,7 +28,7 @@ Sekundär (in den Fenstern, die sich öffnen, wenn man über einem Zeitpunkt sch
 - Bemerkungen
 
 Von den primären Informationen erhält man also auf den ersten Blick eine Übersicht.<br/>
-Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt. 
+Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.<br/><br/>
 
 ### Wie
 
@@ -36,12 +36,20 @@ Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.
 Als Grundlage werden verwendet:
 
 - Anzahlen aus durchgeführten Zählungen
-- Anzahlen aus geplanten Zählungen, die _nach der letzten durchgeführten Zählung_ geplant sind
-- Anzahlen aus durchgeführten Lieferungen: Zu den Anzahlen aus letzten Zählung davor wird summiert, was in der Zwischenzeit geliefert wurde
-- Anzahlen aus geplanten Lieferungen, die _nach der letzten durchgeführten Zählung_ geplant sind
+- Anzahlen aus geplanten Zählungen. Aber nur, wenn sie nach der letzten durchgeführten Zählung geplant sind
+- Anzahlen aus durchgeführten Lieferungen:<br/>
+  Basis sind die Anzahlen aus letzten zuvor durchgeführten Zählung.<br/>
+  Dazu wird summiert, was in der Zwischenzeit geliefert wurde
+- Anzahlen aus geplanten Lieferungen, die nach der letzten durchgeführten Zählung geplant sind
+
+Linien, die geplante Anzahlen darstellen, verwenden dieselbe Farbe wie die Linie für die entsprechende Einheit bei durchgeführten Zählungen. Aber etwas aufgehellt.<br/><br/>
 
 #### Punkte für ignorierte Zählungen
-- Geplante Zählungen, nach denen eine Zählung durchgeführt wurde, werden nicht als Teil der Linien berücksichtigt. Stattdessen werden sie in separaten Punkten dargestellt
+- Geplante Zählungen, nach denen eine Zählung durchgeführt wurde, werden nicht als Teil der Linien berücksichtigt.<br/>
+  Stattdessen werden sie in separaten Punkten dargestellt
 
 #### Säulen für Lieferungen
-
+- An-Lieferungen werden als Säulen mit positiven Werten dargestellt,
+- Aus-Lieferungen mit negativen Werten
+- Lieferungen, die nach der letzten durchgeführten Zählung geplant sind, werden etwas aufgehellt dargestellt.<br/>
+  Vor diesem Zeitpunkt geplante werden in abweichenden Farben dargestellt
