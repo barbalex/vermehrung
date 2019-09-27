@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -19,12 +19,14 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import moment from 'moment'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
+import IconButton from '@material-ui/core/IconButton'
 
 const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.05);
   flex-shrink: 0;
   display: flex;
-  height: 40px;
+  height: 48px;
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
@@ -53,9 +55,14 @@ const PTitle = styled.div`
 `
 
 const Kultur = ({ row }) => {
+  const openPlanenDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Zeitachse-Kultur',
+      )
+  }, [])
   const zaehlungen = get(row, 'zaehlungs') || []
   const lastZaehlung = zaehlungen.slice(-1)[0]
-  const firstZaehlung = zaehlungen.slice(0)
   const zaehlungenGeplantAll = get(row, 'zaehlungsGeplant') || []
   const zaehlungGeplantIgnored = zaehlungenGeplantAll.filter(zg =>
     // check if more recent zaehlungen exists
@@ -464,6 +471,15 @@ const Kultur = ({ row }) => {
     <ErrorBoundary>
       <TitleRow>
         <Title>Zeit-Achse</Title>
+        <div>
+          <IconButton
+            aria-label="Anleitung öffnen"
+            title="Anleitung öffnen"
+            onClick={openPlanenDocs}
+          >
+            <IoMdInformationCircleOutline />
+          </IconButton>
+        </div>
       </TitleRow>
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
