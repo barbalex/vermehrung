@@ -191,37 +191,27 @@ const Kultur = ({ row }) => {
     'datum',
   )
   const anLieferungenData = anLieferungen.map(l => {
-    const previousZaehlung =
-      zaehlungenForLine.reverse().find(z => z.datum < l.datum) || {}
-    const lastZaehlungDatum = previousZaehlung
-      ? previousZaehlung.datum
-      : '1900-01-01'
-    const lastAnLieferung =
-      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const lastAusLieferung =
-      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const allSorted = sortBy(
-      [previousZaehlung, lastAnLieferung, lastAusLieferung].filter(
-        o => !!o.datum,
-      ),
-      'datum',
-    )
-    const lastOfAll = allSorted.reverse().find(z => z.datum < l.datum) || {}
+    // 1. previous Zaehlung is basis. If none, take 0
+    const previousZaehlung = zaehlungenForLine
+      .reverse()
+      .find(z => z.datum < l.datum) || {
+      datum: '1900.01.01',
+      anzahl_pflanzen: 0,
+      anzahl_auspflanzbereit: 0,
+    }
+    // 2. Summ all Lieferungen since
     const anLieferungenSince = anLieferungenForLine.filter(
-      l => l.datum > lastOfAll.datum,
+      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
     )
     const ausLieferungenSince = ausLieferungenForLine.filter(
-      l => l.datum > lastOfAll.datum,
+      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
     )
-    // summ all counts since
     const sumAnzahlPflanzen =
+      (previousZaehlung.anzahl_pflanzen || 0) +
       (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
       (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
     const sumAnzahlAuspflanzbereit =
+      (previousZaehlung.anzahl_auspflanzbereit || 0) +
       (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
       (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -246,38 +236,27 @@ const Kultur = ({ row }) => {
     return data
   })
   const ausLieferungenData = ausLieferungen.map(l => {
-    const previousZaehlung =
-      zaehlungenForLine.reverse().find(z => z.datum < l.datum) || {}
-    const lastZaehlungDatum = previousZaehlung
-      ? previousZaehlung.datum
-      : '1900-01-01'
-    const lastAnLieferung =
-      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const lastAusLieferung =
-      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const allSorted = sortBy(
-      [previousZaehlung, lastAnLieferung, lastAusLieferung].filter(
-        o => !!o.datum,
-      ),
-      'datum',
-    )
-    const lastOfAll = allSorted.reverse().find(z => z.datum < l.datum) || {}
-
+    // 1. previous Zaehlung is basis. If none, take 0
+    const previousZaehlung = zaehlungenForLine
+      .reverse()
+      .find(z => z.datum < l.datum) || {
+      datum: '1900.01.01',
+      anzahl_pflanzen: 0,
+      anzahl_auspflanzbereit: 0,
+    }
+    // 2. Summ all Lieferungen since
     const anLieferungenSince = anLieferungenForLine.filter(
-      l => l.datum > lastOfAll.datum,
+      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
     )
     const ausLieferungenSince = ausLieferungenForLine.filter(
-      l => l.datum > lastOfAll.datum,
+      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
     )
-    // summ all counts since
     const sumAnzahlPflanzen =
+      (previousZaehlung.anzahl_pflanzen || 0) +
       (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
       (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
     const sumAnzahlAuspflanzbereit =
+      (previousZaehlung.anzahl_auspflanzbereit || 0) +
       (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
       (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
