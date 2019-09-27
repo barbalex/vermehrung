@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import max from 'lodash/max'
+import sumBy from 'lodash/sumBy'
 import ErrorBoundary from 'react-error-boundary'
 import {
   ComposedChart,
@@ -41,16 +42,10 @@ const Popup = styled.div`
   border: 1px solid rgba(74, 20, 140, 0.9);
   opacity: 0.8;
   padding: 8px;
-  li {
-    margin-bottom: 0;
-    font-size: 0.8em;
-    font-weight: 400;
-    margin-left: -23px;
-  }
-  ul {
-    list-style-type: none;
-    margin-bottom: 0;
-  }
+`
+const PRow = styled.div`
+  font-size: 0.8em;
+  font-weight: 400;
 `
 const PTitle = styled.div`
   font-size: 0.8em;
@@ -72,6 +67,10 @@ const Kultur = ({ row }) => {
   if (zaehlungenGeplant.length) {
     zaehlungenGeplant = [lastZaehlung, ...zaehlungenGeplant]
   }
+  const zaehlungenForLine = sortBy(
+    [...zaehlungen, ...zaehlungenGeplant],
+    'datum',
+  )
   // TODO: need to add last zaehlung to zaehlungenGeplant to connect lines
   const zaehlungenData = zaehlungen.map(l => {
     const teilzaehlungs = get(l, 'teilzaehlungs')
@@ -164,11 +163,15 @@ const Kultur = ({ row }) => {
   const anLieferungenGeplant = get(row, 'anLieferungsGeplant') || []
   const anLieferungGeplantIgnored = anLieferungenGeplant.filter(lg =>
     // check if more recent anLieferungen exists
-    anLieferungen.every(lu => lu.datum >= lg.datum),
+    anLieferungen.some(lu => lu.datum >= lg.datum),
   )
   const anLieferungGeplantIgnoredIds = anLieferungGeplantIgnored.map(l => l.id)
   const anLieferungGeplantIncluded = anLieferungenGeplant.filter(
     lg => !anLieferungGeplantIgnoredIds.includes(lg.id),
+  )
+  const anLieferungenForLine = sortBy(
+    [...anLieferungen, ...anLieferungGeplantIncluded],
+    'datum',
   )
   const ausLieferungen = get(row, 'ausLieferungs') || []
   const ausLieferungenGeplant = get(row, 'ausLieferungsGeplant') || []
@@ -182,71 +185,82 @@ const Kultur = ({ row }) => {
   const ausLieferungGeplantIncluded = ausLieferungenGeplant.filter(
     lg => !ausLieferungGeplantIgnoredIds.includes(lg.id),
   )
+  const ausLieferungenForLine = sortBy(
+    [...ausLieferungen, ...ausLieferungGeplantIncluded],
+    'datum',
+  )
   const anLieferungenData = anLieferungen.map(l => {
     const lastZaehlung =
-      sortBy([...zaehlungen, ...zaehlungenGeplant], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const lastAnLieferung =
-      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const lastAusLieferung =
-      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const allSorted = sortBy(
-      [lastZaehlung, lastAnLieferung, lastAusLieferung].filter(o => !!o.datum),
-      'datum',
+      zaehlungenForLine.reverse().find(z => z.datum < l.datum) || {}
+    const lastZaehlungDatum = lastZaehlung ? lastZaehlung.datum : '1900-01-01'
+    const anLieferungenSince = anLieferungenForLine.filter(
+      l => l.datum > lastZaehlungDatum,
     )
-    const lastOfAll = allSorted.reverse().find(z => z.datum < l.datum) || {}
+    console.log('Timeline, anLieferungenSince:', anLieferungenSince)
+    const ausLieferungenSince = ausLieferungenForLine.filter(
+      l => l.datum > lastZaehlungDatum,
+    )
+    console.log('Timeline, ausLieferungenSince:', ausLieferungenSince)
+    // summ all counts since
+    const sumAnzahlPflanzen =
+      (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
+      (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
+    console.log('Timeline, sumAnzahlPflanzen:', sumAnzahlPflanzen)
+    const sumAnzahlAuspflanzbereit =
+      (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
+      (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
-    return {
+    const data = {
       datum: new Date(l.datum).getTime(),
       'Lieferung Pflanzen': l.anzahl_pflanzen,
-      'Zählung Pflanzen': (lastOfAll.anzahl_pflanzen || 0) + l.anzahl_pflanzen,
       'Lieferung Pflanzen auspflanzbereit': l.anzahl_auspflanzbereit,
-      'Zählung Pflanzen auspflanzbereit':
-        (lastOfAll.anzahl_auspflanzbereit || 0) + l.anzahl_auspflanzbereit,
       'Lieferung andere Mengen': l.andere_menge,
       'Lieferung Gramm Samen': l.gramm_samen,
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
       'Lieferung Bemerkungen': l.bemerkungen,
     }
+    if (l.datum < lastZaehlungDatum) {
+      data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
+      data['Zählung Pflanzen auspflanzbereit'] =
+        sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
+    }
+    return data
   })
   const ausLieferungenData = ausLieferungen.map(l => {
     const lastZaehlung =
-      sortBy([...zaehlungen, ...zaehlungenGeplant], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const lastAnLieferung =
-      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const lastAusLieferung =
-      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
-        .reverse()
-        .find(z => z.datum < l.datum) || {}
-    const allSorted = sortBy(
-      [lastZaehlung, lastAnLieferung, lastAusLieferung].filter(o => !!o.datum),
-      'datum',
+      zaehlungenForLine.reverse().find(z => z.datum < l.datum) || {}
+    const lastZaehlungDatum = lastZaehlung ? lastZaehlung.datum : '1900-01-01'
+    const anLieferungenSince = anLieferungenForLine.filter(
+      l => l.datum > lastZaehlungDatum,
     )
-    const lastOfAll = allSorted.reverse().find(z => z.datum < l.datum) || {}
+    const ausLieferungenSince = ausLieferungenForLine.filter(
+      l => l.datum > lastZaehlungDatum,
+    )
+    // summ all counts since
+    const sumAnzahlPflanzen =
+      (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
+      (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
+    const sumAnzahlAuspflanzbereit =
+      (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
+      (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
-    return {
+    const data = {
       datum: new Date(l.datum).getTime(),
       'Lieferung Pflanzen': -l.anzahl_pflanzen,
-      'Zählung Pflanzen':
-        max([lastOfAll.anzahl_pflanzen, l.anzahl_pflanzen]) - l.anzahl_pflanzen,
       'Lieferung Pflanzen auspflanzbereit': -l.anzahl_auspflanzbereit,
-      'Zählung Pflanzen auspflanzbereit':
-        max([lastOfAll.anzahl_auspflanzbereit, l.anzahl_auspflanzbereit]) -
-        l.anzahl_auspflanzbereit,
       'Lieferung andere Mengen': l.andere_menge,
       'Lieferung Gramm Samen': l.gramm_samen,
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
       'Lieferung Bemerkungen': l.bemerkungen,
     }
+    if (l.datum < lastZaehlungDatum) {
+      data['Zählung Pflanzen'] =
+        max([sumAnzahlPflanzen, l.anzahl_pflanzen]) - l.anzahl_pflanzen
+      data['Zählung Pflanzen auspflanzbereit'] =
+        max([sumAnzahlAuspflanzbereit, l.anzahl_auspflanzbereit]) -
+        l.anzahl_auspflanzbereit
+    }
+    return data
   })
   const anLieferungenGeplantData = anLieferungGeplantIncluded.map(l => ({
     datum: new Date(l.datum).getTime(),
@@ -349,73 +363,71 @@ const Kultur = ({ row }) => {
       return (
         <Popup>
           <PTitle>{moment(label).format('YYYY.MM.DD')}</PTitle>
-          <ul>
-            {payload.map((o, i) => {
-              // if this payload is last non summable values
-              if (i === payload.length - 1) {
-                return (
-                  <>
-                    <li key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</li>
-                    {o.payload['Lieferung Gramm Samen'] && (
-                      <li key={`${o.dataKey}1`}>{`Lieferung Gramm Samen: ${
-                        o.payload['Lieferung Gramm Samen']
-                      }`}</li>
-                    )}
-                    {o.payload['Zählung andere Mengen'] && (
-                      <li key={`${o.dataKey}2`}>{`Zählung andere Mengen: ${
-                        o.payload['Zählung andere Mengen']
-                      }`}</li>
-                    )}
-                    {o.payload['Lieferung andere Mengen'] && (
-                      <li key={`${o.dataKey}3`}>{`Lieferung andere Mengen: ${
-                        o.payload['Lieferung andere Mengen']
-                      }`}</li>
-                    )}
-                    {o.payload['Lieferung von Anzahl Individuen'] && (
-                      <li
-                        key={`${o.dataKey}4`}
-                      >{`Lieferung von Anzahl Individuen: ${
-                        o.payload['Lieferung von Anzahl Individuen']
-                      }`}</li>
-                    )}
-                    {o.payload[
-                      'Zählung Beschreibung auspflanzbereite Pflanzen'
-                    ] && (
-                      <li
-                        key={`${o.dataKey}5`}
-                      >{`Zählung Beschreibung auspflanzbereite Pflanzen: ${
-                        o.payload[
-                          'Zählung Beschreibung auspflanzbereite Pflanzen'
-                        ]
-                      }`}</li>
-                    )}
-                    {o.payload[
-                      'Lieferung Beschreibung auspflanzbereite Pflanzen'
-                    ] && (
-                      <li
-                        key={`${o.dataKey}6`}
-                      >{`Lieferung Beschreibung auspflanzbereite Pflanzen: ${
-                        o.payload[
-                          'Lieferung Beschreibung auspflanzbereite Pflanzen'
-                        ]
-                      }`}</li>
-                    )}
-                    {o.payload['Zählung Bemerkungen'] && (
-                      <li key={`${o.dataKey}7`}>{`Zählung Bemerkungen: ${
-                        o.payload['Zählung Bemerkungen']
-                      }`}</li>
-                    )}
-                    {o.payload['Lieferung Bemerkungen'] && (
-                      <li key={`${o.dataKey}8`}>{`Lieferung Bemerkungen: ${
-                        o.payload['Lieferung Bemerkungen']
-                      }`}</li>
-                    )}
-                  </>
-                )
-              }
-              return <li key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</li>
-            })}
-          </ul>
+          {payload.map((o, i) => {
+            // if this payload is last non summable values
+            if (i === payload.length - 1) {
+              return (
+                <div key={`${o.dataKey}0`}>
+                  <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
+                  {o.payload['Lieferung Gramm Samen'] && (
+                    <PRow key={`${o.dataKey}1`}>{`Lieferung Gramm Samen: ${
+                      o.payload['Lieferung Gramm Samen']
+                    }`}</PRow>
+                  )}
+                  {o.payload['Zählung andere Mengen'] && (
+                    <PRow key={`${o.dataKey}2`}>{`Zählung andere Mengen: ${
+                      o.payload['Zählung andere Mengen']
+                    }`}</PRow>
+                  )}
+                  {o.payload['Lieferung andere Mengen'] && (
+                    <PRow key={`${o.dataKey}3`}>{`Lieferung andere Mengen: ${
+                      o.payload['Lieferung andere Mengen']
+                    }`}</PRow>
+                  )}
+                  {o.payload['Lieferung von Anzahl Individuen'] && (
+                    <PRow
+                      key={`${o.dataKey}4`}
+                    >{`Lieferung von Anzahl Individuen: ${
+                      o.payload['Lieferung von Anzahl Individuen']
+                    }`}</PRow>
+                  )}
+                  {o.payload[
+                    'Zählung Beschreibung auspflanzbereite Pflanzen'
+                  ] && (
+                    <PRow
+                      key={`${o.dataKey}5`}
+                    >{`Zählung Beschreibung auspflanzbereite Pflanzen: ${
+                      o.payload[
+                        'Zählung Beschreibung auspflanzbereite Pflanzen'
+                      ]
+                    }`}</PRow>
+                  )}
+                  {o.payload[
+                    'Lieferung Beschreibung auspflanzbereite Pflanzen'
+                  ] && (
+                    <PRow
+                      key={`${o.dataKey}6`}
+                    >{`Lieferung Beschreibung auspflanzbereite Pflanzen: ${
+                      o.payload[
+                        'Lieferung Beschreibung auspflanzbereite Pflanzen'
+                      ]
+                    }`}</PRow>
+                  )}
+                  {o.payload['Zählung Bemerkungen'] && (
+                    <PRow key={`${o.dataKey}7`}>{`Zählung Bemerkungen: ${
+                      o.payload['Zählung Bemerkungen']
+                    }`}</PRow>
+                  )}
+                  {o.payload['Lieferung Bemerkungen'] && (
+                    <PRow key={`${o.dataKey}8`}>{`Lieferung Bemerkungen: ${
+                      o.payload['Lieferung Bemerkungen']
+                    }`}</PRow>
+                  )}
+                </div>
+              )
+            }
+            return <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
+          })}
         </Popup>
       )
     }
