@@ -61,45 +61,87 @@ const Kultur = ({ row }) => {
   const zaehlungen = get(row, 'zaehlungs') || []
   const lastZaehlung = zaehlungen.slice(-1)[0]
   const zaehlungenGeplantAll = get(row, 'zaehlungsGeplant') || []
-  const zaehlungGeplantToIgnore = zaehlungenGeplantAll.filter(zg =>
+  const zaehlungGeplantIgnored = zaehlungenGeplantAll.filter(zg =>
     // check if more recent zaehlungen exists
     zaehlungen.some(z => z.datum >= zg.datum),
   )
-  const zaehlungGeplantToIgnoreIds = zaehlungGeplantToIgnore.map(l => l.id)
+  const zaehlungGeplantIgnoredIds = zaehlungGeplantIgnored.map(l => l.id)
   let zaehlungenGeplant = zaehlungenGeplantAll.filter(
-    lg => !zaehlungGeplantToIgnoreIds.includes(lg.id),
+    lg => !zaehlungGeplantIgnoredIds.includes(lg.id),
   )
   if (zaehlungenGeplant.length) {
     zaehlungenGeplant = [lastZaehlung, ...zaehlungenGeplant]
   }
   // TODO: need to add last zaehlung to zaehlungenGeplant to connect lines
-  const zaehlungenData = zaehlungen.map(l => ({
-    datum: new Date(l.datum).getTime(),
-    Pflanzen: get(l, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen'),
-    'Pflanzen auspflanzbereit': get(
-      l,
-      'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-    ),
-    Mutterpflanzen: get(
-      l,
-      'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-    ),
-  }))
-  const zaehlungenGeplantData = zaehlungenGeplant.map(l => ({
-    datum: new Date(l.datum).getTime(),
-    'Pflanzen geplant': get(
-      l,
-      'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-    ),
-    'Pflanzen auspflanzbereit geplant': get(
-      l,
-      'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-    ),
-    'Mutterpflanzen geplant': get(
-      l,
-      'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-    ),
-  }))
+  const zaehlungenData = zaehlungen.map(l => {
+    const teilzaehlungs = get(l, 'teilzaehlungs')
+
+    return {
+      datum: new Date(l.datum).getTime(),
+      Pflanzen: get(l, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen'),
+      'Pflanzen auspflanzbereit': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+      ),
+      Mutterpflanzen: get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+      ),
+      'Andere Mengen': teilzaehlungs.map(t => t.andere_menge).join(', '),
+      'Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+        .map(t => t.auspflanzbereit_beschreibung)
+        .join(', '),
+      Bemerkungen: teilzaehlungs.map(t => t.bemerkungen).join(', '),
+    }
+  })
+  const zaehlungenGeplantData = zaehlungenGeplant.map(l => {
+    const teilzaehlungs = get(l, 'teilzaehlungs')
+
+    return {
+      datum: new Date(l.datum).getTime(),
+      'Pflanzen geplant': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+      ),
+      'Pflanzen auspflanzbereit geplant': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+      ),
+      'Mutterpflanzen geplant': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+      ),
+      'Andere Mengen': teilzaehlungs.map(t => t.andere_menge).join(', '),
+      'Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+        .map(t => t.auspflanzbereit_beschreibung)
+        .join(', '),
+      Bemerkungen: teilzaehlungs.map(t => t.bemerkungen).join(', '),
+    }
+  })
+  const zaehlungenGeplantIgnoredData = zaehlungGeplantIgnored.map(l => {
+    const teilzaehlungs = get(l, 'teilzaehlungs')
+
+    return {
+      datum: new Date(l.datum).getTime(),
+      'Pflanzen geplant, ignoriert': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+      ),
+      'Pflanzen auspflanzbereit geplant, ignoriert': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+      ),
+      'Mutterpflanzen geplant, ignoriert': get(
+        l,
+        'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+      ),
+      'Andere Mengen': teilzaehlungs.map(t => t.andere_menge).join(', '),
+      'Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+        .map(t => t.auspflanzbereit_beschreibung)
+        .join(', '),
+      Bemerkungen: teilzaehlungs.map(t => t.bemerkungen).join(', '),
+    }
+  })
   const zaehlungenDataGroupedByDatum = groupBy(
     [...zaehlungenData, ...zaehlungenGeplantData],
     'datum',
@@ -111,27 +153,25 @@ const Kultur = ({ row }) => {
 
   const anLieferungen = get(row, 'anLieferungs') || []
   const anLieferungenGeplant = get(row, 'anLieferungsGeplant') || []
-  const anLieferungGeplantToIgnore = anLieferungenGeplant.filter(lg =>
+  const anLieferungGeplantIgnored = anLieferungenGeplant.filter(lg =>
     // check if more recent anLieferungen exists
     anLieferungen.every(lu => lu.datum >= lg.datum),
   )
-  const anLieferungGeplantToIgnoreIds = anLieferungGeplantToIgnore.map(
-    l => l.id,
-  )
-  const anLieferungGeplantToInclude = anLieferungenGeplant.filter(
-    lg => !anLieferungGeplantToIgnoreIds.includes(lg.id),
+  const anLieferungGeplantIgnoredIds = anLieferungGeplantIgnored.map(l => l.id)
+  const anLieferungGeplantIncluded = anLieferungenGeplant.filter(
+    lg => !anLieferungGeplantIgnoredIds.includes(lg.id),
   )
   const ausLieferungen = get(row, 'ausLieferungs') || []
   const ausLieferungenGeplant = get(row, 'ausLieferungsGeplant') || []
-  const ausLieferungGeplantToIgnore = ausLieferungenGeplant.filter(lg =>
+  const ausLieferungGeplantIgnored = ausLieferungenGeplant.filter(lg =>
     // check if more recent ausLieferungen exists
     ausLieferungen.some(l => l.datum >= lg.datum),
   )
-  const ausLieferungGeplantToIgnoreIds = ausLieferungGeplantToIgnore.map(
+  const ausLieferungGeplantIgnoredIds = ausLieferungGeplantIgnored.map(
     l => l.id,
   )
-  const ausLieferungGeplantToInclude = ausLieferungenGeplant.filter(
-    lg => !ausLieferungGeplantToIgnoreIds.includes(lg.id),
+  const ausLieferungGeplantIncluded = ausLieferungenGeplant.filter(
+    lg => !ausLieferungGeplantIgnoredIds.includes(lg.id),
   )
   const anLieferungenData = anLieferungen.map(l => {
     const lastZaehlung =
@@ -153,6 +193,10 @@ const Kultur = ({ row }) => {
       'Lieferung Pflanzen auspflanzbereit': l.anzahl_auspflanzbereit,
       'Pflanzen auspflanzbereit':
         (lastOfAll.anzahl_auspflanzbereit || 0) + l.anzahl_auspflanzbereit,
+      'Andere Mengen': l.andere_menge,
+      'Lieferung Gramm Samen': l.gramm_samen,
+      'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+      Bemerkungen: l.bemerkungen,
     }
   })
   const ausLieferungenData = ausLieferungen.map(l => {
@@ -177,18 +221,51 @@ const Kultur = ({ row }) => {
       'Pflanzen auspflanzbereit':
         max([lastOfAll.anzahl_auspflanzbereit, l.anzahl_auspflanzbereit]) -
         l.anzahl_auspflanzbereit,
+      'Andere Mengen': l.andere_menge,
+      'Lieferung Gramm Samen': l.gramm_samen,
+      'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+      Bemerkungen: l.bemerkungen,
     }
   })
-  const anLieferungenGeplantData = anLieferungGeplantToInclude.map(l => ({
+  const anLieferungenGeplantData = anLieferungGeplantIncluded.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant': l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant': l.anzahl_auspflanzbereit,
+    'Andere Mengen': l.andere_menge,
+    'Lieferung Gramm Samen': l.gramm_samen,
+    'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+    Bemerkungen: l.bemerkungen,
   }))
-  const ausLieferungenGeplantData = ausLieferungGeplantToInclude.map(l => ({
+  const anLieferungenGeplantIgnoredData = anLieferungGeplantIgnored.map(l => ({
+    datum: new Date(l.datum).getTime(),
+    'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
+    'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
+      l.anzahl_auspflanzbereit,
+    'Andere Mengen': l.andere_menge,
+    'Lieferung Gramm Samen': l.gramm_samen,
+    'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+    Bemerkungen: l.bemerkungen,
+  }))
+  const ausLieferungenGeplantData = ausLieferungGeplantIncluded.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant': -l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
+    'Andere Mengen': l.andere_menge,
+    'Lieferung Gramm Samen': l.gramm_samen,
+    'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+    Bemerkungen: l.bemerkungen,
   }))
+  const ausLieferungenGeplantIgnoredData = ausLieferungGeplantIgnored.map(
+    l => ({
+      datum: new Date(l.datum).getTime(),
+      'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
+      'Lieferung Pflanzen auspflanzbereit geplant, ignoriert': -l.anzahl_auspflanzbereit,
+      'Andere Mengen': l.andere_menge,
+      'Lieferung Gramm Samen': l.gramm_samen,
+      'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+      Bemerkungen: l.bemerkungen,
+    }),
+  )
 
   /*console.log('Timeline:', {
     anLieferungenData,
@@ -203,8 +280,11 @@ const Kultur = ({ row }) => {
       ...anLieferungenData,
       ...ausLieferungenData,
       ...anLieferungenGeplantData,
+      ...anLieferungenGeplantIgnoredData,
       ...ausLieferungenGeplantData,
+      ...ausLieferungenGeplantIgnoredData,
       ...zaehlungenDataCombined,
+      ...zaehlungenGeplantIgnoredData,
     ],
     'datum',
   )
@@ -249,9 +329,46 @@ const Kultur = ({ row }) => {
         <Popup>
           <PTitle>{new Date(label).toLocaleDateString()}</PTitle>
           <ul>
-            {payload.map(o => (
-              <li key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</li>
-            ))}
+            {payload.map((o, i) => {
+              // if this payload is last non summable values
+              if (i === payload.length - 1) {
+                return (
+                  <>
+                    <li key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</li>
+                    {o.payload['Lieferung Gramm Samen'] && (
+                      <li key={`${o.dataKey}1`}>{`Lieferung Gramm Samen: ${
+                        o.payload['Lieferung Gramm Samen']
+                      }`}</li>
+                    )}
+                    {o.payload['Andere Mengen'] && (
+                      <li key={`${o.dataKey}2`}>{`Andere Mengen: ${
+                        o.payload['Andere Mengen']
+                      }`}</li>
+                    )}
+                    {o.payload['Lieferung von Anzahl Individuen'] && (
+                      <li
+                        key={`${o.dataKey}3`}
+                      >{`Lieferung von Anzahl Individuen: ${
+                        o.payload['Lieferung von Anzahl Individuen']
+                      }`}</li>
+                    )}
+                    {o.payload['Beschreibung auspflanzbereite Pflanzen'] && (
+                      <li
+                        key={`${o.dataKey}4`}
+                      >{`Beschreibung auspflanzbereite Pflanzen: ${
+                        o.payload['Beschreibung auspflanzbereite Pflanzen']
+                      }`}</li>
+                    )}
+                    {o.payload['Bemerkungen'] && (
+                      <li key={`${o.dataKey}5`}>{`Bemerkungen: ${
+                        o.payload['Bemerkungen']
+                      }`}</li>
+                    )}
+                  </>
+                )
+              }
+              return <li key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</li>
+            })}
           </ul>
         </Popup>
       )
@@ -275,39 +392,55 @@ const Kultur = ({ row }) => {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="datum" tick={renderCustomAxisTick} />
-          <YAxis />
+          <YAxis
+            label={{
+              value: 'Anzahl',
+              angle: -90,
+              position: 'insideLeft',
+              offset: 25,
+              fontSize: 13,
+            }}
+            fontSize={12}
+          />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             layout="vertical"
             align="right"
-            wrapperStyle={{ right: -10, bottom: 95, fontSize: 13 }}
+            wrapperStyle={{ right: -10, bottom: 12, fontSize: 12 }}
           />
           <ReferenceLine y={0} stroke="#000" />
           <Line
             type="monotone"
             connectNulls={true}
             dataKey="Pflanzen"
-            stroke="#8884d8"
+            stroke="#4a148c"
             label={<LabelZaehlung />}
           />
           <Line
             type="monotone"
             connectNulls={true}
             dataKey="Pflanzen auspflanzbereit"
-            stroke="#82ca9d"
+            stroke="#01792D"
             label={<LabelZaehlung />}
           />
           <Line
             type="monotone"
             connectNulls={true}
             dataKey="Mutterpflanzen"
-            stroke="#ff7300"
+            stroke="#F91F3F"
             label={<LabelZaehlung />}
           />
           <Line
             type="monotone"
             connectNulls={true}
             dataKey="Pflanzen geplant"
+            stroke="#d8d8f3"
+            label={<LabelZaehlung />}
+          />
+          <Line
+            type="basis"
+            dataKey="Pflanzen geplant, ignoriert"
+            legendType="circle"
             stroke="#d8d8f3"
             label={<LabelZaehlung />}
           />
@@ -319,15 +452,29 @@ const Kultur = ({ row }) => {
             label={<LabelZaehlung />}
           />
           <Line
+            type="basis"
+            dataKey="Pflanzen auspflanzbereit geplant, ignoriert"
+            legendType="circle"
+            stroke="#dbf0e3"
+            label={<LabelZaehlung />}
+          />
+          <Line
             type="monotone"
             connectNulls={true}
             dataKey="Mutterpflanzen geplant"
-            stroke="#ffe3cc"
+            stroke="#FCAFBB"
+            label={<LabelZaehlung />}
+          />
+          <Line
+            type="basis"
+            dataKey="Mutterpflanzen geplant, ignoriert"
+            legendType="circle"
+            stroke="#FCAFBB"
             label={<LabelZaehlung />}
           />
           <Bar
             dataKey="Lieferung Pflanzen"
-            fill="#8884d8"
+            fill="#4a148c"
             label={<LabelLieferung />}
           />
           <Bar
@@ -336,13 +483,22 @@ const Kultur = ({ row }) => {
             label={<LabelLieferung />}
           />
           <Bar
+            dataKey="Lieferung Pflanzen geplant, ignoriert"
+            label={<LabelLieferung />}
+          />
+          <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit"
-            fill="#82ca9d"
+            fill="#01792D"
             label={<LabelLieferung />}
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit geplant"
             fill="#dbf0e3"
+            label={<LabelLieferung />}
+          />
+          <Bar
+            dataKey="Lieferung Pflanzen auspflanzbereit geplant, ignoriert"
+            fill="#707070"
             label={<LabelLieferung />}
           />
         </ComposedChart>

@@ -66,6 +66,12 @@ export default gql`
             }
           }
         }
+        teilzaehlungs {
+          id
+          andere_menge
+          auspflanzbereit_beschreibung
+          bemerkungen
+        }
       }
       zaehlungsGeplant: zaehlungs(
         where: { geplant: { _eq: true }, datum: { _is_null: false } }
@@ -80,6 +86,12 @@ export default gql`
               anzahl_mutterpflanzen
             }
           }
+        }
+        teilzaehlungs {
+          id
+          andere_menge
+          auspflanzbereit_beschreibung
+          bemerkungen
         }
       }
     }
