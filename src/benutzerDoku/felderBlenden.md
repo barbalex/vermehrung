@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Felder-blenden"
 date: "2019-09-20"
 title: "Felder ein- und ausblenden"
-sort: 5
+sort: 6
 ---
 
 ### Wieso

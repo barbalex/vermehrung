@@ -17,7 +17,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from 'recharts'
-import { Object } from 'core-js'
+import moment from 'moment'
 
 const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.05);
@@ -184,11 +184,17 @@ const Kultur = ({ row }) => {
   )
   const anLieferungenData = anLieferungen.map(l => {
     const lastZaehlung =
-      [...zaehlungen].reverse().find(z => z.datum < l.datum) || {}
+      sortBy([...zaehlungen, ...zaehlungenGeplant], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
     const lastAnLieferung =
-      [...anLieferungen].reverse().find(z => z.datum < l.datum) || {}
+      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
     const lastAusLieferung =
-      [...ausLieferungen].reverse().find(z => z.datum < l.datum) || {}
+      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
     const allSorted = sortBy(
       [lastZaehlung, lastAnLieferung, lastAusLieferung].filter(o => !!o.datum),
       'datum',
@@ -210,11 +216,17 @@ const Kultur = ({ row }) => {
   })
   const ausLieferungenData = ausLieferungen.map(l => {
     const lastZaehlung =
-      [...zaehlungen].reverse().find(z => z.datum < l.datum) || {}
+      sortBy([...zaehlungen, ...zaehlungenGeplant], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
     const lastAnLieferung =
-      [...anLieferungen].reverse().find(z => z.datum < l.datum) || {}
+      sortBy([...anLieferungen, ...anLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
     const lastAusLieferung =
-      [...ausLieferungen].reverse().find(z => z.datum < l.datum) || {}
+      sortBy([...ausLieferungen, ...ausLieferungGeplantIncluded], 'datum')
+        .reverse()
+        .find(z => z.datum < l.datum) || {}
     const allSorted = sortBy(
       [lastZaehlung, lastAnLieferung, lastAusLieferung].filter(o => !!o.datum),
       'datum',
@@ -310,7 +322,7 @@ const Kultur = ({ row }) => {
           transform="rotate(-35)"
           style={{ fontSize: 13 }}
         >
-          {new Date(payload.value).toLocaleDateString()}
+          {moment(payload.value).format('YYYY.MM.DD')}
         </text>
       </g>
     )
@@ -336,7 +348,7 @@ const Kultur = ({ row }) => {
     if (active) {
       return (
         <Popup>
-          <PTitle>{new Date(label).toLocaleDateString()}</PTitle>
+          <PTitle>{moment(label).format('YYYY.MM.DD')}</PTitle>
           <ul>
             {payload.map((o, i) => {
               // if this payload is last non summable values
