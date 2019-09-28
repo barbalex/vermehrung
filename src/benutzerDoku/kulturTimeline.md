@@ -7,8 +7,10 @@ sort: 4
 ---
 
 ### Ziel
-Ziel 2 der [Projekt-Ziele](/Dokumentation/Benutzer/Ziele/): Übersichten über Pflanzen und auspflanz-bereite Pflanzen.<br/>
-Als Grundlage, um Kulturen und Auspflanzungen zu planen.<br/><br/>
+Ziele 2, 3 und 4 der [Projekt-Ziele](/Dokumentation/Benutzer/Ziele/): Übersichten über Pflanzen, auspflanz-bereite Pflanzen und Mutterpflanzen.<br/>
+Als Grundlage, um Kulturen, Auspflanzungen und Sammlungen zu planen.<br/><br/>
+
+Die Übersicht dokumentiert auch auf einer hohen Ebene die zentralen Vorgänge im Projekt (Projekt-Ziel 5).<br/><br/>
 
 ### Was
 Dargestellt werden primär die Mengen der für die Planung wesentlichen Einheiten:
