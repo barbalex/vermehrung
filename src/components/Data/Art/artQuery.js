@@ -2,6 +2,8 @@ import gql from 'graphql-tag'
 
 import {
   art as artFragment,
+  artZaehlungDoneSums as artZaehlungDoneSumsFragment,
+  artZaehlungPlannedSums as artZaehlungPlannedSumsFragment,
   lieferung as lieferungFragment,
   sammlung as sammlungFragment,
   zaehlung as zaehlungFragment,
@@ -12,14 +14,10 @@ export default gql`
     art(where: { id: { _eq: $id } }) {
       ...ArtFields
       zaehlungsDone: zaehlung_done_sums {
-        datum
-        anzahl_pflanzen
-        anzahl_auspflanzbereit
+        ...ArtZaehlungDoneSumsFields
       }
       zaehlungsPlanned: zaehlung_planned_sums {
-        datum
-        anzahl_pflanzen
-        anzahl_auspflanzbereit
+        ...ArtZaehlungPlannedSumsFields
       }
       sammlungsDone: sammlungs(
         where: { geplant: { _eq: false }, datum: { _is_null: false } }
@@ -60,6 +58,8 @@ export default gql`
     }
   }
   ${artFragment}
+  ${artZaehlungDoneSumsFragment}
+  ${artZaehlungPlannedSumsFragment}
   ${lieferungFragment}
   ${sammlungFragment}
   ${zaehlungFragment}

@@ -2,7 +2,7 @@ drop view if exists v_art_zaehlung_done_sums;
 create or replace view v_art_zaehlung_done_sums as
 select
   k.art_id,
-  z.id,
+  z.id as zaehlung_id,
   z.datum,
   sum(tz.anzahl_pflanzen) over (partition by k.art_id order by z.datum) as anzahl_pflanzen,
   sum(tz.anzahl_auspflanzbereit) over (partition by k.art_id order by z.datum) as anzahl_auspflanzbereit
@@ -22,7 +22,7 @@ drop view if exists v_art_zaehlung_planned_sums;
 create or replace view v_art_zaehlung_planned_sums as
 select
   k.art_id,
-  z.id,
+  z.id as zaehlung_id,
   z.datum,
   sum(tz.anzahl_pflanzen) over (partition by k.art_id order by z.datum) as anzahl_pflanzen,
   sum(tz.anzahl_auspflanzbereit) over (partition by k.art_id order by z.datum) as anzahl_auspflanzbereit

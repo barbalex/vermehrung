@@ -261,3 +261,21 @@ export const zaehlung = gql`
     bemerkungen
   }
 `
+export const artZaehlungDoneSums = gql`
+  fragment ArtZaehlungDoneSumsFields on artZaehlungDoneSums {
+    art_id
+    zaehlung_id
+    datum
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
+  }
+`
+export const artZaehlungPlannedSums = gql`
+  fragment ArtZaehlungPlannedSumsFields on artZaehlungPlannedSums {
+    art_id
+    zaehlung_id
+    datum
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
+  }
+`
