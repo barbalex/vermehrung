@@ -55,32 +55,33 @@ const PTitle = styled.div`
 `
 
 const Kultur = ({ row }) => {
-  const openPlanenDocs = useCallback(() => {
+  const openDocs = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
         'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Zeitachse-Kultur',
       )
   }, [])
-  const zaehlungen = get(row, 'zaehlungs') || []
-  const lastZaehlung = zaehlungen.slice(-1)[0]
-  const zaehlungenGeplantAll = get(row, 'zaehlungsGeplant') || []
-  const zaehlungGeplantIgnored = zaehlungenGeplantAll.filter(zg =>
-    // check if more recent zaehlungen exists
-    zaehlungen.some(z => z.datum >= zg.datum),
+
+  const zaehlungenDone = get(row, 'zaehlungs') || []
+  const lastZaehlungDone = zaehlungenDone.slice(-1)[0]
+  const zaehlungenPlanned = get(row, 'zaehlungsPlanned') || []
+  const zaehlungenPlannedIgnored = zaehlungenPlanned.filter(zg =>
+    // check if more recent zaehlungenDone exists
+    zaehlungenDone.some(z => z.datum >= zg.datum),
   )
-  const zaehlungGeplantIgnoredIds = zaehlungGeplantIgnored.map(l => l.id)
-  let zaehlungenGeplant = zaehlungenGeplantAll.filter(
-    lg => !zaehlungGeplantIgnoredIds.includes(lg.id),
+  const zaehlungPlannedIgnoredIds = zaehlungenPlannedIgnored.map(l => l.id)
+  let zaehlungenPlannedIncluded = zaehlungenPlanned.filter(
+    lg => !zaehlungPlannedIgnoredIds.includes(lg.id),
   )
-  if (zaehlungenGeplant.length) {
-    zaehlungenGeplant = [lastZaehlung, ...zaehlungenGeplant]
+  if (zaehlungenPlannedIncluded.length) {
+    zaehlungenPlannedIncluded = [lastZaehlungDone, ...zaehlungenPlannedIncluded]
   }
   const zaehlungenForLine = sortBy(
-    [...zaehlungen, ...zaehlungenGeplant],
+    [...zaehlungenDone, ...zaehlungenPlannedIncluded],
     'datum',
   )
-  // TODO: need to add last zaehlung to zaehlungenGeplant to connect lines
-  const zaehlungenData = zaehlungen.map(l => {
+  // TODO: need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
+  const zaehlungenDoneData = zaehlungenDone.map(l => {
     const teilzaehlungs = get(l, 'teilzaehlungs')
 
     return {
@@ -106,7 +107,7 @@ const Kultur = ({ row }) => {
       'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
     }
   })
-  const zaehlungenGeplantData = zaehlungenGeplant.map(l => {
+  const zaehlungenPlannedData = zaehlungenPlannedIncluded.map(l => {
     const teilzaehlungs = get(l, 'teilzaehlungs')
 
     return {
@@ -132,7 +133,7 @@ const Kultur = ({ row }) => {
       'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
     }
   })
-  const zaehlungenGeplantIgnoredData = zaehlungGeplantIgnored.map(l => {
+  const zaehlungenPlannedIgnoredData = zaehlungenPlannedIgnored.map(l => {
     const teilzaehlungs = get(l, 'teilzaehlungs')
 
     return {
@@ -159,46 +160,47 @@ const Kultur = ({ row }) => {
     }
   })
   const zaehlungenDataGroupedByDatum = groupBy(
-    [...zaehlungenData, ...zaehlungenGeplantData],
+    [...zaehlungenDoneData, ...zaehlungenPlannedData],
     'datum',
   )
-  const zaehlungenDataCombined = Object.entries(
+  const zaehlungenData = Object.entries(
     zaehlungenDataGroupedByDatum,
     // eslint-disable-next-line no-unused-vars
   ).map(([key, value]) => Object.assign({}, ...value))
 
   const anLieferungen = get(row, 'anLieferungs') || []
-  const anLieferungenGeplant = get(row, 'anLieferungsGeplant') || []
-  const anLieferungGeplantIgnored = anLieferungenGeplant.filter(lg =>
+  const anLieferungenPlanned = get(row, 'anLieferungsPlanned') || []
+  const anLieferungPlannedIgnored = anLieferungenPlanned.filter(lg =>
     // check if more recent anLieferungen exists
     anLieferungen.some(lu => lu.datum >= lg.datum),
   )
-  const anLieferungGeplantIgnoredIds = anLieferungGeplantIgnored.map(l => l.id)
-  const anLieferungGeplantIncluded = anLieferungenGeplant.filter(
-    lg => !anLieferungGeplantIgnoredIds.includes(lg.id),
+  const anLieferungPlannedIgnoredIds = anLieferungPlannedIgnored.map(l => l.id)
+  const anLieferungPlannedIncluded = anLieferungenPlanned.filter(
+    lg => !anLieferungPlannedIgnoredIds.includes(lg.id),
   )
   const anLieferungenForLine = sortBy(
-    [...anLieferungen, ...anLieferungGeplantIncluded],
+    [...anLieferungen, ...anLieferungPlannedIncluded],
     'datum',
   )
   const ausLieferungen = get(row, 'ausLieferungs') || []
-  const ausLieferungenGeplant = get(row, 'ausLieferungsGeplant') || []
-  const ausLieferungGeplantIgnored = ausLieferungenGeplant.filter(lg =>
+  const ausLieferungenPlanned = get(row, 'ausLieferungsPlanned') || []
+  const ausLieferungPlannedIgnored = ausLieferungenPlanned.filter(lg =>
     // check if more recent ausLieferungen exists
     ausLieferungen.some(l => l.datum >= lg.datum),
   )
-  const ausLieferungGeplantIgnoredIds = ausLieferungGeplantIgnored.map(
+  const ausLieferungPlannedIgnoredIds = ausLieferungPlannedIgnored.map(
     l => l.id,
   )
-  const ausLieferungGeplantIncluded = ausLieferungenGeplant.filter(
-    lg => !ausLieferungGeplantIgnoredIds.includes(lg.id),
+  const ausLieferungPlannedIncluded = ausLieferungenPlanned.filter(
+    lg => !ausLieferungPlannedIgnoredIds.includes(lg.id),
   )
   const ausLieferungenForLine = sortBy(
-    [...ausLieferungen, ...ausLieferungGeplantIncluded],
+    [...ausLieferungen, ...ausLieferungPlannedIncluded],
     'datum',
   )
   const anLieferungenData = anLieferungen.map(l => {
-    // 1. previous Zaehlung is basis. If none, take 0
+    // 1. previous Zaehlung is basis
+    // If none, pretend this is first zaehlung
     const previousZaehlung = zaehlungenForLine
       .reverse()
       .find(z => z.datum < l.datum) || {
@@ -231,7 +233,7 @@ const Kultur = ({ row }) => {
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
       'Lieferung Bemerkungen': l.bemerkungen,
     }
-    if (l.datum < lastZaehlung.datum) {
+    if (l.datum < lastZaehlungDone.datum) {
       data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
       data['Zählung Pflanzen auspflanzbereit'] =
         sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
@@ -276,7 +278,7 @@ const Kultur = ({ row }) => {
       'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
       'Lieferung Bemerkungen': l.bemerkungen,
     }
-    if (l.datum < lastZaehlung.datum) {
+    if (l.datum < lastZaehlungDone.datum) {
       data['Zählung Pflanzen'] =
         max([sumAnzahlPflanzen, l.anzahl_pflanzen]) - l.anzahl_pflanzen
       data['Zählung Pflanzen auspflanzbereit'] =
@@ -291,7 +293,7 @@ const Kultur = ({ row }) => {
     }
     return data
   })
-  const anLieferungenGeplantData = anLieferungGeplantIncluded.map(l => ({
+  const anLieferungenPlannedData = anLieferungPlannedIncluded.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant': l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant': l.anzahl_auspflanzbereit,
@@ -300,7 +302,7 @@ const Kultur = ({ row }) => {
     'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
     'Lieferung Bemerkungen': l.bemerkungen,
   }))
-  const anLieferungenGeplantIgnoredData = anLieferungGeplantIgnored.map(l => ({
+  const anLieferungenPlannedIgnoredData = anLieferungPlannedIgnored.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
@@ -310,7 +312,7 @@ const Kultur = ({ row }) => {
     'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
     'Lieferung Bemerkungen': l.bemerkungen,
   }))
-  const ausLieferungenGeplantData = ausLieferungGeplantIncluded.map(l => ({
+  const ausLieferungenPlannedData = ausLieferungPlannedIncluded.map(l => ({
     datum: new Date(l.datum).getTime(),
     'Lieferung Pflanzen geplant': -l.anzahl_pflanzen,
     'Lieferung Pflanzen auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
@@ -319,7 +321,7 @@ const Kultur = ({ row }) => {
     'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
     'Lieferung Bemerkungen': l.bemerkungen,
   }))
-  const ausLieferungenGeplantIgnoredData = ausLieferungGeplantIgnored.map(
+  const ausLieferungenPlannedIgnoredData = ausLieferungPlannedIgnored.map(
     l => ({
       datum: new Date(l.datum).getTime(),
       'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
@@ -334,21 +336,21 @@ const Kultur = ({ row }) => {
   /*console.log('Timeline:', {
     anLieferungenData,
     ausLieferungenData,
-    anLieferungenGeplantData,
-    ausLieferungenGeplantData,
-    zaehlungenDataCombined,
+    anLieferungenPlannedData,
+    ausLieferungenPlannedData,
+    zaehlungenData,
   })*/
 
   const allData = sortBy(
     [
       ...anLieferungenData,
       ...ausLieferungenData,
-      ...anLieferungenGeplantData,
-      ...anLieferungenGeplantIgnoredData,
-      ...ausLieferungenGeplantData,
-      ...ausLieferungenGeplantIgnoredData,
-      ...zaehlungenDataCombined,
-      ...zaehlungenGeplantIgnoredData,
+      ...anLieferungenPlannedData,
+      ...anLieferungenPlannedIgnoredData,
+      ...ausLieferungenPlannedData,
+      ...ausLieferungenPlannedIgnoredData,
+      ...zaehlungenData,
+      ...zaehlungenPlannedIgnoredData,
     ],
     'datum',
   )
@@ -467,6 +469,9 @@ const Kultur = ({ row }) => {
   if (!row) return null
   if (!allData.length) return null
 
+  // need to disable animation or labels will not show on first render
+  // https://github.com/recharts/recharts/issues/806
+
   return (
     <ErrorBoundary>
       <TitleRow>
@@ -475,7 +480,7 @@ const Kultur = ({ row }) => {
           <IconButton
             aria-label="Anleitung öffnen"
             title="Anleitung öffnen"
-            onClick={openPlanenDocs}
+            onClick={openDocs}
           >
             <IoMdInformationCircleOutline />
           </IconButton>
@@ -511,6 +516,7 @@ const Kultur = ({ row }) => {
             dataKey="Zählung Pflanzen"
             stroke="#4a148c"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="monotone"
@@ -518,6 +524,7 @@ const Kultur = ({ row }) => {
             dataKey="Zählung Pflanzen auspflanzbereit"
             stroke="#01792D"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="monotone"
@@ -525,6 +532,7 @@ const Kultur = ({ row }) => {
             dataKey="Zählung Mutterpflanzen"
             stroke="#F91F3F"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="monotone"
@@ -532,6 +540,7 @@ const Kultur = ({ row }) => {
             dataKey="Zählung Pflanzen geplant"
             stroke="#d8d8f3"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="basis"
@@ -539,6 +548,7 @@ const Kultur = ({ row }) => {
             legendType="circle"
             stroke="#d8d8f3"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="monotone"
@@ -546,6 +556,7 @@ const Kultur = ({ row }) => {
             dataKey="Zählung Pflanzen auspflanzbereit geplant"
             stroke="#dbf0e3"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="basis"
@@ -553,6 +564,7 @@ const Kultur = ({ row }) => {
             legendType="circle"
             stroke="#dbf0e3"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="monotone"
@@ -560,6 +572,7 @@ const Kultur = ({ row }) => {
             dataKey="Zählung Mutterpflanzen geplant"
             stroke="#FCAFBB"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Line
             type="basis"
@@ -567,35 +580,42 @@ const Kultur = ({ row }) => {
             legendType="circle"
             stroke="#FCAFBB"
             label={<LabelZaehlung />}
+            isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen"
             fill="#4a148c"
             label={<LabelLieferung />}
+            isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen geplant"
             fill="#d8d8f3"
             label={<LabelLieferung />}
+            isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen geplant, ignoriert"
             label={<LabelLieferung />}
+            isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit"
             fill="#01792D"
             label={<LabelLieferung />}
+            isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit geplant"
             fill="#dbf0e3"
             label={<LabelLieferung />}
+            isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit geplant, ignoriert"
             fill="#707070"
             label={<LabelLieferung />}
+            isAnimationActive={false}
           />
         </ComposedChart>
       </ResponsiveContainer>

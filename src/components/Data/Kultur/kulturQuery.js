@@ -34,7 +34,7 @@ export default gql`
       ) {
         ...LieferungFields
       }
-      ausLieferungsGeplant: lieferungsByVonKulturId(
+      ausLieferungsPlanned: lieferungsByVonKulturId(
         where: { geplant: { _eq: true }, datum: { _is_null: false } }
         order_by: { datum: asc }
       ) {
@@ -46,7 +46,7 @@ export default gql`
       ) {
         ...LieferungFields
       }
-      anLieferungsGeplant: lieferungsByNachKulturId(
+      anLieferungsPlanned: lieferungsByNachKulturId(
         where: { geplant: { _eq: true }, datum: { _is_null: false } }
         order_by: { datum: asc }
       ) {
@@ -73,7 +73,7 @@ export default gql`
           bemerkungen
         }
       }
-      zaehlungsGeplant: zaehlungs(
+      zaehlungsPlanned: zaehlungs(
         where: { geplant: { _eq: true }, datum: { _is_null: false } }
         order_by: { datum: asc }
       ) {
