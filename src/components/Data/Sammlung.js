@@ -8,6 +8,8 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import IconButton from '@material-ui/core/IconButton'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
@@ -19,6 +21,7 @@ import TextField from '../shared/TextField'
 import DateFieldWithPicker from '../shared/DateFieldWithPicker'
 import FormTitle from '../shared/FormTitle'
 import FilterTitle from '../shared/FilterTitle'
+import Checkbox2States from '../shared/Checkbox2States'
 import {
   sammlung as sammlungFragment,
   art as artFragment,
@@ -206,6 +209,10 @@ const Sammlung = ({ filter: showFilter }) => {
     },
     [client, filter, refetch, row, showFilter],
   )
+  const openPlanenDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
+  }, [])
 
   if (loading) {
     return (
@@ -335,6 +342,25 @@ const Sammlung = ({ filter: showFilter }) => {
               error={errors.von_anzahl_individuen}
               type="number"
             />
+          </FieldRow>
+          <FieldRow>
+            <Checkbox2States
+              key={`${row.id}geplant`}
+              label="Geplant"
+              name="geplant"
+              value={row.geplant}
+              saveToDb={saveToDb}
+              error={errors.geplant}
+            />
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openPlanenDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
           </FieldRow>
           <TextField
             key={`${row.id}bemerkungen`}
