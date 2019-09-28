@@ -2,7 +2,7 @@ import React from 'react'
 
 const LabelLieferung = ({ x, y, stroke, value }) => (
   <text
-    x={x + 4}
+    x={x + 3}
     y={y}
     dy={value > 0 ? -3 : 12}
     fill={stroke}
