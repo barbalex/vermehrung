@@ -21,6 +21,11 @@ import moment from 'moment'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 
+import CustomTooltip from './Tooltip'
+import LabelLieferung from './LabelLieferung'
+import LabelZaehlung from './LabelZaehlung'
+import CustomAxisTick from './CustomAxisTick'
+
 const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.05);
   flex-shrink: 0;
@@ -37,20 +42,6 @@ const Title = styled.div`
   font-weight: bold;
   margin-top: auto;
   margin-bottom: auto;
-`
-const Popup = styled.div`
-  background-color: white;
-  border: 1px solid rgba(74, 20, 140, 0.9);
-  opacity: 0.8;
-  padding: 8px;
-`
-const PRow = styled.div`
-  font-size: 0.8em;
-  font-weight: 400;
-`
-const PTitle = styled.div`
-  font-size: 0.8em;
-  font-weight: 800;
 `
 
 const Kultur = ({ row }) => {
@@ -354,117 +345,6 @@ const Kultur = ({ row }) => {
     'datum',
   )
 
-  const renderCustomAxisTick = ({ x, y, payload }) => {
-    return (
-      <g transform={`translate(${x},${y})`}>
-        <text
-          x={0}
-          y={0}
-          dy={16}
-          textAnchor="end"
-          fill="#666"
-          transform="rotate(-35)"
-          style={{ fontSize: 12 }}
-        >
-          {moment(payload.value).format('YYYY.MM.DD')}
-        </text>
-      </g>
-    )
-  }
-  const LabelZaehlung = ({ x, y, stroke, value }) => (
-    <text x={x} y={y} dy={-5} fill={stroke} fontSize={10} textAnchor="middle">
-      {value}
-    </text>
-  )
-  const LabelLieferung = ({ x, y, stroke, value }) => (
-    <text
-      x={x + 3}
-      y={y}
-      dy={12}
-      fill={stroke}
-      fontSize={10}
-      textAnchor="middle"
-    >
-      {value}
-    </text>
-  )
-  const CustomTooltip = ({ payload, label, active }) => {
-    if (active) {
-      return (
-        <Popup>
-          <PTitle>{moment(label).format('YYYY.MM.DD')}</PTitle>
-          {payload.map((o, i) => {
-            // if this payload is last non summable values
-            if (i === payload.length - 1) {
-              return (
-                <div key={`${o.dataKey}0`}>
-                  <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
-                  {o.payload['Lieferung Gramm Samen'] && (
-                    <PRow key={`${o.dataKey}1`}>{`Lieferung Gramm Samen: ${
-                      o.payload['Lieferung Gramm Samen']
-                    }`}</PRow>
-                  )}
-                  {o.payload['Zählung andere Mengen'] && (
-                    <PRow key={`${o.dataKey}2`}>{`Zählung andere Mengen: ${
-                      o.payload['Zählung andere Mengen']
-                    }`}</PRow>
-                  )}
-                  {o.payload['Lieferung andere Mengen'] && (
-                    <PRow key={`${o.dataKey}3`}>{`Lieferung andere Mengen: ${
-                      o.payload['Lieferung andere Mengen']
-                    }`}</PRow>
-                  )}
-                  {o.payload['Lieferung von Anzahl Individuen'] && (
-                    <PRow
-                      key={`${o.dataKey}4`}
-                    >{`Lieferung von Anzahl Individuen: ${
-                      o.payload['Lieferung von Anzahl Individuen']
-                    }`}</PRow>
-                  )}
-                  {o.payload[
-                    'Zählung Beschreibung auspflanzbereite Pflanzen'
-                  ] && (
-                    <PRow
-                      key={`${o.dataKey}5`}
-                    >{`Zählung Beschreibung auspflanzbereite Pflanzen: ${
-                      o.payload[
-                        'Zählung Beschreibung auspflanzbereite Pflanzen'
-                      ]
-                    }`}</PRow>
-                  )}
-                  {o.payload[
-                    'Lieferung Beschreibung auspflanzbereite Pflanzen'
-                  ] && (
-                    <PRow
-                      key={`${o.dataKey}6`}
-                    >{`Lieferung Beschreibung auspflanzbereite Pflanzen: ${
-                      o.payload[
-                        'Lieferung Beschreibung auspflanzbereite Pflanzen'
-                      ]
-                    }`}</PRow>
-                  )}
-                  {o.payload['Zählung Bemerkungen'] && (
-                    <PRow key={`${o.dataKey}7`}>{`Zählung Bemerkungen: ${
-                      o.payload['Zählung Bemerkungen']
-                    }`}</PRow>
-                  )}
-                  {o.payload['Lieferung Bemerkungen'] && (
-                    <PRow key={`${o.dataKey}8`}>{`Lieferung Bemerkungen: ${
-                      o.payload['Lieferung Bemerkungen']
-                    }`}</PRow>
-                  )}
-                </div>
-              )
-            }
-            return <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
-          })}
-        </Popup>
-      )
-    }
-
-    return null
-  }
-
   if (!row) return null
   if (!allData.length) return null
 
@@ -491,7 +371,7 @@ const Kultur = ({ row }) => {
           margin={{ top: 5, right: 0, left: 0, bottom: 45 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="datum" tick={renderCustomAxisTick} />
+          <XAxis dataKey="datum" tick={CustomAxisTick} />
           <YAxis
             label={{
               value: 'Anzahl',
