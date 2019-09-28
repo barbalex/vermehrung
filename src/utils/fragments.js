@@ -218,6 +218,7 @@ export const sammlung = gql`
     anzahl_pflanzen
     gramm_samen
     andere_menge
+    geplant
     bemerkungen
   }
 `
