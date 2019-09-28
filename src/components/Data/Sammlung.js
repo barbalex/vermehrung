@@ -44,8 +44,12 @@ const FieldsContainer = styled.div`
 `
 const FieldRow = styled.div`
   display: flex;
+  justify-content: space-between;
   > div:not(:last-of-type) {
     padding-right: 8px;
+  }
+  > div > button {
+    margin-top: 8px;
   }
 `
 
