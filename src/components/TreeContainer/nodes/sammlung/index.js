@@ -16,8 +16,9 @@ export default ({ nodes, data }) => {
         const date = datum
           ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
+        const geplant = el.geplant ? ' geplant' : ''
         const label = `${el.nr ||
-          '(keine Nr)'}, ${date}: Herkunft ${herkunft}, ${person}; ${art}`
+          '(keine Nr)'}, ${date}: Herkunft ${herkunft}, ${person}; ${art}${geplant}`
 
         return {
           nodeType: 'table',

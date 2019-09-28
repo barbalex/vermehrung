@@ -18,6 +18,10 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
+        const geplant = el.geplant ? ' geplant' : ''
+        const label = `${datum}: ${get(el, 'herkunft.gemeinde') ||
+          '(keine Gemeinde)'}, ${get(el, 'herkunft.nr') ||
+          '(keine Nr.)'}${geplant}`
 
         return {
           nodeType: 'table',
@@ -25,8 +29,7 @@ export default ({ nodes, data, url }) => {
           table: 'sammlung',
           id: `art${artId}Sammlung${el.id}`,
           parentId: `art${artId}SammlungFolder`,
-          label: `${datum}: ${get(el, 'herkunft.gemeinde') ||
-            '(keine Gemeinde)'}, ${get(el, 'herkunft.nr') || '(keine Nr.)'}`,
+          label,
           url: ['Arten', artId, 'Sammlungen', el.id],
           hasChildren: true,
         }
