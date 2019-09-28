@@ -77,6 +77,9 @@ const FieldsContainer = styled.div`
 const FieldRow = styled.div`
   display: flex;
   justify-content: space-between;
+  > div > button {
+    margin-top: 8px;
+  }
 `
 
 const zaehlungQuery = gql`
@@ -289,10 +292,12 @@ const Zaehlung = ({ filter: showFilter }) => {
             <TitleContainer>
               <Title>Zählung</Title>
               <TitleSymbols>
-                <Settings
-                  kulturId={row.kultur_id}
-                  zaehlungResult={zaehlungResult}
-                />
+                {row.kultur_id && (
+                  <Settings
+                    kulturId={row.kultur_id}
+                    zaehlungResult={zaehlungResult}
+                  />
+                )}
                 {(store.filter.show || isFiltered) && (
                   <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
                 )}

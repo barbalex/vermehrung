@@ -114,10 +114,12 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
         <TitleRow>
           <Title>{title}</Title>
           <div>
-            <Settings
-              kulturId={zaehlung.kultur_id}
-              zaehlungResult={zaehlungResult}
-            />
+            {zaehlung.kultur_id && (
+              <Settings
+                kulturId={zaehlung.kultur_id}
+                zaehlungResult={zaehlungResult}
+              />
+            )}
             {showNew && (
               <IconButton
                 aria-label="Neu"

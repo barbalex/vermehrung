@@ -77,6 +77,9 @@ const FieldsContainer = styled.div`
 const FieldRow = styled.div`
   display: flex;
   justify-content: space-between;
+  > div > button {
+    margin-top: 8px;
+  }
 `
 
 const aufgabeQuery = gql`
@@ -339,10 +342,12 @@ const Aufgabe = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Aufgabe</Title>
             <TitleSymbols>
-              <Settings
-                kulturId={row.kultur_id}
-                aufgabeResult={aufgabeResult}
-              />
+              {row.kultur_id && (
+                <Settings
+                  kulturId={row.kultur_id}
+                  aufgabeResult={aufgabeResult}
+                />
+              )}
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

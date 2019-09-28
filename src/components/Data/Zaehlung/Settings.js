@@ -42,7 +42,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
   const zaehlung = get(data, 'zaehlung', [{}])[0]
   const { z_geplant, z_bemerkungen } =
     get(zaehlung, 'kultur.kultur_felder') || {}
-  const kulturId = get(zaehlung, 'kultur.id')
+  const kulturId = zaehlung.kultur_id
 
   const saveToDb = useCallback(
     async event => {

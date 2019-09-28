@@ -67,6 +67,9 @@ const FieldRow = styled.div`
   > div:not(:last-of-type) {
     padding-right: 8px;
   }
+  > div > button {
+    margin-top: 8px;
+  }
 `
 const Herkunft = styled.div`
   height: 54px;
