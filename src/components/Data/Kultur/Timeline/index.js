@@ -19,6 +19,7 @@ import {
 } from 'recharts'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
+import { observer } from 'mobx-react-lite'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
@@ -589,4 +590,4 @@ const Kultur = ({ row }) => {
   )
 }
 
-export default Kultur
+export default observer(Kultur)
