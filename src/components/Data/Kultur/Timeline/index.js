@@ -477,78 +477,6 @@ const Kultur = ({ row }) => {
             wrapperStyle={{ right: -10, bottom: 12, fontSize: 12 }}
           />
           <ReferenceLine y={0} stroke="#000" />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen"
-            stroke="#4a148c"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen geplant"
-            stroke="#d8d8f3"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="basis"
-            dataKey="Zählung Pflanzen geplant, ignoriert"
-            legendType="circle"
-            stroke="#d8d8f3"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit"
-            stroke="#01792D"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit geplant"
-            stroke="#dbf0e3"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="basis"
-            dataKey="Zählung Pflanzen auspflanzbereit geplant, ignoriert"
-            legendType="circle"
-            stroke="#dbf0e3"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Mutterpflanzen"
-            stroke="#F91F3F"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Mutterpflanzen geplant"
-            stroke="#FCAFBB"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="basis"
-            dataKey="Zählung Mutterpflanzen geplant, ignoriert"
-            legendType="circle"
-            stroke="#FCAFBB"
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
           <Bar
             dataKey="Lieferung Pflanzen"
             fill="#4a148c"
@@ -557,31 +485,113 @@ const Kultur = ({ row }) => {
           />
           <Bar
             dataKey="Lieferung Pflanzen geplant"
-            fill="#d8d8f3"
+            fill="#b1b1e7"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen geplant, ignoriert"
+            fill="#ebebf9"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit"
-            fill="#01792D"
+            fill="#016526"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit geplant"
-            fill="#dbf0e3"
+            fill="#02e355"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit geplant, ignoriert"
-            fill="#707070"
+            fill="#e6ffef"
             label={<LabelLieferung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Pflanzen"
+            stroke="#4a148c"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Pflanzen geplant"
+            stroke="#b1b1e7"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="basis"
+            dataKey="Zählung Pflanzen geplant, ignoriert"
+            legendType="circle"
+            stroke="#ebebf9"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Pflanzen auspflanzbereit"
+            stroke="#016526"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Pflanzen auspflanzbereit geplant"
+            stroke="#02e355"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="basis"
+            dataKey="Zählung Pflanzen auspflanzbereit geplant, ignoriert"
+            legendType="circle"
+            stroke="#e6ffef"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Mutterpflanzen"
+            stroke="#cc0000"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Mutterpflanzen geplant"
+            stroke="#ffb3b3"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="basis"
+            dataKey="Zählung Mutterpflanzen geplant, ignoriert"
+            legendType="circle"
+            stroke="#ffe6e6"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
             isAnimationActive={false}
           />
         </ComposedChart>
