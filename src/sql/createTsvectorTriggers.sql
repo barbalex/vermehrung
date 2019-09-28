@@ -95,6 +95,10 @@ create function sammlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.andere_menge, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.gramm_samen::text, '')), 'A') || ' ' ||
+      case
+        when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
+        else setweight(to_tsvector('simple', 'geplant'), 'A')
+      end || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
@@ -248,6 +252,10 @@ create function zaehlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('german', coalesce(mengen_beschrieben, '')), 'C') || ' ' ||
       setweight(to_tsvector('german', coalesce(auspflanzbereit_beschreibungen, '')), 'C') || ' ' ||
+      case
+        when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
+        else setweight(to_tsvector('simple', 'geplant'), 'A')
+      end || ' ' ||
       setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
@@ -372,6 +380,10 @@ create function aufgabe_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
+      case
+        when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
+        else setweight(to_tsvector('simple', 'geplant'), 'A')
+      end || ' ' ||
       setweight(to_tsvector('german', coalesce(new.aufgabe, '')), 'A');
     return new;
   end
