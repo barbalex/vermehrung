@@ -38,8 +38,9 @@ Als Grundlage werden verwendet:
 - Anzahlen aus durchgeführten Zählungen
 - Anzahlen aus geplanten Zählungen. Aber nur, wenn sie nach der letzten durchgeführten Zählung geplant sind
 - Anzahlen aus durchgeführten Lieferungen:<br/>
-  Basis sind die Anzahlen aus letzten zuvor durchgeführten Zählung.<br/>
-  Dazu wird summiert, was in der Zwischenzeit geliefert wurde
+  Referenz sind die Anzahlen aus letzten zuvor durchgeführten Zählung.<br/>
+  Erfolgte die Lieferung vor der ersten Zählung, wird als Referenz für alle Einheiten die Anzahl 0 verwendet.<br/>
+  Zur Referenz wird summiert, was in der Zwischenzeit geliefert wurde.
 - Anzahlen aus geplanten Lieferungen, die nach der letzten durchgeführten Zählung geplant sind
 
 Linien, die geplante Anzahlen darstellen, verwenden dieselbe Farbe wie die Linie für die entsprechende Einheit bei durchgeführten Zählungen. Aber etwas aufgehellt.<br/><br/>
