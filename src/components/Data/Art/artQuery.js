@@ -11,6 +11,16 @@ export default gql`
   query ArtQuery($id: bigint!, $filter: art_bool_exp!, $isFiltered: Boolean!) {
     art(where: { id: { _eq: $id } }) {
       ...ArtFields
+      zaehlungsDone: zaehlung_done_sums {
+        datum
+        anzahl_pflanzen
+        anzahl_auspflanzbereit
+      }
+      zaehlungsPlanned: zaehlung_planned_sums {
+        datum
+        anzahl_pflanzen
+        anzahl_auspflanzbereit
+      }
       sammlungsDone: sammlungs(
         where: { geplant: { _eq: false }, datum: { _is_null: false } }
         order_by: { datum: asc }
@@ -40,35 +50,6 @@ export default gql`
         }
       ) {
         ...LieferungFields
-      }
-      kulturs {
-        id
-        zaehlungsDone: zaehlungs(
-          where: { geplant: { _eq: false }, datum: { _is_null: false } }
-        ) {
-          ...ZaehlungFields
-          teilzaehlungs_aggregate {
-            aggregate {
-              sum {
-                anzahl_pflanzen
-                anzahl_auspflanzbereit
-              }
-            }
-          }
-        }
-        zaehlungsPlanned: zaehlungs(
-          where: { geplant: { _eq: true }, datum: { _is_null: false } }
-        ) {
-          ...ZaehlungFields
-          teilzaehlungs_aggregate {
-            aggregate {
-              sum {
-                anzahl_pflanzen
-                anzahl_auspflanzbereit
-              }
-            }
-          }
-        }
       }
     }
     rowsUnfiltered: art @include(if: $isFiltered) {
