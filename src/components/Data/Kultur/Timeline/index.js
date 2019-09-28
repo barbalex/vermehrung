@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -71,101 +71,135 @@ const Kultur = ({ row }) => {
     'datum',
   )
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
-  const zaehlungenDoneData = zaehlungenDone.map(l => {
-    const teilzaehlungs = get(l, 'teilzaehlungs')
+  const zaehlungenDoneData = useMemo(
+    () =>
+      zaehlungenDone.map(l => {
+        const teilzaehlungs = get(l, 'teilzaehlungs')
 
-    return {
-      datum: new Date(l.datum).getTime(),
-      'Zählung Pflanzen': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-      ),
-      'Zählung Pflanzen auspflanzbereit': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-      ),
-      'Zählung Mutterpflanzen': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-      ),
-      'Zählung andere Mengen': teilzaehlungs
-        .map(t => t.andere_menge)
-        .join(', '),
-      'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
-        .map(t => t.auspflanzbereit_beschreibung)
-        .join(', '),
-      'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
-    }
-  })
-  const zaehlungenPlannedIncludedData = zaehlungenPlannedIncluded.map(l => {
-    const teilzaehlungs = get(l, 'teilzaehlungs')
-
-    return {
-      datum: new Date(l.datum).getTime(),
-      'Zählung Pflanzen geplant': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-      ),
-      'Zählung Pflanzen auspflanzbereit geplant': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-      ),
-      'Zählung Mutterpflanzen geplant': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-      ),
-      'Zählung andere Mengen': teilzaehlungs
-        .map(t => t.andere_menge)
-        .join(', '),
-      'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
-        .map(t => t.auspflanzbereit_beschreibung)
-        .join(', '),
-      'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
-    }
-  })
-  const zaehlungenPlannedIgnoredData = zaehlungenPlannedIgnored.map(l => {
-    const teilzaehlungs = get(l, 'teilzaehlungs')
-
-    return {
-      datum: new Date(l.datum).getTime(),
-      'Zählung Pflanzen geplant, ignoriert': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-      ),
-      'Zählung Pflanzen auspflanzbereit geplant, ignoriert': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-      ),
-      'Zählung Mutterpflanzen geplant, ignoriert': get(
-        l,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-      ),
-      'Zählung andere Mengen': teilzaehlungs
-        .map(t => t.andere_menge)
-        .join(', '),
-      'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
-        .map(t => t.auspflanzbereit_beschreibung)
-        .join(', '),
-      'Zählung Bemerkungen': teilzaehlungs.map(t => t.bemerkungen).join(', '),
-    }
-  })
-  const zaehlungenDataGroupedByDatum = groupBy(
-    [...zaehlungenDoneData, ...zaehlungenPlannedIncludedData],
-    'datum',
+        return {
+          datum: new Date(l.datum).getTime(),
+          'Zählung Pflanzen': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+          ),
+          'Zählung Pflanzen auspflanzbereit': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+          ),
+          'Zählung Mutterpflanzen': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+          ),
+          'Zählung andere Mengen': teilzaehlungs
+            .map(t => t.andere_menge)
+            .join(', '),
+          'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+            .map(t => t.auspflanzbereit_beschreibung)
+            .join(', '),
+          'Zählung Bemerkungen': teilzaehlungs
+            .map(t => t.bemerkungen)
+            .join(', '),
+        }
+      }),
+    [zaehlungenDone],
   )
-  const zaehlungenData = Object.entries(
-    zaehlungenDataGroupedByDatum,
-    // eslint-disable-next-line no-unused-vars
-  ).map(([key, value]) => Object.assign({}, ...value))
+  const zaehlungenPlannedIncludedData = useMemo(
+    () =>
+      zaehlungenPlannedIncluded.map(l => {
+        const teilzaehlungs = get(l, 'teilzaehlungs')
+
+        return {
+          datum: new Date(l.datum).getTime(),
+          'Zählung Pflanzen geplant': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+          ),
+          'Zählung Pflanzen auspflanzbereit geplant': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+          ),
+          'Zählung Mutterpflanzen geplant': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+          ),
+          'Zählung andere Mengen': teilzaehlungs
+            .map(t => t.andere_menge)
+            .join(', '),
+          'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+            .map(t => t.auspflanzbereit_beschreibung)
+            .join(', '),
+          'Zählung Bemerkungen': teilzaehlungs
+            .map(t => t.bemerkungen)
+            .join(', '),
+        }
+      }),
+    [zaehlungenPlannedIncluded],
+  )
+  const zaehlungenPlannedIgnoredData = useMemo(
+    () =>
+      zaehlungenPlannedIgnored.map(l => {
+        const teilzaehlungs = get(l, 'teilzaehlungs')
+
+        return {
+          datum: new Date(l.datum).getTime(),
+          'Zählung Pflanzen geplant, ignoriert': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+          ),
+          'Zählung Pflanzen auspflanzbereit geplant, ignoriert': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+          ),
+          'Zählung Mutterpflanzen geplant, ignoriert': get(
+            l,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
+          ),
+          'Zählung andere Mengen': teilzaehlungs
+            .map(t => t.andere_menge)
+            .join(', '),
+          'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
+            .map(t => t.auspflanzbereit_beschreibung)
+            .join(', '),
+          'Zählung Bemerkungen': teilzaehlungs
+            .map(t => t.bemerkungen)
+            .join(', '),
+        }
+      }),
+    [zaehlungenPlannedIgnored],
+  )
+  const zaehlungenDataGroupedByDatum = useMemo(
+    () =>
+      groupBy(
+        [...zaehlungenDoneData, ...zaehlungenPlannedIncludedData],
+        'datum',
+      ),
+    [zaehlungenDoneData, zaehlungenPlannedIncludedData],
+  )
+  const zaehlungenData = useMemo(
+    () =>
+      Object.entries(
+        zaehlungenDataGroupedByDatum,
+        // eslint-disable-next-line no-unused-vars
+      ).map(([key, value]) => Object.assign({}, ...value)),
+    [zaehlungenDataGroupedByDatum],
+  )
 
   const anLieferungenDone = get(row, 'anLieferungs') || []
   const anLieferungenPlanned = get(row, 'anLieferungsPlanned') || []
-  const anLieferungPlannedIgnored = anLieferungenPlanned.filter(lg =>
-    // check if more recent anLieferungenDone exists
-    anLieferungenDone.some(lu => lu.datum >= lg.datum),
+  const anLieferungPlannedIgnored = useMemo(
+    () =>
+      anLieferungenPlanned.filter(lg =>
+        // check if more recent anLieferungenDone exists
+        anLieferungenDone.some(lu => lu.datum >= lg.datum),
+      ),
+    [anLieferungenDone, anLieferungenPlanned],
   )
-  const anLieferungPlannedIncluded = anLieferungenPlanned.filter(
-    lg => !anLieferungPlannedIgnored.map(l => l.id).includes(lg.id),
+  const anLieferungPlannedIncluded = useMemo(
+    () =>
+      anLieferungenPlanned.filter(
+        lg => !anLieferungPlannedIgnored.map(l => l.id).includes(lg.id),
+      ),
+    [anLieferungPlannedIgnored, anLieferungenPlanned],
   )
   const anLieferungenForLine = sortBy(
     [...anLieferungenDone, ...anLieferungPlannedIncluded],
@@ -173,175 +207,229 @@ const Kultur = ({ row }) => {
   )
   const ausLieferungenDone = get(row, 'ausLieferungs') || []
   const ausLieferungenPlanned = get(row, 'ausLieferungsPlanned') || []
-  const ausLieferungPlannedIgnored = ausLieferungenPlanned.filter(lg =>
-    // check if more recent ausLieferungenDone exists
-    ausLieferungenDone.some(l => l.datum >= lg.datum),
+  const ausLieferungPlannedIgnored = useMemo(
+    () =>
+      ausLieferungenPlanned.filter(lg =>
+        // check if more recent ausLieferungenDone exists
+        ausLieferungenDone.some(l => l.datum >= lg.datum),
+      ),
+    [ausLieferungenDone, ausLieferungenPlanned],
   )
-  const ausLieferungPlannedIgnoredIds = ausLieferungPlannedIgnored.map(
-    l => l.id,
-  )
-  const ausLieferungPlannedIncluded = ausLieferungenPlanned.filter(
-    lg => !ausLieferungPlannedIgnoredIds.includes(lg.id),
+  const ausLieferungPlannedIncluded = useMemo(
+    () =>
+      ausLieferungenPlanned.filter(
+        lg => !ausLieferungPlannedIgnored.map(l => l.id).includes(lg.id),
+      ),
+    [ausLieferungPlannedIgnored, ausLieferungenPlanned],
   )
   const ausLieferungenForLine = sortBy(
     [...ausLieferungenDone, ...ausLieferungPlannedIncluded],
     'datum',
   )
-  const anLieferungenDoneData = anLieferungenDone.map(l => {
-    // 1. previous Zaehlung is basis
-    // If none, pretend this is first zaehlung
-    const previousZaehlung = zaehlungenForLineReversed.find(
-      z => z.datum < l.datum,
-    ) || {
-      datum: '1900.01.01',
-      anzahl_pflanzen: 0,
-      anzahl_auspflanzbereit: 0,
-    }
-    // 2. Summ all Lieferungen since
-    const anLieferungenSince = anLieferungenForLine.filter(
-      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
-    )
-    const ausLieferungenSince = ausLieferungenForLine.filter(
-      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
-    )
-    const sumAnzahlPflanzen =
-      (get(
-        previousZaehlung,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-      ) || 0) +
-      (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
-      (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
-    const sumAnzahlAuspflanzbereit =
-      (get(
-        previousZaehlung,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-      ) || 0) +
-      (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
-      (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
+  const anLieferungenDoneData = useMemo(
+    () =>
+      anLieferungenDone.map(l => {
+        // 1. previous Zaehlung is basis
+        // If none, pretend this is first zaehlung
+        const previousZaehlung = zaehlungenForLineReversed.find(
+          z => z.datum < l.datum,
+        ) || {
+          datum: '1900.01.01',
+          anzahl_pflanzen: 0,
+          anzahl_auspflanzbereit: 0,
+        }
+        // 2. Summ all Lieferungen since
+        const anLieferungenSince = anLieferungenForLine.filter(
+          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+        )
+        const ausLieferungenSince = ausLieferungenForLine.filter(
+          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+        )
+        const sumAnzahlPflanzen =
+          (get(
+            previousZaehlung,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+          ) || 0) +
+          (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
+          (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
+        const sumAnzahlAuspflanzbereit =
+          (get(
+            previousZaehlung,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+          ) || 0) +
+          (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
+          (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
-    const data = {
-      datum: new Date(l.datum).getTime(),
-      'Lieferung Pflanzen': l.anzahl_pflanzen,
-      'Lieferung Pflanzen auspflanzbereit': l.anzahl_auspflanzbereit,
-      'Lieferung andere Mengen': l.andere_menge,
-      'Lieferung Gramm Samen': l.gramm_samen,
-      'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-      'Lieferung Bemerkungen': l.bemerkungen,
-    }
-    if (l.datum < lastZaehlungDone.datum) {
-      data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
-      data['Zählung Pflanzen auspflanzbereit'] =
-        sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
-    } else {
-      data['Zählung Pflanzen geplant'] = sumAnzahlPflanzen + l.anzahl_pflanzen
-      data['Zählung Pflanzen auspflanzbereit geplant'] =
-        sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
-    }
-    return data
-  })
-  const ausLieferungenDoneData = ausLieferungenDone.map(l => {
-    // 1. previous Zaehlung is basis. If none, take 0
-    const previousZaehlung = zaehlungenForLineReversed.find(
-      z => z.datum < l.datum,
-    ) || {
-      datum: '1900.01.01',
-      anzahl_pflanzen: 0,
-      anzahl_auspflanzbereit: 0,
-    }
-    // 2. Summ all Lieferungen since
-    const anLieferungenSince = anLieferungenForLine.filter(
-      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
-    )
-    const ausLieferungenSince = ausLieferungenForLine.filter(
-      a => a.datum > previousZaehlung.datum && a.datum < l.datum,
-    )
-    const sumAnzahlPflanzen =
-      (get(
-        previousZaehlung,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-      ) || 0) +
-      (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
-      (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
-    const sumAnzahlAuspflanzbereit =
-      (get(
-        previousZaehlung,
-        'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-      ) || 0) +
-      (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
-      (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
+        const data = {
+          datum: new Date(l.datum).getTime(),
+          'Lieferung Pflanzen': l.anzahl_pflanzen,
+          'Lieferung Pflanzen auspflanzbereit': l.anzahl_auspflanzbereit,
+          'Lieferung andere Mengen': l.andere_menge,
+          'Lieferung Gramm Samen': l.gramm_samen,
+          'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+          'Lieferung Bemerkungen': l.bemerkungen,
+        }
+        if (l.datum < lastZaehlungDone.datum) {
+          data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
+          data['Zählung Pflanzen auspflanzbereit'] =
+            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
+        } else {
+          data['Zählung Pflanzen geplant'] =
+            sumAnzahlPflanzen + l.anzahl_pflanzen
+          data['Zählung Pflanzen auspflanzbereit geplant'] =
+            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
+        }
+        return data
+      }),
+    [
+      anLieferungenDone,
+      anLieferungenForLine,
+      ausLieferungenForLine,
+      lastZaehlungDone.datum,
+      zaehlungenForLineReversed,
+    ],
+  )
+  const ausLieferungenDoneData = useMemo(
+    () =>
+      ausLieferungenDone.map(l => {
+        // 1. previous Zaehlung is basis. If none, take 0
+        const previousZaehlung = zaehlungenForLineReversed.find(
+          z => z.datum < l.datum,
+        ) || {
+          datum: '1900.01.01',
+          anzahl_pflanzen: 0,
+          anzahl_auspflanzbereit: 0,
+        }
+        // 2. Summ all Lieferungen since
+        const anLieferungenSince = anLieferungenForLine.filter(
+          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+        )
+        const ausLieferungenSince = ausLieferungenForLine.filter(
+          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+        )
+        const sumAnzahlPflanzen =
+          (get(
+            previousZaehlung,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
+          ) || 0) +
+          (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
+          (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
+        const sumAnzahlAuspflanzbereit =
+          (get(
+            previousZaehlung,
+            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
+          ) || 0) +
+          (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
+          (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
-    const data = {
-      datum: new Date(l.datum).getTime(),
-      'Lieferung Pflanzen': -l.anzahl_pflanzen,
-      'Lieferung Pflanzen auspflanzbereit': -l.anzahl_auspflanzbereit,
-      'Lieferung andere Mengen': l.andere_menge,
-      'Lieferung Gramm Samen': l.gramm_samen,
-      'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-      'Lieferung Bemerkungen': l.bemerkungen,
-    }
-    if (l.datum < lastZaehlungDone.datum) {
-      data['Zählung Pflanzen'] = sumAnzahlPflanzen - l.anzahl_pflanzen
-      data['Zählung Pflanzen auspflanzbereit'] =
-        sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
-    } else {
-      data['Zählung Pflanzen geplant'] = sumAnzahlPflanzen - l.anzahl_pflanzen
-      data['Zählung Pflanzen auspflanzbereit geplant'] =
-        sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
-    }
-    return data
-  })
-  const anLieferungenPlannedData = anLieferungPlannedIncluded.map(l => ({
-    datum: new Date(l.datum).getTime(),
-    'Lieferung Pflanzen geplant': l.anzahl_pflanzen,
-    'Lieferung Pflanzen auspflanzbereit geplant': l.anzahl_auspflanzbereit,
-    'Lieferung andere Mengen': l.andere_menge,
-    'Lieferung Gramm Samen': l.gramm_samen,
-    'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-    'Lieferung Bemerkungen': l.bemerkungen,
-  }))
-  const anLieferungenPlannedIgnoredData = anLieferungPlannedIgnored.map(l => ({
-    datum: new Date(l.datum).getTime(),
-    'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
-    'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
-      l.anzahl_auspflanzbereit,
-    'Lieferung andere Mengen': l.andere_menge,
-    'Lieferung Gramm Samen': l.gramm_samen,
-    'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-    'Lieferung Bemerkungen': l.bemerkungen,
-  }))
-  const ausLieferungenPlannedData = ausLieferungPlannedIncluded.map(l => ({
-    datum: new Date(l.datum).getTime(),
-    'Lieferung Pflanzen geplant': -l.anzahl_pflanzen,
-    'Lieferung Pflanzen auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
-    'Lieferung andere Mengen': l.andere_menge,
-    'Lieferung Gramm Samen': l.gramm_samen,
-    'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-    'Lieferung Bemerkungen': l.bemerkungen,
-  }))
-  const ausLieferungenPlannedIgnoredData = ausLieferungPlannedIgnored.map(
-    l => ({
-      datum: new Date(l.datum).getTime(),
-      'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
-      'Lieferung Pflanzen auspflanzbereit geplant, ignoriert': -l.anzahl_auspflanzbereit,
-      'Lieferung andere Mengen': l.andere_menge,
-      'Lieferung Gramm Samen': l.gramm_samen,
-      'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
-      'Lieferung Bemerkungen': l.bemerkungen,
-    }),
+        const data = {
+          datum: new Date(l.datum).getTime(),
+          'Lieferung Pflanzen': -l.anzahl_pflanzen,
+          'Lieferung Pflanzen auspflanzbereit': -l.anzahl_auspflanzbereit,
+          'Lieferung andere Mengen': l.andere_menge,
+          'Lieferung Gramm Samen': l.gramm_samen,
+          'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+          'Lieferung Bemerkungen': l.bemerkungen,
+        }
+        if (l.datum < lastZaehlungDone.datum) {
+          data['Zählung Pflanzen'] = sumAnzahlPflanzen - l.anzahl_pflanzen
+          data['Zählung Pflanzen auspflanzbereit'] =
+            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
+        } else {
+          data['Zählung Pflanzen geplant'] =
+            sumAnzahlPflanzen - l.anzahl_pflanzen
+          data['Zählung Pflanzen auspflanzbereit geplant'] =
+            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
+        }
+        return data
+      }),
+    [
+      anLieferungenForLine,
+      ausLieferungenDone,
+      ausLieferungenForLine,
+      lastZaehlungDone.datum,
+      zaehlungenForLineReversed,
+    ],
+  )
+  const anLieferungenPlannedData = useMemo(
+    () =>
+      anLieferungPlannedIncluded.map(l => ({
+        datum: new Date(l.datum).getTime(),
+        'Lieferung Pflanzen geplant': l.anzahl_pflanzen,
+        'Lieferung Pflanzen auspflanzbereit geplant': l.anzahl_auspflanzbereit,
+        'Lieferung andere Mengen': l.andere_menge,
+        'Lieferung Gramm Samen': l.gramm_samen,
+        'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+        'Lieferung Bemerkungen': l.bemerkungen,
+      })),
+    [anLieferungPlannedIncluded],
+  )
+  const anLieferungenPlannedIgnoredData = useMemo(
+    () =>
+      anLieferungPlannedIgnored.map(l => ({
+        datum: new Date(l.datum).getTime(),
+        'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
+        'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
+          l.anzahl_auspflanzbereit,
+        'Lieferung andere Mengen': l.andere_menge,
+        'Lieferung Gramm Samen': l.gramm_samen,
+        'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+        'Lieferung Bemerkungen': l.bemerkungen,
+      })),
+    [anLieferungPlannedIgnored],
+  )
+  const ausLieferungenPlannedData = useMemo(
+    () =>
+      ausLieferungPlannedIncluded.map(l => ({
+        datum: new Date(l.datum).getTime(),
+        'Lieferung Pflanzen geplant': -l.anzahl_pflanzen,
+        'Lieferung Pflanzen auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
+        'Lieferung andere Mengen': l.andere_menge,
+        'Lieferung Gramm Samen': l.gramm_samen,
+        'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+        'Lieferung Bemerkungen': l.bemerkungen,
+      })),
+    [ausLieferungPlannedIncluded],
+  )
+  const ausLieferungenPlannedIgnoredData = useMemo(
+    () =>
+      ausLieferungPlannedIgnored.map(l => ({
+        datum: new Date(l.datum).getTime(),
+        'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
+        'Lieferung Pflanzen auspflanzbereit geplant, ignoriert': -l.anzahl_auspflanzbereit,
+        'Lieferung andere Mengen': l.andere_menge,
+        'Lieferung Gramm Samen': l.gramm_samen,
+        'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
+        'Lieferung Bemerkungen': l.bemerkungen,
+      })),
+    [ausLieferungPlannedIgnored],
   )
 
-  const allData = sortBy(
+  const allData = useMemo(
+    () =>
+      sortBy(
+        [
+          ...anLieferungenDoneData,
+          ...anLieferungenPlannedData,
+          ...anLieferungenPlannedIgnoredData,
+          ...ausLieferungenDoneData,
+          ...ausLieferungenPlannedData,
+          ...ausLieferungenPlannedIgnoredData,
+          ...zaehlungenData,
+          ...zaehlungenPlannedIgnoredData,
+        ],
+        'datum',
+      ),
     [
-      ...anLieferungenDoneData,
-      ...anLieferungenPlannedData,
-      ...anLieferungenPlannedIgnoredData,
-      ...ausLieferungenDoneData,
-      ...ausLieferungenPlannedData,
-      ...ausLieferungenPlannedIgnoredData,
-      ...zaehlungenData,
-      ...zaehlungenPlannedIgnoredData,
+      anLieferungenDoneData,
+      anLieferungenPlannedData,
+      anLieferungenPlannedIgnoredData,
+      ausLieferungenDoneData,
+      ausLieferungenPlannedData,
+      ausLieferungenPlannedIgnoredData,
+      zaehlungenData,
+      zaehlungenPlannedIgnoredData,
     ],
-    'datum',
   )
 
   if (!row) return null
