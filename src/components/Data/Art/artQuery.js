@@ -4,6 +4,7 @@ import {
   art as artFragment,
   lieferung as lieferungFragment,
   sammlung as sammlungFragment,
+  zaehlung as zaehlungFragment,
 } from '../../../utils/fragments'
 
 export default gql`
@@ -45,7 +46,7 @@ export default gql`
         zaehlungsDone: zaehlungs(
           where: { geplant: { _eq: false }, datum: { _is_null: false } }
         ) {
-          id
+          ...ZaehlungFields
           teilzaehlungs_aggregate {
             aggregate {
               sum {
@@ -58,7 +59,7 @@ export default gql`
         zaehlungsPlanned: zaehlungs(
           where: { geplant: { _eq: true }, datum: { _is_null: false } }
         ) {
-          id
+          ...ZaehlungFields
           teilzaehlungs_aggregate {
             aggregate {
               sum {
@@ -80,4 +81,5 @@ export default gql`
   ${artFragment}
   ${lieferungFragment}
   ${sammlungFragment}
+  ${zaehlungFragment}
 `
