@@ -119,6 +119,7 @@ create table sammlung (
   anzahl_pflanzen integer default null,
   gramm_samen integer default null,
   andere_menge text default null,
+  geplant boolean default false,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -132,6 +133,7 @@ create index on sammlung using btree (nr);
 create index on sammlung using btree (datum);
 create index on sammlung using btree (anzahl_pflanzen);
 create index on sammlung using btree (gramm_samen);
+create index on sammlung using btree (geplant);
 create index on sammlung using gin (tsv);
 
 drop table if exists sammlung_file;
