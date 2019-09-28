@@ -17,7 +17,6 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from 'recharts'
-import moment from 'moment'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 
@@ -64,6 +63,7 @@ const Kultur = ({ row }) => {
     lg => !zaehlungPlannedIgnoredIds.includes(lg.id),
   )
   if (zaehlungenPlannedIncluded.length) {
+    // need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
     zaehlungenPlannedIncluded = [lastZaehlungDone, ...zaehlungenPlannedIncluded]
   }
   const zaehlungenForLine = sortBy(
@@ -71,7 +71,6 @@ const Kultur = ({ row }) => {
     'datum',
   )
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
-  // TODO: need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
   const zaehlungenDoneData = zaehlungenDone.map(l => {
     const teilzaehlungs = get(l, 'teilzaehlungs')
 
