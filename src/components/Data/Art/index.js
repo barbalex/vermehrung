@@ -8,15 +8,16 @@ import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../storeContext'
-import Select from '../shared/Select'
-import SelectLoadingOptions from '../shared/SelectLoadingOptions'
-import FormTitle from '../shared/FormTitle'
-import FilterTitle from '../shared/FilterTitle'
-import queryFromTable from '../../utils/queryFromTable'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
-import { art as artFragment } from '../../utils/fragments'
-import Files from './Files'
+import storeContext from '../../../storeContext'
+import Select from '../../shared/Select'
+import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
+import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
+import queryFromTable from '../../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
+import { art as artFragment } from '../../../utils/fragments'
+import Files from '../Files'
+import artQuery from './artQuery'
 
 const Container = styled.div`
   height: 100%;
@@ -28,21 +29,6 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
-`
-
-const query = gql`
-  query ArtQuery($id: bigint!, $filter: art_bool_exp!, $isFiltered: Boolean!) {
-    art(where: { id: { _eq: $id } }) {
-      ...ArtFields
-    }
-    rowsUnfiltered: art @include(if: $isFiltered) {
-      id
-    }
-    rowsFiltered: art(where: $filter) @include(if: $isFiltered) {
-      id
-    }
-  }
-  ${artFragment}
 `
 
 const aeArtQuery = gql`
@@ -74,7 +60,7 @@ const Art = ({ filter: showFilter }) => {
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const artFilter = queryFromTable({ store, table: 'art' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery(artQuery, {
     variables: { id: artId, filter: artFilter, isFiltered },
   })
 
