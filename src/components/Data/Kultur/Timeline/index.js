@@ -52,7 +52,7 @@ const Kultur = ({ row }) => {
       )
   }, [])
 
-  const zaehlungenDone = get(row, 'zaehlungs') || []
+  const zaehlungenDone = get(row, 'zaehlungsDone') || []
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0]
   const zaehlungenPlanned = get(row, 'zaehlungsPlanned') || []
   const zaehlungenPlannedIgnored = zaehlungenPlanned.filter(zg =>
@@ -185,7 +185,7 @@ const Kultur = ({ row }) => {
     [zaehlungenDataGroupedByDatum],
   )
 
-  const anLieferungenDone = get(row, 'anLieferungs') || []
+  const anLieferungenDone = get(row, 'anLieferungsDone') || []
   const anLieferungenPlanned = get(row, 'anLieferungsPlanned') || []
   const anLieferungPlannedIgnored = useMemo(
     () =>
@@ -206,7 +206,7 @@ const Kultur = ({ row }) => {
     [...anLieferungenDone, ...anLieferungPlannedIncluded],
     'datum',
   )
-  const ausLieferungenDone = get(row, 'ausLieferungs') || []
+  const ausLieferungenDone = get(row, 'ausLieferungsDone') || []
   const ausLieferungenPlanned = get(row, 'ausLieferungsPlanned') || []
   const ausLieferungPlannedIgnored = useMemo(
     () =>

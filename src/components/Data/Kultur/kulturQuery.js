@@ -28,7 +28,7 @@ export default gql`
           art_id
         }
       }
-      ausLieferungs: lieferungsByVonKulturId(
+      ausLieferungsDone: lieferungsByVonKulturId(
         where: { datum: { _is_null: false } }
         order_by: { datum: asc }
       ) {
@@ -40,7 +40,7 @@ export default gql`
       ) {
         ...LieferungFields
       }
-      anLieferungs: lieferungsByNachKulturId(
+      anLieferungsDone: lieferungsByNachKulturId(
         where: { geplant: { _eq: false }, datum: { _is_null: false } }
         order_by: { datum: asc }
       ) {
@@ -52,7 +52,7 @@ export default gql`
       ) {
         ...LieferungFields
       }
-      zaehlungs: zaehlungs(
+      zaehlungsDone: zaehlungs(
         where: { geplant: { _eq: false }, datum: { _is_null: false } }
         order_by: { datum: asc }
       ) {
