@@ -40,6 +40,35 @@ export default gql`
       ) {
         ...LieferungFields
       }
+      kulturs {
+        id
+        zaehlungsDone: zaehlungs(
+          where: { geplant: { _eq: false }, datum: { _is_null: false } }
+        ) {
+          id
+          teilzaehlungs_aggregate {
+            aggregate {
+              sum {
+                anzahl_pflanzen
+                anzahl_auspflanzbereit
+              }
+            }
+          }
+        }
+        zaehlungsPlanned: zaehlungs(
+          where: { geplant: { _eq: true }, datum: { _is_null: false } }
+        ) {
+          id
+          teilzaehlungs_aggregate {
+            aggregate {
+              sum {
+                anzahl_pflanzen
+                anzahl_auspflanzbereit
+              }
+            }
+          }
+        }
+      }
     }
     rowsUnfiltered: art @include(if: $isFiltered) {
       id
