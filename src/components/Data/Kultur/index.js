@@ -80,7 +80,7 @@ const Kultur = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray, refetch: refetchTree } = store.tree
 
   const id = showFilter
     ? 99999999999999
@@ -218,10 +218,10 @@ const Kultur = ({ filter: showFilter }) => {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
+        refetchTree()
       }
     },
-    [client, filter, refetch, row, showFilter],
+    [client, filter, refetchTree, row, showFilter],
   )
 
   if (loading) {
