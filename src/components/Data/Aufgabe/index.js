@@ -17,6 +17,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
+import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -186,6 +187,7 @@ const Aufgabe = ({ filter: showFilter }) => {
     data: kulturData,
     error: kulturError,
     loading: kulturLoading,
+    refetch: refetchKultur,
   } = useQuery(kulturQuery)
   const {
     data: personData,
@@ -367,8 +369,8 @@ const Aufgabe = ({ filter: showFilter }) => {
             error={errors.kultur_id}
           />
           {((tk && ag_teilkultur_id) || showFilter) && (
-            <Select
-              key={`${row.id}${row.teilkultur_id}teilkultur_id`}
+            <SelectCreatable
+              key={`${row.id}teilkultur_id`}
               name="teilkultur_id"
               value={row.teilkultur_id}
               field="teilkultur_id"
@@ -377,6 +379,11 @@ const Aufgabe = ({ filter: showFilter }) => {
               loading={kulturLoading}
               saveToDb={saveToDb}
               error={errors.teilkultur_id}
+              creatablePropertiesToPass={{ kultur_id: row.kultur_id }}
+              creatablePropertyName="name"
+              creatableIdField="id"
+              table="teilkultur"
+              callback={refetchKultur}
             />
           )}
           <TextField
