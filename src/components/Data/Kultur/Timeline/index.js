@@ -460,8 +460,8 @@ const KulturTimeline = ({ row }) => {
           data={allData}
           margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="datum" tick={CustomAxisTick} />
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+          <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
           <YAxis
             label={{
               value: 'Anzahl',

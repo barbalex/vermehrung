@@ -52,6 +52,12 @@ const ArtTimeline = ({ row }) => {
   }, [])
 
   const artSums = row.artSums || []
+  // zaehlungen data is special because it is
+  // devided in two lines
+  // THAT SHOULD BE CONNECTED
+  // so need to divide data,
+  // add last done zaehlung as first point to planned
+  // and the recombine
   const zaehlungenDone = artSums.filter(
     s => s.action === 'zaehlung' && !s.geplant,
   )
@@ -63,7 +69,7 @@ const ArtTimeline = ({ row }) => {
     () =>
       zaehlungenDone.map(l => ({
         datum: new Date(l.datum).getTime(),
-        'Zählung Pflanzen': l.sum_anzahl_pflanzen || 0,
+        'Zählung Pflanzen': l.sum_anzahl_pflanzen,
       })),
     [zaehlungenDone],
   )
@@ -71,7 +77,7 @@ const ArtTimeline = ({ row }) => {
     () =>
       [lastZaehlungDone, ...zaehlungenPlanned].map(l => ({
         datum: new Date(l.datum).getTime(),
-        'Zählung Pflanzen geplant': l.sum_anzahl_pflanzen || 0,
+        'Zählung Pflanzen geplant': l.sum_anzahl_pflanzen,
       })),
     [lastZaehlungDone, zaehlungenPlanned],
   )
@@ -94,7 +100,6 @@ const ArtTimeline = ({ row }) => {
       sammlungen.map(l => ({
         datum: new Date(l.datum).getTime(),
         [`Sammlung Pflanzen${l.geplant ? ' geplant' : ''}`]: l.anzahl_pflanzen,
-        'Sammlung Pflanzen geplant': l.anzahl_pflanzen,
         'Sammlung andere Mengen': l.andere_menge,
         'Sammlung Gramm Samen': l.gramm_samen,
         'Sammlung von Anzahl Individuen': l.von_anzahl_individuen,
@@ -158,8 +163,8 @@ const ArtTimeline = ({ row }) => {
           data={allData}
           margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="datum" tick={CustomAxisTick} />
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+          <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
           <YAxis
             label={{
               value: 'Anzahl',

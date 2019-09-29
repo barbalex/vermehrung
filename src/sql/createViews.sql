@@ -64,7 +64,7 @@ with
             on a.id = k.art_id
         where
           k.art_id = s.art_id
-          and z.geplant is false
+          --and z.geplant is false
           and z.datum is not null
           and z.datum <= s.datum
         order by
@@ -81,7 +81,7 @@ with
       and (
         s.geplant is false or
         (
-          -- sammlung is after last count done for this art_id
+          -- sammlung is after last zaehlung done for this art_id
           s.datum > (
             select
             distinct on (a.id) z.datum
@@ -116,7 +116,7 @@ with
             on a.id = k.art_id
         where
           k.art_id = l.art_id
-          and z.geplant is false
+          --and z.geplant is false
           and z.datum is not null
           and z.datum <= l.datum
         order by
