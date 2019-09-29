@@ -1,7 +1,11 @@
 -- 1. create datasets with:
---    art_id, partitioner, datum, anzahl_pflanzen
---    from: sammlung, auspflanzung, zaehlung (not planned)
+--    art_id, action, geplant, partitioner, datum, anzahl_pflanzen, sum_anzahl_pflanzen
+--    from: sammlung, auspflanzung, zaehlung
+--    partitioner is the id of last zaehlung done
 -- 2. union them
+-- 3. calculate sum_anzahl_pflanzen partitioning by art_id and partitioner
+drop view if exists art_sums;
+create or replace view art_sums as
 with 
   counts as (
     select
@@ -10,7 +14,7 @@ with
       z.datum,
       z.geplant,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
-      'zaehlung' as typ
+      'zaehlung' as action
     FROM
       kultur k inner join zaehlung z
         inner join teilzaehlung tz
@@ -69,7 +73,7 @@ with
       s.datum,
       s.geplant,
       s.anzahl_pflanzen,
-      'sammlung' as typ
+      'sammlung' as action
     FROM
       sammlung s
     where
@@ -121,12 +125,34 @@ with
       l.datum,
       l.geplant,
       -l.anzahl_pflanzen as anzahl_pflanzen,
-      'auspflanzung' as typ
+      'auspflanzung' as action
     FROM
       lieferung l
     where
       l.datum is not null
-      and l.geplant is false
+      and (
+        l.geplant is false or
+        (
+          -- sammlung is after last count done for this art_id
+          l.datum > (
+            select
+            distinct on (a.id) z.datum
+            from
+              art a
+                inner join kultur
+                  inner join zaehlung z
+                  on kultur.id = z.kultur_id
+                on a.id = kultur.art_id
+            where
+              kultur.art_id = l.art_id
+              and z.geplant is false
+              and z.datum is not null
+            order by
+              a.id,
+              z.datum desc
+          )
+        )
+      )
       and l.anzahl_pflanzen is not null
       and l.nach_ausgepflanzt is true
     order by
@@ -135,7 +161,7 @@ with
   )
 select
   art_id,
-  typ,
+  action,
   geplant,
   partitioner,
   datum,
@@ -145,64 +171,3 @@ from counts
 order by
   art_id,
   datum;
-
--- 3. calculate sum partitioning by art_id and is_zaehlung
-
-
-
-
-drop view if exists v_art_zaehlung_done_sums;
-create or replace view v_art_zaehlung_done_sums as
-select
-  k.art_id,
-  z.datum,
-  sum(tz.anzahl_pflanzen) over (partition by k.art_id order by z.datum) as anzahl_pflanzen
-FROM
-  kultur k inner join zaehlung z
-    inner join teilzaehlung tz
-    on tz.zaehlung_id = z.id
-  on k.id = z.kultur_id
-where
-  z.datum is not null
-  and z.geplant is false
-  and tz.anzahl_pflanzen is not null
-order by
-  k.art_id,
-  z.datum;
-
-drop view if exists v_art_zaehlung_planned_sums;
-create or replace view v_art_zaehlung_planned_sums as
-select
-  k.art_id,
-  z.datum,
-  sum(tz.anzahl_pflanzen) over (partition by k.art_id order by z.datum) as anzahl_pflanzen
-FROM
-  kultur k inner join zaehlung z
-    inner join teilzaehlung tz
-    on tz.zaehlung_id = z.id
-  on k.id = z.kultur_id
-where
-  z.datum is not null
-  and z.geplant is true
-  and tz.anzahl_pflanzen is not null
-  -- only geplant after last done
-  and z.datum > (
-    select
-      distinct on (a.id) datum
-      from
-        art a
-          inner join kultur k
-            inner join zaehlung z
-            on k.id = z.kultur_id
-          on a.id = k.art_id
-      where
-        k.art_id = 2
-        and z.geplant is false
-        and z.datum is not null
-      order by
-        a.id,
-        z.datum desc
-    )
-order by
-  k.art_id,
-  z.datum;

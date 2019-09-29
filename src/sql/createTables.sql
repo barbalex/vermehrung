@@ -36,7 +36,7 @@ create index on person using gin (tsv);
 drop table if exists person_file;
 create table person_file (
   id bigserial primary key,
-  person_id integer default null references person (id) on delete cascade on update cascade,
+  person_id bigint default null references person (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -62,7 +62,7 @@ create index on art using gin (tsv);
 drop table if exists art_file;
 create table art_file (
   id bigserial primary key,
-  art_id integer default null references art (id) on delete cascade on update cascade,
+  art_id bigint default null references art (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -96,7 +96,7 @@ create index on herkunft using gin (tsv);
 drop table if exists herkunft_file;
 create table herkunft_file (
   id bigserial primary key,
-  herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
+  herkunft_id bigint default null references herkunft (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -110,9 +110,9 @@ create index on herkunft_file using btree (file_mime_type);
 drop table if exists sammlung cascade;
 create table sammlung (
   id bigserial primary key,
-  art_id integer default null references art (id) on delete cascade on update cascade,
-  person_id integer default null references person (id) on delete cascade on update cascade,
-  herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
+  art_id bigint default null references art (id) on delete cascade on update cascade,
+  person_id bigint default null references person (id) on delete cascade on update cascade,
+  herkunft_id bigint default null references herkunft (id) on delete cascade on update cascade,
   nr text default null unique,
   datum date default null,
   von_anzahl_individuen integer default null,
@@ -139,7 +139,7 @@ create index on sammlung using gin (tsv);
 drop table if exists sammlung_file;
 create table sammlung_file (
   id bigserial primary key,
-  sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
+  sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -154,7 +154,7 @@ drop table if exists garten cascade;
 create table garten (
   id bigserial primary key,
   name text default null,
-  person_id integer default null references person (id) on delete cascade on update cascade,
+  person_id bigint default null references person (id) on delete cascade on update cascade,
   strasse text default null,
   plz integer default null,
   ort text default null,
@@ -177,7 +177,7 @@ create index on garten using gin (tsv);
 drop table if exists garten_file;
 create table garten_file (
   id bigserial primary key,
-  garten_id integer default null references garten (id) on delete cascade on update cascade,
+  garten_id bigint default null references garten (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -191,9 +191,9 @@ create index on garten_file using btree (file_mime_type);
 drop table if exists kultur cascade;
 create table kultur (
   id bigserial primary key,
-  art_id integer default null references art (id) on delete cascade on update cascade,
-  herkunft_id integer default null references herkunft (id) on delete cascade on update cascade,
-  garten_id integer default null references garten (id) on delete cascade on update cascade,
+  art_id bigint default null references art (id) on delete cascade on update cascade,
+  herkunft_id bigint default null references herkunft (id) on delete cascade on update cascade,
+  garten_id bigint default null references garten (id) on delete cascade on update cascade,
   zwischenlager boolean default false,
   erhaltungskultur boolean default false,
   von_anzahl_individuen integer default null,
@@ -216,7 +216,7 @@ create index on kultur using gin (tsv);
 drop table if exists kultur_file;
 create table kultur_file (
   id bigserial primary key,
-  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -230,7 +230,7 @@ create index on kultur_file using btree (file_mime_type);
 drop table if exists teilkultur cascade;
 create table teilkultur (
   id bigserial primary key,
-  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   name text default null,
   bemerkungen text default null,
   changed date default now(),
@@ -245,9 +245,9 @@ create index on teilkultur using gin (tsv);
 drop table if exists aufgabe cascade;
 create table aufgabe (
   id bigserial primary key,
-  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
-  teilkultur_id integer default null references teilkultur (id) on delete set null on update cascade,
-  person_id integer default null references person (id) on delete set null on update cascade,
+  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  teilkultur_id bigint default null references teilkultur (id) on delete set null on update cascade,
+  person_id bigint default null references person (id) on delete set null on update cascade,
   aufgabe text default null,
   geplant boolean default false,
   datum date default null,
@@ -267,7 +267,7 @@ create index on aufgabe using gin (tsv);
 drop table if exists zaehlung cascade;
 create table zaehlung (
   id bigserial primary key,
-  kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
   geplant boolean default false,
   bemerkungen text default null,
@@ -284,8 +284,8 @@ create index on zaehlung using gin (tsv);
 drop table if exists teilzaehlung cascade;
 create table teilzaehlung (
   id bigserial primary key,
-  zaehlung_id integer default null references zaehlung (id) on delete cascade on update cascade,
-  teilkultur_id integer default null references teilkultur (id) on delete set null on update cascade,
+  zaehlung_id bigint default null references zaehlung (id) on delete cascade on update cascade,
+  teilkultur_id bigint default null references teilkultur (id) on delete set null on update cascade,
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   anzahl_mutterpflanzen integer default null,
@@ -307,7 +307,7 @@ create index on teilzaehlung using gin (tsv);
 
 drop table if exists kultur_felder cascade;
 create table kultur_felder (
-  kultur_id integer unique not null references kultur (id) on delete cascade on update cascade,
+  kultur_id bigint unique not null references kultur (id) on delete cascade on update cascade,
   z_geplant boolean default false,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
@@ -327,7 +327,7 @@ COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists person_felder cascade;
 create table person_felder (
-  person_id integer unique not null references person (id) on delete cascade on update cascade,
+  person_id bigint unique not null references person (id) on delete cascade on update cascade,
   ga_strasse boolean default true,
   ga_plz boolean default true,
   ga_ort boolean default true,
@@ -344,12 +344,12 @@ create index on person_felder using btree (person_id);
 drop table if exists lieferung cascade;
 create table lieferung (
   id bigserial primary key,
-  art_id integer default null references art (id) on delete cascade on update cascade,
-  person_id integer default null references person (id) on delete cascade on update cascade,
-  von_sammlung_id integer default null references sammlung (id) on delete cascade on update cascade,
-  von_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  art_id bigint default null references art (id) on delete cascade on update cascade,
+  person_id bigint default null references person (id) on delete cascade on update cascade,
+  von_sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
+  von_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
-  nach_kultur_id integer default null references kultur (id) on delete cascade on update cascade,
+  nach_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
@@ -381,7 +381,7 @@ create index on lieferung using gin (tsv);
 drop table if exists lieferung_file;
 create table lieferung_file (
   id bigserial primary key,
-  lieferung_id integer default null references lieferung (id) on delete cascade on update cascade,
+  lieferung_id bigint default null references lieferung (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,

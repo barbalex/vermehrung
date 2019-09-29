@@ -261,17 +261,14 @@ export const zaehlung = gql`
     bemerkungen
   }
 `
-export const vArtZaehlungDoneSums = gql`
-  fragment ArtZaehlungDoneSumsFields on v_art_zaehlung_done_sums {
+export const artSums = gql`
+  fragment ArtSumsFields on art_sums {
     art_id
+    action
+    geplant
+    partitioner
     datum
     anzahl_pflanzen
-  }
-`
-export const vArtZaehlungPlannedSums = gql`
-  fragment ArtZaehlungPlannedSumsFields on v_art_zaehlung_planned_sums {
-    art_id
-    datum
-    anzahl_pflanzen
+    sum_anzahl_pflanzen
   }
 `
