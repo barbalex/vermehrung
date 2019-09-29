@@ -28,9 +28,9 @@ const CustomTooltip = ({ payload, label, active }) => {
             return (
               <div key={`${o.dataKey}0`}>
                 <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
-                {o.payload['Lieferung Gramm Samen'] && (
-                  <PRow key={`${o.dataKey}1`}>{`Lieferung Gramm Samen: ${
-                    o.payload['Lieferung Gramm Samen']
+                {o.payload['Auspflanzung Gramm Samen'] && (
+                  <PRow key={`${o.dataKey}1`}>{`Auspflanzung Gramm Samen: ${
+                    o.payload['Auspflanzung Gramm Samen']
                   }`}</PRow>
                 )}
                 {o.payload['Zählung andere Mengen'] && (
@@ -38,9 +38,9 @@ const CustomTooltip = ({ payload, label, active }) => {
                     o.payload['Zählung andere Mengen']
                   }`}</PRow>
                 )}
-                {o.payload['Lieferung andere Mengen'] && (
-                  <PRow key={`${o.dataKey}3`}>{`Lieferung andere Mengen: ${
-                    o.payload['Lieferung andere Mengen']
+                {o.payload['Auspflanzung andere Mengen'] && (
+                  <PRow key={`${o.dataKey}3`}>{`Auspflanzung andere Mengen: ${
+                    o.payload['Auspflanzung andere Mengen']
                   }`}</PRow>
                 )}
                 {o.payload['Lieferung von Anzahl Individuen'] && (

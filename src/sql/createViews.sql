@@ -15,6 +15,12 @@ with
       z.geplant,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
       sum(tz.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
+      sum(tz.anzahl_mutterpflanzen) as anzahl_mutterpflanzen,
+      0 as von_anzahl_individuen,
+      0 as gramm_samen,
+      string_agg(tz.andere_menge, ', ') as andere_menge,
+      string_agg(tz.auspflanzbereit_beschreibung, ', ') as auspflanzbereit_beschreibung,
+      string_agg(tz.bemerkungen, ', ') as bemerkungen,
       'zaehlung' as action
     FROM
       kultur k inner join zaehlung z
@@ -87,6 +93,12 @@ with
       s.geplant,
       s.anzahl_pflanzen,
       0 as anzahl_auspflanzbereit,
+      0 as anzahl_mutterpflanzen,
+      s.von_anzahl_individuen,
+      s.gramm_samen,
+      s.andere_menge,
+      '' as auspflanzbereit_beschreibung,
+      s.bemerkungen,
       'sammlung' as action
     FROM
       sammlung s
@@ -149,6 +161,12 @@ with
       l.geplant,
       -l.anzahl_pflanzen as anzahl_pflanzen,
       -l.anzahl_auspflanzbereit as anzahl_auspflanzbereit,
+      0 as anzahl_mutterpflanzen,
+      l.von_anzahl_individuen,
+      -l.gramm_samen as gramm_samen,
+      l.andere_menge,
+      '' as auspflanzbereit_beschreibung,
+      l.bemerkungen,
       'auspflanzung' as action
     FROM
       lieferung l
@@ -195,7 +213,13 @@ select
   anzahl_pflanzen,
   anzahl_auspflanzbereit,
   sum(anzahl_pflanzen) over (partition by art_id, partitioner order by datum) as sum_anzahl_pflanzen,
-  sum(anzahl_auspflanzbereit) over (partition by art_id, partitioner order by datum) as sum_anzahl_auspflanzbereit
+  sum(anzahl_auspflanzbereit) over (partition by art_id, partitioner order by datum) as sum_anzahl_auspflanzbereit,
+  sum(anzahl_mutterpflanzen) over (partition by art_id, partitioner order by datum) as anzahl_mutterpflanzen,
+  sum(von_anzahl_individuen) over (partition by art_id, partitioner order by datum) as von_anzahl_individuen,
+  sum(gramm_samen) over (partition by art_id, partitioner order by datum) as gramm_samen,
+  string_agg(andere_menge, ', ') over (partition by art_id, partitioner order by datum) as andere_menge,
+  string_agg(auspflanzbereit_beschreibung, ', ') over (partition by art_id, partitioner order by datum) as auspflanzbereit_beschreibung,
+  string_agg(bemerkungen, ', ') over (partition by art_id, partitioner order by datum) as bemerkungen
 from counts
 order by
   art_id,

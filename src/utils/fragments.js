@@ -272,5 +272,12 @@ export const artSums = gql`
     sum_anzahl_pflanzen
     anzahl_auspflanzbereit
     sum_anzahl_auspflanzbereit
+    sum_anzahl_pflanzen
+    sum_anzahl_auspflanzbereit
+    anzahl_mutterpflanzen
+    gramm_samen
+    andere_menge
+    auspflanzbereit_beschreibung
+    bemerkungen
   }
 `
