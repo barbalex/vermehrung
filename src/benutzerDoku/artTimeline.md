@@ -10,7 +10,7 @@ sort: 4
 Ziele 2, 3 und 4 der [Projekt-Ziele](/Dokumentation/Benutzer/Ziele): Übersichten über Pflanzen und auspflanz-bereite Pflanzen.<br/>
 Als Grundlage, um Kulturen, Auspflanzungen und Sammlungen zu planen.<br/><br/>
 
-Die Übersicht dokumentiert auch auf einer hohen Ebene die zentralen Vorgänge im Projekt (Projekt-Ziel 5).<br/><br/>
+Die Übersicht dokumentiert auch auf einer hohen Ebene zentrale Vorgänge (Projekt-Ziel 5).<br/><br/>
 
 ### Was
 Dargestellt werden primär die Mengen der für die Planung wesentlichen Einheiten:
@@ -28,28 +28,27 @@ Sekundär (in den Fenstern, die sich öffnen, wenn man über einem Zeitpunkt sch
 - Beschreibung auspflanzbereite Pflanzen
 - Bemerkungen
 
-Von den primären Informationen erhält man also auf den ersten Blick eine Übersicht.<br/>
+Von den primären Informationen erhält man auf den ersten Blick eine Übersicht.<br/>
 Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.<br/><br/>
 
 ### Wie
 
-#### Linien für Anzahlen
+#### Linien für (gezählte) Anzahlen
 Als Grundlage werden verwendet:
 
 - Anzahlen aus durchgeführten Zählungen
-- Anzahlen aus geplanten Zählungen. Aber nur, wenn sie nach der letzten durchgeführten Zählung geplant sind
-- Anzahlen aus durchgeführten Sammlungen und Auspflanzungen:<br/>
-  Referenz sind die Anzahlen aus letzten zuvor durchgeführten Zählung.<br/>
-  Erfolgte die Sammlung vor der ersten Zählung, wird als Referenz für alle Einheiten die Anzahl 0 verwendet.<br/>
-  Zur Referenz wird summiert, was in der Zwischenzeit gesammelt wurde. Und subtrahiert, was in der Zwischenzeit ausgepflanzt wurde.
+- Anzahlen aus geplanten Zählungen, wenn sie nach der letzten durchgeführten Zählung geplant sind.<br/>
+  Vor der letzten durchgeführten Zählung geplante Zählungen werden ignoriert
+- Anzahlen aus ausgeführten Sammlungen und Auspflanzungen:<br/>
+  Referenz sind die Anzahlen aus letzten zuvor ausgeführten Zählung.<br/>
+  Erfolgt eine Sammlung vor der ersten Zählung, wird 0 verwendet.<br/>
+  Zur Referenz wird summiert, was in der Zwischenzeit gesammelt wurde. Und subtrahiert, was in der Zwischenzeit ausgepflanzt wurde
 - Anzahlen aus geplanten Sammlungen und Auspflanzungen, die nach der letzten durchgeführten Zählung geplant sind
-
-Vor der letzten durchgeführten Zählung geplante Zählungen, Sammlungen oder Auspflanzungen werden ignoriert.<br/><br/>
 
 Linien, die geplante Anzahlen darstellen, verwenden dieselbe Farbe wie die Linie für die entsprechende Einheit bei durchgeführten Zählungen. Aber etwas aufgehellt.<br/><br/>
 
-#### Säulen für Lieferungen
-- Sammlungen werden als Säulen mit positiven Werten dargestellt,
-- Auspflanzungen mit negativen Werten
+#### Säulen für Sammlungen und Auspflanzungen
+- Sammlungen werden als Säulen mit positiven Werten dargestellt (nur "Anzahl Pflanzen" - auspflanz-bereite Pflanzen werden nicht gesammelt)
+- Auspflanzungen werden mit negativen Werten dargestellt
 - Sammlungen und Auspflanzungen, die nach der letzten durchgeführten Zählung geplant sind, werden etwas aufgehellt dargestellt.<br/>
   Vor diesem Zeitpunkt geplante werden ignoriert.
