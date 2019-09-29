@@ -261,8 +261,8 @@ export const zaehlung = gql`
     bemerkungen
   }
 `
-export const artZaehlungDoneSums = gql`
-  fragment ArtZaehlungDoneSumsFields on artZaehlungDoneSums {
+export const vArtZaehlungDoneSums = gql`
+  fragment ArtZaehlungDoneSumsFields on v_art_zaehlung_done_sums {
     art_id
     zaehlung_id
     datum
@@ -270,8 +270,8 @@ export const artZaehlungDoneSums = gql`
     anzahl_auspflanzbereit
   }
 `
-export const artZaehlungPlannedSums = gql`
-  fragment ArtZaehlungPlannedSumsFields on artZaehlungPlannedSums {
+export const vArtZaehlungPlannedSums = gql`
+  fragment ArtZaehlungPlannedSumsFields on v_art_zaehlung_planned_sums {
     art_id
     zaehlung_id
     datum

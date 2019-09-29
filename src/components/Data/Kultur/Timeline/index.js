@@ -44,7 +44,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const Kultur = ({ row }) => {
+const KulturTimeline = ({ row }) => {
   const openDocs = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -59,13 +59,16 @@ const Kultur = ({ row }) => {
     // check if more recent zaehlungenDone exists
     zaehlungenDone.some(z => z.datum >= zg.datum),
   )
-  let zaehlungenPlannedIncluded = zaehlungenPlanned.filter(
-    lg => !zaehlungenPlannedIgnored.map(l => l.id).includes(lg.id),
-  )
-  if (zaehlungenPlannedIncluded.length) {
-    // need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
-    zaehlungenPlannedIncluded = [lastZaehlungDone, ...zaehlungenPlannedIncluded]
-  }
+  const zaehlungenPlannedIncluded = useMemo(() => {
+    let val = zaehlungenPlanned.filter(
+      lg => !zaehlungenPlannedIgnored.map(l => l.id).includes(lg.id),
+    )
+    if (val.length) {
+      // need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
+      val = [lastZaehlungDone, ...val]
+    }
+    return val
+  }, [lastZaehlungDone, zaehlungenPlanned, zaehlungenPlannedIgnored])
   const zaehlungenForLine = sortBy(
     [...zaehlungenDone, ...zaehlungenPlannedIncluded],
     'datum',
@@ -186,7 +189,7 @@ const Kultur = ({ row }) => {
 
   const anLieferungenDone = get(row, 'anLieferungsDone') || []
   const anLieferungenPlanned = get(row, 'anLieferungsPlanned') || []
-  const anLieferungPlannedIgnored = useMemo(
+  const anLieferungenPlannedIgnored = useMemo(
     () =>
       anLieferungenPlanned.filter(lg =>
         // check if more recent anLieferungenDone exists
@@ -194,20 +197,20 @@ const Kultur = ({ row }) => {
       ),
     [anLieferungenDone, anLieferungenPlanned],
   )
-  const anLieferungPlannedIncluded = useMemo(
+  const anLieferungenPlannedIncluded = useMemo(
     () =>
       anLieferungenPlanned.filter(
-        lg => !anLieferungPlannedIgnored.map(l => l.id).includes(lg.id),
+        lg => !anLieferungenPlannedIgnored.map(l => l.id).includes(lg.id),
       ),
-    [anLieferungPlannedIgnored, anLieferungenPlanned],
+    [anLieferungenPlannedIgnored, anLieferungenPlanned],
   )
   const anLieferungenForLine = sortBy(
-    [...anLieferungenDone, ...anLieferungPlannedIncluded],
+    [...anLieferungenDone, ...anLieferungenPlannedIncluded],
     'datum',
   )
   const ausLieferungenDone = get(row, 'ausLieferungsDone') || []
   const ausLieferungenPlanned = get(row, 'ausLieferungsPlanned') || []
-  const ausLieferungPlannedIgnored = useMemo(
+  const ausLieferungenPlannedIgnored = useMemo(
     () =>
       ausLieferungenPlanned.filter(lg =>
         // check if more recent ausLieferungenDone exists
@@ -215,15 +218,15 @@ const Kultur = ({ row }) => {
       ),
     [ausLieferungenDone, ausLieferungenPlanned],
   )
-  const ausLieferungPlannedIncluded = useMemo(
+  const ausLieferungenPlannedIncluded = useMemo(
     () =>
       ausLieferungenPlanned.filter(
-        lg => !ausLieferungPlannedIgnored.map(l => l.id).includes(lg.id),
+        lg => !ausLieferungenPlannedIgnored.map(l => l.id).includes(lg.id),
       ),
-    [ausLieferungPlannedIgnored, ausLieferungenPlanned],
+    [ausLieferungenPlannedIgnored, ausLieferungenPlanned],
   )
   const ausLieferungenForLine = sortBy(
-    [...ausLieferungenDone, ...ausLieferungPlannedIncluded],
+    [...ausLieferungenDone, ...ausLieferungenPlannedIncluded],
     'datum',
   )
   const anLieferungenDoneData = useMemo(
@@ -353,7 +356,7 @@ const Kultur = ({ row }) => {
   )
   const anLieferungenPlannedData = useMemo(
     () =>
-      anLieferungPlannedIncluded.map(l => ({
+      anLieferungenPlannedIncluded.map(l => ({
         datum: new Date(l.datum).getTime(),
         'Lieferung Pflanzen geplant': l.anzahl_pflanzen,
         'Lieferung Pflanzen auspflanzbereit geplant': l.anzahl_auspflanzbereit,
@@ -362,11 +365,11 @@ const Kultur = ({ row }) => {
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
       })),
-    [anLieferungPlannedIncluded],
+    [anLieferungenPlannedIncluded],
   )
   const anLieferungenPlannedIgnoredData = useMemo(
     () =>
-      anLieferungPlannedIgnored.map(l => ({
+      anLieferungenPlannedIgnored.map(l => ({
         datum: new Date(l.datum).getTime(),
         'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
         'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
@@ -376,11 +379,11 @@ const Kultur = ({ row }) => {
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
       })),
-    [anLieferungPlannedIgnored],
+    [anLieferungenPlannedIgnored],
   )
   const ausLieferungenPlannedData = useMemo(
     () =>
-      ausLieferungPlannedIncluded.map(l => ({
+      ausLieferungenPlannedIncluded.map(l => ({
         datum: new Date(l.datum).getTime(),
         'Lieferung Pflanzen geplant': -l.anzahl_pflanzen,
         'Lieferung Pflanzen auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
@@ -389,11 +392,11 @@ const Kultur = ({ row }) => {
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
       })),
-    [ausLieferungPlannedIncluded],
+    [ausLieferungenPlannedIncluded],
   )
   const ausLieferungenPlannedIgnoredData = useMemo(
     () =>
-      ausLieferungPlannedIgnored.map(l => ({
+      ausLieferungenPlannedIgnored.map(l => ({
         datum: new Date(l.datum).getTime(),
         'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
         'Lieferung Pflanzen auspflanzbereit geplant, ignoriert': -l.anzahl_auspflanzbereit,
@@ -402,7 +405,7 @@ const Kultur = ({ row }) => {
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
       })),
-    [ausLieferungPlannedIgnored],
+    [ausLieferungenPlannedIgnored],
   )
 
   const allData = useMemo(
@@ -455,7 +458,7 @@ const Kultur = ({ row }) => {
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
           data={allData}
-          margin={{ top: 5, right: 0, left: 0, bottom: 45 }}
+          margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="datum" tick={CustomAxisTick} />
@@ -599,4 +602,4 @@ const Kultur = ({ row }) => {
   )
 }
 
-export default observer(Kultur)
+export default observer(KulturTimeline)

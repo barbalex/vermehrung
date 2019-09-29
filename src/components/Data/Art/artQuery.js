@@ -2,8 +2,8 @@ import gql from 'graphql-tag'
 
 import {
   art as artFragment,
-  artZaehlungDoneSums as artZaehlungDoneSumsFragment,
-  artZaehlungPlannedSums as artZaehlungPlannedSumsFragment,
+  vArtZaehlungDoneSums as vArtZaehlungDoneSumsFragment,
+  vArtZaehlungPlannedSums as vArtZaehlungPlannedSumsFragment,
   lieferung as lieferungFragment,
   sammlung as sammlungFragment,
   zaehlung as zaehlungFragment,
@@ -58,8 +58,8 @@ export default gql`
     }
   }
   ${artFragment}
-  ${artZaehlungDoneSumsFragment}
-  ${artZaehlungPlannedSumsFragment}
+  ${vArtZaehlungDoneSumsFragment}
+  ${vArtZaehlungPlannedSumsFragment}
   ${lieferungFragment}
   ${sammlungFragment}
   ${zaehlungFragment}
