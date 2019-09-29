@@ -8,9 +8,9 @@ sort: 5
 
 ### Ziel
 Ziele 2, 3 und 4 der [Projekt-Ziele](/Dokumentation/Benutzer/Ziele/): Übersichten über Pflanzen, auspflanz-bereite Pflanzen und Mutterpflanzen.<br/>
-Als Grundlage, um Kulturen, Auspflanzungen und Sammlungen zu planen.<br/><br/>
+Als Grundlage, um Kulturen, Lieferungen und Auspflanzungen zu planen.<br/><br/>
 
-Die Übersicht dokumentiert auch auf einer hohen Ebene die zentralen Vorgänge im Projekt (Projekt-Ziel 5).<br/><br/>
+Die Übersicht dokumentiert auch auf einer hohen Ebene zentrale Vorgänge (Projekt-Ziel 5).<br/><br/>
 
 ### Was
 Dargestellt werden primär die Mengen der für die Planung wesentlichen Einheiten:
@@ -29,7 +29,7 @@ Sekundär (in den Fenstern, die sich öffnen, wenn man über einem Zeitpunkt sch
 - Beschreibung auspflanzbereite Pflanzen
 - Bemerkungen
 
-Von den primären Informationen erhält man also auf den ersten Blick eine Übersicht.<br/>
+Von den primären Informationen erhält man somit auf den ersten Blick eine Übersicht.<br/>
 Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.<br/><br/>
 
 ### Wie
@@ -38,7 +38,7 @@ Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.
 Als Grundlage werden verwendet:
 
 - Anzahlen aus durchgeführten Zählungen
-- Anzahlen aus geplanten Zählungen. Aber nur, wenn sie nach der letzten durchgeführten Zählung geplant sind
+- Anzahlen aus geplanten Zählungen, wenn sie nach der letzten durchgeführten Zählung geplant sind
 - Anzahlen aus durchgeführten Lieferungen:<br/>
   Referenz sind die Anzahlen aus letzten zuvor durchgeführten Zählung.<br/>
   Erfolgte die Lieferung vor der ersten Zählung, wird als Referenz für alle Einheiten die Anzahl 0 verwendet.<br/>
