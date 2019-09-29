@@ -14,6 +14,7 @@ with
       z.datum,
       z.geplant,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
+      sum(tz.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
       'zaehlung' as action
     FROM
       kultur k inner join zaehlung z
@@ -45,7 +46,10 @@ with
           )
         )
       )
-      and tz.anzahl_pflanzen is not null
+      and (
+        tz.anzahl_pflanzen is not null
+        or tz.anzahl_auspflanzbereit is not null
+      )
     group by
       k.art_id,
       z.id,
@@ -82,6 +86,7 @@ with
       s.datum,
       s.geplant,
       s.anzahl_pflanzen,
+      0 as anzahl_auspflanzbereit,
       'sammlung' as action
     FROM
       sammlung s
@@ -143,6 +148,7 @@ with
       l.datum,
       l.geplant,
       -l.anzahl_pflanzen as anzahl_pflanzen,
+      -l.anzahl_auspflanzbereit as anzahl_auspflanzbereit,
       'auspflanzung' as action
     FROM
       lieferung l
@@ -171,7 +177,10 @@ with
           )
         )
       )
-      and l.anzahl_pflanzen is not null
+      and (
+        l.anzahl_pflanzen is not null
+        or l.anzahl_auspflanzbereit is not null
+      )
       and l.nach_ausgepflanzt is true
     order by
       art_id,
@@ -184,7 +193,9 @@ select
   partitioner,
   datum,
   anzahl_pflanzen,
-  sum(anzahl_pflanzen) over (partition by art_id, partitioner order by datum) as sum_anzahl_pflanzen
+  anzahl_auspflanzbereit,
+  sum(anzahl_pflanzen) over (partition by art_id, partitioner order by datum) as sum_anzahl_pflanzen,
+  sum(anzahl_auspflanzbereit) over (partition by art_id, partitioner order by datum) as sum_anzahl_auspflanzbereit
 from counts
 order by
   art_id,

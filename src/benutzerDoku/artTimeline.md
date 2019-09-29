@@ -6,10 +6,8 @@ title: "Zeit-Achse für Arten"
 sort: 4
 ---
 
-TODO
-
 ### Ziel
-Ziele 2, 3 und 4 der [Projekt-Ziele](/Dokumentation/Benutzer/Ziele/): Übersichten über Pflanzen, auspflanz-bereite Pflanzen und Mutterpflanzen.<br/>
+Ziele 2, 3 und 4 der [Projekt-Ziele](/Dokumentation/Benutzer/Ziele): Übersichten über Pflanzen und auspflanz-bereite Pflanzen.<br/>
 Als Grundlage, um Kulturen, Auspflanzungen und Sammlungen zu planen.<br/><br/>
 
 Die Übersicht dokumentiert auch auf einer hohen Ebene die zentralen Vorgänge im Projekt (Projekt-Ziel 5).<br/><br/>
@@ -19,9 +17,8 @@ Dargestellt werden primär die Mengen der für die Planung wesentlichen Einheite
 
 - Anzahl Pflanzen
 - Anzahl auspflanzungs-bereite Pflanzen
-- Anzahl Mutter-Pflanzen
 
-...aus Zählungen und Lieferungen, durchgeführt und geplant.<br/><br/>
+...aus Sammlungen und Auspflanzungen (= Lieferungen, nach: Ausgepflanzt), durchgeführt und geplant.<br/><br/>
 
 Sekundär (in den Fenstern, die sich öffnen, wenn man über einem Zeitpunkt schwebt) werden weitere Informationen dargestellt, sofern vorhanden:
 
@@ -41,20 +38,18 @@ Als Grundlage werden verwendet:
 
 - Anzahlen aus durchgeführten Zählungen
 - Anzahlen aus geplanten Zählungen. Aber nur, wenn sie nach der letzten durchgeführten Zählung geplant sind
-- Anzahlen aus durchgeführten Lieferungen:<br/>
+- Anzahlen aus durchgeführten Sammlungen und Auspflanzungen:<br/>
   Referenz sind die Anzahlen aus letzten zuvor durchgeführten Zählung.<br/>
-  Erfolgte die Lieferung vor der ersten Zählung, wird als Referenz für alle Einheiten die Anzahl 0 verwendet.<br/>
-  Zur Referenz wird summiert, was in der Zwischenzeit geliefert wurde.
-- Anzahlen aus geplanten Lieferungen, die nach der letzten durchgeführten Zählung geplant sind
+  Erfolgte die Sammlung vor der ersten Zählung, wird als Referenz für alle Einheiten die Anzahl 0 verwendet.<br/>
+  Zur Referenz wird summiert, was in der Zwischenzeit gesammelt wurde. Und subtrahiert, was in der Zwischenzeit ausgepflanzt wurde.
+- Anzahlen aus geplanten Sammlungen und Auspflanzungen, die nach der letzten durchgeführten Zählung geplant sind
+
+Vor der letzten durchgeführten Zählung geplante Zählungen, Sammlungen oder Auspflanzungen werden ignoriert.<br/><br/>
 
 Linien, die geplante Anzahlen darstellen, verwenden dieselbe Farbe wie die Linie für die entsprechende Einheit bei durchgeführten Zählungen. Aber etwas aufgehellt.<br/><br/>
 
-#### Punkte für ignorierte Zählungen
-- Geplante Zählungen, nach denen eine Zählung durchgeführt wurde, werden nicht als Teil der Linien berücksichtigt.<br/>
-  Stattdessen werden sie in separaten Punkten dargestellt
-
 #### Säulen für Lieferungen
-- An-Lieferungen werden als Säulen mit positiven Werten dargestellt,
-- Aus-Lieferungen mit negativen Werten
-- Lieferungen, die nach der letzten durchgeführten Zählung geplant sind, werden etwas aufgehellt dargestellt.<br/>
-  Vor diesem Zeitpunkt geplante werden in abweichenden Farben dargestellt
+- Sammlungen werden als Säulen mit positiven Werten dargestellt,
+- Auspflanzungen mit negativen Werten
+- Sammlungen und Auspflanzungen, die nach der letzten durchgeführten Zählung geplant sind, werden etwas aufgehellt dargestellt.<br/>
+  Vor diesem Zeitpunkt geplante werden ignoriert.
