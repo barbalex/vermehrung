@@ -70,6 +70,7 @@ const ArtTimeline = ({ row }) => {
       zaehlungenDone.map(l => ({
         datum: new Date(l.datum).getTime(),
         'Zählung Pflanzen': l.sum_anzahl_pflanzen,
+        'Zählung Pflanzen auspflanzbereit': l.sum_anzahl_auspflanzbereit,
       })),
     [zaehlungenDone],
   )
@@ -78,6 +79,8 @@ const ArtTimeline = ({ row }) => {
       [lastZaehlungDone, ...zaehlungenPlanned].map(l => ({
         datum: new Date(l.datum).getTime(),
         'Zählung Pflanzen geplant': l.sum_anzahl_pflanzen,
+        'Zählung Pflanzen auspflanzbereit geplant':
+          l.sum_anzahl_auspflanzbereit,
       })),
     [lastZaehlungDone, zaehlungenPlanned],
   )
@@ -99,7 +102,8 @@ const ArtTimeline = ({ row }) => {
     () =>
       sammlungen.map(l => ({
         datum: new Date(l.datum).getTime(),
-        [`Sammlung Pflanzen${l.geplant ? ' geplant' : ''}`]: l.anzahl_pflanzen,
+        [`Sammlung Pflanzen${l.geplant ? ' geplant' : ''}`]:
+          l.anzahl_pflanzen || 0,
         'Sammlung andere Mengen': l.andere_menge,
         'Sammlung Gramm Samen': l.gramm_samen,
         'Sammlung von Anzahl Individuen': l.von_anzahl_individuen,
@@ -107,6 +111,9 @@ const ArtTimeline = ({ row }) => {
         [`Zählung Pflanzen${
           l.geplant ? ' geplant' : ''
         }`]: l.sum_anzahl_pflanzen,
+        [`Zählung Pflanzen auspflanzbereit${
+          l.geplant ? ' geplant' : ''
+        }`]: l.sum_anzahl_auspflanzbereit,
       })),
     [sammlungen],
   )
@@ -115,9 +122,10 @@ const ArtTimeline = ({ row }) => {
     () =>
       auspflanzungen.map(l => ({
         datum: new Date(l.datum).getTime(),
-        [`Auspflanzung Pflanzen${
-          l.geplant ? ' geplant' : ''
-        }`]: l.anzahl_pflanzen,
+        [`Auspflanzung Pflanzen${l.geplant ? ' geplant' : ''}`]:
+          l.anzahl_pflanzen || 0,
+        [`Auspflanzung Pflanzen auspflanzbereit${l.geplant ? ' geplant' : ''}`]:
+          l.anzahl_auspflanzbereit || 0,
         'Auspflanzung andere Mengen': l.andere_menge,
         'Auspflanzung Gramm Samen': l.gramm_samen,
         'Auspflanzung von Anzahl Individuen': l.von_anzahl_individuen,
@@ -125,6 +133,9 @@ const ArtTimeline = ({ row }) => {
         [`Zählung Pflanzen${
           l.geplant ? ' geplant' : ''
         }`]: l.sum_anzahl_pflanzen,
+        [`Zählung Pflanzen auspflanzbereit${
+          l.geplant ? ' geplant' : ''
+        }`]: l.sum_anzahl_auspflanzbereit,
       })),
     [auspflanzungen],
   )
@@ -179,7 +190,7 @@ const ArtTimeline = ({ row }) => {
           <Legend
             layout="vertical"
             align="right"
-            wrapperStyle={{ right: -10, bottom: 180, fontSize: 12 }}
+            wrapperStyle={{ right: -10, bottom: 150, fontSize: 12 }}
           />
           <ReferenceLine y={0} stroke="#000" />
           <Bar
@@ -196,12 +207,24 @@ const ArtTimeline = ({ row }) => {
           />
           <Bar
             dataKey="Auspflanzung Pflanzen"
-            fill="#016526"
+            fill="#4a148c"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
             dataKey="Auspflanzung Pflanzen geplant"
+            fill="#b1b1e7"
+            label={<LabelLieferung />}
+            isAnimationActive={false}
+          />
+          <Bar
+            dataKey="Auspflanzung Pflanzen auspflanzbereit"
+            fill="#016526"
+            label={<LabelLieferung />}
+            isAnimationActive={false}
+          />
+          <Bar
+            dataKey="Auspflanzung Pflanzen auspflanzbereit geplant"
             fill="#02e355"
             label={<LabelLieferung />}
             isAnimationActive={false}
@@ -220,6 +243,24 @@ const ArtTimeline = ({ row }) => {
             connectNulls={true}
             dataKey="Zählung Pflanzen geplant"
             stroke="#b1b1e7"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Pflanzen auspflanzbereit"
+            stroke="#016526"
+            strokeWidth={2}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Zählung Pflanzen auspflanzbereit geplant"
+            stroke="#02e355"
             strokeWidth={2}
             label={<LabelZaehlung />}
             isAnimationActive={false}

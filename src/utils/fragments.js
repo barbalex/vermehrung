@@ -270,5 +270,7 @@ export const artSums = gql`
     datum
     anzahl_pflanzen
     sum_anzahl_pflanzen
+    anzahl_auspflanzbereit
+    sum_anzahl_auspflanzbereit
   }
 `
