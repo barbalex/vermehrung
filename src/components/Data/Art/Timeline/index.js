@@ -179,7 +179,7 @@ const ArtTimeline = ({ row }) => {
           <Legend
             layout="vertical"
             align="right"
-            wrapperStyle={{ right: -10, bottom: 12, fontSize: 12 }}
+            wrapperStyle={{ right: -10, bottom: 180, fontSize: 12 }}
           />
           <ReferenceLine y={0} stroke="#000" />
           <Bar
@@ -196,13 +196,13 @@ const ArtTimeline = ({ row }) => {
           />
           <Bar
             dataKey="Auspflanzung Pflanzen"
-            fill="#4a148c"
+            fill="#016526"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
             dataKey="Auspflanzung Pflanzen geplant"
-            fill="#b1b1e7"
+            fill="#02e355"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
