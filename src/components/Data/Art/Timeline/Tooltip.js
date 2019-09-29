@@ -28,26 +28,38 @@ const CustomTooltip = ({ payload, label, active }) => {
             return (
               <div key={`${o.dataKey}0`}>
                 <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
-                {o.payload['Auspflanzung Gramm Samen'] && (
-                  <PRow key={`${o.dataKey}1`}>{`Auspflanzung Gramm Samen: ${
-                    o.payload['Auspflanzung Gramm Samen']
-                  }`}</PRow>
-                )}
-                {o.payload['Zählung andere Mengen'] && (
-                  <PRow key={`${o.dataKey}2`}>{`Zählung andere Mengen: ${
-                    o.payload['Zählung andere Mengen']
-                  }`}</PRow>
-                )}
                 {o.payload['Auspflanzung andere Mengen'] && (
                   <PRow key={`${o.dataKey}3`}>{`Auspflanzung andere Mengen: ${
                     o.payload['Auspflanzung andere Mengen']
                   }`}</PRow>
                 )}
-                {o.payload['Lieferung von Anzahl Individuen'] && (
+                {o.payload['Auspflanzung von Anzahl Individuen'] && (
                   <PRow
                     key={`${o.dataKey}4`}
-                  >{`Lieferung von Anzahl Individuen: ${
-                    o.payload['Lieferung von Anzahl Individuen']
+                  >{`Auspflanzung von Anzahl Individuen: ${
+                    o.payload['Auspflanzung von Anzahl Individuen']
+                  }`}</PRow>
+                )}
+                {o.payload['Auspflanzung Gramm Samen'] && (
+                  <PRow key={`${o.dataKey}1`}>{`Auspflanzung Gramm Samen: ${
+                    o.payload['Auspflanzung Gramm Samen']
+                  }`}</PRow>
+                )}
+                {o.payload['Auspflanzung Bemerkungen'] && (
+                  <PRow key={`${o.dataKey}8`}>{`Auspflanzung Bemerkungen: ${
+                    o.payload['Auspflanzung Bemerkungen']
+                  }`}</PRow>
+                )}
+                {o.payload['Zählung Anzahl Mutterpflanzen'] && (
+                  <PRow
+                    key={`${o.dataKey}2`}
+                  >{`Zählung Anzahl Mutterpflanzen: ${
+                    o.payload['Zählung Anzahl Mutterpflanzen']
+                  }`}</PRow>
+                )}
+                {o.payload['Zählung andere Mengen'] && (
+                  <PRow key={`${o.dataKey}2`}>{`Zählung andere Mengen: ${
+                    o.payload['Zählung andere Mengen']
                   }`}</PRow>
                 )}
                 {o.payload[
@@ -59,25 +71,31 @@ const CustomTooltip = ({ payload, label, active }) => {
                     o.payload['Zählung Beschreibung auspflanzbereite Pflanzen']
                   }`}</PRow>
                 )}
-                {o.payload[
-                  'Lieferung Beschreibung auspflanzbereite Pflanzen'
-                ] && (
-                  <PRow
-                    key={`${o.dataKey}6`}
-                  >{`Lieferung Beschreibung auspflanzbereite Pflanzen: ${
-                    o.payload[
-                      'Lieferung Beschreibung auspflanzbereite Pflanzen'
-                    ]
-                  }`}</PRow>
-                )}
                 {o.payload['Zählung Bemerkungen'] && (
                   <PRow key={`${o.dataKey}7`}>{`Zählung Bemerkungen: ${
                     o.payload['Zählung Bemerkungen']
                   }`}</PRow>
                 )}
-                {o.payload['Lieferung Bemerkungen'] && (
-                  <PRow key={`${o.dataKey}8`}>{`Lieferung Bemerkungen: ${
-                    o.payload['Lieferung Bemerkungen']
+                {o.payload['Sammlung andere Mengen'] && (
+                  <PRow key={`${o.dataKey}3`}>{`Sammlung andere Mengen: ${
+                    o.payload['Sammlung andere Mengen']
+                  }`}</PRow>
+                )}
+                {o.payload['Sammlung von Anzahl Individuen'] && (
+                  <PRow
+                    key={`${o.dataKey}4`}
+                  >{`Sammlung von Anzahl Individuen: ${
+                    o.payload['Sammlung von Anzahl Individuen']
+                  }`}</PRow>
+                )}
+                {o.payload['Sammlung Gramm Samen'] && (
+                  <PRow key={`${o.dataKey}1`}>{`Sammlung Gramm Samen: ${
+                    o.payload['Sammlung Gramm Samen']
+                  }`}</PRow>
+                )}
+                {o.payload['Sammlung Bemerkungen'] && (
+                  <PRow key={`${o.dataKey}8`}>{`Sammlung Bemerkungen: ${
+                    o.payload['Sammlung Bemerkungen']
                   }`}</PRow>
                 )}
               </div>
