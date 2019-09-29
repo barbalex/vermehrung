@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Dokumentation/Technisch/Roadmap"
-date: "2019-06-19"
+date: "2019-09-30"
 title: "Roadmap"
 sort: 4
 ---
