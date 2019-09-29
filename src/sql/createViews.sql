@@ -18,24 +18,27 @@ with
       on k.id = z.kultur_id
     where
       z.datum is not null
-      and z.geplant is false or (
-        -- zahlung is after last count done for this art_id
-        z.datum > (
-          select
-          distinct on (a.id) z.datum
-          from
-            art a
-              inner join kultur
-                inner join zaehlung z
-                on kultur.id = z.kultur_id
-              on a.id = kultur.art_id
-          where
-            kultur.art_id = k.art_id
-            and z.geplant is false
-            and z.datum is not null
-          order by
-            a.id,
-            z.datum desc
+      and (
+        z.geplant is false or
+        (
+          -- zahlung is after last count done for this art_id
+          z.datum > (
+            select
+            distinct on (a.id) z.datum
+            from
+              art a
+                inner join kultur
+                  inner join zaehlung z
+                  on kultur.id = z.kultur_id
+                on a.id = kultur.art_id
+            where
+              kultur.art_id = k.art_id
+              and z.geplant is false
+              and z.datum is not null
+            order by
+              a.id,
+              z.datum desc
+          )
         )
       )
       and tz.anzahl_pflanzen is not null
@@ -71,7 +74,29 @@ with
       sammlung s
     where
       s.datum is not null
-      and s.geplant is false
+      and (
+        s.geplant is false or
+        (
+          -- sammlung is after last count done for this art_id
+          s.datum > (
+            select
+            distinct on (a.id) z.datum
+            from
+              art a
+                inner join kultur
+                  inner join zaehlung z
+                  on kultur.id = z.kultur_id
+                on a.id = kultur.art_id
+            where
+              kultur.art_id = s.art_id
+              and z.geplant is false
+              and z.datum is not null
+            order by
+              a.id,
+              z.datum desc
+          )
+        )
+      )
       and s.anzahl_pflanzen is not null
     union all
     select
