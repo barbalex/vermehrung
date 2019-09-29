@@ -31,7 +31,7 @@ export default gql`
       ) {
         ...SammlungFields
       }
-      lieferungsDone: lieferungs(
+      auspflanzungsDone: lieferungs(
         where: {
           nach_ausgepflanzt: { _eq: true }
           geplant: { _eq: false }
@@ -40,7 +40,7 @@ export default gql`
       ) {
         ...LieferungFields
       }
-      lieferungsPlanned: lieferungs(
+      auspflanzungsPlanned: lieferungs(
         where: {
           nach_ausgepflanzt: { _eq: true }
           geplant: { _eq: true }

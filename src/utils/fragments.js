@@ -264,18 +264,14 @@ export const zaehlung = gql`
 export const vArtZaehlungDoneSums = gql`
   fragment ArtZaehlungDoneSumsFields on v_art_zaehlung_done_sums {
     art_id
-    zaehlung_id
     datum
     anzahl_pflanzen
-    anzahl_auspflanzbereit
   }
 `
 export const vArtZaehlungPlannedSums = gql`
   fragment ArtZaehlungPlannedSumsFields on v_art_zaehlung_planned_sums {
     art_id
-    zaehlung_id
     datum
     anzahl_pflanzen
-    anzahl_auspflanzbereit
   }
 `
