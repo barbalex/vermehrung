@@ -23,23 +23,26 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: App inklusive Entwicklungs-Umgebung initiiert
 - :white_check_mark: Navigation entworfen
 - :white_check_mark: Navigations-Baum gebaut
-- :ballot_box_with_check: Daten-Laden optimiert
+- :white_check_mark: Daten-Laden optimiert
 - :white_check_mark: Formulare gebaut
 - :white_check_mark: Filter gebaut
 - :white_check_mark: Volltext-Suche gebaut
 - :white_check_mark: Authentifikation und Authorisierung gebaut
 - :ballot_box_with_check: Rollen werden durchgesetzt
-- :ballot_box_with_check: Navigations-Baum ist interaktiv (Kontext-Menüs)
+- :white_check_mark: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_check_mark: Benutzer können verwaltet werden
-- :ballot_box_with_check: Grundlegende Funktionalitäten mit Topos bereinigt
+- :white_check_mark: Grundlegende Funktionalitäten mit Topos bereinigt
 - :white_check_mark: Auftrag ist erteilt
 - :white_check_mark: Funktionalitäten gemäss erster Bereinigung angepasst
 - :white_check_mark: Bilder und Dateien können erfasst werden
+- :white_check_mark: Teil-Kulturen können benutzt werden
+- :white_check_mark: Teil-Kulturen sind opt-in
+- :white_check_mark: Nicht obligatorische Felder können ein- und ausgeblendet werden
 - :white_check_mark: Nicht aktive Personen, Gärten und Kulturen können ein-/ausgeblendet werden
 - :white_check_mark: PostGIS für Koordinaten benutzen
-- :white_medium_square: Übersichten bauen für: Kultur, Garten, Art
+- :ballot_box_with_check: Übersichten bauen für: Kultur, Art
 - :white_medium_square: Übersichten können gedruckt werden
 - :white_medium_square: Daten können exportiert werden
 - :white_medium_square: Qualitätskontrollen bauen
 - :white_medium_square: Funktionalitäten mit Topos bereinigt
-- :white_medium_square: Produktive Version 1.0.0 live schalten (geplant: Herbst 2019)
+- :white_medium_square: Produktive Version 1.0.0 live schalten (geplant: Ende 2019)
