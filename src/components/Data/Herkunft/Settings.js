@@ -50,7 +50,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
         await client.mutate({
           mutation: gql`
               mutation update_person_felder(
-                $personId: Int!
+                $personId: bigint!
               ) {
                 update_person_felder(
                   where: { person_id: { _eq: $personId } }

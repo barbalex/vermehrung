@@ -56,7 +56,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
         await client.mutate({
           mutation: gql`
               mutation update_kultur_felder(
-                $kulturId: Int!
+                $kulturId: bigint!
               ) {
                 update_kultur_felder(
                   where: { kultur_id: { _eq: $kulturId } }
