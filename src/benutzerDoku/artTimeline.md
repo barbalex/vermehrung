@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Zeitachse-Art"
-date: "2019-09-20"
+date: "2019-09-29"
 title: "Zeit-Achse für Arten"
 sort: 4
 ---
