@@ -59,9 +59,8 @@ const Kultur = ({ row }) => {
     // check if more recent zaehlungenDone exists
     zaehlungenDone.some(z => z.datum >= zg.datum),
   )
-  const zaehlungPlannedIgnoredIds = zaehlungenPlannedIgnored.map(l => l.id)
   let zaehlungenPlannedIncluded = zaehlungenPlanned.filter(
-    lg => !zaehlungPlannedIgnoredIds.includes(lg.id),
+    lg => !zaehlungenPlannedIgnored.map(l => l.id).includes(lg.id),
   )
   if (zaehlungenPlannedIncluded.length) {
     // need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
