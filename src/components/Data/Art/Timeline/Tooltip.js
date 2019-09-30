@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
 
+import exists from '../../../../utils/exists'
+
 const Popup = styled.div`
   background-color: white;
   border: 1px solid rgba(74, 20, 140, 0.9);
@@ -25,75 +27,76 @@ const CustomTooltip = ({ payload, label, active }) => {
         {payload.map((o, i) => {
           // if this payload is last non summable values
           if (i === payload.length - 1) {
+            console.log('Payload:', payload)
             return (
               <div key={`${o.dataKey}0`}>
                 <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
-                {o.payload['Auspflanzung andere Mengen'] && (
+                {exists(o.payload['Auspflanzung andere Mengen']) && (
                   <PRow key={`${o.dataKey}3`}>{`Auspflanzung andere Mengen: ${
                     o.payload['Auspflanzung andere Mengen']
                   }`}</PRow>
                 )}
-                {o.payload['Auspflanzung von Anzahl Individuen'] && (
+                {exists(o.payload['Auspflanzung von Anzahl Individuen']) && (
                   <PRow
                     key={`${o.dataKey}4`}
                   >{`Auspflanzung von Anzahl Individuen: ${
                     o.payload['Auspflanzung von Anzahl Individuen']
                   }`}</PRow>
                 )}
-                {o.payload['Auspflanzung Gramm Samen'] && (
+                {exists(o.payload['Auspflanzung Gramm Samen']) && (
                   <PRow key={`${o.dataKey}1`}>{`Auspflanzung Gramm Samen: ${
                     o.payload['Auspflanzung Gramm Samen']
                   }`}</PRow>
                 )}
-                {o.payload['Auspflanzung Bemerkungen'] && (
+                {exists(o.payload['Auspflanzung Bemerkungen']) && (
                   <PRow key={`${o.dataKey}8`}>{`Auspflanzung Bemerkungen: ${
                     o.payload['Auspflanzung Bemerkungen']
                   }`}</PRow>
                 )}
-                {o.payload['Zählung Anzahl Mutterpflanzen'] && (
+                {exists(o.payload['Zählung Anzahl Mutterpflanzen']) && (
                   <PRow
                     key={`${o.dataKey}2`}
                   >{`Zählung Anzahl Mutterpflanzen: ${
                     o.payload['Zählung Anzahl Mutterpflanzen']
                   }`}</PRow>
                 )}
-                {o.payload['Zählung andere Mengen'] && (
+                {exists(o.payload['Zählung andere Mengen']) && (
                   <PRow key={`${o.dataKey}2`}>{`Zählung andere Mengen: ${
                     o.payload['Zählung andere Mengen']
                   }`}</PRow>
                 )}
-                {o.payload[
-                  'Zählung Beschreibung auspflanzbereite Pflanzen'
-                ] && (
+                {exists(
+                  o.payload['Zählung Beschreibung auspflanzbereite Pflanzen'],
+                ) && (
                   <PRow
                     key={`${o.dataKey}5`}
                   >{`Zählung Beschreibung auspflanzbereite Pflanzen: ${
                     o.payload['Zählung Beschreibung auspflanzbereite Pflanzen']
                   }`}</PRow>
                 )}
-                {o.payload['Zählung Bemerkungen'] && (
+                {exists(o.payload['Zählung Bemerkungen']) && (
                   <PRow key={`${o.dataKey}7`}>{`Zählung Bemerkungen: ${
                     o.payload['Zählung Bemerkungen']
                   }`}</PRow>
                 )}
-                {o.payload['Sammlung andere Mengen'] && (
+                {exists(o.payload['Sammlung andere Mengen']) && (
                   <PRow key={`${o.dataKey}3`}>{`Sammlung andere Mengen: ${
                     o.payload['Sammlung andere Mengen']
                   }`}</PRow>
                 )}
-                {o.payload['Sammlung von Anzahl Individuen'] && (
+                {exists(o.payload['Sammlung von Anzahl Individuen']) && (
                   <PRow
                     key={`${o.dataKey}4`}
                   >{`Sammlung von Anzahl Individuen: ${
                     o.payload['Sammlung von Anzahl Individuen']
                   }`}</PRow>
                 )}
-                {o.payload['Sammlung Gramm Samen'] && (
+                {exists(o.payload['Sammlung Gramm Samen']) && (
                   <PRow key={`${o.dataKey}1`}>{`Sammlung Gramm Samen: ${
                     o.payload['Sammlung Gramm Samen']
                   }`}</PRow>
                 )}
-                {o.payload['Sammlung Bemerkungen'] && (
+                {exists(o.payload['Sammlung Bemerkungen']) && (
                   <PRow key={`${o.dataKey}8`}>{`Sammlung Bemerkungen: ${
                     o.payload['Sammlung Bemerkungen']
                   }`}</PRow>
