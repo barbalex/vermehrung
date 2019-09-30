@@ -110,11 +110,6 @@ const TreeContainer = () => {
   // do not set nodes when data is empty
   // which happens while query is loading again
   if (!loading && Object.keys(data).length > 0) {
-    /**
-     * WEIRDO
-     * if the following console.log is not here,
-     * url in nodes is undefined!!!!????
-     */
     setNodes(buildNodes({ store, data, loading }))
   }
 
