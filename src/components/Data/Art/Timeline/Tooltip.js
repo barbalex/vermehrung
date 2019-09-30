@@ -27,7 +27,6 @@ const CustomTooltip = ({ payload, label, active }) => {
         {payload.map((o, i) => {
           // if this payload is last non summable values
           if (i === payload.length - 1) {
-            console.log('Payload:', payload)
             return (
               <div key={`${o.dataKey}0`}>
                 <PRow key={o.dataKey}>{`${o.dataKey}: ${o.value}`}</PRow>
