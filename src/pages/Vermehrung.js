@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useContext,
-  useCallback,
-  useState,
-  useRef,
-} from 'react'
+import React, { useEffect, useContext, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
@@ -14,7 +8,6 @@ import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
 import { login, isAuthenticated, silentAuth } from '../utils/auth'
-import getWindowSize from '../utils/getWindowSize'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
@@ -62,8 +55,6 @@ const Vermehrung = ({ location }) => {
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
 
   const [loading, setLoading] = useState(true)
-  const [dimensions, setDimensions] = useState({ height: 200, width: 200 })
-  const containerEl = useRef(null)
 
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
@@ -76,21 +67,6 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     silentAuth({ callback: handleCheckSession, store })
   }, [handleCheckSession, store])
-  const windowSize = getWindowSize()
-  useEffect(() => {
-    /**
-     * Problem
-     * using containerEl.current.clientHeight does not work on first load
-     * containerEl contains object with key current
-     * containerEl.current is null AT THE SAME MOMENT!!!!!!!!!!!!
-     * no idea why
-     * Solution: calculate values from window size
-     */
-    setDimensions({
-      height: windowSize.height - 64,
-      width: windowSize.width * treeWidthInPercentOfScreen,
-    })
-  }, [windowSize.height, windowSize.width])
   // when pathname changes, update activeNodeArray
   // seems no more needed?
   useEffect(() => {
@@ -98,16 +74,6 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  const onChange = useCallback(() => {
-    if (containerEl.current && containerEl.current.clientWidth) {
-      setDimensions({
-        height: containerEl.current.clientHeight,
-        width: containerEl.current.clientWidth,
-      })
-    } else {
-      setDimensions({ height: 200, width: 200 })
-    }
-  }, [])
   if (loading) return null
 
   /**
@@ -125,14 +91,13 @@ const Vermehrung = ({ location }) => {
   return (
     <ErrorBoundary>
       <Layout>
-        <Container ref={containerEl}>
+        <Container>
           <StyledSplitPane
             split="vertical"
             size={`${treeWidthInPercentOfScreen}%`}
             minSize={200}
-            onDragFinished={onChange}
           >
-            <Tree dimensions={dimensions} />
+            <Tree />
             {showFilter ? <Filter /> : <Data />}
           </StyledSplitPane>
         </Container>

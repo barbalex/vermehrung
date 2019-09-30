@@ -1,35 +1,40 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useReducer, useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 import ErrorBoundary from 'react-error-boundary'
+import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import Row from './Row'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  overflow: hidden;
-  padding-top: 5px;
-  padding-bottom: 5px;
+const StyledList = styled(List)`
+  overflow-x: hidden !important;
   @media print {
     display: none !important;
   }
 `
-const StyledList = styled(List)`
-  overflow-x: hidden !important;
-`
 
 const singleRowHeight = 23
 
-const Tree = ({ dimensions }) => {
+function sizeReducer(state, action) {
+  return action.payload
+}
+
+const Tree = () => {
   const store = useContext(storeContext)
   const { activeNodeArray: aNA, nodesSorted: nodes } = store.tree
+
+  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
+    width: 0,
+    height: 0,
+  })
+  const onResize = useCallback(
+    (width, height) => sizeDispatch({ payload: { width, height } }),
+    [],
+  )
 
   const listRef = React.createRef()
 
@@ -38,30 +43,20 @@ const Tree = ({ dimensions }) => {
     if (index > -1) listRef.current.scrollToItem(index)
   }, [aNA, listRef, nodes])
 
-  let height = 250
-  if (dimensions && dimensions.height) {
-    height = dimensions.height
-  }
-  let width = 250
-  if (dimensions && dimensions.width) {
-    width = dimensions.width
-  }
-
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledList
-          height={height}
-          itemCount={nodes.length}
-          itemSize={singleRowHeight}
-          width={width}
-          ref={listRef}
-        >
-          {({ index, style }) => (
-            <Row key={index} style={style} index={index} node={nodes[index]} />
-          )}
-        </StyledList>
-      </Container>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+      <StyledList
+        height={sizeState.height}
+        itemCount={nodes.length}
+        itemSize={singleRowHeight}
+        width={sizeState.width}
+        ref={listRef}
+      >
+        {({ index, style }) => (
+          <Row key={index} style={style} index={index} node={nodes[index]} />
+        )}
+      </StyledList>
     </ErrorBoundary>
   )
 }

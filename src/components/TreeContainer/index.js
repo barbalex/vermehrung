@@ -32,7 +32,7 @@ const Container = styled.div`
   }
 `
 
-const TreeContainer = ({ dimensions }) => {
+const TreeContainer = () => {
   const store = useContext(storeContext)
   const { setRefetch, openNodes, setNodes } = store.tree
   // 1. build list depending on path using react-window
@@ -125,7 +125,7 @@ const TreeContainer = ({ dimensions }) => {
     )
   }
 
-  return <Tree dimensions={dimensions} />
+  return <Tree />
 }
 
 export default observer(TreeContainer)
