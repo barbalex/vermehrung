@@ -176,8 +176,6 @@ const Teilzaehlung = ({
     refetchTz()
   }, [client, enqueNotification, refetchTz, row.id])
 
-  console.log('Teilzaehlung, teilkultur_id:', row.teilkultur_id)
-
   return (
     <ErrorBoundary>
       <>
