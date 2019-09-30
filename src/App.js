@@ -13,10 +13,14 @@ import 'moment/locale/de-ch' // this is the important bit, you have to import th
 import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 
+import localForage from 'localforage'
+import { navigate } from '@reach/router'
+
 import materialTheme from './utils/materialTheme'
 import client from '../client'
 import Notifier from './components/Notifier'
 import NotificationDismisser from './components/NotificationDismisser'
+import { isAuthenticated } from './utils/auth'
 
 const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
@@ -24,28 +28,52 @@ const myClient = client()
 
 if (typeof window !== 'undefined') window.store = mobxStore
 
+if (typeof window !== 'undefined') {
+  const visitedTopDomain = window.location.pathname === '/'
+  const blacklist = []
+  import('mst-persist').then(module =>
+    module
+      .default('store', mobxStore, {
+        storage: localForage,
+        jsonify: false,
+        blacklist,
+      })
+      .then(async () => {
+        // set last activeNodeArray
+        // only if top domain was visited
+        // TODO:
+        // without timeout and with timeout too low this errors before page Vermehrung logs
+        if (isAuthenticated() && visitedTopDomain) {
+          setTimeout(() => {
+            navigate(`/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`)
+          }, 20)
+        }
+      }),
+  )
+}
+
 const App = ({ element }) => (
   <MuiThemeProvider theme={materialTheme}>
     <MobxProvider value={mobxStore}>
       <ApolloProvider client={myClient}>
-          <MuiPickersUtilsProvider
-            utils={MomentUtils}
-            moment={moment}
-            locale="de-ch"
+        <MuiPickersUtilsProvider
+          utils={MomentUtils}
+          moment={moment}
+          locale="de-ch"
+        >
+          <SnackbarProvider
+            maxSnack={5}
+            preventDuplicate
+            autoHideDuration={10000}
+            action={key => <NotificationDismisser nKey={key} />}
           >
-            <SnackbarProvider
-              maxSnack={5}
-              preventDuplicate
-              autoHideDuration={10000}
-              action={key => <NotificationDismisser nKey={key} />}
-            >
-              <>
-                <GlobalStyle />
-                {element}
-                <Notifier />
-              </>
-            </SnackbarProvider>
-          </MuiPickersUtilsProvider>
+            <>
+              <GlobalStyle />
+              {element}
+              <Notifier />
+            </>
+          </SnackbarProvider>
+        </MuiPickersUtilsProvider>
       </ApolloProvider>
     </MobxProvider>
   </MuiThemeProvider>
