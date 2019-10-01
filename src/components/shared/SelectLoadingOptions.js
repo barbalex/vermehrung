@@ -19,7 +19,7 @@ const Container = styled.div`
   margin-bottom: 12px;
 `
 const Label = styled.div`
-  font-size: ${props => (props.labelsize ? `${props.labelsize}px` : '12px')};
+  font-size: ${props => `${props.labelsize}px`};
   color: rgb(0, 0, 0, 0.54);
 `
 const Error = styled.div`
@@ -80,38 +80,40 @@ const SelectTypable = ({
   valueLabelPath,
   field = '',
   label,
-  labelSize,
+  labelSize = 12,
   error: saveToDbError,
   saveToDb,
   query,
   filter,
-  queryNodesName,
-  variables = {},
+  resultNodesName,
+  resultNodesLabelName,
 }) => {
   const client = useApolloClient()
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
-      const ownFilter = inputValue
-        ? { artname: { includesInsensitive: inputValue }, ...variables }
-        : { artname: { isNull: false }, ...variables }
+      console.log('SelectLoadingOptionsm, inputValue', inputValue)
       let result
       try {
         result = await client.query({
           query,
           variables: {
-            filter: filter ? filter(inputValue) : ownFilter,
+            filter: filter(inputValue),
           },
         })
       } catch (error) {
         console.log({ error })
       }
       const { data } = result
-      const options = get(data, `${queryNodesName}.nodes`, [])
-      console.log('SelectLoadingOptionsm, loadOptions', { options })
+      console.log('SelectLoadingOptionsm, data', data)
+      const options = get(data, resultNodesName, []).map(o => ({
+        value: o.id,
+        label: o[resultNodesLabelName],
+      }))
+      console.log('SelectLoadingOptionsm, loadOptions', options)
       cb(options)
     },
-    [client, filter, query, queryNodesName, variables],
+    [client, filter, query, resultNodesLabelName, resultNodesName],
   )
 
   const onChange = useCallback(
@@ -123,6 +125,7 @@ const SelectTypable = ({
           value,
         },
       }
+      console.log('SelectLoadingOptions, onChange', { value, option, field })
       saveToDb(fakeEvent)
     },
     [field, saveToDb],
@@ -133,7 +136,17 @@ const SelectTypable = ({
     label: get(row, valueLabelPath) || '',
   }
 
-  //console.log('SelectLoadingOptions', { value })
+  console.log('SelectLoadingOptions', {
+    row,
+    valueLabelPath,
+    field,
+    label,
+    labelSize,
+    query,
+    resultNodesName,
+    value,
+    loadOptions,
+  })
 
   return (
     <Container data-id={field}>

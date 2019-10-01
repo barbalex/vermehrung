@@ -5,11 +5,9 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
-import Select from '../../shared/Select'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -18,6 +16,7 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import { art as artFragment } from '../../../utils/fragments'
 import Files from '../Files'
 import artQuery from './artQuery'
+import aeArtQuery from './aeArtQuery'
 import Timeline from './Timeline'
 
 const Container = styled.div`
@@ -30,23 +29,6 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
-`
-
-const aeArtQuery = gql`
-  query aeArtQuery($id: bigint!) {
-    ae_art(
-      where: {
-        _or: [
-          { _not: { ae_art_art: { id: { _is_null: false } } } }
-          { ae_art_art: { id: { _eq: $id } } }
-        ]
-      }
-      order_by: { name: asc_nulls_first }
-    ) {
-      id
-      name
-    }
-  }
 `
 
 const Art = ({ filter: showFilter }) => {
@@ -65,12 +47,6 @@ const Art = ({ filter: showFilter }) => {
     variables: { id: artId, filter: artFilter, isFiltered },
   })
 
-  const {
-    data: aeArtData,
-    error: aeArtError,
-    loading: aeArtLoading,
-  } = useQuery(aeArtQuery, { variables: { id: artId } })
-
   const [errors, setErrors] = useState({})
 
   let row
@@ -85,13 +61,6 @@ const Art = ({ filter: showFilter }) => {
   useEffect(() => {
     setErrors({})
   }, [row.id])
-
-  const artWerte = memoizeOne(() =>
-    get(aeArtData, 'ae_art', []).map(el => ({
-      value: el.id,
-      label: el.name || '(kein Artname)',
-    })),
-  )()
 
   const saveToDb = useCallback(
     async event => {
@@ -145,7 +114,7 @@ const Art = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error || aeArtError
+  const errorToShow = error
   if (errorToShow) {
     return (
       <Container>
@@ -177,29 +146,33 @@ const Art = ({ filter: showFilter }) => {
           />
         )}
         <FieldsContainer>
-          <Select
-            key={`${row.id}${row.ae_id}ae_id`}
-            name="ae_id"
-            value={row.ae_id}
-            field="ae_id"
-            label="Art"
-            options={artWerte}
-            loading={aeArtLoading}
-            saveToDb={saveToDb}
-            error={errors.ae_id}
-          />
           <SelectLoadingOptions
             key={`${row.id}ae_id2`}
             field="ae_id"
-            valueLabelPath="label"
+            valueLabelPath="art_ae_art.name"
             label="Art"
             row={row}
             saveToDb={saveToDb}
             error={errors.ae_id}
             query={aeArtQuery}
-            variables={{ id: artId }}
-            filter={val => ({ name: { _like: `%${val}%` }, id: artId })}
-            queryNodesName="ae_art"
+            filter={val =>
+              val
+                ? {
+                    _or: [
+                      { _not: { ae_art_art: { id: { _is_null: false } } } },
+                      { ae_art_art: { id: { _eq: artId } } },
+                    ],
+                    name: { _ilike: `%${val}%` },
+                  }
+                : {
+                    _or: [
+                      { _not: { ae_art_art: { id: { _is_null: false } } } },
+                      { ae_art_art: { id: { _eq: artId } } },
+                    ],
+                  }
+            }
+            resultNodesName="ae_art"
+            resultNodesLabelName="name"
           />
           {!showFilter && (
             <>
