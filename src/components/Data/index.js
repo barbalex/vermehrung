@@ -9,6 +9,7 @@ import Sammlung from './Sammlung'
 import Garten from './Garten'
 import Kultur from './Kultur'
 import Lieferung from './Lieferung'
+import SammelLieferung from './SammelLieferung'
 import Person from './Person'
 import Zaehlung from './Zaehlung'
 import Teilkultur from './Teilkultur'
@@ -32,6 +33,9 @@ const Data = () => {
     }
     case 'kultur': {
       return <Kultur />
+    }
+    case 'sammel_lieferung': {
+      return <SammelLieferung />
     }
     case 'lieferung': {
       return <Lieferung />

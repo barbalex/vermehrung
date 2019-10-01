@@ -58,7 +58,7 @@ export default ({ url, nodes, data, loading }) => {
         kulturId,
         'Teilkulturen',
       ],
-      sort: [10, personIndex, 2, gartenIndex, 1, kulturIndex, 1],
+      sort: [11, personIndex, 2, gartenIndex, 1, kulturIndex, 1],
       hasChildren: true,
     },
   ]

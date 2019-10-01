@@ -16,6 +16,9 @@ export default url => {
   if (url.length === 2 && url[0] === 'Lieferungen') {
     return 'lieferung'
   }
+  if (url.length === 2 && url[0] === 'Sammel-Lieferungen') {
+    return 'sammel_lieferung'
+  }
   if (url.length === 2 && url[0] === 'Teilkulturen') {
     return 'teilkultur'
   }
