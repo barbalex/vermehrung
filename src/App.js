@@ -46,7 +46,7 @@ if (typeof window !== 'undefined') {
         if (isAuthenticated() && visitedTopDomain) {
           setTimeout(() => {
             navigate(`/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`)
-          }, 20)
+          }, 80)
         }
       }),
   )
