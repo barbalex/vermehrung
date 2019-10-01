@@ -4,18 +4,18 @@ create function person_trigger() returns trigger as $$
   begin
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.name, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.adresszusatz, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.strasse, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.name, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.adresszusatz, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.strasse, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.plz::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.ort, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.fax_privat, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.email, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('simple', coalesce(new.ort, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.fax_privat, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.email, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -47,11 +47,11 @@ create function herkunft_trigger() returns trigger as $$
   begin
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.lokalname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.gemeinde, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.kanton, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.land, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('simple', coalesce(new.lokalname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.gemeinde, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.kanton, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.land, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -82,11 +82,11 @@ create function sammlung_trigger() returns trigger as $$
     from sammlung left join herkunft on sammlung.herkunft_id = herkunft.id
     where herkunft.id = new.herkunft_id;
     new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunftgemeinde, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(herkunftgemeinde, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.von_anzahl_individuen::text, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
@@ -99,7 +99,7 @@ create function sammlung_trigger() returns trigger as $$
         when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
         else setweight(to_tsvector('simple', 'geplant'), 'A')
       end || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -117,9 +117,9 @@ create function garten_trigger() returns trigger as $$
     from garten left join person on garten.person_id = person.id
     where person.id = new.person_id;
     new.tsv :=
-      setweight(to_tsvector('german', coalesce(new.name, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('simple', coalesce(new.name, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -152,19 +152,19 @@ create function kultur_trigger() returns trigger as $$
     from kultur left join herkunft on kultur.herkunft_id = herkunft.id
     where herkunft.id = new.herkunft_id;
       new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(gartenname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(gartenname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(herkunftgemeinde, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'D') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(herkunftgemeinde, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'D') || ' ' ||
       case
-        when new.zwischenlager='true' then setweight(to_tsvector('german', 'zwischenlager'), 'A')
+        when new.zwischenlager='true' then setweight(to_tsvector('simple', 'zwischenlager'), 'A')
         else ''
       end || ' ' ||
       case
-        when new.erhaltungskultur='true' then setweight(to_tsvector('german', 'erhaltungskultur'), 'A')
+        when new.erhaltungskultur='true' then setweight(to_tsvector('simple', 'erhaltungskultur'), 'A')
         else ''
       end;
     return new;
@@ -194,10 +194,10 @@ create function teilkultur_trigger() returns trigger as $$
       on teilkultur.kultur_id = kultur.id
     where kultur.id = new.kultur_id;
     new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.name, '')), 'A');
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(gartenname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(new.name, '')), 'A');
     return new;
   end
 $$ language plpgsql;
@@ -244,19 +244,19 @@ create function zaehlung_trigger() returns trigger as $$
     group by ae_art.name, person.name, zaehlung.id;
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(teilkulturname, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(teilkulturname, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(mengen_beschrieben, '')), 'C') || ' ' ||
-      setweight(to_tsvector('german', coalesce(auspflanzbereit_beschreibungen, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(mengen_beschrieben, '')), 'C') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(auspflanzbereit_beschreibungen, '')), 'C') || ' ' ||
       case
         when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
         else setweight(to_tsvector('simple', 'geplant'), 'A')
       end || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -315,25 +315,25 @@ create function lieferung_trigger() returns trigger as $$
       on lieferung.nach_kultur_id = nachKultur.id
     where nachKultur.id = new.nach_kultur_id;
     new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(sammlungNr, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(sammlungDatum, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(sammlungPerson, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(sammlungHerkunftNr, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(sammlungHerkunftLokalname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(sammlungHerkunftGemeinde, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(vonKulturPersonName, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungNr, '')), 'A') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungDatum, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungPerson, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungHerkunftNr, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungHerkunftLokalname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(sammlungHerkunftGemeinde, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(vonKulturPersonName, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.andere_menge, '')), 'A') || ' ' ||
-      setweight(to_tsvector('german', coalesce(nachKulturPersonName, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(nachKulturPersonName, '')), 'B') || ' ' ||
       case
         when new.nach_ausgepflanzt='true' then setweight(to_tsvector('simple', 'ausgepflanzt'), 'A')
         else ''
@@ -342,7 +342,7 @@ create function lieferung_trigger() returns trigger as $$
         when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
         else setweight(to_tsvector('simple', 'geplant'), 'A')
       end || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.bemerkungen, '')), 'C');
+      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
   end
 $$ language plpgsql;
@@ -373,9 +373,9 @@ create function aufgabe_trigger() returns trigger as $$
       on aufgabe.kultur_id = kultur.id
     where kultur.id = new.kultur_id;
     new.tsv :=
-      setweight(to_tsvector('german', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(gartenname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('german', coalesce(personname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(gartenname, '')), 'B') || ' ' ||
+      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
       setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
@@ -384,7 +384,7 @@ create function aufgabe_trigger() returns trigger as $$
         when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
         else setweight(to_tsvector('simple', 'geplant'), 'A')
       end || ' ' ||
-      setweight(to_tsvector('german', coalesce(new.aufgabe, '')), 'A');
+      setweight(to_tsvector('simple', coalesce(new.aufgabe, '')), 'A');
     return new;
   end
 $$ language plpgsql;
