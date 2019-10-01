@@ -92,7 +92,6 @@ const SelectTypable = ({
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
-      console.log('SelectLoadingOptionsm, inputValue', inputValue)
       let result
       try {
         result = await client.query({
@@ -104,13 +103,10 @@ const SelectTypable = ({
       } catch (error) {
         console.log({ error })
       }
-      const { data } = result
-      console.log('SelectLoadingOptionsm, data', data)
-      const options = get(data, resultNodesName, []).map(o => ({
+      const options = get(result.data, resultNodesName, []).map(o => ({
         value: o.id,
         label: o[resultNodesLabelName],
       }))
-      console.log('SelectLoadingOptionsm, loadOptions', options)
       cb(options)
     },
     [client, filter, query, resultNodesLabelName, resultNodesName],
@@ -125,7 +121,6 @@ const SelectTypable = ({
           value,
         },
       }
-      console.log('SelectLoadingOptions, onChange', { value, option, field })
       saveToDb(fakeEvent)
     },
     [field, saveToDb],
@@ -135,18 +130,6 @@ const SelectTypable = ({
     value: row[field] || '',
     label: get(row, valueLabelPath) || '',
   }
-
-  console.log('SelectLoadingOptions', {
-    row,
-    valueLabelPath,
-    field,
-    label,
-    labelSize,
-    query,
-    resultNodesName,
-    value,
-    loadOptions,
-  })
 
   return (
     <Container data-id={field}>
