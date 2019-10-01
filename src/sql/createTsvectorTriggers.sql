@@ -33,7 +33,7 @@ create function art_trigger() returns trigger as $$
     from ae_art inner join art on art.ae_id = ae_art.id
     where ae_art.id = new.ae_id;
     new.tsv :=
-      to_tsvector('german', coalesce(artname, ''));
+      to_tsvector('simple', coalesce(artname, ''));
     return new;
   end
 $$ language plpgsql;

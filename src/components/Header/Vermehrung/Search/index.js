@@ -134,6 +134,8 @@ export default () => {
     },
   })
 
+  console.log('Search:', { data, val })
+
   const suggestionsArt = get(data, 'art', []).map(o => ({
     id: o.id,
     name: get(o, 'art_ae_art.name') || '(kein Artname)',

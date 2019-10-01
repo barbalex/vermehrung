@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 
 import {
   art as artFragment,
+  aufgabe as aufgabeFragment,
   garten as gartenFragment,
   herkunft as herkunftFragment,
   kultur as kulturFragment,
@@ -73,6 +74,7 @@ export default gql`
     }
   }
   ${artFragment}
+  ${aufgabeFragment}
   ${gartenFragment}
   ${herkunftFragment}
   ${kulturFragment}
