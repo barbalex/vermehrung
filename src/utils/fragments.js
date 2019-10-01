@@ -24,6 +24,7 @@ export const aeArt = gql`
     id
     name
     name_deutsch
+    name_latein
   }
 `
 export const aufgabe = gql`
@@ -186,6 +187,7 @@ export const person = gql`
 export const personFelder = gql`
   fragment PersonFelderFields on person_felder {
     person_id
+    ar_name_deutsch
     ga_strasse
     ga_plz
     ga_ort

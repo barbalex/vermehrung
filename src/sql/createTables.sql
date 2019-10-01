@@ -328,7 +328,7 @@ COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
 drop table if exists person_felder cascade;
 create table person_felder (
   person_id bigint unique not null references person (id) on delete cascade on update cascade,
-  ar_name_deutsch boolean default true,
+  ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
   ga_plz boolean default true,
   ga_ort boolean default true,

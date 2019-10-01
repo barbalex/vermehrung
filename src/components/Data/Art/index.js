@@ -13,10 +13,12 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import { art as artFragment } from '../../../utils/fragments'
+import {
+  art as artFragment,
+  aeArt as aeArtFragment,
+} from '../../../utils/fragments'
 import Files from '../Files'
 import artQuery from './artQuery'
-import aeArtQuery from './aeArtQuery'
 import Timeline from './Timeline'
 
 const Container = styled.div`
@@ -122,6 +124,15 @@ const Art = ({ filter: showFilter }) => {
           },
     [artId],
   )
+  // maybe: sort dependent on person_felder.ar_name_deutsch
+  const aeArtQuery = gql`
+    query aeArtQuery($filter: ae_art_bool_exp!) {
+      ae_art(where: $filter, order_by: { name: asc_nulls_first }, limit: 7) {
+        ...AeArtFields
+      }
+    }
+    ${aeArtFragment}
+  `
 
   if (loading) {
     return (

@@ -17,7 +17,8 @@ CREATE SERVER ae_server
 create foreign table ae_art (
   id uuid,
   name text,
-  name_deutsch text
+  name_deutsch text,
+  name_latein text
 )
 server ae_server options (schema_name 'ae', table_name 'v_vermehrung_arten');
 

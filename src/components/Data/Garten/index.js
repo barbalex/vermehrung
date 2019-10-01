@@ -27,6 +27,7 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import { getProfile } from '../../../utils/auth'
+import getUserPersonId from '../../../utils/getUserPersonId'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
@@ -142,9 +143,7 @@ const Garten = ({ filter: showFilter }) => {
     row = get(data, 'garten', [{}])[0]
   }
 
-  const user = getProfile()
-  const userPersonId =
-    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
+  const userPersonId = getUserPersonId()
   const personFelderResult = useQuery(personFelderQuery, {
     variables: { personId: userPersonId },
   })
