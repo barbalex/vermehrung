@@ -16,7 +16,8 @@ CREATE SERVER ae_server
 -- because joining tables is way too slow
 create foreign table ae_art (
   id uuid,
-  name text
+  name text,
+  name_deutsch text
 )
 server ae_server options (schema_name 'ae', table_name 'v_vermehrung_arten');
 

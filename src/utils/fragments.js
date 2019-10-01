@@ -23,6 +23,7 @@ export const aeArt = gql`
   fragment AeArtFields on ae_art {
     id
     name
+    name_deutsch
   }
 `
 export const aufgabe = gql`
