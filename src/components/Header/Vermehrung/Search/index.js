@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useContext } from 'react'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
@@ -9,19 +8,9 @@ import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import moment from 'moment'
 
-import storeContext from '../../../storeContext'
-import queryFromTable from '../../../utils/queryFromTable'
-
-import {
-  art as artFragment,
-  garten as gartenFragment,
-  herkunft as herkunftFragment,
-  kultur as kulturFragment,
-  lieferung as lieferungFragment,
-  person as personFragment,
-  sammlung as sammlungFragment,
-  zaehlung as zaehlungFragment,
-} from '../../../utils/fragments'
+import storeContext from '../../../../storeContext'
+import queryFromTable from '../../../../utils/queryFromTable'
+import filterSuggestionsQuery from './filterSuggestionsQuery'
 
 const formatDatum = datum =>
   datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : '(kein Datum)'
@@ -109,77 +98,6 @@ const DelIcon = styled(FaTimes)`
   margin: auto 5px;
   opacity: ${props => (props['data-active'] ? 1 : 0.4)};
   cursor: ${props => (props['data-active'] ? 'pointer' : 'default')};
-`
-
-const filterSuggestionsQuery = gql`
-  query filterSuggestionsQuery(
-    $filter: String!
-    $run: Boolean!
-    $personFilter: person_bool_exp!
-    $gartenFilter: garten_bool_exp!
-    $kulturFilter: kultur_bool_exp!
-  ) {
-    art: art_search(args: { filter: $filter }) @include(if: $run) {
-      ...ArtFields
-    }
-    garten: garten_search(args: { filter: $filter }, where: $gartenFilter)
-      @include(if: $run) {
-      ...GartenFields
-      person {
-        ...PersonFields
-      }
-    }
-    herkunft: herkunft_search(args: { filter: $filter }) @include(if: $run) {
-      ...HerkunftFields
-    }
-    kultur: kultur_search(args: { filter: $filter }, where: $kulturFilter)
-      @include(if: $run) {
-      ...KulturFields
-      art {
-        ...ArtFields
-      }
-      garten {
-        id
-        name
-        person {
-          ...PersonFields
-        }
-      }
-    }
-    aufgabe: aufgabe_search(args: { filter: $filter }) @include(if: $run) {
-      ...AufgabeFields
-      kultur {
-        ...KulturFields
-      }
-    }
-    lieferung: lieferung_search(args: { filter: $filter }) @include(if: $run) {
-      ...LieferungFields
-    }
-    person: person_search(args: { filter: $filter }, where: $personFilter)
-      @include(if: $run) {
-      ...PersonFields
-    }
-    sammlung: sammlung_search(args: { filter: $filter }) @include(if: $run) {
-      ...SammlungFields
-      art {
-        ...ArtFields
-      }
-      person {
-        ...PersonFields
-      }
-    }
-    zaehlung: zaehlung_search(args: { filter: $filter }) @include(if: $run) {
-      ...ZaehlungFields
-    }
-  }
-  ${artFragment}
-  ${gartenFragment}
-  ${herkunftFragment}
-  ${kulturFragment}
-  ${lieferungFragment}
-  ${personFragment}
-  ${sammlungFragment}
-  ${zaehlungFragment}
 `
 
 const loadingSuggestions = [
@@ -337,10 +255,13 @@ export default () => {
     ? titledSuggestions
     : loadingSuggestions
 
+  console.log('Search:', { suggestions })
+
   const onChange = useCallback(event => setVal(event.target.value), [])
   const onClickDel = useCallback(() => setVal(''), [])
   const onSuggestionSelected = useCallback(
     (event, { suggestion }) => {
+      console.log('Search, onSuggestionSelected, suggestion:', suggestion)
       let newActiveNodeArray
       // use suggestion.id to set url
       switch (suggestion.type) {
