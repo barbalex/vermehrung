@@ -12,6 +12,8 @@ import Row from './Row'
 
 const StyledList = styled(List)`
   overflow-x: hidden !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
   @media print {
     display: none !important;
   }
@@ -47,7 +49,7 @@ const Tree = () => {
     <ErrorBoundary>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <StyledList
-        height={sizeState.height}
+        height={sizeState.height - 10}
         itemCount={nodes.length}
         itemSize={singleRowHeight}
         width={sizeState.width}
