@@ -53,7 +53,7 @@ const KulturTimeline = ({ row }) => {
   }, [])
 
   const zaehlungenDone = get(row, 'zaehlungsDone') || []
-  const lastZaehlungDone = zaehlungenDone.slice(-1)[0]
+  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
   const zaehlungenPlanned = get(row, 'zaehlungsPlanned') || []
   const zaehlungenPlannedIgnored = zaehlungenPlanned.filter(zg =>
     // check if more recent zaehlungenDone exists

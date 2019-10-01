@@ -61,7 +61,7 @@ const ArtTimeline = ({ row }) => {
   const zaehlungenDone = artSums.filter(
     s => s.action === 'zaehlung' && !s.geplant,
   )
-  const lastZaehlungDone = zaehlungenDone.slice(-1)[0]
+  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
   const zaehlungenPlanned = artSums.filter(
     s => s.action === 'zaehlung' && s.geplant,
   )
