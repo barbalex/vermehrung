@@ -37,6 +37,7 @@ export default gql`
     $isHerkunft: Boolean!
     $isHerkunftSammlung: Boolean!
     $isLieferung: Boolean!
+    $isSammelLieferung: Boolean!
     $isPerson: Boolean!
     $isPersonGarten: Boolean!
     $isPersonGartenKultur: Boolean!

@@ -211,7 +211,7 @@ export const personFile = gql`
   }
 `
 export const sammelLieferung = gql`
-  fragment SammelLieferung on sammel_lieferung {
+  fragment SammelLieferungFields on sammel_lieferung {
     id
     art_id
     person_id
