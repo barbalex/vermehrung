@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Fehler-Ideen"
 date: "2019-09-30"
 title: "Fehler, Ideen, Vorschläge melden"
-sort: 10
+sort: 11
 ---
 
 Das geht so:
