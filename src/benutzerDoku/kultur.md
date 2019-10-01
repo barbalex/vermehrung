@@ -20,7 +20,9 @@ Danach wird eine neue Kultur erstellt, wenn im selben Garten aus derselben Herku
 In einem Garten kann es pro Herkunft einer Art immer nur eine aktive Kultur geben. Das wird in der Datenbank durchgesetzt.<br/><br/>
 
 ### Spezielle Formen
-...von Kulturen sind Erhaltungs-Kulturen und Zwischenlager.<br/><br/>
+...von Kulturen sind:
+- Erhaltungs-Kulturen
+- Zwischenlager
 
-### Von Anzahl Individuen
+### Genetische Vielfalt
 Das Feld "von Anzahl Individuen" nennt oder schätzt die Anzahl Pflanzen, welche die Basis für die genetische Vielfalt der Kultur bildet. Es ist manuell nachzuführen, wenn An-Lieferungen erfolgen.
