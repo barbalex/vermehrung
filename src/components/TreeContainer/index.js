@@ -49,6 +49,10 @@ const TreeContainer = () => {
       personFilter: queryFromTable({ store, table: 'person' }),
       sammlungFilter: queryFromTable({ store, table: 'sammlung' }),
       lieferungFilter: queryFromTable({ store, table: 'lieferung' }),
+      sammelLieferungFilter: queryFromTable({
+        store,
+        table: 'sammel_lieferung',
+      }),
       teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
       zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
       isArt: openNodes.some(n => n[0] === 'Arten'),
@@ -66,6 +70,7 @@ const TreeContainer = () => {
         n => n[0] === 'Herkuenfte' && n[2] === 'Sammlungen',
       ),
       isLieferung: openNodes.some(n => n[0] === 'Lieferungen'),
+      isSammelLieferung: openNodes.some(n => n[0] === 'Sammel-Lieferungen'),
       isPerson: openNodes.some(n => n[0] === 'Personen'),
       isPersonGarten: openNodes.some(
         n => n[0] === 'Personen' && n[2] === 'Gaerten',

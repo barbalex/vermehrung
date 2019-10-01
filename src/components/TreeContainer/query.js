@@ -8,6 +8,7 @@ import {
   kultur,
   kulturFelder,
   lieferung,
+  sammelLieferung,
   person,
   sammlung,
   teilkultur,
@@ -26,6 +27,7 @@ export default gql`
     $teilkulturFilter: teilkultur_bool_exp!
     $zaehlungFilter: zaehlung_bool_exp!
     $lieferungFilter: lieferung_bool_exp!
+    $sammelLieferungFilter: sammel_lieferung_bool_exp!
     $isArt: Boolean!
     $isAufgabe: Boolean!
     $isArtKultur: Boolean!
@@ -375,6 +377,15 @@ export default gql`
         }
       }
     }
+    sammel_lieferung(
+      where: $sammelLieferungFilter
+      order_by: { datum: desc_nulls_first }
+    ) {
+      ...SammelLieferungFields
+      lieferungs @include(if: $isSammelLieferung) {
+        ...LieferungFields
+      }
+    }
     lieferung(where: $lieferungFilter, order_by: { datum: desc_nulls_first }) {
       ...LieferungFields
       person @include(if: $isLieferung) {
@@ -547,6 +558,7 @@ export default gql`
   ${kulturFelder}
   ${herkunft}
   ${lieferung}
+  ${sammelLieferung}
   ${person}
   ${sammlung}
   ${teilkultur}

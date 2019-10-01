@@ -4,6 +4,7 @@ import { empty as herkunft } from './herkunft'
 import { empty as kultur } from './kultur'
 import { empty as kultur_felder } from './kultur_felder'
 import { empty as lieferung } from './lieferung'
+import { empty as sammel_lieferung } from './sammel_lieferung'
 import { empty as person } from './person'
 import { empty as sammlung } from './sammlung'
 import { empty as zaehlung } from './zaehlung'
@@ -17,6 +18,7 @@ export default {
   kultur,
   kultur_felder,
   lieferung,
+  sammel_lieferung,
   person,
   sammlung,
   zaehlung,

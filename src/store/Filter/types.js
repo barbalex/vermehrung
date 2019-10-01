@@ -7,6 +7,7 @@ import { type as herkunft } from './herkunft'
 import { type as kultur } from './kultur'
 import { type as kultur_felder } from './kultur_felder'
 import { type as lieferung } from './lieferung'
+import { type as sammel_lieferung } from './sammel_lieferung'
 import { type as person } from './person'
 import { type as sammlung } from './sammlung'
 import { type as zaehlung } from './zaehlung'
@@ -24,6 +25,7 @@ export default types
     kultur,
     kultur_felder,
     lieferung,
+    sammel_lieferung,
     person,
     sammlung,
     zaehlung,

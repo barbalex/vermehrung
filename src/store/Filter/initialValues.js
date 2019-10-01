@@ -5,6 +5,7 @@ import { initial as herkunft } from './herkunft'
 import { initial as kultur } from './kultur'
 import { initial as kultur_felder } from './kultur_felder'
 import { initial as lieferung } from './lieferung'
+import { initial as sammel_lieferung } from './sammel_lieferung'
 import { initial as person } from './person'
 import { initial as sammlung } from './sammlung'
 import { initial as zaehlung } from './zaehlung'
@@ -20,6 +21,7 @@ export default {
   kultur,
   kultur_felder,
   lieferung,
+  sammel_lieferung,
   person,
   sammlung,
   zaehlung,

@@ -4,6 +4,7 @@ import { simpleTypes as garten } from './garten'
 import { simpleTypes as herkunft } from './herkunft'
 import { simpleTypes as kultur } from './kultur'
 import { simpleTypes as lieferung } from './lieferung'
+import { simpleTypes as sammel_lieferung } from './sammel_lieferung'
 import { simpleTypes as person } from './person'
 import { simpleTypes as sammlung } from './sammlung'
 import { simpleTypes as zaehlung } from './zaehlung'
@@ -17,6 +18,7 @@ export default {
   herkunft,
   kultur,
   lieferung,
+  sammel_lieferung,
   person,
   sammlung,
   zaehlung,
