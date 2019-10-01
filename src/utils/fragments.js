@@ -136,6 +136,7 @@ export const kulturFelder = gql`
 export const lieferung = gql`
   fragment LieferungFields on lieferung {
     id
+    sammel_lieferung_id
     art_id
     person_id
     von_sammlung_id
@@ -207,6 +208,25 @@ export const personFile = gql`
     file_mime_type
     name
     beschreibung
+  }
+`
+export const sammelLieferung = gql`
+  fragment SammelLieferung on sammel_lieferung {
+    id
+    art_id
+    person_id
+    von_sammlung_id
+    von_kultur_id
+    datum
+    nach_kultur_id
+    nach_ausgepflanzt
+    von_anzahl_individuen
+    anzahl_pflanzen
+    anzahl_auspflanzbereit
+    gramm_samen
+    andere_menge
+    geplant
+    bemerkungen
   }
 `
 export const sammlung = gql`
