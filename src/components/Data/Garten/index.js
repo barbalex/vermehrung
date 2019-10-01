@@ -26,7 +26,6 @@ import {
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
-import { getProfile } from '../../../utils/auth'
 import getUserPersonId from '../../../utils/getUserPersonId'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'
