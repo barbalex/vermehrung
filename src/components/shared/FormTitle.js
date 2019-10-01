@@ -55,7 +55,7 @@ const FormTitle = ({
       {table && (
         <Symbols>
           {(show || isFiltered) && (
-            <FilterNumbers>{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
+            <FilterNumbers title="Anzahl gefiltert/total">{`${rowsFilteredLength}/${rowsLength}`}</FilterNumbers>
           )}
         </Symbols>
       )}
