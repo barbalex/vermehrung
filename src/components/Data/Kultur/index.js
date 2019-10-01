@@ -11,7 +11,6 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
@@ -136,28 +135,23 @@ const Kultur = ({ filter: showFilter }) => {
     variables: { include: !!artId },
   })
 
-  const artWerte = memoizeOne(() =>
-    get(dataArt, 'art', []).map(el => ({
-      value: el.id,
-      label: get(el, 'art_ae_art.name') || '(keine Art)',
-    })),
-  )()
-
-  const gartenWerte =
-    get(dataGarten, 'garten') ||
-    []
-      // do not include garten of persons already culturing this art
-      // TODO: move this to query
-      .filter(a => {
-        const kulturs = get(a, 'kulturs', []) || []
-        const artIds = kulturs.map(k => k.art_id)
-        // do show choosen garten
-        return a.id === row.garten_id || !artIds.includes(row.art_id)
-      })
-      .map(el => ({
+  const artWerte = useMemo(
+    () =>
+      get(dataArt, 'art', []).map(el => ({
         value: el.id,
-        label: get(el, 'person.name') || '(kein Name)',
-      }))
+        label: get(el, 'art_ae_art.name') || '(keine Art)',
+      })),
+    [dataArt],
+  )
+
+  const gartenWerte = useMemo(
+    () =>
+      (get(dataGarten, 'garten') || []).map(el => ({
+        value: el.id,
+        label: el.name || get(el, 'person.name') || '(kein Name)',
+      })),
+    [dataGarten],
+  )
 
   const herkunftWerte = useMemo(
     () =>
