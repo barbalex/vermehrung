@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
 
-import { lieferung as lieferungFragment } from '../../../utils/fragments'
+import { sammelLieferung as sammelLieferungFragment } from '../../../utils/fragments'
 
 export default ({ field, valueToSet }) => gql`
-mutation update_lieferung(
+mutation update_sammel_lieferung(
   $id: bigint!
 ) {
-  update_lieferung(
+  update_sammel_lieferung(
     where: { id: { _eq: $id } }
     _set: {
       ${field}: ${valueToSet}
@@ -14,9 +14,9 @@ mutation update_lieferung(
   ) {
     affected_rows
     returning {
-      ...LieferungFields
+      ...SammelLieferungFields
     }
   }
 }
-${lieferungFragment}
+${sammelLieferungFragment}
 `

@@ -29,9 +29,7 @@ import {
   art as artFragment,
 } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
-import Files from '../Files'
-import updateLieferung from './updateLieferung'
-import updateLieferungArtId from './updateLieferungArtId'
+import updateSammelLieferung from './updateSammelLieferung'
 
 const Container = styled.div`
   height: 100%;
@@ -71,24 +69,15 @@ const FieldRow = styled.div`
     margin-top: 8px;
   }
 `
-const Herkunft = styled.div`
-  height: 54px;
-  user-select: none;
-`
-const HerkunftLabel = styled.div`
-  color: rgb(0, 0, 0, 0.54);
-  font-size: 12px;
-  padding-bottom: 2px;
-`
 
 const sammelLieferungQuery = gql`
-  query LieferungQuery(
+  query SammelLieferungQuery(
     $id: bigint!
     $isFiltered: Boolean!
-    $filter: lieferung_bool_exp!
+    $filter: sammel_lieferung_bool_exp!
   ) {
-    lieferung(where: { id: { _eq: $id } }) {
-      ...LieferungFields
+    sammel_lieferung(where: { id: { _eq: $id } }) {
+      ...SammelLieferungFields
       sammlung {
         id
         herkunft {
@@ -121,10 +110,10 @@ const sammelLieferungQuery = gql`
         }
       }
     }
-    rowsUnfiltered: lieferung @include(if: $isFiltered) {
+    rowsUnfiltered: sammel_lieferung @include(if: $isFiltered) {
       id
     }
-    rowsFiltered: lieferung(where: $filter) @include(if: $isFiltered) {
+    rowsFiltered: sammel_lieferung(where: $filter) @include(if: $isFiltered) {
       id
     }
   }
@@ -200,7 +189,7 @@ const personQuery = gql`
   }
 `
 
-const Lieferung = ({ filter: showFilter }) => {
+const SammelLieferung = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
@@ -211,7 +200,10 @@ const Lieferung = ({ filter: showFilter }) => {
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
-  const sammelLieferungFilter = queryFromTable({ store, table: 'lieferung' })
+  const sammelLieferungFilter = queryFromTable({
+    store,
+    table: 'sammel_lieferung',
+  })
   const { data, error, loading, refetch } = useQuery(sammelLieferungQuery, {
     variables: { id, isFiltered, filter: sammelLieferungFilter },
   })
@@ -234,7 +226,7 @@ const Lieferung = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.sammelLieferung
   } else {
-    row = get(data, 'lieferung', [{}])[0]
+    row = get(data, 'sammel_lieferung', [{}])[0]
   }
 
   const sammlungFilter = row.art_id
@@ -250,19 +242,12 @@ const Lieferung = ({ filter: showFilter }) => {
 
   const isAnlieferung =
     activeNodeArray[activeNodeArray.length - 2] === 'An-Lieferungen'
-  const isAuslieferung =
-    activeNodeArray[activeNodeArray.length - 2] === 'Aus-Lieferungen'
 
   const herkunftByKultur = isAnlieferung
     ? get(row, 'kulturByNachKulturId.herkunft')
     : get(row, 'kulturByVonKulturId.herkunft')
   const herkunftBySammlung = get(row, 'sammlung.herkunft')
   const herkunft = herkunftByKultur || herkunftBySammlung
-  const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
-  const herkunftValue = herkunft
-    ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
-        '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
-    : ''
 
   // beware: art_id, herkunft_id and nach_kultur_id can be null
   let vonKulturFilter = { id: { _is_null: false } }
@@ -401,12 +386,12 @@ const Lieferung = ({ filter: showFilter }) => {
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.lieferung[field]
+      const type = types.sammelLieferung[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
       if (showFilter) {
-        filter.setValue({ table: 'lieferung', key: field, value })
+        filter.setValue({ table: 'sammel_lieferung', key: field, value })
       } else {
         let valueToSet
         if (value === null) {
@@ -418,10 +403,7 @@ const Lieferung = ({ filter: showFilter }) => {
         }
         try {
           await client.mutate({
-            mutation:
-              field === 'art_id'
-                ? updateLieferungArtId({ field, valueToSet })
-                : updateLieferung({ field, valueToSet }),
+            mutation: updateSammelLieferung({ field, valueToSet }),
             variables: {
               id: row.id,
             },
@@ -432,7 +414,7 @@ const Lieferung = ({ filter: showFilter }) => {
         }
         if (['von_kultur_id', 'von_sammlung_id', 'art_id'].includes(field)) {
           // ensure Herkunft updates
-          console.log('Lieferung, refetch:', refetch)
+          console.log('SammelLieferung, refetch:', refetch)
           !!refetch && refetch()
         }
         setErrors({})
@@ -449,7 +431,7 @@ const Lieferung = ({ filter: showFilter }) => {
   if (loading) {
     return (
       <Container>
-        <FormTitle title="Lieferung" />
+        <FormTitle title="Sammel-Lieferung" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
@@ -465,7 +447,7 @@ const Lieferung = ({ filter: showFilter }) => {
   if (errorToShow) {
     return (
       <Container>
-        <FormTitle title="Lieferung" />
+        <FormTitle title="Sammel-Lieferung" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
@@ -478,15 +460,15 @@ const Lieferung = ({ filter: showFilter }) => {
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Lieferung"
-            table="lieferung"
+            title="Sammel-Lieferung"
+            table="sammel_lieferung"
             totalNr={totalNr}
             filteredNr={filteredNr}
           />
         ) : (
           <FormTitle
-            title="Lieferung"
-            table="lieferung"
+            title="Sammel-Lieferung"
+            table="sammel_lieferung"
             rowsLength={totalNr}
             rowsFilteredLength={filteredNr}
             filter={showFilter}
@@ -507,12 +489,6 @@ const Lieferung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.art_id}
           />
-          {herkunftValue && (
-            <Herkunft>
-              <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
-              {herkunftValue}
-            </Herkunft>
-          )}
           <FieldRow>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
@@ -562,63 +538,55 @@ const Lieferung = ({ filter: showFilter }) => {
               type="number"
             />
           </FieldRow>
-          {row.art_id && !isAuslieferung && (
-            <>
-              <TitleRow>
-                <Title>von</Title>
-              </TitleRow>
-              <Select
-                key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-                name="von_sammlung_id"
-                value={row.von_sammlung_id}
-                field="von_sammlung_id"
-                label="Sammlung (nur solche derselben Art)"
-                options={sammlungWerte}
-                loading={sammlungLoading}
-                saveToDb={saveToDb}
-                error={errors.von_sammlung_id}
-              />
-              <Select
-                key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-                name="von_kultur_id"
-                value={row.von_kultur_id}
-                field="von_kultur_id"
-                label="Kultur (nur solche derselben Art)"
-                options={vonKulturWerte}
-                loading={vonKulturLoading}
-                saveToDb={saveToDb}
-                error={errors.von_kultur_id}
-              />
-            </>
-          )}
-          {herkunft && !isAnlieferung && (
-            <>
-              <TitleRow>
-                <Title>nach</Title>
-              </TitleRow>
-              <Select
-                key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-                name="nach_kultur_id"
-                value={row.nach_kultur_id}
-                field="nach_kultur_id"
-                label={`Kultur (Kulturen derselben Art und Herkunft${
-                  row.von_kultur_id ? ', ohne die von-Kultur' : ''
-                })`}
-                options={nachKulturWerte}
-                loading={nachKulturLoading}
-                saveToDb={saveToDb}
-                error={errors.nach_kultur_id}
-              />
-              <Checkbox2States
-                key={`${row.id}nach_ausgepflanzt`}
-                label="Ausgepflanzt"
-                name="nach_ausgepflanzt"
-                value={row.nach_ausgepflanzt}
-                saveToDb={saveToDb}
-                error={errors.nach_ausgepflanzt}
-              />
-            </>
-          )}
+          <TitleRow>
+            <Title>von</Title>
+          </TitleRow>
+          <Select
+            key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
+            name="von_sammlung_id"
+            value={row.von_sammlung_id}
+            field="von_sammlung_id"
+            label="Sammlung (nur solche derselben Art)"
+            options={sammlungWerte}
+            loading={sammlungLoading}
+            saveToDb={saveToDb}
+            error={errors.von_sammlung_id}
+          />
+          <Select
+            key={`${row.id}${row.von_kultur_id}von_kultur_id`}
+            name="von_kultur_id"
+            value={row.von_kultur_id}
+            field="von_kultur_id"
+            label="Kultur (nur solche derselben Art)"
+            options={vonKulturWerte}
+            loading={vonKulturLoading}
+            saveToDb={saveToDb}
+            error={errors.von_kultur_id}
+          />
+          <TitleRow>
+            <Title>nach</Title>
+          </TitleRow>
+          <Select
+            key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+            name="nach_kultur_id"
+            value={row.nach_kultur_id}
+            field="nach_kultur_id"
+            label={`Kultur (Kulturen derselben Art und Herkunft${
+              row.von_kultur_id ? ', ohne die von-Kultur' : ''
+            })`}
+            options={nachKulturWerte}
+            loading={nachKulturLoading}
+            saveToDb={saveToDb}
+            error={errors.nach_kultur_id}
+          />
+          <Checkbox2States
+            key={`${row.id}nach_ausgepflanzt`}
+            label="Ausgepflanzt"
+            name="nach_ausgepflanzt"
+            value={row.nach_ausgepflanzt}
+            saveToDb={saveToDb}
+            error={errors.nach_ausgepflanzt}
+          />
           <TitleRow>
             <Title>wann</Title>
           </TitleRow>
@@ -672,11 +640,10 @@ const Lieferung = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          {!showFilter && <Files parentId={row.id} parent="lieferung" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
 }
 
-export default observer(Lieferung)
+export default observer(SammelLieferung)
