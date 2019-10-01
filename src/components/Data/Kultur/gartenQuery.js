@@ -8,7 +8,7 @@ import {
 export default gql`
   query gartenQuery($include: Boolean!) {
     garten(order_by: { person: { name: asc_nulls_first } }) {
-      id
+      ...GartenFields
       person {
         id
         name
