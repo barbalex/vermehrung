@@ -134,8 +134,6 @@ export default () => {
     },
   })
 
-  console.log('Search:', { data, val })
-
   const suggestionsArt = get(data, 'art', []).map(o => ({
     id: o.id,
     name: get(o, 'art_ae_art.name') || '(kein Artname)',
@@ -257,13 +255,10 @@ export default () => {
     ? titledSuggestions
     : loadingSuggestions
 
-  console.log('Search:', { suggestions })
-
   const onChange = useCallback(event => setVal(event.target.value), [])
   const onClickDel = useCallback(() => setVal(''), [])
   const onSuggestionSelected = useCallback(
     (event, { suggestion }) => {
-      console.log('Search, onSuggestionSelected, suggestion:', suggestion)
       let newActiveNodeArray
       // use suggestion.id to set url
       switch (suggestion.type) {
@@ -330,8 +325,6 @@ export default () => {
       </div>
     )
   }, [])
-
-  //console.log('Search, val', val)
 
   return (
     <Container data-autosuggestwidth={autosuggestWidth}>
