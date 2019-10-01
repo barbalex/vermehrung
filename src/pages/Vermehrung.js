@@ -76,13 +76,6 @@ const Vermehrung = ({ location }) => {
 
   if (loading) return null
 
-  /**
-   * ISSUE
-   * aeArtQuery gets filter _like:"%%" from queryFromTable
-   * maybe only when user does not have personId?
-   * WHICH IS ABSOLUTELY WRONG AND IMPOSSIBLE
-   */
-
   if (!isAuthenticated()) {
     login()
     return <Container>Öffne login...</Container>
