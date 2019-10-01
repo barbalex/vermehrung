@@ -343,9 +343,17 @@ create table person_felder (
 );
 create index on person_felder using btree (person_id);
 
+drop table if exist sammel_lieferung cascade;
+create table sammel_lieferung (
+  id bigserial primary key
+);
+create index on lieferung using btree (id);
+
 drop table if exists lieferung cascade;
 create table lieferung (
   id bigserial primary key,
+  sammel_lieferung_id bigint default null references sammel_lieferung (id) on delete set null on update cascade,
+  vorlage_fuer_sammel_lieferung bigint default null references sammel_lieferung (id) on delete cascade on update cascade,
   art_id bigint default null references art (id) on delete cascade on update cascade,
   person_id bigint default null references person (id) on delete cascade on update cascade,
   von_sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
@@ -365,6 +373,8 @@ create table lieferung (
   tsv tsvector
 );
 create index on lieferung using btree (id);
+create index on lieferung using btree (sammel_lieferung_id);
+create index on lieferung using btree (vorlage_fuer_sammel_lieferung);
 create index on lieferung using btree (art_id);
 create index on lieferung using btree (person_id);
 create index on lieferung using btree (von_sammlung_id);
