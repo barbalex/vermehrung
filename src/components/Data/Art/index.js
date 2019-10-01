@@ -104,6 +104,24 @@ const Art = ({ filter: showFilter }) => {
     },
     [client, filter, refetch, row, showFilter],
   )
+  const artSelectFilter = useCallback(
+    val =>
+      val
+        ? {
+            _or: [
+              { _not: { ae_art_art: { id: { _is_null: false } } } },
+              { ae_art_art: { id: { _eq: artId } } },
+            ],
+            name: { _ilike: `%${val}%` },
+          }
+        : {
+            _or: [
+              { _not: { ae_art_art: { id: { _is_null: false } } } },
+              { ae_art_art: { id: { _eq: artId } } },
+            ],
+          },
+    [artId],
+  )
 
   if (loading) {
     return (
@@ -155,22 +173,7 @@ const Art = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.ae_id}
             query={aeArtQuery}
-            filter={val =>
-              val
-                ? {
-                    _or: [
-                      { _not: { ae_art_art: { id: { _is_null: false } } } },
-                      { ae_art_art: { id: { _eq: artId } } },
-                    ],
-                    name: { _ilike: `%${val}%` },
-                  }
-                : {
-                    _or: [
-                      { _not: { ae_art_art: { id: { _is_null: false } } } },
-                      { ae_art_art: { id: { _eq: artId } } },
-                    ],
-                  }
-            }
+            filter={artSelectFilter}
             resultNodesName="ae_art"
             resultNodesLabelName="name"
           />
