@@ -12,6 +12,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
+import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -217,6 +219,12 @@ const Kultur = ({ filter: showFilter }) => {
     },
     [client, filter, refetchTree, row, showFilter],
   )
+  const openKulturDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Kulturen',
+      )
+  }, [])
 
   if (loading) {
     return (
@@ -253,6 +261,13 @@ const Kultur = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Kultur</Title>
             <TitleSymbols>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openKulturDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
               <Settings kulturResult={kulturResult} />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
