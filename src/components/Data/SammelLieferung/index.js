@@ -36,6 +36,7 @@ import types from '../../../store/Filter/simpleTypes'
 import updateSammelLieferung from './updateSammelLieferung'
 import getUserPersonId from '../../../utils/getUserPersonId'
 import Settings from './Settings'
+import Copy from './Copy'
 
 const Container = styled.div`
   height: 100%;
@@ -231,7 +232,7 @@ const personFelderQuery = gql`
   ${personFelderFragment}
 `
 
-const SammelLieferung = ({ filter: showFilter, id: idPassed }) => {
+const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
@@ -504,6 +505,14 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed }) => {
     typeof window !== 'undefined' &&
       window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
   }, [])
+  // TODO: add Sammel-Lieferung Docs
+  // then update this link
+  const openSettingsDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Felder-blenden',
+      )
+  }, [])
   const ifNeeded = useCallback(
     field => {
       if (sl_show_empty_when_next_to_li) return true
@@ -562,12 +571,20 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed }) => {
           <TitleContainer>
             <Title>Sammel-Lieferung</Title>
             <TitleSymbols>
+              <Copy sammelLieferung={row} lieferungId={lieferungId} />
               {idPassed && (
                 <Settings
                   personId={userPersonId}
                   personFelderResult={personFelderResult}
                 />
               )}
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openSettingsDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}
