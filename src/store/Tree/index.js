@@ -24,11 +24,15 @@ export default types
       [],
     ),
     nodes: types.optional(types.array(Node), []),
+    widthInPercentOfScreen: types.optional(types.number, 33),
   })
   .volatile(() => ({
     refetch: () => {},
   }))
   .actions(self => ({
+    setWidthInPercentOfScreen(val) {
+      self.widthInPercentOfScreen = val
+    },
     setActiveNodeArray(val, nonavigate) {
       self.activeNodeArray = val
       !nonavigate && navigate(`/Vermehrung/${val.join('/')}`)

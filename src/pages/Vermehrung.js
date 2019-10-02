@@ -44,11 +44,13 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const treeWidthInPercentOfScreen = 33
-
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
-  const { setOpenNodes, setActiveNodeArray } = store.tree
+  const {
+    setOpenNodes,
+    setActiveNodeArray,
+    widthInPercentOfScreen: treeWidth,
+  } = store.tree
   const showFilter = store.filter.show
 
   const { pathname } = location
@@ -87,7 +89,7 @@ const Vermehrung = ({ location }) => {
         <Container>
           <StyledSplitPane
             split="vertical"
-            size={`${treeWidthInPercentOfScreen}%`}
+            size={`${treeWidth}%`}
             minSize={200}
           >
             <Tree />
