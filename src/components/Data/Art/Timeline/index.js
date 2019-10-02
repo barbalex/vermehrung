@@ -26,7 +26,7 @@ import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 
 const TitleRow = styled.div`
-  background-color: rgba(74, 20, 140, 0.05);
+  background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -34,8 +34,10 @@ const TitleRow = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
-  margin-top: ${props => (props['data-first'] ? '-10px' : 'unset')};
   padding: 0 10px;
+  &:first-of-type {
+    margin-top: -10px;
+  }
 `
 const Title = styled.div`
   font-weight: bold;

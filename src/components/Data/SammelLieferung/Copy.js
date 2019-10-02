@@ -1,17 +1,23 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import { FaCopy } from 'react-icons/fa'
+import { FaRegCopy } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
-import get from 'lodash/get'
 import styled from 'styled-components'
+import get from 'lodash/get'
 
 import storeContext from '../../../storeContext'
-import { personFelder as personFelderFragment } from '../../../utils/fragments'
+import {
+  lieferung as lieferungFragment,
+  sammelLieferung as sammelLieferungFragment,
+} from '../../../utils/fragments'
+import isString from '../../../utils/isString'
+import exists from '../../../utils/exists'
+import fieldsFromFragment from '../../../utils/fieldsFromFragment'
 
 const TitleRow = styled.div`
   display: flex;
@@ -25,6 +31,9 @@ const Title = styled.div`
   user-select: none;
 `
 
+const lieferungFields = fieldsFromFragment(lieferungFragment)
+const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
+
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -36,14 +45,86 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
     event => setAnchorEl(event.currentTarget),
     [],
   )
-  const onClickActiveLieferung = useCallback(() => {
+  const updateLieferung = useCallback(
+    async lieferungId => {
+      const lieferung = {
+        ...sammelLieferung,
+        id: lieferungId,
+        sammel_lieferung_id: sammelLieferung.id,
+      }
+      const objectString = Object.entries(lieferung)
+        .filter(
+          // only accept lieferung's fields
+          // eslint-disable-next-line no-unused-vars
+          ([key, value]) => lieferungFields.includes(key),
+        )
+        // only update with existing values
+        // eslint-disable-next-line no-unused-vars
+        .filter(([key, val]) => exists(val))
+        .map(([key, value]) => {
+          if (isString(value)) {
+            return `${key}: "${value}"`
+          }
+          return `${key}: ${value}`
+        })
+        .join(', ')
+      try {
+        await client.mutate({
+          mutation: gql`
+        mutation update_lieferung(
+          $id: bigint!
+        ) {
+          update_lieferung(
+            where: { id: { _eq: $id } }
+            _set: {
+              ${objectString}
+            }
+          ) {
+            affected_rows
+            returning {
+              ...LieferungFields
+            }
+          }
+        }
+        ${lieferungFragment}
+        `,
+          variables: {
+            id: lieferungId,
+          },
+        })
+      } catch (error) {
+        return enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+    },
+    [client, enqueNotification, sammelLieferung],
+  )
+  const containsData = useMemo(
+    () =>
+      Object.entries(sammelLieferung)
+        .filter(
+          // only accept lieferung's fields
+          // eslint-disable-next-line no-unused-vars
+          ([key, value]) =>
+            sammelLieferungFields.filter(f => f !== 'id').includes(key),
+        )
+        // only update with existing values
+        // eslint-disable-next-line no-unused-vars
+        .filter(([key, val]) => exists(val) && val !== false).length > 0,
+    [sammelLieferung],
+  )
+  const onClickActiveLieferung = useCallback(async () => {
     setAnchorEl(null)
-    ;('TODO:')
-  }, [])
+    updateLieferung(lieferungId)
+  }, [lieferungId, updateLieferung])
   const onClickAllLieferung = useCallback(() => {
     setAnchorEl(null)
-    ;('TODO:')
-  }, [])
+    sammelLieferung.lieferungs.forEach(l => updateLieferung(l.id))
+  }, [sammelLieferung.lieferungs, updateLieferung])
 
   return (
     <ErrorBoundary>
@@ -53,8 +134,9 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
         aria-haspopup="true"
         title="Daten kopieren"
         onClick={onClickConfig}
+        disabled={!containsData}
       >
-        <FaCopy />
+        <FaRegCopy />
       </IconButton>
       <Menu
         id="long-menu"

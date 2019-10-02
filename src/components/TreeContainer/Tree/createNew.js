@@ -176,19 +176,6 @@ export default async ({ node, store, client }) => {
   let mutation
   if (fkExists) additionalValuesToSet[fkName] = parentId
   if (Object.entries(additionalValuesToSet).length) {
-    /*const returning = `{ ...${fragmentFieldsNames[table]} }`
-    mutation = gql`
-      mutation insertDataset {
-        insert_${table} (objects: [
-          {
-            ${fkName}: ${parentId}${artId ? `, art_id: ${artId}` : ''}
-          }
-        ]) {
-          returning ${returning}
-        }
-      }
-      ${fragments[table]}
-    `*/
     const objectString = Object.entries(additionalValuesToSet)
       .map(([key, value]) => {
         if (isString(value)) {

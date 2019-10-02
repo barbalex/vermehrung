@@ -88,8 +88,10 @@ const TitleRow = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: 10px;
-  margin-top: ${props => (props['data-first'] ? '-10px' : 'unset')};
   padding: 0 10px;
+  &:first-of-type {
+    margin-top: -10px;
+  }
 `
 const FieldRow = styled.div`
   display: flex;
@@ -578,7 +580,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             'von_anzahl_individuen',
           ]) && (
             <>
-              <TitleRow data-first>
+              <TitleRow>
                 <Title>was</Title>
               </TitleRow>
               {ifNeeded('art_id') && (
