@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Sammel-Lieferungen"
-date: "2019-09-20"
+date: "2019-10-01"
 title: "Sammel-Lieferungen"
 sort: 9
 ---
