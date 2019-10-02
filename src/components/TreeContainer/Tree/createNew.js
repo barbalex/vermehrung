@@ -119,9 +119,8 @@ export default async ({ node, store, client }) => {
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
-    additionalValuesToSet.artId = get(responce, 'data.kultur[0].art_id')
+    additionalValuesToSet.art_id = get(responce, 'data.kultur[0].art_id')
     artId = get(responce, 'data.kultur[0].art_id')
-    //console.log({ responce, artId })
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
@@ -142,14 +141,10 @@ export default async ({ node, store, client }) => {
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
-    additionalValuesToSet.artId = get(responce, 'data.sammlung[0].art_id')
+    additionalValuesToSet.art_id = get(responce, 'data.sammlung[0].art_id')
     artId = get(responce, 'data.sammlung[0].art_id')
-    //console.log({ responce, artId, parentId })
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
-    console.log('TODO: copy values from sammel-lieferung')
-    console.log('createNew, parentId:', parentId)
-    console.log('createNew, sammelLieferungFragment:', sammelLieferungFragment)
     let responce
     try {
       responce = await client.query({
@@ -169,8 +164,6 @@ export default async ({ node, store, client }) => {
       )
     }
     const sammelLieferung = get(responce, 'data.sammel_lieferung[0]')
-    console.log('createNew, sammelLieferung:', sammelLieferung)
-    console.log('createNew, fkExists:', fkExists)
     const entries = Object.entries(sammelLieferung)
       .filter(
         // eslint-disable-next-line no-unused-vars
@@ -183,9 +176,9 @@ export default async ({ node, store, client }) => {
       additionalValuesToSet[keyToUse] = value
     }
   }
-  console.log('createNew, additionalValuesToSet:', additionalValuesToSet)
   let mutation
-  if (fkExists) {
+  if (fkExists) additionalValuesToSet[fkName] = parentId
+  if (Object.entries(additionalValuesToSet).length) {
     /*const returning = `{ ...${fragmentFieldsNames[table]} }`
     mutation = gql`
       mutation insertDataset {
@@ -207,13 +200,12 @@ export default async ({ node, store, client }) => {
         return `${key}: ${value}`
       })
       .join(', ')
-    console.log('createNew, objectString:', objectString)
     const returning = `{ ...${fragmentFieldsNames[table]} }`
     mutation = gql`
       mutation insertDataset {
         insert_${table} (objects: [
           {
-            ${fkName}: ${parentId}${artId ? `, art_id: ${artId}` : ''}
+            ${objectString}
           }
         ]) {
           returning ${returning}
