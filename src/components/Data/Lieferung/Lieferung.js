@@ -26,19 +26,53 @@ import queryFromTable from '../../../utils/queryFromTable'
 import exists from '../../../utils/exists'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
-  lieferung as lieferungFragment,
   art as artFragment,
+  lieferung as lieferungFragment,
+  personFelder as personFelderFragment,
 } from '../../../utils/fragments'
+import getUserPersonId from '../../../utils/getUserPersonId'
 import types from '../../../store/Filter/simpleTypes'
 import Files from '../Files'
 import updateLieferung from './updateLieferung'
 import updateLieferungArtId from './updateLieferungArtId'
+import Settings from './Settings'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+`
+const TitleContainer = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+  padding 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleSymbols = styled.div`
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleFilterNumbers = styled.div`
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -56,11 +90,6 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   margin-top: ${props => (props['data-first'] ? '-10px' : 'unset')};
   padding: 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
 `
 const FieldRow = styled.div`
   display: flex;
@@ -200,6 +229,14 @@ const personQuery = gql`
     }
   }
 `
+const personFelderQuery = gql`
+  query personFelderQuery($personId: bigint) {
+    person_felder(where: { person_id: { _eq: $personId } }) {
+      ...PersonFelderFields
+    }
+  }
+  ${personFelderFragment}
+`
 
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const client = useApolloClient()
@@ -239,6 +276,13 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   } else {
     row = get(data, 'lieferung', [{}])[0]
   }
+
+  const userPersonId = getUserPersonId()
+  const personFelderResult = useQuery(personFelderQuery, {
+    variables: { personId: userPersonId },
+  })
+  const { li_show_sl_felder } =
+    get(personFelderResult.data, 'person_felder[0]', {}) || {}
 
   const sammlungFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -457,6 +501,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }, [])
   const ifNeeded = useCallback(
     field => {
+      if (sammelLieferung.id && li_show_sl_felder) return true
       if (!exists(sammelLieferung[field]) || sammelLieferung[field] === false) {
         return true
       } else if (sammelLieferung[field] !== row[field]) {
@@ -464,7 +509,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       }
       return false
     },
-    [row, sammelLieferung],
+    [li_show_sl_felder, row, sammelLieferung],
   )
   const ifSomeNeeded = useCallback(fields => fields.some(f => ifNeeded(f)), [
     ifNeeded,
@@ -513,13 +558,18 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle
-            title="Lieferung"
-            table="lieferung"
-            rowsLength={totalNr}
-            rowsFilteredLength={filteredNr}
-            filter={showFilter}
-          />
+          <TitleContainer>
+            <Title>Lieferung</Title>
+            <TitleSymbols>
+              <Settings
+                personId={userPersonId}
+                personFelderResult={personFelderResult}
+              />
+              {(store.filter.show || isFiltered) && (
+                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+              )}
+            </TitleSymbols>
+          </TitleContainer>
         )}
         <FieldsContainer>
           {ifSomeNeeded([

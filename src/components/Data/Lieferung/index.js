@@ -12,8 +12,10 @@ import SammelLieferung from '../SammelLieferung'
 import storeContext from '../../../storeContext'
 import {
   lieferung as lieferungFragment,
+  personFelder as personFelderFragment,
   sammelLieferung as sammelLieferungFragment,
 } from '../../../utils/fragments'
+import getUserPersonId from '../../../utils/getUserPersonId'
 import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
@@ -67,6 +69,14 @@ const lieferungQuery = gql`
   ${lieferungFragment}
   ${sammelLieferungFragment}
 `
+const personFelderQuery = gql`
+  query personFelderQuery($personId: bigint) {
+    person_felder(where: { person_id: { _eq: $personId } }) {
+      ...PersonFelderFields
+    }
+  }
+  ${personFelderFragment}
+`
 
 const LieferungContainer = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
@@ -88,6 +98,13 @@ const LieferungContainer = ({ filter: showFilter }) => {
   )
   const sammelLieferung = get(lieferungData, 'lieferung[0].sammel_lieferung')
 
+  const userPersonId = getUserPersonId()
+  const personFelderResult = useQuery(personFelderQuery, {
+    variables: { personId: userPersonId },
+  })
+  const { li_show_sl } =
+    get(personFelderResult.data, 'person_felder[0]', {}) || {}
+
   if (lieferungLoading) {
     return (
       <Container>
@@ -105,7 +122,7 @@ const LieferungContainer = ({ filter: showFilter }) => {
     )
   }
 
-  if (sammelLieferungId) {
+  if (sammelLieferungId && li_show_sl) {
     // this lieferung is part of a sammel_lieferung
     // show that too
     return (
@@ -115,7 +132,7 @@ const LieferungContainer = ({ filter: showFilter }) => {
       </StyledSplitPane>
     )
   }
-  return <Lieferung showFilter={showFilter} />
+  return <Lieferung showFilter={showFilter} sammelLieferung={sammelLieferung} />
 }
 
 export default observer(LieferungContainer)

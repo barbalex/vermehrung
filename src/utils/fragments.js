@@ -199,6 +199,9 @@ export const personFelder = gql`
     hk_land
     hk_bemerkungen
     hk_geom_point
+    li_show_sl_felder
+    li_show_sl
+    sl_show_empty_when_next_to_li
   }
 `
 export const personFile = gql`

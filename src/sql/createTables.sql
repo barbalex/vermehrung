@@ -341,11 +341,13 @@ create table person_felder (
   hk_bemerkungen boolean default true,
   hk_geom_point boolean default true,
   li_show_sl_felder boolean default false,
-  li_show_sl boolean default true
+  li_show_sl boolean default true,
+  sl_show_empty_when_next_to_li boolean default false
 );
 create index on person_felder using btree (person_id);
-comment on column person_felder.li_show_sl is 'ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
-comment on column person_felder.li_show_sl_felder is 'ob in der Sammel-Lieferung erfasste felder sichtbar sind';
+comment on column person_felder.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
+comment on column person_felder.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
+comment on column person_felder.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
 comment on column person_felder.ar_name_deutsch is 'Dieses Feld wird (momentan) nicht benutzt';
 
 drop table if exist sammel_lieferung cascade;
