@@ -339,9 +339,12 @@ create table person_felder (
   hk_kanton boolean default true,
   hk_land boolean default true,
   hk_bemerkungen boolean default true,
-  hk_geom_point boolean default true
+  hk_geom_point boolean default true,
+  li_hide_sl_felder boolean default true
 );
 create index on person_felder using btree (person_id);
+comment on column person_felder.li_hide_sl_felder is 'ob in der sammel-lieferung erfasste felder im Sammel-Lieferungs-Ast ausgeblendet werden';
+comment on column person_felder.ar_name_deutsch is 'Dieses Feld wird (momentan) nicht benutzt';
 
 drop table if exist sammel_lieferung cascade;
 create table sammel_lieferung (
