@@ -10,8 +10,23 @@ import gql from 'graphql-tag'
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import storeContext from '../../../storeContext'
-import { lieferung as lieferungFragment } from '../../../utils/fragments'
+import {
+  lieferung as lieferungFragment,
+  sammelLieferung as sammelLieferungFragment,
+} from '../../../utils/fragments'
+import FormTitle from '../../shared/FormTitle'
 
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+`
+const FieldsContainer = styled.div`
+  padding: 10px;
+  overflow: auto !important;
+  height: 100%;
+`
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
   .Resizer {
@@ -44,13 +59,15 @@ const lieferungQuery = gql`
   query LieferungQuery($id: bigint!, $include: Boolean!) {
     lieferung(where: { id: { _eq: $id } }) @include(if: $include) {
       ...LieferungFields
+      sammel_lieferung {
+        ...SammelLieferungFields
+      }
     }
   }
   ${lieferungFragment}
+  ${sammelLieferungFragment}
 `
 
-// TODO:
-// if is sammel_lieferung: also show that
 const LieferungContainer = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { activeNodeArray } = store.tree
@@ -69,13 +86,32 @@ const LieferungContainer = ({ filter: showFilter }) => {
     lieferungData,
     'lieferung[0].sammel_lieferung_id',
   )
-  console.log('SammelLieferung, sammelLieferungId:', sammelLieferungId)
+  const sammelLieferung = get(lieferungData, 'lieferung[0].sammel_lieferung')
+
+  if (lieferungLoading) {
+    return (
+      <Container>
+        <FormTitle title="Lieferung" />
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (lieferungError) {
+    return (
+      <Container>
+        <FormTitle title="Lieferung" />
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${lieferungError.message}`}</FieldsContainer>
+      </Container>
+    )
+  }
 
   if (sammelLieferungId) {
+    // this lieferung is part of a sammel_lieferung
+    // show that too
     return (
       <StyledSplitPane split="vertical" size={`50%`} minSize={200}>
-        <Lieferung showFilter={showFilter} />
-        <SammelLieferung lieferungId={lieferungId} />
+        <Lieferung showFilter={showFilter} sammelLieferung={sammelLieferung} />
+        <SammelLieferung showFilter={showFilter} id={sammelLieferungId} />
       </StyledSplitPane>
     )
   }

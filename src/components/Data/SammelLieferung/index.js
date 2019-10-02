@@ -190,26 +190,33 @@ const personQuery = gql`
   }
 `
 
-const SammelLieferung = ({ filter: showFilter, lieferungId }) => {
+const SammelLieferung = ({ filter: showFilter, id: idPassed }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch: refetchTree } = store.tree
+  const {
+    activeNodeArray,
+    refetch: refetchTree,
+    setWidthInPercentOfScreen,
+  } = store.tree
 
   const id = showFilter
     ? 99999999999999
-    : lieferungId
-    ? lieferungId
+    : idPassed
+    ? idPassed
     : last(activeNodeArray.filter(e => !isNaN(e)))
-  console.log('SammelLieferung, id:', id)
   const isFiltered = runIsFiltered()
   const sammelLieferungFilter = queryFromTable({
     store,
     table: 'sammel_lieferung',
   })
   const { data, error, loading, refetch } = useQuery(sammelLieferungQuery, {
-    variables: { id, isFiltered, filter: sammelLieferungFilter },
+    variables: {
+      id,
+      isFiltered,
+      filter: sammelLieferungFilter,
+    },
   })
 
   const { data: artData, error: artError, loading: artLoading } = useQuery(
@@ -230,7 +237,7 @@ const SammelLieferung = ({ filter: showFilter, lieferungId }) => {
   if (showFilter) {
     row = filter.sammelLieferung
   } else {
-    row = get(data, 'sammel_lieferung', [{}])[0]
+    row = get(data, 'sammel_lieferung[0]') || {}
   }
 
   const sammlungFilter = row.art_id
@@ -318,6 +325,12 @@ const SammelLieferung = ({ filter: showFilter, lieferungId }) => {
   useEffect(() => {
     setErrors({})
   }, [row.id])
+  useEffect(() => {
+    if (idPassed) setWidthInPercentOfScreen(25)
+    return () => {
+      if (idPassed) setWidthInPercentOfScreen(33)
+    }
+  }, [idPassed, setWidthInPercentOfScreen])
 
   const vonKulturWerte = useMemo(
     () =>

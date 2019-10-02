@@ -75,13 +75,13 @@ export const empty = {
   von_kultur_id: null,
   datum: null,
   nach_kultur_id: null,
-  nach_ausgepflanzt: false,
+  nach_ausgepflanzt: null,
   von_anzahl_individuen: null,
   anzahl_pflanzen: null,
   anzahl_auspflanzbereit: null,
   gramm_samen: null,
   andere_menge: null,
-  geplant: false,
+  geplant: null,
   bemerkungen: null,
 }
 
