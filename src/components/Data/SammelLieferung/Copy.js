@@ -8,7 +8,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import storeContext from '../../../storeContext'
 import {
