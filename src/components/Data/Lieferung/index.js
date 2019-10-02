@@ -23,6 +23,7 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
+import exists from '../../../utils/exists'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
   lieferung as lieferungFragment,
@@ -572,7 +573,9 @@ const Lieferung = ({ filter: showFilter }) => {
                 name="von_sammlung_id"
                 value={row.von_sammlung_id}
                 field="von_sammlung_id"
-                label="Sammlung (nur solche derselben Art)"
+                label={`Sammlung${
+                  exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                }`}
                 options={sammlungWerte}
                 loading={sammlungLoading}
                 saveToDb={saveToDb}
@@ -583,7 +586,9 @@ const Lieferung = ({ filter: showFilter }) => {
                 name="von_kultur_id"
                 value={row.von_kultur_id}
                 field="von_kultur_id"
-                label="Kultur (nur solche derselben Art)"
+                label={`Kultur${
+                  exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                }`}
                 options={vonKulturWerte}
                 loading={vonKulturLoading}
                 saveToDb={saveToDb}
@@ -601,9 +606,13 @@ const Lieferung = ({ filter: showFilter }) => {
                 name="nach_kultur_id"
                 value={row.nach_kultur_id}
                 field="nach_kultur_id"
-                label={`Kultur (Kulturen derselben Art und Herkunft${
-                  row.von_kultur_id ? ', ohne die von-Kultur' : ''
-                })`}
+                label={`Kultur${
+                  exists(row.art_id)
+                    ? ` (Kulturen derselben Art und Herkunft${
+                        row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                      })`
+                    : ''
+                }`}
                 options={nachKulturWerte}
                 loading={nachKulturLoading}
                 saveToDb={saveToDb}

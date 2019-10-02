@@ -386,6 +386,17 @@ export default gql`
       lieferungs @include(if: $isSammelLieferung) {
         ...LieferungFields
       }
+      kulturByVonKulturId {
+        id
+        garten {
+          id
+          name
+          person {
+            id
+            name
+          }
+        }
+      }
     }
     lieferung(where: $lieferungFilter, order_by: { datum: desc_nulls_first }) {
       ...LieferungFields

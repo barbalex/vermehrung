@@ -11,8 +11,12 @@ export default ({ nodes, data }) => {
       .map(el => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : 'kein Datum'
-        const label = datum
+          : `Kein Datum. ID: ${el.id}`
+        const garten = get(el, 'kulturByVonKulturId.garten.name')
+        const gartenPerson = get(el, 'kulturByVonKulturId.garten.person.name')
+        const von =
+          garten || gartenPerson ? `, von: ${garten || gartenPerson}` : ''
+        const label = `${datum}${von}`
 
         return {
           nodeType: 'table',

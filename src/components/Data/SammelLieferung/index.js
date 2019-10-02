@@ -28,6 +28,7 @@ import {
   sammelLieferung as sammelLieferungFragment,
   art as artFragment,
 } from '../../../utils/fragments'
+import exists from '../../../utils/exists'
 import types from '../../../store/Filter/simpleTypes'
 import updateSammelLieferung from './updateSammelLieferung'
 
@@ -228,6 +229,7 @@ const SammelLieferung = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'sammel_lieferung', [{}])[0]
   }
+  console.log('SammelLieferung, row:', row)
 
   const sammlungFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -239,6 +241,7 @@ const SammelLieferung = ({ filter: showFilter }) => {
   } = useQuery(sammlungQuery, {
     variables: { filter: sammlungFilter },
   })
+  console.log('SammelLieferung, sammlungData:', sammlungData)
 
   const isAnlieferung =
     activeNodeArray[activeNodeArray.length - 2] === 'An-Lieferungen'
@@ -279,6 +282,7 @@ const SammelLieferung = ({ filter: showFilter }) => {
   } = useQuery(kulturQuery, {
     variables: { filter: vonKulturFilter },
   })
+  console.log('SammelLieferung, vonKulturData:', vonKulturData)
   // only kulturen of same herkunft!
   // beware: art_id, herkunft_id and von_kultur_id can be null
   let nachKulturFilter = { id: { _is_null: false } }
@@ -303,6 +307,7 @@ const SammelLieferung = ({ filter: showFilter }) => {
       id: { _neq: row.von_kultur_id },
     }
   }
+  console.log('SammelLieferung, nachKulturFilter:', nachKulturFilter)
   const {
     data: nachKulturData,
     error: nachKulturError,
@@ -310,6 +315,7 @@ const SammelLieferung = ({ filter: showFilter }) => {
   } = useQuery(kulturQuery, {
     variables: { filter: nachKulturFilter },
   })
+  console.log('SammelLieferung, nachKulturData:', nachKulturData)
 
   useEffect(() => {
     setErrors({})
@@ -386,8 +392,10 @@ const SammelLieferung = ({ filter: showFilter }) => {
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.sammelLieferung[field]
+      console.log('SammelLieferung, saveToDb:', { row, value, field, types })
+      const type = types.sammel_lieferung[field]
       const previousValue = row[field]
+      console.log('SammelLieferung, saveToDb:', { type, previousValue })
       // only update if value has changed
       if (value === previousValue) return
       if (showFilter) {
@@ -436,6 +444,8 @@ const SammelLieferung = ({ filter: showFilter }) => {
       </Container>
     )
   }
+
+  console.log('SammelLieferung', { row })
 
   const errorToShow =
     error ||
@@ -546,7 +556,9 @@ const SammelLieferung = ({ filter: showFilter }) => {
             name="von_sammlung_id"
             value={row.von_sammlung_id}
             field="von_sammlung_id"
-            label="Sammlung (nur solche derselben Art)"
+            label={`Sammlung${
+              exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+            }`}
             options={sammlungWerte}
             loading={sammlungLoading}
             saveToDb={saveToDb}
@@ -557,7 +569,9 @@ const SammelLieferung = ({ filter: showFilter }) => {
             name="von_kultur_id"
             value={row.von_kultur_id}
             field="von_kultur_id"
-            label="Kultur (nur solche derselben Art)"
+            label={`Kultur${
+              exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+            }`}
             options={vonKulturWerte}
             loading={vonKulturLoading}
             saveToDb={saveToDb}
@@ -571,9 +585,13 @@ const SammelLieferung = ({ filter: showFilter }) => {
             name="nach_kultur_id"
             value={row.nach_kultur_id}
             field="nach_kultur_id"
-            label={`Kultur (Kulturen derselben Art und Herkunft${
-              row.von_kultur_id ? ', ohne die von-Kultur' : ''
-            })`}
+            label={`Kultur${
+              exists(row.art_id)
+                ? ` (Kulturen derselben Art und Herkunft${
+                    row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                  })`
+                : ''
+            }`}
             options={nachKulturWerte}
             loading={nachKulturLoading}
             saveToDb={saveToDb}
