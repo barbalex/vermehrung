@@ -433,7 +433,14 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
-        if (['von_kultur_id', 'von_sammlung_id', 'art_id'].includes(field)) {
+        if (
+          [
+            'nach_kultur_id',
+            'von_kultur_id',
+            'von_sammlung_id',
+            'art_id',
+          ].includes(field)
+        ) {
           // ensure Herkunft updates
           console.log('Lieferung, refetch:', refetch)
           !!refetch && refetch()
@@ -450,7 +457,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }, [])
   const ifNeeded = useCallback(
     field => {
-      if (!exists(sammelLieferung[field])) {
+      if (!exists(sammelLieferung[field]) || sammelLieferung[field] === false) {
         return true
       } else if (sammelLieferung[field] !== row[field]) {
         return true

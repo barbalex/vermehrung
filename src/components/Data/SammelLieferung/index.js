@@ -25,8 +25,10 @@ import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
-  sammelLieferung as sammelLieferungFragment,
   art as artFragment,
+  herkunft as herkunftFragment,
+  sammelLieferung as sammelLieferungFragment,
+  sammlung as sammlungFragment,
 } from '../../../utils/fragments'
 import exists from '../../../utils/exists'
 import types from '../../../store/Filter/simpleTypes'
@@ -70,6 +72,15 @@ const FieldRow = styled.div`
     margin-top: 8px;
   }
 `
+const Herkunft = styled.div`
+  height: 54px;
+  user-select: none;
+`
+const HerkunftLabel = styled.div`
+  color: rgb(0, 0, 0, 0.54);
+  font-size: 12px;
+  padding-bottom: 2px;
+`
 
 const sammelLieferungQuery = gql`
   query SammelLieferungQuery(
@@ -80,12 +91,9 @@ const sammelLieferungQuery = gql`
     sammel_lieferung(where: { id: { _eq: $id } }) {
       ...SammelLieferungFields
       sammlung {
-        id
+        ...SammlungFields
         herkunft {
-          id
-          nr
-          lokalname
-          gemeinde
+          ...HerkunftFields
         }
       }
       kulturByVonKulturId {
@@ -93,10 +101,7 @@ const sammelLieferungQuery = gql`
         art_id
         herkunft_id
         herkunft {
-          id
-          nr
-          lokalname
-          gemeinde
+          ...HerkunftFields
         }
       }
       kulturByNachKulturId {
@@ -104,10 +109,7 @@ const sammelLieferungQuery = gql`
         art_id
         herkunft_id
         herkunft {
-          id
-          nr
-          lokalname
-          gemeinde
+          ...HerkunftFields
         }
       }
     }
@@ -118,7 +120,9 @@ const sammelLieferungQuery = gql`
       id
     }
   }
+  ${herkunftFragment}
   ${sammelLieferungFragment}
+  ${sammlungFragment}
 `
 const sammlungQuery = gql`
   query sammlungQuery($filter: sammlung_bool_exp!) {
@@ -251,14 +255,20 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed }) => {
     variables: { filter: sammlungFilter },
   })
 
-  const isAnlieferung =
-    activeNodeArray[activeNodeArray.length - 2] === 'An-Lieferungen'
-
-  const herkunftByKultur = isAnlieferung
-    ? get(row, 'kulturByNachKulturId.herkunft')
-    : get(row, 'kulturByVonKulturId.herkunft')
+  const herkunftByNachKultur = get(row, 'kulturByNachKulturId.herkunft')
+  const herkunftByVonKultur = get(row, 'kulturByVonKulturId.herkunft')
   const herkunftBySammlung = get(row, 'sammlung.herkunft')
-  const herkunft = herkunftByKultur || herkunftBySammlung
+  const herkunft =
+    herkunftByNachKultur || herkunftByVonKultur || herkunftBySammlung
+  const herkunftQuelle = herkunftByNachKultur
+    ? 'nach-Kultur'
+    : herkunftByVonKultur
+    ? 'von-Kultur'
+    : 'Sammlung'
+  const herkunftValue = herkunft
+    ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
+        '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
+    : ''
 
   // beware: art_id, herkunft_id and nach_kultur_id can be null
   let vonKulturFilter = { id: { _is_null: false } }
@@ -429,7 +439,14 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed }) => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
-        if (['von_kultur_id', 'von_sammlung_id', 'art_id'].includes(field)) {
+        if (
+          [
+            'nach_kultur_id',
+            'von_kultur_id',
+            'von_sammlung_id',
+            'art_id',
+          ].includes(field)
+        ) {
           // ensure Herkunft updates
           !!refetch && refetch()
         }
@@ -505,6 +522,12 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed }) => {
             saveToDb={saveToDb}
             error={errors.art_id}
           />
+          {herkunftValue && (
+            <Herkunft>
+              <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
+              {herkunftValue}
+            </Herkunft>
+          )}
           <FieldRow>
             <TextField
               key={`${row.id}anzahl_pflanzen`}
