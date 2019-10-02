@@ -254,8 +254,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     variables: { id, isFiltered, filter: lieferungFilter },
   })
 
-  console.log('Lieferung, sammelLieferung:', sammelLieferung)
-
   const { data: artData, error: artError, loading: artLoading } = useQuery(
     artQuery,
   )
@@ -486,7 +484,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
           ].includes(field)
         ) {
           // ensure Herkunft updates
-          console.log('Lieferung, refetch:', refetch)
           !!refetch && refetch()
         }
         setErrors({})
@@ -545,7 +542,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   if (!row || (!showFilter && filter.show)) return null
 
-  console.log('Lieferung, row:', row)
+  //console.log('Lieferung, row:', row)
 
   return (
     <ErrorBoundary>
