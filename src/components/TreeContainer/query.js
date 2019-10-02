@@ -386,6 +386,10 @@ export default gql`
       lieferungs @include(if: $isSammelLieferung) {
         ...LieferungFields
       }
+      person {
+        id
+        name
+      }
       kulturByVonKulturId {
         id
         garten {

@@ -16,7 +16,9 @@ export default ({ nodes, data }) => {
         const gartenPerson = get(el, 'kulturByVonKulturId.garten.person.name')
         const von =
           garten || gartenPerson ? `, von: ${garten || gartenPerson}` : ''
-        const label = `${datum}${von}`
+        const werPerson = get(el, 'person.name')
+        const wer = werPerson ? `, wer: ${werPerson}` : ''
+        const label = `${datum}${von}${wer}`
 
         return {
           nodeType: 'table',
