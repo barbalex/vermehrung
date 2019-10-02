@@ -64,7 +64,6 @@ export default async ({ node, store, client }) => {
   let table = null
   let fkExists = null
   let fkName = null
-  let artId = null
   let additionalValuesToSet = {}
 
   if (nodeType === 'table') {
@@ -120,7 +119,6 @@ export default async ({ node, store, client }) => {
       return console.log('Error querying parent kultur', error.message)
     }
     additionalValuesToSet.art_id = get(responce, 'data.kultur[0].art_id')
-    artId = get(responce, 'data.kultur[0].art_id')
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
@@ -142,7 +140,6 @@ export default async ({ node, store, client }) => {
       return console.log('Error querying parent kultur', error.message)
     }
     additionalValuesToSet.art_id = get(responce, 'data.sammlung[0].art_id')
-    artId = get(responce, 'data.sammlung[0].art_id')
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
     let responce
