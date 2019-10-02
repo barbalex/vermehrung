@@ -19,6 +19,7 @@ import {
   teilzaehlung,
 } from '../../../utils/fragments'
 import exists from '../../../utils/exists'
+import isString from '../../../utils/isString'
 
 const fragments = {
   art: art,
@@ -118,6 +119,7 @@ export default async ({ node, store, client }) => {
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
+    additionalValuesToSet.artId = get(responce, 'data.kultur[0].art_id')
     artId = get(responce, 'data.kultur[0].art_id')
     //console.log({ responce, artId })
   }
@@ -140,6 +142,7 @@ export default async ({ node, store, client }) => {
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
+    additionalValuesToSet.artId = get(responce, 'data.sammlung[0].art_id')
     artId = get(responce, 'data.sammlung[0].art_id')
     //console.log({ responce, artId, parentId })
   }
@@ -183,6 +186,28 @@ export default async ({ node, store, client }) => {
   console.log('createNew, additionalValuesToSet:', additionalValuesToSet)
   let mutation
   if (fkExists) {
+    /*const returning = `{ ...${fragmentFieldsNames[table]} }`
+    mutation = gql`
+      mutation insertDataset {
+        insert_${table} (objects: [
+          {
+            ${fkName}: ${parentId}${artId ? `, art_id: ${artId}` : ''}
+          }
+        ]) {
+          returning ${returning}
+        }
+      }
+      ${fragments[table]}
+    `*/
+    const objectString = Object.entries(additionalValuesToSet)
+      .map(([key, value]) => {
+        if (isString(value)) {
+          return `${key}: "${value}"`
+        }
+        return `${key}: ${value}`
+      })
+      .join(', ')
+    console.log('createNew, objectString:', objectString)
     const returning = `{ ...${fragmentFieldsNames[table]} }`
     mutation = gql`
       mutation insertDataset {
