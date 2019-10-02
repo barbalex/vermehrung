@@ -38,7 +38,7 @@ if (typeof window !== 'undefined') {
         jsonify: false,
         blacklist,
       })
-      .then(async () => {
+      .then(() => {
         // set last activeNodeArray
         // only if top domain was visited
         // TODO:
@@ -46,7 +46,7 @@ if (typeof window !== 'undefined') {
         if (isAuthenticated() && visitedTopDomain) {
           setTimeout(() => {
             navigate(`/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`)
-          }, 120)
+          }, 200)
         }
       }),
   )
