@@ -704,7 +704,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
               ))}
           {((herkunft && !isAnlieferung) ||
             (!!sammelLieferung.id &&
-              ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))) && (
+              ifAllNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))) && (
             <>
               <TitleRow>
                 <Title>nach</Title>
