@@ -28,7 +28,7 @@ export default ({ nodes, data }) => {
           parentId: 'sammelLieferungFolder',
           label,
           url: ['Sammel-Lieferungen', el.id],
-          hasChildren: false,
+          hasChildren: true,
           mono: true,
         }
       })

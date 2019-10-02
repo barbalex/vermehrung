@@ -51,6 +51,8 @@ import buildLieferungLieferung from './lieferung'
 
 import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferungSammelLieferung from './sammelLieferung'
+import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/folder'
+import buildSammelLieferungLieferungLieferung from './sammelLieferung/lieferung'
 
 import buildTeilkulturFolder from './teilkultur/folder'
 import buildTeilkulturTeilkultur from './teilkultur'
@@ -416,6 +418,20 @@ export default ({ store, data, loading }) => {
         )(),
       ]
     }
+    if (url.length === 2 && url[0] === 'Sammel-Lieferungen') {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildSammelLieferungLieferungFolder({
+            nodes,
+            url,
+            data,
+            store,
+            loading,
+          }),
+        )(),
+      ]
+    }
 
     if (url.length === 2 && url[0] === 'Herkuenfte') {
       nodes = [
@@ -600,6 +616,23 @@ export default ({ store, data, loading }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildKulturLieferungAnLieferung({
+            nodes,
+            data,
+            store,
+            url,
+          }),
+        )(),
+      ]
+    }
+    if (
+      url.length === 3 &&
+      url[0] === 'Sammel-Lieferungen' &&
+      url[2] === 'Lieferungen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildSammelLieferungLieferungLieferung({
             nodes,
             data,
             store,

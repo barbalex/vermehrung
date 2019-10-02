@@ -16,7 +16,7 @@ export default url => {
   if (url.length === 2 && url[0] === 'Lieferungen') {
     return 'lieferung'
   }
-  if (url.length === 2 && url[0] === 'Sammel-Lieferungen') {
+  if ([2, 3].includes(url.length) && url[0] === 'Sammel-Lieferungen') {
     return 'sammel_lieferung'
   }
   if (url.length === 2 && url[0] === 'Teilkulturen') {
@@ -66,6 +66,13 @@ export default url => {
     url.length === 4 &&
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferung'
+  }
+  if (
+    url.length === 4 &&
+    url[0] === 'Sammel-Lieferungen' &&
+    url[2] === 'Lieferungen'
   ) {
     return 'lieferung'
   }
