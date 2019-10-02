@@ -510,12 +510,10 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
     typeof window !== 'undefined' &&
       window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
   }, [])
-  // TODO: add Sammel-Lieferung Docs
-  // then update this link
   const openSettingsDocs = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Felder-blenden',
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Sammel-Lieferungen',
       )
   }, [])
   const ifNeeded = useCallback(
