@@ -7,11 +7,6 @@ export default ({ url, nodes, data, loading }) => {
   const sammelLieferung = sammelLieferungen.find(
     k => k.id === sammelLieferungId,
   )
-  console.log('nodes, sammelLieferung, lieferung:', {
-    sammelLieferungId,
-    sammelLieferungen,
-    sammelLieferung,
-  })
   const lieferungen = get(sammelLieferung, 'lieferungs', [])
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 

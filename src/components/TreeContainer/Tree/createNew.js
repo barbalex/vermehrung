@@ -11,12 +11,14 @@ import {
   herkunft,
   kultur,
   lieferung,
+  sammelLieferung as sammelLieferungFragment,
   person,
   sammlung,
   zaehlung,
   teilkultur,
   teilzaehlung,
 } from '../../../utils/fragments'
+import exists from '../../../utils/exists'
 
 const fragments = {
   art: art,
@@ -25,6 +27,7 @@ const fragments = {
   herkunft: herkunft,
   kultur: kultur,
   lieferung: lieferung,
+  sammelLieferung: sammelLieferungFragment,
   person: person,
   sammlung: sammlung,
   zaehlung: zaehlung,
@@ -38,6 +41,7 @@ const fragmentFieldsNames = {
   herkunft: 'HerkunftFields',
   kultur: 'KulturFields',
   lieferung: 'LieferungFields',
+  sammelLieferung: 'SammelLieferungFields',
   person: 'PersonFields',
   sammlung: 'SammlungFields',
   zaehlung: 'ZaehlungFields',
@@ -60,6 +64,7 @@ export default async ({ node, store, client }) => {
   let fkExists = null
   let fkName = null
   let artId = null
+  let additionalValuesToSet = {}
 
   if (nodeType === 'table') {
     tableTitle = url.slice(-2)[0]
@@ -102,13 +107,13 @@ export default async ({ node, store, client }) => {
     try {
       responce = await client.query({
         query: gql`
-        query getArt {
-          kultur(where: { id: { _eq: ${parentId} } }) {
-            id
-            art_id
+          query getArt {
+            kultur(where: { id: { _eq: ${parentId} } }) {
+              id
+              art_id
+            }
           }
-        }
-      `,
+        `,
       })
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
@@ -120,18 +125,17 @@ export default async ({ node, store, client }) => {
     // need to choose von_kultur_id or nach_kultur_id
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     // need to get art_id from sammlung and set it
-    const query = gql`
-      query getArt {
-        sammlung(where: { id: { _eq: ${parentId} } }) {
-          id
-          art_id
-        }
-      }
-    `
     let responce
     try {
       responce = await client.query({
-        query,
+        query: gql`
+          query getArt {
+            sammlung(where: { id: { _eq: ${parentId} } }) {
+              id
+              art_id
+            }
+          }
+        `,
       })
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
@@ -139,6 +143,44 @@ export default async ({ node, store, client }) => {
     artId = get(responce, 'data.sammlung[0].art_id')
     //console.log({ responce, artId, parentId })
   }
+  if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
+    console.log('TODO: copy values from sammel-lieferung')
+    console.log('createNew, parentId:', parentId)
+    console.log('createNew, sammelLieferungFragment:', sammelLieferungFragment)
+    let responce
+    try {
+      responce = await client.query({
+        query: gql`
+          query getSammelLieferung {
+            sammel_lieferung(where: { id: { _eq: ${parentId} } }) {
+              ...SammelLieferungFields
+            }
+          }
+          ${sammelLieferungFragment}
+        `,
+      })
+    } catch (error) {
+      return console.log(
+        'Error querying parent sammel_lieferung',
+        error.message,
+      )
+    }
+    const sammelLieferung = get(responce, 'data.sammel_lieferung[0]')
+    console.log('createNew, sammelLieferung:', sammelLieferung)
+    console.log('createNew, fkExists:', fkExists)
+    const entries = Object.entries(sammelLieferung)
+      .filter(
+        // eslint-disable-next-line no-unused-vars
+        ([key, value]) => key !== '__typename',
+      )
+      // eslint-disable-next-line no-unused-vars
+      .filter(([key, value]) => exists(value))
+    for (const [key, value] of entries) {
+      const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key
+      additionalValuesToSet[keyToUse] = value
+    }
+  }
+  console.log('createNew, additionalValuesToSet:', additionalValuesToSet)
   let mutation
   if (fkExists) {
     const returning = `{ ...${fragmentFieldsNames[table]} }`
