@@ -54,12 +54,6 @@ const Checkbox3States = ({ label, name, value, error, saveToDb }) => {
 
   const indeterminate = value === null
   const checked = value === true
-  const title =
-    value === true
-      ? `Ja. Nach nächstem Klick 'Nein'`
-      : value === false
-      ? `Nein. Nach nächstem Klick 'Unbestimmt'`
-      : `Unbestimmt. Nach nächstem Klick 'Ja'`
   const asideText =
     value === true ? `Ja` : value === false ? `Nein` : `Unbestimmt`
   const asideComment =
@@ -83,7 +77,6 @@ const Checkbox3States = ({ label, name, value, error, saveToDb }) => {
           color="primary"
           checked={checked}
           indeterminate={indeterminate}
-          title={title}
         />
         <Aside>
           {asideText}
