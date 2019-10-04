@@ -76,7 +76,6 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   const onClickAllLieferung = useCallback(async () => {
     setAnchorEl(null)
     updateAllLieferungen({
-      lieferungs: sammelLieferung.lieferungs,
       sammelLieferung,
       client,
       store,

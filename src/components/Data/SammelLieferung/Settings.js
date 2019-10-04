@@ -34,7 +34,8 @@ const SettingsSammelLieferung = ({ personId, personFelderResult }) => {
   const { enqueNotification } = store
 
   const { data, error, loading, refetch } = personFelderResult
-  const { sl_show_empty_when_next_to_li } = get(data, 'person_felder[0]') || {}
+  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
+    get(data, 'person_felder[0]') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -154,6 +155,21 @@ const SettingsSammelLieferung = ({ personId, personFelderResult }) => {
                 />
               }
               label="Felder mit Leer-Werten anzeigen (wenn neben einer Lieferung angezeigt)"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={sl_auto_copy_edits === true ? 'true' : 'false'}
+              control={
+                <Radio
+                  color="primary"
+                  checked={sl_auto_copy_edits}
+                  onClick={saveToDb}
+                  name="sl_auto_copy_edits"
+                />
+              }
+              label="Änderungen automatisch in alle Lieferungen kopieren"
               labelPlacement="end"
             />
           </MenuItem>

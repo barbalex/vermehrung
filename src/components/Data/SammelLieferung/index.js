@@ -27,6 +27,7 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
   art as artFragment,
   herkunft as herkunftFragment,
+  lieferung as lieferungFragment,
   personFelder as personFelderFragment,
   sammelLieferung as sammelLieferungFragment,
   sammlung as sammlungFragment,
@@ -37,6 +38,7 @@ import updateSammelLieferung from './updateSammelLieferung'
 import getUserPersonId from '../../../utils/getUserPersonId'
 import Settings from './Settings'
 import Copy from './Copy'
+import updateAllLieferungen from './Copy/updateAllLieferungen'
 
 const Container = styled.div`
   height: 100%;
@@ -145,7 +147,7 @@ const sammelLieferungQuery = gql`
         }
       }
       lieferungs {
-        id
+        ...LieferungFields
       }
     }
     rowsUnfiltered: sammel_lieferung @include(if: $isFiltered) {
@@ -156,6 +158,7 @@ const sammelLieferungQuery = gql`
     }
   }
   ${herkunftFragment}
+  ${lieferungFragment}
   ${sammelLieferungFragment}
   ${sammlungFragment}
 `
@@ -291,7 +294,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const personFelderResult = useQuery(personFelderQuery, {
     variables: { personId: userPersonId },
   })
-  const { sl_show_empty_when_next_to_li } =
+  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
     get(personFelderResult.data, 'person_felder[0]') || {}
 
   const sammlungFilter = row.art_id
@@ -489,9 +492,15 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
-        // TODO:
         // if sl_auto_copy_edits is true
         // copy to all lieferungen
+        if (sl_auto_copy_edits) {
+          await updateAllLieferungen({
+            sammelLieferung: { ...row, ...{ [field]: valueToSet } },
+            client,
+            store,
+          })
+        }
         if (
           [
             'nach_kultur_id',
@@ -507,7 +516,16 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         refetchTree()
       }
     },
-    [client, filter, refetch, refetchTree, row, showFilter],
+    [
+      client,
+      filter,
+      refetch,
+      refetchTree,
+      row,
+      showFilter,
+      sl_auto_copy_edits,
+      store,
+    ],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
@@ -577,7 +595,9 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
           <TitleContainer>
             <Title>Sammel-Lieferung</Title>
             <TitleSymbols>
-              <Copy sammelLieferung={row} lieferungId={lieferungId} />
+              {!sl_auto_copy_edits && (
+                <Copy sammelLieferung={row} lieferungId={lieferungId} />
+              )}
               {idPassed && (
                 <Settings
                   personId={userPersonId}

@@ -1,8 +1,8 @@
 import updateLieferung from './updateLieferung'
 
-export default async ({ lieferungs, sammelLieferung, client, store }) => {
+export default async ({ sammelLieferung, client, store }) => {
   let error = null
-  for (const l of lieferungs) {
+  for (const l of sammelLieferung.lieferungs) {
     try {
       await updateLieferung({
         lieferungId: l.id,
