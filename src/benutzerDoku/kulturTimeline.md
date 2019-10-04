@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Zeitachse-Kultur"
 date: "2019-09-20"
 title: "Zeit-Achse für Kulturen"
-sort: 5
+sort: 4
 ---
 
 ### Ziele

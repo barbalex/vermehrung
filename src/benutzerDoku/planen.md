@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Planen"
 date: "2019-09-20"
 title: "Planen"
-sort: 3
+sort: 11
 ---
 
 ### Wo

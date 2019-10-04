@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Kulturen"
 date: "2019-09-20"
 title: "Kulturen"
-sort: 6
+sort: 5
 ---
 
 ### Ziele
