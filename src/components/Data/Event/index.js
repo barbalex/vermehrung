@@ -293,6 +293,10 @@ const Event = ({ filter: showFilter }) => {
     typeof window !== 'undefined' &&
       window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
   }, [])
+  const openEventdDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Events')
+  }, [])
 
   if (loading) {
     return (
@@ -347,6 +351,13 @@ const Event = ({ filter: showFilter }) => {
               {row.kultur_id && (
                 <Settings kulturId={row.kultur_id} eventResult={eventResult} />
               )}
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openEventdDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

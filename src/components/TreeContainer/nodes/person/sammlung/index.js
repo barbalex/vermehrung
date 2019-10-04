@@ -23,7 +23,7 @@ export default ({ nodes, data, url }) => {
           : 'kein Datum'
         const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
         const herkunft = get(el, 'herkunft.nr') || '(keine Herkunft-Nr)'
-        const geplant = el.geplant ? ' geplant' : ''
+        const geplant = el.geplant ? ' (geplant)' : ''
         const label = `${datum}: Herkunft ${herkunft}: ${art}${geplant}`
 
         return {

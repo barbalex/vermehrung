@@ -8,13 +8,17 @@ export default ({ nodes, data }) => {
       // only show if parent node exists
       .filter(() => nodes.map(n => n.id).includes('eventFolder'))
       .map(el => {
+        const geplant = el.geplant ? ' (geplant)' : ''
+        const label = `${get(el, 'beschreibung') ||
+          '(nicht beschrieben)'}${geplant}`
+
         return {
           nodeType: 'table',
           menuTitle: 'Event',
           table: 'event',
           id: `event${el.id}`,
           parentId: 'eventFolder',
-          label: el.beschreibung || '(nicht beschrieben)',
+          label,
           url: ['Events', el.id],
           hasChildren: false,
         }

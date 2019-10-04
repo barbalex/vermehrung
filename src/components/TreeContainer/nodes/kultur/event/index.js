@@ -21,7 +21,9 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : null
-        const event = get(el, 'beschreibung') || '(nicht beschrieben)'
+        const geplant = el.geplant ? ' (geplant)' : ''
+        const event = `${get(el, 'beschreibung') ||
+          '(nicht beschrieben)'}${geplant}`
         const label = datum ? `${event} (${datum})` : event
 
         return {

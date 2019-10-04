@@ -30,7 +30,7 @@ export default ({ nodes, data }) => {
           .padStart(3, '\u00A0')}/${anzAb
           .toString()
           .padStart(3, '\u00A0')}/${anzMu.toString().padStart(3, '\u00A0')}`
-        const geplant = el.geplant ? ' geplant' : ''
+        const geplant = el.geplant ? ' (geplant)' : ''
         const label = `${datum}: ${numbers}${geplant}`
 
         return {

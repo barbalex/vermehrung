@@ -24,7 +24,7 @@ export default ({ nodes, data, url }) => {
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
         const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
-        const geplant = el.geplant ? ' geplant' : ''
+        const geplant = el.geplant ? ' (geplant)' : ''
         const label = `${datum}: ${artName}${geplant}`
 
         return {

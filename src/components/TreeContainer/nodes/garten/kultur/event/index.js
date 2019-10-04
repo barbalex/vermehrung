@@ -33,8 +33,9 @@ export default ({ nodes, data, url }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
+        const geplant = el.geplant ? ' (geplant)' : ''
         const label = `${datum}: ${get(el, 'beschreibung') ||
-          '(nicht beschrieben)'}`
+          '(nicht beschrieben)'}${geplant}`
 
         return {
           nodeType: 'table',

@@ -17,7 +17,7 @@ export default ({ nodes, data }) => {
         const numbers = `${anz
           .toString()
           .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`
-        const geplant = el.geplant ? ' geplant' : ''
+        const geplant = el.geplant ? ' (geplant)' : ''
         const label = `${datum}: ${numbers}${geplant}`
 
         return {

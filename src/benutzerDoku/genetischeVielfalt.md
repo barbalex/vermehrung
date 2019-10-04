@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Genetische-Vielfalt"
 date: "2019-10-04"
 title: "Genetische Vielfalt"
-sort: 12
+sort: 13
 ---
 
 
