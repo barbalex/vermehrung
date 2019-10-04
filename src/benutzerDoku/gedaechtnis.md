@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Gedaechtnis"
 date: "2019-09-30"
 title: "vermehrung erinnert sich"
-sort: 10
+sort: 12
 ---
 
 Beim Arbeiten speichert vermehrung laufend den aktuellen Zustand. Zum Beispiel:

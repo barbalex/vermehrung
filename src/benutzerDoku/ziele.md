@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Ziele"
-date: "2019-09-27"
+date: "2019-10-04"
 title: "Ziele"
 sort: 1
 ---
@@ -14,28 +14,27 @@ Die Ziele dienen als Grundlage:
 
 ### Priorität 1: Haupt-Ziele
 
-1. Gewährleisten, dass Herkünfte bekannt sind und innerhalb von Kulturen nicht vermischt werden
--  Übersichten über Pflanzen und auspflanz-bereite Pflanzen.<br/>
-  Als Grundlage, um Kulturen und Auspflanzungen zu planen
-- Obiges auch für frei wählbare Termine in der Zukunft<br/>
-  unter Berücksichtigung der Vermehrung und von geplanten Lieferungen<br/>
-  (vor allem innerhalb der nächsten 1 bis 2 Jahre, soweit Sammlungen, Lieferungen und Vermehrung geplant wurden)
-- Übersicht über Anzahl Mutterpflanzen.<br/>
+1. Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt
+- Die genetische Vielfalt von Kulturen ist bekannt - so gut wie möglich
+- Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden.<br/>
+  Als Grundlage, um Vermehrung und Auspflanzung zu planen
+- Anzahl Mutterpflanzen ist bekannt.<br/>
   Um die genetische Vielfalt zu kennen und Sammlungen zu planen.<br/>
-  Beinhaltet auch einen Überblick über Erhaltungskulturen.
-- Dokumentation über Vorgänge im Projekt
+  Beinhaltet auch einen Überblick über Erhaltungskulturen.<br/>
+  TODO: Mutterpflanzen nochmals diskutieren: Was genau ist ihre Definition und Funktion?
+- Wesentliche Vorgänge sind dokumentiert
 
 ### Priorität 2: Voraussetzungen, um die Haupt-Ziele zu erreichen
 
 6. Effiziente und quell-nahe Erfassung und Nutzung
-- Möglichkeit für MitarbeiterInnen, sich rasch einen Überblick über wichtige Aspekte von Kulturen/Gärten/Arten zu schaffen und auszudrucken (welche und wofür?)
-- In grossen Gärten: Übersicht über die (räumliche) Organisation der Kulturen.
+- MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Kulturen/Gärten/Arten schaffen und ausdrucken
+- In grossen Gärten haben MitarbeiterInnen die Übersicht über die (räumliche) Organisation der Kulturen.
   Um eine effiziente Bereitstellung von Lieferungen zu ermöglichen
 - Die Daten sind nur für MitarbeiterInnen sichtbar
 - Die Sichtbarkeit von Daten kann auf Gärten der jeweiligen Mitarbeiterin eingeschränkt werden
+- Qualitätskontrollen um die Qualität der Arbeit zu erhöhe
 
 ### Priorität 3: zusätzliche Ziele
 
-11. Lieferungen auswerten um zu sehen, wer erfolgreich vermehrt
+12. Lieferungen auswerten um zu sehen, wer erfolgreich vermehrt
 - Vermehrungs-Methodik auswerten
-- Qualitätskontrollen um die Qualität der Arbeit zu erhöhen

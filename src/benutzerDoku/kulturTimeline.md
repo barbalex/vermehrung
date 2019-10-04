@@ -7,8 +7,9 @@ sort: 5
 ---
 
 ### Ziel
-Ziele 2, 3 und 4 der [Projekt-Ziele](/Dokumentation/Benutzer/Ziele/): Übersichten über Pflanzen, auspflanz-bereite Pflanzen und Mutterpflanzen.<br/>
-Als Grundlage, um Kulturen, Lieferungen und Auspflanzungen zu planen.<br/><br/>
+- [Projekt-Ziele](/Dokumentation/Benutzer/Ziele) 3 und 4: Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden. Anzahl Mutterpflanzen ist bekannt<br/>
+  Als Grundlage, um Kulturen, Auspflanzungen und Sammlungen zu planen
+- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 7: MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Kulturen/Gärten/Arten schaffen
 
 Die Übersicht dokumentiert auch auf einer hohen Ebene zentrale Vorgänge (Projekt-Ziel 5).<br/><br/>
 
