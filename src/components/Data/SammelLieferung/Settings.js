@@ -8,7 +8,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import styled from 'styled-components'
@@ -85,13 +84,6 @@ const SettingsSammelLieferung = ({ personId, personFelderResult }) => {
       },
     })
   }, [enqueNotification, error])
-  const openSettingsDocs = useCallback(() => {
-    setAnchorEl(null)
-    typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Felder-blenden',
-      )
-  }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
@@ -133,15 +125,6 @@ const SettingsSammelLieferung = ({ personId, personFelderResult }) => {
         >
           <TitleRow>
             <Title>Optionen für Sammel-Lieferungen wählen:</Title>
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openSettingsDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
           </TitleRow>
           <MenuItem>
             <FormControlLabel
