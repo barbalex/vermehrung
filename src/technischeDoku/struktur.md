@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Dokumentation/Technisch/Struktur"
-date: "2019-06-15"
+date: "2019-10-04"
 title: "Daten-Struktur"
 sort: 3
 ---
