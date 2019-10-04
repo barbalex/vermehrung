@@ -33,15 +33,15 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ aufgabeResult }) => {
+const SettingsZaehlungen = ({ eventResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { error, loading, refetch } = aufgabeResult
-  const kulturId = get(aufgabeResult, 'data.aufgabe[0].kultur.id')
+  const { error, loading, refetch } = eventResult
+  const kulturId = get(eventResult, 'data.event[0].kultur.id')
   const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
-    get(aufgabeResult, 'data.aufgabe[0].kultur.kultur_felder') || {}
+    get(eventResult, 'data.event[0].kultur.kultur_felder') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -138,7 +138,7 @@ const SettingsZaehlungen = ({ aufgabeResult }) => {
           onClose={onClose}
         >
           <TitleRow>
-            <Title>Felder für Aufgaben wählen:</Title>
+            <Title>Felder für Events wählen:</Title>
             <div>
               <IconButton
                 aria-label="Anleitung öffnen"

@@ -350,9 +350,9 @@ $$ language plpgsql;
 create trigger tsvupdate_lieferung before insert or update
   on lieferung for each row execute procedure lieferung_trigger();
 
-DROP TRIGGER IF EXISTS aufgabe_trigger ON aufgabe cascade;
-DROP FUNCTION IF EXISTS aufgabe_trigger() cascade;
-create function aufgabe_trigger() returns trigger as $$
+DROP TRIGGER IF EXISTS event_trigger ON event cascade;
+DROP FUNCTION IF EXISTS event_trigger() cascade;
+create function event_trigger() returns trigger as $$
   declare
     artname text;
     gartenname text;
@@ -360,17 +360,17 @@ create function aufgabe_trigger() returns trigger as $$
     teilkulturname text;
   begin
     select ae_art.name, garten.name, teilkultur.name, person.name into artname, gartenname, teilkulturname, personname
-    from aufgabe
+    from event
       left join teilkultur
-      on aufgabe.teilkultur_id = teilkultur.id
-      left join person on aufgabe.person_id = person.id
+      on event.teilkultur_id = teilkultur.id
+      left join person on event.person_id = person.id
       inner join kultur 
         inner join art 
           inner join ae_art on art.ae_id = ae_art.id
         on kultur.art_id = art.id
         left join garten
         on kultur.garten_id = garten.id
-      on aufgabe.kultur_id = kultur.id
+      on event.kultur_id = kultur.id
     where kultur.id = new.kultur_id;
     new.tsv :=
       setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
@@ -384,10 +384,10 @@ create function aufgabe_trigger() returns trigger as $$
         when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
         else setweight(to_tsvector('simple', 'geplant'), 'A')
       end || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.aufgabe, '')), 'A');
+      setweight(to_tsvector('simple', coalesce(new.beschreibung, '')), 'A');
     return new;
   end
 $$ language plpgsql;
 
-create trigger tsvupdate_aufgabe before insert or update
-  on aufgabe for each row execute procedure aufgabe_trigger();
+create trigger tsvupdate_event before insert or update
+  on event for each row execute procedure event_trigger();

@@ -155,11 +155,11 @@ export default () => {
     name: get(o, 'garten.person.name') || '(kein Name)',
     type: 'Kulturen',
   }))
-  const suggestionsAufgabe = get(data, 'aufgabe', []).map(o => ({
+  const suggestionsEvent = get(data, 'event', []).map(o => ({
     id: o.id,
-    name: `${formatDatum(o.datum)}: ${get(o, 'aufgabe') ||
+    name: `${formatDatum(o.datum)}: ${get(o, 'beschreibung') ||
       '(nicht beschrieben)'}`,
-    type: 'Aufgaben',
+    type: 'Events',
     parent: o.kultur_id,
   }))
   const suggestionsLieferung = get(data, 'lieferung', []).map(o => ({
@@ -190,7 +190,7 @@ export default () => {
     ...suggestionsGarten,
     ...suggestionsHerkunft,
     ...suggestionsKultur,
-    ...suggestionsAufgabe,
+    ...suggestionsEvent,
     ...suggestionsLieferung,
     ...suggestionsPerson,
     ...suggestionsSammlung,
@@ -221,10 +221,10 @@ export default () => {
       suggestions: suggestionsKultur,
     })
   }
-  if (suggestionsAufgabe.length) {
+  if (suggestionsEvent.length) {
     titledSuggestions.push({
-      title: `Aufgaben (${suggestionsAufgabe.length})`,
-      suggestions: suggestionsAufgabe,
+      title: `Events (${suggestionsEvent.length})`,
+      suggestions: suggestionsEvent,
     })
   }
   if (suggestionsLieferung.length) {
@@ -271,7 +271,7 @@ export default () => {
         case 'Kulturen':
           newActiveNodeArray = [suggestion.type, suggestion.id]
           break
-        case 'Aufgaben':
+        case 'Events':
         case 'Zaehlungen':
           newActiveNodeArray = [
             'Kulturen',

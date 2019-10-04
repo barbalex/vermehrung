@@ -27,13 +27,13 @@ export const aeArt = gql`
     # name_latein
   }
 `
-export const aufgabe = gql`
-  fragment AufgabeFields on aufgabe {
+export const event = gql`
+  fragment EventFields on event {
     id
     kultur_id
     teilkultur_id
     person_id
-    aufgabe
+    beschreibung
     geplant
     datum
   }

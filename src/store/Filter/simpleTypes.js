@@ -1,5 +1,5 @@
 import { simpleTypes as art } from './art'
-import { simpleTypes as aufgabe } from './aufgabe'
+import { simpleTypes as event } from './event'
 import { simpleTypes as garten } from './garten'
 import { simpleTypes as herkunft } from './herkunft'
 import { simpleTypes as kultur } from './kultur'
@@ -13,7 +13,7 @@ import { simpleTypes as teilzaehlung } from './teilzaehlung'
 
 export default {
   art,
-  aufgabe,
+  event,
   garten,
   herkunft,
   kultur,

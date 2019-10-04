@@ -42,7 +42,7 @@ const TreeContainer = () => {
     //notifyOnNetworkStatusChange: true,
     variables: {
       artFilter: queryFromTable({ store, table: 'art' }),
-      aufgabeFilter: queryFromTable({ store, table: 'aufgabe' }),
+      eventFilter: queryFromTable({ store, table: 'event' }),
       gartenFilter: queryFromTable({ store, table: 'garten' }),
       kulturFilter: queryFromTable({ store, table: 'kultur' }),
       herkunftFilter: queryFromTable({ store, table: 'herkunft' }),
@@ -56,7 +56,7 @@ const TreeContainer = () => {
       teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
       zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
       isArt: openNodes.some(n => n[0] === 'Arten'),
-      isAufgabe: openNodes.some(n => n[0] === 'Aufgaben'),
+      isEvent: openNodes.some(n => n[0] === 'Events'),
       isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
       isArtSammlung: openNodes.some(
         n => n[0] === 'Arten' && n[2] === 'Sammlungen',

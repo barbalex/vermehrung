@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 import {
   art,
-  aufgabe,
+  event,
   garten,
   herkunft,
   kultur,
@@ -18,7 +18,7 @@ import {
 export default gql`
   query TreeQuery(
     $artFilter: art_bool_exp!
-    $aufgabeFilter: aufgabe_bool_exp!
+    $eventFilter: event_bool_exp!
     $gartenFilter: garten_bool_exp!
     $kulturFilter: kultur_bool_exp!
     $herkunftFilter: herkunft_bool_exp!
@@ -29,7 +29,7 @@ export default gql`
     $lieferungFilter: lieferung_bool_exp!
     $sammelLieferungFilter: sammel_lieferung_bool_exp!
     $isArt: Boolean!
-    $isAufgabe: Boolean!
+    $isEvent: Boolean!
     $isArtKultur: Boolean!
     $isArtSammlung: Boolean!
     $isGarten: Boolean!
@@ -78,9 +78,9 @@ export default gql`
             ...PersonFields
           }
         }
-        aufgaben(where: $aufgabeFilter, order_by: { datum: desc_nulls_first })
+        events(where: $eventFilter, order_by: { datum: desc_nulls_first })
           @include(if: $isGartenKultur) {
-          ...AufgabeFields
+          ...EventFields
         }
         zaehlungs(
           where: $zaehlungFilter
@@ -139,9 +139,9 @@ export default gql`
             ...PersonFields
           }
         }
-        aufgaben(where: $aufgabeFilter, order_by: { datum: desc_nulls_first })
+        events(where: $eventFilter, order_by: { datum: desc_nulls_first })
           @include(if: $isArtKultur) {
-          ...AufgabeFields
+          ...EventFields
         }
         zaehlungs(
           where: $zaehlungFilter
@@ -208,11 +208,8 @@ export default gql`
                 ...PersonFields
               }
             }
-            aufgaben(
-              where: $aufgabeFilter
-              order_by: { datum: desc_nulls_first }
-            ) {
-              ...AufgabeFields
+            events(where: $eventFilter, order_by: { datum: desc_nulls_first }) {
+              ...EventFields
             }
             zaehlungs(
               where: $zaehlungFilter
@@ -233,8 +230,8 @@ export default gql`
         }
       }
     }
-    aufgabe(where: $aufgabeFilter, order_by: { aufgabe: asc_nulls_first }) {
-      ...AufgabeFields
+    event(where: $eventFilter, order_by: { beschreibung: asc_nulls_first }) {
+      ...EventFields
     }
     zaehlung(order_by: { datum: desc_nulls_first }) {
       ...ZaehlungFields
@@ -278,11 +275,11 @@ export default gql`
           ...PersonFields
         }
       }
-      aufgaben(
-        where: $aufgabeFilter
-        order_by: { datum: desc_nulls_first, aufgabe: asc_nulls_first }
+      events(
+        where: $eventFilter
+        order_by: { datum: desc_nulls_first, beschreibung: asc_nulls_first }
       ) @include(if: $isKultur) {
-        ...AufgabeFields
+        ...EventFields
         kultur {
           ...KulturFields
         }
@@ -356,8 +353,8 @@ export default gql`
                 ...PersonFields
               }
             }
-            aufgaben {
-              ...AufgabeFields
+            events {
+              ...EventFields
             }
             zaehlungs(
               where: $zaehlungFilter
@@ -415,8 +412,8 @@ export default gql`
             ...PersonFields
           }
         }
-        aufgaben {
-          ...AufgabeFields
+        events {
+          ...EventFields
         }
         zaehlungs {
           ...ZaehlungFields
@@ -454,8 +451,8 @@ export default gql`
           art {
             ...ArtFields
           }
-          aufgaben @include(if: $isPersonGartenKultur) {
-            ...AufgabeFields
+          events @include(if: $isPersonGartenKultur) {
+            ...EventFields
           }
           zaehlungs @include(if: $isPersonGartenKultur) {
             ...ZaehlungFields
@@ -542,8 +539,8 @@ export default gql`
               ...PersonFields
             }
           }
-          aufgaben @include(if: $isSammlungLieferungKultur) {
-            ...AufgabeFields
+          events @include(if: $isSammlungLieferungKultur) {
+            ...EventFields
           }
           zaehlungs @include(if: $isSammlungLieferungKultur) {
             ...ZaehlungFields
@@ -568,7 +565,7 @@ export default gql`
     }
   }
   ${art}
-  ${aufgabe}
+  ${event}
   ${garten}
   ${kultur}
   ${kulturFelder}

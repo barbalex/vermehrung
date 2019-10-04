@@ -13,8 +13,8 @@ import buildArtSammlungLieferungAusLieferung from './art/sammlung/auslieferung'
 
 import buildArtKulturFolder from './art/kultur/folder'
 import buildArtKultur from './art/kultur'
-import buildArtKulturAufgabeFolder from './art/kultur/aufgabe/folder'
-import buildArtKulturAufgabeAufgabe from './art/kultur/aufgabe'
+import buildArtKulturEventFolder from './art/kultur/event/folder'
+import buildArtKulturEventEvent from './art/kultur/event'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
 import buildArtKulturTeilkulturTeilkultur from './art/kultur/teilkultur'
 import buildArtKulturZaehlungFolder from './art/kultur/zaehlung/folder'
@@ -30,8 +30,8 @@ import buildGartenKulturFolder from './garten/kultur/folder'
 import buildGartenKultur from './garten/kultur'
 import buildGartenKulturTeilkulturFolder from './garten/kultur/teilkultur/folder'
 import buildGartenKulturTeilkulturTeilkultur from './garten/kultur/teilkultur'
-import buildGartenKulturAufgabeFolder from './garten/kultur/aufgabe/folder'
-import buildGartenKulturAufgabeAufgabe from './garten/kultur/aufgabe'
+import buildGartenKulturEventFolder from './garten/kultur/event/folder'
+import buildGartenKulturEventEvent from './garten/kultur/event'
 import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
 import buildGartenKulturZaehlungZaehlung from './garten/kultur/zaehlung'
 import buildGartenKulturAusLieferungFolder from './garten/kultur/auslieferung/folder'
@@ -60,8 +60,8 @@ import buildTeilkulturTeilkultur from './teilkultur'
 import buildZaehlungFolder from './zaehlung/folder'
 import buildZaehlungZaehlung from './zaehlung'
 
-import buildAufgabeFolder from './aufgabe/folder'
-import buildAufgabeAufgabe from './aufgabe'
+import buildEventFolder from './event/folder'
+import buildEventEvent from './event'
 
 import buildPersonFolder from './person/folder'
 import buildPersonPerson from './person'
@@ -71,8 +71,8 @@ import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
 import buildPersonGartenKulturKultur from './person/garten/kultur'
 import buildPersonGartenKulturZaehlungFolder from './person/garten/kultur/zaehlung/folder'
 import buildPersonGartenKulturZaehlungZaehlung from './person/garten/kultur/zaehlung'
-import buildPersonGartenKulturAufgabeFolder from './person/garten/kultur/aufgabe/folder'
-import buildPersonGartenKulturAufgabeAufgabe from './person/garten/kultur/aufgabe'
+import buildPersonGartenKulturEventFolder from './person/garten/kultur/event/folder'
+import buildPersonGartenKulturEventEvent from './person/garten/kultur/event'
 import buildPersonGartenKulturTeilkulturFolder from './person/garten/kultur/teilkultur/folder'
 import buildPersonGartenKulturTeilkulturTeilkultur from './person/garten/kultur/teilkultur'
 import buildPersonGartenKulturAuslieferungFolder from './person/garten/kultur/auslieferung/folder'
@@ -94,8 +94,8 @@ import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultu
 import buildSammlungAusLieferungKulturKultur from './sammlung/auslieferung/kultur'
 import buildSammlungAusLieferungKulturZaehlungFolder from './sammlung/auslieferung/kultur/zaehlung/folder'
 import buildSammlungAusLieferungKulturZaehlungZaehlung from './sammlung/auslieferung/kultur/zaehlung'
-import buildSammlungAusLieferungKulturAufgabeFolder from './sammlung/auslieferung/kultur/aufgabe/folder'
-import buildSammlungAusLieferungKulturAufgabeAufgabe from './sammlung/auslieferung/kultur/aufgabe'
+import buildSammlungAusLieferungKulturEventFolder from './sammlung/auslieferung/kultur/event/folder'
+import buildSammlungAusLieferungKulturEventEvent from './sammlung/auslieferung/kultur/event'
 import buildSammlungAusLieferungKulturAusLieferungFolder from './sammlung/auslieferung/kultur/auslieferung/folder'
 import buildSammlungAusLieferungKulturAusLieferungLieferung from './sammlung/auslieferung/kultur/auslieferung'
 import buildSammlungAusLieferungKulturAnLieferungFolder from './sammlung/auslieferung/kultur/anlieferung/folder'
@@ -111,8 +111,8 @@ import buildKulturAnLieferungFolder from './kultur/anlieferung/folder'
 import buildKulturLieferungAnLieferung from './kultur/anlieferung'
 import buildKulturAusLieferungFolder from './kultur/auslieferung/folder'
 import buildKulturLieferungAusLieferung from './kultur/auslieferung'
-import buildKulturAufgabeFolder from './kultur/aufgabe/folder'
-import buildKulturAufgabeAufgabe from './kultur/aufgabe'
+import buildKulturEventFolder from './kultur/event/folder'
+import buildKulturEventEvent from './kultur/event'
 
 export default ({ store, data, loading }) => {
   const openNodes = store.tree.openNodes.sort(sort)
@@ -126,7 +126,7 @@ export default ({ store, data, loading }) => {
     ...memoizeOne(() => buildSammelLieferungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildAufgabeFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
     ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
@@ -214,11 +214,11 @@ export default ({ store, data, loading }) => {
         )(),
       ]
     }
-    if (url.length === 1 && url[0] === 'Aufgaben') {
+    if (url.length === 1 && url[0] === 'Events') {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildAufgabeAufgabe({
+          buildEventEvent({
             nodes,
             data,
             store,
@@ -408,7 +408,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildKulturAufgabeFolder({
+          buildKulturEventFolder({
             nodes,
             url,
             data,
@@ -658,11 +658,11 @@ export default ({ store, data, loading }) => {
         )(),
       ]
     }
-    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Aufgaben') {
+    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Events') {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildKulturAufgabeAufgabe({
+          buildKulturEventEvent({
             nodes,
             data,
             store,
@@ -703,7 +703,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildArtKulturAufgabeFolder({
+          buildArtKulturEventFolder({
             nodes,
             url,
             data,
@@ -767,7 +767,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildGartenKulturAufgabeFolder({
+          buildGartenKulturEventFolder({
             nodes,
             url,
             data,
@@ -913,12 +913,12 @@ export default ({ store, data, loading }) => {
       url.length === 5 &&
       url[0] === 'Arten' &&
       url[2] === 'Kulturen' &&
-      url[4] === 'Aufgaben'
+      url[4] === 'Events'
     ) {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildArtKulturAufgabeAufgabe({
+          buildArtKulturEventEvent({
             nodes,
             data,
             store,
@@ -1004,12 +1004,12 @@ export default ({ store, data, loading }) => {
       url.length === 5 &&
       url[0] === 'Gaerten' &&
       url[2] === 'Kulturen' &&
-      url[4] === 'Aufgaben'
+      url[4] === 'Events'
     ) {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildGartenKulturAufgabeAufgabe({
+          buildGartenKulturEventEvent({
             nodes,
             data,
             store,
@@ -1108,7 +1108,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildPersonGartenKulturAufgabeFolder({
+          buildPersonGartenKulturEventFolder({
             nodes,
             data,
             store,
@@ -1159,7 +1159,7 @@ export default ({ store, data, loading }) => {
           }),
         )(),
         ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturAufgabeFolder({
+          buildSammlungAusLieferungKulturEventFolder({
             nodes,
             data,
             store,
@@ -1212,12 +1212,12 @@ export default ({ store, data, loading }) => {
       url[0] === 'Personen' &&
       url[2] === 'Gaerten' &&
       url[4] === 'Kulturen' &&
-      url[6] === 'Aufgaben'
+      url[6] === 'Events'
     ) {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildPersonGartenKulturAufgabeAufgabe({
+          buildPersonGartenKulturEventEvent({
             nodes,
             data,
             store,
@@ -1308,12 +1308,12 @@ export default ({ store, data, loading }) => {
       url[0] === 'Sammlungen' &&
       url[2] === 'Aus-Lieferungen' &&
       url[4] === 'Kulturen' &&
-      url[6] === 'Aufgaben'
+      url[6] === 'Events'
     ) {
       nodes = [
         ...nodes,
         ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturAufgabeAufgabe({
+          buildSammlungAusLieferungKulturEventEvent({
             nodes,
             data,
             store,

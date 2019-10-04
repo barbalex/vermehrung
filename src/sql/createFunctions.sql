@@ -75,10 +75,10 @@ returns setof lieferung as
   $$
 language sql stable;
 
-drop function if exists aufgabe_search(filter text);
-create or replace function aufgabe_search(filter text)
-returns setof aufgabe as
+drop function if exists event_search(filter text);
+create or replace function event_search(filter text)
+returns setof event as
   $$
-    select * from aufgabe where tsv @@ to_tsquery($1);
+    select * from event where tsv @@ to_tsquery($1);
   $$
 language sql stable;

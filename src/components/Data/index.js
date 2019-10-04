@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
 import Art from './Art'
-import Aufgabe from './Aufgabe'
+import Event from './Event'
 import Herkunft from './Herkunft'
 import Sammlung from './Sammlung'
 import Garten from './Garten'
@@ -22,8 +22,8 @@ const Data = () => {
     case 'art': {
       return <Art />
     }
-    case 'aufgabe': {
-      return <Aufgabe />
+    case 'event': {
+      return <Event />
     }
     case 'garten': {
       return <Garten />

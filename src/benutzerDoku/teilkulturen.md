@@ -39,7 +39,7 @@ Pro Kultur können (fakultativ) mehrere Teil-Zählungen erfasst werden. Die Teil
 vermehrung.apflora.ch summiert alle Zahlen der Einheiten "Anzahl Pflanzen", "anzahl auspflanz-bereit" und "Anzahl Mutter-Pflanzen" pro Kultur.
 <br/><br/>
 
-#### Aufgaben können Teil-Kulturen zugeordnet werden
+#### Events können Teil-Kulturen zugeordnet werden
 ...müssen aber nicht.
 <br/><br/>
 

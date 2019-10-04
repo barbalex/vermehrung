@@ -11,8 +11,8 @@ export default ({ url, nodes, data, loading }) => {
   const garten = gaerten.find(a => a.id === gartenId)
   const kulturen = get(garten, 'kulturs', [])
   const kultur = kulturen.find(k => k.id === kulturId)
-  const aufgaben = get(kultur, 'aufgaben', [])
-  const nr = loading && !aufgaben.length ? '...' : aufgaben.length
+  const events = get(kultur, 'events', [])
+  const nr = loading && !events.length ? '...' : events.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
@@ -44,9 +44,9 @@ export default ({ url, nodes, data, loading }) => {
   return [
     {
       nodeType: 'folder',
-      menuTitle: 'Aufgaben',
-      id: `person${personId}Garten${gartenId}Kultur${kulturId}AufgabeFolder`,
-      label: `Aufgaben (${nr})`,
+      menuTitle: 'Events',
+      id: `person${personId}Garten${gartenId}Kultur${kulturId}EventFolder`,
+      label: `Events (${nr})`,
       url: [
         'Personen',
         personId,
@@ -54,7 +54,7 @@ export default ({ url, nodes, data, loading }) => {
         gartenId,
         'Kulturen',
         kulturId,
-        'Aufgaben',
+        'Events',
       ],
       sort: [11, personIndex, 2, gartenIndex, 1, kulturIndex, 5],
       hasChildren: true,

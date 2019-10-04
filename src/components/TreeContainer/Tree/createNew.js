@@ -6,7 +6,7 @@ import last from 'lodash/last'
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 import {
   art,
-  aufgabe,
+  event,
   garten,
   herkunft,
   kultur,
@@ -23,7 +23,7 @@ import isString from '../../../utils/isString'
 
 const fragments = {
   art: art,
-  aufgabe: aufgabe,
+  event: event,
   garten: garten,
   herkunft: herkunft,
   kultur: kultur,
@@ -37,7 +37,7 @@ const fragments = {
 }
 const fragmentFieldsNames = {
   art: 'ArtFields',
-  aufgabe: 'AufgabeFields',
+  event: 'EventFields',
   garten: 'GartenFields',
   herkunft: 'HerkunftFields',
   kultur: 'KulturFields',

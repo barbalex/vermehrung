@@ -24,7 +24,7 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
-  aufgabe as aufgabeFragment,
+  event as eventFragment,
   kulturFelder as kulturFelderFragment,
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
@@ -83,14 +83,14 @@ const FieldRow = styled.div`
   }
 `
 
-const aufgabeQuery = gql`
-  query AufgabeQuery(
+const eventQuery = gql`
+  query EventQuery(
     $id: bigint!
-    $filter: aufgabe_bool_exp!
+    $filter: event_bool_exp!
     $isFiltered: Boolean!
   ) {
-    aufgabe(where: { id: { _eq: $id } }) {
-      ...AufgabeFields
+    event(where: { id: { _eq: $id } }) {
+      ...EventFields
       kultur {
         id
         art_id
@@ -99,14 +99,14 @@ const aufgabeQuery = gql`
         }
       }
     }
-    rowsUnfiltered: aufgabe @include(if: $isFiltered) {
+    rowsUnfiltered: event @include(if: $isFiltered) {
       id
     }
-    rowsFiltered: aufgabe(where: $filter) @include(if: $isFiltered) {
+    rowsFiltered: event(where: $filter) @include(if: $isFiltered) {
       id
     }
   }
-  ${aufgabeFragment}
+  ${eventFragment}
   ${kulturFelderFragment}
 `
 // garten.person.name
@@ -142,7 +142,7 @@ const kulturQuery = gql`
       }
     }
   }
-  ${aufgabeFragment}
+  ${eventFragment}
   ${teilkulturFragment}
 `
 const personQuery = gql`
@@ -155,7 +155,7 @@ const personQuery = gql`
   }
 `
 
-const Aufgabe = ({ filter: showFilter }) => {
+const Event = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
@@ -166,11 +166,11 @@ const Aufgabe = ({ filter: showFilter }) => {
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
-  const aufgabeFilter = queryFromTable({ store, table: 'aufgabe' })
-  const aufgabeResult = useQuery(aufgabeQuery, {
-    variables: { id, isFiltered, filter: aufgabeFilter },
+  const eventFilter = queryFromTable({ store, table: 'event' })
+  const eventResult = useQuery(eventQuery, {
+    variables: { id, isFiltered, filter: eventFilter },
   })
-  const { data, error, loading } = aufgabeResult
+  const { data, error, loading } = eventResult
 
   const [errors, setErrors] = useState({})
 
@@ -178,9 +178,9 @@ const Aufgabe = ({ filter: showFilter }) => {
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
   if (showFilter) {
-    row = filter.aufgabe
+    row = filter.event
   } else {
-    row = get(data, 'aufgabe[0]') || {}
+    row = get(data, 'event[0]') || {}
   }
 
   const {
@@ -244,12 +244,12 @@ const Aufgabe = ({ filter: showFilter }) => {
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.aufgabe[field]
+      const type = types.event[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
       if (showFilter) {
-        filter.setValue({ table: 'aufgabe', key: field, value })
+        filter.setValue({ table: 'event', key: field, value })
       } else {
         try {
           let valueToSet
@@ -262,19 +262,19 @@ const Aufgabe = ({ filter: showFilter }) => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_aufgabe($id: bigint!) {
-                update_aufgabe(
+              mutation update_event($id: bigint!) {
+                update_event(
                   where: { id: { _eq: $id } }
                   _set: { 
                     ${field}: ${valueToSet} }
                 ) {
                   affected_rows
                   returning {
-                    ...AufgabeFields
+                    ...EventFields
                   }
                 }
               }
-              ${aufgabeFragment}
+              ${eventFragment}
             `,
             variables: {
               id: row.id,
@@ -297,7 +297,7 @@ const Aufgabe = ({ filter: showFilter }) => {
   if (loading) {
     return (
       <Container>
-        <FormTitle title="Aufgabe" />
+        <FormTitle title="Event" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
@@ -306,7 +306,7 @@ const Aufgabe = ({ filter: showFilter }) => {
   if (error) {
     return (
       <Container>
-        <FormTitle title="Aufgabe" />
+        <FormTitle title="Event" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
@@ -314,7 +314,7 @@ const Aufgabe = ({ filter: showFilter }) => {
   if (kulturError) {
     return (
       <Container>
-        <FormTitle title="Aufgabe" />
+        <FormTitle title="Event" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${kulturError.message}`}</FieldsContainer>
       </Container>
     )
@@ -322,7 +322,7 @@ const Aufgabe = ({ filter: showFilter }) => {
   if (personError) {
     return (
       <Container>
-        <FormTitle title="Aufgabe" />
+        <FormTitle title="Event" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${personError.message}`}</FieldsContainer>
       </Container>
     )
@@ -335,20 +335,17 @@ const Aufgabe = ({ filter: showFilter }) => {
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Aufgabe"
-            table="aufgabe"
+            title="Event"
+            table="event"
             totalNr={totalNr}
             filteredNr={filteredNr}
           />
         ) : (
           <TitleContainer>
-            <Title>Aufgabe</Title>
+            <Title>Event</Title>
             <TitleSymbols>
               {row.kultur_id && (
-                <Settings
-                  kulturId={row.kultur_id}
-                  aufgabeResult={aufgabeResult}
-                />
+                <Settings kulturId={row.kultur_id} eventResult={eventResult} />
               )}
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
@@ -387,12 +384,12 @@ const Aufgabe = ({ filter: showFilter }) => {
             />
           )}
           <TextField
-            key={`${row.id}aufgabe`}
-            name="aufgabe"
-            label="Aufgabe"
-            value={row.aufgabe}
+            key={`${row.id}beschreibung`}
+            name="beschreibung"
+            label="Beschreibung"
+            value={row.beschreibung}
             saveToDb={saveToDb}
-            error={errors.aufgabe}
+            error={errors.beschreibung}
             multiline
           />
           {(ag_person_id || showFilter) && (
@@ -445,4 +442,4 @@ const Aufgabe = ({ filter: showFilter }) => {
   )
 }
 
-export default observer(Aufgabe)
+export default observer(Event)

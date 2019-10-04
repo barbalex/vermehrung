@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 import {
   art as artFragment,
-  aufgabe as aufgabeFragment,
+  event as eventFragment,
   garten as gartenFragment,
   herkunft as herkunftFragment,
   kultur as kulturFragment,
@@ -47,8 +47,8 @@ export default gql`
         }
       }
     }
-    aufgabe: aufgabe_search(args: { filter: $filter }) @include(if: $run) {
-      ...AufgabeFields
+    event: event_search(args: { filter: $filter }) @include(if: $run) {
+      ...EventFields
       kultur {
         ...KulturFields
       }
@@ -74,7 +74,7 @@ export default gql`
     }
   }
   ${artFragment}
-  ${aufgabeFragment}
+  ${eventFragment}
   ${gartenFragment}
   ${herkunftFragment}
   ${kulturFragment}

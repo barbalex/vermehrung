@@ -22,7 +22,7 @@ Es ist möglich, dass gewisse Felder nur in bestimmten Kulturen benutzt werden. 
 - Kultur
 - Teil-Kulturen
 - Zählungen
-- Aufgaben
+- Events
 
 Was nicht einer Kultur zugeordnet ist, wird pro Benutzer bestimmt. Das sind momentan:
 
