@@ -96,7 +96,8 @@ const LieferungContainer = ({ filter: showFilter }) => {
     lieferungData,
     'lieferung[0].sammel_lieferung_id',
   )
-  const sammelLieferung = get(lieferungData, 'lieferung[0].sammel_lieferung')
+  const sammelLieferung =
+    get(lieferungData, 'lieferung[0].sammel_lieferung') || {}
 
   const userPersonId = getUserPersonId()
   const personFelderResult = useQuery(personFelderQuery, {

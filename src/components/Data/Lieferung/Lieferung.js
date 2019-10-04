@@ -241,6 +241,7 @@ const personFelderQuery = gql`
 `
 
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
+  const existsSammelLieferung = !!get(sammelLieferung, 'id')
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
@@ -506,7 +507,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }, [])
   const ifNeeded = useCallback(
     field => {
-      if (sammelLieferung.id && li_show_sl_felder) return true
+      if (existsSammelLieferung && li_show_sl_felder) return true
       if (!exists(sammelLieferung[field]) || sammelLieferung[field] === false) {
         return true
       } else if (sammelLieferung[field] !== row[field]) {
@@ -514,7 +515,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       }
       return false
     },
-    [li_show_sl_felder, row, sammelLieferung],
+    [existsSammelLieferung, li_show_sl_felder, row, sammelLieferung],
   )
   const ifSomeNeeded = useCallback(fields => fields.some(f => ifNeeded(f)), [
     ifNeeded,
@@ -677,7 +678,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             </>
           )}
           {(row.art_id && !isAuslieferung) ||
-            (sammelLieferung.id &&
+            (existsSammelLieferung &&
               ifAllNeeded(['von_sammlung_id', 'von_kultur_id']) && (
                 <>
                   <TitleRow>
@@ -716,7 +717,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                 </>
               ))}
           {((herkunft && !isAnlieferung) ||
-            (!!sammelLieferung.id &&
+            (existsSammelLieferung &&
               ifAllNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))) && (
             <>
               <TitleRow>
