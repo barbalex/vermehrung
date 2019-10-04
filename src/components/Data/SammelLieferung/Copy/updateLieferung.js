@@ -7,7 +7,15 @@ import exists from '../../../../utils/exists'
 
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
-export default async ({ lieferungId, sammelLieferung, client, store }) => {
+export default async ({
+  lieferungId,
+  sammelLieferung,
+  field,
+  client,
+  store,
+}) => {
+  // pass field to mark which field should be updated
+  // even if it has value null
   const lieferung = {
     ...sammelLieferung,
     id: lieferungId,
@@ -21,7 +29,7 @@ export default async ({ lieferungId, sammelLieferung, client, store }) => {
     )
     // only update with existing values
     // eslint-disable-next-line no-unused-vars
-    .filter(([key, val]) => exists(val))
+    .filter(([key, val]) => exists(val) || key === field)
     .map(([key, value]) => {
       if (isString(value)) {
         return `${key}: "${value}"`

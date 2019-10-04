@@ -1,6 +1,8 @@
 import get from 'lodash/get'
 import moment from 'moment'
 
+import exists from '../../../../utils/exists'
+
 export default ({ nodes, data }) => {
   const lieferungen = get(data, 'lieferung', [])
 
@@ -12,8 +14,10 @@ export default ({ nodes, data }) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
-        const anz = get(el, 'anzahl_pflanzen') || '_'
-        const anzAb = get(el, 'anzahl_auspflanzbereit') || '_'
+        const anz = exists(el.anzahl_pflanzen) ? el.anzahl_pflanzen : '_'
+        const anzAb = exists(el.anzahl_auspflanzbereit)
+          ? el.anzahl_auspflanzbereit
+          : '_'
         const numbers = `${anz
           .toString()
           .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`

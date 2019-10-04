@@ -495,8 +495,11 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         // if sl_auto_copy_edits is true
         // copy to all lieferungen
         if (sl_auto_copy_edits) {
+          // pass field to mark which field should be updated
+          // even if it has value null
           await updateAllLieferungen({
             sammelLieferung: { ...row, ...{ [field]: valueToSet } },
+            field,
             client,
             store,
           })
