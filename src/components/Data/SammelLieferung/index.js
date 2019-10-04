@@ -489,6 +489,9 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
+        // TODO:
+        // if sl_auto_copy_edits is true
+        // copy to all lieferungen
         if (
           [
             'nach_kultur_id',

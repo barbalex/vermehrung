@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useState, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -9,14 +8,12 @@ import { FaRegCopy } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 import styled from 'styled-components'
 
-import storeContext from '../../../storeContext'
-import {
-  lieferung as lieferungFragment,
-  sammelLieferung as sammelLieferungFragment,
-} from '../../../utils/fragments'
-import isString from '../../../utils/isString'
-import exists from '../../../utils/exists'
-import fieldsFromFragment from '../../../utils/fieldsFromFragment'
+import storeContext from '../../../../storeContext'
+import { sammelLieferung as sammelLieferungFragment } from '../../../../utils/fragments'
+import exists from '../../../../utils/exists'
+import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
+import updateLieferung from './updateLieferung'
+import updateAllLieferungen from './updateAllLieferungen'
 
 const TitleRow = styled.div`
   display: flex;
@@ -30,7 +27,6 @@ const Title = styled.div`
   user-select: none;
 `
 
-const lieferungFields = fieldsFromFragment(lieferungFragment)
 const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
 
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
@@ -43,64 +39,6 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   const onClickConfig = useCallback(
     event => setAnchorEl(event.currentTarget),
     [],
-  )
-  const updateLieferung = useCallback(
-    async lieferungId => {
-      const lieferung = {
-        ...sammelLieferung,
-        id: lieferungId,
-        sammel_lieferung_id: sammelLieferung.id,
-      }
-      const objectString = Object.entries(lieferung)
-        .filter(
-          // only accept lieferung's fields
-          // eslint-disable-next-line no-unused-vars
-          ([key, value]) => lieferungFields.includes(key),
-        )
-        // only update with existing values
-        // eslint-disable-next-line no-unused-vars
-        .filter(([key, val]) => exists(val))
-        .map(([key, value]) => {
-          if (isString(value)) {
-            return `${key}: "${value}"`
-          }
-          return `${key}: ${value}`
-        })
-        .join(', ')
-      try {
-        await client.mutate({
-          mutation: gql`
-        mutation update_lieferung(
-          $id: bigint!
-        ) {
-          update_lieferung(
-            where: { id: { _eq: $id } }
-            _set: {
-              ${objectString}
-            }
-          ) {
-            affected_rows
-            returning {
-              ...LieferungFields
-            }
-          }
-        }
-        ${lieferungFragment}
-        `,
-          variables: {
-            id: lieferungId,
-          },
-        })
-      } catch (error) {
-        return enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-    },
-    [client, enqueNotification, sammelLieferung],
   )
   const containsData = useMemo(
     () =>
@@ -119,7 +57,12 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   const onClickActiveLieferung = useCallback(async () => {
     setAnchorEl(null)
     try {
-      await updateLieferung(lieferungId)
+      await updateLieferung({
+        lieferungId,
+        sammelLieferung,
+        client,
+        store,
+      })
     } catch (error) {
       return
     }
@@ -129,26 +72,16 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
         variant: 'info',
       },
     })
-  }, [enqueNotification, lieferungId, updateLieferung])
+  }, [client, enqueNotification, lieferungId, sammelLieferung, store])
   const onClickAllLieferung = useCallback(async () => {
     setAnchorEl(null)
-    let error = null
-    for (const l of sammelLieferung.lieferungs) {
-      try {
-        await updateLieferung(l.id)
-      } catch (err) {
-        error = true
-      }
-    }
-    if (!error) {
-      enqueNotification({
-        message: 'Alle Lieferungen aktualisiert',
-        options: {
-          variant: 'info',
-        },
-      })
-    }
-  }, [enqueNotification, sammelLieferung.lieferungs, updateLieferung])
+    updateAllLieferungen({
+      lieferungs: sammelLieferung.lieferungs,
+      sammelLieferung,
+      client,
+      store,
+    })
+  }, [client, sammelLieferung, store])
 
   return (
     <ErrorBoundary>
