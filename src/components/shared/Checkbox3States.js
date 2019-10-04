@@ -53,7 +53,7 @@ const Checkbox3States = ({ label, name, value, error, saveToDb }) => {
   }, [value, name, saveToDb])
 
   const indeterminate = value === null
-  const checked = value === true
+  const checked = value === true  
   const asideText =
     value === true ? `Ja` : value === false ? `Nein` : `Unbestimmt`
   const asideComment =

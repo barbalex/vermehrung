@@ -342,7 +342,8 @@ create table person_felder (
   hk_geom_point boolean default true,
   li_show_sl_felder boolean default false,
   li_show_sl boolean default true,
-  sl_show_empty_when_next_to_li boolean default false
+  sl_show_empty_when_next_to_li boolean default false,
+  sl_auto_copy_edits boolean default true
 );
 create index on person_felder using btree (person_id);
 comment on column person_felder.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';

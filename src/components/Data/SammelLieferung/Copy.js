@@ -118,12 +118,37 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   )
   const onClickActiveLieferung = useCallback(async () => {
     setAnchorEl(null)
-    updateLieferung(lieferungId)
-  }, [lieferungId, updateLieferung])
-  const onClickAllLieferung = useCallback(() => {
+    try {
+      await updateLieferung(lieferungId)
+    } catch (error) {
+      return
+    }
+    enqueNotification({
+      message: 'Lieferung aktualisiert',
+      options: {
+        variant: 'info',
+      },
+    })
+  }, [enqueNotification, lieferungId, updateLieferung])
+  const onClickAllLieferung = useCallback(async () => {
     setAnchorEl(null)
-    sammelLieferung.lieferungs.forEach(l => updateLieferung(l.id))
-  }, [sammelLieferung.lieferungs, updateLieferung])
+    let error = null
+    for (const l of sammelLieferung.lieferungs) {
+      try {
+        await updateLieferung(l.id)
+      } catch (err) {
+        error = true
+      }
+    }
+    if (!error) {
+      enqueNotification({
+        message: 'Alle Lieferungen aktualisiert',
+        options: {
+          variant: 'info',
+        },
+      })
+    }
+  }, [enqueNotification, sammelLieferung.lieferungs, updateLieferung])
 
   return (
     <ErrorBoundary>

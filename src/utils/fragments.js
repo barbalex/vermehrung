@@ -202,6 +202,7 @@ export const personFelder = gql`
     li_show_sl_felder
     li_show_sl
     sl_show_empty_when_next_to_li
+    sl_auto_copy_edits
   }
 `
 export const personFile = gql`
