@@ -40,7 +40,7 @@ const SettingsZaehlungen = ({ eventResult }) => {
 
   const { error, loading, refetch } = eventResult
   const kulturId = get(eventResult, 'data.event[0].kultur.id')
-  const { ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
+  const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
     get(eventResult, 'data.event[0].kultur.kultur_felder') || {}
 
   const saveToDb = useCallback(
@@ -151,13 +151,13 @@ const SettingsZaehlungen = ({ eventResult }) => {
           </TitleRow>
           <MenuItem>
             <FormControlLabel
-              value={ag_teilkultur_id === true ? 'true' : 'false'}
+              value={ev_teilkultur_id === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
-                  checked={ag_teilkultur_id}
+                  checked={ev_teilkultur_id}
                   onClick={saveToDb}
-                  name="ag_teilkultur_id"
+                  name="ev_teilkultur_id"
                 />
               }
               label="Teilkultur"
@@ -166,13 +166,13 @@ const SettingsZaehlungen = ({ eventResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_person_id === true ? 'true' : 'false'}
+              value={ev_person_id === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
-                  checked={ag_person_id}
+                  checked={ev_person_id}
                   onClick={saveToDb}
-                  name="ag_person_id"
+                  name="ev_person_id"
                 />
               }
               label="Wer"
@@ -181,13 +181,13 @@ const SettingsZaehlungen = ({ eventResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_datum === true ? 'true' : 'false'}
+              value={ev_datum === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
-                  checked={ag_datum}
+                  checked={ev_datum}
                   onClick={saveToDb}
-                  name="ag_datum"
+                  name="ev_datum"
                 />
               }
               label="Datum"
@@ -196,13 +196,13 @@ const SettingsZaehlungen = ({ eventResult }) => {
           </MenuItem>
           <MenuItem>
             <FormControlLabel
-              value={ag_geplant === true ? 'true' : 'false'}
+              value={ev_geplant === true ? 'true' : 'false'}
               control={
                 <Radio
                   color="primary"
-                  checked={ag_geplant}
+                  checked={ev_geplant}
                   onClick={saveToDb}
-                  name="ag_geplant"
+                  name="ev_geplant"
                 />
               }
               label="geplant"

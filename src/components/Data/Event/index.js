@@ -235,7 +235,7 @@ const Event = ({ filter: showFilter }) => {
     [personData],
   )
 
-  const { tk, ag_datum, ag_teilkultur_id, ag_geplant, ag_person_id } =
+  const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
     get(row, 'kultur.kultur_felder') || {}
 
   const saveToDb = useCallback(
@@ -365,7 +365,7 @@ const Event = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.kultur_id}
           />
-          {((tk && ag_teilkultur_id) || showFilter) && (
+          {((tk && ev_teilkultur_id) || showFilter) && (
             <SelectCreatable
               key={`${row.id}teilkultur_id`}
               name="teilkultur_id"
@@ -392,7 +392,7 @@ const Event = ({ filter: showFilter }) => {
             error={errors.beschreibung}
             multiline
           />
-          {(ag_person_id || showFilter) && (
+          {(ev_person_id || showFilter) && (
             <Select
               key={`${row.id}${row.person_id}person_id`}
               name="person_id"
@@ -405,7 +405,7 @@ const Event = ({ filter: showFilter }) => {
               error={errors.person_id}
             />
           )}
-          {(ag_datum || showFilter) && (
+          {(ev_datum || showFilter) && (
             <DateFieldWithPicker
               key={`${row.id}datum`}
               name="datum"
@@ -415,7 +415,7 @@ const Event = ({ filter: showFilter }) => {
               error={errors.datum}
             />
           )}
-          {(ag_geplant || showFilter) && (
+          {(ev_geplant || showFilter) && (
             <FieldRow>
               <Checkbox2States
                 key={`${row.id}geplant`}

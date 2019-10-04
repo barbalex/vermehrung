@@ -118,10 +118,10 @@ export const kulturFile = gql`
 export const kulturFelder = gql`
   fragment KulturFelderFields on kultur_felder {
     kultur_id
-    ag_datum
-    ag_geplant
-    ag_person_id
-    ag_teilkultur_id
+    ev_datum
+    ev_geplant
+    ev_person_id
+    ev_teilkultur_id
     tk
     tk_bemerkungen
     tz_andere_menge
