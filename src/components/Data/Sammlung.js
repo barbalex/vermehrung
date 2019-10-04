@@ -217,6 +217,12 @@ const Sammlung = ({ filter: showFilter }) => {
     typeof window !== 'undefined' &&
       window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
   }, [])
+  const openGenVielfaldDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Genetische-Vielfalt',
+      )
+  }, [])
 
   if (loading) {
     return (
@@ -337,6 +343,8 @@ const Sammlung = ({ filter: showFilter }) => {
               error={errors.andere_menge}
               type="text"
             />
+          </FieldRow>
+          <FieldRow>
             <TextField
               key={`${row.id}von_anzahl_individuen`}
               name="von_anzahl_individuen"
@@ -346,6 +354,15 @@ const Sammlung = ({ filter: showFilter }) => {
               error={errors.von_anzahl_individuen}
               type="number"
             />
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openGenVielfaldDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
           </FieldRow>
           <FieldRow>
             <Checkbox2States

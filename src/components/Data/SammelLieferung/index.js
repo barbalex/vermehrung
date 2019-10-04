@@ -537,6 +537,12 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Sammel-Lieferungen',
       )
   }, [])
+  const openGenVielfaldDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Genetische-Vielfalt',
+      )
+  }, [])
   const ifNeeded = useCallback(
     field => {
       if (sl_show_empty_when_next_to_li) return true
@@ -696,7 +702,9 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
                     type="text"
                   />
                 )}
-                {ifNeeded('von_anzahl_individuen') && (
+              </FieldRow>
+              {ifNeeded('von_anzahl_individuen') && (
+                <FieldRow>
                   <TextField
                     key={`${row.id}von_anzahl_individuen`}
                     name="von_anzahl_individuen"
@@ -706,8 +714,17 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
                     error={errors.von_anzahl_individuen}
                     type="number"
                   />
-                )}
-              </FieldRow>
+                  <div>
+                    <IconButton
+                      aria-label="Anleitung öffnen"
+                      title="Anleitung öffnen"
+                      onClick={openGenVielfaldDocs}
+                    >
+                      <IoMdInformationCircleOutline />
+                    </IconButton>
+                  </div>
+                </FieldRow>
+              )}
             </>
           )}
           {ifSomeNeeded(['von_sammlung_id', 'von_kultur_id']) && (

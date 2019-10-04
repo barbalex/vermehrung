@@ -75,6 +75,16 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+const FieldRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  > div:not(:last-of-type) {
+    padding-right: 8px;
+  }
+  > div > button {
+    margin-top: 8px;
+  }
+`
 
 const Kultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -225,6 +235,12 @@ const Kultur = ({ filter: showFilter }) => {
         'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Kulturen',
       )
   }, [])
+  const openGenVielfaldDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Genetische-Vielfalt',
+      )
+  }, [])
 
   if (loading) {
     return (
@@ -325,15 +341,26 @@ const Kultur = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.erhaltungskultur}
           />
-          <TextField
-            key={`${row.id}von_anzahl_individuen`}
-            name="von_anzahl_individuen"
-            label="von Anzahl Individuen"
-            value={row.von_anzahl_individuen}
-            saveToDb={saveToDb}
-            error={errors.von_anzahl_individuen}
-            type="number"
-          />
+          <FieldRow>
+            <TextField
+              key={`${row.id}von_anzahl_individuen`}
+              name="von_anzahl_individuen"
+              label="von Anzahl Individuen"
+              value={row.von_anzahl_individuen}
+              saveToDb={saveToDb}
+              error={errors.von_anzahl_individuen}
+              type="number"
+            />
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openGenVielfaldDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </FieldRow>
           <Checkbox2States
             key={`${row.id}aktiv`}
             label="aktiv"
