@@ -7,6 +7,8 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 import ErrorBoundary from 'react-error-boundary'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
+import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -231,6 +233,12 @@ const Teilkultur = ({ filter: showFilter }) => {
     },
     [client, filter, refetch, row, showFilter],
   )
+  const openTeilkulturDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Teilkulturen',
+      )
+  }, [])
 
   if (loading) {
     return (
@@ -275,6 +283,13 @@ const Teilkultur = ({ filter: showFilter }) => {
             <Title>Teilkultur</Title>
             <TitleSymbols>
               <Settings teilkulturResult={teilkulturResult} />
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openTeilkulturDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

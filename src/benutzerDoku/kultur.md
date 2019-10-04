@@ -6,13 +6,15 @@ title: "Kulturen"
 sort: 6
 ---
 
-### Definition
-
-Eine Kultur ist:
-
-- eine Art
-- aus einer Herkunft
-- in einem Garten
+### Ziele
+- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 1: Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt.<br/>
+  Darum ist eine Kultur definiert als:
+  - eine Art
+  - aus einer Herkunft
+  - in einem Garten<br/>
+  Die Datenbank akzeptiert pro Garten nur eine aktive Kultur derselben Art und Herkunft.
+- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 2: Die genetische Vielfalt von Kulturen ist bekannt.<br/>
+  Indem das Feld "von Anzahl Individuen" bei jeder An-Lieferung nachgeführt wird
 
 ### Aktiv vs. erloschen
 Eine Kultur beginnt aktiv (das gleichnamige Feld enthält in neuen Kulturen immer den Wert "ja"), kann aber erlöschen (Feld "aktiv" auf "nein" setzen).<br/>

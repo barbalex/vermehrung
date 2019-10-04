@@ -255,6 +255,12 @@ const Zaehlung = ({ filter: showFilter }) => {
     typeof window !== 'undefined' &&
       window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
   }, [])
+  const openZaehlungDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Zaehlungen',
+      )
+  }, [])
 
   if (loading) {
     return (
@@ -298,6 +304,13 @@ const Zaehlung = ({ filter: showFilter }) => {
                     zaehlungResult={zaehlungResult}
                   />
                 )}
+                <IconButton
+                  aria-label="Anleitung öffnen"
+                  title="Anleitung öffnen"
+                  onClick={openZaehlungDocs}
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
                 {(store.filter.show || isFiltered) && (
                   <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
                 )}

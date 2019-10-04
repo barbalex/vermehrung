@@ -7,13 +7,14 @@ sort: 10
 ---
 
 ### 1	Ziele
-- Lieferscheine mit mehreren Einzelpositionen ermöglichen
-- Gleichzeitige Lieferung aus vielen Kulturen effizienter erfassen
+- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 6: "Effiziente ... Erfassung und Nutzung."<br/>
+  Die gleichzeitige Lieferung aus vielen Kulturen wird effizienter erfasst
+- Es können Lieferscheine mit mehreren Einzelpositionen erstellt werden
 
 ### 2 Grund-Idee
 - Lieferungen können mit Hilfe einer Vorlage ausgefüllt werden
-- Alles, was in der Vorlage erfasst wird, muss nicht mehr in den einzelnen Lieferungen erfasst werden
-- Diese Vorlage wird "Sammel-Lieferung" genannt
+- Die Daten der Vorlage, werden automatisch (oder wenn gewünscht flexibel mit Befehlen) in die zugehörigen (Teil-)Lieferungen kopiert
+- Die Vorlage wird "Sammel-Lieferung" genannt
 
 ### 3	Benutzer-Erlebnis
 - :heavy_check_mark: Benutzer wählt "Neue Sammel-Lieferung" (im Struktur-Baum)
@@ -29,7 +30,3 @@ sort: 10
   - :heavy_check_mark: Daten der Sammel-Lieferung können manuell in alle Lieferungen kopiert werden
 - Benutzer kann Sammel-Lieferung drucken
 - Eventuell: Benutzer kann auch Einzel-Positionen drucken (in allen Lieferungs-Formularen)
-
-### 4 Strukturelle Umsetzung
-- :heavy_check_mark: Neue Tabelle "sammel_lieferung". Mit Feldern "id" und allen wesentlichen Feldern aus der Tabelle "lieferung"
-- :heavy_check_mark: Neues Feld in Tabelle "lieferung": "sammel_lieferung_id"

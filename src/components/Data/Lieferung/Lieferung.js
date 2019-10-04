@@ -498,6 +498,12 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     typeof window !== 'undefined' &&
       window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
   }, [])
+  const openLieferungDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Lieferungen',
+      )
+  }, [])
   const ifNeeded = useCallback(
     field => {
       if (sammelLieferung.id && li_show_sl_felder) return true
@@ -564,6 +570,13 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                 personId={userPersonId}
                 personFelderResult={personFelderResult}
               />
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openLieferungDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

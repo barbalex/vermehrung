@@ -27,7 +27,7 @@ Die Ziele dienen als Grundlage:
 ### Priorität 2: Voraussetzungen, um die Haupt-Ziele zu erreichen
 
 6. Effiziente und quell-nahe Erfassung und Nutzung
-- MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Kulturen/Gärten/Arten schaffen und ausdrucken
+- MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Kulturen und Arten schaffen und ausdrucken
 - In grossen Gärten haben MitarbeiterInnen die Übersicht über die (räumliche) Organisation der Kulturen.
   Um eine effiziente Bereitstellung von Lieferungen zu ermöglichen
 - Die Daten sind nur für MitarbeiterInnen sichtbar
