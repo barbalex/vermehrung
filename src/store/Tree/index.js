@@ -25,6 +25,7 @@ export default types
     ),
     nodes: types.optional(types.array(Node), []),
     widthInPercentOfScreen: types.optional(types.number, 33),
+    widthEnforced: types.maybeNull(types.number, null),
   })
   .volatile(() => ({
     refetch: () => {},
@@ -32,6 +33,9 @@ export default types
   .actions(self => ({
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
+    },
+    setWidthEnforced(val) {
+      self.widthEnforced = val
     },
     setActiveNodeArray(val, nonavigate) {
       self.activeNodeArray = val

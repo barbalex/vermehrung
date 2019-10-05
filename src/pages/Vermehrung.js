@@ -8,6 +8,7 @@ import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
 import { login, isAuthenticated, silentAuth } from '../utils/auth'
+import exists from '../utils/exists'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
@@ -46,12 +47,20 @@ const StyledSplitPane = styled(SplitPane)`
 
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
+  const { activeForm } = store
   const {
     setOpenNodes,
     setActiveNodeArray,
-    widthInPercentOfScreen: treeWidth,
+    widthInPercentOfScreen,
+    widthEnforced,
   } = store.tree
   const showFilter = store.filter.show
+  const treeWidth = exists(widthEnforced)
+    ? activeForm
+      ? widthEnforced
+      : // if no form is active, show only tree
+        '100%'
+    : `${widthInPercentOfScreen}%`
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
@@ -87,11 +96,7 @@ const Vermehrung = ({ location }) => {
     <ErrorBoundary>
       <Layout>
         <Container>
-          <StyledSplitPane
-            split="vertical"
-            size={`${treeWidth}%`}
-            minSize={200}
-          >
+          <StyledSplitPane split="vertical" size={treeWidth} minSize={200}>
             <Tree />
             {showFilter ? <Filter /> : <Data />}
           </StyledSplitPane>

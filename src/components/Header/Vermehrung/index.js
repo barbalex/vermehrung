@@ -3,15 +3,20 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import Switch from '@material-ui/core/Switch'
+import IconButton from '@material-ui/core/IconButton'
+import { FaBars, FaHome, FaBook, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
+import ReactResizeDetector from 'react-resize-detector'
 
 import Account from './Account'
 //import More from './More'
 import Search from './Search'
 import storeContext from '../../../storeContext'
+import constants from '../../../utils/constants'
+import exists from '../../../utils/exists'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -67,6 +72,7 @@ const HeaderVermehrung = () => {
   const store = useContext(storeContext)
   const { setHideInactive, hideInactive, filter } = store
   const { show: showFilter, setShow: setShowFilter } = filter
+  const { widthEnforced, setWidthEnforced } = store.tree
 
   const onClickHideActive = useCallback(() => setHideInactive(!hideInactive), [
     hideInactive,
@@ -76,29 +82,100 @@ const HeaderVermehrung = () => {
     setShowFilter,
     showFilter,
   ])
+  const onResize = useCallback(
+    width => {
+      if (width > constants.tree.minimalWindowWidth && exists(widthEnforced)) {
+        setWidthEnforced(null)
+      }
+      if (width < constants.tree.minimalWindowWidth && widthEnforced === null) {
+        setWidthEnforced(0)
+      }
+    },
+    [setWidthEnforced, widthEnforced],
+  )
+  const onClickTreeMenu = useCallback(() => {
+    if (widthEnforced === 0) {
+      setWidthEnforced(constants.tree.minimalWidth)
+    }
+    if (widthEnforced > 0) {
+      setWidthEnforced(0)
+    }
+  }, [setWidthEnforced, widthEnforced])
 
   return (
     <ErrorBoundary>
       <AppBar position="fixed">
+        <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <Toolbar>
-          <SiteTitle variant="outlined" component={Link} to="/" title="Home">
-            Vermehrung
-          </SiteTitle>
+          {exists(widthEnforced) ? (
+            <>
+              <IconButton
+                color="inherit"
+                aria-label="Navigations-Baum öffnen"
+                edge="start"
+                onClick={onClickTreeMenu}
+                title={
+                  widthEnforced === 0
+                    ? 'Navigations-Baum öffnen'
+                    : 'Navigations-Baum schliessen'
+                }
+              >
+                <FaBars />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                aria-label="Home"
+                component={Link}
+                to="/"
+                title="Home"
+              >
+                <FaHome />
+              </IconButton>
+            </>
+          ) : (
+            <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+              Vermehrung
+            </SiteTitle>
+          )}
           <Spacer />
-          <StyledButton
-            variant="outlined"
-            component={Link}
-            to="/Dokumentation/Benutzer/"
-          >
-            Dokumentation
-          </StyledButton>
-          <FilterButton
-            variant="outlined"
-            onClick={onClickFilter}
-            data-active={showFilter}
-          >
-            Filter
-          </FilterButton>
+          {exists(widthEnforced) ? (
+            <IconButton
+              color="inherit"
+              aria-label="Dokumentation"
+              edge="start"
+              component={Link}
+              to="/Dokumentation/Benutzer/"
+              title="Dokumentation"
+            >
+              <FaBook />
+            </IconButton>
+          ) : (
+            <StyledButton
+              variant="outlined"
+              component={Link}
+              to="/Dokumentation/Benutzer/"
+            >
+              Dokumentation
+            </StyledButton>
+          )}
+          {exists(widthEnforced) ? (
+            <IconButton
+              color="inherit"
+              aria-label="Filter"
+              onClick={onClickFilter}
+              title="Filter"
+            >
+              <FaFilter />
+            </IconButton>
+          ) : (
+            <FilterButton
+              variant="outlined"
+              onClick={onClickFilter}
+              data-active={showFilter}
+            >
+              Filter
+            </FilterButton>
+          )}
           <HideActiveDiv>
             <StyledLabel
               title={`Inaktive Personen, Gärten und Kulturen ${
