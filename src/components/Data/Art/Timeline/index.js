@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
@@ -19,6 +19,7 @@ import {
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
+import ReactResizeDetector from 'react-resize-detector'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
@@ -46,12 +47,7 @@ const Title = styled.div`
 `
 
 const ArtTimeline = ({ row }) => {
-  const openDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Zeitachse-Art',
-      )
-  }, [])
+  const [narrow, setNarrow] = useState(false)
 
   const artSums = row.artSums || []
   // zaehlungen data is special because it is
@@ -151,6 +147,24 @@ const ArtTimeline = ({ row }) => {
     [sammlungenData, auspflanzungenData, zaehlungenData],
   )
 
+  const openDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Zeitachse-Art',
+      )
+  }, [])
+  const onResize = useCallback(
+    width => {
+      if (width < 1100 && !narrow) {
+        setNarrow(true)
+      }
+      if (width > 1100 && narrow) {
+        setNarrow(false)
+      }
+    },
+    [narrow],
+  )
+
   if (!row) return null
   if (!allData.length) return null
 
@@ -159,6 +173,7 @@ const ArtTimeline = ({ row }) => {
 
   return (
     <ErrorBoundary>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <TitleRow>
         <Title>Zeit-Achse</Title>
         <div>
@@ -189,11 +204,19 @@ const ArtTimeline = ({ row }) => {
             fontSize={12}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Legend
-            layout="vertical"
-            align="right"
-            wrapperStyle={{ right: -10, bottom: 150, fontSize: 12 }}
-          />
+          {narrow ? (
+            <Legend
+              layout="horizontal"
+              align="center"
+              wrapperStyle={{ bottom: 0, fontSize: 12 }}
+            />
+          ) : (
+            <Legend
+              layout="vertical"
+              align="right"
+              wrapperStyle={{ right: -10, bottom: 150, fontSize: 12 }}
+            />
+          )}
           <ReferenceLine y={0} stroke="#000" />
           <Bar
             dataKey="Sammlung Pflanzen"
