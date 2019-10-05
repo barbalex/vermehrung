@@ -20,6 +20,7 @@ import {
 import Files from '../Files'
 import artQuery from './artQuery'
 import Timeline from './Timeline'
+import QK from './QK'
 
 const Container = styled.div`
   height: 100%;
@@ -190,6 +191,7 @@ const Art = ({ filter: showFilter }) => {
           />
           {!showFilter && (
             <>
+              <QK />
               <Timeline row={row} />
               <Files parentId={row.id} parent="art" />
             </>

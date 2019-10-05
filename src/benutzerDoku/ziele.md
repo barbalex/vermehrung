@@ -32,7 +32,7 @@ Die Ziele dienen als Grundlage:
   Um eine effiziente Bereitstellung von Lieferungen zu ermöglichen
 - Die Daten sind nur für MitarbeiterInnen sichtbar
 - Die Sichtbarkeit von Daten kann auf Gärten der jeweiligen Mitarbeiterin eingeschränkt werden
-- Qualitätskontrollen um die Qualität der Arbeit zu erhöhe
+- Qualitätskontrollen um die Qualität der Arbeit zu erhöhen
 
 ### Priorität 3: zusätzliche Ziele
 
