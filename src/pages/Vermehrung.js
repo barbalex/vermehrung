@@ -91,12 +91,18 @@ const Vermehrung = ({ location }) => {
     login()
     return <Container>Öffne login...</Container>
   }
+  const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
       <Layout>
         <Container>
-          <StyledSplitPane split="vertical" size={treeWidth} minSize={200}>
+          <StyledSplitPane
+            split="vertical"
+            size={treeWidth}
+            minSize={200}
+            resizerStyle={resizerStyle}
+          >
             <Tree />
             {showFilter ? <Filter /> : <Data />}
           </StyledSplitPane>
