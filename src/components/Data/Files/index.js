@@ -33,7 +33,7 @@ const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
   display: flex;
-  height: 38px;
+  height: 48px;
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
@@ -47,7 +47,7 @@ const Title = styled.div`
 `
 // center buttons
 const Buttons = styled.div`
-  margin-top: 2px;
+  margin-top: 7px;
 `
 const Spacer = styled.div`
   height: 10px;
