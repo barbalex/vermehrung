@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
 const TitleRow = styled.div`
@@ -25,12 +26,16 @@ const Title = styled.div`
 `
 
 const ApQk = () => {
+  const [open, setOpen] = useState(false)
+
   const openDocs = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
         'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Qualitaets-Kontrollen',
       )
   }, [])
+  const onClickClose = useCallback(() => setOpen(false), [])
+  const onClickOpen = useCallback(() => setOpen(true), [])
 
   return (
     <TitleRow>
@@ -43,6 +48,23 @@ const ApQk = () => {
         >
           <IoMdInformationCircleOutline />
         </IconButton>
+        {open ? (
+          <IconButton
+            aria-label="schliessen"
+            title="schliessen"
+            onClick={onClickClose}
+          >
+            <FaChevronUp />
+          </IconButton>
+        ) : (
+          <IconButton
+            aria-label="schliessen"
+            title="schliessen"
+            onClick={onClickOpen}
+          >
+            <FaChevronDown />
+          </IconButton>
+        )}
       </div>
     </TitleRow>
   )
