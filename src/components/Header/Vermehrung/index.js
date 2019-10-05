@@ -112,7 +112,6 @@ const HeaderVermehrung = () => {
               <IconButton
                 color="inherit"
                 aria-label="Navigations-Baum öffnen"
-                //edge="start"
                 onClick={onClickTreeMenu}
                 title={
                   widthEnforced === 0
@@ -142,7 +141,6 @@ const HeaderVermehrung = () => {
             <IconButton
               color="inherit"
               aria-label="Dokumentation"
-              //edge="start"
               component={Link}
               to="/Dokumentation/Benutzer/"
               title="Dokumentation"

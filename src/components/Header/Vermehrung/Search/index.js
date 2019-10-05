@@ -10,6 +10,7 @@ import moment from 'moment'
 
 import storeContext from '../../../../storeContext'
 import queryFromTable from '../../../../utils/queryFromTable'
+import exists from '../../../../utils/exists'
 import filterSuggestionsQuery from './filterSuggestionsQuery'
 
 const formatDatum = datum =>
@@ -121,7 +122,7 @@ const getSectionSuggestions = section => section.suggestions
 
 export default () => {
   const store = useContext(storeContext)
-  const { setActiveNodeArray, addOpenNodes } = store.tree
+  const { setActiveNodeArray, addOpenNodes, widthEnforced } = store.tree
   const [val, setVal] = useState('')
 
   const { data } = useQuery(filterSuggestionsQuery, {
@@ -328,7 +329,7 @@ export default () => {
 
   return (
     <Container data-autosuggestwidth={autosuggestWidth}>
-      <SearchIcon />
+      {!exists(widthEnforced) && <SearchIcon />}
       <Autosuggest
         suggestions={suggestions}
         onSuggestionsFetchRequested={() => {
