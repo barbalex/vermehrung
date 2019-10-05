@@ -56,7 +56,7 @@ const Vermehrung = ({ location }) => {
   } = store.tree
   const showFilter = store.filter.show
   const treeWidth = exists(widthEnforced)
-    ? activeForm
+    ? activeForm || showFilter
       ? widthEnforced
       : // if no form is active, show only tree
         '100%'
