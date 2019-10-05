@@ -91,6 +91,7 @@ const Vermehrung = ({ location }) => {
     login()
     return <Container>Öffne login...</Container>
   }
+  // hide resizer when tree is not shown
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
 
   return (
