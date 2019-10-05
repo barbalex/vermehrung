@@ -11,6 +11,9 @@ import Vermehrung from './Vermehrung'
 
 const StyledAppBar = styled(AppBar)`
   min-height: 64px !important;
+  .MuiToolbar-root {
+    min-height: 64px !important;
+  }
   @media print {
     display: none !important;
   }
