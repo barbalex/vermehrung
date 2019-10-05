@@ -6,7 +6,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import ErrorBoundary from 'react-error-boundary'
 
-import QK from './QK'
+import QkContent from './QkContent'
 
 const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -71,7 +71,7 @@ const ApQk = ({ art }) => {
           )}
         </div>
       </TitleRow>
-      {open && <QK art={art} />}
+      {open && <QkContent art={art} />}
     </ErrorBoundary>
   )
 }
