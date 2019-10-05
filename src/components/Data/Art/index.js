@@ -192,7 +192,7 @@ const Art = ({ filter: showFilter }) => {
           {!showFilter && (
             <>
               <Timeline row={row} />
-              <QK />
+              <QK art={row} />
               <Files parentId={row.id} parent="art" />
             </>
           )}

@@ -28,7 +28,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const ApQk = () => {
+const ApQk = ({ art }) => {
   const [open, setOpen] = useState(false)
 
   const openDocs = useCallback(() => {
@@ -71,7 +71,7 @@ const ApQk = () => {
           )}
         </div>
       </TitleRow>
-      {open && <QK />}
+      {open && <QK art={art} />}
     </ErrorBoundary>
   )
 }
