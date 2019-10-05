@@ -275,7 +275,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   if (showFilter) {
     row = filter.lieferung
   } else {
-    row = get(data, 'lieferung', [{}])[0]
+    row = get(data, 'lieferung[0]') || {}
   }
 
   const userPersonId = getUserPersonId()
@@ -283,7 +283,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     variables: { personId: userPersonId },
   })
   const { li_show_sl_felder } =
-    get(personFelderResult.data, 'person_felder[0]', {}) || {}
+    get(personFelderResult.data, 'person_felder[0]') || {}
 
   const sammlungFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }

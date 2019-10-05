@@ -55,7 +55,7 @@ const ApQkQk = ({ art }) => {
   const messageGroups = data
     ? buildQk({ data, artId: art.id }).filter(q => q.messages.length)
     : []
-
+  if (loading) return 'Lade Daten...'
   if (error) return `Fehler: ${error.message}`
   return (
     <>

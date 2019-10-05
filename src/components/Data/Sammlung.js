@@ -124,7 +124,7 @@ const Sammlung = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.sammlung
   } else {
-    row = get(data, 'sammlung', [{}])[0]
+    row = get(data, 'sammlung[0]') || {}
   }
 
   useEffect(() => {

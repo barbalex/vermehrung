@@ -58,7 +58,7 @@ const Art = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.art
   } else {
-    row = get(data, 'art', [{}])[0]
+    row = get(data, 'art[0]') || {}
   }
 
   useEffect(() => {

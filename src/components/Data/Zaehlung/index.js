@@ -158,7 +158,7 @@ const Zaehlung = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.zaehlung
   } else {
-    row = get(data, 'zaehlung', [{}])[0]
+    row = get(data, 'zaehlung[0]') || {}
   }
 
   const artId = get(row, 'kultur.art_id')

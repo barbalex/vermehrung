@@ -139,7 +139,7 @@ const Garten = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.garten
   } else {
-    row = get(data, 'garten', [{}])[0]
+    row = get(data, 'garten[0]')||{}
   }
 
   const userPersonId = getUserPersonId()

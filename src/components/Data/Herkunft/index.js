@@ -117,7 +117,7 @@ const Herkunft = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.herkunft
   } else {
-    row = get(data, 'herkunft', [{}])[0]
+    row = get(data, 'herkunft[0]') || {}
   }
 
   const user = getProfile()
@@ -127,7 +127,7 @@ const Herkunft = ({ filter: showFilter }) => {
     variables: { personId: userPersonId },
   })
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
-    get(personFelderResult.data, 'person_felder[0]', {}) || {}
+    get(personFelderResult.data, 'person_felder[0]') || {}
 
   useEffect(() => {
     setErrors({})

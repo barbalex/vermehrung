@@ -73,7 +73,7 @@ const Person = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.person
   } else {
-    row = get(data, 'person', [{}])[0]
+    row = get(data, 'person[0]') || {}
   }
 
   useEffect(() => {
