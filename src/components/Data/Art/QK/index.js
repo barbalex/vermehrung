@@ -4,6 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import ErrorBoundary from 'react-error-boundary'
+
+import QK from './QK'
 
 const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -38,35 +41,38 @@ const ApQk = () => {
   const onClickOpen = useCallback(() => setOpen(true), [])
 
   return (
-    <TitleRow>
-      <Title>Qualitäts-Kontrollen</Title>
-      <div>
-        <IconButton
-          aria-label="Anleitung öffnen"
-          title="Anleitung öffnen"
-          onClick={openDocs}
-        >
-          <IoMdInformationCircleOutline />
-        </IconButton>
-        {open ? (
+    <ErrorBoundary>
+      <TitleRow>
+        <Title>Qualitäts-Kontrollen</Title>
+        <div>
           <IconButton
-            aria-label="schliessen"
-            title="schliessen"
-            onClick={onClickClose}
+            aria-label="Anleitung öffnen"
+            title="Anleitung öffnen"
+            onClick={openDocs}
           >
-            <FaChevronUp />
+            <IoMdInformationCircleOutline />
           </IconButton>
-        ) : (
-          <IconButton
-            aria-label="schliessen"
-            title="schliessen"
-            onClick={onClickOpen}
-          >
-            <FaChevronDown />
-          </IconButton>
-        )}
-      </div>
-    </TitleRow>
+          {open ? (
+            <IconButton
+              aria-label="schliessen"
+              title="schliessen"
+              onClick={onClickClose}
+            >
+              <FaChevronUp />
+            </IconButton>
+          ) : (
+            <IconButton
+              aria-label="schliessen"
+              title="schliessen"
+              onClick={onClickOpen}
+            >
+              <FaChevronDown />
+            </IconButton>
+          )}
+        </div>
+      </TitleRow>
+      {open && <QK />}
+    </ErrorBoundary>
   )
 }
 
