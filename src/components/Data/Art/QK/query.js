@@ -4,6 +4,7 @@ import {
   event,
   herkunft,
   kultur,
+  lieferung,
   sammlung,
   teilkultur,
   teilzaehlung,
@@ -70,6 +71,12 @@ export default gql`
         herkunft {
           ...HerkunftFields
         }
+      }
+      lieferungsWithoutPerson: lieferungs(
+        where: { person_id: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
+      ) {
+        ...LieferungFields
       }
       kultursWithoutVonAnzahlIndividuen: kulturs(
         where: { von_anzahl_individuen: { _is_null: true } }
@@ -352,6 +359,7 @@ export default gql`
   ${event}
   ${herkunft}
   ${kultur}
+  ${lieferung}
   ${sammlung}
   ${teilkultur}
   ${teilzaehlung}

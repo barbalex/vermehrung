@@ -105,6 +105,21 @@ export default ({ data, artId }) => [
     }),
   },
   {
+    title: 'Lieferungen ohne Person',
+    messages: get(data, 'art[0].lieferungsWithoutPerson').map(l => {
+      const datum = l.datum
+        ? format(new Date(l.datum), 'yyyy.MM.dd')
+        : `kein Datum, ID: ${l.id}`
+      const geplant = l.geplant ? ', (geplant)' : ''
+      const text = `${datum}${geplant}`
+
+      return {
+        url: ['Lieferungen', l.id],
+        text,
+      }
+    }),
+  },
+  {
     title: 'Kulturen ohne "von Anzahl Individuen"',
     messages: get(data, 'art[0].kultursWithoutVonAnzahlIndividuen').map(k => {
       const garten =
