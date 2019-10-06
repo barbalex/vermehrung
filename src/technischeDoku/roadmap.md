@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Dokumentation/Technisch/Roadmap"
-date: "2019-09-30"
+date: "2019-10-06"
 title: "Roadmap"
 sort: 4
 ---
@@ -32,7 +32,7 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_check_mark: Benutzer können verwaltet werden
 - :white_check_mark: Grundlegende Funktionalitäten mit Topos bereinigt
-- :white_check_mark: Auftrag ist erteilt
+- :white_check_mark: Auftrag liegt vor
 - :white_check_mark: Funktionalitäten gemäss erster Bereinigung angepasst
 - :white_check_mark: Bilder und Dateien können erfasst werden
 - :white_check_mark: Teil-Kulturen können benutzt werden
@@ -40,9 +40,12 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Nicht obligatorische Felder können ein- und ausgeblendet werden
 - :white_check_mark: Nicht aktive Personen, Gärten und Kulturen können ein-/ausgeblendet werden
 - :white_check_mark: PostGIS für Koordinaten benutzen
+- :white_check_mark: Zeit-Achsen visualisieren die wichtigsten Vorgänge und Kennzahlen
+- :white_check_mark: Lieferungen können als Sammel-Lieferungen erfasst werden
+- :white_check_mark: Qualitätskontrollen bauen
 - :ballot_box_with_check: Übersichten bauen für: Kultur, Art
 - :white_medium_square: Übersichten können gedruckt werden
+- :white_medium_square: Sammel-Lieferungen können gedruckt werden
 - :white_medium_square: Daten können exportiert werden
-- :white_medium_square: Qualitätskontrollen bauen
 - :white_medium_square: Funktionalitäten mit Topos bereinigt
 - :white_medium_square: Produktive Version 1.0.0 live schalten (geplant: Ende 2019)
