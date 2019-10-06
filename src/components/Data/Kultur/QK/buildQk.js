@@ -4,7 +4,7 @@ import format from 'date-fns/format'
 export default ({ data, artId }) => [
   {
     title: 'Sammlungen ohne "Nr"',
-    messages: get(data, 'sammlungsWithoutNr').map(s => {
+    messages: get(data, 'art[0].sammlungsWithoutNr').map(s => {
       const datum = s.datum
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
@@ -21,7 +21,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Sammlungen ohne Herkunft',
-    messages: get(data, 'sammlungsWithoutHerkunft').map(s => {
+    messages: get(data, 'art[0].sammlungsWithoutHerkunft').map(s => {
       const datum = s.datum
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
@@ -38,7 +38,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Sammlungen ohne Person',
-    messages: get(data, 'sammlungsWithoutPerson').map(s => {
+    messages: get(data, 'art[0].sammlungsWithoutPerson').map(s => {
       const datum = s.datum
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
@@ -55,7 +55,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Sammlungen ohne "Datum"',
-    messages: get(data, 'sammlungsWithoutDatum').map(s => {
+    messages: get(data, 'art[0].sammlungsWithoutDatum').map(s => {
       const datum = s.datum
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
@@ -72,7 +72,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Sammlungen ohne "Anzahl Pflanzen"',
-    messages: get(data, 'sammlungsWithoutAnzahlPflanzen').map(s => {
+    messages: get(data, 'art[0].sammlungsWithoutAnzahlPflanzen').map(s => {
       const datum = s.datum
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
@@ -89,7 +89,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Sammlungen ohne "von Anzahl Individuen"',
-    messages: get(data, 'sammlungsWithoutVonAnzahlIdividuen').map(s => {
+    messages: get(data, 'art[0].sammlungsWithoutVonAnzahlIdividuen').map(s => {
       const datum = s.datum
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
@@ -106,7 +106,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Lieferungen ohne "Anzahl Pflanzen"',
-    messages: get(data, 'lieferungsWithoutAnzahlPflanzen').map(l => {
+    messages: get(data, 'art[0].lieferungsWithoutAnzahlPflanzen').map(l => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -121,37 +121,41 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Lieferungen ohne "Anzahl auspflanz-bereit"',
-    messages: get(data, 'lieferungsWithoutAnzahlAuspflanzbereit').map(l => {
-      const datum = l.datum
-        ? format(new Date(l.datum), 'yyyy.MM.dd')
-        : `kein Datum`
-      const geplant = l.geplant ? ', (geplant)' : ''
-      const text = `${datum}, ID: ${l.id}${geplant}`
+    messages: get(data, 'art[0].lieferungsWithoutAnzahlAuspflanzbereit').map(
+      l => {
+        const datum = l.datum
+          ? format(new Date(l.datum), 'yyyy.MM.dd')
+          : `kein Datum`
+        const geplant = l.geplant ? ', (geplant)' : ''
+        const text = `${datum}, ID: ${l.id}${geplant}`
 
-      return {
-        url: ['Lieferungen', l.id],
-        text,
-      }
-    }),
+        return {
+          url: ['Lieferungen', l.id],
+          text,
+        }
+      },
+    ),
   },
   {
     title: 'Lieferungen ohne "von Anzahl Individuen"',
-    messages: get(data, 'lieferungsWithoutVonAnzahlIndividuen').map(l => {
-      const datum = l.datum
-        ? format(new Date(l.datum), 'yyyy.MM.dd')
-        : `kein Datum`
-      const geplant = l.geplant ? ', (geplant)' : ''
-      const text = `${datum}, ID: ${l.id}${geplant}`
+    messages: get(data, 'art[0].lieferungsWithoutVonAnzahlIndividuen').map(
+      l => {
+        const datum = l.datum
+          ? format(new Date(l.datum), 'yyyy.MM.dd')
+          : `kein Datum`
+        const geplant = l.geplant ? ', (geplant)' : ''
+        const text = `${datum}, ID: ${l.id}${geplant}`
 
-      return {
-        url: ['Lieferungen', l.id],
-        text,
-      }
-    }),
+        return {
+          url: ['Lieferungen', l.id],
+          text,
+        }
+      },
+    ),
   },
   {
     title: 'Lieferungen ohne "von" (Sammlung oder Kultur)',
-    messages: get(data, 'lieferungsWithoutVon').map(l => {
+    messages: get(data, 'art[0].lieferungsWithoutVon').map(l => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -166,7 +170,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Lieferungen ohne "nach" ("Kultur" oder "ausgepflanzt")',
-    messages: get(data, 'lieferungsWithoutNach').map(l => {
+    messages: get(data, 'art[0].lieferungsWithoutNach').map(l => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -181,7 +185,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Lieferungen ohne "Datum"',
-    messages: get(data, 'lieferungsWithoutDatum').map(l => {
+    messages: get(data, 'art[0].lieferungsWithoutDatum').map(l => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -196,7 +200,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Lieferungen ohne Person',
-    messages: get(data, 'lieferungsWithoutPerson').map(l => {
+    messages: get(data, 'art[0].lieferungsWithoutPerson').map(l => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
