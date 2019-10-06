@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { navigate } from 'gatsby'
 import MListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -6,6 +6,8 @@ import Divider from '@material-ui/core/Divider'
 import { Location } from '@reach/router'
 import styled from 'styled-components'
 import get from 'lodash/get'
+
+import storeContext from '../../storeContext'
 
 const ListItem = styled(MListItem)`
   background-color: ${props =>
@@ -15,10 +17,11 @@ const ListItem = styled(MListItem)`
 `
 
 const MenuItem = ({ node }) => {
-  const onClickMenuItem = useCallback(
-    () => navigate(`${node.frontmatter.path}/`),
-    [node],
-  )
+  const { setSidebarWidth } = useContext(storeContext)
+  const onClickMenuItem = useCallback(() => {
+    navigate(`${node.frontmatter.path}/`)
+    setSidebarWidth(null)
+  }, [node.frontmatter.path, setSidebarWidth])
 
   return (
     <Location>

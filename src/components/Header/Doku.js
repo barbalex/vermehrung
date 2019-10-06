@@ -71,7 +71,6 @@ const HeaderDoku = () => {
       setSidebarWidth(0)
     }
   }, [setSidebarWidth, sidebarWidth])
-  console.log('Header Doku, sidebarWidth:', sidebarWidth)
 
   return (
     <Location>
