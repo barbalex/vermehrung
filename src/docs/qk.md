@@ -2,7 +2,7 @@
 path: "/Dokumentation/Qualitaets-Kontrollen"
 date: "2019-10-06"
 title: "Qualitäts-Kontrollen"
-sort: 14
+sort1: 14
 ---
 
 ### Ziel

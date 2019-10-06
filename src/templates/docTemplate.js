@@ -73,7 +73,7 @@ export const pageQuery = graphql`
       }
     }
     allMarkdownRemark(
-      sort: { order: ASC, fields: [frontmatter___sort] }
+      sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
       filter: { fileAbsolutePath: { regex: "/(/docs)/.*.md$/" } }
     ) {
       edges {
@@ -83,6 +83,8 @@ export const pageQuery = graphql`
             date(formatString: "DD.MM.YYYY")
             path
             title
+            sort1
+            sort2
           }
         }
       }

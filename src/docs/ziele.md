@@ -2,7 +2,8 @@
 path: "/Dokumentation/Ziele"
 date: "2019-10-04"
 title: "Ziele"
-sort: 1
+sort1: 1
+sort2: 0
 ---
 
 Die Ziele dienen als Grundlage:

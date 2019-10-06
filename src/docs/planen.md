@@ -2,7 +2,7 @@
 path: "/Dokumentation/Planen"
 date: "2019-09-20"
 title: "Planen"
-sort: 12
+sort1: 12
 ---
 
 ### Wo

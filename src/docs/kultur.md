@@ -2,7 +2,7 @@
 path: "/Dokumentation/Kulturen"
 date: "2019-09-20"
 title: "Kulturen"
-sort: 5
+sort1: 5
 ---
 
 ### Ziele

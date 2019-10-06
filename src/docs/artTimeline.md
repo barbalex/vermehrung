@@ -2,7 +2,7 @@
 path: "/Dokumentation/Zeitachse-Art"
 date: "2019-09-29"
 title: "Zeit-Achse für Arten"
-sort: 3
+sort1: 3
 ---
 
 ### Ziele

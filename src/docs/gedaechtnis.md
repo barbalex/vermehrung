@@ -2,7 +2,7 @@
 path: "/Dokumentation/Gedaechtnis"
 date: "2019-09-30"
 title: "vermehrung erinnert sich"
-sort: 15
+sort1: 15
 ---
 
 Beim Arbeiten speichert vermehrung laufend den aktuellen Zustand. Zum Beispiel:

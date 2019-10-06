@@ -2,7 +2,7 @@
 path: "/Dokumentation/Zaehlungen"
 date: "2019-10-04"
 title: "Zählungen"
-sort: 6
+sort1: 6
 ---
 
 ### Ziele

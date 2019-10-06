@@ -2,7 +2,7 @@
 path: "/Dokumentation/Roadmap"
 date: "2019-10-06"
 title: "Roadmap"
-sort: 22
+sort1: 22
 ---
 
 vermehrung.apflora.ch ist in Entwicklung. Ziel ist, dass ab 2020 damit gearbeitet wird.<br/><br/>

@@ -2,7 +2,7 @@
 path: "/Dokumentation/Lieferungen"
 date: "2019-10-06"
 title: "Lieferungen"
-sort: 7
+sort1: 7
 ---
 
 ### Ziele

@@ -2,7 +2,7 @@
 path: "/Dokumentation/Zeitachse-Kultur"
 date: "2019-09-20"
 title: "Zeit-Achse für Kulturen"
-sort: 4
+sort1: 4
 ---
 
 ### Ziele

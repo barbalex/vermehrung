@@ -10,7 +10,8 @@ import Filter from './Filter'
 import constants from '../../utils/constants'
 
 const Menu = styled.div`
-  width: ${constants.sidebar.width};
+  width: ${constants.sidebar.width}px;
+  min-width: ${constants.sidebar.width}px;
   height: calc(100vh - 64px);
   overflow-y: auto;
   padding: 25px 0;

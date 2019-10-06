@@ -2,7 +2,7 @@
 path: "/Dokumentation/Technische-Voraussetzungen"
 date: "2019-01-25"
 title: "Technische Voraussetzungen"
-sort: 2
+sort1: 2
 ---
 
 Sie brauchen eine aktuelle Version eines modernen **Browsers**.<br/>
