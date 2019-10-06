@@ -7,6 +7,6 @@ sort2: 2
 ---
 
 
-Ziel 1 lautet: Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt.
+Ziel 1 lautet: "Herkünfte sind bekannt und werden innerhalb von Kulturen nicht vermischt."<br/><br/>
 
 Wie wird das unterstützt?
