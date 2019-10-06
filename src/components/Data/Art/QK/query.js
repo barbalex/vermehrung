@@ -22,6 +22,13 @@ export default gql`
           nr
         }
       }
+      kultursWithoutGarten: kulturs(where: { garten_id: { _is_null: true } }) {
+        id
+        herkunft {
+          id
+          nr
+        }
+      }
       kultursWithoutZaehlungInYear: kulturs(
         where: {
           _not: {
