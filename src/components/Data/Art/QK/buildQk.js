@@ -3,6 +3,108 @@ import format from 'date-fns/format'
 
 export default ({ data, artId }) => [
   {
+    title: 'Sammlungen ohne "Nr"',
+    messages: get(data, 'art[0].sammlungWithoutNr').map(s => {
+      const datum = s.datum
+        ? format(new Date(s.datum), 'yyyy.MM.dd')
+        : 'kein Datum'
+      const geplant = s.geplant ? ' (geplant)' : ''
+      const text = `${datum}: ${get(s, 'herkunft.gemeinde') ||
+        '(keine Gemeinde)'}, ${get(s, 'herkunft.nr') ||
+        '(keine Nr.)'}${geplant}`
+
+      return {
+        url: ['Arten', artId, 'Sammlungen', s.id],
+        text,
+      }
+    }),
+  },
+  {
+    title: 'Sammlungen ohne Herkunft',
+    messages: get(data, 'art[0].sammlungWithoutHerkunft').map(s => {
+      const datum = s.datum
+        ? format(new Date(s.datum), 'yyyy.MM.dd')
+        : 'kein Datum'
+      const geplant = s.geplant ? ' (geplant)' : ''
+      const text = `${datum}: ${get(s, 'herkunft.gemeinde') ||
+        '(keine Gemeinde)'}, ${get(s, 'herkunft.nr') ||
+        '(keine Nr.)'}${geplant}`
+
+      return {
+        url: ['Arten', artId, 'Sammlungen', s.id],
+        text,
+      }
+    }),
+  },
+  {
+    title: 'Sammlungen ohne Person',
+    messages: get(data, 'art[0].sammlungWithoutPerson').map(s => {
+      const datum = s.datum
+        ? format(new Date(s.datum), 'yyyy.MM.dd')
+        : 'kein Datum'
+      const geplant = s.geplant ? ' (geplant)' : ''
+      const text = `${datum}: ${get(s, 'herkunft.gemeinde') ||
+        '(keine Gemeinde)'}, ${get(s, 'herkunft.nr') ||
+        '(keine Nr.)'}${geplant}`
+
+      return {
+        url: ['Arten', artId, 'Sammlungen', s.id],
+        text,
+      }
+    }),
+  },
+  {
+    title: 'Sammlungen ohne "Datum"',
+    messages: get(data, 'art[0].sammlungWithoutDatum').map(s => {
+      const datum = s.datum
+        ? format(new Date(s.datum), 'yyyy.MM.dd')
+        : 'kein Datum'
+      const geplant = s.geplant ? ' (geplant)' : ''
+      const text = `${datum}: ${get(s, 'herkunft.gemeinde') ||
+        '(keine Gemeinde)'}, ${get(s, 'herkunft.nr') ||
+        '(keine Nr.)'}${geplant}`
+
+      return {
+        url: ['Arten', artId, 'Sammlungen', s.id],
+        text,
+      }
+    }),
+  },
+  {
+    title: 'Sammlungen ohne "Anzahl Pflanzen"',
+    messages: get(data, 'art[0].sammlungWithoutAnzahlPflanzen').map(s => {
+      const datum = s.datum
+        ? format(new Date(s.datum), 'yyyy.MM.dd')
+        : 'kein Datum'
+      const geplant = s.geplant ? ' (geplant)' : ''
+      const text = `${datum}: ${get(s, 'herkunft.gemeinde') ||
+        '(keine Gemeinde)'}, ${get(s, 'herkunft.nr') ||
+        '(keine Nr.)'}${geplant}`
+
+      return {
+        url: ['Arten', artId, 'Sammlungen', s.id],
+        text,
+      }
+    }),
+  },
+  {
+    title: 'Sammlungen ohne "von Anzahl Individuen"',
+    messages: get(data, 'art[0].sammlungWithoutVonAnzahlIdividuen').map(s => {
+      const datum = s.datum
+        ? format(new Date(s.datum), 'yyyy.MM.dd')
+        : 'kein Datum'
+      const geplant = s.geplant ? ' (geplant)' : ''
+      const text = `${datum}: ${get(s, 'herkunft.gemeinde') ||
+        '(keine Gemeinde)'}, ${get(s, 'herkunft.nr') ||
+        '(keine Nr.)'}${geplant}`
+
+      return {
+        url: ['Arten', artId, 'Sammlungen', s.id],
+        text,
+      }
+    }),
+  },
+  {
     title: 'Kulturen ohne "von Anzahl Individuen"',
     messages: get(data, 'art[0].kultursWithoutVonAnzahlIndividuen').map(k => {
       const garten =

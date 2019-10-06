@@ -2,7 +2,9 @@ import gql from 'graphql-tag'
 
 import {
   event,
+  herkunft,
   kultur,
+  sammlung,
   teilkultur,
   teilzaehlung,
   zaehlung,
@@ -12,6 +14,63 @@ export default gql`
   query ArtQkQuery($artId: bigint!, $startYear: date!, $startNextYear: date!) {
     art(where: { id: { _eq: $artId } }) {
       id
+      sammlungWithoutNr: sammlungs(
+        where: { nr: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
+      ) {
+        ...SammlungFields
+        herkunft {
+          ...HerkunftFields
+        }
+      }
+      sammlungWithoutHerkunft: sammlungs(
+        where: { herkunft_id: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
+      ) {
+        ...SammlungFields
+        herkunft {
+          ...HerkunftFields
+        }
+      }
+      sammlungWithoutPerson: sammlungs(
+        where: { person_id: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
+      ) {
+        ...SammlungFields
+        herkunft {
+          ...HerkunftFields
+        }
+      }
+      sammlungWithoutDatum: sammlungs(
+        where: { datum: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
+      ) {
+        ...SammlungFields
+        herkunft {
+          ...HerkunftFields
+        }
+      }
+      sammlungWithoutAnzahlPflanzen: sammlungs(
+        where: { anzahl_pflanzen: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
+      ) {
+        ...SammlungFields
+        herkunft {
+          ...HerkunftFields
+        }
+      }
+      sammlungWithoutVonAnzahlIdividuen: sammlungs(
+        where: {
+          von_anzahl_individuen: { _is_null: true }
+          art_id: { _eq: $artId }
+        }
+        order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
+      ) {
+        ...SammlungFields
+        herkunft {
+          ...HerkunftFields
+        }
+      }
       kultursWithoutVonAnzahlIndividuen: kulturs(
         where: { von_anzahl_individuen: { _is_null: true } }
         order_by: [
@@ -291,7 +350,9 @@ export default gql`
     }
   }
   ${event}
+  ${herkunft}
   ${kultur}
+  ${sammlung}
   ${teilkultur}
   ${teilzaehlung}
   ${zaehlung}
