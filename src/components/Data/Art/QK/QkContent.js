@@ -97,7 +97,9 @@ const ApQkQk = ({ art }) => {
             badgeContent={
               loading
                 ? '...'
-                : `${messageGroupsFiltered.length}/${messageGroups.length}`
+                : filter
+                ? `${messageGroupsFiltered.length}/${messageGroups.length}`
+                : messageGroups.length
             }
             color="primary"
           >
