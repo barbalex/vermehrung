@@ -45,7 +45,7 @@ export default ({ data, artId }) => [
   },
   {
     title: 'Kulturen ohne Zählung im aktuellen Jahr',
-    messages: get(data, 'art[0].kultursWithoutZaehlungInYear').map(k => {
+    messages: get(data, 'art[0].kultursWithoutZaehlungThisYear').map(k => {
       const garten =
         get(k, 'garten.name') ||
         `(${get(k, 'garten.person.name') || 'kein Name'})`

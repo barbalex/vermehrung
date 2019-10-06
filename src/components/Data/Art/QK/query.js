@@ -55,7 +55,7 @@ export default gql`
           }
         }
       }
-      kultursWithoutZaehlungInYear: kulturs(
+      kultursWithoutZaehlungThisYear: kulturs(
         where: {
           _not: {
             zaehlungs: {
