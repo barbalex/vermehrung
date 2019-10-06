@@ -7,10 +7,10 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../storeContext'
 import MenuItems from './MenuItems'
 import Filter from './Filter'
+import constants from '../../utils/constants'
 
 const Menu = styled.div`
-  width: 25%;
-  min-width: 320px;
+  width: ${constants.sidebar.width};
   height: calc(100vh - 64px);
   overflow-y: auto;
   padding: 25px 0;
@@ -36,6 +36,7 @@ const Sidebar = ({ title, titleLink, edges }) => {
     benutzerDokuFilter,
     setTechnDokuFilter,
     setBenutzerDokuFilter,
+    sidebarWidth,
   } = store
   const filter =
     title === 'Benutzer-Dokumentation' ? benutzerDokuFilter : technDokuFilter
@@ -54,6 +55,7 @@ const Sidebar = ({ title, titleLink, edges }) => {
         : true,
     )
 
+  if (sidebarWidth === 0) return null
   return (
     <Menu>
       <MenuTitle>

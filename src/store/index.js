@@ -4,6 +4,7 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
+import constants from '../utils/constants'
 
 const myTypes = types
   .model({
@@ -18,6 +19,7 @@ const myTypes = types
       '',
     ),
     hideInactive: types.optional(types.maybeNull(types.boolean), true),
+    sidebarWidth: types.maybeNull(types.number, null),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -28,6 +30,9 @@ const myTypes = types
     notifications: [],
   }))
   .actions(self => ({
+    setSidebarWidth(val) {
+      self.sidebarWidth = val
+    },
     setHideInactive(val) {
       self.hideInactive = val
       // TODO:

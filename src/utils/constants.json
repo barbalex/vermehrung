@@ -6,5 +6,9 @@
   "tree": {
     "minimalWidth": 331,
     "minimalWindowWidth": 1000
+  },
+  "sidebar": {
+    "width": 320,
+    "minimalWindowWidth": 1000
   }
 }
