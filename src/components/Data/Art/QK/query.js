@@ -113,18 +113,14 @@ export default gql`
     lieferungsWithoutNach: lieferung(
       where: {
         art_id: { _eq: $artId }
-        _and: [
-          # has von
-          {
-            _or: [
-              { von_kultur_id: { _is_null: false } }
-              { von_sammlung_id: { _is_null: false } }
-            ]
-          }
-          # nas no nach
-          { nach_kultur_id: { _is_null: true } }
-          { nach_ausgepflanzt: { _neq: true } }
+        # has von
+        _or: [
+          { von_kultur_id: { _is_null: false } }
+          { von_sammlung_id: { _is_null: false } }
         ]
+        # nas no nach
+        nach_kultur_id: { _is_null: true }
+        nach_ausgepflanzt: { _neq: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
     ) {
@@ -185,6 +181,7 @@ export default gql`
         where: {
           _not: {
             zaehlungs: {
+              # need _and because querying datum more than once
               _and: [
                 { datum: { _gte: $startYear } }
                 { datum: { _lt: $startNextYear } }
