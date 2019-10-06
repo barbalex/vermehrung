@@ -109,9 +109,24 @@ export default ({ data, artId }) => [
     messages: get(data, 'art[0].lieferungsWithoutPerson').map(l => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
-        : `kein Datum, ID: ${l.id}`
+        : `kein Datum`
       const geplant = l.geplant ? ', (geplant)' : ''
-      const text = `${datum}${geplant}`
+      const text = `${datum}, ID: ${l.id}${geplant}`
+
+      return {
+        url: ['Lieferungen', l.id],
+        text,
+      }
+    }),
+  },
+  {
+    title: 'Lieferungen ohne "Anzahl Pflanzen"',
+    messages: get(data, 'art[0].lieferungsWithoutAnzahlPflanzen').map(l => {
+      const datum = l.datum
+        ? format(new Date(l.datum), 'yyyy.MM.dd')
+        : `kein Datum`
+      const geplant = l.geplant ? ', (geplant)' : ''
+      const text = `${datum}, ID: ${l.id}${geplant}`
 
       return {
         url: ['Lieferungen', l.id],

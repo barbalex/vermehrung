@@ -78,6 +78,12 @@ export default gql`
       ) {
         ...LieferungFields
       }
+      lieferungsWithoutAnzahlPflanzen: lieferungs(
+        where: { anzahl_pflanzen: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
+      ) {
+        ...LieferungFields
+      }
       kultursWithoutVonAnzahlIndividuen: kulturs(
         where: { von_anzahl_individuen: { _is_null: true } }
         order_by: [
