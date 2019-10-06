@@ -57,6 +57,7 @@ const ApQkQk = ({ art }) => {
     : []
   if (loading) return 'Lade Daten...'
   if (error) return `Fehler: ${error.message}`
+  console.log('ApQk, data:', data)
   return (
     <>
       <Badge

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { kultur } from '../../../../utils/fragments'
+import { kultur, teilkultur } from '../../../../utils/fragments'
 
 export default gql`
   query ArtQkQuery($artId: bigint!, $startYear: date!, $startNextYear: date!) {
@@ -8,6 +8,10 @@ export default gql`
       id
       kultursWithoutVonAnzahlIndividuen: kulturs(
         where: { von_anzahl_individuen: { _is_null: true } }
+        order_by: [
+          { garten: { name: asc_nulls_first } }
+          { herkunft: { nr: asc_nulls_first } }
+        ]
       ) {
         ...KulturFields
         garten {
@@ -22,11 +26,27 @@ export default gql`
           nr
         }
       }
-      kultursWithoutGarten: kulturs(where: { garten_id: { _is_null: true } }) {
+      kultursWithoutGarten: kulturs(
+        where: { garten_id: { _is_null: true } }
+        order_by: { herkunft: { nr: asc_nulls_first } }
+      ) {
         id
         herkunft {
           id
           nr
+        }
+      }
+      kultursWithoutHerkunft: kulturs(
+        where: { herkunft_id: { _is_null: true } }
+        order_by: { garten: { name: asc_nulls_first } }
+      ) {
+        ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
         }
       }
       kultursWithoutZaehlungInYear: kulturs(
@@ -43,7 +63,34 @@ export default gql`
       ) {
         ...KulturFields
       }
+      teilkultursWithoutName: kulturs(
+        where: { teilkulturs: { name: { _is_null: true } } }
+        order_by: [
+          { garten: { name: asc_nulls_first } }
+          { herkunft: { nr: asc_nulls_first } }
+        ]
+      ) {
+        ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
+        teilkulturs(
+          where: { name: { _is_null: true } }
+          order_by: { id: asc }
+        ) {
+          ...TeilkulturFields
+        }
+      }
     }
   }
   ${kultur}
+  ${teilkultur}
 `
