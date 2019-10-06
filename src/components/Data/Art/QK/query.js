@@ -14,7 +14,7 @@ import {
 export default gql`
   query ArtQkQuery($artId: bigint!, $startYear: date!, $startNextYear: date!) {
     sammlungsWithoutNr: sammlung(
-      where: { nr: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, nr: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
     ) {
       ...SammlungFields
@@ -23,7 +23,7 @@ export default gql`
       }
     }
     sammlungsWithoutHerkunft: sammlung(
-      where: { herkunft_id: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, herkunft_id: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
     ) {
       ...SammlungFields
@@ -32,7 +32,7 @@ export default gql`
       }
     }
     sammlungsWithoutPerson: sammlung(
-      where: { person_id: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, person_id: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
     ) {
       ...SammlungFields
@@ -41,7 +41,7 @@ export default gql`
       }
     }
     sammlungsWithoutDatum: sammlung(
-      where: { datum: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, datum: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
     ) {
       ...SammlungFields
@@ -50,7 +50,7 @@ export default gql`
       }
     }
     sammlungsWithoutAnzahlPflanzen: sammlung(
-      where: { anzahl_pflanzen: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, anzahl_pflanzen: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
     ) {
       ...SammlungFields
@@ -60,8 +60,8 @@ export default gql`
     }
     sammlungsWithoutVonAnzahlIdividuen: sammlung(
       where: {
-        von_anzahl_individuen: { _is_null: true }
         art_id: { _eq: $artId }
+        von_anzahl_individuen: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
     ) {
@@ -71,21 +71,21 @@ export default gql`
       }
     }
     lieferungsWithoutPerson: lieferung(
-      where: { person_id: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, person_id: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
     ) {
       ...LieferungFields
     }
     lieferungsWithoutAnzahlPflanzen: lieferung(
-      where: { anzahl_pflanzen: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, anzahl_pflanzen: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
     ) {
       ...LieferungFields
     }
     lieferungsWithoutAnzahlAuspflanzbereit: lieferung(
       where: {
-        anzahl_auspflanzbereit: { _is_null: true }
         art_id: { _eq: $artId }
+        anzahl_auspflanzbereit: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
     ) {
@@ -93,8 +93,8 @@ export default gql`
     }
     lieferungsWithoutVonAnzahlIndividuen: lieferung(
       where: {
-        von_anzahl_individuen: { _is_null: true }
         art_id: { _eq: $artId }
+        von_anzahl_individuen: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
     ) {
@@ -127,288 +127,295 @@ export default gql`
       ...LieferungFields
     }
     lieferungsWithoutDatum: lieferung(
-      where: { datum: { _is_null: true }, art_id: { _eq: $artId } }
+      where: { art_id: { _eq: $artId }, datum: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
     ) {
       ...LieferungFields
     }
-    art(where: { id: { _eq: $artId } }) {
-      id
-      kultursWithoutVonAnzahlIndividuen: kulturs(
-        where: { von_anzahl_individuen: { _is_null: true } }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
-      ) {
-        ...KulturFields
-        garten {
-          id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
-        }
+
+    kultursWithoutVonAnzahlIndividuen: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        von_anzahl_individuen: { _is_null: true }
       }
-      kultursWithoutGarten: kulturs(
-        where: { garten_id: { _is_null: true } }
-        order_by: { herkunft: { nr: asc_nulls_first } }
-      ) {
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
         id
-        herkunft {
+        person {
           id
-          nr
+          name
         }
       }
-      kultursWithoutHerkunft: kulturs(
-        where: { herkunft_id: { _is_null: true } }
-        order_by: { garten: { name: asc_nulls_first } }
-      ) {
-        ...KulturFields
-        garten {
+      herkunft {
+        id
+        nr
+      }
+    }
+    kultursWithoutGarten: kultur(
+      where: { art_id: { _eq: $artId }, garten_id: { _is_null: true } }
+      order_by: { herkunft: { nr: asc_nulls_first } }
+    ) {
+      id
+      herkunft {
+        id
+        nr
+      }
+    }
+    kultursWithoutHerkunft: kultur(
+      where: { art_id: { _eq: $artId }, herkunft_id: { _is_null: true } }
+      order_by: { garten: { name: asc_nulls_first } }
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
           id
-          person {
-            id
-            name
+          name
+        }
+      }
+    }
+    kultursWithoutZaehlungThisYear: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        _not: {
+          zaehlungs: {
+            # need _and because querying datum more than once
+            _and: [
+              { datum: { _gte: $startYear } }
+              { datum: { _lt: $startNextYear } }
+            ]
           }
         }
       }
-      kultursWithoutZaehlungThisYear: kulturs(
-        where: {
-          _not: {
-            zaehlungs: {
-              # need _and because querying datum more than once
-              _and: [
-                { datum: { _gte: $startYear } }
-                { datum: { _lt: $startNextYear } }
-              ]
-            }
-          }
-        }
-      ) {
-        ...KulturFields
-        garten {
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
           id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
+          name
         }
       }
-      teilkultursWithoutName: kulturs(
-        where: { teilkulturs: { name: { _is_null: true } } }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
+      herkunft {
+        id
+        nr
+      }
+    }
+    teilkultursWithoutName: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        teilkulturs: { name: { _is_null: true } }
+      }
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
+          id
+          name
+        }
+      }
+      herkunft {
+        id
+        nr
+      }
+      teilkulturs(where: { name: { _is_null: true } }, order_by: { id: asc }) {
+        ...TeilkulturFields
+      }
+    }
+    zaehlungsWithoutDatum: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        zaehlungs: { datum: { _is_null: true } }
+      }
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
+          id
+          name
+        }
+      }
+      herkunft {
+        id
+        nr
+      }
+      zaehlungs(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
+        ...ZaehlungFields
+      }
+    }
+    eventsWithoutBeschreibung: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        events: { beschreibung: { _is_null: true } }
+      }
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
+          id
+          name
+        }
+      }
+      herkunft {
+        id
+        nr
+      }
+      events(
+        where: { beschreibung: { _is_null: true } }
+        order_by: { id: asc }
       ) {
-        ...KulturFields
-        garten {
+        ...EventFields
+      }
+    }
+    eventsWithoutDatum: kultur(
+      where: { art_id: { _eq: $artId }, events: { datum: { _is_null: true } } }
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
           id
-          person {
-            id
-            name
-          }
+          name
         }
-        herkunft {
+      }
+      herkunft {
+        id
+        nr
+      }
+      events(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
+        ...EventFields
+      }
+    }
+    zaehlungsWithoutAnzahlPflanzen: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        zaehlungs: { teilzaehlungs: { anzahl_pflanzen: { _is_null: true } } }
+      }
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
           id
-          nr
+          name
         }
-        teilkulturs(
-          where: { name: { _is_null: true } }
+      }
+      herkunft {
+        id
+        nr
+      }
+      zaehlungs(
+        where: { teilzaehlungs: { anzahl_pflanzen: { _is_null: true } } }
+        order_by: { datum: asc_nulls_first }
+      ) {
+        ...ZaehlungFields
+        teilzaehlungs(
+          where: { anzahl_pflanzen: { _is_null: true } }
           order_by: { id: asc }
         ) {
-          ...TeilkulturFields
+          ...TeilzaehlungFields
         }
       }
-      zaehlungsWithoutDatum: kulturs(
-        where: { zaehlungs: { datum: { _is_null: true } } }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
-      ) {
-        ...KulturFields
-        garten {
-          id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
-        }
-        zaehlungs(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
-          ...ZaehlungFields
+    }
+    zaehlungsWithoutAnzahlAuspflanzbereit: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        zaehlungs: {
+          teilzaehlungs: { anzahl_auspflanzbereit: { _is_null: true } }
         }
       }
-      eventsWithoutBeschreibung: kulturs(
-        where: { events: { beschreibung: { _is_null: true } } }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
+          id
+          name
+        }
+      }
+      herkunft {
+        id
+        nr
+      }
+      zaehlungs(
+        where: { teilzaehlungs: { anzahl_auspflanzbereit: { _is_null: true } } }
+        order_by: { datum: asc_nulls_first }
       ) {
-        ...KulturFields
-        garten {
-          id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
-        }
-        events(
-          where: { beschreibung: { _is_null: true } }
+        ...ZaehlungFields
+        teilzaehlungs(
+          where: { anzahl_auspflanzbereit: { _is_null: true } }
           order_by: { id: asc }
         ) {
-          ...EventFields
+          ...TeilzaehlungFields
         }
       }
-      eventsWithoutDatum: kulturs(
-        where: { events: { datum: { _is_null: true } } }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
-      ) {
-        ...KulturFields
-        garten {
-          id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
-        }
-        events(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
-          ...EventFields
+    }
+    zaehlungsWithoutAnzahlMutterpflanzen: kultur(
+      where: {
+        art_id: { _eq: $artId }
+        zaehlungs: {
+          teilzaehlungs: { anzahl_mutterpflanzen: { _is_null: true } }
         }
       }
-      zaehlungsWithoutAnzahlPflanzen: kulturs(
-        where: {
-          zaehlungs: { teilzaehlungs: { anzahl_pflanzen: { _is_null: true } } }
+      order_by: [
+        { garten: { name: asc_nulls_first } }
+        { herkunft: { nr: asc_nulls_first } }
+      ]
+    ) {
+      ...KulturFields
+      garten {
+        id
+        person {
+          id
+          name
         }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
+      }
+      herkunft {
+        id
+        nr
+      }
+      zaehlungs(
+        where: { teilzaehlungs: { anzahl_mutterpflanzen: { _is_null: true } } }
+        order_by: { datum: asc_nulls_first }
       ) {
-        ...KulturFields
-        garten {
-          id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
-        }
-        zaehlungs(
-          where: { teilzaehlungs: { anzahl_pflanzen: { _is_null: true } } }
-          order_by: { datum: asc_nulls_first }
+        ...ZaehlungFields
+        teilzaehlungs(
+          where: { anzahl_mutterpflanzen: { _is_null: true } }
+          order_by: { id: asc }
         ) {
-          ...ZaehlungFields
-          teilzaehlungs(
-            where: { anzahl_pflanzen: { _is_null: true } }
-            order_by: { id: asc }
-          ) {
-            ...TeilzaehlungFields
-          }
-        }
-      }
-      zaehlungsWithoutAnzahlAuspflanzbereit: kulturs(
-        where: {
-          zaehlungs: {
-            teilzaehlungs: { anzahl_auspflanzbereit: { _is_null: true } }
-          }
-        }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
-      ) {
-        ...KulturFields
-        garten {
-          id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
-        }
-        zaehlungs(
-          where: {
-            teilzaehlungs: { anzahl_auspflanzbereit: { _is_null: true } }
-          }
-          order_by: { datum: asc_nulls_first }
-        ) {
-          ...ZaehlungFields
-          teilzaehlungs(
-            where: { anzahl_auspflanzbereit: { _is_null: true } }
-            order_by: { id: asc }
-          ) {
-            ...TeilzaehlungFields
-          }
-        }
-      }
-      zaehlungsWithoutAnzahlMutterpflanzen: kulturs(
-        where: {
-          zaehlungs: {
-            teilzaehlungs: { anzahl_mutterpflanzen: { _is_null: true } }
-          }
-        }
-        order_by: [
-          { garten: { name: asc_nulls_first } }
-          { herkunft: { nr: asc_nulls_first } }
-        ]
-      ) {
-        ...KulturFields
-        garten {
-          id
-          person {
-            id
-            name
-          }
-        }
-        herkunft {
-          id
-          nr
-        }
-        zaehlungs(
-          where: {
-            teilzaehlungs: { anzahl_mutterpflanzen: { _is_null: true } }
-          }
-          order_by: { datum: asc_nulls_first }
-        ) {
-          ...ZaehlungFields
-          teilzaehlungs(
-            where: { anzahl_mutterpflanzen: { _is_null: true } }
-            order_by: { id: asc }
-          ) {
-            ...TeilzaehlungFields
-          }
+          ...TeilzaehlungFields
         }
       }
     }

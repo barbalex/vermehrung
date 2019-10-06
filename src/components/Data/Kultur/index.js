@@ -32,6 +32,7 @@ import gartenQuery from './gartenQuery'
 import kulturQuery from './kulturQuery'
 import artQuery from './artQuery'
 import Timeline from './Timeline'
+import QK from './QK'
 
 const Container = styled.div`
   height: 100%;
@@ -381,6 +382,7 @@ const Kultur = ({ filter: showFilter }) => {
           {!showFilter && (
             <>
               <Timeline row={row} />
+              <QK kultur={row} />
               <Files parentId={row.id} parent="kultur" />
             </>
           )}

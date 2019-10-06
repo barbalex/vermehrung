@@ -29,7 +29,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const ApQk = ({ art }) => {
+const ApQk = ({ kultur }) => {
   const [open, setOpen] = useState(false)
 
   const openDocs = useCallback(e => {
