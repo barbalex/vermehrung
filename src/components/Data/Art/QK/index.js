@@ -18,6 +18,7 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
+  cursor: pointer;
   &:first-of-type {
     margin-top: -10px;
   }
@@ -31,18 +32,24 @@ const Title = styled.div`
 const ApQk = ({ art }) => {
   const [open, setOpen] = useState(false)
 
-  const openDocs = useCallback(() => {
+  const openDocs = useCallback(e => {
+    e.stopPropagation()
     typeof window !== 'undefined' &&
       window.open(
         'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Qualitaets-Kontrollen',
       )
   }, [])
-  const onClickClose = useCallback(() => setOpen(false), [])
-  const onClickOpen = useCallback(() => setOpen(true), [])
+  const onClickToggle = useCallback(
+    e => {
+      e.stopPropagation()
+      setOpen(!open)
+    },
+    [open],
+  )
 
   return (
     <ErrorBoundary>
-      <TitleRow>
+      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
         <Title>Qualitäts-Kontrollen</Title>
         <div>
           <IconButton
@@ -52,23 +59,13 @@ const ApQk = ({ art }) => {
           >
             <IoMdInformationCircleOutline />
           </IconButton>
-          {open ? (
-            <IconButton
-              aria-label="schliessen"
-              title="schliessen"
-              onClick={onClickClose}
-            >
-              <FaChevronUp />
-            </IconButton>
-          ) : (
-            <IconButton
-              aria-label="schliessen"
-              title="schliessen"
-              onClick={onClickOpen}
-            >
-              <FaChevronDown />
-            </IconButton>
-          )}
+          <IconButton
+            aria-label={open ? 'schliessen' : 'öffnen'}
+            title={open ? 'schliessen' : 'öffnen'}
+            onClick={onClickToggle}
+          >
+            {open ? <FaChevronUp /> : <FaChevronDown />}
+          </IconButton>
         </div>
       </TitleRow>
       {open && <QkContent art={art} />}
