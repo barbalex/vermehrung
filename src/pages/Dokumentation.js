@@ -3,8 +3,8 @@ import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 
-import Layout from '../../components/Layout'
-import Sidebar from '../../templates/Sidebar'
+import Layout from '../components/Layout'
+import Sidebar from '../templates/Sidebar'
 
 const Container = styled.div`
   height: calc(100vh - 64px);

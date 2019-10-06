@@ -12,11 +12,12 @@ sort: 9
 
 ### 2 Grund-Idee
 - Lieferungen können mit Hilfe einer Vorlage ausgefüllt werden
-- Die Daten der Vorlage, werden automatisch (oder wenn gewünscht flexibel mit Befehlen) in die zugehörigen (Teil-)Lieferungen kopiert
+- Die Daten der Vorlage werden automatisch (oder nach Wahl flexibel mit Befehlen) in die zugehörigen (Teil-)Lieferungen kopiert
+- Die BenutzerIn kann wählen, die Daten der Vorlage manuell mit Hilfe von Befehlen zu kopieren. So ist es möglich, in einzelnen Feldern / Lieferungen von der Vorlage abzuweichen
 - Die Vorlage wird "Sammel-Lieferung" genannt
 
 ### 3	Benutzer-Erlebnis
-- :heavy_check_mark: Benutzer wählt "Neue Sammel-Lieferung" (im Struktur-Baum)
+- :heavy_check_mark: Benutzer wählt "Neue Sammel-Lieferung" (im Navigations-Baum)
 - :heavy_check_mark: Eine Sammel-Lieferung öffnet sich. Sie entspricht genau dem Lieferungs-Formular. Das Label im Baum zeigt erst die ID der Sammel-Lieferung an
 - :heavy_check_mark: Benutzer füllt alles aus, was in allen (Teil-)Lieferungen gleich ist
 - :heavy_check_mark: Das Label im Baum zeigt nun Daten aus der Sammel-Lieferung, sofern vorhanden (Datum, von, wer)

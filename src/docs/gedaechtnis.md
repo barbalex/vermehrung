@@ -7,7 +7,7 @@ sort: 15
 
 Beim Arbeiten speichert vermehrung laufend den aktuellen Zustand. Zum Beispiel:
 
-- Welche Äste des Struktur-Baums offen sind
+- Welche Äste des Navigations-Baums offen sind
 - Ob Filter gesetzt sind
 - Welches Formular offen ist
 
