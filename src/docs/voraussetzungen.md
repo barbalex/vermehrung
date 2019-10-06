@@ -14,7 +14,7 @@ Zum Beispiel (aber nicht abschliessend):
 
 Etwas weniger gut geeignet ist Safari. Sollte aber funktionieren.<br/><br/>
 
-_Nicht_ geeignet ist der Internet Explorer.<br/><br/>
+Nicht geeignet ist der Internet Explorer.<br/><br/>
 
 vermehrung.apflora.ch funktioniert **auf allen Betriebssystemen**. Mehr dazu [hier](/Dokumentation/PWA/).<br/><br/>
 

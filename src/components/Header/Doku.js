@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaBars, FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import { Location } from '@reach/router'
 import ErrorBoundary from 'react-error-boundary'
 import ReactResizeDetector from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
@@ -73,59 +72,42 @@ const HeaderDoku = () => {
   }, [setSidebarWidth, sidebarWidth])
 
   return (
-    <Location>
-      {({ location }) => {
-        const { pathname } = location
-
-        return (
-          <ErrorBoundary>
-            <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-            <AppBar position="fixed">
-              <Toolbar>
-                {exists(sidebarWidth) ? (
-                  <>
-                    <IconButton
-                      color="inherit"
-                      aria-label="Navigations-Baum öffnen"
-                      onClick={onClickMenu}
-                      title="Menü öffnen"
-                    >
-                      <FaBars />
-                    </IconButton>
-                    <IconButton
-                      color="inherit"
-                      aria-label="Home"
-                      component={Link}
-                      to="/"
-                      title="Home"
-                    >
-                      <FaHome />
-                    </IconButton>
-                  </>
-                ) : (
-                  <SiteTitle
-                    variant="outlined"
-                    component={Link}
-                    to="/"
-                    title="Home"
-                  >
-                    Vermehrung
-                  </SiteTitle>
-                )}
-                <Spacer />
-                <NavButton
-                  variant="outlined"
-                  component={Link}
-                  to="/Vermehrung/"
-                >
-                  Daten bearbeiten
-                </NavButton>
-              </Toolbar>
-            </AppBar>
-          </ErrorBoundary>
-        )
-      }}
-    </Location>
+    <ErrorBoundary>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+      <AppBar position="fixed">
+        <Toolbar>
+          {exists(sidebarWidth) ? (
+            <>
+              <IconButton
+                color="inherit"
+                aria-label="Navigations-Baum öffnen"
+                onClick={onClickMenu}
+                title="Menü öffnen"
+              >
+                <FaBars />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                aria-label="Home"
+                component={Link}
+                to="/"
+                title="Home"
+              >
+                <FaHome />
+              </IconButton>
+            </>
+          ) : (
+            <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+              Vermehrung
+            </SiteTitle>
+          )}
+          <Spacer />
+          <NavButton variant="outlined" component={Link} to="/Vermehrung/">
+            Daten bearbeiten
+          </NavButton>
+        </Toolbar>
+      </AppBar>
+    </ErrorBoundary>
   )
 }
 
