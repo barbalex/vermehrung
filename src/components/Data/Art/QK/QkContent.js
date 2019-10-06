@@ -13,6 +13,10 @@ import getAppBaseUrl from '../../../../utils/appBaseUrl'
 
 const appBaseUrl = getAppBaseUrl()
 
+const Container = styled.div`
+  padding-top: 5px;
+  padding-bottom: 5px;
+`
 const StyledPaper = styled(Paper)`
   padding: 10px;
   margin-bottom: 12px !important;
@@ -57,9 +61,8 @@ const ApQkQk = ({ art }) => {
     : []
   if (loading) return 'Lade Daten...'
   if (error) return `Fehler: ${error.message}`
-  console.log('ApQk, data:', data)
   return (
-    <>
+    <Container>
       <Badge
         badgeContent={loading ? '...' : messageGroups.length}
         color="primary"
@@ -93,7 +96,7 @@ const ApQkQk = ({ art }) => {
       {!loading && messageGroups.length === 0 && (
         <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
       )}
-    </>
+    </Container>
   )
 }
 

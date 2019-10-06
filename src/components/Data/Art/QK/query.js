@@ -4,6 +4,7 @@ import {
   event,
   kultur,
   teilkultur,
+  teilzaehlung,
   zaehlung,
 } from '../../../../utils/fragments'
 
@@ -67,6 +68,17 @@ export default gql`
         }
       ) {
         ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
       }
       teilkultursWithoutName: kulturs(
         where: { teilkulturs: { name: { _is_null: true } } }
@@ -102,6 +114,17 @@ export default gql`
         ]
       ) {
         ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
         zaehlungs(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
           ...ZaehlungFields
         }
@@ -114,6 +137,17 @@ export default gql`
         ]
       ) {
         ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
         events(
           where: { beschreibung: { _is_null: true } }
           order_by: { id: asc }
@@ -129,8 +163,129 @@ export default gql`
         ]
       ) {
         ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
         events(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
           ...EventFields
+        }
+      }
+      zaehlungsWithoutAnzahlPflanzen: kulturs(
+        where: {
+          zaehlungs: { teilzaehlungs: { anzahl_pflanzen: { _is_null: true } } }
+        }
+        order_by: [
+          { garten: { name: asc_nulls_first } }
+          { herkunft: { nr: asc_nulls_first } }
+        ]
+      ) {
+        ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
+        zaehlungs(
+          where: { teilzaehlungs: { anzahl_pflanzen: { _is_null: true } } }
+          order_by: { datum: asc_nulls_first }
+        ) {
+          ...ZaehlungFields
+          teilzaehlungs(
+            where: { anzahl_pflanzen: { _is_null: true } }
+            order_by: { id: asc }
+          ) {
+            ...TeilzaehlungFields
+          }
+        }
+      }
+      zaehlungsWithoutAnzahlAuspflanzbereit: kulturs(
+        where: {
+          zaehlungs: {
+            teilzaehlungs: { anzahl_auspflanzbereit: { _is_null: true } }
+          }
+        }
+        order_by: [
+          { garten: { name: asc_nulls_first } }
+          { herkunft: { nr: asc_nulls_first } }
+        ]
+      ) {
+        ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
+        zaehlungs(
+          where: {
+            teilzaehlungs: { anzahl_auspflanzbereit: { _is_null: true } }
+          }
+          order_by: { datum: asc_nulls_first }
+        ) {
+          ...ZaehlungFields
+          teilzaehlungs(
+            where: { anzahl_auspflanzbereit: { _is_null: true } }
+            order_by: { id: asc }
+          ) {
+            ...TeilzaehlungFields
+          }
+        }
+      }
+      zaehlungsWithoutAnzahlMutterpflanzen: kulturs(
+        where: {
+          zaehlungs: {
+            teilzaehlungs: { anzahl_mutterpflanzen: { _is_null: true } }
+          }
+        }
+        order_by: [
+          { garten: { name: asc_nulls_first } }
+          { herkunft: { nr: asc_nulls_first } }
+        ]
+      ) {
+        ...KulturFields
+        garten {
+          id
+          person {
+            id
+            name
+          }
+        }
+        herkunft {
+          id
+          nr
+        }
+        zaehlungs(
+          where: {
+            teilzaehlungs: { anzahl_mutterpflanzen: { _is_null: true } }
+          }
+          order_by: { datum: asc_nulls_first }
+        ) {
+          ...ZaehlungFields
+          teilzaehlungs(
+            where: { anzahl_mutterpflanzen: { _is_null: true } }
+            order_by: { id: asc }
+          ) {
+            ...TeilzaehlungFields
+          }
         }
       }
     }
@@ -138,5 +293,6 @@ export default gql`
   ${event}
   ${kultur}
   ${teilkultur}
+  ${teilzaehlung}
   ${zaehlung}
 `
