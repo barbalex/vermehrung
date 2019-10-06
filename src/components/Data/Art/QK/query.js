@@ -1,6 +1,11 @@
 import gql from 'graphql-tag'
 
-import { kultur, teilkultur, zaehlung } from '../../../../utils/fragments'
+import {
+  event,
+  kultur,
+  teilkultur,
+  zaehlung,
+} from '../../../../utils/fragments'
 
 export default gql`
   query ArtQkQuery($artId: bigint!, $startYear: date!, $startNextYear: date!) {
@@ -101,8 +106,36 @@ export default gql`
           ...ZaehlungFields
         }
       }
+      eventsWithoutBeschreibung: kulturs(
+        where: { events: { beschreibung: { _is_null: true } } }
+        order_by: [
+          { garten: { name: asc_nulls_first } }
+          { herkunft: { nr: asc_nulls_first } }
+        ]
+      ) {
+        ...KulturFields
+        events(
+          where: { beschreibung: { _is_null: true } }
+          order_by: { id: asc }
+        ) {
+          ...EventFields
+        }
+      }
+      eventsWithoutDatum: kulturs(
+        where: { events: { datum: { _is_null: true } } }
+        order_by: [
+          { garten: { name: asc_nulls_first } }
+          { herkunft: { nr: asc_nulls_first } }
+        ]
+      ) {
+        ...KulturFields
+        events(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
+          ...EventFields
+        }
+      }
     }
   }
+  ${event}
   ${kultur}
   ${teilkultur}
   ${zaehlung}

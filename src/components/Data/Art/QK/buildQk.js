@@ -58,7 +58,7 @@ export default ({ data, artId }) => [
     }),
   },
   {
-    title: 'Teil-Kulturen ohne Name',
+    title: 'Teilkulturen ohne Name',
     messages: get(data, 'art[0].teilkultursWithoutName').flatMap(k =>
       (get(k, 'teilkulturs') || []).map(tk => {
         const garten =
@@ -86,6 +86,40 @@ export default ({ data, artId }) => [
 
         return {
           url: ['Arten', artId, 'Kulturen', k.id, 'Zaehlungen', z.id],
+          text,
+        }
+      }),
+    ),
+  },
+  {
+    title: 'Events ohne Beschreibung',
+    messages: get(data, 'art[0].eventsWithoutBeschreibung').flatMap(k =>
+      (get(k, 'events') || []).map(ev => {
+        const garten =
+          get(k, 'garten.name') ||
+          `(${get(k, 'garten.person.name') || 'kein Name'})`
+        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
+
+        return {
+          url: ['Arten', artId, 'Kulturen', k.id, 'Events', ev.id],
+          text,
+        }
+      }),
+    ),
+  },
+  {
+    title: 'Events ohne Datum',
+    messages: get(data, 'art[0].eventsWithoutDatum').flatMap(k =>
+      (get(k, 'events') || []).map(ev => {
+        const garten =
+          get(k, 'garten.name') ||
+          `(${get(k, 'garten.person.name') || 'kein Name'})`
+        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
+
+        return {
+          url: ['Arten', artId, 'Kulturen', k.id, 'Events', ev.id],
           text,
         }
       }),
