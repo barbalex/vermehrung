@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
@@ -6,6 +6,9 @@ import format from 'date-fns/format'
 import Badge from '@material-ui/core/Badge'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
 
 import query from './query'
 import buildQk from './buildQk'
@@ -37,6 +40,14 @@ const StyledA = styled.p`
 const Row = styled.div`
   display: flex;
 `
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  button {
+    width: 167px;
+  }
+`
 const StyledButton = styled(Button)`
   margin-bottom: 15px !important;
   margin-top: -5px !important;
@@ -44,12 +55,23 @@ const StyledButton = styled(Button)`
     props.loading === 'true'
       ? '#D84315 !important'
       : 'rgb(46, 125, 50) !important'};
+  height: 34px !important;
   > span {
     text-transform: none;
   }
 `
+const StyledFormControl = styled(FormControl)`
+  padding-bottom: 19px !important;
+  margin-left: 35px !important;
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 
 const ApQkQk = ({ art }) => {
+  const [filter, setFilter] = useState('')
+  const onChangeFilter = useCallback(event => setFilter(event.target.value), [])
+
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}.01.01`
   const startNextYear = `${year + 1}.01.01`
@@ -59,23 +81,48 @@ const ApQkQk = ({ art }) => {
   const messageGroups = data
     ? buildQk({ data, artId: art.id }).filter(q => q.messages.length)
     : []
+  const messageGroupsFiltered = messageGroups.filter(messageGroup => {
+    if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
+      return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
+    }
+    return true
+  })
   if (loading) return 'Lade Daten...'
   if (error) return `Fehler: ${error.message}`
   return (
     <Container>
-      <Badge
-        badgeContent={loading ? '...' : messageGroups.length}
-        color="primary"
-      >
-        <StyledButton
-          onClick={() => refetch()}
-          variant="outlined"
-          loading={loading.toString()}
-        >
-          {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
-        </StyledButton>
-      </Badge>
-      {messageGroups.map(messageGroup => (
+      <Row>
+        <ButtonContainer>
+          <Badge
+            badgeContent={
+              loading
+                ? '...'
+                : `${messageGroupsFiltered.length}/${messageGroups.length}`
+            }
+            color="primary"
+          >
+            <StyledButton
+              onClick={() => refetch()}
+              variant="outlined"
+              loading={loading.toString()}
+            >
+              {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
+            </StyledButton>
+          </Badge>
+        </ButtonContainer>
+        <StyledFormControl fullWidth>
+          <InputLabel htmlFor="filter" shrink>
+            nach Abschnitts-Titel filtern
+          </InputLabel>
+          <Input
+            id="filter"
+            value={filter}
+            onChange={onChangeFilter}
+            spellCheck={false}
+          />
+        </StyledFormControl>
+      </Row>
+      {messageGroupsFiltered.map(messageGroup => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{messageGroup.title}</Title>
           {messageGroup.messages.map((m, i) => (
