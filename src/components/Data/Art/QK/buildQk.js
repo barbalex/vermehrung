@@ -74,4 +74,21 @@ export default ({ data, artId }) => [
       }),
     ),
   },
+  {
+    title: 'Zählungen ohne Datum',
+    messages: get(data, 'art[0].zaehlungsWithoutDatum').flatMap(k =>
+      (get(k, 'zaehlungs') || []).map(z => {
+        const garten =
+          get(k, 'garten.name') ||
+          `(${get(k, 'garten.person.name') || 'kein Name'})`
+        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
+
+        return {
+          url: ['Arten', artId, 'Kulturen', k.id, 'Zaehlungen', z.id],
+          text,
+        }
+      }),
+    ),
+  },
 ]
