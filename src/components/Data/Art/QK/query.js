@@ -15,7 +15,7 @@ export default gql`
   query ArtQkQuery($artId: bigint!, $startYear: date!, $startNextYear: date!) {
     art(where: { id: { _eq: $artId } }) {
       id
-      sammlungWithoutNr: sammlungs(
+      sammlungsWithoutNr: sammlungs(
         where: { nr: { _is_null: true }, art_id: { _eq: $artId } }
         order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
       ) {
@@ -24,7 +24,7 @@ export default gql`
           ...HerkunftFields
         }
       }
-      sammlungWithoutHerkunft: sammlungs(
+      sammlungsWithoutHerkunft: sammlungs(
         where: { herkunft_id: { _is_null: true }, art_id: { _eq: $artId } }
         order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
       ) {
@@ -33,7 +33,7 @@ export default gql`
           ...HerkunftFields
         }
       }
-      sammlungWithoutPerson: sammlungs(
+      sammlungsWithoutPerson: sammlungs(
         where: { person_id: { _is_null: true }, art_id: { _eq: $artId } }
         order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
       ) {
@@ -42,7 +42,7 @@ export default gql`
           ...HerkunftFields
         }
       }
-      sammlungWithoutDatum: sammlungs(
+      sammlungsWithoutDatum: sammlungs(
         where: { datum: { _is_null: true }, art_id: { _eq: $artId } }
         order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
       ) {
@@ -51,7 +51,7 @@ export default gql`
           ...HerkunftFields
         }
       }
-      sammlungWithoutAnzahlPflanzen: sammlungs(
+      sammlungsWithoutAnzahlPflanzen: sammlungs(
         where: { anzahl_pflanzen: { _is_null: true }, art_id: { _eq: $artId } }
         order_by: [{ datum: asc_nulls_first }, { nr: asc_nulls_first }]
       ) {
@@ -60,7 +60,7 @@ export default gql`
           ...HerkunftFields
         }
       }
-      sammlungWithoutVonAnzahlIdividuen: sammlungs(
+      sammlungsWithoutVonAnzahlIdividuen: sammlungs(
         where: {
           von_anzahl_individuen: { _is_null: true }
           art_id: { _eq: $artId }
@@ -80,6 +80,60 @@ export default gql`
       }
       lieferungsWithoutAnzahlPflanzen: lieferungs(
         where: { anzahl_pflanzen: { _is_null: true }, art_id: { _eq: $artId } }
+        order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
+      ) {
+        ...LieferungFields
+      }
+      lieferungsWithoutAnzahlAuspflanzbereit: lieferungs(
+        where: {
+          anzahl_auspflanzbereit: { _is_null: true }
+          art_id: { _eq: $artId }
+        }
+        order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
+      ) {
+        ...LieferungFields
+      }
+      lieferungsWithoutVonAnzahlIndividuen: lieferungs(
+        where: {
+          von_anzahl_individuen: { _is_null: true }
+          art_id: { _eq: $artId }
+        }
+        order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
+      ) {
+        ...LieferungFields
+      }
+      lieferungsWithoutVon: lieferungs(
+        where: {
+          _and: [
+            { von_kultur_id: { _is_null: true } }
+            { von_sammlung_id: { _is_null: true } }
+          ]
+        }
+        order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
+      ) {
+        ...LieferungFields
+      }
+      lieferungsWithoutNach: lieferungs(
+        where: {
+          _and: [
+            # has von
+            {
+              _or: [
+                { von_kultur_id: { _is_null: false } }
+                { von_sammlung_id: { _is_null: false } }
+              ]
+            }
+            # nas no nach
+            { nach_kultur_id: { _is_null: true } }
+            { nach_ausgepflanzt: { _neq: true } }
+          ]
+        }
+        order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
+      ) {
+        ...LieferungFields
+      }
+      lieferungsWithoutDatum: lieferungs(
+        where: { datum: { _is_null: true }, art_id: { _eq: $artId } }
         order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
       ) {
         ...LieferungFields

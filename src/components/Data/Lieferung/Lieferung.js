@@ -296,10 +296,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     variables: { filter: sammlungFilter },
   })
 
-  const isAnlieferung =
-    activeNodeArray[activeNodeArray.length - 2] === 'An-Lieferungen'
-  const isAuslieferung =
-    activeNodeArray[activeNodeArray.length - 2] === 'Aus-Lieferungen'
+  const urlLastName = activeNodeArray[activeNodeArray.length - 2]
+  const isAnlieferung = urlLastName === 'An-Lieferungen'
+  const isAuslieferung = urlLastName === 'Aus-Lieferungen'
 
   const herkunftByKultur = isAnlieferung
     ? get(row, 'kulturByNachKulturId.herkunft')
@@ -311,6 +310,13 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
         '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
+  const showVon =
+    (!!row.art_id && !isAuslieferung) ||
+    (existsSammelLieferung && ifAllNeeded(['von_sammlung_id', 'von_kultur_id']))
+  const showNach =
+    (herkunft && !isAnlieferung) ||
+    (existsSammelLieferung &&
+      ifAllNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))
 
   // beware: art_id, herkunft_id and nach_kultur_id can be null
   let vonKulturFilter = { id: { _is_null: false } }
@@ -694,48 +700,44 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
               )}
             </>
           )}
-          {(row.art_id && !isAuslieferung) ||
-            (existsSammelLieferung &&
-              ifAllNeeded(['von_sammlung_id', 'von_kultur_id']) && (
-                <>
-                  <TitleRow>
-                    <Title>von</Title>
-                  </TitleRow>
-                  {ifNeeded('von_sammlung_id') && (
-                    <Select
-                      key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-                      name="von_sammlung_id"
-                      value={row.von_sammlung_id}
-                      field="von_sammlung_id"
-                      label={`Sammlung${
-                        exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                      }`}
-                      options={sammlungWerte}
-                      loading={sammlungLoading}
-                      saveToDb={saveToDb}
-                      error={errors.von_sammlung_id}
-                    />
-                  )}
-                  {ifNeeded('von_kultur_id') && (
-                    <Select
-                      key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-                      name="von_kultur_id"
-                      value={row.von_kultur_id}
-                      field="von_kultur_id"
-                      label={`Kultur${
-                        exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                      }`}
-                      options={vonKulturWerte}
-                      loading={vonKulturLoading}
-                      saveToDb={saveToDb}
-                      error={errors.von_kultur_id}
-                    />
-                  )}
-                </>
-              ))}
-          {((herkunft && !isAnlieferung) ||
-            (existsSammelLieferung &&
-              ifAllNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))) && (
+          {showVon && (
+            <>
+              <TitleRow>
+                <Title>von</Title>
+              </TitleRow>
+              {ifNeeded('von_sammlung_id') && (
+                <Select
+                  key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
+                  name="von_sammlung_id"
+                  value={row.von_sammlung_id}
+                  field="von_sammlung_id"
+                  label={`Sammlung${
+                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                  }`}
+                  options={sammlungWerte}
+                  loading={sammlungLoading}
+                  saveToDb={saveToDb}
+                  error={errors.von_sammlung_id}
+                />
+              )}
+              {ifNeeded('von_kultur_id') && (
+                <Select
+                  key={`${row.id}${row.von_kultur_id}von_kultur_id`}
+                  name="von_kultur_id"
+                  value={row.von_kultur_id}
+                  field="von_kultur_id"
+                  label={`Kultur${
+                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                  }`}
+                  options={vonKulturWerte}
+                  loading={vonKulturLoading}
+                  saveToDb={saveToDb}
+                  error={errors.von_kultur_id}
+                />
+              )}
+            </>
+          )}
+          {showNach && (
             <>
               <TitleRow>
                 <Title>nach</Title>
@@ -762,7 +764,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
               {ifNeeded('nach_ausgepflanzt') && (
                 <Checkbox2States
                   key={`${row.id}nach_ausgepflanzt`}
-                  label="Ausgepflanzt"
+                  label="ausgepflanzt"
                   name="nach_ausgepflanzt"
                   value={row.nach_ausgepflanzt}
                   saveToDb={saveToDb}
