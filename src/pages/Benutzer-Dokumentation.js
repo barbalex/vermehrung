@@ -41,8 +41,8 @@ const Template = ({ data }) => {
       <Layout>
         <Container>
           <Sidebar
-            title="Benutzer-Dokumentation"
-            titleLink="/Dokumentation/Benutzer/"
+            title="Dokumentation"
+            titleLink="/Dokumentation/"
             edges={edges}
           />
           <Doku>
@@ -58,7 +58,7 @@ export const pageQuery = graphql`
   query {
     allMarkdownRemark(
       sort: { order: ASC, fields: [frontmatter___sort] }
-      filter: { fileAbsolutePath: { regex: "/(/benutzerDoku)/.*.md$/" } }
+      filter: { fileAbsolutePath: { regex: "/(/docs)/.*.md$/" } }
     ) {
       edges {
         node {

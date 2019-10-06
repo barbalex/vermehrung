@@ -115,26 +115,6 @@ const HeaderDoku = () => {
                 <Spacer />
                 <NavButton
                   variant="outlined"
-                  outlined={pathname
-                    .startsWith('/Dokumentation/Benutzer')
-                    .toString()}
-                  component={Link}
-                  to="/Dokumentation/Benutzer/"
-                >
-                  Benutzer Doku
-                </NavButton>
-                <NavButton
-                  variant="outlined"
-                  outlined={pathname
-                    .startsWith('/Dokumentation/Technisch')
-                    .toString()}
-                  component={Link}
-                  to="/Dokumentation/Technisch/"
-                >
-                  Technische Doku
-                </NavButton>
-                <NavButton
-                  variant="outlined"
                   component={Link}
                   to="/Vermehrung/"
                 >

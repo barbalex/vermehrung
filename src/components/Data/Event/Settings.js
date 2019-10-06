@@ -95,7 +95,7 @@ const SettingsZaehlungen = ({ eventResult }) => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
       window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Felder-blenden',
+        'https://vermehrung.apflora.ch/Dokumentation/Felder-blenden',
       )
   }, [])
 

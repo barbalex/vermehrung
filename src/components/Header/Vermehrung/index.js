@@ -142,7 +142,7 @@ const HeaderVermehrung = () => {
               color="inherit"
               aria-label="Dokumentation"
               component={Link}
-              to="/Dokumentation/Benutzer/"
+              to="/Dokumentation/"
               title="Dokumentation"
             >
               <FaBook />
@@ -151,7 +151,7 @@ const HeaderVermehrung = () => {
             <StyledButton
               variant="outlined"
               component={Link}
-              to="/Dokumentation/Benutzer/"
+              to="/Dokumentation/"
             >
               Dokumentation
             </StyledButton>

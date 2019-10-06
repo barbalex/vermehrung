@@ -42,11 +42,7 @@ const HeaderHome = () => (
           Vermehrung
         </SiteTitle>
         <Spacer />
-        <NavButton
-          variant="outlined"
-          component={Link}
-          to="/Dokumentation/Benutzer/"
-        >
+        <NavButton variant="outlined" component={Link} to="/Dokumentation/">
           Dokumentation
         </NavButton>
         <NavButton variant="outlined" component={Link} to="/Vermehrung/">

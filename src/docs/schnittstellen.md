@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Schnittstellen"
+path: "/Dokumentation/Schnittstellen"
 date: "2019-06-15"
 title: "Schnittstellen"
 sort: 18

@@ -1,9 +1,8 @@
 ---
-typ: 'technDoku'
-path: "/Dokumentation/Technisch/Technologien"
+path: "/Dokumentation/Technologien"
 date: "2019-01-30"
 title: "Verwendete Technologien"
-sort: 2
+sort: 20
 ---
 
 

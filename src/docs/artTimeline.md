@@ -1,16 +1,15 @@
 ---
-typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Zeitachse-Art"
+path: "/Dokumentation/Zeitachse-Art"
 date: "2019-09-29"
 title: "Zeit-Achse für Arten"
 sort: 3
 ---
 
 ### Ziele
-- [Projekt-Ziele](/Dokumentation/Benutzer/Ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt"
-- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 5: "Wesentliche Vorgänge sind dokumentiert".<br/>
+- [Projekt-Ziele](/Dokumentation/Ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt"
+- [Projekt-Ziel](/Dokumentation/Ziele) 5: "Wesentliche Vorgänge sind dokumentiert".<br/>
   Auf einer hohen Ebene werden dokumentiert: Vermehrung, Auspflanzungen
-- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 7: "MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Arten schaffen"
+- [Projekt-Ziel](/Dokumentation/Ziele) 7: "MitarbeiterInnen können sich rasch einen Überblick über wichtige Aspekte von Arten schaffen"
 
 Die Übersicht dokumentiert auch auf einer hohen Ebene zentrale Vorgänge (Projekt-Ziel 5).<br/><br/>
 

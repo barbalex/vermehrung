@@ -232,14 +232,12 @@ const Kultur = ({ filter: showFilter }) => {
   )
   const openKulturDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Kulturen',
-      )
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Kulturen')
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Genetische-Vielfalt',
+        'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
       )
   }, [])
 

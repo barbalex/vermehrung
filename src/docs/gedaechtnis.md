@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Gedaechtnis"
+path: "/Dokumentation/Gedaechtnis"
 date: "2019-09-30"
 title: "vermehrung erinnert sich"
 sort: 15

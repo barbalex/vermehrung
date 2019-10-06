@@ -1,9 +1,8 @@
 ---
-typ: 'technDoku'
-path: "/Dokumentation/Technisch/PWA"
+path: "/Dokumentation/PWA"
 date: "2019-06-15"
 title: "Progressive Web App"
-sort: 1
+sort: 19
 ---
 
 vermehrung.apflora.ch ist eine [**Progressive Web App**](https://developers.google.com/web/progressive-web-apps) (PWA).<br/><br/>

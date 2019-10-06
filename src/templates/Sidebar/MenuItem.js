@@ -17,11 +17,11 @@ const ListItem = styled(MListItem)`
 `
 
 const MenuItem = ({ node }) => {
-  const { setSidebarWidth } = useContext(storeContext)
+  const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
   const onClickMenuItem = useCallback(() => {
     navigate(`${node.frontmatter.path}/`)
-    setSidebarWidth(null)
-  }, [node.frontmatter.path, setSidebarWidth])
+    sidebarWidth && setSidebarWidth(null)
+  }, [node.frontmatter.path, setSidebarWidth, sidebarWidth])
 
   return (
     <Location>

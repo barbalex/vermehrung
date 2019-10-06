@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Events"
+path: "/Dokumentation/Events"
 date: "2019-10-04"
 title: "Events"
 sort: 10
@@ -8,7 +7,7 @@ sort: 10
 
 
 ### Ziele
-- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 5: "Wesentliche Vorgänge sind dokumentiert."
+- [Projekt-Ziel](/Dokumentation/Ziele) 5: "Wesentliche Vorgänge sind dokumentiert."
 - Aufgaben können geplant bzw. koordiniert werden
 
 ### Umsetzung

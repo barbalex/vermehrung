@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Genetische-Vielfalt"
+path: "/Dokumentation/Genetische-Vielfalt"
 date: "2019-10-04"
 title: "Genetische Vielfalt"
 sort: 13
@@ -8,7 +7,7 @@ sort: 13
 
 
 
-[Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 2 lautet: "Die genetische Vielfalt von Kulturen ist bekannt."<br/><br/>
+[Projekt-Ziel](/Dokumentation/Ziele) 2 lautet: "Die genetische Vielfalt von Kulturen ist bekannt."<br/><br/>
 
 Das ist nicht ganz einfach zu realisieren. Schon der Begriff "genetische Vielfalt" lässt viel Spielraum. Trotzdem ist klar, dass er für bedrohte Arten grosse Bedeutung hat. Jede Methode wird daher nur eine Annäherung sein. In vermehrung geschieht es so:<br/><br/>
 

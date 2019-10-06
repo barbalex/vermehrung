@@ -31,27 +31,15 @@ const MenuTitleLink = styled(Link)`
 
 const Sidebar = ({ title, titleLink, edges }) => {
   const store = useContext(storeContext)
-  const {
-    technDokuFilter,
-    benutzerDokuFilter,
-    setTechnDokuFilter,
-    setBenutzerDokuFilter,
-    sidebarWidth,
-  } = store
-  const filter =
-    title === 'Benutzer-Dokumentation' ? benutzerDokuFilter : technDokuFilter
-  const setFilter =
-    title === 'Benutzer-Dokumentation'
-      ? setBenutzerDokuFilter
-      : setTechnDokuFilter
+  const { docFilter, sidebarWidth } = store
 
   const items = edges
     .filter(n => !!n && !!n.node)
     .filter(n =>
-      filter
+      docFilter
         ? get(n, 'node.frontmatter.title', '(Titel fehlt)')
             .toLowerCase()
-            .includes(filter.toLowerCase())
+            .includes(docFilter.toLowerCase())
         : true,
     )
 
@@ -60,7 +48,7 @@ const Sidebar = ({ title, titleLink, edges }) => {
     <Menu>
       <MenuTitle>
         <MenuTitleLink to={titleLink}>{title}</MenuTitleLink>
-        <Filter filter={filter} setFilter={setFilter} />
+        <Filter />
       </MenuTitle>
       <MenuItems items={items} />
     </Menu>

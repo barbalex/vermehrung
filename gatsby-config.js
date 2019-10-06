@@ -28,15 +28,8 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/src/technischeDoku`,
-        name: 'technischeDoku-pages',
-      },
-    },
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        path: `${__dirname}/src/benutzerDoku`,
-        name: 'benutzerDoku-pages',
+        path: `${__dirname}/src/docs`,
+        name: 'docs-pages',
       },
     },
     'gatsby-plugin-sharp',

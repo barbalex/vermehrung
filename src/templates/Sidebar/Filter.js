@@ -1,10 +1,12 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import styled from 'styled-components'
+
+import storeContext from '../../storeContext'
 
 const StyledInput = styled(Input)`
   div hr {
@@ -21,23 +23,27 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   color: rgba(0, 0, 0, 0.7);
 `
 
-const Filter = ({ filter, setFilter }) => {
-  const onChange = useCallback(e => setFilter(e.target.value), [setFilter])
-  const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
+const Filter = () => {
+  const store = useContext(storeContext)
+  const { docFilter, setDocFilter } = store
+  const onChange = useCallback(e => setDocFilter(e.target.value), [
+    setDocFilter,
+  ])
+  const onClickEmptyFilter = useCallback(() => setDocFilter(''), [setDocFilter])
 
   return (
     <FormControl fullWidth>
       <InputLabel htmlFor="filterInput">filtern</InputLabel>
       <StyledInput
         id="filterInput"
-        value={filter}
+        value={docFilter}
         onChange={onChange}
         spellCheck="false"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
         endAdornment={
-          filter ? (
+          docFilter ? (
             <InputAdornment
               position="end"
               onClick={onClickEmptyFilter}

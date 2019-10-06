@@ -1,13 +1,12 @@
 ---
-typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Qualitaets-Kontrollen"
+path: "/Dokumentation/Qualitaets-Kontrollen"
 date: "2019-10-06"
 title: "Qualitäts-Kontrollen"
 sort: 14
 ---
 
 ### Ziel
-- [Projekt-Ziel](/Dokumentation/Benutzer/Ziele) 11: "Qualitätskontrollen um die Qualität der Arbeit zu erhöhen"<br/>
+- [Projekt-Ziel](/Dokumentation/Ziele) 11: "Qualitätskontrollen um die Qualität der Arbeit zu erhöhen"<br/>
 
 ### Umsetzung
 

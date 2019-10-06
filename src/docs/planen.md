@@ -1,6 +1,5 @@
 ---
-typ: 'benutzerDoku'
-path: "/Dokumentation/Benutzer/Planen"
+path: "/Dokumentation/Planen"
 date: "2019-09-20"
 title: "Planen"
 sort: 12

@@ -4,17 +4,12 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
-import constants from '../utils/constants'
 
 const myTypes = types
   .model({
     tree: types.optional(Tree, defaultTree),
     filter: types.optional(Filter, initialFilterValues),
-    technDokuFilter: types.optional(
-      types.union(types.string, types.number),
-      '',
-    ),
-    benutzerDokuFilter: types.optional(
+    docFilter: types.optional(
       types.union(types.string, types.number),
       '',
     ),
@@ -64,11 +59,8 @@ const myTypes = types
     setAuth0Token(token) {
       self.auth0Token = token
     },
-    setTechnDokuFilter(val) {
-      self.technDokuFilter = val
-    },
-    setBenutzerDokuFilter(val) {
-      self.benutzerDokuFilter = val
+    setDocFilter(val) {
+      self.docFilter = val
     },
   }))
   .views(self => ({

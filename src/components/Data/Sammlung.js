@@ -215,12 +215,12 @@ const Sammlung = ({ filter: showFilter }) => {
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Genetische-Vielfalt',
+        'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
       )
   }, [])
 

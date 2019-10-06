@@ -37,7 +37,7 @@ const DokuDate = styled.p`
   color: grey;
 `
 
-const TechnDokuTemplate = ({ data }) => {
+const DocTemplate = ({ data }) => {
   const { markdownRemark, allMarkdownRemark } = data
   const { frontmatter, html } = markdownRemark
   const { edges } = allMarkdownRemark
@@ -47,8 +47,8 @@ const TechnDokuTemplate = ({ data }) => {
       <Layout>
         <Container>
           <Sidebar
-            title="Technische Dokumentation"
-            titleLink="/Dokumentation/Technisch/"
+            title="Dokumentation"
+            titleLink="/Dokumentation/"
             edges={edges}
           />
           <Doku>
@@ -74,7 +74,7 @@ export const pageQuery = graphql`
     }
     allMarkdownRemark(
       sort: { order: ASC, fields: [frontmatter___sort] }
-      filter: { fileAbsolutePath: { regex: "/(/technischeDoku)/.*.md$/" } }
+      filter: { fileAbsolutePath: { regex: "/(/docs)/.*.md$/" } }
     ) {
       edges {
         node {
@@ -90,4 +90,4 @@ export const pageQuery = graphql`
   }
 `
 
-export default TechnDokuTemplate
+export default DocTemplate

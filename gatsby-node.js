@@ -10,10 +10,7 @@ const path = require('path')
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions
 
-  const technDokuTemplate = path.resolve(`src/templates/technDokuTemplate.js`)
-  const benutzerDokuTemplate = path.resolve(
-    `src/templates/benutzerDokuTemplate.js`,
-  )
+  const docTemplate = path.resolve(`src/templates/docTemplate.js`)
 
   const result = await graphql(`
     {
@@ -25,7 +22,6 @@ exports.createPages = async ({ actions, graphql }) => {
           node {
             frontmatter {
               path
-              typ
             }
           }
         }
@@ -39,22 +35,10 @@ exports.createPages = async ({ actions, graphql }) => {
 
   const { edges } = result.data.allMarkdownRemark
   edges.forEach(({ node }) => {
-    if (node.frontmatter.typ === 'technDoku') {
-      return createPage({
-        path: node.frontmatter.path,
-        component: technDokuTemplate,
-      })
-    } else if (node.frontmatter.typ === 'benutzerDoku') {
-      createPage({
-        path: node.frontmatter.path,
-        component: benutzerDokuTemplate,
-      })
-    } else {
-      console.log(
-        'gatsby-node, node: NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!',
-        node,
-      )
-    }
+    createPage({
+      path: node.frontmatter.path,
+      component: docTemplate,
+    })
   })
 }
 

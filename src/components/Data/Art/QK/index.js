@@ -36,7 +36,7 @@ const ApQk = ({ art }) => {
     e.stopPropagation()
     typeof window !== 'undefined' &&
       window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Qualitaets-Kontrollen',
+        'https://vermehrung.apflora.ch/Dokumentation/Qualitaets-Kontrollen',
       )
   }, [])
   const onClickToggle = useCallback(

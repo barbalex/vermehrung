@@ -291,11 +291,11 @@ const Event = ({ filter: showFilter }) => {
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Planen')
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
   }, [])
   const openEventdDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Benutzer/Events')
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Events')
   }, [])
 
   if (loading) {

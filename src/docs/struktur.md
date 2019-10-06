@@ -1,9 +1,8 @@
 ---
-typ: 'technDoku'
-path: "/Dokumentation/Technisch/Struktur"
+path: "/Dokumentation/Struktur"
 date: "2019-10-04"
 title: "Daten-Struktur"
-sort: 3
+sort: 21
 ---
 
 ![Daten-Struktur](_media/structure.png)

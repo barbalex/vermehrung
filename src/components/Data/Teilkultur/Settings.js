@@ -94,9 +94,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Benutzer/Felder-blenden',
-      )
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Felder-blenden')
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
