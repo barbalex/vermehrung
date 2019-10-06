@@ -57,7 +57,7 @@ const Dokumentation = ({ data }) => {
 export const pageQuery = graphql`
   query {
     allMarkdownRemark(
-      sort: { order: ASC, fields: [frontmatter___sort] }
+      sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
       filter: { fileAbsolutePath: { regex: "/(/docs)/.*.md$/" } }
     ) {
       edges {
