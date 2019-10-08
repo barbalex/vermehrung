@@ -112,6 +112,13 @@ const SelectTypable = ({
     [client, filter, query, resultNodesLabelName, resultNodesName],
   )
 
+  console.log('SelectLoadingOptions', {
+    row,
+    field,
+    loadOptions,
+    valueLabelPath,
+  })
+
   const onChange = useCallback(
     option => {
       const value = option && option.value ? option.value : null

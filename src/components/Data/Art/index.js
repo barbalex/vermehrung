@@ -108,8 +108,14 @@ const Art = ({ filter: showFilter }) => {
     [client, filter, refetch, row, showFilter],
   )
   const artSelectFilter = useCallback(
-    val =>
-      val
+    val => {
+      if (showFilter) {
+        return {
+          ae_art_art: { id: { _is_null: false } },
+          name: { _ilike: `%${val}%` },
+        }
+      }
+      return val
         ? {
             _or: [
               { _not: { ae_art_art: { id: { _is_null: false } } } },
@@ -122,8 +128,9 @@ const Art = ({ filter: showFilter }) => {
               { _not: { ae_art_art: { id: { _is_null: false } } } },
               { ae_art_art: { id: { _eq: artId } } },
             ],
-          },
-    [artId],
+          }
+    },
+    [artId, showFilter],
   )
   // maybe: sort dependent on person_felder.ar_name_deutsch
   const aeArtQuery = gql`
@@ -155,6 +162,8 @@ const Art = ({ filter: showFilter }) => {
   }
 
   if (!row || (!showFilter && filter.show)) return null
+
+  //console.log('Art', { row })
 
   return (
     <ErrorBoundary>
