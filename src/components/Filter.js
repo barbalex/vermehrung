@@ -10,6 +10,7 @@ import Garten from './Data/Garten'
 import Herkunft from './Data/Herkunft'
 import Kultur from './Data/Kultur'
 import Lieferung from './Data/Lieferung'
+import SammelLieferung from './Data/SammelLieferung'
 import Person from './Data/Person'
 import Sammlung from './Data/Sammlung'
 import Teilkultur from './Data/Teilkultur'
@@ -54,6 +55,7 @@ export default () => {
     garten: <Garten filter />,
     kultur: <Kultur filter />,
     lieferung: <Lieferung filter />,
+    sammelLieferung: <SammelLieferung filter />,
     person: <Person filter />,
     sammlung: <Sammlung filter />,
     teilkultur: <Teilkultur filter />,
@@ -67,6 +69,7 @@ export default () => {
     herkunft: 'Herkunft Filter',
     kultur: 'Kultur Filter',
     lieferung: 'Lieferung Filter',
+    sammelLieferung: 'Sammel-Lieferung Filter',
     person: 'Person Filter',
     sammlung: 'Sammlung Filter',
     teilkultur: 'TeilKultur Filter',
@@ -101,6 +104,11 @@ export default () => {
               label="Lieferung"
               value="lieferung"
               data-id="lieferung"
+            />
+            <StyledTab
+              label="Sammel-Lieferung"
+              value="sammelLieferung"
+              data-id="sammelLieferung"
             />
             <StyledTab label="Event" value="event" data-id="event" />
             <StyledTab label="Person" value="person" data-id="person" />

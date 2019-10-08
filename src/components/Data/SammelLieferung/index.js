@@ -285,7 +285,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
   if (showFilter) {
-    row = filter.sammelLieferung
+    row = filter.sammel_lieferung
   } else {
     row = get(data, 'sammel_lieferung[0]') || {}
   }
