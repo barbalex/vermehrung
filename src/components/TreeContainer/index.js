@@ -106,7 +106,7 @@ const TreeContainer = () => {
     },
   })
 
-  console.log('TreeContainer, data:', data)
+  //console.log('TreeContainer, data:', data)
 
   useEffect(() => {
     setRefetch(refetch)
