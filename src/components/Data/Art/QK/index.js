@@ -62,7 +62,6 @@ const ApQk = ({ art }) => {
       !!(get(data, 'art_qk_choosen') || []).find(no => no.qk_name === n.name),
     ]),
   )
-  console.log('QK Top', { data, allQks, qks, qkNameQueries })
 
   const qkCount = loading ? '...' : allQks.length
   const artQkCount = loading

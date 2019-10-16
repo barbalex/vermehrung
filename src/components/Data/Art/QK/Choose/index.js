@@ -25,7 +25,6 @@ const ChooseQk = ({ refetchTab }) => {
 
   const { data, error, loading } = useQuery(query)
   const rows = get(data, 'art_qk')
-  console.log('Choose, rows:', rows)
 
   if (error) return <Container>{`Fehler: ${error.message}`}</Container>
   if (loading) return <Container>Lade Daten...</Container>
