@@ -11,6 +11,7 @@ import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 
 import Qk from './Qk'
+import Choose from './Choose'
 import queryQk from './queryQk'
 
 const TitleRow = styled.div`
@@ -119,7 +120,9 @@ const ApQk = ({ art }) => {
               data-id="waehlen"
             />
           </StyledTabs>
-          <Body>{tab === 'qk' ? <Qk art={art} /> : <div>TODO</div>}</Body>
+          <Body>
+            {tab === 'qk' ? <Qk art={art} /> : <Choose refetchTab={refetch} />}
+          </Body>
         </>
       )}
     </ErrorBoundary>
