@@ -59,6 +59,29 @@ create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using gin (tsv);
 
+drop table if exists art_qk;
+create table art_qk (
+  name text primary key,
+  titel text,
+  beschreibung text,
+  sort smallint default null
+);
+create index on art_qk using btree (name);
+create index on art_qk using btree (titel);
+create index on art_qk using btree (sort);
+comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
+
+drop table if exists art_qk_choosen;
+create table art_qk_choosen (
+  art_id bigserial NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  unique(art_id, qk_name)
+);
+create index on art_qk_choosen using btree (art_id);
+create index on art_qk_choosen using btree (qk_name);
+
+
+
 drop table if exists art_file;
 create table art_file (
   id bigserial primary key,
