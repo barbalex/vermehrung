@@ -10,6 +10,20 @@ export const art = gql`
     }
   }
 `
+export const artQk = gql`
+  fragment ArtQkFields on art_qk {
+    name
+    titel
+    beschreibung
+    sort
+  }
+`
+export const artQkChoosen = gql`
+  fragment ArtQkChoosenFields on art_qk_choosen {
+    art_id
+    qk_name
+  }
+`
 export const artFile = gql`
   fragment ArtFileFields on art_file {
     art_id
