@@ -10,7 +10,7 @@ import ErrorBoundary from 'react-error-boundary'
 import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 
-import QkContent from './QkContent'
+import Qk from './Qk'
 import queryQk from './queryQk'
 
 const TitleRow = styled.div`
@@ -119,9 +119,7 @@ const ApQk = ({ art }) => {
               data-id="waehlen"
             />
           </StyledTabs>
-          <Body>
-            {tab === 'qk' ? <QkContent art={art} /> : <div>TODO</div>}
-          </Body>
+          <Body>{tab === 'qk' ? <Qk art={art} /> : <div>TODO</div>}</Body>
         </>
       )}
     </ErrorBoundary>
