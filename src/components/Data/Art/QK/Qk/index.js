@@ -83,6 +83,7 @@ const ApQkQk = ({ art, qkNameQueries, qks }) => {
       startNextYear,
     },
   })
+  console.log('Qk:', { data, qkNameQueries, qks, art })
   const messageFunctions = createMessageFunctions({
     data,
     artId: art.id,
@@ -93,6 +94,7 @@ const ApQkQk = ({ art, qkNameQueries, qks }) => {
       messages: messageFunctions[qk.name](),
     }))
     .filter(q => q.messages.length)
+  console.log('Qk:', { messageGroups })
   const messageGroupsFiltered = messageGroups.filter(messageGroup => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())

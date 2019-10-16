@@ -49,19 +49,20 @@ const ApQk = ({ art }) => {
 
   const { data, loading, error, refetch } = useQuery(queryQk, {
     variables: { artId: art.id },
-    //fetchPolicy: 'no-cache',
+    fetchPolicy: 'no-cache',
   })
   const allQks = get(data, 'art_qk') || []
   const qks = allQks.filter(
     qk =>
-      !!(get(data, 'art_qk_choosen') || []).find(no => no.qkName === qk.name),
+      !!(get(data, 'art_qk_choosen') || []).find(no => no.qk_name === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
     allQks.map(n => [
       n.name,
-      !!(get(data, 'art_qk_choosen') || []).find(no => no.qkName === n.name),
+      !!(get(data, 'art_qk_choosen') || []).find(no => no.qk_name === n.name),
     ]),
   )
+  console.log('QK Top', { data, allQks, qks, qkNameQueries })
 
   const qkCount = loading ? '...' : allQks.length
   const artQkCount = loading
@@ -83,6 +84,7 @@ const ApQk = ({ art }) => {
     [open],
   )
 
+  if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
       <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>

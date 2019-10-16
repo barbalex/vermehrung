@@ -12,7 +12,7 @@ import {
 } from '../../../../utils/fragments'
 
 export default gql`
-  query ArtQkQuery(
+  query KulturQkQuery(
     $kulturId: bigint!
     $startYear: date!
     $startNextYear: date!

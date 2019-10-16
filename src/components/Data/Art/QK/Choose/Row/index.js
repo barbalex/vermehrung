@@ -33,12 +33,12 @@ const Beschreibung = styled.div`
 const ChooseArtQkRow = ({ artId, qk, refetchTab }) => {
   const client = useApolloClient()
 
-  const { data, error, refetch } = useQuery(query, {
+  const { data, loading, error, refetch } = useQuery(query, {
     variables: { artId, qkName: qk.name },
   })
   const artQkChoosen = get(data, 'art_qk_choosen')
 
-  const checked = !!artQkChoosen
+  const checked = !loading && !!artQkChoosen.length
 
   const onChange = useCallback(async () => {
     // 1. if checked, delete artQkChoosen
@@ -49,7 +49,7 @@ const ChooseArtQkRow = ({ artId, qk, refetchTab }) => {
         mutation: gql`
           mutation deleteArtQkChoosen($artId: bigint!, $qkName: String!) {
             delete_art_qk_choosen(
-              where: { artId: { _eq: $artId }, qkName: { _eq: $qkName } }
+              where: { art_id: { _eq: $artId }, qk_name: { _eq: $qkName } }
             ) {
               returning {
                 ...ArtQkChoosenFields

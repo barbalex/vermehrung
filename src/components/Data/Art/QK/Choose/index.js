@@ -11,14 +11,11 @@ import RowComponent from './Row'
 import storeContext from '../../../../../storeContext'
 
 const Container = styled.div`
-  height: calc(100vh - 64px - 43px - 48px);
   display: flex;
   flex-direction: column;
 `
 const FieldsContainer = styled.div`
   padding: 10px 0;
-  overflow: auto !important;
-  height: 100%;
 `
 
 const ChooseQk = ({ refetchTab }) => {
@@ -28,6 +25,7 @@ const ChooseQk = ({ refetchTab }) => {
 
   const { data, error, loading } = useQuery(query)
   const rows = get(data, 'art_qk')
+  console.log('Choose, rows:', rows)
 
   if (error) return <Container>{`Fehler: ${error.message}`}</Container>
   if (loading) return <Container>Lade Daten...</Container>
