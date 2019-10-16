@@ -121,7 +121,11 @@ const ApQk = ({ art }) => {
             />
           </StyledTabs>
           <Body>
-            {tab === 'qk' ? <Qk art={art} /> : <Choose refetchTab={refetch} />}
+            {tab === 'qk' ? (
+              <Qk art={art} qkNameQueries={qkNameQueries} qks={qks} />
+            ) : (
+              <Choose refetchTab={refetch} />
+            )}
           </Body>
         </>
       )}
