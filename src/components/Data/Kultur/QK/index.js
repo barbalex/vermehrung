@@ -11,6 +11,7 @@ import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 
 import Qk from './Qk'
+import Choose from './Choose'
 import queryQk from './queryQk'
 
 const TitleRow = styled.div`
@@ -33,8 +34,14 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+const StyledTabs = styled(Tabs)`
+  margin-top: -10px;
+`
+const Body = styled.div`
+  padding: 10px 0;
+`
 
-const ApQk = ({ kultur }) => {
+const KulturQk = ({ kultur }) => {
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
@@ -80,6 +87,7 @@ const ApQk = ({ kultur }) => {
     [open],
   )
 
+  if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
       <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
@@ -101,9 +109,35 @@ const ApQk = ({ kultur }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && <Qk kultur={kultur} />}
+      {open && (
+        <>
+          <StyledTabs
+            value={tab}
+            onChange={onChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab label="ausführen" value="qk" data-id="qk" />
+            <Tab
+              label={`auswählen${
+                qkCount ? ` (${kulturQkCount}/${qkCount})` : ''
+              }`}
+              value="waehlen"
+              data-id="waehlen"
+            />
+          </StyledTabs>
+          <Body>
+            {tab === 'qk' ? (
+              <Qk kultur={kultur} qkNameQueries={qkNameQueries} qks={qks} />
+            ) : (
+              <Choose refetchTab={refetch} />
+            )}
+          </Body>
+        </>
+      )}
     </ErrorBoundary>
   )
 }
 
-export default observer(ApQk)
+export default observer(KulturQk)
