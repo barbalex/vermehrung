@@ -120,6 +120,20 @@ export const kultur = gql`
     bemerkungen
   }
 `
+export const kulturQk = gql`
+  fragment KulturQkFields on kultur_qk {
+    name
+    titel
+    beschreibung
+    sort
+  }
+`
+export const kulturQkChoosen = gql`
+  fragment KulturQkChoosenFields on kultur_qk_choosen {
+    kultur_id
+    qk_name
+  }
+`
 export const kulturFile = gql`
   fragment KulturFileFields on kultur_file {
     kultur_id

@@ -9,7 +9,7 @@ import {
   teilkultur,
   teilzaehlung,
   zaehlung,
-} from '../../../../utils/fragments'
+} from '../../../../../utils/fragments'
 
 export default gql`
   query KulturQkQuery(

@@ -80,8 +80,6 @@ create table art_qk_choosen (
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
 
-
-
 drop table if exists art_file;
 create table art_file (
   id bigserial primary key,
@@ -236,6 +234,27 @@ create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
 create index on kultur using gin (tsv);
+
+drop table if exists kultur_qk;
+create table kultur_qk (
+  name text primary key,
+  titel text,
+  beschreibung text,
+  sort smallint default null
+);
+create index on kultur_qk using btree (name);
+create index on kultur_qk using btree (titel);
+create index on kultur_qk using btree (sort);
+comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
+
+drop table if exists kultur_qk_choosen;
+create table kultur_qk_choosen (
+  kultur_id bigserial NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  unique(kultur_id, qk_name)
+);
+create index on kultur_qk_choosen using btree (kultur_id);
+create index on kultur_qk_choosen using btree (qk_name);
 
 drop table if exists kultur_file;
 create table kultur_file (

@@ -12,7 +12,7 @@ import FormControl from '@material-ui/core/FormControl'
 
 import query from './query'
 import buildQk from './buildQk'
-import getAppBaseUrl from '../../../../utils/appBaseUrl'
+import getAppBaseUrl from '../../../../../utils/appBaseUrl'
 
 const appBaseUrl = getAppBaseUrl()
 

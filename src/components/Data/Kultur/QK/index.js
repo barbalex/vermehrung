@@ -4,9 +4,14 @@ import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import ErrorBoundary from 'react-error-boundary'
+import { useQuery } from '@apollo/react-hooks'
+import get from 'lodash/get'
 
-import QkContent from './QkContent'
+import Qk from './Qk'
+import queryQk from './queryQk'
 
 const TitleRow = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -31,6 +36,34 @@ const Title = styled.div`
 
 const ApQk = ({ kultur }) => {
   const [open, setOpen] = useState(false)
+
+  const [tab, setTab] = useState('qk')
+  const onChangeTab = useCallback((event, value) => setTab(value), [])
+
+  const { data, loading, error, refetch } = useQuery(queryQk, {
+    variables: { kulturId: kultur.id },
+    fetchPolicy: 'no-cache',
+  })
+  const allQks = get(data, 'kultur_qk') || []
+  const qks = allQks.filter(
+    qk =>
+      !!(get(data, 'kultur_qk_choosen') || []).find(
+        no => no.qk_name === qk.name,
+      ),
+  )
+  const qkNameQueries = Object.fromEntries(
+    allQks.map(n => [
+      n.name,
+      !!(get(data, 'kultur_qk_choosen') || []).find(
+        no => no.qk_name === n.name,
+      ),
+    ]),
+  )
+
+  const qkCount = loading ? '...' : allQks.length
+  const kulturQkCount = loading
+    ? '...'
+    : (get(data, 'kultur_qk_choosen') || []).length
 
   const openDocs = useCallback(e => {
     e.stopPropagation()
@@ -68,7 +101,7 @@ const ApQk = ({ kultur }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && <QkContent kultur={kultur} />}
+      {open && <Qk kultur={kultur} />}
     </ErrorBoundary>
   )
 }
