@@ -11,7 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 
 import query from './query'
-import buildQk from './buildQk'
+import createMessageFunctions from './createMessageFunctions'
 import getAppBaseUrl from '../../../../../utils/appBaseUrl'
 
 const appBaseUrl = getAppBaseUrl()
@@ -68,7 +68,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const ApQkQk = ({ kultur }) => {
+const ApQkQk = ({ kultur, qkNameQueries, qks }) => {
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(event => setFilter(event.target.value), [])
 
@@ -76,17 +76,30 @@ const ApQkQk = ({ kultur }) => {
   const startYear = `${year}.01.01`
   const startNextYear = `${year + 1}.01.01`
   const { data, error, loading, refetch } = useQuery(query, {
-    variables: { kulturId: kultur.id, startYear, startNextYear },
+    variables: {
+      ...qkNameQueries,
+      kulturId: kultur.id,
+      startYear,
+      startNextYear,
+    },
   })
-  const messageGroups = data
-    ? buildQk({ data, kulturId: kultur.id }).filter(q => q.messages.length)
-    : []
+  const messageFunctions = createMessageFunctions({
+    data,
+    kulturId: kultur.id,
+  })
+  const messageGroups = qks
+    .map(qk => ({
+      title: qk.titel,
+      messages: messageFunctions[qk.name](),
+    }))
+    .filter(q => q.messages.length)
   const messageGroupsFiltered = messageGroups.filter(messageGroup => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
     }
     return true
   })
+
   if (loading) return 'Lade Daten...'
   if (error) return `Fehler: ${error.message}`
   return (

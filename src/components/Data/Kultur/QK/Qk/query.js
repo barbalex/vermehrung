@@ -16,6 +16,29 @@ export default gql`
     $kulturId: bigint!
     $startYear: date!
     $startNextYear: date!
+    $kultursWithoutVonAnzahlIndividuen: Boolean!
+    $kultursWithoutGarten: Boolean!
+    $kultursWithoutHerkunft: Boolean!
+    $kultursWithoutZaehlungThisYear: Boolean!
+    $teilkultursWithoutName: Boolean!
+    $zaehlungsWithoutDatum: Boolean!
+    $zaehlungsWithoutAnzahlPflanzen: Boolean!
+    $zaehlungsWithoutAnzahlAuspflanzbereit: Boolean!
+    $zaehlungsWithoutAnzahlMutterpflanzen: Boolean!
+    $anLieferungsWithoutAnzahlPflanzen: Boolean!
+    $ausLieferungsWithoutAnzahlPflanzen: Boolean!
+    $anLieferungsWithoutAnzahlAuspflanzbereit: Boolean!
+    $ausLieferungsWithoutAnzahlAuspflanzbereit: Boolean!
+    $anLieferungsWithoutVonAnzahlIndividuen: Boolean!
+    $ausLieferungsWithoutVonAnzahlIndividuen: Boolean!
+    $anLieferungsWithoutVon: Boolean!
+    $ausLieferungsWithoutNach: Boolean!
+    $anLieferungsWithoutDatum: Boolean!
+    $ausLieferungsWithoutDatum: Boolean!
+    $anLieferungsWithoutPerson: Boolean!
+    $ausLieferungsWithoutPerson: Boolean!
+    $eventsWithoutBeschreibung: Boolean!
+    $eventsWithoutDatum: Boolean!
   ) {
     anLieferungsWithoutPerson: lieferung(
       where: {
@@ -23,7 +46,7 @@ export default gql`
         person_id: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $anLieferungsWithoutPerson) {
       ...LieferungFields
     }
     ausLieferungsWithoutPerson: lieferung(
@@ -32,7 +55,7 @@ export default gql`
         person_id: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $ausLieferungsWithoutPerson) {
       ...LieferungFields
     }
     anLieferungsWithoutAnzahlPflanzen: lieferung(
@@ -41,7 +64,7 @@ export default gql`
         anzahl_pflanzen: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $anLieferungsWithoutAnzahlPflanzen) {
       ...LieferungFields
     }
     ausLieferungsWithoutAnzahlPflanzen: lieferung(
@@ -50,7 +73,7 @@ export default gql`
         anzahl_pflanzen: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $ausLieferungsWithoutAnzahlPflanzen) {
       ...LieferungFields
     }
     anLieferungsWithoutAnzahlAuspflanzbereit: lieferung(
@@ -59,7 +82,7 @@ export default gql`
         anzahl_auspflanzbereit: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $anLieferungsWithoutAnzahlAuspflanzbereit) {
       ...LieferungFields
     }
     ausLieferungsWithoutAnzahlAuspflanzbereit: lieferung(
@@ -68,7 +91,7 @@ export default gql`
         anzahl_auspflanzbereit: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $ausLieferungsWithoutAnzahlAuspflanzbereit) {
       ...LieferungFields
     }
     anLieferungsWithoutVonAnzahlIndividuen: lieferung(
@@ -77,7 +100,7 @@ export default gql`
         von_anzahl_individuen: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $anLieferungsWithoutVonAnzahlIndividuen) {
       ...LieferungFields
     }
     ausLieferungsWithoutVonAnzahlIndividuen: lieferung(
@@ -86,7 +109,7 @@ export default gql`
         von_anzahl_individuen: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $ausLieferungsWithoutVonAnzahlIndividuen) {
       ...LieferungFields
     }
     anLieferungsWithoutVon: lieferung(
@@ -96,7 +119,7 @@ export default gql`
         von_sammlung_id: { _is_null: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $anLieferungsWithoutVon) {
       ...LieferungFields
     }
     ausLieferungsWithoutNach: lieferung(
@@ -107,19 +130,19 @@ export default gql`
         nach_ausgepflanzt: { _neq: true }
       }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $ausLieferungsWithoutNach) {
       ...LieferungFields
     }
     anLieferungsWithoutDatum: lieferung(
       where: { nach_kultur_id: { _eq: $kulturId }, datum: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $anLieferungsWithoutDatum) {
       ...LieferungFields
     }
     ausLieferungsWithoutDatum: lieferung(
       where: { von_kultur_id: { _eq: $kulturId }, datum: { _is_null: true } }
       order_by: [{ datum: asc_nulls_first }, { id: asc_nulls_first }]
-    ) {
+    ) @include(if: $ausLieferungsWithoutDatum) {
       ...LieferungFields
     }
     kultursWithoutVonAnzahlIndividuen: kultur(
@@ -131,7 +154,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $kultursWithoutVonAnzahlIndividuen) {
       ...KulturFields
       garten {
         id
@@ -148,7 +171,7 @@ export default gql`
     kultursWithoutGarten: kultur(
       where: { id: { _eq: $kulturId }, garten_id: { _is_null: true } }
       order_by: { herkunft: { nr: asc_nulls_first } }
-    ) {
+    ) @include(if: $kultursWithoutGarten) {
       id
       herkunft {
         id
@@ -158,7 +181,7 @@ export default gql`
     kultursWithoutHerkunft: kultur(
       where: { id: { _eq: $kulturId }, herkunft_id: { _is_null: true } }
       order_by: { garten: { name: asc_nulls_first } }
-    ) {
+    ) @include(if: $kultursWithoutHerkunft) {
       ...KulturFields
       garten {
         id
@@ -181,7 +204,7 @@ export default gql`
           }
         }
       }
-    ) {
+    ) @include(if: $kultursWithoutZaehlungThisYear) {
       ...KulturFields
       garten {
         id
@@ -204,7 +227,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $teilkultursWithoutName) {
       ...KulturFields
       garten {
         id
@@ -230,7 +253,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $zaehlungsWithoutDatum) {
       ...KulturFields
       garten {
         id
@@ -256,7 +279,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $eventsWithoutBeschreibung) {
       ...KulturFields
       garten {
         id
@@ -282,7 +305,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $eventsWithoutDatum) {
       ...KulturFields
       garten {
         id
@@ -308,7 +331,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $zaehlungsWithoutAnzahlPflanzen) {
       ...KulturFields
       garten {
         id
@@ -345,7 +368,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $zaehlungsWithoutAnzahlAuspflanzbereit) {
       ...KulturFields
       garten {
         id
@@ -382,7 +405,7 @@ export default gql`
         { garten: { name: asc_nulls_first } }
         { herkunft: { nr: asc_nulls_first } }
       ]
-    ) {
+    ) @include(if: $zaehlungsWithoutAnzahlMutterpflanzen) {
       ...KulturFields
       garten {
         id
