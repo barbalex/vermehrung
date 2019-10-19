@@ -30,7 +30,7 @@ const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleRow = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
+  background-color: rgba(237, 230, 244, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -39,6 +39,9 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 15px;
   padding: 0 10px;
+  position: sticky;
+  top: -10px;
+  z-index: 10;
 `
 const Title = styled.div`
   font-weight: bold;

@@ -38,7 +38,7 @@ const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
+  background-color:rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
   display: flex;
   @media print {
@@ -139,7 +139,7 @@ const Garten = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.garten
   } else {
-    row = get(data, 'garten[0]')||{}
+    row = get(data, 'garten[0]') || {}
   }
 
   const userPersonId = getUserPersonId()

@@ -80,7 +80,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 const TitleRow = styled.div`
-  background-color: rgba(74, 20, 140, 0.05);
+  background-color: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 40px;
@@ -89,6 +89,9 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
+  position: sticky;
+  top: -10px;
+  z-index: 10;
   &:first-of-type {
     margin-top: -10px;
   }
@@ -507,9 +510,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }, [])
   const openLieferungDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Lieferungen',
-      )
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Lieferungen')
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&

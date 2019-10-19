@@ -15,7 +15,7 @@ import Choose from './Choose'
 import queryQk from './queryQk'
 
 const TitleRow = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
+  background-color: rgba(237, 230, 244, 1);
   flex-shrink: 0;
   display: flex;
   height: 48px;
@@ -25,6 +25,9 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
+  position: sticky;
+  top: -10px;
+  z-index: 10;
   &:first-of-type {
     margin-top: -10px;
   }
