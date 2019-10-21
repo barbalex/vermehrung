@@ -72,6 +72,8 @@ const StyledSelect = styled(AsyncSelect)`
   .react-select__menu-list {
     height: 130px;
     height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
+    z-index: 2;
   }
 `
 

@@ -27,7 +27,7 @@ const TitleRow = styled.div`
   cursor: pointer;
   position: sticky;
   top: -10px;
-  z-index: 10;
+  z-index: 1;
   &:first-of-type {
     margin-top: -10px;
   }

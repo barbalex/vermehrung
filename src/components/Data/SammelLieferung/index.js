@@ -83,7 +83,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 const TitleRow = styled.div`
-  background-color: rgba(248, 243, 254, 1);
+  background: rgba(248, 243, 254, 1);
   flex-shrink: 0;
   display: flex;
   height: 40px;
@@ -94,7 +94,7 @@ const TitleRow = styled.div`
   padding: 0 10px;
   position: sticky;
   top: -10px;
-  z-index: 10;
+  z-index: 1;
   &:first-of-type {
     margin-top: -10px;
   }
