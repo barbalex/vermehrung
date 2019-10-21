@@ -303,6 +303,25 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const isAnlieferung = urlLastName === 'An-Lieferungen'
   const isAuslieferung = urlLastName === 'Aus-Lieferungen'
 
+  const ifNeeded = useCallback(
+    field => {
+      if (existsSammelLieferung && li_show_sl_felder) return true
+      if (!exists(sammelLieferung[field]) || sammelLieferung[field] === false) {
+        return true
+      } else if (sammelLieferung[field] !== row[field]) {
+        return true
+      }
+      return false
+    },
+    [existsSammelLieferung, li_show_sl_felder, row, sammelLieferung],
+  )
+  const ifSomeNeeded = useCallback(fields => fields.some(f => ifNeeded(f)), [
+    ifNeeded,
+  ])
+  const ifAllNeeded = useCallback(fields => fields.every(f => ifNeeded(f)), [
+    ifNeeded,
+  ])
+
   const herkunftByKultur = isAnlieferung
     ? get(row, 'kulturByNachKulturId.herkunft')
     : get(row, 'kulturByVonKulturId.herkunft')
@@ -518,24 +537,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
       )
   }, [])
-  const ifNeeded = useCallback(
-    field => {
-      if (existsSammelLieferung && li_show_sl_felder) return true
-      if (!exists(sammelLieferung[field]) || sammelLieferung[field] === false) {
-        return true
-      } else if (sammelLieferung[field] !== row[field]) {
-        return true
-      }
-      return false
-    },
-    [existsSammelLieferung, li_show_sl_felder, row, sammelLieferung],
-  )
-  const ifSomeNeeded = useCallback(fields => fields.some(f => ifNeeded(f)), [
-    ifNeeded,
-  ])
-  const ifAllNeeded = useCallback(fields => fields.every(f => ifNeeded(f)), [
-    ifNeeded,
-  ])
 
   if (loading) {
     return (
