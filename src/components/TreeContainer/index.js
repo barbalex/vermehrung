@@ -116,7 +116,7 @@ const TreeContainer = () => {
 
   // do not set nodes when data is empty
   // which happens while query is loading again
-  if (!loading && Object.keys(data).length > 0) {
+  if (!loading && data && Object.keys(data).length > 0) {
     setNodes(buildNodes({ store, data, loading }))
   }
 
