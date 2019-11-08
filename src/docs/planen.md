@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/Planen"
-date: "2019-09-20"
+date: "2019-10-09"
 title: "Planen"
 sort1: 12
 ---
@@ -17,6 +17,10 @@ In diesen Formularen kann man die Eigenschaft "geplant" erfassen:
 
 - Um Handlungen zu Planen
 - Um Planen zu können, wie viele (auspflanz-bereite) Pflanzen im nächsten oder allenfalls übernächsten Jahr zur Verfügung stehen
+
+### Wie
+In Sammlungen, Lieferungen und Events gibt es ein Feld "geplant".<br/>
+Zählungen werden (von der Artverantwortlichen/Projektleitung) als "Ziel" oder (vom Gärtner) als "Prognose" markiert.<br/><br/>
 
 ### Wozu Zählungen planen?
 Sammlungen, Lieferungen und Events planen ist einleuchtend. Wozu aber Zählungen planen?<br/><br/>
