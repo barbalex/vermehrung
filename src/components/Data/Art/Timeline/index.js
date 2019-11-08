@@ -60,11 +60,11 @@ const ArtTimeline = ({ row }) => {
   // add last done zaehlung as first point to planned
   // and the recombine
   const zaehlungenDone = artSums.filter(
-    s => s.action === 'zaehlung' && !s.geplant,
+    s => s.action === 'zaehlung' && !(s.ziel || s.prognose),
   )
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
   const zaehlungenPlanned = artSums.filter(
-    s => s.action === 'zaehlung' && s.geplant,
+    s => s.action === 'zaehlung' && (s.ziel || s.prognose),
   )
   const zaehlungenDoneData = useMemo(
     () =>
@@ -79,8 +79,8 @@ const ArtTimeline = ({ row }) => {
     () =>
       [lastZaehlungDone, ...zaehlungenPlanned].map(l => ({
         datum: new Date(l.datum).getTime(),
-        'Zählung Pflanzen geplant': l.sum_anzahl_pflanzen,
-        'Zählung Pflanzen auspflanzbereit geplant':
+        'Zählung Pflanzen Ziel/Prognose': l.sum_anzahl_pflanzen,
+        'Zählung Pflanzen auspflanzbereit Ziel/Prognose':
           l.sum_anzahl_auspflanzbereit,
       })),
     [lastZaehlungDone, zaehlungenPlanned],
@@ -110,10 +110,10 @@ const ArtTimeline = ({ row }) => {
         'Sammlung von Anzahl Individuen': l.von_anzahl_individuen,
         'Sammlung Bemerkungen': l.bemerkungen,
         [`Zählung Pflanzen${
-          l.geplant ? ' geplant' : ''
+          l.geplant ? ' Ziel/Prognose' : ''
         }`]: l.sum_anzahl_pflanzen,
         [`Zählung Pflanzen auspflanzbereit${
-          l.geplant ? ' geplant' : ''
+          l.geplant ? ' Ziel/Prognose' : ''
         }`]: l.sum_anzahl_auspflanzbereit,
       })),
     [sammlungen],
@@ -132,10 +132,10 @@ const ArtTimeline = ({ row }) => {
         'Auspflanzung von Anzahl Individuen': l.von_anzahl_individuen,
         'Auspflanzung Bemerkungen': l.bemerkungen,
         [`Zählung Pflanzen${
-          l.geplant ? ' geplant' : ''
+          l.geplant ? ' Ziel/Prognose' : ''
         }`]: l.sum_anzahl_pflanzen,
         [`Zählung Pflanzen auspflanzbereit${
-          l.geplant ? ' geplant' : ''
+          l.geplant ? ' Ziel/Prognose' : ''
         }`]: l.sum_anzahl_auspflanzbereit,
       })),
     [auspflanzungen],
@@ -267,7 +267,7 @@ const ArtTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Pflanzen geplant"
+            dataKey="Zählung Pflanzen Ziel/Prognose"
             stroke="#b1b1e7"
             strokeWidth={2}
             label={<LabelZaehlung />}
@@ -285,7 +285,7 @@ const ArtTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit geplant"
+            dataKey="Zählung Pflanzen auspflanzbereit Ziel/Prognose"
             stroke="#02e355"
             strokeWidth={2}
             label={<LabelZaehlung />}

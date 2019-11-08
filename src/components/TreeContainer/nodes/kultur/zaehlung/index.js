@@ -39,8 +39,9 @@ export default ({ nodes, data, url }) => {
           .padStart(3, '\u00A0')}/${anzAb
           .toString()
           .padStart(3, '\u00A0')}/${anzMu.toString().padStart(3, '\u00A0')}`
-        const geplant = el.geplant ? ' (geplant)' : ''
-        const label = `${datum}: ${numbers}${geplant}`
+        const ziel = el.ziel ? ' (Ziel)' : ''
+        const prognose = el.prognose ? ' (Prognose)' : ''
+        const label = `${datum}: ${numbers}${ziel}${prognose}`
 
         return {
           nodeType: 'table',

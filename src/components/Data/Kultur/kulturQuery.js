@@ -53,7 +53,11 @@ export default gql`
         ...LieferungFields
       }
       zaehlungsDone: zaehlungs(
-        where: { geplant: { _eq: false }, datum: { _is_null: false } }
+        where: {
+          ziel: { _eq: false }
+          prognose: { _eq: false }
+          datum: { _is_null: false }
+        }
         order_by: { datum: asc }
       ) {
         ...ZaehlungFields
@@ -74,7 +78,10 @@ export default gql`
         }
       }
       zaehlungsPlanned: zaehlungs(
-        where: { geplant: { _eq: true }, datum: { _is_null: false } }
+        where: {
+          _or: [{ ziel: { _eq: true } }, { prognose: { _eq: true } }]
+          datum: { _is_null: false }
+        }
         order_by: { datum: asc }
       ) {
         ...ZaehlungFields

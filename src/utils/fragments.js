@@ -158,7 +158,6 @@ export const kulturFelder = gql`
     tz_teilkultur_id
     tz_bemerkungen
     z_bemerkungen
-    z_geplant
   }
 `
 export const lieferung = gql`
@@ -313,6 +312,8 @@ export const zaehlung = gql`
     kultur_id
     datum
     geplant
+    ziel
+    prognose
     bemerkungen
   }
 `

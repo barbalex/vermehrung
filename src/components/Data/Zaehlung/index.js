@@ -175,7 +175,7 @@ const Zaehlung = ({ filter: showFilter }) => {
     },
   })
 
-  const { z_geplant, z_bemerkungen } = get(row, 'kultur.kultur_felder') || {}
+  const { z_bemerkungen } = get(row, 'kultur.kultur_felder') || {}
 
   useEffect(() => {
     setErrors({})
@@ -335,27 +335,44 @@ const Zaehlung = ({ filter: showFilter }) => {
               saveToDb={saveToDb}
               error={errors.datum}
             />
-            {(z_geplant || showFilter) && (
-              <FieldRow>
-                <Checkbox2States
-                  key={`${row.id}geplant`}
-                  label="geplant"
-                  name="geplant"
-                  value={row.geplant}
-                  saveToDb={saveToDb}
-                  error={errors.geplant}
-                />
-                <div>
-                  <IconButton
-                    aria-label="Anleitung öffnen"
-                    title="Anleitung öffnen"
-                    onClick={openPlanenDocs}
-                  >
-                    <IoMdInformationCircleOutline />
-                  </IconButton>
-                </div>
-              </FieldRow>
-            )}
+            <FieldRow>
+              <Checkbox2States
+                key={`${row.id}prognose`}
+                label="Prognose"
+                name="prognose"
+                value={row.prognose}
+                saveToDb={saveToDb}
+                error={errors.prognose}
+              />
+              <div>
+                <IconButton
+                  aria-label="Anleitung öffnen"
+                  title="Anleitung öffnen"
+                  onClick={openPlanenDocs}
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </div>
+            </FieldRow>
+            <FieldRow>
+              <Checkbox2States
+                key={`${row.id}ziel`}
+                label="Ziel"
+                name="ziel"
+                value={row.ziel}
+                saveToDb={saveToDb}
+                error={errors.ziel}
+              />
+              <div>
+                <IconButton
+                  aria-label="Anleitung öffnen"
+                  title="Anleitung öffnen"
+                  onClick={openPlanenDocs}
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </div>
+            </FieldRow>
             {(z_bemerkungen || showFilter) && (
               <TextField
                 key={`${row.id}bemerkungen`}

@@ -308,11 +308,14 @@ create index on event using btree (datum);
 create index on event using gin (tsv);
 
 drop table if exists zaehlung cascade;
+-- TODO: remove geplant
 create table zaehlung (
   id bigserial primary key,
   kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
   geplant boolean default false,
+  ziel boolean default false,
+  prognose boolean default false,
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -321,7 +324,8 @@ create table zaehlung (
 create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
-create index on zaehlung using btree (geplant);
+create index on zaehlung using btree (ziel);
+create index on zaehlung using btree (prognose);
 create index on zaehlung using gin (tsv);
 
 drop table if exists teilzaehlung cascade;
@@ -351,7 +355,6 @@ create index on teilzaehlung using gin (tsv);
 drop table if exists kultur_felder cascade;
 create table kultur_felder (
   kultur_id bigint unique not null references kultur (id) on delete cascade on update cascade,
-  z_geplant boolean default false,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,

@@ -40,8 +40,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
 
   const { data, error, loading, refetch: refetchZaehlung } = zaehlungResult
   const zaehlung = get(data, 'zaehlung', [{}])[0]
-  const { z_geplant, z_bemerkungen } =
-    get(zaehlung, 'kultur.kultur_felder') || {}
+  const { z_bemerkungen } = get(zaehlung, 'kultur.kultur_felder') || {}
   const kulturId = zaehlung.kultur_id
 
   const saveToDb = useCallback(
@@ -148,21 +147,6 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
               </IconButton>
             </div>
           </TitleRow>
-          <MenuItem>
-            <FormControlLabel
-              value={z_geplant === true ? 'true' : 'false'}
-              control={
-                <Radio
-                  color="primary"
-                  checked={z_geplant}
-                  onClick={saveToDb}
-                  name="z_geplant"
-                />
-              }
-              label="geplant"
-              labelPlacement="end"
-            />
-          </MenuItem>
           <MenuItem>
             <FormControlLabel
               value={z_bemerkungen === true ? 'true' : 'false'}

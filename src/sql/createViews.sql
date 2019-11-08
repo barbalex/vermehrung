@@ -12,7 +12,10 @@ with
       k.art_id,
       z.id as partitioner,
       z.datum,
-      z.geplant,
+      case
+        when z.ziel is true then z.ziel
+        else z.prognose
+      end as geplant,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
       sum(tz.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
       sum(tz.anzahl_mutterpflanzen) as anzahl_mutterpflanzen,
@@ -30,7 +33,10 @@ with
     where
       z.datum is not null
       and (
-        z.geplant is false or
+        (
+          z.ziel is false 
+          and z.prognose is false
+        ) or
         (
           -- zahlung is after last count done for this art_id
           z.datum > (
@@ -44,7 +50,8 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = k.art_id
-              and z2.geplant is false
+              and z2.ziel is false 
+              and z2.prognose is false
               and z2.datum is not null
             order by
               a2.id,
@@ -75,7 +82,8 @@ with
         where
           case
             when s.geplant is false then 
-              z2.geplant is false
+              z2.ziel is false 
+              and z2.prognose is false
               and k2.art_id = s.art_id
               and z2.datum is not null
               and z2.datum <= s.datum
@@ -119,7 +127,8 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = s.art_id
-              and z2.geplant is false
+              and z2.ziel is false 
+              and z2.prognose is false
               and z2.datum is not null
             order by
               a2.id,
@@ -143,7 +152,8 @@ with
         where
           case
             when l.geplant is false then 
-              z2.geplant is false
+              z2.ziel is false 
+              and z2.prognose is false
               and k2.art_id = l.art_id
               and z2.datum is not null
               and z2.datum <= l.datum
@@ -187,7 +197,8 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = l.art_id
-              and z2.geplant is false
+              and z2.ziel is false 
+              and z2.prognose is false
               and z2.datum is not null
             order by
               a2.id,

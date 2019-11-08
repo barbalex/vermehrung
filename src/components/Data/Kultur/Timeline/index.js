@@ -114,11 +114,11 @@ const KulturTimeline = ({ row }) => {
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen geplant': get(
+          'Zählung Pflanzen Ziel/Prognose': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
           ),
-          'Zählung Pflanzen auspflanzbereit geplant': get(
+          'Zählung Pflanzen auspflanzbereit Ziel/Prognose': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
           ),
@@ -146,11 +146,11 @@ const KulturTimeline = ({ row }) => {
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen geplant, ignoriert': get(
+          'Zählung Pflanzen Ziel/Prognose, ignoriert': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
           ),
-          'Zählung Pflanzen auspflanzbereit geplant, ignoriert': get(
+          'Zählung Pflanzen auspflanzbereit Ziel/Prognose, ignoriert': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
           ),
@@ -278,9 +278,9 @@ const KulturTimeline = ({ row }) => {
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
         } else {
-          data['Zählung Pflanzen geplant'] =
+          data['Zählung Pflanzen Ziel/Prognose'] =
             sumAnzahlPflanzen + l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit geplant'] =
+          data['Zählung Pflanzen auspflanzbereit Ziel/Prognose'] =
             sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
         }
         return data
@@ -340,9 +340,9 @@ const KulturTimeline = ({ row }) => {
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
         } else {
-          data['Zählung Pflanzen geplant'] =
+          data['Zählung Pflanzen Ziel/Prognose'] =
             sumAnzahlPflanzen - l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit geplant'] =
+          data['Zählung Pflanzen auspflanzbereit Ziel/Prognose'] =
             sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
         }
         return data
@@ -554,7 +554,7 @@ const KulturTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Pflanzen geplant"
+            dataKey="Zählung Pflanzen Ziel/Prognose"
             stroke="#b1b1e7"
             strokeWidth={2}
             label={<LabelZaehlung />}
@@ -562,7 +562,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Line
             type="basis"
-            dataKey="Zählung Pflanzen geplant, ignoriert"
+            dataKey="Zählung Pflanzen Ziel/Prognose, ignoriert"
             legendType="circle"
             stroke="#ebebf9"
             strokeWidth={2}
@@ -581,7 +581,7 @@ const KulturTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit geplant"
+            dataKey="Zählung Pflanzen auspflanzbereit Ziel/Prognose"
             stroke="#02e355"
             strokeWidth={2}
             label={<LabelZaehlung />}
@@ -589,7 +589,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Line
             type="basis"
-            dataKey="Zählung Pflanzen auspflanzbereit geplant, ignoriert"
+            dataKey="Zählung Pflanzen auspflanzbereit Ziel/Prognose, ignoriert"
             legendType="circle"
             stroke="#e6ffef"
             strokeWidth={2}
