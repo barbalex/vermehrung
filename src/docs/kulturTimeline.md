@@ -38,12 +38,13 @@ Von den sekundären, indem man auf der Zeit-Achse über den Zeitpunkten schwebt.
 #### Linien für Anzahlen
 Als Grundlage werden verwendet:
 
-- Anzahlen aus durchgeführten Zählungen
+- Anzahlen aus durchgeführten Zählungen (nur solche, die in der Vergangenheit liegen)
 - Anzahlen aus geplanten Zählungen, wenn sie nach der letzten durchgeführten Zählung geplant sind
 - Anzahlen aus durchgeführten Lieferungen:<br/>
   Referenz sind die Anzahlen aus letzten zuvor durchgeführten Zählung.<br/>
   Erfolgte die Lieferung vor der ersten Zählung, wird als Referenz für alle Einheiten die Anzahl 0 verwendet.<br/>
-  Zur Referenz wird summiert, was in der Zwischenzeit geliefert wurde.
+  Zur Referenz wird summiert, was in der Zwischenzeit geliefert wurde.<br/>
+  Berücksichtigt werden nur Lieferungen, die in der Vergangenheit liegen.
 - Anzahlen aus geplanten Lieferungen, die nach der letzten durchgeführten Zählung geplant sind
 
 Linien, die geplante Anzahlen darstellen, verwenden dieselbe Farbe wie die Linie für die entsprechende Einheit bei durchgeführten Zählungen. Aber etwas aufgehellt.<br/><br/>
