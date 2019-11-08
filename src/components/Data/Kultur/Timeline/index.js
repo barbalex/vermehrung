@@ -21,6 +21,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
 import ReactResizeDetector from 'react-resize-detector'
+import format from 'date-fns/format'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
@@ -203,7 +204,9 @@ const KulturTimeline = ({ row }) => {
     [zaehlungenDataGroupedByDatum],
   )
 
-  const anLieferungenDone = get(row, 'anLieferungsDone') || []
+  const anLieferungenDone = (get(row, 'anLieferungsDone') || []).filter(
+    l => l.datum <= format(new Date(), 'yyyy-mm-dd'),
+  )
   const anLieferungenPlanned = get(row, 'anLieferungsPlanned') || []
   const anLieferungenPlannedIgnored = useMemo(
     () =>
@@ -224,7 +227,9 @@ const KulturTimeline = ({ row }) => {
     [...anLieferungenDone, ...anLieferungenPlannedIncluded],
     'datum',
   )
-  const ausLieferungenDone = get(row, 'ausLieferungsDone') || []
+  const ausLieferungenDone = (get(row, 'ausLieferungsDone') || []).filter(
+    l => l.datum <= format(new Date(), 'yyyy-mm-dd'),
+  )
   const ausLieferungenPlanned = get(row, 'ausLieferungsPlanned') || []
   const ausLieferungenPlannedIgnored = useMemo(
     () =>
