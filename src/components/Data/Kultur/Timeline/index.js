@@ -252,11 +252,6 @@ const KulturTimeline = ({ row }) => {
     [...ausLieferungenDone, ...ausLieferungenPlannedIncluded],
     'datum',
   )
-  console.log('Kultur Timeline', {
-    ausLieferungenPlannedIncluded,
-    anLieferungenDone,
-    anLieferungenPlanned,
-  })
   const anLieferungenDoneData = useMemo(
     () =>
       anLieferungenDone.map(l => {
