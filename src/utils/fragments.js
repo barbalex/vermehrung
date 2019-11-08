@@ -311,7 +311,6 @@ export const zaehlung = gql`
     id
     kultur_id
     datum
-    geplant
     ziel
     prognose
     bemerkungen

@@ -313,7 +313,6 @@ create table zaehlung (
   id bigserial primary key,
   kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
-  geplant boolean default false,
   ziel boolean default false,
   prognose boolean default false,
   bemerkungen text default null,
