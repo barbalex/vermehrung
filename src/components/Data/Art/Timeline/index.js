@@ -66,11 +66,6 @@ const ArtTimeline = ({ row }) => {
   const zaehlungenPlanned = artSums.filter(
     s => s.action === 'zaehlung' && s.geplant,
   )
-  console.log('Art timeline', {
-    zaehlungenDone,
-    zaehlungenPlanned,
-    lastZaehlungDone,
-  })
   const zaehlungenDoneData = useMemo(
     () =>
       zaehlungenDone.map(l => ({
