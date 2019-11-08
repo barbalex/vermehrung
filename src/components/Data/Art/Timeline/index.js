@@ -72,6 +72,7 @@ const ArtTimeline = ({ row }) => {
         datum: new Date(l.datum).getTime(),
         'Zählung Pflanzen': l.sum_anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit': l.sum_anzahl_auspflanzbereit,
+        ereignis: 'Zählung',
       })),
     [zaehlungenDone],
   )
@@ -82,6 +83,7 @@ const ArtTimeline = ({ row }) => {
         'Zählung Pflanzen Ziel/Prognose': l.sum_anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit Ziel/Prognose':
           l.sum_anzahl_auspflanzbereit,
+        ereignis: 'Zählung',
       })),
     [lastZaehlungDone, zaehlungenPlanned],
   )
@@ -115,6 +117,7 @@ const ArtTimeline = ({ row }) => {
         [`Zählung Pflanzen auspflanzbereit${
           l.geplant ? ' Ziel/Prognose' : ''
         }`]: l.sum_anzahl_auspflanzbereit,
+        ereignis: 'Sammlung',
       })),
     [sammlungen],
   )
@@ -137,6 +140,7 @@ const ArtTimeline = ({ row }) => {
         [`Zählung Pflanzen auspflanzbereit${
           l.geplant ? ' Ziel/Prognose' : ''
         }`]: l.sum_anzahl_auspflanzbereit,
+        ereignis: 'Auspflanzung',
       })),
     [auspflanzungen],
   )

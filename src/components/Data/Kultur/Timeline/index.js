@@ -103,6 +103,7 @@ const KulturTimeline = ({ row }) => {
           'Zählung Bemerkungen': teilzaehlungs
             .map(t => t.bemerkungen)
             .join(', '),
+          ereignis: 'Zählung',
         }
       }),
     [zaehlungenDone],
@@ -122,10 +123,16 @@ const KulturTimeline = ({ row }) => {
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
           ),
-          'Zählung Mutterpflanzen geplant': get(
+          'Zählung Mutterpflanzen Ziel/Prognose': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ),
+          'Zählung Ziel': teilzaehlungs
+            .map(t => (t.ziel ? 'ja' : 'nein'))
+            .join(', '),
+          'Zählung Prognose': teilzaehlungs
+            .map(t => (t.prognose ? 'ja' : 'nein'))
+            .join(', '),
           'Zählung andere Mengen': teilzaehlungs
             .map(t => t.andere_menge)
             .join(', '),
@@ -135,6 +142,7 @@ const KulturTimeline = ({ row }) => {
           'Zählung Bemerkungen': teilzaehlungs
             .map(t => t.bemerkungen)
             .join(', '),
+          ereignis: 'Zählung',
         }
       }),
     [zaehlungenPlannedIncluded],
@@ -154,10 +162,16 @@ const KulturTimeline = ({ row }) => {
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
           ),
-          'Zählung Mutterpflanzen geplant, ignoriert': get(
+          'Zählung Mutterpflanzen Ziel/Prognose, ignoriert': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ),
+          'Zählung Ziel': teilzaehlungs
+            .map(t => (t.ziel ? 'ja' : 'nein'))
+            .join(', '),
+          'Zählung Prognose': teilzaehlungs
+            .map(t => (t.prognose ? 'ja' : 'nein'))
+            .join(', '),
           'Zählung andere Mengen': teilzaehlungs
             .map(t => t.andere_menge)
             .join(', '),
@@ -167,6 +181,7 @@ const KulturTimeline = ({ row }) => {
           'Zählung Bemerkungen': teilzaehlungs
             .map(t => t.bemerkungen)
             .join(', '),
+          ereignis: 'Zählung',
         }
       }),
     [zaehlungenPlannedIgnored],
@@ -272,6 +287,7 @@ const KulturTimeline = ({ row }) => {
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
           'Lieferung Bemerkungen': l.bemerkungen,
+          ereignis: 'Lieferung',
         }
         if (l.datum < lastZaehlungDone.datum) {
           data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
@@ -334,6 +350,7 @@ const KulturTimeline = ({ row }) => {
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
           'Lieferung Bemerkungen': l.bemerkungen,
+          ereignis: 'Lieferung',
         }
         if (l.datum < lastZaehlungDone.datum) {
           data['Zählung Pflanzen'] = sumAnzahlPflanzen - l.anzahl_pflanzen
@@ -365,6 +382,7 @@ const KulturTimeline = ({ row }) => {
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
+        ereignis: 'Lieferung',
       })),
     [anLieferungenPlannedIncluded],
   )
@@ -379,6 +397,7 @@ const KulturTimeline = ({ row }) => {
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
+        ereignis: 'Lieferung',
       })),
     [anLieferungenPlannedIgnored],
   )
@@ -392,6 +411,7 @@ const KulturTimeline = ({ row }) => {
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
+        ereignis: 'Lieferung',
       })),
     [ausLieferungenPlannedIncluded],
   )
@@ -405,6 +425,7 @@ const KulturTimeline = ({ row }) => {
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
         'Lieferung Bemerkungen': l.bemerkungen,
+        ereignis: 'Lieferung',
       })),
     [ausLieferungenPlannedIgnored],
   )
@@ -608,7 +629,7 @@ const KulturTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Mutterpflanzen geplant"
+            dataKey="Zählung Mutterpflanzen Ziel/Prognose"
             stroke="#ffb3b3"
             strokeWidth={2}
             label={<LabelZaehlung />}
@@ -616,7 +637,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Line
             type="basis"
-            dataKey="Zählung Mutterpflanzen geplant, ignoriert"
+            dataKey="Zählung Mutterpflanzen Ziel/Prognose, ignoriert"
             legendType="circle"
             stroke="#ffe6e6"
             strokeWidth={2}

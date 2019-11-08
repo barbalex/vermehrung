@@ -19,13 +19,26 @@ const PTitle = styled.div`
   font-weight: 800;
 `
 
-const CustomTooltip = ({ payload, label, active }) => {
+const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
+  // filter out zählung information if ereignis is not zählung
+  const payload = [
+    ...payloadPassed.filter(p => {
+      if (
+        p.payload.ereignis !== 'Zählung' &&
+        p.dataKey.includes('Zählung Pflanzen')
+      ) {
+        return false
+      }
+      return true
+    }),
+  ]
+
   if (active) {
     return (
       <Popup>
         <PTitle>{moment(label).format('YYYY.MM.DD')}</PTitle>
         {payload.map((o, i) => {
-          // if this payload is last non summable values
+          // if this payload is last, add non summable values
           if (i === payload.length - 1) {
             return (
               <div key={`${o.dataKey}0`}>
@@ -52,11 +65,14 @@ const CustomTooltip = ({ payload, label, active }) => {
                     o.payload['Auspflanzung Bemerkungen']
                   }`}</PRow>
                 )}
-                {exists(o.payload['Zählung Anzahl Mutterpflanzen']) && (
-                  <PRow
-                    key={`${o.dataKey}2`}
-                  >{`Zählung Anzahl Mutterpflanzen: ${
-                    o.payload['Zählung Anzahl Mutterpflanzen']
+                {exists(o.payload['Zählung Ziel']) && (
+                  <PRow key={`${o.dataKey}9`}>{`Zählung Ziel: ${
+                    o.payload['Zählung Ziel']
+                  }`}</PRow>
+                )}
+                {exists(o.payload['Zählung Prognose']) && (
+                  <PRow key={`${o.dataKey}10`}>{`Zählung Prognose: ${
+                    o.payload['Zählung Prognose']
                   }`}</PRow>
                 )}
                 {exists(o.payload['Zählung andere Mengen']) && (

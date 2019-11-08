@@ -19,7 +19,20 @@ const PTitle = styled.div`
   font-weight: 800;
 `
 
-const CustomTooltip = ({ payload, label, active }) => {
+const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
+  // filter out zählung information if ereignis is not zählung
+  const payload = [
+    ...payloadPassed.filter(p => {
+      if (
+        p.payload.ereignis !== 'Zählung' &&
+        p.dataKey.includes('Zählung Pflanzen')
+      ) {
+        return false
+      }
+      return true
+    }),
+  ]
+
   if (active) {
     return (
       <Popup>
@@ -33,6 +46,16 @@ const CustomTooltip = ({ payload, label, active }) => {
                 {exists(o.payload['Lieferung Gramm Samen']) && (
                   <PRow key={`${o.dataKey}1`}>{`Lieferung Gramm Samen: ${
                     o.payload['Lieferung Gramm Samen']
+                  }`}</PRow>
+                )}
+                {exists(o.payload['Zählung Ziel']) && (
+                  <PRow key={`${o.dataKey}9`}>{`Zählung Ziel: ${
+                    o.payload['Zählung Ziel']
+                  }`}</PRow>
+                )}
+                {exists(o.payload['Zählung Prognose']) && (
+                  <PRow key={`${o.dataKey}10`}>{`Zählung Prognose: ${
+                    o.payload['Zählung Prognose']
                   }`}</PRow>
                 )}
                 {exists(o.payload['Zählung andere Mengen']) && (
