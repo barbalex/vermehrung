@@ -60,12 +60,17 @@ const ArtTimeline = ({ row }) => {
   // add last done zaehlung as first point to planned
   // and the recombine
   const zaehlungenDone = artSums.filter(
-    s => s.action === 'zaehlung' && !(s.ziel || s.prognose),
+    s => s.action === 'zaehlung' && !s.geplant,
   )
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
   const zaehlungenPlanned = artSums.filter(
-    s => s.action === 'zaehlung' && (s.ziel || s.prognose),
+    s => s.action === 'zaehlung' && s.geplant,
   )
+  console.log('Art timeline', {
+    zaehlungenDone,
+    zaehlungenPlanned,
+    lastZaehlungDone,
+  })
   const zaehlungenDoneData = useMemo(
     () =>
       zaehlungenDone.map(l => ({
