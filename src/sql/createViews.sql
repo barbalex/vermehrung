@@ -38,7 +38,7 @@ with
           and z.prognose is false
         ) or
         (
-          -- zahlung is after last count done for this art_id
+          -- zaehlung is after last count done for this art_id
           z.datum > (
             select
             distinct on (a2.id) z2.datum
@@ -185,7 +185,7 @@ with
       and (
         l.geplant is false or
         (
-          -- sammlung is after last count done for this art_id
+          -- lieferung is after last count done for this art_id
           l.datum > (
             select
             distinct on (a2.id) z2.datum
