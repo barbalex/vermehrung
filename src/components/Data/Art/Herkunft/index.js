@@ -22,7 +22,7 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
-  position: sticky;
+  ${props => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;
   &:first-of-type {
@@ -54,8 +54,12 @@ const HerkunftTimelineArea = ({ artId }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
-        <Title>Herkünfte</Title>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+        data-open={open}
+      >
+        <Title>Zeit-Achsen Herkünfte</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
