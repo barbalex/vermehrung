@@ -30,7 +30,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   // TODO: get label for herkunft and render it
   const [narrow, setNarrow] = useState(false)
 
-  const { data, error, loading } = useQuery(query, {
+  const { data } = useQuery(query, {
     variables: { id: herkunftId },
   })
   const herkunft = get(data, 'herkunft[0]', {})
