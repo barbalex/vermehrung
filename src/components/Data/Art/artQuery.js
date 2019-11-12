@@ -3,7 +3,6 @@ import gql from 'graphql-tag'
 import {
   art as artFragment,
   artSums as artSumsFragment,
-  herkunftSums as herkunftSumsFragment,
 } from '../../../utils/fragments'
 
 export default gql`
@@ -12,9 +11,6 @@ export default gql`
       ...ArtFields
       artSums: art_sums(where: { art_id: { _eq: $id } }) {
         ...ArtSumsFields
-      }
-      herkunftSums: herkunft_sums(where: { art_id: { _eq: $id } }) {
-        ...HerkunftSumsFields
       }
     }
     rowsUnfiltered: art @include(if: $isFiltered) {
@@ -26,5 +22,4 @@ export default gql`
   }
   ${artFragment}
   ${artSumsFragment}
-  ${herkunftSumsFragment}
 `

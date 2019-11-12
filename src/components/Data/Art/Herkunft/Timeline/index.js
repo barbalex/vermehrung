@@ -17,15 +17,25 @@ import {
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
 import ReactResizeDetector from 'react-resize-detector'
+import get from 'lodash/get'
+import { useQuery } from '@apollo/react-hooks'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
+import query from './query'
 
 const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   // TODO: get label for herkunft and render it
   const [narrow, setNarrow] = useState(false)
+
+  const { data, error, loading } = useQuery(query, {
+    variables: { id: herkunftId },
+  })
+  const herkunft = get(data, 'herkunft[0]', {})
+  const herkunftLabel = `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
+    '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
 
   // zaehlungen data is special because it is
   // devided in two lines
@@ -148,6 +158,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   return (
     <ErrorBoundary>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+      <h4>{herkunftLabel}</h4>
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
           data={allData}

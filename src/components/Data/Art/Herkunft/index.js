@@ -5,8 +5,11 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import ErrorBoundary from 'react-error-boundary'
 import groupBy from 'lodash/groupBy'
+import get from 'lodash/get'
+import { useQuery } from '@apollo/react-hooks'
 
 import Timeline from './Timeline'
+import query from './query'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -32,7 +35,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const TimelineArea = ({ row }) => {
+const HerkunftTimelineArea = ({ artId }) => {
   const [open, setOpen] = useState(false)
 
   const onClickToggle = useCallback(
@@ -43,8 +46,11 @@ const TimelineArea = ({ row }) => {
     [open],
   )
 
-  const herkunftSumsGrouped = groupBy(row.herkunftSums, 'herkunft_id')
-  console.log('Herkunft, herkunftSumsGrouped:', herkunftSumsGrouped)
+  const { data, error, loading } = useQuery(query, {
+    variables: { id: artId },
+  })
+  const herkunftSums = get(data, 'herkunft_sums', [])
+  const herkunftSumsGrouped = groupBy(herkunftSums, 'herkunft_id')
 
   return (
     <ErrorBoundary>
@@ -62,19 +68,23 @@ const TimelineArea = ({ row }) => {
       </TitleRow>
       {open && (
         <>
-          {Object.entries(herkunftSumsGrouped).map(
-            ([herkunftId, herkunftSums]) => (
-              <Timeline
-                key={herkunftId}
-                herkunftId={herkunftId}
-                herkunftSums={herkunftSums}
-              />
-            ),
-          )}
+          {loading
+            ? 'Lade Daten...'
+            : error
+            ? `Fehler: ${error.message}`
+            : Object.entries(
+                herkunftSumsGrouped,
+              ).map(([herkunftId, herkunftSums]) => (
+                <Timeline
+                  key={herkunftId}
+                  herkunftId={herkunftId}
+                  herkunftSums={herkunftSums}
+                />
+              ))}
         </>
       )}
     </ErrorBoundary>
   )
 }
 
-export default observer(TimelineArea)
+export default observer(HerkunftTimelineArea)

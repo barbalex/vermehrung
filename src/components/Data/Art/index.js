@@ -201,8 +201,8 @@ const Art = ({ filter: showFilter }) => {
           />
           {!showFilter && (
             <>
-              <Timeline row={row} />
-              <Herkunft row={row} />
+              <Timeline artId={row.id} />
+              <Herkunft artId={row.id} />
               <QK art={row} />
               <Files parentId={row.id} parent="art" />
             </>

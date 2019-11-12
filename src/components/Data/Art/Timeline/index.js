@@ -5,8 +5,11 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import ErrorBoundary from 'react-error-boundary'
+import get from 'lodash/get'
+import { useQuery } from '@apollo/react-hooks'
 
 import Timeline from './Timeline'
+import query from './query'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -32,7 +35,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const TimelineArea = ({ row }) => {
+const TimelineArea = ({ artId }) => {
   const [open, setOpen] = useState(false)
 
   const openDocs = useCallback(() => {
@@ -46,6 +49,11 @@ const TimelineArea = ({ row }) => {
     },
     [open],
   )
+
+  const { data, error, loading } = useQuery(query, {
+    variables: { id: artId },
+  })
+  const artSums = get(data, 'art_sums', [])
 
   return (
     <ErrorBoundary>
@@ -68,7 +76,17 @@ const TimelineArea = ({ row }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && <Timeline row={row} />}
+      {open && (
+        <>
+          {loading ? (
+            'Lade Daten...'
+          ) : error ? (
+            `Fehler: ${error.message}`
+          ) : (
+            <Timeline artSums={artSums} />
+          )}
+        </>
+      )}
     </ErrorBoundary>
   )
 }

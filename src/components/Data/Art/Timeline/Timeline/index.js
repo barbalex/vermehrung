@@ -23,10 +23,9 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 
-const ArtTimeline = ({ row }) => {
+const ArtTimeline = ({ artSums }) => {
   const [narrow, setNarrow] = useState(false)
 
-  const artSums = row.artSums || []
   // zaehlungen data is special because it is
   // devided in two lines
   // THAT SHOULD BE CONNECTED
@@ -140,7 +139,6 @@ const ArtTimeline = ({ row }) => {
     [narrow],
   )
 
-  if (!row) return null
   if (!allData.length) return null
 
   // need to disable animation or labels will not show on first render
