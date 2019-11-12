@@ -24,6 +24,7 @@ import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 
 const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
+  // TODO: get label for herkunft and render it
   const [narrow, setNarrow] = useState(false)
 
   // zaehlungen data is special because it is
