@@ -336,3 +336,24 @@ export const artSums = gql`
     bemerkungen
   }
 `
+export const herkunftSums = gql`
+  fragment HerkunftSumsFields on herkunft_sums {
+    art_id
+    herkunft_id
+    action
+    geplant
+    partitioner
+    datum
+    anzahl_pflanzen
+    sum_anzahl_pflanzen
+    anzahl_auspflanzbereit
+    sum_anzahl_auspflanzbereit
+    sum_anzahl_pflanzen
+    sum_anzahl_auspflanzbereit
+    anzahl_mutterpflanzen
+    gramm_samen
+    andere_menge
+    auspflanzbereit_beschreibung
+    bemerkungen
+  }
+`
