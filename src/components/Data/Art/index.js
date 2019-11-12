@@ -20,6 +20,7 @@ import {
 import Files from '../Files'
 import artQuery from './artQuery'
 import Timeline from './Timeline'
+import Herkunft from './Herkunft'
 import QK from './QK'
 
 const Container = styled.div`
@@ -201,6 +202,7 @@ const Art = ({ filter: showFilter }) => {
           {!showFilter && (
             <>
               <Timeline row={row} />
+              <Herkunft row={row} />
               <QK art={row} />
               <Files parentId={row.id} parent="art" />
             </>

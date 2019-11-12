@@ -1,0 +1,64 @@
+import React, { useCallback, useState } from 'react'
+import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
+import IconButton from '@material-ui/core/IconButton'
+import ErrorBoundary from 'react-error-boundary'
+
+import Timeline from './Timeline'
+
+const TitleRow = styled.div`
+  background-color: rgba(237, 230, 244, 1);
+  flex-shrink: 0;
+  display: flex;
+  height: 48px;
+  justify-content: space-between;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  cursor: pointer;
+  position: sticky;
+  top: -10px;
+  z-index: 1;
+  &:first-of-type {
+    margin-top: -10px;
+  }
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+
+const TimelineArea = ({ row }) => {
+  const [open, setOpen] = useState(false)
+
+  const onClickToggle = useCallback(
+    e => {
+      e.stopPropagation()
+      setOpen(!open)
+    },
+    [open],
+  )
+
+  return (
+    <ErrorBoundary>
+      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+        <Title>Herkünfte</Title>
+        <div>
+          <IconButton
+            aria-label={open ? 'schliessen' : 'öffnen'}
+            title={open ? 'schliessen' : 'öffnen'}
+            onClick={onClickToggle}
+          >
+            {open ? <FaChevronUp /> : <FaChevronDown />}
+          </IconButton>
+        </div>
+      </TitleRow>
+      {open && <Timeline row={row} />}
+    </ErrorBoundary>
+  )
+}
+
+export default observer(TimelineArea)
