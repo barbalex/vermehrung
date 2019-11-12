@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import ErrorBoundary from 'react-error-boundary'
+import groupBy from 'lodash/groupBy'
 
 import Timeline from './Timeline'
 
@@ -42,6 +43,9 @@ const TimelineArea = ({ row }) => {
     [open],
   )
 
+  const herkunftSumsGrouped = groupBy(row.herkunftSums, 'herkunft_id')
+  console.log('Herkunft, herkunftSumsGrouped:', herkunftSumsGrouped)
+
   return (
     <ErrorBoundary>
       <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
@@ -56,7 +60,19 @@ const TimelineArea = ({ row }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && <Timeline row={row} />}
+      {open && (
+        <>
+          {Object.entries(herkunftSumsGrouped).map(
+            ([herkunftId, herkunftSums]) => (
+              <Timeline
+                key={herkunftId}
+                herkunftId={herkunftId}
+                herkunftSums={herkunftSums}
+              />
+            ),
+          )}
+        </>
+      )}
     </ErrorBoundary>
   )
 }
