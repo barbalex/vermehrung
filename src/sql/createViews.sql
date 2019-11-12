@@ -373,7 +373,7 @@ with
     union all
     select
       l.art_id,
-      s.herkunft_id,
+      ku.herkunft_id,
       -- partitioner must be id of previous count
       (select
         distinct on (k2.art_id, k2.herkunft_id) z2.id
@@ -386,13 +386,13 @@ with
               z2.ziel is false 
               and z2.prognose is false
               and k2.art_id = l.art_id
-              and k2.herkunft_id = s.herkunft_id
+              and k2.herkunft_id = ku.herkunft_id
               and z2.datum is not null
               and z2.datum <= l.datum
             else
               -- if lieferung is geplant, also accept zaehlung geplant
               k2.art_id = l.art_id
-              and k2.herkunft_id = s.herkunft_id
+              and k2.herkunft_id = ku.herkunft_id
               and z2.datum is not null
               and z2.datum <= l.datum
           end
@@ -413,8 +413,8 @@ with
       l.bemerkungen,
       'auspflanzung' as action
     FROM
-      lieferung l inner join sammlung s
-      on l.von_sammlung_id = s.id
+      lieferung l inner join kultur ku
+      on l.von_kultur_id = ku.id
     where
       l.datum is not null
       and (
@@ -429,7 +429,7 @@ with
               on k2.id = z2.kultur_id
             where
               k2.art_id = l.art_id
-              and k2.herkunft_id = s.herkunft_id
+              and k2.herkunft_id = ku.herkunft_id
               and z2.ziel is false 
               and z2.prognose is false
               and z2.datum is not null
