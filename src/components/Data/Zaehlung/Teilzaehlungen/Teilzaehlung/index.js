@@ -8,12 +8,12 @@ import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
-import TextField from '../../../../../shared/TextField'
-import Select from '../../../../../shared/SelectCreatable'
-import { teilzaehlung as teilzaehlungFragment } from '../../../../../../utils/fragments'
-import ifIsNumericAsNumber from '../../../../../../utils/ifIsNumericAsNumber'
-import types from '../../../../../../store/Filter/simpleTypes'
-import storeContext from '../../../../../../storeContext'
+import TextField from '../../../../shared/TextField'
+import Select from '../../../../shared/SelectCreatable'
+import { teilzaehlung as teilzaehlungFragment } from '../../../../../utils/fragments'
+import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
+import types from '../../../../../store/Filter/simpleTypes'
+import storeContext from '../../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
