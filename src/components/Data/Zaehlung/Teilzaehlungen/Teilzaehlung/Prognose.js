@@ -57,13 +57,19 @@ const TopLine = styled.div`
   margin-bottom: 10px;
 `
 
-const Teilzaehlung = ({
+const mutation = gql`
+  mutation deleteDataset($id: bigint!) {
+    delete_teilzaehlung(where: { id: { _eq: $id } }) {
+      returning {
+        id
+      }
+    }
+  }
+`
+
+const Prognose = ({
   kulturId,
   teilzaehlung: row,
-  teilkulturenWerte,
-  teilkulturenLoading,
-  refetchTeilkulturen,
-  index,
   zaehlungResult,
   refetchTz,
 }) => {
@@ -151,15 +157,7 @@ const Teilzaehlung = ({
   const onClickDelete = useCallback(async () => {
     try {
       await client.mutate({
-        mutation: gql`
-          mutation deleteTeilzaehlung($id: bigint!) {
-            delete_teilzaehlung(where: { id: { _eq: $id } }) {
-              returning {
-                id
-              }
-            }
-          }
-        `,
+        mutation,
         variables: {
           id: row.id,
         },
@@ -174,73 +172,14 @@ const Teilzaehlung = ({
     }
     refetchTz()
   }, [client, enqueNotification, refetchTz, row.id])
-  const onClickPrognosis = useCallback(async () => {
-    // create new teilzaehlung
-    // if a zaehlung with date of 15.09. of year does not yet exist create that first
-    // using: zaehlung.kultur_id, zaehlung.id, teilzaehlung.teilkultur_id
+  const onClickPrognosis = useCallback(() => {
     console.log('TODO:')
-    try {
-      await client.mutate({
-        mutation: gql`
-          mutation insertDataset($zaehlId: bigint!) {
-            insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
-              returning {
-                ...TeilzaehlungFields
-              }
-            }
-          }
-          ${teilzaehlungFragment}
-        `,
-        variables: {
-          id: row.id,
-        },
-      })
-    } catch (error) {
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
   }, [])
 
   return (
     <ErrorBoundary>
       <>
-        {!!index && <TopLine />}
         <Container>
-          {tk && tz_teilkultur_id && (
-            <Teilkultur>
-              <Select
-                key={`${row.id}teilkultur_id`}
-                name="teilkultur_id"
-                value={row.teilkultur_id}
-                field="teilkultur_id"
-                label="Teilkultur"
-                options={teilkulturenWerte}
-                loading={teilkulturenLoading}
-                saveToDb={saveToDb}
-                error={errors.teilkultur_id}
-                creatablePropertiesToPass={{ kultur_id: kulturId }}
-                creatablePropertyName="name"
-                creatableIdField="id"
-                table="teilkultur"
-                callback={refetchTeilkulturen}
-              />
-            </Teilkultur>
-          )}
-          <Anzahl>
-            <TextField
-              key={`${row.id}anzahl_pflanzen`}
-              name="anzahl_pflanzen"
-              label="Anzahl Pflanzen"
-              value={row.anzahl_pflanzen}
-              saveToDb={saveToDb}
-              error={errors.anzahl_pflanzen}
-              type="number"
-            />
-          </Anzahl>
           <Anzahl>
             <TextField
               key={`${row.id}anzahl_auspflanzbereit`}
@@ -265,56 +204,10 @@ const Teilzaehlung = ({
               />
             </Anzahl>
           )}
-          {tz_andere_menge && (
-            <Other>
-              <TextField
-                key={`${row.id}andere_menge`}
-                name="andere_menge"
-                label={`Andere Menge (z.B. "3 Zwiebeln")`}
-                value={row.andere_menge}
-                saveToDb={saveToDb}
-                error={errors.andere_menge}
-                type="text"
-              />
-            </Other>
-          )}
-          {tz_auspflanzbereit_beschreibung && (
-            <Auspflanzbereit>
-              <TextField
-                key={`${row.id}auspflanzbereit_beschreibung`}
-                name="auspflanzbereit_beschreibung"
-                label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
-                value={row.auspflanzbereit_beschreibung}
-                saveToDb={saveToDb}
-                error={errors.auspflanzbereit_beschreibung}
-                type="text"
-              />
-            </Auspflanzbereit>
-          )}
-          {tz_bemerkungen && (
-            <Last>
-              <TextField
-                key={`${row.id}bemerkungen`}
-                name="bemerkungen"
-                label="Bemerkungen"
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={errors.bemerkungen}
-                multiLine
-              />
-            </Last>
-          )}
           <div>
             <IconButton
-              aria-label="Prognose"
-              title="Prognose"
-              onClick={onClickPrognosis}
-            >
-              <FaChartLine />
-            </IconButton>
-            <IconButton
-              aria-label="löschen"
-              title="löschen"
+              aria-label="Prognose löschen"
+              title="Prognose löschen"
               onClick={onClickDelete}
             >
               <FaRegTrashAlt />
@@ -326,4 +219,4 @@ const Teilzaehlung = ({
   )
 }
 
-export default observer(Teilzaehlung)
+export default observer(Prognose)
