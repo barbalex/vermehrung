@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
-import { FaRegTrashAlt } from 'react-icons/fa'
+import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
@@ -175,6 +175,9 @@ const Teilzaehlung = ({
     }
     refetchTz()
   }, [client, enqueNotification, refetchTz, row.id])
+  const onClickPrognosis = useCallback(() => {
+    console.log('TODO:')
+  }, [])
 
   return (
     <ErrorBoundary>
@@ -276,6 +279,13 @@ const Teilzaehlung = ({
             </Last>
           )}
           <div>
+            <IconButton
+              aria-label="Prognose"
+              title="Prognose"
+              onClick={onClickPrognosis}
+            >
+              <FaChartLine />
+            </IconButton>
             <IconButton
               aria-label="löschen"
               title="löschen"
