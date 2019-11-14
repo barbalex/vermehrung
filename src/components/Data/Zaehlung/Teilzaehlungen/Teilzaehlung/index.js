@@ -149,7 +149,8 @@ const Teilzaehlung = ({
           'anzahl_pflanzen',
           'anzahl_auspflanzbereit',
           'anzahl_mutterpflanzen',
-          'geplant',
+          'prognose',
+          'ziel',
         ].includes(field)
       )
         refetchTree()
