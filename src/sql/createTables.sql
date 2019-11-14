@@ -338,11 +338,13 @@ create table teilzaehlung (
   andere_menge text default null,
   auspflanzbereit_beschreibung text default null,
   bemerkungen text default null,
+  prognose_von_tz bigint default null references teilzaehlung (id) on delete set null on update cascade,
   changed date default now(),
   changed_by varchar(20) default null,
   tsv tsvector
 );
 create index on teilzaehlung using btree (id);
+create index on teilzaehlung using btree (prognose_von_tz);
 create index on teilzaehlung using btree (zaehlung_id);
 create index on teilzaehlung using btree (teilkultur_id);
 create index on teilzaehlung using btree (anzahl_pflanzen);
