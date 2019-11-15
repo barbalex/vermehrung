@@ -14,6 +14,7 @@ import { teilzaehlung as teilzaehlungFragment } from '../../../../../utils/fragm
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import types from '../../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../../storeContext'
+import PrognoseMenu from './PrognoseMenu'
 
 const Container = styled.div`
   display: flex;
@@ -72,6 +73,14 @@ const Teilzaehlung = ({
   const { enqueNotification } = store
   const { refetch: refetchTree } = store.tree
 
+  const [openPrognosis, setOpenPrognosis] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const onClosePrognosis = useCallback(() => setAnchorEl(null), [])
+  const onClickPrognosis = useCallback(event => {
+    setOpenPrognosis(true)
+    setAnchorEl(event.currentTarget)
+  }, [])
+
   const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
   const {
     tk,
@@ -83,7 +92,6 @@ const Teilzaehlung = ({
   } = get(zaehlung, 'kultur.kultur_felder') || {}
 
   const [errors, setErrors] = useState({})
-
   useEffect(() => {
     setErrors({})
   }, [row.id])
@@ -174,36 +182,6 @@ const Teilzaehlung = ({
     }
     refetchTz()
   }, [client, enqueNotification, refetchTz, row.id])
-  const onClickPrognosis = useCallback(async () => {
-    // create new teilzaehlung
-    // if a zaehlung with date of 15.09. of year does not yet exist create that first
-    // using: zaehlung.kultur_id, zaehlung.id, teilzaehlung.teilkultur_id
-    console.log('TODO:')
-    try {
-      await client.mutate({
-        mutation: gql`
-          mutation insertDataset($zaehlId: bigint!) {
-            insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
-              returning {
-                ...TeilzaehlungFields
-              }
-            }
-          }
-          ${teilzaehlungFragment}
-        `,
-        variables: {
-          id: row.id,
-        },
-      })
-    } catch (error) {
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-  }, [])
 
   return (
     <ErrorBoundary>
@@ -306,19 +284,26 @@ const Teilzaehlung = ({
           )}
           <div>
             <IconButton
-              aria-label="Prognose"
-              title="Prognose"
-              onClick={onClickPrognosis}
-            >
-              <FaChartLine />
-            </IconButton>
-            <IconButton
               aria-label="löschen"
               title="löschen"
               onClick={onClickDelete}
             >
               <FaRegTrashAlt />
             </IconButton>
+
+            <IconButton
+              aria-label="Prognose"
+              title="Prognose"
+              onClick={onClickPrognosis}
+            >
+              <FaChartLine />
+            </IconButton>
+            {openPrognosis && (
+              <PrognoseMenu
+                onClosePrognosis={onClosePrognosis}
+                anchorEl={anchorEl}
+              />
+            )}
           </div>
         </Container>
       </>

@@ -172,9 +172,6 @@ const Prognose = ({
     }
     refetchTz()
   }, [client, enqueNotification, refetchTz, row.id])
-  const onClickPrognosis = useCallback(() => {
-    console.log('TODO:')
-  }, [])
 
   return (
     <ErrorBoundary>
