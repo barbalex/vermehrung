@@ -75,7 +75,11 @@ const Teilzaehlung = ({
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClosePrognosis = useCallback(() => setAnchorEl(null), [])
+  const onClosePrognosis = useCallback((event, reason) => {
+    if (reason === 'escapeKeyDown') {
+      setAnchorEl(null)
+    }
+  }, [])
   const onClickPrognosis = useCallback(event => {
     setOpenPrognosis(true)
     setAnchorEl(event.currentTarget)
@@ -302,6 +306,9 @@ const Teilzaehlung = ({
               <PrognoseMenu
                 onClosePrognosis={onClosePrognosis}
                 anchorEl={anchorEl}
+                setAnchorEl={setAnchorEl}
+                teilzaehlung={row}
+                zaehlung={zaehlung}
               />
             )}
           </div>

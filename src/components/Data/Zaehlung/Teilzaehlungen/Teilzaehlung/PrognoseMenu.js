@@ -1,27 +1,23 @@
-import React, {
-  useState,
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} from 'react'
+import React, { useState, useCallback, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import Menu from '@material-ui/core/Menu'
 import IconButton from '@material-ui/core/IconButton'
-import { FaChartLine } from 'react-icons/fa'
+import Button from '@material-ui/core/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
 import TextField from '../../../../shared/TextField'
-import { teilzaehlung as teilzaehlungFragment } from '../../../../../utils/fragments'
+import {
+  teilzaehlung as teilzaehlungFragment,
+  zaehlung as zaehlungFragment,
+} from '../../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
-import types from '../../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../../storeContext'
+import exists from '../../../../../utils/exists'
 
 const TitleRow = styled.div`
   display: flex;
@@ -34,125 +30,252 @@ const Title = styled.div`
   font-weight: 800;
   user-select: none;
 `
-const Info = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.4);
-  user-select: none;
-`
 const Field = styled.div`
   padding: 0 16px;
 `
+const Buttons = styled.div`
+  padding: 0 16px;
+  display: flex;
+  justify-content: flex-end;
+`
 
-const Teilzaehlung = ({ onClosePrognosis, anchorEl, row }) => {
+const Teilzaehlung = ({
+  onClosePrognosis,
+  anchorEl,
+  setAnchorEl,
+  teilzaehlung,
+  zaehlung: zaehlungPassed,
+}) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
   const { refetch: refetchTree } = store.tree
+
+  const [jahr, setJahr] = useState(null)
+  const [anz, setAnz] = useState(null)
 
   const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
   }, [])
 
-  const jahrEl = useRef(null)
-  useEffect(() => {
-    setTimeout(() => {
-      console.log('jahrEl:', jahrEl)
-      jahrEl && jahrEl.current && jahrEl.current.focus()
-    })
-  }, [])
-
-  const onClickPrognosis2 = useCallback(async () => {
-    // create new teilzaehlung
-    // if a zaehlung with date of 15.09. of year does not yet exist create that first
-    // using: zaehlung.kultur_id, zaehlung.id, teilzaehlung.teilkultur_id
-    console.log('TODO:')
-    try {
-      await client.mutate({
-        mutation: gql`
-          mutation insertDataset($zaehlId: bigint!) {
-            insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
-              returning {
-                ...TeilzaehlungFields
-              }
-            }
-          }
-          ${teilzaehlungFragment}
-        `,
-        variables: {
-          id: row.id,
-        },
-      })
-    } catch (error) {
-      return enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-  }, [])
-
   const saveToDb = useCallback(
     async event => {
+      setErrors({})
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.lieferung[field]
-      const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
+      // type is always number so no need to use 'valueToSet'
+      // only do something if both values exist
+      field === 'anzahl_auspflanzbereit' ? setAnz(value) : setJahr(value)
+      const anzAuspflanzbereit =
+        field === 'anzahl_auspflanzbereit' ? value : anz
+      const yearToUse = field === 'jahr' ? value : jahr
+      if (!exists(yearToUse)) return
+      if (!(yearToUse > 1900 && yearToUse < 2200)) {
+        return setErrors({
+          jahr: 'Das Jahr muss zwischen 1900 und 2200 liegen',
+        })
+      }
+      if (!exists(value)) return
+      if (!exists(anzAuspflanzbereit)) return
+      // we have both values. Let's go on
+      // check if zaehlung with date of 15.09. of year exist
+      let existingZaehlungData
+      const dateOfZaehlung = `${yearToUse}.09.15`
       try {
-        let valueToSet
-        if (value === null) {
-          valueToSet = null
-        } else if (['number', 'boolean'].includes(type)) {
-          valueToSet = value
-        } else {
-          valueToSet = `"${value}"`
-        }
-        await client.mutate({
-          mutation: gql`
-              mutation update_teilzaehlung(
-                $id: bigint!
+        existingZaehlungData = await client.query({
+          query: gql`
+            query GetExistingPrognoseData($datum: date!) {
+              zaehlung(
+                where: { datum: { _eq: $datum }, prognose: { _eq: true } }
               ) {
-                update_teilzaehlung(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...TeilzaehlungFields
-                  }
-                }
+                ...ZaehlungFields
               }
-              ${teilzaehlungFragment}
-            `,
+            }
+            ${zaehlungFragment}
+          `,
           variables: {
-            id: row.id,
+            datum: dateOfZaehlung,
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
       }
-      // update tree if numbers were changed
-      if (
-        [
-          'anzahl_pflanzen',
-          'anzahl_auspflanzbereit',
-          'anzahl_mutterpflanzen',
-          'prognose',
-          'ziel',
-        ].includes(field)
-      )
+      const existingZaehlung = get(existingZaehlungData, 'data.zaehlung[0]')
+      // if not: create it first
+      let newZaehlung
+      // if not: create it first
+      if (!existingZaehlung) {
+        let zaehlungData
+        try {
+          zaehlungData = await client.mutate({
+            mutation: gql`
+              mutation insertDataset(
+                $kulturId: bigint!
+                $datum: date!
+                $prognose: Boolean!
+              ) {
+                insert_zaehlung(
+                  objects: [
+                    { kultur_id: $kulturId, datum: $datum, prognose: $prognose }
+                  ]
+                ) {
+                  returning {
+                    ...ZaehlungFields
+                  }
+                }
+              }
+              ${zaehlungFragment}
+            `,
+            variables: {
+              kulturId: zaehlungPassed.kultur_id,
+              datum: dateOfZaehlung,
+              prognose: true,
+            },
+          })
+        } catch (error) {
+          return enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+        newZaehlung = get(zaehlungData, 'data.insert_zaehlung.returning[0]')
+      }
+      const zaehlung = existingZaehlung || newZaehlung
+      // create new teilzaehlung
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation insertPrognose(
+              $zaehlId: bigint!
+              $teilkulturId: bigint
+              $anzA: Int!
+            ) {
+              insert_teilzaehlung(
+                objects: [
+                  {
+                    zaehlung_id: $zaehlId
+                    teilkultur_id: $teilkulturId
+                    anzahl_auspflanzbereit: $anzA
+                  }
+                ]
+              ) {
+                returning {
+                  ...TeilzaehlungFields
+                }
+              }
+            }
+            ${teilzaehlungFragment}
+          `,
+          variables: {
+            zaehlId: zaehlung.id,
+            teilkulturId: teilzaehlung.teilkultur_id,
+            anzA: anzAuspflanzbereit,
+          },
+        })
+      } catch (error) {
         refetchTree()
+        return enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      // delete empty teilzaehlung
+      let emptyTeilzaehlungenData
+      try {
+        emptyTeilzaehlungenData = await client.query({
+          query: gql`
+            query GetTeilzaehlungen($zaehlungId: bigint!) {
+              teilzaehlung(
+                where: {
+                  zaehlung_id: { _eq: $zaehlungId }
+                  teilkultur_id: { _is_null: true }
+                  anzahl_pflanzen: { _is_null: true }
+                  anzahl_auspflanzbereit: { _is_null: true }
+                  anzahl_mutterpflanzen: { _is_null: true }
+                  andere_menge: { _is_null: true }
+                  bemerkungen: { _is_null: true }
+                  auspflanzbereit_beschreibung: { _is_null: true }
+                }
+              ) {
+                ...TeilzaehlungFields
+              }
+            }
+            ${teilzaehlungFragment}
+          `,
+          variables: {
+            zaehlungId: zaehlung.id,
+          },
+        })
+      } catch (error) {
+        return enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      const emptyTeilzaehlung = get(
+        emptyTeilzaehlungenData,
+        'data.teilzaehlung[0]',
+      )
+      if (emptyTeilzaehlung) {
+        try {
+          await client.mutate({
+            mutation: gql`
+              mutation deleteEmptyTz($id: bigint!) {
+                delete_teilzaehlung(where: { id: { _eq: $id } }) {
+                  affected_rows
+                }
+              }
+            `,
+            variables: {
+              id: emptyTeilzaehlung.id,
+            },
+          })
+        } catch (error) {
+          return enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+      }
+      enqueNotification({
+        message: 'Die Prognose wurde gespeichert',
+        options: {
+          variant: 'info',
+        },
+      })
+      setAnchorEl(null)
+      // update tree
+      refetchTree()
       setErrors({})
     },
-    [client, refetchTree, row],
+    [
+      anz,
+      client,
+      enqueNotification,
+      jahr,
+      refetchTree,
+      setAnchorEl,
+      teilzaehlung.teilkultur_id,
+      zaehlungPassed.kultur_id,
+    ],
   )
+  const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
 
   return (
     <ErrorBoundary>
@@ -183,7 +306,6 @@ const Teilzaehlung = ({ onClosePrognosis, anchorEl, row }) => {
             saveToDb={saveToDb}
             error={errors.jahr}
             type="number"
-            ref={jahrEl}
             autoFocus
           />
         </Field>
@@ -198,11 +320,10 @@ const Teilzaehlung = ({ onClosePrognosis, anchorEl, row }) => {
             type="number"
           />
         </Field>
-        <Info>
-          Zwingende Felder sind nicht aufgelistet.
-          <br />
-          Die Wahl gilt (nur) für diese Kultur.
-        </Info>
+        <Buttons>
+          <Button onClick={onClickAbbrechen}>abbrechen</Button>
+          <Button onClick={onClickAbbrechen}>speichern</Button>
+        </Buttons>
       </Menu>
     </ErrorBoundary>
   )

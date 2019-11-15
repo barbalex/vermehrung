@@ -253,8 +253,12 @@ create function zaehlung_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(mengen_beschrieben, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(auspflanzbereit_beschreibungen, '')), 'C') || ' ' ||
       case
-        when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
-        else setweight(to_tsvector('simple', 'geplant'), 'A')
+        when new.ziel='true' then setweight(to_tsvector('simple', 'Ziel'), 'A')
+        else setweight(to_tsvector('simple', ''), 'A')
+      end || ' ' ||
+      case
+        when new.prognose='true' then setweight(to_tsvector('simple', 'Prognose'), 'A')
+        else setweight(to_tsvector('simple', ''), 'A')
       end || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;
