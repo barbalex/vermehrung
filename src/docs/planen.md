@@ -1,12 +1,12 @@
 ---
 path: "/Dokumentation/Planen"
-date: "2019-10-09"
+date: "2019-11-15"
 title: "Planen"
 sort1: 12
 ---
 
 ### Wo
-In diesen Formularen kann man die Eigenschaft "geplant" erfassen:
+Die folgenden Vorgänge können geplant werden:
 
 - Sammlungen
 - Lieferungen

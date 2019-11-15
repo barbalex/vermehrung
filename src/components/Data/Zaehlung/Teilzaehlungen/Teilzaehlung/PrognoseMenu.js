@@ -276,6 +276,10 @@ const Teilzaehlung = ({
     ],
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
+  const openDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
+  }, [])
 
   return (
     <ErrorBoundary>
@@ -291,7 +295,7 @@ const Teilzaehlung = ({
             <IconButton
               aria-label="Anleitung öffnen"
               title="Anleitung öffnen"
-              onClick={() => console.log('TODO:')}
+              onClick={openDocs}
             >
               <IoMdInformationCircleOutline />
             </IconButton>
