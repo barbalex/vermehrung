@@ -286,7 +286,7 @@ const KulturTimeline = ({ row }) => {
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
-        const data = {
+        return {
           datum: new Date(l.datum).getTime(),
           'Lieferung Pflanzen': l.anzahl_pflanzen,
           'Lieferung Pflanzen auspflanzbereit': l.anzahl_auspflanzbereit,
@@ -294,25 +294,16 @@ const KulturTimeline = ({ row }) => {
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
           'Lieferung Bemerkungen': l.bemerkungen,
+          'Zählung Pflanzen': sumAnzahlPflanzen + l.anzahl_pflanzen,
+          'Zählung Pflanzen auspflanzbereit':
+            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit,
           ereignis: 'Lieferung',
         }
-        if (l.datum < lastZaehlungDone.datum) {
-          data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit'] =
-            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
-        } else {
-          data['Zählung Pflanzen Ziel/Prognose'] =
-            sumAnzahlPflanzen + l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit Ziel/Prognose'] =
-            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
-        }
-        return data
       }),
     [
       anLieferungenDone,
       anLieferungenForLine,
       ausLieferungenForLine,
-      lastZaehlungDone.datum,
       zaehlungenForLineReversed,
     ],
   )
@@ -349,7 +340,7 @@ const KulturTimeline = ({ row }) => {
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
-        const data = {
+        return {
           datum: new Date(l.datum).getTime(),
           'Lieferung Pflanzen': -l.anzahl_pflanzen,
           'Lieferung Pflanzen auspflanzbereit': -l.anzahl_auspflanzbereit,
@@ -357,25 +348,16 @@ const KulturTimeline = ({ row }) => {
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
           'Lieferung Bemerkungen': l.bemerkungen,
+          'Zählung Pflanzen': sumAnzahlPflanzen - l.anzahl_pflanzen,
+          'Zählung Pflanzen auspflanzbereit':
+            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit,
           ereignis: 'Lieferung',
         }
-        if (l.datum < lastZaehlungDone.datum) {
-          data['Zählung Pflanzen'] = sumAnzahlPflanzen - l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit'] =
-            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
-        } else {
-          data['Zählung Pflanzen Ziel/Prognose'] =
-            sumAnzahlPflanzen - l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit Ziel/Prognose'] =
-            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
-        }
-        return data
       }),
     [
       anLieferungenForLine,
       ausLieferungenDone,
       ausLieferungenForLine,
-      lastZaehlungDone.datum,
       zaehlungenForLineReversed,
     ],
   )
@@ -424,7 +406,7 @@ const KulturTimeline = ({ row }) => {
           'Lieferung Bemerkungen': l.bemerkungen,
           ereignis: 'Lieferung',
         }
-        if (l.datum < lastZaehlungDone.datum) {
+        if (data.datum < new Date(lastZaehlungDone.datum).getTime()) {
           data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
@@ -502,7 +484,7 @@ const KulturTimeline = ({ row }) => {
           'Lieferung Bemerkungen': l.bemerkungen,
           ereignis: 'Lieferung',
         }
-        if (l.datum < lastZaehlungDone.datum) {
+        if (data.datum < new Date(lastZaehlungDone.datum).getTime()) {
           data['Zählung Pflanzen'] = sumAnzahlPflanzen - l.anzahl_pflanzen
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
@@ -579,6 +561,14 @@ const KulturTimeline = ({ row }) => {
     },
     [narrow],
   )
+  console.log('Kultur Timeline', {
+    anLieferungenForLine,
+    ausLieferungenDone,
+    ausLieferungenForLine,
+    lastZaehlungDone,
+    zaehlungenForLineReversed,
+    allData,
+  })
 
   if (!row) return null
   if (!allData.length) return null
