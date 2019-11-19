@@ -64,7 +64,7 @@
     "mobx-react-lite": "1.5.1",
     "mobx-state-tree": "3.15.0",
     "moment": "2.24.0",
-    "mst-persist": "0.1.1",
+    "mst-persist": "0.1.2",
     "notistack": "0.9.6",
     "prettier": "1.19.1",
     "proj4": "2.6.0",
