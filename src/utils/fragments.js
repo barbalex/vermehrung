@@ -218,6 +218,7 @@ export const personFelder = gql`
     ga_plz
     ga_ort
     ga_geom_point
+    ga_lat_lng
     ga_aktiv
     ga_bemerkungen
     hk_kanton

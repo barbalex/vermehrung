@@ -44,6 +44,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
     ga_plz,
     ga_ort,
     ga_geom_point,
+    ga_lat_lng,
     ga_aktiv,
     ga_bemerkungen,
   } = get(data, 'person_felder[0]') || {}
@@ -209,6 +210,21 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
                 />
               }
               label="Koordinaten"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={ga_lat_lng === true ? 'true' : 'false'}
+              control={
+                <Radio
+                  color="primary"
+                  checked={ga_lat_lng}
+                  onClick={saveToDb}
+                  name="ga_lat_lng"
+                />
+              }
+              label="Längen- und Breitengrade"
               labelPlacement="end"
             />
           </MenuItem>

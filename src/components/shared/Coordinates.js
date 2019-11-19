@@ -5,9 +5,10 @@ import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import upperFirst from 'lodash/upperFirst'
+import get from 'lodash/get'
 
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import epsg2056to4326 from '../../utils/epsg2056to4326'
@@ -30,7 +31,9 @@ import {
 import {
   herkunft as herkunftFragment,
   garten as gartenFragment,
+  personFelder as personFelderFragment,
 } from '../../utils/fragments'
+import getUserPersonId from '../../utils/getUserPersonId'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -45,6 +48,15 @@ const Row = styled.div`
   display: flex;
 `
 
+const personFelderQuery = gql`
+  query personFelderQuery($personId: bigint) {
+    person_felder(where: { person_id: { _eq: $personId } }) {
+      ...PersonFelderFields
+    }
+  }
+  ${personFelderFragment}
+`
+
 const fragments = {
   herkunft: herkunftFragment,
   garten: gartenFragment,
@@ -55,6 +67,13 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const { lv95_x, lv95_y, wgs84_lat, wgs84_long } = computed
 
   const client = useApolloClient()
+
+  const userPersonId = getUserPersonId()
+  const personFelderResult = useQuery(personFelderQuery, {
+    variables: { personId: userPersonId },
+  })
+  const { ga_lat_lng } =
+    get(personFelderResult.data, 'person_felder[0]', {}) || {}
 
   const [lv95XState, setLv95XState] = useState(lv95_x || '')
   const [lv95YState, setLv95YState] = useState(lv95_y || '')
@@ -226,66 +245,68 @@ const Coordinates = ({ row, refetchForm, table }) => {
 
   return (
     <>
-      <Row>
-        <LeftFormControl
-          fullWidth
-          error={!!wgs84LatError}
-          aria-describedby={`${id}wgs84LatErrorText`}
-        >
-          <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
-            Breitengrad
-          </InputLabel>
-          <Input
-            id={`${id}wgs84_lat`}
-            data-id="wgs84_lat"
-            name="wgs84_lat"
-            value={wgs84LatState}
-            type="number"
-            onChange={onChangeWgs84Lat}
-            onBlur={onBlurWgs84Lat}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-          />
-          {!!wgs84LatError && (
-            <FormHelperText
-              id={`${id}wgs84LatErrorText`}
-              data-id="wgs84LatErrorText"
-            >
-              {wgs84LatError}
-            </FormHelperText>
-          )}
-        </LeftFormControl>
-        <StyledFormControl
-          fullWidth
-          error={!!wgs84LongError}
-          aria-describedby={`${id}wgs84LongErrorText`}
-        >
-          <InputLabel htmlFor={`${id}wgs84_long`} shrink>
-            Längengrad
-          </InputLabel>
-          <Input
-            id={`${id}wgs84_long`}
-            data-id="wgs84_long"
-            name="wgs84_long"
-            value={wgs84LongState}
-            type="number"
-            onChange={onChangeWgs84Long}
-            onBlur={onBlurWgs84Long}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-          />
-          {!!wgs84LongError && (
-            <FormHelperText
-              id={`${id}wgs84LongErrorText`}
-              data-id="wgs84LongErrorText"
-            >
-              {wgs84LongError}
-            </FormHelperText>
-          )}
-        </StyledFormControl>
-      </Row>
+      {ga_lat_lng && (
+        <Row>
+          <LeftFormControl
+            fullWidth
+            error={!!wgs84LatError}
+            aria-describedby={`${id}wgs84LatErrorText`}
+          >
+            <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
+              Breitengrad
+            </InputLabel>
+            <Input
+              id={`${id}wgs84_lat`}
+              data-id="wgs84_lat"
+              name="wgs84_lat"
+              value={wgs84LatState}
+              type="number"
+              onChange={onChangeWgs84Lat}
+              onBlur={onBlurWgs84Lat}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+            />
+            {!!wgs84LatError && (
+              <FormHelperText
+                id={`${id}wgs84LatErrorText`}
+                data-id="wgs84LatErrorText"
+              >
+                {wgs84LatError}
+              </FormHelperText>
+            )}
+          </LeftFormControl>
+          <StyledFormControl
+            fullWidth
+            error={!!wgs84LongError}
+            aria-describedby={`${id}wgs84LongErrorText`}
+          >
+            <InputLabel htmlFor={`${id}wgs84_long`} shrink>
+              Längengrad
+            </InputLabel>
+            <Input
+              id={`${id}wgs84_long`}
+              data-id="wgs84_long"
+              name="wgs84_long"
+              value={wgs84LongState}
+              type="number"
+              onChange={onChangeWgs84Long}
+              onBlur={onBlurWgs84Long}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+            />
+            {!!wgs84LongError && (
+              <FormHelperText
+                id={`${id}wgs84LongErrorText`}
+                data-id="wgs84LongErrorText"
+              >
+                {wgs84LongError}
+              </FormHelperText>
+            )}
+          </StyledFormControl>
+        </Row>
+      )}
       <Row>
         <LeftFormControl
           fullWidth
