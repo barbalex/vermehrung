@@ -561,14 +561,6 @@ const KulturTimeline = ({ row }) => {
     },
     [narrow],
   )
-  console.log('Kultur Timeline', {
-    anLieferungenForLine,
-    ausLieferungenDone,
-    ausLieferungenForLine,
-    lastZaehlungDone,
-    zaehlungenForLineReversed,
-    allData,
-  })
 
   if (!row) return null
   if (!allData.length) return null
