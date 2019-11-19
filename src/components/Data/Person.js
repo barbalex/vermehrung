@@ -249,22 +249,6 @@ const Person = ({ filter: showFilter }) => {
             error={errors.telefon_mobile}
           />
           <TextField
-            key={`${row.id}fax_privat`}
-            name="fax_privat"
-            label="Fax privat"
-            value={row.fax_privat}
-            saveToDb={saveToDb}
-            error={errors.fax_privat}
-          />
-          <TextField
-            key={`${row.id}fax_geschaeft`}
-            name="fax_geschaeft"
-            label="Fax Geschäft"
-            value={row.fax_geschaeft}
-            saveToDb={saveToDb}
-            error={errors.fax_geschaeft}
-          />
-          <TextField
             key={`${row.id}email`}
             name="email"
             label="Email"

@@ -12,8 +12,6 @@ create function person_trigger() returns trigger as $$
       setweight(to_tsvector('simple', coalesce(new.telefon_privat, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.telefon_geschaeft, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.telefon_mobile, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.fax_privat, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.fax_geschaeft, '')), 'D') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.email, '')), 'C') || ' ' ||
       setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
     return new;

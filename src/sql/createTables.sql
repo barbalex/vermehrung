@@ -12,8 +12,6 @@ create table person (
   telefon_privat text default null,
   telefon_geschaeft text default null,
   telefon_mobile text default null,
-  fax_privat text default null,
-  fax_geschaeft text default null,
   email text default null,
   kein_email boolean default false,
   bemerkungen text default null,

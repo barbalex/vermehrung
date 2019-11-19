@@ -201,8 +201,6 @@ export const person = gql`
     telefon_privat
     telefon_geschaeft
     telefon_mobile
-    fax_privat
-    fax_geschaeft
     email
     kein_email
     bemerkungen
