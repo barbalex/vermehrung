@@ -1,4 +1,5 @@
 create extension if not exists "uuid-ossp";
+CREATE EXTENSION if not exists postgis;
 
 drop table if exists person cascade;
 create table person (
@@ -21,7 +22,7 @@ create table person (
   account_id text default null,
   kommerziell boolean default false,
   info boolean default false,
-  aktiv boolean default true,
+  aktiv boolean default true
 );
 create index on person using btree (id);
 create index on person using btree (name);
@@ -396,31 +397,10 @@ comment on column person_felder.li_show_sl is 'Ob die Sammel-Lieferung neben der
 comment on column person_felder.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
 comment on column person_felder.ar_name_deutsch is 'Dieses Feld wird (momentan) nicht benutzt';
 
-drop table if exist sammel_lieferung cascade;
-create table sammel_lieferung (
-  id bigserial primary key,
-  art_id bigint default null references art (id) on delete cascade on update cascade,
-  person_id bigint default null references person (id) on delete cascade on update cascade,
-  von_sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
-  von_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
-  datum date default null,
-  nach_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
-  nach_ausgepflanzt boolean default false,
-  von_anzahl_individuen integer default null,
-  anzahl_pflanzen integer default null,
-  anzahl_auspflanzbereit integer default null,
-  gramm_samen integer default null,
-  andere_menge text default null,
-  geplant boolean default false,
-  bemerkungen text default null
-);
-create index on lieferung using btree (id);
-
-
 drop table if exists lieferung cascade;
 create table lieferung (
   id bigserial primary key,
-  sammel_lieferung_id bigint default null references sammel_lieferung (id) on delete set null on update cascade,
+  sammel_lieferung_id bigint default null,-- references sammel_lieferung (id) on delete set null on update cascade ,
   art_id bigint default null references art (id) on delete cascade on update cascade,
   person_id bigint default null references person (id) on delete cascade on update cascade,
   von_sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
@@ -455,6 +435,28 @@ create index on lieferung using btree (gramm_samen);
 create index on lieferung using btree (andere_menge);
 create index on lieferung using btree (geplant);
 create index on lieferung using gin (tsv);
+
+drop table if exists sammel_lieferung cascade;
+create table sammel_lieferung (
+  id bigserial primary key,
+  art_id bigint default null references art (id) on delete cascade on update cascade,
+  person_id bigint default null references person (id) on delete cascade on update cascade,
+  von_sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
+  von_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  datum date default null,
+  nach_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  nach_ausgepflanzt boolean default false,
+  von_anzahl_individuen integer default null,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  gramm_samen integer default null,
+  andere_menge text default null,
+  geplant boolean default false,
+  bemerkungen text default null
+);
+create index on lieferung using btree (id);
+-- need to wait with adding this reference until sammel_lieferung was created
+alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lieferung_id) references sammel_lieferung (id) on delete set null on update cascade;
 
 drop table if exists lieferung_file;
 create table lieferung_file (
