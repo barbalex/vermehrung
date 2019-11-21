@@ -127,44 +127,39 @@ const Kultur = ({ filter: showFilter }) => {
   // => present arten of the rest
   const { data: sammlungData, error: sammlungError } = useQuery(sammlungQuery)
   const artHerkunftInGarten = get(row, 'garten.kulturs', [])
-  const sammlungHerkunftCombos = get(
-    sammlungData,
-    'sammlung_art_herkunft_combos',
-    [],
+    // only consider kulturen with both art and herkunft chosen
+    .filter(o => o.art_id && o.herkunft_id)
+  const sammlungs = get(sammlungData, 'sammlung', [])
+  const artHerkunftToChoose = sammlungs.filter(
+    s =>
+      !artHerkunftInGarten.find(
+        a => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+      ),
   )
-  const artHerkunftToChoose = sammlungHerkunftCombos.filter(
-    o =>
-      artHerkunftInGarten.find(
-        a => a.art_id === o.art_id && a.herkunft_id === o.herkunft_id,
-      ) === undefined,
+  const artenToChoose = uniq(
+    artHerkunftToChoose
+      .filter(ah =>
+        row.herkunft_id ? ah.herkunft_id === row.herkunft_id : true,
+      )
+      .map(a => a.art_id),
   )
-  const artenToChoose = uniq(artHerkunftToChoose.map(a => a.art_id))
   // do show own art
   if (row.art_id && !artenToChoose.includes(row.art_id)) {
     artenToChoose.push(row.art_id)
   }
-  const herkunftToChoose = uniq(artHerkunftToChoose.map(a => a.herkunft_id))
+  const herkunftToChoose = uniq(
+    artHerkunftToChoose
+      .filter(ah => (row.art_id ? ah.art_id === row.art_id : true))
+      .map(a => a.herkunft_id),
+  )
   // do show own herkunft
-  if (row.herkunft_id && !artenToChoose.includes(row.herkunft_id)) {
+  if (row.herkunft_id && !herkunftToChoose.includes(row.herkunft_id)) {
     herkunftToChoose.push(row.herkunft_id)
   }
-
-  console.log('Kultur', {
-    sammlungData,
-    sammlungHerkunftCombos,
-    artHerkunftInGarten,
-    artHerkunftToChoose,
-    artenToChoose,
-    herkunftToChoose,
-    row,
-  })
 
   const artFilter = { ae_id: { _is_null: false } }
   if (artenToChoose.length) {
     artFilter.id = { _in: artenToChoose }
-  }
-  if (row.herkunft_id) {
-    artFilter.sammlungs = { herkunft_id: { _eq: row.herkunft_id } }
   }
   const { data: dataArt, error: errorArt, loading: loadingArt } = useQuery(
     artQuery,
@@ -174,9 +169,6 @@ const Kultur = ({ filter: showFilter }) => {
   )
 
   const herkunftFilter = { id: { _in: herkunftToChoose } }
-  if (row.art_id) {
-    herkunftFilter.sammlungs = { art_id: { _eq: row.art_id } }
-  }
   const {
     data: herkunftData,
     error: herkunftError,

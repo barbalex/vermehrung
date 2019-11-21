@@ -473,17 +473,3 @@ order by
   herkunft_id,
   herkunft_id,
   datum;
-
-
-drop view if exists sammlung_art_herkunft_combos;
-create or replace view sammlung_art_herkunft_combos as
-  select distinct
-    art_id,
-    herkunft_id
-  from sammlung
-  where
-    art_id is not null
-    and herkunft_id is not null
-  order by 
-    art_id,
-    herkunft_id;

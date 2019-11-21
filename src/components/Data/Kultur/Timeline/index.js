@@ -81,7 +81,7 @@ const KulturTimeline = ({ row }) => {
   const zaehlungenDoneData = useMemo(
     () =>
       zaehlungenDone.map(l => {
-        const teilzaehlungs = get(l, 'teilzaehlungs')
+        const teilzaehlungs = get(l, 'teilzaehlungs', [])
 
         return {
           datum: new Date(l.datum).getTime(),
@@ -114,7 +114,7 @@ const KulturTimeline = ({ row }) => {
   const zaehlungenPlannedIncludedData = useMemo(
     () =>
       zaehlungenPlannedIncluded.map(l => {
-        const teilzaehlungs = get(l, 'teilzaehlungs')
+        const teilzaehlungs = get(l, 'teilzaehlungs', [])
 
         return {
           datum: new Date(l.datum).getTime(),
@@ -153,7 +153,7 @@ const KulturTimeline = ({ row }) => {
   const zaehlungenPlannedIgnoredData = useMemo(
     () =>
       zaehlungenPlannedIgnored.map(l => {
-        const teilzaehlungs = get(l, 'teilzaehlungs')
+        const teilzaehlungs = get(l, 'teilzaehlungs', [])
 
         return {
           datum: new Date(l.datum).getTime(),
