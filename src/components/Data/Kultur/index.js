@@ -125,6 +125,7 @@ const Kultur = ({ filter: showFilter }) => {
   }, [row.id])
 
   // do not show other arten in this garten
+  // TODO: if there exist no other herkunft than the one's in this garten
   const otherArtenInThisGarten = get(row, 'garten.kulturs', [])
     .map(k => k.art_id)
     // do show own art
