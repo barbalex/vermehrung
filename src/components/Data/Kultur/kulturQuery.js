@@ -26,6 +26,7 @@ export default gql`
         kulturs(where: { art: { ae_id: { _is_null: false } } }) {
           id
           art_id
+          herkunft_id
         }
       }
       ausLieferungsDone: lieferungsByVonKulturId(

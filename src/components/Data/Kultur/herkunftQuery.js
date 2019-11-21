@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query herkunftQuery {
+  query herkunftQuery($filter: herkunft_bool_exp!) {
     herkunft(
+      where: $filter
       order_by: [
         { nr: asc_nulls_first }
         { gemeinde: asc_nulls_first }

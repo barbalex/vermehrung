@@ -11,6 +11,7 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import uniq from 'lodash/uniq'
 import ErrorBoundary from 'react-error-boundary'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
@@ -104,11 +105,6 @@ const Kultur = ({ filter: showFilter }) => {
     variables: { id, isFiltered, filter: kulturFilter },
   })
   const { data, error, loading } = kulturResult
-  const {
-    data: herkunftData,
-    error: herkunftError,
-    loading: herkunftLoading,
-  } = useQuery(herkunftQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -125,30 +121,71 @@ const Kultur = ({ filter: showFilter }) => {
     setErrors({})
   }, [row.id])
 
-  const {
-    data: sammlungData,
-    error: sammlungError,
-    loading: loadingSammlung,
-  } = useQuery(sammlungQuery)
-
-  // do not show other arten in this garten
-  // TODO: From all collected combinations of art and herkunft show only arten of those not present in this garten
+  // From all collected combinations of art and herkunft show only arten of those not present in this garten
   // => find all combinations of art and herkunft in sammlungen
   // => substract the ones existing in this garden
   // => present arten of the rest
-  const otherArtenInThisGarten = get(row, 'garten.kulturs', [])
-    .map(k => k.art_id)
-    // do show own art
-    .filter(k => k !== row.art_id)
-  const artFilter = otherArtenInThisGarten.length
-    ? { id: { _nin: otherArtenInThisGarten }, ae_id: { _is_null: false } }
-    : { ae_id: { _is_null: false } }
+  const { data: sammlungData, error: sammlungError } = useQuery(sammlungQuery)
+  const artHerkunftInGarten = get(row, 'garten.kulturs', [])
+  const sammlungHerkunftCombos = get(
+    sammlungData,
+    'sammlung_art_herkunft_combos',
+    [],
+  )
+  const artHerkunftToChoose = sammlungHerkunftCombos.filter(
+    o =>
+      artHerkunftInGarten.find(
+        a => a.art_id === o.art_id && a.herkunft_id === o.herkunft_id,
+      ) === undefined,
+  )
+  const artenToChoose = uniq(artHerkunftToChoose.map(a => a.art_id))
+  // do show own art
+  if (row.art_id && !artenToChoose.includes(row.art_id)) {
+    artenToChoose.push(row.art_id)
+  }
+  const herkunftToChoose = uniq(artHerkunftToChoose.map(a => a.herkunft_id))
+  // do show own herkunft
+  if (row.herkunft_id && !artenToChoose.includes(row.herkunft_id)) {
+    herkunftToChoose.push(row.herkunft_id)
+  }
+
+  console.log('Kultur', {
+    sammlungData,
+    sammlungHerkunftCombos,
+    artHerkunftInGarten,
+    artHerkunftToChoose,
+    artenToChoose,
+    herkunftToChoose,
+    row,
+  })
+
+  const artFilter = { ae_id: { _is_null: false } }
+  if (artenToChoose.length) {
+    artFilter.id = { _in: artenToChoose }
+  }
+  if (row.herkunft_id) {
+    artFilter.sammlungs = { herkunft_id: { _eq: row.herkunft_id } }
+  }
   const { data: dataArt, error: errorArt, loading: loadingArt } = useQuery(
     artQuery,
     {
       variables: { filter: artFilter },
     },
   )
+
+  const herkunftFilter = { id: { _in: herkunftToChoose } }
+  if (row.art_id) {
+    herkunftFilter.sammlungs = { art_id: { _eq: row.art_id } }
+  }
+  const {
+    data: herkunftData,
+    error: herkunftError,
+    loading: herkunftLoading,
+  } = useQuery(herkunftQuery, {
+    variables: {
+      filter: herkunftFilter,
+    },
+  })
 
   const artId = row.art_id || 999999999
   const {
@@ -261,7 +298,8 @@ const Kultur = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error || errorArt || errorGarten || herkunftError
+  const errorToShow =
+    error || errorArt || errorGarten || herkunftError || sammlungError
   if (errorToShow) {
     return (
       <Container>
