@@ -33,7 +33,7 @@
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-react-hooks": "2.3.0",
-    "gatsby": "2.18.0",
+    "gatsby": "2.18.1",
     "gatsby-image": "2.2.33",
     "gatsby-link": "2.2.24",
     "gatsby-plugin-create-client-paths": "2.1.17",
