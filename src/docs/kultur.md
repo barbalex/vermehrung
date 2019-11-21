@@ -26,4 +26,13 @@ In einem Garten kann es pro Herkunft einer Art immer nur eine aktive Kultur gebe
 - Zwischenlager
 
 ### Genetische Vielfalt
-Das Feld "von Anzahl Individuen" nennt oder schätzt die Anzahl Pflanzen, welche die Basis für die genetische Vielfalt der Kultur bildet. Es ist manuell nachzuführen, wenn An-Lieferungen erfolgen.
+Das Feld "von Anzahl Individuen" nennt oder schätzt die Anzahl Pflanzen, welche die Basis für die genetische Vielfalt der Kultur bildet. Es ist manuell nachzuführen, wenn An-Lieferungen erfolgen.<br/><br/>
+
+### Formular
+Im Feld "Art" können nur Arten gewählt werden:
+- Von denen es gesammelte Herkünfte gibt, für die im betreffenden Garten noch keine Kultur existiert
+- Wenn die Herkunft schon gewählt wurde: Die in dieser Herkunft gesammelt wurden
+
+Im Feld "Herkunft" können nur Herkünfte gewählt werden:
+- Von denen es gesammelte Arten gibt, für die im betreffenden Garten noch keine Kultur existiert
+- Wenn die Art schon gewählt wurde: In denen diese Art gesammelt wurde
