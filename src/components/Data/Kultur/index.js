@@ -31,6 +31,7 @@ import herkunftQuery from './herkunftQuery'
 import gartenQuery from './gartenQuery'
 import kulturQuery from './kulturQuery'
 import artQuery from './artQuery'
+import sammlungQuery from './sammlungQuery'
 import Timeline from './Timeline'
 import QK from './QK'
 
@@ -123,6 +124,12 @@ const Kultur = ({ filter: showFilter }) => {
   useEffect(() => {
     setErrors({})
   }, [row.id])
+
+  const {
+    data: sammlungData,
+    error: sammlungError,
+    loading: loadingSammlung,
+  } = useQuery(sammlungQuery)
 
   // do not show other arten in this garten
   // TODO: From all collected combinations of art and herkunft show only arten of those not present in this garten
