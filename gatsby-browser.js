@@ -17,8 +17,6 @@ export const wrapRootElement = ({ element }) => <App element={element} />
 
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
 export const onServiceWorkerUpdateReady = () => {
-  // clear local storage in case db structure was changed
-  localForage.clear()
   if (
     window.confirm(
       'vermehrung neu laden, um die neuste Version zu installieren?',
