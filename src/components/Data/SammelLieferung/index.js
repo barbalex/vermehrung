@@ -14,6 +14,7 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
 import storeContext from '../../../storeContext'
@@ -625,12 +626,21 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
                 />
               )}
               <IconButton
-                aria-label="Lieferschein Drucken"
-                title="Lieferschein Drucken"
+                aria-label={print ? 'Formular' : 'Lieferschein'}
+                title={print ? 'Formular' : 'Lieferschein'}
                 onClick={printDeliveryNote}
               >
-                <MdPrint />
+                {print ? <FaEdit /> : <FaEnvelopeOpenText />}
               </IconButton>
+              {print && (
+                <IconButton
+                  aria-label="drucken"
+                  title="drucken"
+                  onClick={window.print}
+                >
+                  <MdPrint />
+                </IconButton>
+              )}
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
