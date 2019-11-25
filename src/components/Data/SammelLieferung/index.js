@@ -14,6 +14,7 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import { MdPrint } from 'react-icons/md'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -39,6 +40,7 @@ import getUserPersonId from '../../../utils/getUserPersonId'
 import Settings from './Settings'
 import Copy from './Copy'
 import updateAllLieferungen from './Copy/updateAllLieferungen'
+import Lieferschein from './Lieferschein'
 
 const Container = styled.div`
   height: 100%;
@@ -543,6 +545,12 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         'https://vermehrung.apflora.ch/Dokumentation/Sammel-Lieferungen',
       )
   }, [])
+
+  const [print, setPrint] = useState(false)
+  const printDeliveryNote = useCallback(() => {
+    setPrint(!print)
+  }, [print])
+
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -554,8 +562,8 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
       if (sl_show_empty_when_next_to_li) return true
       if (
         idPassed &&
-        (!sl_show_empty_when_next_to_li &&
-          (!exists(row[field]) || row[field] === false))
+        !sl_show_empty_when_next_to_li &&
+        (!exists(row[field]) || row[field] === false)
       )
         return false
       return true
@@ -617,6 +625,13 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
                 />
               )}
               <IconButton
+                aria-label="Lieferschein Drucken"
+                title="Lieferschein Drucken"
+                onClick={printDeliveryNote}
+              >
+                <MdPrint />
+              </IconButton>
+              <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
                 onClick={openSettingsDocs}
@@ -629,253 +644,257 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer>
-          {ifSomeNeeded([
-            'art_id',
-            'anzahl_pflanzen',
-            'anzahl_auspflanzbereit',
-            'gramm_samen',
-            'andere_menge',
-            'von_anzahl_individuen',
-          ]) && (
-            <>
-              <TitleRow>
-                <Title>was</Title>
-              </TitleRow>
-              {ifNeeded('art_id') && (
-                <Select
-                  key={`${row.id}art_id`}
-                  name="art_id"
-                  value={row.art_id}
-                  field="art_id"
-                  label="Art"
-                  options={artWerte}
-                  loading={artLoading}
-                  saveToDb={saveToDb}
-                  error={errors.art_id}
-                />
-              )}
-              {herkunftValue && (
-                <Herkunft>
-                  <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
-                  {herkunftValue}
-                </Herkunft>
-              )}
-              <FieldRow>
-                {ifNeeded('anzahl_pflanzen') && (
-                  <TextField
-                    key={`${row.id}anzahl_pflanzen`}
-                    name="anzahl_pflanzen"
-                    label="Anzahl Pflanzen"
-                    value={row.anzahl_pflanzen}
+        {print ? (
+          <Lieferschein />
+        ) : (
+          <FieldsContainer>
+            {ifSomeNeeded([
+              'art_id',
+              'anzahl_pflanzen',
+              'anzahl_auspflanzbereit',
+              'gramm_samen',
+              'andere_menge',
+              'von_anzahl_individuen',
+            ]) && (
+              <>
+                <TitleRow>
+                  <Title>was</Title>
+                </TitleRow>
+                {ifNeeded('art_id') && (
+                  <Select
+                    key={`${row.id}art_id`}
+                    name="art_id"
+                    value={row.art_id}
+                    field="art_id"
+                    label="Art"
+                    options={artWerte}
+                    loading={artLoading}
                     saveToDb={saveToDb}
-                    error={errors.anzahl_pflanzen}
-                    type="number"
+                    error={errors.art_id}
                   />
                 )}
-                {ifNeeded('anzahl_auspflanzbereit') && (
-                  <TextField
-                    key={`${row.id}anzahl_auspflanzbereit`}
-                    name="anzahl_auspflanzbereit"
-                    label="Anzahl auspflanzbereit"
-                    value={row.anzahl_auspflanzbereit}
-                    saveToDb={saveToDb}
-                    error={errors.anzahl_auspflanzbereit}
-                    type="number"
-                  />
+                {herkunftValue && (
+                  <Herkunft>
+                    <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
+                    {herkunftValue}
+                  </Herkunft>
                 )}
-              </FieldRow>
-              <FieldRow>
-                {ifNeeded('gramm_samen') && (
-                  <TextField
-                    key={`${row.id}gramm_samen`}
-                    name="gramm_samen"
-                    label="Gramm Samen"
-                    value={row.gramm_samen}
-                    saveToDb={saveToDb}
-                    error={errors.gramm_samen}
-                    type="number"
-                  />
-                )}
-                {ifNeeded('andere_menge') && (
-                  <TextField
-                    key={`${row.id}andere_menge`}
-                    name="andere_menge"
-                    label={`Andere Menge (z.B. "3 Zwiebeln")`}
-                    value={row.andere_menge}
-                    saveToDb={saveToDb}
-                    error={errors.andere_menge}
-                    type="text"
-                  />
-                )}
-              </FieldRow>
-              {ifNeeded('von_anzahl_individuen') && (
                 <FieldRow>
-                  <TextField
-                    key={`${row.id}von_anzahl_individuen`}
-                    name="von_anzahl_individuen"
-                    label="von Anzahl Individuen"
-                    value={row.von_anzahl_individuen}
-                    saveToDb={saveToDb}
-                    error={errors.von_anzahl_individuen}
-                    type="number"
-                  />
-                  <div>
-                    <IconButton
-                      aria-label="Anleitung öffnen"
-                      title="Anleitung öffnen"
-                      onClick={openGenVielfaldDocs}
-                    >
-                      <IoMdInformationCircleOutline />
-                    </IconButton>
-                  </div>
+                  {ifNeeded('anzahl_pflanzen') && (
+                    <TextField
+                      key={`${row.id}anzahl_pflanzen`}
+                      name="anzahl_pflanzen"
+                      label="Anzahl Pflanzen"
+                      value={row.anzahl_pflanzen}
+                      saveToDb={saveToDb}
+                      error={errors.anzahl_pflanzen}
+                      type="number"
+                    />
+                  )}
+                  {ifNeeded('anzahl_auspflanzbereit') && (
+                    <TextField
+                      key={`${row.id}anzahl_auspflanzbereit`}
+                      name="anzahl_auspflanzbereit"
+                      label="Anzahl auspflanzbereit"
+                      value={row.anzahl_auspflanzbereit}
+                      saveToDb={saveToDb}
+                      error={errors.anzahl_auspflanzbereit}
+                      type="number"
+                    />
+                  )}
                 </FieldRow>
-              )}
-            </>
-          )}
-          {ifSomeNeeded(['von_sammlung_id', 'von_kultur_id']) && (
-            <>
-              <TitleRow>
-                <Title>von</Title>
-              </TitleRow>
-              {ifNeeded('von_sammlung_id') && (
-                <Select
-                  key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-                  name="von_sammlung_id"
-                  value={row.von_sammlung_id}
-                  field="von_sammlung_id"
-                  label={`Sammlung${
-                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                  }`}
-                  options={sammlungWerte}
-                  loading={sammlungLoading}
-                  saveToDb={saveToDb}
-                  error={errors.von_sammlung_id}
-                />
-              )}
-              {ifNeeded('von_kultur_id') && (
-                <Select
-                  key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-                  name="von_kultur_id"
-                  value={row.von_kultur_id}
-                  field="von_kultur_id"
-                  label={`Kultur${
-                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                  }`}
-                  options={vonKulturWerte}
-                  loading={vonKulturLoading}
-                  saveToDb={saveToDb}
-                  error={errors.von_kultur_id}
-                />
-              )}
-            </>
-          )}
-          {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
-            <>
-              <TitleRow>
-                <Title>nach</Title>
-              </TitleRow>
-              {ifNeeded('nach_kultur_id') && (
-                <Select
-                  key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-                  name="nach_kultur_id"
-                  value={row.nach_kultur_id}
-                  field="nach_kultur_id"
-                  label={`Kultur${
-                    exists(row.art_id)
-                      ? ` (Kulturen derselben Art und Herkunft${
-                          row.von_kultur_id ? ', ohne die von-Kultur' : ''
-                        })`
-                      : ''
-                  }`}
-                  options={nachKulturWerte}
-                  loading={nachKulturLoading}
-                  saveToDb={saveToDb}
-                  error={errors.nach_kultur_id}
-                />
-              )}
-              {ifNeeded('nach_ausgepflanzt') && (
-                <Checkbox2States
-                  key={`${row.id}nach_ausgepflanzt`}
-                  label="Ausgepflanzt"
-                  name="nach_ausgepflanzt"
-                  value={row.nach_ausgepflanzt}
-                  saveToDb={saveToDb}
-                  error={errors.nach_ausgepflanzt}
-                />
-              )}
-            </>
-          )}
-          {ifSomeNeeded(['datum', 'geplant']) && (
-            <>
-              <TitleRow>
-                <Title>wann</Title>
-              </TitleRow>
-              {ifNeeded('datum') && (
-                <DateFieldWithPicker
-                  key={`${row.id}datum`}
-                  name="datum"
-                  label="Datum"
-                  value={row.datum}
-                  saveToDb={saveToDb}
-                  error={errors.datum}
-                />
-              )}
-              {ifNeeded('geplant') && (
                 <FieldRow>
+                  {ifNeeded('gramm_samen') && (
+                    <TextField
+                      key={`${row.id}gramm_samen`}
+                      name="gramm_samen"
+                      label="Gramm Samen"
+                      value={row.gramm_samen}
+                      saveToDb={saveToDb}
+                      error={errors.gramm_samen}
+                      type="number"
+                    />
+                  )}
+                  {ifNeeded('andere_menge') && (
+                    <TextField
+                      key={`${row.id}andere_menge`}
+                      name="andere_menge"
+                      label={`Andere Menge (z.B. "3 Zwiebeln")`}
+                      value={row.andere_menge}
+                      saveToDb={saveToDb}
+                      error={errors.andere_menge}
+                      type="text"
+                    />
+                  )}
+                </FieldRow>
+                {ifNeeded('von_anzahl_individuen') && (
+                  <FieldRow>
+                    <TextField
+                      key={`${row.id}von_anzahl_individuen`}
+                      name="von_anzahl_individuen"
+                      label="von Anzahl Individuen"
+                      value={row.von_anzahl_individuen}
+                      saveToDb={saveToDb}
+                      error={errors.von_anzahl_individuen}
+                      type="number"
+                    />
+                    <div>
+                      <IconButton
+                        aria-label="Anleitung öffnen"
+                        title="Anleitung öffnen"
+                        onClick={openGenVielfaldDocs}
+                      >
+                        <IoMdInformationCircleOutline />
+                      </IconButton>
+                    </div>
+                  </FieldRow>
+                )}
+              </>
+            )}
+            {ifSomeNeeded(['von_sammlung_id', 'von_kultur_id']) && (
+              <>
+                <TitleRow>
+                  <Title>von</Title>
+                </TitleRow>
+                {ifNeeded('von_sammlung_id') && (
+                  <Select
+                    key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
+                    name="von_sammlung_id"
+                    value={row.von_sammlung_id}
+                    field="von_sammlung_id"
+                    label={`Sammlung${
+                      exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                    }`}
+                    options={sammlungWerte}
+                    loading={sammlungLoading}
+                    saveToDb={saveToDb}
+                    error={errors.von_sammlung_id}
+                  />
+                )}
+                {ifNeeded('von_kultur_id') && (
+                  <Select
+                    key={`${row.id}${row.von_kultur_id}von_kultur_id`}
+                    name="von_kultur_id"
+                    value={row.von_kultur_id}
+                    field="von_kultur_id"
+                    label={`Kultur${
+                      exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                    }`}
+                    options={vonKulturWerte}
+                    loading={vonKulturLoading}
+                    saveToDb={saveToDb}
+                    error={errors.von_kultur_id}
+                  />
+                )}
+              </>
+            )}
+            {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
+              <>
+                <TitleRow>
+                  <Title>nach</Title>
+                </TitleRow>
+                {ifNeeded('nach_kultur_id') && (
+                  <Select
+                    key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+                    name="nach_kultur_id"
+                    value={row.nach_kultur_id}
+                    field="nach_kultur_id"
+                    label={`Kultur${
+                      exists(row.art_id)
+                        ? ` (Kulturen derselben Art und Herkunft${
+                            row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                          })`
+                        : ''
+                    }`}
+                    options={nachKulturWerte}
+                    loading={nachKulturLoading}
+                    saveToDb={saveToDb}
+                    error={errors.nach_kultur_id}
+                  />
+                )}
+                {ifNeeded('nach_ausgepflanzt') && (
                   <Checkbox2States
-                    key={`${row.id}geplant`}
-                    label="Geplant"
-                    name="geplant"
-                    value={row.geplant}
+                    key={`${row.id}nach_ausgepflanzt`}
+                    label="Ausgepflanzt"
+                    name="nach_ausgepflanzt"
+                    value={row.nach_ausgepflanzt}
                     saveToDb={saveToDb}
-                    error={errors.geplant}
+                    error={errors.nach_ausgepflanzt}
                   />
-                  <div>
-                    <IconButton
-                      aria-label="Anleitung öffnen"
-                      title="Anleitung öffnen"
-                      onClick={openPlanenDocs}
-                    >
-                      <IoMdInformationCircleOutline />
-                    </IconButton>
-                  </div>
-                </FieldRow>
-              )}
-            </>
-          )}
-          {ifSomeNeeded(['person_id', 'bemerkungen']) && (
-            <>
-              <TitleRow>
-                <Title>wer</Title>
-              </TitleRow>
-              {ifNeeded('person_id') && (
-                <Select
-                  key={`${row.id}person_id`}
-                  name="person_id"
-                  value={row.person_id}
-                  field="person_id"
-                  label="Person"
-                  options={personWerte}
-                  loading={personLoading}
-                  saveToDb={saveToDb}
-                  error={errors.person_id}
-                />
-              )}
-              {ifNeeded('bemerkungen') && (
-                <TextField
-                  key={`${row.id}bemerkungen`}
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  value={row.bemerkungen}
-                  saveToDb={saveToDb}
-                  error={errors.bemerkungen}
-                  multiLine
-                />
-              )}
-            </>
-          )}
-        </FieldsContainer>
+                )}
+              </>
+            )}
+            {ifSomeNeeded(['datum', 'geplant']) && (
+              <>
+                <TitleRow>
+                  <Title>wann</Title>
+                </TitleRow>
+                {ifNeeded('datum') && (
+                  <DateFieldWithPicker
+                    key={`${row.id}datum`}
+                    name="datum"
+                    label="Datum"
+                    value={row.datum}
+                    saveToDb={saveToDb}
+                    error={errors.datum}
+                  />
+                )}
+                {ifNeeded('geplant') && (
+                  <FieldRow>
+                    <Checkbox2States
+                      key={`${row.id}geplant`}
+                      label="Geplant"
+                      name="geplant"
+                      value={row.geplant}
+                      saveToDb={saveToDb}
+                      error={errors.geplant}
+                    />
+                    <div>
+                      <IconButton
+                        aria-label="Anleitung öffnen"
+                        title="Anleitung öffnen"
+                        onClick={openPlanenDocs}
+                      >
+                        <IoMdInformationCircleOutline />
+                      </IconButton>
+                    </div>
+                  </FieldRow>
+                )}
+              </>
+            )}
+            {ifSomeNeeded(['person_id', 'bemerkungen']) && (
+              <>
+                <TitleRow>
+                  <Title>wer</Title>
+                </TitleRow>
+                {ifNeeded('person_id') && (
+                  <Select
+                    key={`${row.id}person_id`}
+                    name="person_id"
+                    value={row.person_id}
+                    field="person_id"
+                    label="Person"
+                    options={personWerte}
+                    loading={personLoading}
+                    saveToDb={saveToDb}
+                    error={errors.person_id}
+                  />
+                )}
+                {ifNeeded('bemerkungen') && (
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    name="bemerkungen"
+                    label="Bemerkungen"
+                    value={row.bemerkungen}
+                    saveToDb={saveToDb}
+                    error={errors.bemerkungen}
+                    multiLine
+                  />
+                )}
+              </>
+            )}
+          </FieldsContainer>
+        )}
       </Container>
     </ErrorBoundary>
   )

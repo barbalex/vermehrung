@@ -5,6 +5,30 @@ export default () => createGlobalStyle`
     overflow: hidden !important;
   }
 
+@media print {
+  * {
+    overflow: visible !important;
+  }
+  html,
+  body {
+    background-color: white !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  #___gatsby {
+    background-color: white !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  #___gatsby>div {
+    height: auto !important;
+    overflow: visible;
+  }
+}
+
   /* scrollbars */
 
   ::-webkit-scrollbar {
