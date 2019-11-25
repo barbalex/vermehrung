@@ -6,26 +6,49 @@ export default () => createGlobalStyle`
   }
 
 @media print {
-  * {
-    overflow: visible !important;
+
+  /*
+  * hide everything BUT what shall be printed
+  */
+  body * {
+    visibility: hidden;
   }
+
+  .printer-content,
+  .printer-content * {
+    visibility: visible !important;
+  }
+
+  .printer-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  /**
+  * ensure html and body
+  * have no margins, no padding,
+  * grow and overflow as needed
+    necessary as hidden?
+  */
   html,
-  body {
-    background-color: white !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  #___gatsby {
-    background-color: white !important;
-    height: auto !important;
-    min-height: auto !important;
-    overflow: visible !important;
-  }
-
+  body,
+  #___gatsby,
   #___gatsby>div {
+    background-color: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
     height: auto !important;
-    overflow: visible;
+    width: auto !important;
+    overflow: visible !important;
+    
+  }
+  
+  @page .hochformat {
+    size: A4 portrait;
+  }
+  @page .querformat {
+    size: A4 landscape;
   }
 }
 
