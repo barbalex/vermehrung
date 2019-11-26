@@ -8,6 +8,8 @@ import get from 'lodash/get'
 import moment from 'moment'
 import gql from 'graphql-tag'
 
+import Lieferung from './Lieferung'
+
 const Container = styled.div`
   background-color: #f8f8f8;
   font-size: 9pt;
@@ -86,6 +88,41 @@ const kulturQuery = gql`
     }
   }
 `
+const lieferungQuery = gql`
+  query lieferungenQueryForLieferschein($id: bigint!) {
+    lieferung(
+      where: { sammel_lieferung_id: { _eq: $id } }
+      order_by: [
+        { art: { art_ae_art: { name: asc } } }
+        { kulturByVonKulturId: { herkunft: { nr: asc } } }
+      ]
+    ) {
+      id
+      art {
+        id
+        art_ae_art {
+          id
+          name
+        }
+      }
+      andere_menge
+      anzahl_auspflanzbereit
+      anzahl_pflanzen
+      gramm_samen
+      von_anzahl_individuen
+      kulturByVonKulturId {
+        id
+        herkunft {
+          id
+          nr
+          gemeinde
+          lokalname
+        }
+      }
+      bemerkungen
+    }
+  }
+`
 
 const Lieferschein = ({ row }) => {
   const imageData = useStaticQuery(graphql`
@@ -139,10 +176,20 @@ const Lieferschein = ({ row }) => {
           'kein Ort',
         )})`
     : '(keine Person erfasst)'
-  console.log('Lieferschein, row:', row)
+
   const am = row.datum
     ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
     : '(Kein Datum erfasst)'
+
+  const {
+    data: lieferungData,
+    error: lieferungError,
+    loading: lieferungLoading,
+  } = useQuery(lieferungQuery, {
+    variables: { id: row.id },
+  })
+  console.log('Lieferschein, lieferungData:', lieferungData)
+  const lieferungen = get(lieferungData, 'lieferung') || []
 
   return (
     <Container>
