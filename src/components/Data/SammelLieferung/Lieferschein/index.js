@@ -48,6 +48,23 @@ const PageContainer = styled.div`
     overflow-y: hidden !important;
   }
 `
+const Title = styled.h3`
+  padding-top: 15px;
+  margin-bottom: 0.2rem;
+`
+const HeaderText = styled.p`
+  font-size: small;
+  margin-bottom: 0.2rem;
+`
+const HeaderRow = styled.div`
+  display: flex;
+  font-size: small;
+`
+const HaederLabel = styled.div`
+  flex-basis: 40px;
+  flex-grow: 0;
+`
+const HeaderValue = styled.div``
 
 const Lieferschein = () => {
   const imageData = useStaticQuery(graphql`
@@ -69,11 +86,23 @@ const Lieferschein = () => {
     <Container>
       <PageContainer className="querformat printer-content">
         {image && <Img fixed={image} />}
-        <h3>Lieferschein</h3>
-        <p>
+        <Title>Lieferschein</Title>
+        <HeaderText>
           Projekt: Zwischenvermehrung von seltenen und bedrohten Pflanzenarten
           im Kanton Zürich
-        </p>
+        </HeaderText>
+        <HeaderRow>
+          <HaederLabel>von:</HaederLabel>
+          <HeaderValue>{'topos Marti & Müller AG'}</HeaderValue>
+        </HeaderRow>
+        <HeaderRow>
+          <HaederLabel>an:</HaederLabel>
+          <HeaderValue>{'Karin Sartori, Umweltatelier'}</HeaderValue>
+        </HeaderRow>
+        <HeaderRow>
+          <HaederLabel>am:</HaederLabel>
+          <HeaderValue>{'28.05.2019'}</HeaderValue>
+        </HeaderRow>
       </PageContainer>
     </Container>
   )
