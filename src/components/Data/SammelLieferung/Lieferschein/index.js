@@ -1,6 +1,9 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { graphql, useStaticQuery } from 'gatsby'
+import Img from 'gatsby-image'
+import get from 'lodash/get'
 
 const Container = styled.div`
   background-color: #eee;
@@ -27,7 +30,7 @@ const PageContainer = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /*justify-content: space-between;*/
 
   /* set dimensions */
   width: 29.7cm;
@@ -47,10 +50,30 @@ const PageContainer = styled.div`
 `
 
 const Lieferschein = () => {
+  const imageData = useStaticQuery(graphql`
+    query QueryLieferscheinImage {
+      file(relativePath: { eq: "toposLogo.png" }) {
+        childImageSharp {
+          # Specify the image processing specifications right in the query.
+          # Makes it trivial to update as your page's design changes.
+          fixed(width: 500, height: 87) {
+            ...GatsbyImageSharpFixed
+          }
+        }
+      }
+    }
+  `)
+  const image = get(imageData, 'file.childImageSharp.fixed', {})
+
   return (
     <Container>
       <PageContainer className="querformat printer-content">
-        Print
+        {image && <Img fixed={image} />}
+        <h3>Lieferschein</h3>
+        <p>
+          Projekt: Zwischenvermehrung von seltenen und bedrohten Pflanzenarten
+          im Kanton Zürich
+        </p>
       </PageContainer>
     </Container>
   )
