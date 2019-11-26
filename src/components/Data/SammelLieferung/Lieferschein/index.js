@@ -214,7 +214,6 @@ const Lieferschein = ({ row }) => {
   } = useQuery(lieferungQuery, {
     variables: { id: row.id },
   })
-  console.log('Lieferschein, lieferungData:', lieferungData)
   const lieferungen = get(lieferungData, 'lieferung') || []
 
   return (
@@ -253,9 +252,13 @@ const Lieferschein = ({ row }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {lieferungen.map(l => (
-                <Lieferung key={l.id} lieferung={l} />
-              ))}
+              {lieferungLoading ? (
+                <TableRow>...</TableRow>
+              ) : lieferungError ? (
+                <TableRow>{`Fehler beim Laden der Daten: ${lieferungError.message}`}</TableRow>
+              ) : (
+                lieferungen.map(l => <Lieferung key={l.id} lieferung={l} />)
+              )}
             </TableBody>
           </StyledTable>
         </StyledPaper>
