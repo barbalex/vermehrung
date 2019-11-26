@@ -7,6 +7,12 @@ import Img from 'gatsby-image'
 import get from 'lodash/get'
 import moment from 'moment'
 import gql from 'graphql-tag'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
 
 import Lieferung from './Lieferung'
 
@@ -66,6 +72,23 @@ const HaederLabel = styled.div`
   flex-grow: 0;
 `
 const HeaderValue = styled.div``
+const StyledPaper = styled(Paper)`
+  margin-top: 15px;
+  box-shadow: none !important;
+`
+const StyledTable = styled(Table)`
+  margin-bottom: 0;
+  td,
+  th {
+    font-size: 0.75rem;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  th:first-child,
+  td:first-child {
+    padding-left: 8px;
+  }
+`
 
 const personQuery = gql`
   query personQueryForLieferschein($id: bigint!) {
@@ -219,10 +242,24 @@ const Lieferschein = ({ row }) => {
           <HaederLabel>am:</HaederLabel>
           <HeaderValue>{am}</HeaderValue>
         </HeaderRow>
+        <StyledPaper square>
+          <StyledTable size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Art</TableCell>
+                <TableCell>Herkunft</TableCell>
+                <TableCell>Was</TableCell>
+                <TableCell>Bemerkungen</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {lieferungen.map(l => (
+                <Lieferung key={l.id} lieferung={l} />
+              ))}
+            </TableBody>
+          </StyledTable>
+        </StyledPaper>
       </PageContainer>
-      {lieferungen.map(l => (
-        <Lieferung key={l.id} lieferung={l} />
-      ))}
     </Container>
   )
 }

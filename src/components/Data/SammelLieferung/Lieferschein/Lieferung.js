@@ -1,8 +1,11 @@
 import React from 'react'
 import get from 'lodash/get'
+import TableCell from '@material-ui/core/TableCell'
+import TableRow from '@material-ui/core/TableRow'
+
+const Zeile = ({ value }) => <div>{value}</div>
 
 const LieferungForLieferschein = ({ lieferung: l }) => {
-  console.log('LieferungForLS, l:', l)
   const art = l.art_id
     ? get(l, 'art.art_ae_art.name', '(kein Name)')
     : '(keine Art gewählt)'
@@ -17,10 +20,26 @@ const LieferungForLieferschein = ({ lieferung: l }) => {
         '(kein Lokalname)',
       )})`
     : '(keine von-Kultur)'
-  const was = 'TODO:'
-  const bemerkungen = 'TODO:'
+  const wasArray = []
+  l.anzahl_pflanzen && wasArray.push(`${l.anzahl_pflanzen} Pflanzen`)
+  l.anzahl_auspflanzbereit &&
+    wasArray.push(`${l.anzahl_auspflanzbereit} Pflanzen auspflanzbereit`)
+  l.gramm_samen && wasArray.push(`${l.gramm_samen} Gramm Samen`)
+  l.andere_menge && wasArray.push(l.andere_menge)
+  const bemerkungen = l.bemerkungen
 
-  return <div>{`${art}, ${herkunft}`}</div>
+  return (
+    <TableRow>
+      <TableCell>{art}</TableCell>
+      <TableCell>{herkunft}</TableCell>
+      <TableCell>
+        {wasArray.map((w, i) => (
+          <Zeile key={i} value={w} />
+        ))}
+      </TableCell>
+      <TableCell>{bemerkungen}</TableCell>
+    </TableRow>
+  )
 }
 
 export default LieferungForLieferschein
