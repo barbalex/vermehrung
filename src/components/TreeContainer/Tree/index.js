@@ -42,7 +42,7 @@ const Tree = () => {
 
   useEffect(() => {
     const index = findIndex(nodes, node => isEqual(node.url, aNA))
-    if (index > -1) listRef.current.scrollToItem(index)
+    if (index > -1 && listRef.current) listRef.current.scrollToItem(index)
   }, [aNA, listRef, nodes])
 
   return (

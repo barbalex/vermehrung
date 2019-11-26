@@ -249,7 +249,7 @@ const personFelderQuery = gql`
 const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { filter } = store
+  const { filter, isPrint, setIsPrint } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -547,10 +547,19 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
       )
   }, [])
 
-  const [print, setPrint] = useState(false)
-  const printDeliveryNote = useCallback(() => {
-    setPrint(!print)
-  }, [print])
+  // setting initial value like this is necessary
+  // because during printing page Vermehrung re-renders without tree
+  const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
+  const showLieferschein = useCallback(() => {
+    setPrintPreview(!printPreview)
+  }, [printPreview])
+  const printLieferschein = useCallback(() => {
+    setIsPrint(true)
+    setTimeout(() => {
+      window.print()
+      setIsPrint(false)
+    })
+  }, [setIsPrint])
 
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&
@@ -626,17 +635,17 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
                 />
               )}
               <IconButton
-                aria-label={print ? 'Formular' : 'Lieferschein'}
-                title={print ? 'Formular' : 'Lieferschein'}
-                onClick={printDeliveryNote}
+                aria-label={printPreview ? 'Formular' : 'Lieferschein'}
+                title={printPreview ? 'Formular' : 'Lieferschein'}
+                onClick={showLieferschein}
               >
-                {print ? <FaEdit /> : <FaEnvelopeOpenText />}
+                {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
               </IconButton>
-              {print && (
+              {printPreview && (
                 <IconButton
                   aria-label="drucken"
                   title="drucken"
-                  onClick={window.print}
+                  onClick={printLieferschein}
                 >
                   <MdPrint />
                 </IconButton>
@@ -654,7 +663,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
             </TitleSymbols>
           </TitleContainer>
         )}
-        {print ? (
+        {printPreview ? (
           <Lieferschein />
         ) : (
           <FieldsContainer>

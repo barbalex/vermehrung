@@ -9,12 +9,10 @@ const myTypes = types
   .model({
     tree: types.optional(Tree, defaultTree),
     filter: types.optional(Filter, initialFilterValues),
-    docFilter: types.optional(
-      types.union(types.string, types.number),
-      '',
-    ),
+    docFilter: types.optional(types.union(types.string, types.number), ''),
     hideInactive: types.optional(types.maybeNull(types.boolean), true),
     sidebarWidth: types.maybeNull(types.number, null),
+    isPrint: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -25,6 +23,9 @@ const myTypes = types
     notifications: [],
   }))
   .actions(self => ({
+    setIsPrint(val) {
+      self.isPrint = val
+    },
     setSidebarWidth(val) {
       self.sidebarWidth = val
     },

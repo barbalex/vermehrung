@@ -47,7 +47,7 @@ const StyledSplitPane = styled(SplitPane)`
 
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
-  const { activeForm } = store
+  const { activeForm, isPrint } = store
   const {
     setOpenNodes,
     setActiveNodeArray,
@@ -55,12 +55,15 @@ const Vermehrung = ({ location }) => {
     widthEnforced,
   } = store.tree
   const showFilter = store.filter.show
-  const treeWidth = exists(widthEnforced)
+  let treeWidth = exists(widthEnforced)
     ? activeForm || showFilter
       ? widthEnforced
       : // if no form is active, show only tree
         '100%'
     : `${widthInPercentOfScreen}%`
+  // ensure tree is invisible when printing but still exists
+  // (caused errors to render form without tree while printing)
+  if (isPrint) treeWidth = 0
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
