@@ -6,7 +6,7 @@ import Img from 'gatsby-image'
 import get from 'lodash/get'
 
 const Container = styled.div`
-  background-color: #eee;
+  background-color: #f8f8f8;
   font-size: 9pt;
   cursor: default;
   overflow-y: auto;
@@ -50,18 +50,14 @@ const PageContainer = styled.div`
 `
 const Title = styled.h3`
   padding-top: 15px;
-  margin-bottom: 0.2rem;
-`
-const HeaderText = styled.p`
-  font-size: small;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.3rem;
 `
 const HeaderRow = styled.div`
   display: flex;
   font-size: small;
 `
 const HaederLabel = styled.div`
-  flex-basis: 40px;
+  flex-basis: 50px;
   flex-grow: 0;
 `
 const HeaderValue = styled.div``
@@ -87,10 +83,14 @@ const Lieferschein = () => {
       <PageContainer className="querformat printer-content">
         {image && <Img fixed={image} />}
         <Title>Lieferschein</Title>
-        <HeaderText>
-          Projekt: Zwischenvermehrung von seltenen und bedrohten Pflanzenarten
-          im Kanton Zürich
-        </HeaderText>
+        <HeaderRow>
+          <HaederLabel>Projekt:</HaederLabel>
+          <HeaderValue>
+            {
+              'Zwischenvermehrung von seltenen und bedrohten Pflanzenarten im Kanton Zürich'
+            }
+          </HeaderValue>
+        </HeaderRow>
         <HeaderRow>
           <HaederLabel>von:</HaederLabel>
           <HeaderValue>{'topos Marti & Müller AG'}</HeaderValue>
