@@ -664,7 +664,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
           </TitleContainer>
         )}
         {printPreview ? (
-          <Lieferschein />
+          <Lieferschein row={row} />
         ) : (
           <FieldsContainer>
             {ifSomeNeeded([

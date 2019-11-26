@@ -2,8 +2,11 @@ import React from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { graphql, useStaticQuery } from 'gatsby'
+import { useQuery } from '@apollo/react-hooks'
 import Img from 'gatsby-image'
 import get from 'lodash/get'
+import moment from 'moment'
+import gql from 'graphql-tag'
 
 const Container = styled.div`
   background-color: #f8f8f8;
@@ -50,7 +53,7 @@ const PageContainer = styled.div`
 `
 const Title = styled.h3`
   padding-top: 15px;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 `
 const HeaderRow = styled.div`
   display: flex;
@@ -62,7 +65,29 @@ const HaederLabel = styled.div`
 `
 const HeaderValue = styled.div``
 
-const Lieferschein = () => {
+const personQuery = gql`
+  query personQueryForLieferschein($id: bigint!) {
+    person(where: { id: { _eq: $id } }) {
+      id
+      name
+      ort
+    }
+  }
+`
+const kulturQuery = gql`
+  query kulturQueryForLieferschein($id: bigint!) {
+    kultur(where: { id: { _eq: $id } }) {
+      id
+      garten {
+        id
+        name
+        ort
+      }
+    }
+  }
+`
+
+const Lieferschein = ({ row }) => {
   const imageData = useStaticQuery(graphql`
     query QueryLieferscheinImage {
       file(relativePath: { eq: "toposLogo.png" }) {
@@ -77,6 +102,47 @@ const Lieferschein = () => {
     }
   `)
   const image = get(imageData, 'file.childImageSharp.fixed', {})
+
+  const {
+    data: kulturData,
+    error: kulturError,
+    loading: kulturLoading,
+  } = useQuery(kulturQuery, {
+    variables: { id: row.von_kultur_id },
+  })
+  const von = row.von_kultur_id
+    ? kulturLoading
+      ? '...'
+      : kulturError
+      ? '(Fehler beim Laden der Daten)'
+      : `${get(kulturData, 'kultur[0].garten.name') || '(kein Name)'} (${get(
+          kulturData,
+          'kultur[0].garten.ort',
+        ) || 'kein Ort'})`
+    : '(keine von-Kultur erfasst)'
+
+  const {
+    data: personData,
+    error: personError,
+    loading: personLoading,
+  } = useQuery(personQuery, {
+    variables: { id: row.person_id },
+  })
+  const an = row.person_id
+    ? personLoading
+      ? '...'
+      : personError
+      ? '(Fehler beim Laden der Daten für die Person)'
+      : `${get(personData, 'person[0].name', '(kein Name)')} (${get(
+          personData,
+          'person[0].ort',
+          'kein Ort',
+        )})`
+    : '(keine Person erfasst)'
+  console.log('Lieferschein, row:', row)
+  const am = row.datum
+    ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
+    : '(Kein Datum erfasst)'
 
   return (
     <Container>
@@ -93,15 +159,15 @@ const Lieferschein = () => {
         </HeaderRow>
         <HeaderRow>
           <HaederLabel>von:</HaederLabel>
-          <HeaderValue>{'topos Marti & Müller AG'}</HeaderValue>
+          <HeaderValue>{von}</HeaderValue>
         </HeaderRow>
         <HeaderRow>
           <HaederLabel>an:</HaederLabel>
-          <HeaderValue>{'Karin Sartori, Umweltatelier'}</HeaderValue>
+          <HeaderValue>{an}</HeaderValue>
         </HeaderRow>
         <HeaderRow>
           <HaederLabel>am:</HaederLabel>
-          <HeaderValue>{'28.05.2019'}</HeaderValue>
+          <HeaderValue>{am}</HeaderValue>
         </HeaderRow>
       </PageContainer>
     </Container>
