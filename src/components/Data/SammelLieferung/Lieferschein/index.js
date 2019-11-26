@@ -98,6 +98,7 @@ const lieferungQuery = gql`
       ]
     ) {
       id
+      art_id
       art {
         id
         art_ae_art {
@@ -110,8 +111,10 @@ const lieferungQuery = gql`
       anzahl_pflanzen
       gramm_samen
       von_anzahl_individuen
+      von_kultur_id
       kulturByVonKulturId {
         id
+        herkunft_id
         herkunft {
           id
           nr
@@ -217,6 +220,9 @@ const Lieferschein = ({ row }) => {
           <HeaderValue>{am}</HeaderValue>
         </HeaderRow>
       </PageContainer>
+      {lieferungen.map(l => (
+        <Lieferung key={l.id} lieferung={l} />
+      ))}
     </Container>
   )
 }
