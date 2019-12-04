@@ -23,7 +23,7 @@ const Title = styled.div`
   user-select: none;
 `
 
-const TeilkulturDeleteButton = ({ row }) => {
+const ZaehlungDeleteButton = ({ row }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -37,7 +37,7 @@ const TeilkulturDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    const node = { url: ['Teilkulturen', row.id] }
+    const node = { url: ['Zaehlungen', row.id] }
     deleteDataset({ node, store, client })
   }, [client, row.id, store])
 
@@ -46,8 +46,8 @@ const TeilkulturDeleteButton = ({ row }) => {
       <IconButton
         aria-controls="menu"
         aria-haspopup="true"
-        aria-label="Teilkultur löschen"
-        title="Teilkultur löschen"
+        aria-label="Zählung löschen"
+        title="Zählung löschen"
         onClick={onClickDelete}
       >
         <FaMinus />
@@ -69,4 +69,4 @@ const TeilkulturDeleteButton = ({ row }) => {
   )
 }
 
-export default observer(TeilkulturDeleteButton)
+export default observer(ZaehlungDeleteButton)

@@ -8,26 +8,22 @@ import IconButton from '@material-ui/core/IconButton'
 import storeContext from '../../../storeContext'
 import createNew from '../../TreeContainer/Tree/createNew'
 
-const TeilkulturAddButton = () => {
+const ZaehlungAddButton = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: ['Teilkulturen'] }
+    const node = { nodeType: 'folder', url: ['Zaehlungen'] }
     createNew({ node, store, client })
   }, [client, store])
 
   return (
     <ErrorBoundary>
-      <IconButton
-        aria-label="neue Teilkultur"
-        title="neue Teilkultur"
-        onClick={add}
-      >
+      <IconButton aria-label="neue Zählung" title="neue Zählung" onClick={add}>
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
   )
 }
 
-export default observer(TeilkulturAddButton)
+export default observer(ZaehlungAddButton)
