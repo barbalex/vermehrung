@@ -6,6 +6,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
+import { FaPlus } from 'react-icons/fa'
+import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
@@ -21,13 +23,46 @@ import Files from '../Files'
 import artQuery from './artQuery'
 import Timeline from './Timeline'
 import Herkunft from './Herkunft'
+import DeleteButton from './DeleteButton'
 import QK from './QK'
+import createNew from '../../TreeContainer/Tree/createNew'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+`
+const TitleContainer = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+  padding 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleSymbols = styled.div`
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleFilterNumbers = styled.div`
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -65,6 +100,11 @@ const Art = ({ filter: showFilter }) => {
   useEffect(() => {
     setErrors({})
   }, [row.id])
+
+  const add = useCallback(() => {
+    const node = { nodeType: 'folder', url: ['Arten'] }
+    createNew({ node, store, client })
+  }, [client, store])
 
   const saveToDb = useCallback(
     async event => {
@@ -177,13 +217,18 @@ const Art = ({ filter: showFilter }) => {
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle
-            title="Art"
-            table="art"
-            rowsLength={totalNr}
-            rowsFilteredLength={filteredNr}
-            filter={showFilter}
-          />
+          <TitleContainer>
+            <Title>Art</Title>
+            <TitleSymbols>
+              <IconButton aria-label="neue Art" title="neue Art" onClick={add}>
+                <FaPlus />
+              </IconButton>
+              <DeleteButton row={row} />
+              {(store.filter.show || isFiltered) && (
+                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+              )}
+            </TitleSymbols>
+          </TitleContainer>
         )}
         <FieldsContainer>
           <SelectLoadingOptions
