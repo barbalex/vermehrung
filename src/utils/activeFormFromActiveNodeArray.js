@@ -15,6 +15,9 @@ export default url => {
   if (url.length === 1 && url[0] === 'Sammlungen') {
     return 'sammlungen'
   }
+  if (url.length === 1 && url[0] === 'Teilkulturen') {
+    return 'teilkulturen'
+  }
   if (url.length === 1) {
     return null
   }

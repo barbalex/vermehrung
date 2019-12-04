@@ -23,6 +23,7 @@ import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
+import DeleteButton from './DeleteButton'
 
 const Container = styled.div`
   height: 100%;
@@ -235,9 +236,7 @@ const Teilkultur = ({ filter: showFilter }) => {
   )
   const openTeilkulturDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Teilkulturen',
-      )
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Teilkulturen')
   }, [])
 
   if (loading) {
@@ -282,6 +281,7 @@ const Teilkultur = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Teilkultur</Title>
             <TitleSymbols>
+              <DeleteButton row={row} />
               <Settings teilkulturResult={teilkulturResult} />
               <IconButton
                 aria-label="Anleitung öffnen"

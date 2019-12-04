@@ -18,6 +18,7 @@ import SammelLieferung from './SammelLieferung'
 import Person from './Person'
 import Zaehlung from './Zaehlung'
 import Teilkultur from './Teilkultur'
+import Teilkulturen from './Teilkulturen'
 
 const Data = () => {
   const { activeForm } = useContext(storeContext)
@@ -68,6 +69,9 @@ const Data = () => {
     }
     case 'teilkultur': {
       return <Teilkultur />
+    }
+    case 'teilkulturen': {
+      return <Teilkulturen />
     }
     case 'zaehlung': {
       return <Zaehlung />

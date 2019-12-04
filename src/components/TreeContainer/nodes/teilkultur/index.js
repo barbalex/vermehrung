@@ -1,9 +1,10 @@
 import get from 'lodash/get'
 
 export default ({ nodes, data }) => {
-  const teilkulturen = (get(data, 'teilkultur') || []).filter(t =>
+  const teilkulturen = get(data, 'teilkultur') || []
+  /*.filter(t =>
     get(t, 'kultur.kultur_felder.tk'),
-  )
+  )*/
 
   return (
     teilkulturen
