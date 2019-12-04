@@ -18,11 +18,11 @@ export default ({ nodes, data, url }) => {
     n => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
-  const arten = get(data, 'art', [])
+  const arten = get(data, 'art') || []
   const art = arten.find(a => a.id === artId)
-  const sammlungen = get(art, 'sammlungs', [])
+  const sammlungen = get(art, 'sammlungs') || []
   const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs', [])
+  const lieferungen = get(sammlung, 'lieferungs') || []
 
   return (
     lieferungen

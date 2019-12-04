@@ -6,11 +6,11 @@ import exists from '../../../../../utils/exists'
 
 export default ({ nodes, data, url }) => {
   const sammelLieferungId = url[1]
-  const sammelLieferungen = get(data, 'sammel_lieferung', [])
+  const sammelLieferungen = get(data, 'sammel_lieferung') || []
   const sammelLieferung = sammelLieferungen.find(
     k => k.id === sammelLieferungId,
   )
-  const lieferungen = get(sammelLieferung, 'lieferungs', [])
+  const lieferungen = get(sammelLieferung, 'lieferungs') || []
 
   const sammelLieferungNodes = nodes.filter(
     n => n.parentId === `sammelLieferungFolder`,

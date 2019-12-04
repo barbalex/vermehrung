@@ -3,9 +3,9 @@ import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
   const personId = url[1]
-  const personen = get(data, 'person', [])
+  const personen = get(data, 'person') || []
   const person = personen.find(p => p.id === personId)
-  const sammlungen = get(person, 'sammlungs', [])
+  const sammlungen = get(person, 'sammlungs') || []
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')

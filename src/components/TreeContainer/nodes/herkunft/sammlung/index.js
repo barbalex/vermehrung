@@ -5,9 +5,9 @@ import moment from 'moment'
 export default ({ nodes, data, url }) => {
   const herkunftId = url[1]
 
-  const herkuenfte = get(data, 'herkunft', [])
+  const herkuenfte = get(data, 'herkunft') || []
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungs', [])
+  const sammlungen = get(herkunft, 'sammlungs') || []
 
   const herkunftNodes = nodes.filter(n => n.parentId === 'herkunftFolder')
   const herkunftIndex =

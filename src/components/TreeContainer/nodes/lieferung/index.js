@@ -4,7 +4,7 @@ import moment from 'moment'
 import exists from '../../../../utils/exists'
 
 export default ({ nodes, data }) => {
-  const lieferungen = get(data, 'lieferung', [])
+  const lieferungen = get(data, 'lieferung') || []
 
   return (
     lieferungen

@@ -3,9 +3,9 @@ import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const gartenId = url[1]
-  const gaerten = get(data, 'garten', [])
+  const gaerten = get(data, 'garten') || []
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kulturs', [])
+  const kulturen = get(garten, 'kulturs') || []
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
   const gartenIndex =

@@ -2,7 +2,7 @@ import get from 'lodash/get'
 import moment from 'moment'
 
 export default ({ nodes, data }) => {
-  const sammelLieferungen = get(data, 'sammel_lieferung', [])
+  const sammelLieferungen = get(data, 'sammel_lieferung') || []
 
   return (
     sammelLieferungen

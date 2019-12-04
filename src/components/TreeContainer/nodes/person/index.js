@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 
 export default ({ nodes, data }) =>
-  get(data, 'person', [])
+  (get(data, 'person') || [])
     // only show if parent node exists
     .filter(() => nodes.map(n => n.id).includes('personFolder'))
     .map(el => ({

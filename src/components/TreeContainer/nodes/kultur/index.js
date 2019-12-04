@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 
 export default ({ nodes, data }) => {
-  const kulturen = get(data, 'kultur', [])
+  const kulturen = get(data, 'kultur') || []
 
   return (
     kulturen

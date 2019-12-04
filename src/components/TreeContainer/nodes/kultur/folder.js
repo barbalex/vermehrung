@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 
 export default ({ data, loading }) => {
-  const kulturen = get(data, 'kultur', [])
+  const kulturen = get(data, 'kultur') || []
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   return [

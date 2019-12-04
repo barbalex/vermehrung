@@ -3,9 +3,9 @@ import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const kulturId = url[1]
-  const kulturen = get(data, 'kultur', [])
+  const kulturen = get(data, 'kultur') || []
   const kultur = kulturen.find(k => k.id === kulturId)
-  const teilkulturs = get(kultur, 'teilkulturs', [])
+  const teilkulturs = get(kultur, 'teilkulturs') || []
 
   const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
   const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)

@@ -3,11 +3,11 @@ import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
   const sammelLieferungId = url[1]
-  const sammelLieferungen = get(data, 'sammel_lieferung', [])
+  const sammelLieferungen = get(data, 'sammel_lieferung') || []
   const sammelLieferung = sammelLieferungen.find(
     k => k.id === sammelLieferungId,
   )
-  const lieferungen = get(sammelLieferung, 'lieferungs', [])
+  const lieferungen = get(sammelLieferung, 'lieferungs') || []
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   const sammelLieferungNodes = nodes.filter(

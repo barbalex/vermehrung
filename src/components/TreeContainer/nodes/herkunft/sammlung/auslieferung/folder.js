@@ -18,11 +18,11 @@ export default ({ url, nodes, data, loading }) => {
     n => n.id === `herkunft${herkunftId}Sammlung${sammlungId}`,
   )
 
-  const herkuenfte = get(data, 'herkunft', [])
+  const herkuenfte = get(data, 'herkunft') || []
   const herkunft = herkuenfte.find(a => a.id === herkunftId)
-  const sammlungen = get(herkunft, 'sammlungs', [])
+  const sammlungen = get(herkunft, 'sammlungs') || []
   const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs', [])
+  const lieferungen = get(sammlung, 'lieferungs') || []
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   // only return if parent exists

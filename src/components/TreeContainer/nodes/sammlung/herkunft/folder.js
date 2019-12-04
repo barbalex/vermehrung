@@ -4,7 +4,7 @@ import findIndex from 'lodash/findIndex'
 export default ({ data, loading, url, nodes }) => {
   const sammlungId = url[1]
 
-  const sammlungen = get(data, 'sammlung', [])
+  const sammlungen = get(data, 'sammlung') || []
   const sammlung = sammlungen.find(p => p.id === sammlungId)
   const herkunft = get(sammlung, 'herkunft')
   const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0

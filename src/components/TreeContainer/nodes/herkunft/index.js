@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 
 export default ({ nodes, data }) => {
-  const herkuenfte = get(data, 'herkunft', [])
+  const herkuenfte = get(data, 'herkunft') || []
 
   return (
     herkuenfte

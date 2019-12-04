@@ -9,7 +9,7 @@ export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const sammlungen = get(data, 'sammlung', [])
   const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs', [])
+  const lieferungen = get(sammlung, 'lieferungs') || []
 
   const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(

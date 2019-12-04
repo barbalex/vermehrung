@@ -4,11 +4,11 @@ import findIndex from 'lodash/findIndex'
 export default ({ url, nodes, data, loading }) => {
   const gartenId = url[1]
   const kulturId = url[3]
-  const gaerten = get(data, 'garten', [])
+  const gaerten = get(data, 'garten') || []
   const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kulturs', [])
+  const kulturen = get(garten, 'kulturs') || []
   const kultur = kulturen.find(k => k.id === kulturId)
-  const auslieferungen = get(kultur, 'lieferungsByVonKulturId', [])
+  const auslieferungen = get(kultur, 'lieferungsByVonKulturId') || []
   const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
 
   const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')

@@ -4,9 +4,9 @@ import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const personId = url[1]
-  const personen = get(data, 'person', [])
+  const personen = get(data, 'person') || []
   const person = personen.find(p => p.id === personId)
-  const sammlungen = get(person, 'sammlungs', [])
+  const sammlungen = get(person, 'sammlungs') || []
 
   const personNodes = nodes.filter(n => n.parentId === 'personFolder')
   const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)

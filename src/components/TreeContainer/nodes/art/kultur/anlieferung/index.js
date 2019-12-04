@@ -8,11 +8,11 @@ export default ({ nodes, data, url }) => {
   const artId = url[1]
   const kulturId = url[3]
 
-  const arten = get(data, 'art', [])
+  const arten = get(data, 'art') || []
   const art = arten.find(a => a.id === artId)
-  const kulturen = get(art, 'kulturs', [])
+  const kulturen = get(art, 'kulturs') || []
   const kultur = kulturen.find(k => k.id === kulturId)
-  const anlieferungen = get(kultur, 'lieferungsByNachKulturId', [])
+  const anlieferungen = get(kultur, 'lieferungsByNachKulturId') || []
 
   const artNodes = nodes.filter(n => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)

@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 
 export default ({ nodes, data }) => {
-  const events = get(data, 'event', [])
+  const events = get(data, 'event') || []
 
   return (
     events
