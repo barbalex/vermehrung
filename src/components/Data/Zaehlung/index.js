@@ -31,6 +31,8 @@ import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
 import Settings from './Settings'
+import AddButton from './AddButton'
+import DelteButton from './DeleteButton'
 
 const Container = styled.div`
   height: 100%;
@@ -296,6 +298,8 @@ const Zaehlung = ({ filter: showFilter }) => {
             <TitleContainer>
               <Title>Zählung</Title>
               <TitleSymbols>
+                <AddButton />
+                <DelteButton row={row} />
                 {row.kultur_id && (
                   <Settings
                     kulturId={row.kultur_id}
