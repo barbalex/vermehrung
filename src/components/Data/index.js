@@ -6,6 +6,7 @@ import Art from './Art'
 import Arten from './Arten'
 import Event from './Event'
 import Herkunft from './Herkunft'
+import Herkuenfte from './Herkuenfte'
 import Sammlung from './Sammlung'
 import Garten from './Garten'
 import Kultur from './Kultur'
@@ -34,6 +35,9 @@ const Data = () => {
     }
     case 'herkunft': {
       return <Herkunft />
+    }
+    case 'herkuenfte': {
+      return <Herkuenfte />
     }
     case 'kultur': {
       return <Kultur />

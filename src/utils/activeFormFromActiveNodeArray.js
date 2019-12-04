@@ -7,6 +7,9 @@ export default url => {
   if (url.length === 1 && url[0] === 'Arten') {
     return 'arten'
   }
+  if (url.length === 1 && url[0] === 'Herkuenfte') {
+    return 'herkuenfte'
+  }
   if (url.length === 1) {
     return null
   }

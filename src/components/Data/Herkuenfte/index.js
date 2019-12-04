@@ -6,12 +6,12 @@ import get from 'lodash/get'
 import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import gql from 'graphql-tag'
 
 import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import artQuery from './artQuery'
 import createNew from '../../TreeContainer/Tree/createNew'
 
 const Container = styled.div`
@@ -58,30 +58,41 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Arten = ({ filter: showFilter }) => {
+const query = gql`
+  query HerkunftQuery($isFiltered: Boolean!, $filter: herkunft_bool_exp!) {
+    rowsUnfiltered: herkunft @include(if: $isFiltered) {
+      id
+    }
+    rowsFiltered: herkunft(where: $filter) @include(if: $isFiltered) {
+      id
+    }
+  }
+`
+
+const Herkuenfte = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const artFilter = queryFromTable({ store, table: 'art' })
-  const { data, error, loading } = useQuery(artQuery, {
-    variables: { filter: artFilter, isFiltered },
+  const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
+  const { data, error, loading } = useQuery(query, {
+    variables: { isFiltered, filter: herkunftFilter },
   })
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: ['Arten'] }
+    const node = { nodeType: 'folder', url: ['Herkuenfte'] }
     createNew({ node, store, client })
   }, [client, store])
 
   if (loading) {
     return (
       <Container>
-        <FormTitle title="Arten" />
+        <FormTitle title="Herkünfte" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
@@ -91,7 +102,7 @@ const Arten = ({ filter: showFilter }) => {
   if (errorToShow) {
     return (
       <Container>
-        <FormTitle title="Arten" />
+        <FormTitle title="Herkünfte" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
@@ -109,9 +120,13 @@ const Arten = ({ filter: showFilter }) => {
           />
         ) : (
           <TitleContainer>
-            <Title>Arten</Title>
+            <Title>Herkünfte</Title>
             <TitleSymbols>
-              <IconButton aria-label="neue Art" title="neue Art" onClick={add}>
+              <IconButton
+                aria-label="neue Herkunft"
+                title="neue Herkunft"
+                onClick={add}
+              >
                 <FaPlus />
               </IconButton>
               {(store.filter.show || isFiltered) && (
@@ -126,4 +141,4 @@ const Arten = ({ filter: showFilter }) => {
   )
 }
 
-export default observer(Arten)
+export default observer(Herkuenfte)
