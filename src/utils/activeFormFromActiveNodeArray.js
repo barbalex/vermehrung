@@ -1,5 +1,12 @@
 export default url => {
+  console.log('activeFormFromActiveNodeArray', {
+    urlLength: url.length,
+    url0: url[0],
+  })
   //console.log('acitveFormFromActiveNodeArray, url:', url.slice())
+  if (url.length === 1 && url[0] === 'Arten') {
+    return 'arten'
+  }
   if (url.length === 1) {
     return null
   }

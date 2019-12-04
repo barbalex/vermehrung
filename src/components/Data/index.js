@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
 import Art from './Art'
+import Arten from './Arten'
 import Event from './Event'
 import Herkunft from './Herkunft'
 import Sammlung from './Sammlung'
@@ -21,6 +22,9 @@ const Data = () => {
   switch (activeForm) {
     case 'art': {
       return <Art />
+    }
+    case 'arten': {
+      return <Arten />
     }
     case 'event': {
       return <Event />

@@ -55,6 +55,7 @@ export default async ({ node, store, client }) => {
   const { enqueNotification } = store
   const { setActiveNodeArray, refetch, addOpenNodes } = store.tree
   const { nodeType, url } = node
+  console.log('createNew', { nodeType, url: url.slice() })
 
   // get table and id from url
   let parentTableTitle = null
