@@ -14,6 +14,7 @@ import Gaerten from './Gaerten'
 import Kultur from './Kultur'
 import Kulturen from './Kulturen'
 import Lieferung from './Lieferung'
+import Lieferungen from './Lieferungen'
 import SammelLieferung from './SammelLieferung'
 import Person from './Person'
 import Zaehlung from './Zaehlung'
@@ -58,6 +59,9 @@ const Data = () => {
     }
     case 'lieferung': {
       return <Lieferung />
+    }
+    case 'lieferungen': {
+      return <Lieferungen />
     }
     case 'person': {
       return <Person />
