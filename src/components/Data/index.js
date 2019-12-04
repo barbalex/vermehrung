@@ -10,6 +10,7 @@ import Herkuenfte from './Herkuenfte'
 import Sammlung from './Sammlung'
 import Sammlungen from './Sammlungen'
 import Garten from './Garten'
+import Gaerten from './Gaerten'
 import Kultur from './Kultur'
 import Lieferung from './Lieferung'
 import SammelLieferung from './SammelLieferung'
@@ -33,6 +34,9 @@ const Data = () => {
     }
     case 'garten': {
       return <Garten />
+    }
+    case 'gaerten': {
+      return <Gaerten />
     }
     case 'herkunft': {
       return <Herkunft />

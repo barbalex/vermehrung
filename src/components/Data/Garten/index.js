@@ -30,6 +30,7 @@ import getUserPersonId from '../../../utils/getUserPersonId'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
+import DeleteButton from './DeleteButton'
 
 const Container = styled.div`
   height: 100%;
@@ -273,6 +274,7 @@ const Garten = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Garten</Title>
             <TitleSymbols>
+              <DeleteButton row={row} />
               <Settings
                 personId={userPersonId}
                 personFelderResult={personFelderResult}
