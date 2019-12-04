@@ -42,6 +42,8 @@ import Settings from './Settings'
 import Copy from './Copy'
 import updateAllLieferungen from './Copy/updateAllLieferungen'
 import Lieferschein from './Lieferschein'
+import AddButton from './AddButton'
+import DeleteButton from './DeleteButton'
 
 const Container = styled.div`
   height: 100%;
@@ -628,6 +630,8 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
               {!sl_auto_copy_edits && (
                 <Copy sammelLieferung={row} lieferungId={lieferungId} />
               )}
+              <AddButton />
+              <DeleteButton row={row} />
               {idPassed && (
                 <Settings
                   personId={userPersonId}
