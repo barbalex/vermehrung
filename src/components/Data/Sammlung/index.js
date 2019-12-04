@@ -15,21 +15,21 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../storeContext'
-import Select from '../shared/Select'
-import TextField from '../shared/TextField'
-import DateFieldWithPicker from '../shared/DateFieldWithPicker'
-import FormTitle from '../shared/FormTitle'
-import FilterTitle from '../shared/FilterTitle'
-import Checkbox2States from '../shared/Checkbox2States'
+import storeContext from '../../../storeContext'
+import Select from '../../shared/Select'
+import TextField from '../../shared/TextField'
+import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
+import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
+import Checkbox2States from '../../shared/Checkbox2States'
 import {
   sammlung as sammlungFragment,
   art as artFragment,
-} from '../../utils/fragments'
-import types from '../../store/Filter/simpleTypes'
-import queryFromTable from '../../utils/queryFromTable'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
-import Files from './Files'
+} from '../../../utils/fragments'
+import types from '../../../store/Filter/simpleTypes'
+import queryFromTable from '../../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
+import Files from '../Files'
 
 const Container = styled.div`
   height: 100%;

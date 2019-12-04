@@ -8,6 +8,7 @@ import Event from './Event'
 import Herkunft from './Herkunft'
 import Herkuenfte from './Herkuenfte'
 import Sammlung from './Sammlung'
+import Sammlungen from './Sammlungen'
 import Garten from './Garten'
 import Kultur from './Kultur'
 import Lieferung from './Lieferung'
@@ -53,6 +54,9 @@ const Data = () => {
     }
     case 'sammlung': {
       return <Sammlung />
+    }
+    case 'sammlungen': {
+      return <Sammlungen />
     }
     case 'teilkultur': {
       return <Teilkultur />

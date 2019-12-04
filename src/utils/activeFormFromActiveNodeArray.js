@@ -10,6 +10,9 @@ export default url => {
   if (url.length === 1 && url[0] === 'Herkuenfte') {
     return 'herkuenfte'
   }
+  if (url.length === 1 && url[0] === 'Sammlungen') {
+    return 'sammlungen'
+  }
   if (url.length === 1) {
     return null
   }
