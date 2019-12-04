@@ -36,6 +36,8 @@ import Files from '../Files'
 import updateLieferung from './updateLieferung'
 import updateLieferungArtId from './updateLieferungArtId'
 import Settings from './Settings'
+import AddButton from './AddButton'
+import DeleteButton from './DeleteButton'
 
 const Container = styled.div`
   height: 100%;
@@ -581,6 +583,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
           <TitleContainer>
             <Title>Lieferung</Title>
             <TitleSymbols>
+              <AddButton />
+              <DeleteButton row={row} />
               <Settings
                 personId={userPersonId}
                 personFelderResult={personFelderResult}
