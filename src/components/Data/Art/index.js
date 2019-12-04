@@ -24,6 +24,7 @@ import artQuery from './artQuery'
 import Timeline from './Timeline'
 import Herkunft from './Herkunft'
 import DeleteButton from './DeleteButton'
+import AddButton from './AddButton'
 import QK from './QK'
 import createNew from '../../TreeContainer/Tree/createNew'
 
@@ -220,9 +221,7 @@ const Art = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Art</Title>
             <TitleSymbols>
-              <IconButton aria-label="neue Art" title="neue Art" onClick={add}>
-                <FaPlus />
-              </IconButton>
+              <AddButton />
               <DeleteButton row={row} />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
