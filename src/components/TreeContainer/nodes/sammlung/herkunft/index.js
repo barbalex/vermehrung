@@ -24,7 +24,7 @@ export default ({ nodes, data, url }) => {
           '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`
 
         return {
-          nodeType: 'table',
+          nodeType: 'table_no_menu',
           menuTitle: 'Herkunft',
           table: 'herkunft',
           id: `sammlung${sammlungId}Herkunft${el.id}`,

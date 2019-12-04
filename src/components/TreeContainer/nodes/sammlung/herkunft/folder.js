@@ -20,7 +20,7 @@ export default ({ data, loading, url, nodes }) => {
 
   return [
     {
-      nodeType: 'folder',
+      nodeType: 'folder_no_menu',
       menuTitle: 'Herkünfte',
       id: `sammlung${sammlungId}HerkunftFolder`,
       label: `Herkünfte (${nr})`,
