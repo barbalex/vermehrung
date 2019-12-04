@@ -74,6 +74,7 @@ const Sammlungen = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
+  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
@@ -85,9 +86,9 @@ const Sammlungen = ({ filter: showFilter }) => {
   const filteredNr = get(data, 'rowsFiltered', []).length
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: ['Sammlungen'] }
+    const node = { nodeType: 'folder', url: activeNodeArray }
     createNew({ node, store, client })
-  }, [client, store])
+  }, [activeNodeArray, client, store])
 
   if (loading) {
     return (

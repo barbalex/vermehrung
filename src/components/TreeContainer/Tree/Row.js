@@ -236,7 +236,6 @@ const Row = ({ style, node }) => {
     createNew({ node, store, client })
   }, [node, store, client])
   const onClickDelete = useCallback(() => {
-    console.log('Row, onClickDelete, node:', node)
     deleteDataset({ node, store, client })
   }, [node, store, client])
 
