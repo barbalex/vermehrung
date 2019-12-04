@@ -5,6 +5,7 @@ import storeContext from '../../storeContext'
 import Art from './Art'
 import Arten from './Arten'
 import Event from './Event'
+import Events from './Events'
 import Herkunft from './Herkunft'
 import Herkuenfte from './Herkuenfte'
 import Sammlung from './Sammlung'
@@ -36,6 +37,9 @@ const Data = () => {
     }
     case 'event': {
       return <Event />
+    }
+    case 'events': {
+      return <Events />
     }
     case 'garten': {
       return <Garten />

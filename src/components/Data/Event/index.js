@@ -32,6 +32,8 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import Settings from './Settings'
+import AddButton from './AddButton'
+import DeleteButton from './DeleteButton'
 
 const Container = styled.div`
   height: 100%;
@@ -348,6 +350,8 @@ const Event = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Event</Title>
             <TitleSymbols>
+              <AddButton />
+              <DeleteButton row={row} />
               {row.kultur_id && (
                 <Settings kulturId={row.kultur_id} eventResult={eventResult} />
               )}

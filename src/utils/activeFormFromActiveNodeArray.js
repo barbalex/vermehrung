@@ -3,6 +3,9 @@ export default url => {
   if (url.length === 1 && url[0] === 'Arten') {
     return 'arten'
   }
+  if (url.length === 1 && url[0] === 'Events') {
+    return 'events'
+  }
   if (url.length === 1 && url[0] === 'Gaerten') {
     return 'gaerten'
   }
@@ -65,13 +68,7 @@ export default url => {
   if ([2, 3].includes(url.length) && url[0] === 'Sammlungen') {
     return 'sammlung'
   }
-  if (
-    [2, 3].includes(url.length) &&
-    url[0] === 'Kulturen' &&
-    url[2] !== 'Teilkulturen' &&
-    url[2] !== 'Zaehlungen' &&
-    url[2] !== 'Lieferungen'
-  ) {
+  if (url.length === 2 && url[0] === 'Kulturen') {
     return 'kultur'
   }
 
@@ -87,7 +84,14 @@ export default url => {
   if (url.length === 3 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
     return 'sammlungen'
   }
-  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Lieferungen') {
+  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Events') {
+    return 'events'
+  }
+  if (
+    url.length === 3 &&
+    url[0] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[2])
+  ) {
     return 'lieferungen'
   }
   if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Teilkulturen') {
@@ -172,7 +176,15 @@ export default url => {
     url.length === 5 &&
     url[0] === 'Arten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Lieferungen'
+    url[4] === 'Events'
+  ) {
+    return 'events'
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[4])
   ) {
     return 'lieferungen'
   }
@@ -199,7 +211,15 @@ export default url => {
     url.length === 5 &&
     url[0] === 'Gaerten' &&
     url[2] === 'Kulturen' &&
-    url[4] === 'Lieferungen'
+    url[4] === 'Events'
+  ) {
+    return 'events'
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[4])
   ) {
     return 'lieferungen'
   }
@@ -353,7 +373,16 @@ export default url => {
     url[0] === 'Personen' &&
     url[2] === 'Gaerten' &&
     url[4] === 'Kulturen' &&
-    url[6] === 'Lieferungen'
+    url[6] === 'Events'
+  ) {
+    return 'events'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Personen' &&
+    url[2] === 'Gaerten' &&
+    url[4] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[6])
   ) {
     return 'lieferungen'
   }
