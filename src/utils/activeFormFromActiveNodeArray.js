@@ -1,9 +1,5 @@
 export default url => {
-  console.log('activeFormFromActiveNodeArray', {
-    urlLength: url.length,
-    url0: url[0],
-  })
-  //console.log('acitveFormFromActiveNodeArray, url:', url.slice())
+  console.log('acitveFormFromActiveNodeArray, url:', url.slice())
   if (url.length === 1 && url[0] === 'Arten') {
     return 'arten'
   }
@@ -13,6 +9,9 @@ export default url => {
   if (url.length === 1 && url[0] === 'Herkuenfte') {
     return 'herkuenfte'
   }
+  if (url.length === 1 && url[0] === 'Kulturen') {
+    return 'kulturen'
+  }
   if (url.length === 1 && url[0] === 'Sammlungen') {
     return 'sammlungen'
   }
@@ -20,14 +19,10 @@ export default url => {
     return null
   }
 
-  if (
-    [2, 3].includes(url.length) &&
-    url[0] === 'Arten' &&
-    url[2] !== 'Sammlungen'
-  ) {
+  if (url.length === 2 && url[0] === 'Arten') {
     return 'art'
   }
-  if ([2, 3].includes(url.length) && url[0] === 'Gaerten') {
+  if (url.length === 2 && url[0] === 'Gaerten') {
     return 'garten'
   }
   if (url.length === 2 && url[0] === 'Herkuenfte') {
@@ -62,8 +57,14 @@ export default url => {
     return 'kultur'
   }
 
+  if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
+    return 'kulturen'
+  }
   if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
     return 'sammlungen'
+  }
+  if (url.length === 3 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
+    return 'kulturen'
   }
   if (url.length === 3 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
     return 'sammlungen'
@@ -143,7 +144,6 @@ export default url => {
   if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Kulturen') {
     return 'kultur'
   }
-
   if (url.length === 5 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
     return 'kultur'
   }
@@ -153,8 +153,13 @@ export default url => {
   if (url.length === 5 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
     return 'sammlung'
   }
-  if (url.length === 5 && url[0] === 'Personen' && url[2] === 'Gaerten') {
-    return 'garten'
+  if (
+    url.length === 5 &&
+    url[0] === 'Personen' &&
+    url[2] === 'Gaerten' &&
+    url[4] === 'Kulturen'
+  ) {
+    return 'kulturen'
   }
   if (
     url.length === 5 &&

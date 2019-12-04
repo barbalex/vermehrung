@@ -5,7 +5,6 @@ import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 export default async ({ node, store, client }) => {
   const { activeNodeArray, setActiveNodeArray, refetch } = store.tree
   // get table and id from url
-  console.log('delete, url:', node.url.slice())
   const title = node.url.slice(-2)[0]
   const id = node.url.slice(-1)[0]
   const table = tableFromTitleHash[title]
