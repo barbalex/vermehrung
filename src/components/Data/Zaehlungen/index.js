@@ -59,17 +59,17 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query SammlungQuery($isFiltered: Boolean!, $filter: sammlung_bool_exp!) {
-    rowsUnfiltered: sammlung @include(if: $isFiltered) {
+  query ZaehlungQuery($isFiltered: Boolean!, $filter: zaehlung_bool_exp!) {
+    rowsUnfiltered: zaehlung @include(if: $isFiltered) {
       id
     }
-    rowsFiltered: sammlung(where: $filter) @include(if: $isFiltered) {
+    rowsFiltered: zaehlung(where: $filter) @include(if: $isFiltered) {
       id
     }
   }
 `
 
-const Sammlungen = ({ filter: showFilter }) => {
+const Zaehlungen = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { filter } = store
@@ -77,9 +77,9 @@ const Sammlungen = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
+  const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
   const { data, error, loading } = useQuery(query, {
-    variables: { isFiltered, filter: sammlungFilter },
+    variables: { isFiltered, filter: zaehlungFilter },
   })
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
@@ -93,7 +93,7 @@ const Sammlungen = ({ filter: showFilter }) => {
   if (loading) {
     return (
       <Container>
-        <FormTitle title="Sammlungen" />
+        <FormTitle title="Zählungen" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
@@ -103,7 +103,7 @@ const Sammlungen = ({ filter: showFilter }) => {
   if (errorToShow) {
     return (
       <Container>
-        <FormTitle title="Sammlungen" />
+        <FormTitle title="Zählungen" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
       </Container>
     )
@@ -114,18 +114,18 @@ const Sammlungen = ({ filter: showFilter }) => {
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Sammlung"
-            table="sammlung"
+            title="Zählung"
+            table="zaehlung"
             totalNr={totalNr}
             filteredNr={filteredNr}
           />
         ) : (
           <TitleContainer>
-            <Title>Sammlungen</Title>
+            <Title>Zählungen</Title>
             <TitleSymbols>
               <IconButton
-                aria-label="neue Sammlung"
-                title="neue Sammlung"
+                aria-label="neue Zählung"
+                title="neue Zählung"
                 onClick={add}
               >
                 <FaPlus />
@@ -142,4 +142,4 @@ const Sammlungen = ({ filter: showFilter }) => {
   )
 }
 
-export default observer(Sammlungen)
+export default observer(Zaehlungen)

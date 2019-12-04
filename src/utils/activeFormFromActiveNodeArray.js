@@ -18,6 +18,9 @@ export default url => {
   if (url.length === 1 && url[0] === 'Teilkulturen') {
     return 'teilkulturen'
   }
+  if (url.length === 1 && url[0] === 'Zaehlungen') {
+    return 'zaehlungen'
+  }
   if (url.length === 1) {
     return null
   }
@@ -56,7 +59,11 @@ export default url => {
   if ([2, 3].includes(url.length) && url[0] === 'Sammlungen') {
     return 'sammlung'
   }
-  if ([2, 3].includes(url.length) && url[0] === 'Kulturen') {
+  if (
+    [2, 3].includes(url.length) &&
+    url[0] === 'Kulturen' &&
+    url[2] !== 'Teilkulturen'
+  ) {
     return 'kultur'
   }
 
@@ -71,6 +78,9 @@ export default url => {
   }
   if (url.length === 3 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
     return 'sammlungen'
+  }
+  if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Teilkulturen') {
+    return 'teilkulturen'
   }
   if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Gaerten') {
     return 'gaerten'
@@ -144,8 +154,24 @@ export default url => {
     return 'lieferung'
   }
 
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Teilkulturen'
+  ) {
+    return 'teilkulturen'
+  }
   if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Kulturen') {
     return 'kultur'
+  }
+  if (
+    url.length === 5 &&
+    url[0] === 'Gaerten' &&
+    url[2] === 'Kulturen' &&
+    url[4] === 'Teilkulturen'
+  ) {
+    return 'teilkulturen'
   }
   if (url.length === 5 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
     return 'kultur'
@@ -275,6 +301,15 @@ export default url => {
     url[4] === 'Kulturen'
   ) {
     return 'kultur'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Personen' &&
+    url[2] === 'Gaerten' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Teilkulturen'
+  ) {
+    return 'teilkulturen'
   }
   if (
     url.length === 7 &&

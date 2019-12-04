@@ -114,8 +114,8 @@ const Kulturen = ({ filter: showFilter }) => {
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Art"
-            table="art"
+            title="Kultur"
+            table="kultur"
             totalNr={totalNr}
             filteredNr={filteredNr}
           />

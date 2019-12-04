@@ -114,8 +114,8 @@ const Gaerten = ({ filter: showFilter }) => {
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Art"
-            table="art"
+            title="Garten"
+            table="garten"
             totalNr={totalNr}
             filteredNr={filteredNr}
           />

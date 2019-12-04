@@ -6,8 +6,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
-import { FaPlus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
@@ -26,7 +24,6 @@ import Herkunft from './Herkunft'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import QK from './QK'
-import createNew from '../../TreeContainer/Tree/createNew'
 
 const Container = styled.div`
   height: 100%;
@@ -101,11 +98,6 @@ const Art = ({ filter: showFilter }) => {
   useEffect(() => {
     setErrors({})
   }, [row.id])
-
-  const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: ['Arten'] }
-    createNew({ node, store, client })
-  }, [client, store])
 
   const saveToDb = useCallback(
     async event => {

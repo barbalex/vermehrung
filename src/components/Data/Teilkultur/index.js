@@ -24,6 +24,7 @@ import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
 import DeleteButton from './DeleteButton'
+import AddButton from './AddButton'
 
 const Container = styled.div`
   height: 100%;
@@ -281,6 +282,7 @@ const Teilkultur = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Teilkultur</Title>
             <TitleSymbols>
+              <AddButton />
               <DeleteButton row={row} />
               <Settings teilkulturResult={teilkulturResult} />
               <IconButton

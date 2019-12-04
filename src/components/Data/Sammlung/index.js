@@ -31,6 +31,7 @@ import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import DeleteButton from './DeleteButton'
+import AddButton from './AddButton'
 
 const Container = styled.div`
   height: 100%;
@@ -291,6 +292,7 @@ const Sammlung = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Sammlung</Title>
             <TitleSymbols>
+              <AddButton />
               <DeleteButton row={row} />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>

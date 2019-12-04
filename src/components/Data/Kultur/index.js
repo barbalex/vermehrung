@@ -36,6 +36,7 @@ import sammlungQuery from './sammlungQuery'
 import Timeline from './Timeline'
 import QK from './QK'
 import DeleteButton from './DeleteButton'
+import AddButton from './AddButton'
 
 const Container = styled.div`
   height: 100%;
@@ -318,6 +319,7 @@ const Kultur = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Kultur</Title>
             <TitleSymbols>
+              <AddButton />
               <DeleteButton row={row} />
               <IconButton
                 aria-label="Anleitung öffnen"

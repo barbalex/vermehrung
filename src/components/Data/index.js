@@ -17,6 +17,7 @@ import Lieferung from './Lieferung'
 import SammelLieferung from './SammelLieferung'
 import Person from './Person'
 import Zaehlung from './Zaehlung'
+import Zaehlungen from './Zaehlungen'
 import Teilkultur from './Teilkultur'
 import Teilkulturen from './Teilkulturen'
 
@@ -75,6 +76,9 @@ const Data = () => {
     }
     case 'zaehlung': {
       return <Zaehlung />
+    }
+    case 'zaehlungen': {
+      return <Zaehlungen />
     }
     default:
       return null
