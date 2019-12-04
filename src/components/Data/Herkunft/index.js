@@ -19,6 +19,7 @@ import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
+import DeleteButton from './DeleteButton'
 import Coordinates from '../../shared/Coordinates'
 import { getProfile } from '../../../utils/auth'
 import Settings from './Settings'
@@ -222,6 +223,7 @@ const Herkunft = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Herkunft</Title>
             <TitleSymbols>
+              <DeleteButton row={row} />
               <Settings
                 personId={userPersonId}
                 personFelderResult={personFelderResult}

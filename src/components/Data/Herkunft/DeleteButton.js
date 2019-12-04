@@ -23,7 +23,7 @@ const Title = styled.div`
   user-select: none;
 `
 
-const ArtDeleteButton = ({ row }) => {
+const HerkunftDeleteButton = ({ row }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -37,7 +37,7 @@ const ArtDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    const node = { url: ['Arten', row.id] }
+    const node = { url: ['Herkuenfte', row.id] }
     deleteDataset({ node, store, client })
   }, [client, row.id, store])
 
@@ -46,8 +46,8 @@ const ArtDeleteButton = ({ row }) => {
       <IconButton
         aria-controls="menu"
         aria-haspopup="true"
-        aria-label="Art löschen"
-        title="Art löschen"
+        aria-label="Herkunft löschen"
+        title="Herkunft löschen"
         onClick={onClickDelete}
       >
         <FaMinus />
@@ -69,4 +69,4 @@ const ArtDeleteButton = ({ row }) => {
   )
 }
 
-export default observer(ArtDeleteButton)
+export default observer(HerkunftDeleteButton)
