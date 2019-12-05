@@ -14,6 +14,7 @@ import last from 'lodash/last'
 import uniq from 'lodash/uniq'
 import ErrorBoundary from 'react-error-boundary'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import { FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
@@ -37,6 +38,7 @@ import Timeline from './Timeline'
 import QK from './QK'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
+import download from './download'
 
 const Container = styled.div`
   height: 100%;
@@ -282,6 +284,10 @@ const Kultur = ({ filter: showFilter }) => {
         'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
       )
   }, [])
+  const onClickDownload = useCallback(
+    () => download({ client, store, kultur_id: row.id }),
+    [client, row.id, store],
+  )
 
   if (loading) {
     return (
@@ -321,6 +327,13 @@ const Kultur = ({ filter: showFilter }) => {
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
+              <IconButton
+                aria-label="Daten herunterladen"
+                title="Daten herunterladen"
+                onClick={onClickDownload}
+              >
+                <FaDownload />
+              </IconButton>
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
