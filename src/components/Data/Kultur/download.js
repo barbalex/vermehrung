@@ -17,7 +17,7 @@ export default async ({ client, store, kultur_id }) => {
   try {
     kulturResult = await client.query({
       query: gql`
-        query GetKulturForDownload($id: bigint!) {
+        query GetKulturForKulturDownload($id: bigint!) {
           kultur(where: { id: { _eq: $id } }) {
             id
             art {
@@ -74,11 +74,99 @@ export default async ({ client, store, kultur_id }) => {
     data: [kultur],
   })
   // 2. Get Zählungen
+  let zaehlungResult
+  try {
+    zaehlungResult = await client.query({
+      query: gql`
+        query GetZaehlungForKulturDownload($id: bigint!) {
+          zaehlung(where: { kultur_id: { _eq: $id } }) {
+            id
+            kultur_id
+            datum
+            ziel
+            prognose
+            bemerkungen
+            teilzaehlungs_aggregate {
+              aggregate {
+                count
+                sum {
+                  anzahl_pflanzen
+                  anzahl_auspflanzbereit
+                  anzahl_mutterpflanzen
+                }
+              }
+              nodes {
+                id
+                teilkultur {
+                  id
+                  name
+                }
+                andere_menge
+              }
+            }
+          }
+        }
+      `,
+      variables: {
+        id: kultur_id,
+      },
+    })
+  } catch (error) {
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+  const zaehlungenArray = get(zaehlungResult, 'data.zaehlung') || []
+  const zaehlungen = zaehlungenArray.map(z => {
+    z.teilzaehlungen_anzahl = get(
+      z,
+      'teilzaehlungs_aggregate.aggregate.count',
+      '',
+    )
+    z.teilzaehlungen_anzahl_pflanzen = get(
+      z,
+      'teilzaehlungs_aggregate.aggregate.anzahl_pflanzen',
+      '',
+    )
+    z.teilzaehlungen_anzahl_auspflanzbereit = get(
+      z,
+      'teilzaehlungs_aggregate.aggregate.anzahl_auspflanzbereit',
+      '',
+    )
+    z.teilzaehlungen_anzahl_mutterpflanzen = get(
+      z,
+      'teilzaehlungs_aggregate.aggregate.anzahl_mutterpflanzen',
+      '',
+    )
+    const tknodes = get(z, 'teilzaehlungs_aggregate.nodes') || []
+    z.teilzaehlungen_ids = tknodes
+      .filter(tk => !!get(tk, 'id'))
+      .map(tk => get(tk, 'id'))
+      .join(', ')
+    z.teilzaehlungen_teilkulturen = tknodes
+      .filter(tk => !!get(tk, 'teilkultur.name'))
+      .map(tk => get(tk, 'teilkultur.name'))
+      .join(', ')
+    z.teilzaehlungen_andere_mengen = tknodes
+      .filter(tk => !!get(tk, 'andere_menge'))
+      .map(tk => get(tk, 'andere_menge'))
+      .join(', ')
+    delete z.teilzaehlungs_aggregate
+    delete z.__typename
+    return z
+  })
+  addWorksheetToExceljsWorkbook({
+    workbook,
+    title: 'Zaehlungen',
+    data: zaehlungen,
+  })
   // 3. Get An-Lieferungen
   // 4. Get Aus-Lieferungen
   // 5. Get Events
 
-  console.log('download', { kultur_id, kultur })
   let buffer
   try {
     buffer = await workbook.xlsx.writeBuffer()
