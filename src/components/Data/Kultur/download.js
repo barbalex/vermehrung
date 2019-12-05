@@ -163,9 +163,10 @@ export default async ({ client, store, kultur_id }) => {
     title: 'Zaehlungen',
     data: zaehlungen,
   })
-  // 3. Get An-Lieferungen
-  // 4. Get Aus-Lieferungen
-  // 5. Get Events
+  // 3. Get Teil-Zählungen
+  // 4. Get An-Lieferungen
+  // 5. Get Aus-Lieferungen
+  // 6. Get Events
 
   let buffer
   try {
