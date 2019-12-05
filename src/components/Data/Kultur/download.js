@@ -9,7 +9,6 @@ import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsW
 
 export default async ({ client, store, kultur_id }) => {
   const { enqueNotification } = store
-  console.log('download', { kultur_id })
 
   const workbook = new ExcelJs.Workbook()
 
@@ -58,18 +57,28 @@ export default async ({ client, store, kultur_id }) => {
       },
     })
   }
-  const kultur = get(kulturResult, 'data.kultur[0]')
-  console.log('download', { kultur })
+  const kultur = { ...get(kulturResult, 'data.kultur[0]') }
+  kultur.art_id = get(kultur, 'art.art_ae_art.id', '')
+  kultur.art_name = get(kultur, 'art.art_ae_art.name', '')
+  kultur.herkunft_id = get(kultur, 'herkunft.id', '')
+  kultur.herkunft_nr = get(kultur, 'herkunft.nr', '')
+  kultur.garten_id = get(kultur, 'garten.id', '')
+  kultur.garten_name = get(kultur, 'garten.name', '')
+  delete kultur.art
+  delete kultur.herkunft
+  delete kultur.garten
+  delete kultur.__typename
   addWorksheetToExceljsWorkbook({
     workbook,
     title: 'Kultur',
-    data: get(kulturResult, 'data.kultur'),
+    data: [kultur],
   })
   // 2. Get Zählungen
   // 3. Get An-Lieferungen
   // 4. Get Aus-Lieferungen
   // 5. Get Events
 
+  console.log('download', { kultur_id, kultur })
   let buffer
   try {
     buffer = await workbook.xlsx.writeBuffer()
@@ -81,7 +90,7 @@ export default async ({ client, store, kultur_id }) => {
       },
     })
   }
-  const file = `Kultur_${kultur.id}_${format(
+  const file = `Kultur_${kultur_id}_${format(
     new Date(),
     'yyyy-MM-dd_HH-mm-ss',
   )}`
