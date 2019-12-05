@@ -207,8 +207,12 @@ const Person = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Person</Title>
             <TitleSymbols>
-              {role === 'manager' && <AddButton />}
-              <DeleteButton row={row} />
+              {role === 'manager' && (
+                <>
+                  <AddButton />
+                  <DeleteButton row={row} />
+                </>
+              )}
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}
