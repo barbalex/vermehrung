@@ -1,5 +1,4 @@
 export default url => {
-  console.log('acitveFormFromActiveNodeArray, url:', url.slice())
   if (url.length === 1 && url[0] === 'Arten') {
     return 'arten'
   }
@@ -17,6 +16,9 @@ export default url => {
   }
   if (url.length === 1 && url[0] === 'Lieferungen') {
     return 'lieferungen'
+  }
+  if (url.length === 1 && url[0] === 'Personen') {
+    return 'personen'
   }
   if (url.length === 1 && url[0] === 'Sammel-Lieferungen') {
     return 'sammelLieferungen'
@@ -58,11 +60,7 @@ export default url => {
   if (url.length === 2 && url[0] === 'Events') {
     return 'event'
   }
-  if (
-    [2, 3].includes(url.length) &&
-    url[0] === 'Personen' &&
-    url[2] === 'Lieferungen'
-  ) {
+  if (url.length === 2 && url[0] === 'Personen') {
     return 'person'
   }
   if ([2, 3].includes(url.length) && url[0] === 'Sammlungen') {
@@ -105,6 +103,9 @@ export default url => {
   }
   if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Sammlungen') {
     return 'sammlungen'
+  }
+  if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
+    return 'lieferungen'
   }
 
   if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
