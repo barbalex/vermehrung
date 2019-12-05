@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import storeContext from '../../../storeContext'
 import createNew from '../../TreeContainer/Tree/createNew'
 
-const KulturAddButton = () => {
+const PersonAddButton = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { activeNodeArray } = store.tree
@@ -20,11 +20,11 @@ const KulturAddButton = () => {
 
   return (
     <ErrorBoundary>
-      <IconButton aria-label="neue Kultur" title="neue Kultur" onClick={add}>
+      <IconButton aria-label="neue Person" title="neue Person" onClick={add}>
         <FaPlus />
       </IconButton>
     </ErrorBoundary>
   )
 }
 
-export default observer(KulturAddButton)
+export default observer(PersonAddButton)

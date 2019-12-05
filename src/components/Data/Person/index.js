@@ -7,22 +7,56 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../storeContext'
-import TextField from '../shared/TextField'
-import FormTitle from '../shared/FormTitle'
-import FilterTitle from '../shared/FilterTitle'
-import Checkbox2States from '../shared/Checkbox2States'
-import { person as personFragment } from '../../utils/fragments'
-import types from '../../store/Filter/simpleTypes'
-import queryFromTable from '../../utils/queryFromTable'
-import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
-import Files from './Files'
+import storeContext from '../../../storeContext'
+import TextField from '../../shared/TextField'
+import FormTitle from '../../shared/FormTitle'
+import FilterTitle from '../../shared/FilterTitle'
+import Checkbox2States from '../../shared/Checkbox2States'
+import { person as personFragment } from '../../../utils/fragments'
+import types from '../../../store/Filter/simpleTypes'
+import queryFromTable from '../../../utils/queryFromTable'
+import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
+import Files from '../Files'
+import AddButton from './AddButton'
+import DeleteButton from './DeleteButton'
+import { signup, getProfile } from '../../../utils/auth'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+`
+const TitleContainer = styled.div`
+  background-color: rgba(74, 20, 140, 0.1);
+  flex-shrink: 0;
+  display: flex;
+  @media print {
+    display: none !important;
+  }
+  height: 48px;
+  justify-content: space-between;
+  padding 0 10px;
+`
+const Title = styled.div`
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleSymbols = styled.div`
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const TitleFilterNumbers = styled.div`
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+  padding-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 48px;
+  text-align: center;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -79,6 +113,10 @@ const Person = ({ filter: showFilter }) => {
   useEffect(() => {
     setErrors({})
   }, [row.id])
+
+  const user = getProfile()
+  const claims = user['https://hasura.io/jwt/claims'] || {}
+  const role = claims['x-hasura-role']
 
   const saveToDb = useCallback(
     async event => {
@@ -166,13 +204,20 @@ const Person = ({ filter: showFilter }) => {
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle
-            title="Person"
-            table="person"
-            rowsLength={totalNr}
-            rowsFilteredLength={filteredNr}
-            filter={showFilter}
-          />
+          <TitleContainer>
+            <Title>Person</Title>
+            <TitleSymbols>
+              {role === 'manager' && (
+                <>
+                  <AddButton />
+                  <DeleteButton row={row} />
+                </>
+              )}
+              {(store.filter.show || isFiltered) && (
+                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+              )}
+            </TitleSymbols>
+          </TitleContainer>
         )}
         <FieldsContainer>
           <TextField
