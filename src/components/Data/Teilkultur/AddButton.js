@@ -11,11 +11,12 @@ import createNew from '../../TreeContainer/Tree/createNew'
 const TeilkulturAddButton = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { activeNodeArray } = store.tree
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: ['Teilkulturen'] }
+    const node = { nodeType: 'table', url: activeNodeArray }
     createNew({ node, store, client })
-  }, [client, store])
+  }, [activeNodeArray, client, store])
 
   return (
     <ErrorBoundary>
