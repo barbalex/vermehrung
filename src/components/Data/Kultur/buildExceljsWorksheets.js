@@ -1,7 +1,5 @@
 import gql from 'graphql-tag'
 import get from 'lodash/get'
-import fileSaver from 'file-saver'
-import format from 'date-fns/format'
 
 import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
 
