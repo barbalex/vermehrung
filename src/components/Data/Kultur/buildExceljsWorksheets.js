@@ -14,70 +14,79 @@ export default async ({
   workbook,
   calledFromHigherUp,
 }) => {
+  console.log('kultur buildExceljsWorksheets', {
+    kultur_id,
+    calledFromHigherUp,
+    workbook,
+    store,
+    client,
+  })
   const { enqueNotification } = store
 
   // 1. Get Kultur
-  let kulturResult
-  try {
-    kulturResult = await client.query({
-      query: gql`
-        query GetKulturForKulturDownload($id: bigint!) {
-          kultur(where: { id: { _eq: $id } }) {
-            id
-            art_id
-            art {
+  if (!calledFromHigherUp) {
+    let kulturResult
+    try {
+      kulturResult = await client.query({
+        query: gql`
+          query GetKulturForKulturDownload($id: bigint!) {
+            kultur(where: { id: { _eq: $id } }) {
               id
-              art_ae_art {
+              art_id
+              art {
+                id
+                art_ae_art {
+                  id
+                  name
+                }
+              }
+              herkunft_id
+              herkunft {
+                id
+                nr
+              }
+              garten_id
+              garten {
                 id
                 name
               }
+              zwischenlager
+              erhaltungskultur
+              von_anzahl_individuen
+              aktiv
+              bemerkungen
             }
-            herkunft_id
-            herkunft {
-              id
-              nr
-            }
-            garten_id
-            garten {
-              id
-              name
-            }
-            zwischenlager
-            erhaltungskultur
-            von_anzahl_individuen
-            aktiv
-            bemerkungen
           }
-        }
-      `,
-      variables: {
-        id: kultur_id,
-      },
-    })
-  } catch (error) {
-    return enqueNotification({
-      message: error.message,
-      options: {
-        variant: 'error',
-      },
+        `,
+        variables: {
+          id: kultur_id,
+        },
+      })
+    } catch (error) {
+      return enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const kultur = { ...get(kulturResult, 'data.kultur[0]') }
+    kultur.art_ae_id = get(kultur, 'art.art_ae_art.id', '')
+    kultur.art_ae_name = get(kultur, 'art.art_ae_art.name', '')
+    delete kultur.art
+    kultur.herkunft_id = get(kultur, 'herkunft.id', '')
+    kultur.herkunft_nr = get(kultur, 'herkunft.nr', '')
+    delete kultur.herkunft
+    kultur.garten_id = get(kultur, 'garten.id', '')
+    kultur.garten_name = get(kultur, 'garten.name', '')
+    delete kultur.garten
+    delete kultur.__typename
+    addWorksheetToExceljsWorkbook({
+      workbook,
+      title: calledFromHigherUp ? `Kultur_${kultur_id}` : 'Kultur',
+      data: [kultur],
     })
   }
-  const kultur = { ...get(kulturResult, 'data.kultur[0]') }
-  kultur.art_ae_id = get(kultur, 'art.art_ae_art.id', '')
-  kultur.art_ae_name = get(kultur, 'art.art_ae_art.name', '')
-  kultur.herkunft_id = get(kultur, 'herkunft.id', '')
-  kultur.herkunft_nr = get(kultur, 'herkunft.nr', '')
-  kultur.garten_id = get(kultur, 'garten.id', '')
-  kultur.garten_name = get(kultur, 'garten.name', '')
-  delete kultur.art
-  delete kultur.herkunft
-  delete kultur.garten
-  delete kultur.__typename
-  addWorksheetToExceljsWorkbook({
-    workbook,
-    title: calledFromHigherUp ? `Kultur_${kultur_id}` : 'Kultur',
-    data: [kultur],
-  })
   // 2. Get Zählungen
   let zaehlungResult
   try {
@@ -163,6 +172,11 @@ export default async ({
     delete z.__typename
     return z
   })
+  console.log('kultur buildExceljsWorksheets', {
+    zaehlungen,
+    zaehlungenArray,
+    zaehlungResult,
+  })
   addWorksheetToExceljsWorkbook({
     workbook,
     title: calledFromHigherUp ? `Kultur_${kultur_id}_Zaehlungen` : 'Zaehlungen',
@@ -209,6 +223,11 @@ export default async ({
     delete z.teilkultur
     delete z.__typename
     return z
+  })
+  console.log('kultur buildExceljsWorksheets', {
+    teilzaehlungen,
+    teilzaehlungenArray,
+    teilzaehlungResult,
   })
   addWorksheetToExceljsWorkbook({
     workbook,
@@ -332,6 +351,11 @@ export default async ({
     delete z.__typename
     return z
   })
+  console.log('kultur buildExceljsWorksheets', {
+    anlieferungen,
+    anlieferungenArray,
+    anlieferungResult,
+  })
   addWorksheetToExceljsWorkbook({
     workbook,
     title: calledFromHigherUp
@@ -454,6 +478,11 @@ export default async ({
     delete z.__typename
     return z
   })
+  console.log('kultur buildExceljsWorksheets', {
+    auslieferungen,
+    auslieferungenArray,
+    auslieferungResult,
+  })
   addWorksheetToExceljsWorkbook({
     workbook,
     title: calledFromHigherUp
@@ -506,6 +535,11 @@ export default async ({
     delete z.person
     delete z.__typename
     return z
+  })
+  console.log('kultur buildExceljsWorksheets', {
+    events,
+    eventsArray,
+    eventResult,
   })
   addWorksheetToExceljsWorkbook({
     workbook,

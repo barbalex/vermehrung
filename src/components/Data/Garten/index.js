@@ -237,8 +237,8 @@ const Garten = ({ filter: showFilter }) => {
   )
   const onClickDownload = useCallback(async () => {
     const workbook = new ExcelJs.Workbook()
-    await buildExceljsWorksheets({ client, store, kultur_id: row.id, workbook })
-    downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
+    await buildExceljsWorksheets({ client, store, garten_id: row.id, workbook })
+    downloadExceljsWorkbook({ store, fileName: `Garten_${row.id}`, workbook })
   }, [client, row.id, store])
 
   //console.log('Garten, row:', row)

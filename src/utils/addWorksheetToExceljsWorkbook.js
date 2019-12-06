@@ -1,6 +1,10 @@
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
-export default ({ workbook, title, data }) => {
+export default ({ workbook, title, data: dataPassed }) => {
+  let data = dataPassed
+  if (data.length === 0) {
+    data = [{ 'keine Daten': 'Es gibt keine Daten' }]
+  }
   const dataArray = getDataArrayFromExportObjects(data)
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
