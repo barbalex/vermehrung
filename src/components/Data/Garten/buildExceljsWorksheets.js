@@ -78,7 +78,7 @@ export default async ({
     kulturResult = await client.query({
       query: gql`
         query GetKultursForGartenDownload($id: bigint!) {
-          kultur(where: { garten_id: { _eq: $id } }) {
+          kultur(where: { garten_id: { _eq: $id } }, order_by: { id: asc }) {
             id
             art_id
             art {
@@ -132,23 +132,23 @@ export default async ({
     delete k.__typename
     return k
   })
-  addWorksheetToExceljsWorkbook({
-    workbook,
-    title: calledFromHigherUp ? `Garten_${garten_id}_Kulturen` : 'Kulturen',
-    data: kulturs,
-  })
-  // 3. for all kulturen, call Kultur/buildExceljsWorksheets
-  const myKulturIds = kulturs.map(k => k.id)
-  console.log({ myKulturIds })
-  for (const kultur_id of myKulturIds) {
-    console.log({ kultur_id })
-    await buildExceljsWorksheetsForKultur({
-      client,
-      store,
-      kultur_id,
+  if (kulturs.length) {
+    addWorksheetToExceljsWorkbook({
       workbook,
-      calledFromHigherUp: true,
+      title: calledFromHigherUp ? `Garten_${garten_id}_Kulturen` : 'Kulturen',
+      data: kulturs,
     })
+    // 3. for all kulturen, call Kultur/buildExceljsWorksheets
+    const myKulturIds = kulturs.map(k => k.id)
+    for (const kultur_id of myKulturIds) {
+      await buildExceljsWorksheetsForKultur({
+        client,
+        store,
+        kultur_id,
+        workbook,
+        calledFromHigherUp: true,
+      })
+    }
   }
   return
 }

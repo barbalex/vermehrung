@@ -14,13 +14,6 @@ export default async ({
   workbook,
   calledFromHigherUp,
 }) => {
-  console.log('kultur buildExceljsWorksheets', {
-    kultur_id,
-    calledFromHigherUp,
-    workbook,
-    store,
-    client,
-  })
   const { enqueNotification } = store
 
   // 1. Get Kultur
@@ -172,16 +165,15 @@ export default async ({
     delete z.__typename
     return z
   })
-  console.log('kultur buildExceljsWorksheets', {
-    zaehlungen,
-    zaehlungenArray,
-    zaehlungResult,
-  })
-  addWorksheetToExceljsWorkbook({
-    workbook,
-    title: calledFromHigherUp ? `Kultur_${kultur_id}_Zaehlungen` : 'Zaehlungen',
-    data: zaehlungen,
-  })
+  if (zaehlungen.length) {
+    addWorksheetToExceljsWorkbook({
+      workbook,
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_id}_Zaehlungen`
+        : 'Zaehlungen',
+      data: zaehlungen,
+    })
+  }
   // 3. Get Teil-Zählungen
   let teilzaehlungResult
   try {
@@ -224,18 +216,15 @@ export default async ({
     delete z.__typename
     return z
   })
-  console.log('kultur buildExceljsWorksheets', {
-    teilzaehlungen,
-    teilzaehlungenArray,
-    teilzaehlungResult,
-  })
-  addWorksheetToExceljsWorkbook({
-    workbook,
-    title: calledFromHigherUp
-      ? `Kultur_${kultur_id}_Teilzaehlungen`
-      : 'Teilzaehlungen',
-    data: teilzaehlungen,
-  })
+  if (teilzaehlungResult.length) {
+    addWorksheetToExceljsWorkbook({
+      workbook,
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_id}_Teilzaehlungen`
+        : 'Teilzaehlungen',
+      data: teilzaehlungen,
+    })
+  }
   // 4. Get An-Lieferungen
   let anlieferungResult
   try {
@@ -351,18 +340,15 @@ export default async ({
     delete z.__typename
     return z
   })
-  console.log('kultur buildExceljsWorksheets', {
-    anlieferungen,
-    anlieferungenArray,
-    anlieferungResult,
-  })
-  addWorksheetToExceljsWorkbook({
-    workbook,
-    title: calledFromHigherUp
-      ? `Kultur_${kultur_id}_Anlieferungen`
-      : 'Anlieferungen',
-    data: anlieferungen,
-  })
+  if (anlieferungen.length) {
+    addWorksheetToExceljsWorkbook({
+      workbook,
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_id}_Anlieferungen`
+        : 'Anlieferungen',
+      data: anlieferungen,
+    })
+  }
   // 5. Get Aus-Lieferungen
   let auslieferungResult
   try {
@@ -478,18 +464,15 @@ export default async ({
     delete z.__typename
     return z
   })
-  console.log('kultur buildExceljsWorksheets', {
-    auslieferungen,
-    auslieferungenArray,
-    auslieferungResult,
-  })
-  addWorksheetToExceljsWorkbook({
-    workbook,
-    title: calledFromHigherUp
-      ? `Kultur_${kultur_id}_Auslieferungen`
-      : 'Auslieferungen',
-    data: auslieferungen,
-  })
+  if (auslieferungen.length) {
+    addWorksheetToExceljsWorkbook({
+      workbook,
+      title: calledFromHigherUp
+        ? `Kultur_${kultur_id}_Auslieferungen`
+        : 'Auslieferungen',
+      data: auslieferungen,
+    })
+  }
   // 6. Get Events
   let eventResult
   try {
@@ -536,15 +519,12 @@ export default async ({
     delete z.__typename
     return z
   })
-  console.log('kultur buildExceljsWorksheets', {
-    events,
-    eventsArray,
-    eventResult,
-  })
-  addWorksheetToExceljsWorkbook({
-    workbook,
-    title: calledFromHigherUp ? `Kultur_${kultur_id}_Events` : 'Events',
-    data: events,
-  })
+  if (events.length) {
+    addWorksheetToExceljsWorkbook({
+      workbook,
+      title: calledFromHigherUp ? `Kultur_${kultur_id}_Events` : 'Events',
+      data: events,
+    })
+  }
   return
 }
