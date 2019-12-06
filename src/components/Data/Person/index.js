@@ -19,7 +19,7 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
-import { signup, getProfile } from '../../../utils/auth'
+import { getProfile } from '../../../utils/auth'
 
 const Container = styled.div`
   height: 100%;
