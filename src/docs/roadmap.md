@@ -43,9 +43,7 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Lieferungen können als Sammel-Lieferungen erfasst werden
 - :white_check_mark: Qualitätskontrollen sind gebaut
 - :white_check_mark: Vermehrung ist für BenutzerInnen dokumentiert 
-- :ballot_box_with_check: Übersichten bauen für: Kultur, Art
-- :white_medium_square: Übersichten können gedruckt werden
-- :white_medium_square: Sammel-Lieferungen können gedruckt werden
-- :white_medium_square: Daten können exportiert werden
+- :white_check_mark: Sammel-Lieferungen können gedruckt werden
+- :ballot_box_with_check: Daten können exportiert werden
 - :white_medium_square: Funktionalitäten mit Topos bereinigt
-- :white_medium_square: Produktive Version 1.0.0 live schalten (geplant: Ende 2019)
+- :white_medium_square: Produktive Version 1.0.0 live schalten (geplant: Beginn 2020)
