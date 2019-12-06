@@ -1,5 +1,3 @@
-// see: https://github.com/guyonroche/exceljs/issues/313
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import fileSaver from 'file-saver'
@@ -9,12 +7,16 @@ import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsW
 
 /**
  * this function cann be used from higher up
- * that is why it _can_ recieve a workbook
+ * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
-export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
+export default async ({
+  client,
+  store,
+  kultur_id,
+  workbook,
+  calledFromHigherUp,
+}) => {
   const { enqueNotification } = store
-
-  const workbook = wbPassed || new ExcelJs.Workbook()
 
   // 1. Get Kultur
   let kulturResult
@@ -75,7 +77,7 @@ export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
   delete kultur.__typename
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: wbPassed ? `Kultur_${kultur_id}` : 'Kultur',
+    title: calledFromHigherUp ? `Kultur_${kultur_id}` : 'Kultur',
     data: [kultur],
   })
   // 2. Get Zählungen
@@ -165,7 +167,7 @@ export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: wbPassed ? `Kultur_${kultur_id}_Zaehlungen` : 'Zaehlungen',
+    title: calledFromHigherUp ? `Kultur_${kultur_id}_Zaehlungen` : 'Zaehlungen',
     data: zaehlungen,
   })
   // 3. Get Teil-Zählungen
@@ -212,7 +214,9 @@ export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: wbPassed ? `Kultur_${kultur_id}_Teilzaehlungen` : 'Teilzaehlungen',
+    title: calledFromHigherUp
+      ? `Kultur_${kultur_id}_Teilzaehlungen`
+      : 'Teilzaehlungen',
     data: teilzaehlungen,
   })
   // 4. Get An-Lieferungen
@@ -332,7 +336,9 @@ export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: wbPassed ? `Kultur_${kultur_id}_Anlieferungen` : 'Anlieferungen',
+    title: calledFromHigherUp
+      ? `Kultur_${kultur_id}_Anlieferungen`
+      : 'Anlieferungen',
     data: anlieferungen,
   })
   // 5. Get Aus-Lieferungen
@@ -452,7 +458,9 @@ export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: wbPassed ? `Kultur_${kultur_id}_Auslieferungen` : 'Auslieferungen',
+    title: calledFromHigherUp
+      ? `Kultur_${kultur_id}_Auslieferungen`
+      : 'Auslieferungen',
     data: auslieferungen,
   })
   // 6. Get Events
@@ -503,27 +511,8 @@ export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: wbPassed ? `Kultur_${kultur_id}_Events` : 'Events',
+    title: calledFromHigherUp ? `Kultur_${kultur_id}_Events` : 'Events',
     data: events,
   })
-
-  let buffer
-  try {
-    buffer = await workbook.xlsx.writeBuffer()
-  } catch (error) {
-    return store.enqueNotification({
-      message: error.message,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
-  const file = `Kultur_${kultur_id}_${format(
-    new Date(),
-    'yyyy-MM-dd_HH-mm-ss',
-  )}`
-  fileSaver.saveAs(
-    new Blob([buffer], { type: 'application/octet-stream' }),
-    `${file}.xlsx`,
-  )
+  return
 }

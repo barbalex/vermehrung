@@ -15,7 +15,8 @@ import uniq from 'lodash/uniq'
 import ErrorBoundary from 'react-error-boundary'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaDownload } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
+import IconButton from '@material-ui/core/IconButton' // see: https://github.com/guyonroche/exceljs/issues/313
+import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -38,7 +39,8 @@ import Timeline from './Timeline'
 import QK from './QK'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
-import download from './download'
+import buildExceljsWorksheets from './buildExceljsWorksheets'
+import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
 
 const Container = styled.div`
   height: 100%;
@@ -284,10 +286,11 @@ const Kultur = ({ filter: showFilter }) => {
         'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
       )
   }, [])
-  const onClickDownload = useCallback(
-    () => download({ client, store, kultur_id: row.id }),
-    [client, row.id, store],
-  )
+  const onClickDownload = useCallback(async () => {
+    const workbook = new ExcelJs.Workbook()
+    await buildExceljsWorksheets({ client, store, kultur_id: row.id, workbook })
+    downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
+  }, [client, row.id, store])
 
   if (loading) {
     return (
