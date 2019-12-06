@@ -452,6 +452,56 @@ export default async ({ client, store, kultur_id }) => {
     data: auslieferungen,
   })
   // 6. Get Events
+  let eventResult
+  try {
+    eventResult = await client.query({
+      query: gql`
+        query GetEventsForKulturDownload($id: bigint!) {
+          event(where: { kultur_id: { _eq: $id } }) {
+            id
+            kultur_id
+            teilkultur_id
+            teilkultur {
+              id
+              name
+            }
+            person_id
+            person {
+              id
+              name
+            }
+            beschreibung
+            geplant
+            datum
+          }
+        }
+      `,
+      variables: {
+        id: kultur_id,
+      },
+    })
+  } catch (error) {
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+  const eventsArray = get(eventResult, 'data.event') || []
+  const events = eventsArray.map(z => {
+    z.teilkultur_name = get(z, 'teilkultur.name', '')
+    delete z.teilkultur
+    z.person_name = get(z, 'person.name', '')
+    delete z.person
+    delete z.__typename
+    return z
+  })
+  addWorksheetToExceljsWorkbook({
+    workbook,
+    title: 'Events',
+    data: events,
+  })
 
   let buffer
   try {
