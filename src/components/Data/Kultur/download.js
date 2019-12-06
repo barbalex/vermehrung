@@ -7,10 +7,14 @@ import format from 'date-fns/format'
 
 import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
 
-export default async ({ client, store, kultur_id }) => {
+/**
+ * this function cann be used from higher up
+ * that is why it _can_ recieve a workbook
+ */
+export default async ({ client, store, kultur_id, workbook: wbPassed }) => {
   const { enqueNotification } = store
 
-  const workbook = new ExcelJs.Workbook()
+  const workbook = wbPassed || new ExcelJs.Workbook()
 
   // 1. Get Kultur
   let kulturResult
@@ -71,7 +75,7 @@ export default async ({ client, store, kultur_id }) => {
   delete kultur.__typename
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: 'Kultur',
+    title: wbPassed ? `Kultur_${kultur_id}` : 'Kultur',
     data: [kultur],
   })
   // 2. Get Zählungen
@@ -161,7 +165,7 @@ export default async ({ client, store, kultur_id }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: 'Zaehlungen',
+    title: wbPassed ? `Kultur_${kultur_id}_Zaehlungen` : 'Zaehlungen',
     data: zaehlungen,
   })
   // 3. Get Teil-Zählungen
@@ -208,7 +212,7 @@ export default async ({ client, store, kultur_id }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: 'Teilzaehlungen',
+    title: wbPassed ? `Kultur_${kultur_id}_Teilzaehlungen` : 'Teilzaehlungen',
     data: teilzaehlungen,
   })
   // 4. Get An-Lieferungen
@@ -328,7 +332,7 @@ export default async ({ client, store, kultur_id }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: 'Anlieferungen',
+    title: wbPassed ? `Kultur_${kultur_id}_Anlieferungen` : 'Anlieferungen',
     data: anlieferungen,
   })
   // 5. Get Aus-Lieferungen
@@ -448,7 +452,7 @@ export default async ({ client, store, kultur_id }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: 'Auslieferungen',
+    title: wbPassed ? `Kultur_${kultur_id}_Auslieferungen` : 'Auslieferungen',
     data: auslieferungen,
   })
   // 6. Get Events
@@ -499,7 +503,7 @@ export default async ({ client, store, kultur_id }) => {
   })
   addWorksheetToExceljsWorkbook({
     workbook,
-    title: 'Events',
+    title: wbPassed ? `Kultur_${kultur_id}_Events` : 'Events',
     data: events,
   })
 
