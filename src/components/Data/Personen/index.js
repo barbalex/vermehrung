@@ -13,7 +13,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
-import { signup, getProfile } from '../../../utils/auth'
+import { getProfile } from '../../../utils/auth'
 
 const Container = styled.div`
   height: 100%;
