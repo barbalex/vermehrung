@@ -46,4 +46,5 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Sammel-Lieferungen können gedruckt werden
 - :ballot_box_with_check: Daten können exportiert werden
 - :white_medium_square: Funktionalitäten mit Topos bereinigt
-- :white_medium_square: Produktive Version 1.0.0 live schalten (geplant: Beginn 2020)
+- :white_medium_square: Vorhandene Daten importiert
+- :white_medium_square: Produktive Version 1.0.0 ist live (geplant: Beginn 2020)
