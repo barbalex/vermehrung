@@ -12,6 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import artQuery from './artQuery'
+import Row from './Row'
 import createNew from '../../TreeContainer/Tree/createNew'
 
 const Container = styled.div`
@@ -43,17 +44,15 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const TitleFilterNumbers = styled.div`
-  padding-right: 8px;
   cursor: default;
   user-select: none;
-  padding-right: 5px;
+  padding: 0 5px;
   margin-top: auto;
   margin-bottom: auto;
   min-width: 48px;
   text-align: center;
 `
 const FieldsContainer = styled.div`
-  padding: 10px;
   overflow: auto !important;
   height: 100%;
 `
@@ -67,11 +66,12 @@ const Arten = ({ filter: showFilter }) => {
 
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(artQuery, {
-    variables: { filter: artFilter, isFiltered },
+    variables: { filter: artFilter },
   })
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const rows = get(data, 'rowsFiltered', [])
+  const filteredNr = rows.length
 
   const add = useCallback(() => {
     const node = { nodeType: 'folder', url: ['Arten'] }
@@ -120,7 +120,11 @@ const Arten = ({ filter: showFilter }) => {
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer />
+        <FieldsContainer>
+          {rows.map(row => (
+            <Row key={row.id} row={row} />
+          ))}
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )

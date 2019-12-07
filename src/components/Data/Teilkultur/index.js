@@ -54,10 +54,9 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const TitleFilterNumbers = styled.div`
-  padding-right: 8px;
   cursor: default;
   user-select: none;
-  padding-right: 5px;
+  padding: 0 5px;
   margin-top: auto;
   margin-bottom: auto;
   min-width: 48px;

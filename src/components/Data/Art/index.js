@@ -57,10 +57,9 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 const TitleFilterNumbers = styled.div`
-  padding-right: 8px;
   cursor: default;
   user-select: none;
-  padding-right: 5px;
+  padding: 0 5px;
   margin-top: auto;
   margin-bottom: auto;
   min-width: 48px;
@@ -78,7 +77,7 @@ const Art = ({ filter: showFilter }) => {
   const { filter, tree } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
-  const { activeNodeArray, refetch } = tree
+  const { activeNodeArray, setActiveNodeArray, refetch } = tree
 
   const artId = showFilter
     ? 99999999999999
@@ -170,6 +169,19 @@ const Art = ({ filter: showFilter }) => {
     },
     [artId, showFilter],
   )
+  const onClickToArten = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToSammlungen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToKulturen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+
   // maybe: sort dependent on person_felder.ar_name_deutsch
   const aeArtQuery = gql`
     query aeArtQuery($filter: ae_art_bool_exp!) {
@@ -217,13 +229,19 @@ const Art = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Art</Title>
             <TitleSymbols>
-              <IconButton title="Zur Art">
+              <IconButton title="Zu allen Arten" onClick={onClickToArten}>
                 <ArUpSvg />
               </IconButton>
-              <IconButton title="Zu den Sammlungen">
+              <IconButton
+                title="Zu den Sammlungen dieser Art"
+                onClick={onClickToSammlungen}
+              >
                 <SaSvg />
               </IconButton>
-              <IconButton title="Zu den Kulturen">
+              <IconButton
+                title="Zu den Kulturen dieser Art"
+                onClick={onClickToKulturen}
+              >
                 <KuSvg />
               </IconButton>
               <AddButton />
