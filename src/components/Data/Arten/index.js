@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
@@ -6,6 +6,8 @@ import get from 'lodash/get'
 import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import { FixedSizeList } from 'react-window'
+import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
@@ -21,7 +23,6 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
 `
-
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
   flex-shrink: 0;
@@ -56,6 +57,14 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+const List = styled(FixedSizeList)`
+  /*overflow-x: hidden !important;*/
+`
+
+const singleRowHeight = 44
+function sizeReducer(state, action) {
+  return action.payload
+}
 
 const Arten = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -77,6 +86,15 @@ const Arten = ({ filter: showFilter }) => {
     const node = { nodeType: 'folder', url: ['Arten'] }
     createNew({ node, store, client })
   }, [client, store])
+
+  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
+    width: 0,
+    height: 0,
+  })
+  const onResize = useCallback(
+    (width, height) => sizeDispatch({ payload: { width, height } }),
+    [],
+  )
 
   if (loading) {
     return (
@@ -121,9 +139,17 @@ const Arten = ({ filter: showFilter }) => {
           </TitleContainer>
         )}
         <FieldsContainer>
-          {rows.map(row => (
-            <Row key={row.id} row={row} />
-          ))}
+          <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+          <List
+            height={sizeState.height}
+            itemCount={rows.length}
+            itemSize={singleRowHeight}
+            width={sizeState.width}
+          >
+            {({ index, style }) => (
+              <Row key={index} style={style} index={index} row={rows[index]} />
+            )}
+          </List>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
