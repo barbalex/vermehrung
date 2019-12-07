@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 
@@ -33,11 +32,9 @@ const Arten = ({ row, style }) => {
   )
 
   return (
-    <ErrorBoundary>
-      <Row key={row.id} onClick={onClickRow} style={style}>
-        {get(row, 'art_ae_art.name')}
-      </Row>
-    </ErrorBoundary>
+    <Row key={row.id} onClick={onClickRow} style={style}>
+      {get(row, 'art_ae_art.name')}
+    </Row>
   )
 }
 
