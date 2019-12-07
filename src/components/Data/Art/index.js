@@ -217,13 +217,13 @@ const Art = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Art</Title>
             <TitleSymbols>
-              <IconButton>
+              <IconButton title="Zur Art">
                 <ArUpSvg />
               </IconButton>
-              <IconButton>
+              <IconButton title="Zu den Sammlungen">
                 <SaSvg />
               </IconButton>
-              <IconButton>
+              <IconButton title="Zu den Kulturen">
                 <KuSvg />
               </IconButton>
               <AddButton />
