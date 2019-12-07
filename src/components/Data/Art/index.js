@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
+import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
@@ -24,6 +25,9 @@ import Herkunft from './Herkunft'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import QK from './QK'
+import ArUpSvg from '../../../svg/to_ar_up.inline.svg'
+import SaSvg from '../../../svg/to_sa.inline.svg'
+import KuSvg from '../../../svg/to_ku.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -213,6 +217,15 @@ const Art = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Art</Title>
             <TitleSymbols>
+              <IconButton>
+                <ArUpSvg />
+              </IconButton>
+              <IconButton>
+                <SaSvg />
+              </IconButton>
+              <IconButton>
+                <KuSvg />
+              </IconButton>
               <AddButton />
               <DeleteButton row={row} />
               {(store.filter.show || isFiltered) && (
