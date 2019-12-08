@@ -54,7 +54,10 @@ export default gql`
   ) {
     garten(
       where: $gartenFilter
-      order_by: { person: { name: asc_nulls_first } }
+      order_by: [
+        { name: asc_nulls_first }
+        { person: { name: asc_nulls_first } }
+      ]
     ) {
       ...GartenFields
       person @include(if: $isGarten) {

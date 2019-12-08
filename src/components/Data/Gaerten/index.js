@@ -1,18 +1,26 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import findIndex from 'lodash/findIndex'
 import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import gql from 'graphql-tag'
+import { FixedSizeList } from 'react-window'
+import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
+import {
+  garten as gartenFragment,
+  person as personFragment,
+} from '../../../utils/fragments'
+import Row from './Row'
 
 const Container = styled.div`
   height: 100%;
@@ -52,21 +60,36 @@ const TitleFilterNumbers = styled.div`
   text-align: center;
 `
 const FieldsContainer = styled.div`
-  padding: 10px;
   overflow: auto !important;
   height: 100%;
 `
 
 const query = gql`
-  query GartenQuery($isFiltered: Boolean!, $filter: garten_bool_exp!) {
-    rowsUnfiltered: garten @include(if: $isFiltered) {
+  query GartenQuery($filter: garten_bool_exp!) {
+    rowsUnfiltered: garten {
       id
     }
-    rowsFiltered: garten(where: $filter) @include(if: $isFiltered) {
-      id
+    rowsFiltered: garten(
+      where: $filter
+      order_by: [
+        { name: asc_nulls_first }
+        { person: { name: asc_nulls_first } }
+      ]
+    ) {
+      ...GartenFields
+      person {
+        ...PersonFields
+      }
     }
   }
+  ${gartenFragment}
+  ${personFragment}
 `
+
+const singleRowHeight = 48
+function sizeReducer(state, action) {
+  return action.payload
+}
 
 const Gaerten = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -77,17 +100,32 @@ const Gaerten = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
 
   const gartenFilter = queryFromTable({ store, table: 'garten' })
+  if (activeNodeArray.includes('Personen')) {
+    const indexOfPersonen = findIndex(activeNodeArray, 'Personen')
+    const personId = activeNodeArray[indexOfPersonen + 2]
+    gartenFilter.person_id = { _eq: personId }
+  }
   const { data, error, loading } = useQuery(query, {
-    variables: { isFiltered, filter: gartenFilter },
+    variables: { filter: gartenFilter },
   })
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const rows = get(data, 'rowsFiltered', [])
+  const filteredNr = rows.length
 
   const add = useCallback(() => {
     const node = { nodeType: 'folder', url: activeNodeArray }
     createNew({ node, store, client })
   }, [activeNodeArray, client, store])
+
+  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
+    width: 0,
+    height: 0,
+  })
+  const onResize = useCallback(
+    (width, height) => sizeDispatch({ payload: { width, height } }),
+    [],
+  )
 
   if (loading) {
     return (
@@ -135,7 +173,25 @@ const Gaerten = ({ filter: showFilter }) => {
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer />
+        <FieldsContainer>
+          <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+          <FixedSizeList
+            height={sizeState.height}
+            itemCount={rows.length}
+            itemSize={singleRowHeight}
+            width={sizeState.width}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={rows[index]}
+                last={index === rows.length - 1}
+              />
+            )}
+          </FixedSizeList>
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
