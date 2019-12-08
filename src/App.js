@@ -22,6 +22,8 @@ import Notifier from './components/Notifier'
 import NotificationDismisser from './components/NotificationDismisser'
 import { isAuthenticated } from './utils/auth'
 
+import UpdateExists from './components/UpdateExists'
+
 const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
 const myClient = client()
@@ -87,6 +89,7 @@ const App = ({ element }) => (
               <GlobalStyle />
               {element}
               <Notifier />
+              <UpdateExists />
             </>
           </SnackbarProvider>
         </MuiPickersUtilsProvider>

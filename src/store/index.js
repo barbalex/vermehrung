@@ -13,6 +13,7 @@ const myTypes = types
     hideInactive: types.optional(types.maybeNull(types.boolean), true),
     sidebarWidth: types.maybeNull(types.number, null),
     isPrint: types.optional(types.boolean, false),
+    updateExists: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -23,6 +24,9 @@ const myTypes = types
     notifications: [],
   }))
   .actions(self => ({
+    setUpdateExists(val) {
+      self.updateExists = val
+    },
     setIsPrint(val) {
       self.isPrint = val
     },
