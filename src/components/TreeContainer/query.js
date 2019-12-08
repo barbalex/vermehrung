@@ -81,8 +81,10 @@ export default gql`
             ...PersonFields
           }
         }
-        events(where: $eventFilter, order_by: { datum: desc_nulls_first })
-          @include(if: $isGartenKultur) {
+        events(
+          where: $eventFilter
+          order_by: { datum: desc_nulls_first, beschreibung: asc_nulls_first }
+        ) @include(if: $isGartenKultur) {
           ...EventFields
         }
         zaehlungs(
@@ -142,8 +144,10 @@ export default gql`
             ...PersonFields
           }
         }
-        events(where: $eventFilter, order_by: { datum: desc_nulls_first })
-          @include(if: $isArtKultur) {
+        events(
+          where: $eventFilter
+          order_by: { datum: desc_nulls_first, beschreibung: asc_nulls_first }
+        ) @include(if: $isArtKultur) {
           ...EventFields
         }
         zaehlungs(
@@ -211,7 +215,13 @@ export default gql`
                 ...PersonFields
               }
             }
-            events(where: $eventFilter, order_by: { datum: desc_nulls_first }) {
+            events(
+              where: $eventFilter
+              order_by: {
+                datum: desc_nulls_first
+                beschreibung: asc_nulls_first
+              }
+            ) {
               ...EventFields
             }
             zaehlungs(

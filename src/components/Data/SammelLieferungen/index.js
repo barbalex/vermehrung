@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
@@ -7,12 +7,16 @@ import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import gql from 'graphql-tag'
+import { FixedSizeList } from 'react-window'
+import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
+import { sammelLieferung as sammelLieferungFragment } from '../../../utils/fragments'
+import Row from './Row'
 
 const Container = styled.div`
   height: 100%;
@@ -52,24 +56,44 @@ const TitleFilterNumbers = styled.div`
   text-align: center;
 `
 const FieldsContainer = styled.div`
-  padding: 10px;
   overflow: auto !important;
   height: 100%;
 `
 
 const query = gql`
-  query SammelLieferungQuery(
-    $isFiltered: Boolean!
-    $filter: sammel_lieferung_bool_exp!
-  ) {
-    rowsUnfiltered: sammel_lieferung @include(if: $isFiltered) {
+  query SammelLieferungQuery($filter: sammel_lieferung_bool_exp!) {
+    rowsUnfiltered: sammel_lieferung {
       id
     }
-    rowsFiltered: sammel_lieferung(where: $filter) @include(if: $isFiltered) {
-      id
+    rowsFiltered: sammel_lieferung(
+      where: $filter
+      order_by: { datum: desc_nulls_first }
+    ) {
+      ...SammelLieferungFields
+      person {
+        id
+        name
+      }
+      kulturByVonKulturId {
+        id
+        garten {
+          id
+          name
+          person {
+            id
+            name
+          }
+        }
+      }
     }
   }
+  ${sammelLieferungFragment}
 `
+
+const singleRowHeight = 48
+function sizeReducer(state, action) {
+  return action.payload
+}
 
 const SammelLieferungen = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -84,16 +108,26 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     table: 'sammel_lieferung',
   })
   const { data, error, loading } = useQuery(query, {
-    variables: { isFiltered, filter: sammelLieferungFilter },
+    variables: { filter: sammelLieferungFilter },
   })
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const rows = get(data, 'rowsFiltered', [])
+  const filteredNr = rows.length
 
   const add = useCallback(() => {
     const node = { nodeType: 'folder', url: activeNodeArray }
     createNew({ node, store, client })
   }, [activeNodeArray, client, store])
+
+  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
+    width: 0,
+    height: 0,
+  })
+  const onResize = useCallback(
+    (width, height) => sizeDispatch({ payload: { width, height } }),
+    [],
+  )
 
   if (loading) {
     return (
@@ -141,7 +175,25 @@ const SammelLieferungen = ({ filter: showFilter }) => {
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer />
+        <FieldsContainer>
+          <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+          <FixedSizeList
+            height={sizeState.height}
+            itemCount={rows.length}
+            itemSize={singleRowHeight}
+            width={sizeState.width}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={rows[index]}
+                last={index === rows.length - 1}
+              />
+            )}
+          </FixedSizeList>
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
