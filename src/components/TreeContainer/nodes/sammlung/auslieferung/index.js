@@ -2,7 +2,6 @@ import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import compareLabel from '../../compareLabel'
 import exists from '../../../../../utils/exists'
 
 export default ({ nodes, data, url }) => {

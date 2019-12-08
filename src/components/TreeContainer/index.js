@@ -101,7 +101,6 @@ const TreeContainer = () => {
     ),
     isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
   }
-  console.log('TreeContainer', { variables })
   const { data, error, loading, refetch } = useQuery(query, {
     variables,
   })
