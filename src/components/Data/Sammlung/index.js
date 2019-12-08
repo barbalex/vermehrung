@@ -174,11 +174,22 @@ const Sammlung = ({ filter: showFilter }) => {
 
   const herkunftWerte = useMemo(
     () =>
-      get(dataData, 'herkunft', []).map(el => ({
-        value: el.id,
-        label: `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
-          '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`,
-      })),
+      get(dataData, 'herkunft', []).map(el => {
+        // only show lokal if exist
+        // does not exist if user does not have right to see it
+        const lokal =
+          el.gemeinde || el.lokalname
+            ? `, ${el.gemeinde && `${el.gemeinde}, `}${el.lokalname &&
+                el.lokalname}`
+            : ''
+        const nr = el.nr || '(keine Nr.)'
+        const label = `${nr}${lokal}`
+
+        return {
+          value: el.id,
+          label,
+        }
+      }),
     [dataData],
   )
 

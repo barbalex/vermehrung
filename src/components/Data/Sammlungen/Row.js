@@ -1,6 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import get from 'lodash/get'
+import moment from 'moment'
 
 import storeContext from '../../../storeContext'
 
@@ -35,19 +37,20 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  // only show lokal if exist
-  // does not exist if user does not have right to see it
-  const lokal =
-    row.gemeinde || row.lokalname
-      ? `, ${row.gemeinde && `${row.gemeinde}, `}${row.lokalname &&
-          row.lokalname}`
-      : ''
-  const nr = row.nr || '(keine Nr.)'
-  const name = `${nr}${lokal}`
+  const { datum } = row
+  const art = get(row, 'art.art_ae_art.name') || '(keine Art)'
+  const person = get(row, 'person.name') || '(keine Person)'
+  const herkunft = get(row, 'herkunft.nr') || '(keine Herkunft-Nr)'
+  const date = datum
+    ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+    : 'kein Datum'
+  const geplant = row.geplant ? ' (geplant)' : ''
+  const label = `${row.nr ||
+    '(keine Nr)'}, ${date}: Herkunft ${herkunft}, ${person}; ${art}${geplant}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{name}</div>
+      <div>{label}</div>
     </Row>
   )
 }

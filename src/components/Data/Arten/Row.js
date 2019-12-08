@@ -18,9 +18,11 @@ const Row = styled.div`
   margin: -1px 0;
   padding: 10px;
   cursor: pointer;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  div {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
   &:hover {
     background-color: rgba(74, 20, 140, 0.03);
   }

@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
@@ -7,12 +7,21 @@ import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import gql from 'graphql-tag'
+import { FixedSizeList } from 'react-window'
+import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
+import {
+  sammlung as sammlungFragment,
+  art as artFragment,
+  person as personFragment,
+  herkunft as herkunftFragment,
+} from '../../../utils/fragments'
+import Row from './Row'
 
 const Container = styled.div`
   height: 100%;
@@ -52,21 +61,38 @@ const TitleFilterNumbers = styled.div`
   text-align: center;
 `
 const FieldsContainer = styled.div`
-  padding: 10px;
   overflow: auto !important;
   height: 100%;
 `
 
 const query = gql`
-  query SammlungQuery($isFiltered: Boolean!, $filter: sammlung_bool_exp!) {
-    rowsUnfiltered: sammlung @include(if: $isFiltered) {
+  query SammlungQuery($filter: sammlung_bool_exp!) {
+    rowsUnfiltered: sammlung {
       id
     }
-    rowsFiltered: sammlung(where: $filter) @include(if: $isFiltered) {
-      id
+    rowsFiltered: sammlung(where: $filter) {
+      ...SammlungFields
+      art {
+        ...ArtFields
+      }
+      herkunft {
+        ...HerkunftFields
+      }
+      person {
+        ...PersonFields
+      }
     }
   }
+  ${artFragment}
+  ${herkunftFragment}
+  ${personFragment}
+  ${sammlungFragment}
 `
+
+const singleRowHeight = 48
+function sizeReducer(state, action) {
+  return action.payload
+}
 
 const Sammlungen = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -78,16 +104,26 @@ const Sammlungen = ({ filter: showFilter }) => {
 
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
   const { data, error, loading } = useQuery(query, {
-    variables: { isFiltered, filter: sammlungFilter },
+    variables: { filter: sammlungFilter },
   })
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const rows = get(data, 'rowsFiltered', [])
+  const filteredNr = rows.length
 
   const add = useCallback(() => {
     const node = { nodeType: 'folder', url: activeNodeArray }
     createNew({ node, store, client })
   }, [activeNodeArray, client, store])
+
+  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
+    width: 0,
+    height: 0,
+  })
+  const onResize = useCallback(
+    (width, height) => sizeDispatch({ payload: { width, height } }),
+    [],
+  )
 
   if (loading) {
     return (
@@ -135,7 +171,25 @@ const Sammlungen = ({ filter: showFilter }) => {
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer />
+        <FieldsContainer>
+          <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+          <FixedSizeList
+            height={sizeState.height}
+            itemCount={rows.length}
+            itemSize={singleRowHeight}
+            width={sizeState.width}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={rows[index]}
+                last={index === rows.length - 1}
+              />
+            )}
+          </FixedSizeList>
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
