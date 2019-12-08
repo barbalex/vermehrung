@@ -116,6 +116,11 @@ const Sammlungen = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Herkuenfte') + 1],
     }
   }
+  if (activeNodeArray.includes('Personen')) {
+    sammlungFilter.person_id = {
+      _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
+    }
+  }
   const { data, error, loading } = useQuery(query, {
     variables: { filter: sammlungFilter },
   })

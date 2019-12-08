@@ -49,7 +49,7 @@ export default url => {
   if (url.length === 2 && url[0] === 'Lieferungen') {
     return 'lieferung'
   }
-  if ([2, 3].includes(url.length) && url[0] === 'Sammel-Lieferungen') {
+  if (url.length === 2 && url[0] === 'Sammel-Lieferungen') {
     return 'sammel_lieferung'
   }
   if (url.length === 2 && url[0] === 'Teilkulturen') {
@@ -71,8 +71,22 @@ export default url => {
     return 'kultur'
   }
 
+  if (
+    url.length === 3 &&
+    url[0] === 'Sammel-Lieferungen' &&
+    url[2] === 'Lieferungen'
+  ) {
+    return 'lieferungen'
+  }
   if (url.length === 3 && url[0] === 'Sammlungen' && url[2] === 'Herkuenfte') {
     return 'herkuenfte'
+  }
+  if (
+    url.length === 3 &&
+    url[0] === 'Sammlungen' &&
+    url[2] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferungen'
   }
   if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
     return 'kulturen'
@@ -250,8 +264,13 @@ export default url => {
   if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
     return 'sammlung'
   }
-  if (url.length === 5 && url[0] === 'Herkuenfte' && url[2] === 'Sammlungen') {
-    return 'sammlung'
+  if (
+    url.length === 5 &&
+    url[0] === 'Herkuenfte' &&
+    url[2] === 'Sammlungen' &&
+    url[4] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferungen'
   }
   if (
     url.length === 5 &&

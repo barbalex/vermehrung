@@ -49,7 +49,6 @@ export default ({ nodes, data, url }) => {
           mono: true,
         }
       })
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [3, sammlungIndex, 3, index]
         return el

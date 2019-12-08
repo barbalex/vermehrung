@@ -120,6 +120,21 @@ const Lieferungen = ({ filter: showFilter }) => {
       }
     }
   }
+  if (activeNodeArray.includes('Sammel-Lieferungen')) {
+    lieferungFilter.sammel_lieferung_id = {
+      _eq: activeNodeArray[activeNodeArray.indexOf('Sammel-Lieferungen') + 1],
+    }
+  }
+  if (activeNodeArray.includes('Personen')) {
+    lieferungFilter.person_id = {
+      _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
+    }
+  }
+  if (activeNodeArray.includes('Sammlungen')) {
+    lieferungFilter.von_sammlung_id = {
+      _eq: activeNodeArray[activeNodeArray.indexOf('Sammlungen') + 1],
+    }
+  }
   const { data, error, loading } = useQuery(query, {
     variables: { filter: lieferungFilter },
   })

@@ -542,7 +542,8 @@ export default gql`
       person @include(if: $isSammlung) {
         ...PersonFields
       }
-      lieferungs @include(if: $isSammlung) {
+      lieferungs(order_by: { datum: desc_nulls_first })
+        @include(if: $isSammlung) {
         ...LieferungFields
         person @include(if: $isSammlungLieferung) {
           ...PersonFields
