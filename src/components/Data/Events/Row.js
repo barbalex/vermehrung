@@ -2,6 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import moment from 'moment'
 
 import storeContext from '../../../storeContext'
 
@@ -36,8 +37,12 @@ const EventsRows = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
+  const datum = row.datum
+    ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+    : null
   const geplant = row.geplant ? ' (geplant)' : ''
-  const label = `${get(row, 'beschreibung') || '(nicht beschrieben)'}${geplant}`
+  const event = `${get(row, 'beschreibung') || '(nicht beschrieben)'}${geplant}`
+  const label = `${datum || '(kein Datum)'}: ${event}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>

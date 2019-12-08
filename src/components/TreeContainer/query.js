@@ -233,7 +233,10 @@ export default gql`
         }
       }
     }
-    event(where: $eventFilter, order_by: { beschreibung: asc_nulls_first }) {
+    event(
+      where: $eventFilter
+      order_by: { datum: desc_nulls_first, beschreibung: asc_nulls_first }
+    ) {
       ...EventFields
     }
     zaehlung(order_by: { datum: desc_nulls_first }) {

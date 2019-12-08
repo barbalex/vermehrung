@@ -24,7 +24,7 @@ export default ({ nodes, data, url }) => {
         const geplant = el.geplant ? ' (geplant)' : ''
         const event = `${get(el, 'beschreibung') ||
           '(nicht beschrieben)'}${geplant}`
-        const label = datum ? `${event} (${datum})` : event
+        const label = `${datum || '(kein Datum)'}: ${event}`
 
         return {
           nodeType: 'table',

@@ -32,10 +32,11 @@ export default ({ nodes, data, url }) => {
       .map(el => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : 'kein Datum'
+          : null
         const geplant = el.geplant ? ' (geplant)' : ''
-        const label = `${datum}: ${get(el, 'beschreibung') ||
+        const event = `${get(el, 'beschreibung') ||
           '(nicht beschrieben)'}${geplant}`
+        const label = `${datum || '(kein Datum)'}: ${event}`
 
         return {
           nodeType: 'table',
