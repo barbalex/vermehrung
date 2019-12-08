@@ -19,6 +19,8 @@ export default ({ nodes, data, url }) => {
       .filter(() =>
         nodes.map(n => n.id).includes(`sammlung${sammlungId}HerkunftFolder`),
       )
+      // there were null values causing errors
+      .filter(n => !!n)
       .map(el => {
         const label = `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
           '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`
