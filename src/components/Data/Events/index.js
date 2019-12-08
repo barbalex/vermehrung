@@ -92,9 +92,9 @@ const Events = ({ filter: showFilter }) => {
     store,
     table: 'event',
   })
-  if (activeNodeArray.includes('Events')) {
+  if (activeNodeArray.includes('Kulturen')) {
     eventFilter.kultur_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Events') + 1],
+      _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
     }
   }
   const { data, error, loading } = useQuery(query, {
