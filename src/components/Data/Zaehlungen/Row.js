@@ -1,6 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import get from 'lodash/get'
+import moment from 'moment'
 
 import storeContext from '../../../storeContext'
 
@@ -35,7 +37,25 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const label = row.name || '(kein Name)'
+  const datum = row.datum
+    ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+    : 'kein Datum'
+  const anz =
+    get(row, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') || '-'
+  const anzAb =
+    get(row, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit') ||
+    '-'
+  const anzMu =
+    get(row, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen') ||
+    '-'
+  const numbers = `${anz
+    .toString()
+    .padStart(3, '\u00A0')}/${anzAb
+    .toString()
+    .padStart(3, '\u00A0')}/${anzMu.toString().padStart(3, '\u00A0')}`
+  const ziel = row.ziel ? ' (Ziel)' : ''
+  const prognose = row.prognose ? ' (Prognose)' : ''
+  const label = `${datum}: ${numbers}${ziel}${prognose}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
