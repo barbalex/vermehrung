@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import findIndex from 'lodash/findIndex'
 import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -71,7 +70,10 @@ const query = gql`
     rowsUnfiltered: sammlung {
       id
     }
-    rowsFiltered: sammlung(where: $filter) {
+    rowsFiltered: sammlung(
+      where: $filter
+      order_by: [{ nr: asc_nulls_first }, { datum: desc_nulls_first }]
+    ) {
       ...SammlungFields
       art {
         ...ArtFields
@@ -105,14 +107,14 @@ const Sammlungen = ({ filter: showFilter }) => {
 
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
   if (activeNodeArray.includes('Arten')) {
-    const indexOfArten = findIndex(activeNodeArray, 'Arten')
-    const artId = activeNodeArray[indexOfArten + 2]
-    sammlungFilter.art_id = { _eq: artId }
+    sammlungFilter.art_id = {
+      _eq: activeNodeArray[activeNodeArray.indexOf('Arten') + 1],
+    }
   }
   if (activeNodeArray.includes('Herkuenfte')) {
-    const indexOfArten = findIndex(activeNodeArray, 'Herkuenfte')
-    const herkunftId = activeNodeArray[indexOfArten + 2]
-    sammlungFilter.herkunft_id = { _eq: herkunftId }
+    sammlungFilter.herkunft_id = {
+      _eq: activeNodeArray[activeNodeArray.indexOf('Herkuenfte') + 1],
+    }
   }
   const { data, error, loading } = useQuery(query, {
     variables: { filter: sammlungFilter },

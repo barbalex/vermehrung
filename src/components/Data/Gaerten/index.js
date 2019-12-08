@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import findIndex from 'lodash/findIndex'
 import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -101,9 +100,9 @@ const Gaerten = ({ filter: showFilter }) => {
 
   const gartenFilter = queryFromTable({ store, table: 'garten' })
   if (activeNodeArray.includes('Personen')) {
-    const indexOfPersonen = findIndex(activeNodeArray, 'Personen')
-    const personId = activeNodeArray[indexOfPersonen + 2]
-    gartenFilter.person_id = { _eq: personId }
+    gartenFilter.person_id = {
+      _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
+    }
   }
   const { data, error, loading } = useQuery(query, {
     variables: { filter: gartenFilter },

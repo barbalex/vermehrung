@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import findIndex from 'lodash/findIndex'
 import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -94,9 +93,9 @@ const Herkuenfte = ({ filter: showFilter }) => {
 
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   if (activeNodeArray.includes('Sammlungen')) {
-    const indexOfArten = findIndex(activeNodeArray, 'Sammlungen')
-    const sammlungId = activeNodeArray[indexOfArten + 2]
-    herkunftFilter.sammlungs = { id: { _eq: sammlungId } }
+    herkunftFilter.sammlungs = {
+      id: { _eq: activeNodeArray[activeNodeArray.indexOf('Sammlungen') + 1] },
+    }
   }
   const { data, error, loading } = useQuery(query, {
     variables: { filter: herkunftFilter },
