@@ -57,11 +57,8 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
-const List = styled(FixedSizeList)`
-  /*overflow-x: hidden !important;*/
-`
 
-const singleRowHeight = 44
+const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
 }
@@ -140,16 +137,22 @@ const Arten = ({ filter: showFilter }) => {
         )}
         <FieldsContainer>
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-          <List
+          <FixedSizeList
             height={sizeState.height}
             itemCount={rows.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
             {({ index, style }) => (
-              <Row key={index} style={style} index={index} row={rows[index]} />
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                row={rows[index]}
+                last={index === rows.length - 1}
+              />
             )}
-          </List>
+          </FixedSizeList>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

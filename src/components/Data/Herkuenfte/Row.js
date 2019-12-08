@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import storeContext from '../../../storeContext'
 
@@ -34,10 +33,19 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
+  // only show lokal if exist
+  // does not exist if user does not have right to see it
+  const lokal =
+    row.gemeinde || row.lokalname
+      ? `, ${row.gemeinde && `${row.gemeinde}, `}${row.lokalname &&
+          row.lokalname}`
+      : ''
+  const nr = row.nr || '(keine Nr.)'
+  const name = `${nr}${lokal}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{get(row, 'art_ae_art.name')}</div>
+      <div>{name}</div>
     </Row>
   )
 }
