@@ -64,13 +64,16 @@ export default url => {
   if (url.length === 2 && url[0] === 'Personen') {
     return 'person'
   }
-  if ([2, 3].includes(url.length) && url[0] === 'Sammlungen') {
+  if (url.length === 2 && url[0] === 'Sammlungen') {
     return 'sammlung'
   }
   if (url.length === 2 && url[0] === 'Kulturen') {
     return 'kultur'
   }
 
+  if (url.length === 3 && url[0] === 'Sammlungen' && url[2] === 'Herkuenfte') {
+    return 'herkuenfte'
+  }
   if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
     return 'kulturen'
   }

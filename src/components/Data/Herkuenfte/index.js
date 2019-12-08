@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import findIndex from 'lodash/findIndex'
 import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -70,6 +71,9 @@ const query = gql`
       order_by: [{ nr: asc }, { gemeinde: asc }, { lokalname: asc }]
     ) {
       ...HerkunftFields
+      sammlungs {
+        id
+      }
     }
   }
   ${herkunftFragment}
@@ -86,8 +90,14 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
+  const { activeNodeArray } = store.tree
 
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
+  if (activeNodeArray.includes('Sammlungen')) {
+    const indexOfArten = findIndex(activeNodeArray, 'Sammlungen')
+    const sammlungId = activeNodeArray[indexOfArten + 2]
+    herkunftFilter.sammlungs = { id: { _eq: sammlungId } }
+  }
   const { data, error, loading } = useQuery(query, {
     variables: { filter: herkunftFilter },
   })
@@ -97,9 +107,9 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: ['Herkuenfte'] }
+    const node = { nodeType: 'folder', url: activeNodeArray }
     createNew({ node, store, client })
-  }, [client, store])
+  }, [activeNodeArray, client, store])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
@@ -109,6 +119,9 @@ const Herkuenfte = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
+  // herkuenfte is top node
+  // never enable adding below that
+  const showPlus = activeNodeArray.length < 2
 
   if (loading) {
     return (
@@ -143,13 +156,15 @@ const Herkuenfte = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Herkünfte</Title>
             <TitleSymbols>
-              <IconButton
-                aria-label="neue Herkunft"
-                title="neue Herkunft"
-                onClick={add}
-              >
-                <FaPlus />
-              </IconButton>
+              {showPlus && (
+                <IconButton
+                  aria-label="neue Herkunft"
+                  title="neue Herkunft"
+                  onClick={add}
+                >
+                  <FaPlus />
+                </IconButton>
+              )}
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

@@ -69,6 +69,7 @@ const Arten = ({ filter: showFilter }) => {
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
+  const { activeNodeArray } = store.tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(artQuery, {
@@ -80,9 +81,9 @@ const Arten = ({ filter: showFilter }) => {
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: ['Arten'] }
+    const node = { nodeType: 'folder', url: activeNodeArray }
     createNew({ node, store, client })
-  }, [client, store])
+  }, [activeNodeArray, client, store])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
