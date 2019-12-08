@@ -219,7 +219,9 @@ export default gql`
               where: $eventFilter
               order_by: {
                 datum: desc_nulls_first
-                beschreibung: asc_nulls_first
+                # TODO: This causes error in query:
+                # "ORDER BY "root.ar.root.sammlungs.ar.sammlungs.lieferungs.or.kulturByNachK" is ambiguous"
+                #beschreibung: asc_nulls_first
               }
             ) {
               ...EventFields

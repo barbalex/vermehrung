@@ -37,73 +37,73 @@ const TreeContainer = () => {
   const { setRefetch, openNodes, setNodes } = store.tree
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
-
+  const variables = {
+    artFilter: queryFromTable({ store, table: 'art' }),
+    eventFilter: queryFromTable({ store, table: 'event' }),
+    gartenFilter: queryFromTable({ store, table: 'garten' }),
+    kulturFilter: queryFromTable({ store, table: 'kultur' }),
+    herkunftFilter: queryFromTable({ store, table: 'herkunft' }),
+    personFilter: queryFromTable({ store, table: 'person' }),
+    sammlungFilter: queryFromTable({ store, table: 'sammlung' }),
+    lieferungFilter: queryFromTable({ store, table: 'lieferung' }),
+    sammelLieferungFilter: queryFromTable({
+      store,
+      table: 'sammel_lieferung',
+    }),
+    teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
+    zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
+    isArt: openNodes.some(n => n[0] === 'Arten'),
+    isEvent: openNodes.some(n => n[0] === 'Events'),
+    isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
+    isArtSammlung: openNodes.some(
+      n => n[0] === 'Arten' && n[2] === 'Sammlungen',
+    ),
+    isGarten: openNodes.some(n => n[0] === 'Gaerten'),
+    isGartenKultur: openNodes.some(
+      n => n[0] === 'Gaerten' && n[2] === 'Kulturen',
+    ),
+    isHerkunft: openNodes.some(n => n[0] === 'Herkuenfte'),
+    isHerkunftSammlung: openNodes.some(
+      n => n[0] === 'Herkuenfte' && n[2] === 'Sammlungen',
+    ),
+    isLieferung: openNodes.some(n => n[0] === 'Lieferungen'),
+    isSammelLieferung: openNodes.some(n => n[0] === 'Sammel-Lieferungen'),
+    isPerson: openNodes.some(n => n[0] === 'Personen'),
+    isPersonGarten: openNodes.some(
+      n => n[0] === 'Personen' && n[2] === 'Gaerten',
+    ),
+    isPersonGartenKultur: openNodes.some(
+      n => n[0] === 'Personen' && n[2] === 'Gaerten' && n[4] === 'Kulturen',
+    ),
+    isPersonSammlung: openNodes.some(
+      n => n[0] === 'Personen' && n[2] === 'Sammlungen',
+    ),
+    isPersonLieferung: openNodes.some(
+      n => n[0] === 'Personen' && n[2] === 'Lieferungen',
+    ),
+    isSammlung: openNodes.some(n => n[0] === 'Sammlungen'),
+    isSammlungLieferung: openNodes.some(
+      n => n[0] === 'Sammlungen' && n[2] === 'Aus-Lieferungen',
+    ),
+    isSammlungLieferungKultur: openNodes.some(
+      n =>
+        n[0] === 'Sammlungen' &&
+        n[2] === 'Aus-Lieferungen' &&
+        n[4] === 'Kulturen',
+    ),
+    isTeilkultur: openNodes.some(n => n[0] === 'Teilkulturen'),
+    isKultur: openNodes.some(n => n[0] === 'Kulturen'),
+    isKulturAnLieferung: openNodes.some(
+      n => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
+    ),
+    isKulturAusLieferung: openNodes.some(
+      n => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
+    ),
+    isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
+  }
+  console.log('TreeContainer', { variables })
   const { data, error, loading, refetch } = useQuery(query, {
-    //notifyOnNetworkStatusChange: true,
-    variables: {
-      artFilter: queryFromTable({ store, table: 'art' }),
-      eventFilter: queryFromTable({ store, table: 'event' }),
-      gartenFilter: queryFromTable({ store, table: 'garten' }),
-      kulturFilter: queryFromTable({ store, table: 'kultur' }),
-      herkunftFilter: queryFromTable({ store, table: 'herkunft' }),
-      personFilter: queryFromTable({ store, table: 'person' }),
-      sammlungFilter: queryFromTable({ store, table: 'sammlung' }),
-      lieferungFilter: queryFromTable({ store, table: 'lieferung' }),
-      sammelLieferungFilter: queryFromTable({
-        store,
-        table: 'sammel_lieferung',
-      }),
-      teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
-      zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
-      isArt: openNodes.some(n => n[0] === 'Arten'),
-      isEvent: openNodes.some(n => n[0] === 'Events'),
-      isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
-      isArtSammlung: openNodes.some(
-        n => n[0] === 'Arten' && n[2] === 'Sammlungen',
-      ),
-      isGarten: openNodes.some(n => n[0] === 'Gaerten'),
-      isGartenKultur: openNodes.some(
-        n => n[0] === 'Gaerten' && n[2] === 'Kulturen',
-      ),
-      isHerkunft: openNodes.some(n => n[0] === 'Herkuenfte'),
-      isHerkunftSammlung: openNodes.some(
-        n => n[0] === 'Herkuenfte' && n[2] === 'Sammlungen',
-      ),
-      isLieferung: openNodes.some(n => n[0] === 'Lieferungen'),
-      isSammelLieferung: openNodes.some(n => n[0] === 'Sammel-Lieferungen'),
-      isPerson: openNodes.some(n => n[0] === 'Personen'),
-      isPersonGarten: openNodes.some(
-        n => n[0] === 'Personen' && n[2] === 'Gaerten',
-      ),
-      isPersonGartenKultur: openNodes.some(
-        n => n[0] === 'Personen' && n[2] === 'Gaerten' && n[4] === 'Kulturen',
-      ),
-      isPersonSammlung: openNodes.some(
-        n => n[0] === 'Personen' && n[2] === 'Sammlungen',
-      ),
-      isPersonLieferung: openNodes.some(
-        n => n[0] === 'Personen' && n[2] === 'Lieferungen',
-      ),
-      isSammlung: openNodes.some(n => n[0] === 'Sammlungen'),
-      isSammlungLieferung: openNodes.some(
-        n => n[0] === 'Sammlungen' && n[2] === 'Aus-Lieferungen',
-      ),
-      isSammlungLieferungKultur: openNodes.some(
-        n =>
-          n[0] === 'Sammlungen' &&
-          n[2] === 'Aus-Lieferungen' &&
-          n[4] === 'Kulturen',
-      ),
-      isTeilkultur: openNodes.some(n => n[0] === 'Teilkulturen'),
-      isKultur: openNodes.some(n => n[0] === 'Kulturen'),
-      isKulturAnLieferung: openNodes.some(
-        n => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
-      ),
-      isKulturAusLieferung: openNodes.some(
-        n => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
-      ),
-      isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
-    },
+    variables,
   })
 
   //console.log('TreeContainer, data:', data)
