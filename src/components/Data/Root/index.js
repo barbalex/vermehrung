@@ -76,6 +76,7 @@ const Root = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
+  // eslint-disable-next-line no-unused-vars
   const role = claims['x-hasura-role']
 
   // TODO: filter according to roles
