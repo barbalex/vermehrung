@@ -1,5 +1,8 @@
 export default url => {
   //console.log('acitveFormFromActiveNodeArray, url:', url.slice())
+  if (url.length === 0) {
+    return 'root'
+  }
   if (url.length === 1 && url[0] === 'Arten') {
     return 'arten'
   }

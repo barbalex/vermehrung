@@ -251,7 +251,7 @@ export default gql`
     ) {
       ...EventFields
     }
-    zaehlung(order_by: { datum: desc_nulls_first }) {
+    zaehlung(where: $zaehlungFilter, order_by: { datum: desc_nulls_first }) {
       ...ZaehlungFields
       teilzaehlungs_aggregate {
         aggregate {

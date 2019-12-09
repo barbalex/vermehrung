@@ -24,12 +24,16 @@ import Zaehlung from './Zaehlung'
 import Zaehlungen from './Zaehlungen'
 import Teilkultur from './Teilkultur'
 import Teilkulturen from './Teilkulturen'
+import Root from './Root'
 
 const Data = () => {
   const { activeForm } = useContext(storeContext)
   //console.log('Daten, activeForm:', activeForm)
 
   switch (activeForm) {
+    case 'root': {
+      return <Root />
+    }
     case 'art': {
       return <Art />
     }
