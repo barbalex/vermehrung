@@ -244,7 +244,7 @@ const Zaehlung = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateZaehlung: {
                 id: row.id,
                 __typename: 'Zaehlung',
                 content: { ...row, [field]: valueToSet },

@@ -282,7 +282,7 @@ const Event = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateEvent: {
                 id: row.id,
                 __typename: 'Event',
                 content: { ...row, [field]: valueToSet },

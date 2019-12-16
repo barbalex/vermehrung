@@ -136,7 +136,7 @@ const Art = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateArt: {
                 id: row.id,
                 __typename: 'Art',
                 content: { ...row, ae_id: value },

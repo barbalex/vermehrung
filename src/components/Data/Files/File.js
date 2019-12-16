@@ -197,9 +197,9 @@ const File = ({ file, parent, refetch }) => {
           },
           optimisticResponse: {
             __typename: 'Mutation',
-            updateComment: {
+            updateFile: {
               id: file.file_id,
-              __typename: 'Event',
+              __typename: 'File',
               content: { ...file, [field]: valueToSet },
             },
           },

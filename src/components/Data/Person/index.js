@@ -163,7 +163,7 @@ const Person = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updatePerson: {
                 id: row.id,
                 __typename: 'Person',
                 content: { ...row, [field]: valueToSet },

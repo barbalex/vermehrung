@@ -180,7 +180,7 @@ const Herkunft = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateHerkunft: {
                 id: row.id,
                 __typename: 'Herkunft',
                 content: { ...row, [field]: valueToSet },

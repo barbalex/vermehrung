@@ -504,7 +504,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateLieferung: {
                 id: row.id,
                 __typename: 'Lieferung',
                 content: { ...row, [field]: valueToSet },

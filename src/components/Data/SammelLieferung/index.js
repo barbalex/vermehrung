@@ -492,7 +492,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateSammelLieferung: {
                 id: row.id,
                 __typename: 'SammelLieferung',
                 content: { ...row, [field]: valueToSet },

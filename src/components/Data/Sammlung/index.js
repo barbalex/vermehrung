@@ -248,7 +248,7 @@ const Sammlung = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateSammlung: {
                 id: row.id,
                 __typename: 'Sammlung',
                 content: { ...row, [field]: valueToSet },

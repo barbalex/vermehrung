@@ -226,7 +226,7 @@ const Teilkultur = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateTeilkultur: {
                 id: row.id,
                 __typename: 'Teilkultur',
                 content: { ...row, [field]: valueToSet },

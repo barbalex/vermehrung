@@ -278,7 +278,7 @@ const Kultur = ({ filter: showFilter }) => {
             },
             optimisticResponse: {
               __typename: 'Mutation',
-              updateComment: {
+              updateKultur: {
                 id: row.id,
                 __typename: 'Kultur',
                 content: { ...row, [field]: valueToSet },
