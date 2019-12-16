@@ -19,7 +19,7 @@ import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
-import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
+import Date from '../../shared/Date'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
@@ -330,7 +330,7 @@ const Zaehlung = ({ filter: showFilter }) => {
               saveToDb={saveToDb}
               error={errors.kultur_id}
             />
-            <DateFieldWithPicker
+            <Date
               key={`${row.id}datum`}
               name="datum"
               label="Datum"

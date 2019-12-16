@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 12px;
+  margin-bottom: 19px;
 `
 const Label = styled.div`
   font-size: 12px;
@@ -31,7 +31,7 @@ const StyledSelect = styled(Select)`
     border-bottom-width: 2px;
   }
   .react-select__control:focus-within {
-    border-bottom-color: rgba(28, 80, 31, 1) !important;
+    border-bottom-color: #4a148c !important;
     box-shadow: none;
   }
   .react-select__value-container {

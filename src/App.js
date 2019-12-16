@@ -8,13 +8,11 @@ import Store from './store'
 import { Provider as MobxProvider } from './storeContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
-import moment from 'moment'
-import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
-import MomentUtils from '@date-io/moment'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-
 import localForage from 'localforage'
 import { navigate } from '@reach/router'
+import { registerLocale, setDefaultLocale } from 'react-datepicker'
+import { de } from 'date-fns/locale'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import materialTheme from './utils/materialTheme'
 import client from '../client'
@@ -27,6 +25,9 @@ import UpdateExists from './components/UpdateExists'
 const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
 const myClient = client()
+
+registerLocale('de', de)
+setDefaultLocale('de')
 
 if (typeof window !== 'undefined') window.store = mobxStore
 
@@ -74,25 +75,19 @@ const App = ({ element }) => (
   <MuiThemeProvider theme={materialTheme}>
     <MobxProvider value={mobxStore}>
       <ApolloProvider client={myClient}>
-        <MuiPickersUtilsProvider
-          utils={MomentUtils}
-          moment={moment}
-          locale="de-ch"
+        <SnackbarProvider
+          maxSnack={5}
+          preventDuplicate
+          autoHideDuration={10000}
+          action={key => <NotificationDismisser nKey={key} />}
         >
-          <SnackbarProvider
-            maxSnack={5}
-            preventDuplicate
-            autoHideDuration={10000}
-            action={key => <NotificationDismisser nKey={key} />}
-          >
-            <>
-              <GlobalStyle />
-              {element}
-              <Notifier />
-              <UpdateExists />
-            </>
-          </SnackbarProvider>
-        </MuiPickersUtilsProvider>
+          <>
+            <GlobalStyle />
+            {element}
+            <Notifier />
+            <UpdateExists />
+          </>
+        </SnackbarProvider>
       </ApolloProvider>
     </MobxProvider>
   </MuiThemeProvider>

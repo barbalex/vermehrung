@@ -18,7 +18,7 @@ import ErrorBoundary from 'react-error-boundary'
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
-import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
+import Date from '../../shared/Date'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -353,7 +353,7 @@ const Sammlung = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.person_id}
           />
-          <DateFieldWithPicker
+          <Date
             key={`${row.id}datum`}
             name="datum"
             label="Datum"

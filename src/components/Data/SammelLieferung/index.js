@@ -20,7 +20,7 @@ import { MdPrint } from 'react-icons/md'
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
-import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
+import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -852,7 +852,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
                   <Title>wann</Title>
                 </TitleRow>
                 {ifNeeded('datum') && (
-                  <DateFieldWithPicker
+                  <Date
                     key={`${row.id}datum`}
                     name="datum"
                     label="Datum"

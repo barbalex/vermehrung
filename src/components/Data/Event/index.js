@@ -19,7 +19,7 @@ import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
-import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
+import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -241,6 +241,7 @@ const Event = ({ filter: showFilter }) => {
 
   const saveToDb = useCallback(
     async event => {
+      console.log('Event, event:', event)
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -420,7 +421,7 @@ const Event = ({ filter: showFilter }) => {
             />
           )}
           {(ev_datum || showFilter) && (
-            <DateFieldWithPicker
+            <Date
               key={`${row.id}datum`}
               name="datum"
               label="Datum"
