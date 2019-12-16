@@ -41,12 +41,14 @@ const StyledDatePicker = styled(DatePicker)`
   border-radius: 0;
   min-height: 36px !important;
   height: 36px !important;
+  background-color: transparent;
   &:focus {
     color: #495057;
     background-color: #fff;
     outline: 0;
     border-bottom: 2px solid #4a148c;
     box-shadow: none;
+    background-color: transparent;
   }
 `
 const dateFormat = [
