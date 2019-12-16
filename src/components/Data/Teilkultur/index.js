@@ -132,7 +132,7 @@ const Teilkultur = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray } = store.tree
 
   const id = showFilter
     ? 99999999999999
@@ -224,15 +224,22 @@ const Teilkultur = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Teilkultur',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
       }
     },
-    [client, filter, refetch, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const openTeilkulturDocs = useCallback(() => {
     typeof window !== 'undefined' &&

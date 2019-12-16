@@ -246,12 +246,20 @@ const Sammlung = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Sammlung',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
+        if (['herkunft_id', 'person_id', 'art_id'].includes(field)) refetch()
       }
     },
     [client, filter, refetch, row, showFilter],

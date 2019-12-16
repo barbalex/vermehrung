@@ -75,7 +75,7 @@ export const simpleTypes = {
   person_id: 'number',
   herkunft_id: 'number',
   nr: 'string',
-  datum: 'string',
+  datum: 'date',
   von_anzahl_individuen: 'number',
   anzahl_pflanzen: 'number',
   gramm_samen: 'number',

@@ -195,14 +195,21 @@ const File = ({ file, parent, refetch }) => {
           variables: {
             file_id: file.file_id,
           },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateComment: {
+              id: file.file_id,
+              __typename: 'Event',
+              content: { ...file, [field]: valueToSet },
+            },
+          },
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      refetch()
     },
-    [client, file.file_id, parent, refetch],
+    [client, file, parent],
   )
 
   if (!file) return null

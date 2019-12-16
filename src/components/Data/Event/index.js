@@ -161,7 +161,7 @@ const Event = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch: refetchTree } = store.tree
+  const { activeNodeArray } = store.tree
 
   const id = showFilter
     ? 99999999999999
@@ -241,7 +241,6 @@ const Event = ({ filter: showFilter }) => {
 
   const saveToDb = useCallback(
     async event => {
-      console.log('Event, event:', event)
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -281,15 +280,22 @@ const Event = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Event',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetchTree()
       }
     },
-    [client, filter, refetchTree, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

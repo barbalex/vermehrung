@@ -250,7 +250,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch: refetchTree } = store.tree
+  const { activeNodeArray } = store.tree
 
   const id = showFilter
     ? 99999999999999
@@ -502,6 +502,14 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Lieferung',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           console.log(error)
@@ -519,10 +527,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
           !!refetch && refetch()
         }
         setErrors({})
-        refetchTree()
       }
     },
-    [client, filter, refetch, refetchTree, row, showFilter],
+    [client, filter, refetch, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

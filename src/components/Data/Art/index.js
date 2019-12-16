@@ -77,7 +77,7 @@ const Art = ({ filter: showFilter }) => {
   const { filter, tree } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
-  const { activeNodeArray, setActiveNodeArray, refetch } = tree
+  const { activeNodeArray, setActiveNodeArray } = tree
 
   const artId = showFilter
     ? 99999999999999
@@ -134,15 +134,22 @@ const Art = ({ filter: showFilter }) => {
               id: row.id,
               ae_id: value,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Art',
+                content: { ...row, ae_id: value },
+              },
+            },
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
       }
     },
-    [client, filter, refetch, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const artSelectFilter = useCallback(
     val => {

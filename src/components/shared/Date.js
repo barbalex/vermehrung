@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -77,18 +77,25 @@ const DateField = ({
   popperPlacement = 'auto',
 }) => {
   const onChangeDatePicker = useCallback(
-    date =>
-      saveToDb({
-        target: {
-          value: moment(date, 'DD.MM.YYYY').format('YYYY-MM-DD'),
-          name,
-        },
-      }),
+    date => {
+      if (date === null) {
+        saveToDb({
+          target: {
+            value: null,
+            name,
+          },
+        })
+      } else {
+        saveToDb({
+          target: {
+            value: moment(date).format('YYYY-MM-DD'),
+            name,
+          },
+        })
+      }
+    },
     [name, saveToDb],
   )
-  const selected = moment(value, 'YYYY-MM-DD').isValid()
-    ? new Date(moment(value, 'YYYY-MM-DD').toDate())
-    : null
 
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (
@@ -96,7 +103,11 @@ const DateField = ({
       <Label htmlFor={name}>{label}</Label>
       <StyledDatePicker
         id={name}
-        selected={selected}
+        selected={
+          moment(value, 'YYYY-MM-DD').isValid()
+            ? new Date(moment(value, 'YYYY-MM-DD').toDate())
+            : null
+        }
         onChange={onChangeDatePicker}
         dateFormat={dateFormat}
         popperPlacement={popperPlacement}

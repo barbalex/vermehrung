@@ -252,11 +252,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const store = useContext(storeContext)
   const { filter, isPrint, setIsPrint } = store
   const { isFiltered: runIsFiltered } = filter
-  const {
-    activeNodeArray,
-    refetch: refetchTree,
-    setWidthInPercentOfScreen,
-  } = store.tree
+  const { activeNodeArray, setWidthInPercentOfScreen } = store.tree
 
   const id = showFilter
     ? 99999999999999
@@ -494,6 +490,14 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'SammelLieferung',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           console.log(error)
@@ -523,19 +527,9 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
           !!refetch && refetch()
         }
         setErrors({})
-        refetchTree()
       }
     },
-    [
-      client,
-      filter,
-      refetch,
-      refetchTree,
-      row,
-      showFilter,
-      sl_auto_copy_edits,
-      store,
-    ],
+    [client, filter, refetch, row, showFilter, sl_auto_copy_edits, store],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

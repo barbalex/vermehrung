@@ -39,7 +39,7 @@ export const empty = {
 export const simpleTypes = {
   id: 'number',
   kultur_id: 'number',
-  datum: 'string',
+  datum: 'date',
   geplant: 'boolean',
   bemerkungen: 'string',
 }

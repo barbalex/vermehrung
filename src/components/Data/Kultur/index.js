@@ -276,12 +276,23 @@ const Kultur = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Kultur',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetchTree()
+        // need to refetch or related data will not be updated
+        if (['art_id', 'herkunft_id', 'garten_id'].includes(field)) {
+          refetchTree()
+        }
       }
     },
     [client, filter, refetchTree, row, showFilter],

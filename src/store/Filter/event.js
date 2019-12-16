@@ -55,5 +55,5 @@ export const simpleTypes = {
   person_id: 'number',
   beschreibung: 'string',
   geplant: 'boolean',
-  datum: 'string',
+  datum: 'date',
 }

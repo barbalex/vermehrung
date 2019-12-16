@@ -91,7 +91,7 @@ export const simpleTypes = {
   person_id: 'number',
   von_sammlung_id: 'number',
   von_kultur_id: 'number',
-  datum: 'string',
+  datum: 'date',
   nach_kultur_id: 'number',
   nach_ausgepflanzt: 'boolean',
   von_anzahl_individuen: 'number',

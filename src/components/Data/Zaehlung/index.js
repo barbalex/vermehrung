@@ -139,7 +139,7 @@ const Zaehlung = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch: refetchTree } = store.tree
+  const { activeNodeArray } = store.tree
   const id = showFilter
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
@@ -242,15 +242,22 @@ const Zaehlung = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Zaehlung',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetchTree()
       }
     },
-    [client, filter, refetchTree, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

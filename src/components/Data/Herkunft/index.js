@@ -107,7 +107,7 @@ const Herkunft = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const { data, error, loading } = useQuery(herkunftQuery, {
-    variables: { id, isFiltered, filter: herkunftFilter, refetch },
+    variables: { id, isFiltered, filter: herkunftFilter },
   })
 
   const [errors, setErrors] = useState({})
@@ -178,15 +178,22 @@ const Herkunft = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateComment: {
+                id: row.id,
+                __typename: 'Herkunft',
+                content: { ...row, [field]: valueToSet },
+              },
+            },
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
       }
     },
-    [client, filter, refetch, row, showFilter],
+    [client, filter, row, showFilter],
   )
 
   if (loading) {
