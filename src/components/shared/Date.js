@@ -91,7 +91,7 @@ const DateField = ({
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (
     <StyledFormControl>
-      <Label for={name}>{label}</Label>
+      <Label htmlFor={name}>{label}</Label>
       <StyledDatePicker
         id={name}
         selected={selected}
