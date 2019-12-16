@@ -1,7 +1,7 @@
 {
   "name": "vermehrung.apflora.ch",
   "description": "breeding endangered plant species",
-  "version": "0.19.13",
+  "version": "0.19.14",
   "license": "MIT",
   "scripts": {
     "dev": "gatsby develop",
