@@ -80,32 +80,30 @@ export const gartenFile = gql`
     beschreibung
   }
 `
-export const herkunft = role =>
-  !!role && role === 'gardener'
-    ? gql`
-        fragment HerkunftFields on herkunft {
-          id
-          nr
-        }
-      `
-    : gql`
-        fragment HerkunftFields on herkunft {
-          id
-          nr
-          lokalname
-          gemeinde
-          kanton
-          land
-          bemerkungen
-          computed {
-            id
-            lv95_x
-            lv95_y
-            wgs84_lat
-            wgs84_long
-          }
-        }
-      `
+export const herkunft = gql`
+  fragment HerkunftFields on herkunft {
+    id
+    nr
+    lokalname
+    gemeinde
+    kanton
+    land
+    bemerkungen
+    computed {
+      id
+      lv95_x
+      lv95_y
+      wgs84_lat
+      wgs84_long
+    }
+  }
+`
+export const herkunftForGardener = gql`
+  fragment HerkunftForGardenerFields on herkunft {
+    id
+    nr
+  }
+`
 export const herkunftFile = gql`
   fragment HerkunftFileFields on herkunft_file {
     herkunft_id

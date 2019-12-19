@@ -5,6 +5,7 @@ import {
   event,
   garten,
   herkunft,
+  herkunftForGardener,
   kultur,
   kulturFelder,
   lieferung,
@@ -51,6 +52,8 @@ export default gql`
     $isKulturAusLieferung: Boolean!
     $isTeilkultur: Boolean!
     $isWerteListe: Boolean!
+    $isGardener: Boolean!
+    $isNotGardener: Boolean!
   ) {
     garten(
       where: $gartenFilter
@@ -144,6 +147,10 @@ export default gql`
             ...PersonFields
           }
         }
+        herkunft @include(if: $isArtKultur) {
+          id
+          nr
+        }
         events(
           where: $eventFilter
           order_by: { datum: desc_nulls_first, beschreibung: asc_nulls_first }
@@ -194,7 +201,8 @@ export default gql`
         @include(if: $isArt) {
         ...SammlungFields
         herkunft @include(if: $isArtSammlung) {
-          ...HerkunftFields
+          ...HerkunftFields @include(if: $isNotGardener)
+          ...HerkunftForGardenerFields @include(if: $isGardener)
         }
         art @include(if: $isArtSammlung) {
           ...ArtFields
@@ -347,7 +355,7 @@ export default gql`
         { gemeinde: asc_nulls_first }
         { lokalname: asc_nulls_first }
       ]
-    ) {
+    ) @include(if: $isNotGardener) {
       ...HerkunftFields
       sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
         @include(if: $isHerkunft) {
@@ -514,7 +522,8 @@ export default gql`
           ...ArtFields
         }
         herkunft @include(if: $isPersonSammlung) {
-          ...HerkunftFields
+          ...HerkunftFields @include(if: $isNotGardener)
+          ...HerkunftForGardenerFields @include(if: $isGardener)
         }
       }
       lieferungs @include(if: $isPerson) {
@@ -539,7 +548,8 @@ export default gql`
         ...ArtFields
       }
       herkunft @include(if: $isSammlung) {
-        ...HerkunftFields
+        ...HerkunftFields @include(if: $isNotGardener)
+        ...HerkunftForGardenerFields @include(if: $isGardener)
       }
       person @include(if: $isSammlung) {
         ...PersonFields
@@ -589,6 +599,7 @@ export default gql`
   ${kultur}
   ${kulturFelder}
   ${herkunft}
+  ${herkunftForGardener}
   ${lieferung}
   ${sammelLieferung}
   ${person}

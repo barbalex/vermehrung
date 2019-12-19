@@ -20,6 +20,7 @@ import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
 import queryFromTable from '../../utils/queryFromTable'
+import { getProfile } from '../../utils/auth'
 
 const Container = styled.div`
   height: 100%;
@@ -35,6 +36,14 @@ const Container = styled.div`
 const TreeContainer = () => {
   const store = useContext(storeContext)
   const { setRefetch, openNodes, setNodes } = store.tree
+
+  const user = getProfile()
+  const claims = user['https://hasura.io/jwt/claims'] || {}
+  const role = claims['x-hasura-role']
+
+  const isGardener = role === 'gardener'
+  console.log('TreeContainer:', { role, isGardener })
+
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
   const variables = {
@@ -100,12 +109,14 @@ const TreeContainer = () => {
       n => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
     ),
     isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
+    isGardener,
+    isNotGardener: !isGardener,
   }
   const { data, error, loading, refetch } = useQuery(query, {
     variables,
   })
 
-  //console.log('TreeContainer, data:', data)
+  console.log('TreeContainer, data:', data)
 
   useEffect(() => {
     setRefetch(refetch)
