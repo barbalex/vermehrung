@@ -98,12 +98,6 @@ export const herkunft = gql`
     }
   }
 `
-export const herkunftForGardener = gql`
-  fragment HerkunftForGardenerFields on herkunft {
-    id
-    nr
-  }
-`
 export const herkunftFile = gql`
   fragment HerkunftFileFields on herkunft_file {
     herkunft_id
