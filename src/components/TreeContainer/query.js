@@ -5,7 +5,6 @@ import {
   event,
   garten,
   herkunft,
-  herkunftForGardener,
   kultur,
   kulturFelder,
   lieferung,
@@ -53,7 +52,6 @@ export default gql`
     $isTeilkultur: Boolean!
     $isWerteListe: Boolean!
     $isGardener: Boolean!
-    $isNotGardener: Boolean!
   ) {
     garten(
       where: $gartenFilter
@@ -201,8 +199,10 @@ export default gql`
         @include(if: $isArt) {
         ...SammlungFields
         herkunft @include(if: $isArtSammlung) {
-          ...HerkunftFields @include(if: $isNotGardener)
-          ...HerkunftForGardenerFields @include(if: $isGardener)
+          id
+          nr
+          lokalname @skip(if: $isGardener)
+          gemeinde @skip(if: $isGardener)
         }
         art @include(if: $isArtSammlung) {
           ...ArtFields
@@ -355,7 +355,7 @@ export default gql`
         { gemeinde: asc_nulls_first }
         { lokalname: asc_nulls_first }
       ]
-    ) @include(if: $isNotGardener) {
+    ) @skip(if: $isGardener) {
       ...HerkunftFields
       sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
         @include(if: $isHerkunft) {
@@ -522,8 +522,10 @@ export default gql`
           ...ArtFields
         }
         herkunft @include(if: $isPersonSammlung) {
-          ...HerkunftFields @include(if: $isNotGardener)
-          ...HerkunftForGardenerFields @include(if: $isGardener)
+          id
+          nr
+          lokalname @skip(if: $isGardener)
+          gemeinde @skip(if: $isGardener)
         }
       }
       lieferungs @include(if: $isPerson) {
@@ -548,8 +550,10 @@ export default gql`
         ...ArtFields
       }
       herkunft @include(if: $isSammlung) {
-        ...HerkunftFields @include(if: $isNotGardener)
-        ...HerkunftForGardenerFields @include(if: $isGardener)
+        id
+        nr
+        lokalname @skip(if: $isGardener)
+        gemeinde @skip(if: $isGardener)
       }
       person @include(if: $isSammlung) {
         ...PersonFields
@@ -599,7 +603,6 @@ export default gql`
   ${kultur}
   ${kulturFelder}
   ${herkunft}
-  ${herkunftForGardener}
   ${lieferung}
   ${sammelLieferung}
   ${person}
