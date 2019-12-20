@@ -203,7 +203,7 @@ const Teilkultur = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value}"`
+            valueToSet = `"${value.replace(/"/, "'")}"`
           }
           await client.mutate({
             mutation: gql`

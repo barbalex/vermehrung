@@ -482,7 +482,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
         } else {
-          valueToSet = `"${value}"`
+          valueToSet = `"${value.replace(/"/, "'")}"`
         }
         try {
           await client.mutate({
