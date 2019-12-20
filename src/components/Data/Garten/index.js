@@ -201,7 +201,7 @@ const Garten = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.replace(/"/, "'")}"`
+            valueToSet = `"${value.split('"').join('\\"')}"`
           }
           //console.log('Garten, saveToDb', { field, valueToSet })
           await client.mutate({

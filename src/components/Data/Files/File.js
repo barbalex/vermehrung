@@ -170,7 +170,7 @@ const File = ({ file, parent, refetch }) => {
         if (value === undefined || value === null) {
           valueToSet = null
         } else {
-          valueToSet = `"${value.replace(/"/, "'")}"`
+          valueToSet = `"${value.split('"').join('\\"')}"`
         }
         const fragment = fragmentObject[parent]
         await client.mutate({

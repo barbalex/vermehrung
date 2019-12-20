@@ -222,7 +222,7 @@ const Sammlung = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.replace(/"/, "'")}"`
+            valueToSet = `"${value.split('"').join('\\"')}"`
           }
           await client.mutate({
             mutation: gql`
