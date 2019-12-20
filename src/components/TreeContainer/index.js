@@ -40,9 +40,8 @@ const TreeContainer = () => {
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
   const role = claims['x-hasura-role']
-
   const isGardener = role === 'gardener'
-  //console.log('TreeContainer:', { role, isGardener })
+  console.log('TreeContainer:', { role, isGardener })
 
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
@@ -120,8 +119,8 @@ const TreeContainer = () => {
   useEffect(() => {
     setRefetch(refetch)
     // fetch on first load to show loading state
-    setNodes(buildNodes({ store, data, loading }))
-  }, [data, loading, refetch, setNodes, setRefetch, store])
+    setNodes(buildNodes({ store, data, loading, role }))
+  }, [data, loading, refetch, role, setNodes, setRefetch, store])
 
   // do not set nodes when data is empty
   // which happens while query is loading again

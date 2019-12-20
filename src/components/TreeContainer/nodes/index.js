@@ -114,23 +114,41 @@ import buildKulturLieferungAusLieferung from './kultur/auslieferung'
 import buildKulturEventFolder from './kultur/event/folder'
 import buildKulturEventEvent from './kultur/event'
 
-export default ({ store, data, loading }) => {
+export default ({ store, data, loading, role }) => {
   const openNodes = store.tree.openNodes.sort(sort)
   let artArtNodes
 
-  let nodes = [
-    ...memoizeOne(() => buildArtFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildHerkunftFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildSammelLieferungFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
-  ]
+  let nodes
+  if (role === 'gardener') {
+    nodes = [
+      ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
+      ...memoizeOne(() =>
+        buildSammelLieferungFolder({ data, store, loading }),
+      )(),
+      ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
+    ]
+  } else {
+    nodes = [
+      ...memoizeOne(() => buildArtFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildHerkunftFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
+      ...memoizeOne(() =>
+        buildSammelLieferungFolder({ data, store, loading }),
+      )(),
+      ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
+      ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
+    ]
+  }
 
   /**
    * We ALWAYS add an array of nodes,
