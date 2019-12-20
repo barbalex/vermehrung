@@ -42,7 +42,7 @@ const TreeContainer = () => {
   const role = claims['x-hasura-role']
 
   const isGardener = role === 'gardener'
-  console.log('TreeContainer:', { role, isGardener })
+  //console.log('TreeContainer:', { role, isGardener })
 
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
@@ -115,7 +115,7 @@ const TreeContainer = () => {
     variables,
   })
 
-  console.log('TreeContainer, data:', data)
+  //console.log('TreeContainer, data:', data)
 
   useEffect(() => {
     setRefetch(refetch)
