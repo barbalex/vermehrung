@@ -118,10 +118,10 @@ export default ({ store, data, loading, role }) => {
   const openNodes = store.tree.openNodes.sort(sort)
   let artArtNodes
 
-  let nodes
-  if (role === 'gardener') {
-    nodes = [
+  let nodes = [
+      ...memoizeOne(() => role === 'gardener' ? [] : buildArtFolder({ data, store, loading }))(),
       ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
+      ...memoizeOne(() => role === 'gardener' ? [] : buildHerkunftFolder({ data, store, loading }))(),
       ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
       ...memoizeOne(() =>
         buildSammelLieferungFolder({ data, store, loading }),
@@ -130,25 +130,9 @@ export default ({ store, data, loading, role }) => {
       ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
       ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
       ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
+      ...memoizeOne(() => role === 'gardener' ? [] : buildSammlungFolder({ data, store, loading }))(),
       ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
     ]
-  } else {
-    nodes = [
-      ...memoizeOne(() => buildArtFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildHerkunftFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
-      ...memoizeOne(() =>
-        buildSammelLieferungFolder({ data, store, loading }),
-      )(),
-      ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildSammlungFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
-    ]
-  }
 
   /**
    * We ALWAYS add an array of nodes,
