@@ -41,7 +41,6 @@ const TreeContainer = () => {
   const claims = user['https://hasura.io/jwt/claims'] || {}
   const role = claims['x-hasura-role']
   const isGardener = role === 'gardener'
-  console.log('TreeContainer:', { role, isGardener })
 
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
@@ -125,7 +124,7 @@ const TreeContainer = () => {
   // do not set nodes when data is empty
   // which happens while query is loading again
   if (!loading && data && Object.keys(data).length > 0) {
-    setNodes(buildNodes({ store, data, loading }))
+    setNodes(buildNodes({ store, data, loading, role }))
   }
 
   if (error) {
