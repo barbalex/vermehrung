@@ -84,7 +84,7 @@ const FieldRow = styled.div`
 `
 
 const zaehlungQuery = gql`
-  query ZaehlungQuery(
+  query ZaehlungQueryForZaehlung(
     $id: bigint!
     $isFiltered: Boolean!
     $filter: zaehlung_bool_exp!

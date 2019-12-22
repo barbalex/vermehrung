@@ -61,7 +61,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query ZaehlungQuery($filter: zaehlung_bool_exp!) {
+  query ZaehlungQueryForZaehlungen($filter: zaehlung_bool_exp!) {
     rowsUnfiltered: zaehlung {
       id
     }
