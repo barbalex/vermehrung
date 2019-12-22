@@ -86,7 +86,7 @@ const herkunftQuery = gql`
   ${herkunftFragment}
 `
 const personFelderQuery = gql`
-  query personFelderQuery($personId: bigint) {
+  query personFelderQueryForHerkunft($personId: bigint) {
     person_felder(where: { person_id: { _eq: $personId } }) {
       ...PersonFelderFields
     }

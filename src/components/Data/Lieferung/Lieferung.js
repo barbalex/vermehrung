@@ -236,7 +236,7 @@ const personQuery = gql`
   }
 `
 const personFelderQuery = gql`
-  query personFelderQuery($personId: bigint) {
+  query personFelderQueryForLieferungLieferung($personId: bigint) {
     person_felder(where: { person_id: { _eq: $personId } }) {
       ...PersonFelderFields
     }
