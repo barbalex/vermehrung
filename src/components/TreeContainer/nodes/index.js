@@ -117,11 +117,14 @@ import buildKulturEventEvent from './kultur/event'
 export default ({ store, data, loading, role }) => {
   const openNodes = store.tree.openNodes.sort(sort)
   let artArtNodes
+  const showArtFolder = role !== 'gardener'
+  const showHerkunftFolder = role !== 'gardener'
+  const showSammlungFolder = role !== 'gardener'
 
   let nodes = [
-      ...memoizeOne(() => role === 'gardener' ? [] : buildArtFolder({ data, store, loading }))(),
+      ...memoizeOne(() => showArtFolder ? buildArtFolder({ data, store, loading }):[])(),
       ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
-      ...memoizeOne(() => role === 'gardener' ? [] : buildHerkunftFolder({ data, store, loading }))(),
+      ...memoizeOne(() => showHerkunftFolder? buildHerkunftFolder({ data, store, loading }):[])(),
       ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
       ...memoizeOne(() =>
         buildSammelLieferungFolder({ data, store, loading }),
@@ -130,7 +133,7 @@ export default ({ store, data, loading, role }) => {
       ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
       ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
       ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
-      ...memoizeOne(() => role === 'gardener' ? [] : buildSammlungFolder({ data, store, loading }))(),
+      ...memoizeOne(() => showSammlungFolder? buildSammlungFolder({ data, store, loading }):[])(),
       ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
     ]
 
