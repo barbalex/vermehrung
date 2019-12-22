@@ -66,7 +66,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query SammlungQuery($filter: sammlung_bool_exp!) {
+  query SammlungQueryForSammlungen($filter: sammlung_bool_exp!) {
     rowsUnfiltered: sammlung {
       id
     }

@@ -86,7 +86,7 @@ const FieldRow = styled.div`
 `
 
 const query = gql`
-  query SammlungQuery(
+  query SammlungQueryForSammlung(
     $id: bigint!
     $isFiltered: Boolean!
     $filter: sammlung_bool_exp!

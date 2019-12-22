@@ -170,7 +170,7 @@ const sammelLieferungQuery = gql`
   ${sammlungFragment}
 `
 const sammlungQuery = gql`
-  query sammlungQuery($filter: sammlung_bool_exp!) {
+  query sammlungQueryForSammelLieferung($filter: sammlung_bool_exp!) {
     sammlung(
       where: $filter
       order_by: [
