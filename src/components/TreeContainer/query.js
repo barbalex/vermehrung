@@ -16,7 +16,7 @@ import {
 } from '../../utils/fragments'
 
 export default gql`
-  query TreeQuery(
+  query TreeQueryForTreeContainer(
     $artFilter: art_bool_exp!
     $eventFilter: event_bool_exp!
     $gartenFilter: garten_bool_exp!

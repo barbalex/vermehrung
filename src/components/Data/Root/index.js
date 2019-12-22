@@ -23,7 +23,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query TreeQuery(
+  query TreeQueryForRoot(
     $artFilter: art_bool_exp!
     $eventFilter: event_bool_exp!
     $gartenFilter: garten_bool_exp!
