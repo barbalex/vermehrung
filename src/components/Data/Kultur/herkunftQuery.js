@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query herkunftQuery($filter: herkunft_bool_exp!) {
+  query herkunftQueryForKultur($filter: herkunft_bool_exp!) {
     herkunft(
       where: $filter
       order_by: [

@@ -61,7 +61,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query HerkunftQuery($filter: herkunft_bool_exp!) {
+  query HerkunftQueryForHerkuenfte($filter: herkunft_bool_exp!) {
     rowsUnfiltered: herkunft {
       id
     }
