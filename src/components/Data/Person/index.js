@@ -64,7 +64,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query PersonQuery(
+  query PersonQueryForPerson(
     $id: bigint!
     $isFiltered: Boolean!
     $filter: person_bool_exp!

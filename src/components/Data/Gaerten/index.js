@@ -64,7 +64,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query GartenQuery($filter: garten_bool_exp!) {
+  query GartenQueryForGaerten($filter: garten_bool_exp!) {
     rowsUnfiltered: garten {
       id
     }

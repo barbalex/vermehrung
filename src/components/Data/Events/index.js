@@ -61,7 +61,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query EventQuery($filter: event_bool_exp!) {
+  query EventQueryForEvents($filter: event_bool_exp!) {
     rowsUnfiltered: event {
       id
     }

@@ -6,7 +6,7 @@ import {
 } from '../../../utils/fragments'
 
 export default gql`
-  query gartenQuery($include: Boolean!) {
+  query gartenQueryForKultur($include: Boolean!) {
     garten(order_by: { person: { name: asc_nulls_first } }) {
       ...GartenFields
       person {

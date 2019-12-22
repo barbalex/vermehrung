@@ -81,7 +81,7 @@ const FieldsContainer = styled.div`
 `
 
 const gartenQuery = gql`
-  query GartenQuery(
+  query GartenQueryForGarten(
     $id: bigint!
     $isFiltered: Boolean!
     $filter: garten_bool_exp!
@@ -99,7 +99,7 @@ const gartenQuery = gql`
   ${gartenFragment}
 `
 const personQuery = gql`
-  query personQuery {
+  query personQueryForGarten {
     person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
       name

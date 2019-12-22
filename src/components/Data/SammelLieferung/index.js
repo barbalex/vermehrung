@@ -230,7 +230,7 @@ const artQuery = gql`
   ${artFragment}
 `
 const personQuery = gql`
-  query personQuery {
+  query personQueryForSammelLieferung {
     person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
       name

@@ -85,7 +85,7 @@ const FieldRow = styled.div`
 `
 
 const eventQuery = gql`
-  query EventQuery(
+  query EventQueryForEvent(
     $id: bigint!
     $filter: event_bool_exp!
     $isFiltered: Boolean!
@@ -147,7 +147,7 @@ const kulturQuery = gql`
   ${teilkulturFragment}
 `
 const personQuery = gql`
-  query personQuery {
+  query personQueryForEvent {
     person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
       name
