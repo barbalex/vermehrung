@@ -11,7 +11,7 @@ import {
 } from '../../../utils/fragments'
 
 export default gql`
-  query KulturQuery(
+  query KulturQueryForKultur(
     $id: bigint!
     $isFiltered: Boolean!
     $filter: kultur_bool_exp!

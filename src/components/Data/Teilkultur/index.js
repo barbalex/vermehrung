@@ -69,7 +69,7 @@ const FieldsContainer = styled.div`
 `
 
 const teilkulturQuery = gql`
-  query TeilkulturQuery(
+  query TeilkulturQueryForTeilkultur(
     $id: bigint!
     $filter: teilkultur_bool_exp!
     $isFiltered: Boolean!

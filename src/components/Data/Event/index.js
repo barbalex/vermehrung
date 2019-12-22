@@ -112,7 +112,7 @@ const eventQuery = gql`
 `
 // garten.person.name
 const kulturQuery = gql`
-  query kulturQuery {
+  query kulturQueryForEvent {
     kultur(
       order_by: [
         { garten: { person: { name: asc_nulls_first } } }

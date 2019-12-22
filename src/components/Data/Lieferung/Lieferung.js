@@ -195,7 +195,7 @@ const sammlungQuery = gql`
   }
 `
 const kulturQuery = gql`
-  query kulturQuery($filter: kultur_bool_exp!) {
+  query kulturQueryForLieferung($filter: kultur_bool_exp!) {
     kultur(
       where: $filter
       order_by: [

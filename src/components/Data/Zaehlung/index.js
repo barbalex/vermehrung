@@ -110,7 +110,7 @@ const zaehlungQuery = gql`
   ${kulturFelderFragment}
 `
 const kulturQuery = gql`
-  query kulturQuery($filter: kultur_bool_exp!) {
+  query kulturQueryForZaehlung($filter: kultur_bool_exp!) {
     kultur(
       where: $filter
       order_by: [
