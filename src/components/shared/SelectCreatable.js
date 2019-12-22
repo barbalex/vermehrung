@@ -115,7 +115,7 @@ const SharedSelect = ({
             .join(', ')
           responce = await client.mutate({
             mutation: gql`
-            mutation insertDataset {
+            mutation insertDatasetForSelectCreatable {
               insert_${table} (objects: [{${creatablePropertyName}: "${option.label}", ${propertiesToPass}}]) {
                 returning { id }
               }

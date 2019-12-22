@@ -61,7 +61,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query SammelLieferungQueryForSammelLieferung($filter: sammel_lieferung_bool_exp!) {
+  query SammelLieferungQueryForSammelLieferungen($filter: sammel_lieferung_bool_exp!) {
     rowsUnfiltered: sammel_lieferung {
       id
     }

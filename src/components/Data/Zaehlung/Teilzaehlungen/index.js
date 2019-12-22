@@ -53,7 +53,7 @@ const teilzaehlungenQuery = gql`
   ${teilkulturFragment}
 `
 const insertTeilzaehlungMutation = gql`
-  mutation insertDataset($zaehlId: bigint!) {
+  mutation insertTeilzaehlung($zaehlId: bigint!) {
     insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
       returning {
         ...TeilzaehlungFields

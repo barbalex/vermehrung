@@ -117,7 +117,7 @@ const Teilzaehlung = ({
         try {
           zaehlungData = await client.mutate({
             mutation: gql`
-              mutation insertDataset(
+              mutation insertZaehlungForTeilzaehlung(
                 $kulturId: bigint!
                 $datum: date!
                 $prognose: Boolean!
