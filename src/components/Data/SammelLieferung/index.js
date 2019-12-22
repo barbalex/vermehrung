@@ -124,7 +124,7 @@ const HerkunftLabel = styled.div`
 `
 
 const sammelLieferungQuery = gql`
-  query SammelLieferungQuery(
+  query SammelLieferungQueryForSammelLieferung(
     $id: bigint!
     $isFiltered: Boolean!
     $filter: sammel_lieferung_bool_exp!

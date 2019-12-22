@@ -58,7 +58,7 @@ const StyledSplitPane = styled(SplitPane)`
 `
 
 const lieferungQuery = gql`
-  query LieferungQuery($id: bigint!, $include: Boolean!) {
+  query LieferungQueryForLieferung($id: bigint!, $include: Boolean!) {
     lieferung(where: { id: { _eq: $id } }) @include(if: $include) {
       ...LieferungFields
       sammel_lieferung {

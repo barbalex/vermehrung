@@ -64,7 +64,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query LieferungQuery($filter: lieferung_bool_exp!) {
+  query LieferungQueryForLieferungen($filter: lieferung_bool_exp!) {
     rowsUnfiltered: lieferung {
       id
     }

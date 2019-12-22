@@ -118,7 +118,7 @@ const HerkunftLabel = styled.div`
 `
 
 const lieferungQuery = gql`
-  query LieferungQuery(
+  query LieferungQueryForLieferungLieferung(
     $id: bigint!
     $isFiltered: Boolean!
     $filter: lieferung_bool_exp!
