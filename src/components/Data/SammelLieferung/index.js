@@ -222,7 +222,7 @@ const kulturQuery = gql`
   }
 `
 const artQuery = gql`
-  query artQuery {
+  query artQueryForSammelLieferung {
     art(order_by: { art_ae_art: { name: asc } }) {
       ...ArtFields
     }
