@@ -46,21 +46,21 @@ const Container = styled.div`
   }
   .react-autosuggest__suggestions-container {
     display: none;
+    z-index: 3 !important;
   }
   .react-autosuggest__suggestions-container--open {
     display: block;
+    /*DO I NEED POSITION RELATIVE TO GET Z-INDEX TO WORK????*/
     position: absolute;
     top: 48px;
     margin-left: -23px;
     width: ${props => `${props['data-autosuggestwidth']}px`};
     border: 1px solid #aaa;
     background-color: #fff;
-    /*background-color: rgb(251, 248, 255);*/
     font-family: Helvetica, sans-serif;
     font-size: 14px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    z-index: 2;
     max-height: calc(100vh - 60px);
     overflow-y: auto;
     box-shadow: 3px 3px 3px rgba(74, 20, 140, 0.1);
