@@ -116,4 +116,32 @@ export default () => createGlobalStyle`
     font-weight: 500;
     background-color: rgba(74, 20, 140, 0.08);
   }
+
+  /* react-autosuggest */
+  .react-autosuggest__suggestions-container ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  .react-autosuggest__suggestion {
+    cursor: pointer;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 0 20px;
+    color: rgba(0, 0, 0, 0.8);
+  }
+  .react-autosuggest__suggestion--highlighted {
+    background-color: #ddd;
+  }
+  .react-autosuggest__section-container {
+    border-top: 1px dashed #ccc;
+  }
+  .react-autosuggest__section-container--first {
+    border-top: 0;
+  }
+  .react-autosuggest__section-title {
+    padding: 5px 0 0 10px;
+    font-size: 12px;
+    color: #777;
+  }
 `

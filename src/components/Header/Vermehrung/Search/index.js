@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useRef, useMemo } from 'react'
+import ReactDOM from 'react-dom'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
@@ -18,7 +19,6 @@ const formatDatum = datum =>
 
 const Container = styled.div`
   border-radius: 3px;
-  background-color: #5f00d4;
   margin-right: 5px;
   width: 250px;
   display: flex;
@@ -44,53 +44,6 @@ const Container = styled.div`
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
-  .react-autosuggest__suggestions-container {
-    display: none;
-    z-index: 3 !important;
-  }
-  .react-autosuggest__suggestions-container--open {
-    display: block;
-    /*DO I NEED POSITION RELATIVE TO GET Z-INDEX TO WORK????*/
-    position: absolute;
-    top: 48px;
-    margin-left: -23px;
-    width: ${props => `${props['data-autosuggestwidth']}px`};
-    border: 1px solid #aaa;
-    background-color: #fff;
-    font-family: Helvetica, sans-serif;
-    font-size: 14px;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
-    box-shadow: 3px 3px 3px rgba(74, 20, 140, 0.1);
-  }
-  .react-autosuggest__suggestions-list {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-  }
-  .react-autosuggest__suggestion {
-    cursor: pointer;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    padding: 0 20px;
-    color: rgba(0, 0, 0, 0.8);
-  }
-  .react-autosuggest__suggestion--highlighted {
-    background-color: #ddd;
-  }
-  .react-autosuggest__section-container {
-    border-top: 1px dashed #ccc;
-  }
-  .react-autosuggest__section-container--first {
-    border-top: 0;
-  }
-  .react-autosuggest__section-title {
-    padding: 5px 0 0 10px;
-    font-size: 12px;
-    color: #777;
-  }
 `
 const SearchIcon = styled(FaSearch)`
   margin: auto 5px;
@@ -103,7 +56,7 @@ const DelIcon = styled(FaTimes)`
 
 const loadingSuggestions = [
   {
-    title: 'Lade Daten',
+    title: 'Lade Daten...',
     suggestions: [
       {
         id: 'none',
@@ -113,7 +66,6 @@ const loadingSuggestions = [
     ],
   },
 ]
-const autosuggestWidth = 350
 const getSuggestionValue = suggestion => suggestion && suggestion.name
 const shouldRenderSuggestions = value =>
   value && value.trim && value.trim().length > 1
@@ -121,9 +73,15 @@ const renderSectionTitle = section => <strong>{section.title}</strong>
 const getSectionSuggestions = section => section.suggestions
 
 export default () => {
+  if (typeof window === 'undefined') return null
   const store = useContext(storeContext)
   const { setActiveNodeArray, addOpenNodes, widthEnforced } = store.tree
   const [val, setVal] = useState('')
+
+  const [focused, setFocused]=useState(false)
+  const onFocus = useCallback(()=>setFocused(true),[])
+  const onBlur = useCallback(()=>setFocused(false),[])
+  const asRef = useRef(null)
 
   const { data } = useQuery(filterSuggestionsQuery, {
     variables: {
@@ -327,10 +285,46 @@ export default () => {
     )
   }, [])
 
+  // see: https://github.com/moroshko/react-autosuggest/issues/699#issuecomment-568798287
+  const renderSuggestionsContainerPopper = ({ containerProps, children }) => {
+    if (focused && suggestions.length) {
+      const inputCoords = asRef.current
+        ? asRef.current.input.getBoundingClientRect()
+        : {}
+      const style = {
+        position: 'absolute',
+        left: inputCoords.left - 29 + window.scrollX, // adding scrollX and scrollY to get the coords wrt document instead of viewport
+        top: inputCoords.top + 34 + window.scrollY,
+        overflowY: 'auto',
+        zIndex: 3,
+        boxShadow: '3px 3px 3px rgba(74, 20, 140, 0.1)',
+        width: inputCoords.width + 57,
+        border: '1px solid #4a148c',
+        backgroundColor: '#fff',
+        fontFamily: 'Helvetica, sans-serif',
+        fontSize: '14px',
+        borderBottomLeftRadius: '4px',
+        borderBottomRightRadius: '4px',
+        maxHeight: 'calc(100vh - 60px)',
+      }
+      return ReactDOM.createPortal(
+        <div {...containerProps} style={style}>
+          {children}
+        </div>,
+        document.body,
+      )
+    }
+    return null
+  }
+
   return (
-    <Container data-autosuggestwidth={autosuggestWidth}>
+    <Container>
       {!exists(widthEnforced) && <SearchIcon />}
+      <div
+        onFocus={onFocus}
+        onBlur={onBlur}>
       <Autosuggest
+        ref={asRef}
         suggestions={suggestions}
         onSuggestionsFetchRequested={() => {
           // Autosuggest wants this function
@@ -344,12 +338,13 @@ export default () => {
         shouldRenderSuggestions={shouldRenderSuggestions}
         onSuggestionSelected={onSuggestionSelected}
         renderSuggestion={renderSuggestion}
+        renderSuggestionsContainer={renderSuggestionsContainerPopper}
         multiSection={true}
         renderSectionTitle={renderSectionTitle}
         getSectionSuggestions={getSectionSuggestions}
         inputProps={inputProps}
         focusInputOnSuggestionClick={false}
-      />
+      /></div>
       <DelIcon data-active={!!val} onClick={onClickDel} />
     </Container>
   )
