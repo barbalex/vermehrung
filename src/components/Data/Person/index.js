@@ -17,6 +17,7 @@ import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
+import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import { getProfile } from '../../../utils/auth'
@@ -348,6 +349,7 @@ const Person = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
+          <Arten/>
           {!showFilter && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>
