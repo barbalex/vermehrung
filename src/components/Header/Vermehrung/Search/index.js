@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, useRef, useMemo } from 'react'
+import React, { useState, useCallback, useContext, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
@@ -286,7 +286,7 @@ export default () => {
   }, [])
 
   // see: https://github.com/moroshko/react-autosuggest/issues/699#issuecomment-568798287
-  const renderSuggestionsContainerPopper = ({ containerProps, children }) => {
+  const renderSuggestionsContainerPopper = useCallback(({ containerProps, children }) => {
     if (focused && suggestions.length) {
       const inputCoords = asRef.current
         ? asRef.current.input.getBoundingClientRect()
@@ -315,7 +315,7 @@ export default () => {
       )
     }
     return null
-  }
+  },[focused, suggestions.length])
 
   return (
     <Container>
