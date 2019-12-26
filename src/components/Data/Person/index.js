@@ -117,6 +117,7 @@ const Person = ({ filter: showFilter }) => {
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
   const role = claims['x-hasura-role']
+  const isArtverantwortlich = role === 'artverantwortlich'
 
   const saveToDb = useCallback(
     async event => {
@@ -179,6 +180,8 @@ const Person = ({ filter: showFilter }) => {
     },
     [client, filter, row, showFilter],
   )
+
+  console.log('Person', { isArtverantwortlich, role })
 
   if (loading) {
     return (
@@ -349,7 +352,7 @@ const Person = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          <Arten/>
+          {isArtverantwortlich && <Arten />}
           {!showFilter && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>
