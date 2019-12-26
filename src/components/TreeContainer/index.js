@@ -40,7 +40,7 @@ const TreeContainer = () => {
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
   const role = claims['x-hasura-role']
-  const isGardener = role === 'gardener'
+  const isGardener = role === 'gaertner'
 
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click

@@ -205,6 +205,7 @@ export const person = gql`
     kein_email
     bemerkungen
     account_id
+    user_role
     kommerziell
     info
     aktiv

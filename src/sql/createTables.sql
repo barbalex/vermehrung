@@ -20,10 +20,12 @@ create table person (
   changed_by varchar(20) default null,
   tsv tsvector,
   account_id text default null,
+  user_role text default null references user_role (value) on delete set null on update cascade,
   kommerziell boolean default false,
   info boolean default false,
   aktiv boolean default true
 );
+--alter table person add column user_role text default null references user_role (value) on delete set null on update cascade;
 create index on person using btree (id);
 create index on person using btree (name);
 create index on person using btree (account_id);
@@ -31,6 +33,17 @@ create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using gin (tsv);
+
+drop table if exist user_role cascade;
+create table user_role (
+  value text primary key,
+  comment text
+);
+create index on user_role using btree (value);
+INSERT INTO user_role (value, comment) VALUES
+  ('gaertner', 'liest und editiert Daten des eigenen Garten'),
+  ('artverantwortlich', 'liest und editiert Daten für bestimmte Arten'),
+  ('manager', 'liest und editiert alle Daten');
 
 drop table if exists person_file;
 create table person_file (

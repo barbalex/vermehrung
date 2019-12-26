@@ -178,13 +178,13 @@ export const signoff = async ({ account_id, store }) => {
  * - add auth0-id to person data vermehrung-side
  * - user gets email to set password
  */
-export const signup = async ({ email, personId, store, client }) => {
+export const signup = async ({ email, personId, userRole, store, client }) => {
   auth.signup(
     {
       connection: 'Username-Password-Authentication',
       email,
       password: process.env.AUTH0_USER_INITIAL_PASSWORD,
-      user_metadata: { personId },
+      user_metadata: { personId, userRole },
     },
     async (err, resp) => {
       if (!err) {

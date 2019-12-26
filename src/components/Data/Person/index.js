@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useState, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
@@ -9,6 +9,7 @@ import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
+import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -79,6 +80,10 @@ const query = gql`
     rowsFiltered: person(where: $filter) @include(if: $isFiltered) {
       id
     }
+    user_role(order_by: {value: asc}) {
+      value
+      comment
+    }
   }
   ${personFragment}
 `
@@ -98,6 +103,17 @@ const Person = ({ filter: showFilter }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered, filter: personFilter },
   })
+
+  const userRoleWerte = useMemo(
+    () =>
+      get(data, 'user_role', []).map(el => ({
+        value: el.value,
+        label: `${el.value} (${el.comment})`,
+      })),
+    [data],
+  )
+
+  console.log('Person',{data,userRoleWerte})
 
   const [errors, setErrors] = useState({})
 
@@ -230,6 +246,17 @@ const Person = ({ filter: showFilter }) => {
           </TitleContainer>
         )}
         <FieldsContainer>
+          <Select
+            key={`${row.id}${row.user_role}user_role`}
+            name="user_role"
+            value={row.user_role}
+            field="user_role"
+            label="Rolle"
+            options={userRoleWerte}
+            loading={loading}
+            saveToDb={saveToDb}
+            error={errors.user_role}
+          />
           <TextField
             key={`${row.id}nr`}
             name="nr"

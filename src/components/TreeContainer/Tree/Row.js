@@ -250,6 +250,7 @@ const Row = ({ style, node }) => {
             person (where: { id: { _eq: ${personId} } }) {
               id
               email
+              user_role
             }
           }
         `,
@@ -272,9 +273,19 @@ const Row = ({ style, node }) => {
         },
       })
     }
+    const userRole = get(result, 'data.person[0].user_role')
+    if (!userRole) {
+      return enqueNotification({
+        message: 'Eine Rolle muss erfasst sein',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
     signup({
       email,
       personId: personId.toString(),
+      userRole,
       store,
       client,
     })

@@ -117,9 +117,9 @@ import buildKulturEventEvent from './kultur/event'
 export default ({ store, data, loading, role }) => {
   const openNodes = store.tree.openNodes.sort(sort)
   let artArtNodes
-  const showArtFolder = role !== 'gardener'
-  const showHerkunftFolder = role !== 'gardener'
-  const showSammlungFolder = role !== 'gardener'
+  const showArtFolder = role !== 'gaertner'
+  const showHerkunftFolder = role !== 'gaertner'
+  const showSammlungFolder = role !== 'gaertner'
 
   let nodes = [
       ...memoizeOne(() => showArtFolder ? buildArtFolder({ data, store, loading }):[])(),
