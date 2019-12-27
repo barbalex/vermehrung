@@ -31,7 +31,9 @@ const Text = styled.div`
   justify-content: center;
 `
 const DelIcon = styled(IconButton)`
-  font-size: 1.1rem;
+  svg {
+    font-size: 1.1rem;
+  }
 `
 const MenuTitle = styled.h3`
   padding-top: 8px;

@@ -132,6 +132,7 @@ const Person = ({ filter: showFilter }) => {
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
   const role = claims['x-hasura-role']
+  console.log('Person, role:',role)
 
   const saveToDb = useCallback(
     async event => {

@@ -4,12 +4,14 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import ErrorBoundary from 'react-error-boundary'
-import { useQuery } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import Art from './Art'
 import query from './query'
 import Select from '../../../shared/Select'
+import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -24,6 +26,7 @@ const TitleRow = styled.div`
   ${props => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;
+  ${props => !props['data-open'] && 'border-bottom: thin solid #4a148c36;'}
   &:first-of-type {
     margin-top: -10px;
   }
@@ -41,6 +44,7 @@ const AvArten = styled.div`
 `
 
 const PersonArten = ({ personId }) => {
+  const client = useApolloClient()
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -58,7 +62,6 @@ const PersonArten = ({ personId }) => {
     variables: { personId },
   })
   const avArten = get(data, 'av_art', [])
-  const anzAvArten = avArten.length
   const artenChoosen = get(data, 'art_choosen',[])
 
   const artWerte = useMemo(
@@ -69,7 +72,43 @@ const PersonArten = ({ personId }) => {
       })),
     [data],
   )
-  console.log('Arten:', {data,anzAvArten,artenChoosen})
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = ifIsNumericAsNumber(event.target.value)
+      console.log('Arten, saveToDb:',{value,personId})
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation insert_av_art_for_person(
+              $personId: bigint!
+              $artId: bigint!
+            ) {
+              insert_av_art(
+                objects: [{ art_id: $artId, person_id: $personId}]
+              ) {
+                affected_rows
+                returning {
+                  art_id
+                  person_id
+                }
+              }
+            }
+          `,
+          variables: {
+            personId,
+            artId: value
+          },
+        })
+      } catch (error) {
+        console.log({error})
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+    },
+    [client, personId],
+  )
 
   return (
     <ErrorBoundary>
@@ -105,7 +144,7 @@ const PersonArten = ({ personId }) => {
             label="Art hinzufügen"
             options={artWerte}
             loading={loading}
-            saveToDb={()=>{console.log('TODO:')}}
+            saveToDb={saveToDb}
             isClearable={false}
             error={errors.art_id}
           />
