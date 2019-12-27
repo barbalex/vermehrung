@@ -83,6 +83,7 @@ const SharedSelect = ({
   options,
   loading,
   maxHeight = null,
+  isClearable = true,
   noCaret = false,
   saveToDb,
 }) => {
@@ -115,7 +116,7 @@ const SharedSelect = ({
         onChange={onChange}
         hideSelectedOptions
         placeholder=""
-        isClearable
+        isClearable={isClearable}
         isSearchable
         noOptionsMessage={() => '(keine)'}
         maxheight={maxHeight}

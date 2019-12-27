@@ -8,17 +8,30 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ErrorBoundary from 'react-error-boundary'
+import get from 'lodash/get'
 
 import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
-  width: 100%;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  &:hover {
+    background-color:rgba(74, 20, 140, 0.03);
+  }
+`
+const Text = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 48px;
 `
 const DelIcon = styled(IconButton)`
-  margin-bottom: 20px !important;
+  /*margin-bottom: 20px !important;*/
 `
 const MenuTitle = styled.h3`
   padding-top: 8px;
@@ -48,14 +61,21 @@ const AvArt = ({ avArt, refetch }) => {
       await client.mutate({
         mutation: gql`
           mutation deleteArtFile($artId: bigint!, $personId: bigint!) {
-            delete_av_art (where: {_and: [{art_id: {_eq: $artId}},{person_id: {_eq: $personId}}]}) {
+            delete_av_art(
+              where: {
+                _and: [
+                  { art_id: { _eq: $artId } }
+                  { person_id: { _eq: $personId } }
+                ]
+              }
+            ) {
               returning {
                 id
               }
             }
           }
         `,
-        variables: {artId: avArt.art_id, personId: avArt.person_id}
+        variables: { artId: avArt.art_id, personId: avArt.person_id },
       })
     } catch (error) {
       console.log(error)
@@ -101,13 +121,16 @@ const AvArt = ({ avArt, refetch }) => {
     console.log('AvArt, onClickDelete', { res, avArt })*/
   }, [refetch, client, avArt.art_id, avArt.person_id, store])
 
+  const artname = get(avArt, 'art.art_ae_art.name')
 
   if (!avArt) return null
 
   return (
     <ErrorBoundary>
       <Container>
-        <div>Art</div>
+        <Text>
+          <div>{artname}</div>
+        </Text>
         <DelIcon
           title="löschen"
           aria-label="löschen"

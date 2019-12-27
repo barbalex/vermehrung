@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -9,6 +9,7 @@ import get from 'lodash/get'
 
 import Art from './Art'
 import query from './query'
+import Select from '../../../shared/Select'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -33,6 +34,12 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+const Content = styled.div`
+  padding-bottom: 10px;
+`
+const AvArten = styled.div`
+  padding-bottom: 8px;
+`
 
 const PersonArten = ({ personId }) => {
   const [open, setOpen] = useState(false)
@@ -51,6 +58,15 @@ const PersonArten = ({ personId }) => {
   const avArten = get(data, 'av_art', [])
   const anzAvArten = avArten.length
   const artenChoosen = get(data, 'art_choosen',[])
+
+  const artWerte = useMemo(
+    () =>
+      get(data, 'art_to_choose', []).map(el => ({
+        value: el.id,
+        label: get(el, 'art_ae_art.name') || '(kein Artname)',
+      })),
+    [data],
+  )
   console.log('Arten:', {data,anzAvArten,artenChoosen})
 
   return (
@@ -60,7 +76,7 @@ const PersonArten = ({ personId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`Arten (${artenChoosen.length})`}</Title>
+        <Title>{`Arten (${loading?'...':artenChoosen.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -72,15 +88,26 @@ const PersonArten = ({ personId }) => {
         </div>
       </TitleRow>
       {open && (
-        <>
+        <Content>
           {loading ? (
-            'Lade Daten...'
+            <AvArten>Lade Daten...</AvArten>
           ) : error ? (
-            `Fehler: ${error.message}`
-          ) : (<>
-            {avArten.map((avArt)=><Art key={`${avArt.person_id}/${avArt.art_id}`} avArt={avArt} />)}</>
+            <AvArten>{`Fehler: ${error.message}`}</AvArten>
+          ) : (
+            <AvArten>{avArten.map((avArt)=><Art key={`${avArt.person_id}/${avArt.art_id}`} avArt={avArt} />)}</AvArten>
           )}
-        </>
+          <Select
+            name="art_id"
+            value={''}
+            field="art_id"
+            label="Art hinzufügen"
+            options={artWerte}
+            loading={loading}
+            saveToDb={()=>{console.log('TODO:')}}
+            isClearable={false}
+            //error={errors.art_id}
+          />
+        </Content>
       )}
     </ErrorBoundary>
   )

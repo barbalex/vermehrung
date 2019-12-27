@@ -497,3 +497,5 @@ create table av_art (
 );
 create index on av_art using btree (art_id);
 create index on av_art using btree (person_id);
+
+ALTER TABLE ONLY av_art ALTER COLUMN art_id SET DEFAULT null;

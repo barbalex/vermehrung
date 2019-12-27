@@ -7,6 +7,13 @@ export default gql`
     av_art(where: {person_id: {_eq: $personId}}){
       art_id
       person_id
+      art {
+        id
+        art_ae_art {
+          id
+          name
+        }
+      }
     }
     art_to_choose: art(where: {_not: {av_art: {}}}, order_by: { art_ae_art: { name: asc_nulls_first } }) {
       ...ArtFields
