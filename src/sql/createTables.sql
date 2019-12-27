@@ -36,14 +36,18 @@ create index on person using gin (tsv);
 
 drop table if exist user_role cascade;
 create table user_role (
-  value text primary key,
+  id text primary key,
+  name text,
+  sort integer,
   comment text
 );
-create index on user_role using btree (value);
-INSERT INTO user_role (value, comment) VALUES
-  ('gaertner', 'liest und editiert Daten des eigenen Garten'),
-  ('artverantwortlich', 'liest und editiert Daten für bestimmte Arten'),
-  ('manager', 'liest und editiert alle Daten');
+create index on user_role using btree (id);
+create index on user_role using btree (name);
+create index on user_role using btree (sort);
+INSERT INTO user_role (id, name, sort, comment) VALUES
+  ('rol_0eMVfAl4o3f5q8ab', 'gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
+  ('rol_Jsk4O8Lun0V5OEs6', 'artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
+  ('rol_mImJOLKj390Murkh', 'manager', 3, 'liest und editiert alle Daten');
 
 drop table if exists person_file;
 create table person_file (

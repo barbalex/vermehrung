@@ -1,11 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import ErrorBoundary from 'react-error-boundary'
-import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
 
 import Art from './Art'
@@ -38,10 +36,6 @@ const Title = styled.div`
 const PersonArten = ({ artId }) => {
   const [open, setOpen] = useState(false)
 
-  const openDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Zeitachse-Art')
-  }, [])
   const onClickToggle = useCallback(
     e => {
       e.stopPropagation()
@@ -53,7 +47,7 @@ const PersonArten = ({ artId }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id: artId },
   })
-  const artSums = get(data, 'art_sums', [])
+  console.log('Arten, data:', data)
 
   return (
     <ErrorBoundary>
@@ -62,15 +56,8 @@ const PersonArten = ({ artId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>Zeit-Achse</Title>
+        <Title>Arten</Title>
         <div>
-          <IconButton
-            aria-label="Anleitung öffnen"
-            title="Anleitung öffnen"
-            onClick={openDocs}
-          >
-            <IoMdInformationCircleOutline />
-          </IconButton>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
@@ -87,7 +74,7 @@ const PersonArten = ({ artId }) => {
           ) : error ? (
             `Fehler: ${error.message}`
           ) : (
-            <Art artSums={artSums} />
+            <Art />
           )}
         </>
       )}

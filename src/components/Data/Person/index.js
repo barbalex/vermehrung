@@ -80,8 +80,9 @@ const query = gql`
     rowsFiltered: person(where: $filter) @include(if: $isFiltered) {
       id
     }
-    user_role(order_by: {value: asc}) {
-      value
+    user_role(order_by: {sort: asc}) {
+      id
+      name
       comment
     }
   }
@@ -107,13 +108,11 @@ const Person = ({ filter: showFilter }) => {
   const userRoleWerte = useMemo(
     () =>
       get(data, 'user_role', []).map(el => ({
-        value: el.value,
-        label: `${el.value} (${el.comment})`,
+        value: el.id,
+        label: `${el.name} (${el.comment})`,
       })),
     [data],
   )
-
-  console.log('Person',{data,userRoleWerte})
 
   const [errors, setErrors] = useState({})
 
@@ -133,7 +132,6 @@ const Person = ({ filter: showFilter }) => {
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
   const role = claims['x-hasura-role']
-  const isArtverantwortlich = role === 'artverantwortlich'
 
   const saveToDb = useCallback(
     async event => {
@@ -197,7 +195,7 @@ const Person = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
 
-  console.log('Person', { isArtverantwortlich, role })
+  const personRole = get(row, 'userRoleByUserRole.name')
 
   if (loading) {
     return (
@@ -379,7 +377,7 @@ const Person = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          {isArtverantwortlich && <Arten />}
+          {personRole === 'artverantwortlich' && <Arten />}
           {!showFilter && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>

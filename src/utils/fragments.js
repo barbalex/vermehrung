@@ -206,6 +206,10 @@ export const person = gql`
     bemerkungen
     account_id
     user_role
+    userRoleByUserRole {
+      id
+      name
+    }
     kommerziell
     info
     aktiv
