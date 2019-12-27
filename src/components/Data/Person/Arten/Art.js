@@ -19,7 +19,7 @@ const Container = styled.div`
   margin-left: -10px;
   margin-right: -10px;
   padding-left: 10px;
-  padding-right: 10px;
+  padding-right: 13px;
   border-bottom: thin solid #0000001c;
   &:hover {
     background-color:rgba(74, 20, 140, 0.03);
@@ -29,10 +29,9 @@ const Text = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 48px;
 `
 const DelIcon = styled(IconButton)`
-  /*margin-bottom: 20px !important;*/
+  font-size: 1.1rem;
 `
 const MenuTitle = styled.h3`
   padding-top: 8px;
