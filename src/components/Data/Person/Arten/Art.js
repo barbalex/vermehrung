@@ -20,6 +20,7 @@ const Container = styled.div`
   margin-right: -10px;
   padding-left: 10px;
   padding-right: 10px;
+  border-bottom: thin solid #0000001c;
   &:hover {
     background-color:rgba(74, 20, 140, 0.03);
   }
@@ -48,12 +49,8 @@ const AvArt = ({ avArt, refetch }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
-  const [errors, setErrors] = useState({})
-
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
-
-  useEffect(() => setErrors({}), [avArt])
 
   const onClickDelete = useCallback(async () => {
     // TODO: 1. remove dataset

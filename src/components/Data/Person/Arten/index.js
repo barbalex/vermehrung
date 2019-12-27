@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useCallback, useState, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -19,7 +19,6 @@ const TitleRow = styled.div`
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
-  margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
   ${props => props['data-open'] && 'position: sticky;'}
@@ -43,6 +42,9 @@ const AvArten = styled.div`
 
 const PersonArten = ({ personId }) => {
   const [open, setOpen] = useState(false)
+
+  const [errors, setErrors] = useState({})
+  useEffect(() => setErrors({}), [personId])
 
   const onClickToggle = useCallback(
     e => {
@@ -105,7 +107,7 @@ const PersonArten = ({ personId }) => {
             loading={loading}
             saveToDb={()=>{console.log('TODO:')}}
             isClearable={false}
-            //error={errors.art_id}
+            error={errors.art_id}
           />
         </Content>
       )}
