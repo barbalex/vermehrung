@@ -10,7 +10,7 @@ export default async ({ node, store, client }) => {
   const table = tableFromTitleHash[title]
 
   const mutation = gql`
-    mutation deleteDataset {
+    mutation deleteDatasetInTree {
       delete_${table} (where: {id: {_eq: ${id}}}) {
         returning {
           id

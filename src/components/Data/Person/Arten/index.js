@@ -5,6 +5,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import ErrorBoundary from 'react-error-boundary'
 import { useQuery } from '@apollo/react-hooks'
+import get from 'lodash/get'
 
 import Art from './Art'
 import query from './query'
@@ -33,7 +34,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const PersonArten = ({ artId }) => {
+const PersonArten = ({ personId }) => {
   const [open, setOpen] = useState(false)
 
   const onClickToggle = useCallback(
@@ -45,9 +46,11 @@ const PersonArten = ({ artId }) => {
   )
 
   const { data, error, loading } = useQuery(query, {
-    variables: { id: artId },
+    variables: { personId },
   })
-  console.log('Arten, data:', data)
+  const anzAvArten = get(data, 'av_art', []).length
+  const artenChoosen = get(data, 'art_choosen',[])
+  console.log('Arten:', {data,anzAvArten,artenChoosen})
 
   return (
     <ErrorBoundary>
@@ -56,7 +59,7 @@ const PersonArten = ({ artId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>Arten</Title>
+        <Title>{`Arten (${artenChoosen.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -73,8 +76,8 @@ const PersonArten = ({ artId }) => {
             'Lade Daten...'
           ) : error ? (
             `Fehler: ${error.message}`
-          ) : (
-            <Art />
+          ) : (<>
+            {artenChoosen.map((art)=><Art key={art.id} art={art} />)}</>
           )}
         </>
       )}

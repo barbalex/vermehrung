@@ -102,7 +102,7 @@ const File = ({ file, parent, refetch }) => {
     try {
       await client.mutate({
         mutation: gql`
-          mutation deleteDataset {
+          mutation deleteFile {
             delete_${parent}_file (where: {file_id: {_eq: "${file.file_id}"}}) {
               returning {
                 id

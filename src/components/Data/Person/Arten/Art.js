@@ -20,6 +20,7 @@ import {
   kulturFile as kulturFileFragment,
   lieferungFile as lieferungFileFragment,
 } from '../../../../utils/fragments'
+import Row from '../../../TreeContainer/Tree/Row'
 
 const Container = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const File = ({ file, parent, refetch }) => {
+const File = ({ art, parent, refetch }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -50,21 +51,22 @@ const File = ({ file, parent, refetch }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  useEffect(() => setErrors({}), [file])
+  useEffect(() => setErrors({}), [art])
 
   const onClickDelete = useCallback(async () => {
     // 1. remove dataset
     try {
       await client.mutate({
         mutation: gql`
-          mutation deleteDataset {
-            delete_${parent}_file (where: {file_id: {_eq: "${file.file_id}"}}) {
+          mutation deleteArtFile($artId: bigint!) {
+            delete_av_art (where: {art_id: {_eq: $artId}}) {
               returning {
                 id
               }
             }
           }
         `,
+        {variables: artId: art.art_id, personId: art.person_id}
       })
     } catch (error) {
       console.log(error)
@@ -76,7 +78,7 @@ const File = ({ file, parent, refetch }) => {
       })
     }
     refetch()
-    // 2. remove file
+    // 2. remove art
     // actually no: not secure
     // batch delete unneeded files using the api
     // https://uploadcare.com/docs/api_reference/rest/accessing_files
@@ -84,7 +86,7 @@ const File = ({ file, parent, refetch }) => {
     // 1. cors issue, 2. "Date is an unsafe header"...
     /*
     const verb = 'DELETE'
-    const uri = `/files/${file.file_id}/storage`
+    const uri = `/files/${art.file_id}/storage`
     const signature = uploadcareApiSignature({ verb, uri })
     let res
     try {
@@ -107,11 +109,11 @@ const File = ({ file, parent, refetch }) => {
     } catch (error) {
       console.log(error)
     }
-    console.log('File, onClickDelete', { res, file })*/
-  }, [client, file.file_id, parent, refetch, store])
+    console.log('File, onClickDelete', { res, art })*/
+  }, [client, art.id, parent, refetch, store])
 
 
-  if (!file) return null
+  if (!art) return null
 
   return (
     <ErrorBoundary>

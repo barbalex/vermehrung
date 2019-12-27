@@ -377,7 +377,7 @@ const Person = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          {personRole === 'artverantwortlich' && <Arten />}
+          {personRole === 'artverantwortlich' && <Arten personId={row.id} />}
           {!showFilter && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>
