@@ -54,7 +54,7 @@ const File = ({ art, parent, refetch }) => {
   useEffect(() => setErrors({}), [art])
 
   const onClickDelete = useCallback(async () => {
-    // 1. remove dataset
+    // TODO: 1. remove dataset
     try {
       await client.mutate({
         mutation: gql`
