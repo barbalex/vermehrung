@@ -10,17 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
-import TextField from '../../../shared/TextField'
-import {
-  artFile as artFileFragment,
-  herkunftFile as herkunftFileFragment,
-  sammlungFile as sammlungFileFragment,
-  personFile as personFileFragment,
-  gartenFile as gartenFileFragment,
-  kulturFile as kulturFileFragment,
-  lieferungFile as lieferungFileFragment,
-} from '../../../../utils/fragments'
-import Row from '../../../TreeContainer/Tree/Row'
 
 const Container = styled.div`
   display: flex;
@@ -42,7 +31,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const File = ({ art, parent, refetch }) => {
+const AvArt = ({ avArt, refetch }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -51,22 +40,22 @@ const File = ({ art, parent, refetch }) => {
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  useEffect(() => setErrors({}), [art])
+  useEffect(() => setErrors({}), [avArt])
 
   const onClickDelete = useCallback(async () => {
     // TODO: 1. remove dataset
     try {
       await client.mutate({
         mutation: gql`
-          mutation deleteArtFile($artId: bigint!) {
-            delete_av_art (where: {art_id: {_eq: $artId}}) {
+          mutation deleteArtFile($artId: bigint!, $personId: bigint!) {
+            delete_av_art (where: {_and: [{art_id: {_eq: $artId}},{person_id: {_eq: $personId}}]}) {
               returning {
                 id
               }
             }
           }
         `,
-        {variables: artId: art.art_id, personId: art.person_id}
+        variables: {artId: avArt.art_id, personId: avArt.person_id}
       })
     } catch (error) {
       console.log(error)
@@ -78,7 +67,7 @@ const File = ({ art, parent, refetch }) => {
       })
     }
     refetch()
-    // 2. remove art
+    // 2. remove avArt
     // actually no: not secure
     // batch delete unneeded files using the api
     // https://uploadcare.com/docs/api_reference/rest/accessing_files
@@ -86,7 +75,7 @@ const File = ({ art, parent, refetch }) => {
     // 1. cors issue, 2. "Date is an unsafe header"...
     /*
     const verb = 'DELETE'
-    const uri = `/files/${art.file_id}/storage`
+    const uri = `/files/${avArt.file_id}/storage`
     const signature = uploadcareApiSignature({ verb, uri })
     let res
     try {
@@ -109,11 +98,11 @@ const File = ({ art, parent, refetch }) => {
     } catch (error) {
       console.log(error)
     }
-    console.log('File, onClickDelete', { res, art })*/
-  }, [client, art.id, parent, refetch, store])
+    console.log('AvArt, onClickDelete', { res, avArt })*/
+  }, [refetch, client, avArt.art_id, avArt.person_id, store])
 
 
-  if (!art) return null
+  if (!avArt) return null
 
   return (
     <ErrorBoundary>
@@ -149,4 +138,4 @@ const File = ({ art, parent, refetch }) => {
   )
 }
 
-export default observer(File)
+export default observer(AvArt)

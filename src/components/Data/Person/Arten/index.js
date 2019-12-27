@@ -48,7 +48,8 @@ const PersonArten = ({ personId }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { personId },
   })
-  const anzAvArten = get(data, 'av_art', []).length
+  const avArten = get(data, 'av_art', [])
+  const anzAvArten = avArten.length
   const artenChoosen = get(data, 'art_choosen',[])
   console.log('Arten:', {data,anzAvArten,artenChoosen})
 
@@ -77,7 +78,7 @@ const PersonArten = ({ personId }) => {
           ) : error ? (
             `Fehler: ${error.message}`
           ) : (<>
-            {artenChoosen.map((art)=><Art key={art.id} art={art} />)}</>
+            {avArten.map((avArt)=><Art key={`${avArt.person_id}/${avArt.art_id}`} avArt={avArt} />)}</>
           )}
         </>
       )}
