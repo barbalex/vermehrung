@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -54,7 +54,6 @@ const AvArt = ({ avArt, refetch }) => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(async () => {
-    // TODO: 1. remove dataset
     try {
       await client.mutate({
         mutation: gql`
