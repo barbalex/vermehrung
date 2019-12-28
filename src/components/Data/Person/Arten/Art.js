@@ -22,7 +22,7 @@ const Container = styled.div`
   padding-right: 13px;
   border-bottom: thin solid #0000001c;
   &:hover {
-    background-color:rgba(74, 20, 140, 0.03);
+    background-color: rgba(74, 20, 140, 0.03);
   }
 `
 const Text = styled.div`
@@ -68,7 +68,7 @@ const AvArt = ({ avArt, refetch }) => {
               }
             ) {
               returning {
-                id
+                art_id
               }
             }
           }
@@ -78,45 +78,13 @@ const AvArt = ({ avArt, refetch }) => {
     } catch (error) {
       console.log(error)
       return store.enqueNotification({
-        message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
+        message: `Die Art konnte nicht entfernt werden: ${error.message}`,
         options: {
           variant: 'error',
         },
       })
     }
     refetch()
-    // 2. remove avArt
-    // actually no: not secure
-    // batch delete unneeded files using the api
-    // https://uploadcare.com/docs/api_reference/rest/accessing_files
-    // also: following does not work due to
-    // 1. cors issue, 2. "Date is an unsafe header"...
-    /*
-    const verb = 'DELETE'
-    const uri = `/files/${avArt.file_id}/storage`
-    const signature = uploadcareApiSignature({ verb, uri })
-    let res
-    try {
-      res = await axios.delete(`https://api.uploadcare.com${uri}`, {
-        mode: 'no-cors',
-        withCredentials: true,
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Credentials': 'true',
-          Accept: 'application/vnd.uploadcare-v0.5+json',
-          Date: new Date().toISOString(),
-          Authorization: `Uploadcare ${
-            process.env.UPLOADCARE_PUBLIC_KEY
-          }:${signature}`,
-        },
-      })
-    } catch (error) {
-      console.log(error)
-    }
-    console.log('AvArt, onClickDelete', { res, avArt })*/
   }, [refetch, client, avArt.art_id, avArt.person_id, store])
 
   const artname = get(avArt, 'art.art_ae_art.name')

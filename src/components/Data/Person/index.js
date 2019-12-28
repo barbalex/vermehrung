@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
@@ -80,7 +86,7 @@ const query = gql`
     rowsFiltered: person(where: $filter) @include(if: $isFiltered) {
       id
     }
-    user_role(order_by: {sort: asc}) {
+    user_role(order_by: { sort: asc }) {
       id
       name
       comment
@@ -132,7 +138,7 @@ const Person = ({ filter: showFilter }) => {
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
   const role = claims['x-hasura-role']
-  console.log('Person, role:',role)
+  //console.log('Person, role:', role)
 
   const saveToDb = useCallback(
     async event => {

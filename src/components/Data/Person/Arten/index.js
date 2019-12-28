@@ -26,7 +26,7 @@ const TitleRow = styled.div`
   ${props => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;
-  ${props => !props['data-open'] && 'border-bottom: thin solid #4a148c36;'}
+  ${props => !props['data-open'] && 'margin-bottom: 10px;'}
   &:first-of-type {
     margin-top: -10px;
   }
@@ -58,11 +58,11 @@ const PersonArten = ({ personId }) => {
     [open],
   )
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, refetch } = useQuery(query, {
     variables: { personId },
   })
   const avArten = get(data, 'av_art', [])
-  const artenChoosen = get(data, 'art_choosen',[])
+  const artenChoosen = get(data, 'art_choosen', [])
 
   const artWerte = useMemo(
     () =>
@@ -77,7 +77,6 @@ const PersonArten = ({ personId }) => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
-      console.log('Arten, saveToDb:',{value,personId})
       try {
         await client.mutate({
           mutation: gql`
@@ -86,7 +85,7 @@ const PersonArten = ({ personId }) => {
               $artId: bigint!
             ) {
               insert_av_art(
-                objects: [{ art_id: $artId, person_id: $personId}]
+                objects: [{ art_id: $artId, person_id: $personId }]
               ) {
                 affected_rows
                 returning {
@@ -98,16 +97,17 @@ const PersonArten = ({ personId }) => {
           `,
           variables: {
             personId,
-            artId: value
+            artId: value,
           },
         })
       } catch (error) {
-        console.log({error})
+        console.log({ error })
         return setErrors({ [field]: error.message })
       }
+      refetch()
       setErrors({})
     },
-    [client, personId],
+    [client, personId, refetch],
   )
 
   return (
@@ -117,7 +117,7 @@ const PersonArten = ({ personId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`Arten (${loading?'...':artenChoosen.length})`}</Title>
+        <Title>{`Arten (${loading ? '...' : artenChoosen.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -135,7 +135,15 @@ const PersonArten = ({ personId }) => {
           ) : error ? (
             <AvArten>{`Fehler: ${error.message}`}</AvArten>
           ) : (
-            <AvArten>{avArten.map((avArt)=><Art key={`${avArt.person_id}/${avArt.art_id}`} avArt={avArt} />)}</AvArten>
+            <AvArten>
+              {avArten.map(avArt => (
+                <Art
+                  key={`${avArt.person_id}/${avArt.art_id}`}
+                  avArt={avArt}
+                  refetch={refetch}
+                />
+              ))}
+            </AvArten>
           )}
           <Select
             name="art_id"
