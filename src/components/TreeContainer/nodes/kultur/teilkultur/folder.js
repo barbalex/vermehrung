@@ -5,7 +5,7 @@ export default ({ url, nodes, data, loading }) => {
   const kulturId = url[1]
   const kulturen = get(data, 'kultur') || []
   const kultur = kulturen.find(k => k.id === kulturId)
-  const tk = get(kultur, 'kultur_felder.tk')
+  const tk = get(kultur, 'kultur_option.tk')
   if (!tk) return []
 
   const teilkulturs = get(kultur, 'teilkulturs') || []

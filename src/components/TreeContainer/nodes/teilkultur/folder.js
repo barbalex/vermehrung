@@ -3,7 +3,7 @@ import get from 'lodash/get'
 export default ({ data, loading }) => {
   const teilkulturen = get(data, 'teilkultur') || []
   /*.filter(t =>
-    get(t, 'kultur.kultur_felder.tk'),
+    get(t, 'kultur.kultur_option.tk'),
   )*/
   if (!teilkulturen.length) return []
   const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length

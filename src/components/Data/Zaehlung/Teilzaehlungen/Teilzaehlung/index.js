@@ -93,7 +93,7 @@ const Teilzaehlung = ({
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = get(zaehlung, 'kultur.kultur_felder') || {}
+  } = get(zaehlung, 'kultur.kultur_option') || {}
 
   const [errors, setErrors] = useState({})
   useEffect(() => {

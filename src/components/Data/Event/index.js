@@ -25,7 +25,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
   event as eventFragment,
-  kulturFelder as kulturFelderFragment,
+  kulturOption as kulturOptionFragment,
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
@@ -95,8 +95,8 @@ const eventQuery = gql`
       kultur {
         id
         art_id
-        kultur_felder {
-          ...KulturFelderFields
+        kultur_option {
+          ...KulturOptionFields
         }
       }
     }
@@ -108,7 +108,7 @@ const eventQuery = gql`
     }
   }
   ${eventFragment}
-  ${kulturFelderFragment}
+  ${kulturOptionFragment}
 `
 // garten.person.name
 const kulturQuery = gql`
@@ -237,7 +237,7 @@ const Event = ({ filter: showFilter }) => {
   )
 
   const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
-    get(row, 'kultur.kultur_felder') || {}
+    get(row, 'kultur.kultur_option') || {}
 
   const saveToDb = useCallback(
     async event => {

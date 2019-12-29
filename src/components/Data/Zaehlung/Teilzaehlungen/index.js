@@ -78,7 +78,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
   )
   const rows = get(data, 'teilzaehlung', [])
 
-  const { tk } = get(zaehlung, 'kultur.kultur_felder') || {}
+  const { tk } = get(zaehlung, 'kultur.kultur_option') || {}
 
   const onClickNew = useCallback(async () => {
     try {

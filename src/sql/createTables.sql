@@ -369,8 +369,8 @@ create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using btree (andere_menge);
 create index on teilzaehlung using gin (tsv);
 
-drop table if exists kultur_felder cascade;
-create table kultur_felder (
+drop table if exists kultur_option cascade;
+create table kultur_option (
   kultur_id bigint unique not null references kultur (id) on delete cascade on update cascade,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
@@ -385,8 +385,8 @@ create table kultur_felder (
   ev_person_id boolean default true,
   ev_datum boolean default true
 );
-create index on kultur_felder using btree (kultur_id);
-COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
+create index on kultur_option using btree (kultur_id);
+COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists person_option cascade;
 create table person_option (

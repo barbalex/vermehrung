@@ -24,7 +24,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
   zaehlung as zaehlungFragment,
-  kulturFelder as kulturFelderFragment,
+  kulturOption as kulturOptionFragment,
 } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
@@ -94,8 +94,8 @@ const zaehlungQuery = gql`
       kultur {
         id
         art_id
-        kultur_felder {
-          ...KulturFelderFields
+        kultur_option {
+          ...KulturOptionFields
         }
       }
     }
@@ -107,7 +107,7 @@ const zaehlungQuery = gql`
     }
   }
   ${zaehlungFragment}
-  ${kulturFelderFragment}
+  ${kulturOptionFragment}
 `
 const kulturQuery = gql`
   query kulturQueryForZaehlung($filter: kultur_bool_exp!) {
@@ -131,7 +131,7 @@ const kulturQuery = gql`
       }
     }
   }
-  ${kulturFelderFragment}
+  ${kulturOptionFragment}
 `
 
 const Zaehlung = ({ filter: showFilter }) => {
@@ -176,7 +176,7 @@ const Zaehlung = ({ filter: showFilter }) => {
     },
   })
 
-  const { z_bemerkungen } = get(row, 'kultur.kultur_felder') || {}
+  const { z_bemerkungen } = get(row, 'kultur.kultur_option') || {}
 
   useEffect(() => {
     setErrors({})

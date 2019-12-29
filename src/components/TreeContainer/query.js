@@ -6,7 +6,7 @@ import {
   garten,
   herkunft,
   kultur,
-  kulturFelder,
+  kulturOption,
   lieferung,
   sammelLieferung,
   person,
@@ -124,8 +124,8 @@ export default gql`
             ...KulturFields
           }
         }
-        kultur_felder @include(if: $isGartenKultur) {
-          ...KulturFelderFields
+        kultur_option @include(if: $isGartenKultur) {
+          ...KulturOptionFields
         }
       }
     }
@@ -191,8 +191,8 @@ export default gql`
             ...KulturFields
           }
         }
-        kultur_felder @include(if: $isArtKultur) {
-          ...KulturFelderFields
+        kultur_option @include(if: $isArtKultur) {
+          ...KulturOptionFields
         }
       }
       sammlungs(where: $sammlungFilter, order_by: { datum: desc_nulls_first })
@@ -275,7 +275,7 @@ export default gql`
       ...TeilkulturFields
       kultur {
         ...KulturFields
-        kultur_felder {
+        kultur_option {
           tk
         }
       }
@@ -319,8 +319,8 @@ export default gql`
           ...KulturFields
         }
       }
-      kultur_felder @include(if: $isKultur) {
-        ...KulturFelderFields
+      kultur_option @include(if: $isKultur) {
+        ...KulturOptionFields
       }
       zaehlungs(where: $zaehlungFilter, order_by: { datum: desc_nulls_first })
         @include(if: $isKultur) {
@@ -510,8 +510,8 @@ export default gql`
               ...KulturFields
             }
           }
-          kultur_felder @include(if: $isPersonGartenKultur) {
-            ...KulturFelderFields
+          kultur_option @include(if: $isPersonGartenKultur) {
+            ...KulturOptionFields
           }
         }
       }
@@ -601,7 +601,7 @@ export default gql`
   ${event}
   ${garten}
   ${kultur}
-  ${kulturFelder}
+  ${kulturOption}
   ${herkunft}
   ${lieferung}
   ${sammelLieferung}

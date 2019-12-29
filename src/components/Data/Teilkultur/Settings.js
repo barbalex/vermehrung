@@ -14,7 +14,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
-import { kulturFelder as kulturFelderFragment } from '../../../utils/fragments'
+import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
 
 const TitleRow = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
 
   const { data, error, loading, refetch } = teilkulturResult
   const { tk_bemerkungen } =
-    get(data, 'teilkultur[0].kultur.kultur_felder') || {}
+    get(data, 'teilkultur[0].kultur.kultur_option') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -50,10 +50,10 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
       try {
         await client.mutate({
           mutation: gql`
-              mutation update_kultur_felder(
+              mutation update_kultur_option(
                 $kulturId: bigint!
               ) {
-                update_kultur_felder(
+                update_kultur_option(
                   where: { kultur_id: { _eq: $kulturId } }
                   _set: {
                     ${field}: ${!value}
@@ -61,11 +61,11 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
                 ) {
                   affected_rows
                   returning {
-                    ...KulturFelderFields
+                    ...KulturOptionFields
                   }
                 }
               }
-              ${kulturFelderFragment}
+              ${kulturOptionFragment}
             `,
           variables: {
             kulturId,

@@ -8,7 +8,7 @@ export default ({ url, nodes, data, loading }) => {
   const art = arten.find(a => a.id === artId)
   const kulturen = get(art, 'kulturs') || []
   const kultur = kulturen.find(k => k.id === kulturId)
-  const tk = get(kultur, 'kultur_felder.tk')
+  const tk = get(kultur, 'kultur_option.tk')
   if (!tk) return []
   const teilkulturen = get(kultur, 'teilkulturs') || []
   const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length

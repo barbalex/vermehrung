@@ -14,7 +14,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
-import { kulturFelder as kulturFelderFragment } from '../../../utils/fragments'
+import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
 
 const TitleRow = styled.div`
   display: flex;
@@ -41,7 +41,7 @@ const SettingsZaehlungen = ({ eventResult }) => {
   const { error, loading, refetch } = eventResult
   const kulturId = get(eventResult, 'data.event[0].kultur.id')
   const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
-    get(eventResult, 'data.event[0].kultur.kultur_felder') || {}
+    get(eventResult, 'data.event[0].kultur.kultur_option') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -50,10 +50,10 @@ const SettingsZaehlungen = ({ eventResult }) => {
       try {
         await client.mutate({
           mutation: gql`
-              mutation update_kultur_felder(
+              mutation update_kultur_option(
                 $kulturId: bigint!
               ) {
-                update_kultur_felder(
+                update_kultur_option(
                   where: { kultur_id: { _eq: $kulturId } }
                   _set: {
                     ${field}: ${!value}
@@ -61,11 +61,11 @@ const SettingsZaehlungen = ({ eventResult }) => {
                 ) {
                   affected_rows
                   returning {
-                    ...KulturFelderFields
+                    ...KulturOptionFields
                   }
                 }
               }
-              ${kulturFelderFragment}
+              ${kulturOptionFragment}
             `,
           variables: {
             kulturId,
@@ -94,9 +94,7 @@ const SettingsZaehlungen = ({ eventResult }) => {
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Felder-blenden',
-      )
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Felder-blenden')
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)

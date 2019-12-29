@@ -14,7 +14,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
-import { kulturFelder as kulturFelderFragment } from '../../../utils/fragments'
+import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
 
 const Title = styled.div`
   padding: 12px 16px;
@@ -35,7 +35,7 @@ const SettingsKultur = ({ kulturResult }) => {
   const { refetch: refetchTree } = store.tree
 
   const { data, error, loading, refetch } = kulturResult
-  const { tk } = get(data, 'kultur[0].kultur_felder') || {}
+  const { tk } = get(data, 'kultur[0].kultur_option') || {}
   const kulturId = get(data, 'kultur[0].id')
 
   const saveToDb = useCallback(
@@ -45,10 +45,10 @@ const SettingsKultur = ({ kulturResult }) => {
       try {
         await client.mutate({
           mutation: gql`
-              mutation update_kultur_felder(
+              mutation update_kultur_option(
                 $kulturId: bigint!
               ) {
-                update_kultur_felder(
+                update_kultur_option(
                   where: { kultur_id: { _eq: $kulturId } }
                   _set: {
                     ${field}: ${!value}
@@ -56,11 +56,11 @@ const SettingsKultur = ({ kulturResult }) => {
                 ) {
                   affected_rows
                   returning {
-                    ...KulturFelderFields
+                    ...KulturOptionFields
                   }
                 }
               }
-              ${kulturFelderFragment}
+              ${kulturOptionFragment}
             `,
           variables: {
             kulturId,

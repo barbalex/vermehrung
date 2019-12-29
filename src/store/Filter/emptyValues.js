@@ -2,7 +2,7 @@ import { empty as art } from './art'
 import { empty as garten } from './garten'
 import { empty as herkunft } from './herkunft'
 import { empty as kultur } from './kultur'
-import { empty as kultur_felder } from './kultur_felder'
+import { empty as kultur_option } from './kultur_option'
 import { empty as lieferung } from './lieferung'
 import { empty as sammel_lieferung } from './sammel_lieferung'
 import { empty as person } from './person'
@@ -16,7 +16,7 @@ export default {
   garten,
   herkunft,
   kultur,
-  kultur_felder,
+  kultur_option,
   lieferung,
   sammel_lieferung,
   person,

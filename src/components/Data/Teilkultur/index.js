@@ -16,7 +16,7 @@ import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
-  kulturFelder as kulturFelderFragment,
+  kulturOption as kulturOptionFragment,
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
@@ -79,8 +79,8 @@ const teilkulturQuery = gql`
       kultur {
         id
         art_id
-        kultur_felder {
-          ...KulturFelderFields
+        kultur_option {
+          ...KulturOptionFields
         }
       }
     }
@@ -92,7 +92,7 @@ const teilkulturQuery = gql`
     }
   }
   ${teilkulturFragment}
-  ${kulturFelderFragment}
+  ${kulturOptionFragment}
 `
 // garten.person.name
 const kulturQuery = gql`
@@ -161,7 +161,7 @@ const Teilkultur = ({ filter: showFilter }) => {
     loading: kulturLoading,
   } = useQuery(kulturQuery)
 
-  const { tk_bemerkungen } = get(row, 'kultur.kultur_felder', {}) || {}
+  const { tk_bemerkungen } = get(row, 'kultur.kultur_option', {}) || {}
 
   useEffect(() => {
     setErrors({})

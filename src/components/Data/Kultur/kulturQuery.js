@@ -4,7 +4,7 @@ import {
   art as artFragment,
   garten as gartenFragment,
   kultur as kulturFragment,
-  kulturFelder as kulturFelderFragment,
+  kulturOption as kulturOptionFragment,
   lieferung as lieferungFragment,
   zaehlung as zahlungsFragment,
   teilzaehlung as teilzaehlungFragment,
@@ -18,8 +18,8 @@ export default gql`
   ) {
     kultur(where: { id: { _eq: $id } }) {
       ...KulturFields
-      kultur_felder {
-        ...KulturFelderFields
+      kultur_option {
+        ...KulturOptionFields
       }
       garten {
         ...GartenFields
@@ -113,7 +113,7 @@ export default gql`
   ${kulturFragment}
   ${artFragment}
   ${gartenFragment}
-  ${kulturFelderFragment}
+  ${kulturOptionFragment}
   ${lieferungFragment}
   ${zahlungsFragment}
   ${teilzaehlungFragment}

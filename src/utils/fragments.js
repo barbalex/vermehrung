@@ -143,8 +143,8 @@ export const kulturFile = gql`
     beschreibung
   }
 `
-export const kulturFelder = gql`
-  fragment KulturFelderFields on kultur_felder {
+export const kulturOption = gql`
+  fragment KulturOptionFields on kultur_option {
     kultur_id
     ev_datum
     ev_geplant
