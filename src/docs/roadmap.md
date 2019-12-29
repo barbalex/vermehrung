@@ -27,7 +27,7 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Filter gebaut
 - :white_check_mark: Volltext-Suche gebaut
 - :white_check_mark: Authentifikation und Authorisierung gebaut
-- :ballot_box_with_check: Rollen werden durchgesetzt
+- :white_check_mark: Rollen werden durchgesetzt
 - :white_check_mark: Navigations-Baum ist interaktiv (Kontext-Menüs)
 - :white_check_mark: Benutzer können verwaltet werden
 - :white_check_mark: Grundlegende Funktionalitäten mit Topos bereinigt
@@ -44,7 +44,8 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Qualitätskontrollen sind gebaut
 - :white_check_mark: Vermehrung ist für BenutzerInnen dokumentiert 
 - :white_check_mark: Sammel-Lieferungen können gedruckt werden
-- :ballot_box_with_check: Daten können exportiert werden
-- :white_medium_square: Funktionalitäten mit Topos bereinigt
+- :white_check_mark: Daten können exportiert werden
+- :white_check_mark: Gärtner, Artverantwortliche und Manager haben passende Rechte und Funktionalitäten
+- :white_medium_square: Funktionalitäten mit Topos für v1 bereinigt
 - :white_medium_square: Vorhandene Daten importiert
-- :white_medium_square: Produktive Version 1.0.0 ist live (geplant: Beginn 2020)
+- :white_medium_square: Produktive Version 1 ist live (geplant: Februar/März 2020)
