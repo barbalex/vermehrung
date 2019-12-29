@@ -14,6 +14,7 @@ import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 import storeContext from '../../storeContext'
 import query from './query'
@@ -39,6 +40,8 @@ const TreeContainer = () => {
 
   const user = getProfile()
   const claims = user['https://hasura.io/jwt/claims'] || {}
+  const personId =
+    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
   const role = claims['x-hasura-role']
   const isGardener = role === 'gaertner'
 
@@ -108,6 +111,7 @@ const TreeContainer = () => {
     ),
     isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
     isGardener,
+    personId,
   }
   const { data, error, loading, refetch } = useQuery(query, {
     variables,
@@ -134,7 +138,7 @@ const TreeContainer = () => {
     )
   }
 
-  return <Tree refetch={refetch} />
+  return <Tree refetch={refetch} personId={personId} data={data} />
 }
 
 export default observer(TreeContainer)

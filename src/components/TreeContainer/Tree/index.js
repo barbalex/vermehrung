@@ -26,7 +26,7 @@ function sizeReducer(state, action) {
   return action.payload
 }
 
-const Tree = ({ refetch }) => {
+const Tree = ({ refetch, data, personId }) => {
   const store = useContext(storeContext)
   const { activeNodeArray: aNA, nodesSorted: nodes } = store.tree
 
@@ -48,7 +48,7 @@ const Tree = ({ refetch }) => {
 
   return (
     <ErrorBoundary>
-      <Settings refetch={refetch} />
+      <Settings refetch={refetch} data={data} personId={personId} />
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <StyledList
         height={sizeState.height - 10}

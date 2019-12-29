@@ -6,16 +6,15 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
+import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import styled from 'styled-components'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 
 import storeContext from '../../../storeContext'
 import { personOption as personOptionFragment } from '../../../utils/fragments'
-import { getProfile } from '../../../utils/auth'
 
 const Container = styled.div`
   position: absolute;
@@ -40,33 +39,19 @@ const Info = styled.div`
   user-select: none;
 `
 
-const personOptionQuery = gql`
-  query personOptionQueryForTree($personId: bigint) {
-    person_option(where: { person_id: { _eq: $personId } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
-
-const SettingsTree = ({ refetch }) => {
+const SettingsTree = ({ refetch, data, personId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const user = getProfile()
-  const personId =
-    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
-  const { data, loading, error } = useQuery(personOptionQuery, {
-    variables: { personId },
-  })
+  const personOption = get(data, 'person_option[0]') || {}
   const {
     tree_kultur,
     tree_teilkultur,
     tree_zaehlung,
     tree_lieferung,
     tree_event,
-  } = get(data, 'person_option[0]') || {}
+  } = personOption
 
   const saveToDb = useCallback(
     async event => {
@@ -95,6 +80,14 @@ const SettingsTree = ({ refetch }) => {
           variables: {
             personId,
           },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            update_person_option: {
+              person_id: personId,
+              __typename: 'person_option',
+              content: { ...personOption, [field]: value },
+            },
+          },
         })
       } catch (error) {
         return enqueNotification({
@@ -108,14 +101,6 @@ const SettingsTree = ({ refetch }) => {
     },
     [refetch, client, personId, enqueNotification],
   )
-  const onClickFrown = useCallback(() => {
-    enqueNotification({
-      message: error.message,
-      options: {
-        variant: 'error',
-      },
-    })
-  }, [enqueNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
@@ -129,21 +114,6 @@ const SettingsTree = ({ refetch }) => {
     [],
   )
 
-  if (error) {
-    return (
-      <Container>
-        <IconButton
-          aria-label="Felder wählen"
-          aria-owns={anchorEl ? 'long-menu' : null}
-          aria-haspopup="true"
-          title={error.message}
-          onClick={onClickFrown}
-        >
-          <FaFrown />
-        </IconButton>
-      </Container>
-    )
-  }
   return (
     <ErrorBoundary>
       <Container>
@@ -156,105 +126,103 @@ const SettingsTree = ({ refetch }) => {
         >
           <FaCog />
         </IconButton>
-        {!loading && (
-          <Menu
-            id="long-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={onClose}
-          >
-            <TitleRow>
-              <Title>Fakultative Ordner wählen:</Title>
-              <div>
-                <IconButton
-                  aria-label="Anleitung öffnen"
-                  title="Anleitung öffnen"
-                  onClick={openSettingsDocs}
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </div>
-            </TitleRow>
-            <MenuItem>
-              <FormControlLabel
-                value={tree_kultur === true ? 'true' : 'false'}
-                control={
-                  <Radio
-                    color="primary"
-                    checked={tree_kultur}
-                    onClick={saveToDb}
-                    name="tree_kultur"
-                  />
-                }
-                label="Kulturen"
-                labelPlacement="end"
-              />
-            </MenuItem>
-            <MenuItem>
-              <FormControlLabel
-                value={tree_teilkultur === true ? 'true' : 'false'}
-                control={
-                  <Radio
-                    color="primary"
-                    checked={tree_teilkultur}
-                    onClick={saveToDb}
-                    name="tree_teilkultur"
-                  />
-                }
-                label="Teilkulturen"
-                labelPlacement="end"
-              />
-            </MenuItem>
-            <MenuItem>
-              <FormControlLabel
-                value={tree_zaehlung === true ? 'true' : 'false'}
-                control={
-                  <Radio
-                    color="primary"
-                    checked={tree_zaehlung}
-                    onClick={saveToDb}
-                    name="tree_zaehlung"
-                  />
-                }
-                label="Zählungen"
-                labelPlacement="end"
-              />
-            </MenuItem>
-            <MenuItem>
-              <FormControlLabel
-                value={tree_lieferung === true ? 'true' : 'false'}
-                control={
-                  <Radio
-                    color="primary"
-                    checked={tree_lieferung}
-                    onClick={saveToDb}
-                    name="tree_lieferung"
-                  />
-                }
-                label="Lieferungen"
-                labelPlacement="end"
-              />
-            </MenuItem>
-            <MenuItem>
-              <FormControlLabel
-                value={tree_event === true ? 'true' : 'false'}
-                control={
-                  <Radio
-                    color="primary"
-                    checked={tree_event}
-                    onClick={saveToDb}
-                    name="tree_event"
-                  />
-                }
-                label="Events"
-                labelPlacement="end"
-              />
-            </MenuItem>
-            <Info>
-              Für die Navigation zwingende Ordner sind nicht aufgelistet.
-            </Info>
-          </Menu>
-        )}
+        <Menu
+          id="long-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={onClose}
+        >
+          <TitleRow>
+            <Title>Fakultative Ordner wählen:</Title>
+            <div>
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openSettingsDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </div>
+          </TitleRow>
+          <MenuItem>
+            <FormControlLabel
+              value={tree_kultur === true ? 'true' : 'false'}
+              control={
+                <Radio
+                  color="primary"
+                  checked={tree_kultur}
+                  onClick={saveToDb}
+                  name="tree_kultur"
+                />
+              }
+              label="Kulturen"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={tree_teilkultur === true ? 'true' : 'false'}
+              control={
+                <Radio
+                  color="primary"
+                  checked={tree_teilkultur}
+                  onClick={saveToDb}
+                  name="tree_teilkultur"
+                />
+              }
+              label="Teilkulturen"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={tree_zaehlung === true ? 'true' : 'false'}
+              control={
+                <Radio
+                  color="primary"
+                  checked={tree_zaehlung}
+                  onClick={saveToDb}
+                  name="tree_zaehlung"
+                />
+              }
+              label="Zählungen"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={tree_lieferung === true ? 'true' : 'false'}
+              control={
+                <Radio
+                  color="primary"
+                  checked={tree_lieferung}
+                  onClick={saveToDb}
+                  name="tree_lieferung"
+                />
+              }
+              label="Lieferungen"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <MenuItem>
+            <FormControlLabel
+              value={tree_event === true ? 'true' : 'false'}
+              control={
+                <Radio
+                  color="primary"
+                  checked={tree_event}
+                  onClick={saveToDb}
+                  name="tree_event"
+                />
+              }
+              label="Events"
+              labelPlacement="end"
+            />
+          </MenuItem>
+          <Info>
+            Für die Navigation zwingende Ordner sind nicht aufgelistet.
+          </Info>
+        </Menu>
       </Container>
     </ErrorBoundary>
   )

@@ -10,6 +10,7 @@ import {
   lieferung,
   sammelLieferung,
   person,
+  personOption,
   sammlung,
   teilkultur,
   zaehlung,
@@ -52,7 +53,11 @@ export default gql`
     $isTeilkultur: Boolean!
     $isWerteListe: Boolean!
     $isGardener: Boolean!
+    $personId: bigint!
   ) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
+    }
     garten(
       where: $gartenFilter
       order_by: [
@@ -606,6 +611,7 @@ export default gql`
   ${lieferung}
   ${sammelLieferung}
   ${person}
+  ${personOption}
   ${sammlung}
   ${teilkultur}
   ${zaehlung}

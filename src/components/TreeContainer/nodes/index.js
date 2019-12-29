@@ -1,4 +1,5 @@
 import memoizeOne from 'memoize-one'
+import get from 'lodash/get'
 
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
@@ -116,10 +117,22 @@ import buildKulturEventEvent from './kultur/event'
 
 export default ({ store, data, loading, role }) => {
   const openNodes = store.tree.openNodes.sort(sort)
-  let artArtNodes
+
+  const {
+    tree_kultur,
+    tree_teilkultur,
+    tree_zaehlung,
+    tree_lieferung,
+    tree_event,
+  } = get(data, 'person_option[0]') || {}
   const showArtFolder = role !== 'gaertner'
   const showHerkunftFolder = role !== 'gaertner'
   const showSammlungFolder = role !== 'gaertner'
+  const showKulturFolder = tree_kultur
+  const showTeilkulturFolder = tree_teilkultur
+  const showZaehlungFolder = tree_zaehlung
+  const showLieferungFolder = tree_lieferung
+  const showEventFolder = tree_event
 
   let nodes = [
     ...memoizeOne(() =>
@@ -129,16 +142,28 @@ export default ({ store, data, loading, role }) => {
     ...memoizeOne(() =>
       showHerkunftFolder ? buildHerkunftFolder({ data, store, loading }) : [],
     )(),
-    ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
+    ...memoizeOne(() =>
+      showLieferungFolder ? buildLieferungFolder({ data, store, loading }) : [],
+    )(),
     ...memoizeOne(() => buildSammelLieferungFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
-    ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
+    ...memoizeOne(() =>
+      showTeilkulturFolder
+        ? buildTeilkulturFolder({ data, store, loading })
+        : [],
+    )(),
+    ...memoizeOne(() =>
+      showZaehlungFolder ? buildZaehlungFolder({ data, store, loading }) : [],
+    )(),
+    ...memoizeOne(() =>
+      showEventFolder ? buildEventFolder({ data, store, loading }) : [],
+    )(),
     ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
     ...memoizeOne(() =>
       showSammlungFolder ? buildSammlungFolder({ data, store, loading }) : [],
     )(),
-    ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
+    ...memoizeOne(() =>
+      showKulturFolder ? buildKulturFolder({ data, store, loading }) : [],
+    )(),
   ]
 
   /**
@@ -150,6 +175,7 @@ export default ({ store, data, loading, role }) => {
    * for instance if a parent node is not open
    * or some filter is active
    */
+  let artArtNodes
   openNodes.forEach(url => {
     //console.log('nodes, url:', url.slice())
     if (!allParentNodesAreOpen(openNodes, url)) return
