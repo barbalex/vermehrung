@@ -122,20 +122,24 @@ export default ({ store, data, loading, role }) => {
   const showSammlungFolder = role !== 'gaertner'
 
   let nodes = [
-      ...memoizeOne(() => showArtFolder ? buildArtFolder({ data, store, loading }):[])(),
-      ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
-      ...memoizeOne(() => showHerkunftFolder? buildHerkunftFolder({ data, store, loading }):[])(),
-      ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
-      ...memoizeOne(() =>
-        buildSammelLieferungFolder({ data, store, loading }),
-      )(),
-      ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
-      ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
-      ...memoizeOne(() => showSammlungFolder? buildSammlungFolder({ data, store, loading }):[])(),
-      ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
-    ]
+    ...memoizeOne(() =>
+      showArtFolder ? buildArtFolder({ data, store, loading }) : [],
+    )(),
+    ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
+    ...memoizeOne(() =>
+      showHerkunftFolder ? buildHerkunftFolder({ data, store, loading }) : [],
+    )(),
+    ...memoizeOne(() => buildLieferungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildSammelLieferungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildTeilkulturFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildZaehlungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildEventFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
+    ...memoizeOne(() =>
+      showSammlungFolder ? buildSammlungFolder({ data, store, loading }) : [],
+    )(),
+    ...memoizeOne(() => buildKulturFolder({ data, store, loading }))(),
+  ]
 
   /**
    * We ALWAYS add an array of nodes,
