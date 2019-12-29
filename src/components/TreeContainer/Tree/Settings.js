@@ -1,0 +1,263 @@
+import React, { useContext, useCallback, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import gql from 'graphql-tag'
+import IconButton from '@material-ui/core/IconButton'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Radio from '@material-ui/core/Radio'
+import { FaCog, FaFrown } from 'react-icons/fa'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
+import ErrorBoundary from 'react-error-boundary'
+import get from 'lodash/get'
+import styled from 'styled-components'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
+
+import storeContext from '../../../storeContext'
+import { personOption as personOptionFragment } from '../../../utils/fragments'
+import { getProfile } from '../../../utils/auth'
+
+const Container = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+`
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+`
+const Title = styled.div`
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 800;
+  user-select: none;
+`
+const Info = styled.div`
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.4);
+  user-select: none;
+`
+
+const personOptionQuery = gql`
+  query personOptionQueryForTree($personId: bigint) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
+    }
+  }
+  ${personOptionFragment}
+`
+
+const SettingsTree = ({ refetch }) => {
+  const client = useApolloClient()
+  const store = useContext(storeContext)
+  const { enqueNotification } = store
+
+  const user = getProfile()
+  const personId =
+    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
+  const { data, loading, error } = useQuery(personOptionQuery, {
+    variables: { personId },
+  })
+  const {
+    tree_kultur,
+    tree_teilkultur,
+    tree_zaehlung,
+    tree_lieferung,
+    tree_event,
+  } = get(data, 'person_option[0]') || {}
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = event.target.value === 'true'
+      try {
+        await client.mutate({
+          mutation: gql`
+              mutation update_person_option(
+                $personId: bigint!
+              ) {
+                update_person_option(
+                  where: { person_id: { _eq: $personId } }
+                  _set: {
+                    ${field}: ${!value}
+                  }
+                ) {
+                  affected_rows
+                  returning {
+                    ...PersonOptionFields
+                  }
+                }
+              }
+              ${personOptionFragment}
+            `,
+          variables: {
+            personId,
+          },
+        })
+      } catch (error) {
+        return enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      refetch()
+    },
+    [refetch, client, personId, enqueNotification],
+  )
+  const onClickFrown = useCallback(() => {
+    enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
+  }, [enqueNotification, error])
+  const openSettingsDocs = useCallback(() => {
+    setAnchorEl(null)
+    typeof window !== 'undefined' &&
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Ordner-blenden')
+  }, [])
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const onClose = useCallback(() => setAnchorEl(null), [])
+  const onClickConfig = useCallback(
+    event => setAnchorEl(event.currentTarget),
+    [],
+  )
+
+  if (error) {
+    return (
+      <Container>
+        <IconButton
+          aria-label="Felder wählen"
+          aria-owns={anchorEl ? 'long-menu' : null}
+          aria-haspopup="true"
+          title={error.message}
+          onClick={onClickFrown}
+        >
+          <FaFrown />
+        </IconButton>
+      </Container>
+    )
+  }
+  return (
+    <ErrorBoundary>
+      <Container>
+        <IconButton
+          aria-label="Ordner wählen"
+          aria-owns={anchorEl ? 'long-menu' : null}
+          aria-haspopup="true"
+          title="Ordner wählen"
+          onClick={onClickConfig}
+        >
+          <FaCog />
+        </IconButton>
+        {!loading && (
+          <Menu
+            id="long-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={onClose}
+          >
+            <TitleRow>
+              <Title>Fakultative Ordner wählen:</Title>
+              <div>
+                <IconButton
+                  aria-label="Anleitung öffnen"
+                  title="Anleitung öffnen"
+                  onClick={openSettingsDocs}
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </div>
+            </TitleRow>
+            <MenuItem>
+              <FormControlLabel
+                value={tree_kultur === true ? 'true' : 'false'}
+                control={
+                  <Radio
+                    color="primary"
+                    checked={tree_kultur}
+                    onClick={saveToDb}
+                    name="tree_kultur"
+                  />
+                }
+                label="Kulturen"
+                labelPlacement="end"
+              />
+            </MenuItem>
+            <MenuItem>
+              <FormControlLabel
+                value={tree_teilkultur === true ? 'true' : 'false'}
+                control={
+                  <Radio
+                    color="primary"
+                    checked={tree_teilkultur}
+                    onClick={saveToDb}
+                    name="tree_teilkultur"
+                  />
+                }
+                label="Teilkulturen"
+                labelPlacement="end"
+              />
+            </MenuItem>
+            <MenuItem>
+              <FormControlLabel
+                value={tree_zaehlung === true ? 'true' : 'false'}
+                control={
+                  <Radio
+                    color="primary"
+                    checked={tree_zaehlung}
+                    onClick={saveToDb}
+                    name="tree_zaehlung"
+                  />
+                }
+                label="Zählungen"
+                labelPlacement="end"
+              />
+            </MenuItem>
+            <MenuItem>
+              <FormControlLabel
+                value={tree_lieferung === true ? 'true' : 'false'}
+                control={
+                  <Radio
+                    color="primary"
+                    checked={tree_lieferung}
+                    onClick={saveToDb}
+                    name="tree_lieferung"
+                  />
+                }
+                label="Lieferungen"
+                labelPlacement="end"
+              />
+            </MenuItem>
+            <MenuItem>
+              <FormControlLabel
+                value={tree_event === true ? 'true' : 'false'}
+                control={
+                  <Radio
+                    color="primary"
+                    checked={tree_event}
+                    onClick={saveToDb}
+                    name="tree_event"
+                  />
+                }
+                label="Events"
+                labelPlacement="end"
+              />
+            </MenuItem>
+            <Info>
+              Für die Navigation zwingende Ordner sind nicht aufgelistet.
+            </Info>
+          </Menu>
+        )}
+      </Container>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(SettingsTree)

@@ -134,7 +134,7 @@ const TreeContainer = () => {
     )
   }
 
-  return <Tree />
+  return <Tree refetch={refetch} />
 }
 
 export default observer(TreeContainer)

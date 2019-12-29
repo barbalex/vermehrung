@@ -2,7 +2,7 @@
 path: "/Dokumentation/Fehler-Ideen"
 date: "2019-09-30"
 title: "Fehler, Ideen, Vorschläge melden"
-sort1: 17
+sort1: 18
 ---
 
 Das geht so:

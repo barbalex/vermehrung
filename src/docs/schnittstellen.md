@@ -2,7 +2,7 @@
 path: "/Dokumentation/Schnittstellen"
 date: "2019-06-15"
 title: "Schnittstellen"
-sort1: 18
+sort1: 19
 ---
 
 Brauchen Sie in anderen Anwendungen Zugriff auf Ihre Daten in vermehrung.apflora.ch? Kein Problem: vermehrung.apflora.ch verfügt über eine öffentliche [GraphQL](https://github.com/facebook/graphql)-Schnittstelle.<br/><br/>

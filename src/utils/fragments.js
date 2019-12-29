@@ -234,6 +234,11 @@ export const personOption = gql`
     li_show_sl
     sl_show_empty_when_next_to_li
     sl_auto_copy_edits
+    tree_kultur
+    tree_teilkultur
+    tree_zaehlung
+    tree_lieferung
+    tree_event
   }
 `
 export const personFile = gql`

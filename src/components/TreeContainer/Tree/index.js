@@ -9,6 +9,7 @@ import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import Row from './Row'
+import Settings from './Settings'
 
 const StyledList = styled(List)`
   overflow-x: hidden !important;
@@ -25,7 +26,7 @@ function sizeReducer(state, action) {
   return action.payload
 }
 
-const Tree = () => {
+const Tree = ({ refetch }) => {
   const store = useContext(storeContext)
   const { activeNodeArray: aNA, nodesSorted: nodes } = store.tree
 
@@ -47,6 +48,7 @@ const Tree = () => {
 
   return (
     <ErrorBoundary>
+      <Settings refetch={refetch} />
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <StyledList
         height={sizeState.height - 10}

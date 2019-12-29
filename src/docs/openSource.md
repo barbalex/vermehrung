@@ -2,7 +2,7 @@
 path: "/Dokumentation/Open-Source"
 date: "2019-06-15"
 title: "Open Source"
-sort1: 16
+sort1: 17
 ---
 
 vermehrung.apflora.ch wird von [Gabriel-Software](//gabriel-software.ch) für die [Fachstelle Naturschutz des Kantons Zürich](//naturschutz.zh.ch) entwickelt und soll im Rahmen des [Aktionsplans Flora](//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html) eingesetzt werden.<br/><br/>

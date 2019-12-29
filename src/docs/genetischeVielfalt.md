@@ -2,7 +2,7 @@
 path: "/Dokumentation/Genetische-Vielfalt"
 date: "2019-10-04"
 title: "Genetische Vielfalt"
-sort1: 13
+sort1: 14
 ---
 
 
