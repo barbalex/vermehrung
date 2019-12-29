@@ -189,7 +189,7 @@ const Art = ({ filter: showFilter }) => {
     [activeNodeArray, setActiveNodeArray],
   )
 
-  // maybe: sort dependent on person_felder.ar_name_deutsch
+  // maybe: sort dependent on person_option.ar_name_deutsch
   const aeArtQuery = gql`
     query aeArtQuery($filter: ae_art_bool_exp!) {
       ae_art(where: $filter, order_by: { name: asc_nulls_first }, limit: 7) {

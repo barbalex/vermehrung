@@ -30,7 +30,7 @@ import {
   art as artFragment,
   herkunft as herkunftFragment,
   lieferung as lieferungFragment,
-  personFelder as personFelderFragment,
+  personOption as personOptionFragment,
   sammelLieferung as sammelLieferungFragment,
   sammlung as sammlungFragment,
 } from '../../../utils/fragments'
@@ -238,13 +238,13 @@ const personQuery = gql`
     }
   }
 `
-const personFelderQuery = gql`
-  query personFelderQueryForSammelLieferung($personId: bigint) {
-    person_felder(where: { person_id: { _eq: $personId } }) {
-      ...PersonFelderFields
+const personOptionQuery = gql`
+  query personOptionQueryForSammelLieferung($personId: bigint) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
     }
   }
-  ${personFelderFragment}
+  ${personOptionFragment}
 `
 
 const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
@@ -294,11 +294,11 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   }
 
   const userPersonId = getUserPersonId()
-  const personFelderResult = useQuery(personFelderQuery, {
+  const personOptionResult = useQuery(personOptionQuery, {
     variables: { personId: userPersonId },
   })
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
-    get(personFelderResult.data, 'person_felder[0]') || {}
+    get(personOptionResult.data, 'person_option[0]') || {}
 
   const sammlungFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -628,7 +628,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
               {idPassed && (
                 <Settings
                   personId={userPersonId}
-                  personFelderResult={personFelderResult}
+                  personOptionResult={personOptionResult}
                 />
               )}
               <IconButton

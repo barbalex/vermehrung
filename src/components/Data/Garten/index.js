@@ -24,7 +24,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
   garten as gartenFragment,
-  personFelder as personFelderFragment,
+  personOption as personOptionFragment,
 } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import types from '../../../store/Filter/simpleTypes'
@@ -107,13 +107,13 @@ const personQuery = gql`
     }
   }
 `
-const personFelderQuery = gql`
-  query personFelderQueryForGarten($personId: bigint) {
-    person_felder(where: { person_id: { _eq: $personId } }) {
-      ...PersonFelderFields
+const personOptionQuery = gql`
+  query personOptionQueryForGarten($personId: bigint) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
     }
   }
-  ${personFelderFragment}
+  ${personOptionFragment}
 `
 
 const Garten = ({ filter: showFilter }) => {
@@ -149,7 +149,7 @@ const Garten = ({ filter: showFilter }) => {
   }
 
   const userPersonId = getUserPersonId()
-  const personFelderResult = useQuery(personFelderQuery, {
+  const personOptionResult = useQuery(personOptionQuery, {
     variables: { personId: userPersonId },
   })
   const {
@@ -159,7 +159,7 @@ const Garten = ({ filter: showFilter }) => {
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-  } = get(personFelderResult.data, 'person_felder[0]', {}) || {}
+  } = get(personOptionResult.data, 'person_option[0]', {}) || {}
 
   useEffect(() => {
     setErrors({})
@@ -295,7 +295,7 @@ const Garten = ({ filter: showFilter }) => {
               </IconButton>
               <Settings
                 personId={userPersonId}
-                personFelderResult={personFelderResult}
+                personOptionResult={personOptionResult}
               />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>

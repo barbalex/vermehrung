@@ -13,7 +13,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import {
   herkunft as herkunftFragment,
-  personFelder as personFelderFragment,
+  personOption as personOptionFragment,
 } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
@@ -85,13 +85,13 @@ const herkunftQuery = gql`
   }
   ${herkunftFragment}
 `
-const personFelderQuery = gql`
-  query personFelderQueryForHerkunft($personId: bigint) {
-    person_felder(where: { person_id: { _eq: $personId } }) {
-      ...PersonFelderFields
+const personOptionQuery = gql`
+  query personOptionQueryForHerkunft($personId: bigint) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
     }
   }
-  ${personFelderFragment}
+  ${personOptionFragment}
 `
 
 const Herkunft = ({ filter: showFilter }) => {
@@ -124,11 +124,11 @@ const Herkunft = ({ filter: showFilter }) => {
   const user = getProfile()
   const userPersonId =
     user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
-  const personFelderResult = useQuery(personFelderQuery, {
+  const personOptionResult = useQuery(personOptionQuery, {
     variables: { personId: userPersonId },
   })
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
-    get(personFelderResult.data, 'person_felder[0]') || {}
+    get(personOptionResult.data, 'person_option[0]') || {}
 
   useEffect(() => {
     setErrors({})
@@ -234,7 +234,7 @@ const Herkunft = ({ filter: showFilter }) => {
               <DeleteButton row={row} />
               <Settings
                 personId={userPersonId}
-                personFelderResult={personFelderResult}
+                personOptionResult={personOptionResult}
               />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>

@@ -12,7 +12,7 @@ import SammelLieferung from '../SammelLieferung'
 import storeContext from '../../../storeContext'
 import {
   lieferung as lieferungFragment,
-  personFelder as personFelderFragment,
+  personOption as personOptionFragment,
   sammelLieferung as sammelLieferungFragment,
 } from '../../../utils/fragments'
 import getUserPersonId from '../../../utils/getUserPersonId'
@@ -69,13 +69,13 @@ const lieferungQuery = gql`
   ${lieferungFragment}
   ${sammelLieferungFragment}
 `
-const personFelderQuery = gql`
-  query personFelderQueryForLieferung($personId: bigint) {
-    person_felder(where: { person_id: { _eq: $personId } }) {
-      ...PersonFelderFields
+const personOptionQuery = gql`
+  query personOptionQueryForLieferung($personId: bigint) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
     }
   }
-  ${personFelderFragment}
+  ${personOptionFragment}
 `
 
 const LieferungContainer = ({ filter: showFilter }) => {
@@ -100,11 +100,11 @@ const LieferungContainer = ({ filter: showFilter }) => {
     get(lieferungData, 'lieferung[0].sammel_lieferung') || {}
 
   const userPersonId = getUserPersonId()
-  const personFelderResult = useQuery(personFelderQuery, {
+  const personOptionResult = useQuery(personOptionQuery, {
     variables: { personId: userPersonId },
   })
   const { li_show_sl } =
-    get(personFelderResult.data, 'person_felder[0]', {}) || {}
+    get(personOptionResult.data, 'person_option[0]', {}) || {}
 
   if (lieferungLoading) {
     return (

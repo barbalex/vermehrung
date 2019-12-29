@@ -388,8 +388,8 @@ create table kultur_felder (
 create index on kultur_felder using btree (kultur_id);
 COMMENT ON COLUMN kultur_felder.tk IS 'opt-in Option für Teilkulturen';
 
-drop table if exists person_felder cascade;
-create table person_felder (
+drop table if exists person_option cascade;
+create table person_option (
   person_id bigint unique not null references person (id) on delete cascade on update cascade,
   ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
@@ -408,11 +408,11 @@ create table person_felder (
   sl_show_empty_when_next_to_li boolean default false,
   sl_auto_copy_edits boolean default true
 );
-create index on person_felder using btree (person_id);
-comment on column person_felder.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
-comment on column person_felder.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
-comment on column person_felder.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
-comment on column person_felder.ar_name_deutsch is 'Dieses Feld wird (momentan) nicht benutzt';
+create index on person_option using btree (person_id);
+comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
+comment on column person_option.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
+comment on column person_option.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
+comment on column person_option.ar_name_deutsch is 'Dieses Feld wird (momentan) nicht benutzt';
 
 drop table if exists lieferung cascade;
 create table lieferung (

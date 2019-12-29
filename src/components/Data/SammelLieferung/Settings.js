@@ -13,7 +13,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
-import { personFelder as personFelderFragment } from '../../../utils/fragments'
+import { personOption as personOptionFragment } from '../../../utils/fragments'
 
 const TitleRow = styled.div`
   display: flex;
@@ -27,14 +27,14 @@ const Title = styled.div`
   user-select: none;
 `
 
-const SettingsSammelLieferung = ({ personId, personFelderResult }) => {
+const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = personFelderResult
+  const { data, error, loading, refetch } = personOptionResult
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
-    get(data, 'person_felder[0]') || {}
+    get(data, 'person_option[0]') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -43,10 +43,10 @@ const SettingsSammelLieferung = ({ personId, personFelderResult }) => {
       try {
         await client.mutate({
           mutation: gql`
-              mutation update_person_felder(
+              mutation update_person_option(
                 $personId: bigint!
               ) {
-                update_person_felder(
+                update_person_option(
                   where: { person_id: { _eq: $personId } }
                   _set: {
                     ${field}: ${!value}
@@ -54,11 +54,11 @@ const SettingsSammelLieferung = ({ personId, personFelderResult }) => {
                 ) {
                   affected_rows
                   returning {
-                    ...PersonFelderFields
+                    ...PersonOptionFields
                   }
                 }
               }
-              ${personFelderFragment}
+              ${personOptionFragment}
             `,
           variables: {
             personId,

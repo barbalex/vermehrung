@@ -215,8 +215,8 @@ export const person = gql`
     aktiv
   }
 `
-export const personFelder = gql`
-  fragment PersonFelderFields on person_felder {
+export const personOption = gql`
+  fragment PersonOptionFields on person_option {
     person_id
     ar_name_deutsch
     ga_strasse

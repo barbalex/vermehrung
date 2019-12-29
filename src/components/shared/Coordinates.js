@@ -31,7 +31,7 @@ import {
 import {
   herkunft as herkunftFragment,
   garten as gartenFragment,
-  personFelder as personFelderFragment,
+  personOption as personOptionFragment,
 } from '../../utils/fragments'
 import getUserPersonId from '../../utils/getUserPersonId'
 
@@ -48,13 +48,13 @@ const Row = styled.div`
   display: flex;
 `
 
-const personFelderQuery = gql`
-  query personFelderQueryForCoordinates($personId: bigint) {
-    person_felder(where: { person_id: { _eq: $personId } }) {
-      ...PersonFelderFields
+const personOptionQuery = gql`
+  query personOptionQueryForCoordinates($personId: bigint) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
     }
   }
-  ${personFelderFragment}
+  ${personOptionFragment}
 `
 
 const fragments = {
@@ -69,11 +69,11 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const client = useApolloClient()
 
   const userPersonId = getUserPersonId()
-  const personFelderResult = useQuery(personFelderQuery, {
+  const personOptionResult = useQuery(personOptionQuery, {
     variables: { personId: userPersonId },
   })
   const { ga_lat_lng } =
-    get(personFelderResult.data, 'person_felder[0]', {}) || {}
+    get(personOptionResult.data, 'person_option[0]', {}) || {}
 
   const [lv95XState, setLv95XState] = useState(lv95_x || '')
   const [lv95YState, setLv95YState] = useState(lv95_y || '')

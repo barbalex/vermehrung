@@ -49,7 +49,7 @@ DROP FUNCTION IF EXISTS person_has_felder() cascade;
 CREATE FUNCTION person_has_felder() RETURNS trigger AS $person_has_felder$
 BEGIN
   INSERT INTO
-    person_felder (person_id)
+    person_option (person_id)
   VALUES (NEW.id);
   RETURN NEW;
 END;
@@ -60,11 +60,11 @@ CREATE TRIGGER person_has_felder AFTER INSERT ON person
 
 -- in case this trigger was not working
 -- add person where they are missing
-insert into person_felder (person_id)
+insert into person_option (person_id)
 select person.id from person
-left join person_felder
-on person_felder.person_id = person.id
-where person_felder.person_id is null;
+left join person_option
+on person_option.person_id = person.id
+where person_option.person_id is null;
 
 DROP TRIGGER IF EXISTS kultur_has_qk_choosen ON kultur_qk_choosen cascade;
 DROP FUNCTION IF EXISTS kultur_has_qk_choosen() cascade;

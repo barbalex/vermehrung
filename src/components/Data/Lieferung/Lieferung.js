@@ -28,7 +28,7 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
   art as artFragment,
   lieferung as lieferungFragment,
-  personFelder as personFelderFragment,
+  personOption as personOptionFragment,
 } from '../../../utils/fragments'
 import getUserPersonId from '../../../utils/getUserPersonId'
 import types from '../../../store/Filter/simpleTypes'
@@ -235,13 +235,13 @@ const personQuery = gql`
     }
   }
 `
-const personFelderQuery = gql`
-  query personFelderQueryForLieferungLieferung($personId: bigint) {
-    person_felder(where: { person_id: { _eq: $personId } }) {
-      ...PersonFelderFields
+const personOptionQuery = gql`
+  query personOptionQueryForLieferungLieferung($personId: bigint) {
+    person_option(where: { person_id: { _eq: $personId } }) {
+      ...PersonOptionFields
     }
   }
-  ${personFelderFragment}
+  ${personOptionFragment}
 `
 
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
@@ -283,11 +283,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }
 
   const userPersonId = getUserPersonId()
-  const personFelderResult = useQuery(personFelderQuery, {
+  const personOptionResult = useQuery(personOptionQuery, {
     variables: { personId: userPersonId },
   })
   const { li_show_sl_felder } =
-    get(personFelderResult.data, 'person_felder[0]') || {}
+    get(personOptionResult.data, 'person_option[0]') || {}
 
   const sammlungFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -593,7 +593,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
               <DeleteButton row={row} />
               <Settings
                 personId={userPersonId}
-                personFelderResult={personFelderResult}
+                personOptionResult={personOptionResult}
               />
               <IconButton
                 aria-label="Anleitung öffnen"

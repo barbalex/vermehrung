@@ -14,7 +14,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
-import { personFelder as personFelderFragment } from '../../../utils/fragments'
+import { personOption as personOptionFragment } from '../../../utils/fragments'
 
 const TitleRow = styled.div`
   display: flex;
@@ -33,12 +33,12 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsGarten = ({ personId, personFelderResult }) => {
+const SettingsGarten = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = personFelderResult
+  const { data, error, loading, refetch } = personOptionResult
   const {
     ga_strasse,
     ga_plz,
@@ -47,7 +47,7 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
     ga_lat_lng,
     ga_aktiv,
     ga_bemerkungen,
-  } = get(data, 'person_felder[0]') || {}
+  } = get(data, 'person_option[0]') || {}
 
   const saveToDb = useCallback(
     async event => {
@@ -56,10 +56,10 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
       try {
         await client.mutate({
           mutation: gql`
-              mutation update_person_felder(
+              mutation update_person_option(
                 $personId: bigint!
               ) {
-                update_person_felder(
+                update_person_option(
                   where: { person_id: { _eq: $personId } }
                   _set: {
                     ${field}: ${!value}
@@ -67,11 +67,11 @@ const SettingsGarten = ({ personId, personFelderResult }) => {
                 ) {
                   affected_rows
                   returning {
-                    ...PersonFelderFields
+                    ...PersonOptionFields
                   }
                 }
               }
-              ${personFelderFragment}
+              ${personOptionFragment}
             `,
           variables: {
             personId,
