@@ -496,7 +496,7 @@ create index on lieferung_file using btree (file_mime_type);
 
 drop table if exists av_art;
 create table av_art (
-  art_id bigserial REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  art_id bigserial unique REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id bigint references person (id) on delete cascade on update cascade,
   primary key (person_id, art_id)
 );
