@@ -406,7 +406,12 @@ create table person_option (
   li_show_sl_felder boolean default false,
   li_show_sl boolean default true,
   sl_show_empty_when_next_to_li boolean default false,
-  sl_auto_copy_edits boolean default true
+  sl_auto_copy_edits boolean default true,
+  tree_kultur boolean default false,
+  tree_teilkultur boolean default false,
+  tree_zaehlung boolean default false,
+  tree_lieferung boolean default false,
+  tree_event boolean default false
 );
 create index on person_option using btree (person_id);
 comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
