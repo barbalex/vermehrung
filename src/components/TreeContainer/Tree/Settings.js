@@ -80,14 +80,14 @@ const SettingsTree = ({ refetch, data, personId }) => {
           variables: {
             personId,
           },
-          optimisticResponse: {
+          /*optimisticResponse: {
             __typename: 'Mutation',
-            update_person_option: {
-              person_id: personId,
-              __typename: 'person_option',
-              content: { ...personOption, [field]: value },
+            updatePersonOption: {
+              person_id: personOption.person_id,
+              __typename: 'PersonOption',
+              content: { ...personOption, [field]: !value },
             },
-          },
+          }*/
         })
       } catch (error) {
         return enqueNotification({
