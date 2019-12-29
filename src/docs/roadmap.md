@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/Roadmap"
-date: "2019-12-06"
+date: "2019-12-29"
 title: "Roadmap"
 sort1: 23
 ---
