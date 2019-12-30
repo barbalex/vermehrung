@@ -99,7 +99,7 @@ const Kultur = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch: refetchTree } = store.tree
+  const { activeNodeArray } = store.tree
 
   const id = showFilter
     ? 99999999999999
@@ -254,6 +254,14 @@ const Kultur = ({ filter: showFilter }) => {
           } else {
             valueToSet = `"${value.split('"').join('\\"')}"`
           }
+          // need to refetch or related data will not be updated
+          const refetchQueries = [
+            'art_id',
+            'herkunft_id',
+            'garten_id',
+          ].includes(field)
+            ? ['TreeQueryForTreeContainer']
+            : []
           await client.mutate({
             mutation: gql`
               mutation update_kultur(
@@ -276,6 +284,7 @@ const Kultur = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            refetchQueries,
             optimisticResponse: {
               __typename: 'Mutation',
               updateKultur: {
@@ -289,13 +298,9 @@ const Kultur = ({ filter: showFilter }) => {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        // need to refetch or related data will not be updated
-        if (['art_id', 'herkunft_id', 'garten_id'].includes(field)) {
-          refetchTree()
-        }
       }
     },
-    [client, filter, refetchTree, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const openKulturDocs = useCallback(() => {
     typeof window !== 'undefined' &&

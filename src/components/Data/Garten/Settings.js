@@ -38,7 +38,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = personOptionResult
+  const { data, error, loading } = personOptionResult
   const {
     ga_strasse,
     ga_plz,
@@ -76,6 +76,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
           variables: {
             personId,
           },
+          refetchQueries: ['PersonOptionQueryForGarten'],
         })
       } catch (error) {
         return enqueNotification({
@@ -85,9 +86,8 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
           },
         })
       }
-      refetch()
     },
-    [refetch, client, personId, enqueNotification],
+    [client, personId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

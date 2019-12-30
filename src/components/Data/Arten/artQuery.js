@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { art as artFragment } from '../../../utils/fragments'
 
 export default gql`
-  query ArtQueryForArten($filter: art_bool_exp!) {
+  query ArtQueryForArts($filter: art_bool_exp!) {
     rowsUnfiltered: art {
       id
     }

@@ -86,7 +86,7 @@ const herkunftQuery = gql`
   ${herkunftFragment}
 `
 const personOptionQuery = gql`
-  query personOptionQueryForHerkunft($personId: bigint) {
+  query PersonOptionQueryForHerkunft($personId: bigint) {
     person_option(where: { person_id: { _eq: $personId } }) {
       ...PersonOptionFields
     }
@@ -99,14 +99,14 @@ const Herkunft = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray } = store.tree
 
   const id = showFilter
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
-  const { data, error, loading } = useQuery(herkunftQuery, {
+  const { data, error, loading, refetch } = useQuery(herkunftQuery, {
     variables: { id, isFiltered, filter: herkunftFilter },
   })
 
