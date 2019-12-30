@@ -32,7 +32,7 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = personOptionResult
+  const { data, error, loading } = personOptionResult
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
     get(data, 'person_option[0]') || {}
 
@@ -63,6 +63,7 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
           variables: {
             personId,
           },
+          refetchQueries: ['PersonOptionQueryForSammelLieferung'],
         })
       } catch (error) {
         return enqueNotification({
@@ -72,9 +73,8 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
           },
         })
       }
-      refetch()
     },
-    [refetch, client, personId, enqueNotification],
+    [client, personId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

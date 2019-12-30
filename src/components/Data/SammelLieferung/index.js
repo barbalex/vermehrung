@@ -239,7 +239,7 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query personOptionQueryForSammelLieferung($personId: bigint) {
+  query PersonOptionQueryForSammelLieferung($personId: bigint) {
     person_option(where: { person_id: { _eq: $personId } }) {
       ...PersonOptionFields
     }
@@ -264,7 +264,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
     store,
     table: 'sammel_lieferung',
   })
-  const { data, error, loading, refetch } = useQuery(sammelLieferungQuery, {
+  const { data, error, loading } = useQuery(sammelLieferungQuery, {
     variables: {
       id,
       isFiltered,
@@ -484,12 +484,21 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         } else {
           valueToSet = `"${value.split('"').join('\\"')}"`
         }
+        const refetchQueries = [
+          'nach_kultur_id',
+          'von_kultur_id',
+          'von_sammlung_id',
+          'art_id',
+        ].includes(field)
+          ? ['SammelLieferungQueryForSammelLieferung']
+          : []
         try {
           await client.mutate({
             mutation: updateSammelLieferung({ field, valueToSet }),
             variables: {
               id: row.id,
             },
+            refetchQueries,
             optimisticResponse: {
               __typename: 'Mutation',
               updateSammelLieferung: {
@@ -515,21 +524,10 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
             store,
           })
         }
-        if (
-          [
-            'nach_kultur_id',
-            'von_kultur_id',
-            'von_sammlung_id',
-            'art_id',
-          ].includes(field)
-        ) {
-          // ensure Herkunft updates
-          !!refetch && refetch()
-        }
         setErrors({})
       }
     },
-    [client, filter, refetch, row, showFilter, sl_auto_copy_edits, store],
+    [client, filter, row, showFilter, sl_auto_copy_edits, store],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
