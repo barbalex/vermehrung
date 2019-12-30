@@ -38,7 +38,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = personOptionResult
+  const { data, error, loading } = personOptionResult
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
     get(data, 'person_option[0]', {}) || {}
 
@@ -69,6 +69,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
           variables: {
             personId,
           },
+          refetchQueries: ['PersonOptionQueryForHerkunft'],
         })
       } catch (error) {
         return enqueNotification({
@@ -78,9 +79,8 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
           },
         })
       }
-      refetch()
     },
-    [refetch, client, personId, enqueNotification],
+    [client, personId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

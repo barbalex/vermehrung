@@ -181,9 +181,9 @@ const Teilzaehlung = ({
             teilkulturId: teilzaehlung.teilkultur_id,
             anzA: anzAuspflanzbereit,
           },
+          refetchQueries: ['TreeQueryForTreeContainer'],
         })
       } catch (error) {
-        refetchTree()
         return enqueNotification({
           message: error.message,
           options: {
@@ -217,6 +217,7 @@ const Teilzaehlung = ({
           variables: {
             zaehlungId: zaehlung.id,
           },
+          refetchQueries: ['TreeQueryForTreeContainer'],
         })
       } catch (error) {
         return enqueNotification({

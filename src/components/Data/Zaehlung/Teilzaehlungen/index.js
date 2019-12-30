@@ -70,12 +70,9 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
 
   const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
 
-  const { data, error, loading, refetch: refetchTeilzaehlungen } = useQuery(
-    teilzaehlungenQuery,
-    {
-      variables: { zaehlId: zaehlung.id },
-    },
-  )
+  const { data, error, loading } = useQuery(teilzaehlungenQuery, {
+    variables: { zaehlId: zaehlung.id },
+  })
   const rows = get(data, 'teilzaehlung', [])
 
   const { tk } = get(zaehlung, 'kultur.kultur_option') || {}
@@ -87,6 +84,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
         variables: {
           zaehlId: zaehlung.id,
         },
+        refetchQueries: ['TeilzaehlungenQuery'],
       })
     } catch (error) {
       return enqueNotification({
@@ -96,8 +94,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
         },
       })
     }
-    refetchTeilzaehlungen()
-  }, [client, enqueNotification, refetchTeilzaehlungen, zaehlung.id])
+  }, [client, enqueNotification, zaehlung.id])
 
   const showNew = rows.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
@@ -137,7 +134,6 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
         <TeilzaehlungenRows
           rows={rows}
           zaehlungResult={zaehlungResult}
-          refetchTz={refetchTeilzaehlungen}
           kulturId={zaehlung.kultur_id}
         />
       </Container>

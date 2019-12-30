@@ -66,12 +66,10 @@ const Teilzaehlung = ({
   refetchTeilkulturen,
   index,
   zaehlungResult,
-  refetchTz,
 }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
-  const { refetch: refetchTree } = store.tree
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -110,6 +108,16 @@ const Teilzaehlung = ({
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+      // update tree if numbers were changed
+      const refetchQueries = [
+        'anzahl_pflanzen',
+        'anzahl_auspflanzbereit',
+        'anzahl_mutterpflanzen',
+        'prognose',
+        'ziel',
+      ].includes(field)
+        ? ['TreeQueryForTreeContainer']
+        : []
       try {
         let valueToSet
         if (value === null) {
@@ -141,24 +149,14 @@ const Teilzaehlung = ({
           variables: {
             id: row.id,
           },
+          refetchQueries,
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      // update tree if numbers were changed
-      if (
-        [
-          'anzahl_pflanzen',
-          'anzahl_auspflanzbereit',
-          'anzahl_mutterpflanzen',
-          'prognose',
-          'ziel',
-        ].includes(field)
-      )
-        refetchTree()
       setErrors({})
     },
-    [client, refetchTree, row],
+    [client, row],
   )
   const onClickDelete = useCallback(async () => {
     try {
@@ -175,6 +173,7 @@ const Teilzaehlung = ({
         variables: {
           id: row.id,
         },
+        refetchQueries: ['TeilzaehlungenQuery'],
       })
     } catch (error) {
       return enqueNotification({
@@ -184,8 +183,7 @@ const Teilzaehlung = ({
         },
       })
     }
-    refetchTz()
-  }, [client, enqueNotification, refetchTz, row.id])
+  }, [client, enqueNotification, row.id])
 
   return (
     <ErrorBoundary>
