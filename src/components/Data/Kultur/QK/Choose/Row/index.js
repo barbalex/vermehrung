@@ -33,7 +33,7 @@ const Beschreibung = styled.div`
 const ChooseKulturQkRow = ({ kulturId, qk, refetchTab }) => {
   const client = useApolloClient()
 
-  const { data, loading, error, refetch } = useQuery(query, {
+  const { data, loading, error } = useQuery(query, {
     variables: { kulturId, qkName: qk.name },
   })
   const kulturQkChoosen = get(data, 'kultur_qk_choosen')
@@ -78,12 +78,11 @@ const ChooseKulturQkRow = ({ kulturId, qk, refetchTab }) => {
           ${kulturQkChoosenFragment}
         `,
         variables,
+        refetchQueries: ['KulturQkChoosenQueryForRow'],
       })
     }
-    // 3. refetch data
-    refetch()
     setTimeout(() => refetchTab())
-  }, [kulturId, checked, client, qk.name, refetch, refetchTab])
+  }, [kulturId, checked, client, qk.name, refetchTab])
 
   if (error)
     return (

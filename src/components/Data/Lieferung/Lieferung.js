@@ -236,7 +236,7 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query personOptionQueryForLieferungLieferung($personId: bigint) {
+  query PersonOptionQueryForLieferungLieferung($personId: bigint) {
     person_option(where: { person_id: { _eq: $personId } }) {
       ...PersonOptionFields
     }
@@ -257,7 +257,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
-  const { data, error, loading, refetch } = useQuery(lieferungQuery, {
+  const { data, error, loading } = useQuery(lieferungQuery, {
     variables: { id, isFiltered, filter: lieferungFilter },
   })
 
@@ -493,6 +493,15 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         } else {
           valueToSet = `"${value.split('"').join('\\"')}"`
         }
+        // ensure Herkunft updates
+        const refetchQueries = [
+          'nach_kultur_id',
+          'von_kultur_id',
+          'von_sammlung_id',
+          'art_id',
+        ].includes(field)
+          ? ['LieferungQueryForLieferungLieferung']
+          : []
         try {
           await client.mutate({
             mutation:
@@ -502,6 +511,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             variables: {
               id: row.id,
             },
+            refetchQueries,
             optimisticResponse: {
               __typename: 'Mutation',
               updateLieferung: {
@@ -515,21 +525,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
           console.log(error)
           return setErrors({ [field]: error.message })
         }
-        if (
-          [
-            'nach_kultur_id',
-            'von_kultur_id',
-            'von_sammlung_id',
-            'art_id',
-          ].includes(field)
-        ) {
-          // ensure Herkunft updates
-          !!refetch && refetch()
-        }
         setErrors({})
       }
     },
-    [client, filter, refetch, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

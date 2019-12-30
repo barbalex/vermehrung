@@ -66,7 +66,7 @@ const FieldsContainer = styled.div`
 `
 
 const query = gql`
-  query KulturQueryForKulturen($filter: kultur_bool_exp!) {
+  query KulturQueryForKulturs($filter: kultur_bool_exp!) {
     rowsUnfiltered: kultur {
       id
     }
