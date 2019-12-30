@@ -33,7 +33,7 @@ const Beschreibung = styled.div`
 const ChooseArtQkRow = ({ artId, qk, refetchTab }) => {
   const client = useApolloClient()
 
-  const { data, loading, error, refetch } = useQuery(query, {
+  const { data, loading, error } = useQuery(query, {
     variables: { artId, qkName: qk.name },
   })
   const artQkChoosen = get(data, 'art_qk_choosen')
@@ -75,12 +75,11 @@ const ChooseArtQkRow = ({ artId, qk, refetchTab }) => {
           ${artQkChoosenFragment}
         `,
         variables,
+        refetchQueries: ['artQkChoosenQueryForRow'],
       })
     }
-    // 3. refetch data
-    refetch()
     setTimeout(() => refetchTab())
-  }, [artId, checked, client, qk.name, refetch, refetchTab])
+  }, [artId, checked, client, qk.name, refetchTab])
 
   if (error)
     return (

@@ -108,7 +108,7 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query personOptionQueryForGarten($personId: bigint) {
+  query PersonOptionQueryForGarten($personId: bigint) {
     person_option(where: { person_id: { _eq: $personId } }) {
       ...PersonOptionFields
     }
@@ -121,14 +121,14 @@ const Garten = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray } = store.tree
 
   const id = showFilter
     ? 99999999999999
     : last(activeNodeArray.filter(e => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
-  const { data, error, loading, refetch: refetchForm } = useQuery(gartenQuery, {
+  const { data, error, loading, refetch } = useQuery(gartenQuery, {
     variables: { id, isFiltered, filter: gartenFilter },
   })
   const {
@@ -182,12 +182,6 @@ const Garten = ({ filter: showFilter }) => {
       if (event.target.value === '') value = null
       const type = types.garten[field]
       const previousValue = row[field]
-      /*console.log('Garten, saveToDb', {
-        field,
-        value,
-        previousValue,
-        eventValue: event.target.value,
-      })*/
       // only update if value has changed
       if (value === previousValue) return
       //console.log('Garten, saveToDb saving to db')
@@ -229,10 +223,9 @@ const Garten = ({ filter: showFilter }) => {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        refetch()
       }
     },
-    [client, filter, refetch, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const onClickDownload = useCallback(async () => {
     const workbook = new ExcelJs.Workbook()
@@ -355,7 +348,7 @@ const Garten = ({ filter: showFilter }) => {
             />
           )}
           {!showFilter && ga_geom_point && (
-            <Coordinates row={row} refetchForm={refetchForm} table="garten" />
+            <Coordinates row={row} refetchForm={refetch} table="garten" />
           )}
           {ga_aktiv && (
             <Checkbox2States

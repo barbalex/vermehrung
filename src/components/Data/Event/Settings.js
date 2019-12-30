@@ -38,7 +38,7 @@ const SettingsZaehlungen = ({ eventResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { error, loading, refetch } = eventResult
+  const { error, loading } = eventResult
   const kulturId = get(eventResult, 'data.event[0].kultur.id')
   const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
     get(eventResult, 'data.event[0].kultur.kultur_option') || {}
@@ -70,6 +70,7 @@ const SettingsZaehlungen = ({ eventResult }) => {
           variables: {
             kulturId,
           },
+          refetchQueries: ['EventQueryForEvent'],
         })
       } catch (error) {
         return enqueNotification({
@@ -79,9 +80,8 @@ const SettingsZaehlungen = ({ eventResult }) => {
           },
         })
       }
-      refetch()
     },
-    [refetch, client, kulturId, enqueNotification],
+    [client, kulturId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
