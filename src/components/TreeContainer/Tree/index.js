@@ -12,9 +12,7 @@ import Row from './Row'
 import Settings from './Settings'
 
 const StyledList = styled(List)`
-  overflow-x: hidden !important;
   margin-top: 5px;
-  margin-bottom: 5px;
   @media print {
     display: none !important;
   }
@@ -51,7 +49,7 @@ const Tree = ({ refetch, data, personId }) => {
       <Settings refetch={refetch} data={data} personId={personId} />
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <StyledList
-        height={sizeState.height - 10}
+        height={sizeState.height - 5}
         itemCount={nodes.length}
         itemSize={singleRowHeight}
         width={sizeState.width}

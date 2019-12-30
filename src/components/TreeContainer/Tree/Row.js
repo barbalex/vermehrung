@@ -188,11 +188,12 @@ const TextSpan = styled.span`
   font-weight: ${props =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow-x: hidden !important;
   cursor: pointer;
   &:hover {
     color: #f57c00;
+    /*overflow: visible !important;
+    width: auto !important;
+    position: absolute !important;*/
   }
 `
 
@@ -310,11 +311,11 @@ const Row = ({ style, node }) => {
         <StyledNode
           data-level={level}
           data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-          data-id={node.id}
-          data-parentid={node.parentId}
-          data-url={dataUrl}
-          data-nodetype={node.nodeType}
-          data-label={node.label}
+          //data-id={node.id}
+          //data-parentid={node.parentId}
+          //data-url={dataUrl}
+          //data-nodetype={node.nodeType}
+          //data-label={node.label}
         >
           {useSymbolIcon && (
             <SymbolDiv onClick={onClickNodeSymbol}>
