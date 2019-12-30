@@ -38,7 +38,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = teilkulturResult
+  const { data, error, loading } = teilkulturResult
   const { tk_bemerkungen } =
     get(data, 'teilkultur[0].kultur.kultur_option') || {}
 
@@ -70,6 +70,7 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
           variables: {
             kulturId,
           },
+          refetchQueries: ['TeilkulturQueryForTeilkultur'],
         })
       } catch (error) {
         return enqueNotification({
@@ -79,9 +80,8 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
           },
         })
       }
-      refetch()
     },
-    [data, refetch, client, enqueNotification],
+    [data, client, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

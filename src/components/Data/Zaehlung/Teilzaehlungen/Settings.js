@@ -38,7 +38,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = zaehlungResult
+  const { data, error, loading } = zaehlungResult
   const zaehlung = get(data, 'zaehlung', [{}])[0]
   const {
     tz_teilkultur_id,
@@ -75,6 +75,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           variables: {
             kulturId,
           },
+          refetchQueries: ['ZaehlungQueryForZaehlung'],
         })
       } catch (error) {
         return enqueNotification({
@@ -84,9 +85,8 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungResult }) => {
           },
         })
       }
-      refetch()
     },
-    [refetch, client, kulturId, enqueNotification],
+    [client, kulturId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

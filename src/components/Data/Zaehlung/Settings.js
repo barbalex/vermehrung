@@ -38,7 +38,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch: refetchZaehlung } = zaehlungResult
+  const { data, error, loading } = zaehlungResult
   const zaehlung = get(data, 'zaehlung', [{}])[0]
   const { z_bemerkungen } = get(zaehlung, 'kultur.kultur_option') || {}
   const kulturId = zaehlung.kultur_id
@@ -70,6 +70,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
           variables: {
             kulturId,
           },
+          refetchQueries: ['ZaehlungQueryForZaehlung'],
         })
       } catch (error) {
         return enqueNotification({
@@ -79,9 +80,8 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
           },
         })
       }
-      refetchZaehlung()
     },
-    [refetchZaehlung, client, kulturId, enqueNotification],
+    [client, kulturId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({
