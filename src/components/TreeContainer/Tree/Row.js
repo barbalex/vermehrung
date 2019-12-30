@@ -191,9 +191,6 @@ const TextSpan = styled.span`
   cursor: pointer;
   &:hover {
     color: #f57c00;
-    /*overflow: visible !important;
-    width: auto !important;
-    position: absolute !important;*/
   }
 `
 
