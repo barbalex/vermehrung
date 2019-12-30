@@ -31,3 +31,6 @@ Die Zahlen einer Zählung und einer Lieferung sind somit nur dann gleich, wenn d
 vermehrung kann rechnen. Erfolgt eine Aus-Lieferung von 20 "auspflanz-bereite Pflanzen", subtrahiert vermehrung diese 20 von der zuletzt gezählten Anzahl um darzustellen, wie viele "auspflanz-bereite Pflanzen" aktuell existieren.<br/><br/>
 
 Um eine Lieferung zu erfassen ist es daher in der Regel nicht nötig, eine Zählung durchzuführen. Eine Zählung ist nur nötig, wenn der Gärtner oder die Projektleitung aktuelle  Zahlen haben will, welche auch die Vermehrung bzw. Mortalität berücksichtigen.
+
+### Mutter-Pflanzen...
+...sind Pflanzen, die aus einer Sammlung oder via GAW aus einer Sammlung angeliefert wurden. Daraus vermehrte sind nicht Mutter-Pflanzen.
