@@ -32,9 +32,8 @@ const SettingsKultur = ({ kulturResult }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
-  const { refetch: refetchTree } = store.tree
 
-  const { data, error, loading, refetch } = kulturResult
+  const { data, error, loading } = kulturResult
   const { tk } = get(data, 'kultur[0].kultur_option') || {}
   const kulturId = get(data, 'kultur[0].id')
 
@@ -65,6 +64,7 @@ const SettingsKultur = ({ kulturResult }) => {
           variables: {
             kulturId,
           },
+          refetchQueries: ['TreeQueryForTreeContainer', 'KulturQueryForKultur'],
         })
       } catch (error) {
         return enqueNotification({
@@ -74,10 +74,8 @@ const SettingsKultur = ({ kulturResult }) => {
           },
         })
       }
-      refetch()
-      refetchTree()
     },
-    [refetch, refetchTree, client, kulturId, enqueNotification],
+    [client, kulturId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

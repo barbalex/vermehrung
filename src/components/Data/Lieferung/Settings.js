@@ -38,7 +38,7 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
 
-  const { data, error, loading, refetch } = personOptionResult
+  const { data, error, loading } = personOptionResult
   const { li_show_sl_felder, li_show_sl } = get(data, 'person_option[0]') || {}
 
   const saveToDb = useCallback(
@@ -68,6 +68,7 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
           variables: {
             personId,
           },
+          refetchQueries: ['PersonOptionQueryForLieferungLieferung'],
         })
       } catch (error) {
         return enqueNotification({
@@ -77,9 +78,8 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
           },
         })
       }
-      refetch()
     },
-    [refetch, client, personId, enqueNotification],
+    [client, personId, enqueNotification],
   )
   const onClickFrown = useCallback(() => {
     enqueNotification({

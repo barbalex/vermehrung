@@ -134,7 +134,7 @@ const Sammlung = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, refetch } = store.tree
+  const { activeNodeArray } = store.tree
 
   const id = showFilter
     ? 99999999999999
@@ -224,6 +224,13 @@ const Sammlung = ({ filter: showFilter }) => {
           } else {
             valueToSet = `"${value.split('"').join('\\"')}"`
           }
+          const refetchQueries = [
+            'herkunft_id',
+            'person_id',
+            'art_id',
+          ].includes(field)
+            ? ['TreeQueryForTreeContainer']
+            : []
           await client.mutate({
             mutation: gql`
               mutation update_sammlung(
@@ -246,6 +253,7 @@ const Sammlung = ({ filter: showFilter }) => {
             variables: {
               id: row.id,
             },
+            refetchQueries,
             optimisticResponse: {
               __typename: 'Mutation',
               updateSammlung: {
@@ -259,10 +267,9 @@ const Sammlung = ({ filter: showFilter }) => {
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        if (['herkunft_id', 'person_id', 'art_id'].includes(field)) refetch()
       }
     },
-    [client, filter, refetch, row, showFilter],
+    [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&

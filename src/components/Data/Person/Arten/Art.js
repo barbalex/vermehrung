@@ -46,7 +46,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const AvArt = ({ avArt, refetch }) => {
+const AvArt = ({ avArt }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -73,6 +73,7 @@ const AvArt = ({ avArt, refetch }) => {
           }
         `,
         variables: { artId: avArt.art_id, personId: avArt.person_id },
+        refetchQueries: ['ArtenForPersonQuery'],
       })
     } catch (error) {
       console.log(error)
@@ -83,8 +84,7 @@ const AvArt = ({ avArt, refetch }) => {
         },
       })
     }
-    refetch()
-  }, [refetch, client, avArt.art_id, avArt.person_id, store])
+  }, [client, avArt.art_id, avArt.person_id, store])
 
   const artname = get(avArt, 'art.art_ae_art.name')
 

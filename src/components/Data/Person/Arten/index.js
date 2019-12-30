@@ -58,7 +58,7 @@ const PersonArten = ({ personId }) => {
     [open],
   )
 
-  const { data, error, loading, refetch } = useQuery(query, {
+  const { data, error, loading } = useQuery(query, {
     variables: { personId },
   })
   const avArten = get(data, 'av_art', [])
@@ -99,15 +99,15 @@ const PersonArten = ({ personId }) => {
             personId,
             artId: value,
           },
+          refetchQueries: ['ArtenForPersonQuery'],
         })
       } catch (error) {
         console.log({ error })
         return setErrors({ [field]: error.message })
       }
-      refetch()
       setErrors({})
     },
-    [client, personId, refetch],
+    [client, personId],
   )
 
   return (
@@ -137,11 +137,7 @@ const PersonArten = ({ personId }) => {
           ) : (
             <AvArten>
               {avArten.map(avArt => (
-                <Art
-                  key={`${avArt.person_id}/${avArt.art_id}`}
-                  avArt={avArt}
-                  refetch={refetch}
-                />
+                <Art key={`${avArt.person_id}/${avArt.art_id}`} avArt={avArt} />
               ))}
             </AvArten>
           )}
