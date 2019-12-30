@@ -87,7 +87,7 @@ const Files = ({ parentId, parent }) => {
   const fragment = fragmentObject[parent]
   const queryObject = {
     [parent]: gql`
-    query FileQuery($parentId: bigint!) {
+    query GeneralFileQuery($parentId: bigint!) {
       ${parent}_file(
         order_by: { name: asc }
         where: { ${parent}_id: { _eq: $parentId } }
@@ -100,7 +100,7 @@ const Files = ({ parentId, parent }) => {
   }
 
   const query = queryObject[parent]
-  const { data, error, loading, refetch } = useQuery(query, {
+  const { data, error, loading } = useQuery(query, {
     variables: { parentId },
   })
 
@@ -126,6 +126,7 @@ const Files = ({ parentId, parent }) => {
           try {
             await client.mutate({
               mutation,
+              refetchQueries: ['GeneralFileQuery'],
             })
           } catch (error) {
             return store.enqueNotification({
@@ -136,12 +137,11 @@ const Files = ({ parentId, parent }) => {
             })
           }
           //console.log('File uploaded: ', { info, responce })
-          refetch()
           // TODO: reinitiate uploader
         })
       }
     },
-    [client, parent, parentId, refetch, store],
+    [client, parent, parentId, store],
   )
 
   const images = files.filter(f => isImageFile(f))
@@ -212,12 +212,7 @@ const Files = ({ parentId, parent }) => {
         )}
         <Spacer />
         {files.map(file => (
-          <File
-            key={file.file_id}
-            file={file}
-            parent={parent}
-            refetch={refetch}
-          />
+          <File key={file.file_id} file={file} parent={parent} />
         ))}
       </Container>
     </ErrorBoundary>

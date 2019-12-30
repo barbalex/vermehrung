@@ -86,7 +86,7 @@ const fragmentObject = {
   lieferung: lieferungFileFragment,
 }
 
-const File = ({ file, parent, refetch }) => {
+const File = ({ file, parent }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
@@ -110,6 +110,7 @@ const File = ({ file, parent, refetch }) => {
             }
           }
         `,
+        refetchQueries: ['GeneralFileQuery'],
       })
     } catch (error) {
       console.log(error)
@@ -120,7 +121,6 @@ const File = ({ file, parent, refetch }) => {
         },
       })
     }
-    refetch()
     // 2. remove file
     // actually no: not secure
     // batch delete unneeded files using the api
@@ -153,7 +153,7 @@ const File = ({ file, parent, refetch }) => {
       console.log(error)
     }
     console.log('File, onClickDelete', { res, file })*/
-  }, [client, file.file_id, parent, refetch, store])
+  }, [client, file.file_id, parent, store])
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
     [file],

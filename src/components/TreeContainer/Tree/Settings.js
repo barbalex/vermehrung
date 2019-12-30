@@ -39,7 +39,7 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTree = ({ refetch, data, personId }) => {
+const SettingsTree = ({ data, personId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -80,14 +80,16 @@ const SettingsTree = ({ refetch, data, personId }) => {
           variables: {
             personId,
           },
-          /*optimisticResponse: {
+          refetchQueries: ['TreeQueryForTreeContainer'],
+          awaitRefetchQueries: true,
+          optimisticResponse: {
             __typename: 'Mutation',
             updatePersonOption: {
               person_id: personOption.person_id,
               __typename: 'PersonOption',
               content: { ...personOption, [field]: !value },
             },
-          }*/
+          },
         })
       } catch (error) {
         return enqueNotification({
@@ -97,9 +99,9 @@ const SettingsTree = ({ refetch, data, personId }) => {
           },
         })
       }
-      refetch()
+      console.log('hi')
     },
-    [refetch, client, personId, enqueNotification],
+    [client, personId, personOption, enqueNotification],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
