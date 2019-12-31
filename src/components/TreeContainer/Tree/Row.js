@@ -298,7 +298,6 @@ const Row = ({ style, node }) => {
   // for unknows reaseon this happens momentarily when new art is created
   if (!node.url) return null
 
-  const dataUrl = JSON.stringify(node.url)
   const level =
     node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
 
@@ -308,11 +307,6 @@ const Row = ({ style, node }) => {
         <StyledNode
           data-level={level}
           data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-          //data-id={node.id}
-          //data-parentid={node.parentId}
-          //data-url={dataUrl}
-          //data-nodetype={node.nodeType}
-          //data-label={node.label}
         >
           {useSymbolIcon && (
             <SymbolDiv onClick={onClickNodeSymbol}>
