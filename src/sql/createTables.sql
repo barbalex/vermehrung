@@ -1,6 +1,21 @@
 create extension if not exists "uuid-ossp";
 CREATE EXTENSION if not exists postgis;
 
+drop table if exists user_role cascade;
+create table user_role (
+  id text primary key,
+  name text,
+  sort integer,
+  comment text
+);
+create index on user_role using btree (id);
+create index on user_role using btree (name);
+create index on user_role using btree (sort);
+INSERT INTO user_role (id, name, sort, comment) VALUES
+  ('rol_0eMVfAl4o3f5q8ab', 'gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
+  ('rol_Jsk4O8Lun0V5OEs6', 'artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
+  ('rol_mImJOLKj390Murkh', 'manager', 3, 'liest und editiert alle Daten');
+
 drop table if exists person cascade;
 create table person (
   id bigserial primary key,
@@ -20,7 +35,7 @@ create table person (
   changed_by varchar(20) default null,
   tsv tsvector,
   account_id text default null,
-  user_role text default null references user_role (value) on delete set null on update cascade,
+  user_role text default null references user_role (id) on delete set null on update cascade,
   kommerziell boolean default false,
   info boolean default false,
   aktiv boolean default true
@@ -33,21 +48,6 @@ create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using gin (tsv);
-
-drop table if exist user_role cascade;
-create table user_role (
-  id text primary key,
-  name text,
-  sort integer,
-  comment text
-);
-create index on user_role using btree (id);
-create index on user_role using btree (name);
-create index on user_role using btree (sort);
-INSERT INTO user_role (id, name, sort, comment) VALUES
-  ('rol_0eMVfAl4o3f5q8ab', 'gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
-  ('rol_Jsk4O8Lun0V5OEs6', 'artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
-  ('rol_mImJOLKj390Murkh', 'manager', 3, 'liest und editiert alle Daten');
 
 drop table if exists person_file;
 create table person_file (
