@@ -1,5 +1,6 @@
 {
-  "graphQlUri": "https://api.vermehrung.apflora.ch/v1/graphql",
+  "graphQlUriReal": "https://api.vermehrung.apflora.ch/v1/graphql",
+  "graphQlUri": "http://104.248.23.104/v1/graphql",
   "testArten": [
     "1ab6bbb1-979a-4232-a5d8-62efb5cb984a"
   ],
