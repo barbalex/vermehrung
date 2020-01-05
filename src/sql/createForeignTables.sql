@@ -26,3 +26,9 @@ CREATE USER MAPPING
     FOR doadmin
  SERVER ae_server
 OPTIONS (user 'fdw_user', password 'secret');
+-- or:
+
+CREATE USER MAPPING
+    FOR postgres
+ SERVER ae_server
+OPTIONS (user 'fdw_user', password 'secret');

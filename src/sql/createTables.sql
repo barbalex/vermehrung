@@ -11,10 +11,10 @@ create table user_role (
 create index on user_role using btree (id);
 create index on user_role using btree (name);
 create index on user_role using btree (sort);
-INSERT INTO user_role (id, name, sort, comment) VALUES
-  ('rol_0eMVfAl4o3f5q8ab', 'gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
-  ('rol_Jsk4O8Lun0V5OEs6', 'artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
-  ('rol_mImJOLKj390Murkh', 'manager', 3, 'liest und editiert alle Daten');
+-- INSERT INTO user_role (id, name, sort, comment) VALUES
+--   ('rol_0eMVfAl4o3f5q8ab', 'gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
+--   ('rol_Jsk4O8Lun0V5OEs6', 'artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
+--   ('rol_mImJOLKj390Murkh', 'manager', 3, 'liest und editiert alle Daten');
 
 drop table if exists person cascade;
 create table person (
