@@ -12,3 +12,6 @@ sort1: 5
 
 ### Nummer
 Die Nummer gibt der Herkunft einen Namen, der nur grob Rückschlüsse auf den Ort zulässt. Gärtner sehen von der Herkunft nur diese Nummer. So soll erreicht werden, dass Gärtner nicht aus eigenem Antrieb sammeln.
+
+### Abgrenzung
+Die Abgrenzung genetischer Einheiten von Arten mit unterschiedliche Ausbreitungs-Biologie sollte sich im Prinzip unterscheiden. Darum kann es sinnvoll sein, für unterschiedliche Arten am selben Ort unterschiedliche Herkünfte zu generieren. Die App überlässt es den BiologInnen, zu entscheiden, ob dieselbe Herkunft (= geografischer Umriss) für mehrere Arten verwendet wird oder nur für eine.
