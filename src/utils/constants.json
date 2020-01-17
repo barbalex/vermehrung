@@ -1,6 +1,6 @@
 {
-  "graphQlUriReal": "https://api.vermehrung.apflora.ch/v1/graphql",
-  "graphQlUri2": "http://104.248.23.104/v1/graphql",
+  "graphQlUri3": "https://api.vermehrung.apflora.ch/v1/graphql",
+  "graphQlUri2": "https://134.209.235.33/v1/graphql",
   "graphQlUri": "https://vermehrung-api.brexit-chronology.ch/v1/graphql",
   "testArten": ["1ab6bbb1-979a-4232-a5d8-62efb5cb984a"],
   "tree": {

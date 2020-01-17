@@ -22,6 +22,7 @@ import Date from '../../shared/Date'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Coordinates from '../../shared/Coordinates'
 import {
   sammlung as sammlungFragment,
   art as artFragment,
@@ -144,9 +145,12 @@ const Sammlung = ({ filter: showFilter }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered, filter: sammlungFilter },
   })
-  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
-    dataQuery,
-  )
+  const {
+    data: dataData,
+    error: dataError,
+    loading: dataLoading,
+    refetch,
+  } = useQuery(dataQuery)
 
   const [errors, setErrors] = useState({})
 
@@ -425,6 +429,9 @@ const Sammlung = ({ filter: showFilter }) => {
               </IconButton>
             </div>
           </FieldRow>
+          {!showFilter && (
+            <Coordinates row={row} refetchForm={refetch} table="sammlung" />
+          )}
           <FieldRow>
             <Checkbox2States
               key={`${row.id}geplant`}

@@ -156,6 +156,7 @@ create table sammlung (
   anzahl_pflanzen integer default null,
   gramm_samen integer default null,
   andere_menge text default null,
+  geom_point geometry(Point, 4326) default null,
   geplant boolean default false,
   bemerkungen text default null,
   changed date default now(),

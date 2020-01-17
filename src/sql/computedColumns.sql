@@ -46,3 +46,24 @@ select
   end as lv95_y
 from garten;
 
+
+create or replace view sammlung_computed as
+select
+  sammlung.id,
+  case
+    when is_valid_coordinates(geom_point) then ST_Y(geom_point)
+    else null
+  end as wgs84_lat,
+  case
+    when is_valid_coordinates(geom_point) then ST_X(geom_point)
+    else null
+  end as wgs84_long,
+  case
+    when is_valid_coordinates(geom_point) then round(ST_X(ST_Transform(geom_point, 2056)))
+    else null
+  end as lv95_x,
+  case
+    when is_valid_coordinates(geom_point) then round(ST_Y(ST_Transform(geom_point, 2056)))
+    else null
+  end as lv95_y
+from sammlung;
