@@ -2,7 +2,7 @@
 path: "/Dokumentation/Felder-blenden"
 date: "2019-09-20"
 title: "Felder ein- und ausblenden"
-sort1: 11
+sort1: 13
 ---
 
 ### Wieso

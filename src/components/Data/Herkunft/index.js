@@ -6,6 +6,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
+import IconButton from '@material-ui/core/IconButton'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -195,6 +197,10 @@ const Herkunft = ({ filter: showFilter }) => {
     },
     [client, filter, row, showFilter],
   )
+  const openHerkunftDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Herkuenfte')
+  }, [])
 
   if (loading) {
     return (
@@ -232,6 +238,13 @@ const Herkunft = ({ filter: showFilter }) => {
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openHerkunftDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
               <Settings
                 personId={userPersonId}
                 personOptionResult={personOptionResult}

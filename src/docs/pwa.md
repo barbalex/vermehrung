@@ -2,7 +2,7 @@
 path: "/Dokumentation/PWA"
 date: "2019-06-15"
 title: "Progressive Web App"
-sort1: 20
+sort1: 22
 ---
 
 vermehrung.apflora.ch ist eine [**Progressive Web App**](https://developers.google.com/web/progressive-web-apps) (PWA).<br/><br/>

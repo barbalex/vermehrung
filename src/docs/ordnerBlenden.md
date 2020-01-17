@@ -2,7 +2,7 @@
 path: "/Dokumentation/Ordner-blenden"
 date: "2019-12-28"
 title: "Ordner ein- und ausblenden"
-sort1: 12
+sort1: 14
 ---
 
 ### Wieso

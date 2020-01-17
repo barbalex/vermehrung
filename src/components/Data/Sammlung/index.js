@@ -285,6 +285,10 @@ const Sammlung = ({ filter: showFilter }) => {
         'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
       )
   }, [])
+  const openSammlungDocs = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open('https://vermehrung.apflora.ch/Dokumentation/Sammlungen')
+  }, [])
 
   if (loading) {
     return (
@@ -323,6 +327,13 @@ const Sammlung = ({ filter: showFilter }) => {
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
+              <IconButton
+                aria-label="Anleitung öffnen"
+                title="Anleitung öffnen"
+                onClick={openSammlungDocs}
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

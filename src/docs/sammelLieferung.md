@@ -2,7 +2,7 @@
 path: "/Dokumentation/Sammel-Lieferungen"
 date: "2019-10-04"
 title: "Sammel-Lieferungen"
-sort1: 9
+sort1: 11
 ---
 
 ### 1	Ziele
