@@ -31,6 +31,7 @@ import {
 import {
   herkunft as herkunftFragment,
   garten as gartenFragment,
+  sammlung as sammlungFragment,
   personOption as personOptionFragment,
 } from '../../utils/fragments'
 import getUserPersonId from '../../utils/getUserPersonId'
@@ -60,6 +61,7 @@ const personOptionQuery = gql`
 const fragments = {
   herkunft: herkunftFragment,
   garten: gartenFragment,
+  sammlung: sammlungFragment,
 }
 
 const Coordinates = ({ row, refetchForm, table }) => {
@@ -229,6 +231,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           },
         })
       } catch (error) {
+        console.log('saveToDb, error:', error)
         return projection === 'lv95'
           ? setYError(error.message)
           : setWgs84LatError(error.message)
