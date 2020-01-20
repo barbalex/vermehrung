@@ -471,16 +471,48 @@ order by
 
 drop view if exists kultur_export_sums;
 create or replace view kultur_export_sums as
+with kultur_summs as (
+  -- TODO: use only letzte Zählung that is not prognose
+  select
+    kultur.id,
+    sum (teilzaehlung.anzahl_pflanzen) as anzahl_pflanzen,
+    sum (teilzaehlung.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
+    sum (teilzaehlung.anzahl_mutterpflanzen) as anzahl_mutterpflanzen
+  from
+    kultur
+    inner join zaehlung
+      inner join teilzaehlung
+      on teilzaehlung.zaehlung_id = zaehlung.id
+    on teilzaehlung.zaehlung_id = zaehlung.id
+  group by kultur.id
+), zaehlung_summs as (
+  select
+    zaehlung.id,
+    sum (teilzaehlung.anzahl_pflanzen) as anzahl_pflanzen,
+    sum (teilzaehlung.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
+    sum (teilzaehlung.anzahl_mutterpflanzen) as anzahl_mutterpflanzen
+  from
+    zaehlung
+    inner join teilzaehlung
+    on teilzaehlung.zaehlung_id = zaehlung.id
+  group by zaehlung.id
+)
 select
   g.id as garten_id,
   g.name as garten_name,
   k.id as kultur_id,
   ae_art.name as art_name,
   h.nr as herkunft_nr,
+  ks.anzahl_pflanzen as kultur_anzahl_pflanzen,
+  ks.anzahl_auspflanzbereit as kultur_anzahl_auspflanzbereit,
+  ks.anzahl_mutterpflanzen as kultur_anzahl_mutterpflanzen,
   z.id as zaehlung_id,
   z.datum as zaehlung_datum,
   z.prognose as zaehlung_prognose,
   z.bemerkungen as zaehlung_bemerkungen,
+  zs.anzahl_pflanzen as zaehlung_anzahl_pflanzen,
+  zs.anzahl_auspflanzbereit as zaehlung_anzahl_auspflanzbereit,
+  zs.anzahl_mutterpflanzen as zaehlung_anzahl_mutterpflanzen,
   tz.id as teilzaehlung_id,
   tk.name as teilzaehlung_teilkultur_name,
   tk.ort1 as teilzaehlung_teilkultur_ort1,
@@ -500,7 +532,11 @@ from
       left join teilkultur tk
       on tz.teilkultur_id = tk.id
     on tz.zaehlung_id = z.id
+    left join zaehlung_summs zs
+    on zs.id = z.id
   on z.kultur_id = k.id
+  left join kultur_summs ks
+  on ks.id = k.id
   inner join art a
     inner join ae_art
     on ae_art.id = a.ae_id
