@@ -66,7 +66,6 @@ const TitleFilterNumbers = styled.div`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
-  height: 100%;
 `
 
 const teilkulturQuery = gql`

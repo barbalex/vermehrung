@@ -14,8 +14,6 @@ const TitleRow = styled.div`
   display: flex;
   height: 48px;
   justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
   position: sticky;
@@ -26,6 +24,10 @@ const Title = styled.div`
   font-weight: bold;
   margin-top: auto;
   margin-bottom: auto;
+`
+const ContentContainer = styled.div`
+  padding: 10px;
+  overflow: auto !important;
 `
 
 const zaehlungQuery = gql`
@@ -38,6 +40,7 @@ const zaehlungQuery = gql`
         kultur_id: { _eq: $kulturId }
         teilzaehlungs: { teilkultur_id: { _eq: $teilkulturId } }
       }
+      order_by: { datum: desc_nulls_last }
     ) {
       id
       datum
@@ -64,7 +67,7 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
       <TitleRow>
         <Title>Zählungen</Title>
       </TitleRow>
-      TODO
+      <ContentContainer>Todo</ContentContainer>
     </ErrorBoundary>
   )
 }
