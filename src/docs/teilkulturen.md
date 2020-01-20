@@ -44,3 +44,6 @@ vermehrung.apflora.ch summiert alle Zahlen der Einheiten "Anzahl Pflanzen", "anz
 
 #### Kulturen können individuell organisiert werden
 Die Option "Teil-Kulturen" wirkt pro Kultur. Man kann daher in jeder Kultur wählen, ob Teil-Kulturen erfasst werden können und nach welchem System.
+
+#### Teilkulturen können in drei Stufen zusätzlich beschrieben werden
+...wozu die Felder "ort1", "ort2" und "ort3" dienen.
