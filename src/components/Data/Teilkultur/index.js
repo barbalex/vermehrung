@@ -154,7 +154,6 @@ const Teilkultur = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'teilkultur[0]') || {}
   }
-  const kulturId = row.kultur_id
 
   const {
     data: kulturData,
