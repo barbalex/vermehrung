@@ -306,6 +306,9 @@ export const teilkultur = gql`
     id
     kultur_id
     name
+    ort1
+    ort2
+    ort3
     bemerkungen
   }
 `

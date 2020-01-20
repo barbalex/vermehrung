@@ -467,3 +467,45 @@ order by
   herkunft_id,
   herkunft_id,
   datum;
+
+
+drop view if exists kultur_export_sums;
+create or replace view kultur_export_sums as
+select
+  ae_art.name as art_name,
+  h.nr as herkunft_nr,
+  g.name as garten_name,
+  k.id as garten_id,
+  z.id as zaehlung_id,
+  z.datum as zaehlung_datum,
+  z.prognose as zaehlung_prognose,
+  z.bemerkungen as zaehlung_bemerkungen,
+  tz.id as teilzaehlung_id,
+  tk.name as teilzaehlung_teilkultur_name,
+  tk.bemerkungen as teilzaehlung_teilkultur_bemerkungen,
+  tz.anzahl_pflanzen as teilzaehlung_anzahl_pflanzen,
+  tz.anzahl_auspflanzbereit as teilzaehlung_anzahl_auspflanzbereit,
+  tz.anzahl_mutterpflanzen as teilzaehlung_anzahl_mutterpflanzen,
+  tz.andere_menge as teilzaehlung_andere_menge,
+  tz.auspflanzbereit_beschreibung as teilzaehlung_auspflanzbereit_beschreibung,
+  tz.bemerkungen as teilzaehlung_bemerkungen
+from
+  kultur k
+  inner join zaehlung z
+    inner join teilzaehlung tz
+      left join teilkultur tk
+      on tz.teilkultur_id = tk.id
+    on tz.zaehlung_id = z.id
+  on z.kultur_id = k.id
+  inner join art a
+    inner join ae_art
+    on ae_art.id = a.ae_id
+  on k.art_id = a.id
+  inner join garten g
+  on g.id = k.garten_id
+  inner join herkunft h
+  on h.id = k.herkunft_id
+order by
+  ae_art.name,
+  h.nr,
+  g.name

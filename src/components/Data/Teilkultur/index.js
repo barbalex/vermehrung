@@ -324,6 +324,30 @@ const Teilkultur = ({ filter: showFilter }) => {
             saveToDb={saveToDb}
             error={errors.name}
           />
+          <TextField
+            key={`${row.id}ort1`}
+            name="ort1"
+            label="Ort 1"
+            value={row.ort1}
+            saveToDb={saveToDb}
+            error={errors.ort1}
+          />
+          <TextField
+            key={`${row.id}ort2`}
+            name="ort2"
+            label="Ort 2"
+            value={row.ort2}
+            saveToDb={saveToDb}
+            error={errors.ort2}
+          />
+          <TextField
+            key={`${row.id}ort3`}
+            name="ort3"
+            label="Ort 3"
+            value={row.ort3}
+            saveToDb={saveToDb}
+            error={errors.ort3}
+          />
           {(tk_bemerkungen || showFilter) && (
             <TextField
               key={`${row.id}bemerkungen`}
