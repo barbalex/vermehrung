@@ -42,7 +42,7 @@ const Row = styled.div`
   }
 `
 const Datum = styled.div`
-  flex-basis: 110px;
+  flex-basis: 85px;
   flex-shrink: 0;
   flex-grow: 0;
   margin-right: 10px;
@@ -60,7 +60,7 @@ const Auspflanzbereit = styled.div`
   margin-right: 10px;
 `
 const Prognose = styled.div`
-  flex-basis: 40px;
+  flex-basis: 72px;
   flex-shrink: 0;
   flex-grow: 0;
   margin-right: 10px;
@@ -122,6 +122,7 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
           : tzs.map((tz, i) => (
               <Row key={tz.id} data-last={i === tzs.length - 1}>
                 <Datum>{`${format(new Date(tz.datum), 'yyyy.MM.dd')}:`}</Datum>
+                <Prognose>{tz.prognose ? 'Prognose' : ' '}</Prognose>
                 <Pflanzen>
                   {exists(tz.anzahl_pflanzen)
                     ? `${tz.anzahl_pflanzen} Pflanzen`
@@ -146,7 +147,6 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
                     : ''}
                 </Other>
                 <Other>{tz.bemerkungen ? tz.bemerkungen : ''}</Other>
-                <Prognose>{tz.prognose ? 'Prognose' : ''}</Prognose>
               </Row>
             ))}
       </Rows>
