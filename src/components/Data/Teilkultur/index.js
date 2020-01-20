@@ -25,6 +25,7 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
+import Zaehlungen from './Zaehlungen'
 
 const Container = styled.div`
   height: 100%;
@@ -96,7 +97,7 @@ const teilkulturQuery = gql`
 `
 // garten.person.name
 const kulturQuery = gql`
-  query kulturQuery {
+  query kulturQueryForTk {
     kultur(
       order_by: [
         { garten: { person: { name: asc_nulls_first } } }
@@ -154,6 +155,7 @@ const Teilkultur = ({ filter: showFilter }) => {
   } else {
     row = get(data, 'teilkultur[0]') || {}
   }
+  const kulturId = row.kultur_id
 
   const {
     data: kulturData,
@@ -336,6 +338,9 @@ const Teilkultur = ({ filter: showFilter }) => {
             />
           )}
         </FieldsContainer>
+        {!showFilter && (
+          <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
+        )}
       </Container>
     </ErrorBoundary>
   )
