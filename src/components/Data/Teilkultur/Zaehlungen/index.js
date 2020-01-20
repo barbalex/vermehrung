@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext } from 'react'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import ErrorBoundary from 'react-error-boundary'
@@ -25,9 +25,18 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-const ContentContainer = styled.div`
-  padding: 10px;
+const Rows = styled.div`
   overflow: auto !important;
+`
+const Row = styled.div`
+  border-top: thin solid rgba(74, 20, 140, 0.1);
+  border-bottom: ${props => (props['data-last'] ? '1px' : 'thin')} solid
+    rgba(74, 20, 140, 0.1);
+  border-collapse: collapse;
+  padding: 10px;
+  &:hover {
+    background-color: rgba(74, 20, 140, 0.03);
+  }
 `
 
 const zaehlungQuery = gql`
@@ -60,14 +69,27 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
     variables: { kulturId, teilkulturId },
   })
   const rows = get(data, 'zaehlung', [])
+  const tzs = rows.flatMap(row => {
+    const tz = get(row, 'teilzaehlungs') || []
+    return tz.map(t => ({
+      ...t,
+      datum: row.datum,
+      prognose: row.prognose,
+    }))
+  })
   console.log('TkZaehlungen, rows:', rows)
+  console.log('TkZaehlungen, tzs:', tzs)
 
   return (
     <ErrorBoundary>
       <TitleRow>
         <Title>Zählungen</Title>
       </TitleRow>
-      <ContentContainer>Todo</ContentContainer>
+      <Rows>
+        {tzs.map(tz => (
+          <Row key={tz.id}>{JSON.stringify(tz)}</Row>
+        ))}
+      </Rows>
     </ErrorBoundary>
   )
 }
