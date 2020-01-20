@@ -336,7 +336,7 @@ export const artSums = gql`
   fragment ArtSumsFields on art_sums {
     art_id
     action
-    geplant
+    prognose
     partitioner
     datum
     anzahl_pflanzen
@@ -357,7 +357,7 @@ export const herkunftSums = gql`
     art_id
     herkunft_id
     action
-    geplant
+    prognose
     partitioner
     datum
     anzahl_pflanzen

@@ -118,21 +118,18 @@ const KulturTimeline = ({ row }) => {
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen Ziel/Prognose': get(
+          'Zählung Pflanzen Prognose': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
           ),
-          'Zählung Pflanzen auspflanzbereit Ziel/Prognose': get(
+          'Zählung Pflanzen auspflanzbereit Prognose': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
           ),
-          'Zählung Mutterpflanzen Ziel/Prognose': get(
+          'Zählung Mutterpflanzen Prognose': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ),
-          'Zählung Ziel': teilzaehlungs
-            .map(t => (t.ziel ? 'ja' : 'nein'))
-            .join(', '),
           'Zählung Prognose': teilzaehlungs
             .map(t => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
@@ -157,21 +154,18 @@ const KulturTimeline = ({ row }) => {
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen Ziel/Prognose, ignoriert': get(
+          'Zählung Pflanzen Prognose, ignoriert': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
           ),
-          'Zählung Pflanzen auspflanzbereit Ziel/Prognose, ignoriert': get(
+          'Zählung Pflanzen auspflanzbereit Prognose, ignoriert': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
           ),
-          'Zählung Mutterpflanzen Ziel/Prognose, ignoriert': get(
+          'Zählung Mutterpflanzen Prognose, ignoriert': get(
             l,
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ),
-          'Zählung Ziel': teilzaehlungs
-            .map(t => (t.ziel ? 'ja' : 'nein'))
-            .join(', '),
           'Zählung Prognose': teilzaehlungs
             .map(t => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
@@ -411,9 +405,9 @@ const KulturTimeline = ({ row }) => {
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
         } else {
-          data['Zählung Pflanzen Ziel/Prognose'] =
+          data['Zählung Pflanzen Prognose'] =
             sumAnzahlPflanzen + l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit Ziel/Prognose'] =
+          data['Zählung Pflanzen auspflanzbereit Prognose'] =
             sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
         }
         return data
@@ -489,9 +483,9 @@ const KulturTimeline = ({ row }) => {
           data['Zählung Pflanzen auspflanzbereit'] =
             sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
         } else {
-          data['Zählung Pflanzen Ziel/Prognose'] =
+          data['Zählung Pflanzen Prognose'] =
             sumAnzahlPflanzen - l.anzahl_pflanzen
-          data['Zählung Pflanzen auspflanzbereit Ziel/Prognose'] =
+          data['Zählung Pflanzen auspflanzbereit Prognose'] =
             sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
         }
         return data
@@ -663,7 +657,7 @@ const KulturTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Pflanzen Ziel/Prognose"
+            dataKey="Zählung Pflanzen Prognose"
             stroke="#b1b1e7"
             strokeWidth={2}
             label={<LabelZaehlung />}
@@ -671,7 +665,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Line
             type="basis"
-            dataKey="Zählung Pflanzen Ziel/Prognose, ignoriert"
+            dataKey="Zählung Pflanzen Prognose, ignoriert"
             legendType="circle"
             stroke="#ebebf9"
             strokeWidth={2}
@@ -690,7 +684,7 @@ const KulturTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit Ziel/Prognose"
+            dataKey="Zählung Pflanzen auspflanzbereit Prognose"
             stroke="#02e355"
             strokeWidth={2}
             label={<LabelZaehlung />}
@@ -698,7 +692,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Line
             type="basis"
-            dataKey="Zählung Pflanzen auspflanzbereit Ziel/Prognose, ignoriert"
+            dataKey="Zählung Pflanzen auspflanzbereit Prognose, ignoriert"
             legendType="circle"
             stroke="#e6ffef"
             strokeWidth={2}
@@ -717,7 +711,7 @@ const KulturTimeline = ({ row }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Mutterpflanzen Ziel/Prognose"
+            dataKey="Zählung Mutterpflanzen Prognose"
             stroke="#ffb3b3"
             strokeWidth={2}
             label={<LabelZaehlung />}
@@ -725,7 +719,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Line
             type="basis"
-            dataKey="Zählung Mutterpflanzen Ziel/Prognose, ignoriert"
+            dataKey="Zählung Mutterpflanzen Prognose, ignoriert"
             legendType="circle"
             stroke="#ffe6e6"
             strokeWidth={2}

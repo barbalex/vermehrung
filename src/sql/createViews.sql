@@ -1,5 +1,5 @@
 -- 1. create datasets with:
---    art_id, action, geplant, partitioner, datum, anzahl_pflanzen, sum_anzahl_pflanzen
+--    art_id, action, prognose, partitioner, datum, anzahl_pflanzen, sum_anzahl_pflanzen
 --    from: sammlung, auspflanzung, zaehlung
 --    partitioner is the id of last zaehlung done
 -- 2. union them
@@ -12,10 +12,7 @@ with
       k.art_id,
       z.id as partitioner,
       z.datum,
-      case
-        when z.ziel is true then z.ziel
-        else z.prognose
-      end as geplant,
+      z.prognose,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
       sum(tz.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
       sum(tz.anzahl_mutterpflanzen) as anzahl_mutterpflanzen,
@@ -218,7 +215,7 @@ with
 select
   art_id,
   action,
-  geplant,
+  prognose,
   partitioner,
   datum,
   anzahl_pflanzen,
@@ -245,10 +242,7 @@ with
       k.herkunft_id,
       z.id as partitioner,
       z.datum,
-      case
-        when z.ziel is true then z.ziel
-        else z.prognose
-      end as geplant,
+      z.prognose,
       sum(tz.anzahl_pflanzen) as anzahl_pflanzen,
       sum(tz.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
       sum(tz.anzahl_mutterpflanzen) as anzahl_mutterpflanzen,
@@ -454,7 +448,7 @@ select
   art_id,
   herkunft_id,
   action,
-  geplant,
+  prognose,
   partitioner,
   datum,
   anzahl_pflanzen,

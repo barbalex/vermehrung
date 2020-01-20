@@ -90,7 +90,6 @@ export default async ({
             id
             kultur_id
             datum
-            ziel
             prognose
             bemerkungen
             teilzaehlungs_aggregate {

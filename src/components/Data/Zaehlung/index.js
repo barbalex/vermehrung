@@ -364,25 +364,6 @@ const Zaehlung = ({ filter: showFilter }) => {
                 </IconButton>
               </div>
             </FieldRow>
-            <FieldRow>
-              <Checkbox2States
-                key={`${row.id}ziel`}
-                label="Ziel"
-                name="ziel"
-                value={row.ziel}
-                saveToDb={saveToDb}
-                error={errors.ziel}
-              />
-              <div>
-                <IconButton
-                  aria-label="Anleitung öffnen"
-                  title="Anleitung öffnen"
-                  onClick={openPlanenDocs}
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </div>
-            </FieldRow>
             {(z_bemerkungen || showFilter) && (
               <TextField
                 key={`${row.id}bemerkungen`}

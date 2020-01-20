@@ -78,11 +78,6 @@ const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
                     key={`${o.dataKey}8`}
                   >{`Bemerkungen: ${o.payload['Auspflanzung Bemerkungen']}`}</PRow>
                 )}
-                {exists(o.payload['Zählung Ziel']) && (
-                  <PRow
-                    key={`${o.dataKey}9`}
-                  >{`Ziel: ${o.payload['Zählung Ziel']}`}</PRow>
-                )}
                 {exists(o.payload['Zählung Prognose']) && (
                   <PRow
                     key={`${o.dataKey}10`}

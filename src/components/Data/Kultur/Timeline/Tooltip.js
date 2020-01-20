@@ -58,64 +58,53 @@ const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
               <div key={`${o.dataKey}0`}>
                 <PRow key={o.dataKey}>{`${label}: ${o.value}`}</PRow>
                 {exists(o.payload['Lieferung Gramm Samen']) && (
-                  <PRow key={`${o.dataKey}1`}>{`Gramm Samen: ${
-                    o.payload['Lieferung Gramm Samen']
-                  }`}</PRow>
-                )}
-                {exists(o.payload['Zählung Ziel']) && (
-                  <PRow key={`${o.dataKey}9`}>{`Ziel: ${
-                    o.payload['Zählung Ziel']
-                  }`}</PRow>
+                  <PRow
+                    key={`${o.dataKey}1`}
+                  >{`Gramm Samen: ${o.payload['Lieferung Gramm Samen']}`}</PRow>
                 )}
                 {exists(o.payload['Zählung Prognose']) && (
-                  <PRow key={`${o.dataKey}10`}>{`Prognose: ${
-                    o.payload['Zählung Prognose']
-                  }`}</PRow>
+                  <PRow
+                    key={`${o.dataKey}10`}
+                  >{`Prognose: ${o.payload['Zählung Prognose']}`}</PRow>
                 )}
                 {exists(o.payload['Zählung andere Mengen']) && (
-                  <PRow key={`${o.dataKey}2`}>{`andere Mengen: ${
-                    o.payload['Zählung andere Mengen']
-                  }`}</PRow>
+                  <PRow
+                    key={`${o.dataKey}2`}
+                  >{`andere Mengen: ${o.payload['Zählung andere Mengen']}`}</PRow>
                 )}
                 {exists(o.payload['Lieferung andere Mengen']) && (
-                  <PRow key={`${o.dataKey}3`}>{`andere Mengen: ${
-                    o.payload['Lieferung andere Mengen']
-                  }`}</PRow>
+                  <PRow
+                    key={`${o.dataKey}3`}
+                  >{`andere Mengen: ${o.payload['Lieferung andere Mengen']}`}</PRow>
                 )}
                 {exists(o.payload['Lieferung von Anzahl Individuen']) && (
-                  <PRow key={`${o.dataKey}4`}>{`von Anzahl Individuen: ${
-                    o.payload['Lieferung von Anzahl Individuen']
-                  }`}</PRow>
+                  <PRow
+                    key={`${o.dataKey}4`}
+                  >{`von Anzahl Individuen: ${o.payload['Lieferung von Anzahl Individuen']}`}</PRow>
                 )}
                 {exists(
                   o.payload['Zählung Beschreibung auspflanzbereite Pflanzen'],
                 ) && (
                   <PRow
                     key={`${o.dataKey}5`}
-                  >{`Beschreibung auspflanzbereite Pflanzen: ${
-                    o.payload['Zählung Beschreibung auspflanzbereite Pflanzen']
-                  }`}</PRow>
+                  >{`Beschreibung auspflanzbereite Pflanzen: ${o.payload['Zählung Beschreibung auspflanzbereite Pflanzen']}`}</PRow>
                 )}
                 {exists(
                   o.payload['Lieferung Beschreibung auspflanzbereite Pflanzen'],
                 ) && (
                   <PRow
                     key={`${o.dataKey}6`}
-                  >{`Beschreibung auspflanzbereite Pflanzen: ${
-                    o.payload[
-                      'Lieferung Beschreibung auspflanzbereite Pflanzen'
-                    ]
-                  }`}</PRow>
+                  >{`Beschreibung auspflanzbereite Pflanzen: ${o.payload['Lieferung Beschreibung auspflanzbereite Pflanzen']}`}</PRow>
                 )}
                 {exists(o.payload['Zählung Bemerkungen']) && (
-                  <PRow key={`${o.dataKey}7`}>{`Bemerkungen: ${
-                    o.payload['Zählung Bemerkungen']
-                  }`}</PRow>
+                  <PRow
+                    key={`${o.dataKey}7`}
+                  >{`Bemerkungen: ${o.payload['Zählung Bemerkungen']}`}</PRow>
                 )}
                 {exists(o.payload['Lieferung Bemerkungen']) && (
-                  <PRow key={`${o.dataKey}8`}>{`Bemerkungen: ${
-                    o.payload['Lieferung Bemerkungen']
-                  }`}</PRow>
+                  <PRow
+                    key={`${o.dataKey}8`}
+                  >{`Bemerkungen: ${o.payload['Lieferung Bemerkungen']}`}</PRow>
                 )}
               </div>
             )
