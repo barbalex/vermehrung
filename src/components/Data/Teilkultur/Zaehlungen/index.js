@@ -1,11 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import ErrorBoundary from 'react-error-boundary'
 
-import storeContext from '../../../../storeContext'
 import { teilzaehlung as teilzahlungFragment } from '../../../../utils/fragments'
 
 const TitleRow = styled.div`
@@ -14,7 +13,6 @@ const TitleRow = styled.div`
   display: flex;
   height: 48px;
   justify-content: space-between;
-  margin-bottom: 10px;
   padding: 0 10px;
   position: sticky;
   top: -10px;
@@ -63,8 +61,6 @@ const zaehlungQuery = gql`
 `
 
 const TkZaehlungen = ({ kulturId, teilkulturId }) => {
-  const store = useContext(storeContext)
-
   const { data, error, loading } = useQuery(zaehlungQuery, {
     variables: { kulturId, teilkulturId },
   })
@@ -77,8 +73,8 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
       prognose: row.prognose,
     }))
   })
-  console.log('TkZaehlungen, rows:', rows)
-  console.log('TkZaehlungen, tzs:', tzs)
+  //console.log('TkZaehlungen, rows:', rows)
+  //console.log('TkZaehlungen, tzs:', tzs)
 
   return (
     <ErrorBoundary>
@@ -90,7 +86,11 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
           ? 'lade...'
           : error
           ? error.message
-          : tzs.map(tz => <Row key={tz.id}>{JSON.stringify(tz)}</Row>)}
+          : tzs.map((tz, i) => (
+              <Row key={tz.id} data-last={i === tzs.length - 1}>
+                {JSON.stringify(tz)}
+              </Row>
+            ))}
       </Rows>
     </ErrorBoundary>
   )
