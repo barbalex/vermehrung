@@ -86,9 +86,11 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
         <Title>Zählungen</Title>
       </TitleRow>
       <Rows>
-        {tzs.map(tz => (
-          <Row key={tz.id}>{JSON.stringify(tz)}</Row>
-        ))}
+        {loading
+          ? 'lade...'
+          : error
+          ? error.message
+          : tzs.map(tz => <Row key={tz.id}>{JSON.stringify(tz)}</Row>)}
       </Rows>
     </ErrorBoundary>
   )
