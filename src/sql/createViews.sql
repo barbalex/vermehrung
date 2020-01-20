@@ -472,16 +472,20 @@ order by
 drop view if exists kultur_export_sums;
 create or replace view kultur_export_sums as
 select
+  g.id as garten_id,
+  g.name as garten_name,
+  k.id as kultur_id,
   ae_art.name as art_name,
   h.nr as herkunft_nr,
-  g.name as garten_name,
-  k.id as garten_id,
   z.id as zaehlung_id,
   z.datum as zaehlung_datum,
   z.prognose as zaehlung_prognose,
   z.bemerkungen as zaehlung_bemerkungen,
   tz.id as teilzaehlung_id,
   tk.name as teilzaehlung_teilkultur_name,
+  tk.ort1 as teilzaehlung_teilkultur_ort1,
+  tk.ort2 as teilzaehlung_teilkultur_ort2,
+  tk.ort3 as teilzaehlung_teilkultur_ort3,
   tk.bemerkungen as teilzaehlung_teilkultur_bemerkungen,
   tz.anzahl_pflanzen as teilzaehlung_anzahl_pflanzen,
   tz.anzahl_auspflanzbereit as teilzaehlung_anzahl_auspflanzbereit,
@@ -506,6 +510,6 @@ from
   inner join herkunft h
   on h.id = k.herkunft_id
 order by
+  g.name,
   ae_art.name,
-  h.nr,
-  g.name
+  h.nr;
