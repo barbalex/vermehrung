@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/Struktur"
-date: "2019-10-04"
+date: "2020-01-20"
 title: "Daten-Struktur"
 sort1: 24
 ---
