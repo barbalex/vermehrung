@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 
-import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
-import buildExceljsWorksheetsForKultur from '../Kultur/buildExceljsWorksheets'
+import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
+import buildExceljsWorksheetsForKultur from '../../Kultur/buildExceljsWorksheets'
 
 /**
  * this function cann be used from higher up

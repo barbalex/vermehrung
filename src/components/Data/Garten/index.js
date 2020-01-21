@@ -12,9 +12,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
-import { FaDownload } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -35,8 +32,7 @@ import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
-import buildExceljsWorksheets from './buildExceljsWorksheets'
-import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
+import Download from './Download'
 
 const Container = styled.div`
   height: 100%;
@@ -197,7 +193,6 @@ const Garten = ({ filter: showFilter }) => {
           } else {
             valueToSet = `"${value.split('"').join('\\"')}"`
           }
-          //console.log('Garten, saveToDb', { field, valueToSet })
           await client.mutate({
             mutation: gql`
               mutation update_garten($id: bigint!) {
@@ -227,13 +222,6 @@ const Garten = ({ filter: showFilter }) => {
     },
     [client, filter, row, showFilter],
   )
-  const onClickDownload = useCallback(async () => {
-    const workbook = new ExcelJs.Workbook()
-    await buildExceljsWorksheets({ client, store, garten_id: row.id, workbook })
-    downloadExceljsWorkbook({ store, fileName: `Garten_${row.id}`, workbook })
-  }, [client, row.id, store])
-
-  //console.log('Garten, row:', row)
 
   if (loading) {
     return (
@@ -279,13 +267,7 @@ const Garten = ({ filter: showFilter }) => {
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
-              <IconButton
-                aria-label="Daten herunterladen"
-                title="Daten herunterladen"
-                onClick={onClickDownload}
-              >
-                <FaDownload />
-              </IconButton>
+              <Download gartenId={row.id} />
               <Settings
                 personId={userPersonId}
                 personOptionResult={personOptionResult}

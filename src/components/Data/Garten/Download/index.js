@@ -1,0 +1,100 @@
+import React, { useContext, useCallback, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useApolloClient } from '@apollo/react-hooks'
+import IconButton from '@material-ui/core/IconButton'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import { FaDownload } from 'react-icons/fa'
+import ErrorBoundary from 'react-error-boundary'
+import styled from 'styled-components'
+import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
+
+import storeContext from '../../../../storeContext'
+import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
+import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums'
+import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook'
+
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-right: 16px;
+`
+const Title = styled.div`
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 800;
+  user-select: none;
+`
+
+const GartenDownload = ({ gartenId }) => {
+  const client = useApolloClient()
+  const store = useContext(storeContext)
+
+  const onClickData = useCallback(async () => {
+    const workbook = new ExcelJs.Workbook()
+    await buildExceljsWorksheetsForDaten({
+      client,
+      store,
+      garten_id: gartenId,
+      workbook,
+    })
+    downloadExceljsWorkbook({
+      store,
+      fileName: `Garten_${gartenId}_rohdaten`,
+      workbook,
+    })
+    setAnchorEl(null)
+  }, [client, gartenId, store])
+  const onClickTzSums = useCallback(async () => {
+    const workbook = new ExcelJs.Workbook()
+    await buildExceljsWorksheetsForTzSums({
+      client,
+      store,
+      garten_id: gartenId,
+      workbook,
+    })
+    downloadExceljsWorkbook({
+      store,
+      fileName: `Garten_${gartenId}_teilzaehlungen_summen`,
+      workbook,
+    })
+    setAnchorEl(null)
+  }, [client, gartenId, store])
+
+  const [anchorEl, setAnchorEl] = useState(null)
+  const onClose = useCallback(() => setAnchorEl(null), [])
+  const onClickOpenMenu = useCallback(
+    event => setAnchorEl(event.currentTarget),
+    [],
+  )
+
+  return (
+    <ErrorBoundary>
+      <IconButton
+        aria-label="Daten herunterladen"
+        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-haspopup="true"
+        title="Daten herunterladen"
+        onClick={onClickOpenMenu}
+      >
+        <FaDownload />
+      </IconButton>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={onClose}
+      >
+        <TitleRow>
+          <Title>herunterladen:</Title>
+        </TitleRow>
+        <MenuItem onClick={onClickData}>{`(Roh-)Daten`}</MenuItem>
+        <MenuItem
+          onClick={onClickTzSums}
+        >{`Auswertung der Teil-Zählungen`}</MenuItem>
+      </Menu>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(GartenDownload)
