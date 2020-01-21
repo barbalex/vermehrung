@@ -31,7 +31,7 @@
     "eslint-plugin-import": "2.20.0",
     "eslint-plugin-react": "7.18.0",
     "eslint-plugin-react-hooks": "2.3.0",
-    "exceljs": "3.6.0",
+    "exceljs": "3.6.1",
     "file-saver": "2.0.2",
     "gatsby": "2.18.25",
     "gatsby-image": "2.2.39",
