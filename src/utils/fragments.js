@@ -71,6 +71,67 @@ export const garten = gql`
     }
   }
 `
+export const gartenTeilzaehlungSums = gql`
+  fragment GartenTeilzaehlungSumsFields on garten_teilzaehlung_sums {
+    garten_id
+    garten_name
+    garten_person_id
+    garten_person_name
+    garten_strasse
+    garten_plz
+    garten_ort
+    garten_aktiv
+    garten_bemerkungen
+    garten_anzahl_kulturen
+    kultur_id
+    kultur_art_id
+    kultur_art_name
+    kultur_herkunft_nr
+    kultur_zwischenlager
+    kultur_erhaltungskultur
+    kultur_von_anzahl_individuen
+    kultur_aktiv
+    kultur_bemerkungen
+    kultur_events_anzahl
+    kultur_events_datum_beschreibung
+    kultur_letzter_event_id
+    kultur_letzter_event_datum
+    kultur_letzter_event_beschreibung
+    kultur_letzter_event_geplant
+    kultur_letzter_event_person_name
+    kultur_letzter_event_teilkultur_name
+    kultur_letzter_event_teilkultur_ort1
+    kultur_letzter_event_teilkultur_ort2
+    kultur_letzter_event_teilkultur_ort3
+    kultur_letzter_event_teilkultur_bemerkungen
+    kultur_teilkulturen_anzahl
+    kultur_teilkulturen_namen
+    kultur_zaehlungen_anzahl
+    kultur_anzahl_pflanzen
+    kultur_anzahl_auspflanzbereit
+    kultur_anzahl_mutterpflanzen
+    zaehlung_id
+    zaehlung_datum
+    zaehlung_prognose
+    zaehlung_bemerkungen
+    zaehlung_anzahl_teilzaehlungen
+    zaehlung_anzahl_pflanzen
+    zaehlung_anzahl_auspflanzbereit
+    zaehlung_anzahl_mutterpflanzen
+    teilzaehlung_id
+    teilzaehlung_teilkultur_name
+    teilzaehlung_teilkultur_ort1
+    teilzaehlung_teilkultur_ort2
+    teilzaehlung_teilkultur_ort3
+    teilzaehlung_teilkultur_bemerkungen
+    teilzaehlung_anzahl_pflanzen
+    teilzaehlung_anzahl_auspflanzbereit
+    teilzaehlung_anzahl_mutterpflanzen
+    teilzaehlung_andere_menge
+    teilzaehlung_auspflanzbereit_beschreibung
+    teilzaehlung_bemerkungen
+  }
+`
 export const gartenFile = gql`
   fragment GartenFileFields on garten_file {
     garten_id
