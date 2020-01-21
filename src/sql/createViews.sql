@@ -505,6 +505,7 @@ with kultur_last_event as (
 ), zaehlung_summs as (
   select
     zaehlung.id,
+    count (teilzaehlung.id) as anzahl_teilzaehlungen,
     sum (teilzaehlung.anzahl_pflanzen) as anzahl_pflanzen,
     sum (teilzaehlung.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
     sum (teilzaehlung.anzahl_mutterpflanzen) as anzahl_mutterpflanzen
@@ -514,7 +515,7 @@ with kultur_last_event as (
     on teilzaehlung.zaehlung_id = zaehlung.id
   group by zaehlung.id
 ), kultur_summs as (
-  -- TODO: use only letzte Zählung that is not prognose
+  -- use letzte Zählung that is not prognose
   select
     kultur.id,
     zaehlung_summs.anzahl_pflanzen,
@@ -526,6 +527,30 @@ with kultur_last_event as (
       inner join zaehlung_summs
       on zaehlung_summs.id = kultur_last_zaehlung.zaehlung_id
     on kultur_last_zaehlung.kultur_id = kultur.id
+), kultur_sums2 as (
+  select
+    kultur.id,
+    count (zaehlung.id) as anzahl_zaehlungen
+  from kultur
+    inner join zaehlung
+    on zaehlung.kultur_id = kultur.id
+  group by kultur.id
+), kultur_sums3 as (
+  select
+    kultur.id,
+    count (teilkultur.id) as anzahl_teilkulturen
+  from kultur
+    inner join teilkultur
+    on teilkultur.kultur_id = kultur.id
+  group by kultur.id
+), kultur_sums4 as (
+  select
+    kultur.id,
+    count (event.id) as anzahl_events
+  from kultur
+    inner join event
+    on event.kultur_id = kultur.id
+  group by kultur.id
 )
 select
   g.id as garten_id,
@@ -533,6 +558,9 @@ select
   k.id as kultur_id,
   ae_art.name as art_name,
   h.nr as herkunft_nr,
+  ks3.anzahl_teilkulturen as kultur_anzahl_teilkulturen,
+  ks4.anzahl_events as kultur_anzahl_events,
+  ks2.anzahl_zaehlungen as kultur_anzahl_zaehlungen,
   ks.anzahl_pflanzen as kultur_anzahl_pflanzen,
   ks.anzahl_auspflanzbereit as kultur_anzahl_auspflanzbereit,
   ks.anzahl_mutterpflanzen as kultur_anzahl_mutterpflanzen,
@@ -540,6 +568,7 @@ select
   z.datum as zaehlung_datum,
   z.prognose as zaehlung_prognose,
   z.bemerkungen as zaehlung_bemerkungen,
+  zs.anzahl_teilzaehlungen as zaehlung_anzahl_teilzaehlungen,
   zs.anzahl_pflanzen as zaehlung_anzahl_pflanzen,
   zs.anzahl_auspflanzbereit as zaehlung_anzahl_auspflanzbereit,
   zs.anzahl_mutterpflanzen as zaehlung_anzahl_mutterpflanzen,
@@ -577,6 +606,12 @@ from
   on z.kultur_id = k.id
   left join kultur_summs ks
   on ks.id = k.id
+  left join kultur_sums2 ks2
+  on ks2.id = k.id
+  left join kultur_sums3 ks3
+  on ks3.id = k.id
+  left join kultur_sums4 ks4
+  on ks4.id = k.id
   inner join art a
     inner join ae_art
     on ae_art.id = a.ae_id
