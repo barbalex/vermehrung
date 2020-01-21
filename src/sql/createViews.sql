@@ -471,20 +471,37 @@ order by
 
 drop view if exists kultur_export_sums;
 create or replace view kultur_export_sums as
-with kultur_summs as (
-  -- TODO: use only letzte Zählung that is not prognose
+with kultur_last_event as (
   select
-    kultur.id,
-    sum (teilzaehlung.anzahl_pflanzen) as anzahl_pflanzen,
-    sum (teilzaehlung.anzahl_auspflanzbereit) as anzahl_auspflanzbereit,
-    sum (teilzaehlung.anzahl_mutterpflanzen) as anzahl_mutterpflanzen
+    distinct on (kultur.id)
+    kultur.id as kultur_id,
+    event.datum,
+    event.id as event_id
   from
-    kultur
-    inner join zaehlung
-      inner join teilzaehlung
-      on teilzaehlung.zaehlung_id = zaehlung.id
-    on teilzaehlung.zaehlung_id = zaehlung.id
-  group by kultur.id
+    kultur inner join event
+    on kultur.id = event.kultur_id
+  where
+    event.geplant is false
+    and event.datum is not null
+  order by
+    kultur.id,
+    event.datum desc
+), kultur_last_zaehlung as (
+  select
+    distinct on (kultur.id)
+    kultur.id as kultur_id,
+    zaehlung.datum,
+    zaehlung.id as zaehlung_id
+  from
+    kultur inner join zaehlung
+    on kultur.id = zaehlung.kultur_id
+  where
+    zaehlung.ziel is false 
+    and zaehlung.prognose is false
+    and zaehlung.datum is not null
+  order by
+    kultur.id,
+    zaehlung.datum desc
 ), zaehlung_summs as (
   select
     zaehlung.id,
@@ -496,6 +513,19 @@ with kultur_summs as (
     inner join teilzaehlung
     on teilzaehlung.zaehlung_id = zaehlung.id
   group by zaehlung.id
+), kultur_summs as (
+  -- TODO: use only letzte Zählung that is not prognose
+  select
+    kultur.id,
+    zaehlung_summs.anzahl_pflanzen,
+    zaehlung_summs.anzahl_auspflanzbereit,
+    zaehlung_summs.anzahl_mutterpflanzen
+  from
+    kultur
+    inner join kultur_last_zaehlung
+      inner join zaehlung_summs
+      on zaehlung_summs.id = kultur_last_zaehlung.zaehlung_id
+    on kultur_last_zaehlung.kultur_id = kultur.id
 )
 select
   g.id as garten_id,
@@ -524,7 +554,17 @@ select
   tz.anzahl_mutterpflanzen as teilzaehlung_anzahl_mutterpflanzen,
   tz.andere_menge as teilzaehlung_andere_menge,
   tz.auspflanzbereit_beschreibung as teilzaehlung_auspflanzbereit_beschreibung,
-  tz.bemerkungen as teilzaehlung_bemerkungen
+  tz.bemerkungen as teilzaehlung_bemerkungen,
+  e.id as event_id,
+  e.datum as event_datum,
+  e.beschreibung as event_beschreibung,
+  e.geplant as event_geplant,
+  ep.name as event_person_name,
+  etk.name as event_teilkultur_name,
+  etk.ort1 as event_teilkultur_ort1,
+  etk.ort2 as event_teilkultur_ort2,
+  etk.ort3 as event_teilkultur_ort3,
+  etk.bemerkungen as event_teilkultur_bemerkungen
 from
   kultur k
   inner join zaehlung z
@@ -545,7 +585,16 @@ from
   on g.id = k.garten_id
   inner join herkunft h
   on h.id = k.herkunft_id
+  left join event e
+    inner join kultur_last_event on
+    kultur_last_event.event_id = e.id
+    left join person ep
+    on ep.id = e.person_id
+    left join teilkultur etk
+    on etk.id = e.teilkultur_id
+  on e.kultur_id = k.id
 order by
   g.name,
   ae_art.name,
-  h.nr;
+  h.nr,
+  z.datum desc;
