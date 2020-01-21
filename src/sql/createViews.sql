@@ -469,8 +469,8 @@ order by
   datum;
 
 
-drop view if exists kultur_export_sums;
-create or replace view kultur_export_sums as
+drop view if exists garten_teilzaehlung_sums;
+create or replace view garten_teilzaehlung_sums as
 with kultur_last_event as (
   select
     distinct on (kultur.id)
@@ -530,7 +530,7 @@ with kultur_last_event as (
 ), kultur_sums2 as (
   select
     kultur.id,
-    count (zaehlung.id) as anzahl_zaehlungen
+    count (zaehlung.id) as zaehlungen_anzahl
   from kultur
     inner join zaehlung
     on zaehlung.kultur_id = kultur.id
@@ -538,7 +538,8 @@ with kultur_last_event as (
 ), kultur_sums3 as (
   select
     kultur.id,
-    count (teilkultur.id) as anzahl_teilkulturen
+    count (teilkultur.id) as teilkulturen_anzahl,
+    string_agg(teilkultur.name, ', ') as teilkulturen_namen
   from kultur
     inner join teilkultur
     on teilkultur.kultur_id = kultur.id
@@ -546,21 +547,56 @@ with kultur_last_event as (
 ), kultur_sums4 as (
   select
     kultur.id,
-    count (event.id) as anzahl_events
+    count (event.id) as events_anzahl,
+    string_agg(event.datum::text || ': ' || event.beschreibung, ', ') as events_datum_beschreibung
   from kultur
     inner join event
     on event.kultur_id = kultur.id
   group by kultur.id
+), garten_sums as (
+  select
+    garten.id,
+    count (kultur.id) as anzahl_kulturen
+  from garten
+    inner join kultur
+    on kultur.garten_id = garten.id
+  group by garten.id
 )
 select
   g.id as garten_id,
   g.name as garten_name,
+  g.person_id as garten_person_id,
+  gp.name as garten_person_name,
+  g.strasse as garten_strasse,
+  g.plz as garten_plz,
+  g.ort as garten_ort,
+  g.aktiv as garten_aktiv,
+  g.bemerkungen as garten_bemerkungen,
+  gs.anzahl_kulturen as garten_anzahl_kulturen,
   k.id as kultur_id,
-  ae_art.name as art_name,
-  h.nr as herkunft_nr,
-  ks3.anzahl_teilkulturen as kultur_anzahl_teilkulturen,
-  ks4.anzahl_events as kultur_anzahl_events,
-  ks2.anzahl_zaehlungen as kultur_anzahl_zaehlungen,
+  a.id as kultur_art_id,
+  ae_art.name as kultur_art_name,
+  h.nr as kultur_herkunft_nr,
+  k.zwischenlager as kultur_zwischenlager,
+  k.erhaltungskultur as kultur_erhaltungskultur,
+  k.von_anzahl_individuen as kultur_von_anzahl_individuen,
+  k.aktiv as kultur_aktiv,
+  k.bemerkungen as kultur_bemerkungen,
+  ks4.events_anzahl as kultur_events_anzahl,
+  ks4.events_datum_beschreibung as kultur_events_datum_beschreibung,
+  e.id as kultur_letzter_event_id,
+  e.datum as kultur_letzter_event_datum,
+  e.beschreibung as kultur_letzter_event_beschreibung,
+  e.geplant as kultur_letzter_event_geplant,
+  ep.name as kultur_letzter_event_person_name,
+  etk.name as kultur_letzter_event_teilkultur_name,
+  etk.ort1 as kultur_letzter_event_teilkultur_ort1,
+  etk.ort2 as kultur_letzter_event_teilkultur_ort2,
+  etk.ort3 as kultur_letzter_event_teilkultur_ort3,
+  etk.bemerkungen as kultur_letzter_event_teilkultur_bemerkungen,
+  ks3.teilkulturen_anzahl as kultur_teilkulturen_anzahl,
+  ks3.teilkulturen_namen as kultur_teilkulturen_namen,
+  ks2.zaehlungen_anzahl as kultur_zaehlungen_anzahl,
   ks.anzahl_pflanzen as kultur_anzahl_pflanzen,
   ks.anzahl_auspflanzbereit as kultur_anzahl_auspflanzbereit,
   ks.anzahl_mutterpflanzen as kultur_anzahl_mutterpflanzen,
@@ -583,51 +619,45 @@ select
   tz.anzahl_mutterpflanzen as teilzaehlung_anzahl_mutterpflanzen,
   tz.andere_menge as teilzaehlung_andere_menge,
   tz.auspflanzbereit_beschreibung as teilzaehlung_auspflanzbereit_beschreibung,
-  tz.bemerkungen as teilzaehlung_bemerkungen,
-  e.id as event_id,
-  e.datum as event_datum,
-  e.beschreibung as event_beschreibung,
-  e.geplant as event_geplant,
-  ep.name as event_person_name,
-  etk.name as event_teilkultur_name,
-  etk.ort1 as event_teilkultur_ort1,
-  etk.ort2 as event_teilkultur_ort2,
-  etk.ort3 as event_teilkultur_ort3,
-  etk.bemerkungen as event_teilkultur_bemerkungen
+  tz.bemerkungen as teilzaehlung_bemerkungen
 from
-  kultur k
-  inner join zaehlung z
-    inner join teilzaehlung tz
-      left join teilkultur tk
-      on tz.teilkultur_id = tk.id
-    on tz.zaehlung_id = z.id
-    left join zaehlung_summs zs
-    on zs.id = z.id
-  on z.kultur_id = k.id
-  left join kultur_summs ks
-  on ks.id = k.id
-  left join kultur_sums2 ks2
-  on ks2.id = k.id
-  left join kultur_sums3 ks3
-  on ks3.id = k.id
-  left join kultur_sums4 ks4
-  on ks4.id = k.id
-  inner join art a
-    inner join ae_art
-    on ae_art.id = a.ae_id
-  on k.art_id = a.id
-  inner join garten g
+  garten g
+  left join person gp
+  on g.person_id = gp.id
+  left join garten_sums gs
+  on gs.id = g.id
+  inner join kultur k
+    inner join zaehlung z
+      inner join teilzaehlung tz
+        left join teilkultur tk
+        on tz.teilkultur_id = tk.id
+      on tz.zaehlung_id = z.id
+      left join zaehlung_summs zs
+      on zs.id = z.id
+    on z.kultur_id = k.id
+    left join kultur_summs ks
+    on ks.id = k.id
+    left join kultur_sums2 ks2
+    on ks2.id = k.id
+    left join kultur_sums3 ks3
+    on ks3.id = k.id
+    left join kultur_sums4 ks4
+    on ks4.id = k.id
+    inner join art a
+      inner join ae_art
+      on ae_art.id = a.ae_id
+    on k.art_id = a.id
+    inner join herkunft h
+    on h.id = k.herkunft_id
+    left join event e
+      inner join kultur_last_event on
+      kultur_last_event.event_id = e.id
+      left join person ep
+      on ep.id = e.person_id
+      left join teilkultur etk
+      on etk.id = e.teilkultur_id
+    on e.kultur_id = k.id
   on g.id = k.garten_id
-  inner join herkunft h
-  on h.id = k.herkunft_id
-  left join event e
-    inner join kultur_last_event on
-    kultur_last_event.event_id = e.id
-    left join person ep
-    on ep.id = e.person_id
-    left join teilkultur etk
-    on etk.id = e.teilkultur_id
-  on e.kultur_id = k.id
 order by
   g.name,
   ae_art.name,
