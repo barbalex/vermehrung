@@ -106,6 +106,9 @@ export default async ({
                 teilkultur {
                   id
                   name
+                  ort1
+                  ort2
+                  ort3
                 }
                 andere_menge
               }
