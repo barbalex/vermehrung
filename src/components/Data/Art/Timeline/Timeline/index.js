@@ -31,7 +31,8 @@ const ArtTimeline = ({ artSums }) => {
   // THAT SHOULD BE CONNECTED
   // so need to divide data,
   // add last done zaehlung as first point to planned
-  // and the recombine
+  // NOOOOO: add last: done zaehlung/lieferung as first point to planned
+  // and then recombine
   const zaehlungenDone = artSums.filter(
     s => s.action === 'zaehlung' && !s.prognose,
   )
@@ -78,17 +79,17 @@ const ArtTimeline = ({ artSums }) => {
     () =>
       sammlungen.map(l => ({
         datum: new Date(l.datum).getTime(),
-        [`Sammlung Pflanzen${l.geplant ? ' geplant' : ''}`]:
+        [`Sammlung Pflanzen${l.prognose ? ' geplant' : ''}`]:
           l.anzahl_pflanzen || 0,
         'Sammlung andere Mengen': l.andere_menge,
         'Sammlung Gramm Samen': l.gramm_samen,
         'Sammlung von Anzahl Individuen': l.von_anzahl_individuen,
         'Sammlung Bemerkungen': l.bemerkungen,
         [`Zählung Pflanzen${
-          l.geplant ? ' Prognose' : ''
+          l.prognose ? ' Prognose' : ''
         }`]: l.sum_anzahl_pflanzen,
         [`Zählung Pflanzen auspflanzbereit${
-          l.geplant ? ' Prognose' : ''
+          l.prognose ? ' Prognose' : ''
         }`]: l.sum_anzahl_auspflanzbereit,
         ereignis: 'Sammlung',
       })),
@@ -99,19 +100,20 @@ const ArtTimeline = ({ artSums }) => {
     () =>
       auspflanzungen.map(l => ({
         datum: new Date(l.datum).getTime(),
-        [`Auspflanzung Pflanzen${l.geplant ? ' geplant' : ''}`]:
+        [`Auspflanzung Pflanzen${l.prognose ? ' geplant' : ''}`]:
           l.anzahl_pflanzen || 0,
-        [`Auspflanzung Pflanzen auspflanzbereit${l.geplant ? ' geplant' : ''}`]:
-          l.anzahl_auspflanzbereit || 0,
+        [`Auspflanzung Pflanzen auspflanzbereit${
+          l.prognose ? ' geplant' : ''
+        }`]: l.anzahl_auspflanzbereit || 0,
         'Auspflanzung andere Mengen': l.andere_menge,
         'Auspflanzung Gramm Samen': l.gramm_samen,
         'Auspflanzung von Anzahl Individuen': l.von_anzahl_individuen,
         'Auspflanzung Bemerkungen': l.bemerkungen,
         [`Zählung Pflanzen${
-          l.geplant ? ' Prognose' : ''
+          l.prognose ? ' Prognose' : ''
         }`]: l.sum_anzahl_pflanzen,
         [`Zählung Pflanzen auspflanzbereit${
-          l.geplant ? ' Prognose' : ''
+          l.prognose ? ' Prognose' : ''
         }`]: l.sum_anzahl_auspflanzbereit,
         ereignis: 'Auspflanzung',
       })),
