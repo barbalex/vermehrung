@@ -114,7 +114,6 @@ const Teilzaehlung = ({
         'anzahl_auspflanzbereit',
         'anzahl_mutterpflanzen',
         'prognose',
-        'ziel',
       ].includes(field)
         ? ['TreeQueryForTreeContainer']
         : []

@@ -53,9 +53,8 @@ const Arten = ({ row, style, last }) => {
     .padStart(3, '\u00A0')}/${anzAb
     .toString()
     .padStart(3, '\u00A0')}/${anzMu.toString().padStart(3, '\u00A0')}`
-  const ziel = row.ziel ? ' (Ziel)' : ''
   const prognose = row.prognose ? ' (Prognose)' : ''
-  const label = `${datum}: ${numbers}${ziel}${prognose}`
+  const label = `${datum}: ${numbers}${prognose}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>

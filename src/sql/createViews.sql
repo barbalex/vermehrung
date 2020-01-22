@@ -30,10 +30,8 @@ with
     where
       z.datum is not null
       and (
-        (
-          z.ziel is false 
-          and z.prognose is false
-        ) or
+        z.prognose is false
+        or
         (
           -- zaehlung is after last count done for this art_id
           z.datum > (
@@ -47,7 +45,6 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = k.art_id
-              and z2.ziel is false 
               and z2.prognose is false
               and z2.datum is not null
             order by
@@ -79,8 +76,7 @@ with
         where
           case
             when s.geplant is false then 
-              z2.ziel is false 
-              and z2.prognose is false
+              z2.prognose is false
               and k2.art_id = s.art_id
               and z2.datum is not null
               and z2.datum <= s.datum
@@ -124,7 +120,6 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = s.art_id
-              and z2.ziel is false 
               and z2.prognose is false
               and z2.datum is not null
             order by
@@ -149,8 +144,7 @@ with
         where
           case
             when l.geplant is false then 
-              z2.ziel is false 
-              and z2.prognose is false
+              z2.prognose is false
               and k2.art_id = l.art_id
               and z2.datum is not null
               and z2.datum <= l.datum
@@ -194,7 +188,6 @@ with
                 on a2.id = k2.art_id
             where
               k2.art_id = l.art_id
-              and z2.ziel is false 
               and z2.prognose is false
               and z2.datum is not null
             order by
@@ -260,10 +253,8 @@ with
     where
       z.datum is not null
       and (
-        (
-          z.ziel is false 
-          and z.prognose is false
-        ) or
+        z.prognose is false
+        or
         (
           -- zaehlung is after last count done for this art_id
           z.datum > (
@@ -275,7 +266,6 @@ with
             where
               k2.art_id = k.art_id
               and k2.herkunft_id = k.herkunft_id
-              and z2.ziel is false 
               and z2.prognose is false
               and z2.datum is not null
             order by
@@ -307,8 +297,7 @@ with
         where
           case
             when s.geplant is false then 
-              z2.ziel is false 
-              and z2.prognose is false
+              z2.prognose is false
               and k2.art_id = s.art_id
               and k2.herkunft_id = s.herkunft_id
               and z2.datum is not null
@@ -353,7 +342,6 @@ with
             where
               k2.art_id = s.art_id
               and k2.herkunft_id = s.herkunft_id
-              and z2.ziel is false 
               and z2.prognose is false
               and z2.datum is not null
             order by
@@ -377,8 +365,7 @@ with
         where
           case
             when l.geplant is false then 
-              z2.ziel is false 
-              and z2.prognose is false
+              z2.prognose is false
               and k2.art_id = l.art_id
               and k2.herkunft_id = ku.herkunft_id
               and z2.datum is not null
@@ -424,7 +411,6 @@ with
             where
               k2.art_id = l.art_id
               and k2.herkunft_id = ku.herkunft_id
-              and z2.ziel is false 
               and z2.prognose is false
               and z2.datum is not null
             order by
@@ -496,8 +482,7 @@ with kultur_last_event as (
     kultur inner join zaehlung
     on kultur.id = zaehlung.kultur_id
   where
-    zaehlung.ziel is false 
-    and zaehlung.prognose is false
+    zaehlung.prognose is false
     and zaehlung.datum is not null
   order by
     kultur.id,
