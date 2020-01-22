@@ -333,7 +333,6 @@ create table zaehlung (
   id bigserial primary key,
   kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
-  ziel boolean default false,
   prognose boolean default false,
   bemerkungen text default null,
   changed date default now(),
@@ -343,7 +342,6 @@ create table zaehlung (
 create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
-create index on zaehlung using btree (ziel);
 create index on zaehlung using btree (prognose);
 create index on zaehlung using gin (tsv);
 
