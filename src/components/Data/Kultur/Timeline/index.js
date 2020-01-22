@@ -617,7 +617,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Bar
             dataKey="Lieferung Pflanzen geplant"
-            fill="#b1b1e7"
+            fill="#ceceeb"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
@@ -635,7 +635,7 @@ const KulturTimeline = ({ row }) => {
           />
           <Bar
             dataKey="Lieferung Pflanzen auspflanzbereit geplant"
-            fill="#02e355"
+            fill="#9cffc0"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
@@ -650,7 +650,7 @@ const KulturTimeline = ({ row }) => {
             connectNulls={true}
             dataKey="Zählung Pflanzen"
             stroke="#4a148c"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -658,8 +658,8 @@ const KulturTimeline = ({ row }) => {
             type="monotone"
             connectNulls={true}
             dataKey="Zählung Pflanzen Prognose"
-            stroke="#b1b1e7"
-            strokeWidth={2}
+            stroke="#e0e0ff"
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -668,7 +668,7 @@ const KulturTimeline = ({ row }) => {
             dataKey="Zählung Pflanzen Prognose, ignoriert"
             legendType="circle"
             stroke="#ebebf9"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -677,7 +677,7 @@ const KulturTimeline = ({ row }) => {
             connectNulls={true}
             dataKey="Zählung Pflanzen auspflanzbereit"
             stroke="#016526"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -685,8 +685,8 @@ const KulturTimeline = ({ row }) => {
             type="monotone"
             connectNulls={true}
             dataKey="Zählung Pflanzen auspflanzbereit Prognose"
-            stroke="#02e355"
-            strokeWidth={2}
+            stroke="#9cffc0"
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -695,7 +695,7 @@ const KulturTimeline = ({ row }) => {
             dataKey="Zählung Pflanzen auspflanzbereit Prognose, ignoriert"
             legendType="circle"
             stroke="#e6ffef"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -704,7 +704,7 @@ const KulturTimeline = ({ row }) => {
             connectNulls={true}
             dataKey="Zählung Mutterpflanzen"
             stroke="#cc0000"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -713,7 +713,7 @@ const KulturTimeline = ({ row }) => {
             connectNulls={true}
             dataKey="Zählung Mutterpflanzen Prognose"
             stroke="#ffb3b3"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -722,7 +722,7 @@ const KulturTimeline = ({ row }) => {
             dataKey="Zählung Mutterpflanzen Prognose, ignoriert"
             legendType="circle"
             stroke="#ffe6e6"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />

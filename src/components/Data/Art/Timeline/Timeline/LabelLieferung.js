@@ -1,16 +1,18 @@
 import React from 'react'
+import { Text } from 'recharts'
 
 const LabelLieferung = ({ x, y, stroke, value }) => (
-  <text
-    x={x + 5}
+  <Text
+    x={x + 2}
     y={y}
     dy={value > 0 ? -3 : 12}
     fill={stroke}
     fontSize={10}
+    fontWeight={700}
     textAnchor="middle"
   >
     {value}
-  </text>
+  </Text>
 )
 
 export default LabelLieferung

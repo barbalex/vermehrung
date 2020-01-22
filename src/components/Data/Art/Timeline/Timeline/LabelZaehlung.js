@@ -1,9 +1,18 @@
 import React from 'react'
+import { Text } from 'recharts'
 
 const LabelZaehlung = ({ x, y, stroke, value }) => (
-  <text x={x} y={y} dy={-5} fill={stroke} fontSize={10} textAnchor="middle">
+  <Text
+    x={x}
+    y={y}
+    dy={-5}
+    fill={stroke}
+    fontSize={10}
+    fontWeight={700}
+    textAnchor="middle"
+  >
     {value}
-  </text>
+  </Text>
 )
 
 export default LabelZaehlung

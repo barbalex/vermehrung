@@ -200,7 +200,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
           />
           <Bar
             dataKey="Sammlung Pflanzen geplant"
-            fill="#b1b1e7"
+            fill="#ceceeb"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
@@ -212,7 +212,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
           />
           <Bar
             dataKey="Auspflanzung Pflanzen geplant"
-            fill="#b1b1e7"
+            fill="#ceceeb"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
@@ -224,7 +224,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
           />
           <Bar
             dataKey="Auspflanzung Pflanzen auspflanzbereit geplant"
-            fill="#02e355"
+            fill="#9cffc0"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
@@ -233,7 +233,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
             connectNulls={true}
             dataKey="Zählung Pflanzen"
             stroke="#4a148c"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -241,8 +241,8 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
             type="monotone"
             connectNulls={true}
             dataKey="Zählung Pflanzen Prognose"
-            stroke="#b1b1e7"
-            strokeWidth={2}
+            stroke="#e0e0ff"
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -251,7 +251,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
             connectNulls={true}
             dataKey="Zählung Pflanzen auspflanzbereit"
             stroke="#016526"
-            strokeWidth={2}
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
@@ -259,8 +259,8 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
             type="monotone"
             connectNulls={true}
             dataKey="Zählung Pflanzen auspflanzbereit Prognose"
-            stroke="#02e355"
-            strokeWidth={2}
+            stroke="#9cffc0"
+            strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
           />
