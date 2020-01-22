@@ -30,7 +30,7 @@ export default gql`
         }
       }
       ausLieferungsDone: lieferungsByVonKulturId(
-        where: { datum: { _is_null: false } }
+        where: { geplant: { _eq: false }, datum: { _is_null: false } }
         order_by: { datum: asc }
       ) {
         ...LieferungFields
