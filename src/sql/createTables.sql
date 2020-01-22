@@ -328,7 +328,6 @@ create index on event using btree (datum);
 create index on event using gin (tsv);
 
 drop table if exists zaehlung cascade;
--- TODO: remove geplant
 create table zaehlung (
   id bigserial primary key,
   kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
