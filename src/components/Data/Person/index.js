@@ -164,7 +164,7 @@ const Person = ({ filter: showFilter }) => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_person(
+              mutation update_person_for_person(
                 $id: bigint!
               ) {
                 update_person(
