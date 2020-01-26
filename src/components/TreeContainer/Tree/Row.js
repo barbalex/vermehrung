@@ -283,6 +283,7 @@ const Row = ({ style, node }) => {
     signup({
       email,
       personId: personId.toString(),
+      userRole,
       store,
       client,
     })
