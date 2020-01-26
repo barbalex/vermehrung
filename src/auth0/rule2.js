@@ -7,15 +7,17 @@ function (user, context, callback) {
   context.idToken[namespace] =
     {
       'x-hasura-default-role': context.authorization.roles[0],
-      'x-hasura-role': userRole,
-      'x-hasura-allowed-roles': [userRole],
+      'x-hasura-role': context.authorization.roles[0],
+      'x-hasura-allowed-roles': context.authorization.roles,
       'x-hasura-user-id': userId
-    }
+    };
+
   user.app_metadata.roles = user.app_metadata.roles || [];
   if (!user.app_metadata.roles.includes(userRole)) {
     user.app_metadata.roles.push(userRole);
   }
-  auth0.users.updateAppMetadata(user.user_id, user.app_metadata);
+  // user.app_metadata.roles.push('test');
+  auth0.users.updateAppMetadata(user.user_id, user.app_metadata)
   .then(function(){
     callback(null, user, context);
   })
