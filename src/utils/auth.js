@@ -178,7 +178,7 @@ export const signoff = async ({ account_id, store }) => {
  * - add auth0-id to person data vermehrung-side
  * - user gets email to set password
  */
-export const signup = async ({ email, personId, userRole, store, client }) => {
+export const signup = ({ email, personId, userRole, store, client }) => {
   auth.signup(
     {
       connection: 'Username-Password-Authentication',
@@ -186,7 +186,7 @@ export const signup = async ({ email, personId, userRole, store, client }) => {
       password: process.env.AUTH0_USER_INITIAL_PASSWORD,
       user_metadata: { personId, userRole },
     },
-    async (err, resp) => {
+    (err, resp) => {
       if (!err) {
         store.enqueNotification({
           message: `Für ${email} wurde ein Konto erstellt`,
@@ -203,7 +203,7 @@ export const signup = async ({ email, personId, userRole, store, client }) => {
         // save resp.Id to mark users with account
         client.mutate({
           mutation: gql`
-            mutation update_person(
+            mutation update_person_for_signup(
               $id: bigint!
             ) {
               update_person(
