@@ -8,6 +8,10 @@
     {
       "src": "/Vermehrung/.*",
       "dest": "/Vermehrung/index.html"
+    },
+    {
+      "src": "/api/setrole",
+      "dest": "/api/setrole/index.js"
     }
   ]
 }
