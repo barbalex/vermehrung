@@ -1,13 +1,13 @@
 {
   "name": "vermehrung.apflora.ch",
   "description": "breeding endangered plant species",
-  "version": "0.26.7",
+  "version": "0.26.8",
   "license": "MIT",
   "scripts": {
     "dev": "gatsby develop",
     "clean": "gatsby clean",
     "build": "gatsby clean && gatsby build",
-    "postbuild": "copyfiles now.json public && copyfiles api/** public/api",
+    "postbuild": "copyfiles now.json public && copyfiles api/**/* public",
     "serve": "gatsby serve"
   },
   "dependencies": {
