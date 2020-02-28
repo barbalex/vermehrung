@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "name": "vermehrung",
+  "name": "vermehrung_own_docker",
   "env": {
     "HASURA_GRAPHQL_URL": "https://api.vermehrung.apflora.ch/v1/graphql"
   },
-  "routes": [
-    {
+  "routes": [{
       "src": "/Vermehrung/.*",
       "dest": "/Vermehrung/index.html"
     },

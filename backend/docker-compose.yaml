@@ -1,0 +1,49 @@
+version: 3.7
+services:
+  db:
+    image: 'mdillon/postgis'
+    # specify container name to make it easier to run commands.
+    # for example, you could run docker exec -i postgres psql -U postgres postgres < schema.sql to run an SQL file against the Postgres database
+    container_name: v_db
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      # make the Postgres database accessible from outside the Docker container on port 5432
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - sik_data:/shared
+    # hasura needs higher max_locks_per_transaction
+    command: postgres -c max_locks_per_transaction=2000
+  graphql:
+    image: 'hasura/graphql-engine:v1.0.0'
+    container_name: v_graphql
+    ports:
+      - '8080:8080'
+    depends_on:
+      - v_db
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+    command:
+      - graphql-engine
+      - serve
+  caddy:
+    image: 'abiosoft/caddy:0.11.0'
+    container_name: caddy
+    depends_on:
+      - v_db
+      - graphql
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile
+      - caddy_certs:/root/.caddy
+volumes:
+  db_data:
+  caddy_certs:
+  sik_data:

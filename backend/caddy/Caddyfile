@@ -1,0 +1,21 @@
+# see: https://caddyserver.com/docs/caddyfile/concepts
+
+{
+  email alex.barbalex@gmail.com
+  #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+api.vermehrung.ch {
+  reverse_proxy /graphql* {
+    to v_graphql:5000
+    header_down Access-Control-Allow-Origin *
+  }
+  reverse_proxy /graphiql* {
+    to v_graphql:5000
+    header_down Access-Control-Allow-Origin *
+  }
+  reverse_proxy /db/* {
+    to v_db:5432
+    header_down Access-Control-Allow-Origin *
+  }
+}
