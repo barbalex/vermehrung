@@ -1,4 +1,4 @@
-version: 3.7
+version: '3.7'
 services:
   db:
     image: 'mdillon/postgis'
@@ -20,30 +20,31 @@ services:
     image: 'hasura/graphql-engine:v1.0.0'
     container_name: v_graphql
     ports:
-      - '8080:8080'
+      - '5000:5000'
     depends_on:
-      - v_db
+      - db
     restart: always
     env_file:
       - ./.env
-    environment:
     command:
       - graphql-engine
       - serve
   caddy:
     image: 'abiosoft/caddy:0.11.0'
-    container_name: caddy
+    container_name: v_caddy
     depends_on:
-      - v_db
+      - db
       - graphql
     restart: always
     ports:
       - '80:80'
       - '443:443'
     volumes:
-      - ./Caddyfile:/etc/Caddyfile
-      - caddy_certs:/root/.caddy
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_certs:/root/.local/share/caddy
+      - caddy_config:/root/.config/caddy
 volumes:
   db_data:
   caddy_certs:
   sik_data:
+  caddy_config:
