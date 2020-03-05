@@ -17,7 +17,7 @@ services:
     # hasura needs higher max_locks_per_transaction
     command: postgres -c max_locks_per_transaction=2000
   graphql:
-    image: 'hasura/graphql-engine:v1.0.0'
+    image: 'hasura/graphql-engine:v1.1.0'
     container_name: v_graphql
     ports:
       - '8080:8080'
