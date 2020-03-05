@@ -23,12 +23,6 @@ create foreign table ae_art (
 server ae_server options (schema_name 'ae', table_name 'v_vermehrung_arten');
 
 CREATE USER MAPPING
-    FOR doadmin
- SERVER ae_server
-OPTIONS (user 'fdw_user', password 'secret');
--- or:
-
-CREATE USER MAPPING
     FOR postgres
  SERVER ae_server
 OPTIONS (user 'fdw_user', password 'secret');

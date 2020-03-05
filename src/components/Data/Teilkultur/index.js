@@ -243,7 +243,7 @@ const Teilkultur = ({ filter: showFilter }) => {
   )
   const openTeilkulturDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Teilkulturen')
+      window.open('https://vermehrung.ch/Dokumentation/Teilkulturen')
   }, [])
 
   if (loading) {

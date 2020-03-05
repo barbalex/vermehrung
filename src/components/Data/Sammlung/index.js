@@ -277,17 +277,15 @@ const Sammlung = ({ filter: showFilter }) => {
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
+      window.open('https://vermehrung.ch/Dokumentation/Planen')
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
-      )
+      window.open('https://vermehrung.ch/Dokumentation/Genetische-Vielfalt')
   }, [])
   const openSammlungDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Sammlungen')
+      window.open('https://vermehrung.ch/Dokumentation/Sammlungen')
   }, [])
 
   if (loading) {

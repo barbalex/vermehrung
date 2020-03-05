@@ -5,7 +5,7 @@ title: "Progressive Web App"
 sort1: 22
 ---
 
-vermehrung.apflora.ch ist eine [**Progressive Web App**](https://developers.google.com/web/progressive-web-apps) (PWA).<br/><br/>
+vermehrung.ch ist eine [**Progressive Web App**](https://developers.google.com/web/progressive-web-apps) (PWA).<br/><br/>
 
 "Progressive Web Apps" sind Web-Apps und werden für Browser entwickelt. Weil sie einige zusätzliche Anforderungen erfüllen, können sie je länger je weniger von "normalen" Apps unterschieden werden. Das ist das erklärte Ziel von Google und Microsoft.<br/><br/>
 
@@ -20,6 +20,6 @@ vermehrung.apflora.ch ist eine [**Progressive Web App**](https://developers.goog
 
 **Was ist der Unterschied zu einer traditionellen Applikation?**
 - Die App funktioniert auf allen Bertriebssystemen und auf allen Geräten mit modernem Browser
-- Statt die App zu installieren, müssen Sie nur vermehrung.apflora.ch besuchen
+- Statt die App zu installieren, müssen Sie nur vermehrung.ch besuchen
 - Updates erfolgen automatisch
 - Einer neuen Mitarbeiterin schicken Sie einfach URL und Login. Schon kann sie loslegen!

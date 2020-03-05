@@ -7,7 +7,7 @@ sort1: 13
 
 ### Wieso
 Nicht jeder erfasst dieselben Daten. Felder, die nicht verwendet werden, verringern die Übersicht, lenken ab und können verwirren.<br/>
-In vermehrung.apflora.ch gibt es daher eine Reihe von Feldern, die ausgeblendet werden können.<br/>
+In vermehrung.ch gibt es daher eine Reihe von Feldern, die ausgeblendet werden können.<br/>
 Felder, welche für das Funktionieren der Anwendung wichtig sind, können nicht ausgeblendet werden.
 <br/><br/>
 

@@ -8,7 +8,7 @@ export default () => {
 
   const appHost = isLocalhost
     ? `http://${hostname}:8000/`
-    : 'https://vermehrung.apflora.ch/'
+    : 'https://vermehrung.ch/'
 
   return appHost
 }

@@ -74,9 +74,7 @@ const ApQk = ({ art }) => {
   const openDocs = useCallback(e => {
     e.stopPropagation()
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Qualitaets-Kontrollen',
-      )
+      window.open('https://vermehrung.ch/Dokumentation/Qualitaets-Kontrollen')
   }, [])
   const onClickToggle = useCallback(
     e => {

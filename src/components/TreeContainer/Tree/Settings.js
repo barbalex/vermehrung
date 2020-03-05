@@ -106,7 +106,7 @@ const SettingsTree = ({ data, personId }) => {
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Ordner-blenden')
+      window.open('https://vermehrung.ch/Dokumentation/Ordner-blenden')
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)

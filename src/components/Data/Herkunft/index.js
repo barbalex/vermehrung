@@ -199,7 +199,7 @@ const Herkunft = ({ filter: showFilter }) => {
   )
   const openHerkunftDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Herkuenfte')
+      window.open('https://vermehrung.ch/Dokumentation/Herkuenfte')
   }, [])
 
   if (loading) {

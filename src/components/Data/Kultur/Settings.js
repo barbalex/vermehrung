@@ -96,7 +96,7 @@ const SettingsKultur = ({ kulturResult }) => {
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Teilkulturen')
+      window.open('https://vermehrung.ch/Dokumentation/Teilkulturen')
   }, [])
 
   if (error) {

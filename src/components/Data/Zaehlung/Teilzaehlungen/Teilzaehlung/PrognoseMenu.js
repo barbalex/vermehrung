@@ -279,7 +279,7 @@ const Teilzaehlung = ({
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
   const openDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
+      window.open('https://vermehrung.ch/Dokumentation/Planen')
   }, [])
 
   return (

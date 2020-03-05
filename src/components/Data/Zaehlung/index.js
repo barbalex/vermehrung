@@ -261,11 +261,11 @@ const Zaehlung = ({ filter: showFilter }) => {
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
+      window.open('https://vermehrung.ch/Dokumentation/Planen')
   }, [])
   const openZaehlungDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Zaehlungen')
+      window.open('https://vermehrung.ch/Dokumentation/Zaehlungen')
   }, [])
 
   if (loading) {

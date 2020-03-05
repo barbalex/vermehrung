@@ -6,7 +6,7 @@ sort1: 8
 ---
 
 Grössere Gärten oder gärtnerische Betriebe organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: "Beete", "Kästen", "Reihen".<br/>
-In vermehrung.apflora.ch werden diese Untereinheiten "Teil-Kulturen" genannt.<br/><br/>
+In vermehrung.ch werden diese Untereinheiten "Teil-Kulturen" genannt.<br/><br/>
 
 ### 1. Ziele
 - [Projekt-Ziel](/Dokumentation/Ziele) 3 und 4: "Anzahl Pflanzen und Anzahl auspflanz-bereite Pflanzen sind bekannt und können geplant werden", "Anzahl Mutterpflanzen ist bekannt."<br/>
@@ -24,7 +24,7 @@ Sie ermöglicht:
 <br/><br/>
 
 #### Es können Teil-Kulturen erfasst werden
-Neben der zugehörigen Kultur wird vorerst nur ein Name erfasst. "Name" ist eine simple Methode, damit verschiedene Systeme, Untereinheiten zu bilden möglich sind, ohne dass vermehrung.apflora.ch eines vorgeben muss.<br/><br/>
+Neben der zugehörigen Kultur wird vorerst nur ein Name erfasst. "Name" ist eine simple Methode, damit verschiedene Systeme, Untereinheiten zu bilden möglich sind, ohne dass vermehrung.ch eines vorgeben muss.<br/><br/>
 
 Beispiel: Ein Betrieb hat Beete, darin Kästen und darin Reihen. Es soll pro Reihe gezählt werden. Von jeder Kategorie gibt es nie mehr als 99.<br/>
 In diesem Fall empfiehlt es sich, für den Namen diese drei Hierarchiestufen so oder ähnlich zu kombinieren: "02/03/12". Das ist Reihe 12 im Kasten 3 im Beet 2. Auf diese Weise sortieren sich die Namen auch wie erwartet.<br/><br/>
@@ -35,7 +35,7 @@ Um Teil-Kulturen erfassen zu können, erscheint im Navigations-Baum unter der Ku
 
 #### Zählungen können pro Teil-Kultur erfasst werden
 Pro Kultur können (fakultativ) mehrere Teil-Zählungen erfasst werden. Die Teil-Zählungen können einer Teil-Kultur zugeordnet werden.<br/>
-vermehrung.apflora.ch summiert alle Zahlen der Einheiten "Anzahl Pflanzen", "anzahl auspflanz-bereit" und "Anzahl Mutter-Pflanzen" pro Kultur.
+vermehrung.ch summiert alle Zahlen der Einheiten "Anzahl Pflanzen", "anzahl auspflanz-bereit" und "Anzahl Mutter-Pflanzen" pro Kultur.
 <br/><br/>
 
 #### Events können Teil-Kulturen zugeordnet werden

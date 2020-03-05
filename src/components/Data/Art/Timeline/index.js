@@ -40,7 +40,7 @@ const TimelineArea = ({ artId }) => {
 
   const openDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Zeitachse-Art')
+      window.open('https://vermehrung.ch/Dokumentation/Zeitachse-Art')
   }, [])
   const onClickToggle = useCallback(
     e => {

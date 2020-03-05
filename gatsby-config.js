@@ -54,7 +54,7 @@ module.exports = {
       resolve: 'gatsby-plugin-manifest',
       options: {
         scope: '/',
-        name: 'vermehrung.apflora.ch',
+        name: 'vermehrung.ch',
         short_name: 'vermehrung',
         start_url: '/',
         background_color: '#2e0c58',

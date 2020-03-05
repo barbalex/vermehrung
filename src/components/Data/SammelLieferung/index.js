@@ -531,13 +531,11 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
+      window.open('https://vermehrung.ch/Dokumentation/Planen')
   }, [])
   const openSettingsDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Sammel-Lieferungen',
-      )
+      window.open('https://vermehrung.ch/Dokumentation/Sammel-Lieferungen')
   }, [])
 
   // setting initial value like this is necessary
@@ -556,9 +554,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
 
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
-      )
+      window.open('https://vermehrung.ch/Dokumentation/Genetische-Vielfalt')
   }, [])
   const ifNeeded = useCallback(
     field => {

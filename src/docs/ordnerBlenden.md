@@ -8,7 +8,7 @@ sort1: 14
 ### Wieso
 Nicht jeder nutzt alle Features. Features, die nicht verwendet werden, verringern die Übersicht, lenken ab und können verwirren.<br/><br/>
 
-In vermehrung.apflora.ch gibt es daher im Navigationsbaum eine Reihe von Ordnern, die eingeblendet werden können, standardmässig aber ausgeblendet sind.<br/><br/>
+In vermehrung.ch gibt es daher im Navigationsbaum eine Reihe von Ordnern, die eingeblendet werden können, standardmässig aber ausgeblendet sind.<br/><br/>
 
 Für die Navigation notwendige Ordner können nicht ausgeblendet werden.
 <br/><br/>

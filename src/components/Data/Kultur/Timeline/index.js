@@ -540,9 +540,7 @@ const KulturTimeline = ({ row }) => {
   )
   const openDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Zeitachse-Kultur',
-      )
+      window.open('https://vermehrung.ch/Dokumentation/Zeitachse-Kultur')
   }, [])
   const onResize = useCallback(
     width => {

@@ -548,17 +548,15 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   )
   const openPlanenDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Planen')
+      window.open('https://vermehrung.ch/Dokumentation/Planen')
   }, [])
   const openLieferungDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open('https://vermehrung.apflora.ch/Dokumentation/Lieferungen')
+      window.open('https://vermehrung.ch/Dokumentation/Lieferungen')
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
     typeof window !== 'undefined' &&
-      window.open(
-        'https://vermehrung.apflora.ch/Dokumentation/Genetische-Vielfalt',
-      )
+      window.open('https://vermehrung.ch/Dokumentation/Genetische-Vielfalt')
   }, [])
 
   if (loading) {
