@@ -30,7 +30,7 @@ services:
       - graphql-engine
       - serve
   caddy:
-    image: 'abiosoft/caddy:0.11.0'
+    image: 'caddy/caddy:alpine'
     container_name: v_caddy
     depends_on:
       - db
