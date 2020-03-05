@@ -41,7 +41,7 @@ services:
       - '443:443'
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-      - caddy_certs:/root/.local/share/caddy
+      - caddy_certs:/data/caddy
       - caddy_config:/root/.config/caddy
 volumes:
   db_data:
