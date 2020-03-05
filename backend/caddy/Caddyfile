@@ -7,11 +7,11 @@
 
 api.vermehrung.ch {
   reverse_proxy /graphql* {
-    to v_graphql:5000
+    to v_graphql:8080
     header_down Access-Control-Allow-Origin *
   }
   reverse_proxy /graphiql* {
-    to v_graphql:5000
+    to v_graphql:8080
     header_down Access-Control-Allow-Origin *
   }
 }

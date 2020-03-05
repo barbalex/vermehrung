@@ -20,7 +20,7 @@ services:
     image: 'hasura/graphql-engine:v1.0.0'
     container_name: v_graphql
     ports:
-      - '5000:5000'
+      - '8080:8080'
     depends_on:
       - db
     restart: always
