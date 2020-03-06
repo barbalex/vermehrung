@@ -7,8 +7,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import axios from 'axios'
 import ErrorBoundary from 'react-error-boundary'
-
-import { getProfile, logout } from '../../../utils/auth'
+import firebase from 'firebase'
 
 const IconContainer = styled.div`
   position: relative;
@@ -36,11 +35,10 @@ const Account = () => {
   const onCloseMenu = useCallback(() => setAnchorEl(null), [])
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
-    logout()
+    firebase.auth().signOut()
   }, [])
 
-  const user = getProfile()
-  const { picture, email } = user
+  const { picture, email } = firebase.auth().User
 
   const onClickReset = useCallback(async () => {
     setResetTitle('...')

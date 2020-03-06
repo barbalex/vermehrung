@@ -6,10 +6,11 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
-import { useApolloClient } from '@apollo/react-hooks'
 import last from 'lodash/last'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
+import firebase from 'firebase'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -22,7 +23,7 @@ import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import { signup, getProfile } from '../../../utils/auth'
+import { person as personFragment } from '../../../utils/fragments'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -193,6 +194,14 @@ const TextSpan = styled.span`
     color: #f57c00;
   }
 `
+const personQuery = gql`
+  query PersonQueryForTree($account_id: string) {
+    person(where: { account_id: { _eq: $account_id } }) {
+      id
+      user_role
+    }
+  }
+`
 
 const Row = ({ style, node }) => {
   const client = useApolloClient()
@@ -216,9 +225,11 @@ const Row = ({ style, node }) => {
     useSymbolSpan = true
     useSymbolIcon = false
   }
-  const user = getProfile()
-  const claims = user['https://hasura.io/jwt/claims'] || {}
-  const role = claims['x-hasura-role']
+
+  const personResult = useQuery(personQuery, {
+    variables: { accountId: firebase.auth().User.uid },
+  })
+  const { user_role: role } = get(personResult.data, 'person_option[0]') || {}
 
   const onClickNode = useCallback(() => {
     toggleNode({
@@ -280,12 +291,48 @@ const Row = ({ style, node }) => {
         },
       })
     }
-    signup({
-      email,
-      personId: personId.toString(),
-      userRole,
-      store,
-      client,
+    let newUser
+    try {
+      newUser = firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, 'initial-passwort-bitte-aendern')
+    } catch (error) {
+      store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    store.enqueNotification({
+      message: `Für ${email} wurde ein Konto erstellt, mit dem Passwort: "initial-passwort-bitte-aendern"`,
+      options: {
+        variant: 'success',
+      },
+    })
+    // save resp.Id to mark users with account
+    client.mutate({
+      mutation: gql`
+        mutation update_person_for_signup(
+          $id: bigint!
+        ) {
+          update_person(
+            where: { id: { _eq: $id } }
+            _set: {
+              account_id: "${newUser.uid}"
+            }
+          ) {
+            affected_rows
+            returning {
+              ...PersonFields
+            }
+          }
+        }
+        ${personFragment}
+      `,
+      variables: {
+        id: last(node.url).toString(),
+      },
     })
   }, [node.url, store, client, enqueNotification])
 
