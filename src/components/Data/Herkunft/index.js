@@ -8,6 +8,7 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import firebase from 'firebase'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -24,7 +25,6 @@ import Files from '../Files'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Coordinates from '../../shared/Coordinates'
-import { getProfile } from '../../../utils/auth'
 import Settings from './Settings'
 
 const Container = styled.div`
@@ -88,8 +88,8 @@ const herkunftQuery = gql`
   ${herkunftFragment}
 `
 const personOptionQuery = gql`
-  query PersonOptionQueryForHerkunft($personId: bigint) {
-    person_option(where: { person_id: { _eq: $personId } }) {
+  query PersonOptionQueryForHerkunft($account_id: string) {
+    person_option(where: { person: { account_id: { _eq: $account_id } } }) {
       ...PersonOptionFields
     }
   }
@@ -123,13 +123,10 @@ const Herkunft = ({ filter: showFilter }) => {
     row = get(data, 'herkunft[0]') || {}
   }
 
-  const user = getProfile()
-  const userPersonId =
-    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { personId: userPersonId },
+    variables: { accountId: firebase.auth().User.uid },
   })
-  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
   useEffect(() => {
@@ -246,7 +243,7 @@ const Herkunft = ({ filter: showFilter }) => {
                 <IoMdInformationCircleOutline />
               </IconButton>
               <Settings
-                personId={userPersonId}
+                personId={person_id}
                 personOptionResult={personOptionResult}
               />
               {(store.filter.show || isFiltered) && (

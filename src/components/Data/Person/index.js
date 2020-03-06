@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
+import firebase from 'firebase'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -27,7 +28,6 @@ import Files from '../Files'
 import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
-import { getProfile } from '../../../utils/auth'
 
 const Container = styled.div`
   height: 100%;
@@ -94,6 +94,14 @@ const query = gql`
   }
   ${personFragment}
 `
+const personQuery = gql`
+  query PersonQueryForPersonByAccoutId($account_id: string) {
+    person(where: { account_id: { _eq: $account_id } }) {
+      ...PersonOptionFields
+    }
+  }
+  ${personFragment}
+`
 
 const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
@@ -135,10 +143,11 @@ const Person = ({ filter: showFilter }) => {
     setErrors({})
   }, [row.id])
 
-  const user = getProfile()
-  const claims = user['https://hasura.io/jwt/claims'] || {}
-  const role = claims['x-hasura-role']
-  //console.log('Person, role:', role)
+  const personResult = useQuery(personQuery, {
+    variables: { accountId: firebase.auth().User.uid },
+  })
+  const { user_role } = get(personResult.data, 'person_option[0]') || {}
+  //console.log('Person, user_role:', user_role)
 
   const saveToDb = useCallback(
     async event => {
@@ -238,7 +247,7 @@ const Person = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Person</Title>
             <TitleSymbols>
-              {role === 'manager' && (
+              {user_role === 'manager' && (
                 <>
                   <AddButton />
                   <DeleteButton row={row} />

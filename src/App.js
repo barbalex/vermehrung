@@ -2,6 +2,7 @@ import React from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
+import firebase from 'firebase'
 
 import createGlobalStyle from './utils/createGlobalStyle'
 import Store from './store'
@@ -18,7 +19,6 @@ import materialTheme from './utils/materialTheme'
 import client from '../client'
 import Notifier from './components/Notifier'
 import NotificationDismisser from './components/NotificationDismisser'
-import { isAuthenticated } from './utils/auth'
 
 import UpdateExists from './components/UpdateExists'
 
@@ -46,7 +46,9 @@ if (typeof window !== 'undefined') {
         // only if top domain was visited
         // TODO:
         // without timeout and with timeout too low this errors before page Vermehrung logs
-        if (isAuthenticated() && visitedTopDomain) {
+        const isAuthenticated = !!firebase.auth().User.uid
+        // TODO: fetch
+        if (isAuthenticated && visitedTopDomain) {
           setTimeout(() => {
             navigate(`/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`)
           }, 200)

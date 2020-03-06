@@ -1,13 +1,14 @@
-import React, { useEffect, useContext, useCallback, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import firebase from 'firebase'
 
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
-import { login, isAuthenticated, silentAuth } from '../utils/auth'
 import exists from '../utils/exists'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
@@ -45,6 +46,13 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
+// Configure Firebase
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+}
+firebase.initializeApp(firebaseConfig)
+
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const { activeForm, isPrint } = store
@@ -65,11 +73,33 @@ const Vermehrung = ({ location }) => {
   // (caused errors to render form without tree while printing)
   if (isPrint) treeWidth = 0
 
+  // Configure FirebaseUI
+  const firebaseUiConfig = {
+    // Popup signin flow rather than redirect flow
+    signInFlow: 'popup',
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function
+    signInSuccessUrl: `/Vermehrung/${store.tree.activeNodeArray.join('/')}`,
+  }
+
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
 
-  const [loading, setLoading] = useState(true)
+  const [isSignedIn, setIsSignedIn] = useState(false)
 
+  // Listen to the Firebase Auth state and set the local state
+  useEffect(() => {
+    const unregisterAuthObserver = firebase
+      .auth()
+      .onAuthStateChanged(user => setIsSignedIn(!!user))
+    return () => {
+      unregisterAuthObserver()
+    }
+  }, [])
+
+  console.log('Vermehrung', {
+    processEnv: process.env,
+    fApiKey: process.env.FIREBASE_API_KEY,
+  })
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
   // it will not be possible to open multiple branches in tree
@@ -77,10 +107,6 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-  const handleCheckSession = useCallback(() => setLoading(false), [])
-  useEffect(() => {
-    silentAuth({ callback: handleCheckSession, store })
-  }, [handleCheckSession, store])
   // when pathname changes, update activeNodeArray
   // seems no more needed?
   useEffect(() => {
@@ -88,11 +114,17 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  if (loading) return null
-
-  if (!isAuthenticated()) {
-    login()
-    return <Container>Öffne login...</Container>
+  if (!isSignedIn) {
+    return (
+      <div>
+        <h1>My App</h1>
+        <p>Please sign-in:</p>
+        <StyledFirebaseAuth
+          uiConfig={firebaseUiConfig}
+          firebaseAuth={firebase.auth()}
+        />
+      </div>
+    )
   }
   // hide resizer when tree is not shown
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
