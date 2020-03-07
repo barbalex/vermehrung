@@ -5,6 +5,11 @@ var admin = require('firebase-admin')
 const postgres = require('postgres')
 
 var serviceAccount = require('./config.js')
+console.log(
+  'HASURA_GRAPHQL_DATABASE_URL:',
+  process.env.HASURA_GRAPHQL_DATABASE_URL,
+)
+console.log('serviceAccount:', serviceAccount)
 const sql = postgres(process.env.HASURA_GRAPHQL_DATABASE_URL)
 
 var error = null
@@ -20,6 +25,7 @@ if (serviceAccount) {
 }
 
 firebaseRouter.route('/webhook').get((request, response) => {
+  console.log('request:', request)
   // Throw 500 if firebase is not configured
   if (!serviceAccount) {
     response.status(500).send('Firebase not configured')

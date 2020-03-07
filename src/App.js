@@ -52,7 +52,8 @@ if (typeof window !== 'undefined') {
 
 const App = ({ element }) => {
   const [firebase, setFirebase] = useState(null)
-  const visitedTopDomain = window.location.pathname === '/'
+  const visitedTopDomain =
+    typeof window !== 'undefined' ? window.location.pathname === '/' : false
 
   useEffect(() => {
     if (firebase) return

@@ -108,14 +108,16 @@ const Vermehrung = ({ location }) => {
 
   if (!isSignedIn) {
     return (
-      <div>
-        <h1>My App</h1>
-        <p>Please sign-in:</p>
-        <StyledFirebaseAuth
-          uiConfig={firebaseUiConfig}
-          firebaseAuth={firebase.auth()}
-        />
-      </div>
+      <ErrorBoundary>
+        <Layout>
+          <Container>
+            <StyledFirebaseAuth
+              uiConfig={firebaseUiConfig}
+              firebaseAuth={firebase.auth()}
+            />
+          </Container>
+        </Layout>
+      </ErrorBoundary>
     )
   }
   // hide resizer when tree is not shown

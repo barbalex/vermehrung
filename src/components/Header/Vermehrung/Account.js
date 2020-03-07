@@ -5,7 +5,6 @@ import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import axios from 'axios'
 import ErrorBoundary from 'react-error-boundary'
 
 import firebaseContext from '../../../firebaseContext'
@@ -41,19 +40,12 @@ const Account = () => {
     firebase.auth().signOut()
   }, [firebase])
 
-  const { picture, email } = firebase.auth().currentUser
+  const { picture, email } = firebase.auth().currentUser || {}
 
   const onClickReset = useCallback(async () => {
     setResetTitle('...')
     try {
-      axios.post(
-        `https://${process.env.AUTH0_DOMAIN2}/dbconnections/change_password`,
-        {
-          client_id: process.env.AUTH0_CLIENTID,
-          email,
-          connection: 'Username-Password-Authentication',
-        },
-      )
+      await firebase.auth().sendPasswordResetEmail(email)
     } catch (error) {
       setResetTitle('Fehler: Passwort nicht zurückgesetzt')
       setTimeout(() => {
@@ -66,9 +58,7 @@ const Account = () => {
       setResetTitle('Passwort zurücksetzen')
       setAnchorEl(null)
     }, 5000)
-  }, [email])
-
-  //console.log('Account', { user })
+  }, [email, firebase])
 
   return (
     <ErrorBoundary>
