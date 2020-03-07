@@ -52,6 +52,7 @@ if (typeof window !== 'undefined') {
 
 const App = ({ element }) => {
   const [firebase, setFirebase] = useState(null)
+  const visitedTopDomain = window.location.pathname === '/'
 
   useEffect(() => {
     if (firebase) return
@@ -65,7 +66,6 @@ const App = ({ element }) => {
       fb.initializeApp(firebaseConfig)
       setFirebase(fb)
 
-      const visitedTopDomain = window.location.pathname === '/'
       const blacklist = []
       import('mst-persist').then(module =>
         module
@@ -90,9 +90,9 @@ const App = ({ element }) => {
           }),
       )
     })
-  }, [firebase])
+  }, [firebase, visitedTopDomain])
 
-  if (!firebase) return null
+  if (!firebase && !visitedTopDomain) return null
 
   return (
     <MuiThemeProvider theme={materialTheme}>

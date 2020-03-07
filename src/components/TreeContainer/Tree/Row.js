@@ -229,7 +229,7 @@ const Row = ({ style, node }) => {
   }
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId: firebase.auth().User.uid },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
   const { user_role: role } = get(personResult.data, 'person_option[0]') || {}
 

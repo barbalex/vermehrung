@@ -49,7 +49,7 @@ const TreeContainer = () => {
   const { setRefetch, openNodes, setNodes } = store.tree
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId: firebase.auth().User.uid },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
   const { user_role: role, id: personId } =
     get(personResult.data, 'person_option[0]') || {}

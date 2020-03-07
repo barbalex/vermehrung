@@ -74,6 +74,7 @@ const Vermehrung = ({ location }) => {
     signInFlow: 'popup',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function
     signInSuccessUrl: `/Vermehrung/${store.tree.activeNodeArray.join('/')}`,
+    signInOptions: [{ provider: firebase.auth.EmailAuthProvider.PROVIDER_ID }],
   }
 
   const { pathname } = location

@@ -125,7 +125,7 @@ const Herkunft = ({ filter: showFilter }) => {
   }
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().User.uid },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}

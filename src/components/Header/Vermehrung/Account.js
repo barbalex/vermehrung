@@ -41,7 +41,7 @@ const Account = () => {
     firebase.auth().signOut()
   }, [firebase])
 
-  const { picture, email } = firebase.auth().User
+  const { picture, email } = firebase.auth().currentUser
 
   const onClickReset = useCallback(async () => {
     setResetTitle('...')

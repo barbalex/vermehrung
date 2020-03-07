@@ -86,7 +86,7 @@ const Root = ({ filter: showFilter }) => {
   const firebase = useContext(firebaseContext)
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId: firebase.auth().User.uid },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
   // eslint-disable-next-line no-unused-vars
   const { user_role } = get(personResult.data, 'person_option[0]') || {}

@@ -296,7 +296,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   }
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().User.uid },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}

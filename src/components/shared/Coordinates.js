@@ -73,7 +73,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const client = useApolloClient()
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().User.uid },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
   const { ga_lat_lng } =
     get(personOptionResult.data, 'person_option[0]', {}) || {}

@@ -149,7 +149,7 @@ const Person = ({ filter: showFilter }) => {
   }, [row.id])
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId: firebase.auth().User.uid },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
   const { user_role } = get(personResult.data, 'person_option[0]') || {}
   //console.log('Person, user_role:', user_role)
