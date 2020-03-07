@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
@@ -7,7 +7,8 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import axios from 'axios'
 import ErrorBoundary from 'react-error-boundary'
-import firebase from 'firebase'
+
+import firebaseContext from '../../../firebaseContext'
 
 const IconContainer = styled.div`
   position: relative;
@@ -29,6 +30,8 @@ const StyledUserIcon = styled(UserIcon)`
 `
 
 const Account = () => {
+  const firebase = useContext(firebaseContext)
+
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
   const onClickMenu = useCallback(event => setAnchorEl(event.currentTarget), [])
@@ -36,7 +39,7 @@ const Account = () => {
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
     firebase.auth().signOut()
-  }, [])
+  }, [firebase])
 
   const { picture, email } = firebase.auth().User
 

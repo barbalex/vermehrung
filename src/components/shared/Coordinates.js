@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -34,7 +34,7 @@ import {
   sammlung as sammlungFragment,
   personOption as personOptionFragment,
 } from '../../utils/fragments'
-import getUserPersonId from '../../utils/getUserPersonId'
+import firebaseContext from '../../firebaseContext'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -50,8 +50,8 @@ const Row = styled.div`
 `
 
 const personOptionQuery = gql`
-  query personOptionQueryForCoordinates($personId: bigint) {
-    person_option(where: { person_id: { _eq: $personId } }) {
+  query personOptionQueryForCoordinates($account_id: string) {
+    person_option(where: { person: { account_id: { _eq: $account_id } } }) {
       ...PersonOptionFields
     }
   }
@@ -65,14 +65,15 @@ const fragments = {
 }
 
 const Coordinates = ({ row, refetchForm, table }) => {
+  const firebase = useContext(firebaseContext)
+
   const { id, computed } = row
   const { lv95_x, lv95_y, wgs84_lat, wgs84_long } = computed
 
   const client = useApolloClient()
 
-  const userPersonId = getUserPersonId()
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { personId: userPersonId },
+    variables: { accountId: firebase.auth().User.uid },
   })
   const { ga_lat_lng } =
     get(personOptionResult.data, 'person_option[0]', {}) || {}

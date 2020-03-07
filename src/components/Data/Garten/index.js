@@ -14,6 +14,7 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -26,7 +27,6 @@ import {
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
-import getUserPersonId from '../../../utils/getUserPersonId'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
@@ -104,8 +104,8 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query PersonOptionQueryForGarten($personId: bigint) {
-    person_option(where: { person_id: { _eq: $personId } }) {
+  query PersonOptionQueryForGarten($account_id: string) {
+    person_option(where: { person: { account_id: { _eq: $account_id } } }) {
       ...PersonOptionFields
     }
   }
@@ -115,6 +115,8 @@ const personOptionQuery = gql`
 const Garten = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -144,9 +146,8 @@ const Garten = ({ filter: showFilter }) => {
     row = get(data, 'garten[0]') || {}
   }
 
-  const userPersonId = getUserPersonId()
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { personId: userPersonId },
+    variables: { accountId: firebase.auth().User.uid },
   })
   const {
     ga_strasse,

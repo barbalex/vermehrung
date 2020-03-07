@@ -9,7 +9,6 @@ import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import firebase from 'firebase'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
@@ -21,6 +20,7 @@ import closeAllChildren from '../closeAllChildren'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
 import { person as personFragment } from '../../../utils/fragments'
@@ -206,6 +206,8 @@ const personQuery = gql`
 const Row = ({ style, node }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { tree, enqueNotification } = store
   const { nodes, openNodes, activeNodeArray } = tree
 
@@ -334,7 +336,7 @@ const Row = ({ style, node }) => {
         id: last(node.url).toString(),
       },
     })
-  }, [node.url, store, client, enqueNotification])
+  }, [node.url, store, client, enqueNotification, firebase])
 
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })

@@ -10,12 +10,12 @@ import gql from 'graphql-tag'
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import {
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
   sammelLieferung as sammelLieferungFragment,
 } from '../../../utils/fragments'
-import getUserPersonId from '../../../utils/getUserPersonId'
 import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
@@ -70,8 +70,8 @@ const lieferungQuery = gql`
   ${sammelLieferungFragment}
 `
 const personOptionQuery = gql`
-  query personOptionQueryForLieferung($personId: bigint) {
-    person_option(where: { person_id: { _eq: $personId } }) {
+  query personOptionQueryForLieferung($account_id: string) {
+    person_option(where: { person: { account_id: { _eq: $account_id } } }) {
       ...PersonOptionFields
     }
   }
@@ -80,6 +80,8 @@ const personOptionQuery = gql`
 
 const LieferungContainer = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { activeNodeArray } = store.tree
 
   const lieferungId = last(activeNodeArray.filter(e => !isNaN(e)))
@@ -99,9 +101,8 @@ const LieferungContainer = ({ filter: showFilter }) => {
   const sammelLieferung =
     get(lieferungData, 'lieferung[0].sammel_lieferung') || {}
 
-  const userPersonId = getUserPersonId()
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { personId: userPersonId },
+    variables: { accountId: firebase.auth().User.uid },
   })
   const { li_show_sl } =
     get(personOptionResult.data, 'person_option[0]', {}) || {}

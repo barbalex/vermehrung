@@ -8,9 +8,9 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import firebase from 'firebase'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -99,6 +99,7 @@ const personOptionQuery = gql`
 const Herkunft = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree

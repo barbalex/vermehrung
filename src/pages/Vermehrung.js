@@ -4,7 +4,6 @@ import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import firebase from 'firebase'
 
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
@@ -14,6 +13,7 @@ import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
 import storeContext from '../storeContext'
+import firebaseContext from '../firebaseContext'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -46,15 +46,10 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-// Configure Firebase
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-}
-firebase.initializeApp(firebaseConfig)
-
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { activeForm, isPrint } = store
   const {
     setOpenNodes,
@@ -94,11 +89,11 @@ const Vermehrung = ({ location }) => {
     return () => {
       unregisterAuthObserver()
     }
-  }, [])
+  }, [firebase])
 
   console.log('Vermehrung', {
     processEnv: process.env,
-    fApiKey: process.env.FIREBASE_API_KEY,
+    fApiKey: process.env.GATSBY_FIREBASE_API_KEY,
   })
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or

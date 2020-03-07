@@ -12,15 +12,18 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
-import firebase from 'firebase'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
-import { person as personFragment } from '../../../utils/fragments'
+import {
+  person as personFragment,
+  personOption as personOptionFragment,
+} from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
@@ -95,17 +98,19 @@ const query = gql`
   ${personFragment}
 `
 const personQuery = gql`
-  query PersonQueryForPersonByAccoutId($account_id: string) {
-    person(where: { account_id: { _eq: $account_id } }) {
+  query PersonOptionQueryForPersonByAccoutId($account_id: string) {
+    person_option(where: { account_id: { _eq: $account_id } }) {
       ...PersonOptionFields
     }
   }
-  ${personFragment}
+  ${personOptionFragment}
 `
 
 const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree

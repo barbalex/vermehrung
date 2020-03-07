@@ -9,14 +9,17 @@ import IconButton from '@material-ui/core/IconButton'
 import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import firebase from 'firebase'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
-import { person as personFragment } from '../../../utils/fragments'
+import {
+  person as personFragment,
+  personOption as personOptionFragment,
+} from '../../../utils/fragments'
 import Row from './Row'
 
 const Container = styled.div`
@@ -73,12 +76,12 @@ const query = gql`
   ${personFragment}
 `
 const personQuery = gql`
-  query PersonQueryForPersonsByAccoutId($account_id: string) {
-    person(where: { account_id: { _eq: $account_id } }) {
+  query PersonOptionQueryForPersonsByAccoutId($account_id: string) {
+    person_option(where: { account_id: { _eq: $account_id } }) {
       ...PersonOptionFields
     }
   }
-  ${personFragment}
+  ${personOptionFragment}
 `
 
 const singleRowHeight = 48
@@ -89,6 +92,8 @@ function sizeReducer(state, action) {
 const Personen = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree

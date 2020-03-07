@@ -4,11 +4,11 @@ import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import gql from 'graphql-tag'
-import firebase from 'firebase'
 import get from 'lodash/get'
 
 import Row from './Row'
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import queryFromTable from '../../../utils/queryFromTable'
 
 const Container = styled.div`
@@ -83,6 +83,8 @@ const personQuery = gql`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const personResult = useQuery(personQuery, {
     variables: { accountId: firebase.auth().User.uid },
   })

@@ -2,11 +2,11 @@ import React from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
-import firebase from 'firebase'
 
 import createGlobalStyle from './utils/createGlobalStyle'
 import Store from './store'
 import { Provider as MobxProvider } from './storeContext'
+import { Provider as FirebaseProvider } from './firebaseContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import localForage from 'localforage'
@@ -73,24 +73,39 @@ if (typeof window !== 'undefined') {
   )
 }
 
+let firebase
+if (typeof window !== 'undefined') {
+  import('firebase').then(module => {
+    // Configure Firebase
+    const firebaseConfig = {
+      apiKey: process.env.GATSBY_FIREBASE_API_KEY,
+      authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
+    }
+    firebase = module.default
+    firebase.initializeApp(firebaseConfig)
+  })
+}
+
 const App = ({ element }) => (
   <MuiThemeProvider theme={materialTheme}>
     <MobxProvider value={mobxStore}>
-      <ApolloProvider client={myClient}>
-        <SnackbarProvider
-          maxSnack={5}
-          preventDuplicate
-          autoHideDuration={10000}
-          action={key => <NotificationDismisser nKey={key} />}
-        >
-          <>
-            <GlobalStyle />
-            {element}
-            <Notifier />
-            <UpdateExists />
-          </>
-        </SnackbarProvider>
-      </ApolloProvider>
+      <FirebaseProvider value={firebase}>
+        <ApolloProvider client={myClient}>
+          <SnackbarProvider
+            maxSnack={5}
+            preventDuplicate
+            autoHideDuration={10000}
+            action={key => <NotificationDismisser nKey={key} />}
+          >
+            <>
+              <GlobalStyle />
+              {element}
+              <Notifier />
+              <UpdateExists />
+            </>
+          </SnackbarProvider>
+        </ApolloProvider>
+      </FirebaseProvider>
     </MobxProvider>
   </MuiThemeProvider>
 )
