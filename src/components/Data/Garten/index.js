@@ -156,6 +156,7 @@ const Garten = ({ filter: showFilter }) => {
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
+    person_id,
   } = get(personOptionResult.data, 'person_option[0]', {}) || {}
 
   useEffect(() => {
@@ -270,7 +271,7 @@ const Garten = ({ filter: showFilter }) => {
               <DeleteButton row={row} />
               <Download gartenId={row.id} />
               <Settings
-                personId={userPersonId}
+                personId={person_id}
                 personOptionResult={personOptionResult}
               />
               {(store.filter.show || isFiltered) && (

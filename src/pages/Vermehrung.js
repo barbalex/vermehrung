@@ -91,10 +91,6 @@ const Vermehrung = ({ location }) => {
     }
   }, [firebase])
 
-  console.log('Vermehrung', {
-    processEnv: process.env,
-    fApiKey: process.env.GATSBY_FIREBASE_API_KEY,
-  })
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
   // it will not be possible to open multiple branches in tree
