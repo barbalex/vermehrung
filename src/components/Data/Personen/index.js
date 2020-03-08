@@ -76,7 +76,7 @@ const query = gql`
   ${personFragment}
 `
 const personOptionQuery = gql`
-  query PersonOptionQueryForPersonsByAccoutId($accountId: string) {
+  query PersonOptionQueryForPersonsByAccoutId($accountId: String) {
     person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }

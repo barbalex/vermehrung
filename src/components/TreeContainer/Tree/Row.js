@@ -195,7 +195,7 @@ const TextSpan = styled.span`
   }
 `
 const personQuery = gql`
-  query PersonQueryForTree($accountId: string) {
+  query PersonQueryForTree($accountId: String) {
     person(where: { account_id: { _eq: $accountId } }) {
       id
       user_role

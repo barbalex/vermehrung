@@ -70,7 +70,7 @@ const lieferungQuery = gql`
   ${sammelLieferungFragment}
 `
 const personOptionQuery = gql`
-  query personOptionQueryForLieferung($accountId: string) {
+  query personOptionQueryForLieferung($accountId: String) {
     person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }

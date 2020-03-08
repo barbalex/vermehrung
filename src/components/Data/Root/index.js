@@ -73,7 +73,7 @@ const query = gql`
   }
 `
 const personQuery = gql`
-  query PersonQueryForRoot($accountId: string) {
+  query PersonQueryForRoot($accountId: String) {
     person(where: { account_id: { _eq: $accountId } }) {
       id
       user_role
@@ -84,9 +84,11 @@ const personQuery = gql`
 const Root = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
+  const accountId = firebase.auth().currentUser.uid
+  console.log('Root, accountId:', accountId)
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId },
   })
   // eslint-disable-next-line no-unused-vars
   const { user_role } = get(personResult.data, 'person_option[0]') || {}
