@@ -1,10 +1,13 @@
-var express = require('express')
-var firebaseRouter = express.Router()
+const express = require('express')
 // see: https://firebase.google.com/docs/auth/admin/manage-users
-var admin = require('firebase-admin')
+const admin = require('firebase-admin')
 const postgres = require('postgres')
 
-var serviceAccount = require('./config.js')
+const serviceAccount = require('./config.js')
+
+const app = express()
+const port = 7000
+
 console.log(
   'HASURA_GRAPHQL_DATABASE_URL:',
   process.env.HASURA_GRAPHQL_DATABASE_URL,
@@ -12,7 +15,7 @@ console.log(
 console.log('serviceAccount:', serviceAccount)
 const sql = postgres(process.env.HASURA_GRAPHQL_DATABASE_URL)
 
-var error = null
+let error = null
 // Initialize the Firebase admin SDK with your service account credentials
 if (serviceAccount) {
   try {
@@ -24,7 +27,7 @@ if (serviceAccount) {
   }
 }
 
-firebaseRouter.route('/webhook').get((request, response) => {
+app.get('/webhook', (request, response) => {
   console.log('request:', request)
   // Throw 500 if firebase is not configured
   if (!serviceAccount) {
@@ -37,14 +40,14 @@ firebaseRouter.route('/webhook').get((request, response) => {
     return
   }
   // Get authorization headers
-  var authHeaders = request.get('Authorization')
+  const authHeaders = request.get('Authorization')
   // Send anonymous role if there are no auth headers
   if (!authHeaders) {
     response.json({ 'x-hasura-role': 'anonymous' })
     return
   } else {
     // Validate the received id_token
-    var idToken = extractToken(authHeaders)
+    const idToken = extractToken(authHeaders)
     console.log(idToken)
     admin
       .auth()
@@ -71,7 +74,7 @@ firebaseRouter.route('/webhook').get((request, response) => {
             // TODO:
             // call db, extract userId and role for this email
             // then return
-            var hasuraVariables = {
+            const hasuraVariables = {
               'x-hasura-default-role': user_role,
               'x-hasura-role': user_role,
               'x-hasura-allowed-roles': user_role,
@@ -100,4 +103,4 @@ const extractToken = bearerToken => {
   return null
 }
 
-module.exports = firebaseRouter
+module.exports = router
