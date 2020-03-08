@@ -1,3 +1,6 @@
+'use strict'
+// see: https://nodejs.org/de/docs/guides/nodejs-docker-webapp/
+
 const express = require('express')
 // see: https://firebase.google.com/docs/auth/admin/manage-users
 const admin = require('firebase-admin')
@@ -7,12 +10,13 @@ const serviceAccount = require('./config.js')
 
 const app = express()
 const port = 7000
+const host = '0.0.0.0'
 
-console.log(
+/*console.log(
   'HASURA_GRAPHQL_DATABASE_URL:',
   process.env.HASURA_GRAPHQL_DATABASE_URL,
 )
-console.log('serviceAccount:', serviceAccount)
+console.log('serviceAccount:', serviceAccount)*/
 const sql = postgres(process.env.HASURA_GRAPHQL_DATABASE_URL)
 
 let error = null
@@ -27,28 +31,38 @@ if (serviceAccount) {
   }
 }
 
-app.get('/webhook', (request, response) => {
-  console.log('request:', request)
+app.get('/', (req, res) => {
+  res.send('you hit root')
+})
+app.get('/webhook', (req, res) => {
+  res.send('you hit webhook with a get')
+})
+app.post('/webhook', (req, res) => {
+  res.send('you hit webhook with a get')
+})
+app.post('/', (req, res) => {
+  res.send('you hit webhook with a post')
+  console.log('req:', req)
   // Throw 500 if firebase is not configured
   if (!serviceAccount) {
-    response.status(500).send('Firebase not configured')
+    res.status(500).send('Firebase not configured')
     return
   }
   // Check for errors initializing firebase SDK
   if (error) {
-    response.status(500).send('Invalid firebase configuration')
+    res.status(500).send('Invalid firebase configuration')
     return
   }
   // Get authorization headers
-  const authHeaders = request.get('Authorization')
+  const authHeaders = req.get('Authorization')
   // Send anonymous role if there are no auth headers
   if (!authHeaders) {
-    response.json({ 'x-hasura-role': 'anonymous' })
+    res.json({ 'x-hasura-role': 'anonymous' })
     return
   } else {
     // Validate the received id_token
     const idToken = extractToken(authHeaders)
-    console.log(idToken)
+    console.log('idToken:', idToken)
     admin
       .auth()
       .verifyIdToken(idToken)
@@ -58,22 +72,19 @@ app.get('/webhook', (request, response) => {
           .then(persons => {
             console.log('persons:', persons)
             if (!persons) {
-              return response.json({ 'x-hasura-role': 'anonymous' })
+              return res.json({ 'x-hasura-role': 'anonymous' })
             }
             const person = persons[0]
             if (!person) {
-              return response.json({ 'x-hasura-role': 'anonymous' })
+              return res.json({ 'x-hasura-role': 'anonymous' })
             }
             const { id, user_role } = person
             if (!id) {
-              return response.json({ 'x-hasura-role': 'anonymous' })
+              return res.json({ 'x-hasura-role': 'anonymous' })
             }
             if (!user_role) {
-              return response.json({ 'x-hasura-role': 'anonymous' })
+              return res.json({ 'x-hasura-role': 'anonymous' })
             }
-            // TODO:
-            // call db, extract userId and role for this email
-            // then return
             const hasuraVariables = {
               'x-hasura-default-role': user_role,
               'x-hasura-role': user_role,
@@ -82,14 +93,14 @@ app.get('/webhook', (request, response) => {
             }
             //console.log(hasuraVariables) // For debug
             // Send appropriate variables
-            response.json(hasuraVariables)
+            res.json(hasuraVariables)
           })
-          .catch(() => response.json({ 'x-hasura-role': 'anonymous' }))
+          .catch(() => res.json({ 'x-hasura-role': 'anonymous' }))
       })
       .catch(e => {
         // Throw authentication error
         console.log(e)
-        response.json({ 'x-hasura-role': 'anonymous' })
+        res.json({ 'x-hasura-role': 'anonymous' })
       })
   }
 })
@@ -103,4 +114,6 @@ const extractToken = bearerToken => {
   return null
 }
 
-module.exports = router
+app.listen((port, host), () =>
+  console.log(`app Running on http://${host}:${port}`),
+)
