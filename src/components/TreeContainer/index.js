@@ -47,12 +47,14 @@ const TreeContainer = () => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
   const { setRefetch, openNodes, setNodes } = store.tree
+  const accountId = firebase.auth().currentUser.uid
+  //console.log('TreeContainer, accountId:', accountId)
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId },
   })
   const { user_role: role, id: personId } =
-    get(personResult.data, 'person_option[0]') || {}
+    get(personResult.data, 'person[0]') || {}
   const isGardener = role === 'gaertner'
 
   // 1. build list depending on path using react-window
