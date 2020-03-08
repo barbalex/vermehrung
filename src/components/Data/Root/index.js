@@ -85,13 +85,12 @@ const Root = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
   const accountId = firebase.auth().currentUser.uid
-  console.log('Root, accountId:', accountId)
 
   const personResult = useQuery(personQuery, {
     variables: { accountId },
   })
   // eslint-disable-next-line no-unused-vars
-  const { user_role } = get(personResult.data, 'person_option[0]') || {}
+  const { user_role } = get(personResult.data, 'person[0]') || {}
 
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value

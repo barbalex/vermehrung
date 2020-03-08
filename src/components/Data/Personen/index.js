@@ -75,13 +75,13 @@ const query = gql`
   }
   ${personFragment}
 `
-const personOptionQuery = gql`
-  query PersonOptionQueryForPersonsByAccoutId($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
+const personQueryByAccountId = gql`
+  query PersonQueryForPersonsByAccoutId($accountId: String) {
+    person_option(where: { account_id: { _eq: $accountId } }) {
+      ...PersonFields
     }
   }
-  ${personOptionFragment}
+  ${personFragment}
 `
 
 const singleRowHeight = 48
@@ -122,10 +122,10 @@ const Personen = ({ filter: showFilter }) => {
     [],
   )
 
-  const personOptionResult = useQuery(personOptionQuery, {
+  const personOptionResult = useQuery(personQueryByAccountId, {
     variables: { accountId: firebase.auth().currentUser.uid },
   })
-  const { user_role } = get(personOptionResult.data, 'person_option[0]') || {}
+  const { user_role } = get(personOptionResult.data, 'person[0]') || {}
 
   if (loading) {
     return (
