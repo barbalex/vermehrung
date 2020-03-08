@@ -16,10 +16,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
-import {
-  person as personFragment,
-  personOption as personOptionFragment,
-} from '../../../utils/fragments'
+import { person as personFragment } from '../../../utils/fragments'
 import Row from './Row'
 
 const Container = styled.div`
