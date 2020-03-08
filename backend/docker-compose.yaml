@@ -33,7 +33,7 @@ services:
       - db
       - graphql
   graphql:
-    image: 'hasura/graphql-engine:v1.2.0-beta.2'
+    image: 'hasura/graphql-engine:v1.1.0'
     container_name: v_graphql
     networks:
       - network
