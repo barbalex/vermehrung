@@ -5,6 +5,8 @@ services:
     # specify container name to make it easier to run commands.
     # for example, you could run docker exec -i postgres psql -U postgres postgres < schema.sql to run an SQL file against the Postgres database
     container_name: v_db
+    networks:
+      - network
     restart: always
     env_file:
       - ./.env
@@ -20,6 +22,8 @@ services:
     build:
       context: ./auth_hook
     container_name: v_auth_hook
+    networks:
+      - network
     restart: always
     env_file:
       - ./.env
@@ -31,6 +35,8 @@ services:
   graphql:
     image: 'hasura/graphql-engine:v1.2.0-beta.2'
     container_name: v_graphql
+    networks:
+      - network
     ports:
       - '8080:8080'
     depends_on:
@@ -44,6 +50,8 @@ services:
   caddy:
     image: 'caddy/caddy:alpine'
     container_name: v_caddy
+    networks:
+      - network
     depends_on:
       - db
       - graphql
@@ -60,3 +68,5 @@ volumes:
   caddy_certs:
   sik_data:
   caddy_config:
+networks:
+  network:
