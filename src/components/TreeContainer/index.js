@@ -35,8 +35,8 @@ const Container = styled.div`
   }
 `
 const personQuery = gql`
-  query PersonQueryForTreeContinerByAccoutId($account_id: string) {
-    person(where: { account_id: { _eq: $account_id } }) {
+  query PersonQueryForTreeContinerByAccoutId($accountId: string) {
+    person(where: { account_id: { _eq: $accountId } }) {
       id
       user_role
     }

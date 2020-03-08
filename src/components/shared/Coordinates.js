@@ -50,8 +50,8 @@ const Row = styled.div`
 `
 
 const personOptionQuery = gql`
-  query personOptionQueryForCoordinates($account_id: string) {
-    person_option(where: { person: { account_id: { _eq: $account_id } } }) {
+  query personOptionQueryForCoordinates($accountId: string) {
+    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }
   }

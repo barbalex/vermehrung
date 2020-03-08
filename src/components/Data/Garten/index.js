@@ -104,8 +104,8 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query PersonOptionQueryForGarten($account_id: string) {
-    person_option(where: { person: { account_id: { _eq: $account_id } } }) {
+  query PersonOptionQueryForGarten($accountId: string) {
+    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }
   }

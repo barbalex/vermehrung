@@ -239,8 +239,8 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query PersonOptionQueryForSammelLieferung($account_id: string) {
-    person_option(where: { person: { account_id: { _eq: $account_id } } }) {
+  query PersonOptionQueryForSammelLieferung($accountId: string) {
+    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }
   }

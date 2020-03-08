@@ -97,9 +97,9 @@ const query = gql`
   }
   ${personFragment}
 `
-const personQuery = gql`
-  query PersonOptionQueryForPersonByAccoutId($account_id: string) {
-    person_option(where: { account_id: { _eq: $account_id } }) {
+const personOptionQuery = gql`
+  query PersonOptionQueryForPersonByAccoutId($accountId: string) {
+    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }
   }
@@ -148,10 +148,10 @@ const Person = ({ filter: showFilter }) => {
     setErrors({})
   }, [row.id])
 
-  const personResult = useQuery(personQuery, {
+  const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: firebase.auth().currentUser.uid },
   })
-  const { user_role } = get(personResult.data, 'person_option[0]') || {}
+  const { user_role } = get(personOptionResult.data, 'person_option[0]') || {}
   //console.log('Person, user_role:', user_role)
 
   const saveToDb = useCallback(

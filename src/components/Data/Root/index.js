@@ -73,8 +73,8 @@ const query = gql`
   }
 `
 const personQuery = gql`
-  query PersonQueryForRoot($account_id: string) {
-    person(where: { account_id: { _eq: $account_id } }) {
+  query PersonQueryForRoot($accountId: string) {
+    person(where: { account_id: { _eq: $accountId } }) {
       id
       user_role
     }
