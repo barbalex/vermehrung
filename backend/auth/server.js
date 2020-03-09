@@ -13,22 +13,17 @@ const server = new Hapi.Server({
   port: 7000,
 })
 
-/*console.log(
-  'HASURA_GRAPHQL_DATABASE_URL:',
-  process.env.HASURA_GRAPHQL_DATABASE_URL,
-)
-console.log('serviceAccount:', serviceAccount)*/
 const sql = postgres(process.env.HASURA_GRAPHQL_DATABASE_URL)
 
-let error = null
+let firebaseInitializationError = null
 // Initialize the Firebase admin SDK with your service account credentials
 if (serviceAccount) {
   try {
     admin.initializeApp({
-      credential: admin.credential.cert(JSON.parse(serviceAccount)),
+      credential: admin.credential.cert(serviceAccount),
     })
   } catch (e) {
-    error = e
+    firebaseInitializationError = e
   }
 }
 
@@ -38,26 +33,33 @@ async function start() {
     path: '/{uid}',
     handler: async (req, h) => {
       console.log('you hit root with a get')
-      const { uid } = req.params
-      console.log('req:', req)
-      console.log('uid:', uid)
+      console.log('serviceAccount:', serviceAccount)
       // Throw 500 if firebase is not configured
       if (!serviceAccount) {
         return h.response('Firebase not configured').code(500)
       }
+      console.log('firebaseInitializationError:', firebaseInitializationError)
       // Check for errors initializing firebase SDK
-      if (error) {
-        return h.response('Invalid firebase configuration').code(500)
+      if (firebaseInitializationError) {
+        return h
+          .response(
+            'firebase initalization error:',
+            firebaseInitializationError.message,
+          )
+          .code(500)
       }
 
+      const { uid } = req.params
+      console.log('uid:', uid)
       if (!uid) {
-        return h.response('no user-uid was passed').code(500)
+        return h.response('no uid was passed').code(500)
       }
 
+      console.log('will query now')
       // fetch id and user_role
-      sql`select * from person where account_id = '${uid}'`
+      return sql`select * from person where account_id = ${uid}`
         .then(persons => {
-          console.log('persons:', persons)
+          console.log('persons from query result:', persons)
           if (!persons) {
             return h.response('Got no persons when querying db').code(500)
           }
@@ -92,7 +94,10 @@ async function start() {
               h.response('Error creating custom token:', adminError).code(500),
             )
         })
-        .catch(sqlError => h.response('Error querying db:', sqlError).code(500))
+        .catch(sqlError => {
+          console.log('Error querying db:', sqlError)
+          h.response(`Error querying db: ${sqlError.message}`).code(500)
+        })
     },
   })
   await server.start()
