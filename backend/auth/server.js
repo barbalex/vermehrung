@@ -32,15 +32,14 @@ async function start() {
     method: 'GET',
     path: '/{uid}',
     handler: async (req, h) => {
-      console.log('you hit root with a get')
-      console.log('serviceAccount:', serviceAccount)
+      //console.log('serviceAccount:', serviceAccount)
       // Throw 500 if firebase is not configured
       if (!serviceAccount) {
         return h.response('Firebase not configured').code(500)
       }
-      console.log('firebaseInitializationError:', firebaseInitializationError)
       // Check for errors initializing firebase SDK
       if (firebaseInitializationError) {
+        console.log('firebaseInitializationError:', firebaseInitializationError)
         return h
           .response(
             'firebase initalization error:',
@@ -50,16 +49,16 @@ async function start() {
       }
 
       const { uid } = req.params
-      console.log('uid:', uid)
+      //console.log('uid:', uid)
       if (!uid) {
         return h.response('no uid was passed').code(500)
       }
 
-      console.log('will query now')
+      //console.log('will query now')
       // fetch id and user_role
       return sql`select * from person where account_id = ${uid}`
         .then(persons => {
-          console.log('persons from query result:', persons)
+          //console.log('persons from query result:', persons)
           if (!persons) {
             return h.response('Got no persons when querying db').code(500)
           }
@@ -83,13 +82,14 @@ async function start() {
             'x-hasura-user-id': id,
           }
 
-          admin
+          return admin
             .auth()
             .createCustomToken(uid, hasuraVariables)
-            .then(customToken =>
+            .then(customToken => {
+              //console.log('customToken:', customToken)
               // Send token back to client
-              h.response(customToken),
-            )
+              return h.response(customToken)
+            })
             .catch(adminError =>
               h.response('Error creating custom token:', adminError).code(500),
             )
