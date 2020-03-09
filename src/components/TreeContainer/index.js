@@ -124,6 +124,7 @@ const TreeContainer = () => {
     isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
     isGardener,
     personId,
+    personExists: !!personId,
   }
   const { data, error, loading, refetch } = useQuery(query, {
     variables,
