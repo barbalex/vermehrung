@@ -20,10 +20,7 @@ import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
-import {
-  person as personFragment,
-  personOption as personOptionFragment,
-} from '../../../utils/fragments'
+import { person as personFragment } from '../../../utils/fragments'
 import types from '../../../store/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
