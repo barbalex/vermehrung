@@ -31,9 +31,11 @@ if (serviceAccount) {
   }
 }
 
-app.get('/', (req, res) => {
-  res.send('you hit webhook with a post')
+app.get('/:uid', (req, res) => {
+  console.log('you hit webhook with a get')
+  const uid = req.params.uid
   console.log('req:', req)
+  console.log('uid:', uid)
   // Throw 500 if firebase is not configured
   if (!serviceAccount) {
     res.status(500).send('Firebase not configured')
@@ -41,69 +43,51 @@ app.get('/', (req, res) => {
   }
   // Check for errors initializing firebase SDK
   if (error) {
-    res.status(500).send('Invalid firebase configuration')
-    return
+    return res.status(500).send('Invalid firebase configuration')
   }
-  // Get authorization headers
-  const authHeaders = req.get('Authorization')
-  // Send anonymous role if there are no auth headers
-  if (!authHeaders) {
-    res.json({ 'x-hasura-role': 'anonymous' })
-    return
-  } else {
-    // Validate the received id_token
-    const idToken = extractToken(authHeaders)
-    console.log('idToken:', idToken)
-    admin
-      .auth()
-      .verifyIdToken(idToken)
-      .then(decodedToken => {
-        const { uid } = decodedToken
-        sql`select * from person where account_id = '${uid}'`
-          .then(persons => {
-            console.log('persons:', persons)
-            if (!persons) {
-              return res.json({ 'x-hasura-role': 'anonymous' })
-            }
-            const person = persons[0]
-            if (!person) {
-              return res.json({ 'x-hasura-role': 'anonymous' })
-            }
-            const { id, user_role } = person
-            if (!id) {
-              return res.json({ 'x-hasura-role': 'anonymous' })
-            }
-            if (!user_role) {
-              return res.json({ 'x-hasura-role': 'anonymous' })
-            }
-            const hasuraVariables = {
-              'x-hasura-default-role': user_role,
-              'x-hasura-role': user_role,
-              'x-hasura-allowed-roles': user_role,
-              'x-hasura-user-id': id,
-            }
-            //console.log(hasuraVariables) // For debug
-            // Send appropriate variables
-            res.json(hasuraVariables)
-          })
-          .catch(() => res.json({ 'x-hasura-role': 'anonymous' }))
-      })
-      .catch(e => {
-        // Throw authentication error
-        console.log(e)
-        res.json({ 'x-hasura-role': 'anonymous' })
-      })
-  }
-})
 
-const extractToken = bearerToken => {
-  const regex = /^(Bearer) (.*)$/g
-  const match = regex.exec(bearerToken)
-  if (match && match[2]) {
-    return match[2]
+  if (!uid) {
+    return res.status(500).send('no user-uid was passed')
   }
-  return null
-}
+
+  // fetch id and user_role
+  sql`select * from person where account_id = '${uid}'`
+    .then(persons => {
+      console.log('persons:', persons)
+      if (!persons) {
+        return res.json({ 'x-hasura-role': 'anonymous' })
+      }
+      const person = persons[0]
+      if (!person) {
+        return res.json({ 'x-hasura-role': 'anonymous' })
+      }
+      const { id, user_role } = person
+      if (!id) {
+        return res.json({ 'x-hasura-role': 'anonymous' })
+      }
+      if (!user_role) {
+        return res.json({ 'x-hasura-role': 'anonymous' })
+      }
+      const hasuraVariables = {
+        'x-hasura-default-role': user_role,
+        'x-hasura-role': user_role,
+        'x-hasura-allowed-roles': user_role,
+        'x-hasura-user-id': id,
+      }
+
+      admin
+        .auth()
+        .createCustomToken(uid, hasuraVariables)
+        .then(customToken =>
+          // Send token back to client
+          res.send(customToken),
+        )
+        .catch(adminError =>
+          res.status(500).send('Error creating custom token:', adminError),
+        )
+    })
+    .catch(sqlError => res.status(500).send('Error querying db:', sqlError))
+})
 
 app.listen((port, host), () =>
   console.log(`app Running on http://${host}:${port}`),
