@@ -32,15 +32,6 @@ if (serviceAccount) {
 }
 
 app.get('/', (req, res) => {
-  res.send('you hit root')
-})
-app.get('/webhook', (req, res) => {
-  res.send('you hit webhook with a get')
-})
-app.post('/webhook', (req, res) => {
-  res.send('you hit webhook with a get')
-})
-app.post('/', (req, res) => {
   res.send('you hit webhook with a post')
   console.log('req:', req)
   // Throw 500 if firebase is not configured
