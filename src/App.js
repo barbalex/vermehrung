@@ -81,6 +81,7 @@ const App = ({ element }) => {
             // TODO:
             // without timeout and with timeout too low this errors before page Vermehrung logs
             const isAuthenticated = !!fb.auth().currentUser
+            console.log('App, currentUser:', fb.auth().currentUser)
             if (isAuthenticated && visitedTopDomain) {
               setTimeout(() => {
                 navigate(
