@@ -4,6 +4,7 @@ import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import axios from 'axios'
 
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
@@ -86,7 +87,21 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     const unregisterAuthObserver = firebase
       .auth()
-      .onAuthStateChanged(user => setIsSignedIn(!!user))
+      .onAuthStateChanged(async user => {
+        console.log('vermehrung page registered user:', user)
+        setIsSignedIn(!!user)
+        if (user.uid) {
+          let res
+          try {
+            res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
+          } catch (error) {
+            console.log(error)
+          }
+          // set token to localStorage so authLink picks it up on next db call
+          // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+          window.localStorage.setItem('token', res.data)
+        }
+      })
     return () => {
       unregisterAuthObserver()
     }
@@ -105,6 +120,8 @@ const Vermehrung = ({ location }) => {
     // need not to navigate or app is blocked
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
+
+  console.log('vermehrung page rendering')
 
   if (!isSignedIn) {
     return (
