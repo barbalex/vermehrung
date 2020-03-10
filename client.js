@@ -8,16 +8,15 @@ import constants from './src/utils/constants.json'
 
 const client = () => {
   const authLink = setContext(async (_, { headers }) => {
-    // TODO: get profile from auth.vermehrung.ch using https://firebase.google.com/docs/auth/admin/create-custom-tokens
-    //const user = getProfile()
-    // add claims to pass roles
-    //const claims = user['https://hasura.io/jwt/claims']
+    // get token every time from localStorage
+    // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+    const token = localStorage.getItem('token')
 
     return {
       headers: {
         ...headers,
-        'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
-        ///...claims,
+        //'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
+        authorization: token ? `Bearer ${token}` : '',
       },
     }
   })
