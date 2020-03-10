@@ -4,10 +4,11 @@ import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import gql from 'graphql-tag'
+import get from 'lodash/get'
 
 import Row from './Row'
-import { getProfile } from '../../../utils/auth'
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import queryFromTable from '../../../utils/queryFromTable'
 
 const Container = styled.div`
@@ -71,13 +72,25 @@ const query = gql`
     }
   }
 `
+const personQuery = gql`
+  query PersonQueryForRoot($accountId: String) {
+    person(where: { account_id: { _eq: $accountId } }) {
+      id
+      user_role
+    }
+  }
+`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
-  const user = getProfile()
-  const claims = user['https://hasura.io/jwt/claims'] || {}
+  const firebase = useContext(firebaseContext)
+  const accountId = firebase.auth().currentUser.uid
+
+  const personResult = useQuery(personQuery, {
+    variables: { accountId },
+  })
   // eslint-disable-next-line no-unused-vars
-  const role = claims['x-hasura-role']
+  const { user_role } = get(personResult.data, 'person[0]') || {}
 
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value

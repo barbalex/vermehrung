@@ -43,7 +43,7 @@ exports.createPages = async ({ actions, graphql }) => {
 }
 
 // see: https://auth0.com/blog/securing-gatsby-with-auth0/
-exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+exports.onCreateWebpackConfig = ({ stage, loaders, actions, getConfig }) => {
   if (stage === 'build-html') {
     /*
      * During the build step, `auth0-js` will break because it relies on
@@ -53,10 +53,23 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
      * from breaking the app.)
      */
     actions.setWebpackConfig({
+      // see: https://github.com/firebase/firebase-js-sdk/issues/2222#issuecomment-538072948
+      /*externals: getConfig().externals.concat(function(
+        context,
+        request,
+        callback,
+      ) {
+        const regex = /^@?firebase(\/(.+))?/
+        // exclude firebase products from being bundled, so they will be loaded using require() at runtime.
+        if (regex.test(request)) {
+          return callback(null, 'umd ' + request)
+        }
+        callback()
+      }),*/
       module: {
         rules: [
           {
-            test: /auth0-js/,
+            test: /@firebase/,
             use: loaders.null(),
           },
         ],

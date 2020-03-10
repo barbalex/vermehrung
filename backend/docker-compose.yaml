@@ -16,6 +16,20 @@ services:
       - sik_data:/shared
     # hasura needs higher max_locks_per_transaction
     command: postgres -c max_locks_per_transaction=2000
+  auth:
+    build:
+      context: ./auth
+    container_name: v_auth
+    restart: always
+    env_file:
+      - ./.env
+    expose:
+      - '7000'
+    ports:
+      - '7000:7000'
+    depends_on:
+      - db
+      - graphql
   graphql:
     image: 'hasura/graphql-engine:v1.1.0'
     container_name: v_graphql

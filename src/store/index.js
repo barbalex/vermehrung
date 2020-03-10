@@ -18,12 +18,13 @@ const myTypes = types
   // structure of these variables is not controlled
   // so need to define this as volatile
   .volatile(() => ({
-    auth0Users: [],
-    auth0Token: '',
-    auth0ManagementToken: '',
     notifications: [],
+    user: {},
   }))
   .actions(self => ({
+    setUser(val) {
+      self.user = val
+    },
     setUpdateExists(val) {
       self.updateExists = val
     },
@@ -54,15 +55,6 @@ const myTypes = types
     },
     removeNotification(note) {
       self.notifications = self.notifications.filter(n => n.key !== note)
-    },
-    setAuth0Users(users) {
-      self.auth0Users = users
-    },
-    setAuth0ManagementToken(token) {
-      self.auth0ManagementToken = token
-    },
-    setAuth0Token(token) {
-      self.auth0Token = token
     },
     setDocFilter(val) {
       self.docFilter = val

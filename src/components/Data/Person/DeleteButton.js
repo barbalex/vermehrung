@@ -9,6 +9,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import deleteDataset from '../../TreeContainer/Tree/delete'
 
 const TitleRow = styled.div`
@@ -26,6 +27,7 @@ const Title = styled.div`
 const PersonDeleteButton = ({ row }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -39,7 +41,11 @@ const PersonDeleteButton = ({ row }) => {
   const remove = useCallback(() => {
     const node = { url: ['Personen', row.id] }
     deleteDataset({ node, store, client })
-  }, [client, row.id, store])
+    firebase
+      .auth()
+      .currentUser.delete()
+      .catch(error => console.log(error))
+  }, [client, firebase, row.id, store])
 
   return (
     <ErrorBoundary>

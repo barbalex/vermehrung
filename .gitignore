@@ -67,3 +67,5 @@ secrets.json
 public/
 
 .now
+
+google-application-credentials.json

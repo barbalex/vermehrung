@@ -5,21 +5,27 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-link'
 
 import constants from './src/utils/constants.json'
-import { getProfile } from './src/utils/auth'
 
 const client = () => {
   const authLink = setContext(async (_, { headers }) => {
-    const user = getProfile()
-    // add hasura claims to pass roles
-    const claims = user['https://hasura.io/jwt/claims']
+    // get token every time from localStorage
+    // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+    const token = localStorage.getItem('token')
+    const newHeaders = token
+      ? {
+          headers: {
+            ...headers,
+            //'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
+            authorization: token ? `Bearer ${token}` : '',
+          },
+        }
+      : {
+          headers: {
+            ...headers,
+          },
+        }
 
-    return {
-      headers: {
-        ...headers,
-        'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
-        ...claims,
-      },
-    }
+    return newHeaders
   })
 
   const cache = new InMemoryCache()

@@ -14,13 +14,15 @@ import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
+import get from 'lodash/get'
+import gql from 'graphql-tag'
 
 import storeContext from '../../storeContext'
+import firebaseContext from '../../firebaseContext'
 import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
 import queryFromTable from '../../utils/queryFromTable'
-import { getProfile } from '../../utils/auth'
 
 const Container = styled.div`
   height: 100%;
@@ -32,16 +34,27 @@ const Container = styled.div`
     display: none !important;
   }
 `
+const personQuery = gql`
+  query PersonQueryForTreeContinerByAccoutId($accountId: String) {
+    person(where: { account_id: { _eq: $accountId } }) {
+      id
+      user_role
+    }
+  }
+`
 
 const TreeContainer = () => {
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
   const { setRefetch, openNodes, setNodes } = store.tree
+  const accountId = firebase.auth().currentUser.uid
+  //console.log('TreeContainer, accountId:', accountId)
 
-  const user = getProfile()
-  const claims = user['https://hasura.io/jwt/claims'] || {}
-  const personId =
-    user['https://hasura.io/jwt/claims']['x-hasura-user-id'] || 999999
-  const role = claims['x-hasura-role']
+  const personResult = useQuery(personQuery, {
+    variables: { accountId },
+  })
+  const { user_role: role, id: personId } =
+    get(personResult.data, 'person[0]') || {}
   const isGardener = role === 'gaertner'
 
   // 1. build list depending on path using react-window
@@ -111,6 +124,7 @@ const TreeContainer = () => {
     isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
     isGardener,
     personId,
+    personExists: !!personId,
   }
   const { data, error, loading, refetch } = useQuery(query, {
     variables,
