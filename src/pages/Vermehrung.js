@@ -75,7 +75,12 @@ const Vermehrung = ({ location }) => {
     signInFlow: 'popup',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function
     signInSuccessUrl: `/Vermehrung/${store.tree.activeNodeArray.join('/')}`,
-    signInOptions: [{ provider: firebase.auth.EmailAuthProvider.PROVIDER_ID }],
+    signInOptions: [
+      {
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        requireDisplayName: true,
+      },
+    ],
   }
 
   const { pathname } = location
@@ -91,25 +96,31 @@ const Vermehrung = ({ location }) => {
         console.log('vermehrung page registered user:', user)
         setIsSignedIn(!!user)
         if (user && user.uid) {
+          const idToken = user.getIdToken()
+          console.log('Vermehrung, idToken:', idToken)
           let res
           try {
+            /*res = await axios.post(`https://auth.vermehrung.ch/${user.uid}`, {
+              idToken,
+            })*/
             res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
           } catch (error) {
             // TODO: surface this error
             return console.log(error)
           }
           console.log('response from auth.vermehrung.ch:', res)
-          const token = res.data
-          firebase
-            .auth()
-            .signInWithCustomToken(token)
-            .catch(error => {
-              console.log('Error signing in with custom token:', error)
-              // TODO: surface this error to the ui
-            })
-          // set token to localStorage so authLink picks it up on next db call
-          // see: https://www.apollographql.com/docs/react/networking/authentication/#header
-          window.localStorage.setItem('token', token)
+          if (res.status === 200) {
+            let tokenWithRoles
+            try {
+              tokenWithRoles = await user.getIdToken(true)
+            } catch (error) {
+              console.log(error)
+            }
+            console.log('tokenWithRoles:', tokenWithRoles)
+            // set token to localStorage so authLink picks it up on next db call
+            // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+            window.localStorage.setItem('token', tokenWithRoles)
+          }
         }
       })
     return () => {
