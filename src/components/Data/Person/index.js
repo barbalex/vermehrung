@@ -14,6 +14,7 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
@@ -27,7 +28,6 @@ import Files from '../Files'
 import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
-import { getProfile } from '../../../utils/auth'
 
 const Container = styled.div`
   height: 100%;
@@ -87,9 +87,16 @@ const query = gql`
       id
     }
     user_role(order_by: { sort: asc }) {
-      id
       name
       comment
+    }
+  }
+  ${personFragment}
+`
+const personQueryByAccountId = gql`
+  query PersonQueryForPersonByAccoutId($accountId: String) {
+    person(where: { account_id: { _eq: $accountId } }) {
+      ...PersonFields
     }
   }
   ${personFragment}
@@ -98,6 +105,8 @@ const query = gql`
 const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -114,7 +123,7 @@ const Person = ({ filter: showFilter }) => {
   const userRoleWerte = useMemo(
     () =>
       get(data, 'user_role', []).map(el => ({
-        value: el.id,
+        value: el.name,
         label: `${el.name} (${el.comment})`,
       })),
     [data],
@@ -135,10 +144,12 @@ const Person = ({ filter: showFilter }) => {
     setErrors({})
   }, [row.id])
 
-  const user = getProfile()
-  const claims = user['https://hasura.io/jwt/claims'] || {}
-  const role = claims['x-hasura-role']
-  //console.log('Person, role:', role)
+  const personQueryByAccountIdResult = useQuery(personQueryByAccountId, {
+    variables: { accountId: firebase.auth().currentUser.uid },
+  })
+  const { user_role } =
+    get(personQueryByAccountIdResult.data, 'person[0]') || {}
+  //console.log('Person, user_role:', user_role)
 
   const saveToDb = useCallback(
     async event => {
@@ -202,8 +213,6 @@ const Person = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
 
-  const personRole = get(row, 'userRoleByUserRole.name')
-
   if (loading) {
     return (
       <Container>
@@ -238,7 +247,7 @@ const Person = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Person</Title>
             <TitleSymbols>
-              {role === 'manager' && (
+              {user_role === 'manager' && (
                 <>
                   <AddButton />
                   <DeleteButton row={row} />
@@ -384,7 +393,7 @@ const Person = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          {personRole === 'artverantwortlich' && <Arten personId={row.id} />}
+          {row.user_role === 'artverantwortlich' && <Arten personId={row.id} />}
           {!showFilter && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>

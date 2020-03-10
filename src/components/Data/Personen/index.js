@@ -11,11 +11,11 @@ import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
-import { getProfile } from '../../../utils/auth'
 import { person as personFragment } from '../../../utils/fragments'
 import Row from './Row'
 
@@ -72,6 +72,14 @@ const query = gql`
   }
   ${personFragment}
 `
+const personQueryByAccountId = gql`
+  query PersonQueryForPersonsByAccoutId($accountId: String) {
+    person_option(where: { account_id: { _eq: $accountId } }) {
+      ...PersonFields
+    }
+  }
+  ${personFragment}
+`
 
 const singleRowHeight = 48
 function sizeReducer(state, action) {
@@ -81,6 +89,8 @@ function sizeReducer(state, action) {
 const Personen = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -109,9 +119,10 @@ const Personen = ({ filter: showFilter }) => {
     [],
   )
 
-  const user = getProfile()
-  const claims = user['https://hasura.io/jwt/claims'] || {}
-  const role = claims['x-hasura-role']
+  const personOptionResult = useQuery(personQueryByAccountId, {
+    variables: { accountId: firebase.auth().currentUser.uid },
+  })
+  const { user_role } = get(personOptionResult.data, 'person[0]') || {}
 
   if (loading) {
     return (
@@ -146,7 +157,7 @@ const Personen = ({ filter: showFilter }) => {
           <TitleContainer>
             <Title>Personen</Title>
             <TitleSymbols>
-              {role === 'manager' && (
+              {user_role === 'manager' && (
                 <IconButton
                   aria-label="neue Person"
                   title="neue Person"

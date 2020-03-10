@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -30,7 +31,6 @@ import {
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
 } from '../../../utils/fragments'
-import getUserPersonId from '../../../utils/getUserPersonId'
 import types from '../../../store/Filter/simpleTypes'
 import Files from '../Files'
 import updateLieferung from './updateLieferung'
@@ -236,8 +236,8 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query PersonOptionQueryForLieferungLieferung($personId: bigint) {
-    person_option(where: { person_id: { _eq: $personId } }) {
+  query PersonOptionQueryForLieferungLieferung($accountId: String) {
+    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }
   }
@@ -248,6 +248,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!get(sammelLieferung, 'id')
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -282,11 +284,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     row = get(data, 'lieferung[0]') || {}
   }
 
-  const userPersonId = getUserPersonId()
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { personId: userPersonId },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
-  const { li_show_sl_felder } =
+  const { li_show_sl_felder, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
   const sammlungFilter = row.art_id
@@ -605,7 +606,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
               <AddButton />
               <DeleteButton row={row} />
               <Settings
-                personId={userPersonId}
+                personId={person_id}
                 personOptionResult={personOptionResult}
               />
               <IconButton

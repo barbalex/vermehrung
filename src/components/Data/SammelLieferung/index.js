@@ -18,6 +18,7 @@ import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -37,7 +38,6 @@ import {
 import exists from '../../../utils/exists'
 import types from '../../../store/Filter/simpleTypes'
 import updateSammelLieferung from './updateSammelLieferung'
-import getUserPersonId from '../../../utils/getUserPersonId'
 import Settings from './Settings'
 import Copy from './Copy'
 import updateAllLieferungen from './Copy/updateAllLieferungen'
@@ -239,8 +239,8 @@ const personQuery = gql`
   }
 `
 const personOptionQuery = gql`
-  query PersonOptionQueryForSammelLieferung($personId: bigint) {
-    person_option(where: { person_id: { _eq: $personId } }) {
+  query PersonOptionQueryForSammelLieferung($accountId: String) {
+    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }
   }
@@ -250,6 +250,8 @@ const personOptionQuery = gql`
 const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
+
   const { filter, isPrint, setIsPrint } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setWidthInPercentOfScreen } = store.tree
@@ -293,11 +295,10 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
     row = get(data, 'sammel_lieferung[0]') || {}
   }
 
-  const userPersonId = getUserPersonId()
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { personId: userPersonId },
+    variables: { accountId: firebase.auth().currentUser.uid },
   })
-  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
+  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
   const sammlungFilter = row.art_id
@@ -621,7 +622,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
               <DeleteButton row={row} />
               {idPassed && (
                 <Settings
-                  personId={userPersonId}
+                  personId={person_id}
                   personOptionResult={personOptionResult}
                 />
               )}
