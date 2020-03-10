@@ -24,7 +24,6 @@ import UpdateExists from './components/UpdateExists'
 
 const GlobalStyle = createGlobalStyle()
 const mobxStore = Store.create()
-const myClient = client()
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -50,8 +49,11 @@ if (typeof window !== 'undefined') {
   )
 }
 
+const myClient = client()
+
 const App = ({ element }) => {
   const [firebase, setFirebase] = useState(null)
+
   const visitedTopDomain =
     typeof window !== 'undefined' ? window.location.pathname === '/' : false
 
