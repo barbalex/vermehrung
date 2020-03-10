@@ -90,16 +90,26 @@ const Vermehrung = ({ location }) => {
       .onAuthStateChanged(async user => {
         console.log('vermehrung page registered user:', user)
         setIsSignedIn(!!user)
-        if (user.uid) {
+        if (user && user.uid) {
           let res
           try {
             res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
           } catch (error) {
-            console.log(error)
+            // TODO: surface this error
+            return console.log(error)
           }
+          console.log('response from auth.vermehrung.ch:', res)
+          const token = res.data
+          firebase
+            .auth()
+            .signInWithCustomToken(token)
+            .catch(error => {
+              console.log('Error signing in with custom token:', error)
+              // TODO: surface this error to the ui
+            })
           // set token to localStorage so authLink picks it up on next db call
           // see: https://www.apollographql.com/docs/react/networking/authentication/#header
-          window.localStorage.setItem('token', res.data)
+          window.localStorage.setItem('token', token)
         }
       })
     return () => {
