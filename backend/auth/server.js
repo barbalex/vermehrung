@@ -78,17 +78,18 @@ async function start() {
             'https://hasura.io/jwt/claims': {
               'x-hasura-default-role': user_role,
               'x-hasura-allowed-roles': [user_role],
-              'x-hasura-user-id': id,
+              // beware: hasura expects strings
+              'x-hasura-user-id': `"${id}"`,
             },
           }
 
           return admin
             .auth()
-            .createCustomToken(uid, hasuraVariables)
-            .then(customToken => {
+            .setCustomUserClaims(uid, hasuraVariables)
+            .then(() => {
               //console.log('customToken:', customToken)
               // Send token back to client
-              return h.response(customToken)
+              return h.response('user role and id set').code(200)
             })
             .catch(adminError => {
               console.log('Error creating custom token:', adminError)
