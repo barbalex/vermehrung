@@ -87,7 +87,6 @@ const query = gql`
       id
     }
     user_role(order_by: { sort: asc }) {
-      id
       name
       comment
     }
@@ -124,7 +123,7 @@ const Person = ({ filter: showFilter }) => {
   const userRoleWerte = useMemo(
     () =>
       get(data, 'user_role', []).map(el => ({
-        value: el.id,
+        value: el.name,
         label: `${el.name} (${el.comment})`,
       })),
     [data],
@@ -213,8 +212,6 @@ const Person = ({ filter: showFilter }) => {
     },
     [client, filter, row, showFilter],
   )
-
-  const personRole = get(row, 'userRoleByUserRole.name')
 
   if (loading) {
     return (
@@ -396,7 +393,7 @@ const Person = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          {personRole === 'artverantwortlich' && <Arten personId={row.id} />}
+          {row.user_role === 'artverantwortlich' && <Arten personId={row.id} />}
           {!showFilter && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>
