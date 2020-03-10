@@ -76,10 +76,12 @@ async function start() {
               .code(500)
           }
           const hasuraVariables = {
-            'x-hasura-default-role': user_role,
-            'x-hasura-role': user_role,
-            'x-hasura-allowed-roles': user_role,
-            'x-hasura-user-id': id,
+            'https://hasura.io/jwt/claims': {
+              'x-hasura-default-role': user_role,
+              'x-hasura-role': user_role,
+              'x-hasura-allowed-roles': [user_role],
+              'x-hasura-user-id': id,
+            },
           }
 
           return admin
