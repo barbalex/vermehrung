@@ -6,6 +6,7 @@ import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
+import { useApolloClient } from '@apollo/react-hooks'
 
 import firebaseContext from '../../../firebaseContext'
 
@@ -30,6 +31,7 @@ const StyledUserIcon = styled(UserIcon)`
 
 const Account = () => {
   const firebase = useContext(firebaseContext)
+  const client = useApolloClient()
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
@@ -38,7 +40,8 @@ const Account = () => {
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
     firebase.auth().signOut()
-  }, [firebase])
+    client.resetStore()
+  }, [client, firebase])
 
   const { picture, email } = firebase.auth().currentUser || {}
 
