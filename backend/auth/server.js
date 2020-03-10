@@ -42,8 +42,7 @@ async function start() {
         console.log('firebaseInitializationError:', firebaseInitializationError)
         return h
           .response(
-            'firebase initalization error:',
-            firebaseInitializationError.message,
+            `firebase initalization error: ${firebaseInitializationError.message}`,
           )
           .code(500)
       }
@@ -78,7 +77,6 @@ async function start() {
           const hasuraVariables = {
             'https://hasura.io/jwt/claims': {
               'x-hasura-default-role': user_role,
-              'x-hasura-role': user_role,
               'x-hasura-allowed-roles': [user_role],
               'x-hasura-user-id': id,
             },
@@ -92,9 +90,12 @@ async function start() {
               // Send token back to client
               return h.response(customToken)
             })
-            .catch(adminError =>
-              h.response('Error creating custom token:', adminError).code(500),
-            )
+            .catch(adminError => {
+              console.log('Error creating custom token:', adminError)
+              h.response(
+                `Error creating custom token: ${adminError.message}`,
+              ).code(500)
+            })
         })
         .catch(sqlError => {
           console.log('Error querying db:', sqlError)
