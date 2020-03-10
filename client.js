@@ -11,14 +11,21 @@ const client = () => {
     // get token every time from localStorage
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     const token = localStorage.getItem('token')
+    const newHeaders = token
+      ? {
+          headers: {
+            ...headers,
+            //'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
+            authorization: token ? `Bearer ${token}` : '',
+          },
+        }
+      : {
+          headers: {
+            ...headers,
+          },
+        }
 
-    return {
-      headers: {
-        ...headers,
-        //'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    }
+    return newHeaders
   })
 
   const cache = new InMemoryCache()
