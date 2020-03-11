@@ -42,7 +42,7 @@ const PersonDeleteButton = ({ row }) => {
     const node = { url: ['Personen', row.id] }
     deleteDataset({ node, store, client })
     // delete firebase user
-    if (node.accountId) {
+    if (row.account_id) {
       try {
         await axios.get(
           `https://auth.vermehrung.ch/delete-user/${row.account_id}`,
@@ -58,8 +58,6 @@ const PersonDeleteButton = ({ row }) => {
       }
     }
   }, [client, enqueNotification, row.account_id, row.id, store])
-
-  console.log({ row })
 
   return (
     <ErrorBoundary>
