@@ -53,9 +53,10 @@ const StyledSplitPane = styled(SplitPane)`
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
-  console.log('Vermehrung rendering')
+  //console.log('Vermehrung rendering')
 
   const { activeForm, isPrint, user, initializingFirebase, isSignedIn } = store
+  const existsUser = !!user.uid
   const {
     setOpenNodes,
     setActiveNodeArray,
@@ -87,15 +88,6 @@ const Vermehrung = ({ location }) => {
     // this is important because of bug in firebaseui-web-react
     // https://github.com/firebase/firebaseui-web-react/issues/67
     credentialHelper: 'none',
-    callbacks: {
-      signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-        console.log('Vermehrung, firebase, signInSuccessWithAuthResult', {
-          authResult,
-          redirectUrl,
-        })
-        return true
-      },
-    },
   }
 
   const { pathname } = location
@@ -115,11 +107,11 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  console.log('vermehrung page rendering:', {
+  /*console.log('vermehrung page rendering:', {
     user,
     initializingFirebase,
     isSignedIn,
-  })
+  })*/
 
   if (initializingFirebase) {
     return (
@@ -131,7 +123,12 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  if (!isSignedIn) {
+  if (!(isSignedIn || existsUser)) {
+    /*console.log('vermehrung page rendering auth:', {
+      user,
+      initializingFirebase,
+      isSignedIn,
+    })*/
     return (
       <ErrorBoundary>
         <Layout>
@@ -139,7 +136,6 @@ const Vermehrung = ({ location }) => {
             <StyledFirebaseAuth
               uiConfig={firebaseUiConfig}
               firebaseAuth={firebase.auth()}
-              uiCallback={ui => ui.disableAutoSignIn()}
             />
           </TempContainer>
         </Layout>
@@ -149,7 +145,7 @@ const Vermehrung = ({ location }) => {
 
   // for unknown reason user remains null even though it is set BEFORE isSignedIn and initializingFirebase
   // so need to catch that
-  if (!user) {
+  if (!(existsUser && isSignedIn && !initializingFirebase)) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -160,6 +156,11 @@ const Vermehrung = ({ location }) => {
   }
   // hide resizer when tree is not shown
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
+  /*console.log('Vermehrung, will render tree', {
+    user,
+    initializingFirebase,
+    isSignedIn,
+  })*/
 
   return (
     <ErrorBoundary>

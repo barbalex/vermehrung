@@ -21,7 +21,7 @@ const myTypes = types
   // so need to define this as volatile
   .volatile(() => ({
     notifications: [],
-    user: null,
+    user: {},
   }))
   .actions(self => ({
     setIsSignedIn(val) {
@@ -31,7 +31,7 @@ const myTypes = types
       self.initializingFirebase = val
     },
     setUser(val) {
-      self.user = val
+      self.user = val || {}
     },
     setUpdateExists(val) {
       self.updateExists = val
