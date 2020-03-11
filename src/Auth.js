@@ -36,72 +36,75 @@ const Auth = ({ children }) => {
   useEffect(() => {
     if (firebase) return
 
+    /**
+     * 2020.03.11: suddenly basic mobx errors occured
+     * so had to turn off mst-persist
+     */
     let unregisterAuthObserver = () => {}
-    Promise.all([import('firebase'), import('mst-persist')]).then(
-      ([fbModule, pModule]) => {
+    Promise.all([import('firebase') /*, import('mst-persist')*/]).then(
+      ([fbModule /*, pModule*/]) => {
+        //const blacklist = []
+        //const persist = pModule.default
+        //persist('store', store, {
+        //  storage: localForage,
+        //  jsonify: false,
+        //  blacklist,
+        //}).then(() => {
         const fb = fbModule.default
         fb.initializeApp(firebaseConfig)
         setFirebase(fb)
-
-        const blacklist = ['user']
-        const persist = pModule.default
-        persist('store', store, {
-          storage: localForage,
-          jsonify: false,
-          blacklist,
-        }).then(() => {
-          unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-            //console.log('Auth onAuthStateChanged, user:', user)
-            setUser(user)
-            setIsSignedIn(!!user)
-            if (user && user.uid) {
-              setInitializingFirebase(true)
-              //const idToken = user.getIdToken()
-              //console.log('Vermehrung, idToken:', idToken)
-              let res
+        unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
+          //console.log('Auth onAuthStateChanged, user:', user)
+          setUser(user)
+          setIsSignedIn(!!user)
+          if (user && user.uid) {
+            setInitializingFirebase(true)
+            //const idToken = user.getIdToken()
+            //console.log('Vermehrung, idToken:', idToken)
+            let res
+            try {
+              res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
+            } catch (error) {
+              // TODO: surface this error
+              console.log(error)
+              return enqueNotification({
+                message: error.response.data,
+                options: {
+                  variant: 'error',
+                },
+              })
+            }
+            console.log('response from auth.vermehrung.ch:', res)
+            if (res.status === 200) {
+              let tokenWithRoles
               try {
-                res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
+                tokenWithRoles = await user.getIdToken(true)
               } catch (error) {
-                // TODO: surface this error
                 console.log(error)
-                return enqueNotification({
-                  message: error.response.data,
-                  options: {
-                    variant: 'error',
-                  },
-                })
               }
-              console.log('response from auth.vermehrung.ch:', res)
-              if (res.status === 200) {
-                let tokenWithRoles
-                try {
-                  tokenWithRoles = await user.getIdToken(true)
-                } catch (error) {
-                  console.log(error)
-                }
-                //console.log('tokenWithRoles:', tokenWithRoles)
-                // set token to localStorage so authLink picks it up on next db call
-                // see: https://www.apollographql.com/docs/react/networking/authentication/#header
-                window.localStorage.setItem('token', tokenWithRoles)
-                setTimeout(() => setInitializingFirebase(false))
-              } else {
-                setInitializingFirebase(false)
-              }
+              //console.log('tokenWithRoles:', tokenWithRoles)
+              // set token to localStorage so authLink picks it up on next db call
+              // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+              window.localStorage.setItem('token', tokenWithRoles)
+              setTimeout(() => setInitializingFirebase(false))
             } else {
               setInitializingFirebase(false)
             }
-            // set last activeNodeArray
-            // only if top domain was visited
-            // TODO:
-            // without timeout and with timeout too low this errors before page Vermehrung logs
-            const isAuthenticated = !!user
-            if (isAuthenticated && visitedTopDomain) {
-              setTimeout(() => {
-                navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
-              }, 200)
-            }
-          })
+          } else {
+            setInitializingFirebase(false)
+          }
+          // set last activeNodeArray
+          // only if top domain was visited
+          // TODO:
+          // without timeout and with timeout too low this errors before page Vermehrung logs
+          const isAuthenticated = !!user
+          if (isAuthenticated && visitedTopDomain) {
+            setTimeout(() => {
+              navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
+            }, 200)
+          }
         })
+        //})
       },
     )
     return () => {
