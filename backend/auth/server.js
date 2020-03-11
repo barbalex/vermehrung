@@ -117,16 +117,13 @@ async function start() {
       }
 
       const { uid } = req.params
-      //console.log('uid:', uid)
       if (!uid) {
         return h.response('no uid was passed').code(500)
       }
 
-      //console.log('will query now')
       // fetch id and user_role
       return sql`select * from person where account_id = ${uid}`
         .then(persons => {
-          //console.log('persons from query result:', persons)
           if (!persons) {
             return h.response('Got no persons when querying db').code(500)
           }
@@ -158,8 +155,6 @@ async function start() {
             .auth()
             .setCustomUserClaims(uid, hasuraVariables)
             .then(() => {
-              //console.log('customToken:', customToken)
-              // Send token back to client
               return h.response('user role and id set').code(200)
             })
             .catch(adminError => {
