@@ -67,6 +67,7 @@ const App = ({ element }) => {
 
   useEffect(() => {
     if (firebase) return
+    let unregisterAuthObserver = () => {}
     import('firebase').then(module => {
       const fb = module.default
       fb.initializeApp(firebaseConfig)
@@ -80,64 +81,53 @@ const App = ({ element }) => {
           jsonify: false,
           blacklist,
         }).then(() => {
-          // set last activeNodeArray
-          // only if top domain was visited
-          // TODO:
-          // without timeout and with timeout too low this errors before page Vermehrung logs
-          const isAuthenticated = !!fb.auth().currentUser
-          console.log('App, currentUser:', fb.auth().currentUser)
-          if (isAuthenticated && visitedTopDomain) {
-            setTimeout(() => {
-              navigate(
-                `/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`,
-              )
-            }, 200)
-          }
+          unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
+            console.log('vermehrung page registered user:', user)
+            mobxStore.setUser(user)
+            if (user && user.uid) {
+              const idToken = user.getIdToken()
+              console.log('Vermehrung, idToken:', idToken)
+              let res
+              try {
+                res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
+              } catch (error) {
+                // TODO: surface this error
+                return console.log(error)
+              }
+              console.log('response from auth.vermehrung.ch:', res)
+              if (res.status === 200) {
+                let tokenWithRoles
+                try {
+                  tokenWithRoles = await user.getIdToken(true)
+                } catch (error) {
+                  console.log(error)
+                }
+                console.log('tokenWithRoles:', tokenWithRoles)
+                // set token to localStorage so authLink picks it up on next db call
+                // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+                window.localStorage.setItem('token', tokenWithRoles)
+              }
+            }
+            // set last activeNodeArray
+            // only if top domain was visited
+            // TODO:
+            // without timeout and with timeout too low this errors before page Vermehrung logs
+            const isAuthenticated = !!user
+            if (isAuthenticated && visitedTopDomain) {
+              setTimeout(() => {
+                navigate(
+                  `/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`,
+                )
+              }, 200)
+            }
+          })
         })
       })
     })
-  }, [firebase, visitedTopDomain])
-
-  // Listen to the Firebase Auth state and set the local state
-  useEffect(() => {
-    if (!firebase) return
-    const unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged(async user => {
-        console.log('vermehrung page registered user:', user)
-        mobxStore.setUser(user)
-        if (user && user.uid) {
-          const idToken = user.getIdToken()
-          console.log('Vermehrung, idToken:', idToken)
-          let res
-          try {
-            /*res = await axios.post(`https://auth.vermehrung.ch/${user.uid}`, {
-              idToken,
-            })*/
-            res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
-          } catch (error) {
-            // TODO: surface this error
-            return console.log(error)
-          }
-          console.log('response from auth.vermehrung.ch:', res)
-          if (res.status === 200) {
-            let tokenWithRoles
-            try {
-              tokenWithRoles = await user.getIdToken(true)
-            } catch (error) {
-              console.log(error)
-            }
-            console.log('tokenWithRoles:', tokenWithRoles)
-            // set token to localStorage so authLink picks it up on next db call
-            // see: https://www.apollographql.com/docs/react/networking/authentication/#header
-            window.localStorage.setItem('token', tokenWithRoles)
-          }
-        }
-      })
     return () => {
       unregisterAuthObserver()
     }
-  }, [firebase])
+  }, [firebase, visitedTopDomain])
 
   if (!firebase && !visitedTopDomain) return null
 
