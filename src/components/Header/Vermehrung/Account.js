@@ -52,7 +52,10 @@ const Account = () => {
   const onClickReset = useCallback(async () => {
     setResetTitle('...')
     try {
-      await firebase.auth().sendPasswordResetEmail(email)
+      await firebase.auth().sendPasswordResetEmail(email, {
+        url: 'https://vermehrung.ch/Vermehrung',
+        handleCodeInApp: true,
+      })
     } catch (error) {
       setResetTitle('Fehler: Passwort nicht zurückgesetzt')
       setTimeout(() => {
