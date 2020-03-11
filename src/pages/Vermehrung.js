@@ -18,6 +18,10 @@ import firebaseContext from '../firebaseContext'
 const Container = styled.div`
   min-height: calc(100vh - 64px);
 `
+const TempContainer = styled.div`
+  min-height: calc(100vh - 64px);
+  padding: 10px;
+`
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
   .Resizer {
@@ -49,8 +53,9 @@ const StyledSplitPane = styled(SplitPane)`
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
+  console.log('Vermehrung rendering')
 
-  const { activeForm, isPrint, user } = store
+  const { activeForm, isPrint, user, initializingFirebase, isSignedIn } = store
   const {
     setOpenNodes,
     setActiveNodeArray,
@@ -110,20 +115,45 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  //console.log('vermehrung page rendering, user:', user)
+  console.log('vermehrung page rendering:', {
+    user,
+    initializingFirebase,
+    isSignedIn,
+  })
 
-  if (!user) {
-    //return null
+  if (initializingFirebase) {
     return (
       <ErrorBoundary>
         <Layout>
-          <Container>
+          <TempContainer>autorisiere...</TempContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
+
+  if (!isSignedIn) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <TempContainer>
             <StyledFirebaseAuth
               uiConfig={firebaseUiConfig}
               firebaseAuth={firebase.auth()}
               uiCallback={ui => ui.disableAutoSignIn()}
             />
-          </Container>
+          </TempContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
+
+  // for unknown reason user remains null even though it is set BEFORE isSignedIn and initializingFirebase
+  // so need to catch that
+  if (!user) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <TempContainer>autorisiere...</TempContainer>
         </Layout>
       </ErrorBoundary>
     )
