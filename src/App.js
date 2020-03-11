@@ -54,6 +54,8 @@ const myClient = client()
 const firebaseConfig = {
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
   authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
+  appId: process.env.GATSBY_FIREBASE_APP_ID,
 }
 
 const App = ({ element }) => {
@@ -70,29 +72,28 @@ const App = ({ element }) => {
       setFirebase(fb)
 
       const blacklist = []
-      import('mst-persist').then(module =>
-        module
-          .default('store', mobxStore, {
-            storage: localForage,
-            jsonify: false,
-            blacklist,
-          })
-          .then(() => {
-            // set last activeNodeArray
-            // only if top domain was visited
-            // TODO:
-            // without timeout and with timeout too low this errors before page Vermehrung logs
-            const isAuthenticated = !!fb.auth().currentUser
-            console.log('App, currentUser:', fb.auth().currentUser)
-            if (isAuthenticated && visitedTopDomain) {
-              setTimeout(() => {
-                navigate(
-                  `/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`,
-                )
-              }, 200)
-            }
-          }),
-      )
+      import('mst-persist').then(module => {
+        const persist = module.default
+        persist('store', mobxStore, {
+          storage: localForage,
+          jsonify: false,
+          blacklist,
+        }).then(() => {
+          // set last activeNodeArray
+          // only if top domain was visited
+          // TODO:
+          // without timeout and with timeout too low this errors before page Vermehrung logs
+          const isAuthenticated = !!fb.auth().currentUser
+          console.log('App, currentUser:', fb.auth().currentUser)
+          if (isAuthenticated && visitedTopDomain) {
+            setTimeout(() => {
+              navigate(
+                `/Vermehrung/${mobxStore.tree.activeNodeArray.join('/')}`,
+              )
+            }, 200)
+          }
+        })
+      })
     })
   }, [firebase, visitedTopDomain])
 
