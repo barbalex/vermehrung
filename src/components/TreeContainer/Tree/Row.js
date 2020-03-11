@@ -312,6 +312,7 @@ const Row = ({ style, node }) => {
         variant: 'success',
       },
     })
+    console.log('Row, newUser:', newUser)
     // save resp.Id to mark users with account
     client.mutate({
       mutation: gql`

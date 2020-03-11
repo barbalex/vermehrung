@@ -20,10 +20,15 @@ const firebaseConfig = {
 
 const Auth = ({ children }) => {
   const store = useContext(storeContext)
-  const { setInitializingFirebase, setIsSignedIn, setUser } = store
+  const {
+    setInitializingFirebase,
+    setIsSignedIn,
+    setUser,
+    enqueNotification,
+  } = store
   const [firebase, setFirebase] = useState(null)
 
-  console.log('Auth rendering, firebase:', firebase)
+  //console.log('Auth rendering, firebase:', firebase)
 
   const visitedTopDomain =
     typeof window !== 'undefined' ? window.location.pathname === '/' : false
@@ -46,10 +51,9 @@ const Auth = ({ children }) => {
           blacklist,
         }).then(() => {
           unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-            console.log('vermehrung onAuthStateChanged, user:', user)
+            //console.log('Auth onAuthStateChanged, user:', user)
             setUser(user)
             setIsSignedIn(!!user)
-            //setUser(user)
             if (user && user.uid) {
               setInitializingFirebase(true)
               //const idToken = user.getIdToken()
@@ -59,9 +63,15 @@ const Auth = ({ children }) => {
                 res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
               } catch (error) {
                 // TODO: surface this error
-                return console.log(error)
+                console.log(error)
+                return enqueNotification({
+                  message: error.response.data,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
-              //console.log('response from auth.vermehrung.ch:', res)
+              console.log('response from auth.vermehrung.ch:', res)
               if (res.status === 200) {
                 let tokenWithRoles
                 try {
@@ -73,12 +83,12 @@ const Auth = ({ children }) => {
                 // set token to localStorage so authLink picks it up on next db call
                 // see: https://www.apollographql.com/docs/react/networking/authentication/#header
                 window.localStorage.setItem('token', tokenWithRoles)
-                setTimeout(() => setInitializingFirebase(false), 1000)
+                setTimeout(() => setInitializingFirebase(false))
               } else {
-                setTimeout(() => setInitializingFirebase(false), 1000)
+                setInitializingFirebase(false)
               }
             } else {
-              setTimeout(() => setInitializingFirebase(false), 1000)
+              setInitializingFirebase(false)
             }
             // set last activeNodeArray
             // only if top domain was visited
@@ -98,6 +108,7 @@ const Auth = ({ children }) => {
       unregisterAuthObserver()
     }
   }, [
+    enqueNotification,
     firebase,
     setInitializingFirebase,
     setIsSignedIn,

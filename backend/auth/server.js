@@ -63,16 +63,18 @@ async function start() {
           }
           const person = persons[0]
           if (!person) {
-            return h.response('Got no person when querying db').code(500)
+            return h.response('Got no person when querying db').code(412)
           }
           const { id, user_role } = person
           if (!id) {
-            return h.response('Got no person_id when querying db').code(500)
+            return h.response('Got no person_id when querying db').code(412)
           }
           if (!user_role) {
             return h
-              .response('Got no person-user_role when querying db')
-              .code(500)
+              .response(
+                'Diese Person hat keine Rolle. Ohne Rolle ist eine Anmeldung nicht möglich.',
+              )
+              .code(412)
           }
           const hasuraVariables = {
             'https://hasura.io/jwt/claims': {
