@@ -14,7 +14,6 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
@@ -105,9 +104,8 @@ const personQueryByAccountId = gql`
 const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
 
-  const { filter } = store
+  const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -145,7 +143,7 @@ const Person = ({ filter: showFilter }) => {
   }, [row.id])
 
   const personQueryByAccountIdResult = useQuery(personQueryByAccountId, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: user.uid },
   })
   const { user_role } =
     get(personQueryByAccountIdResult.data, 'person[0]') || {}

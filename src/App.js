@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
+import axios from 'axios'
 
 import createGlobalStyle from './utils/createGlobalStyle'
 import Store from './store'
@@ -71,7 +72,7 @@ const App = ({ element }) => {
       fb.initializeApp(firebaseConfig)
       setFirebase(fb)
 
-      const blacklist = []
+      const blacklist = ['user']
       import('mst-persist').then(module => {
         const persist = module.default
         persist('store', mobxStore, {
@@ -96,6 +97,47 @@ const App = ({ element }) => {
       })
     })
   }, [firebase, visitedTopDomain])
+
+  // Listen to the Firebase Auth state and set the local state
+  useEffect(() => {
+    if (!firebase) return
+    const unregisterAuthObserver = firebase
+      .auth()
+      .onAuthStateChanged(async user => {
+        console.log('vermehrung page registered user:', user)
+        mobxStore.setUser(user)
+        if (user && user.uid) {
+          const idToken = user.getIdToken()
+          console.log('Vermehrung, idToken:', idToken)
+          let res
+          try {
+            /*res = await axios.post(`https://auth.vermehrung.ch/${user.uid}`, {
+              idToken,
+            })*/
+            res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
+          } catch (error) {
+            // TODO: surface this error
+            return console.log(error)
+          }
+          console.log('response from auth.vermehrung.ch:', res)
+          if (res.status === 200) {
+            let tokenWithRoles
+            try {
+              tokenWithRoles = await user.getIdToken(true)
+            } catch (error) {
+              console.log(error)
+            }
+            console.log('tokenWithRoles:', tokenWithRoles)
+            // set token to localStorage so authLink picks it up on next db call
+            // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+            window.localStorage.setItem('token', tokenWithRoles)
+          }
+        }
+      })
+    return () => {
+      unregisterAuthObserver()
+    }
+  }, [firebase])
 
   if (!firebase && !visitedTopDomain) return null
 

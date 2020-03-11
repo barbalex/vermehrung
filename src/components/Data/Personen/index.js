@@ -11,7 +11,6 @@ import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
@@ -89,9 +88,8 @@ function sizeReducer(state, action) {
 const Personen = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
 
-  const { filter } = store
+  const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
@@ -120,7 +118,7 @@ const Personen = ({ filter: showFilter }) => {
   )
 
   const personOptionResult = useQuery(personQueryByAccountId, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: user.uid },
   })
   const { user_role } = get(personOptionResult.data, 'person[0]') || {}
 

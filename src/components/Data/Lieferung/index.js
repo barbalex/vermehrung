@@ -10,7 +10,6 @@ import gql from 'graphql-tag'
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import {
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
@@ -80,8 +79,8 @@ const personOptionQuery = gql`
 
 const LieferungContainer = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
 
+  const { user } = store
   const { activeNodeArray } = store.tree
 
   const lieferungId = last(activeNodeArray.filter(e => !isNaN(e)))
@@ -102,7 +101,7 @@ const LieferungContainer = ({ filter: showFilter }) => {
     get(lieferungData, 'lieferung[0].sammel_lieferung') || {}
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: user.uid },
   })
   const { li_show_sl } =
     get(personOptionResult.data, 'person_option[0]', {}) || {}

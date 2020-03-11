@@ -14,7 +14,6 @@ import last from 'lodash/last'
 import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -115,9 +114,8 @@ const personOptionQuery = gql`
 const Garten = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
 
-  const { filter } = store
+  const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -147,7 +145,7 @@ const Garten = ({ filter: showFilter }) => {
   }
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: user.uid },
   })
   const {
     ga_strasse,

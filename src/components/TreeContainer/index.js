@@ -18,7 +18,6 @@ import get from 'lodash/get'
 import gql from 'graphql-tag'
 
 import storeContext from '../../storeContext'
-import firebaseContext from '../../firebaseContext'
 import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
@@ -45,10 +44,9 @@ const personQuery = gql`
 
 const TreeContainer = () => {
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
+  const { user } = store
   const { setRefetch, openNodes, setNodes } = store.tree
-  const accountId = firebase.auth().currentUser.uid
-  //console.log('TreeContainer, accountId:', accountId)
+  const accountId = user.uid
 
   const personResult = useQuery(personQuery, {
     variables: { accountId },

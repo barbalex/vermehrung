@@ -1,10 +1,9 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import axios from 'axios'
 
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
@@ -51,7 +50,7 @@ const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
 
-  const { activeForm, isPrint, isSignedIn, setIsSignedIn } = store
+  const { activeForm, isPrint, user } = store
   const {
     setOpenNodes,
     setActiveNodeArray,
@@ -86,46 +85,6 @@ const Vermehrung = ({ location }) => {
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
 
-  // Listen to the Firebase Auth state and set the local state
-  useEffect(() => {
-    const unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged(async user => {
-        console.log('vermehrung page registered user:', user)
-        setIsSignedIn(!!user)
-        if (user && user.uid) {
-          const idToken = user.getIdToken()
-          console.log('Vermehrung, idToken:', idToken)
-          let res
-          try {
-            /*res = await axios.post(`https://auth.vermehrung.ch/${user.uid}`, {
-              idToken,
-            })*/
-            res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
-          } catch (error) {
-            // TODO: surface this error
-            return console.log(error)
-          }
-          console.log('response from auth.vermehrung.ch:', res)
-          if (res.status === 200) {
-            let tokenWithRoles
-            try {
-              tokenWithRoles = await user.getIdToken(true)
-            } catch (error) {
-              console.log(error)
-            }
-            console.log('tokenWithRoles:', tokenWithRoles)
-            // set token to localStorage so authLink picks it up on next db call
-            // see: https://www.apollographql.com/docs/react/networking/authentication/#header
-            window.localStorage.setItem('token', tokenWithRoles)
-          }
-        }
-      })
-    return () => {
-      unregisterAuthObserver()
-    }
-  }, [firebase])
-
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
   // it will not be possible to open multiple branches in tree
@@ -140,9 +99,9 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  console.log('vermehrung page rendering')
+  console.log('vermehrung page rendering, user:', user)
 
-  if (!isSignedIn) {
+  if (!user) {
     return (
       <ErrorBoundary>
         <Layout>

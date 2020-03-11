@@ -16,7 +16,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -248,9 +247,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!get(sammelLieferung, 'id')
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
 
-  const { filter } = store
+  const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -285,7 +283,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: user.uid },
   })
   const { li_show_sl_felder, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}

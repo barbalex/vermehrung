@@ -18,7 +18,6 @@ import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -250,9 +249,8 @@ const personOptionQuery = gql`
 const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
 
-  const { filter, isPrint, setIsPrint } = store
+  const { filter, isPrint, setIsPrint, user } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setWidthInPercentOfScreen } = store.tree
 
@@ -296,7 +294,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   }
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: user.uid },
   })
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}

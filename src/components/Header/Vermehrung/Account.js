@@ -9,6 +9,7 @@ import ErrorBoundary from 'react-error-boundary'
 import { useApolloClient } from '@apollo/react-hooks'
 
 import firebaseContext from '../../../firebaseContext'
+import storeContext from '../../../storeContext'
 
 const IconContainer = styled.div`
   position: relative;
@@ -31,7 +32,10 @@ const StyledUserIcon = styled(UserIcon)`
 
 const Account = () => {
   const firebase = useContext(firebaseContext)
+  const store = useContext(storeContext)
   const client = useApolloClient()
+
+  const { user } = store
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
@@ -43,7 +47,7 @@ const Account = () => {
     client.resetStore()
   }, [client, firebase])
 
-  const { picture, email } = firebase.auth().currentUser || {}
+  const { picture, email } = user || {}
 
   const onClickReset = useCallback(async () => {
     setResetTitle('...')
