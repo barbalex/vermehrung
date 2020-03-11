@@ -29,9 +29,8 @@ const mobxStore = Store.create()
 registerLocale('de', de)
 setDefaultLocale('de')
 
-if (typeof window !== 'undefined') window.store = mobxStore
-
 if (typeof window !== 'undefined') {
+  window.store = mobxStore
   // inform users of old browsers
   const browserUpdateConfiguration = {
     required: { e: -2, f: -2, o: -2, s: -2, c: -2 },
@@ -53,7 +52,7 @@ if (typeof window !== 'undefined') {
 const apolloClient = createApolloClient()
 
 const App = ({ element }) => {
-  //console.log('App rendering')
+  console.log('App rendering')
 
   return (
     <MuiThemeProvider theme={materialTheme}>
