@@ -59,11 +59,11 @@ const Auth = ({ children }) => {
           setIsSignedIn(!!user)
           if (user && user.uid) {
             setInitializingFirebase(true)
-            //const idToken = user.getIdToken()
-            //console.log('Vermehrung, idToken:', idToken)
             let res
             try {
-              res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
+              res = await axios.get(
+                `https://auth.vermehrung.ch/add-hasura-claims/${user.uid}`,
+              )
             } catch (error) {
               console.log(error)
               return enqueNotification({

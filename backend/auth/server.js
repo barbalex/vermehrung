@@ -30,7 +30,41 @@ if (serviceAccount) {
 async function start() {
   server.route({
     method: 'GET',
-    path: '/{uid}',
+    path: '/create-user/{email}',
+    handler: async (req, h) => {
+      if (!serviceAccount) {
+        return h.response('Firebase not configured').code(500)
+      }
+      // Check for errors initializing firebase SDK
+      if (firebaseInitializationError) {
+        console.log('firebaseInitializationError:', firebaseInitializationError)
+        return h
+          .response(
+            `firebase initalization error: ${firebaseInitializationError.message}`,
+          )
+          .code(500)
+      }
+      const { email } = req.params
+      let user
+      try {
+        user = await admin.auth().createUser({
+          email,
+          password: 'initial-passwort-bitte-aendern',
+        })
+      } catch (error) {
+        return h
+          .response(`firebase createUser error: ${error.message}`)
+          .code(500)
+      }
+      console.log('create-user, user:', user)
+      console.log('create-user, user.uid:', user.uid)
+      return h.response(user.uid).code(200)
+    },
+  })
+
+  server.route({
+    method: 'GET',
+    path: '/add-hasura-claims/{uid}',
     handler: async (req, h) => {
       //console.log('serviceAccount:', serviceAccount)
       // Throw 500 if firebase is not configured
