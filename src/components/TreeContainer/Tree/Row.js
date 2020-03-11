@@ -21,6 +21,7 @@ import closeAllChildren from '../closeAllChildren'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
+import firebaseContext from '../../../firebaseContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
 import { person as personFragment } from '../../../utils/fragments'
@@ -206,6 +207,7 @@ const personQuery = gql`
 const Row = ({ style, node }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const firebase = useContext(firebaseContext)
 
   const { tree, enqueNotification, user } = store
   const { nodes, openNodes, activeNodeArray } = tree
@@ -245,10 +247,72 @@ const Row = ({ style, node }) => {
   const onClickNeu = useCallback(() => {
     createNew({ node, store, client })
   }, [node, store, client])
-  const onClickDelete = useCallback(() => {
+  const onClickDelete = useCallback(async () => {
     deleteDataset({ node, store, client })
-  }, [node, store, client])
+    // delete firebase user
+    if (node.accountId) {
+      try {
+        await axios.get(
+          `https://auth.vermehrung.ch/delete-user/${node.accountId}`,
+        )
+      } catch (error) {
+        console.log(error)
+        return enqueNotification({
+          message: error.response.data,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+    }
+  }, [client, enqueNotification, node, store])
 
+  const onClickSetPassword = useCallback(async () => {
+    const personId = last(node.url).toString()
+    // fetch email of this person
+    let result
+    try {
+      result = await client.query({
+        query: gql`
+          query getPerson($id: Int!) {
+            person (where: { id: { _eq: ${personId} } }) {
+              id
+              email
+              user_role
+            }
+          }
+        `,
+        variables: { id: personId },
+      })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const email = get(result, 'data.person[0].email')
+    try {
+      await firebase.auth().sendPasswordResetEmail(email, {
+        url: 'https://vermehrung.ch/Vermehrung',
+        handleCodeInApp: true,
+      })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    store.enqueNotification({
+      message: `Die Person mit dem Email ${email} erhält einen Link, um ein Passwort zu setzen`,
+      options: {
+        variant: 'success',
+      },
+    })
+  }, [client, enqueNotification, firebase, node.url, store])
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
     // fetch email of this person
@@ -305,7 +369,7 @@ const Row = ({ style, node }) => {
       })
     }
     store.enqueNotification({
-      message: `Für ${email} wurde ein Konto erstellt, mit dem Passwort: "initial-passwort-bitte-aendern"`,
+      message: `Für ${email} wurde ein Konto erstellt. Schicken Sie ein Email, um das Passwort zu setzen.`,
       options: {
         variant: 'success',
       },
@@ -402,6 +466,14 @@ const Row = ({ style, node }) => {
             role === 'manager' &&
             !node.accountId && (
               <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
+            )}
+          {node.nodeType === 'table' &&
+            node.menuTitle === 'Person' &&
+            role === 'manager' &&
+            node.accountId && (
+              <MenuItem onClick={onClickSetPassword}>
+                Email schicken, um ein Passwort zu setzen
+              </MenuItem>
             )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
