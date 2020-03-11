@@ -7,7 +7,7 @@
     "dev": "gatsby develop",
     "clean": "gatsby clean",
     "build": "gatsby clean && gatsby build",
-    "postbuild": "copyfiles now.json public && copyfiles api/**/* public",
+    "postbuild": "copyfiles .now/* public",
     "serve": "gatsby serve"
   },
   "dependencies": {
