@@ -10,6 +10,7 @@ import last from 'lodash/last'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import axios from 'axios'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -20,7 +21,6 @@ import closeAllChildren from '../closeAllChildren'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import createNew from './createNew'
 import deleteDataset from './delete'
 import { person as personFragment } from '../../../utils/fragments'
@@ -206,7 +206,6 @@ const personQuery = gql`
 const Row = ({ style, node }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
 
   const { tree, enqueNotification, user } = store
   const { nodes, openNodes, activeNodeArray } = tree
@@ -293,14 +292,13 @@ const Row = ({ style, node }) => {
         },
       })
     }
-    let newUser
+    let res
     try {
-      newUser = firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, 'initial-passwort-bitte-aendern')
+      res = await axios.get(`https://auth.vermehrung.ch/create-user/${email}`)
     } catch (error) {
-      store.enqueNotification({
-        message: error.message,
+      console.log(error)
+      return enqueNotification({
+        message: error.response.data,
         options: {
           variant: 'error',
         },
@@ -312,8 +310,8 @@ const Row = ({ style, node }) => {
         variant: 'success',
       },
     })
-    console.log('Row, newUser:', newUser)
-    const uid = get(newUser, 'i.user.uid')
+
+    console.log('Row, res:', res)
     // save resp.Id to mark users with account
     client.mutate({
       mutation: gql`
@@ -323,7 +321,7 @@ const Row = ({ style, node }) => {
           update_person(
             where: { id: { _eq: $id } }
             _set: {
-              account_id: "${uid}"
+              account_id: "${res.data}"
             }
           ) {
             affected_rows
@@ -338,7 +336,7 @@ const Row = ({ style, node }) => {
         id: last(node.url).toString(),
       },
     })
-  }, [node.url, store, client, enqueNotification, firebase])
+  }, [client, enqueNotification, node.url, store])
 
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })
