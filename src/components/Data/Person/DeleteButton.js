@@ -7,9 +7,9 @@ import { FaMinus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import axios from 'axios'
 
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import deleteDataset from '../../TreeContainer/Tree/delete'
 
 const TitleRow = styled.div`
@@ -27,7 +27,7 @@ const Title = styled.div`
 const PersonDeleteButton = ({ row }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
+  const { enqueNotification } = store
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -38,14 +38,28 @@ const PersonDeleteButton = ({ row }) => {
     event => setAnchorEl(event.currentTarget),
     [],
   )
-  const remove = useCallback(() => {
+  const remove = useCallback(async () => {
     const node = { url: ['Personen', row.id] }
     deleteDataset({ node, store, client })
-    firebase
-      .auth()
-      .currentUser.delete()
-      .catch(error => console.log(error))
-  }, [client, firebase, row.id, store])
+    // delete firebase user
+    if (node.accountId) {
+      try {
+        await axios.get(
+          `https://auth.vermehrung.ch/delete-user/${row.account_id}`,
+        )
+      } catch (error) {
+        console.log(error)
+        return enqueNotification({
+          message: error.response.data,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+    }
+  }, [client, enqueNotification, row.account_id, row.id, store])
+
+  console.log({ row })
 
   return (
     <ErrorBoundary>
