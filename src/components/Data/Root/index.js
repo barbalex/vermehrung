@@ -8,7 +8,6 @@ import get from 'lodash/get'
 
 import Row from './Row'
 import storeContext from '../../../storeContext'
-import firebaseContext from '../../../firebaseContext'
 import queryFromTable from '../../../utils/queryFromTable'
 
 const Container = styled.div`
@@ -83,8 +82,8 @@ const personQuery = gql`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
-  const accountId = firebase.auth().currentUser.uid
+  const { user } = store
+  const accountId = user.uid
 
   const personResult = useQuery(personQuery, {
     variables: { accountId },

@@ -34,7 +34,7 @@ import {
   sammlung as sammlungFragment,
   personOption as personOptionFragment,
 } from '../../utils/fragments'
-import firebaseContext from '../../firebaseContext'
+import storeContext from '../../storeContext'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -65,7 +65,7 @@ const fragments = {
 }
 
 const Coordinates = ({ row, refetchForm, table }) => {
-  const firebase = useContext(firebaseContext)
+  const store = useContext(storeContext)
 
   const { id, computed } = row
   const { lv95_x, lv95_y, wgs84_lat, wgs84_long } = computed
@@ -73,7 +73,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const client = useApolloClient()
 
   const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: store.user.uid },
   })
   const { ga_lat_lng } =
     get(personOptionResult.data, 'person_option[0]', {}) || {}

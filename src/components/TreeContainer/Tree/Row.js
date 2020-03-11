@@ -208,7 +208,7 @@ const Row = ({ style, node }) => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
 
-  const { tree, enqueNotification } = store
+  const { tree, enqueNotification, user } = store
   const { nodes, openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -229,7 +229,7 @@ const Row = ({ style, node }) => {
   }
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId: firebase.auth().currentUser.uid },
+    variables: { accountId: user.uid },
   })
   const { user_role: role } = get(personResult.data, 'person[0]') || {}
 
