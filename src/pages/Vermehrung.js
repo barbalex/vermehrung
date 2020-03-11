@@ -77,9 +77,20 @@ const Vermehrung = ({ location }) => {
     signInOptions: [
       {
         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        requireDisplayName: true,
       },
     ],
+    // this is important because of bug in firebaseui-web-react
+    // https://github.com/firebase/firebaseui-web-react/issues/67
+    credentialHelper: 'none',
+    callbacks: {
+      signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+        console.log('Vermehrung, firebase, signInSuccessWithAuthResult', {
+          authResult,
+          redirectUrl,
+        })
+        return true
+      },
+    },
   }
 
   const { pathname } = location
@@ -99,9 +110,10 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  console.log('vermehrung page rendering, user:', user)
+  //console.log('vermehrung page rendering, user:', user)
 
   if (!user) {
+    //return null
     return (
       <ErrorBoundary>
         <Layout>
@@ -109,6 +121,7 @@ const Vermehrung = ({ location }) => {
             <StyledFirebaseAuth
               uiConfig={firebaseUiConfig}
               firebaseAuth={firebase.auth()}
+              uiCallback={ui => ui.disableAutoSignIn()}
             />
           </Container>
         </Layout>
