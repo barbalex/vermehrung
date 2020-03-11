@@ -45,6 +45,10 @@ async function start() {
           .code(500)
       }
       const { email } = req.params
+      if (!email) {
+        return h.response('no email was passed').code(500)
+      }
+
       let user
       try {
         user = await admin.auth().createUser({
@@ -56,9 +60,40 @@ async function start() {
           .response(`firebase createUser error: ${error.message}`)
           .code(500)
       }
-      console.log('create-user, user:', user)
-      console.log('create-user, user.uid:', user.uid)
       return h.response(user.uid).code(200)
+    },
+  })
+
+  server.route({
+    method: 'GET',
+    path: '/delete-user/{uid}',
+    handler: async (req, h) => {
+      if (!serviceAccount) {
+        return h.response('Firebase not configured').code(500)
+      }
+      // Check for errors initializing firebase SDK
+      if (firebaseInitializationError) {
+        console.log('firebaseInitializationError:', firebaseInitializationError)
+        return h
+          .response(
+            `firebase initalization error: ${firebaseInitializationError.message}`,
+          )
+          .code(500)
+      }
+
+      const { uid } = req.params
+      if (!uid) {
+        return h.response('no uid was passed').code(500)
+      }
+
+      try {
+        await admin.auth().deleteUser(uid)
+      } catch (error) {
+        return h
+          .response(`firebase deleteUser error: ${error.message}`)
+          .code(500)
+      }
+      return h.response().code(200)
     },
   })
 
