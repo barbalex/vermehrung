@@ -50,6 +50,11 @@ if (typeof window !== 'undefined') {
 }
 
 const myClient = client()
+// Configure Firebase
+const firebaseConfig = {
+  apiKey: process.env.GATSBY_FIREBASE_API_KEY,
+  authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
+}
 
 const App = ({ element }) => {
   const [firebase, setFirebase] = useState(null)
@@ -60,11 +65,6 @@ const App = ({ element }) => {
   useEffect(() => {
     if (firebase) return
     import('firebase').then(module => {
-      // Configure Firebase
-      const firebaseConfig = {
-        apiKey: process.env.GATSBY_FIREBASE_API_KEY,
-        authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
-      }
       const fb = module.default
       fb.initializeApp(firebaseConfig)
       setFirebase(fb)
