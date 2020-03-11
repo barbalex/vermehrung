@@ -14,6 +14,7 @@ const myTypes = types
     sidebarWidth: types.maybeNull(types.number, null),
     isPrint: types.optional(types.boolean, false),
     updateExists: types.optional(types.boolean, false),
+    isSignedIn: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -22,6 +23,9 @@ const myTypes = types
     user: {},
   }))
   .actions(self => ({
+    setIsSignedIn(val) {
+      self.isSignedIn = val
+    },
     setUser(val) {
       self.user = val
     },

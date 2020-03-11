@@ -51,7 +51,7 @@ const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   const firebase = useContext(firebaseContext)
 
-  const { activeForm, isPrint } = store
+  const { activeForm, isPrint, isSignedIn, setIsSignedIn } = store
   const {
     setOpenNodes,
     setActiveNodeArray,
@@ -85,8 +85,6 @@ const Vermehrung = ({ location }) => {
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
-
-  const [isSignedIn, setIsSignedIn] = useState(false)
 
   // Listen to the Firebase Auth state and set the local state
   useEffect(() => {
