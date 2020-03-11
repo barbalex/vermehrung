@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { Provider as FirebaseProvider } from './firebaseContext'
 
-import localForage from 'localforage'
+//import localForage from 'localforage'
 import { navigate } from '@reach/router'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -65,7 +65,6 @@ const Auth = ({ children }) => {
             try {
               res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
             } catch (error) {
-              // TODO: surface this error
               console.log(error)
               return enqueNotification({
                 message: error.response.data,
@@ -74,7 +73,6 @@ const Auth = ({ children }) => {
                 },
               })
             }
-            console.log('response from auth.vermehrung.ch:', res)
             if (res.status === 200) {
               let tokenWithRoles
               try {
