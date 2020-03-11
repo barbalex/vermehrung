@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Provider as FirebaseProvider } from './firebaseContext'
 
 //import localForage from 'localforage'
-import { navigate } from '@reach/router'
+//import { navigate } from '@reach/router'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import storeContext from './storeContext'
@@ -95,12 +95,12 @@ const Auth = ({ children }) => {
           // only if top domain was visited
           // TODO:
           // without timeout and with timeout too low this errors before page Vermehrung logs
-          const isAuthenticated = !!user
-          if (isAuthenticated && visitedTopDomain) {
-            setTimeout(() => {
-              navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
-            }, 200)
-          }
+          //const isAuthenticated = !!user
+          //if (isAuthenticated && visitedTopDomain) {
+          //  setTimeout(() => {
+          //    navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
+          //  }, 200)
+          //}
         })
         //})
       },
