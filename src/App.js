@@ -17,7 +17,7 @@ import { de } from 'date-fns/locale'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import materialTheme from './utils/materialTheme'
-import client from '../client'
+import createApolloClient from '../apolloClient'
 import Notifier from './components/Notifier'
 import NotificationDismisser from './components/NotificationDismisser'
 
@@ -50,7 +50,7 @@ if (typeof window !== 'undefined') {
   )
 }
 
-const myClient = client()
+const apolloClient = createApolloClient()
 // Configure Firebase
 const firebaseConfig = {
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -82,11 +82,11 @@ const App = ({ element }) => {
           blacklist,
         }).then(() => {
           unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-            console.log('vermehrung page registered user:', user)
+            //console.log('vermehrung page registered user:', user)
             mobxStore.setUser(user)
             if (user && user.uid) {
-              const idToken = user.getIdToken()
-              console.log('Vermehrung, idToken:', idToken)
+              //const idToken = user.getIdToken()
+              //console.log('Vermehrung, idToken:', idToken)
               let res
               try {
                 res = await axios.get(`https://auth.vermehrung.ch/${user.uid}`)
@@ -94,7 +94,7 @@ const App = ({ element }) => {
                 // TODO: surface this error
                 return console.log(error)
               }
-              console.log('response from auth.vermehrung.ch:', res)
+              //console.log('response from auth.vermehrung.ch:', res)
               if (res.status === 200) {
                 let tokenWithRoles
                 try {
@@ -102,7 +102,7 @@ const App = ({ element }) => {
                 } catch (error) {
                   console.log(error)
                 }
-                console.log('tokenWithRoles:', tokenWithRoles)
+                //console.log('tokenWithRoles:', tokenWithRoles)
                 // set token to localStorage so authLink picks it up on next db call
                 // see: https://www.apollographql.com/docs/react/networking/authentication/#header
                 window.localStorage.setItem('token', tokenWithRoles)
@@ -135,7 +135,7 @@ const App = ({ element }) => {
     <MuiThemeProvider theme={materialTheme}>
       <MobxProvider value={mobxStore}>
         <FirebaseProvider value={firebase}>
-          <ApolloProvider client={myClient}>
+          <ApolloProvider client={apolloClient}>
             <SnackbarProvider
               maxSnack={5}
               preventDuplicate
