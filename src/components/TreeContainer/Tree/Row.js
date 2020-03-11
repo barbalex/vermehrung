@@ -313,6 +313,7 @@ const Row = ({ style, node }) => {
       },
     })
     console.log('Row, newUser:', newUser)
+    const uid = get(newUser, 'i.user.uid')
     // save resp.Id to mark users with account
     client.mutate({
       mutation: gql`
@@ -322,7 +323,7 @@ const Row = ({ style, node }) => {
           update_person(
             where: { id: { _eq: $id } }
             _set: {
-              account_id: "${newUser.uid}"
+              account_id: "${uid}"
             }
           ) {
             affected_rows
