@@ -107,13 +107,12 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  /*console.log('vermehrung page rendering:', {
-    user,
-    initializingFirebase,
-    isSignedIn,
-  })*/
-
   if (initializingFirebase) {
+    /*console.log('vermehrung page rendering first autorisiere:', {
+      user,
+      initializingFirebase,
+      isSignedIn,
+    })*/
     return (
       <ErrorBoundary>
         <Layout>
@@ -146,6 +145,11 @@ const Vermehrung = ({ location }) => {
   // for unknown reason user remains null even though it is set BEFORE isSignedIn and initializingFirebase
   // so need to catch that
   if (!(existsUser && isSignedIn && !initializingFirebase)) {
+    /*console.log('vermehrung page rendering second autorisiere:', {
+      user,
+      initializingFirebase,
+      isSignedIn,
+    })*/
     return (
       <ErrorBoundary>
         <Layout>
