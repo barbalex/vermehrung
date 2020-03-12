@@ -147,7 +147,7 @@ async function start() {
               'x-hasura-default-role': user_role,
               'x-hasura-allowed-roles': [user_role],
               // beware: hasura expects strings
-              'x-hasura-user-id': `"${id}"`,
+              'x-hasura-user-id': `${id.toString ? id.toString() : id}`,
             },
           }
 
