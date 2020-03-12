@@ -66,6 +66,7 @@ const Auth = ({ children }) => {
               )
             } catch (error) {
               console.log(error)
+              setInitializingFirebase(false)
               return enqueNotification({
                 message: error.response.data,
                 options: {
