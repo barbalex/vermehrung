@@ -4,7 +4,7 @@ import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import { ImpulseSpinner as Spinner } from "react-spinners-kit"
+import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
@@ -19,13 +19,18 @@ import firebaseContext from '../firebaseContext'
 const Container = styled.div`
   min-height: calc(100vh - 64px);
 `
-const TempContainer = styled.div`
+const SpinnerContainer = styled.div`
   min-height: calc(100vh - 64px);
-  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`
+const LoginContainer = styled.div`
+  margin: 20px;
+`
+const SpinnerText = styled.div`
+  padding: 10px;
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
@@ -121,7 +126,15 @@ const Vermehrung = ({ location }) => {
     return (
       <ErrorBoundary>
         <Layout>
-          <TempContainer><Spinner size={50} frontColor="#4a148c" backColor="#4a148c1a" loading={true}/>autorisiere</TempContainer>
+          <SpinnerContainer>
+            <Spinner
+              size={50}
+              frontColor="#4a148c"
+              backColor="#4a148c1a"
+              loading={true}
+            />
+            <SpinnerText>autorisiere</SpinnerText>
+          </SpinnerContainer>
         </Layout>
       </ErrorBoundary>
     )
@@ -136,12 +149,12 @@ const Vermehrung = ({ location }) => {
     return (
       <ErrorBoundary>
         <Layout>
-          <TempContainer>
+          <LoginContainer>
             <StyledFirebaseAuth
               uiConfig={firebaseUiConfig}
               firebaseAuth={firebase.auth()}
             />
-          </TempContainer>
+          </LoginContainer>
         </Layout>
       </ErrorBoundary>
     )
@@ -158,7 +171,15 @@ const Vermehrung = ({ location }) => {
     return (
       <ErrorBoundary>
         <Layout>
-          <TempContainer><Spinner size={150} frontColor="#4a148c" backColor="#4a148c1a" loading={true}/>autorisiere</TempContainer>
+          <SpinnerContainer>
+            <Spinner
+              size={150}
+              frontColor="#4a148c"
+              backColor="#4a148c1a"
+              loading={true}
+            />
+            <SpinnerText>autorisiere</SpinnerText>
+          </SpinnerContainer>
         </Layout>
       </ErrorBoundary>
     )
