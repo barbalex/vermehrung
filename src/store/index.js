@@ -31,7 +31,7 @@ const myTypes = types
     },
     setAuthorizing(val) {
       if (val !== self.authorizing) {
-        console.log('Store, setting authorizing to:', val)
+        //console.log('Store, setting authorizing to:', val)
         self.authorizing = val
       }
     },
