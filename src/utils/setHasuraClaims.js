@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default async ({ store, user }) => {
   const { enqueNotification, setAuthorizing } = store
-  console.log('seting Hasura Claims')
+  console.log('setting Hasura Claims')
   setAuthorizing(true)
   let res
   try {
@@ -37,7 +37,7 @@ export default async ({ store, user }) => {
     // set token to localStorage so authLink picks it up on next db call
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     window.localStorage.setItem('token', tokenWithRoles)
-    setTimeout(() => setAuthorizing(false))
+    setAuthorizing(false)
   } else {
     setAuthorizing(false)
   }

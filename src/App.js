@@ -52,7 +52,7 @@ if (typeof window !== 'undefined') {
 const apolloClient = createApolloClient()
 
 const App = ({ element }) => {
-  //console.log('App rendering')
+  //console.log('App rendering, authorizing:', mobxStore.authorizing)
 
   return (
     <MuiThemeProvider theme={materialTheme}>
