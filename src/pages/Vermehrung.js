@@ -63,7 +63,7 @@ const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   //console.log('Vermehrung rendering')
 
-  const { activeForm, isPrint, user, initializingFirebase, isSignedIn } = store
+  const { activeForm, isPrint, user, authorizing, isSignedIn } = store
   const existsUser = !!user.uid
   const {
     setOpenNodes,
@@ -99,11 +99,11 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
-  if (initializingFirebase) {
+  if (authorizing) {
     console.log('vermehrung page rendering first autorisiere:', {
       user,
       existsUser,
-      initializingFirebase,
+      authorizing,
       isSignedIn,
     })
     return (
@@ -127,7 +127,7 @@ const Vermehrung = ({ location }) => {
     console.log('vermehrung page rendering auth:', {
       user,
       existsUser,
-      initializingFirebase,
+      authorizing,
       isSignedIn,
     })
     return (
@@ -141,13 +141,13 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  // for unknown reason user remains null even though it is set BEFORE isSignedIn and initializingFirebase
+  // for unknown reason user remains null even though it is set BEFORE isSignedIn and authorizing
   // so need to catch that
-  if (!(existsUser && isSignedIn && !initializingFirebase)) {
+  if (!(existsUser && isSignedIn && !authorizing)) {
     console.log('vermehrung page rendering second autorisiere:', {
       user,
       existsUser,
-      initializingFirebase,
+      authorizing,
       isSignedIn,
     })
     return (
@@ -170,7 +170,7 @@ const Vermehrung = ({ location }) => {
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
   /*console.log('Vermehrung, will render tree', {
     user,
-    initializingFirebase,
+    authorizing,
     isSignedIn,
   })*/
 
