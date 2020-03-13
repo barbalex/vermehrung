@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 
 import Layout from '../components/Layout'
@@ -14,7 +13,7 @@ import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
 import storeContext from '../storeContext'
-import firebaseContext from '../firebaseContext'
+import Login from '../components/Login'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -62,7 +61,6 @@ const StyledSplitPane = styled(SplitPane)`
 
 const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
-  const firebase = useContext(firebaseContext)
   //console.log('Vermehrung rendering')
 
   const { activeForm, isPrint, user, initializingFirebase, isSignedIn } = store
@@ -83,22 +81,6 @@ const Vermehrung = ({ location }) => {
   // ensure tree is invisible when printing but still exists
   // (caused errors to render form without tree while printing)
   if (isPrint) treeWidth = 0
-
-  // Configure FirebaseUI
-  const firebaseUiConfig = {
-    // Popup signin flow rather than redirect flow
-    signInFlow: 'popup',
-    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function
-    signInSuccessUrl: `/Vermehrung/${store.tree.activeNodeArray.join('/')}`,
-    signInOptions: [
-      {
-        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      },
-    ],
-    // this is important because of bug in firebaseui-web-react
-    // https://github.com/firebase/firebaseui-web-react/issues/67
-    credentialHelper: 'none',
-  }
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
@@ -150,10 +132,7 @@ const Vermehrung = ({ location }) => {
       <ErrorBoundary>
         <Layout>
           <LoginContainer>
-            <StyledFirebaseAuth
-              uiConfig={firebaseUiConfig}
-              firebaseAuth={firebase.auth()}
-            />
+            <Login />
           </LoginContainer>
         </Layout>
       </ErrorBoundary>

@@ -307,12 +307,64 @@ const Row = ({ style, node }) => {
       })
     }
     store.enqueNotification({
-      message: `Die Person mit dem Email ${email} erhält einen Link, um ein Passwort zu setzen`,
+      message: `${email} erhält einen Link, um ein Passwort zu setzen`,
       options: {
         variant: 'success',
       },
     })
   }, [client, enqueNotification, firebase, node.url, store])
+  const onClickDeleteAccout = useCallback(async () => {
+    // delete firebase user
+    if (node.accountId) {
+      try {
+        await axios.get(
+          `https://auth.vermehrung.ch/delete-user/${node.accountId}`,
+        )
+      } catch (error) {
+        console.log(error)
+        return enqueNotification({
+          message: error.response.data,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+    }
+    try {
+      // remove users account_id
+      client.mutate({
+        mutation: gql`
+          mutation update_person_for_deleting_account(
+            $id: bigint!
+            $accountId: String
+          ) {
+            update_person(
+              where: { id: { _eq: $id } }
+              _set: { account_id: $accountId }
+            ) {
+              affected_rows
+              returning {
+                ...PersonFields
+              }
+            }
+          }
+          ${personFragment}
+        `,
+        variables: {
+          id: last(node.url).toString(),
+          accountId: null,
+        },
+      })
+    } catch (error) {
+      console.log(error)
+      return enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+  }, [client, enqueNotification, node.accountId, node.url])
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
     // fetch email of this person
@@ -470,9 +522,12 @@ const Row = ({ style, node }) => {
             node.menuTitle === 'Person' &&
             role === 'manager' &&
             node.accountId && (
-              <MenuItem onClick={onClickSetPassword}>
-                Email schicken, um ein Passwort zu setzen
-              </MenuItem>
+              <>
+                <MenuItem onClick={onClickSetPassword}>
+                  Email schicken, um ein Passwort zu setzen
+                </MenuItem>
+                <MenuItem onClick={onClickDeleteAccout}>Konto löschen</MenuItem>
+              </>
             )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
