@@ -102,6 +102,7 @@ const Vermehrung = ({ location }) => {
   if (initializingFirebase) {
     console.log('vermehrung page rendering first autorisiere:', {
       user,
+      existsUser,
       initializingFirebase,
       isSignedIn,
     })
@@ -125,6 +126,7 @@ const Vermehrung = ({ location }) => {
   if (!(isSignedIn || existsUser)) {
     console.log('vermehrung page rendering auth:', {
       user,
+      existsUser,
       initializingFirebase,
       isSignedIn,
     })
@@ -144,6 +146,7 @@ const Vermehrung = ({ location }) => {
   if (!(existsUser && isSignedIn && !initializingFirebase)) {
     console.log('vermehrung page rendering second autorisiere:', {
       user,
+      existsUser,
       initializingFirebase,
       isSignedIn,
     })

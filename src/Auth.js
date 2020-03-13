@@ -55,7 +55,7 @@ const Auth = ({ children }) => {
         setFirebase(fb)
         setInitializingFirebase(true)
         unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-          //console.log('Auth onAuthStateChanged, user:', user)
+          console.log('Auth onAuthStateChanged, user:', user)
           setUser(user)
           setIsSignedIn(!!user)
           if (user && user.uid) {
