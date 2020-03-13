@@ -15,7 +15,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'isomorphic-fetch'
 
 //import localForage from 'localforage'
-import { navigate } from '@reach/router'
+//import { navigate } from '@reach/router'
 
 import Notifier from './components/Notifier'
 import NotificationDismisser from './components/NotificationDismisser'
@@ -65,8 +65,6 @@ const apolloClient = createApolloClient()
 
 const App = ({ element }) => {
   console.log('App rendering, authorizing:', store.authorizing)
-  const visitedTopDomain =
-    typeof window !== 'undefined' ? window.location.pathname === '/' : false
   const { setUser, setAuthorizing, setFirebase } = store
 
   useEffect(() => {
@@ -95,7 +93,8 @@ const App = ({ element }) => {
           // only if top domain was visited
           // TODO:
           // without timeout and with timeout too low this errors before page Vermehrung logs
-          /*if (!!user && visitedTopDomain) {
+          /*const visitedTopDomain = window.location.pathname === '/'
+          if (!!user && visitedTopDomain) {
             setTimeout(() => {
               navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
             }, 200)
@@ -108,7 +107,7 @@ const App = ({ element }) => {
       console.log('App, unregistering auth observer')
       unregisterAuthObserver()
     }
-  }, [setAuthorizing, setFirebase, setUser, visitedTopDomain])
+  }, [setAuthorizing, setFirebase, setUser])
 
   return (
     <MuiThemeProvider theme={materialTheme}>
