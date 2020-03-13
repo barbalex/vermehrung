@@ -41,7 +41,7 @@ if (typeof window !== 'undefined') {
     text: {
       msg: 'Ihr Browser ({brow_name}) ist veraltet.',
       msgmore:
-        'Aktualisieren Sie ihn für mehr Sicherheit, Geschwindigkeit und weil vermehrung einen aktuellen Browser voraussetzt.',
+        'Aktualisieren Sie ihn für mehr Sicherheit, Geschwindigkeit und weil vermehrung.ch einen aktuellen Browser voraussetzt.',
       bupdate: 'Browser aktualisieren',
       bignore: 'Ignorieren',
     },

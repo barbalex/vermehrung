@@ -14,6 +14,9 @@ const myTypes = types
     sidebarWidth: types.maybeNull(types.number, null),
     isPrint: types.optional(types.boolean, false),
     updateExists: types.optional(types.boolean, false),
+    // on startup need to wait with showing data
+    // until hasura claims have been added
+    // this is _after_ user is set so need another variable
     authorizing: types.optional(types.boolean, true),
   })
   // structure of these variables is not controlled
@@ -21,6 +24,10 @@ const myTypes = types
   .volatile(() => ({
     notifications: [],
     user: {},
+    // started out using context for firebase
+    // refactored here because of some weird stuff
+    // but that probably had other reasons
+    // so could move this back to context if necessary
     firebase: null,
   }))
   .actions(self => ({
