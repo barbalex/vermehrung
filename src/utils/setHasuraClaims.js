@@ -2,7 +2,6 @@ import axios from 'axios'
 
 export default async ({ store, user }) => {
   const { enqueNotification, setAuthorizing } = store
-  console.log('setting Hasura Claims')
   setAuthorizing(true)
   let res
   try {

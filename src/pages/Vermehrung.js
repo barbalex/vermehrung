@@ -100,11 +100,6 @@ const Vermehrung = ({ location }) => {
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
   if (authorizing) {
-    console.log('vermehrung page rendering first autorisiere:', {
-      user,
-      existsUser,
-      authorizing,
-    })
     return (
       <ErrorBoundary>
         <Layout>
@@ -123,11 +118,6 @@ const Vermehrung = ({ location }) => {
   }
 
   if (!existsUser) {
-    console.log('vermehrung page rendering auth:', {
-      user,
-      existsUser,
-      authorizing,
-    })
     return (
       <ErrorBoundary>
         <Layout>
@@ -138,37 +128,7 @@ const Vermehrung = ({ location }) => {
       </ErrorBoundary>
     )
   }
-
-  // for unknown reason user remains null even though it is set BEFORE user exists and authorizing
-  // so need to catch that
-  if (!(existsUser && !authorizing)) {
-    console.log('vermehrung page rendering second autorisiere:', {
-      user,
-      existsUser,
-      authorizing,
-    })
-    return (
-      <ErrorBoundary>
-        <Layout>
-          <SpinnerContainer>
-            <Spinner
-              size={150}
-              frontColor="#4a148c"
-              backColor="#4a148c1a"
-              loading={true}
-            />
-            <SpinnerText>autorisiere</SpinnerText>
-          </SpinnerContainer>
-        </Layout>
-      </ErrorBoundary>
-    )
-  }
-  // hide resizer when tree is not shown
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
-  /*console.log('Vermehrung, will render tree', {
-    user,
-    authorizing,
-  })*/
 
   return (
     <ErrorBoundary>

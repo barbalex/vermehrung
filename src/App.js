@@ -64,7 +64,6 @@ const firebaseConfig = {
 const apolloClient = createApolloClient()
 
 const App = ({ element }) => {
-  console.log('App rendering, authorizing:', store.authorizing)
   const { setUser, setAuthorizing, setFirebase } = store
 
   useEffect(() => {
@@ -82,7 +81,6 @@ const App = ({ element }) => {
         fb.initializeApp(firebaseConfig)
         setFirebase(fb)
         unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-          console.log('Auth onAuthStateChanged, user:', user)
           setUser(user)
           if (user && user.uid) {
             setHasuraClaims({ store, user })
