@@ -3,8 +3,8 @@ import 'isomorphic-fetch'
 
 import { Provider as FirebaseProvider } from './firebaseContext'
 
-//import localForage from 'localforage'
-//import { navigate } from '@reach/router'
+import localForage from 'localforage'
+import { navigate } from '@reach/router'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import storeContext from './storeContext'
@@ -20,10 +20,10 @@ const firebaseConfig = {
 
 const Auth = ({ children }) => {
   const store = useContext(storeContext)
-  const { setUser, enqueNotification } = store
+  const { setUser, setAuthorizing } = store
   const [firebase, setFirebase] = useState(null)
 
-  //console.log('Auth rendering, firebase:', firebase)
+  console.log('Auth rendering:', { firebase })
 
   const visitedTopDomain =
     typeof window !== 'undefined' ? window.location.pathname === '/' : false
@@ -36,42 +36,43 @@ const Auth = ({ children }) => {
      * so had to turn off mst-persist
      */
     let unregisterAuthObserver = () => {}
-    Promise.all([import('firebase') /*, import('mst-persist')*/]).then(
-      ([fbModule /*, pModule*/]) => {
-        //const blacklist = []
-        //const persist = pModule.default
-        //persist('store', store, {
-        //  storage: localForage,
-        //  jsonify: false,
-        //  blacklist,
-        //}).then(() => {
-        const fb = fbModule.default
-        fb.initializeApp(firebaseConfig)
-        setFirebase(fb)
-        unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-          console.log('Auth onAuthStateChanged, user:', user)
-          setUser(user)
-          if (user && user.uid) {
-            setHasuraClaims({ store, user })
-          }
-          // set last activeNodeArray
-          // only if top domain was visited
-          // TODO:
-          // without timeout and with timeout too low this errors before page Vermehrung logs
-          //const isAuthenticated = !!user
-          //if (isAuthenticated && visitedTopDomain) {
-          //  setTimeout(() => {
-          //    navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
-          //  }, 200)
-          //}
+    Promise.all([import('firebase'), import('mst-persist')]).then(
+      ([fbModule, pModule]) => {
+        const blacklist = ['user']
+        const persist = pModule.default
+        persist('store', store, {
+          storage: localForage,
+          jsonify: false,
+          blacklist,
+        }).then(() => {
+          const fb = fbModule.default
+          fb.initializeApp(firebaseConfig)
+          setFirebase(fb)
+          unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
+            console.log('Auth onAuthStateChanged, user:', user)
+            setUser(user)
+            if (user && user.uid) {
+              setHasuraClaims({ store, user })
+            } else {
+              setAuthorizing(false)
+            }
+            // set last activeNodeArray
+            // only if top domain was visited
+            // TODO:
+            // without timeout and with timeout too low this errors before page Vermehrung logs
+            if (!!user && visitedTopDomain) {
+              setTimeout(() => {
+                navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
+              }, 200)
+            }
+          })
         })
-        //})
       },
     )
     return () => {
       unregisterAuthObserver()
     }
-  }, [enqueNotification, firebase, setUser, store, visitedTopDomain])
+  }, [firebase, setAuthorizing, setUser, store, visitedTopDomain])
 
   if (!firebase && !visitedTopDomain) return null
 

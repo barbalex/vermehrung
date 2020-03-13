@@ -24,7 +24,10 @@ const myTypes = types
   }))
   .actions(self => ({
     setAuthorizing(val) {
-      self.authorizing = val
+      if (val !== self.authorizing) {
+        console.log('Store, setting authorizing to:', val)
+        self.authorizing = val
+      }
     },
     setUser(val) {
       self.user = val || {}
