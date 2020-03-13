@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default async ({ store, user }) => {
-  const { enqueNotification, setInitializingFirebase } = store
+  const { enqueNotification, setAuthorizing } = store
   let res
   try {
     res = await axios.get(
@@ -9,7 +9,7 @@ export default async ({ store, user }) => {
     )
   } catch (error) {
     console.log(error)
-    setInitializingFirebase(false)
+    setAuthorizing(false)
     return enqueNotification({
       message: error.response.data,
       options: {
@@ -23,13 +23,20 @@ export default async ({ store, user }) => {
       tokenWithRoles = await user.getIdToken(true)
     } catch (error) {
       console.log(error)
+      setAuthorizing(false)
+      return enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     //console.log('tokenWithRoles:', tokenWithRoles)
     // set token to localStorage so authLink picks it up on next db call
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     window.localStorage.setItem('token', tokenWithRoles)
-    setTimeout(() => setInitializingFirebase(false))
+    setTimeout(() => setAuthorizing(false))
   } else {
-    setInitializingFirebase(false)
+    setAuthorizing(false)
   }
 }

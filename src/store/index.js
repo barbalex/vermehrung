@@ -14,7 +14,7 @@ const myTypes = types
     sidebarWidth: types.maybeNull(types.number, null),
     isPrint: types.optional(types.boolean, false),
     updateExists: types.optional(types.boolean, false),
-    initializingFirebase: types.optional(types.boolean, true),
+    authorizing: types.optional(types.boolean, true),
     isSignedIn: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
@@ -27,8 +27,8 @@ const myTypes = types
     setIsSignedIn(val) {
       self.isSignedIn = val
     },
-    setInitializingFirebase(val) {
-      self.initializingFirebase = val
+    setAuthorizing(val) {
+      self.authorizing = val
     },
     setUser(val) {
       self.user = val || {}
