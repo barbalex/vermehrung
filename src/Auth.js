@@ -53,12 +53,12 @@ const Auth = ({ children }) => {
         const fb = fbModule.default
         fb.initializeApp(firebaseConfig)
         setFirebase(fb)
+        setInitializingFirebase(true)
         unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
           //console.log('Auth onAuthStateChanged, user:', user)
           setUser(user)
           setIsSignedIn(!!user)
           if (user && user.uid) {
-            setInitializingFirebase(true)
             let res
             try {
               res = await axios.get(
