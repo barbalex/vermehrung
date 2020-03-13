@@ -4,6 +4,7 @@ import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import { ImpulseSpinner as Spinner } from "react-spinners-kit"
 
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
@@ -21,6 +22,10 @@ const Container = styled.div`
 const TempContainer = styled.div`
   min-height: calc(100vh - 64px);
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
@@ -116,7 +121,7 @@ const Vermehrung = ({ location }) => {
     return (
       <ErrorBoundary>
         <Layout>
-          <TempContainer>autorisiere...</TempContainer>
+          <TempContainer><Spinner size={50} frontColor="#4a148c" backColor="#4a148c1a" loading={true}/>autorisiere</TempContainer>
         </Layout>
       </ErrorBoundary>
     )
@@ -153,7 +158,7 @@ const Vermehrung = ({ location }) => {
     return (
       <ErrorBoundary>
         <Layout>
-          <TempContainer>autorisiere...</TempContainer>
+          <TempContainer><Spinner size={150} frontColor="#4a148c" backColor="#4a148c1a" loading={true}/>autorisiere</TempContainer>
         </Layout>
       </ErrorBoundary>
     )
