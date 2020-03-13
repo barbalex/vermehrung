@@ -27,6 +27,10 @@ const StyledInput = styled(Input)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const ResetButton = styled(Button)`
+  text-transform: none !important;
+  font-weight: 400 !important;
+`
 
 const Login = () => {
   const firebase = useContext(firebaseContext)
@@ -43,7 +47,6 @@ const Login = () => {
     async ({ email: emailPassed, password: passwordPassed }) => {
       const emailToUse = emailPassed || email
       const passwordToUse = passwordPassed || password
-      console.log('fetchLogin', { emailPassed, emailToUse })
       try {
         firebase.auth().signInWithEmailAndPassword(emailToUse, passwordToUse)
       } catch (error) {
@@ -115,7 +118,7 @@ const Login = () => {
   return (
     <ErrorBoundary>
       <StyledDialog aria-labelledby="dialog-title" open={true}>
-        <DialogTitle id="dialog-title">Anmelden</DialogTitle>
+        <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
         <StyledDiv>
           <FormControl
             error={!!emailErrorText}
@@ -167,7 +170,7 @@ const Login = () => {
           </FormControl>
         </StyledDiv>
         <DialogActions>
-          <Button onClick={reset}>{resetTitle}</Button>
+          <ResetButton onClick={reset}>{resetTitle}</ResetButton>
           <Button color="primary" onClick={fetchLogin}>
             anmelden
           </Button>
