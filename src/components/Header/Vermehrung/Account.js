@@ -8,7 +8,6 @@ import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 import { useApolloClient } from '@apollo/react-hooks'
 
-import firebaseContext from '../../../firebaseContext'
 import storeContext from '../../../storeContext'
 
 const IconContainer = styled.div`
@@ -31,11 +30,10 @@ const StyledUserIcon = styled(UserIcon)`
 `
 
 const Account = () => {
-  const firebase = useContext(firebaseContext)
   const store = useContext(storeContext)
   const client = useApolloClient()
 
-  const { user } = store
+  const { user, firebase } = store
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')

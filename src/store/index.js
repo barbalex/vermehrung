@@ -21,8 +21,14 @@ const myTypes = types
   .volatile(() => ({
     notifications: [],
     user: {},
+    firebase: null,
   }))
   .actions(self => ({
+    setFirebase(val) {
+      if (!self.firebase) {
+        self.firebase = val
+      }
+    },
     setAuthorizing(val) {
       if (val !== self.authorizing) {
         console.log('Store, setting authorizing to:', val)

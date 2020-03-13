@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 
-import firebaseContext from '../firebaseContext'
+import storeContext from '../storeContext'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -33,7 +33,7 @@ const ResetButton = styled(Button)`
 `
 
 const Login = () => {
-  const firebase = useContext(firebaseContext)
+  const { firebase } = useContext(storeContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
