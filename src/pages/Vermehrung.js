@@ -63,7 +63,7 @@ const Vermehrung = ({ location }) => {
   const store = useContext(storeContext)
   //console.log('Vermehrung rendering')
 
-  const { activeForm, isPrint, user, authorizing, isSignedIn } = store
+  const { activeForm, isPrint, user, authorizing } = store
   const existsUser = !!user.uid
   const {
     setOpenNodes,
@@ -104,7 +104,6 @@ const Vermehrung = ({ location }) => {
       user,
       existsUser,
       authorizing,
-      isSignedIn,
     })
     return (
       <ErrorBoundary>
@@ -123,12 +122,11 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  if (!(isSignedIn || existsUser)) {
+  if (!existsUser) {
     console.log('vermehrung page rendering auth:', {
       user,
       existsUser,
       authorizing,
-      isSignedIn,
     })
     return (
       <ErrorBoundary>
@@ -141,14 +139,13 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  // for unknown reason user remains null even though it is set BEFORE isSignedIn and authorizing
+  // for unknown reason user remains null even though it is set BEFORE user exists and authorizing
   // so need to catch that
-  if (!(existsUser && isSignedIn && !authorizing)) {
+  if (!(existsUser && !authorizing)) {
     console.log('vermehrung page rendering second autorisiere:', {
       user,
       existsUser,
       authorizing,
-      isSignedIn,
     })
     return (
       <ErrorBoundary>
@@ -171,7 +168,6 @@ const Vermehrung = ({ location }) => {
   /*console.log('Vermehrung, will render tree', {
     user,
     authorizing,
-    isSignedIn,
   })*/
 
   return (
