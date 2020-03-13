@@ -20,7 +20,7 @@ const firebaseConfig = {
 
 const Auth = ({ children }) => {
   const store = useContext(storeContext)
-  const { setIsSignedIn, setUser, enqueNotification } = store
+  const { setUser, enqueNotification } = store
   const [firebase, setFirebase] = useState(null)
 
   //console.log('Auth rendering, firebase:', firebase)
@@ -51,7 +51,6 @@ const Auth = ({ children }) => {
         unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
           console.log('Auth onAuthStateChanged, user:', user)
           setUser(user)
-          setIsSignedIn(!!user)
           if (user && user.uid) {
             setHasuraClaims({ store, user })
           }
@@ -72,14 +71,7 @@ const Auth = ({ children }) => {
     return () => {
       unregisterAuthObserver()
     }
-  }, [
-    enqueNotification,
-    firebase,
-    setIsSignedIn,
-    setUser,
-    store,
-    visitedTopDomain,
-  ])
+  }, [enqueNotification, firebase, setUser, store, visitedTopDomain])
 
   if (!firebase && !visitedTopDomain) return null
 
