@@ -195,6 +195,9 @@ const TextSpan = styled.span`
     color: #f57c00;
   }
 `
+const MenuSubtitle = styled.div`
+  padding-top: 7px;
+`
 const personQuery = gql`
   query PersonQueryForTree($accountId: String) {
     person(where: { account_id: { _eq: $accountId } }) {
@@ -512,23 +515,6 @@ const Row = ({ style, node }) => {
           {node.nodeType === 'table' && (
             <MenuItem onClick={onClickDelete}>löschen</MenuItem>
           )}
-          {node.nodeType === 'table' &&
-            node.menuTitle === 'Person' &&
-            role === 'manager' &&
-            !node.accountId && (
-              <MenuItem onClick={onClickSignup}>Konto eröffnen</MenuItem>
-            )}
-          {node.nodeType === 'table' &&
-            node.menuTitle === 'Person' &&
-            role === 'manager' &&
-            node.accountId && (
-              <>
-                <MenuItem onClick={onClickSetPassword}>
-                  Email schicken, um ein Passwort zu setzen
-                </MenuItem>
-                <MenuItem onClick={onClickDeleteAccout}>Konto löschen</MenuItem>
-              </>
-            )}
           {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
             <>
               {someChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
@@ -543,6 +529,31 @@ const Row = ({ style, node }) => {
               )}
             </>
           )}
+          {node.nodeType === 'table' &&
+            node.menuTitle === 'Person' &&
+            role === 'manager' &&
+            !node.accountId && (
+              <>
+                <MenuSubtitle className="react-contextmenu-title">
+                  Konto
+                </MenuSubtitle>
+                <MenuItem onClick={onClickSignup}>neu</MenuItem>
+              </>
+            )}
+          {node.nodeType === 'table' &&
+            node.menuTitle === 'Person' &&
+            role === 'manager' &&
+            node.accountId && (
+              <>
+                <MenuSubtitle className="react-contextmenu-title">
+                  Konto
+                </MenuSubtitle>
+                <MenuItem onClick={onClickSetPassword}>
+                  Email schicken, um ein Passwort zu setzen
+                </MenuItem>
+                <MenuItem onClick={onClickDeleteAccout}>löschen</MenuItem>
+              </>
+            )}
         </ContextMenu>
       )}
     </Container>
