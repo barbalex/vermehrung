@@ -30,6 +30,8 @@ const StyledInput = styled(Input)`
 const ResetButton = styled(Button)`
   text-transform: none !important;
   font-weight: 400 !important;
+  margin-left: 8px !important;
+  margin-right: 20px !important;
 `
 
 const Login = () => {
