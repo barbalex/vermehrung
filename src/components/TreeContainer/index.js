@@ -145,7 +145,7 @@ const TreeContainer = () => {
 
   if (error) {
     console.log(error)
-    // TODO: if JWTExpired, renew
+    // if JWTExpired, renew
     if (error.message.includes('JWTExpired')) {
       setHasuraClaims({ store, user })
     }
