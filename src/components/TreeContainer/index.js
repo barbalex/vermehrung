@@ -22,6 +22,7 @@ import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
 import queryFromTable from '../../utils/queryFromTable'
+import setHasuraClaims from '../../utils/setHasuraClaims'
 
 const Container = styled.div`
   height: 100%;
@@ -144,6 +145,10 @@ const TreeContainer = () => {
 
   if (error) {
     console.log(error)
+    // TODO: if JWTExpired, renew
+    if (error.message.includes('JWTExpired')) {
+      setHasuraClaims({ store, user })
+    }
     return (
       <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
     )

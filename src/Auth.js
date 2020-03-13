@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import 'isomorphic-fetch'
-import axios from 'axios'
 
 import { Provider as FirebaseProvider } from './firebaseContext'
 
@@ -9,6 +8,7 @@ import { Provider as FirebaseProvider } from './firebaseContext'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import storeContext from './storeContext'
+import setHasuraClaims from './utils/setHasuraClaims'
 
 // Configure Firebase
 const firebaseConfig = {
@@ -59,36 +59,7 @@ const Auth = ({ children }) => {
           setUser(user)
           setIsSignedIn(!!user)
           if (user && user.uid) {
-            let res
-            try {
-              res = await axios.get(
-                `https://auth.vermehrung.ch/add-hasura-claims/${user.uid}`,
-              )
-            } catch (error) {
-              console.log(error)
-              setInitializingFirebase(false)
-              return enqueNotification({
-                message: error.response.data,
-                options: {
-                  variant: 'error',
-                },
-              })
-            }
-            if (res.status === 200) {
-              let tokenWithRoles
-              try {
-                tokenWithRoles = await user.getIdToken(true)
-              } catch (error) {
-                console.log(error)
-              }
-              //console.log('tokenWithRoles:', tokenWithRoles)
-              // set token to localStorage so authLink picks it up on next db call
-              // see: https://www.apollographql.com/docs/react/networking/authentication/#header
-              window.localStorage.setItem('token', tokenWithRoles)
-              setTimeout(() => setInitializingFirebase(false))
-            } else {
-              setInitializingFirebase(false)
-            }
+            setHasuraClaims({ store, user })
           } else {
             setInitializingFirebase(false)
           }
