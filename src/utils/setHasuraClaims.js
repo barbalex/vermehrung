@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export default async ({ store, user }) => {
   const { enqueNotification, setAuthorizing } = store
+  setAuthorizing(true)
   let res
   try {
     res = await axios.get(

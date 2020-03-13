@@ -20,7 +20,7 @@ const firebaseConfig = {
 
 const Auth = ({ children }) => {
   const store = useContext(storeContext)
-  const { setAuthorizing, setIsSignedIn, setUser, enqueNotification } = store
+  const { setIsSignedIn, setUser, enqueNotification } = store
   const [firebase, setFirebase] = useState(null)
 
   //console.log('Auth rendering, firebase:', firebase)
@@ -50,13 +50,10 @@ const Auth = ({ children }) => {
         setFirebase(fb)
         unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
           console.log('Auth onAuthStateChanged, user:', user)
-          setAuthorizing(true)
           setUser(user)
           setIsSignedIn(!!user)
           if (user && user.uid) {
             setHasuraClaims({ store, user })
-          } else {
-            setAuthorizing(false)
           }
           // set last activeNodeArray
           // only if top domain was visited
@@ -78,7 +75,6 @@ const Auth = ({ children }) => {
   }, [
     enqueNotification,
     firebase,
-    setAuthorizing,
     setIsSignedIn,
     setUser,
     store,
