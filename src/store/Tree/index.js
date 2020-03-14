@@ -14,7 +14,7 @@ export default types
       types.array(types.array(types.union(types.string, types.number))),
       [],
     ),
-    nodes: types.optional(types.array(Node), []),
+    nodesToAdd: types.optional(types.array(Node), []),
     widthInPercentOfScreen: types.optional(types.number, 33),
     widthEnforced: types.maybeNull(types.number, null),
   })
@@ -43,7 +43,10 @@ export default types
       self.openNodes = Array.from(set).map(JSON.parse)
     },
     addNode(node) {
-      self.nodes = [...self.nodes, node]
+      self.nodesToAdd = [...self.nodesToAdd, node]
+    },
+    setNodesToAdd(val) {
+      self.nodesToAdd = val
     },
     setRefetch(func) {
       self.refetch = func
