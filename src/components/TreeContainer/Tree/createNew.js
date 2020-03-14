@@ -55,7 +55,6 @@ export default async ({ node, store, client }) => {
   const { enqueNotification } = store
   const { setActiveNodeArray, refetch, addOpenNodes } = store.tree
   const { nodeType, url } = node
-  console.log('createNew', { nodeType, url: url.slice() })
 
   // get table and id from url
   let parentTableTitle = null
@@ -187,7 +186,7 @@ export default async ({ node, store, client }) => {
       .join(', ')
     const returning = `{ ...${fragmentFieldsNames[table]} }`
     mutation = gql`
-      mutation InsertDatasetForCreateNew1 {
+      mutation InsertDatasetForCreateNew_01 {
         insert_${table} (objects: [
           {
             ${objectString}
