@@ -50,10 +50,9 @@ const TreeContainer = () => {
   const { user } = store
   const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
-  const accountId = user.uid
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId },
+    variables: { accountId: user.uid },
   })
   const { user_role: role, id: personId } =
     get(personResult.data, 'person[0]') || {}
@@ -148,7 +147,7 @@ const TreeContainer = () => {
         ),
       )
     }
-  }, [data, loading, refetch, role, setRefetch, store])
+  }, [data, loading, refetch, role, setRefetch, store, nodesToAddRaw])
   useEffect(() => {
     if (nodesToAddRaw.length) {
       setNodes([...nodes, ...nodesToAddRaw])
@@ -162,7 +161,7 @@ const TreeContainer = () => {
     console.log(error)
     // if JWT expired, renew
     if (error.message.includes('JWTExpired')) {
-      console.log('TreeContainer, JWT expired, well set hasura claims anew')
+      console.log('TreeContainer, JWT expired, will set hasura claims anew')
       setHasuraClaims({ store, user })
     }
     return (
