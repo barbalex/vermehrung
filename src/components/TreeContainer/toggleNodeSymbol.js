@@ -3,8 +3,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import isNodeOpen from './isNodeOpen'
 
-export default ({ node: nodeRaw, store }) => {
-  const node = getSnapshot(nodeRaw)
+export default ({ node, store }) => {
   if (!node.url) throw new Error('passed node has no url')
   const { setOpenNodes, addOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
