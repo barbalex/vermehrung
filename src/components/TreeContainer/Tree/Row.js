@@ -206,12 +206,12 @@ const personQuery = gql`
   }
 `
 
-const Row = ({ style, node }) => {
+const Row = ({ style, node, nodes }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
   const { tree, enqueNotification, user, firebase } = store
-  const { nodes, openNodes, activeNodeArray } = tree
+  const { openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
