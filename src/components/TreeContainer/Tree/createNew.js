@@ -186,7 +186,7 @@ export default async ({ node, store, client }) => {
       .join(', ')
     const returning = `{ ...${fragmentFieldsNames[table]} }`
     mutation = gql`
-      mutation InsertDatasetForCreateNew1 {
+      mutation InsertDatasetForCreateNew_01 {
         insert_${table} (objects: [
           {
             ${objectString}
