@@ -16,6 +16,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
+import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../storeContext'
 import query from './query'
@@ -47,7 +48,8 @@ const personQuery = gql`
 const TreeContainer = () => {
   const store = useContext(storeContext)
   const { user } = store
-  const { setRefetch, openNodes } = store.tree
+  const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
+  const nodesToAddRaw = getSnapshot(nodesToAdd)
   const accountId = user.uid
 
   const personResult = useQuery(personQuery, {
@@ -140,9 +142,19 @@ const TreeContainer = () => {
     // do not set nodes when data is empty
     // which happens while query is loading again
     if (!loading && data && Object.keys(data).length > 0) {
-      setNodes(buildNodes({ store, data, loading, role }))
+      setNodes(
+        buildNodes({ store, data, loading, role }).filter(
+          node => node.id !== 'loadingNode',
+        ),
+      )
     }
   }, [data, loading, refetch, role, setRefetch, store])
+  useEffect(() => {
+    if (nodesToAddRaw.length) {
+      setNodes([...nodes, ...nodesToAddRaw])
+      setNodesToAdd([])
+    }
+  }, [nodes, nodesToAddRaw, setNodesToAdd])
 
   const nodesSorted = useMemo(() => sortNodes(nodes), [nodes])
 
