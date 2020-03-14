@@ -17,18 +17,17 @@ export default async ({ node, store, client }) => {
   const listQueryName = `${tableExtract}QueryFor${tableExtract}s`
   refetchQueries.push(listQueryName)
 
-  const mutation = gql`
-    mutation deleteDatasetInTree {
-      delete_${table} (where: {id: {_eq: ${id}}}) {
-        returning {
-          id
-        }
-      }
-    }
-  `
   try {
     await client.mutate({
-      mutation,
+      mutation: gql`
+      mutation deleteDatasetInTree {
+        delete_${table} (where: {id: {_eq: ${id}}}) {
+          returning {
+            id
+          }
+        }
+      }
+    `,
       refetchQueries,
     })
   } catch (error) {
