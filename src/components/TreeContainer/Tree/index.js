@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useReducer, useCallback } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useCallback,
+  useRef,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
@@ -24,9 +30,10 @@ function sizeReducer(state, action) {
   return action.payload
 }
 
-const Tree = ({ data, personId }) => {
+const Tree = ({ data, personId, nodes }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray: aNA, nodesSorted: nodes } = store.tree
+
+  const { activeNodeArray: aNA } = store.tree
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
@@ -37,7 +44,7 @@ const Tree = ({ data, personId }) => {
     [],
   )
 
-  const listRef = React.createRef()
+  const listRef = useRef(null)
 
   useEffect(() => {
     const index = findIndex(nodes, node => isEqual(node.url, aNA))
@@ -56,7 +63,13 @@ const Tree = ({ data, personId }) => {
         ref={listRef}
       >
         {({ index, style }) => (
-          <Row key={index} style={style} index={index} node={nodes[index]} />
+          <Row
+            key={index}
+            style={style}
+            index={index}
+            node={nodes[index]}
+            nodes={nodes}
+          />
         )}
       </StyledList>
     </ErrorBoundary>

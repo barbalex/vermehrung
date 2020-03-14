@@ -10,12 +10,13 @@
  * Which can decide not to update nodes if the query is loading
  * but rather use the previous value
  */
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
+import { getSnapshot } from 'mobx-state-tree'
 
 import storeContext from '../../storeContext'
 import query from './query'
@@ -23,6 +24,7 @@ import Tree from './Tree'
 import buildNodes from './nodes'
 import queryFromTable from '../../utils/queryFromTable'
 import setHasuraClaims from '../../utils/setHasuraClaims'
+import sortNodes from '../../utils/sortNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -46,11 +48,11 @@ const personQuery = gql`
 const TreeContainer = () => {
   const store = useContext(storeContext)
   const { user } = store
-  const { setRefetch, openNodes, setNodes } = store.tree
-  const accountId = user.uid
+  const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
+  const nodesToAddRaw = getSnapshot(nodesToAdd)
 
   const personResult = useQuery(personQuery, {
-    variables: { accountId },
+    variables: { accountId: user.uid },
   })
   const { user_role: role, id: personId } =
     get(personResult.data, 'person[0]') || {}
@@ -129,25 +131,37 @@ const TreeContainer = () => {
     variables,
   })
 
-  //console.log('TreeContainer, data:', data)
-
+  const [nodes, setNodes] = useState([])
   useEffect(() => {
     setRefetch(refetch)
-    // fetch on first load to show loading state
-    setNodes(buildNodes({ store, data, loading, role }))
-  }, [data, loading, refetch, role, setNodes, setRefetch, store])
+    if (!data && loading) {
+      // fetch on first load to show loading state
+      setNodes(buildNodes({ store, data, loading, role }))
+    }
+    // do not set nodes when data is empty
+    // which happens while query is loading again
+    if (!loading && data && Object.keys(data).length > 0) {
+      setNodes(
+        buildNodes({ store, data, loading, role }).filter(
+          node => node.id !== 'loadingNode',
+        ),
+      )
+    }
+  }, [data, loading, refetch, role, setRefetch, store, nodesToAddRaw])
+  useEffect(() => {
+    if (nodesToAddRaw.length) {
+      setNodes([...nodes, ...nodesToAddRaw])
+      setNodesToAdd([])
+    }
+  }, [nodes, nodesToAddRaw, setNodesToAdd])
 
-  // do not set nodes when data is empty
-  // which happens while query is loading again
-  if (!loading && data && Object.keys(data).length > 0) {
-    setNodes(buildNodes({ store, data, loading, role }))
-  }
+  const nodesSorted = useMemo(() => sortNodes(nodes), [nodes])
 
   if (error) {
     console.log(error)
     // if JWT expired, renew
     if (error.message.includes('JWTExpired')) {
-      console.log('TreeContainer, JWT expired, well set hasura claims anew')
+      console.log('TreeContainer, JWT expired, will set hasura claims anew')
       setHasuraClaims({ store, user })
     }
     return (
@@ -155,7 +169,7 @@ const TreeContainer = () => {
     )
   }
 
-  return <Tree personId={personId} data={data} />
+  return <Tree personId={personId} data={data} nodes={nodesSorted} />
 }
 
 export default observer(TreeContainer)
