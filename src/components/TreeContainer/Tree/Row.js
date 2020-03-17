@@ -547,7 +547,8 @@ const Row = ({ style, node, nodes }) => {
                   Konto
                 </MenuSubtitle>
                 <MenuItem onClick={onClickSetPassword}>
-                  Email schicken, um ein Passwort zu setzen
+                  Email schicken, um ein Passwort zu setzen (Achtung: Ist nur
+                  ca. 2 Stunden gültig)
                 </MenuItem>
                 <MenuItem onClick={onClickDeleteAccout}>löschen</MenuItem>
               </>
