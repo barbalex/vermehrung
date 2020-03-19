@@ -17,7 +17,6 @@ api.vermehrung.ch {
   }
 }
 
-# this may not be necessary as hasura uses
 auth.vermehrung.ch {
   reverse_proxy * {
     to v_auth:7000
