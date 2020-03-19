@@ -101,7 +101,6 @@ async function start() {
     method: 'GET',
     path: '/add-hasura-claims/{uid}',
     handler: async (req, h) => {
-      //console.log('serviceAccount:', serviceAccount)
       // Throw 500 if firebase is not configured
       if (!serviceAccount) {
         return h.response('Firebase not configured').code(500)
