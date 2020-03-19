@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
@@ -14,8 +14,8 @@ import { de } from 'date-fns/locale'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'isomorphic-fetch'
 
-//import localForage from 'localforage'
-//import { navigate } from '@reach/router'
+import localForage from 'localforage'
+import { navigate } from '@reach/router'
 
 import Notifier from './components/Notifier'
 import NotificationDismisser from './components/NotificationDismisser'
@@ -28,13 +28,10 @@ import setHasuraClaims from './utils/setHasuraClaims'
 
 const GlobalStyle = createGlobalStyle()
 
-const store = Store.create()
-
 registerLocale('de', de)
 setDefaultLocale('de')
 
 if (typeof window !== 'undefined') {
-  window.store = store
   // inform users of old browsers
   const browserUpdateConfiguration = {
     required: { e: -2, f: -2, o: -2, s: -2, c: -2 },
@@ -64,49 +61,57 @@ const firebaseConfig = {
 const apolloClient = createApolloClient()
 
 const App = ({ element }) => {
-  const { setUser, setAuthorizing, setFirebase } = store
+  const [store, setStore] = useState(null)
 
   useEffect(() => {
     let unregisterAuthObserver = () => {}
-    Promise.all([import('firebase') /*, import('mst-persist')*/]).then(
-      ([fbModule /*, pModule*/]) => {
-        /*const blacklist = ['user']
+    Promise.all([import('firebase'), import('mst-persist')]).then(
+      ([fbModule, pModule]) => {
+        // need to wait until now to build store
+        // otherwise mobx freaks out
+        const myStore = Store.create()
+        const { setUser, setAuthorizing, setFirebase } = myStore
+        setStore(myStore)
+        const blacklist = ['user']
         const persist = pModule.default
-        persist('store', store, {
+        persist('store', myStore, {
           storage: localForage,
           jsonify: false,
           blacklist,
-        }).then(() => {*/
-        const fb = fbModule.default
-        fb.initializeApp(firebaseConfig)
-        setFirebase(fb)
-        unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-          setUser(user)
-          if (user && user.uid) {
-            setHasuraClaims({ store, user })
-          } else {
-            setAuthorizing(false)
-          }
-          // set last activeNodeArray
-          // only if top domain was visited
-          // TODO:
-          // without timeout and with timeout too low this errors before page Vermehrung logs
-          /*const visitedTopDomain = window.location.pathname === '/'
-          if (!!user && visitedTopDomain) {
-            setTimeout(() => {
-              navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
-            }, 200)
-          }*/
+        }).then(() => {
+          const fb = fbModule.default
+          fb.initializeApp(firebaseConfig)
+          setFirebase(fb)
+          unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
+            setUser(user)
+            if (user && user.uid) {
+              setHasuraClaims({ store: myStore, user })
+            } else {
+              setAuthorizing(false)
+            }
+            // set last activeNodeArray
+            // only if top domain was visited
+            // TODO:
+            // without timeout and with timeout too low this errors before page Vermehrung logs
+            const visitedTopDomain = window.location.pathname === '/'
+            if (!!user && visitedTopDomain) {
+              setTimeout(() => {
+                navigate(
+                  `/Vermehrung/${myStore.tree.activeNodeArray.join('/')}`,
+                )
+              }, 200)
+            }
+          })
         })
-        //})
       },
     )
     return () => {
       console.log('App, unregistering auth observer')
       unregisterAuthObserver()
     }
-  }, [setAuthorizing, setFirebase, setUser])
+  }, [])
 
+  if (!store) return null
   return (
     <MuiThemeProvider theme={materialTheme}>
       <MobxProvider value={store}>
