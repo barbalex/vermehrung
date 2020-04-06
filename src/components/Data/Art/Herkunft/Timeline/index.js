@@ -34,8 +34,9 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
     variables: { id: herkunftId },
   })
   const herkunft = get(data, 'herkunft[0]', {})
-  const herkunftLabel = `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
-    '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
+  const herkunftLabel = `${herkunft.nr || '(keine Nr)'}: ${
+    herkunft.gemeinde || '(keine Gemeinde)'
+  }, ${herkunft.lokalname || '(kein Lokalname)'}`
 
   // zaehlungen data is special because it is
   // devided in two lines
@@ -44,15 +45,15 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   // add last done zaehlung as first point to planned
   // and the recombine
   const zaehlungenDone = herkunftSums.filter(
-    s => s.action === 'zaehlung' && !s.prognose,
+    (s) => s.action === 'zaehlung' && !s.prognose,
   )
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
   const zaehlungenPlanned = herkunftSums.filter(
-    s => s.action === 'zaehlung' && s.prognose,
+    (s) => s.action === 'zaehlung' && s.prognose,
   )
   const zaehlungenDoneData = useMemo(
     () =>
-      zaehlungenDone.map(l => ({
+      zaehlungenDone.map((l) => ({
         datum: new Date(l.datum).getTime(),
         'Zählung Pflanzen': l.sum_anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit': l.sum_anzahl_auspflanzbereit,
@@ -62,7 +63,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   )
   const zaehlungenPlannedData = useMemo(
     () =>
-      [lastZaehlungDone, ...zaehlungenPlanned].map(l => ({
+      [lastZaehlungDone, ...zaehlungenPlanned].map((l) => ({
         datum: new Date(l.datum).getTime(),
         'Zählung Pflanzen Prognose': l.sum_anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit Prognose':
@@ -84,10 +85,10 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
     [zaehlungenDataGroupedByDatum],
   )
 
-  const sammlungen = herkunftSums.filter(s => s.action === 'sammlung')
+  const sammlungen = herkunftSums.filter((s) => s.action === 'sammlung')
   const sammlungenData = useMemo(
     () =>
-      sammlungen.map(l => ({
+      sammlungen.map((l) => ({
         datum: new Date(l.datum).getTime(),
         [`Sammlung Pflanzen${l.prognose ? ' geplant' : ''}`]:
           l.anzahl_pflanzen || 0,
@@ -105,10 +106,10 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
       })),
     [sammlungen],
   )
-  const auspflanzungen = herkunftSums.filter(s => s.action === 'auspflanzung')
+  const auspflanzungen = herkunftSums.filter((s) => s.action === 'auspflanzung')
   const auspflanzungenData = useMemo(
     () =>
-      auspflanzungen.map(l => ({
+      auspflanzungen.map((l) => ({
         datum: new Date(l.datum).getTime(),
         [`Auspflanzung Pflanzen${l.prognose ? ' geplant' : ''}`]:
           l.anzahl_pflanzen || 0,
@@ -140,7 +141,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   )
 
   const onResize = useCallback(
-    width => {
+    (width) => {
       if (width < 1100 && !narrow) {
         setNarrow(true)
       }
@@ -154,7 +155,7 @@ const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   if (!allData.length) return null
 
   // need to disable animation or labels will not show on first render
-  // https://github.com/recharts/recharts/issues/806
+  // https://github.com/recharts/recharts/issues/1821
 
   return (
     <ErrorBoundary>
