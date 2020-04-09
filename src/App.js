@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
+import 'mobx-react-lite/batchingForReactDom'
 
 import createGlobalStyle from './utils/createGlobalStyle'
 
@@ -45,7 +46,7 @@ if (typeof window !== 'undefined') {
     style: 'bottom',
     //test: true,
   }
-  import('browser-update').then(module =>
+  import('browser-update').then((module) =>
     module.default(browserUpdateConfiguration),
   )
 }
@@ -82,26 +83,28 @@ const App = ({ element }) => {
           const fb = fbModule.default
           fb.initializeApp(firebaseConfig)
           setFirebase(fb)
-          unregisterAuthObserver = fb.auth().onAuthStateChanged(async user => {
-            setUser(user)
-            if (user && user.uid) {
-              setHasuraClaims({ store: myStore, user })
-            } else {
-              setAuthorizing(false)
-            }
-            // set last activeNodeArray
-            // only if top domain was visited
-            // TODO:
-            // without timeout and with timeout too low this errors before page Vermehrung logs
-            const visitedTopDomain = window.location.pathname === '/'
-            if (!!user && visitedTopDomain) {
-              setTimeout(() => {
-                navigate(
-                  `/Vermehrung/${myStore.tree.activeNodeArray.join('/')}`,
-                )
-              }, 200)
-            }
-          })
+          unregisterAuthObserver = fb
+            .auth()
+            .onAuthStateChanged(async (user) => {
+              setUser(user)
+              if (user && user.uid) {
+                setHasuraClaims({ store: myStore, user })
+              } else {
+                setAuthorizing(false)
+              }
+              // set last activeNodeArray
+              // only if top domain was visited
+              // TODO:
+              // without timeout and with timeout too low this errors before page Vermehrung logs
+              const visitedTopDomain = window.location.pathname === '/'
+              if (!!user && visitedTopDomain) {
+                setTimeout(() => {
+                  navigate(
+                    `/Vermehrung/${myStore.tree.activeNodeArray.join('/')}`,
+                  )
+                }, 200)
+              }
+            })
         })
       },
     )
@@ -120,7 +123,7 @@ const App = ({ element }) => {
             maxSnack={5}
             preventDuplicate
             autoHideDuration={10000}
-            action={key => <NotificationDismisser nKey={key} />}
+            action={(key) => <NotificationDismisser nKey={key} />}
           >
             <>
               <GlobalStyle />
