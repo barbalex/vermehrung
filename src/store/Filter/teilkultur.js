@@ -13,6 +13,18 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  ort1: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  ort2: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  ort3: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -23,6 +35,9 @@ export const initial = {
   id: null,
   kultur_id: null,
   name: null,
+  ort1: null,
+  ort2: null,
+  ort3: null,
   bemerkungen: null,
 }
 
@@ -30,6 +45,9 @@ export const empty = {
   id: null,
   kultur_id: null,
   name: null,
+  ort1: null,
+  ort2: null,
+  ort3: null,
   bemerkungen: null,
 }
 
@@ -37,5 +55,8 @@ export const simpleTypes = {
   id: 'number',
   kultur_id: 'number',
   name: 'string',
+  ort1: 'string',
+  ort2: 'string',
+  ort3: 'string',
   bemerkungen: 'string',
 }

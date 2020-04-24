@@ -25,6 +25,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  // geomPoint missing
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

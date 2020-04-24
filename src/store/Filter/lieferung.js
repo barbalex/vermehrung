@@ -9,10 +9,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  teilkultur_id: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   art_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -38,10 +34,6 @@ export const type = types.model({
     null,
   ),
   nach_ausgepflanzt: types.optional(types.boolean, false),
-  status: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
   anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
   anzahl_auspflanzbereit: types.optional(types.maybeNull(types.number), null),
@@ -60,7 +52,6 @@ export const type = types.model({
 export const initial = {
   id: null,
   sammel_lieferung_id: null,
-  teilkultur_id: null,
   art_id: null,
   person_id: null,
   von_sammlung_id: null,
@@ -80,7 +71,6 @@ export const initial = {
 export const empty = {
   id: null,
   sammel_lieferung_id: null,
-  teilkultur_id: null,
   art_id: null,
   person_id: null,
   von_sammlung_id: null,
@@ -100,7 +90,6 @@ export const empty = {
 export const simpleTypes = {
   id: 'number',
   sammel_lieferung_id: 'number',
-  teilkultur_id: 'number',
   art_id: 'number',
   person_id: 'number',
   von_sammlung_id: 'number',
