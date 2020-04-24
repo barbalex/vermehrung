@@ -69,3 +69,4 @@ public/
 .now
 
 google-application-credentials.json
+dropbox_uploader.conf
