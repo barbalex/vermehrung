@@ -6,7 +6,7 @@ LANGUAGE sql IMMUTABLE STRICT;
 
 create or replace view herkunft_computed as
 select
-  herkunft.id,
+  id,
   case
     when is_valid_coordinates(geom_point) then ST_Y(geom_point)
     else null
@@ -27,7 +27,7 @@ from herkunft;
 
 create or replace view garten_computed as
 select
-  garten.id,
+  id,
   case
     when is_valid_coordinates(geom_point) then ST_Y(geom_point)
     else null
@@ -49,7 +49,7 @@ from garten;
 
 create or replace view sammlung_computed as
 select
-  sammlung.id,
+  id,
   case
     when is_valid_coordinates(geom_point) then ST_Y(geom_point)
     else null
