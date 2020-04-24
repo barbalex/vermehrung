@@ -30,10 +30,6 @@ export const type = types.model({
     null,
   ),
   nach_ausgepflanzt: types.optional(types.boolean, false),
-  status: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
   von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
   anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
   anzahl_auspflanzbereit: types.optional(types.maybeNull(types.number), null),

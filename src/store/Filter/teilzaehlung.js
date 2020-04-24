@@ -9,17 +9,13 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  ort: types.optional(
+  teilkultur_id: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
   anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
-  anzahl_mutterpflanzen: types.optional(types.maybeNull(types.number), null),
   anzahl_auspflanzbereit: types.optional(types.maybeNull(types.number), null),
-  anz_bluehend: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    null,
-  ),
+  anzahl_mutterpflanzen: types.optional(types.maybeNull(types.number), null),
   andere_menge: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -37,7 +33,7 @@ export const type = types.model({
 export const initial = {
   id: null,
   zaehlung_id: null,
-  ort: null,
+  teilkultur_id: null,
   anzahl_pflanzen: null,
   anzahl_mutterpflanzen: null,
   anzahl_auspflanzbereit: null,
@@ -49,7 +45,7 @@ export const initial = {
 export const empty = {
   id: null,
   zaehlung_id: null,
-  ort: null,
+  teilkultur_id: null,
   anzahl_pflanzen: null,
   anzahl_mutterpflanzen: null,
   anzahl_auspflanzbereit: null,
@@ -61,7 +57,7 @@ export const empty = {
 export const simpleTypes = {
   id: 'number',
   zaehlung_id: 'number',
-  ort: 'string',
+  teilkultur_id: 'number',
   anzahl_pflanzen: 'number',
   anzahl_mutterpflanzen: 'number',
   anzahl_auspflanzbereit: 'number',

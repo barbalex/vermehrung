@@ -25,11 +25,12 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  // geomPoint missing!
+  aktiv: types.optional(types.boolean, true),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  aktiv: types.optional(types.boolean, true),
 })
 
 export const initial = {
@@ -39,8 +40,8 @@ export const initial = {
   strasse: null,
   plz: null,
   ort: null,
-  bemerkungen: null,
   aktiv: true,
+  bemerkungen: null,
 }
 
 export const empty = {
@@ -50,8 +51,8 @@ export const empty = {
   strasse: null,
   plz: null,
   ort: null,
-  bemerkungen: null,
   aktiv: true,
+  bemerkungen: null,
 }
 
 export const simpleTypes = {
@@ -61,6 +62,6 @@ export const simpleTypes = {
   strasse: 'string',
   plz: 'number',
   ort: 'string',
-  bemerkungen: 'string',
   aktiv: 'boolean',
+  bemerkungen: 'string',
 }
