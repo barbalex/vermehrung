@@ -47,7 +47,7 @@ create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using gin (tsv);
 
-drop table if exists person_file;
+drop table if exists person_file cascade;
 create table person_file (
   id bigserial primary key,
   person_id bigint default null references person (id) on delete cascade on update cascade,
@@ -73,7 +73,7 @@ create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using gin (tsv);
 
-drop table if exists art_qk;
+drop table if exists art_qk cascade;
 create table art_qk (
   name text primary key,
   titel text,
@@ -85,7 +85,7 @@ create index on art_qk using btree (titel);
 create index on art_qk using btree (sort);
 comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
-drop table if exists art_qk_choosen;
+drop table if exists art_qk_choosen cascade;
 create table art_qk_choosen (
   art_id bigserial NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -94,7 +94,7 @@ create table art_qk_choosen (
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
 
-drop table if exists art_file;
+drop table if exists art_file cascade;
 create table art_file (
   id bigserial primary key,
   art_id bigint default null references art (id) on delete cascade on update cascade,
@@ -128,7 +128,7 @@ create index on herkunft using btree (gemeinde);
 create index on herkunft using btree (lokalname);
 create index on herkunft using gin (tsv);
 
-drop table if exists herkunft_file;
+drop table if exists herkunft_file cascade;
 create table herkunft_file (
   id bigserial primary key,
   herkunft_id bigint default null references herkunft (id) on delete cascade on update cascade,
@@ -172,7 +172,7 @@ create index on sammlung using btree (gramm_samen);
 create index on sammlung using btree (geplant);
 create index on sammlung using gin (tsv);
 
-drop table if exists sammlung_file;
+drop table if exists sammlung_file cascade;
 create table sammlung_file (
   id bigserial primary key,
   sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
@@ -210,7 +210,7 @@ create index on garten using btree (ort);
 create index on garten using btree (aktiv);
 create index on garten using gin (tsv);
 
-drop table if exists garten_file;
+drop table if exists garten_file cascade;
 create table garten_file (
   id bigserial primary key,
   garten_id bigint default null references garten (id) on delete cascade on update cascade,
@@ -250,7 +250,7 @@ create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
 create index on kultur using gin (tsv);
 
-drop table if exists kultur_qk;
+drop table if exists kultur_qk cascade;
 create table kultur_qk (
   name text primary key,
   titel text,
@@ -262,7 +262,7 @@ create index on kultur_qk using btree (titel);
 create index on kultur_qk using btree (sort);
 comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
-drop table if exists kultur_qk_choosen;
+drop table if exists kultur_qk_choosen cascade;
 create table kultur_qk_choosen (
   kultur_id bigserial NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -271,7 +271,7 @@ create table kultur_qk_choosen (
 create index on kultur_qk_choosen using btree (kultur_id);
 create index on kultur_qk_choosen using btree (qk_name);
 
-drop table if exists kultur_file;
+drop table if exists kultur_file cascade;
 create table kultur_file (
   id bigserial primary key,
   kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
@@ -479,7 +479,7 @@ create index on lieferung using btree (id);
 -- need to wait with adding this reference until sammel_lieferung was created
 alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lieferung_id) references sammel_lieferung (id) on delete set null on update cascade;
 
-drop table if exists lieferung_file;
+drop table if exists lieferung_file cascade;
 create table lieferung_file (
   id bigserial primary key,
   lieferung_id bigint default null references lieferung (id) on delete cascade on update cascade,
@@ -493,7 +493,7 @@ create index on lieferung_file using btree (lieferung_id);
 create index on lieferung_file using btree (file_id);
 create index on lieferung_file using btree (file_mime_type);
 
-drop table if exists av_art;
+drop table if exists av_art cascade;
 create table av_art (
   art_id bigserial unique REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id bigint references person (id) on delete cascade on update cascade,
