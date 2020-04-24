@@ -1,3 +1,4 @@
+--CREATE DATABASE vermehrung encoding 'UTF8';
 create extension if not exists "uuid-ossp";
 CREATE EXTENSION if not exists postgis;
 
@@ -9,10 +10,10 @@ create table user_role (
 );
 create index on user_role using btree (name);
 create index on user_role using btree (sort);
--- INSERT INTO user_role (id, name, sort, comment) VALUES
---   ('gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
---   ('artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
---   ('manager', 3, 'liest und editiert alle Daten');
+INSERT INTO user_role (name, sort, comment) VALUES
+  ('gaertner', 1, 'liest und editiert Daten des eigenen Garten'),
+  ('artverantwortlich', 2, 'liest und editiert Daten für bestimmte Arten'),
+  ('manager', 3, 'liest und editiert alle Daten');
 
 drop table if exists person cascade;
 create table person (
@@ -38,7 +39,6 @@ create table person (
   info boolean default false,
   aktiv boolean default true
 );
---alter table person add column user_role text default null references user_role (value) on delete set null on update cascade;
 create index on person using btree (id);
 create index on person using btree (name);
 create index on person using btree (account_id);
@@ -475,7 +475,7 @@ create table sammel_lieferung (
   geplant boolean default false,
   bemerkungen text default null
 );
-create index on lieferung using btree (id);
+create index on sammel_lieferung using btree (id);
 -- need to wait with adding this reference until sammel_lieferung was created
 alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lieferung_id) references sammel_lieferung (id) on delete set null on update cascade;
 

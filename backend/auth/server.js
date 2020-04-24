@@ -122,7 +122,7 @@ async function start() {
 
       // fetch id and user_role
       return sql`select * from person where account_id = ${uid}`
-        .then(persons => {
+        .then((persons) => {
           if (!persons) {
             return h.response('Got no persons when querying db').code(500)
           }
@@ -156,14 +156,14 @@ async function start() {
             .then(() => {
               return h.response('user role and id set').code(200)
             })
-            .catch(adminError => {
+            .catch((adminError) => {
               console.log('Error creating custom token:', adminError)
               h.response(
                 `Error creating custom token: ${adminError.message}`,
               ).code(500)
             })
         })
-        .catch(sqlError => {
+        .catch((sqlError) => {
           console.log('Error querying db:', sqlError)
           h.response(`Error querying db: ${sqlError.message}`).code(500)
         })
@@ -173,7 +173,7 @@ async function start() {
   console.log('JSON-API-Server running at:', server.info.uri)
 }
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   console.log(err)
   process.exit(1)
 })
