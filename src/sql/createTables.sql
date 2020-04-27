@@ -239,7 +239,7 @@ create table kultur (
   changed_by varchar(20) default null,
   tsv tsvector
 );
-create index single_active_herkunft_per_art_and_garden_idx on kultur (art_id, herkunft_id, garten_id) where aktiv is true;
+create index single_active_herkunft_per_art_and_garden_idx on kultur (art_id, herkunft_id, garten_id) where aktiv is true and herkunft_id is not null;
 create index on kultur using btree (id);
 create index on kultur using btree (art_id);
 create index on kultur using btree (herkunft_id);
