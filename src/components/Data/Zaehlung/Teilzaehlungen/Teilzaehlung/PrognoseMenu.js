@@ -18,6 +18,7 @@ import {
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import storeContext from '../../../../../storeContext'
 import exists from '../../../../../utils/exists'
+import appBaseUrl from '../../../../../utils/appBaseUrl'
 
 const TitleRow = styled.div`
   display: flex;
@@ -60,7 +61,7 @@ const Teilzaehlung = ({
   }, [])
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       setErrors({})
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
@@ -278,8 +279,13 @@ const Teilzaehlung = ({
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
   const openDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Planen')
+    const url = `${appBaseUrl()}Dokumentation/Planen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   return (

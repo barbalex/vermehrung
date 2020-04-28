@@ -15,6 +15,7 @@ import { useApolloClient } from '@apollo/react-hooks'
 
 import storeContext from '../../../storeContext'
 import { personOption as personOptionFragment } from '../../../utils/fragments'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Container = styled.div`
   position: absolute;
@@ -54,7 +55,7 @@ const SettingsTree = ({ data, personId }) => {
   } = personOption
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       const value = event.target.value === 'true'
       try {
@@ -105,14 +106,19 @@ const SettingsTree = ({ data, personId }) => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Ordner-blenden')
+    const url = `${appBaseUrl()}Dokumentation/Ordner-blenden`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
-    event => setAnchorEl(event.currentTarget),
+    (event) => setAnchorEl(event.currentTarget),
     [],
   )
 
