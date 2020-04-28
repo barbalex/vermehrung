@@ -37,12 +37,13 @@ import updateLieferungArtId from './updateLieferungArtId'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -254,7 +255,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
   const { data, error, loading } = useQuery(lieferungQuery, {
@@ -304,7 +305,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const isAuslieferung = urlLastName === 'Aus-Lieferungen'
 
   const ifNeeded = useCallback(
-    field => {
+    (field) => {
       if (existsSammelLieferung && li_show_sl_felder) return true
       if (!exists(sammelLieferung[field]) || sammelLieferung[field] === false) {
         return true
@@ -315,12 +316,14 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     },
     [existsSammelLieferung, li_show_sl_felder, row, sammelLieferung],
   )
-  const ifSomeNeeded = useCallback(fields => fields.some(f => ifNeeded(f)), [
-    ifNeeded,
-  ])
-  const ifAllNeeded = useCallback(fields => fields.every(f => ifNeeded(f)), [
-    ifNeeded,
-  ])
+  const ifSomeNeeded = useCallback(
+    (fields) => fields.some((f) => ifNeeded(f)),
+    [ifNeeded],
+  )
+  const ifAllNeeded = useCallback(
+    (fields) => fields.every((f) => ifNeeded(f)),
+    [ifNeeded],
+  )
 
   const herkunftByKultur = isAnlieferung
     ? get(row, 'kulturByNachKulturId.herkunft')
@@ -329,8 +332,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const herkunft = herkunftByKultur || herkunftBySammlung
   const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
   const herkunftValue = herkunft
-    ? `${herkunft.nr || '(keine Nr)'}: ${herkunft.gemeinde ||
-        '(keine Gemeinde)'}, ${herkunft.lokalname || '(kein Lokalname)'}`
+    ? `${herkunft.nr || '(keine Nr)'}: ${
+        herkunft.gemeinde || '(keine Gemeinde)'
+      }, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
   const showVon =
     (!!row.art_id && !isAuslieferung) ||
@@ -424,7 +428,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const vonKulturWerte = useMemo(
     () =>
-      get(vonKulturData, 'kultur', []).map(el => {
+      get(vonKulturData, 'kultur', []).map((el) => {
         const personName = get(el, 'garten.person.name') || '(kein Name)'
         const personOrt = get(el, 'garten.person.ort') || null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
@@ -439,7 +443,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   )
   const nachKulturWerte = useMemo(
     () =>
-      get(nachKulturData, 'kultur', []).map(el => {
+      get(nachKulturData, 'kultur', []).map((el) => {
         const personName = get(el, 'garten.person.name') || '(kein Name)'
         const personOrt = get(el, 'garten.person.ort') || null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
@@ -455,7 +459,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const sammlungWerte = useMemo(
     () =>
-      get(sammlungData, 'sammlung', []).map(el => {
+      get(sammlungData, 'sammlung', []).map((el) => {
         const datum = el.datum || '(kein Datum)'
         const nr = get(el, 'herkunft.nr') || '(keine Nr)'
         const person = get(el, 'person.name') || '(kein Name)'
@@ -471,7 +475,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const personWerte = useMemo(
     () =>
-      get(personData, 'person', []).map(el => ({
+      get(personData, 'person', []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
@@ -480,7 +484,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const artWerte = useMemo(
     () =>
-      get(artData, 'art', []).map(el => ({
+      get(artData, 'art', []).map((el) => ({
         value: el.id,
         label: get(el, 'art_ae_art.name') || '(kein Artname)',
       })),
@@ -488,7 +492,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   )
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -546,16 +550,31 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Planen')
+    const url = `${appBaseUrl()}Dokumentation/Planen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const openLieferungDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Lieferungen')
+    const url = `${appBaseUrl()}Dokumentation/Lieferungen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Genetische-Vielfalt')
+    const url = `${appBaseUrl()}Dokumentation/Genetische-Vielfalt`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (loading) {

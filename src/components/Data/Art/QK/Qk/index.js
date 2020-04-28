@@ -51,7 +51,7 @@ const ButtonContainer = styled.div`
 const StyledButton = styled(Button)`
   margin-bottom: 15px !important;
   margin-top: -5px !important;
-  color: ${props =>
+  color: ${(props) =>
     props.loading === 'true'
       ? '#D84315 !important'
       : 'rgb(46, 125, 50) !important'};
@@ -70,11 +70,20 @@ const StyledFormControl = styled(FormControl)`
 
 const ApQkQk = ({ art, qkNameQueries, qks }) => {
   const [filter, setFilter] = useState('')
-  const onChangeFilter = useCallback(event => setFilter(event.target.value), [])
+  const onChangeFilter = useCallback(
+    (event) => setFilter(event.target.value),
+    [],
+  )
 
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}.01.01`
   const startNextYear = `${year + 1}.01.01`
+  console.log('ApQkQk', {
+    qkNameQueries,
+    artId: art.id,
+    startYear,
+    startNextYear,
+  })
   const { data, error, loading, refetch } = useQuery(query, {
     variables: {
       ...qkNameQueries,
@@ -88,12 +97,12 @@ const ApQkQk = ({ art, qkNameQueries, qks }) => {
     artId: art.id,
   })
   const messageGroups = qks
-    .map(qk => ({
+    .map((qk) => ({
       title: qk.titel,
       messages: messageFunctions[qk.name](),
     }))
-    .filter(q => q.messages.length)
-  const messageGroupsFiltered = messageGroups.filter(messageGroup => {
+    .filter((q) => q.messages.length)
+  const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
     }
@@ -137,7 +146,7 @@ const ApQkQk = ({ art, qkNameQueries, qks }) => {
           />
         </StyledFormControl>
       </Row>
-      {messageGroupsFiltered.map(messageGroup => (
+      {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{messageGroup.title}</Title>
           {messageGroup.messages.map((m, i) => (

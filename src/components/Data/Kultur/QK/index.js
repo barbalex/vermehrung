@@ -13,6 +13,7 @@ import get from 'lodash/get'
 import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'
+import appBaseUrl from '../../../../utils/appBaseUrl'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -56,16 +57,16 @@ const KulturQk = ({ kultur }) => {
   })
   const allQks = get(data, 'kultur_qk') || []
   const qks = allQks.filter(
-    qk =>
+    (qk) =>
       !!(get(data, 'kultur_qk_choosen') || []).find(
-        no => no.qk_name === qk.name,
+        (no) => no.qk_name === qk.name,
       ),
   )
   const qkNameQueries = Object.fromEntries(
-    allQks.map(n => [
+    allQks.map((n) => [
       n.name,
       !!(get(data, 'kultur_qk_choosen') || []).find(
-        no => no.qk_name === n.name,
+        (no) => no.qk_name === n.name,
       ),
     ]),
   )
@@ -75,13 +76,18 @@ const KulturQk = ({ kultur }) => {
     ? '...'
     : (get(data, 'kultur_qk_choosen') || []).length
 
-  const openDocs = useCallback(e => {
+  const openDocs = useCallback((e) => {
     e.stopPropagation()
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Qualitaets-Kontrollen')
+    const url = `${appBaseUrl()}Dokumentation/Qualitaets-Kontrollen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const onClickToggle = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       setOpen(!open)
     },

@@ -41,12 +41,13 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
 import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -103,7 +104,7 @@ const Kultur = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const kulturFilter = queryFromTable({ store, table: 'kultur' })
   const kulturResult = useQuery(kulturQuery, {
@@ -133,20 +134,20 @@ const Kultur = ({ filter: showFilter }) => {
   const { data: sammlungData, error: sammlungError } = useQuery(sammlungQuery)
   const artHerkunftInGarten = get(row, 'garten.kulturs', [])
     // only consider kulturen with both art and herkunft chosen
-    .filter(o => o.art_id && o.herkunft_id)
+    .filter((o) => o.art_id && o.herkunft_id)
   const sammlungs = get(sammlungData, 'sammlung', [])
   const artHerkunftToChoose = sammlungs.filter(
-    s =>
+    (s) =>
       !artHerkunftInGarten.find(
-        a => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+        (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
       ),
   )
   const artenToChoose = uniq(
     artHerkunftToChoose
-      .filter(ah =>
+      .filter((ah) =>
         row.herkunft_id ? ah.herkunft_id === row.herkunft_id : true,
       )
-      .map(a => a.art_id),
+      .map((a) => a.art_id),
   )
   // do show own art
   if (row.art_id && !artenToChoose.includes(row.art_id)) {
@@ -154,8 +155,8 @@ const Kultur = ({ filter: showFilter }) => {
   }
   const herkunftToChoose = uniq(
     artHerkunftToChoose
-      .filter(ah => (row.art_id ? ah.art_id === row.art_id : true))
-      .map(a => a.herkunft_id),
+      .filter((ah) => (row.art_id ? ah.art_id === row.art_id : true))
+      .map((a) => a.herkunft_id),
   )
   // do show own herkunft
   if (row.herkunft_id && !herkunftToChoose.includes(row.herkunft_id)) {
@@ -195,7 +196,7 @@ const Kultur = ({ filter: showFilter }) => {
 
   const artWerte = useMemo(
     () =>
-      get(dataArt, 'art', []).map(el => ({
+      get(dataArt, 'art', []).map((el) => ({
         value: el.id,
         label: get(el, 'art_ae_art.name') || '(keine Art)',
       })),
@@ -204,7 +205,7 @@ const Kultur = ({ filter: showFilter }) => {
 
   const gartenWerte = useMemo(
     () =>
-      (get(dataGarten, 'garten') || []).map(el => ({
+      (get(dataGarten, 'garten') || []).map((el) => ({
         value: el.id,
         label: el.name || get(el, 'person.name') || '(kein Name)',
       })),
@@ -213,13 +214,14 @@ const Kultur = ({ filter: showFilter }) => {
 
   const herkunftWerte = useMemo(
     () =>
-      (get(herkunftData, 'herkunft') || []).map(el => {
+      (get(herkunftData, 'herkunft') || []).map((el) => {
         // only show lokal if exist
         // does not exist if user does not have right to see it
         const lokal =
           el.gemeinde || el.lokalname
-            ? `, ${el.gemeinde && `${el.gemeinde}, `}${el.lokalname &&
-                el.lokalname}`
+            ? `, ${el.gemeinde && `${el.gemeinde}, `}${
+                el.lokalname && el.lokalname
+              }`
             : ''
         const nr = el.nr || '(keine Nr.)'
         const label = `${nr}${lokal}`
@@ -233,7 +235,7 @@ const Kultur = ({ filter: showFilter }) => {
   )
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -303,12 +305,22 @@ const Kultur = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
   const openKulturDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Kulturen')
+    const url = `${appBaseUrl()}Dokumentation/Kulturen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Genetische-Vielfalt')
+    const url = `${appBaseUrl()}Dokumentation/Genetische-Vielfalt`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const onClickDownload = useCallback(async () => {
     const workbook = new ExcelJs.Workbook()

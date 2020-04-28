@@ -34,12 +34,13 @@ import queryFromTable from '../../../utils/queryFromTable'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -165,7 +166,7 @@ const Event = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const eventFilter = queryFromTable({ store, table: 'event' })
   const eventResult = useQuery(eventQuery, {
@@ -203,7 +204,7 @@ const Event = ({ filter: showFilter }) => {
   const kulturs = get(kulturData, 'kultur', []) || []
   const kulturWerte = useMemo(
     () =>
-      kulturs.map(el => {
+      kulturs.map((el) => {
         const personName = get(el, 'garten.person.name') || '(kein Name)'
         const personOrt = get(el, 'garten.person.ort') || null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
@@ -219,9 +220,9 @@ const Event = ({ filter: showFilter }) => {
     [kulturs],
   )
   const teilkulturWerte = useMemo(() => {
-    const kultur = kulturs.find(k => k.id === row.kultur_id)
+    const kultur = kulturs.find((k) => k.id === row.kultur_id)
     const tks = get(kultur, 'teilkulturs', []) || []
-    return tks.map(t => ({
+    return tks.map((t) => ({
       value: t.id,
       label: t.name || '(kein Name)',
     }))
@@ -229,7 +230,7 @@ const Event = ({ filter: showFilter }) => {
 
   const personWerte = useMemo(
     () =>
-      get(personData, 'person', []).map(el => ({
+      get(personData, 'person', []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
@@ -240,7 +241,7 @@ const Event = ({ filter: showFilter }) => {
     get(row, 'kultur.kultur_option') || {}
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -298,12 +299,22 @@ const Event = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Planen')
+    const url = `${appBaseUrl()}Dokumentation/Planen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const openEventdDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Events')
+    const url = `${appBaseUrl()}Dokumentation/Events`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (loading) {
