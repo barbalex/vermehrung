@@ -25,12 +25,13 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -104,7 +105,7 @@ const Herkunft = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const { data, error, loading, refetch } = useQuery(herkunftQuery, {
@@ -133,7 +134,7 @@ const Herkunft = ({ filter: showFilter }) => {
   }, [row.id])
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -194,8 +195,13 @@ const Herkunft = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
   const openHerkunftDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Herkuenfte')
+    const url = `${appBaseUrl()}Dokumentation/Herkuenfte`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (loading) {

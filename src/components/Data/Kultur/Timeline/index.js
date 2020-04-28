@@ -27,6 +27,7 @@ import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
+import appBaseUrl from '../../../../utils/appBaseUrl'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -55,17 +56,17 @@ const KulturTimeline = ({ row }) => {
   const [narrow, setNarrow] = useState(false)
 
   const zaehlungenDone = (get(row, 'zaehlungsDone') || []).filter(
-    l => l.datum <= format(new Date(), 'yyyy-mm-dd'),
+    (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
   )
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
   const zaehlungenPlanned = get(row, 'zaehlungsPlanned') || []
-  const zaehlungenPlannedIgnored = zaehlungenPlanned.filter(zg =>
+  const zaehlungenPlannedIgnored = zaehlungenPlanned.filter((zg) =>
     // check if more recent zaehlungenDone exists
-    zaehlungenDone.some(z => z.datum >= zg.datum),
+    zaehlungenDone.some((z) => z.datum >= zg.datum),
   )
   const zaehlungenPlannedIncluded = useMemo(() => {
     let val = zaehlungenPlanned.filter(
-      lg => !zaehlungenPlannedIgnored.map(l => l.id).includes(lg.id),
+      (lg) => !zaehlungenPlannedIgnored.map((l) => l.id).includes(lg.id),
     )
     if (val.length) {
       // need to add last zaehlung to zaehlungenPlannedIncluded to connect lines
@@ -80,7 +81,7 @@ const KulturTimeline = ({ row }) => {
   const zaehlungenForLineReversed = [...zaehlungenForLine].reverse()
   const zaehlungenDoneData = useMemo(
     () =>
-      zaehlungenDone.map(l => {
+      zaehlungenDone.map((l) => {
         const teilzaehlungs = get(l, 'teilzaehlungs', [])
 
         return {
@@ -98,13 +99,13 @@ const KulturTimeline = ({ row }) => {
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ),
           'Zählung andere Mengen': teilzaehlungs
-            .map(t => t.andere_menge)
+            .map((t) => t.andere_menge)
             .join(', '),
           'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
-            .map(t => t.auspflanzbereit_beschreibung)
+            .map((t) => t.auspflanzbereit_beschreibung)
             .join(', '),
           'Zählung Bemerkungen': teilzaehlungs
-            .map(t => t.bemerkungen)
+            .map((t) => t.bemerkungen)
             .join(', '),
           ereignis: 'Zählung',
         }
@@ -113,7 +114,7 @@ const KulturTimeline = ({ row }) => {
   )
   const zaehlungenPlannedIncludedData = useMemo(
     () =>
-      zaehlungenPlannedIncluded.map(l => {
+      zaehlungenPlannedIncluded.map((l) => {
         const teilzaehlungs = get(l, 'teilzaehlungs', [])
 
         return {
@@ -131,16 +132,16 @@ const KulturTimeline = ({ row }) => {
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ),
           'Zählung Prognose': teilzaehlungs
-            .map(t => (t.prognose ? 'ja' : 'nein'))
+            .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
           'Zählung andere Mengen': teilzaehlungs
-            .map(t => t.andere_menge)
+            .map((t) => t.andere_menge)
             .join(', '),
           'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
-            .map(t => t.auspflanzbereit_beschreibung)
+            .map((t) => t.auspflanzbereit_beschreibung)
             .join(', '),
           'Zählung Bemerkungen': teilzaehlungs
-            .map(t => t.bemerkungen)
+            .map((t) => t.bemerkungen)
             .join(', '),
           ereignis: 'Zählung',
         }
@@ -149,7 +150,7 @@ const KulturTimeline = ({ row }) => {
   )
   const zaehlungenPlannedIgnoredData = useMemo(
     () =>
-      zaehlungenPlannedIgnored.map(l => {
+      zaehlungenPlannedIgnored.map((l) => {
         const teilzaehlungs = get(l, 'teilzaehlungs', [])
 
         return {
@@ -167,16 +168,16 @@ const KulturTimeline = ({ row }) => {
             'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
           ),
           'Zählung Prognose': teilzaehlungs
-            .map(t => (t.prognose ? 'ja' : 'nein'))
+            .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
           'Zählung andere Mengen': teilzaehlungs
-            .map(t => t.andere_menge)
+            .map((t) => t.andere_menge)
             .join(', '),
           'Zählung Beschreibung auspflanzbereite Pflanzen': teilzaehlungs
-            .map(t => t.auspflanzbereit_beschreibung)
+            .map((t) => t.auspflanzbereit_beschreibung)
             .join(', '),
           'Zählung Bemerkungen': teilzaehlungs
-            .map(t => t.bemerkungen)
+            .map((t) => t.bemerkungen)
             .join(', '),
           ereignis: 'Zählung',
         }
@@ -201,21 +202,21 @@ const KulturTimeline = ({ row }) => {
   )
 
   const anLieferungenDone = (get(row, 'anLieferungsDone') || []).filter(
-    l => l.datum <= format(new Date(), 'yyyy-mm-dd'),
+    (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
   )
   const anLieferungenPlanned = get(row, 'anLieferungsPlanned') || []
   const anLieferungenPlannedIgnored = useMemo(
     () =>
-      anLieferungenPlanned.filter(lg =>
+      anLieferungenPlanned.filter((lg) =>
         // check if more recent anLieferungenDone exists
-        anLieferungenDone.some(lu => lu.datum >= lg.datum),
+        anLieferungenDone.some((lu) => lu.datum >= lg.datum),
       ),
     [anLieferungenDone, anLieferungenPlanned],
   )
   const anLieferungenPlannedIncluded = useMemo(
     () =>
       anLieferungenPlanned.filter(
-        lg => !anLieferungenPlannedIgnored.map(l => l.id).includes(lg.id),
+        (lg) => !anLieferungenPlannedIgnored.map((l) => l.id).includes(lg.id),
       ),
     [anLieferungenPlannedIgnored, anLieferungenPlanned],
   )
@@ -224,21 +225,21 @@ const KulturTimeline = ({ row }) => {
     'datum',
   )
   const ausLieferungenDone = (get(row, 'ausLieferungsDone') || []).filter(
-    l => l.datum <= format(new Date(), 'yyyy-mm-dd'),
+    (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
   )
   const ausLieferungenPlanned = get(row, 'ausLieferungsPlanned') || []
   const ausLieferungenPlannedIgnored = useMemo(
     () =>
-      ausLieferungenPlanned.filter(lg =>
+      ausLieferungenPlanned.filter((lg) =>
         // check if more recent ausLieferungenDone exists
-        ausLieferungenDone.some(l => l.datum >= lg.datum),
+        ausLieferungenDone.some((l) => l.datum >= lg.datum),
       ),
     [ausLieferungenDone, ausLieferungenPlanned],
   )
   const ausLieferungenPlannedIncluded = useMemo(
     () =>
       ausLieferungenPlanned.filter(
-        lg => !ausLieferungenPlannedIgnored.map(l => l.id).includes(lg.id),
+        (lg) => !ausLieferungenPlannedIgnored.map((l) => l.id).includes(lg.id),
       ),
     [ausLieferungenPlannedIgnored, ausLieferungenPlanned],
   )
@@ -248,11 +249,11 @@ const KulturTimeline = ({ row }) => {
   )
   const anLieferungenDoneData = useMemo(
     () =>
-      anLieferungenDone.map(l => {
+      anLieferungenDone.map((l) => {
         // 1. previous Zaehlung is basis
         // If none, pretend this is first zaehlung
         const previousZaehlung = zaehlungenForLineReversed.find(
-          z => z.datum < l.datum,
+          (z) => z.datum < l.datum,
         ) || {
           datum: '1900.01.01',
           anzahl_pflanzen: 0,
@@ -260,10 +261,10 @@ const KulturTimeline = ({ row }) => {
         }
         // 2. Summ all Lieferungen since
         const anLieferungenSince = anLieferungenForLine.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const ausLieferungenSince = ausLieferungenForLine.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
           (get(
@@ -303,10 +304,10 @@ const KulturTimeline = ({ row }) => {
   )
   const ausLieferungenDoneData = useMemo(
     () =>
-      ausLieferungenDone.map(l => {
+      ausLieferungenDone.map((l) => {
         // 1. previous Zaehlung is basis. If none, take 0
         const previousZaehlung = zaehlungenForLineReversed.find(
-          z => z.datum < l.datum,
+          (z) => z.datum < l.datum,
         ) || {
           datum: '1900.01.01',
           anzahl_pflanzen: 0,
@@ -314,10 +315,10 @@ const KulturTimeline = ({ row }) => {
         }
         // 2. Summ all Lieferungen since
         const anLieferungenSince = anLieferungenForLine.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const ausLieferungenSince = ausLieferungenForLine.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
           (get(
@@ -357,11 +358,11 @@ const KulturTimeline = ({ row }) => {
   )
   const anLieferungenPlannedData = useMemo(
     () =>
-      anLieferungenPlannedIncluded.map(l => {
+      anLieferungenPlannedIncluded.map((l) => {
         // 1. previous Zaehlung is basis
         // If none, pretend this is first zaehlung
         const previousZaehlung = zaehlungenForLineReversed.find(
-          z => z.datum < l.datum,
+          (z) => z.datum < l.datum,
         ) || {
           datum: '1900.01.01',
           anzahl_pflanzen: 0,
@@ -369,10 +370,10 @@ const KulturTimeline = ({ row }) => {
         }
         // 2. Summ all Lieferungen since
         const anLieferungenSince = anLieferungenPlannedIncluded.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const ausLieferungenSince = ausLieferungenPlannedIncluded.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
           (get(
@@ -421,7 +422,7 @@ const KulturTimeline = ({ row }) => {
   )
   const anLieferungenPlannedIgnoredData = useMemo(
     () =>
-      anLieferungenPlannedIgnored.map(l => ({
+      anLieferungenPlannedIgnored.map((l) => ({
         datum: new Date(l.datum).getTime(),
         'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
         'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
@@ -436,11 +437,11 @@ const KulturTimeline = ({ row }) => {
   )
   const ausLieferungenPlannedData = useMemo(
     () =>
-      ausLieferungenPlannedIncluded.map(l => {
+      ausLieferungenPlannedIncluded.map((l) => {
         // 1. previous Zaehlung is basis
         // If none, pretend this is first zaehlung
         const previousZaehlung = zaehlungenForLineReversed.find(
-          z => z.datum < l.datum,
+          (z) => z.datum < l.datum,
         ) || {
           datum: '1900.01.01',
           anzahl_pflanzen: 0,
@@ -448,10 +449,10 @@ const KulturTimeline = ({ row }) => {
         }
         // 2. Summ all Lieferungen since
         const anLieferungenSince = anLieferungenPlannedIncluded.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const ausLieferungenSince = ausLieferungenPlannedIncluded.filter(
-          a => a.datum > previousZaehlung.datum && a.datum < l.datum,
+          (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
           (get(
@@ -499,7 +500,7 @@ const KulturTimeline = ({ row }) => {
   )
   const ausLieferungenPlannedIgnoredData = useMemo(
     () =>
-      ausLieferungenPlannedIgnored.map(l => ({
+      ausLieferungenPlannedIgnored.map((l) => ({
         datum: new Date(l.datum).getTime(),
         'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
         'Lieferung Pflanzen auspflanzbereit geplant, ignoriert': -l.anzahl_auspflanzbereit,
@@ -539,11 +540,16 @@ const KulturTimeline = ({ row }) => {
     ],
   )
   const openDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Zeitachse-Kultur')
+    const url = `${appBaseUrl()}Dokumentation/Zeitachse-Kultur`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const onResize = useCallback(
-    width => {
+    (width) => {
       if (width < 1100 && !narrow) {
         setNarrow(true)
       }

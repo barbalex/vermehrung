@@ -15,6 +15,7 @@ import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
 import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Title = styled.div`
   padding: 12px 16px;
@@ -38,7 +39,7 @@ const SettingsKultur = ({ kulturResult }) => {
   const kulturId = get(data, 'kultur[0].id')
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       const value = event.target.value === 'true'
       try {
@@ -90,13 +91,18 @@ const SettingsKultur = ({ kulturResult }) => {
 
   const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
-    event => setAnchorEl(event.currentTarget),
+    (event) => setAnchorEl(event.currentTarget),
     [],
   )
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Teilkulturen')
+    const url = `${appBaseUrl()}Dokumentation/Teilkulturen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (error) {

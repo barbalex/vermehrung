@@ -10,6 +10,7 @@ import { useQuery } from '@apollo/react-hooks'
 
 import Timeline from './Timeline'
 import query from './query'
+import appBaseUrl from '../../../../utils/appBaseUrl'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -22,7 +23,7 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
-  ${props => props['data-open'] && 'position: sticky;'}
+  ${(props) => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;
   &:first-of-type {
@@ -39,11 +40,16 @@ const TimelineArea = ({ artId }) => {
   const [open, setOpen] = useState(false)
 
   const openDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Zeitachse-Art')
+    const url = `${appBaseUrl()}Dokumentation/Zeitachse-Art`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const onClickToggle = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       setOpen(!open)
     },
