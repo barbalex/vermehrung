@@ -33,12 +33,13 @@ import Teilzaehlungen from './Teilzaehlungen'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DelteButton from './DeleteButton'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -142,7 +143,7 @@ const Zaehlung = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
@@ -184,7 +185,7 @@ const Zaehlung = ({ filter: showFilter }) => {
 
   const kulturWerte = useMemo(
     () =>
-      get(kulturData, 'kultur', []).map(el => {
+      get(kulturData, 'kultur', []).map((el) => {
         const personName = get(el, 'garten.person.name') || '(kein Name)'
         const personOrt = get(el, 'garten.person.ort') || null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
@@ -199,7 +200,7 @@ const Zaehlung = ({ filter: showFilter }) => {
   )
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -260,12 +261,22 @@ const Zaehlung = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Planen')
+    const url = `${appBaseUrl()}Dokumentation/Planen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const openZaehlungDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Zaehlungen')
+    const url = `${appBaseUrl()}Dokumentation/Zaehlungen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (loading) {
