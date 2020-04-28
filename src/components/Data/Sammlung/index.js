@@ -33,12 +33,13 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
+import appBaseUrl from '../../../utils/appBaseUrl'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -139,7 +140,7 @@ const Sammlung = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
   const { data, error, loading } = useQuery(query, {
@@ -169,7 +170,7 @@ const Sammlung = ({ filter: showFilter }) => {
 
   const personWerte = useMemo(
     () =>
-      get(dataData, 'person', []).map(el => ({
+      get(dataData, 'person', []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
@@ -178,13 +179,14 @@ const Sammlung = ({ filter: showFilter }) => {
 
   const herkunftWerte = useMemo(
     () =>
-      get(dataData, 'herkunft', []).map(el => {
+      get(dataData, 'herkunft', []).map((el) => {
         // only show lokal if exist
         // does not exist if user does not have right to see it
         const lokal =
           el.gemeinde || el.lokalname
-            ? `, ${el.gemeinde && `${el.gemeinde}, `}${el.lokalname &&
-                el.lokalname}`
+            ? `, ${el.gemeinde && `${el.gemeinde}, `}${
+                el.lokalname && el.lokalname
+              }`
             : ''
         const nr = el.nr || '(keine Nr.)'
         const label = `${nr}${lokal}`
@@ -199,7 +201,7 @@ const Sammlung = ({ filter: showFilter }) => {
 
   const artWerte = useMemo(
     () =>
-      get(dataData, 'art', []).map(el => ({
+      get(dataData, 'art', []).map((el) => ({
         value: el.id,
         label: get(el, 'art_ae_art.name') || '(kein Artname)',
       })),
@@ -207,7 +209,7 @@ const Sammlung = ({ filter: showFilter }) => {
   )
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -276,16 +278,31 @@ const Sammlung = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Planen')
+    const url = `${appBaseUrl()}Dokumentation/Planen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Genetische-Vielfalt')
+    const url = `${appBaseUrl()}Dokumentation/Genetische-Vielfalt`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
   const openSammlungDocs = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open('https://vermehrung.ch/Dokumentation/Sammlungen')
+    const url = `${appBaseUrl()}Dokumentation/Sammlungen`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (loading) {
