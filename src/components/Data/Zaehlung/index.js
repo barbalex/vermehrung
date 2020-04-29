@@ -264,7 +264,7 @@ const Zaehlung = ({ filter: showFilter }) => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }
@@ -273,7 +273,7 @@ const Zaehlung = ({ filter: showFilter }) => {
     const url = `${appBaseUrl()}Dokumentation/Zaehlungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }
