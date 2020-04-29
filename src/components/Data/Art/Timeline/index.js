@@ -43,7 +43,7 @@ const TimelineArea = ({ artId }) => {
     const url = `${appBaseUrl()}Dokumentation/Zeitachse-Art`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }

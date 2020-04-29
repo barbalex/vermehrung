@@ -543,7 +543,7 @@ const KulturTimeline = ({ row }) => {
     const url = `${appBaseUrl()}Dokumentation/Zeitachse-Kultur`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }

@@ -302,7 +302,7 @@ const Event = ({ filter: showFilter }) => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }
@@ -311,7 +311,7 @@ const Event = ({ filter: showFilter }) => {
     const url = `${appBaseUrl()}Dokumentation/Events`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }
