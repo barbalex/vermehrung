@@ -5,7 +5,6 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
-import ErrorBoundary from 'react-error-boundary'
 import styled from 'styled-components'
 
 import storeContext from '../../../../storeContext'
@@ -14,6 +13,7 @@ import exists from '../../../../utils/exists'
 import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
 import updateLieferung from './updateLieferung'
 import updateAllLieferungen from './updateAllLieferungen'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
-    event => setAnchorEl(event.currentTarget),
+    (event) => setAnchorEl(event.currentTarget),
     [],
   )
   const containsData = useMemo(
@@ -47,7 +47,7 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
           // only accept lieferung's fields
           // eslint-disable-next-line no-unused-vars
           ([key, value]) =>
-            sammelLieferungFields.filter(f => f !== 'id').includes(key),
+            sammelLieferungFields.filter((f) => f !== 'id').includes(key),
         )
         // only update with existing values
         // eslint-disable-next-line no-unused-vars

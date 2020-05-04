@@ -2,19 +2,19 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import Row from './Row'
 import storeContext from '../../../storeContext'
 import queryFromTable from '../../../utils/queryFromTable'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 
 const FieldsContainer = styled.div`
@@ -149,7 +149,7 @@ const Root = ({ filter: showFilter }) => {
     <ErrorBoundary>
       <Container showfilter={showFilter}>
         <FieldsContainer>
-          {rows.map(row => (
+          {rows.map((row) => (
             <Row
               key={row.name}
               row={row}
