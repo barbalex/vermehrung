@@ -12,9 +12,9 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../storeContext'
+import ErrorBoundary from './shared/ErrorBoundary'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -59,7 +59,7 @@ const Login = () => {
     [email, firebase, password],
   )
   const onBlurEmail = useCallback(
-    e => {
+    (e) => {
       setEmailErrorText('')
       const email = e.target.value
       setEmail(email)
@@ -72,7 +72,7 @@ const Login = () => {
     [fetchLogin, password],
   )
   const onBlurPassword = useCallback(
-    e => {
+    (e) => {
       setPasswordErrorText('')
       const password = e.target.value
       setPassword(password)
@@ -85,15 +85,15 @@ const Login = () => {
     [fetchLogin, email],
   )
   const onKeyPressEmail = useCallback(
-    e => e.key === 'Enter' && onBlurEmail(e),
+    (e) => e.key === 'Enter' && onBlurEmail(e),
     [onBlurEmail],
   )
   const onKeyPressPassword = useCallback(
-    e => e.key === 'Enter' && onBlurPassword(e),
+    (e) => e.key === 'Enter' && onBlurPassword(e),
     [onBlurPassword],
   )
   const onClickShowPass = useCallback(() => setShowPass(!showPass), [showPass])
-  const onMouseDownShowPass = useCallback(e => e.preventDefault(), [])
+  const onMouseDownShowPass = useCallback((e) => e.preventDefault(), [])
 
   const [resetTitle, setResetTitle] = useState('neues Passwort setzen')
   const reset = useCallback(async () => {
