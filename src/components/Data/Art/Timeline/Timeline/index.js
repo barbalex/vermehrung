@@ -2,7 +2,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
-import ErrorBoundary from 'react-error-boundary'
 import {
   ComposedChart,
   Bar,
@@ -22,6 +21,7 @@ import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const ArtTimeline = ({ artSums }) => {
   const [narrow, setNarrow] = useState(false)
@@ -34,15 +34,15 @@ const ArtTimeline = ({ artSums }) => {
   // NOOOOO: add last: done zaehlung/lieferung as first point to planned
   // and then recombine
   const zaehlungenDone = artSums.filter(
-    s => s.action === 'zaehlung' && !s.prognose,
+    (s) => s.action === 'zaehlung' && !s.prognose,
   )
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
   const zaehlungenPlanned = artSums.filter(
-    s => s.action === 'zaehlung' && s.prognose,
+    (s) => s.action === 'zaehlung' && s.prognose,
   )
   const zaehlungenDoneData = useMemo(
     () =>
-      zaehlungenDone.map(l => ({
+      zaehlungenDone.map((l) => ({
         datum: new Date(l.datum).getTime(),
         'Zählung Pflanzen': l.sum_anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit': l.sum_anzahl_auspflanzbereit,
@@ -52,7 +52,7 @@ const ArtTimeline = ({ artSums }) => {
   )
   const zaehlungenPlannedData = useMemo(
     () =>
-      [lastZaehlungDone, ...zaehlungenPlanned].map(l => ({
+      [lastZaehlungDone, ...zaehlungenPlanned].map((l) => ({
         datum: new Date(l.datum).getTime(),
         'Zählung Pflanzen Prognose': l.sum_anzahl_pflanzen,
         'Zählung Pflanzen auspflanzbereit Prognose':
@@ -74,10 +74,10 @@ const ArtTimeline = ({ artSums }) => {
     [zaehlungenDataGroupedByDatum],
   )
 
-  const sammlungen = artSums.filter(s => s.action === 'sammlung')
+  const sammlungen = artSums.filter((s) => s.action === 'sammlung')
   const sammlungenData = useMemo(
     () =>
-      sammlungen.map(l => ({
+      sammlungen.map((l) => ({
         datum: new Date(l.datum).getTime(),
         [`Sammlung Pflanzen${l.prognose ? ' geplant' : ''}`]:
           l.anzahl_pflanzen || 0,
@@ -95,10 +95,10 @@ const ArtTimeline = ({ artSums }) => {
       })),
     [sammlungen],
   )
-  const auspflanzungen = artSums.filter(s => s.action === 'auspflanzung')
+  const auspflanzungen = artSums.filter((s) => s.action === 'auspflanzung')
   const auspflanzungenData = useMemo(
     () =>
-      auspflanzungen.map(l => ({
+      auspflanzungen.map((l) => ({
         datum: new Date(l.datum).getTime(),
         [`Auspflanzung Pflanzen${l.prognose ? ' geplant' : ''}`]:
           l.anzahl_pflanzen || 0,
@@ -130,7 +130,7 @@ const ArtTimeline = ({ artSums }) => {
   )
 
   const onResize = useCallback(
-    width => {
+    (width) => {
       if (width < 1100 && !narrow) {
         setNarrow(true)
       }

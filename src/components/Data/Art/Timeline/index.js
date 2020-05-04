@@ -4,13 +4,13 @@ import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
 
 import Timeline from './Timeline'
 import query from './query'
 import appBaseUrl from '../../../../utils/appBaseUrl'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
