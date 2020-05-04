@@ -2,7 +2,6 @@ import React, { useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 import { FaMinus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -10,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 
 import storeContext from '../../../storeContext'
 import deleteDataset from '../../TreeContainer/Tree/delete'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ const HerkunftDeleteButton = ({ row }) => {
   }, [])
 
   const onClickDelete = useCallback(
-    event => setAnchorEl(event.currentTarget),
+    (event) => setAnchorEl(event.currentTarget),
     [],
   )
   const remove = useCallback(() => {
