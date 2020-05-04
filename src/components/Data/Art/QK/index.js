@@ -6,7 +6,6 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import ErrorBoundary from 'react-error-boundary'
 import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 
@@ -14,6 +13,7 @@ import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'
 import appBaseUrl from '../../../../utils/appBaseUrl'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);

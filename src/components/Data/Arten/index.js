@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
@@ -16,12 +15,13 @@ import queryFromTable from '../../../utils/queryFromTable'
 import artQuery from './artQuery'
 import Row from './Row'
 import createNew from '../../TreeContainer/Tree/createNew'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
