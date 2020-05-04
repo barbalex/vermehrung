@@ -10,12 +10,12 @@ import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
-import ErrorBoundary from 'react-error-boundary'
 import ReactResizeDetector from 'react-resize-detector'
 
 import storeContext from '../../../storeContext'
 import Row from './Row'
 import Settings from './Settings'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const StyledList = styled(List)`
   margin-top: 5px;
@@ -47,7 +47,7 @@ const Tree = ({ data, personId, nodes }) => {
   const listRef = useRef(null)
 
   useEffect(() => {
-    const index = findIndex(nodes, node => isEqual(node.url, aNA))
+    const index = findIndex(nodes, (node) => isEqual(node.url, aNA))
     if (index > -1 && listRef.current) listRef.current.scrollToItem(index)
   }, [aNA, listRef, nodes])
 
