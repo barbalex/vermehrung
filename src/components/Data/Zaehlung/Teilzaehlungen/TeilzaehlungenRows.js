@@ -4,10 +4,10 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import ErrorBoundary from 'react-error-boundary'
 
 import { teilkultur as teilkulturFragment } from '../../../../utils/fragments'
 import Teilzaehlung from './Teilzaehlung'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ const TeilzaehlungenRows = ({ kulturId, rows, zaehlungResult }) => {
   })
   const teilkulturenWerte = useMemo(() => {
     const data = get(teilkulturenData, 'teilkultur', []) || []
-    return data.map(el => ({
+    return data.map((el) => ({
       value: el.id,
       label: el.name,
     }))
