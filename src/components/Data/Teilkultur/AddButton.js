@@ -1,12 +1,12 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
 import storeContext from '../../../storeContext'
 import createNew from '../../TreeContainer/Tree/createNew'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TeilkulturAddButton = () => {
   const client = useApolloClient()
