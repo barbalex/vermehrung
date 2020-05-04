@@ -13,7 +13,6 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -34,6 +33,7 @@ import Files from '../Files'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
