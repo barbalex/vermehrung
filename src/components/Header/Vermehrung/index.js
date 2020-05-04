@@ -8,7 +8,6 @@ import { FaBars, FaHome, FaBook, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 import ReactResizeDetector from 'react-resize-detector'
 
 import Account from './Account'
@@ -17,6 +16,7 @@ import Search from './Search'
 import storeContext from '../../../storeContext'
 import constants from '../../../utils/constants'
 import exists from '../../../utils/exists'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -46,7 +46,7 @@ const StyledButton = styled(Button)`
   }
 `
 const FilterButton = styled(StyledButton)`
-  border-width: ${props =>
+  border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
 `
 const HideActiveDiv = styled.div`
@@ -83,7 +83,7 @@ const HeaderVermehrung = () => {
     showFilter,
   ])
   const onResize = useCallback(
-    width => {
+    (width) => {
       if (width > constants.tree.minimalWindowWidth && exists(widthEnforced)) {
         setWidthEnforced(null)
       }

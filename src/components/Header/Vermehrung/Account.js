@@ -5,10 +5,10 @@ import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 import { useApolloClient } from '@apollo/react-hooks'
 
 import storeContext from '../../../storeContext'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const IconContainer = styled.div`
   position: relative;
@@ -37,7 +37,10 @@ const Account = () => {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
-  const onClickMenu = useCallback(event => setAnchorEl(event.currentTarget), [])
+  const onClickMenu = useCallback(
+    (event) => setAnchorEl(event.currentTarget),
+    [],
+  )
   const onCloseMenu = useCallback(() => setAnchorEl(null), [])
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
