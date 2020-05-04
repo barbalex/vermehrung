@@ -7,7 +7,6 @@ import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import {
@@ -23,11 +22,12 @@ import Uploader from '../../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'
 import isImageFile from './isImageFile'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -107,9 +107,9 @@ const Files = ({ parentId, parent }) => {
   const files = get(data, `${parent}_file`, [])
 
   const onChangeUploader = useCallback(
-    file => {
+    (file) => {
       if (file) {
-        file.done(async info => {
+        file.done(async (info) => {
           //console.log({ info })
           const mutation = gql`
             mutation insertFile {
@@ -144,9 +144,9 @@ const Files = ({ parentId, parent }) => {
     [client, parent, parentId, store],
   )
 
-  const images = files.filter(f => isImageFile(f))
+  const images = files.filter((f) => isImageFile(f))
   const imageUrls = images.map(
-    f =>
+    (f) =>
       `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${f.name}`,
   )
   const onClickLightboxButton = useCallback(() => setLightboxIsOpen(true), [])
@@ -211,7 +211,7 @@ const Files = ({ parentId, parent }) => {
           />
         )}
         <Spacer />
-        {files.map(file => (
+        {files.map((file) => (
           <File key={file.file_id} file={file} parent={parent} />
         ))}
       </Container>

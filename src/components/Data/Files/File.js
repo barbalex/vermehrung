@@ -7,7 +7,6 @@ import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import ErrorBoundary from 'react-error-boundary'
 import upperFirst from 'lodash/upperFirst'
 
 import storeContext from '../../../storeContext'
@@ -23,11 +22,12 @@ import {
 } from '../../../utils/fragments'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
   width: 100%;
 `
 const Img = styled.img`
@@ -160,7 +160,7 @@ const File = ({ file, parent }) => {
   )
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = event.target.value || null
       if (event.target.value === false) value = false
@@ -272,7 +272,7 @@ const File = ({ file, parent }) => {
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={event => setDelMenuAnchorEl(event.currentTarget)}
+          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
         >
           <FaTimes />
         </DelIcon>
