@@ -3,11 +3,11 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import ErrorBoundary from 'react-error-boundary'
 import format from 'date-fns/format'
 
 import { teilzaehlung as teilzahlungFragment } from '../../../../utils/fragments'
 import exists from '../../../../utils/exists'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -30,7 +30,7 @@ const Rows = styled.div`
 `
 const Row = styled.div`
   border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: ${props => (props['data-last'] ? '1px' : 'thin')} solid
+  border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
     rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
   padding: 10px;
@@ -100,9 +100,9 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
     variables: { kulturId, teilkulturId },
   })
   const rows = get(data, 'zaehlung', [])
-  const tzs = rows.flatMap(row => {
+  const tzs = rows.flatMap((row) => {
     const tz = get(row, 'teilzaehlungs') || []
-    return tz.map(t => ({
+    return tz.map((t) => ({
       ...t,
       datum: row.datum,
       prognose: row.prognose,
