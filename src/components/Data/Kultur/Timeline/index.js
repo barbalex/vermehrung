@@ -4,7 +4,6 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import sumBy from 'lodash/sumBy'
-import ErrorBoundary from 'react-error-boundary'
 import {
   ComposedChart,
   Bar,
@@ -28,6 +27,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import appBaseUrl from '../../../../utils/appBaseUrl'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);

@@ -12,7 +12,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import uniq from 'lodash/uniq'
-import ErrorBoundary from 'react-error-boundary'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton' // see: https://github.com/guyonroche/exceljs/issues/313
@@ -42,6 +41,7 @@ import AddButton from './AddButton'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
 import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
 import appBaseUrl from '../../../utils/appBaseUrl'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
