@@ -11,7 +11,6 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -27,12 +26,13 @@ import Files from '../Files'
 import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -111,7 +111,7 @@ const Person = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
   const { data, error, loading } = useQuery(query, {
@@ -120,7 +120,7 @@ const Person = ({ filter: showFilter }) => {
 
   const userRoleWerte = useMemo(
     () =>
-      get(data, 'user_role', []).map(el => ({
+      get(data, 'user_role', []).map((el) => ({
         value: el.name,
         label: `${el.name} (${el.comment})`,
       })),
@@ -150,7 +150,7 @@ const Person = ({ filter: showFilter }) => {
   //console.log('Person, user_role:', user_role)
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null

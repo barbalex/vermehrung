@@ -7,10 +7,10 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
@@ -101,7 +101,7 @@ const AvArt = ({ avArt }) => {
           aria-label="löschen"
           aria-owns={delMenuOpen ? 'delMenu' : undefined}
           aria-haspopup="true"
-          onClick={event => setDelMenuAnchorEl(event.currentTarget)}
+          onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
         >
           <FaTimes />
         </DelIcon>

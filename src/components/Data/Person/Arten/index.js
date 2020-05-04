@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import ErrorBoundary from 'react-error-boundary'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
@@ -12,6 +11,7 @@ import Art from './Art'
 import query from './query'
 import Select from '../../../shared/Select'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -23,10 +23,10 @@ const TitleRow = styled.div`
   margin-right: -10px;
   padding: 0 10px;
   cursor: pointer;
-  ${props => props['data-open'] && 'position: sticky;'}
+  ${(props) => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;
-  ${props => !props['data-open'] && 'margin-bottom: 10px;'}
+  ${(props) => !props['data-open'] && 'margin-bottom: 10px;'}
   &:first-of-type {
     margin-top: -10px;
   }
@@ -51,7 +51,7 @@ const PersonArten = ({ personId }) => {
   useEffect(() => setErrors({}), [personId])
 
   const onClickToggle = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       setOpen(!open)
     },
@@ -66,7 +66,7 @@ const PersonArten = ({ personId }) => {
 
   const artWerte = useMemo(
     () =>
-      get(data, 'art_to_choose', []).map(el => ({
+      get(data, 'art_to_choose', []).map((el) => ({
         value: el.id,
         label: get(el, 'art_ae_art.name') || '(kein Artname)',
       })),
@@ -74,7 +74,7 @@ const PersonArten = ({ personId }) => {
   )
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
       try {
@@ -136,7 +136,7 @@ const PersonArten = ({ personId }) => {
             <AvArten>{`Fehler: ${error.message}`}</AvArten>
           ) : (
             <AvArten>
-              {avArten.map(avArt => (
+              {avArten.map((avArt) => (
                 <Art key={`${avArt.person_id}/${avArt.art_id}`} avArt={avArt} />
               ))}
             </AvArten>
