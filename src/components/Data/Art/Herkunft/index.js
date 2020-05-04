@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import ErrorBoundary from 'react-error-boundary'
 import groupBy from 'lodash/groupBy'
 import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
 
 import Timeline from './Timeline'
 import query from './query'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -22,7 +22,7 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
-  ${props => props['data-open'] && 'position: sticky;'}
+  ${(props) => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;
   &:first-of-type {
@@ -39,7 +39,7 @@ const HerkunftTimelineArea = ({ artId }) => {
   const [open, setOpen] = useState(false)
 
   const onClickToggle = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       setOpen(!open)
     },

@@ -2,7 +2,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
-import ErrorBoundary from 'react-error-boundary'
 import {
   ComposedChart,
   Bar,
@@ -25,6 +24,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import query from './query'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
   // TODO: get label for herkunft and render it
