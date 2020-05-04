@@ -2,13 +2,13 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import last from 'lodash/last'
 
 import query from './query'
 import RowComponent from './Row'
 import storeContext from '../../../../../storeContext'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +21,7 @@ const FieldsContainer = styled.div`
 const ChooseQk = ({ refetchTab }) => {
   const store = useContext(storeContext)
   const { activeNodeArray } = store.tree
-  const kulturId = last(activeNodeArray.filter(e => !isNaN(e)))
+  const kulturId = last(activeNodeArray.filter((e) => !isNaN(e)))
 
   const { data, error, loading } = useQuery(query)
   const rows = get(data, 'kultur_qk')
@@ -32,7 +32,7 @@ const ChooseQk = ({ refetchTab }) => {
     <ErrorBoundary>
       <Container>
         <FieldsContainer>
-          {rows.map(row => (
+          {rows.map((row) => (
             <RowComponent
               key={row.name}
               kulturId={kulturId}
