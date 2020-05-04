@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
 import {
@@ -15,6 +14,7 @@ import {
 } from '../../../../utils/fragments'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
