@@ -5,7 +5,6 @@ import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
 import TextField from '../../../../shared/TextField'
@@ -15,6 +14,7 @@ import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import types from '../../../../../store/Filter/simpleTypes'
 import storeContext from '../../../../../storeContext'
 import PrognoseMenu from './PrognoseMenu'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;
@@ -78,7 +78,7 @@ const Teilzaehlung = ({
       setAnchorEl(null)
     }
   }, [])
-  const onClickPrognosis = useCallback(event => {
+  const onClickPrognosis = useCallback((event) => {
     setOpenPrognosis(true)
     setAnchorEl(event.currentTarget)
   }, [])
@@ -99,7 +99,7 @@ const Teilzaehlung = ({
   }, [row.id])
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null

@@ -6,13 +6,13 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaBars, FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import ErrorBoundary from 'react-error-boundary'
 import ReactResizeDetector from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
 import constants from '../../utils/constants'
 import exists from '../../utils/exists'
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -35,7 +35,7 @@ const Spacer = styled.div`
 const NavButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: ${props =>
+  border-width: ${(props) =>
     props.outlined === 'true' ? '1px !important' : '0 !important'};
   text-transform: none !important;
   &:hover {
@@ -46,7 +46,7 @@ const NavButton = styled(Button)`
 const HeaderDoku = () => {
   const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
   const onResize = useCallback(
-    width => {
+    (width) => {
       if (
         width > constants.sidebar.minimalWindowWidth &&
         exists(sidebarWidth)

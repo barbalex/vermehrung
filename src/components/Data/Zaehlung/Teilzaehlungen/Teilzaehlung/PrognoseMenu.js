@@ -7,7 +7,6 @@ import Menu from '@material-ui/core/Menu'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
 import TextField from '../../../../shared/TextField'
@@ -19,6 +18,7 @@ import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import storeContext from '../../../../../storeContext'
 import exists from '../../../../../utils/exists'
 import appBaseUrl from '../../../../../utils/appBaseUrl'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
