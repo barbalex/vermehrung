@@ -3,7 +3,8 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import styled from 'styled-components'
 import { Location } from '@reach/router'
-import ErrorBoundary from 'react-error-boundary'
+
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 import Home from './Home'
 import Doku from './Doku'
