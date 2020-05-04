@@ -8,12 +8,12 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
 import { personOption as personOptionFragment } from '../../../utils/fragments'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
     get(data, 'person_option[0]') || {}
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       const value = event.target.value === 'true'
       try {
@@ -88,7 +88,7 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickConfig = useCallback(
-    event => setAnchorEl(event.currentTarget),
+    (event) => setAnchorEl(event.currentTarget),
     [],
   )
 

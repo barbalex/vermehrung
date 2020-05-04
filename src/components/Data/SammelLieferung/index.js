@@ -11,7 +11,6 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import ErrorBoundary from 'react-error-boundary'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
@@ -44,6 +43,7 @@ import Lieferschein from './Lieferschein'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
