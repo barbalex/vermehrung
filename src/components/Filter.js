@@ -2,7 +2,6 @@ import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 
 import Art from './Data/Art'
 import Event from './Data/Event'
@@ -16,6 +15,7 @@ import Sammlung from './Data/Sammlung'
 import Teilkultur from './Data/Teilkultur'
 import Zaehlung from './Data/Zaehlung'
 import storeContext from '../storeContext'
+import ErrorBoundary from './shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
