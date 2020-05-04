@@ -5,7 +5,6 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { FaDownload } from 'react-icons/fa'
-import ErrorBoundary from 'react-error-boundary'
 import styled from 'styled-components'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
@@ -13,6 +12,7 @@ import storeContext from '../../../../storeContext'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
 import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums'
 import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
@@ -64,7 +64,7 @@ const GartenDownload = ({ gartenId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickOpenMenu = useCallback(
-    event => setAnchorEl(event.currentTarget),
+    (event) => setAnchorEl(event.currentTarget),
     [],
   )
 

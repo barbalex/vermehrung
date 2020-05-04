@@ -11,7 +11,6 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -32,12 +31,13 @@ import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Download from './Download'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const TitleContainer = styled.div`
   background-color:rgba(74, 20, 140, 0.1);
@@ -121,7 +121,7 @@ const Garten = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter(e => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => !isNaN(e)))
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
   const { data, error, loading, refetch } = useQuery(gartenQuery, {
@@ -163,7 +163,7 @@ const Garten = ({ filter: showFilter }) => {
 
   const personWerte = useMemo(
     () =>
-      get(personData, 'person', []).map(el => ({
+      get(personData, 'person', []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
@@ -171,7 +171,7 @@ const Garten = ({ filter: showFilter }) => {
   )
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
