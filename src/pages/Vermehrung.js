@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 
 import Layout from '../components/Layout'
@@ -14,6 +13,7 @@ import Data from '../components/Data'
 import Filter from '../components/Filter'
 import storeContext from '../storeContext'
 import Login from '../components/Login'
+import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
