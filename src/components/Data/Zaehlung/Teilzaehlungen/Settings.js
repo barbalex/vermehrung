@@ -9,13 +9,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
 import storeContext from '../../../../storeContext'
 import { kulturOption as kulturOptionFragment } from '../../../../utils/fragments'
 import appBaseUrl from '../../../../utils/appBaseUrl'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
