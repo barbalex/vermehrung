@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
+// TODO: is ApolloOfflineProvider really needed? useOfflineMutation is never used!
+import { ApolloOfflineProvider } from 'react-offix-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
@@ -122,21 +124,23 @@ const App = ({ element }) => {
   return (
     <MuiThemeProvider theme={materialTheme}>
       <MobxProvider value={store}>
-        <ApolloProvider client={apolloClient}>
-          <SnackbarProvider
-            maxSnack={5}
-            preventDuplicate
-            autoHideDuration={10000}
-            action={(key) => <NotificationDismisser nKey={key} />}
-          >
-            <>
-              <GlobalStyle />
-              {element}
-              <Notifier />
-              <UpdateExists />
-            </>
-          </SnackbarProvider>
-        </ApolloProvider>
+        <ApolloOfflineProvider client={apolloClient}>
+          <ApolloProvider client={apolloClient}>
+            <SnackbarProvider
+              maxSnack={5}
+              preventDuplicate
+              autoHideDuration={10000}
+              action={(key) => <NotificationDismisser nKey={key} />}
+            >
+              <>
+                <GlobalStyle />
+                {element}
+                <Notifier />
+                <UpdateExists />
+              </>
+            </SnackbarProvider>
+          </ApolloProvider>
+        </ApolloOfflineProvider>
       </MobxProvider>
     </MuiThemeProvider>
   )
