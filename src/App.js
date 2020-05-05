@@ -59,11 +59,13 @@ const firebaseConfig = {
   appId: process.env.GATSBY_FIREBASE_APP_ID,
 }
 
-const apolloClient = createApolloClient()
-
 const App = ({ element }) => {
-  const [store, setStore] = useState(null)
+  const [apolloClient, setApolloClient] = useState(null)
+  useEffect(() => {
+    createApolloClient().then((cl) => setApolloClient(cl))
+  }, [])
 
+  const [store, setStore] = useState(null)
   useEffect(() => {
     let unregisterAuthObserver = () => {}
     Promise.all([import('firebase'), import('mst-persist')]).then(
@@ -115,6 +117,8 @@ const App = ({ element }) => {
   }, [])
 
   if (!store) return null
+  if (!apolloClient) return null
+
   return (
     <MuiThemeProvider theme={materialTheme}>
       <MobxProvider value={store}>
