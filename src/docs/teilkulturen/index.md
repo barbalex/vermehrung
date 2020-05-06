@@ -19,7 +19,7 @@ In vermehrung.ch werden diese Untereinheiten "Teil-Kulturen" genannt.<br/><br/>
 ### 2. Umsetzung
 
 Bei Kulturen gibt es die Option "Mit Teil-Kulturen arbeiten".<br/>
-![Option "Mit Teil-Kulturen arbeiten"](_media/teilkultur_option.gif)<br/>
+![Option "Mit Teil-Kulturen arbeiten"](teilkultur_option.gif)<br/>
 Sie ermöglicht:
 <br/><br/>
 
@@ -30,7 +30,7 @@ Beispiel: Ein Betrieb hat Beete, darin Kästen und darin Reihen. Es soll pro Rei
 In diesem Fall empfiehlt es sich, für den Namen diese drei Hierarchiestufen so oder ähnlich zu kombinieren: "02/03/12". Das ist Reihe 12 im Kasten 3 im Beet 2. Auf diese Weise sortieren sich die Namen auch wie erwartet.<br/><br/>
 
 Um Teil-Kulturen erfassen zu können, erscheint im Navigations-Baum unter der Kultur ein neuer Ast. Eine neue Teil-Kultur kann aber auch direkt im Feld, in dem man Teil-Kulturen auswählt, erfasst werden: Einfach den neuen Wert tippen und "... als neue Teilkultur aufnehmen" wählen.<br/>
-![Direkt neue Teilkultur erstellen](_media/teilkultur_new.gif)
+![Direkt neue Teilkultur erstellen](teilkultur_new.gif)
 <br/><br/>
 
 #### Zählungen können pro Teil-Kultur erfasst werden

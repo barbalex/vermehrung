@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/Roadmap"
-date: "2019-12-29"
+date: "2020-05-05"
 title: "Roadmap"
 sort1: 26
 ---
@@ -46,6 +46,6 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Sammel-Lieferungen können gedruckt werden
 - :white_check_mark: Daten können exportiert werden
 - :white_check_mark: Gärtner, Artverantwortliche und Manager haben passende Rechte und Funktionalitäten
-- :white_medium_square: Funktionalitäten mit Topos für v1 bereinigt
-- :white_medium_square: Vorhandene Daten importiert
-- :white_medium_square: Produktive Version 1 ist live (geplant: Februar/März 2020)
+- :white_check_mark: Funktionalitäten mit Topos für v1 bereinigt
+- :white_medium_square: Vorhandene Daten importiert (verzögert sich etwas)
+- :white_medium_square: Produktive Version 1 ist live (geplant: Juni 2020)
