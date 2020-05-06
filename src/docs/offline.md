@@ -81,4 +81,5 @@ Wenn:
 - es sich in vermehrung.ch bewährt,
 - für apflora.ch gewünscht wird 
 - und der Aufwand gerechtfertigt werden kann,
+
 ...können wir beginnen, es für apflora.ch umsetzen.
