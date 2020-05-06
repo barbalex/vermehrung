@@ -13,7 +13,7 @@ Felder, welche für das Funktionieren der Anwendung wichtig sind, können nicht 
 
 ### So geht's
 Dafür wird das Zahnrad-Symbol oben rechts verwendet:<br/>
-![Felder wählen](_media/felderBlenden1.gif)<br/>
+![Felder wählen](felderBlenden1.gif)<br/>
 
 ### So funktioniert es
 Es ist möglich, dass gewisse Felder nur in bestimmten Kulturen benutzt werden. Daher wirkt sich das Ein- und Ausblenden bei allem, was zu einer Kultur gehört, nur innerhalb dieser Kultur aus. Das sind:

@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/PWA"
-date: "2019-06-15"
+date: "2020-05-06"
 title: "Progressive Web App"
 sort1: 22
 ---
@@ -12,8 +12,8 @@ vermehrung.ch ist eine [**Progressive Web App**](https://developers.google.com/w
 **Was ist der Unterschied zu einer gewöhnlichen Web-App?**
 - Sie können vermehrung auf Desktop/Startseite platzieren bzw. "installieren". 
   - In Chrome auf PC und Mac öffnen Sie dazu das Menü ganz oben rechts:
-    ![installieren](_media/installieren.png)
-    Ab ca. August 2019 sollte sich dafür ganz rechts in der URL-Zeile ein +-Symbol finden.
+    ![installieren](installieren.png)
+    Ganz rechts in der URL-Zeile gibt es dafür ein +-Symbol.
   - Auf Android werden Sie von Chrome gefragt, ob sie vermehrung auf dem Startbildschirm platzieren wollen.
 - Danach hat vermehrung eine eigene Verknüpfung und startet ausserhalb des Browsers in einem eigenen Fenster, ohne URL-Zeile.
 - Auch vermehrung-Links sollen bald mit der installierten Version geöffnet werden (funktioniert bereits auf Android).<br/>
