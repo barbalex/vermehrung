@@ -62,13 +62,10 @@ export const garten = gql`
     ort
     aktiv
     bemerkungen
-    computed {
-      id
-      lv95_x
-      lv95_y
-      wgs84_lat
-      wgs84_long
-    }
+    lv95_x
+    lv95_y
+    wgs84_lat
+    wgs84_long
   }
 `
 export const gartenTeilzaehlungSums = gql`
@@ -150,13 +147,10 @@ export const herkunft = gql`
     kanton
     land
     bemerkungen
-    computed {
-      id
-      lv95_x
-      lv95_y
-      wgs84_lat
-      wgs84_long
-    }
+    lv95_x
+    lv95_y
+    wgs84_lat
+    wgs84_long
   }
 `
 export const herkunftFile = gql`
@@ -340,13 +334,10 @@ export const sammlung = gql`
     andere_menge
     geplant
     bemerkungen
-    computed {
-      id
-      lv95_x
-      lv95_y
-      wgs84_lat
-      wgs84_long
-    }
+    lv95_x
+    lv95_y
+    wgs84_lat
+    wgs84_long
   }
 `
 export const sammlungFile = gql`

@@ -115,7 +115,6 @@ const Person = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
-  console.log('Person', { personFilter, id })
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered, filter: personFilter },
   })
