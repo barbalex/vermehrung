@@ -19,7 +19,7 @@ const Container = styled.div`
   margin-bottom: 12px;
 `
 const Label = styled.div`
-  font-size: ${props => `${props.labelsize}px`};
+  font-size: ${(props) => `${props.labelsize}px`};
   color: rgb(0, 0, 0, 0.54);
 `
 const Error = styled.div`
@@ -52,15 +52,15 @@ const StyledSelect = styled(AsyncSelect)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
   input {
     @media print {
@@ -71,7 +71,7 @@ const StyledSelect = styled(AsyncSelect)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
     /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
     z-index: 2;
   }
@@ -105,7 +105,7 @@ const SelectTypable = ({
       } catch (error) {
         console.log({ error })
       }
-      const options = get(result.data, resultNodesName, []).map(o => ({
+      const options = get(result.data, resultNodesName, []).map((o) => ({
         value: o.id,
         label: o[resultNodesLabelName],
       }))
@@ -114,15 +114,15 @@ const SelectTypable = ({
     [client, filter, query, resultNodesLabelName, resultNodesName],
   )
 
-  console.log('SelectLoadingOptions', {
+  /*console.log('SelectLoadingOptions', {
     row,
     field,
     loadOptions,
     valueLabelPath,
-  })
+  })*/
 
   const onChange = useCallback(
-    option => {
+    (option) => {
       const value = option && option.value ? option.value : null
       const fakeEvent = {
         target: {
