@@ -64,7 +64,19 @@ Bevor die App offline ist, muss sie die gewünschten Daten geladen haben:
 - Die Benutzerin würde mit Vorteil diese Daten vor einer geplanten Offline-Benutzung nochmals aktualisieren. <br/>
   Oder die App aktualisiert laufend alle geladenen Daten ("live")
 
-### 4. Schrittweise Umsetzung
+### 4. Authentifikation
+
+Offline ist Authentifikation nicht möglich. Die App muss mit den vorhandenen Daten auch funktionieren, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie offline ist, muss die Authentifikation erneuert werden.
+
+### 5. Suche
+
+Suche ist offline nicht möglich. Sie muss im offline Modus ausgeblendet werden.
+
+### 6. Dateien
+
+Dateien können offline nicht gemanagt werden. Sie müssen daher im offline Modus ausgeblendet werden.
+
+### 7. Schrittweise Umsetzung
 
 Es gibt viel Arbeit. Sehr viel. Beispielsweise:
 - Wird die Anzahl Tabellen in der Datenbank verdoppelt (!)
