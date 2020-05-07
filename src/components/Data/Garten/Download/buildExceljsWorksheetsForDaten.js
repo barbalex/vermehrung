@@ -36,13 +36,10 @@ export default async ({
             ort
             aktiv
             bemerkungen
-            computed {
-              id
-              lv95_x
-              lv95_y
-              wgs84_lat
-              wgs84_long
-            }
+            lv95_x
+            lv95_y
+            wgs84_lat
+            wgs84_long
           }
         }
       `,
@@ -61,11 +58,6 @@ export default async ({
   const garten = { ...get(gartenResult, 'data.garten[0]') }
   garten.person_name = get(garten, 'person.name', '')
   delete garten.person
-  garten.lv95_x = get(garten, 'computed.lv95_x', '')
-  garten.lv95_y = get(garten, 'computed.lv95_y', '')
-  garten.wgs84_lat = get(garten, 'computed.wgs84_lat', '')
-  garten.wgs84_long = get(garten, 'computed.wgs84_long', '')
-  delete garten.computed
   delete garten.__typename
   addWorksheetToExceljsWorkbook({
     workbook,

@@ -67,8 +67,7 @@ const fragments = {
 const Coordinates = ({ row, refetchForm, table }) => {
   const store = useContext(storeContext)
 
-  const { id, computed } = row
-  const { lv95_x, lv95_y, wgs84_lat, wgs84_long } = computed
+  const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 
   const client = useApolloClient()
 
