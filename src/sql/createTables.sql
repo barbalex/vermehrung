@@ -17,7 +17,7 @@ INSERT INTO user_role (name, sort, comment) VALUES
 
 drop table if exists person cascade;
 create table person (
-  id bigserial primary key,
+  id uuid primary key default uuid_generate_v1mc(),
   nr text default null unique,
   name text default null,
   adresszusatz text default null,
@@ -49,8 +49,8 @@ create index on person using gin (tsv);
 
 drop table if exists person_file cascade;
 create table person_file (
-  id bigserial primary key,
-  person_id bigint default null references person (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  person_id uuid default null references person (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -63,7 +63,7 @@ create index on person_file using btree (file_mime_type);
 
 drop table if exists art cascade;
 create table art (
-  id bigserial primary key,
+  id uuid primary key default uuid_generate_v1mc(),
   ae_id uuid default null,
   changed date default now(),
   changed_by varchar(20) default null,
@@ -87,7 +87,7 @@ comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und c
 
 drop table if exists art_qk_choosen cascade;
 create table art_qk_choosen (
-  art_id bigserial NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
   unique(art_id, qk_name)
 );
@@ -96,8 +96,8 @@ create index on art_qk_choosen using btree (qk_name);
 
 drop table if exists art_file cascade;
 create table art_file (
-  id bigserial primary key,
-  art_id bigint default null references art (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  art_id uuid default null references art (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -110,7 +110,7 @@ create index on art_file using btree (file_mime_type);
 
 drop table if exists herkunft cascade;
 create table herkunft (
-  id bigserial primary key,
+  id uuid primary key default uuid_generate_v1mc(),
   nr text default null unique,
   lokalname text default null,
   gemeinde text default null,
@@ -130,8 +130,8 @@ create index on herkunft using gin (tsv);
 
 drop table if exists herkunft_file cascade;
 create table herkunft_file (
-  id bigserial primary key,
-  herkunft_id bigint default null references herkunft (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  herkunft_id uuid default null references herkunft (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -144,10 +144,10 @@ create index on herkunft_file using btree (file_mime_type);
 
 drop table if exists sammlung cascade;
 create table sammlung (
-  id bigserial primary key,
-  art_id bigint default null references art (id) on delete cascade on update cascade,
-  person_id bigint default null references person (id) on delete cascade on update cascade,
-  herkunft_id bigint default null references herkunft (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  art_id uuid default null references art (id) on delete cascade on update cascade,
+  person_id uuid default null references person (id) on delete cascade on update cascade,
+  herkunft_id uuid default null references herkunft (id) on delete cascade on update cascade,
   nr text default null unique,
   datum date default null,
   von_anzahl_individuen integer default null,
@@ -174,8 +174,8 @@ create index on sammlung using gin (tsv);
 
 drop table if exists sammlung_file cascade;
 create table sammlung_file (
-  id bigserial primary key,
-  sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  sammlung_id uuid default null references sammlung (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -188,9 +188,9 @@ create index on sammlung_file using btree (file_mime_type);
 
 drop table if exists garten cascade;
 create table garten (
-  id bigserial primary key,
+  id uuid primary key default uuid_generate_v1mc(),
   name text default null,
-  person_id bigint default null references person (id) on delete cascade on update cascade,
+  person_id uuid default null references person (id) on delete cascade on update cascade,
   strasse text default null,
   plz integer default null,
   ort text default null,
@@ -212,8 +212,8 @@ create index on garten using gin (tsv);
 
 drop table if exists garten_file cascade;
 create table garten_file (
-  id bigserial primary key,
-  garten_id bigint default null references garten (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  garten_id uuid default null references garten (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -226,10 +226,10 @@ create index on garten_file using btree (file_mime_type);
 
 drop table if exists kultur cascade;
 create table kultur (
-  id bigserial primary key,
-  art_id bigint default null references art (id) on delete cascade on update cascade,
-  herkunft_id bigint default null references herkunft (id) on delete cascade on update cascade,
-  garten_id bigint default null references garten (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  art_id uuid default null references art (id) on delete cascade on update cascade,
+  herkunft_id uuid default null references herkunft (id) on delete cascade on update cascade,
+  garten_id uuid default null references garten (id) on delete cascade on update cascade,
   zwischenlager boolean default false,
   erhaltungskultur boolean default false,
   von_anzahl_individuen integer default null,
@@ -264,7 +264,7 @@ comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen un
 
 drop table if exists kultur_qk_choosen cascade;
 create table kultur_qk_choosen (
-  kultur_id bigserial NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
   unique(kultur_id, qk_name)
 );
@@ -273,8 +273,8 @@ create index on kultur_qk_choosen using btree (qk_name);
 
 drop table if exists kultur_file cascade;
 create table kultur_file (
-  id bigserial primary key,
-  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -287,8 +287,8 @@ create index on kultur_file using btree (file_mime_type);
 
 drop table if exists teilkultur cascade;
 create table teilkultur (
-  id bigserial primary key,
-  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
   name text default null,
   ort1 text default null,
   ort2 text default null,
@@ -305,10 +305,10 @@ create index on teilkultur using gin (tsv);
 
 drop table if exists event cascade;
 create table event (
-  id bigserial primary key,
-  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
-  teilkultur_id bigint default null references teilkultur (id) on delete set null on update cascade,
-  person_id bigint default null references person (id) on delete set null on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
+  teilkultur_id uuid default null references teilkultur (id) on delete set null on update cascade,
+  person_id uuid default null references person (id) on delete set null on update cascade,
   beschreibung text default null,
   geplant boolean default false,
   datum date default null,
@@ -327,8 +327,8 @@ create index on event using gin (tsv);
 
 drop table if exists zaehlung cascade;
 create table zaehlung (
-  id bigserial primary key,
-  kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
   prognose boolean default false,
   bemerkungen text default null,
@@ -344,16 +344,16 @@ create index on zaehlung using gin (tsv);
 
 drop table if exists teilzaehlung cascade;
 create table teilzaehlung (
-  id bigserial primary key,
-  zaehlung_id bigint default null references zaehlung (id) on delete cascade on update cascade,
-  teilkultur_id bigint default null references teilkultur (id) on delete set null on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  zaehlung_id uuid default null references zaehlung (id) on delete cascade on update cascade,
+  teilkultur_id uuid default null references teilkultur (id) on delete set null on update cascade,
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   anzahl_mutterpflanzen integer default null,
   andere_menge text default null,
   auspflanzbereit_beschreibung text default null,
   bemerkungen text default null,
-  prognose_von_tz bigint default null references teilzaehlung (id) on delete set null on update cascade,
+  prognose_von_tz uuid default null references teilzaehlung (id) on delete set null on update cascade,
   changed date default now(),
   changed_by varchar(20) default null,
   tsv tsvector
@@ -370,7 +370,7 @@ create index on teilzaehlung using gin (tsv);
 
 drop table if exists kultur_option cascade;
 create table kultur_option (
-  kultur_id bigint unique not null references kultur (id) on delete cascade on update cascade,
+  kultur_id uuid unique not null references kultur (id) on delete cascade on update cascade,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
@@ -389,7 +389,7 @@ COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists person_option cascade;
 create table person_option (
-  person_id bigint unique not null references person (id) on delete cascade on update cascade,
+  person_id uuid unique not null references person (id) on delete cascade on update cascade,
   ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
   ga_plz boolean default true,
@@ -420,14 +420,14 @@ comment on column person_option.ar_name_deutsch is 'Dieses Feld wird (momentan) 
 
 drop table if exists lieferung cascade;
 create table lieferung (
-  id bigserial primary key,
-  sammel_lieferung_id bigint default null,-- references sammel_lieferung (id) on delete set null on update cascade ,
-  art_id bigint default null references art (id) on delete cascade on update cascade,
-  person_id bigint default null references person (id) on delete cascade on update cascade,
-  von_sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
-  von_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  sammel_lieferung_id uuid default null,-- references sammel_lieferung (id) on delete set null on update cascade ,
+  art_id uuid default null references art (id) on delete cascade on update cascade,
+  person_id uuid default null references person (id) on delete cascade on update cascade,
+  von_sammlung_id uuid default null references sammlung (id) on delete cascade on update cascade,
+  von_kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
-  nach_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  nach_kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
@@ -459,13 +459,13 @@ create index on lieferung using gin (tsv);
 
 drop table if exists sammel_lieferung cascade;
 create table sammel_lieferung (
-  id bigserial primary key,
-  art_id bigint default null references art (id) on delete cascade on update cascade,
-  person_id bigint default null references person (id) on delete cascade on update cascade,
-  von_sammlung_id bigint default null references sammlung (id) on delete cascade on update cascade,
-  von_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  art_id uuid default null references art (id) on delete cascade on update cascade,
+  person_id uuid default null references person (id) on delete cascade on update cascade,
+  von_sammlung_id uuid default null references sammlung (id) on delete cascade on update cascade,
+  von_kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
   datum date default null,
-  nach_kultur_id bigint default null references kultur (id) on delete cascade on update cascade,
+  nach_kultur_id uuid default null references kultur (id) on delete cascade on update cascade,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
@@ -481,8 +481,8 @@ alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lie
 
 drop table if exists lieferung_file cascade;
 create table lieferung_file (
-  id bigserial primary key,
-  lieferung_id bigint default null references lieferung (id) on delete cascade on update cascade,
+  id uuid primary key default uuid_generate_v1mc(),
+  lieferung_id uuid default null references lieferung (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,
   name text default null,
@@ -495,8 +495,8 @@ create index on lieferung_file using btree (file_mime_type);
 
 drop table if exists av_art cascade;
 create table av_art (
-  art_id bigserial unique REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  person_id bigint references person (id) on delete cascade on update cascade,
+  art_id uuid unique REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  person_id uuid references person (id) on delete cascade on update cascade,
   primary key (person_id, art_id)
 );
 create index on av_art using btree (art_id);

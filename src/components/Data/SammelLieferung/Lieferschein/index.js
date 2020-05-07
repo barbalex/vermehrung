@@ -91,7 +91,7 @@ const StyledTable = styled(Table)`
 `
 
 const personQuery = gql`
-  query personQueryForLieferschein($id: bigint!) {
+  query personQueryForLieferschein($id: uuid!) {
     person(where: { id: { _eq: $id } }) {
       id
       name
@@ -100,7 +100,7 @@ const personQuery = gql`
   }
 `
 const kulturQuery = gql`
-  query kulturQueryForLieferschein($id: bigint!) {
+  query kulturQueryForLieferschein($id: uuid!) {
     kultur(where: { id: { _eq: $id } }) {
       id
       garten {
@@ -112,7 +112,7 @@ const kulturQuery = gql`
   }
 `
 const lieferungQuery = gql`
-  query lieferungenQueryForLieferschein($id: bigint!) {
+  query lieferungenQueryForLieferschein($id: uuid!) {
     lieferung(
       where: { sammel_lieferung_id: { _eq: $id } }
       order_by: [
@@ -178,10 +178,9 @@ const Lieferschein = ({ row }) => {
       ? '...'
       : kulturError
       ? '(Fehler beim Laden der Daten)'
-      : `${get(kulturData, 'kultur[0].garten.name') || '(kein Name)'} (${get(
-          kulturData,
-          'kultur[0].garten.ort',
-        ) || 'kein Ort'})`
+      : `${get(kulturData, 'kultur[0].garten.name') || '(kein Name)'} (${
+          get(kulturData, 'kultur[0].garten.ort') || 'kein Ort'
+        })`
     : '(keine von-Kultur erfasst)'
 
   const {
@@ -257,7 +256,7 @@ const Lieferschein = ({ row }) => {
               ) : lieferungError ? (
                 <TableRow>{`Fehler beim Laden der Daten: ${lieferungError.message}`}</TableRow>
               ) : (
-                lieferungen.map(l => <Lieferung key={l.id} lieferung={l} />)
+                lieferungen.map((l) => <Lieferung key={l.id} lieferung={l} />)
               )}
             </TableBody>
           </StyledTable>

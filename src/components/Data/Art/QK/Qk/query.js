@@ -13,7 +13,7 @@ import {
 
 export default gql`
   query ArtQkQuery(
-    $artId: bigint!
+    $artId: uuid!
     $startYear: date!
     $startNextYear: date!
     $sammlungsWithoutNr: Boolean!

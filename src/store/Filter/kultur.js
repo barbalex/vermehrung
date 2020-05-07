@@ -52,10 +52,10 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
-  art_id: 'number',
-  herkunft_id: 'number',
-  garten_id: 'number',
+  id: 'uuid',
+  art_id: 'uuid',
+  herkunft_id: 'uuid',
+  garten_id: 'uuid',
   zwischenlager: 'boolean',
   erhaltungskultur: 'boolean',
   von_anzahl_individuen: 'number',

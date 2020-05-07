@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import isUuid from 'is-uuid'
 
 import query from './query'
 import RowComponent from './Row'
@@ -21,7 +22,7 @@ const FieldsContainer = styled.div`
 const ChooseQk = ({ refetchTab }) => {
   const store = useContext(storeContext)
   const { activeNodeArray } = store.tree
-  const kulturId = last(activeNodeArray.filter((e) => !isNaN(e)))
+  const kulturId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
   const { data, error, loading } = useQuery(query)
   const rows = get(data, 'kultur_qk')

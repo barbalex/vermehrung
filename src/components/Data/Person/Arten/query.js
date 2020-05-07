@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { art } from '../../../../utils/fragments'
 
 export default gql`
-  query ArtenForPersonQuery($personId: bigint!) {
+  query ArtenForPersonQuery($personId: uuid!) {
     av_art(
       where: { person_id: { _eq: $personId } }
       order_by: { art: { art_ae_art: { name: asc } } }

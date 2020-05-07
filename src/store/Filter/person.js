@@ -103,7 +103,7 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
+  id: 'uuid',
   nr: 'string',
   name: 'string',
   adresszusatz: 'string',

@@ -56,9 +56,9 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
+  id: 'uuid',
   name: 'string',
-  person_id: 'number',
+  person_id: 'uuid',
   strasse: 'string',
   plz: 'number',
   ort: 'string',

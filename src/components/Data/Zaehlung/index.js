@@ -13,6 +13,7 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -86,7 +87,7 @@ const FieldRow = styled.div`
 
 const zaehlungQuery = gql`
   query ZaehlungQueryForZaehlung(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: zaehlung_bool_exp!
   ) {
@@ -143,7 +144,7 @@ const Zaehlung = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
@@ -224,7 +225,7 @@ const Zaehlung = ({ filter: showFilter }) => {
           await client.mutate({
             mutation: gql`
               mutation update_zaehlung(
-                $id: bigint!
+                $id: uuid!
               ) {
                 update_zaehlung(
                   where: { id: { _eq: $id } }

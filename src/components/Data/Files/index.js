@@ -87,7 +87,7 @@ const Files = ({ parentId, parent }) => {
   const fragment = fragmentObject[parent]
   const queryObject = {
     [parent]: gql`
-    query GeneralFileQuery($parentId: bigint!) {
+    query GeneralFileQuery($parentId: uuid!) {
       ${parent}_file(
         order_by: { name: asc }
         where: { ${parent}_id: { _eq: $parentId } }

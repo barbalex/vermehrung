@@ -13,6 +13,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -89,7 +90,7 @@ const FieldRow = styled.div`
 
 const query = gql`
   query SammlungQueryForSammlung(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: sammlung_bool_exp!
   ) {
@@ -140,7 +141,7 @@ const Sammlung = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
   const { data, error, loading } = useQuery(query, {
@@ -240,7 +241,7 @@ const Sammlung = ({ filter: showFilter }) => {
           await client.mutate({
             mutation: gql`
               mutation update_sammlung(
-                $id: bigint!
+                $id: uuid!
               ) {
                 update_sammlung(
                   where: { id: { _eq: $id } }

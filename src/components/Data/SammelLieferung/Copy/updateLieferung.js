@@ -41,7 +41,7 @@ export default async ({
     await client.mutate({
       mutation: gql`
     mutation update_lieferung(
-      $id: bigint!
+      $id: uuid!
     ) {
       update_lieferung(
         where: { id: { _eq: $id } }

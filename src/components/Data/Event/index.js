@@ -13,6 +13,7 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -87,7 +88,7 @@ const FieldRow = styled.div`
 
 const eventQuery = gql`
   query EventQueryForEvent(
-    $id: bigint!
+    $id: uuid!
     $filter: event_bool_exp!
     $isFiltered: Boolean!
   ) {
@@ -166,7 +167,7 @@ const Event = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const eventFilter = queryFromTable({ store, table: 'event' })
   const eventResult = useQuery(eventQuery, {
@@ -264,7 +265,7 @@ const Event = ({ filter: showFilter }) => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_event($id: bigint!) {
+              mutation update_event($id: uuid!) {
                 update_event(
                   where: { id: { _eq: $id } }
                   _set: { 

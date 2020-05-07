@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { kulturQk, kulturQkChoosen } from '../../../../utils/fragments'
 
 export default gql`
-  query KulturQkTopQuery($kulturId: bigint!) {
+  query KulturQkTopQuery($kulturId: uuid!) {
     kultur_qk(order_by: [{ sort: asc_nulls_last }, { name: asc_nulls_first }]) {
       ...KulturQkFields
     }

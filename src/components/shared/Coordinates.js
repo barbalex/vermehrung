@@ -98,12 +98,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
     setWgs84LongState(wgs84_long || '')
   }, [wgs84_lat, wgs84_long])
 
-  const onChangeX = useCallback(event => {
+  const onChangeX = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95XState(value)
   }, [])
   const onBlurX = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = xIsValid(value)
       if (!isValid) return setXError(xMessage)
@@ -116,12 +116,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
     },
     [lv95YState, lv95_x, saveToDbLv95],
   )
-  const onChangeY = useCallback(event => {
+  const onChangeY = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95YState(value)
   }, [])
   const onBlurY = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = yIsValid(value)
       if (!isValid) return setYError(yMessage)
@@ -134,12 +134,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
     [lv95XState, lv95_y, saveToDbLv95],
   )
 
-  const onChangeWgs84Lat = useCallback(event => {
+  const onChangeWgs84Lat = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LatState(value)
   }, [])
   const onBlurWgs84Lat = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = wgs84LatIsValid(value)
       if (!isValid) return setWgs84LatError(wgs84LatMessage)
@@ -152,12 +152,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
     },
     [saveToDbWgs84, wgs84LongState, wgs84_lat],
   )
-  const onChangeWgs84Long = useCallback(event => {
+  const onChangeWgs84Long = useCallback((event) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setWgs84LongState(value)
   }, [])
   const onBlurWgs84Long = useCallback(
-    event => {
+    (event) => {
       const value = ifIsNumericAsNumber(event.target.value)
       const isValid = wgs84LongIsValid(value)
       if (!isValid) return setWgs84LongError(wgs84LongMessage)
@@ -209,7 +209,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
         await client.mutate({
           mutation: gql`
             mutation ${mutationName}(
-              $id: bigint!
+              $id: uuid!
               $geomPoint: geometry
             ) {
               ${mutationName}(

@@ -8,6 +8,7 @@ import last from 'lodash/last'
 import memoizeOne from 'memoize-one'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -71,7 +72,7 @@ const FieldsContainer = styled.div`
 
 const teilkulturQuery = gql`
   query TeilkulturQueryForTeilkultur(
-    $id: bigint!
+    $id: uuid!
     $filter: teilkultur_bool_exp!
     $isFiltered: Boolean!
   ) {
@@ -137,7 +138,7 @@ const Teilkultur = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })
   const teilkulturResult = useQuery(teilkulturQuery, {
@@ -208,7 +209,7 @@ const Teilkultur = ({ filter: showFilter }) => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_teilkultur($id: bigint!) {
+              mutation update_teilkultur($id: uuid!) {
                 update_teilkultur(
                   where: { id: { _eq: $id } }
                   _set: { 

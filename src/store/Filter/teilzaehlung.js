@@ -55,9 +55,9 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
-  zaehlung_id: 'number',
-  teilkultur_id: 'number',
+  id: 'uuid',
+  zaehlung_id: 'uuid',
+  teilkultur_id: 'uuid',
   anzahl_pflanzen: 'number',
   anzahl_mutterpflanzen: 'number',
   anzahl_auspflanzbereit: 'number',

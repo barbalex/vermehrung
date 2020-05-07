@@ -47,7 +47,7 @@ const ChooseArtQkRow = ({ artId, qk, refetchTab }) => {
     if (checked) {
       await client.mutate({
         mutation: gql`
-          mutation deleteArtQkChoosen($artId: bigint!, $qkName: String!) {
+          mutation deleteArtQkChoosen($artId: uuid!, $qkName: String!) {
             delete_art_qk_choosen(
               where: { art_id: { _eq: $artId }, qk_name: { _eq: $qkName } }
             ) {
@@ -63,7 +63,7 @@ const ChooseArtQkRow = ({ artId, qk, refetchTab }) => {
     } else {
       await client.mutate({
         mutation: gql`
-          mutation insertArtQkChoosen($artId: bigint!, $qkName: String!) {
+          mutation insertArtQkChoosen($artId: uuid!, $qkName: String!) {
             insert_art_qk_choosen(
               objects: [{ art_id: $artId, qk_name: $qkName }]
             ) {

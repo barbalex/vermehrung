@@ -15,7 +15,7 @@ export default async ({ client, store, garten_id, workbook }) => {
   try {
     gaertenResult = await client.query({
       query: gql`
-        query GetGartenTzSums($id: bigint!) {
+        query GetGartenTzSums($id: uuid!) {
           garten_teilzaehlung_sums(where: { garten_id: { _eq: $id } }) {
             ...GartenTeilzaehlungSumsFields
           }

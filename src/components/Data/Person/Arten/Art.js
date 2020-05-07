@@ -57,7 +57,7 @@ const AvArt = ({ avArt }) => {
     try {
       await client.mutate({
         mutation: gql`
-          mutation deleteArtFile($artId: bigint!, $personId: bigint!) {
+          mutation deleteArtFile($artId: uuid!, $personId: uuid!) {
             delete_av_art(
               where: {
                 _and: [

@@ -16,6 +16,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton' // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -104,7 +105,7 @@ const Kultur = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const kulturFilter = queryFromTable({ store, table: 'kultur' })
   const kulturResult = useQuery(kulturQuery, {
@@ -267,7 +268,7 @@ const Kultur = ({ filter: showFilter }) => {
           await client.mutate({
             mutation: gql`
               mutation update_kultur(
-                $id: bigint!
+                $id: uuid!
               ) {
                 update_kultur(
                   where: { id: { _eq: $id } }

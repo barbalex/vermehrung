@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import isUuid from 'is-uuid'
 //import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
@@ -85,7 +86,7 @@ export default async ({ node, store, client }) => {
     tableTitle = url.slice(-1)[0]
     table = tableFromTitleHash[tableTitle]
     // need to check for Werte-Listen and top level tables
-    if (url.length > 1 && !isNaN(url[1])) {
+    if (url.length > 1 && isUuid.v1(url[1])) {
       parentId = url.slice(-2)[0]
     }
     if (parentId && url.length > 2) {

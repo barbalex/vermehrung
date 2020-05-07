@@ -14,7 +14,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 const teilkulturenQuery = gql`
-  query TeilkulturenQuery($kulturId: bigint) {
+  query TeilkulturenQuery($kulturId: uuid) {
     teilkultur(
       where: { kultur_id: { _eq: $kulturId } }
       order_by: { name: asc_nulls_first }

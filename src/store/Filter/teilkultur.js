@@ -52,8 +52,8 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
-  kultur_id: 'number',
+  id: 'uuid',
+  kultur_id: 'uuid',
   name: 'string',
   ort1: 'string',
   ort2: 'string',

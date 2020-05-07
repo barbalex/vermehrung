@@ -6,7 +6,11 @@ import {
 } from '../../../utils/fragments'
 
 export default gql`
-  query ArtQueryForArt($id: bigint!, $filter: art_bool_exp!, $isFiltered: Boolean!) {
+  query ArtQueryForArt(
+    $id: uuid!
+    $filter: art_bool_exp!
+    $isFiltered: Boolean!
+  ) {
     art(where: { id: { _eq: $id } }) {
       ...ArtFields
       artSums: art_sums(where: { art_id: { _eq: $id } }) {

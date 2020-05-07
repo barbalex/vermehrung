@@ -80,10 +80,7 @@ const PersonArten = ({ personId }) => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation insert_av_art_for_person(
-              $personId: bigint!
-              $artId: bigint!
-            ) {
+            mutation insert_av_art_for_person($personId: uuid!, $artId: uuid!) {
               insert_av_art(
                 objects: [{ art_id: $artId, person_id: $personId }]
               ) {

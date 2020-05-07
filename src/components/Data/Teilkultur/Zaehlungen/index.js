@@ -73,10 +73,7 @@ const Other = styled.div`
 `
 
 const zaehlungQuery = gql`
-  query zaehlungQueryForTkZaehlungen(
-    $kulturId: bigint!
-    $teilkulturId: bigint!
-  ) {
+  query zaehlungQueryForTkZaehlungen($kulturId: uuid!, $teilkulturId: uuid!) {
     zaehlung(
       where: {
         kultur_id: { _eq: $kulturId }
