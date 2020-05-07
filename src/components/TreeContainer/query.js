@@ -53,7 +53,7 @@ export default gql`
     $isTeilkultur: Boolean!
     $isWerteListe: Boolean!
     $isGardener: Boolean!
-    $personId: bigint
+    $personId: uuid
     $personExists: Boolean!
   ) {
     person_option(where: { person_id: { _eq: $personId } })

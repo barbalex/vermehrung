@@ -49,10 +49,10 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
-  kultur_id: 'number',
-  teilkultur_id: 'number',
-  person_id: 'number',
+  id: 'uuid',
+  kultur_id: 'uuid',
+  teilkultur_id: 'uuid',
+  person_id: 'uuid',
   beschreibung: 'string',
   geplant: 'boolean',
   datum: 'date',

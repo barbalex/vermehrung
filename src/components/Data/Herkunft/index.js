@@ -7,6 +7,7 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -71,7 +72,7 @@ const FieldsContainer = styled.div`
 
 const herkunftQuery = gql`
   query HerkunftQueryForHerkunft(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: herkunft_bool_exp!
   ) {
@@ -105,7 +106,7 @@ const Herkunft = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const { data, error, loading, refetch } = useQuery(herkunftQuery, {
@@ -158,7 +159,7 @@ const Herkunft = ({ filter: showFilter }) => {
           await client.mutate({
             mutation: gql`
               mutation update_herkunft(
-                $id: bigint!
+                $id: uuid!
               ) {
                 update_herkunft(
                   where: { id: { _eq: $id } }

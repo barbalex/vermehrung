@@ -51,7 +51,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
         await client.mutate({
           mutation: gql`
               mutation update_person_option(
-                $personId: bigint!
+                $personId: uuid!
               ) {
                 update_person_option(
                   where: { person_id: { _eq: $personId } }

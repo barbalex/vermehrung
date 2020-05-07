@@ -4,7 +4,7 @@ import { sammelLieferung as sammelLieferungFragment } from '../../../utils/fragm
 
 export default ({ field, valueToSet }) => gql`
 mutation update_sammel_lieferung(
-  $id: bigint!
+  $id: uuid!
 ) {
   update_sammel_lieferung(
     where: { id: { _eq: $id } }

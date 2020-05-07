@@ -11,6 +11,7 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
@@ -72,7 +73,7 @@ const FieldsContainer = styled.div`
 
 const query = gql`
   query PersonQueryForPerson(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: person_bool_exp!
   ) {
@@ -111,9 +112,10 @@ const Person = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
+  console.log('Person', { personFilter, id })
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered, filter: personFilter },
   })
@@ -174,7 +176,7 @@ const Person = ({ filter: showFilter }) => {
           await client.mutate({
             mutation: gql`
               mutation update_person_for_person(
-                $id: bigint!
+                $id: uuid!
               ) {
                 update_person(
                   where: { id: { _eq: $id } }

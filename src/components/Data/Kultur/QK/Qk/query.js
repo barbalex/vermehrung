@@ -13,7 +13,7 @@ import {
 
 export default gql`
   query KulturQkQuery(
-    $kulturId: bigint!
+    $kulturId: uuid!
     $startYear: date!
     $startNextYear: date!
     $kultursWithoutVonAnzahlIndividuen: Boolean!

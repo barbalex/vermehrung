@@ -22,7 +22,7 @@ export default async ({
     try {
       kulturResult = await client.query({
         query: gql`
-          query GetKulturForKulturDownload($id: bigint!) {
+          query GetKulturForKulturDownload($id: uuid!) {
             kultur(where: { id: { _eq: $id } }) {
               id
               art_id
@@ -85,7 +85,7 @@ export default async ({
   try {
     zaehlungResult = await client.query({
       query: gql`
-        query GetZaehlungForKulturDownload($id: bigint!) {
+        query GetZaehlungForKulturDownload($id: uuid!) {
           zaehlung(where: { kultur_id: { _eq: $id } }) {
             id
             kultur_id
@@ -129,7 +129,7 @@ export default async ({
     })
   }
   const zaehlungenArray = get(zaehlungResult, 'data.zaehlung') || []
-  const zaehlungen = zaehlungenArray.map(z => {
+  const zaehlungen = zaehlungenArray.map((z) => {
     z.teilzaehlungen_anzahl = get(
       z,
       'teilzaehlungs_aggregate.aggregate.count',
@@ -152,16 +152,16 @@ export default async ({
     )
     const tknodes = get(z, 'teilzaehlungs_aggregate.nodes') || []
     z.teilzaehlungen_ids = tknodes
-      .filter(tk => !!get(tk, 'id'))
-      .map(tk => get(tk, 'id'))
+      .filter((tk) => !!get(tk, 'id'))
+      .map((tk) => get(tk, 'id'))
       .join(', ')
     z.teilzaehlungen_teilkulturen = tknodes
-      .filter(tk => !!get(tk, 'teilkultur.name'))
-      .map(tk => get(tk, 'teilkultur.name'))
+      .filter((tk) => !!get(tk, 'teilkultur.name'))
+      .map((tk) => get(tk, 'teilkultur.name'))
       .join(', ')
     z.teilzaehlungen_andere_mengen = tknodes
-      .filter(tk => !!get(tk, 'andere_menge'))
-      .map(tk => get(tk, 'andere_menge'))
+      .filter((tk) => !!get(tk, 'andere_menge'))
+      .map((tk) => get(tk, 'andere_menge'))
       .join(', ')
     delete z.teilzaehlungs_aggregate
     delete z.__typename
@@ -181,7 +181,7 @@ export default async ({
   try {
     teilzaehlungResult = await client.query({
       query: gql`
-        query GetTeilzaehlungForKulturDownload($id: bigint!) {
+        query GetTeilzaehlungForKulturDownload($id: uuid!) {
           teilzaehlung(where: { zaehlung: { kultur_id: { _eq: $id } } }) {
             id
             zaehlung_id
@@ -212,7 +212,7 @@ export default async ({
     })
   }
   const teilzaehlungenArray = get(teilzaehlungResult, 'data.teilzaehlung') || []
-  const teilzaehlungen = teilzaehlungenArray.map(z => {
+  const teilzaehlungen = teilzaehlungenArray.map((z) => {
     z.teilkultur_name = get(z, 'teilkultur.name', '')
     delete z.teilkultur
     delete z.__typename
@@ -232,7 +232,7 @@ export default async ({
   try {
     anlieferungResult = await client.query({
       query: gql`
-        query GetAnlieferungForKulturDownload($id: bigint!) {
+        query GetAnlieferungForKulturDownload($id: uuid!) {
           lieferung(where: { nach_kultur_id: { _eq: $id } }) {
             id
             sammel_lieferung_id
@@ -317,7 +317,7 @@ export default async ({
     })
   }
   const anlieferungenArray = get(anlieferungResult, 'data.lieferung') || []
-  const anlieferungen = anlieferungenArray.map(z => {
+  const anlieferungen = anlieferungenArray.map((z) => {
     z.art_ae_id = get(z, 'art.art_ae_art.id', '')
     z.art_ae_name = get(z, 'art.art_ae_art.name', '')
     delete z.art
@@ -356,7 +356,7 @@ export default async ({
   try {
     auslieferungResult = await client.query({
       query: gql`
-        query GetAuslieferungForKulturDownload($id: bigint!) {
+        query GetAuslieferungForKulturDownload($id: uuid!) {
           lieferung(where: { von_kultur_id: { _eq: $id } }) {
             id
             sammel_lieferung_id
@@ -441,7 +441,7 @@ export default async ({
     })
   }
   const auslieferungenArray = get(auslieferungResult, 'data.lieferung') || []
-  const auslieferungen = auslieferungenArray.map(z => {
+  const auslieferungen = auslieferungenArray.map((z) => {
     z.art_ae_id = get(z, 'art.art_ae_art.id', '')
     z.art_ae_name = get(z, 'art.art_ae_art.name', '')
     delete z.art
@@ -480,7 +480,7 @@ export default async ({
   try {
     eventResult = await client.query({
       query: gql`
-        query GetEventsForKulturDownload($id: bigint!) {
+        query GetEventsForKulturDownload($id: uuid!) {
           event(where: { kultur_id: { _eq: $id } }) {
             id
             kultur_id
@@ -513,7 +513,7 @@ export default async ({
     })
   }
   const eventsArray = get(eventResult, 'data.event') || []
-  const events = eventsArray.map(z => {
+  const events = eventsArray.map((z) => {
     z.teilkultur_name = get(z, 'teilkultur.name', '')
     delete z.teilkultur
     z.person_name = get(z, 'person.name', '')

@@ -71,10 +71,10 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
-  art_id: 'number',
-  person_id: 'number',
-  herkunft_id: 'number',
+  id: 'uuid',
+  art_id: 'uuid',
+  person_id: 'uuid',
+  herkunft_id: 'uuid',
   nr: 'string',
   datum: 'date',
   von_anzahl_individuen: 'number',

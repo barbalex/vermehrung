@@ -129,7 +129,7 @@ const Teilzaehlung = ({
         await client.mutate({
           mutation: gql`
               mutation update_teilzaehlung(
-                $id: bigint!
+                $id: uuid!
               ) {
                 update_teilzaehlung(
                   where: { id: { _eq: $id } }
@@ -161,7 +161,7 @@ const Teilzaehlung = ({
     try {
       await client.mutate({
         mutation: gql`
-          mutation deleteTeilzaehlung($id: bigint!) {
+          mutation deleteTeilzaehlung($id: uuid!) {
             delete_teilzaehlung(where: { id: { _eq: $id } }) {
               returning {
                 id

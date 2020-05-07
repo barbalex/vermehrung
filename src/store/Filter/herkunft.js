@@ -53,7 +53,7 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
+  id: 'uuid',
   nr: 'string',
   lokalname: 'string',
   gemeinde: 'string',

@@ -22,7 +22,7 @@ export default async ({
   try {
     gartenResult = await client.query({
       query: gql`
-        query GetGartenForGartenDownload($id: bigint!) {
+        query GetGartenForGartenDownload($id: uuid!) {
           garten(where: { id: { _eq: $id } }) {
             id
             name
@@ -77,7 +77,7 @@ export default async ({
   try {
     kulturResult = await client.query({
       query: gql`
-        query GetKultursForGartenDownload($id: bigint!) {
+        query GetKultursForGartenDownload($id: uuid!) {
           kultur(where: { garten_id: { _eq: $id } }, order_by: { id: asc }) {
             id
             art_id
@@ -119,7 +119,7 @@ export default async ({
     })
   }
   const kultursArray = get(kulturResult, 'data.kultur') || []
-  const kulturs = kultursArray.map(k => {
+  const kulturs = kultursArray.map((k) => {
     k.art_ae_id = get(k, 'art.art_ae_art.id', '')
     k.art_ae_name = get(k, 'art.art_ae_art.name', '')
     delete k.art
@@ -139,7 +139,7 @@ export default async ({
       data: kulturs,
     })
     // 3. for all kulturen, call Kultur/buildExceljsWorksheets
-    const myKulturIds = kulturs.map(k => k.id)
+    const myKulturIds = kulturs.map((k) => k.id)
     for (const kultur_id of myKulturIds) {
       await buildExceljsWorksheetsForKultur({
         client,

@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
@@ -81,7 +82,7 @@ const Art = ({ filter: showFilter }) => {
 
   const artId = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(artQuery, {
     variables: { id: artId, filter: artFilter, isFiltered },
@@ -117,7 +118,7 @@ const Art = ({ filter: showFilter }) => {
         try {
           await client.mutate({
             mutation: gql`
-              mutation update_art($id: bigint!, $ae_id: uuid) {
+              mutation update_art($id: uuid!, $ae_id: uuid) {
                 update_art(
                   where: { id: { _eq: $id } }
                   _set: { ae_id: $ae_id }

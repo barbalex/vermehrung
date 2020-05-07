@@ -13,6 +13,7 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -119,7 +120,7 @@ const HerkunftLabel = styled.div`
 
 const lieferungQuery = gql`
   query LieferungQueryForLieferungLieferung(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: lieferung_bool_exp!
   ) {
@@ -255,7 +256,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
   const { data, error, loading } = useQuery(lieferungQuery, {

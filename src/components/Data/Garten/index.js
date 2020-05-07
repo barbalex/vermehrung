@@ -11,6 +11,7 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -77,7 +78,7 @@ const FieldsContainer = styled.div`
 
 const gartenQuery = gql`
   query GartenQueryForGarten(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: garten_bool_exp!
   ) {
@@ -121,7 +122,7 @@ const Garten = ({ filter: showFilter }) => {
 
   const id = showFilter
     ? 99999999999999
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
   const { data, error, loading, refetch } = useQuery(gartenQuery, {
@@ -195,7 +196,7 @@ const Garten = ({ filter: showFilter }) => {
           }
           await client.mutate({
             mutation: gql`
-              mutation update_garten($id: bigint!) {
+              mutation update_garten($id: uuid!) {
                 update_garten(
                   where: { id: { _eq: $id } }
                   _set: {

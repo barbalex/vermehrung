@@ -119,7 +119,7 @@ const Teilzaehlung = ({
           zaehlungData = await client.mutate({
             mutation: gql`
               mutation insertZaehlungForTeilzaehlung(
-                $kulturId: bigint!
+                $kulturId: uuid!
                 $datum: date!
                 $prognose: Boolean!
               ) {
@@ -157,8 +157,8 @@ const Teilzaehlung = ({
         await client.mutate({
           mutation: gql`
             mutation insertPrognose(
-              $zaehlId: bigint!
-              $teilkulturId: bigint
+              $zaehlId: uuid!
+              $teilkulturId: uuid
               $anzA: Int!
             ) {
               insert_teilzaehlung(
@@ -197,7 +197,7 @@ const Teilzaehlung = ({
       try {
         emptyTeilzaehlungenData = await client.query({
           query: gql`
-            query GetTeilzaehlungen($zaehlungId: bigint!) {
+            query GetTeilzaehlungen($zaehlungId: uuid!) {
               teilzaehlung(
                 where: {
                   zaehlung_id: { _eq: $zaehlungId }
@@ -236,7 +236,7 @@ const Teilzaehlung = ({
         try {
           await client.mutate({
             mutation: gql`
-              mutation deleteEmptyTz($id: bigint!) {
+              mutation deleteEmptyTz($id: uuid!) {
                 delete_teilzaehlung(where: { id: { _eq: $id } }) {
                   affected_rows
                 }

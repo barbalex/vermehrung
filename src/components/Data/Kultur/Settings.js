@@ -46,7 +46,7 @@ const SettingsKultur = ({ kulturResult }) => {
         await client.mutate({
           mutation: gql`
               mutation update_kultur_option(
-                $kulturId: bigint!
+                $kulturId: uuid!
               ) {
                 update_kultur_option(
                   where: { kultur_id: { _eq: $kulturId } }

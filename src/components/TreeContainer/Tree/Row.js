@@ -107,7 +107,7 @@ const Container = styled.div`
   }
 `
 const StyledNode = styled.div`
-  padding-left: ${props => `${Number(props['data-level']) * 17 - 10}px`};
+  padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -116,20 +116,21 @@ const StyledNode = styled.div`
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${props =>
+  color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
-  margin-top: ${props =>
+  margin-top: ${(props) =>
     props['data-nodeisopen'] ? '-5px !important' : '1px !important'};
-  margin-left: ${props => (props['data-nodeisopen'] ? '-1px !important' : 0)};
-  margin-right: ${props => (props['data-nodeisopen'] ? '-5px !important' : 0)};
-  padding-left: ${props => (props['data-nodeisopen'] ? '2px' : '2px')};
-  height: ${props =>
+  margin-left: ${(props) => (props['data-nodeisopen'] ? '-1px !important' : 0)};
+  margin-right: ${(props) =>
+    props['data-nodeisopen'] ? '-5px !important' : 0};
+  padding-left: ${(props) => (props['data-nodeisopen'] ? '2px' : '2px')};
+  height: ${(props) =>
     props['data-nodeisopen'] ? '30px !important' : '22px !important'};
-  width: ${props =>
+  width: ${(props) =>
     props['data-nodeisopen'] ? '30px !important' : '26px !important'};
-  color: ${props =>
+  color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   cursor: pointer;
   &:hover {
@@ -146,17 +147,17 @@ const StyledChevronRightIcon = styled(ChevronRightIcon)`
   }
 `
 const StyledMoreHorizIcon = styled(MoreHorizIcon)`
-  margin-top: ${props =>
+  margin-top: ${(props) =>
     props['data-nodeisinactivenodepath']
       ? '-5px !important'
       : '-2px !important'};
-  padding-left: ${props =>
+  padding-left: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
-  height: ${props =>
+  height: ${(props) =>
     props['data-nodeisinactivenodepath']
       ? '26px !important'
       : '22px !important'};
-  color: ${props =>
+  color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
   cursor: pointer;
@@ -174,7 +175,7 @@ const SymbolDiv = styled.div`
 const SymbolSpan = styled.span`
   padding-right: 11px !important;
   padding-left: 9px;
-  font-weight: ${props =>
+  font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   margin-top: -10px !important;
   font-size: 28px !important;
@@ -183,10 +184,10 @@ const SymbolSpan = styled.span`
 const TextSpan = styled.span`
   margin-left: 0;
   padding-right: 4px;
-  font-family: ${props => (props['data-mono'] ? 'Roboto Mono' : 'Roboto')};
-  font-size: ${props =>
+  font-family: ${(props) => (props['data-mono'] ? 'Roboto Mono' : 'Roboto')};
+  font-size: ${(props) =>
     props['data-mono'] ? '15px !important' : '16px !important'};
-  font-weight: ${props =>
+  font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   white-space: nowrap;
   cursor: pointer;
@@ -336,7 +337,7 @@ const Row = ({ style, node, nodes }) => {
       client.mutate({
         mutation: gql`
           mutation update_person_for_deleting_account(
-            $id: bigint!
+            $id: uuid!
             $accountId: String
           ) {
             update_person(
@@ -432,7 +433,7 @@ const Row = ({ style, node, nodes }) => {
     client.mutate({
       mutation: gql`
         mutation update_person_for_signup(
-          $id: bigint!
+          $id: uuid!
         ) {
           update_person(
             where: { id: { _eq: $id } }

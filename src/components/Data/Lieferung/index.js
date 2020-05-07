@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/react-hooks'
 import last from 'lodash/last'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
+import isUuid from 'is-uuid'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
@@ -21,7 +22,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#fff3e0' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -57,7 +58,7 @@ const StyledSplitPane = styled(SplitPane)`
 `
 
 const lieferungQuery = gql`
-  query LieferungQueryForLieferung($id: bigint!, $include: Boolean!) {
+  query LieferungQueryForLieferung($id: uuid!, $include: Boolean!) {
     lieferung(where: { id: { _eq: $id } }) @include(if: $include) {
       ...LieferungFields
       sammel_lieferung {
@@ -83,7 +84,7 @@ const LieferungContainer = ({ filter: showFilter }) => {
   const { user } = store
   const { activeNodeArray } = store.tree
 
-  const lieferungId = last(activeNodeArray.filter(e => !isNaN(e)))
+  const lieferungId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const id = showFilter ? 99999999999999 : lieferungId
 
   const {

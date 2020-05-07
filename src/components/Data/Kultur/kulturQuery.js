@@ -12,7 +12,7 @@ import {
 
 export default gql`
   query KulturQueryForKultur(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: kultur_bool_exp!
   ) {

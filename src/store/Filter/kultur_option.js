@@ -49,7 +49,7 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  kultur_id: 'number',
+  kultur_id: 'uuid',
   tk: 'boolean',
   tk_bemerkungen: 'boolean',
   z_bemerkungen: 'boolean',

@@ -113,6 +113,7 @@ const App = ({ element }) => {
       console.log('App, unregistering auth observer')
       unregisterAuthObserver()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (!store) return null

@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
+import isUuid from 'is-uuid'
 
 import storeContext from '../../../storeContext'
 import Select from '../../shared/Select'
@@ -125,7 +126,7 @@ const HerkunftLabel = styled.div`
 
 const sammelLieferungQuery = gql`
   query SammelLieferungQueryForSammelLieferung(
-    $id: bigint!
+    $id: uuid!
     $isFiltered: Boolean!
     $filter: sammel_lieferung_bool_exp!
   ) {
@@ -259,7 +260,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
     ? 99999999999999
     : idPassed
     ? idPassed
-    : last(activeNodeArray.filter((e) => !isNaN(e)))
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const sammelLieferungFilter = queryFromTable({
     store,

@@ -47,7 +47,7 @@ const ChooseKulturQkRow = ({ kulturId, qk, refetchTab }) => {
     if (checked) {
       await client.mutate({
         mutation: gql`
-          mutation deleteKulturQkChoosen($kulturId: bigint!, $qkName: String!) {
+          mutation deleteKulturQkChoosen($kulturId: uuid!, $qkName: String!) {
             delete_kultur_qk_choosen(
               where: {
                 kultur_id: { _eq: $kulturId }
@@ -66,7 +66,7 @@ const ChooseKulturQkRow = ({ kulturId, qk, refetchTab }) => {
     } else {
       await client.mutate({
         mutation: gql`
-          mutation insertKulturQkChoosen($kulturId: bigint!, $qkName: String!) {
+          mutation insertKulturQkChoosen($kulturId: uuid!, $qkName: String!) {
             insert_kultur_qk_choosen(
               objects: [{ kultur_id: $kulturId, qk_name: $qkName }]
             ) {

@@ -41,7 +41,7 @@ const Title = styled.div`
 `
 
 const teilzaehlungenQuery = gql`
-  query TeilzaehlungenQuery($zaehlId: bigint) {
+  query TeilzaehlungenQuery($zaehlId: uuid) {
     teilzaehlung(
       where: { zaehlung_id: { _eq: $zaehlId } }
       order_by: { teilkultur: { name: asc_nulls_first } }
@@ -53,7 +53,7 @@ const teilzaehlungenQuery = gql`
   ${teilkulturFragment}
 `
 const insertTeilzaehlungMutation = gql`
-  mutation insertTeilzaehlung($zaehlId: bigint!) {
+  mutation insertTeilzaehlung($zaehlId: uuid!) {
     insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
       returning {
         ...TeilzaehlungFields

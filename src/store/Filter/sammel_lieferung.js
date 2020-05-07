@@ -82,13 +82,13 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  id: 'number',
-  art_id: 'number',
-  person_id: 'number',
-  von_sammlung_id: 'number',
-  von_kultur_id: 'number',
+  id: 'uuid',
+  art_id: 'uuid',
+  person_id: 'uuid',
+  von_sammlung_id: 'uuid',
+  von_kultur_id: 'uuid',
   datum: 'date',
-  nach_kultur_id: 'number',
+  nach_kultur_id: 'uuid',
   nach_ausgepflanzt: 'boolean',
   von_anzahl_individuen: 'number',
   anzahl_pflanzen: 'number',
