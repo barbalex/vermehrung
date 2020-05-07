@@ -5,10 +5,15 @@ import Button from '@material-ui/core/Button'
 import Switch from '@material-ui/core/Switch'
 import IconButton from '@material-ui/core/IconButton'
 import { FaBars, FaHome, FaBook, FaFilter } from 'react-icons/fa'
+import {
+  MdCloudDone as NetworkOn,
+  MdCloudOff as NetworkOff,
+} from 'react-icons/md'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 import ReactResizeDetector from 'react-resize-detector'
+import { Offline, Online } from 'react-detect-offline'
 
 import Account from './Account'
 //import More from './More'
@@ -192,6 +197,16 @@ const HeaderVermehrung = () => {
             />
           </HideActiveDiv>
           <Search />
+          <Online>
+            <IconButton color="inherit" aria-label="online" title="online">
+              <NetworkOn />
+            </IconButton>
+          </Online>
+          <Offline>
+            <IconButton color="inherit" aria-label="offline" title="offline">
+              <NetworkOff />
+            </IconButton>
+          </Offline>
           <Account />
           {/*<More />*/}
         </Toolbar>

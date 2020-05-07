@@ -75,6 +75,7 @@
     "react-autosuggest": "10.0.2",
     "react-contextmenu": "2.13.0",
     "react-datepicker": "2.14.1",
+    "react-detect-offline": "^2.4.0",
     "react-dom": "16.13.1",
     "react-error-boundary": "2.2.1",
     "react-helmet": "6.0.0",
