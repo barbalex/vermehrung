@@ -196,7 +196,9 @@ const HeaderVermehrung = () => {
               }`}
             />
           </HideActiveDiv>
-          <Search />
+          <Online>
+            <Search />
+          </Online>
           <Online>
             <IconButton color="inherit" aria-label="online" title="online">
               <NetworkOn />
