@@ -96,5 +96,8 @@
   },
   "devDependencies": {
     "copyfiles": "2.2.0"
+  },
+  "dev-comments": {
+    "gatsby": "DO NOT UPGRADE over 2.20.36. 2.21.17 tested to be bad in production. See: https://github.com/gatsbyjs/gatsby/issues/19618#issuecomment-625350450"
   }
 }
