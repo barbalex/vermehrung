@@ -72,6 +72,7 @@ const App = ({ element }) => {
         // otherwise mobx freaks out
         const myStore = Store.create()
         const { setUser, setAuthorizing, setFirebase } = myStore
+        window.store = store
         setStore(myStore)
         const blacklist = ['user']
         const persist = pModule.default
