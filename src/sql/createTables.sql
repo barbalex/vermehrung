@@ -37,7 +37,12 @@ create table person (
   user_role text default null references user_role (name) on delete set null on update cascade,
   kommerziell boolean default false,
   info boolean default false,
-  aktiv boolean default true
+  aktiv boolean default true,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions uuid[] default array[]::uuid[],
+  _depth integer default 1,
+  _conflicts uuid[] default array[]::uuid[]
 );
 create index on person using btree (id);
 create index on person using btree (name);
@@ -46,6 +51,43 @@ create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using gin (tsv);
+
+drop table if exists person_rev cascade;
+create table person_rev (
+  id uuid default uuid_generate_v1mc(),
+  nr text default null unique,
+  name text default null,
+  adresszusatz text default null,
+  strasse text default null,
+  plz integer default null,
+  ort text default null,
+  telefon_privat text default null,
+  telefon_geschaeft text default null,
+  telefon_mobile text default null,
+  email text default null,
+  kein_email boolean default false,
+  bemerkungen text default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  tsv tsvector,
+  account_id text default null,
+  user_role text default null references user_role (name) on delete set null on update cascade,
+  kommerziell boolean default false,
+  info boolean default false,
+  aktiv boolean default true,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions uuid[] default array[]::uuid[],
+  _depth integer default 1,
+  _deleted boolean default false,
+  _conflicts uuid[] default array[]::uuid[],
+  primary key (id, _rev)
+);
+create index on person_rev using btree (id);
+create index on person_rev using btree (_rev);
+create index on person_rev using btree (_parent_rev);
+create index on person_rev using btree (_depth);
+create index on person_rev using btree (_deleted);
 
 drop table if exists person_file cascade;
 create table person_file (
