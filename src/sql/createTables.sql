@@ -40,9 +40,9 @@ create table person (
   aktiv boolean default true,
   _rev text default null,
   _parent_rev text default null,
-  _revisions uuid[] default array[]::uuid[],
+  _revisions text[] default null,
   _depth integer default 1,
-  _conflicts uuid[] default array[]::uuid[]
+  _conflicts text[] default null
 );
 create index on person using btree (id);
 create index on person using btree (name);
@@ -69,7 +69,6 @@ create table person_rev (
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector,
   account_id text default null,
   user_role text default null references user_role (name) on delete set null on update cascade,
   kommerziell boolean default false,
@@ -77,10 +76,9 @@ create table person_rev (
   aktiv boolean default true,
   _rev text default null,
   _parent_rev text default null,
-  _revisions uuid[] default array[]::uuid[],
+  _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  _conflicts uuid[] default array[]::uuid[],
   primary key (id, _rev)
 );
 create index on person_rev using btree (id);
@@ -109,11 +107,35 @@ create table art (
   ae_id uuid default null,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using gin (tsv);
+
+drop table if exists art_rev cascade;
+create table art_rev (
+  id uuid default uuid_generate_v1mc(),
+  ae_id uuid default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on art_rev using btree (id);
+create index on art_rev using btree (_rev);
+create index on art_rev using btree (_parent_rev);
+create index on art_rev using btree (_depth);
+create index on art_rev using btree (_deleted);
 
 drop table if exists art_qk cascade;
 create table art_qk (
