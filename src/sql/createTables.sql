@@ -595,13 +595,40 @@ create table zaehlung (
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
 create index on zaehlung using btree (prognose);
 create index on zaehlung using gin (tsv);
+
+drop table if exists zaehlung_rev cascade;
+create table zaehlung_rev (
+  id uuid default uuid_generate_v1mc(),
+  kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  datum date default null,
+  prognose boolean default false,
+  bemerkungen text default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on zaehlung_rev using btree (id);
+create index on zaehlung_rev using btree (_rev);
+create index on zaehlung_rev using btree (_parent_rev);
+create index on zaehlung_rev using btree (_depth);
+create index on zaehlung_rev using btree (_deleted);
 
 drop table if exists teilzaehlung cascade;
 create table teilzaehlung (
