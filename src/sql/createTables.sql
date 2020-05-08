@@ -70,7 +70,7 @@ create table person_rev (
   changed date default now(),
   changed_by varchar(20) default null,
   account_id text default null,
-  user_role text default null references user_role (name) on delete set null on update cascade,
+  user_role text default null references user_role (name) on delete no action on update cascade,
   kommerziell boolean default false,
   info boolean default false,
   aktiv boolean default true,
@@ -261,7 +261,12 @@ create table sammlung (
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on sammlung using btree (id);
 create index on sammlung using btree (art_id);
@@ -273,6 +278,36 @@ create index on sammlung using btree (anzahl_pflanzen);
 create index on sammlung using btree (gramm_samen);
 create index on sammlung using btree (geplant);
 create index on sammlung using gin (tsv);
+
+drop table if exists sammlung_rev cascade;
+create table sammlung_rev (
+  id uuid default uuid_generate_v1mc(),
+  art_id uuid default null references art (id) on delete no action on update cascade,
+  person_id uuid default null references person (id) on delete no action on update cascade,
+  herkunft_id uuid default null references herkunft (id) on delete no action on update cascade,
+  nr text default null unique,
+  datum date default null,
+  von_anzahl_individuen integer default null,
+  anzahl_pflanzen integer default null,
+  gramm_samen integer default null,
+  andere_menge text default null,
+  geom_point geometry(Point, 4326) default null,
+  geplant boolean default false,
+  bemerkungen text default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on sammlung_rev using btree (id);
+create index on sammlung_rev using btree (_rev);
+create index on sammlung_rev using btree (_parent_rev);
+create index on sammlung_rev using btree (_depth);
+create index on sammlung_rev using btree (_deleted);
 
 drop table if exists sammlung_file cascade;
 create table sammlung_file (
