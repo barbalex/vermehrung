@@ -499,12 +499,41 @@ create table teilkultur (
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on teilkultur using btree (id);
 create index on teilkultur using btree (kultur_id);
 create index on teilkultur using btree (name);
 create index on teilkultur using gin (tsv);
+
+drop table if exists teilkultur_rev cascade;
+create table teilkultur_rev (
+  id uuid default uuid_generate_v1mc(),
+  kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  name text default null,
+  ort1 text default null,
+  ort2 text default null,
+  ort3 text default null,
+  bemerkungen text default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on teilkultur_rev using btree (id);
+create index on teilkultur_rev using btree (_rev);
+create index on teilkultur_rev using btree (_parent_rev);
+create index on teilkultur_rev using btree (_depth);
+create index on teilkultur_rev using btree (_deleted);
 
 drop table if exists event cascade;
 create table event (
