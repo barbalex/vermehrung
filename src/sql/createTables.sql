@@ -906,11 +906,46 @@ create table sammel_lieferung (
   gramm_samen integer default null,
   andere_menge text default null,
   geplant boolean default false,
-  bemerkungen text default null
+  bemerkungen text default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on sammel_lieferung using btree (id);
 -- need to wait with adding this reference until sammel_lieferung was created
 alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lieferung_id) references sammel_lieferung (id) on delete set null on update cascade;
+
+drop table if exists sammel_lieferung_rev cascade;
+create table sammel_lieferung_rev (
+  id uuid default uuid_generate_v1mc(),
+  art_id uuid default null references art (id) on delete no action on update cascade,
+  person_id uuid default null references person (id) on delete no action on update cascade,
+  von_sammlung_id uuid default null references sammlung (id) on delete no action on update cascade,
+  von_kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  datum date default null,
+  nach_kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  nach_ausgepflanzt boolean default false,
+  von_anzahl_individuen integer default null,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  gramm_samen integer default null,
+  andere_menge text default null,
+  geplant boolean default false,
+  bemerkungen text default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on sammel_lieferung_rev using btree (id);
+create index on sammel_lieferung_rev using btree (_rev);
+create index on sammel_lieferung_rev using btree (_parent_rev);
+create index on sammel_lieferung_rev using btree (_depth);
+create index on sammel_lieferung_rev using btree (_deleted);
 
 drop table if exists lieferung_file cascade;
 create table lieferung_file (
