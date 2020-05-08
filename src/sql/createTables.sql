@@ -702,10 +702,44 @@ create table kultur_option (
   ev_teilkultur_id boolean default true,
   ev_geplant boolean default true,
   ev_person_id boolean default true,
-  ev_datum boolean default true
+  ev_datum boolean default true,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on kultur_option using btree (kultur_id);
 COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
+
+drop table if exists kultur_option_rev cascade;
+create table kultur_option_rev (
+  kultur_id uuid not null references kultur (id) on delete no action on update cascade,
+  z_bemerkungen boolean default true,
+  tz_teilkultur_id boolean default true,
+  tz_anzahl_mutterpflanzen boolean default true,
+  tz_andere_menge boolean default true,
+  tz_auspflanzbereit_beschreibung boolean default true,
+  tz_bemerkungen boolean default true,
+  tk boolean default false,
+  tk_bemerkungen boolean default true,
+  ev_teilkultur_id boolean default true,
+  ev_geplant boolean default true,
+  ev_person_id boolean default true,
+  ev_datum boolean default true,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (kultur_id, _rev)
+);
+create index on kultur_option_rev using btree (kultur_id);
+create index on kultur_option_rev using btree (_rev);
+create index on kultur_option_rev using btree (_parent_rev);
+create index on kultur_option_rev using btree (_depth);
+create index on kultur_option_rev using btree (_deleted);
+
 
 drop table if exists person_option cascade;
 create table person_option (
