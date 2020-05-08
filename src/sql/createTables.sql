@@ -340,7 +340,12 @@ create table garten (
   bemerkungen text default null,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on garten using btree (id);
 create index on garten using btree (name);
@@ -350,6 +355,32 @@ create index on garten using btree (plz);
 create index on garten using btree (ort);
 create index on garten using btree (aktiv);
 create index on garten using gin (tsv);
+
+drop table if exists garten_rev cascade;
+create table garten_rev (
+  id uuid default uuid_generate_v1mc(),
+  name text default null,
+  person_id uuid default null references person (id) on delete no action on update cascade,
+  strasse text default null,
+  plz integer default null,
+  ort text default null,
+  geom_point geometry(Point, 4326) default null,
+  aktiv boolean default true,
+  bemerkungen text default null,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on garten_rev using btree (id);
+create index on art_rev using btree (_rev);
+create index on art_rev using btree (_parent_rev);
+create index on art_rev using btree (_depth);
+create index on art_rev using btree (_deleted);
 
 drop table if exists garten_file cascade;
 create table garten_file (
