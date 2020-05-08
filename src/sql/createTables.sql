@@ -409,7 +409,12 @@ create table kultur (
   aktiv boolean default true,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index single_active_herkunft_per_art_and_garden_idx on kultur (art_id, herkunft_id, garten_id) where aktiv is true and herkunft_id is not null;
 create index on kultur using btree (id);
@@ -421,6 +426,32 @@ create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
 create index on kultur using gin (tsv);
+
+drop table if exists kultur_rev cascade;
+create table kultur_rev (
+  id uuid default uuid_generate_v1mc(),
+  art_id uuid default null references art (id) on delete no action on update cascade,
+  herkunft_id uuid default null references herkunft (id) on delete no action on update cascade,
+  garten_id uuid default null references garten (id) on delete no action on update cascade,
+  zwischenlager boolean default false,
+  erhaltungskultur boolean default false,
+  von_anzahl_individuen integer default null,
+  bemerkungen text default null,
+  aktiv boolean default true,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on kultur_rev using btree (id);
+create index on art_rev using btree (_rev);
+create index on art_rev using btree (_parent_rev);
+create index on art_rev using btree (_depth);
+create index on art_rev using btree (_deleted);
 
 drop table if exists kultur_qk cascade;
 create table kultur_qk (
