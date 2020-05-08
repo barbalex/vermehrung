@@ -66,15 +66,15 @@ Bevor die App offline ist, muss sie die gewünschten Daten geladen haben:
 
 ### 4. Authentifikation
 
-Offline ist Authentifikation nicht möglich. Die App muss mit den vorhandenen Daten auch funktionieren, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie offline ist, muss die Authentifikation erneuert werden.
+Offline ist Authentifikation nicht möglich. Die App muss mit den vorhandenen Daten auch funktionieren, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie offline ist, muss die Authentifikation erneuert werden.<br/><br/>
 
 ### 5. Suche
 
-Suche ist offline nicht möglich. Sie muss im offline Modus ausgeblendet werden.
+Suche ist offline nicht möglich. Sie muss im offline Modus ausgeblendet werden.<br/><br/>
 
 ### 6. Dateien
 
-Dateien können offline nicht gemanagt werden. Sie müssen daher im offline Modus ausgeblendet werden.
+Dateien können offline nicht gemanagt werden. Sie müssen daher im offline Modus ausgeblendet werden.<br/><br/>
 
 ### 7. Schrittweise Umsetzung
 
