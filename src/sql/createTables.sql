@@ -644,7 +644,12 @@ create table teilzaehlung (
   prognose_von_tz uuid default null references teilzaehlung (id) on delete set null on update cascade,
   changed date default now(),
   changed_by varchar(20) default null,
-  tsv tsvector
+  tsv tsvector,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on teilzaehlung using btree (id);
 create index on teilzaehlung using btree (prognose_von_tz);
@@ -655,6 +660,33 @@ create index on teilzaehlung using btree (anzahl_auspflanzbereit);
 create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using btree (andere_menge);
 create index on teilzaehlung using gin (tsv);
+
+drop table if exists teilzaehlung_rev cascade;
+create table teilzaehlung_rev (
+  id uuid default uuid_generate_v1mc(),
+  zaehlung_id uuid default null references zaehlung (id) on delete no action on update cascade,
+  teilkultur_id uuid default null references teilkultur (id) on delete no action on update cascade,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  anzahl_mutterpflanzen integer default null,
+  andere_menge text default null,
+  auspflanzbereit_beschreibung text default null,
+  bemerkungen text default null,
+  prognose_von_tz uuid default null references teilzaehlung (id) on delete no action on update cascade,
+  changed date default now(),
+  changed_by varchar(20) default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (id, _rev)
+);
+create index on teilzaehlung_rev using btree (id);
+create index on teilzaehlung_rev using btree (_rev);
+create index on teilzaehlung_rev using btree (_parent_rev);
+create index on teilzaehlung_rev using btree (_depth);
+create index on teilzaehlung_rev using btree (_deleted);
 
 drop table if exists kultur_option cascade;
 create table kultur_option (
