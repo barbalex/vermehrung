@@ -740,7 +740,6 @@ create index on kultur_option_rev using btree (_parent_rev);
 create index on kultur_option_rev using btree (_depth);
 create index on kultur_option_rev using btree (_deleted);
 
-
 drop table if exists person_option cascade;
 create table person_option (
   person_id uuid unique not null references person (id) on delete cascade on update cascade,
@@ -764,13 +763,55 @@ create table person_option (
   tree_teilkultur boolean default false,
   tree_zaehlung boolean default false,
   tree_lieferung boolean default false,
-  tree_event boolean default false
+  tree_event boolean default false,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _conflicts text[] default null
 );
 create index on person_option using btree (person_id);
 comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
 comment on column person_option.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
 comment on column person_option.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
 comment on column person_option.ar_name_deutsch is 'Dieses Feld wird (momentan) nicht benutzt';
+
+drop table if exists person_option_rev cascade;
+create table person_option_rev (
+  person_id uuid not null references person (id) on delete no action on update cascade,
+  ar_name_deutsch boolean default true,  -- not in use
+  ga_strasse boolean default true,
+  ga_plz boolean default true,
+  ga_ort boolean default true,
+  ga_geom_point boolean default true,
+  ga_lat_lng boolean default true,
+  ga_aktiv boolean default true,
+  ga_bemerkungen boolean default true,
+  hk_kanton boolean default true,
+  hk_land boolean default true,
+  hk_bemerkungen boolean default true,
+  hk_geom_point boolean default true,
+  li_show_sl_felder boolean default false,
+  li_show_sl boolean default true,
+  sl_show_empty_when_next_to_li boolean default false,
+  sl_auto_copy_edits boolean default true,
+  tree_kultur boolean default false,
+  tree_teilkultur boolean default false,
+  tree_zaehlung boolean default false,
+  tree_lieferung boolean default false,
+  tree_event boolean default false,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false,
+  primary key (person_id, _rev)
+);
+create index on person_option_rev using btree (person_id);
+create index on person_option_rev using btree (_rev);
+create index on person_option_rev using btree (_parent_rev);
+create index on person_option_rev using btree (_depth);
+create index on person_option_rev using btree (_deleted);
 
 drop table if exists lieferung cascade;
 create table lieferung (
