@@ -2,28 +2,28 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { EventAggregateModel } from "./EventAggregateModel"
-import { EventAggregateModelSelector } from "./EventAggregateModel.base"
-import { EventModel } from "./EventModel"
-import { EventModelSelector } from "./EventModel.base"
-import { KulturModel } from "./KulturModel"
-import { KulturModelSelector } from "./KulturModel.base"
-import { TeilzaehlungAggregateModel } from "./TeilzaehlungAggregateModel"
-import { TeilzaehlungAggregateModelSelector } from "./TeilzaehlungAggregateModel.base"
-import { TeilzaehlungModel } from "./TeilzaehlungModel"
-import { TeilzaehlungModelSelector } from "./TeilzaehlungModel.base"
+import { eventModel } from "./eventModel"
+import { eventModelSelector } from "./eventModel.base"
+import { event_aggregateModel } from "./event_aggregateModel"
+import { event_aggregateModelSelector } from "./event_aggregateModel.base"
+import { kulturModel } from "./kulturModel"
+import { kulturModelSelector } from "./kulturModel.base"
+import { teilzaehlungModel } from "./teilzaehlungModel"
+import { teilzaehlungModelSelector } from "./teilzaehlungModel.base"
+import { teilzaehlung_aggregateModel } from "./teilzaehlung_aggregateModel"
+import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateModel.base"
 
 
 /**
- * TeilkulturBase
- * auto generated base class for the model TeilkulturModel.
+ * teilkulturBase
+ * auto generated base class for the model teilkulturModel.
  *
  * columns and relationships of "teilkultur"
  */
-export const TeilkulturModelBase = ModelBase
-  .named('Teilkultur')
+export const teilkulturModelBase = ModelBase
+  .named('teilkultur')
   .props({
     __typename: types.optional(types.literal("teilkultur"), "teilkultur"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
@@ -35,21 +35,21 @@ export const TeilkulturModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    events: types.union(types.undefined, types.array(types.late(() => EventModel))),
+    events: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
     /** An aggregated array relationship */
-    events_aggregate: types.union(types.undefined, types.late(() => EventAggregateModel)),
+    events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     id: types.union(types.undefined, types.frozen()),
     /** An object relationship */
-    kultur: types.union(types.undefined, types.null, types.late(() => KulturModel)),
+    kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort1: types.union(types.undefined, types.null, types.string),
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    teilzaehlungs: types.union(types.undefined, types.array(types.late(() => TeilzaehlungModel))),
+    teilzaehlungs: types.union(types.undefined, types.array(types.late(() => teilzaehlungModel))),
     /** An aggregated array relationship */
-    teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => TeilzaehlungAggregateModel)),
+    teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -58,7 +58,7 @@ export const TeilkulturModelBase = ModelBase
     }
   }))
 
-export class TeilkulturModelSelector extends QueryBuilder {
+export class teilkulturModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
@@ -74,14 +74,14 @@ export class TeilkulturModelSelector extends QueryBuilder {
   get ort2() { return this.__attr(`ort2`) }
   get ort3() { return this.__attr(`ort3`) }
   get tsv() { return this.__attr(`tsv`) }
-  events(builder) { return this.__child(`events`, EventModelSelector, builder) }
-  events_aggregate(builder) { return this.__child(`events_aggregate`, EventAggregateModelSelector, builder) }
-  kultur(builder) { return this.__child(`kultur`, KulturModelSelector, builder) }
-  teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, TeilzaehlungModelSelector, builder) }
-  teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, TeilzaehlungAggregateModelSelector, builder) }
+  events(builder) { return this.__child(`events`, eventModelSelector, builder) }
+  events_aggregate(builder) { return this.__child(`events_aggregate`, event_aggregateModelSelector, builder) }
+  kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
+  teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, teilzaehlungModelSelector, builder) }
+  teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
 }
-export function selectFromTeilkultur() {
-  return new TeilkulturModelSelector()
+export function selectFromteilkultur() {
+  return new teilkulturModelSelector()
 }
 
-export const teilkulturModelPrimitives = selectFromTeilkultur()._conflicts._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3.tsv
+export const teilkulturModelPrimitives = selectFromteilkultur()._conflicts._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3.tsv

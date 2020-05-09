@@ -2,24 +2,24 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { KulturModel } from "./KulturModel"
-import { KulturModelSelector } from "./KulturModel.base"
-import { PersonModel } from "./PersonModel"
-import { PersonModelSelector } from "./PersonModel.base"
-import { TeilkulturModel } from "./TeilkulturModel"
-import { TeilkulturModelSelector } from "./TeilkulturModel.base"
+import { kulturModel } from "./kulturModel"
+import { kulturModelSelector } from "./kulturModel.base"
+import { personModel } from "./personModel"
+import { personModelSelector } from "./personModel.base"
+import { teilkulturModel } from "./teilkulturModel"
+import { teilkulturModelSelector } from "./teilkulturModel.base"
 
 
 /**
- * EventBase
- * auto generated base class for the model EventModel.
+ * eventBase
+ * auto generated base class for the model eventModel.
  *
  * columns and relationships of "event"
  */
-export const EventModelBase = ModelBase
-  .named('Event')
+export const eventModelBase = ModelBase
+  .named('event')
   .props({
     __typename: types.optional(types.literal("event"), "event"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
@@ -34,13 +34,13 @@ export const EventModelBase = ModelBase
     geplant: types.union(types.undefined, types.null, types.boolean),
     id: types.union(types.undefined, types.frozen()),
     /** An object relationship */
-    kultur: types.union(types.undefined, types.null, types.late(() => KulturModel)),
+    kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    person: types.union(types.undefined, types.null, types.late(() => PersonModel)),
+    person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    teilkultur: types.union(types.undefined, types.null, types.late(() => TeilkulturModel)),
+    teilkultur: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })
@@ -50,7 +50,7 @@ export const EventModelBase = ModelBase
     }
   }))
 
-export class EventModelSelector extends QueryBuilder {
+export class eventModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
@@ -66,12 +66,12 @@ export class EventModelSelector extends QueryBuilder {
   get person_id() { return this.__attr(`person_id`) }
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
   get tsv() { return this.__attr(`tsv`) }
-  kultur(builder) { return this.__child(`kultur`, KulturModelSelector, builder) }
-  person(builder) { return this.__child(`person`, PersonModelSelector, builder) }
-  teilkultur(builder) { return this.__child(`teilkultur`, TeilkulturModelSelector, builder) }
+  kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
+  person(builder) { return this.__child(`person`, personModelSelector, builder) }
+  teilkultur(builder) { return this.__child(`teilkultur`, teilkulturModelSelector, builder) }
 }
-export function selectFromEvent() {
-  return new EventModelSelector()
+export function selectFromevent() {
+  return new eventModelSelector()
 }
 
-export const eventModelPrimitives = selectFromEvent()._conflicts._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.geplant.kultur_id.person_id.teilkultur_id.tsv
+export const eventModelPrimitives = selectFromevent()._conflicts._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.geplant.kultur_id.person_id.teilkultur_id.tsv

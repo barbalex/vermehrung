@@ -1,15 +1,15 @@
-import { LieferungModelBase } from "./LieferungModel.base"
+import { lieferungModelBase } from "./lieferungModel.base"
 
 
-/* A graphql query fragment builders for LieferungModel */
-export { selectFromLieferung, lieferungModelPrimitives, LieferungModelSelector } from "./LieferungModel.base"
+/* A graphql query fragment builders for lieferungModel */
+export { selectFromlieferung, lieferungModelPrimitives, lieferungModelSelector } from "./lieferungModel.base"
 
 /**
- * LieferungModel
+ * lieferungModel
  *
  * columns and relationships of "lieferung"
  */
-export const LieferungModel = LieferungModelBase
+export const lieferungModel = lieferungModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

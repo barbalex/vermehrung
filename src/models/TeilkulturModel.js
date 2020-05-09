@@ -1,15 +1,15 @@
-import { TeilkulturModelBase } from "./TeilkulturModel.base"
+import { teilkulturModelBase } from "./teilkulturModel.base"
 
 
-/* A graphql query fragment builders for TeilkulturModel */
-export { selectFromTeilkultur, teilkulturModelPrimitives, TeilkulturModelSelector } from "./TeilkulturModel.base"
+/* A graphql query fragment builders for teilkulturModel */
+export { selectFromteilkultur, teilkulturModelPrimitives, teilkulturModelSelector } from "./teilkulturModel.base"
 
 /**
- * TeilkulturModel
+ * teilkulturModel
  *
  * columns and relationships of "teilkultur"
  */
-export const TeilkulturModel = TeilkulturModelBase
+export const teilkulturModel = teilkulturModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

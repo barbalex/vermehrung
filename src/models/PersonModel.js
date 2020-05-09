@@ -1,15 +1,15 @@
-import { PersonModelBase } from "./PersonModel.base"
+import { personModelBase } from "./personModel.base"
 
 
-/* A graphql query fragment builders for PersonModel */
-export { selectFromPerson, personModelPrimitives, PersonModelSelector } from "./PersonModel.base"
+/* A graphql query fragment builders for personModel */
+export { selectFromperson, personModelPrimitives, personModelSelector } from "./personModel.base"
 
 /**
- * PersonModel
+ * personModel
  *
  * columns and relationships of "person"
  */
-export const PersonModel = PersonModelBase
+export const personModel = personModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

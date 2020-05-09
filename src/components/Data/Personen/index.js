@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import { v1 as uuidv1 } from 'uuid'
 
 import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
@@ -17,6 +18,7 @@ import createNew from '../../TreeContainer/Tree/createNew'
 import { person as personFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { useQuery } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -73,7 +75,7 @@ const query = gql`
 `
 const personQueryByAccountId = gql`
   query PersonQueryForPersonsByAccoutId($accountId: String) {
-    person_option(where: { account_id: { _eq: $accountId } }) {
+    person(where: { account_id: { _eq: $accountId } }) {
       ...PersonFields
     }
   }
@@ -86,7 +88,6 @@ function sizeReducer(state, action) {
 }
 
 const Personen = ({ filter: showFilter }) => {
-  const client = useApolloClient()
   const store = useContext(storeContext)
 
   const { filter, user } = store
@@ -95,18 +96,40 @@ const Personen = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
 
   const personFilter = queryFromTable({ store, table: 'person' })
-  const { data, error, loading } = useQuery(query, {
+  const { store: dataStore, data, error, loading } = useQuery(query, {
     variables: { filter: personFilter },
   })
+  const { data: data2, error: error2, refetch } = useQuery((st) =>
+    st.queryPerson(),
+  )
+  console.log('Personen:', {
+    dataStore,
+    data2,
+    dataStorePersons: dataStore.persons,
+  })
+  //dataStore.log()
+  console.log('Personen, store.persons:', dataStore.persons)
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const rows = get(data, 'rowsFiltered', [])
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: activeNodeArray }
-    createNew({ node, store, client })
-  }, [activeNodeArray, client, store])
+    //const node = { nodeType: 'folder', url: activeNodeArray }
+    const id = uuidv1()
+    dataStore.mutateInsert_person(
+      {
+        objects: [{ id, name: 'test4' }],
+        onConflict: { constraint: 'person_pkey', update_columns: [] },
+      },
+      undefined,
+      /*(m) => {
+        dataStore.persons.push(m)
+      },*/
+    )
+    //refetch()
+    //createNew({ node, store, client })
+  }, [dataStore])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,

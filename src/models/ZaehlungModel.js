@@ -1,15 +1,15 @@
-import { ZaehlungModelBase } from "./ZaehlungModel.base"
+import { zaehlungModelBase } from "./zaehlungModel.base"
 
 
-/* A graphql query fragment builders for ZaehlungModel */
-export { selectFromZaehlung, zaehlungModelPrimitives, ZaehlungModelSelector } from "./ZaehlungModel.base"
+/* A graphql query fragment builders for zaehlungModel */
+export { selectFromzaehlung, zaehlungModelPrimitives, zaehlungModelSelector } from "./zaehlungModel.base"
 
 /**
- * ZaehlungModel
+ * zaehlungModel
  *
  * columns and relationships of "zaehlung"
  */
-export const ZaehlungModel = ZaehlungModelBase
+export const zaehlungModel = zaehlungModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

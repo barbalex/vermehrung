@@ -1,15 +1,15 @@
-import { ArtModelBase } from "./ArtModel.base"
+import { artModelBase } from "./artModel.base"
 
 
-/* A graphql query fragment builders for ArtModel */
-export { selectFromArt, artModelPrimitives, ArtModelSelector } from "./ArtModel.base"
+/* A graphql query fragment builders for artModel */
+export { selectFromart, artModelPrimitives, artModelSelector } from "./artModel.base"
 
 /**
- * ArtModel
+ * artModel
  *
  * columns and relationships of "art"
  */
-export const ArtModel = ArtModelBase
+export const artModel = artModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

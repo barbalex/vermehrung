@@ -1,15 +1,15 @@
-import { GartenModelBase } from "./GartenModel.base"
+import { gartenModelBase } from "./gartenModel.base"
 
 
-/* A graphql query fragment builders for GartenModel */
-export { selectFromGarten, gartenModelPrimitives, GartenModelSelector } from "./GartenModel.base"
+/* A graphql query fragment builders for gartenModel */
+export { selectFromgarten, gartenModelPrimitives, gartenModelSelector } from "./gartenModel.base"
 
 /**
- * GartenModel
+ * gartenModel
  *
  * columns and relationships of "garten"
  */
-export const GartenModel = GartenModelBase
+export const gartenModel = gartenModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

@@ -2,24 +2,24 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { KulturModel } from "./KulturModel"
-import { KulturModelSelector } from "./KulturModel.base"
-import { TeilzaehlungAggregateModel } from "./TeilzaehlungAggregateModel"
-import { TeilzaehlungAggregateModelSelector } from "./TeilzaehlungAggregateModel.base"
-import { TeilzaehlungModel } from "./TeilzaehlungModel"
-import { TeilzaehlungModelSelector } from "./TeilzaehlungModel.base"
+import { kulturModel } from "./kulturModel"
+import { kulturModelSelector } from "./kulturModel.base"
+import { teilzaehlungModel } from "./teilzaehlungModel"
+import { teilzaehlungModelSelector } from "./teilzaehlungModel.base"
+import { teilzaehlung_aggregateModel } from "./teilzaehlung_aggregateModel"
+import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateModel.base"
 
 
 /**
- * ZaehlungBase
- * auto generated base class for the model ZaehlungModel.
+ * zaehlungBase
+ * auto generated base class for the model zaehlungModel.
  *
  * columns and relationships of "zaehlung"
  */
-export const ZaehlungModelBase = ModelBase
-  .named('Zaehlung')
+export const zaehlungModelBase = ModelBase
+  .named('zaehlung')
   .props({
     __typename: types.optional(types.literal("zaehlung"), "zaehlung"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
@@ -33,13 +33,13 @@ export const ZaehlungModelBase = ModelBase
     datum: types.union(types.undefined, types.null, types.frozen()),
     id: types.union(types.undefined, types.frozen()),
     /** An object relationship */
-    kultur: types.union(types.undefined, types.null, types.late(() => KulturModel)),
+    kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
     /** An array relationship */
-    teilzaehlungs: types.union(types.undefined, types.array(types.late(() => TeilzaehlungModel))),
+    teilzaehlungs: types.union(types.undefined, types.array(types.late(() => teilzaehlungModel))),
     /** An aggregated array relationship */
-    teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => TeilzaehlungAggregateModel)),
+    teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -48,7 +48,7 @@ export const ZaehlungModelBase = ModelBase
     }
   }))
 
-export class ZaehlungModelSelector extends QueryBuilder {
+export class zaehlungModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
@@ -62,12 +62,12 @@ export class ZaehlungModelSelector extends QueryBuilder {
   get kultur_id() { return this.__attr(`kultur_id`) }
   get prognose() { return this.__attr(`prognose`) }
   get tsv() { return this.__attr(`tsv`) }
-  kultur(builder) { return this.__child(`kultur`, KulturModelSelector, builder) }
-  teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, TeilzaehlungModelSelector, builder) }
-  teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, TeilzaehlungAggregateModelSelector, builder) }
+  kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
+  teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, teilzaehlungModelSelector, builder) }
+  teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
 }
-export function selectFromZaehlung() {
-  return new ZaehlungModelSelector()
+export function selectFromzaehlung() {
+  return new zaehlungModelSelector()
 }
 
-export const zaehlungModelPrimitives = selectFromZaehlung()._conflicts._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.datum.kultur_id.prognose.tsv
+export const zaehlungModelPrimitives = selectFromzaehlung()._conflicts._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.datum.kultur_id.prognose.tsv

@@ -2,36 +2,36 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { ArtModel } from "./ArtModel"
-import { ArtModelSelector } from "./ArtModel.base"
-import { HerkunftModel } from "./HerkunftModel"
-import { HerkunftModelSelector } from "./HerkunftModel.base"
-import { LieferungAggregateModel } from "./LieferungAggregateModel"
-import { LieferungAggregateModelSelector } from "./LieferungAggregateModel.base"
-import { LieferungModel } from "./LieferungModel"
-import { LieferungModelSelector } from "./LieferungModel.base"
-import { PersonModel } from "./PersonModel"
-import { PersonModelSelector } from "./PersonModel.base"
-import { SammelLieferungAggregateModel } from "./SammelLieferungAggregateModel"
-import { SammelLieferungAggregateModelSelector } from "./SammelLieferungAggregateModel.base"
-import { SammelLieferungModel } from "./SammelLieferungModel"
-import { SammelLieferungModelSelector } from "./SammelLieferungModel.base"
-import { SammlungFileAggregateModel } from "./SammlungFileAggregateModel"
-import { SammlungFileAggregateModelSelector } from "./SammlungFileAggregateModel.base"
-import { SammlungFileModel } from "./SammlungFileModel"
-import { SammlungFileModelSelector } from "./SammlungFileModel.base"
+import { artModel } from "./artModel"
+import { artModelSelector } from "./artModel.base"
+import { herkunftModel } from "./herkunftModel"
+import { herkunftModelSelector } from "./herkunftModel.base"
+import { lieferungModel } from "./lieferungModel"
+import { lieferungModelSelector } from "./lieferungModel.base"
+import { lieferung_aggregateModel } from "./lieferung_aggregateModel"
+import { lieferung_aggregateModelSelector } from "./lieferung_aggregateModel.base"
+import { personModel } from "./personModel"
+import { personModelSelector } from "./personModel.base"
+import { sammel_lieferungModel } from "./sammel_lieferungModel"
+import { sammel_lieferungModelSelector } from "./sammel_lieferungModel.base"
+import { sammel_lieferung_aggregateModel } from "./sammel_lieferung_aggregateModel"
+import { sammel_lieferung_aggregateModelSelector } from "./sammel_lieferung_aggregateModel.base"
+import { sammlung_fileModel } from "./sammlung_fileModel"
+import { sammlung_fileModelSelector } from "./sammlung_fileModel.base"
+import { sammlung_file_aggregateModel } from "./sammlung_file_aggregateModel"
+import { sammlung_file_aggregateModelSelector } from "./sammlung_file_aggregateModel.base"
 
 
 /**
- * SammlungBase
- * auto generated base class for the model SammlungModel.
+ * sammlungBase
+ * auto generated base class for the model sammlungModel.
  *
  * columns and relationships of "sammlung"
  */
-export const SammlungModelBase = ModelBase
-  .named('Sammlung')
+export const sammlungModelBase = ModelBase
+  .named('sammlung')
   .props({
     __typename: types.optional(types.literal("sammlung"), "sammlung"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
@@ -42,7 +42,7 @@ export const SammlungModelBase = ModelBase
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
     /** An object relationship */
-    art: types.union(types.undefined, types.null, types.late(() => ArtModel)),
+    art: types.union(types.undefined, types.null, types.late(() => artModel)),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
@@ -52,27 +52,27 @@ export const SammlungModelBase = ModelBase
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
     /** An object relationship */
-    herkunft: types.union(types.undefined, types.null, types.late(() => HerkunftModel)),
+    herkunft: types.union(types.undefined, types.null, types.late(() => herkunftModel)),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.union(types.undefined, types.frozen()),
     /** An array relationship */
-    lieferungs: types.union(types.undefined, types.array(types.late(() => LieferungModel))),
+    lieferungs: types.union(types.undefined, types.array(types.late(() => lieferungModel))),
     /** An aggregated array relationship */
-    lieferungs_aggregate: types.union(types.undefined, types.late(() => LieferungAggregateModel)),
+    lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     nr: types.union(types.undefined, types.null, types.string),
     /** An object relationship */
-    person: types.union(types.undefined, types.null, types.late(() => PersonModel)),
+    person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     /** An array relationship */
-    sammel_lieferungs: types.union(types.undefined, types.array(types.late(() => SammelLieferungModel))),
+    sammel_lieferungs: types.union(types.undefined, types.array(types.late(() => sammel_lieferungModel))),
     /** An aggregated array relationship */
-    sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => SammelLieferungAggregateModel)),
+    sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     /** An array relationship */
-    sammlung_files: types.union(types.undefined, types.array(types.late(() => SammlungFileModel))),
+    sammlung_files: types.union(types.undefined, types.array(types.late(() => sammlung_fileModel))),
     /** An aggregated array relationship */
-    sammlung_files_aggregate: types.union(types.undefined, types.late(() => SammlungFileAggregateModel)),
+    sammlung_files_aggregate: types.union(types.undefined, types.late(() => sammlung_file_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
@@ -84,7 +84,7 @@ export const SammlungModelBase = ModelBase
     }
   }))
 
-export class SammlungModelSelector extends QueryBuilder {
+export class sammlungModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
@@ -110,18 +110,18 @@ export class SammlungModelSelector extends QueryBuilder {
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get wgs84_lat() { return this.__attr(`wgs84_lat`) }
   get wgs84_long() { return this.__attr(`wgs84_long`) }
-  art(builder) { return this.__child(`art`, ArtModelSelector, builder) }
-  herkunft(builder) { return this.__child(`herkunft`, HerkunftModelSelector, builder) }
-  lieferungs(builder) { return this.__child(`lieferungs`, LieferungModelSelector, builder) }
-  lieferungs_aggregate(builder) { return this.__child(`lieferungs_aggregate`, LieferungAggregateModelSelector, builder) }
-  person(builder) { return this.__child(`person`, PersonModelSelector, builder) }
-  sammel_lieferungs(builder) { return this.__child(`sammel_lieferungs`, SammelLieferungModelSelector, builder) }
-  sammel_lieferungs_aggregate(builder) { return this.__child(`sammel_lieferungs_aggregate`, SammelLieferungAggregateModelSelector, builder) }
-  sammlung_files(builder) { return this.__child(`sammlung_files`, SammlungFileModelSelector, builder) }
-  sammlung_files_aggregate(builder) { return this.__child(`sammlung_files_aggregate`, SammlungFileAggregateModelSelector, builder) }
+  art(builder) { return this.__child(`art`, artModelSelector, builder) }
+  herkunft(builder) { return this.__child(`herkunft`, herkunftModelSelector, builder) }
+  lieferungs(builder) { return this.__child(`lieferungs`, lieferungModelSelector, builder) }
+  lieferungs_aggregate(builder) { return this.__child(`lieferungs_aggregate`, lieferung_aggregateModelSelector, builder) }
+  person(builder) { return this.__child(`person`, personModelSelector, builder) }
+  sammel_lieferungs(builder) { return this.__child(`sammel_lieferungs`, sammel_lieferungModelSelector, builder) }
+  sammel_lieferungs_aggregate(builder) { return this.__child(`sammel_lieferungs_aggregate`, sammel_lieferung_aggregateModelSelector, builder) }
+  sammlung_files(builder) { return this.__child(`sammlung_files`, sammlung_fileModelSelector, builder) }
+  sammlung_files_aggregate(builder) { return this.__child(`sammlung_files_aggregate`, sammlung_file_aggregateModelSelector, builder) }
 }
-export function selectFromSammlung() {
-  return new SammlungModelSelector()
+export function selectFromsammlung() {
+  return new sammlungModelSelector()
 }
 
-export const sammlungModelPrimitives = selectFromSammlung()._conflicts._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.lv95_x.lv95_y.nr.person_id.tsv.von_anzahl_individuen.wgs84_lat.wgs84_long
+export const sammlungModelPrimitives = selectFromsammlung()._conflicts._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.lv95_x.lv95_y.nr.person_id.tsv.von_anzahl_individuen.wgs84_lat.wgs84_long
