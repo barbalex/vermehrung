@@ -2,54 +2,54 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { AeArtModel } from "./AeArtModel"
-import { AeArtModelSelector } from "./AeArtModel.base"
-import { ArtFileAggregateModel } from "./ArtFileAggregateModel"
-import { ArtFileAggregateModelSelector } from "./ArtFileAggregateModel.base"
-import { ArtFileModel } from "./ArtFileModel"
-import { ArtFileModelSelector } from "./ArtFileModel.base"
-import { ArtQkChoosenAggregateModel } from "./ArtQkChoosenAggregateModel"
-import { ArtQkChoosenAggregateModelSelector } from "./ArtQkChoosenAggregateModel.base"
-import { ArtQkChoosenModel } from "./ArtQkChoosenModel"
-import { ArtQkChoosenModelSelector } from "./ArtQkChoosenModel.base"
-import { ArtSumsAggregateModel } from "./ArtSumsAggregateModel"
-import { ArtSumsAggregateModelSelector } from "./ArtSumsAggregateModel.base"
-import { ArtSumsModel } from "./ArtSumsModel"
-import { ArtSumsModelSelector } from "./ArtSumsModel.base"
-import { AvArtModel } from "./AvArtModel"
-import { AvArtModelSelector } from "./AvArtModel.base"
-import { GartenTeilzaehlungSumsAggregateModel } from "./GartenTeilzaehlungSumsAggregateModel"
-import { GartenTeilzaehlungSumsAggregateModelSelector } from "./GartenTeilzaehlungSumsAggregateModel.base"
-import { GartenTeilzaehlungSumsModel } from "./GartenTeilzaehlungSumsModel"
-import { GartenTeilzaehlungSumsModelSelector } from "./GartenTeilzaehlungSumsModel.base"
-import { KulturAggregateModel } from "./KulturAggregateModel"
-import { KulturAggregateModelSelector } from "./KulturAggregateModel.base"
-import { KulturModel } from "./KulturModel"
-import { KulturModelSelector } from "./KulturModel.base"
-import { LieferungAggregateModel } from "./LieferungAggregateModel"
-import { LieferungAggregateModelSelector } from "./LieferungAggregateModel.base"
-import { LieferungModel } from "./LieferungModel"
-import { LieferungModelSelector } from "./LieferungModel.base"
-import { SammelLieferungAggregateModel } from "./SammelLieferungAggregateModel"
-import { SammelLieferungAggregateModelSelector } from "./SammelLieferungAggregateModel.base"
-import { SammelLieferungModel } from "./SammelLieferungModel"
-import { SammelLieferungModelSelector } from "./SammelLieferungModel.base"
-import { SammlungAggregateModel } from "./SammlungAggregateModel"
-import { SammlungAggregateModelSelector } from "./SammlungAggregateModel.base"
-import { SammlungModel } from "./SammlungModel"
-import { SammlungModelSelector } from "./SammlungModel.base"
+import { ae_artModel } from "./ae_artModel"
+import { ae_artModelSelector } from "./ae_artModel.base"
+import { art_fileModel } from "./art_fileModel"
+import { art_fileModelSelector } from "./art_fileModel.base"
+import { art_file_aggregateModel } from "./art_file_aggregateModel"
+import { art_file_aggregateModelSelector } from "./art_file_aggregateModel.base"
+import { art_qk_choosenModel } from "./art_qk_choosenModel"
+import { art_qk_choosenModelSelector } from "./art_qk_choosenModel.base"
+import { art_qk_choosen_aggregateModel } from "./art_qk_choosen_aggregateModel"
+import { art_qk_choosen_aggregateModelSelector } from "./art_qk_choosen_aggregateModel.base"
+import { art_sumsModel } from "./art_sumsModel"
+import { art_sumsModelSelector } from "./art_sumsModel.base"
+import { art_sums_aggregateModel } from "./art_sums_aggregateModel"
+import { art_sums_aggregateModelSelector } from "./art_sums_aggregateModel.base"
+import { av_artModel } from "./av_artModel"
+import { av_artModelSelector } from "./av_artModel.base"
+import { garten_teilzaehlung_sumsModel } from "./garten_teilzaehlung_sumsModel"
+import { garten_teilzaehlung_sumsModelSelector } from "./garten_teilzaehlung_sumsModel.base"
+import { garten_teilzaehlung_sums_aggregateModel } from "./garten_teilzaehlung_sums_aggregateModel"
+import { garten_teilzaehlung_sums_aggregateModelSelector } from "./garten_teilzaehlung_sums_aggregateModel.base"
+import { kulturModel } from "./kulturModel"
+import { kulturModelSelector } from "./kulturModel.base"
+import { kultur_aggregateModel } from "./kultur_aggregateModel"
+import { kultur_aggregateModelSelector } from "./kultur_aggregateModel.base"
+import { lieferungModel } from "./lieferungModel"
+import { lieferungModelSelector } from "./lieferungModel.base"
+import { lieferung_aggregateModel } from "./lieferung_aggregateModel"
+import { lieferung_aggregateModelSelector } from "./lieferung_aggregateModel.base"
+import { sammel_lieferungModel } from "./sammel_lieferungModel"
+import { sammel_lieferungModelSelector } from "./sammel_lieferungModel.base"
+import { sammel_lieferung_aggregateModel } from "./sammel_lieferung_aggregateModel"
+import { sammel_lieferung_aggregateModelSelector } from "./sammel_lieferung_aggregateModel.base"
+import { sammlungModel } from "./sammlungModel"
+import { sammlungModelSelector } from "./sammlungModel.base"
+import { sammlung_aggregateModel } from "./sammlung_aggregateModel"
+import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
 
 
 /**
- * ArtBase
- * auto generated base class for the model ArtModel.
+ * artBase
+ * auto generated base class for the model artModel.
  *
  * columns and relationships of "art"
  */
-export const ArtModelBase = ModelBase
-  .named('Art')
+export const artModelBase = ModelBase
+  .named('art')
   .props({
     __typename: types.optional(types.literal("art"), "art"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
@@ -59,44 +59,44 @@ export const ArtModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    art_ae_art: types.union(types.undefined, types.null, types.late(() => AeArtModel)),
+    art_ae_art: types.union(types.undefined, types.null, types.late(() => ae_artModel)),
     /** An array relationship */
-    art_files: types.union(types.undefined, types.array(types.late(() => ArtFileModel))),
+    art_files: types.union(types.undefined, types.array(types.late(() => art_fileModel))),
     /** An aggregated array relationship */
-    art_files_aggregate: types.union(types.undefined, types.late(() => ArtFileAggregateModel)),
+    art_files_aggregate: types.union(types.undefined, types.late(() => art_file_aggregateModel)),
     /** An array relationship */
-    art_qk_choosens: types.union(types.undefined, types.array(types.late(() => ArtQkChoosenModel))),
+    art_qk_choosens: types.union(types.undefined, types.array(types.late(() => art_qk_choosenModel))),
     /** An aggregated array relationship */
-    art_qk_choosens_aggregate: types.union(types.undefined, types.late(() => ArtQkChoosenAggregateModel)),
+    art_qk_choosens_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
     /** An array relationship */
-    art_sums: types.union(types.undefined, types.array(types.late(() => ArtSumsModel))),
+    art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
     /** An aggregated array relationship */
-    art_sums_aggregate: types.union(types.undefined, types.late(() => ArtSumsAggregateModel)),
+    art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
     /** An object relationship */
-    av_art: types.union(types.undefined, types.null, types.late(() => AvArtModel)),
+    av_art: types.union(types.undefined, types.null, types.late(() => av_artModel)),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    garten_teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => GartenTeilzaehlungSumsModel))),
+    garten_teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
     /** An aggregated array relationship */
-    garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => GartenTeilzaehlungSumsAggregateModel)),
+    garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
     id: types.union(types.undefined, types.frozen()),
     /** An array relationship */
-    kulturs: types.union(types.undefined, types.array(types.late(() => KulturModel))),
+    kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     /** An aggregated array relationship */
-    kulturs_aggregate: types.union(types.undefined, types.late(() => KulturAggregateModel)),
+    kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     /** An array relationship */
-    lieferungs: types.union(types.undefined, types.array(types.late(() => LieferungModel))),
+    lieferungs: types.union(types.undefined, types.array(types.late(() => lieferungModel))),
     /** An aggregated array relationship */
-    lieferungs_aggregate: types.union(types.undefined, types.late(() => LieferungAggregateModel)),
+    lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     /** An array relationship */
-    sammel_lieferungs: types.union(types.undefined, types.array(types.late(() => SammelLieferungModel))),
+    sammel_lieferungs: types.union(types.undefined, types.array(types.late(() => sammel_lieferungModel))),
     /** An aggregated array relationship */
-    sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => SammelLieferungAggregateModel)),
+    sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     /** An array relationship */
-    sammlungs: types.union(types.undefined, types.array(types.late(() => SammlungModel))),
+    sammlungs: types.union(types.undefined, types.array(types.late(() => sammlungModel))),
     /** An aggregated array relationship */
-    sammlungs_aggregate: types.union(types.undefined, types.late(() => SammlungAggregateModel)),
+    sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -105,7 +105,7 @@ export const ArtModelBase = ModelBase
     }
   }))
 
-export class ArtModelSelector extends QueryBuilder {
+export class artModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
@@ -116,27 +116,27 @@ export class ArtModelSelector extends QueryBuilder {
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
   get tsv() { return this.__attr(`tsv`) }
-  art_ae_art(builder) { return this.__child(`art_ae_art`, AeArtModelSelector, builder) }
-  art_files(builder) { return this.__child(`art_files`, ArtFileModelSelector, builder) }
-  art_files_aggregate(builder) { return this.__child(`art_files_aggregate`, ArtFileAggregateModelSelector, builder) }
-  art_qk_choosens(builder) { return this.__child(`art_qk_choosens`, ArtQkChoosenModelSelector, builder) }
-  art_qk_choosens_aggregate(builder) { return this.__child(`art_qk_choosens_aggregate`, ArtQkChoosenAggregateModelSelector, builder) }
-  art_sums(builder) { return this.__child(`art_sums`, ArtSumsModelSelector, builder) }
-  art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, ArtSumsAggregateModelSelector, builder) }
-  av_art(builder) { return this.__child(`av_art`, AvArtModelSelector, builder) }
-  garten_teilzaehlung_sums(builder) { return this.__child(`garten_teilzaehlung_sums`, GartenTeilzaehlungSumsModelSelector, builder) }
-  garten_teilzaehlung_sums_aggregate(builder) { return this.__child(`garten_teilzaehlung_sums_aggregate`, GartenTeilzaehlungSumsAggregateModelSelector, builder) }
-  kulturs(builder) { return this.__child(`kulturs`, KulturModelSelector, builder) }
-  kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, KulturAggregateModelSelector, builder) }
-  lieferungs(builder) { return this.__child(`lieferungs`, LieferungModelSelector, builder) }
-  lieferungs_aggregate(builder) { return this.__child(`lieferungs_aggregate`, LieferungAggregateModelSelector, builder) }
-  sammel_lieferungs(builder) { return this.__child(`sammel_lieferungs`, SammelLieferungModelSelector, builder) }
-  sammel_lieferungs_aggregate(builder) { return this.__child(`sammel_lieferungs_aggregate`, SammelLieferungAggregateModelSelector, builder) }
-  sammlungs(builder) { return this.__child(`sammlungs`, SammlungModelSelector, builder) }
-  sammlungs_aggregate(builder) { return this.__child(`sammlungs_aggregate`, SammlungAggregateModelSelector, builder) }
+  art_ae_art(builder) { return this.__child(`art_ae_art`, ae_artModelSelector, builder) }
+  art_files(builder) { return this.__child(`art_files`, art_fileModelSelector, builder) }
+  art_files_aggregate(builder) { return this.__child(`art_files_aggregate`, art_file_aggregateModelSelector, builder) }
+  art_qk_choosens(builder) { return this.__child(`art_qk_choosens`, art_qk_choosenModelSelector, builder) }
+  art_qk_choosens_aggregate(builder) { return this.__child(`art_qk_choosens_aggregate`, art_qk_choosen_aggregateModelSelector, builder) }
+  art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
+  art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
+  av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
+  garten_teilzaehlung_sums(builder) { return this.__child(`garten_teilzaehlung_sums`, garten_teilzaehlung_sumsModelSelector, builder) }
+  garten_teilzaehlung_sums_aggregate(builder) { return this.__child(`garten_teilzaehlung_sums_aggregate`, garten_teilzaehlung_sums_aggregateModelSelector, builder) }
+  kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
+  kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
+  lieferungs(builder) { return this.__child(`lieferungs`, lieferungModelSelector, builder) }
+  lieferungs_aggregate(builder) { return this.__child(`lieferungs_aggregate`, lieferung_aggregateModelSelector, builder) }
+  sammel_lieferungs(builder) { return this.__child(`sammel_lieferungs`, sammel_lieferungModelSelector, builder) }
+  sammel_lieferungs_aggregate(builder) { return this.__child(`sammel_lieferungs_aggregate`, sammel_lieferung_aggregateModelSelector, builder) }
+  sammlungs(builder) { return this.__child(`sammlungs`, sammlungModelSelector, builder) }
+  sammlungs_aggregate(builder) { return this.__child(`sammlungs_aggregate`, sammlung_aggregateModelSelector, builder) }
 }
-export function selectFromArt() {
-  return new ArtModelSelector()
+export function selectFromart() {
+  return new artModelSelector()
 }
 
-export const artModelPrimitives = selectFromArt()._conflicts._depth._parent_rev._rev._revisions.ae_id.changed.changed_by.tsv
+export const artModelPrimitives = selectFromart()._conflicts._depth._parent_rev._rev._revisions.ae_id.changed.changed_by.tsv

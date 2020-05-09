@@ -1,15 +1,15 @@
-import { SammlungModelBase } from "./SammlungModel.base"
+import { sammlungModelBase } from "./sammlungModel.base"
 
 
-/* A graphql query fragment builders for SammlungModel */
-export { selectFromSammlung, sammlungModelPrimitives, SammlungModelSelector } from "./SammlungModel.base"
+/* A graphql query fragment builders for sammlungModel */
+export { selectFromsammlung, sammlungModelPrimitives, sammlungModelSelector } from "./sammlungModel.base"
 
 /**
- * SammlungModel
+ * sammlungModel
  *
  * columns and relationships of "sammlung"
  */
-export const SammlungModel = SammlungModelBase
+export const sammlungModel = sammlungModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

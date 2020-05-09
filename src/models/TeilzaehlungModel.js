@@ -1,15 +1,15 @@
-import { TeilzaehlungModelBase } from "./TeilzaehlungModel.base"
+import { teilzaehlungModelBase } from "./teilzaehlungModel.base"
 
 
-/* A graphql query fragment builders for TeilzaehlungModel */
-export { selectFromTeilzaehlung, teilzaehlungModelPrimitives, TeilzaehlungModelSelector } from "./TeilzaehlungModel.base"
+/* A graphql query fragment builders for teilzaehlungModel */
+export { selectFromteilzaehlung, teilzaehlungModelPrimitives, teilzaehlungModelSelector } from "./teilzaehlungModel.base"
 
 /**
- * TeilzaehlungModel
+ * teilzaehlungModel
  *
  * columns and relationships of "teilzaehlung"
  */
-export const TeilzaehlungModel = TeilzaehlungModelBase
+export const teilzaehlungModel = teilzaehlungModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

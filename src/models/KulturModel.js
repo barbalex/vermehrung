@@ -1,15 +1,15 @@
-import { KulturModelBase } from "./KulturModel.base"
+import { kulturModelBase } from "./kulturModel.base"
 
 
-/* A graphql query fragment builders for KulturModel */
-export { selectFromKultur, kulturModelPrimitives, KulturModelSelector } from "./KulturModel.base"
+/* A graphql query fragment builders for kulturModel */
+export { selectFromkultur, kulturModelPrimitives, kulturModelSelector } from "./kulturModel.base"
 
 /**
- * KulturModel
+ * kulturModel
  *
  * columns and relationships of "kultur"
  */
-export const KulturModel = KulturModelBase
+export const kulturModel = kulturModelBase
   .actions(self => ({
     // This is an auto-generated example action.
     log() {

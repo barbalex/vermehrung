@@ -4,23 +4,23 @@
 import { types } from "mobx-state-tree"
 import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { TeilkulturModel } from "./TeilkulturModel"
-import { TeilkulturModelSelector } from "./TeilkulturModel.base"
-import { TeilzaehlungAggregateModel } from "./TeilzaehlungAggregateModel"
-import { TeilzaehlungAggregateModelSelector } from "./TeilzaehlungAggregateModel.base"
-import { TeilzaehlungModel } from "./TeilzaehlungModel"
-import { ZaehlungModel } from "./ZaehlungModel"
-import { ZaehlungModelSelector } from "./ZaehlungModel.base"
+import { teilkulturModel } from "./teilkulturModel"
+import { teilkulturModelSelector } from "./teilkulturModel.base"
+import { teilzaehlungModel } from "./teilzaehlungModel"
+import { teilzaehlung_aggregateModel } from "./teilzaehlung_aggregateModel"
+import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateModel.base"
+import { zaehlungModel } from "./zaehlungModel"
+import { zaehlungModelSelector } from "./zaehlungModel.base"
 
 
 /**
- * TeilzaehlungBase
- * auto generated base class for the model TeilzaehlungModel.
+ * teilzaehlungBase
+ * auto generated base class for the model teilzaehlungModel.
  *
  * columns and relationships of "teilzaehlung"
  */
-export const TeilzaehlungModelBase = ModelBase
-  .named('Teilzaehlung')
+export const teilzaehlungModelBase = ModelBase
+  .named('teilzaehlung')
   .props({
     __typename: types.optional(types.literal("teilzaehlung"), "teilzaehlung"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
@@ -39,17 +39,17 @@ export const TeilzaehlungModelBase = ModelBase
     id: types.union(types.undefined, types.frozen()),
     prognose_von_tz: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    teilkultur: types.union(types.undefined, types.null, types.late(() => TeilkulturModel)),
+    teilkultur: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    teilzaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => TeilzaehlungModel))),
+    teilzaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     /** An array relationship */
-    teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => TeilzaehlungModel)))),
+    teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     /** An aggregated array relationship */
-    teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => TeilzaehlungAggregateModel)),
+    teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    zaehlung: types.union(types.undefined, types.null, types.late(() => ZaehlungModel)),
+    zaehlung: types.union(types.undefined, types.null, types.late(() => zaehlungModel)),
     zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -58,7 +58,7 @@ export const TeilzaehlungModelBase = ModelBase
     }
   }))
 
-export class TeilzaehlungModelSelector extends QueryBuilder {
+export class teilzaehlungModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
@@ -77,14 +77,14 @@ export class TeilzaehlungModelSelector extends QueryBuilder {
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
   get tsv() { return this.__attr(`tsv`) }
   get zaehlung_id() { return this.__attr(`zaehlung_id`) }
-  teilkultur(builder) { return this.__child(`teilkultur`, TeilkulturModelSelector, builder) }
-  teilzaehlung(builder) { return this.__child(`teilzaehlung`, TeilzaehlungModelSelector, builder) }
-  teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, TeilzaehlungModelSelector, builder) }
-  teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, TeilzaehlungAggregateModelSelector, builder) }
-  zaehlung(builder) { return this.__child(`zaehlung`, ZaehlungModelSelector, builder) }
+  teilkultur(builder) { return this.__child(`teilkultur`, teilkulturModelSelector, builder) }
+  teilzaehlung(builder) { return this.__child(`teilzaehlung`, teilzaehlungModelSelector, builder) }
+  teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, teilzaehlungModelSelector, builder) }
+  teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
+  zaehlung(builder) { return this.__child(`zaehlung`, zaehlungModelSelector, builder) }
 }
-export function selectFromTeilzaehlung() {
-  return new TeilzaehlungModelSelector()
+export function selectFromteilzaehlung() {
+  return new teilzaehlungModelSelector()
 }
 
-export const teilzaehlungModelPrimitives = selectFromTeilzaehlung()._conflicts._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.teilkultur_id.tsv.zaehlung_id
+export const teilzaehlungModelPrimitives = selectFromteilzaehlung()._conflicts._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.teilkultur_id.tsv.zaehlung_id

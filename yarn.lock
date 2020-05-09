@@ -8369,7 +8369,7 @@ graphql-playground-middleware-express@^1.7.12:
   dependencies:
     graphql-playground-html "^1.6.19"
 
-graphql-request@^1.5.0, graphql-request@^1.8.2:
+graphql-request@1.8.2, graphql-request@^1.5.0, graphql-request@^1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-1.8.2.tgz#398d10ae15c585676741bde3fc01d5ca948f8fbe"
   integrity sha512-dDX2M+VMsxXFCmUX0Vo0TopIZIX4ggzOtiCsThgtrKR4niiaagsGTDIHj3fsOMFETpa064vzovI+4YV4QnMbcg==
@@ -9889,7 +9889,7 @@ is-utf8@^0.2.0:
   resolved "https://registry.yarnpkg.com/is-utf8/-/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
   integrity sha1-Sw2hRCEE0bM2NA6AeX6GXPOffXI=
 
-is-uuid@^1.0.2:
+is-uuid@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-uuid/-/is-uuid-1.0.2.tgz#ad1898ddf154947c25c8e54966f48604e9caecc4"
   integrity sha1-rRiY3fFUlHwlyOVJZvSGBOnK7MQ=
@@ -11482,7 +11482,7 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-mst-gql@^0.11.0:
+mst-gql@0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/mst-gql/-/mst-gql-0.11.0.tgz#48201e3f71f0a3871d61fd5978a74a67662d968f"
   integrity sha512-G6cnLgv7jI/KjseiXpmCwhWnVh2UYnOTg6InXKdBO0sG/QmFPBgCFtwFA0MrYXOr6LK5cwcNQSoeveC+6Asbgw==
@@ -16761,6 +16761,11 @@ uuid@3.4.0, uuid@^3.0.0, uuid@^3.0.1, uuid@^3.3.2, uuid@^3.3.3, uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.0.0.tgz#bc6ccf91b5ff0ac07bbcdbf1c7c4e150db4dbb6c"
+  integrity sha512-jOXGuXZAWdsTH7eZLtyXMqUb9EcWMGZNbL9YcGBJl4MH4nrxHmZJhEHvyLFrkxo+28uLb/NYRcStH48fnD0Vzw==
 
 v8-compile-cache@^1.1.2:
   version "1.1.2"
