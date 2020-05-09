@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default async ({ store, user }) => {
+export default async ({ store, user, gqlHttpClient }) => {
   const { enqueNotification, setAuthorizing } = store
   setAuthorizing(true)
   let res
@@ -36,6 +36,7 @@ export default async ({ store, user }) => {
     // set token to localStorage so authLink picks it up on next db call
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     window.localStorage.setItem('token', tokenWithRoles)
+    gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
     setAuthorizing(false)
   } else {
     setAuthorizing(false)
