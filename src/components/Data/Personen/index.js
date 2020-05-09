@@ -92,20 +92,25 @@ const Personen = ({ filter: showFilter }) => {
 
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
+  const { refetch: refetchTree } = store.tree
   const isFiltered = runIsFiltered()
 
   const personFilter = queryFromTable({ store, table: 'person' })
-  const { store: dataStore, data, error, loading } = useQuery(query, {
-    variables: { filter: personFilter },
-  })
-  const { data: data2, error: error2, refetch } = useQuery((st) =>
-    st.queryPerson(),
+  const { store: dataStore, data, error, loading, query: query1 } = useQuery(
+    query,
+    {
+      variables: { filter: personFilter },
+    },
+  )
+  const { data: data2, error: error2 } = useQuery((store) =>
+    store.queryPerson(),
   )
   console.log('Personen:', {
     dataStore,
     data2,
     dataStorePersons: dataStore.persons,
+    query,
+    data,
   })
   //dataStore.log()
   console.log('Personen, store.persons:', dataStore.persons)
@@ -114,22 +119,23 @@ const Personen = ({ filter: showFilter }) => {
   const rows = get(data, 'rowsFiltered', [])
   const filteredNr = rows.length
 
-  const add = useCallback(() => {
+  const add = useCallback(async () => {
     //const node = { nodeType: 'folder', url: activeNodeArray }
     const id = uuidv1()
-    dataStore.mutateInsert_person(
+    await dataStore.mutateInsert_person(
       {
-        objects: [{ id, name: 'test4' }],
-        onConflict: { constraint: 'person_pkey', update_columns: [] },
+        objects: [{ id, name: 'test8' }],
+        on_conflict: { constraint: 'person_pkey', update_columns: [] },
       },
       undefined,
       /*(m) => {
         dataStore.persons.push(m)
       },*/
     )
-    //refetch()
+    query1.refetch()
+    refetchTree()
     //createNew({ node, store, client })
-  }, [dataStore])
+  }, [dataStore, query1, refetchTree])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
