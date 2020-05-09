@@ -4,10 +4,16 @@ import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
+import { createHttpClient } from 'mst-gql'
+import {
+  RootStore as DataStore,
+  StoreContext as DataStoreContext,
+} from './models'
+
 import createGlobalStyle from './utils/createGlobalStyle'
 
-import Store from './store'
-import { Provider as MobxProvider } from './storeContext'
+import LocalStore from './store'
+import { Provider as LocalStoreContextProvider } from './storeContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -28,6 +34,12 @@ import UpdateExists from './components/UpdateExists'
 import setHasuraClaims from './utils/setHasuraClaims'
 
 const GlobalStyle = createGlobalStyle()
+
+import constants from './utils/constants.json'
+
+const dataStore = DataStore.create(undefined, {
+  gqlHttpClient: createHttpClient(constants.graphQlUri),
+})
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -62,18 +74,18 @@ const firebaseConfig = {
 const apolloClient = createApolloClient()
 
 const App = ({ element }) => {
-  const [store, setStore] = useState(null)
+  const [localStore, setLocalStore] = useState(null)
 
   useEffect(() => {
     let unregisterAuthObserver = () => {}
     Promise.all([import('firebase'), import('mst-persist')]).then(
       ([fbModule, pModule]) => {
-        // need to wait until now to build store
+        // need to wait until now to build localStore
         // otherwise mobx freaks out
-        const myStore = Store.create()
+        const myStore = LocalStore.create()
         const { setUser, setAuthorizing, setFirebase } = myStore
-        window.store = store
-        setStore(myStore)
+        window.localStore = localStore
+        setLocalStore(myStore)
         const blacklist = ['user']
         const persist = pModule.default
         persist('store', myStore, {
@@ -116,26 +128,28 @@ const App = ({ element }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (!store) return null
+  if (!localStore) return null
   return (
     <MuiThemeProvider theme={materialTheme}>
-      <MobxProvider value={store}>
-        <ApolloProvider client={apolloClient}>
-          <SnackbarProvider
-            maxSnack={5}
-            preventDuplicate
-            autoHideDuration={10000}
-            action={(key) => <NotificationDismisser nKey={key} />}
-          >
-            <>
-              <GlobalStyle />
-              {element}
-              <Notifier />
-              <UpdateExists />
-            </>
-          </SnackbarProvider>
-        </ApolloProvider>
-      </MobxProvider>
+      <DataStoreContext.Provider value={dataStore}>
+        <LocalStoreContextProvider value={localStore}>
+          <ApolloProvider client={apolloClient}>
+            <SnackbarProvider
+              maxSnack={5}
+              preventDuplicate
+              autoHideDuration={10000}
+              action={(key) => <NotificationDismisser nKey={key} />}
+            >
+              <>
+                <GlobalStyle />
+                {element}
+                <Notifier />
+                <UpdateExists />
+              </>
+            </SnackbarProvider>
+          </ApolloProvider>
+        </LocalStoreContextProvider>
+      </DataStoreContext.Provider>
     </MuiThemeProvider>
   )
 }

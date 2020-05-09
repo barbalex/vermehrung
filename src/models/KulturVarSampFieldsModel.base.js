@@ -1,0 +1,36 @@
+/* This is a mst-gql generated file, don't modify it manually */
+/* eslint-disable */
+
+import { types } from "mobx-state-tree"
+import { QueryBuilder } from "mst-gql"
+import { ModelBase } from "./ModelBase"
+
+
+/**
+ * KulturVarSampFieldsBase
+ * auto generated base class for the model KulturVarSampFieldsModel.
+ *
+ * aggregate var_samp on columns
+ */
+export const KulturVarSampFieldsModelBase = ModelBase
+  .named('KulturVarSampFields')
+  .props({
+    __typename: types.optional(types.literal("kultur_var_samp_fields"), "kultur_var_samp_fields"),
+    _depth: types.union(types.undefined, types.null, types.number),
+    von_anzahl_individuen: types.union(types.undefined, types.null, types.number),
+  })
+  .views(self => ({
+    get store() {
+      return self.__getStore()
+    }
+  }))
+
+export class KulturVarSampFieldsModelSelector extends QueryBuilder {
+  get _depth() { return this.__attr(`_depth`) }
+  get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
+}
+export function selectFromKulturVarSampFields() {
+  return new KulturVarSampFieldsModelSelector()
+}
+
+export const kulturVarSampFieldsModelPrimitives = selectFromKulturVarSampFields()._depth.von_anzahl_individuen
