@@ -37,8 +37,9 @@ const GlobalStyle = createGlobalStyle()
 
 import constants from './utils/constants.json'
 
+const gqlHttpClient = createHttpClient(constants.graphQlUri)
 const dataStore = DataStore.create(undefined, {
-  gqlHttpClient: createHttpClient(constants.graphQlUri),
+  gqlHttpClient,
 })
 
 registerLocale('de', de)
@@ -101,7 +102,7 @@ const App = ({ element }) => {
             .onAuthStateChanged(async (user) => {
               setUser(user)
               if (user && user.uid) {
-                setHasuraClaims({ store: myStore, user })
+                setHasuraClaims({ store: myStore, user, gqlHttpClient })
               } else {
                 setAuthorizing(false)
               }
