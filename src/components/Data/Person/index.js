@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
@@ -28,6 +28,7 @@ import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { useQuery } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -102,21 +103,45 @@ const personQueryByAccountId = gql`
   ${personFragment}
 `
 
+const getId = ({ activeNodeArray, showFilter }) =>
+  showFilter
+    ? '99999999-9999-9999-9999-999999999999'
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
+
 const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
+  const { activeNodeArray: aNAProxy } = store.tree
+  const activeNodeArray = aNAProxy.slice()
 
-  const id = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
+  const [id, setId] = useState(getId({ activeNodeArray, showFilter }))
+  useEffect(() => {
+    setId(getId({ activeNodeArray, showFilter }))
+  }, [activeNodeArray, showFilter])
+
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
+  const {
+    store: dataStore,
+    data: dataSinglePerson,
+    error: errorSinglePerson,
+    loading: loadingSinglePerson,
+  } = useQuery((store) =>
+    store.queryPerson({
+      where: { id: { _eq: id } },
+    }),
+  )
   const { data, error, loading } = useQuery(query, {
     variables: { id, isFiltered, filter: personFilter },
+  })
+  console.log('Person', {
+    dataSinglePerson,
+    data,
+    id,
+    activeNodeArray: activeNodeArray.slice(),
   })
 
   const userRoleWerte = useMemo(
@@ -136,7 +161,7 @@ const Person = ({ filter: showFilter }) => {
   if (showFilter) {
     row = filter.person
   } else {
-    row = get(data, 'person[0]') || {}
+    row = get(dataSinglePerson, 'person[0]') || {}
   }
 
   useEffect(() => {
@@ -393,7 +418,7 @@ const Person = ({ filter: showFilter }) => {
             multiLine
           />
           {row.user_role === 'artverantwortlich' && <Arten personId={row.id} />}
-          {!showFilter && <Files parentId={row.id} parent="person" />}
+          {!showFilter && row.id && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
