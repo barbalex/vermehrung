@@ -56,7 +56,7 @@ export default () => {
     kultur: <Kultur filter />,
     lieferung: <Lieferung filter />,
     sammelLieferung: <SammelLieferung filter />,
-    person: <Person filter />,
+    personen: <Person filter />,
     sammlung: <Sammlung filter />,
     teilkultur: <Teilkultur filter />,
     zaehlung: <Zaehlung filter />,
@@ -70,7 +70,7 @@ export default () => {
     kultur: 'Kultur Filter',
     lieferung: 'Lieferung Filter',
     sammelLieferung: 'Sammel-Lieferung Filter',
-    person: 'Person Filter',
+    personen: 'Person Filter',
     sammlung: 'Sammlung Filter',
     teilkultur: 'TeilKultur Filter',
     zaehlung: 'Zählung Filter',
@@ -111,7 +111,7 @@ export default () => {
               data-id="sammelLieferung"
             />
             <StyledTab label="Event" value="event" data-id="event" />
-            <StyledTab label="Person" value="person" data-id="person" />
+            <StyledTab label="Person" value="personen" data-id="person" />
           </StyledTabs>
         </TitleRow>
         {form}

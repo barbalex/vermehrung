@@ -137,7 +137,7 @@ const Teilkultur = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
 
   const id = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })

@@ -257,7 +257,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const { activeNodeArray, setWidthInPercentOfScreen } = store.tree
 
   const id = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : idPassed
     ? idPassed
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
