@@ -26,7 +26,7 @@ import {
   zaehlung as zaehlungFragment,
   kulturOption as kulturOptionFragment,
 } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'

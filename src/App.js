@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
@@ -12,7 +12,6 @@ import {
 
 import createGlobalStyle from './utils/createGlobalStyle'
 
-import LocalStore from './store'
 import { Provider as LocalStoreContextProvider } from './storeContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
@@ -38,7 +37,7 @@ const GlobalStyle = createGlobalStyle()
 import constants from './utils/constants.json'
 
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
-const dataStore = DataStore.create(undefined, {
+const store = DataStore.create(undefined, {
   gqlHttpClient,
 })
 
@@ -75,21 +74,15 @@ const firebaseConfig = {
 const apolloClient = createApolloClient()
 
 const App = ({ element }) => {
-  const [localStore, setLocalStore] = useState(null)
-
   useEffect(() => {
     let unregisterAuthObserver = () => {}
     Promise.all([import('firebase'), import('mst-persist')]).then(
       ([fbModule, pModule]) => {
-        // need to wait until now to build localStore
-        // otherwise mobx freaks out
-        const myStore = LocalStore.create()
-        const { setUser, setAuthorizing, setFirebase } = myStore
-        window.localStore = localStore
-        setLocalStore(myStore)
+        const { setUser, setAuthorizing, setFirebase } = store
+        window.store = store
         const blacklist = ['user']
         const persist = pModule.default
-        persist('store', myStore, {
+        persist('store', store, {
           storage: localForage,
           jsonify: false,
           blacklist,
@@ -102,7 +95,7 @@ const App = ({ element }) => {
             .onAuthStateChanged(async (user) => {
               setUser(user)
               if (user && user.uid) {
-                setHasuraClaims({ store: myStore, user, gqlHttpClient })
+                setHasuraClaims({ store, user, gqlHttpClient })
               } else {
                 setAuthorizing(false)
               }
@@ -114,7 +107,7 @@ const App = ({ element }) => {
               if (!!user && visitedTopDomain) {
                 setTimeout(() => {
                   navigate(
-                    `/Vermehrung/${myStore.tree.activeNodeArray.join('/')}`,
+                    `/Vermehrung/${store.tree.activeNodeArray.join('/')}`,
                   )
                 }, 200)
               }
@@ -129,11 +122,11 @@ const App = ({ element }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (!localStore) return null
+  if (!store) return null
   return (
     <MuiThemeProvider theme={materialTheme}>
-      <DataStoreContext.Provider value={dataStore}>
-        <LocalStoreContextProvider value={localStore}>
+      <DataStoreContext.Provider value={store}>
+        <LocalStoreContextProvider value={store}>
           <ApolloProvider client={apolloClient}>
             <SnackbarProvider
               maxSnack={5}

@@ -35,7 +35,7 @@ import {
   sammlung as sammlungFragment,
 } from '../../../utils/fragments'
 import exists from '../../../utils/exists'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import updateSammelLieferung from './updateSammelLieferung'
 import Settings from './Settings'
 import Copy from './Copy'

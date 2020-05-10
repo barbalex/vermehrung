@@ -24,7 +24,7 @@ import {
   personOption as personOptionFragment,
 } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'

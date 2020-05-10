@@ -30,7 +30,7 @@ import {
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
 } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import Files from '../Files'
 import updateLieferung from './updateLieferung'
 import updateLieferungArtId from './updateLieferungArtId'

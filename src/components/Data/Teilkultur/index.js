@@ -19,7 +19,7 @@ import {
   kulturOption as kulturOptionFragment,
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'

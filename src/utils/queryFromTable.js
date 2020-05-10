@@ -1,4 +1,4 @@
-import types from '../store/Filter/simpleTypes'
+import types from '../models/Filter/simpleTypes'
 
 export default ({ store, table }) => {
   const { filter: storeFilter } = store
