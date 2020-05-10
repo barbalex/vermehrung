@@ -85,7 +85,7 @@ const LieferungContainer = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
 
   const lieferungId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
-  const id = showFilter ? 99999999999999 : lieferungId
+  const id = showFilter ? '99999999-9999-9999-9999-999999999999' : lieferungId
 
   const {
     data: lieferungData,

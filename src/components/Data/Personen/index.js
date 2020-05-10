@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
@@ -14,7 +13,6 @@ import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import createNew from '../../TreeContainer/Tree/createNew'
 import { person as personFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -62,17 +60,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query PersonQueryForPersons($filter: person_bool_exp!) {
-    rowsUnfiltered: person {
-      id
-    }
-    rowsFiltered: person(where: $filter, order_by: { name: asc_nulls_first }) {
-      ...PersonFields
-    }
-  }
-  ${personFragment}
-`
 const personQueryByAccountId = gql`
   query PersonQueryForPersonsByAccoutId($accountId: String) {
     person(where: { account_id: { _eq: $accountId } }) {
@@ -96,28 +83,33 @@ const Personen = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
 
   const personFilter = queryFromTable({ store, table: 'person' })
-  const { store: dataStore, data, error, loading, query: query1 } = useQuery(
-    query,
-    {
-      variables: { filter: personFilter },
-    },
+  const {
+    store: dataStore,
+    data: dataFiltered,
+    error: errorFiltered,
+    loading: loadingFiltered,
+    query: queryFiltered,
+  } = useQuery((store) =>
+    store.queryPerson({
+      where: personFilter,
+      order_by: { name: 'asc_nulls_first' },
+    }),
   )
-  const { data: data2, error: error2 } = useQuery((store) =>
-    store.queryPerson(),
-  )
-  console.log('Personen:', {
-    dataStore,
-    data2,
-    dataStorePersons: dataStore.persons,
-    query,
-    data,
-  })
-  //dataStore.log()
-  console.log('Personen, store.persons:', dataStore.persons)
+  const {
+    data: dataAll,
+    error: errorAll,
+    loading: loadingAll,
+  } = useQuery((store) => store.queryPerson())
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
-  const filteredNr = rows.length
+  const totalNr = get(dataAll, 'person', []).length
+  const rowsFiltered = get(dataFiltered, 'person', [])
+  const filteredNr = rowsFiltered.length
+  console.log('Personen:', {
+    dataFiltered,
+    dataAll,
+    rowsFiltered,
+    totalNr,
+  })
 
   const add = useCallback(async () => {
     //const node = { nodeType: 'folder', url: activeNodeArray }
@@ -132,10 +124,10 @@ const Personen = ({ filter: showFilter }) => {
         dataStore.persons.push(m)
       },*/
     )
-    query1.refetch()
+    queryFiltered.refetch()
     refetchTree()
     //createNew({ node, store, client })
-  }, [dataStore, query1, refetchTree])
+  }, [dataStore, queryFiltered, refetchTree])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
@@ -151,7 +143,7 @@ const Personen = ({ filter: showFilter }) => {
   })
   const { user_role } = get(personOptionResult.data, 'person[0]') || {}
 
-  if (loading) {
+  if (loadingFiltered) {
     return (
       <Container>
         <FormTitle title="Personen" />
@@ -160,7 +152,7 @@ const Personen = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error
+  const errorToShow = errorFiltered
   if (errorToShow) {
     return (
       <Container>
@@ -203,7 +195,7 @@ const Personen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={rowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -212,8 +204,8 @@ const Personen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={rowsFiltered[index]}
+                last={index === rowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

@@ -81,7 +81,7 @@ const Art = ({ filter: showFilter }) => {
   const { activeNodeArray, setActiveNodeArray } = tree
 
   const artId = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(artQuery, {
