@@ -13,7 +13,6 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
@@ -28,7 +27,7 @@ import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { useQuery } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -110,7 +109,7 @@ const getId = ({ activeNodeArray, showFilter }) =>
 
 const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
@@ -125,7 +124,6 @@ const Person = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
   const {
-    store: dataStore,
     data: dataSinglePerson,
     error: errorSinglePerson,
     loading: loadingSinglePerson,

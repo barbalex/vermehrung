@@ -7,13 +7,12 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 
-import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { useQuery } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -63,7 +62,7 @@ function sizeReducer(state, action) {
 }
 
 const Personen = ({ filter: showFilter }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
@@ -72,7 +71,6 @@ const Personen = ({ filter: showFilter }) => {
 
   const personFilter = queryFromTable({ store, table: 'person' })
   const {
-    store: dataStore,
     data: dataFiltered,
     error: errorFiltered,
     loading: loadingFiltered,
@@ -97,10 +95,10 @@ const Personen = ({ filter: showFilter }) => {
   const { user_role } = get(dataOption, 'person[0]') || {}
 
   const add = useCallback(async () => {
-    await dataStore.addPerson()
+    await store.addPerson()
     queryFiltered.refetch()
     refetchTree()
-  }, [dataStore, queryFiltered, refetchTree])
+  }, [store, queryFiltered, refetchTree])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
