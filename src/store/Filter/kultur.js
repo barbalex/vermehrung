@@ -17,10 +17,10 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  zwischenlager: types.optional(types.boolean, false),
-  erhaltungskultur: types.optional(types.boolean, false),
+  zwischenlager: types.optional(types.maybeNull(types.boolean), false),
+  erhaltungskultur: types.optional(types.maybeNull(types.boolean), false),
   von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
-  aktiv: types.optional(types.boolean, true),
+  aktiv: types.optional(types.maybeNull(types.boolean), true),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

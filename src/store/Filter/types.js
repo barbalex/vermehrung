@@ -32,17 +32,22 @@ export default types
     teilzaehlung,
     teilkultur,
   })
-  .actions(self => ({
+  .actions((self) => ({
     setValue({ table, key, value }) {
       self[table][key] = value
     },
     empty() {
       const parent = getParent(self)
       parent.setHideInactive(false)
+      console.log('store Filter empty: self:', self)
       // maybe loop all keys and set values?
       Object.keys(self)
-        .filter(k => k !== 'show')
-        .forEach(key => (self[key] = emptyValues[key]))
+        .filter((k) => !!k)
+        .filter((k) => k !== 'show')
+        .forEach((key) => {
+          console.log({ key, emptyValues: emptyValues[key] })
+          self[key] = emptyValues[key]
+        })
     },
     emptyTable({ table }) {
       if (['person', 'garten', 'kultur'].includes(table)) {
@@ -53,13 +58,13 @@ export default types
     },
     tableIsFiltered({ table }) {
       return (
-        Object.values(self[table] || {}).filter(v => v || v === 0).length > 0
+        Object.values(self[table] || {}).filter((v) => v || v === 0).length > 0
       )
     },
     isFiltered() {
       // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
-      const tables = Object.keys(self).filter(t => t !== 'show')
-      return tables.some(table => self.tableIsFiltered({ table }))
+      const tables = Object.keys(self).filter((t) => t !== 'show')
+      return tables.some((table) => self.tableIsFiltered({ table }))
     },
     setShow(val) {
       self.show = val

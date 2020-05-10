@@ -2,18 +2,24 @@ import { types } from 'mobx-state-tree'
 
 export const type = types.model({
   kultur_id: types.optional(types.maybeNull(types.number), null),
-  tk: types.optional(types.boolean, false),
-  tk_bemerkungen: types.optional(types.boolean, true),
-  z_bemerkungen: types.optional(types.boolean, true),
-  tz_teilkultur_id: types.optional(types.boolean, true),
-  tz_anzahl_mutterpflanzen: types.optional(types.boolean, true),
-  tz_andere_menge: types.optional(types.boolean, true),
-  tz_auspflanzbereit_beschreibung: types.optional(types.boolean, true),
-  tz_bemerkungen: types.optional(types.boolean, true),
-  ev_teilkultur_id: types.optional(types.boolean, true),
-  ev_geplant: types.optional(types.boolean, true),
-  ev_person_id: types.optional(types.boolean, true),
-  ev_datum: types.optional(types.boolean, true),
+  tk: types.optional(types.maybeNull(types.boolean), false),
+  tk_bemerkungen: types.optional(types.maybeNull(types.boolean), true),
+  z_bemerkungen: types.optional(types.maybeNull(types.boolean), true),
+  tz_teilkultur_id: types.optional(types.maybeNull(types.boolean), true),
+  tz_anzahl_mutterpflanzen: types.optional(
+    types.maybeNull(types.boolean),
+    true,
+  ),
+  tz_andere_menge: types.optional(types.maybeNull(types.boolean), true),
+  tz_auspflanzbereit_beschreibung: types.optional(
+    types.maybeNull(types.boolean),
+    true,
+  ),
+  tz_bemerkungen: types.optional(types.maybeNull(types.boolean), true),
+  ev_teilkultur_id: types.optional(types.maybeNull(types.boolean), true),
+  ev_geplant: types.optional(types.maybeNull(types.boolean), true),
+  ev_person_id: types.optional(types.maybeNull(types.boolean), true),
+  ev_datum: types.optional(types.maybeNull(types.boolean), true),
 })
 
 export const initial = {

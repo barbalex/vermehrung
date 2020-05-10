@@ -21,7 +21,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  geplant: types.optional(types.boolean, false),
+  geplant: types.optional(types.maybeNull(types.boolean), false),
   datum: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
