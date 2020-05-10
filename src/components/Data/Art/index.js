@@ -8,7 +8,7 @@ import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -74,7 +74,7 @@ const FieldsContainer = styled.div`
 
 const Art = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter, tree } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
