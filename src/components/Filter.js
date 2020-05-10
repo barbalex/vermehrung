@@ -44,7 +44,23 @@ const Title = styled.div`
 
 export default () => {
   const { activeForm } = useContext(storeContext)
-  const [activeTab, setActiveTab] = useState(activeForm || 'art')
+  // ensure list views are directed to correct filter
+  const activeTabFromActiveForm = activeForm
+    ? activeForm
+        .replace('arten', 'art')
+        .replace('events', 'event')
+        .replace('herkuenfte', 'herkunft')
+        .replace('gaerten', 'garten')
+        .replace('kulturen', 'kultur')
+        .replace('lieferungen', 'lieferung')
+        .replace('sammelLieferungen', 'sammelLieferung')
+        .replace('personen', 'person')
+        .replace('sammlungen', 'sammlung')
+        .replace('teilkulturen', 'teilkultur')
+        .replace('zaehlungen', 'zaehlung')
+    : // fallback if no form is active
+      'art'
+  const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
   const onChangeTab = useCallback((event, value) => setActiveTab(value), [])
 
@@ -56,7 +72,7 @@ export default () => {
     kultur: <Kultur filter />,
     lieferung: <Lieferung filter />,
     sammelLieferung: <SammelLieferung filter />,
-    personen: <Person filter />,
+    person: <Person filter />,
     sammlung: <Sammlung filter />,
     teilkultur: <Teilkultur filter />,
     zaehlung: <Zaehlung filter />,
@@ -70,7 +86,7 @@ export default () => {
     kultur: 'Kultur Filter',
     lieferung: 'Lieferung Filter',
     sammelLieferung: 'Sammel-Lieferung Filter',
-    personen: 'Person Filter',
+    person: 'Person Filter',
     sammlung: 'Sammlung Filter',
     teilkultur: 'TeilKultur Filter',
     zaehlung: 'Zählung Filter',
@@ -111,7 +127,7 @@ export default () => {
               data-id="sammelLieferung"
             />
             <StyledTab label="Event" value="event" data-id="event" />
-            <StyledTab label="Person" value="personen" data-id="person" />
+            <StyledTab label="Person" value="person" data-id="person" />
           </StyledTabs>
         </TitleRow>
         {form}
