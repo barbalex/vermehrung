@@ -11,7 +11,7 @@ import { FaCog, FaFrown } from 'react-icons/fa'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import { personOption as personOptionFragment } from '../../../utils/fragments'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -29,7 +29,7 @@ const Title = styled.div`
 
 const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
 
   const { data, error, loading } = personOptionResult

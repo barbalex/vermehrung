@@ -5,14 +5,10 @@ import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
 import { createHttpClient } from 'mst-gql'
-import {
-  RootStore as DataStore,
-  StoreContext as DataStoreContext,
-} from './models'
+import { RootStore as DataStore, StoreContext } from './models'
 
 import createGlobalStyle from './utils/createGlobalStyle'
 
-import { Provider as LocalStoreContextProvider } from './storeContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -125,25 +121,23 @@ const App = ({ element }) => {
   if (!store) return null
   return (
     <MuiThemeProvider theme={materialTheme}>
-      <DataStoreContext.Provider value={store}>
-        <LocalStoreContextProvider value={store}>
-          <ApolloProvider client={apolloClient}>
-            <SnackbarProvider
-              maxSnack={5}
-              preventDuplicate
-              autoHideDuration={10000}
-              action={(key) => <NotificationDismisser nKey={key} />}
-            >
-              <>
-                <GlobalStyle />
-                {element}
-                <Notifier />
-                <UpdateExists />
-              </>
-            </SnackbarProvider>
-          </ApolloProvider>
-        </LocalStoreContextProvider>
-      </DataStoreContext.Provider>
+      <StoreContext.Provider value={store}>
+        <ApolloProvider client={apolloClient}>
+          <SnackbarProvider
+            maxSnack={5}
+            preventDuplicate
+            autoHideDuration={10000}
+            action={(key) => <NotificationDismisser nKey={key} />}
+          >
+            <>
+              <GlobalStyle />
+              {element}
+              <Notifier />
+              <UpdateExists />
+            </>
+          </SnackbarProvider>
+        </ApolloProvider>
+      </StoreContext.Provider>
     </MuiThemeProvider>
   )
 }

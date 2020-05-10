@@ -9,7 +9,7 @@ import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
@@ -85,7 +85,7 @@ function sizeReducer(state, action) {
 
 const Herkuenfte = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()

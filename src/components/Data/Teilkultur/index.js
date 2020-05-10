@@ -10,7 +10,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
@@ -131,7 +131,7 @@ const kulturQuery = gql`
 
 const Teilkultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree

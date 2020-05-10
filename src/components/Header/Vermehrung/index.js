@@ -18,7 +18,7 @@ import { Offline, Online } from 'react-detect-offline'
 import Account from './Account'
 //import More from './More'
 import Search from './Search'
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import constants from '../../../utils/constants'
 import exists from '../../../utils/exists'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -74,7 +74,7 @@ const StyledLabel = styled.label`
 `
 
 const HeaderVermehrung = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { setHideInactive, hideInactive, filter } = store
   const { show: showFilter, setShow: setShowFilter } = filter
   const { widthEnforced, setWidthEnforced } = store.tree

@@ -11,7 +11,7 @@ import exists from '../utils/exists'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
-import storeContext from '../storeContext'
+import { StoreContext } from '../models/reactUtils'
 import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 
@@ -60,7 +60,7 @@ const StyledSplitPane = styled(SplitPane)`
 `
 
 const Vermehrung = ({ location }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   //console.log('Vermehrung rendering')
 
   const { activeForm, isPrint, user, authorizing } = store

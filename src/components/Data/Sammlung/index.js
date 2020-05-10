@@ -15,7 +15,7 @@ import get from 'lodash/get'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -134,7 +134,7 @@ const dataQuery = gql`
 
 const Sammlung = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree

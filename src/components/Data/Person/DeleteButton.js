@@ -8,7 +8,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import axios from 'axios'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import deleteDataset from '../../TreeContainer/Tree/delete'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -26,7 +26,7 @@ const Title = styled.div`
 
 const PersonDeleteButton = ({ row }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
 
   const [anchorEl, setAnchorEl] = useState(null)

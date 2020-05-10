@@ -9,7 +9,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import get from 'lodash/get'
 
-import storeContext from '../../../../storeContext'
+import { StoreContext } from '../../../../models/reactUtils'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -48,7 +48,7 @@ const MenuTitle = styled.h3`
 
 const AvArt = ({ avArt }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)

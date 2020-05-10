@@ -8,7 +8,7 @@ import isUuid from 'is-uuid'
 
 import query from './query'
 import RowComponent from './Row'
-import storeContext from '../../../../../storeContext'
+import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -20,7 +20,7 @@ const FieldsContainer = styled.div`
 `
 
 const ChooseQk = ({ refetchTab }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { activeNodeArray } = store.tree
   const kulturId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 

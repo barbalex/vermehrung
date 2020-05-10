@@ -9,12 +9,12 @@ import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import moment from 'moment'
 
-import storeContext from '../../../../storeContext'
+import { StoreContext } from '../../../../models/reactUtils'
 import queryFromTable from '../../../../utils/queryFromTable'
 import exists from '../../../../utils/exists'
 import filterSuggestionsQuery from './filterSuggestionsQuery'
 
-const formatDatum = datum =>
+const formatDatum = (datum) =>
   datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : '(kein Datum)'
 
 const Container = styled.div`
@@ -50,8 +50,8 @@ const SearchIcon = styled(FaSearch)`
 `
 const DelIcon = styled(FaTimes)`
   margin: auto 5px;
-  opacity: ${props => (props['data-active'] ? 1 : 0.4)};
-  cursor: ${props => (props['data-active'] ? 'pointer' : 'default')};
+  opacity: ${(props) => (props['data-active'] ? 1 : 0.4)};
+  cursor: ${(props) => (props['data-active'] ? 'pointer' : 'default')};
 `
 
 const loadingSuggestions = [
@@ -66,21 +66,21 @@ const loadingSuggestions = [
     ],
   },
 ]
-const getSuggestionValue = suggestion => suggestion && suggestion.name
-const shouldRenderSuggestions = value =>
+const getSuggestionValue = (suggestion) => suggestion && suggestion.name
+const shouldRenderSuggestions = (value) =>
   value && value.trim && value.trim().length > 1
-const renderSectionTitle = section => <strong>{section.title}</strong>
-const getSectionSuggestions = section => section.suggestions
+const renderSectionTitle = (section) => <strong>{section.title}</strong>
+const getSectionSuggestions = (section) => section.suggestions
 
 export default () => {
   if (typeof window === 'undefined') return null
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { setActiveNodeArray, addOpenNodes, widthEnforced } = store.tree
   const [val, setVal] = useState('')
 
-  const [focused, setFocused]=useState(false)
-  const onFocus = useCallback(()=>setFocused(true),[])
-  const onBlur = useCallback(()=>setFocused(false),[])
+  const [focused, setFocused] = useState(false)
+  const onFocus = useCallback(() => setFocused(true), [])
+  const onBlur = useCallback(() => setFocused(false), [])
   const asRef = useRef(null)
 
   const { data } = useQuery(filterSuggestionsQuery, {
@@ -93,52 +93,54 @@ export default () => {
     },
   })
 
-  const suggestionsArt = get(data, 'art', []).map(o => ({
+  const suggestionsArt = get(data, 'art', []).map((o) => ({
     id: o.id,
     name: get(o, 'art_ae_art.name') || '(kein Artname)',
     type: 'Arten',
   }))
-  const suggestionsGarten = get(data, 'garten', []).map(o => ({
+  const suggestionsGarten = get(data, 'garten', []).map((o) => ({
     id: o.id,
     name: o.name || `(${get(o, 'person.name') || 'kein Name'})`,
     type: 'Gaerten',
   }))
-  const suggestionsHerkunft = get(data, 'herkunft', []).map(o => ({
+  const suggestionsHerkunft = get(data, 'herkunft', []).map((o) => ({
     id: o.id,
-    name: `${get(o, 'nr') || '(keine Nr)'}: ${get(o, 'gemeinde') ||
-      '(keine Gemeinde)'}, ${get(o, 'lokalname') || '(kein Lokalname)'}`,
+    name: `${get(o, 'nr') || '(keine Nr)'}: ${
+      get(o, 'gemeinde') || '(keine Gemeinde)'
+    }, ${get(o, 'lokalname') || '(kein Lokalname)'}`,
     type: 'Herkuenfte',
   }))
-  const suggestionsKultur = get(data, 'kultur', []).map(o => ({
+  const suggestionsKultur = get(data, 'kultur', []).map((o) => ({
     id: o.id,
     name: get(o, 'garten.person.name') || '(kein Name)',
     type: 'Kulturen',
   }))
-  const suggestionsEvent = get(data, 'event', []).map(o => ({
+  const suggestionsEvent = get(data, 'event', []).map((o) => ({
     id: o.id,
-    name: `${formatDatum(o.datum)}: ${get(o, 'beschreibung') ||
-      '(nicht beschrieben)'}`,
+    name: `${formatDatum(o.datum)}: ${
+      get(o, 'beschreibung') || '(nicht beschrieben)'
+    }`,
     type: 'Events',
     parent: o.kultur_id,
   }))
-  const suggestionsLieferung = get(data, 'lieferung', []).map(o => ({
+  const suggestionsLieferung = get(data, 'lieferung', []).map((o) => ({
     id: o.id,
     name: o.datum
       ? moment(o.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
       : '(kein Datum)',
     type: 'Lieferungen',
   }))
-  const suggestionsPerson = get(data, 'person', []).map(o => ({
+  const suggestionsPerson = get(data, 'person', []).map((o) => ({
     id: o.id,
     name: get(o, 'name') || '(kein Name)',
     type: 'Personen',
   }))
-  const suggestionsSammlung = get(data, 'sammlung', []).map(o => ({
+  const suggestionsSammlung = get(data, 'sammlung', []).map((o) => ({
     id: o.id,
     name: `${get(o, 'nr') || '(keine Nr)'}: ${formatDatum(o.datum)}`,
     type: 'Sammlungen',
   }))
-  const suggestionsZaehlung = get(data, 'zaehlung', []).map(o => ({
+  const suggestionsZaehlung = get(data, 'zaehlung', []).map((o) => ({
     id: o.id,
     name: formatDatum(o.datum),
     type: 'Zaehlungen',
@@ -214,7 +216,7 @@ export default () => {
     ? titledSuggestions
     : loadingSuggestions
 
-  const onChange = useCallback(event => setVal(event.target.value), [])
+  const onChange = useCallback((event) => setVal(event.target.value), [])
   const onClickDel = useCallback(() => setVal(''), [])
   const onSuggestionSelected = useCallback(
     (event, { suggestion }) => {
@@ -286,65 +288,67 @@ export default () => {
   }, [])
 
   // see: https://github.com/moroshko/react-autosuggest/issues/699#issuecomment-568798287
-  const renderSuggestionsContainerPopper = useCallback(({ containerProps, children }) => {
-    if (focused && suggestions.length) {
-      const inputCoords = asRef.current
-        ? asRef.current.input.getBoundingClientRect()
-        : {}
-      const style = {
-        position: 'absolute',
-        left: inputCoords.left - 29 + window.scrollX, // adding scrollX and scrollY to get the coords wrt document instead of viewport
-        top: inputCoords.top + 34 + window.scrollY,
-        overflowY: 'auto',
-        zIndex: 3,
-        boxShadow: '3px 3px 3px rgba(74, 20, 140, 0.1)',
-        width: inputCoords.width + 57,
-        border: '1px solid #4a148c',
-        backgroundColor: '#fff',
-        fontFamily: 'Helvetica, sans-serif',
-        fontSize: '14px',
-        borderBottomLeftRadius: '4px',
-        borderBottomRightRadius: '4px',
-        maxHeight: 'calc(100vh - 60px)',
+  const renderSuggestionsContainerPopper = useCallback(
+    ({ containerProps, children }) => {
+      if (focused && suggestions.length) {
+        const inputCoords = asRef.current
+          ? asRef.current.input.getBoundingClientRect()
+          : {}
+        const style = {
+          position: 'absolute',
+          left: inputCoords.left - 29 + window.scrollX, // adding scrollX and scrollY to get the coords wrt document instead of viewport
+          top: inputCoords.top + 34 + window.scrollY,
+          overflowY: 'auto',
+          zIndex: 3,
+          boxShadow: '3px 3px 3px rgba(74, 20, 140, 0.1)',
+          width: inputCoords.width + 57,
+          border: '1px solid #4a148c',
+          backgroundColor: '#fff',
+          fontFamily: 'Helvetica, sans-serif',
+          fontSize: '14px',
+          borderBottomLeftRadius: '4px',
+          borderBottomRightRadius: '4px',
+          maxHeight: 'calc(100vh - 60px)',
+        }
+        return ReactDOM.createPortal(
+          <div {...containerProps} style={style}>
+            {children}
+          </div>,
+          document.body,
+        )
       }
-      return ReactDOM.createPortal(
-        <div {...containerProps} style={style}>
-          {children}
-        </div>,
-        document.body,
-      )
-    }
-    return null
-  },[focused, suggestions.length])
+      return null
+    },
+    [focused, suggestions.length],
+  )
 
   return (
     <Container>
       {!exists(widthEnforced) && <SearchIcon />}
-      <div
-        onFocus={onFocus}
-        onBlur={onBlur}>
-      <Autosuggest
-        ref={asRef}
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={() => {
-          // Autosuggest wants this function
-          // could maybe be used to indicate loading?
-        }}
-        onSuggestionsClearRequested={() => {
-          // need this?
-          //console.log('clear requested')
-        }}
-        getSuggestionValue={getSuggestionValue}
-        shouldRenderSuggestions={shouldRenderSuggestions}
-        onSuggestionSelected={onSuggestionSelected}
-        renderSuggestion={renderSuggestion}
-        renderSuggestionsContainer={renderSuggestionsContainerPopper}
-        multiSection={true}
-        renderSectionTitle={renderSectionTitle}
-        getSectionSuggestions={getSectionSuggestions}
-        inputProps={inputProps}
-        focusInputOnSuggestionClick={false}
-      /></div>
+      <div onFocus={onFocus} onBlur={onBlur}>
+        <Autosuggest
+          ref={asRef}
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={() => {
+            // Autosuggest wants this function
+            // could maybe be used to indicate loading?
+          }}
+          onSuggestionsClearRequested={() => {
+            // need this?
+            //console.log('clear requested')
+          }}
+          getSuggestionValue={getSuggestionValue}
+          shouldRenderSuggestions={shouldRenderSuggestions}
+          onSuggestionSelected={onSuggestionSelected}
+          renderSuggestion={renderSuggestion}
+          renderSuggestionsContainer={renderSuggestionsContainerPopper}
+          multiSection={true}
+          renderSectionTitle={renderSectionTitle}
+          getSectionSuggestions={getSectionSuggestions}
+          inputProps={inputProps}
+          focusInputOnSuggestionClick={false}
+        />
+      </div>
       <DelIcon data-active={!!val} onClick={onClickDel} />
     </Container>
   )

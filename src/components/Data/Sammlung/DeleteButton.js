@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import deleteDataset from '../../TreeContainer/Tree/delete'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -25,7 +25,7 @@ const Title = styled.div`
 
 const SammlungDeleteButton = ({ row }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
