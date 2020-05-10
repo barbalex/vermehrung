@@ -12,7 +12,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import { personOption as personOptionFragment } from '../../../utils/fragments'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -36,7 +36,7 @@ const Info = styled.div`
 
 const SettingsLieferung = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
 
   const { data, error, loading } = personOptionResult

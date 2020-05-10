@@ -6,7 +6,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import styled from 'styled-components'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 
 const StyledInput = styled(Input)`
   div hr {
@@ -24,9 +24,9 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 `
 
 const Filter = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { docFilter, setDocFilter } = store
-  const onChange = useCallback(e => setDocFilter(e.target.value), [
+  const onChange = useCallback((e) => setDocFilter(e.target.value), [
     setDocFilter,
   ])
   const onClickEmptyFilter = useCallback(() => setDocFilter(''), [setDocFilter])

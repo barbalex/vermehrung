@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import Row from './Row'
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import queryFromTable from '../../../utils/queryFromTable'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -81,7 +81,7 @@ const personQuery = gql`
 `
 
 const Root = ({ filter: showFilter }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user } = store
   const accountId = user.uid
 

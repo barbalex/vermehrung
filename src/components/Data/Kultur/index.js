@@ -18,7 +18,7 @@ import IconButton from '@material-ui/core/IconButton' // see: https://github.com
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -98,7 +98,7 @@ const FieldRow = styled.div`
 
 const Kultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree

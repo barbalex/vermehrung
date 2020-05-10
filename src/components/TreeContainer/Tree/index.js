@@ -12,7 +12,7 @@ import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Row from './Row'
 import Settings from './Settings'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -31,7 +31,7 @@ function sizeReducer(state, action) {
 }
 
 const Tree = ({ data, personId, nodes }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { activeNodeArray: aNA } = store.tree
 

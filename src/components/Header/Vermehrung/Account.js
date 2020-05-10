@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const IconContainer = styled.div`
@@ -30,7 +30,7 @@ const StyledUserIcon = styled(UserIcon)`
 `
 
 const Account = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const client = useApolloClient()
 
   const { user, firebase } = store

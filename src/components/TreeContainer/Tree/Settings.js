@@ -12,7 +12,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 import { useApolloClient } from '@apollo/react-hooks'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import { personOption as personOptionFragment } from '../../../utils/fragments'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -42,7 +42,7 @@ const Info = styled.div`
 
 const SettingsTree = ({ data, personId }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
 
   const personOption = get(data, 'person_option[0]') || {}

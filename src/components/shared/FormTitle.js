@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -43,7 +43,7 @@ const FormTitle = ({
   rowsFilteredLength,
   filter,
 }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { isFiltered: runIsFiltered, show } = store.filter
   const isFiltered = runIsFiltered()
 

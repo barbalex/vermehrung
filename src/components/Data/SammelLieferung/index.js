@@ -17,7 +17,7 @@ import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -250,7 +250,7 @@ const personOptionQuery = gql`
 
 const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { filter, isPrint, setIsPrint, user } = store
   const { isFiltered: runIsFiltered } = filter

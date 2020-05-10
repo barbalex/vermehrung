@@ -18,7 +18,7 @@ import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { getSnapshot } from 'mobx-state-tree'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
@@ -46,7 +46,7 @@ const personQuery = gql`
 `
 
 const TreeContainer = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { user } = store
   const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
@@ -75,54 +75,54 @@ const TreeContainer = () => {
     }),
     teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
     zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
-    isArt: openNodes.some(n => n[0] === 'Arten'),
-    isEvent: openNodes.some(n => n[0] === 'Events'),
-    isArtKultur: openNodes.some(n => n[0] === 'Arten' && n[2] === 'Kulturen'),
+    isArt: openNodes.some((n) => n[0] === 'Arten'),
+    isEvent: openNodes.some((n) => n[0] === 'Events'),
+    isArtKultur: openNodes.some((n) => n[0] === 'Arten' && n[2] === 'Kulturen'),
     isArtSammlung: openNodes.some(
-      n => n[0] === 'Arten' && n[2] === 'Sammlungen',
+      (n) => n[0] === 'Arten' && n[2] === 'Sammlungen',
     ),
-    isGarten: openNodes.some(n => n[0] === 'Gaerten'),
+    isGarten: openNodes.some((n) => n[0] === 'Gaerten'),
     isGartenKultur: openNodes.some(
-      n => n[0] === 'Gaerten' && n[2] === 'Kulturen',
+      (n) => n[0] === 'Gaerten' && n[2] === 'Kulturen',
     ),
-    isHerkunft: openNodes.some(n => n[0] === 'Herkuenfte'),
+    isHerkunft: openNodes.some((n) => n[0] === 'Herkuenfte'),
     isHerkunftSammlung: openNodes.some(
-      n => n[0] === 'Herkuenfte' && n[2] === 'Sammlungen',
+      (n) => n[0] === 'Herkuenfte' && n[2] === 'Sammlungen',
     ),
-    isLieferung: openNodes.some(n => n[0] === 'Lieferungen'),
-    isSammelLieferung: openNodes.some(n => n[0] === 'Sammel-Lieferungen'),
-    isPerson: openNodes.some(n => n[0] === 'Personen'),
+    isLieferung: openNodes.some((n) => n[0] === 'Lieferungen'),
+    isSammelLieferung: openNodes.some((n) => n[0] === 'Sammel-Lieferungen'),
+    isPerson: openNodes.some((n) => n[0] === 'Personen'),
     isPersonGarten: openNodes.some(
-      n => n[0] === 'Personen' && n[2] === 'Gaerten',
+      (n) => n[0] === 'Personen' && n[2] === 'Gaerten',
     ),
     isPersonGartenKultur: openNodes.some(
-      n => n[0] === 'Personen' && n[2] === 'Gaerten' && n[4] === 'Kulturen',
+      (n) => n[0] === 'Personen' && n[2] === 'Gaerten' && n[4] === 'Kulturen',
     ),
     isPersonSammlung: openNodes.some(
-      n => n[0] === 'Personen' && n[2] === 'Sammlungen',
+      (n) => n[0] === 'Personen' && n[2] === 'Sammlungen',
     ),
     isPersonLieferung: openNodes.some(
-      n => n[0] === 'Personen' && n[2] === 'Lieferungen',
+      (n) => n[0] === 'Personen' && n[2] === 'Lieferungen',
     ),
-    isSammlung: openNodes.some(n => n[0] === 'Sammlungen'),
+    isSammlung: openNodes.some((n) => n[0] === 'Sammlungen'),
     isSammlungLieferung: openNodes.some(
-      n => n[0] === 'Sammlungen' && n[2] === 'Aus-Lieferungen',
+      (n) => n[0] === 'Sammlungen' && n[2] === 'Aus-Lieferungen',
     ),
     isSammlungLieferungKultur: openNodes.some(
-      n =>
+      (n) =>
         n[0] === 'Sammlungen' &&
         n[2] === 'Aus-Lieferungen' &&
         n[4] === 'Kulturen',
     ),
-    isTeilkultur: openNodes.some(n => n[0] === 'Teilkulturen'),
-    isKultur: openNodes.some(n => n[0] === 'Kulturen'),
+    isTeilkultur: openNodes.some((n) => n[0] === 'Teilkulturen'),
+    isKultur: openNodes.some((n) => n[0] === 'Kulturen'),
     isKulturAnLieferung: openNodes.some(
-      n => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
+      (n) => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
     ),
     isKulturAusLieferung: openNodes.some(
-      n => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
+      (n) => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
     ),
-    isWerteListe: openNodes.some(n => n[0] === 'Werte-Listen'),
+    isWerteListe: openNodes.some((n) => n[0] === 'Werte-Listen'),
     isGardener,
     personId,
     personExists: !!personId,
@@ -143,7 +143,7 @@ const TreeContainer = () => {
     if (!loading && data && Object.keys(data).length > 0) {
       setNodes(
         buildNodes({ store, data, loading, role }).filter(
-          node => node.id !== 'loadingNode',
+          (node) => node.id !== 'loadingNode',
         ),
       )
     }

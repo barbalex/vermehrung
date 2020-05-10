@@ -9,7 +9,7 @@ import { Link } from 'gatsby'
 import ReactResizeDetector from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 import constants from '../../utils/constants'
 import exists from '../../utils/exists'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -44,7 +44,7 @@ const NavButton = styled(Button)`
 `
 
 const HeaderDoku = () => {
-  const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
+  const { sidebarWidth, setSidebarWidth } = useContext(StoreContext)
   const onResize = useCallback(
     (width) => {
       if (
