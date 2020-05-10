@@ -9,7 +9,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import upperFirst from 'lodash/upperFirst'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import {
   artFile as artFileFragment,
@@ -88,7 +88,7 @@ const fragmentObject = {
 
 const File = ({ file, parent }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [errors, setErrors] = useState({})
 

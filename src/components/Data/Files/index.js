@@ -8,7 +8,7 @@ import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import {
   artFile as artFileFragment,
   herkunftFile as herkunftFileFragment,
@@ -78,7 +78,7 @@ const fragmentObject = {
 
 const Files = ({ parentId, parent }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)

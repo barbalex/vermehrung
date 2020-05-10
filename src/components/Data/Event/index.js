@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
@@ -160,7 +160,7 @@ const personQuery = gql`
 
 const Event = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
