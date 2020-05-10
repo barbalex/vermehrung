@@ -14,8 +14,8 @@ import Person from './Data/Person'
 import Sammlung from './Data/Sammlung'
 import Teilkultur from './Data/Teilkultur'
 import Zaehlung from './Data/Zaehlung'
-import storeContext from '../storeContext'
 import ErrorBoundary from './shared/ErrorBoundary'
+import { useQuery, StoreContext } from '../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -43,7 +43,7 @@ const Title = styled.div`
 `
 
 export default () => {
-  const { activeForm } = useContext(storeContext)
+  const { activeForm } = useContext(StoreContext)
   // ensure list views are directed to correct filter
   const activeTabFromActiveForm = activeForm
     ? activeForm
