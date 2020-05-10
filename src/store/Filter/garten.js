@@ -26,7 +26,7 @@ export const type = types.model({
     null,
   ),
   // geomPoint missing!
-  aktiv: types.optional(types.boolean, true),
+  aktiv: types.optional(types.maybeNull(types.boolean), true),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

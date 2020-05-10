@@ -33,7 +33,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  nach_ausgepflanzt: types.optional(types.boolean, false),
+  nach_ausgepflanzt: types.optional(types.maybeNull(types.boolean), false),
   von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
   anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
   anzahl_auspflanzbereit: types.optional(types.maybeNull(types.number), null),
@@ -42,7 +42,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  geplant: types.optional(types.boolean, false),
+  geplant: types.optional(types.maybeNull(types.boolean), false),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

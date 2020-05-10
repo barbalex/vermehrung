@@ -13,7 +13,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  prognose: types.optional(types.boolean, false),
+  prognose: types.optional(types.maybeNull(types.boolean), false),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

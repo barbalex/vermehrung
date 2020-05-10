@@ -4,16 +4,13 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import { v1 as uuidv1 } from 'uuid'
 
 import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import { person as personFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import { useQuery } from '../../../models/reactUtils'
@@ -60,15 +57,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const personQueryByAccountId = gql`
-  query PersonQueryForPersonsByAccoutId($accountId: String) {
-    person(where: { account_id: { _eq: $accountId } }) {
-      ...PersonFields
-    }
-  }
-  ${personFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -95,38 +83,23 @@ const Personen = ({ filter: showFilter }) => {
       order_by: { name: 'asc_nulls_first' },
     }),
   )
-  const {
-    data: dataAll,
-    error: errorAll,
-    loading: loadingAll,
-  } = useQuery((store) => store.queryPerson())
+  const { data: dataAll } = useQuery((store) => store.queryPerson())
 
   const totalNr = get(dataAll, 'person', []).length
   const rowsFiltered = get(dataFiltered, 'person', [])
   const filteredNr = rowsFiltered.length
-  console.log('Personen:', {
-    dataFiltered,
-    dataAll,
-    rowsFiltered,
-    totalNr,
-  })
+
+  const { data: dataOption } = useQuery((store) =>
+    store.queryPerson({
+      where: { account_id: { _eq: user.uid } },
+    }),
+  )
+  const { user_role } = get(dataOption, 'person[0]') || {}
 
   const add = useCallback(async () => {
-    //const node = { nodeType: 'folder', url: activeNodeArray }
-    const id = uuidv1()
-    await dataStore.mutateInsert_person(
-      {
-        objects: [{ id, name: 'test8' }],
-        on_conflict: { constraint: 'person_pkey', update_columns: [] },
-      },
-      undefined,
-      /*(m) => {
-        dataStore.persons.push(m)
-      },*/
-    )
+    await dataStore.addPerson()
     queryFiltered.refetch()
     refetchTree()
-    //createNew({ node, store, client })
   }, [dataStore, queryFiltered, refetchTree])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
@@ -137,11 +110,6 @@ const Personen = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  const personOptionResult = useQuery(personQueryByAccountId, {
-    variables: { accountId: user.uid },
-  })
-  const { user_role } = get(personOptionResult.data, 'person[0]') || {}
 
   if (loadingFiltered) {
     return (
