@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext'
 import Art from './Art'
 import Arten from './Arten'
 import Event from './Event'
@@ -25,10 +24,10 @@ import Zaehlungen from './Zaehlungen'
 import Teilkultur from './Teilkultur'
 import Teilkulturen from './Teilkulturen'
 import Root from './Root'
+import { StoreContext } from '../../models/reactUtils'
 
 const Data = () => {
-  const { activeForm } = useContext(storeContext)
-  //console.log('Daten, activeForm:', activeForm)
+  const { activeForm } = useContext(StoreContext)
 
   switch (activeForm) {
     case 'root': {
