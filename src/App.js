@@ -32,11 +32,6 @@ const GlobalStyle = createGlobalStyle()
 
 import constants from './utils/constants.json'
 
-const gqlHttpClient = createHttpClient(constants.graphQlUri)
-const store = DataStore.create(undefined, {
-  gqlHttpClient,
-})
-
 registerLocale('de', de)
 setDefaultLocale('de')
 
@@ -68,6 +63,13 @@ const firebaseConfig = {
 }
 
 const apolloClient = createApolloClient()
+
+const gqlHttpClient = createHttpClient(constants.graphQlUri)
+// todo: is this the place to use tha last snapshot of the store instead of undefined?
+// to that instead of mst-persist?
+const store = DataStore.create(undefined, {
+  gqlHttpClient,
+})
 
 const App = ({ element }) => {
   useEffect(() => {
