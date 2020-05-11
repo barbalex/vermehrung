@@ -130,7 +130,6 @@ const Vermehrung = ({ location }) => {
     )
   }
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
-  console.log('Vermehrung rendering')
 
   return (
     <ErrorBoundary>
