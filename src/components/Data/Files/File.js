@@ -170,7 +170,7 @@ const File = ({ file, parent }) => {
         if (value === undefined || value === null) {
           valueToSet = null
         } else {
-          valueToSet = `"${value.split('"').join('\\"')}"`
+          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
         }
         const fragment = fragmentObject[parent]
         await client.mutate({

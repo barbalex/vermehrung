@@ -255,7 +255,9 @@ const Kultur = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.split('"').join('\\"')}"`
+            valueToSet = `"${
+              value.split ? value.split('"').join('\\"') : value
+            }"`
           }
           // need to refetch or related data will not be updated
           const refetchQueries = [

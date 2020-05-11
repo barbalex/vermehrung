@@ -511,7 +511,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
         } else {
-          valueToSet = `"${value.split('"').join('\\"')}"`
+          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
         }
         // ensure Herkunft updates
         const refetchQueries = [

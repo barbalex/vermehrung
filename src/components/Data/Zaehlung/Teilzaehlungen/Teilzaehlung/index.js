@@ -124,7 +124,7 @@ const Teilzaehlung = ({
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
         } else {
-          valueToSet = `"${value.split('"').join('\\"')}"`
+          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
         }
         await client.mutate({
           mutation: gql`
