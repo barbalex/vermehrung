@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
@@ -16,6 +16,7 @@ import artQuery from './artQuery'
 import Row from './Row'
 import createNew from '../../TreeContainer/Tree/createNew'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { art as artFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -72,13 +73,28 @@ const Arten = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
+  const {
+    data: dataFiltered,
+    error: errorFiltered,
+    loading: loadingFiltered,
+  } = useQuery((store) =>
+    store.queryArt(
+      {
+        where: artFilter,
+        order_by: { art_ae_art: { name: 'asc' } },
+      },
+      (d) => d.id.ae_id.art_ae_art((d) => d.id.name),
+    ),
+  )
   const { data, error, loading } = useQuery(artQuery, {
     variables: { filter: artFilter },
   })
 
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const rows = get(data, 'rowsFiltered', [])
+  const rowsFiltered = get(dataFiltered, 'art', [])
   const filteredNr = rows.length
+  console.log('Arten', { rows, rowsFiltered, dataFiltered })
 
   const add = useCallback(() => {
     const node = { nodeType: 'folder', url: activeNodeArray }
