@@ -16,7 +16,6 @@ import artQuery from './artQuery'
 import Row from './Row'
 import createNew from '../../TreeContainer/Tree/createNew'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { art as artFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -73,11 +72,7 @@ const Arten = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-  } = useQuery((store) =>
+  const { data: dataFiltered } = useQuery((store) =>
     store.queryArt(
       {
         where: artFilter,
