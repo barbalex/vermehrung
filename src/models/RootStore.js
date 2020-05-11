@@ -62,6 +62,9 @@ export const RootStore = RootStoreBase.props({
       addOnlineOperation(op) {
         self.onlineOperations.push(op)
       },
+      addHerkunft(val) {
+        self.herkunfts = { val, ...self.herkunfts.toJS() }
+      },
       setOnline(val) {
         self.online = val
       },
