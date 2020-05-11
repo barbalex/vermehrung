@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
@@ -29,7 +29,7 @@ import {
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import Settings from './Settings'
 import AddButton from './AddButton'
@@ -160,13 +160,13 @@ const personQuery = gql`
 
 const Event = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
   const id = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const eventFilter = queryFromTable({ store, table: 'event' })
@@ -261,7 +261,9 @@ const Event = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.split('"').join('\\"')}"`
+            valueToSet = `"${
+              value.split ? value.split('"').join('\\"') : value
+            }"`
           }
           await client.mutate({
             mutation: gql`

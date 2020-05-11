@@ -10,7 +10,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
@@ -19,7 +19,7 @@ import {
   kulturOption as kulturOptionFragment,
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
@@ -131,13 +131,13 @@ const kulturQuery = gql`
 
 const Teilkultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
   const id = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })
@@ -205,7 +205,9 @@ const Teilkultur = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.split('"').join('\\"')}"`
+            valueToSet = `"${
+              value.split ? value.split('"').join('\\"') : value
+            }"`
           }
           await client.mutate({
             mutation: gql`

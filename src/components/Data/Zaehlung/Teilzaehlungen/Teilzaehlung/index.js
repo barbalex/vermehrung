@@ -11,8 +11,8 @@ import TextField from '../../../../shared/TextField'
 import Select from '../../../../shared/SelectCreatable'
 import { teilzaehlung as teilzaehlungFragment } from '../../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
-import types from '../../../../../store/Filter/simpleTypes'
-import storeContext from '../../../../../storeContext'
+import types from '../../../../../models/Filter/simpleTypes'
+import { StoreContext } from '../../../../../models/reactUtils'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
@@ -68,7 +68,7 @@ const Teilzaehlung = ({
   zaehlungResult,
 }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
@@ -124,7 +124,7 @@ const Teilzaehlung = ({
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
         } else {
-          valueToSet = `"${value.split('"').join('\\"')}"`
+          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
         }
         await client.mutate({
           mutation: gql`

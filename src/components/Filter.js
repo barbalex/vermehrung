@@ -14,8 +14,8 @@ import Person from './Data/Person'
 import Sammlung from './Data/Sammlung'
 import Teilkultur from './Data/Teilkultur'
 import Zaehlung from './Data/Zaehlung'
-import storeContext from '../storeContext'
 import ErrorBoundary from './shared/ErrorBoundary'
+import { StoreContext } from '../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -43,8 +43,24 @@ const Title = styled.div`
 `
 
 export default () => {
-  const { activeForm } = useContext(storeContext)
-  const [activeTab, setActiveTab] = useState(activeForm || 'art')
+  const { activeForm } = useContext(StoreContext)
+  // ensure list views are directed to correct filter
+  const activeTabFromActiveForm = activeForm
+    ? activeForm
+        .replace('arten', 'art')
+        .replace('events', 'event')
+        .replace('herkuenfte', 'herkunft')
+        .replace('gaerten', 'garten')
+        .replace('kulturen', 'kultur')
+        .replace('lieferungen', 'lieferung')
+        .replace('sammelLieferungen', 'sammelLieferung')
+        .replace('personen', 'person')
+        .replace('sammlungen', 'sammlung')
+        .replace('teilkulturen', 'teilkultur')
+        .replace('zaehlungen', 'zaehlung')
+    : // fallback if no form is active
+      'art'
+  const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
 
   const onChangeTab = useCallback((event, value) => setActiveTab(value), [])
 

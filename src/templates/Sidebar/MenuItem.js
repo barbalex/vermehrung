@@ -9,21 +9,21 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 
 const ListItem = styled(MListItem)`
   display: flex;
   justify-content: space-between;
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.active === 'true' ? '#eaeaea' : 'unset'} !important;
   padding-top: 7px !important;
   padding-bottom: 7px !important;
-  padding-left: ${props =>
+  padding-left: ${(props) =>
     props.ischild1 === 'true' ? '35px !important' : 'unset'};
 `
 
 const MenuItem = ({ node }) => {
-  const { sidebarWidth, setSidebarWidth } = useContext(storeContext)
+  const { sidebarWidth, setSidebarWidth } = useContext(StoreContext)
   const { path, sort2 } = node.frontmatter
 
   const onClickMenuItem = useCallback(() => {
@@ -34,10 +34,10 @@ const MenuItem = ({ node }) => {
   return (
     <Location>
       {({ location }) => {
-        const pathname = location.pathname.split('/').filter(a => !!a)
+        const pathname = location.pathname.split('/').filter((a) => !!a)
         const isParent1 = sort2 === 0
         const isChild1 = sort2 > 0
-        const pathSplit = path.split('/').filter(a => !!a)
+        const pathSplit = path.split('/').filter((a) => !!a)
         const isParentOpen = pathSplit[1] === pathname[1]
         const isChildClosed = isChild1 && pathSplit[1] !== pathname[1]
         let active = isEqual(pathname, pathSplit)

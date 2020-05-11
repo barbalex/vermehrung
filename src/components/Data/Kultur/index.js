@@ -18,7 +18,7 @@ import IconButton from '@material-ui/core/IconButton' // see: https://github.com
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -27,7 +27,7 @@ import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import { kultur as kulturFragment } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import Files from '../Files'
 import Settings from './Settings'
 import herkunftQuery from './herkunftQuery'
@@ -98,13 +98,13 @@ const FieldRow = styled.div`
 
 const Kultur = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
   const id = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const kulturFilter = queryFromTable({ store, table: 'kultur' })
@@ -255,7 +255,9 @@ const Kultur = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.split('"').join('\\"')}"`
+            valueToSet = `"${
+              value.split ? value.split('"').join('\\"') : value
+            }"`
           }
           // need to refetch or related data will not be updated
           const refetchQueries = [

@@ -10,7 +10,7 @@ import isUuid from 'is-uuid'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import {
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
@@ -79,13 +79,13 @@ const personOptionQuery = gql`
 `
 
 const LieferungContainer = ({ filter: showFilter }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { user } = store
   const { activeNodeArray } = store.tree
 
   const lieferungId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
-  const id = showFilter ? 99999999999999 : lieferungId
+  const id = showFilter ? '99999999-9999-9999-9999-999999999999' : lieferungId
 
   const {
     data: lieferungData,

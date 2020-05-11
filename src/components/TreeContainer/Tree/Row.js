@@ -20,7 +20,7 @@ import openAllChildren from '../openAllChildren'
 import closeAllChildren from '../closeAllChildren'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import createNew from './createNew'
 import deleteDataset from './delete'
 import { person as personFragment } from '../../../utils/fragments'
@@ -209,7 +209,7 @@ const personQuery = gql`
 
 const Row = ({ style, node, nodes }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { tree, enqueNotification, user, firebase } = store
   const { openNodes, activeNodeArray } = tree

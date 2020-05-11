@@ -4,13 +4,13 @@ import { useApolloClient } from '@apollo/react-hooks'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import createNew from '../../TreeContainer/Tree/createNew'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const SammlungAddButton = () => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { activeNodeArray } = store.tree
 
   const add = useCallback(() => {

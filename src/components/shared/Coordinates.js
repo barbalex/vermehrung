@@ -34,7 +34,7 @@ import {
   sammlung as sammlungFragment,
   personOption as personOptionFragment,
 } from '../../utils/fragments'
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -65,7 +65,7 @@ const fragments = {
 }
 
 const Coordinates = ({ row, refetchForm, table }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 

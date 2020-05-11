@@ -5,7 +5,7 @@ import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   background-color: #ffe0b2;
@@ -44,7 +44,7 @@ const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
 `
 
 const FilterTitle = ({ title, table, totalNr, filteredNr }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { tableIsFiltered, isFiltered, emptyTable, empty } = store.filter
 
   const existsTableFilter = tableIsFiltered({

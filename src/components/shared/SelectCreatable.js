@@ -6,7 +6,7 @@ import Select from 'react-select/creatable'
 import styled from 'styled-components'
 import { useApolloClient } from '@apollo/react-hooks'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -50,15 +50,15 @@ const StyledSelect = styled(Select)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
   input {
     @media print {
@@ -69,7 +69,7 @@ const StyledSelect = styled(Select)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
     /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
     z-index: 2;
   }
@@ -98,7 +98,7 @@ const SharedSelect = ({
   callback,
 }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const { refetch: refetchTree } = store.tree
 
@@ -169,7 +169,7 @@ const SharedSelect = ({
   // show ... whyle options are loading
   const loadingOptions = [{ value, label: '...' }]
   const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find(o => o.value === value) || emptyValue
+  const selectValue = optionsToUse.find((o) => o.value === value) || emptyValue
 
   return (
     <Container>
@@ -188,7 +188,7 @@ const SharedSelect = ({
         maxheight={maxHeight}
         classNamePrefix="react-select"
         nocaret={noCaret}
-        formatCreateLabel={val => `"${val}" als neue Teilkultur aufnehmen`}
+        formatCreateLabel={(val) => `"${val}" als neue Teilkultur aufnehmen`}
       />
       {error && <Error>{error}</Error>}
     </Container>

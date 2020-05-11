@@ -195,6 +195,11 @@ create table herkunft (
   _depth integer default 1,
   _conflicts text[] default null
 );
+alter table herkunft add column _rev text default null;
+alter table herkunft add column _parent_rev text default null;
+alter table herkunft add column _revisions text[] default null;
+alter table herkunft add column _depth integer default 1;
+alter table herkunft add column _conflicts text[] default null;
 create index on herkunft using btree (id);
 create index on herkunft using btree (nr);
 create index on herkunft using btree (gemeinde);

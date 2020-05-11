@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../storeContext'
+import { StoreContext } from '../../models/reactUtils'
 import MenuItems from './MenuItems'
 import Filter from './Filter'
 import constants from '../../utils/constants'
@@ -31,12 +31,12 @@ const MenuTitleLink = styled(Link)`
 `
 
 const Sidebar = ({ title, titleLink, edges }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { docFilter, sidebarWidth } = store
 
   const items = edges
-    .filter(n => !!n && !!n.node)
-    .filter(n =>
+    .filter((n) => !!n && !!n.node)
+    .filter((n) =>
       docFilter
         ? get(n, 'node.frontmatter.title', '(Titel fehlt)')
             .toLowerCase()

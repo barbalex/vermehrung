@@ -1,22 +1,19 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import { v1 as uuidv1 } from 'uuid'
 
-import storeContext from '../../../storeContext'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import createNew from '../../TreeContainer/Tree/createNew'
-import { person as personFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -60,53 +57,78 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query PersonQueryForPersons($filter: person_bool_exp!) {
-    rowsUnfiltered: person {
-      id
-    }
-    rowsFiltered: person(where: $filter, order_by: { name: asc_nulls_first }) {
-      ...PersonFields
-    }
-  }
-  ${personFragment}
-`
-const personQueryByAccountId = gql`
-  query PersonQueryForPersonsByAccoutId($accountId: String) {
-    person_option(where: { account_id: { _eq: $accountId } }) {
-      ...PersonFields
-    }
-  }
-  ${personFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
 }
 
 const Personen = ({ filter: showFilter }) => {
-  const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
-  const { filter, user } = store
+  const { filter, user, mutateInsert_person } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
+  const {
+    activeNodeArray: anaRaw,
+    setActiveNodeArray,
+    addOpenNodes,
+    refetch: refetchTree,
+  } = store.tree
+  const activeNodeArray = anaRaw.toJSON()
 
   const personFilter = queryFromTable({ store, table: 'person' })
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: personFilter },
-  })
+  const {
+    data: dataFiltered,
+    error: errorFiltered,
+    loading: loadingFiltered,
+    query: queryFiltered,
+  } = useQuery((store) =>
+    store.queryPerson({
+      where: personFilter,
+      order_by: { name: 'asc_nulls_first' },
+    }),
+  )
+  const { data: dataAll } = useQuery((store) => store.queryPerson())
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
-  const filteredNr = rows.length
+  const totalNr = get(dataAll, 'person', []).length
+  const rowsFiltered = get(dataFiltered, 'person', [])
+  const filteredNr = rowsFiltered.length
 
-  const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: activeNodeArray }
-    createNew({ node, store, client })
-  }, [activeNodeArray, client, store])
+  const { data: dataUser } = useQuery((store) =>
+    store.queryPerson({
+      where: { account_id: { _eq: user.uid } },
+    }),
+  )
+  const { user_role } = get(dataUser, 'person[0]') || {}
+
+  const add = useCallback(async () => {
+    const id = uuidv1()
+    const newObject = { id }
+    await mutateInsert_person(
+      {
+        objects: [newObject],
+        on_conflict: { constraint: 'person_pkey', update_columns: ['id'] },
+      },
+      undefined,
+      () => {
+        self.persons = { newObject, ...store.persons.toJS() }
+      },
+    )
+    queryFiltered.refetch()
+    refetchTree()
+    const newActiveNodeArray = [...activeNodeArray, id]
+    setActiveNodeArray(newActiveNodeArray)
+    // add node.url just in case it was not yet open
+    addOpenNodes([newActiveNodeArray, newActiveNodeArray])
+  }, [
+    store,
+    queryFiltered,
+    refetchTree,
+    mutateInsert_person,
+    activeNodeArray,
+    setActiveNodeArray,
+    addOpenNodes,
+  ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
@@ -117,12 +139,7 @@ const Personen = ({ filter: showFilter }) => {
     [],
   )
 
-  const personOptionResult = useQuery(personQueryByAccountId, {
-    variables: { accountId: user.uid },
-  })
-  const { user_role } = get(personOptionResult.data, 'person[0]') || {}
-
-  if (loading) {
+  if (loadingFiltered) {
     return (
       <Container>
         <FormTitle title="Personen" />
@@ -131,7 +148,7 @@ const Personen = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error
+  const errorToShow = errorFiltered
   if (errorToShow) {
     return (
       <Container>
@@ -174,7 +191,7 @@ const Personen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={rowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -183,8 +200,8 @@ const Personen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={rowsFiltered[index]}
+                last={index === rowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

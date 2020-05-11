@@ -8,7 +8,7 @@ import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -74,14 +74,14 @@ const FieldsContainer = styled.div`
 
 const Art = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { filter, tree } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
   const artId = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(artQuery, {

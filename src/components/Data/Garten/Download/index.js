@@ -8,7 +8,7 @@ import { FaDownload } from 'react-icons/fa'
 import styled from 'styled-components'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
-import storeContext from '../../../../storeContext'
+import { StoreContext } from '../../../../models/reactUtils'
 import buildExceljsWorksheetsForDaten from './buildExceljsWorksheetsForDaten'
 import buildExceljsWorksheetsForTzSums from './buildExceljsWorksheetsForTzSums'
 import downloadExceljsWorkbook from '../../../../utils/downloadExceljsWorkbook'
@@ -28,7 +28,7 @@ const Title = styled.div`
 
 const GartenDownload = ({ gartenId }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const onClickData = useCallback(async () => {
     const workbook = new ExcelJs.Workbook()

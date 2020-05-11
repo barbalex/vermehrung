@@ -15,7 +15,7 @@ import {
   zaehlung as zaehlungFragment,
 } from '../../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
-import storeContext from '../../../../../storeContext'
+import { StoreContext } from '../../../../../models/reactUtils'
 import exists from '../../../../../utils/exists'
 import appBaseUrl from '../../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
@@ -48,7 +48,7 @@ const Teilzaehlung = ({
   zaehlung: zaehlungPassed,
 }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
   const { refetch: refetchTree } = store.tree
 
