@@ -99,11 +99,16 @@ const Person = ({ filter: showFilter }) => {
       where: { id: { _eq: id } },
     }),
   )
-  const { data: dataAll } = useQuery((store) => store.queryPerson())
+  const { data: dataAll } = useQuery((store) =>
+    store.queryPerson(undefined, (d) => d.id),
+  )
   const { data: dataFiltered } = useQuery((store) =>
-    store.queryPerson({
-      where: personFilter,
-    }),
+    store.queryPerson(
+      {
+        where: personFilter,
+      },
+      (d) => d.id,
+    ),
   )
 
   const { data: dataUserRole, loading: loadingUserRole } = useQuery((store) =>
