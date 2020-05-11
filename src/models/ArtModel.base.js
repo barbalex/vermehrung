@@ -59,13 +59,13 @@ export const artModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    art_ae_art: types.union(types.undefined, types.null, types.late(() => ae_artModel)),
+    art_ae_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => ae_artModel))),
     /** An array relationship */
-    art_files: types.union(types.undefined, types.array(types.late(() => art_fileModel))),
+    art_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_fileModel)))),
     /** An aggregated array relationship */
     art_files_aggregate: types.union(types.undefined, types.late(() => art_file_aggregateModel)),
     /** An array relationship */
-    art_qk_choosens: types.union(types.undefined, types.array(types.late(() => art_qk_choosenModel))),
+    art_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosenModel)))),
     /** An aggregated array relationship */
     art_qk_choosens_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
     /** An array relationship */
@@ -73,7 +73,7 @@ export const artModelBase = ModelBase
     /** An aggregated array relationship */
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
     /** An object relationship */
-    av_art: types.union(types.undefined, types.null, types.late(() => av_artModel)),
+    av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     /** An array relationship */

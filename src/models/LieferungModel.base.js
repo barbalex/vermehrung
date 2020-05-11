@@ -53,7 +53,7 @@ export const lieferungModelBase = ModelBase
     /** An object relationship */
     kulturByVonKulturId: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     /** An array relationship */
-    lieferung_files: types.union(types.undefined, types.array(types.late(() => lieferung_fileModel))),
+    lieferung_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferung_fileModel)))),
     /** An aggregated array relationship */
     lieferung_files_aggregate: types.union(types.undefined, types.late(() => lieferung_file_aggregateModel)),
     nach_ausgepflanzt: types.union(types.undefined, types.null, types.boolean),

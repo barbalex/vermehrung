@@ -53,7 +53,7 @@ export const person_revModelBase = ModelBase
     adresszusatz: types.union(types.undefined, types.null, types.string),
     aktiv: types.union(types.undefined, types.null, types.boolean),
     /** An array relationship */
-    av_art: types.union(types.undefined, types.array(types.late(() => av_artModel))),
+    av_art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
     /** An aggregated array relationship */
     av_art_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
     bemerkungen: types.union(types.undefined, types.null, types.string),
@@ -76,11 +76,11 @@ export const person_revModelBase = ModelBase
     nr: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    person_files: types.union(types.undefined, types.array(types.late(() => person_fileModel))),
+    person_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_fileModel)))),
     /** An aggregated array relationship */
     person_files_aggregate: types.union(types.undefined, types.late(() => person_file_aggregateModel)),
     /** An object relationship */
-    person_option: types.union(types.undefined, types.null, types.late(() => person_optionModel)),
+    person_option: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => person_optionModel))),
     plz: types.union(types.undefined, types.null, types.integer),
     /** An array relationship */
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
@@ -95,7 +95,7 @@ export const person_revModelBase = ModelBase
     telefon_mobile: types.union(types.undefined, types.null, types.string),
     telefon_privat: types.union(types.undefined, types.null, types.string),
     /** An object relationship */
-    userRoleByUserRole: types.union(types.undefined, types.null, types.late(() => user_roleModel)),
+    userRoleByUserRole: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => user_roleModel))),
     user_role: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({

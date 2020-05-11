@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { person_revModel } from "./person_revModel"
 import { person_revModelSelector } from "./person_revModel.base"
@@ -21,7 +21,7 @@ export const person_rev_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("person_rev_aggregate"), "person_rev_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => person_rev_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => person_revModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_revModel)))),
   })
   .views(self => ({
     get store() {

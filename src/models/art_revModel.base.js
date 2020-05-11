@@ -41,7 +41,7 @@ export const art_revModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    av_art: types.union(types.undefined, types.null, types.late(() => av_artModel)),
+    av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.union(types.undefined, types.frozen()),

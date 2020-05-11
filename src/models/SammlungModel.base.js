@@ -70,7 +70,7 @@ export const sammlungModelBase = ModelBase
     /** An aggregated array relationship */
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     /** An array relationship */
-    sammlung_files: types.union(types.undefined, types.array(types.late(() => sammlung_fileModel))),
+    sammlung_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_fileModel)))),
     /** An aggregated array relationship */
     sammlung_files_aggregate: types.union(types.undefined, types.late(() => sammlung_file_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),

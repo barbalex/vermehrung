@@ -24,7 +24,7 @@ export const art_qk_choosenModelBase = ModelBase
     art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
     /** An object relationship */
-    art_qk: types.union(types.undefined, types.late(() => art_qkModel)),
+    art_qk: types.union(types.undefined, MSTGQLRef(types.late(() => art_qkModel))),
     qk_name: types.union(types.undefined, types.string),
   })
   .views(self => ({

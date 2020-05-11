@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { teilkultur_revModel } from "./teilkultur_revModel"
 import { teilkultur_revModelSelector } from "./teilkultur_revModel.base"
@@ -21,7 +21,7 @@ export const teilkultur_rev_mutation_responseModelBase = ModelBase
     /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
     /** data of the affected rows by the mutation */
-    returning: types.union(types.undefined, types.array(types.late(() => teilkultur_revModel))),
+    returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkultur_revModel)))),
   })
   .views(self => ({
     get store() {

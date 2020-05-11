@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { lieferung_fileModel } from "./lieferung_fileModel"
 import { lieferung_fileModelSelector } from "./lieferung_fileModel.base"
@@ -21,7 +21,7 @@ export const lieferung_file_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("lieferung_file_aggregate"), "lieferung_file_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => lieferung_file_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => lieferung_fileModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferung_fileModel)))),
   })
   .views(self => ({
     get store() {
