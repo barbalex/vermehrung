@@ -71,37 +71,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query PersonQueryForPerson(
-    $id: uuid!
-    $isFiltered: Boolean!
-    $filter: person_bool_exp!
-  ) {
-    person(where: { id: { _eq: $id } }) {
-      ...PersonFields
-    }
-    rowsUnfiltered: person @include(if: $isFiltered) {
-      id
-    }
-    rowsFiltered: person(where: $filter) @include(if: $isFiltered) {
-      id
-    }
-    user_role(order_by: { sort: asc }) {
-      name
-      comment
-    }
-  }
-  ${personFragment}
-`
-const personQueryByAccountId = gql`
-  query PersonQueryForPersonByAccoutId($accountId: String) {
-    person(where: { account_id: { _eq: $accountId } }) {
-      ...PersonFields
-    }
-  }
-  ${personFragment}
-`
-
 const getId = ({ activeNodeArray, showFilter }) =>
   showFilter
     ? '99999999-9999-9999-9999-999999999999'
@@ -116,61 +85,59 @@ const Person = ({ filter: showFilter }) => {
   const { activeNodeArray: aNAProxy } = store.tree
   const activeNodeArray = aNAProxy.slice()
 
-  const [id, setId] = useState(getId({ activeNodeArray, showFilter }))
-  useEffect(() => {
-    setId(getId({ activeNodeArray, showFilter }))
-  }, [activeNodeArray, showFilter])
+  const id = getId({ activeNodeArray, showFilter })
+  console.log('Person, id:', id)
 
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
   const {
-    data: dataSinglePerson,
-    error: errorSinglePerson,
-    loading: loadingSinglePerson,
+    data: dataPerson,
+    error: errorPerson,
+    loading: loadingPerson,
   } = useQuery((store) =>
     store.queryPerson({
       where: { id: { _eq: id } },
     }),
   )
-  const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered, filter: personFilter },
-  })
-  console.log('Person', {
-    dataSinglePerson,
-    data,
-    id,
-    activeNodeArray: activeNodeArray.slice(),
-  })
+  const { data: dataAll } = useQuery((store) => store.queryPerson())
+  const { data: dataFiltered } = useQuery((store) =>
+    store.queryPerson({
+      where: personFilter,
+    }),
+  )
 
+  const { data: dataUserRole, loading: loadingUserRole } = useQuery((store) =>
+    store.queryUser_role(),
+  )
   const userRoleWerte = useMemo(
     () =>
-      get(data, 'user_role', []).map((el) => ({
+      get(dataUserRole, 'user_role', []).map((el) => ({
         value: el.name,
         label: `${el.name} (${el.comment})`,
       })),
-    [data],
+    [dataUserRole],
   )
 
-  const [errors, setErrors] = useState({})
-
   let row
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const totalNr = get(dataAll, 'person', []).length
+  const filteredNr = get(dataFiltered, 'person', []).length
   if (showFilter) {
     row = filter.person
   } else {
-    row = get(dataSinglePerson, 'person[0]') || {}
+    row = get(dataPerson, 'person[0]') || {}
   }
 
+  const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
   }, [row.id])
 
-  const personQueryByAccountIdResult = useQuery(personQueryByAccountId, {
-    variables: { accountId: user.uid },
-  })
-  const { user_role } =
-    get(personQueryByAccountIdResult.data, 'person[0]') || {}
+  const { data: dataUser } = useQuery((store) =>
+    store.queryPerson({
+      where: { account_id: { _eq: user.uid } },
+    }),
+  )
+  const { user_role } = get(dataUser, 'person[0]') || {}
   //console.log('Person, user_role:', user_role)
 
   const saveToDb = useCallback(
@@ -235,7 +202,7 @@ const Person = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
 
-  if (loading) {
+  if (loadingPerson) {
     return (
       <Container>
         <FormTitle title="Person" />
@@ -244,11 +211,11 @@ const Person = ({ filter: showFilter }) => {
     )
   }
 
-  if (error) {
+  if (errorPerson) {
     return (
       <Container>
         <FormTitle title="Person" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorPerson.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -289,7 +256,7 @@ const Person = ({ filter: showFilter }) => {
             field="user_role"
             label="Rolle"
             options={userRoleWerte}
-            loading={loading}
+            loading={loadingUserRole}
             saveToDb={saveToDb}
             error={errors.user_role}
           />
