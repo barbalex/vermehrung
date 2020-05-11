@@ -1,5 +1,4 @@
 import { RootStoreBase } from './RootStore.base'
-import { v1 as uuidv1 } from 'uuid'
 import { types } from 'mobx-state-tree'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
@@ -32,20 +31,6 @@ export const RootStore = RootStoreBase.props({
     firebase: null,
   }))
   .actions((self) => ({
-    addPerson() {
-      const id = uuidv1()
-      const newPerson = { id }
-      return self.mutateInsert_person(
-        {
-          objects: [newPerson],
-          on_conflict: { constraint: 'person_pkey', update_columns: [] },
-        },
-        undefined,
-        () => {
-          self.persons = { newPerson, ...self.persons.toJS() }
-        },
-      )
-    },
     setFirebase(val) {
       if (!self.firebase) {
         self.firebase = val
