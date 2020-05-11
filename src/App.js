@@ -81,8 +81,8 @@ const App = ({ element }) => {
         const { setUser, setAuthorizing, setFirebase } = store
         window.store = store
         // need to blacklist authorizing or mst-persist will set it to false
-        // and login form appears for a short moment
-        const blacklist = ['user', 'authorizing']
+        // and login form appears for a short moment until auth state changed
+        const blacklist = ['authorizing']
         const persist = pModule.default
         persist('store', store, {
           storage: localForage,
