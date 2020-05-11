@@ -14,6 +14,7 @@ import Filter from '../components/Filter'
 import { StoreContext } from '../models/reactUtils'
 import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
+import OnlineDetector from '../components/OnlineDetector'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -129,6 +130,7 @@ const Vermehrung = ({ location }) => {
     )
   }
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
+  console.log('Vermehrung rendering')
 
   return (
     <ErrorBoundary>
@@ -145,6 +147,7 @@ const Vermehrung = ({ location }) => {
           </StyledSplitPane>
         </Container>
       </Layout>
+      <OnlineDetector />
     </ErrorBoundary>
   )
 }
