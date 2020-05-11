@@ -13,7 +13,6 @@ import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 import ReactResizeDetector from 'react-resize-detector'
-import { Offline, Online } from 'react-detect-offline'
 
 import Account from './Account'
 //import More from './More'
@@ -75,7 +74,7 @@ const StyledLabel = styled.label`
 
 const HeaderVermehrung = () => {
   const store = useContext(StoreContext)
-  const { setHideInactive, hideInactive, filter } = store
+  const { setHideInactive, hideInactive, filter, online } = store
   const { show: showFilter, setShow: setShowFilter } = filter
   const { widthEnforced, setWidthEnforced } = store.tree
 
@@ -196,19 +195,18 @@ const HeaderVermehrung = () => {
               }`}
             />
           </HideActiveDiv>
-          <Online>
-            <Search />
-          </Online>
-          <Online>
-            <IconButton color="inherit" aria-label="online" title="online">
-              <NetworkOn />
-            </IconButton>
-          </Online>
-          <Offline>
+          {online ? (
+            <>
+              <Search />
+              <IconButton color="inherit" aria-label="online" title="online">
+                <NetworkOn />
+              </IconButton>
+            </>
+          ) : (
             <IconButton color="inherit" aria-label="offline" title="offline">
               <NetworkOff />
             </IconButton>
-          </Offline>
+          )}
           <Account />
           {/*<More />*/}
         </Toolbar>
