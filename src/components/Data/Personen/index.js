@@ -87,12 +87,12 @@ const Personen = ({ filter: showFilter }) => {
   const rowsFiltered = get(dataFiltered, 'person', [])
   const filteredNr = rowsFiltered.length
 
-  const { data: dataOption } = useQuery((store) =>
+  const { data: dataUser } = useQuery((store) =>
     store.queryPerson({
       where: { account_id: { _eq: user.uid } },
     }),
   )
-  const { user_role } = get(dataOption, 'person[0]') || {}
+  const { user_role } = get(dataUser, 'person[0]') || {}
 
   const add = useCallback(async () => {
     await store.addPerson()
