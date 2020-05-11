@@ -43,6 +43,15 @@ export const RootStore = RootStoreBase.props({
     reaction(
       () => `${self.queuedQueries.length}/${self.online}`,
       () => {
+        /**
+         * TODO:
+         * When new query is added
+         * check if same exists already
+         * then combine them into one
+         * Goal: reduce network traffic and revision numbers when many fields were updated
+         * Build new reaction for this that only depends on self.queuedQueries.length? (but must run first...)
+         * Also big problem: How to combine when online?
+         */
         if (self.online) {
           // execute operation
           const query = self.queuedQueries[0]
