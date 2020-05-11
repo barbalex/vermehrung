@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { artModel } from "./artModel"
 import { artModelSelector } from "./artModel.base"
@@ -26,7 +26,7 @@ export const art_sumsModelBase = ModelBase
     anzahl_mutterpflanzen: types.union(types.undefined, types.null, types.frozen()),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    art: types.union(types.undefined, types.null, types.late(() => artModel)),
+    art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     auspflanzbereit_beschreibung: types.union(types.undefined, types.null, types.string),
     /** An object relationship */

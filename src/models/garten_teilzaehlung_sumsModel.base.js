@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { artModel } from "./artModel"
 import { artModelSelector } from "./artModel.base"
@@ -19,7 +19,7 @@ export const garten_teilzaehlung_sumsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("garten_teilzaehlung_sums"), "garten_teilzaehlung_sums"),
     /** An object relationship */
-    art: types.union(types.undefined, types.null, types.late(() => artModel)),
+    art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     garten_aktiv: types.union(types.undefined, types.null, types.boolean),
     garten_anzahl_kulturen: types.union(types.undefined, types.null, types.frozen()),
     garten_bemerkungen: types.union(types.undefined, types.null, types.string),

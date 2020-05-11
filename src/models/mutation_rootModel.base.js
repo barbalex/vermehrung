@@ -193,7 +193,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "art" */
     delete_art: types.union(types.undefined, types.null, types.late(() => art_mutation_responseModel)),
     /** delete single row from the table: "art" */
-    delete_art_by_pk: types.union(types.undefined, types.null, types.late(() => artModel)),
+    delete_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     /** delete data from the table: "art_file" */
     delete_art_file: types.union(types.undefined, types.null, types.late(() => art_file_mutation_responseModel)),
     /** delete single row from the table: "art_file" */
@@ -223,7 +223,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "garten" */
     delete_garten: types.union(types.undefined, types.null, types.late(() => garten_mutation_responseModel)),
     /** delete single row from the table: "garten" */
-    delete_garten_by_pk: types.union(types.undefined, types.null, types.late(() => gartenModel)),
+    delete_garten_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     /** delete data from the table: "garten_file" */
     delete_garten_file: types.union(types.undefined, types.null, types.late(() => garten_file_mutation_responseModel)),
     /** delete single row from the table: "garten_file" */
@@ -235,7 +235,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "herkunft" */
     delete_herkunft: types.union(types.undefined, types.null, types.late(() => herkunft_mutation_responseModel)),
     /** delete single row from the table: "herkunft" */
-    delete_herkunft_by_pk: types.union(types.undefined, types.null, types.late(() => herkunftModel)),
+    delete_herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     /** delete data from the table: "herkunft_file" */
     delete_herkunft_file: types.union(types.undefined, types.null, types.late(() => herkunft_file_mutation_responseModel)),
     /** delete single row from the table: "herkunft_file" */
@@ -271,7 +271,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "lieferung" */
     delete_lieferung: types.union(types.undefined, types.null, types.late(() => lieferung_mutation_responseModel)),
     /** delete single row from the table: "lieferung" */
-    delete_lieferung_by_pk: types.union(types.undefined, types.null, types.late(() => lieferungModel)),
+    delete_lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
     /** delete data from the table: "lieferung_file" */
     delete_lieferung_file: types.union(types.undefined, types.null, types.late(() => lieferung_file_mutation_responseModel)),
     /** delete single row from the table: "lieferung_file" */
@@ -301,7 +301,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "sammel_lieferung" */
     delete_sammel_lieferung: types.union(types.undefined, types.null, types.late(() => sammel_lieferung_mutation_responseModel)),
     /** delete single row from the table: "sammel_lieferung" */
-    delete_sammel_lieferung_by_pk: types.union(types.undefined, types.null, types.late(() => sammel_lieferungModel)),
+    delete_sammel_lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferungModel))),
     /** delete data from the table: "sammel_lieferung_rev" */
     delete_sammel_lieferung_rev: types.union(types.undefined, types.null, types.late(() => sammel_lieferung_rev_mutation_responseModel)),
     /** delete single row from the table: "sammel_lieferung_rev" */
@@ -309,7 +309,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "sammlung" */
     delete_sammlung: types.union(types.undefined, types.null, types.late(() => sammlung_mutation_responseModel)),
     /** delete single row from the table: "sammlung" */
-    delete_sammlung_by_pk: types.union(types.undefined, types.null, types.late(() => sammlungModel)),
+    delete_sammlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     /** delete data from the table: "sammlung_file" */
     delete_sammlung_file: types.union(types.undefined, types.null, types.late(() => sammlung_file_mutation_responseModel)),
     /** delete single row from the table: "sammlung_file" */
@@ -325,7 +325,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "teilkultur" */
     delete_teilkultur: types.union(types.undefined, types.null, types.late(() => teilkultur_mutation_responseModel)),
     /** delete single row from the table: "teilkultur" */
-    delete_teilkultur_by_pk: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
+    delete_teilkultur_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     /** delete data from the table: "teilkultur_rev" */
     delete_teilkultur_rev: types.union(types.undefined, types.null, types.late(() => teilkultur_rev_mutation_responseModel)),
     /** delete single row from the table: "teilkultur_rev" */
@@ -333,7 +333,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "teilzaehlung" */
     delete_teilzaehlung: types.union(types.undefined, types.null, types.late(() => teilzaehlung_mutation_responseModel)),
     /** delete single row from the table: "teilzaehlung" */
-    delete_teilzaehlung_by_pk: types.union(types.undefined, types.null, types.late(() => teilzaehlungModel)),
+    delete_teilzaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     /** delete data from the table: "teilzaehlung_rev" */
     delete_teilzaehlung_rev: types.union(types.undefined, types.null, types.late(() => teilzaehlung_rev_mutation_responseModel)),
     /** delete single row from the table: "teilzaehlung_rev" */
@@ -345,7 +345,7 @@ export const mutation_rootModelBase = ModelBase
     /** delete data from the table: "zaehlung" */
     delete_zaehlung: types.union(types.undefined, types.null, types.late(() => zaehlung_mutation_responseModel)),
     /** delete single row from the table: "zaehlung" */
-    delete_zaehlung_by_pk: types.union(types.undefined, types.null, types.late(() => zaehlungModel)),
+    delete_zaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     /** delete data from the table: "zaehlung_rev" */
     delete_zaehlung_rev: types.union(types.undefined, types.null, types.late(() => zaehlung_rev_mutation_responseModel)),
     /** delete single row from the table: "zaehlung_rev" */
@@ -361,7 +361,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert a single row into the table: "art_file" */
     insert_art_file_one: types.union(types.undefined, types.null, types.late(() => art_fileModel)),
     /** insert a single row into the table: "art" */
-    insert_art_one: types.union(types.undefined, types.null, types.late(() => artModel)),
+    insert_art_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     /** insert data into the table: "art_qk" */
     insert_art_qk: types.union(types.undefined, types.null, types.late(() => art_qk_mutation_responseModel)),
     /** insert data into the table: "art_qk_choosen" */
@@ -393,7 +393,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert a single row into the table: "garten_file" */
     insert_garten_file_one: types.union(types.undefined, types.null, types.late(() => garten_fileModel)),
     /** insert a single row into the table: "garten" */
-    insert_garten_one: types.union(types.undefined, types.null, types.late(() => gartenModel)),
+    insert_garten_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     /** insert data into the table: "garten_rev" */
     insert_garten_rev: types.union(types.undefined, types.null, types.late(() => garten_rev_mutation_responseModel)),
     /** insert a single row into the table: "garten_rev" */
@@ -405,7 +405,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert a single row into the table: "herkunft_file" */
     insert_herkunft_file_one: types.union(types.undefined, types.null, types.late(() => herkunft_fileModel)),
     /** insert a single row into the table: "herkunft" */
-    insert_herkunft_one: types.union(types.undefined, types.null, types.late(() => herkunftModel)),
+    insert_herkunft_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     /** insert data into the table: "herkunft_rev" */
     insert_herkunft_rev: types.union(types.undefined, types.null, types.late(() => herkunft_rev_mutation_responseModel)),
     /** insert a single row into the table: "herkunft_rev" */
@@ -421,7 +421,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert data into the table: "kultur_option" */
     insert_kultur_option: types.union(types.undefined, types.null, types.late(() => kultur_option_mutation_responseModel)),
     /** insert a single row into the table: "kultur_option" */
-    insert_kultur_option_one: types.union(types.undefined, types.null, types.late(() => kultur_optionModel)),
+    insert_kultur_option_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_optionModel))),
     /** insert data into the table: "kultur_option_rev" */
     insert_kultur_option_rev: types.union(types.undefined, types.null, types.late(() => kultur_option_rev_mutation_responseModel)),
     /** insert a single row into the table: "kultur_option_rev" */
@@ -445,7 +445,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert a single row into the table: "lieferung_file" */
     insert_lieferung_file_one: types.union(types.undefined, types.null, types.late(() => lieferung_fileModel)),
     /** insert a single row into the table: "lieferung" */
-    insert_lieferung_one: types.union(types.undefined, types.null, types.late(() => lieferungModel)),
+    insert_lieferung_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
     /** insert data into the table: "lieferung_rev" */
     insert_lieferung_rev: types.union(types.undefined, types.null, types.late(() => lieferung_rev_mutation_responseModel)),
     /** insert a single row into the table: "lieferung_rev" */
@@ -473,7 +473,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert data into the table: "sammel_lieferung" */
     insert_sammel_lieferung: types.union(types.undefined, types.null, types.late(() => sammel_lieferung_mutation_responseModel)),
     /** insert a single row into the table: "sammel_lieferung" */
-    insert_sammel_lieferung_one: types.union(types.undefined, types.null, types.late(() => sammel_lieferungModel)),
+    insert_sammel_lieferung_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferungModel))),
     /** insert data into the table: "sammel_lieferung_rev" */
     insert_sammel_lieferung_rev: types.union(types.undefined, types.null, types.late(() => sammel_lieferung_rev_mutation_responseModel)),
     /** insert a single row into the table: "sammel_lieferung_rev" */
@@ -485,7 +485,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert a single row into the table: "sammlung_file" */
     insert_sammlung_file_one: types.union(types.undefined, types.null, types.late(() => sammlung_fileModel)),
     /** insert a single row into the table: "sammlung" */
-    insert_sammlung_one: types.union(types.undefined, types.null, types.late(() => sammlungModel)),
+    insert_sammlung_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     /** insert data into the table: "sammlung_rev" */
     insert_sammlung_rev: types.union(types.undefined, types.null, types.late(() => sammlung_rev_mutation_responseModel)),
     /** insert a single row into the table: "sammlung_rev" */
@@ -497,7 +497,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert data into the table: "teilkultur" */
     insert_teilkultur: types.union(types.undefined, types.null, types.late(() => teilkultur_mutation_responseModel)),
     /** insert a single row into the table: "teilkultur" */
-    insert_teilkultur_one: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
+    insert_teilkultur_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     /** insert data into the table: "teilkultur_rev" */
     insert_teilkultur_rev: types.union(types.undefined, types.null, types.late(() => teilkultur_rev_mutation_responseModel)),
     /** insert a single row into the table: "teilkultur_rev" */
@@ -505,7 +505,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert data into the table: "teilzaehlung" */
     insert_teilzaehlung: types.union(types.undefined, types.null, types.late(() => teilzaehlung_mutation_responseModel)),
     /** insert a single row into the table: "teilzaehlung" */
-    insert_teilzaehlung_one: types.union(types.undefined, types.null, types.late(() => teilzaehlungModel)),
+    insert_teilzaehlung_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     /** insert data into the table: "teilzaehlung_rev" */
     insert_teilzaehlung_rev: types.union(types.undefined, types.null, types.late(() => teilzaehlung_rev_mutation_responseModel)),
     /** insert a single row into the table: "teilzaehlung_rev" */
@@ -517,7 +517,7 @@ export const mutation_rootModelBase = ModelBase
     /** insert data into the table: "zaehlung" */
     insert_zaehlung: types.union(types.undefined, types.null, types.late(() => zaehlung_mutation_responseModel)),
     /** insert a single row into the table: "zaehlung" */
-    insert_zaehlung_one: types.union(types.undefined, types.null, types.late(() => zaehlungModel)),
+    insert_zaehlung_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     /** insert data into the table: "zaehlung_rev" */
     insert_zaehlung_rev: types.union(types.undefined, types.null, types.late(() => zaehlung_rev_mutation_responseModel)),
     /** insert a single row into the table: "zaehlung_rev" */
@@ -527,7 +527,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "art" */
     update_art: types.union(types.undefined, types.null, types.late(() => art_mutation_responseModel)),
     /** update single row of the table: "art" */
-    update_art_by_pk: types.union(types.undefined, types.null, types.late(() => artModel)),
+    update_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     /** update data of the table: "art_file" */
     update_art_file: types.union(types.undefined, types.null, types.late(() => art_file_mutation_responseModel)),
     /** update single row of the table: "art_file" */
@@ -557,7 +557,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "garten" */
     update_garten: types.union(types.undefined, types.null, types.late(() => garten_mutation_responseModel)),
     /** update single row of the table: "garten" */
-    update_garten_by_pk: types.union(types.undefined, types.null, types.late(() => gartenModel)),
+    update_garten_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     /** update data of the table: "garten_file" */
     update_garten_file: types.union(types.undefined, types.null, types.late(() => garten_file_mutation_responseModel)),
     /** update single row of the table: "garten_file" */
@@ -569,7 +569,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "herkunft" */
     update_herkunft: types.union(types.undefined, types.null, types.late(() => herkunft_mutation_responseModel)),
     /** update single row of the table: "herkunft" */
-    update_herkunft_by_pk: types.union(types.undefined, types.null, types.late(() => herkunftModel)),
+    update_herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     /** update data of the table: "herkunft_file" */
     update_herkunft_file: types.union(types.undefined, types.null, types.late(() => herkunft_file_mutation_responseModel)),
     /** update single row of the table: "herkunft_file" */
@@ -605,7 +605,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "lieferung" */
     update_lieferung: types.union(types.undefined, types.null, types.late(() => lieferung_mutation_responseModel)),
     /** update single row of the table: "lieferung" */
-    update_lieferung_by_pk: types.union(types.undefined, types.null, types.late(() => lieferungModel)),
+    update_lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
     /** update data of the table: "lieferung_file" */
     update_lieferung_file: types.union(types.undefined, types.null, types.late(() => lieferung_file_mutation_responseModel)),
     /** update single row of the table: "lieferung_file" */
@@ -635,7 +635,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "sammel_lieferung" */
     update_sammel_lieferung: types.union(types.undefined, types.null, types.late(() => sammel_lieferung_mutation_responseModel)),
     /** update single row of the table: "sammel_lieferung" */
-    update_sammel_lieferung_by_pk: types.union(types.undefined, types.null, types.late(() => sammel_lieferungModel)),
+    update_sammel_lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferungModel))),
     /** update data of the table: "sammel_lieferung_rev" */
     update_sammel_lieferung_rev: types.union(types.undefined, types.null, types.late(() => sammel_lieferung_rev_mutation_responseModel)),
     /** update single row of the table: "sammel_lieferung_rev" */
@@ -643,7 +643,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "sammlung" */
     update_sammlung: types.union(types.undefined, types.null, types.late(() => sammlung_mutation_responseModel)),
     /** update single row of the table: "sammlung" */
-    update_sammlung_by_pk: types.union(types.undefined, types.null, types.late(() => sammlungModel)),
+    update_sammlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     /** update data of the table: "sammlung_file" */
     update_sammlung_file: types.union(types.undefined, types.null, types.late(() => sammlung_file_mutation_responseModel)),
     /** update single row of the table: "sammlung_file" */
@@ -659,7 +659,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "teilkultur" */
     update_teilkultur: types.union(types.undefined, types.null, types.late(() => teilkultur_mutation_responseModel)),
     /** update single row of the table: "teilkultur" */
-    update_teilkultur_by_pk: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
+    update_teilkultur_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     /** update data of the table: "teilkultur_rev" */
     update_teilkultur_rev: types.union(types.undefined, types.null, types.late(() => teilkultur_rev_mutation_responseModel)),
     /** update single row of the table: "teilkultur_rev" */
@@ -667,7 +667,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "teilzaehlung" */
     update_teilzaehlung: types.union(types.undefined, types.null, types.late(() => teilzaehlung_mutation_responseModel)),
     /** update single row of the table: "teilzaehlung" */
-    update_teilzaehlung_by_pk: types.union(types.undefined, types.null, types.late(() => teilzaehlungModel)),
+    update_teilzaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     /** update data of the table: "teilzaehlung_rev" */
     update_teilzaehlung_rev: types.union(types.undefined, types.null, types.late(() => teilzaehlung_rev_mutation_responseModel)),
     /** update single row of the table: "teilzaehlung_rev" */
@@ -679,7 +679,7 @@ export const mutation_rootModelBase = ModelBase
     /** update data of the table: "zaehlung" */
     update_zaehlung: types.union(types.undefined, types.null, types.late(() => zaehlung_mutation_responseModel)),
     /** update single row of the table: "zaehlung" */
-    update_zaehlung_by_pk: types.union(types.undefined, types.null, types.late(() => zaehlungModel)),
+    update_zaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     /** update data of the table: "zaehlung_rev" */
     update_zaehlung_rev: types.union(types.undefined, types.null, types.late(() => zaehlung_rev_mutation_responseModel)),
     /** update single row of the table: "zaehlung_rev" */

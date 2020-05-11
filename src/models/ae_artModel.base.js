@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { artModel } from "./artModel"
 import { artModelSelector } from "./artModel.base"
@@ -19,7 +19,7 @@ export const ae_artModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("ae_art"), "ae_art"),
     /** An object relationship */
-    ae_art_art: types.union(types.undefined, types.null, types.late(() => artModel)),
+    ae_art_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     name_deutsch: types.union(types.undefined, types.null, types.string),

@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { sammel_lieferungModel } from "./sammel_lieferungModel"
 import { sammel_lieferungModelSelector } from "./sammel_lieferungModel.base"
@@ -21,7 +21,7 @@ export const sammel_lieferung_mutation_responseModelBase = ModelBase
     /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
     /** data of the affected rows by the mutation */
-    returning: types.union(types.undefined, types.array(types.late(() => sammel_lieferungModel))),
+    returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
   })
   .views(self => ({
     get store() {

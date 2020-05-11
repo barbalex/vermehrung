@@ -65,7 +65,7 @@ export const person_revModelBase = ModelBase
     /** An aggregated array relationship */
     events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     /** An array relationship */
-    gartens: types.union(types.undefined, types.array(types.late(() => gartenModel))),
+    gartens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
     /** An aggregated array relationship */
     gartens_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
     id: types.union(types.undefined, types.frozen()),
@@ -83,11 +83,11 @@ export const person_revModelBase = ModelBase
     person_option: types.union(types.undefined, types.null, types.late(() => person_optionModel)),
     plz: types.union(types.undefined, types.null, types.integer),
     /** An array relationship */
-    sammel_lieferungs: types.union(types.undefined, types.array(types.late(() => sammel_lieferungModel))),
+    sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     /** An aggregated array relationship */
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     /** An array relationship */
-    sammlungs: types.union(types.undefined, types.array(types.late(() => sammlungModel))),
+    sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     /** An aggregated array relationship */
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     strasse: types.union(types.undefined, types.null, types.string),

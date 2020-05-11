@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { gartenModel } from "./gartenModel"
 import { gartenModelSelector } from "./gartenModel.base"
@@ -21,7 +21,7 @@ export const garten_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("garten_aggregate"), "garten_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => garten_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => gartenModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
   })
   .views(self => ({
     get store() {

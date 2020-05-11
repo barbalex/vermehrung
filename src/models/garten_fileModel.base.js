@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { gartenModel } from "./gartenModel"
 import { gartenModelSelector } from "./gartenModel.base"
@@ -22,7 +22,7 @@ export const garten_fileModelBase = ModelBase
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     /** An object relationship */
-    garten: types.union(types.undefined, types.null, types.late(() => gartenModel)),
+    garten: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.union(types.undefined, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),

@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { teilkulturModel } from "./teilkulturModel"
 import { teilkulturModelSelector } from "./teilkulturModel.base"
@@ -40,16 +40,16 @@ export const teilzaehlung_revModelBase = ModelBase
     id: types.union(types.undefined, types.frozen()),
     prognose_von_tz: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    teilkultur: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
+    teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    teilzaehlung: types.union(types.undefined, types.null, types.late(() => teilzaehlungModel)),
+    teilzaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     /** An array relationship */
-    teilzaehlungs: types.union(types.undefined, types.array(types.late(() => teilzaehlungModel))),
+    teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     /** An aggregated array relationship */
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     /** An object relationship */
-    zaehlung: types.union(types.undefined, types.null, types.late(() => zaehlungModel)),
+    zaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({

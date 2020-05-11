@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { zaehlungModel } from "./zaehlungModel"
 import { zaehlungModelSelector } from "./zaehlungModel.base"
@@ -21,7 +21,7 @@ export const zaehlung_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("zaehlung_aggregate"), "zaehlung_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => zaehlung_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => zaehlungModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlungModel)))),
   })
   .views(self => ({
     get store() {

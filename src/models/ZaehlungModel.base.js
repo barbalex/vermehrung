@@ -37,7 +37,7 @@ export const zaehlungModelBase = ModelBase
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
     /** An array relationship */
-    teilzaehlungs: types.union(types.undefined, types.array(types.late(() => teilzaehlungModel))),
+    teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     /** An aggregated array relationship */
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
