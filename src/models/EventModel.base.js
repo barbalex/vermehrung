@@ -40,7 +40,7 @@ export const eventModelBase = ModelBase
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    teilkultur: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
+    teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })

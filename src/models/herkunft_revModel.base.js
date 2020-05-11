@@ -44,7 +44,7 @@ export const herkunft_revModelBase = ModelBase
     lokalname: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    sammlungs: types.union(types.undefined, types.array(types.late(() => sammlungModel))),
+    sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     /** An aggregated array relationship */
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
   })

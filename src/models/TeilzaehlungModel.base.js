@@ -39,7 +39,7 @@ export const teilzaehlungModelBase = ModelBase
     id: types.union(types.undefined, types.frozen()),
     prognose_von_tz: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    teilkultur: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
+    teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
     teilzaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
@@ -49,7 +49,7 @@ export const teilzaehlungModelBase = ModelBase
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    zaehlung: types.union(types.undefined, types.null, types.late(() => zaehlungModel)),
+    zaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({

@@ -205,11 +205,11 @@ export const subscription_rootModelBase = ModelBase
     /** fetch aggregated fields from the table: "ae_art" */
     ae_art_aggregate: types.union(types.undefined, types.late(() => ae_art_aggregateModel)),
     /** fetch data from the table: "art" */
-    art: types.union(types.undefined, types.array(types.late(() => artModel))),
+    art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => artModel)))),
     /** fetch aggregated fields from the table: "art" */
     art_aggregate: types.union(types.undefined, types.late(() => art_aggregateModel)),
     /** fetch data from the table: "art" using primary key columns */
-    art_by_pk: types.union(types.undefined, types.null, types.late(() => artModel)),
+    art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     /** fetch data from the table: "art_file" */
     art_file: types.union(types.undefined, types.array(types.late(() => art_fileModel))),
     /** fetch aggregated fields from the table: "art_file" */
@@ -233,7 +233,7 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "art_rev" using primary key columns */
     art_rev_by_pk: types.union(types.undefined, types.null, types.late(() => art_revModel)),
     /** execute function "art_search" which returns "art" */
-    art_search: types.union(types.undefined, types.array(types.late(() => artModel))),
+    art_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => artModel)))),
     /** execute function "art_search" and query aggregates on result of table type "art" */
     art_search_aggregate: types.union(types.undefined, types.late(() => art_aggregateModel)),
     /** fetch data from the table: "art_sums" */
@@ -263,11 +263,11 @@ export const subscription_rootModelBase = ModelBase
     /** execute function "event_search" and query aggregates on result of table type "event" */
     event_search_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     /** fetch data from the table: "garten" */
-    garten: types.union(types.undefined, types.array(types.late(() => gartenModel))),
+    garten: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
     /** fetch aggregated fields from the table: "garten" */
     garten_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
     /** fetch data from the table: "garten" using primary key columns */
-    garten_by_pk: types.union(types.undefined, types.null, types.late(() => gartenModel)),
+    garten_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     /** fetch data from the table: "garten_file" */
     garten_file: types.union(types.undefined, types.array(types.late(() => garten_fileModel))),
     /** fetch aggregated fields from the table: "garten_file" */
@@ -281,7 +281,7 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "garten_rev" using primary key columns */
     garten_rev_by_pk: types.union(types.undefined, types.null, types.late(() => garten_revModel)),
     /** execute function "garten_search" which returns "garten" */
-    garten_search: types.union(types.undefined, types.array(types.late(() => gartenModel))),
+    garten_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
     /** execute function "garten_search" and query aggregates on result of table type "garten" */
     garten_search_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
     /** fetch data from the table: "garten_teilzaehlung_sums" */
@@ -289,11 +289,11 @@ export const subscription_rootModelBase = ModelBase
     /** fetch aggregated fields from the table: "garten_teilzaehlung_sums" */
     garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
     /** fetch data from the table: "herkunft" */
-    herkunft: types.union(types.undefined, types.array(types.late(() => herkunftModel))),
+    herkunft: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunftModel)))),
     /** fetch aggregated fields from the table: "herkunft" */
     herkunft_aggregate: types.union(types.undefined, types.late(() => herkunft_aggregateModel)),
     /** fetch data from the table: "herkunft" using primary key columns */
-    herkunft_by_pk: types.union(types.undefined, types.null, types.late(() => herkunftModel)),
+    herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     /** fetch data from the table: "herkunft_file" */
     herkunft_file: types.union(types.undefined, types.array(types.late(() => herkunft_fileModel))),
     /** fetch aggregated fields from the table: "herkunft_file" */
@@ -307,7 +307,7 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "herkunft_rev" using primary key columns */
     herkunft_rev_by_pk: types.union(types.undefined, types.null, types.late(() => herkunft_revModel)),
     /** execute function "herkunft_search" which returns "herkunft" */
-    herkunft_search: types.union(types.undefined, types.array(types.late(() => herkunftModel))),
+    herkunft_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunftModel)))),
     /** execute function "herkunft_search" and query aggregates on result of table type "herkunft" */
     herkunft_search_aggregate: types.union(types.undefined, types.late(() => herkunft_aggregateModel)),
     /** fetch data from the table: "herkunft_sums" */
@@ -327,7 +327,7 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "kultur_file" using primary key columns */
     kultur_file_by_pk: types.union(types.undefined, types.null, types.late(() => kultur_fileModel)),
     /** fetch data from the table: "kultur_option" */
-    kultur_option: types.union(types.undefined, types.array(types.late(() => kultur_optionModel))),
+    kultur_option: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_optionModel)))),
     /** fetch aggregated fields from the table: "kultur_option" */
     kultur_option_aggregate: types.union(types.undefined, types.late(() => kultur_option_aggregateModel)),
     /** fetch data from the table: "kultur_option_rev" */
@@ -357,11 +357,11 @@ export const subscription_rootModelBase = ModelBase
     /** execute function "kultur_search" and query aggregates on result of table type "kultur" */
     kultur_search_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     /** fetch data from the table: "lieferung" */
-    lieferung: types.union(types.undefined, types.array(types.late(() => lieferungModel))),
+    lieferung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     /** fetch aggregated fields from the table: "lieferung" */
     lieferung_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     /** fetch data from the table: "lieferung" using primary key columns */
-    lieferung_by_pk: types.union(types.undefined, types.null, types.late(() => lieferungModel)),
+    lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
     /** fetch data from the table: "lieferung_file" */
     lieferung_file: types.union(types.undefined, types.array(types.late(() => lieferung_fileModel))),
     /** fetch aggregated fields from the table: "lieferung_file" */
@@ -375,7 +375,7 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "lieferung_rev" using primary key columns */
     lieferung_rev_by_pk: types.union(types.undefined, types.null, types.late(() => lieferung_revModel)),
     /** execute function "lieferung_search" which returns "lieferung" */
-    lieferung_search: types.union(types.undefined, types.array(types.late(() => lieferungModel))),
+    lieferung_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     /** execute function "lieferung_search" and query aggregates on result of table type "lieferung" */
     lieferung_search_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     /** fetch data from the table: "person" */
@@ -411,11 +411,11 @@ export const subscription_rootModelBase = ModelBase
     /** execute function "person_search" and query aggregates on result of table type "person" */
     person_search_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
     /** fetch data from the table: "sammel_lieferung" */
-    sammel_lieferung: types.union(types.undefined, types.array(types.late(() => sammel_lieferungModel))),
+    sammel_lieferung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     /** fetch aggregated fields from the table: "sammel_lieferung" */
     sammel_lieferung_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     /** fetch data from the table: "sammel_lieferung" using primary key columns */
-    sammel_lieferung_by_pk: types.union(types.undefined, types.null, types.late(() => sammel_lieferungModel)),
+    sammel_lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferungModel))),
     /** fetch data from the table: "sammel_lieferung_rev" */
     sammel_lieferung_rev: types.union(types.undefined, types.array(types.late(() => sammel_lieferung_revModel))),
     /** fetch aggregated fields from the table: "sammel_lieferung_rev" */
@@ -423,11 +423,11 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "sammel_lieferung_rev" using primary key columns */
     sammel_lieferung_rev_by_pk: types.union(types.undefined, types.null, types.late(() => sammel_lieferung_revModel)),
     /** fetch data from the table: "sammlung" */
-    sammlung: types.union(types.undefined, types.array(types.late(() => sammlungModel))),
+    sammlung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     /** fetch aggregated fields from the table: "sammlung" */
     sammlung_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     /** fetch data from the table: "sammlung" using primary key columns */
-    sammlung_by_pk: types.union(types.undefined, types.null, types.late(() => sammlungModel)),
+    sammlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     /** fetch data from the table: "sammlung_file" */
     sammlung_file: types.union(types.undefined, types.array(types.late(() => sammlung_fileModel))),
     /** fetch aggregated fields from the table: "sammlung_file" */
@@ -441,7 +441,7 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "sammlung_rev" using primary key columns */
     sammlung_rev_by_pk: types.union(types.undefined, types.null, types.late(() => sammlung_revModel)),
     /** execute function "sammlung_search" which returns "sammlung" */
-    sammlung_search: types.union(types.undefined, types.array(types.late(() => sammlungModel))),
+    sammlung_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     /** execute function "sammlung_search" and query aggregates on result of table type "sammlung" */
     sammlung_search_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     /** fetch data from the table: "spatial_ref_sys" */
@@ -451,11 +451,11 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "spatial_ref_sys" using primary key columns */
     spatial_ref_sys_by_pk: types.union(types.undefined, types.null, types.late(() => spatial_ref_sysModel)),
     /** fetch data from the table: "teilkultur" */
-    teilkultur: types.union(types.undefined, types.array(types.late(() => teilkulturModel))),
+    teilkultur: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkulturModel)))),
     /** fetch aggregated fields from the table: "teilkultur" */
     teilkultur_aggregate: types.union(types.undefined, types.late(() => teilkultur_aggregateModel)),
     /** fetch data from the table: "teilkultur" using primary key columns */
-    teilkultur_by_pk: types.union(types.undefined, types.null, types.late(() => teilkulturModel)),
+    teilkultur_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     /** fetch data from the table: "teilkultur_rev" */
     teilkultur_rev: types.union(types.undefined, types.array(types.late(() => teilkultur_revModel))),
     /** fetch aggregated fields from the table: "teilkultur_rev" */
@@ -463,15 +463,15 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "teilkultur_rev" using primary key columns */
     teilkultur_rev_by_pk: types.union(types.undefined, types.null, types.late(() => teilkultur_revModel)),
     /** execute function "teilkultur_search" which returns "teilkultur" */
-    teilkultur_search: types.union(types.undefined, types.array(types.late(() => teilkulturModel))),
+    teilkultur_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkulturModel)))),
     /** execute function "teilkultur_search" and query aggregates on result of table type "teilkultur" */
     teilkultur_search_aggregate: types.union(types.undefined, types.late(() => teilkultur_aggregateModel)),
     /** fetch data from the table: "teilzaehlung" */
-    teilzaehlung: types.union(types.undefined, types.array(types.late(() => teilzaehlungModel))),
+    teilzaehlung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     /** fetch aggregated fields from the table: "teilzaehlung" */
     teilzaehlung_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     /** fetch data from the table: "teilzaehlung" using primary key columns */
-    teilzaehlung_by_pk: types.union(types.undefined, types.null, types.late(() => teilzaehlungModel)),
+    teilzaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     /** fetch data from the table: "teilzaehlung_rev" */
     teilzaehlung_rev: types.union(types.undefined, types.array(types.late(() => teilzaehlung_revModel))),
     /** fetch aggregated fields from the table: "teilzaehlung_rev" */
@@ -485,11 +485,11 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "user_role" using primary key columns */
     user_role_by_pk: types.union(types.undefined, types.null, types.late(() => user_roleModel)),
     /** fetch data from the table: "zaehlung" */
-    zaehlung: types.union(types.undefined, types.array(types.late(() => zaehlungModel))),
+    zaehlung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlungModel)))),
     /** fetch aggregated fields from the table: "zaehlung" */
     zaehlung_aggregate: types.union(types.undefined, types.late(() => zaehlung_aggregateModel)),
     /** fetch data from the table: "zaehlung" using primary key columns */
-    zaehlung_by_pk: types.union(types.undefined, types.null, types.late(() => zaehlungModel)),
+    zaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     /** fetch data from the table: "zaehlung_rev" */
     zaehlung_rev: types.union(types.undefined, types.array(types.late(() => zaehlung_revModel))),
     /** fetch aggregated fields from the table: "zaehlung_rev" */
@@ -497,7 +497,7 @@ export const subscription_rootModelBase = ModelBase
     /** fetch data from the table: "zaehlung_rev" using primary key columns */
     zaehlung_rev_by_pk: types.union(types.undefined, types.null, types.late(() => zaehlung_revModel)),
     /** execute function "zaehlung_search" which returns "zaehlung" */
-    zaehlung_search: types.union(types.undefined, types.array(types.late(() => zaehlungModel))),
+    zaehlung_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlungModel)))),
     /** execute function "zaehlung_search" and query aggregates on result of table type "zaehlung" */
     zaehlung_search_aggregate: types.union(types.undefined, types.late(() => zaehlung_aggregateModel)),
   })

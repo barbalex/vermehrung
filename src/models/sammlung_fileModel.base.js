@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { sammlungModel } from "./sammlungModel"
 import { sammlungModelSelector } from "./sammlungModel.base"
@@ -24,7 +24,7 @@ export const sammlung_fileModelBase = ModelBase
     id: types.union(types.undefined, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     /** An object relationship */
-    sammlung: types.union(types.undefined, types.null, types.late(() => sammlungModel)),
+    sammlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     sammlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({

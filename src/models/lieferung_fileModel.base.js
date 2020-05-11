@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { lieferungModel } from "./lieferungModel"
 import { lieferungModelSelector } from "./lieferungModel.base"
@@ -23,7 +23,7 @@ export const lieferung_fileModelBase = ModelBase
     file_mime_type: types.union(types.undefined, types.null, types.string),
     id: types.union(types.undefined, types.frozen()),
     /** An object relationship */
-    lieferung: types.union(types.undefined, types.null, types.late(() => lieferungModel)),
+    lieferung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
     lieferung_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
   })

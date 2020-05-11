@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { herkunftModel } from "./herkunftModel"
 import { herkunftModelSelector } from "./herkunftModel.base"
@@ -29,7 +29,7 @@ export const herkunft_sumsModelBase = ModelBase
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     /** An object relationship */
-    herkunft: types.union(types.undefined, types.null, types.late(() => herkunftModel)),
+    herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     partitioner: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),

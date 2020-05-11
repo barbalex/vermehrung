@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { teilkulturModel } from "./teilkulturModel"
 import { teilkulturModelSelector } from "./teilkulturModel.base"
@@ -21,7 +21,7 @@ export const teilkultur_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("teilkultur_aggregate"), "teilkultur_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => teilkultur_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => teilkulturModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkulturModel)))),
   })
   .views(self => ({
     get store() {

@@ -47,7 +47,7 @@ export const teilkultur_revModelBase = ModelBase
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    teilzaehlungs: types.union(types.undefined, types.array(types.late(() => teilzaehlungModel))),
+    teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     /** An aggregated array relationship */
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
   })
