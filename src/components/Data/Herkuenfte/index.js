@@ -1,20 +1,17 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import { v1 as uuidv1 } from 'uuid'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import createNew from '../../TreeContainer/Tree/createNew'
-import { herkunft as herkunftFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -60,36 +57,23 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query HerkunftQueryForHerkunfts($filter: herkunft_bool_exp!) {
-    rowsUnfiltered: herkunft {
-      id
-    }
-    rowsFiltered: herkunft(
-      where: $filter
-      order_by: [{ nr: asc }, { gemeinde: asc }, { lokalname: asc }]
-    ) {
-      ...HerkunftFields
-      sammlungs {
-        id
-      }
-    }
-  }
-  ${herkunftFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
 }
 
 const Herkuenfte = ({ filter: showFilter }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, mutateInsert_herkunft } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
-  const { activeNodeArray } = store.tree
+  const {
+    activeNodeArray: anaRaw,
+    setActiveNodeArray,
+    addOpenNodes,
+    refetch: refetchTree,
+  } = store.tree
+  const activeNodeArray = anaRaw.toJSON()
 
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   if (activeNodeArray.includes('Sammlungen')) {
@@ -97,18 +81,56 @@ const Herkuenfte = ({ filter: showFilter }) => {
       id: { _eq: activeNodeArray[activeNodeArray.indexOf('Sammlungen') + 1] },
     }
   }
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: herkunftFilter },
-  })
+  const {
+    data: dataFiltered,
+    error: errorFiltered,
+    loading: loadingFiltered,
+    query: queryFiltered,
+  } = useQuery((store) =>
+    store.queryHerkunft(
+      {
+        where: herkunftFilter,
+        order_by: [{ nr: 'asc' }, { gemeinde: 'asc' }, { lokalname: 'asc' }],
+      },
+      (d) => d.id.gemeinde.lokalname.nr,
+    ),
+  )
+  const { data: dataAll } = useQuery((store) =>
+    store.queryHerkunft(undefined, (d) => d.id),
+  )
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
-  const filteredNr = rows.length
+  const totalNr = get(dataAll, 'herkunft', []).length
+  const rowsFiltered = get(dataFiltered, 'herkunft', [])
+  const filteredNr = rowsFiltered.length
 
-  const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: activeNodeArray }
-    createNew({ node, store, client })
-  }, [activeNodeArray, client, store])
+  const add = useCallback(async () => {
+    const id = uuidv1()
+    const newObject = { id }
+    await mutateInsert_herkunft(
+      {
+        objects: [newObject],
+        on_conflict: { constraint: 'herkunft_pkey', update_columns: [] },
+      },
+      undefined,
+      () => {
+        self.herkunfts = { newObject, ...store.herkunfts.toJS() }
+      },
+    )
+    queryFiltered.refetch()
+    refetchTree()
+    const newActiveNodeArray = [...activeNodeArray, id]
+    setActiveNodeArray(newActiveNodeArray)
+    // add node.url just in case it was not yet open
+    addOpenNodes([newActiveNodeArray, newActiveNodeArray])
+  }, [
+    mutateInsert_herkunft,
+    queryFiltered,
+    refetchTree,
+    activeNodeArray,
+    setActiveNodeArray,
+    addOpenNodes,
+    store.herkunfts,
+  ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
@@ -122,7 +144,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
   // never enable adding below that
   const showPlus = activeNodeArray.length < 2
 
-  if (loading) {
+  if (loadingFiltered) {
     return (
       <Container>
         <FormTitle title="Herkünfte" />
@@ -131,7 +153,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error
+  const errorToShow = errorFiltered
   if (errorToShow) {
     return (
       <Container>
@@ -174,7 +196,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={rowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -183,8 +205,8 @@ const Herkuenfte = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={rowsFiltered[index]}
+                last={index === rowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>
