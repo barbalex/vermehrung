@@ -6,6 +6,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import { v1 as uuidv1 } from 'uuid'
 
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -64,10 +65,16 @@ function sizeReducer(state, action) {
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
 
-  const { filter, user } = store
+  const { filter, user, mutateInsert_person } = store
   const { isFiltered: runIsFiltered } = filter
-  const { refetch: refetchTree } = store.tree
   const isFiltered = runIsFiltered()
+  const {
+    activeNodeArray: anaRaw,
+    setActiveNodeArray,
+    addOpenNodes,
+    refetch: refetchTree,
+  } = store.tree
+  const activeNodeArray = anaRaw.toJSON()
 
   const personFilter = queryFromTable({ store, table: 'person' })
   const {
@@ -95,10 +102,33 @@ const Personen = ({ filter: showFilter }) => {
   const { user_role } = get(dataUser, 'person[0]') || {}
 
   const add = useCallback(async () => {
-    await store.addPerson()
+    const id = uuidv1()
+    const newObject = { id }
+    await mutateInsert_person(
+      {
+        objects: [newObject],
+        on_conflict: { constraint: 'person_pkey', update_columns: [] },
+      },
+      undefined,
+      () => {
+        self.persons = { newObject, ...store.persons.toJS() }
+      },
+    )
     queryFiltered.refetch()
     refetchTree()
-  }, [store, queryFiltered, refetchTree])
+    const newActiveNodeArray = [...activeNodeArray, id]
+    setActiveNodeArray(newActiveNodeArray)
+    // add node.url just in case it was not yet open
+    addOpenNodes([newActiveNodeArray, newActiveNodeArray])
+  }, [
+    store,
+    queryFiltered,
+    refetchTree,
+    mutateInsert_person,
+    activeNodeArray,
+    setActiveNodeArray,
+    addOpenNodes,
+  ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
