@@ -154,7 +154,13 @@ const Herkunft = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.split('"').join('\\"')}"`
+            valueToSet = `"${
+              value.split
+                ? value.split
+                  ? value.split('"').join('\\"')
+                  : value
+                : value
+            }"`
           }
           await client.mutate({
             mutation: gql`

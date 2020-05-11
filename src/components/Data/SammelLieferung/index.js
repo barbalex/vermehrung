@@ -484,7 +484,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
         } else {
-          valueToSet = `"${value.split('"').join('\\"')}"`
+          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
         }
         const refetchQueries = [
           'nach_kultur_id',
