@@ -65,8 +65,10 @@ const firebaseConfig = {
 const apolloClient = createApolloClient()
 
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
-// todo: is this the place to use tha last snapshot of the store instead of undefined?
+const tokenWithRoles = window.localStorage.getItem('token') || 'none'
+// is this the place to use the last snapshot of the store instead of undefined?
 // to that instead of mst-persist?
+gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
 const store = DataStore.create(undefined, {
   gqlHttpClient,
 })
@@ -78,7 +80,9 @@ const App = ({ element }) => {
       ([fbModule, pModule]) => {
         const { setUser, setAuthorizing, setFirebase } = store
         window.store = store
-        const blacklist = ['user']
+        // need to blacklist authorizing or mst-persist will set it to false
+        // and login form appears for a short moment
+        const blacklist = ['user', 'authorizing']
         const persist = pModule.default
         persist('store', store, {
           storage: localForage,
@@ -119,6 +123,8 @@ const App = ({ element }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  console.log('App, authorizing:', store.authorizing)
 
   if (!store) return null
   return (
