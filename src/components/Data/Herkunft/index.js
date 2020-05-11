@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -72,13 +72,9 @@ const FieldsContainer = styled.div`
 
 const herkunftQuery = gql`
   query HerkunftQueryForHerkunft(
-    $id: uuid!
     $isFiltered: Boolean!
     $filter: herkunft_bool_exp!
   ) {
-    herkunft(where: { id: { _eq: $id } }) {
-      ...HerkunftFields
-    }
     rowsUnfiltered: herkunft @include(if: $isFiltered) {
       id
     }
@@ -86,7 +82,6 @@ const herkunftQuery = gql`
       id
     }
   }
-  ${herkunftFragment}
 `
 const personOptionQuery = gql`
   query PersonOptionQueryForHerkunft($accountId: String) {
@@ -109,20 +104,39 @@ const Herkunft = ({ filter: showFilter }) => {
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
-  const { data, error, loading, refetch } = useQuery(herkunftQuery, {
-    variables: { id, isFiltered, filter: herkunftFilter },
+  const {
+    data: dataHerkunft,
+    error: errorHerkunft,
+    loading: loadingHerkunft,
+    query: queryHerkunft,
+  } = useQuery((store) =>
+    store.queryHerkunft({
+      where: { id: { _eq: id } },
+    }),
+  )
+  const { data: dataAll } = useQuery((store) =>
+    store.queryHerkunft(undefined, (d) => d.id),
+  )
+  const { data: dataFiltered } = useQuery((store) =>
+    store.queryHerkunft(
+      {
+        where: herkunftFilter,
+      },
+      (d) => d.id,
+    ),
+  )
+  const { refetch } = useQuery(herkunftQuery, {
+    variables: { isFiltered, filter: herkunftFilter },
   })
 
-  const [errors, setErrors] = useState({})
-
-  let row
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  let row = get(dataHerkunft, 'herkunft[0]') || {}
+  const totalNr = get(dataAll, 'herkunft', []).length
+  const filteredNr = get(dataFiltered, 'herkunft', []).length
   if (showFilter) {
     row = filter.herkunft
-  } else {
-    row = get(data, 'herkunft[0]') || {}
-  }
+  } /* else {
+    row = get(dataHerkunft, 'herkunft[0]') || {}
+  }*/
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
@@ -130,6 +144,7 @@ const Herkunft = ({ filter: showFilter }) => {
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
+  const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
   }, [row.id])
@@ -211,7 +226,7 @@ const Herkunft = ({ filter: showFilter }) => {
     }
   }, [])
 
-  if (loading) {
+  if (loadingHerkunft) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
@@ -220,11 +235,11 @@ const Herkunft = ({ filter: showFilter }) => {
     )
   }
 
-  if (error) {
+  if (errorHerkunft) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorHerkunft.message}`}</FieldsContainer>
       </Container>
     )
   }
