@@ -1,6 +1,7 @@
 import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
-import { observable, reaction } from 'mobx'
+import { reaction } from 'mobx'
+import { functionType } from './functionType'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -16,6 +17,8 @@ export const RootStore = RootStoreBase.props({
   isPrint: types.optional(types.boolean, false),
   updateExists: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
+  // see: https://github.com/mobxjs/mobx-state-tree/issues/491#issuecomment-415864489
+  onlineOperations: types.array(functionType),
   // on startup need to wait with showing data
   // until hasura claims have been added
   // this is _after_ user is set so need another variable
@@ -26,7 +29,6 @@ export const RootStore = RootStoreBase.props({
   .volatile(() => ({
     notifications: [],
     user: {},
-    onlineOperations: observable([]),
     // started out using context for firebase
     // refactored here because of some weird stuff
     // but that probably had other reasons
