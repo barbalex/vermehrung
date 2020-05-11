@@ -124,8 +124,6 @@ const App = ({ element }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  console.log('App, authorizing:', store.authorizing)
-
   if (!store) return null
   return (
     <MuiThemeProvider theme={materialTheme}>
