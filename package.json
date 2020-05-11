@@ -25,6 +25,7 @@
     "axios": "0.19.2",
     "babel-eslint": "10.1.0",
     "browser-update": "3.3.16",
+    "crypto-js": "4.0.0",
     "date-fns": "2.13.0",
     "eslint": "6.8.0",
     "eslint-loader": "4.0.2",
@@ -97,7 +98,7 @@
     "typeface-roboto-mono": "0.0.75",
     "typography": "0.16.19",
     "uploadcare-widget": "3.9.1",
-    "uuid": "^8.0.0"
+    "uuid": "8.0.0"
   },
   "devDependencies": {
     "copyfiles": "2.2.0"

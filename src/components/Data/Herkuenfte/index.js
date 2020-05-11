@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 import { v1 as uuidv1 } from 'uuid'
+import md5 from 'crypto-js/md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
@@ -105,12 +106,18 @@ const Herkuenfte = ({ filter: showFilter }) => {
 
   const add = useCallback(async () => {
     const id = uuidv1()
-    const newObject = { id }
+    const _rev = `1-${md5({ id, _deleted: false }.toString())}`
+    const _depth = 1
+    const _revisions = `{"${_rev}"}`
+    const newObject = { id, _rev, _depth, _revisions }
     addQueuedQuery({
-      name: 'mutateInsert_herkunft',
+      name: 'mutateInsert_herkunft_rev',
       variables: JSON.stringify({
         objects: [newObject],
-        on_conflict: { constraint: 'herkunft_pkey', update_columns: [] },
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
       }),
       callbackQuery: 'queryHerkunft',
       callbackQueryVariables: JSON.stringify({

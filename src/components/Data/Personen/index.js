@@ -107,7 +107,7 @@ const Personen = ({ filter: showFilter }) => {
     await mutateInsert_person(
       {
         objects: [newObject],
-        on_conflict: { constraint: 'person_pkey', update_columns: [] },
+        on_conflict: { constraint: 'person_pkey', update_columns: ['id'] },
       },
       undefined,
       () => {
