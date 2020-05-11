@@ -1,6 +1,6 @@
 import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
-import { observable } from 'mobx'
+import { observable, reaction } from 'mobx'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -26,65 +26,92 @@ export const RootStore = RootStoreBase.props({
   .volatile(() => ({
     notifications: [],
     user: {},
-    serverOperations: observable([]),
+    onlineOperations: observable([]),
     // started out using context for firebase
     // refactored here because of some weird stuff
     // but that probably had other reasons
     // so could move this back to context if necessary
     firebase: null,
   }))
-  .actions((self) => ({
-    setOnline(val) {
-      self.online = val
-    },
-    setFirebase(val) {
-      if (!self.firebase) {
-        self.firebase = val
-      }
-    },
-    setAuthorizing(val) {
-      if (val !== self.authorizing) {
-        self.authorizing = val
-      }
-    },
-    setUser(val) {
-      self.user = val || {}
-    },
-    setUpdateExists(val) {
-      self.updateExists = val
-    },
-    setIsPrint(val) {
-      self.isPrint = val
-    },
-    setSidebarWidth(val) {
-      self.sidebarWidth = val
-    },
-    setHideInactive(val) {
-      self.hideInactive = val
-      // TODO:
-      // set filters for person,garten,sammlung
-      const key = 'aktiv'
-      const value = val
-      self.filter.setValue({ table: 'person', key, value })
-      self.filter.setValue({ table: 'garten', key, value })
-      self.filter.setValue({ table: 'kultur', key, value })
-    },
-    enqueNotification(note) {
-      self.notifications = [
-        ...self.notifications,
-        {
-          key: new Date().getTime() + Math.random(),
-          ...note,
-        },
-      ]
-    },
-    removeNotification(note) {
-      self.notifications = self.notifications.filter((n) => n.key !== note)
-    },
-    setDocFilter(val) {
-      self.docFilter = val
-    },
-  }))
+  .actions((self) => {
+    reaction(
+      () => `${self.onlineOperations.length}/${self.online}`,
+      () => {
+        if (self.online) {
+          console.log('checking for operations to execute')
+          // execute operation
+          if (self.onlineOperations[0]) {
+            console.log('will execute:', self.onlineOperations[0].toString())
+            try {
+              self.onlineOperations[0]()
+            } catch (error) {
+              // Maybe do it like superhuman and check if network error
+              // then retry and set online without using tool?
+              return
+            }
+          }
+          // remove operation from queue
+          self.onlineOperations.shift()
+          console.log('executed, remaining:', self.onlineOperations.toString())
+        }
+      },
+    )
+    return {
+      addOnlineOperation(op) {
+        self.onlineOperations.push(op)
+      },
+      setOnline(val) {
+        self.online = val
+      },
+      setFirebase(val) {
+        if (!self.firebase) {
+          self.firebase = val
+        }
+      },
+      setAuthorizing(val) {
+        if (val !== self.authorizing) {
+          self.authorizing = val
+        }
+      },
+      setUser(val) {
+        self.user = val || {}
+      },
+      setUpdateExists(val) {
+        self.updateExists = val
+      },
+      setIsPrint(val) {
+        self.isPrint = val
+      },
+      setSidebarWidth(val) {
+        self.sidebarWidth = val
+      },
+      setHideInactive(val) {
+        self.hideInactive = val
+        // TODO:
+        // set filters for person,garten,sammlung
+        const key = 'aktiv'
+        const value = val
+        self.filter.setValue({ table: 'person', key, value })
+        self.filter.setValue({ table: 'garten', key, value })
+        self.filter.setValue({ table: 'kultur', key, value })
+      },
+      enqueNotification(note) {
+        self.notifications = [
+          ...self.notifications,
+          {
+            key: new Date().getTime() + Math.random(),
+            ...note,
+          },
+        ]
+      },
+      removeNotification(note) {
+        self.notifications = self.notifications.filter((n) => n.key !== note)
+      },
+      setDocFilter(val) {
+        self.docFilter = val
+      },
+    }
+  })
   .views((self) => ({
     get activeForm() {
       return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
