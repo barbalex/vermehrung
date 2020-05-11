@@ -1,4 +1,8 @@
 // see: https://github.com/mobxjs/mobx-state-tree/issues/491#issuecomment-415864489
+/**
+ * replaced by passing name ans stringified variables for queries
+ * because this errored when passing in queries
+ */
 import { types } from 'mobx-state-tree'
 
 const parseFunction = (value) => {

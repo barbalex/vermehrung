@@ -337,7 +337,9 @@ const Herkunft = ({ filter: showFilter }) => {
               multiLine
             />
           )}
-          {!showFilter && <Files parentId={row.id} parent="herkunft" />}
+          {!showFilter && row.id && (
+            <Files parentId={row.id} parent="herkunft" />
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
