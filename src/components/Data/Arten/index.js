@@ -89,7 +89,6 @@ const Arten = ({ filter: showFilter }) => {
   const rows = get(data, 'rowsFiltered', [])
   const rowsFiltered = get(dataFiltered, 'art', [])
   const filteredNr = rows.length
-  console.log('Arten', { rows, rowsFiltered, dataFiltered })
 
   const add = useCallback(() => {
     const node = { nodeType: 'folder', url: activeNodeArray }
