@@ -7,20 +7,19 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
 import { person as personFragment } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -28,6 +27,7 @@ import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -71,83 +71,78 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query PersonQueryForPerson(
-    $id: uuid!
-    $isFiltered: Boolean!
-    $filter: person_bool_exp!
-  ) {
-    person(where: { id: { _eq: $id } }) {
-      ...PersonFields
-    }
-    rowsUnfiltered: person @include(if: $isFiltered) {
-      id
-    }
-    rowsFiltered: person(where: $filter) @include(if: $isFiltered) {
-      id
-    }
-    user_role(order_by: { sort: asc }) {
-      name
-      comment
-    }
-  }
-  ${personFragment}
-`
-const personQueryByAccountId = gql`
-  query PersonQueryForPersonByAccoutId($accountId: String) {
-    person(where: { account_id: { _eq: $accountId } }) {
-      ...PersonFields
-    }
-  }
-  ${personFragment}
-`
+const getId = ({ activeNodeArray, showFilter }) =>
+  showFilter
+    ? '99999999-9999-9999-9999-999999999999'
+    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
 const Person = ({ filter: showFilter }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
+  const { activeNodeArray: aNAProxy } = store.tree
+  const activeNodeArray = aNAProxy.slice()
 
-  const id = showFilter
-    ? 99999999999999
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
+  const id = getId({ activeNodeArray, showFilter })
+  //console.log('Person, id:', id)
+
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
-  const { data, error, loading } = useQuery(query, {
-    variables: { id, isFiltered, filter: personFilter },
-  })
+  const {
+    data: dataPerson,
+    error: errorPerson,
+    loading: loadingPerson,
+  } = useQuery((store) =>
+    store.queryPerson({
+      where: { id: { _eq: id } },
+    }),
+  )
+  const { data: dataAll } = useQuery((store) =>
+    store.queryPerson(undefined, (d) => d.id),
+  )
+  const { data: dataFiltered } = useQuery((store) =>
+    store.queryPerson(
+      {
+        where: personFilter,
+      },
+      (d) => d.id,
+    ),
+  )
 
+  const { data: dataUserRole, loading: loadingUserRole } = useQuery((store) =>
+    store.queryUser_role(),
+  )
   const userRoleWerte = useMemo(
     () =>
-      get(data, 'user_role', []).map((el) => ({
+      get(dataUserRole, 'user_role', []).map((el) => ({
         value: el.name,
         label: `${el.name} (${el.comment})`,
       })),
-    [data],
+    [dataUserRole],
   )
 
-  const [errors, setErrors] = useState({})
-
   let row
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const totalNr = get(dataAll, 'person', []).length
+  const filteredNr = get(dataFiltered, 'person', []).length
   if (showFilter) {
     row = filter.person
   } else {
-    row = get(data, 'person[0]') || {}
+    row = get(dataPerson, 'person[0]') || {}
   }
 
+  const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
   }, [row.id])
 
-  const personQueryByAccountIdResult = useQuery(personQueryByAccountId, {
-    variables: { accountId: user.uid },
-  })
-  const { user_role } =
-    get(personQueryByAccountIdResult.data, 'person[0]') || {}
+  const { data: dataUser } = useQuery((store) =>
+    store.queryPerson({
+      where: { account_id: { _eq: user.uid } },
+    }),
+  )
+  const { user_role } = get(dataUser, 'person[0]') || {}
   //console.log('Person, user_role:', user_role)
 
   const saveToDb = useCallback(
@@ -170,7 +165,9 @@ const Person = ({ filter: showFilter }) => {
           } else if (['number', 'boolean'].includes(type)) {
             valueToSet = value
           } else {
-            valueToSet = `"${value.split('"').join('\\"')}"`
+            valueToSet = `"${
+              value.split ? value.split('"').join('\\"') : value
+            }"`
           }
           await client.mutate({
             mutation: gql`
@@ -212,7 +209,7 @@ const Person = ({ filter: showFilter }) => {
     [client, filter, row, showFilter],
   )
 
-  if (loading) {
+  if (loadingPerson) {
     return (
       <Container>
         <FormTitle title="Person" />
@@ -221,11 +218,11 @@ const Person = ({ filter: showFilter }) => {
     )
   }
 
-  if (error) {
+  if (errorPerson) {
     return (
       <Container>
         <FormTitle title="Person" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorPerson.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -266,7 +263,7 @@ const Person = ({ filter: showFilter }) => {
             field="user_role"
             label="Rolle"
             options={userRoleWerte}
-            loading={loading}
+            loading={loadingUserRole}
             saveToDb={saveToDb}
             error={errors.user_role}
           />
@@ -393,7 +390,7 @@ const Person = ({ filter: showFilter }) => {
             multiLine
           />
           {row.user_role === 'artverantwortlich' && <Arten personId={row.id} />}
-          {!showFilter && <Files parentId={row.id} parent="person" />}
+          {!showFilter && row.id && <Files parentId={row.id} parent="person" />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

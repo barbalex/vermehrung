@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -12,7 +12,7 @@ const Row = styled.div`
   justify-content: center;
   min-height: ${singleRowHeight};
   border-top: thin solid rgba(74, 20, 140, 0.1);
-  border-bottom: ${props => (props['data-last'] ? '1px' : 'thin')} solid
+  border-bottom: ${(props) => (props['data-last'] ? '1px' : 'thin')} solid
     rgba(74, 20, 140, 0.1);
   border-collapse: collapse;
   margin: -1px 0;
@@ -29,7 +29,7 @@ const Row = styled.div`
 `
 
 const EventsRows = ({ row, style, last }) => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const onClickRow = useCallback(

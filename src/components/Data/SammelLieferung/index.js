@@ -17,7 +17,7 @@ import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -35,7 +35,7 @@ import {
   sammlung as sammlungFragment,
 } from '../../../utils/fragments'
 import exists from '../../../utils/exists'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import updateSammelLieferung from './updateSammelLieferung'
 import Settings from './Settings'
 import Copy from './Copy'
@@ -250,14 +250,14 @@ const personOptionQuery = gql`
 
 const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { filter, isPrint, setIsPrint, user } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setWidthInPercentOfScreen } = store.tree
 
   const id = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : idPassed
     ? idPassed
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
@@ -484,7 +484,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
         } else {
-          valueToSet = `"${value.split('"').join('\\"')}"`
+          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
         }
         const refetchQueries = [
           'nach_kultur_id',

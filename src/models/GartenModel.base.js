@@ -1,0 +1,109 @@
+/* This is a mst-gql generated file, don't modify it manually */
+/* eslint-disable */
+
+import { types } from "mobx-state-tree"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
+import { ModelBase } from "./ModelBase"
+import { garten_fileModel } from "./garten_fileModel"
+import { garten_fileModelSelector } from "./garten_fileModel.base"
+import { garten_file_aggregateModel } from "./garten_file_aggregateModel"
+import { garten_file_aggregateModelSelector } from "./garten_file_aggregateModel.base"
+import { garten_teilzaehlung_sumsModel } from "./garten_teilzaehlung_sumsModel"
+import { garten_teilzaehlung_sumsModelSelector } from "./garten_teilzaehlung_sumsModel.base"
+import { garten_teilzaehlung_sums_aggregateModel } from "./garten_teilzaehlung_sums_aggregateModel"
+import { garten_teilzaehlung_sums_aggregateModelSelector } from "./garten_teilzaehlung_sums_aggregateModel.base"
+import { kulturModel } from "./kulturModel"
+import { kulturModelSelector } from "./kulturModel.base"
+import { kultur_aggregateModel } from "./kultur_aggregateModel"
+import { kultur_aggregateModelSelector } from "./kultur_aggregateModel.base"
+import { personModel } from "./personModel"
+import { personModelSelector } from "./personModel.base"
+
+
+/**
+ * gartenBase
+ * auto generated base class for the model gartenModel.
+ *
+ * columns and relationships of "garten"
+ */
+export const gartenModelBase = ModelBase
+  .named('garten')
+  .props({
+    __typename: types.optional(types.literal("garten"), "garten"),
+    _conflicts: types.union(types.undefined, types.null, types.frozen()),
+    _depth: types.union(types.undefined, types.null, types.integer),
+    _parent_rev: types.union(types.undefined, types.null, types.string),
+    _rev: types.union(types.undefined, types.null, types.string),
+    _revisions: types.union(types.undefined, types.null, types.frozen()),
+    aktiv: types.union(types.undefined, types.null, types.boolean),
+    bemerkungen: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
+    /** An array relationship */
+    garten_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_fileModel)))),
+    /** An aggregated array relationship */
+    garten_files_aggregate: types.union(types.undefined, types.late(() => garten_file_aggregateModel)),
+    geom_point: types.union(types.undefined, types.null, types.frozen()),
+    id: types.union(types.undefined, types.frozen()),
+    /** An array relationship */
+    kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
+    /** An aggregated array relationship */
+    kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
+    lv95_x: types.union(types.undefined, types.null, types.frozen()),
+    lv95_y: types.union(types.undefined, types.null, types.frozen()),
+    name: types.union(types.undefined, types.null, types.string),
+    ort: types.union(types.undefined, types.null, types.string),
+    /** An object relationship */
+    person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
+    person_id: types.union(types.undefined, types.null, types.frozen()),
+    plz: types.union(types.undefined, types.null, types.integer),
+    strasse: types.union(types.undefined, types.null, types.string),
+    /** An array relationship */
+    teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
+    /** An aggregated array relationship */
+    teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
+    tsv: types.union(types.undefined, types.null, types.frozen()),
+    wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
+    wgs84_long: types.union(types.undefined, types.null, types.frozen()),
+  })
+  .views(self => ({
+    get store() {
+      return self.__getStore()
+    }
+  }))
+
+export class gartenModelSelector extends QueryBuilder {
+  get _conflicts() { return this.__attr(`_conflicts`) }
+  get _depth() { return this.__attr(`_depth`) }
+  get _parent_rev() { return this.__attr(`_parent_rev`) }
+  get _rev() { return this.__attr(`_rev`) }
+  get _revisions() { return this.__attr(`_revisions`) }
+  get aktiv() { return this.__attr(`aktiv`) }
+  get bemerkungen() { return this.__attr(`bemerkungen`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
+  get geom_point() { return this.__attr(`geom_point`) }
+  get id() { return this.__attr(`id`) }
+  get lv95_x() { return this.__attr(`lv95_x`) }
+  get lv95_y() { return this.__attr(`lv95_y`) }
+  get name() { return this.__attr(`name`) }
+  get ort() { return this.__attr(`ort`) }
+  get person_id() { return this.__attr(`person_id`) }
+  get plz() { return this.__attr(`plz`) }
+  get strasse() { return this.__attr(`strasse`) }
+  get tsv() { return this.__attr(`tsv`) }
+  get wgs84_lat() { return this.__attr(`wgs84_lat`) }
+  get wgs84_long() { return this.__attr(`wgs84_long`) }
+  garten_files(builder) { return this.__child(`garten_files`, garten_fileModelSelector, builder) }
+  garten_files_aggregate(builder) { return this.__child(`garten_files_aggregate`, garten_file_aggregateModelSelector, builder) }
+  kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
+  kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
+  person(builder) { return this.__child(`person`, personModelSelector, builder) }
+  teilzaehlung_sums(builder) { return this.__child(`teilzaehlung_sums`, garten_teilzaehlung_sumsModelSelector, builder) }
+  teilzaehlung_sums_aggregate(builder) { return this.__child(`teilzaehlung_sums_aggregate`, garten_teilzaehlung_sums_aggregateModelSelector, builder) }
+}
+export function selectFromgarten() {
+  return new gartenModelSelector()
+}
+
+export const gartenModelPrimitives = selectFromgarten()._conflicts._depth._parent_rev._rev._revisions.aktiv.bemerkungen.changed.changed_by.geom_point.lv95_x.lv95_y.name.ort.person_id.plz.strasse.tsv.wgs84_lat.wgs84_long

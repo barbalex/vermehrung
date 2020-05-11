@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
+import { createHttpClient } from 'mst-gql'
+import { RootStore as DataStore, StoreContext } from './models'
+
 import createGlobalStyle from './utils/createGlobalStyle'
 
-import Store from './store'
-import { Provider as MobxProvider } from './storeContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -28,6 +29,8 @@ import UpdateExists from './components/UpdateExists'
 import setHasuraClaims from './utils/setHasuraClaims'
 
 const GlobalStyle = createGlobalStyle()
+
+import constants from './utils/constants.json'
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -61,22 +64,30 @@ const firebaseConfig = {
 
 const apolloClient = createApolloClient()
 
-const App = ({ element }) => {
-  const [store, setStore] = useState(null)
+const gqlHttpClient = createHttpClient(constants.graphQlUri)
+const tokenWithRoles =
+  typeof window !== 'undefined'
+    ? window.localStorage.getItem('token') || 'none'
+    : 'none'
+// is this the place to use the last snapshot of the store instead of undefined?
+// to that instead of mst-persist?
+gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
+const store = DataStore.create(undefined, {
+  gqlHttpClient,
+})
 
+const App = ({ element }) => {
   useEffect(() => {
     let unregisterAuthObserver = () => {}
     Promise.all([import('firebase'), import('mst-persist')]).then(
       ([fbModule, pModule]) => {
-        // need to wait until now to build store
-        // otherwise mobx freaks out
-        const myStore = Store.create()
-        const { setUser, setAuthorizing, setFirebase } = myStore
+        const { setUser, setAuthorizing, setFirebase } = store
         window.store = store
-        setStore(myStore)
-        const blacklist = ['user']
+        // need to blacklist authorizing or mst-persist will set it to false
+        // and login form appears for a short moment until auth state changed
+        const blacklist = ['authorizing']
         const persist = pModule.default
-        persist('store', myStore, {
+        persist('store', store, {
           storage: localForage,
           jsonify: false,
           blacklist,
@@ -89,7 +100,7 @@ const App = ({ element }) => {
             .onAuthStateChanged(async (user) => {
               setUser(user)
               if (user && user.uid) {
-                setHasuraClaims({ store: myStore, user })
+                setHasuraClaims({ store, user, gqlHttpClient })
               } else {
                 setAuthorizing(false)
               }
@@ -101,7 +112,7 @@ const App = ({ element }) => {
               if (!!user && visitedTopDomain) {
                 setTimeout(() => {
                   navigate(
-                    `/Vermehrung/${myStore.tree.activeNodeArray.join('/')}`,
+                    `/Vermehrung/${store.tree.activeNodeArray.join('/')}`,
                   )
                 }, 200)
               }
@@ -119,7 +130,7 @@ const App = ({ element }) => {
   if (!store) return null
   return (
     <MuiThemeProvider theme={materialTheme}>
-      <MobxProvider value={store}>
+      <StoreContext.Provider value={store}>
         <ApolloProvider client={apolloClient}>
           <SnackbarProvider
             maxSnack={5}
@@ -135,7 +146,7 @@ const App = ({ element }) => {
             </>
           </SnackbarProvider>
         </ApolloProvider>
-      </MobxProvider>
+      </StoreContext.Provider>
     </MuiThemeProvider>
   )
 }

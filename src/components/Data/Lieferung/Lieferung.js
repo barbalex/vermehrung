@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
 
-import storeContext from '../../../storeContext'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -30,7 +30,7 @@ import {
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
 } from '../../../utils/fragments'
-import types from '../../../store/Filter/simpleTypes'
+import types from '../../../models/Filter/simpleTypes'
 import Files from '../Files'
 import updateLieferung from './updateLieferung'
 import updateLieferungArtId from './updateLieferungArtId'
@@ -248,14 +248,14 @@ const personOptionQuery = gql`
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!get(sammelLieferung, 'id')
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
 
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
   const id = showFilter
-    ? 99999999999999
+    ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
@@ -511,7 +511,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         } else if (['number', 'boolean'].includes(type)) {
           valueToSet = value
         } else {
-          valueToSet = `"${value.split('"').join('\\"')}"`
+          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
         }
         // ensure Herkunft updates
         const refetchQueries = [

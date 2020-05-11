@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { FaRegCopy } from 'react-icons/fa'
 import styled from 'styled-components'
 
-import storeContext from '../../../../storeContext'
+import { StoreContext } from '../../../../models/reactUtils'
 import { sammelLieferung as sammelLieferungFragment } from '../../../../utils/fragments'
 import exists from '../../../../utils/exists'
 import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
@@ -31,7 +31,7 @@ const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
 
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { enqueNotification } = store
 
   const [anchorEl, setAnchorEl] = useState(null)

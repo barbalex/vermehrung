@@ -8,10 +8,10 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { observer } from 'mobx-react-lite'
 import localForage from 'localforage'
 
-import storeContext from '../storeContext'
+import { StoreContext } from '../models/reactUtils'
 
 const UpdateExist = () => {
-  const store = useContext(storeContext)
+  const store = useContext(StoreContext)
   const { updateExists, setUpdateExists } = store
 
   const onClick = useCallback(() => {

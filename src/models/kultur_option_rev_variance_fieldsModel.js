@@ -1,0 +1,18 @@
+import { kultur_option_rev_variance_fieldsModelBase } from "./kultur_option_rev_variance_fieldsModel.base"
+
+
+/* A graphql query fragment builders for kultur_option_rev_variance_fieldsModel */
+export { selectFromkultur_option_rev_variance_fields, kultur_option_rev_variance_fieldsModelPrimitives, kultur_option_rev_variance_fieldsModelSelector } from "./kultur_option_rev_variance_fieldsModel.base"
+
+/**
+ * kultur_option_rev_variance_fieldsModel
+ *
+ * aggregate variance on columns
+ */
+export const kultur_option_rev_variance_fieldsModel = kultur_option_rev_variance_fieldsModelBase
+  .actions(self => ({
+    // This is an auto-generated example action.
+    log() {
+      console.log(JSON.stringify(self))
+    }
+  }))
