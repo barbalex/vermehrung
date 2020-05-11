@@ -86,7 +86,7 @@ const Person = ({ filter: showFilter }) => {
   const activeNodeArray = aNAProxy.slice()
 
   const id = getId({ activeNodeArray, showFilter })
-  console.log('Person, id:', id)
+  //console.log('Person, id:', id)
 
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
