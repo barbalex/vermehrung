@@ -24,7 +24,7 @@ export const kultur_qk_choosenModelBase = ModelBase
     kultur: types.union(types.undefined, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.frozen()),
     /** An object relationship */
-    kultur_qk: types.union(types.undefined, types.late(() => kultur_qkModel)),
+    kultur_qk: types.union(types.undefined, MSTGQLRef(types.late(() => kultur_qkModel))),
     qk_name: types.union(types.undefined, types.string),
   })
   .views(self => ({

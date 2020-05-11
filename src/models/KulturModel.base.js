@@ -77,13 +77,13 @@ export const kulturModelBase = ModelBase
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.union(types.undefined, types.frozen()),
     /** An array relationship */
-    kultur_files: types.union(types.undefined, types.array(types.late(() => kultur_fileModel))),
+    kultur_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_fileModel)))),
     /** An aggregated array relationship */
     kultur_files_aggregate: types.union(types.undefined, types.late(() => kultur_file_aggregateModel)),
     /** An object relationship */
     kultur_option: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_optionModel))),
     /** An array relationship */
-    kultur_qk_choosens: types.union(types.undefined, types.array(types.late(() => kultur_qk_choosenModel))),
+    kultur_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
     /** An aggregated array relationship */
     kultur_qk_choosens_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
     /** An array relationship */

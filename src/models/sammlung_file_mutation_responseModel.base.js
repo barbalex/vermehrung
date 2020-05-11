@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { sammlung_fileModel } from "./sammlung_fileModel"
 import { sammlung_fileModelSelector } from "./sammlung_fileModel.base"
@@ -21,7 +21,7 @@ export const sammlung_file_mutation_responseModelBase = ModelBase
     /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
     /** data of the affected rows by the mutation */
-    returning: types.union(types.undefined, types.array(types.late(() => sammlung_fileModel))),
+    returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_fileModel)))),
   })
   .views(self => ({
     get store() {

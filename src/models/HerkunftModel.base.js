@@ -38,7 +38,7 @@ export const herkunftModelBase = ModelBase
     gemeinde: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     /** An array relationship */
-    herkunft_files: types.union(types.undefined, types.array(types.late(() => herkunft_fileModel))),
+    herkunft_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_fileModel)))),
     /** An aggregated array relationship */
     herkunft_files_aggregate: types.union(types.undefined, types.late(() => herkunft_file_aggregateModel)),
     /** An array relationship */

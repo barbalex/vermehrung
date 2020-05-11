@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { herkunft_fileModel } from "./herkunft_fileModel"
 import { herkunft_fileModelSelector } from "./herkunft_fileModel.base"
@@ -21,7 +21,7 @@ export const herkunft_file_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("herkunft_file_aggregate"), "herkunft_file_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => herkunft_file_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => herkunft_fileModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_fileModel)))),
   })
   .views(self => ({
     get store() {

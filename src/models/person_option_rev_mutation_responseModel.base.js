@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { person_option_revModel } from "./person_option_revModel"
 import { person_option_revModelSelector } from "./person_option_revModel.base"
@@ -21,7 +21,7 @@ export const person_option_rev_mutation_responseModelBase = ModelBase
     /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
     /** data of the affected rows by the mutation */
-    returning: types.union(types.undefined, types.array(types.late(() => person_option_revModel))),
+    returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_option_revModel)))),
   })
   .views(self => ({
     get store() {

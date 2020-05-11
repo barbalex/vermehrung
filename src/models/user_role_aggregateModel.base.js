@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { user_roleModel } from "./user_roleModel"
 import { user_roleModelSelector } from "./user_roleModel.base"
@@ -21,7 +21,7 @@ export const user_role_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("user_role_aggregate"), "user_role_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => user_role_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => user_roleModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => user_roleModel)))),
   })
   .views(self => ({
     get store() {

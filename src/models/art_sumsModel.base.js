@@ -30,7 +30,7 @@ export const art_sumsModelBase = ModelBase
     art_id: types.union(types.undefined, types.null, types.frozen()),
     auspflanzbereit_beschreibung: types.union(types.undefined, types.null, types.string),
     /** An object relationship */
-    av_art: types.union(types.undefined, types.null, types.late(() => av_artModel)),
+    av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),

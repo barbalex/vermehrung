@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { art_qkModel } from "./art_qkModel"
 import { art_qkModelSelector } from "./art_qkModel.base"
@@ -21,7 +21,7 @@ export const art_qk_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("art_qk_aggregate"), "art_qk_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => art_qk_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => art_qkModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qkModel)))),
   })
   .views(self => ({
     get store() {

@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { av_artModel } from "./av_artModel"
 import { av_artModelSelector } from "./av_artModel.base"
@@ -21,7 +21,7 @@ export const av_art_mutation_responseModelBase = ModelBase
     /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
     /** data of the affected rows by the mutation */
-    returning: types.union(types.undefined, types.array(types.late(() => av_artModel))),
+    returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
   })
   .views(self => ({
     get store() {

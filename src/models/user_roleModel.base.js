@@ -31,7 +31,7 @@ export const user_roleModelBase = ModelBase
     /** An aggregated array relationship */
     people_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
     /** An array relationship */
-    person_revs: types.union(types.undefined, types.array(types.late(() => person_revModel))),
+    person_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_revModel)))),
     /** An aggregated array relationship */
     person_revs_aggregate: types.union(types.undefined, types.late(() => person_rev_aggregateModel)),
     sort: types.union(types.undefined, types.null, types.integer),

@@ -40,7 +40,7 @@ export const gartenModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    garten_files: types.union(types.undefined, types.array(types.late(() => garten_fileModel))),
+    garten_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_fileModel)))),
     /** An aggregated array relationship */
     garten_files_aggregate: types.union(types.undefined, types.late(() => garten_file_aggregateModel)),
     geom_point: types.union(types.undefined, types.null, types.frozen()),

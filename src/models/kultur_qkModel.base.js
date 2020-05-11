@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { kultur_qk_choosenModel } from "./kultur_qk_choosenModel"
 import { kultur_qk_choosenModelSelector } from "./kultur_qk_choosenModel.base"
@@ -22,7 +22,7 @@ export const kultur_qkModelBase = ModelBase
     __typename: types.optional(types.literal("kultur_qk"), "kultur_qk"),
     beschreibung: types.union(types.undefined, types.null, types.string),
     /** An array relationship */
-    kultur_qk_choosens: types.union(types.undefined, types.array(types.late(() => kultur_qk_choosenModel))),
+    kultur_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
     /** An aggregated array relationship */
     kultur_qk_choosens_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
     /** Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt */
