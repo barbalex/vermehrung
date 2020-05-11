@@ -1,12 +1,12 @@
 import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
 import { reaction } from 'mobx'
-import { functionType } from './functionType'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
+import QueuedQueryType from './QueuedQuery'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -17,8 +17,12 @@ export const RootStore = RootStoreBase.props({
   isPrint: types.optional(types.boolean, false),
   updateExists: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
-  // see: https://github.com/mobxjs/mobx-state-tree/issues/491#issuecomment-415864489
-  onlineOperations: types.array(functionType),
+  /**
+   * This is a queue of all queries
+   * When online they they are immediatly executed by the reaction
+   * When offline they remain queued until connectivity is back
+   */
+  queuedQueries: types.optional(types.array(QueuedQueryType), []),
   // on startup need to wait with showing data
   // until hasura claims have been added
   // this is _after_ user is set so need another variable
@@ -37,30 +41,45 @@ export const RootStore = RootStoreBase.props({
   }))
   .actions((self) => {
     reaction(
-      () => `${self.onlineOperations.length}/${self.online}`,
+      () => `${self.queuedQueries.length}/${self.online}`,
       () => {
         if (self.online) {
-          console.log('checking for operations to execute')
           // execute operation
-          if (self.onlineOperations[0]) {
-            console.log('will execute:', self.onlineOperations[0].toString())
+          const query = self.queuedQueries[0]
+          if (query) {
+            const {
+              name,
+              variables,
+              callbackQuery,
+              callbackQueryVariables,
+            } = query
+            console.log('will execute query:', name)
             try {
-              self.onlineOperations[0]()
+              variables ? self[name](JSON.parse(variables)) : self[name]()
             } catch (error) {
               // Maybe do it like superhuman and check if network error
               // then retry and set online without using tool?
               return
             }
+            // idea: query to refresh the data updated in all used views (tree...)
+            if (callbackQuery) {
+              try {
+                callbackQueryVariables
+                  ? self[callbackQuery](JSON.parse(callbackQueryVariables))
+                  : self[callbackQuery]()
+              } catch (error) {
+                return
+              }
+            }
           }
           // remove operation from queue
-          self.onlineOperations.shift()
-          console.log('executed, remaining:', self.onlineOperations.toString())
+          self.queuedQueries.shift()
         }
       },
     )
     return {
-      addOnlineOperation(op) {
-        self.onlineOperations.push(op)
+      addQueuedQuery(val) {
+        self.queuedQueries.push(val)
       },
       addHerkunft(val) {
         self.herkunfts = { val, ...self.herkunfts.toJS() }

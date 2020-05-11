@@ -64,12 +64,7 @@ function sizeReducer(state, action) {
 
 const Herkuenfte = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    mutateInsert_herkunft,
-    addHerkunft,
-    addOnlineOperation,
-  } = store
+  const { filter, addHerkunft, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const {
@@ -111,24 +106,31 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const add = useCallback(async () => {
     const id = uuidv1()
     const newObject = { id }
-    //addOnlineOperation(
-    mutateInsert_herkunft({
-      objects: [newObject],
-      on_conflict: { constraint: 'herkunft_pkey', update_columns: [] },
+    addQueuedQuery({
+      name: 'mutateInsert_herkunft',
+      variables: JSON.stringify({
+        objects: [newObject],
+        on_conflict: { constraint: 'herkunft_pkey', update_columns: [] },
+      }),
+      callbackQuery: 'queryHerkunft',
+      callbackQueryVariables: JSON.stringify({
+        where: { id: { _eq: id } },
+      }),
     })
-    //)
-    addHerkunft(newObject)
-    queryFiltered.refetch()
-    refetchTree()
-    const newActiveNodeArray = [...activeNodeArray, id]
-    setActiveNodeArray(newActiveNodeArray)
-    // add node.url just in case it was not yet open
-    addOpenNodes([newActiveNodeArray, newActiveNodeArray])
+    setTimeout(() => {
+      addHerkunft(newObject)
+      queryFiltered.refetch()
+      refetchTree()
+      const newActiveNodeArray = [...activeNodeArray, id]
+      setActiveNodeArray(newActiveNodeArray)
+      // add node.url just in case it was not yet open
+      addOpenNodes([newActiveNodeArray, newActiveNodeArray])
+    })
   }, [
     activeNodeArray,
     addHerkunft,
     addOpenNodes,
-    mutateInsert_herkunft,
+    addQueuedQuery,
     queryFiltered,
     refetchTree,
     setActiveNodeArray,

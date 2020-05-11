@@ -27,7 +27,7 @@ const Row = styled.div`
   }
 `
 
-const Arten = ({ row, style, last }) => {
+const HerkunftRow = ({ row, style, last }) => {
   const store = useContext(StoreContext)
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -53,4 +53,4 @@ const Arten = ({ row, style, last }) => {
   )
 }
 
-export default observer(Arten)
+export default observer(HerkunftRow)
