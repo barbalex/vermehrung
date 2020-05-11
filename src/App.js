@@ -65,7 +65,10 @@ const firebaseConfig = {
 const apolloClient = createApolloClient()
 
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
-const tokenWithRoles = window.localStorage.getItem('token') || 'none'
+const tokenWithRoles =
+  typeof window !== 'undefined'
+    ? window.localStorage.getItem('token') || 'none'
+    : 'none'
 // is this the place to use the last snapshot of the store instead of undefined?
 // to that instead of mst-persist?
 gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
