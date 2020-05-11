@@ -108,7 +108,6 @@ const Herkunft = ({ filter: showFilter }) => {
     data: dataHerkunft,
     error: errorHerkunft,
     loading: loadingHerkunft,
-    query: queryHerkunft,
   } = useQuery((store) =>
     store.queryHerkunft({
       where: { id: { _eq: id } },
