@@ -7,6 +7,8 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import { v1 as uuidv1 } from 'uuid'
+import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
@@ -72,7 +74,16 @@ const Arten = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
-  const { data: dataFiltered } = useQuery((store) =>
+  /**
+   * Problem: art_ae_art: Error: Failed to resolve reference...
+   * so the name is never shown
+   */
+  /*
+  const {
+    data: dataFiltered,
+    error: errorFiltered,
+    loading: loadingFiltered,
+  } = useQuery((store) =>
     store.queryArt(
       {
         where: artFilter,
@@ -80,14 +91,16 @@ const Arten = ({ filter: showFilter }) => {
       },
       (d) => d.id.ae_id.art_ae_art((d) => d.id.name),
     ),
-  )
+  )*/
   const { data, error, loading } = useQuery(artQuery, {
     variables: { filter: artFilter },
   })
+  const { data: dataAll } = useQuery((store) =>
+    store.queryArt(undefined, (d) => d.id),
+  )
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
-  const rowsFiltered = get(dataFiltered, 'art', [])
+  const totalNr = get(dataAll, 'art', []).length
+  const rows = get(data, 'art', [])
   const filteredNr = rows.length
 
   const add = useCallback(() => {
