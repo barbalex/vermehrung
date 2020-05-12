@@ -3,10 +3,8 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { useQuery } from '@apollo/react-hooks'
-import last from 'lodash/last'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import isUuid from 'is-uuid'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
@@ -78,14 +76,12 @@ const personOptionQuery = gql`
   ${personOptionFragment}
 `
 
-const LieferungContainer = ({ filter: showFilter }) => {
+const LieferungContainer = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+}) => {
   const store = useContext(StoreContext)
-
   const { user } = store
-  const { activeNodeArray } = store.tree
-
-  const lieferungId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
-  const id = showFilter ? '99999999-9999-9999-9999-999999999999' : lieferungId
 
   const {
     data: lieferungData,
@@ -133,7 +129,7 @@ const LieferungContainer = ({ filter: showFilter }) => {
         <SammelLieferung
           showFilter={showFilter}
           id={sammelLieferungId}
-          lieferungId={lieferungId}
+          lieferungId={id}
         />
       </StyledSplitPane>
     )

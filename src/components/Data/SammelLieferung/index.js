@@ -10,12 +10,10 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
-import isUuid from 'is-uuid'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -248,19 +246,18 @@ const personOptionQuery = gql`
   ${personOptionFragment}
 `
 
-const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
+const SammelLieferung = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+  lieferungId,
+}) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const { filter, isPrint, setIsPrint, user } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, setWidthInPercentOfScreen } = store.tree
+  const { setWidthInPercentOfScreen } = store.tree
 
-  const id = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : idPassed
-    ? idPassed
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const sammelLieferungFilter = queryFromTable({
     store,
@@ -394,11 +391,11 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
     setErrors({})
   }, [row.id])
   useEffect(() => {
-    if (idPassed) setWidthInPercentOfScreen(25)
+    if (id) setWidthInPercentOfScreen(25)
     return () => {
-      if (idPassed) setWidthInPercentOfScreen(33)
+      if (id) setWidthInPercentOfScreen(33)
     }
-  }, [idPassed, setWidthInPercentOfScreen])
+  }, [id, setWidthInPercentOfScreen])
 
   const vonKulturWerte = useMemo(
     () =>
@@ -577,14 +574,14 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
     (field) => {
       if (sl_show_empty_when_next_to_li) return true
       if (
-        idPassed &&
+        id &&
         !sl_show_empty_when_next_to_li &&
         (!exists(row[field]) || row[field] === false)
       )
         return false
       return true
     },
-    [idPassed, row, sl_show_empty_when_next_to_li],
+    [id, row, sl_show_empty_when_next_to_li],
   )
   const ifSomeNeeded = useCallback(
     (fields) => fields.some((f) => ifNeeded(f)),
@@ -637,7 +634,7 @@ const SammelLieferung = ({ filter: showFilter, id: idPassed, lieferungId }) => {
               )}
               <AddButton />
               <DeleteButton row={row} />
-              {idPassed && (
+              {id && (
                 <Settings
                   personId={person_id}
                   personOptionResult={personOptionResult}

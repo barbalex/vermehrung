@@ -92,16 +92,17 @@ const personOptionQuery = gql`
   ${personOptionFragment}
 `
 
-const Herkunft = ({ filter: showFilter }) => {
+const Herkunft = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+}) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
 
-  const id = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
+  //console.log('Herkunft, id:', id)
+
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const {
@@ -114,7 +115,7 @@ const Herkunft = ({ filter: showFilter }) => {
     }),
   )
   const { data: dataAll } = useQuery((store) =>
-    store.queryHerkunft(undefined, (d) => d.id),
+    store.queryHerkunft(/*undefined, (d) => d.id*/),
   )
   const { data: dataFiltered } = useQuery((store) =>
     store.queryHerkunft(
@@ -128,11 +129,14 @@ const Herkunft = ({ filter: showFilter }) => {
     variables: { isFiltered, filter: herkunftFilter },
   })
 
+  const allRows = get(dataAll, 'herkunft', [])
   const row = showFilter
     ? filter.herkunft
-    : get(dataHerkunft, 'herkunft[0]') || {}
+    : //: get(dataHerkunft, 'herkunft[0]') || {}
+      allRows.find((r) => r.id === id) || {}
   const totalNr = get(dataAll, 'herkunft', []).length
   const filteredNr = get(dataFiltered, 'herkunft', []).length
+  //console.log('Herkunft, row:', row)
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
@@ -159,6 +163,10 @@ const Herkunft = ({ filter: showFilter }) => {
         filter.setValue({ table: 'herkunft', key: field, value })
       } else {
         try {
+          /*console.log('Herkunft, saveToDb', {
+            value,
+            targetValue: event.target.value,
+          })*/
           let valueToSet
           if (value === null) {
             valueToSet = null
