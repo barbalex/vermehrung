@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * art_sums_variance_fieldsBase
  * auto generated base class for the model art_sums_variance_fieldsModel.
- *
- * aggregate variance on columns
  */
 export const art_sums_variance_fieldsModelBase = ModelBase
   .named('art_sums_variance_fields')

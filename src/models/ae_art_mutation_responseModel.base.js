@@ -11,16 +11,12 @@ import { ae_artModelSelector } from "./ae_artModel.base"
 /**
  * ae_art_mutation_responseBase
  * auto generated base class for the model ae_art_mutation_responseModel.
- *
- * response of any mutation on the table "ae_art"
  */
 export const ae_art_mutation_responseModelBase = ModelBase
   .named('ae_art_mutation_response')
   .props({
     __typename: types.optional(types.literal("ae_art_mutation_response"), "ae_art_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => ae_artModel)))),
   })
   .views(self => ({

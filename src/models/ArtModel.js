@@ -6,8 +6,6 @@ export { selectFromart, artModelPrimitives, artModelSelector } from "./artModel.
 
 /**
  * artModel
- *
- * columns and relationships of "art"
  */
 export const artModel = artModelBase
   .actions(self => ({

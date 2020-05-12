@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * art_qk_sum_fieldsBase
  * auto generated base class for the model art_qk_sum_fieldsModel.
- *
- * aggregate sum on columns
  */
 export const art_qk_sum_fieldsModelBase = ModelBase
   .named('art_qk_sum_fields')

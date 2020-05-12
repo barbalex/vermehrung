@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_teilzaehlung_sums_min_fieldsBase
  * auto generated base class for the model garten_teilzaehlung_sums_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const garten_teilzaehlung_sums_min_fieldsModelBase = ModelBase
   .named('garten_teilzaehlung_sums_min_fields')

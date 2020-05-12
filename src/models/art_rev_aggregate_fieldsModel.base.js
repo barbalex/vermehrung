@@ -29,8 +29,6 @@ import { art_rev_variance_fieldsModelSelector } from "./art_rev_variance_fieldsM
 /**
  * art_rev_aggregate_fieldsBase
  * auto generated base class for the model art_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "art_rev"
  */
 export const art_rev_aggregate_fieldsModelBase = ModelBase
   .named('art_rev_aggregate_fields')

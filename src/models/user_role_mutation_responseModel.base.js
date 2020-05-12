@@ -11,16 +11,12 @@ import { user_roleModelSelector } from "./user_roleModel.base"
 /**
  * user_role_mutation_responseBase
  * auto generated base class for the model user_role_mutation_responseModel.
- *
- * response of any mutation on the table "user_role"
  */
 export const user_role_mutation_responseModelBase = ModelBase
   .named('user_role_mutation_response')
   .props({
     __typename: types.optional(types.literal("user_role_mutation_response"), "user_role_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => user_roleModel)))),
   })
   .views(self => ({

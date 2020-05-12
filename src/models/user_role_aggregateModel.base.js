@@ -13,8 +13,6 @@ import { user_role_aggregate_fieldsModelSelector } from "./user_role_aggregate_f
 /**
  * user_role_aggregateBase
  * auto generated base class for the model user_role_aggregateModel.
- *
- * aggregated selection of "user_role"
  */
 export const user_role_aggregateModelBase = ModelBase
   .named('user_role_aggregate')

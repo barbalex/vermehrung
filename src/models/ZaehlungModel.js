@@ -6,8 +6,6 @@ export { selectFromzaehlung, zaehlungModelPrimitives, zaehlungModelSelector } fr
 
 /**
  * zaehlungModel
- *
- * columns and relationships of "zaehlung"
  */
 export const zaehlungModel = zaehlungModelBase
   .actions(self => ({

@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * spatial_ref_sys_stddev_pop_fieldsBase
  * auto generated base class for the model spatial_ref_sys_stddev_pop_fieldsModel.
- *
- * aggregate stddev_pop on columns
  */
 export const spatial_ref_sys_stddev_pop_fieldsModelBase = ModelBase
   .named('spatial_ref_sys_stddev_pop_fields')

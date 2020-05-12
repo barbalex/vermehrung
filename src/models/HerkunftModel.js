@@ -6,8 +6,6 @@ export { selectFromherkunft, herkunftModelPrimitives, herkunftModelSelector } fr
 
 /**
  * herkunftModel
- *
- * columns and relationships of "herkunft"
  */
 export const herkunftModel = herkunftModelBase
   .actions(self => ({

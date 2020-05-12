@@ -11,8 +11,6 @@ import { gartenModelSelector } from "./gartenModel.base"
 /**
  * garten_fileBase
  * auto generated base class for the model garten_fileModel.
- *
- * columns and relationships of "garten_file"
  */
 export const garten_fileModelBase = ModelBase
   .named('garten_file')
@@ -21,10 +19,9 @@ export const garten_fileModelBase = ModelBase
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     garten: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({

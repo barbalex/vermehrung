@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * sammel_lieferung_min_fieldsBase
  * auto generated base class for the model sammel_lieferung_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const sammel_lieferung_min_fieldsModelBase = ModelBase
   .named('sammel_lieferung_min_fields')
@@ -26,7 +24,7 @@ export const sammel_lieferung_min_fieldsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),

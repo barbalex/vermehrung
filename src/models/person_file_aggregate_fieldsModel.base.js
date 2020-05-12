@@ -13,8 +13,6 @@ import { person_file_min_fieldsModelSelector } from "./person_file_min_fieldsMod
 /**
  * person_file_aggregate_fieldsBase
  * auto generated base class for the model person_file_aggregate_fieldsModel.
- *
- * aggregate fields of "person_file"
  */
 export const person_file_aggregate_fieldsModelBase = ModelBase
   .named('person_file_aggregate_fields')

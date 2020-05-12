@@ -6,22 +6,20 @@ import { types } from "mobx-state-tree"
 
 /**
 * event_rev_select_column
- *
- * select columns of table "event_rev"
 */
 export const event_rev_select_columnEnum = types.enumeration("event_rev_select_column", [
-        "_deleted", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "beschreibung", // column name
-  "changed", // column name
-  "changed_by", // column name
-  "datum", // column name
-  "geplant", // column name
-  "id", // column name
-  "kultur_id", // column name
-  "person_id", // column name
-  "teilkultur_id", // column name
+        "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "beschreibung",
+  "changed",
+  "changed_by",
+  "datum",
+  "geplant",
+  "id",
+  "kultur_id",
+  "person_id",
+  "teilkultur_id",
       ])

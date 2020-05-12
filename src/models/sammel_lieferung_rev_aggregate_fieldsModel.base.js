@@ -29,8 +29,6 @@ import { sammel_lieferung_rev_variance_fieldsModelSelector } from "./sammel_lief
 /**
  * sammel_lieferung_rev_aggregate_fieldsBase
  * auto generated base class for the model sammel_lieferung_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "sammel_lieferung_rev"
  */
 export const sammel_lieferung_rev_aggregate_fieldsModelBase = ModelBase
   .named('sammel_lieferung_rev_aggregate_fields')

@@ -11,16 +11,12 @@ import { herkunft_revModelSelector } from "./herkunft_revModel.base"
 /**
  * herkunft_rev_mutation_responseBase
  * auto generated base class for the model herkunft_rev_mutation_responseModel.
- *
- * response of any mutation on the table "herkunft_rev"
  */
 export const herkunft_rev_mutation_responseModelBase = ModelBase
   .named('herkunft_rev_mutation_response')
   .props({
     __typename: types.optional(types.literal("herkunft_rev_mutation_response"), "herkunft_rev_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_revModel)))),
   })
   .views(self => ({

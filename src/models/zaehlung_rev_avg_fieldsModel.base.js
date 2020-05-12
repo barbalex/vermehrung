@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * zaehlung_rev_avg_fieldsBase
  * auto generated base class for the model zaehlung_rev_avg_fieldsModel.
- *
- * aggregate avg on columns
  */
 export const zaehlung_rev_avg_fieldsModelBase = ModelBase
   .named('zaehlung_rev_avg_fields')

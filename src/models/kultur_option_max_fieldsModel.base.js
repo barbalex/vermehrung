@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_option_max_fieldsBase
  * auto generated base class for the model kultur_option_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const kultur_option_max_fieldsModelBase = ModelBase
   .named('kultur_option_max_fields')

@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_teilzaehlung_sums_max_fieldsBase
  * auto generated base class for the model garten_teilzaehlung_sums_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const garten_teilzaehlung_sums_max_fieldsModelBase = ModelBase
   .named('garten_teilzaehlung_sums_max_fields')

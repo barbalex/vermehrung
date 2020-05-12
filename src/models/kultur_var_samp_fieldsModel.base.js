@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_var_samp_fieldsBase
  * auto generated base class for the model kultur_var_samp_fieldsModel.
- *
- * aggregate var_samp on columns
  */
 export const kultur_var_samp_fieldsModelBase = ModelBase
   .named('kultur_var_samp_fields')

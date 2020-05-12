@@ -13,8 +13,6 @@ import { teilkultur_aggregate_fieldsModelSelector } from "./teilkultur_aggregate
 /**
  * teilkultur_aggregateBase
  * auto generated base class for the model teilkultur_aggregateModel.
- *
- * aggregated selection of "teilkultur"
  */
 export const teilkultur_aggregateModelBase = ModelBase
   .named('teilkultur_aggregate')

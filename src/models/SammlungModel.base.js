@@ -27,8 +27,6 @@ import { sammlung_file_aggregateModelSelector } from "./sammlung_file_aggregateM
 /**
  * sammlungBase
  * auto generated base class for the model sammlungModel.
- *
- * columns and relationships of "sammlung"
  */
 export const sammlungModelBase = ModelBase
   .named('sammlung')
@@ -41,7 +39,6 @@ export const sammlungModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
-    /** An object relationship */
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
@@ -51,27 +48,19 @@ export const sammlungModelBase = ModelBase
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
-    /** An object relationship */
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
-    /** An array relationship */
+    id: types.identifier,
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    /** An aggregated array relationship */
     lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     nr: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An array relationship */
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
-    /** An aggregated array relationship */
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
-    /** An array relationship */
     sammlung_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_fileModel)))),
-    /** An aggregated array relationship */
     sammlung_files_aggregate: types.union(types.undefined, types.late(() => sammlung_file_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),

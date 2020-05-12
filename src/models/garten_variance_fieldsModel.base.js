@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_variance_fieldsBase
  * auto generated base class for the model garten_variance_fieldsModel.
- *
- * aggregate variance on columns
  */
 export const garten_variance_fieldsModelBase = ModelBase
   .named('garten_variance_fields')

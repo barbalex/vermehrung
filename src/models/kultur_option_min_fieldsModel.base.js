@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_option_min_fieldsBase
  * auto generated base class for the model kultur_option_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const kultur_option_min_fieldsModelBase = ModelBase
   .named('kultur_option_min_fields')

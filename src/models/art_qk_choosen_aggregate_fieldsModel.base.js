@@ -13,8 +13,6 @@ import { art_qk_choosen_min_fieldsModelSelector } from "./art_qk_choosen_min_fie
 /**
  * art_qk_choosen_aggregate_fieldsBase
  * auto generated base class for the model art_qk_choosen_aggregate_fieldsModel.
- *
- * aggregate fields of "art_qk_choosen"
  */
 export const art_qk_choosen_aggregate_fieldsModelBase = ModelBase
   .named('art_qk_choosen_aggregate_fields')

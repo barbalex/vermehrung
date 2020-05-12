@@ -29,8 +29,6 @@ import { event_rev_variance_fieldsModelSelector } from "./event_rev_variance_fie
 /**
  * event_rev_aggregate_fieldsBase
  * auto generated base class for the model event_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "event_rev"
  */
 export const event_rev_aggregate_fieldsModelBase = ModelBase
   .named('event_rev_aggregate_fields')

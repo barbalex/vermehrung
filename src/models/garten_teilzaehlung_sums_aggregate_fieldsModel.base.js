@@ -29,8 +29,6 @@ import { garten_teilzaehlung_sums_variance_fieldsModelSelector } from "./garten_
 /**
  * garten_teilzaehlung_sums_aggregate_fieldsBase
  * auto generated base class for the model garten_teilzaehlung_sums_aggregate_fieldsModel.
- *
- * aggregate fields of "garten_teilzaehlung_sums"
  */
 export const garten_teilzaehlung_sums_aggregate_fieldsModelBase = ModelBase
   .named('garten_teilzaehlung_sums_aggregate_fields')

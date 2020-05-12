@@ -6,23 +6,21 @@ import { types } from "mobx-state-tree"
 
 /**
 * herkunft_rev_select_column
- *
- * select columns of table "herkunft_rev"
 */
 export const herkunft_rev_select_columnEnum = types.enumeration("herkunft_rev_select_column", [
-        "_deleted", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "bemerkungen", // column name
-  "changed", // column name
-  "changed_by", // column name
-  "gemeinde", // column name
-  "geom_point", // column name
-  "id", // column name
-  "kanton", // column name
-  "land", // column name
-  "lokalname", // column name
-  "nr", // column name
+        "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "bemerkungen",
+  "changed",
+  "changed_by",
+  "gemeinde",
+  "geom_point",
+  "id",
+  "kanton",
+  "land",
+  "lokalname",
+  "nr",
       ])

@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * teilkultur_rev_avg_fieldsBase
  * auto generated base class for the model teilkultur_rev_avg_fieldsModel.
- *
- * aggregate avg on columns
  */
 export const teilkultur_rev_avg_fieldsModelBase = ModelBase
   .named('teilkultur_rev_avg_fields')

@@ -13,8 +13,6 @@ import { lieferung_rev_aggregate_fieldsModelSelector } from "./lieferung_rev_agg
 /**
  * lieferung_rev_aggregateBase
  * auto generated base class for the model lieferung_rev_aggregateModel.
- *
- * aggregated selection of "lieferung_rev"
  */
 export const lieferung_rev_aggregateModelBase = ModelBase
   .named('lieferung_rev_aggregate')

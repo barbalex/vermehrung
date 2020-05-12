@@ -13,8 +13,6 @@ import { sammel_lieferung_rev_aggregate_fieldsModelSelector } from "./sammel_lie
 /**
  * sammel_lieferung_rev_aggregateBase
  * auto generated base class for the model sammel_lieferung_rev_aggregateModel.
- *
- * aggregated selection of "sammel_lieferung_rev"
  */
 export const sammel_lieferung_rev_aggregateModelBase = ModelBase
   .named('sammel_lieferung_rev_aggregate')

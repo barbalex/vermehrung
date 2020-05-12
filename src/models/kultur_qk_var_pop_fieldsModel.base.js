@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_qk_var_pop_fieldsBase
  * auto generated base class for the model kultur_qk_var_pop_fieldsModel.
- *
- * aggregate var_pop on columns
  */
 export const kultur_qk_var_pop_fieldsModelBase = ModelBase
   .named('kultur_qk_var_pop_fields')

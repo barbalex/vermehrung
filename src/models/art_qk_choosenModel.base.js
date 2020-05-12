@@ -13,17 +13,13 @@ import { art_qkModelSelector } from "./art_qkModel.base"
 /**
  * art_qk_choosenBase
  * auto generated base class for the model art_qk_choosenModel.
- *
- * columns and relationships of "art_qk_choosen"
  */
 export const art_qk_choosenModelBase = ModelBase
   .named('art_qk_choosen')
   .props({
     __typename: types.optional(types.literal("art_qk_choosen"), "art_qk_choosen"),
-    /** An object relationship */
     art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
-    /** An object relationship */
     art_qk: types.union(types.undefined, MSTGQLRef(types.late(() => art_qkModel))),
     qk_name: types.union(types.undefined, types.string),
   })

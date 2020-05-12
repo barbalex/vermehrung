@@ -13,8 +13,6 @@ import { kultur_rev_aggregate_fieldsModelSelector } from "./kultur_rev_aggregate
 /**
  * kultur_rev_aggregateBase
  * auto generated base class for the model kultur_rev_aggregateModel.
- *
- * aggregated selection of "kultur_rev"
  */
 export const kultur_rev_aggregateModelBase = ModelBase
   .named('kultur_rev_aggregate')

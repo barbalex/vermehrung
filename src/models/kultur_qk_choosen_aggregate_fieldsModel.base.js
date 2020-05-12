@@ -13,8 +13,6 @@ import { kultur_qk_choosen_min_fieldsModelSelector } from "./kultur_qk_choosen_m
 /**
  * kultur_qk_choosen_aggregate_fieldsBase
  * auto generated base class for the model kultur_qk_choosen_aggregate_fieldsModel.
- *
- * aggregate fields of "kultur_qk_choosen"
  */
 export const kultur_qk_choosen_aggregate_fieldsModelBase = ModelBase
   .named('kultur_qk_choosen_aggregate_fields')

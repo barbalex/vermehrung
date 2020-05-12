@@ -11,8 +11,6 @@ import { lieferungModelSelector } from "./lieferungModel.base"
 /**
  * lieferung_fileBase
  * auto generated base class for the model lieferung_fileModel.
- *
- * columns and relationships of "lieferung_file"
  */
 export const lieferung_fileModelBase = ModelBase
   .named('lieferung_file')
@@ -21,8 +19,7 @@ export const lieferung_fileModelBase = ModelBase
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.frozen()),
-    /** An object relationship */
+    id: types.identifier,
     lieferung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
     lieferung_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),

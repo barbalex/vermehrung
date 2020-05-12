@@ -27,8 +27,6 @@ import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
 /**
  * art_revBase
  * auto generated base class for the model art_revModel.
- *
- * columns and relationships of "art_rev"
  */
 export const art_revModelBase = ModelBase
   .named('art_rev')
@@ -40,26 +38,17 @@ export const art_revModelBase = ModelBase
     _rev: types.union(types.undefined, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.frozen()),
-    /** An array relationship */
+    id: types.identifier,
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    /** An aggregated array relationship */
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
-    /** An array relationship */
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    /** An aggregated array relationship */
     lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
-    /** An array relationship */
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
-    /** An aggregated array relationship */
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
-    /** An array relationship */
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
-    /** An aggregated array relationship */
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
   })
   .views(self => ({

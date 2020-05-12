@@ -11,16 +11,12 @@ import { spatial_ref_sysModelSelector } from "./spatial_ref_sysModel.base"
 /**
  * spatial_ref_sys_mutation_responseBase
  * auto generated base class for the model spatial_ref_sys_mutation_responseModel.
- *
- * response of any mutation on the table "spatial_ref_sys"
  */
 export const spatial_ref_sys_mutation_responseModelBase = ModelBase
   .named('spatial_ref_sys_mutation_response')
   .props({
     __typename: types.optional(types.literal("spatial_ref_sys_mutation_response"), "spatial_ref_sys_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(types.late(() => spatial_ref_sysModel))),
   })
   .views(self => ({

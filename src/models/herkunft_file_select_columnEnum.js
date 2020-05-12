@@ -6,14 +6,12 @@ import { types } from "mobx-state-tree"
 
 /**
 * herkunft_file_select_column
- *
- * select columns of table "herkunft_file"
 */
 export const herkunft_file_select_columnEnum = types.enumeration("herkunft_file_select_column", [
-        "beschreibung", // column name
-  "file_id", // column name
-  "file_mime_type", // column name
-  "herkunft_id", // column name
-  "id", // column name
-  "name", // column name
+        "beschreibung",
+  "file_id",
+  "file_mime_type",
+  "herkunft_id",
+  "id",
+  "name",
       ])

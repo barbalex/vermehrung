@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_qk_choosen_max_fieldsBase
  * auto generated base class for the model kultur_qk_choosen_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const kultur_qk_choosen_max_fieldsModelBase = ModelBase
   .named('kultur_qk_choosen_max_fields')

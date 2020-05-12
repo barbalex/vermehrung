@@ -11,16 +11,12 @@ import { sammlung_revModelSelector } from "./sammlung_revModel.base"
 /**
  * sammlung_rev_mutation_responseBase
  * auto generated base class for the model sammlung_rev_mutation_responseModel.
- *
- * response of any mutation on the table "sammlung_rev"
  */
 export const sammlung_rev_mutation_responseModelBase = ModelBase
   .named('sammlung_rev_mutation_response')
   .props({
     __typename: types.optional(types.literal("sammlung_rev_mutation_response"), "sammlung_rev_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_revModel)))),
   })
   .views(self => ({

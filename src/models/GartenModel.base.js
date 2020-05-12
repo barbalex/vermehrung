@@ -23,8 +23,6 @@ import { personModelSelector } from "./personModel.base"
 /**
  * gartenBase
  * auto generated base class for the model gartenModel.
- *
- * columns and relationships of "garten"
  */
 export const gartenModelBase = ModelBase
   .named('garten')
@@ -39,28 +37,21 @@ export const gartenModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     garten_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_fileModel)))),
-    /** An aggregated array relationship */
     garten_files_aggregate: types.union(types.undefined, types.late(() => garten_file_aggregateModel)),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
-    /** An array relationship */
+    id: types.identifier,
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    /** An aggregated array relationship */
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
     strasse: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
-    /** An aggregated array relationship */
     teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),

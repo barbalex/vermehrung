@@ -13,8 +13,6 @@ import { garten_file_aggregate_fieldsModelSelector } from "./garten_file_aggrega
 /**
  * garten_file_aggregateBase
  * auto generated base class for the model garten_file_aggregateModel.
- *
- * aggregated selection of "garten_file"
  */
 export const garten_file_aggregateModelBase = ModelBase
   .named('garten_file_aggregate')

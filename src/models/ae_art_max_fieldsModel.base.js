@@ -9,14 +9,12 @@ import { ModelBase } from "./ModelBase"
 /**
  * ae_art_max_fieldsBase
  * auto generated base class for the model ae_art_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const ae_art_max_fieldsModelBase = ModelBase
   .named('ae_art_max_fields')
   .props({
     __typename: types.optional(types.literal("ae_art_max_fields"), "ae_art_max_fields"),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     name_deutsch: types.union(types.undefined, types.null, types.string),
     name_latein: types.union(types.undefined, types.null, types.string),

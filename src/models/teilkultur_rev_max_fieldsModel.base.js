@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * teilkultur_rev_max_fieldsBase
  * auto generated base class for the model teilkultur_rev_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const teilkultur_rev_max_fieldsModelBase = ModelBase
   .named('teilkultur_rev_max_fields')
@@ -22,7 +20,7 @@ export const teilkultur_rev_max_fieldsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort1: types.union(types.undefined, types.null, types.string),

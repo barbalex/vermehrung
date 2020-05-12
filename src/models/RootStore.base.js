@@ -1168,3289 +1168,2741 @@ export const RootStoreBase = MSTGQLStore
     zaehlung_revs: types.optional(types.map(types.late(() => zaehlung_revModel)), {})
   })
   .actions(self => ({
-    // fetch data from the table: "ae_art"
     queryAe_art(variables, resultSelector = ae_artModelPrimitives.toString(), options = {}) {
       return self.query(`query ae_art($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_artModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "ae_art"
     queryAe_art_aggregate(variables, resultSelector = ae_art_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query ae_art_aggregate($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art"
     queryArt(variables, resultSelector = artModelPrimitives.toString(), options = {}) {
       return self.query(`query art($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "art"
     queryArt_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query art_aggregate($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art" using primary key columns
     queryArt_by_pk(variables, resultSelector = artModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_by_pk($id: uuid!) { art_by_pk(id: $id) {
+      return self.query(`query art_by_pk($id: ID!) { art_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_file"
     queryArt_file(variables, resultSelector = art_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query art_file($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "art_file"
     queryArt_file_aggregate(variables, resultSelector = art_file_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query art_file_aggregate($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_file" using primary key columns
     queryArt_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_file_by_pk($id: uuid!) { art_file_by_pk(id: $id) {
+      return self.query(`query art_file_by_pk($id: ID!) { art_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_qk"
     queryArt_qk(variables, resultSelector = art_qkModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "art_qk"
     queryArt_qk_aggregate(variables, resultSelector = art_qk_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk_aggregate($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_qk" using primary key columns
     queryArt_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk_by_pk($name: String!) { art_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_qk_choosen"
     queryArt_qk_choosen(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk_choosen($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "art_qk_choosen"
     queryArt_qk_choosen_aggregate(variables, resultSelector = art_qk_choosen_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query art_qk_choosen_aggregate($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_rev"
     queryArt_rev(variables, resultSelector = art_revModelPrimitives.toString(), options = {}) {
       return self.query(`query art_rev($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "art_rev"
     queryArt_rev_aggregate(variables, resultSelector = art_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query art_rev_aggregate($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_rev" using primary key columns
     queryArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_rev_by_pk($_rev: String!, $id: uuid!) { art_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query art_rev_by_pk($_rev: String!, $id: ID!) { art_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "art_search" which returns "art"
     queryArt_search(variables, resultSelector = artModelPrimitives.toString(), options = {}) {
       return self.query(`query art_search($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "art_search" and query aggregates on result of table type "art"
     queryArt_search_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query art_search_aggregate($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "art_sums"
     queryArt_sums(variables, resultSelector = art_sumsModelPrimitives.toString(), options = {}) {
       return self.query(`query art_sums($distinct_on: [art_sums_select_column!], $limit: Int, $offset: Int, $order_by: [art_sums_order_by!], $where: art_sums_bool_exp) { art_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_sumsModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "art_sums"
     queryArt_sums_aggregate(variables, resultSelector = art_sums_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query art_sums_aggregate($distinct_on: [art_sums_select_column!], $limit: Int, $offset: Int, $order_by: [art_sums_order_by!], $where: art_sums_bool_exp) { art_sums_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_sums_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "av_art"
     queryAv_art(variables, resultSelector = av_artModelPrimitives.toString(), options = {}) {
       return self.query(`query av_art($distinct_on: [av_art_select_column!], $limit: Int, $offset: Int, $order_by: [av_art_order_by!], $where: av_art_bool_exp) { av_art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_artModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "av_art"
     queryAv_art_aggregate(variables, resultSelector = av_art_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query av_art_aggregate($distinct_on: [av_art_select_column!], $limit: Int, $offset: Int, $order_by: [av_art_order_by!], $where: av_art_bool_exp) { av_art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "av_art" using primary key columns
     queryAv_art_by_pk(variables, resultSelector = av_artModelPrimitives.toString(), options = {}) {
       return self.query(`query av_art_by_pk($art_id: uuid!, $person_id: uuid!) { av_art_by_pk(art_id: $art_id, person_id: $person_id) {
         ${typeof resultSelector === "function" ? resultSelector(new av_artModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "event"
     queryEvent(variables, resultSelector = eventModelPrimitives.toString(), options = {}) {
       return self.query(`query event($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "event"
     queryEvent_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query event_aggregate($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "event" using primary key columns
     queryEvent_by_pk(variables, resultSelector = eventModelPrimitives.toString(), options = {}) {
-      return self.query(`query event_by_pk($id: uuid!) { event_by_pk(id: $id) {
+      return self.query(`query event_by_pk($id: ID!) { event_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "event_rev"
     queryEvent_rev(variables, resultSelector = event_revModelPrimitives.toString(), options = {}) {
       return self.query(`query event_rev($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "event_rev"
     queryEvent_rev_aggregate(variables, resultSelector = event_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query event_rev_aggregate($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "event_rev" using primary key columns
     queryEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query event_rev_by_pk($_rev: String!, $id: uuid!) { event_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query event_rev_by_pk($_rev: String!, $id: ID!) { event_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "event_search" which returns "event"
     queryEvent_search(variables, resultSelector = eventModelPrimitives.toString(), options = {}) {
       return self.query(`query event_search($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "event_search" and query aggregates on result of table type "event"
     queryEvent_search_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query event_search_aggregate($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "garten"
     queryGarten(variables, resultSelector = gartenModelPrimitives.toString(), options = {}) {
       return self.query(`query garten($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "garten"
     queryGarten_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_aggregate($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "garten" using primary key columns
     queryGarten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_by_pk($id: uuid!) { garten_by_pk(id: $id) {
+      return self.query(`query garten_by_pk($id: ID!) { garten_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "garten_file"
     queryGarten_file(variables, resultSelector = garten_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_file($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "garten_file"
     queryGarten_file_aggregate(variables, resultSelector = garten_file_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_file_aggregate($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "garten_file" using primary key columns
     queryGarten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_file_by_pk($id: uuid!) { garten_file_by_pk(id: $id) {
+      return self.query(`query garten_file_by_pk($id: ID!) { garten_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "garten_rev"
     queryGarten_rev(variables, resultSelector = garten_revModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_rev($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "garten_rev"
     queryGarten_rev_aggregate(variables, resultSelector = garten_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_rev_aggregate($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "garten_rev" using primary key columns
     queryGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_rev_by_pk($_rev: String!, $id: uuid!) { garten_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query garten_rev_by_pk($_rev: String!, $id: ID!) { garten_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "garten_search" which returns "garten"
     queryGarten_search(variables, resultSelector = gartenModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_search($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "garten_search" and query aggregates on result of table type "garten"
     queryGarten_search_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_search_aggregate($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "garten_teilzaehlung_sums"
     queryGarten_teilzaehlung_sums(variables, resultSelector = garten_teilzaehlung_sumsModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_teilzaehlung_sums($distinct_on: [garten_teilzaehlung_sums_select_column!], $limit: Int, $offset: Int, $order_by: [garten_teilzaehlung_sums_order_by!], $where: garten_teilzaehlung_sums_bool_exp) { garten_teilzaehlung_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_teilzaehlung_sumsModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "garten_teilzaehlung_sums"
     queryGarten_teilzaehlung_sums_aggregate(variables, resultSelector = garten_teilzaehlung_sums_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_teilzaehlung_sums_aggregate($distinct_on: [garten_teilzaehlung_sums_select_column!], $limit: Int, $offset: Int, $order_by: [garten_teilzaehlung_sums_order_by!], $where: garten_teilzaehlung_sums_bool_exp) { garten_teilzaehlung_sums_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_teilzaehlung_sums_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "herkunft"
     queryHerkunft(variables, resultSelector = herkunftModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "herkunft"
     queryHerkunft_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_aggregate($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "herkunft" using primary key columns
     queryHerkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_by_pk($id: uuid!) { herkunft_by_pk(id: $id) {
+      return self.query(`query herkunft_by_pk($id: ID!) { herkunft_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "herkunft_file"
     queryHerkunft_file(variables, resultSelector = herkunft_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_file($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "herkunft_file"
     queryHerkunft_file_aggregate(variables, resultSelector = herkunft_file_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_file_aggregate($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "herkunft_file" using primary key columns
     queryHerkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_file_by_pk($id: uuid!) { herkunft_file_by_pk(id: $id) {
+      return self.query(`query herkunft_file_by_pk($id: ID!) { herkunft_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "herkunft_rev"
     queryHerkunft_rev(variables, resultSelector = herkunft_revModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_rev($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "herkunft_rev"
     queryHerkunft_rev_aggregate(variables, resultSelector = herkunft_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_rev_aggregate($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "herkunft_rev" using primary key columns
     queryHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_rev_by_pk($_rev: String!, $id: uuid!) { herkunft_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query herkunft_rev_by_pk($_rev: String!, $id: ID!) { herkunft_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "herkunft_search" which returns "herkunft"
     queryHerkunft_search(variables, resultSelector = herkunftModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_search($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "herkunft_search" and query aggregates on result of table type "herkunft"
     queryHerkunft_search_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_search_aggregate($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "herkunft_sums"
     queryHerkunft_sums(variables, resultSelector = herkunft_sumsModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_sums($distinct_on: [herkunft_sums_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_sums_order_by!], $where: herkunft_sums_bool_exp) { herkunft_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_sumsModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "herkunft_sums"
     queryHerkunft_sums_aggregate(variables, resultSelector = herkunft_sums_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_sums_aggregate($distinct_on: [herkunft_sums_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_sums_order_by!], $where: herkunft_sums_bool_exp) { herkunft_sums_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_sums_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur"
     queryKultur(variables, resultSelector = kulturModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "kultur"
     queryKultur_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_aggregate($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur" using primary key columns
     queryKultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_by_pk($id: uuid!) { kultur_by_pk(id: $id) {
+      return self.query(`query kultur_by_pk($id: ID!) { kultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_file"
     queryKultur_file(variables, resultSelector = kultur_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_file($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "kultur_file"
     queryKultur_file_aggregate(variables, resultSelector = kultur_file_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_file_aggregate($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_file" using primary key columns
     queryKultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_file_by_pk($id: uuid!) { kultur_file_by_pk(id: $id) {
+      return self.query(`query kultur_file_by_pk($id: ID!) { kultur_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_option"
     queryKultur_option(variables, resultSelector = kultur_optionModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_option($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_optionModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "kultur_option"
     queryKultur_option_aggregate(variables, resultSelector = kultur_option_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_option_aggregate($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_option_rev"
     queryKultur_option_rev(variables, resultSelector = kultur_option_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_option_rev($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "kultur_option_rev"
     queryKultur_option_rev_aggregate(variables, resultSelector = kultur_option_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_option_rev_aggregate($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_option_rev" using primary key columns
     queryKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_option_rev_by_pk($_rev: String!, $kultur_id: uuid!) { kultur_option_rev_by_pk(_rev: $_rev, kultur_id: $kultur_id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_qk"
     queryKultur_qk(variables, resultSelector = kultur_qkModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "kultur_qk"
     queryKultur_qk_aggregate(variables, resultSelector = kultur_qk_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_aggregate($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_qk" using primary key columns
     queryKultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_by_pk($name: String!) { kultur_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_qk_choosen"
     queryKultur_qk_choosen(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_choosen($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "kultur_qk_choosen"
     queryKultur_qk_choosen_aggregate(variables, resultSelector = kultur_qk_choosen_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_qk_choosen_aggregate($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_rev"
     queryKultur_rev(variables, resultSelector = kultur_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_rev($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "kultur_rev"
     queryKultur_rev_aggregate(variables, resultSelector = kultur_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_rev_aggregate($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "kultur_rev" using primary key columns
     queryKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_rev_by_pk($_rev: String!, $id: uuid!) { kultur_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query kultur_rev_by_pk($_rev: String!, $id: ID!) { kultur_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "kultur_search" which returns "kultur"
     queryKultur_search(variables, resultSelector = kulturModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_search($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "kultur_search" and query aggregates on result of table type "kultur"
     queryKultur_search_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_search_aggregate($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "lieferung"
     queryLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "lieferung"
     queryLieferung_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_aggregate($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "lieferung" using primary key columns
     queryLieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_by_pk($id: uuid!) { lieferung_by_pk(id: $id) {
+      return self.query(`query lieferung_by_pk($id: ID!) { lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "lieferung_file"
     queryLieferung_file(variables, resultSelector = lieferung_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_file($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "lieferung_file"
     queryLieferung_file_aggregate(variables, resultSelector = lieferung_file_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_file_aggregate($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "lieferung_file" using primary key columns
     queryLieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_file_by_pk($id: uuid!) { lieferung_file_by_pk(id: $id) {
+      return self.query(`query lieferung_file_by_pk($id: ID!) { lieferung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "lieferung_rev"
     queryLieferung_rev(variables, resultSelector = lieferung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_rev($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "lieferung_rev"
     queryLieferung_rev_aggregate(variables, resultSelector = lieferung_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_rev_aggregate($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "lieferung_rev" using primary key columns
     queryLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_rev_by_pk($_rev: String!, $id: uuid!) { lieferung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query lieferung_rev_by_pk($_rev: String!, $id: ID!) { lieferung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "lieferung_search" which returns "lieferung"
     queryLieferung_search(variables, resultSelector = lieferungModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_search($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "lieferung_search" and query aggregates on result of table type "lieferung"
     queryLieferung_search_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_search_aggregate($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person"
     queryPerson(variables, resultSelector = personModelPrimitives.toString(), options = {}) {
       return self.query(`query person($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "person"
     queryPerson_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query person_aggregate($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person" using primary key columns
     queryPerson_by_pk(variables, resultSelector = personModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_by_pk($id: uuid!) { person_by_pk(id: $id) {
+      return self.query(`query person_by_pk($id: ID!) { person_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person_file"
     queryPerson_file(variables, resultSelector = person_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query person_file($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "person_file"
     queryPerson_file_aggregate(variables, resultSelector = person_file_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query person_file_aggregate($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person_file" using primary key columns
     queryPerson_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_file_by_pk($id: uuid!) { person_file_by_pk(id: $id) {
+      return self.query(`query person_file_by_pk($id: ID!) { person_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person_option"
     queryPerson_option(variables, resultSelector = person_optionModelPrimitives.toString(), options = {}) {
       return self.query(`query person_option($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_optionModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "person_option"
     queryPerson_option_aggregate(variables, resultSelector = person_option_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query person_option_aggregate($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person_option_rev"
     queryPerson_option_rev(variables, resultSelector = person_option_revModelPrimitives.toString(), options = {}) {
       return self.query(`query person_option_rev($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "person_option_rev"
     queryPerson_option_rev_aggregate(variables, resultSelector = person_option_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query person_option_rev_aggregate($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person_option_rev" using primary key columns
     queryPerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), options = {}) {
       return self.query(`query person_option_rev_by_pk($_rev: String!, $person_id: uuid!) { person_option_rev_by_pk(_rev: $_rev, person_id: $person_id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person_rev"
     queryPerson_rev(variables, resultSelector = person_revModelPrimitives.toString(), options = {}) {
       return self.query(`query person_rev($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "person_rev"
     queryPerson_rev_aggregate(variables, resultSelector = person_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query person_rev_aggregate($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "person_rev" using primary key columns
     queryPerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_rev_by_pk($_rev: String!, $id: uuid!) { person_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query person_rev_by_pk($_rev: String!, $id: ID!) { person_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "person_search" which returns "person"
     queryPerson_search(variables, resultSelector = personModelPrimitives.toString(), options = {}) {
       return self.query(`query person_search($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "person_search" and query aggregates on result of table type "person"
     queryPerson_search_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query person_search_aggregate($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammel_lieferung"
     querySammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), options = {}) {
       return self.query(`query sammel_lieferung($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "sammel_lieferung"
     querySammel_lieferung_aggregate(variables, resultSelector = sammel_lieferung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query sammel_lieferung_aggregate($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammel_lieferung" using primary key columns
     querySammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammel_lieferung_by_pk($id: uuid!) { sammel_lieferung_by_pk(id: $id) {
+      return self.query(`query sammel_lieferung_by_pk($id: ID!) { sammel_lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammel_lieferung_rev"
     querySammel_lieferung_rev(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query sammel_lieferung_rev($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "sammel_lieferung_rev"
     querySammel_lieferung_rev_aggregate(variables, resultSelector = sammel_lieferung_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query sammel_lieferung_rev_aggregate($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammel_lieferung_rev" using primary key columns
     querySammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammel_lieferung_rev_by_pk($_rev: String!, $id: uuid!) { sammel_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query sammel_lieferung_rev_by_pk($_rev: String!, $id: ID!) { sammel_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammlung"
     querySammlung(variables, resultSelector = sammlungModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "sammlung"
     querySammlung_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_aggregate($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammlung" using primary key columns
     querySammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_by_pk($id: uuid!) { sammlung_by_pk(id: $id) {
+      return self.query(`query sammlung_by_pk($id: ID!) { sammlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammlung_file"
     querySammlung_file(variables, resultSelector = sammlung_fileModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_file($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "sammlung_file"
     querySammlung_file_aggregate(variables, resultSelector = sammlung_file_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_file_aggregate($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammlung_file" using primary key columns
     querySammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_file_by_pk($id: uuid!) { sammlung_file_by_pk(id: $id) {
+      return self.query(`query sammlung_file_by_pk($id: ID!) { sammlung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammlung_rev"
     querySammlung_rev(variables, resultSelector = sammlung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_rev($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "sammlung_rev"
     querySammlung_rev_aggregate(variables, resultSelector = sammlung_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_rev_aggregate($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "sammlung_rev" using primary key columns
     querySammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_rev_by_pk($_rev: String!, $id: uuid!) { sammlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query sammlung_rev_by_pk($_rev: String!, $id: ID!) { sammlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "sammlung_search" which returns "sammlung"
     querySammlung_search(variables, resultSelector = sammlungModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_search($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "sammlung_search" and query aggregates on result of table type "sammlung"
     querySammlung_search_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query sammlung_search_aggregate($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "spatial_ref_sys"
     querySpatial_ref_sys(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), options = {}) {
       return self.query(`query spatial_ref_sys($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "spatial_ref_sys"
     querySpatial_ref_sys_aggregate(variables, resultSelector = spatial_ref_sys_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query spatial_ref_sys_aggregate($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "spatial_ref_sys" using primary key columns
     querySpatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), options = {}) {
       return self.query(`query spatial_ref_sys_by_pk($srid: Int!) { spatial_ref_sys_by_pk(srid: $srid) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilkultur"
     queryTeilkultur(variables, resultSelector = teilkulturModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "teilkultur"
     queryTeilkultur_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_aggregate($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilkultur" using primary key columns
     queryTeilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilkultur_by_pk($id: uuid!) { teilkultur_by_pk(id: $id) {
+      return self.query(`query teilkultur_by_pk($id: ID!) { teilkultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilkultur_rev"
     queryTeilkultur_rev(variables, resultSelector = teilkultur_revModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_rev($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "teilkultur_rev"
     queryTeilkultur_rev_aggregate(variables, resultSelector = teilkultur_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_rev_aggregate($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilkultur_rev" using primary key columns
     queryTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilkultur_rev_by_pk($_rev: String!, $id: uuid!) { teilkultur_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query teilkultur_rev_by_pk($_rev: String!, $id: ID!) { teilkultur_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "teilkultur_search" which returns "teilkultur"
     queryTeilkultur_search(variables, resultSelector = teilkulturModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_search($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "teilkultur_search" and query aggregates on result of table type "teilkultur"
     queryTeilkultur_search_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_search_aggregate($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilzaehlung"
     queryTeilzaehlung(variables, resultSelector = teilzaehlungModelPrimitives.toString(), options = {}) {
       return self.query(`query teilzaehlung($distinct_on: [teilzaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_order_by!], $where: teilzaehlung_bool_exp) { teilzaehlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "teilzaehlung"
     queryTeilzaehlung_aggregate(variables, resultSelector = teilzaehlung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query teilzaehlung_aggregate($distinct_on: [teilzaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_order_by!], $where: teilzaehlung_bool_exp) { teilzaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilzaehlung" using primary key columns
     queryTeilzaehlung_by_pk(variables, resultSelector = teilzaehlungModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilzaehlung_by_pk($id: uuid!) { teilzaehlung_by_pk(id: $id) {
+      return self.query(`query teilzaehlung_by_pk($id: ID!) { teilzaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilzaehlung_rev"
     queryTeilzaehlung_rev(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query teilzaehlung_rev($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "teilzaehlung_rev"
     queryTeilzaehlung_rev_aggregate(variables, resultSelector = teilzaehlung_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query teilzaehlung_rev_aggregate($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "teilzaehlung_rev" using primary key columns
     queryTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilzaehlung_rev_by_pk($_rev: String!, $id: uuid!) { teilzaehlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query teilzaehlung_rev_by_pk($_rev: String!, $id: ID!) { teilzaehlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "user_role"
     queryUser_role(variables, resultSelector = user_roleModelPrimitives.toString(), options = {}) {
       return self.query(`query user_role($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "user_role"
     queryUser_role_aggregate(variables, resultSelector = user_role_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query user_role_aggregate($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_role_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "user_role" using primary key columns
     queryUser_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), options = {}) {
       return self.query(`query user_role_by_pk($name: String!) { user_role_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "zaehlung"
     queryZaehlung(variables, resultSelector = zaehlungModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "zaehlung"
     queryZaehlung_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_aggregate($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "zaehlung" using primary key columns
     queryZaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), options = {}) {
-      return self.query(`query zaehlung_by_pk($id: uuid!) { zaehlung_by_pk(id: $id) {
+      return self.query(`query zaehlung_by_pk($id: ID!) { zaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "zaehlung_rev"
     queryZaehlung_rev(variables, resultSelector = zaehlung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_rev($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch aggregated fields from the table: "zaehlung_rev"
     queryZaehlung_rev_aggregate(variables, resultSelector = zaehlung_rev_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_rev_aggregate($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // fetch data from the table: "zaehlung_rev" using primary key columns
     queryZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query zaehlung_rev_by_pk($_rev: String!, $id: uuid!) { zaehlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.query(`query zaehlung_rev_by_pk($_rev: String!, $id: ID!) { zaehlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "zaehlung_search" which returns "zaehlung"
     queryZaehlung_search(variables, resultSelector = zaehlungModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_search($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // execute function "zaehlung_search" and query aggregates on result of table type "zaehlung"
     queryZaehlung_search_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_search_aggregate($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    // delete data from the table: "ae_art"
     mutateDelete_ae_art(variables, resultSelector = ae_art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_ae_art($where: ae_art_bool_exp!) { delete_ae_art(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "art"
     mutateDelete_art(variables, resultSelector = art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_art($where: art_bool_exp!) { delete_art(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "art"
     mutateDelete_art_by_pk(variables, resultSelector = artModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_art_by_pk($id: uuid!) { delete_art_by_pk(id: $id) {
+      return self.mutate(`mutation delete_art_by_pk($id: ID!) { delete_art_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "art_file"
     mutateDelete_art_file(variables, resultSelector = art_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_art_file($where: art_file_bool_exp!) { delete_art_file(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "art_file"
     mutateDelete_art_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_art_file_by_pk($id: uuid!) { delete_art_file_by_pk(id: $id) {
+      return self.mutate(`mutation delete_art_file_by_pk($id: ID!) { delete_art_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "art_qk"
     mutateDelete_art_qk(variables, resultSelector = art_qk_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_art_qk($where: art_qk_bool_exp!) { delete_art_qk(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "art_qk"
     mutateDelete_art_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_art_qk_by_pk($name: String!) { delete_art_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "art_qk_choosen"
     mutateDelete_art_qk_choosen(variables, resultSelector = art_qk_choosen_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_art_qk_choosen($where: art_qk_choosen_bool_exp!) { delete_art_qk_choosen(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "art_rev"
     mutateDelete_art_rev(variables, resultSelector = art_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_art_rev($where: art_rev_bool_exp!) { delete_art_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "art_rev"
     mutateDelete_art_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_art_rev_by_pk($_rev: String!, $id: uuid!) { delete_art_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_art_rev_by_pk($_rev: String!, $id: ID!) { delete_art_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "av_art"
     mutateDelete_av_art(variables, resultSelector = av_art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_av_art($where: av_art_bool_exp!) { delete_av_art(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "av_art"
     mutateDelete_av_art_by_pk(variables, resultSelector = av_artModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_av_art_by_pk($art_id: uuid!, $person_id: uuid!) { delete_av_art_by_pk(art_id: $art_id, person_id: $person_id) {
         ${typeof resultSelector === "function" ? resultSelector(new av_artModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "event"
     mutateDelete_event(variables, resultSelector = event_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_event($where: event_bool_exp!) { delete_event(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "event"
     mutateDelete_event_by_pk(variables, resultSelector = eventModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_event_by_pk($id: uuid!) { delete_event_by_pk(id: $id) {
+      return self.mutate(`mutation delete_event_by_pk($id: ID!) { delete_event_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "event_rev"
     mutateDelete_event_rev(variables, resultSelector = event_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_event_rev($where: event_rev_bool_exp!) { delete_event_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "event_rev"
     mutateDelete_event_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_event_rev_by_pk($_rev: String!, $id: uuid!) { delete_event_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_event_rev_by_pk($_rev: String!, $id: ID!) { delete_event_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "garten"
     mutateDelete_garten(variables, resultSelector = garten_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_garten($where: garten_bool_exp!) { delete_garten(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "garten"
     mutateDelete_garten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_garten_by_pk($id: uuid!) { delete_garten_by_pk(id: $id) {
+      return self.mutate(`mutation delete_garten_by_pk($id: ID!) { delete_garten_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "garten_file"
     mutateDelete_garten_file(variables, resultSelector = garten_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_garten_file($where: garten_file_bool_exp!) { delete_garten_file(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "garten_file"
     mutateDelete_garten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_garten_file_by_pk($id: uuid!) { delete_garten_file_by_pk(id: $id) {
+      return self.mutate(`mutation delete_garten_file_by_pk($id: ID!) { delete_garten_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "garten_rev"
     mutateDelete_garten_rev(variables, resultSelector = garten_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_garten_rev($where: garten_rev_bool_exp!) { delete_garten_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "garten_rev"
     mutateDelete_garten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_garten_rev_by_pk($_rev: String!, $id: uuid!) { delete_garten_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_garten_rev_by_pk($_rev: String!, $id: ID!) { delete_garten_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "herkunft"
     mutateDelete_herkunft(variables, resultSelector = herkunft_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_herkunft($where: herkunft_bool_exp!) { delete_herkunft(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "herkunft"
     mutateDelete_herkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_herkunft_by_pk($id: uuid!) { delete_herkunft_by_pk(id: $id) {
+      return self.mutate(`mutation delete_herkunft_by_pk($id: ID!) { delete_herkunft_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "herkunft_file"
     mutateDelete_herkunft_file(variables, resultSelector = herkunft_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_herkunft_file($where: herkunft_file_bool_exp!) { delete_herkunft_file(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "herkunft_file"
     mutateDelete_herkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_herkunft_file_by_pk($id: uuid!) { delete_herkunft_file_by_pk(id: $id) {
+      return self.mutate(`mutation delete_herkunft_file_by_pk($id: ID!) { delete_herkunft_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "herkunft_rev"
     mutateDelete_herkunft_rev(variables, resultSelector = herkunft_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_herkunft_rev($where: herkunft_rev_bool_exp!) { delete_herkunft_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "herkunft_rev"
     mutateDelete_herkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_herkunft_rev_by_pk($_rev: String!, $id: uuid!) { delete_herkunft_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_herkunft_rev_by_pk($_rev: String!, $id: ID!) { delete_herkunft_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "kultur"
     mutateDelete_kultur(variables, resultSelector = kultur_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur($where: kultur_bool_exp!) { delete_kultur(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "kultur"
     mutateDelete_kultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_kultur_by_pk($id: uuid!) { delete_kultur_by_pk(id: $id) {
+      return self.mutate(`mutation delete_kultur_by_pk($id: ID!) { delete_kultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "kultur_file"
     mutateDelete_kultur_file(variables, resultSelector = kultur_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_file($where: kultur_file_bool_exp!) { delete_kultur_file(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "kultur_file"
     mutateDelete_kultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_kultur_file_by_pk($id: uuid!) { delete_kultur_file_by_pk(id: $id) {
+      return self.mutate(`mutation delete_kultur_file_by_pk($id: ID!) { delete_kultur_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "kultur_option"
     mutateDelete_kultur_option(variables, resultSelector = kultur_option_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_option($where: kultur_option_bool_exp!) { delete_kultur_option(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "kultur_option_rev"
     mutateDelete_kultur_option_rev(variables, resultSelector = kultur_option_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_option_rev($where: kultur_option_rev_bool_exp!) { delete_kultur_option_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "kultur_option_rev"
     mutateDelete_kultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_option_rev_by_pk($_rev: String!, $kultur_id: uuid!) { delete_kultur_option_rev_by_pk(_rev: $_rev, kultur_id: $kultur_id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "kultur_qk"
     mutateDelete_kultur_qk(variables, resultSelector = kultur_qk_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_qk($where: kultur_qk_bool_exp!) { delete_kultur_qk(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "kultur_qk"
     mutateDelete_kultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_qk_by_pk($name: String!) { delete_kultur_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "kultur_qk_choosen"
     mutateDelete_kultur_qk_choosen(variables, resultSelector = kultur_qk_choosen_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_qk_choosen($where: kultur_qk_choosen_bool_exp!) { delete_kultur_qk_choosen(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "kultur_rev"
     mutateDelete_kultur_rev(variables, resultSelector = kultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_rev($where: kultur_rev_bool_exp!) { delete_kultur_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "kultur_rev"
     mutateDelete_kultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_kultur_rev_by_pk($_rev: String!, $id: uuid!) { delete_kultur_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_kultur_rev_by_pk($_rev: String!, $id: ID!) { delete_kultur_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "lieferung"
     mutateDelete_lieferung(variables, resultSelector = lieferung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_lieferung($where: lieferung_bool_exp!) { delete_lieferung(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "lieferung"
     mutateDelete_lieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_lieferung_by_pk($id: uuid!) { delete_lieferung_by_pk(id: $id) {
+      return self.mutate(`mutation delete_lieferung_by_pk($id: ID!) { delete_lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "lieferung_file"
     mutateDelete_lieferung_file(variables, resultSelector = lieferung_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_lieferung_file($where: lieferung_file_bool_exp!) { delete_lieferung_file(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "lieferung_file"
     mutateDelete_lieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_lieferung_file_by_pk($id: uuid!) { delete_lieferung_file_by_pk(id: $id) {
+      return self.mutate(`mutation delete_lieferung_file_by_pk($id: ID!) { delete_lieferung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "lieferung_rev"
     mutateDelete_lieferung_rev(variables, resultSelector = lieferung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_lieferung_rev($where: lieferung_rev_bool_exp!) { delete_lieferung_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "lieferung_rev"
     mutateDelete_lieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_lieferung_rev_by_pk($_rev: String!, $id: uuid!) { delete_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_lieferung_rev_by_pk($_rev: String!, $id: ID!) { delete_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "person"
     mutateDelete_person(variables, resultSelector = person_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_person($where: person_bool_exp!) { delete_person(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "person"
     mutateDelete_person_by_pk(variables, resultSelector = personModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_person_by_pk($id: uuid!) { delete_person_by_pk(id: $id) {
+      return self.mutate(`mutation delete_person_by_pk($id: ID!) { delete_person_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "person_file"
     mutateDelete_person_file(variables, resultSelector = person_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_person_file($where: person_file_bool_exp!) { delete_person_file(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "person_file"
     mutateDelete_person_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_person_file_by_pk($id: uuid!) { delete_person_file_by_pk(id: $id) {
+      return self.mutate(`mutation delete_person_file_by_pk($id: ID!) { delete_person_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "person_option"
     mutateDelete_person_option(variables, resultSelector = person_option_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_person_option($where: person_option_bool_exp!) { delete_person_option(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "person_option_rev"
     mutateDelete_person_option_rev(variables, resultSelector = person_option_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_person_option_rev($where: person_option_rev_bool_exp!) { delete_person_option_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "person_option_rev"
     mutateDelete_person_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_person_option_rev_by_pk($_rev: String!, $person_id: uuid!) { delete_person_option_rev_by_pk(_rev: $_rev, person_id: $person_id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "person_rev"
     mutateDelete_person_rev(variables, resultSelector = person_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_person_rev($where: person_rev_bool_exp!) { delete_person_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "person_rev"
     mutateDelete_person_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_person_rev_by_pk($_rev: String!, $id: uuid!) { delete_person_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_person_rev_by_pk($_rev: String!, $id: ID!) { delete_person_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "sammel_lieferung"
     mutateDelete_sammel_lieferung(variables, resultSelector = sammel_lieferung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_sammel_lieferung($where: sammel_lieferung_bool_exp!) { delete_sammel_lieferung(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "sammel_lieferung"
     mutateDelete_sammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_sammel_lieferung_by_pk($id: uuid!) { delete_sammel_lieferung_by_pk(id: $id) {
+      return self.mutate(`mutation delete_sammel_lieferung_by_pk($id: ID!) { delete_sammel_lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "sammel_lieferung_rev"
     mutateDelete_sammel_lieferung_rev(variables, resultSelector = sammel_lieferung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_sammel_lieferung_rev($where: sammel_lieferung_rev_bool_exp!) { delete_sammel_lieferung_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "sammel_lieferung_rev"
     mutateDelete_sammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_sammel_lieferung_rev_by_pk($_rev: String!, $id: uuid!) { delete_sammel_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_sammel_lieferung_rev_by_pk($_rev: String!, $id: ID!) { delete_sammel_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "sammlung"
     mutateDelete_sammlung(variables, resultSelector = sammlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_sammlung($where: sammlung_bool_exp!) { delete_sammlung(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "sammlung"
     mutateDelete_sammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_sammlung_by_pk($id: uuid!) { delete_sammlung_by_pk(id: $id) {
+      return self.mutate(`mutation delete_sammlung_by_pk($id: ID!) { delete_sammlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "sammlung_file"
     mutateDelete_sammlung_file(variables, resultSelector = sammlung_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_sammlung_file($where: sammlung_file_bool_exp!) { delete_sammlung_file(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "sammlung_file"
     mutateDelete_sammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_sammlung_file_by_pk($id: uuid!) { delete_sammlung_file_by_pk(id: $id) {
+      return self.mutate(`mutation delete_sammlung_file_by_pk($id: ID!) { delete_sammlung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "sammlung_rev"
     mutateDelete_sammlung_rev(variables, resultSelector = sammlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_sammlung_rev($where: sammlung_rev_bool_exp!) { delete_sammlung_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "sammlung_rev"
     mutateDelete_sammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_sammlung_rev_by_pk($_rev: String!, $id: uuid!) { delete_sammlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_sammlung_rev_by_pk($_rev: String!, $id: ID!) { delete_sammlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "spatial_ref_sys"
     mutateDelete_spatial_ref_sys(variables, resultSelector = spatial_ref_sys_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_spatial_ref_sys($where: spatial_ref_sys_bool_exp!) { delete_spatial_ref_sys(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "spatial_ref_sys"
     mutateDelete_spatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_spatial_ref_sys_by_pk($srid: Int!) { delete_spatial_ref_sys_by_pk(srid: $srid) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "teilkultur"
     mutateDelete_teilkultur(variables, resultSelector = teilkultur_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_teilkultur($where: teilkultur_bool_exp!) { delete_teilkultur(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "teilkultur"
     mutateDelete_teilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_teilkultur_by_pk($id: uuid!) { delete_teilkultur_by_pk(id: $id) {
+      return self.mutate(`mutation delete_teilkultur_by_pk($id: ID!) { delete_teilkultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "teilkultur_rev"
     mutateDelete_teilkultur_rev(variables, resultSelector = teilkultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_teilkultur_rev($where: teilkultur_rev_bool_exp!) { delete_teilkultur_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "teilkultur_rev"
     mutateDelete_teilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_teilkultur_rev_by_pk($_rev: String!, $id: uuid!) { delete_teilkultur_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_teilkultur_rev_by_pk($_rev: String!, $id: ID!) { delete_teilkultur_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "teilzaehlung"
     mutateDelete_teilzaehlung(variables, resultSelector = teilzaehlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_teilzaehlung($where: teilzaehlung_bool_exp!) { delete_teilzaehlung(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "teilzaehlung"
     mutateDelete_teilzaehlung_by_pk(variables, resultSelector = teilzaehlungModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_teilzaehlung_by_pk($id: uuid!) { delete_teilzaehlung_by_pk(id: $id) {
+      return self.mutate(`mutation delete_teilzaehlung_by_pk($id: ID!) { delete_teilzaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "teilzaehlung_rev"
     mutateDelete_teilzaehlung_rev(variables, resultSelector = teilzaehlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_teilzaehlung_rev($where: teilzaehlung_rev_bool_exp!) { delete_teilzaehlung_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "teilzaehlung_rev"
     mutateDelete_teilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_teilzaehlung_rev_by_pk($_rev: String!, $id: uuid!) { delete_teilzaehlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_teilzaehlung_rev_by_pk($_rev: String!, $id: ID!) { delete_teilzaehlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "user_role"
     mutateDelete_user_role(variables, resultSelector = user_role_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_user_role($where: user_role_bool_exp!) { delete_user_role(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_role_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "user_role"
     mutateDelete_user_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_user_role_by_pk($name: String!) { delete_user_role_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "zaehlung"
     mutateDelete_zaehlung(variables, resultSelector = zaehlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_zaehlung($where: zaehlung_bool_exp!) { delete_zaehlung(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "zaehlung"
     mutateDelete_zaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_zaehlung_by_pk($id: uuid!) { delete_zaehlung_by_pk(id: $id) {
+      return self.mutate(`mutation delete_zaehlung_by_pk($id: ID!) { delete_zaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete data from the table: "zaehlung_rev"
     mutateDelete_zaehlung_rev(variables, resultSelector = zaehlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_zaehlung_rev($where: zaehlung_rev_bool_exp!) { delete_zaehlung_rev(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // delete single row from the table: "zaehlung_rev"
     mutateDelete_zaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_zaehlung_rev_by_pk($_rev: String!, $id: uuid!) { delete_zaehlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.mutate(`mutation delete_zaehlung_rev_by_pk($_rev: String!, $id: ID!) { delete_zaehlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "ae_art"
     mutateInsert_ae_art(variables, resultSelector = ae_art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_ae_art($objects: [ae_art_insert_input!]!) { insert_ae_art(objects: $objects) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "ae_art"
     mutateInsert_ae_art_one(variables, resultSelector = ae_artModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_ae_art_one($object: ae_art_insert_input!) { insert_ae_art_one(object: $object) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_artModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "art"
     mutateInsert_art(variables, resultSelector = art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art($objects: [art_insert_input!]!, $on_conflict: art_on_conflict) { insert_art(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "art_file"
     mutateInsert_art_file(variables, resultSelector = art_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_file($objects: [art_file_insert_input!]!, $on_conflict: art_file_on_conflict) { insert_art_file(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "art_file"
     mutateInsert_art_file_one(variables, resultSelector = art_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_file_one($object: art_file_insert_input!, $on_conflict: art_file_on_conflict) { insert_art_file_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "art"
     mutateInsert_art_one(variables, resultSelector = artModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_one($object: art_insert_input!, $on_conflict: art_on_conflict) { insert_art_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "art_qk"
     mutateInsert_art_qk(variables, resultSelector = art_qk_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_qk($objects: [art_qk_insert_input!]!, $on_conflict: art_qk_on_conflict) { insert_art_qk(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "art_qk_choosen"
     mutateInsert_art_qk_choosen(variables, resultSelector = art_qk_choosen_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_qk_choosen($objects: [art_qk_choosen_insert_input!]!, $on_conflict: art_qk_choosen_on_conflict) { insert_art_qk_choosen(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "art_qk_choosen"
     mutateInsert_art_qk_choosen_one(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_qk_choosen_one($object: art_qk_choosen_insert_input!, $on_conflict: art_qk_choosen_on_conflict) { insert_art_qk_choosen_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "art_qk"
     mutateInsert_art_qk_one(variables, resultSelector = art_qkModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_qk_one($object: art_qk_insert_input!, $on_conflict: art_qk_on_conflict) { insert_art_qk_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "art_rev"
     mutateInsert_art_rev(variables, resultSelector = art_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_rev($objects: [art_rev_insert_input!]!, $on_conflict: art_rev_on_conflict) { insert_art_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "art_rev"
     mutateInsert_art_rev_one(variables, resultSelector = art_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_art_rev_one($object: art_rev_insert_input!, $on_conflict: art_rev_on_conflict) { insert_art_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "av_art"
     mutateInsert_av_art(variables, resultSelector = av_art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_av_art($objects: [av_art_insert_input!]!, $on_conflict: av_art_on_conflict) { insert_av_art(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new av_art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "av_art"
     mutateInsert_av_art_one(variables, resultSelector = av_artModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_av_art_one($object: av_art_insert_input!, $on_conflict: av_art_on_conflict) { insert_av_art_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new av_artModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "event"
     mutateInsert_event(variables, resultSelector = event_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_event($objects: [event_insert_input!]!, $on_conflict: event_on_conflict) { insert_event(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new event_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "event"
     mutateInsert_event_one(variables, resultSelector = eventModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_event_one($object: event_insert_input!, $on_conflict: event_on_conflict) { insert_event_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "event_rev"
     mutateInsert_event_rev(variables, resultSelector = event_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_event_rev($objects: [event_rev_insert_input!]!, $on_conflict: event_rev_on_conflict) { insert_event_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new event_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "event_rev"
     mutateInsert_event_rev_one(variables, resultSelector = event_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_event_rev_one($object: event_rev_insert_input!, $on_conflict: event_rev_on_conflict) { insert_event_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "garten"
     mutateInsert_garten(variables, resultSelector = garten_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_garten($objects: [garten_insert_input!]!, $on_conflict: garten_on_conflict) { insert_garten(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "garten_file"
     mutateInsert_garten_file(variables, resultSelector = garten_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_garten_file($objects: [garten_file_insert_input!]!, $on_conflict: garten_file_on_conflict) { insert_garten_file(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "garten_file"
     mutateInsert_garten_file_one(variables, resultSelector = garten_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_garten_file_one($object: garten_file_insert_input!, $on_conflict: garten_file_on_conflict) { insert_garten_file_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "garten"
     mutateInsert_garten_one(variables, resultSelector = gartenModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_garten_one($object: garten_insert_input!, $on_conflict: garten_on_conflict) { insert_garten_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "garten_rev"
     mutateInsert_garten_rev(variables, resultSelector = garten_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_garten_rev($objects: [garten_rev_insert_input!]!, $on_conflict: garten_rev_on_conflict) { insert_garten_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "garten_rev"
     mutateInsert_garten_rev_one(variables, resultSelector = garten_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_garten_rev_one($object: garten_rev_insert_input!, $on_conflict: garten_rev_on_conflict) { insert_garten_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "herkunft"
     mutateInsert_herkunft(variables, resultSelector = herkunft_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_herkunft($objects: [herkunft_insert_input!]!, $on_conflict: herkunft_on_conflict) { insert_herkunft(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "herkunft_file"
     mutateInsert_herkunft_file(variables, resultSelector = herkunft_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_herkunft_file($objects: [herkunft_file_insert_input!]!, $on_conflict: herkunft_file_on_conflict) { insert_herkunft_file(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "herkunft_file"
     mutateInsert_herkunft_file_one(variables, resultSelector = herkunft_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_herkunft_file_one($object: herkunft_file_insert_input!, $on_conflict: herkunft_file_on_conflict) { insert_herkunft_file_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "herkunft"
     mutateInsert_herkunft_one(variables, resultSelector = herkunftModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_herkunft_one($object: herkunft_insert_input!, $on_conflict: herkunft_on_conflict) { insert_herkunft_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "herkunft_rev"
     mutateInsert_herkunft_rev(variables, resultSelector = herkunft_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_herkunft_rev($objects: [herkunft_rev_insert_input!]!, $on_conflict: herkunft_rev_on_conflict) { insert_herkunft_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "herkunft_rev"
     mutateInsert_herkunft_rev_one(variables, resultSelector = herkunft_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_herkunft_rev_one($object: herkunft_rev_insert_input!, $on_conflict: herkunft_rev_on_conflict) { insert_herkunft_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "kultur"
     mutateInsert_kultur(variables, resultSelector = kultur_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur($objects: [kultur_insert_input!]!, $on_conflict: kultur_on_conflict) { insert_kultur(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "kultur_file"
     mutateInsert_kultur_file(variables, resultSelector = kultur_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_file($objects: [kultur_file_insert_input!]!, $on_conflict: kultur_file_on_conflict) { insert_kultur_file(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "kultur_file"
     mutateInsert_kultur_file_one(variables, resultSelector = kultur_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_file_one($object: kultur_file_insert_input!, $on_conflict: kultur_file_on_conflict) { insert_kultur_file_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "kultur"
     mutateInsert_kultur_one(variables, resultSelector = kulturModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_one($object: kultur_insert_input!, $on_conflict: kultur_on_conflict) { insert_kultur_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "kultur_option"
     mutateInsert_kultur_option(variables, resultSelector = kultur_option_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_option($objects: [kultur_option_insert_input!]!, $on_conflict: kultur_option_on_conflict) { insert_kultur_option(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "kultur_option"
     mutateInsert_kultur_option_one(variables, resultSelector = kultur_optionModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_option_one($object: kultur_option_insert_input!, $on_conflict: kultur_option_on_conflict) { insert_kultur_option_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_optionModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "kultur_option_rev"
     mutateInsert_kultur_option_rev(variables, resultSelector = kultur_option_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_option_rev($objects: [kultur_option_rev_insert_input!]!, $on_conflict: kultur_option_rev_on_conflict) { insert_kultur_option_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "kultur_option_rev"
     mutateInsert_kultur_option_rev_one(variables, resultSelector = kultur_option_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_option_rev_one($object: kultur_option_rev_insert_input!, $on_conflict: kultur_option_rev_on_conflict) { insert_kultur_option_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "kultur_qk"
     mutateInsert_kultur_qk(variables, resultSelector = kultur_qk_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_qk($objects: [kultur_qk_insert_input!]!, $on_conflict: kultur_qk_on_conflict) { insert_kultur_qk(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "kultur_qk_choosen"
     mutateInsert_kultur_qk_choosen(variables, resultSelector = kultur_qk_choosen_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_qk_choosen($objects: [kultur_qk_choosen_insert_input!]!, $on_conflict: kultur_qk_choosen_on_conflict) { insert_kultur_qk_choosen(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "kultur_qk_choosen"
     mutateInsert_kultur_qk_choosen_one(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_qk_choosen_one($object: kultur_qk_choosen_insert_input!, $on_conflict: kultur_qk_choosen_on_conflict) { insert_kultur_qk_choosen_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "kultur_qk"
     mutateInsert_kultur_qk_one(variables, resultSelector = kultur_qkModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_qk_one($object: kultur_qk_insert_input!, $on_conflict: kultur_qk_on_conflict) { insert_kultur_qk_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "kultur_rev"
     mutateInsert_kultur_rev(variables, resultSelector = kultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_rev($objects: [kultur_rev_insert_input!]!, $on_conflict: kultur_rev_on_conflict) { insert_kultur_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "kultur_rev"
     mutateInsert_kultur_rev_one(variables, resultSelector = kultur_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_kultur_rev_one($object: kultur_rev_insert_input!, $on_conflict: kultur_rev_on_conflict) { insert_kultur_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "lieferung"
     mutateInsert_lieferung(variables, resultSelector = lieferung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_lieferung($objects: [lieferung_insert_input!]!, $on_conflict: lieferung_on_conflict) { insert_lieferung(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "lieferung_file"
     mutateInsert_lieferung_file(variables, resultSelector = lieferung_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_lieferung_file($objects: [lieferung_file_insert_input!]!, $on_conflict: lieferung_file_on_conflict) { insert_lieferung_file(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "lieferung_file"
     mutateInsert_lieferung_file_one(variables, resultSelector = lieferung_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_lieferung_file_one($object: lieferung_file_insert_input!, $on_conflict: lieferung_file_on_conflict) { insert_lieferung_file_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "lieferung"
     mutateInsert_lieferung_one(variables, resultSelector = lieferungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_lieferung_one($object: lieferung_insert_input!, $on_conflict: lieferung_on_conflict) { insert_lieferung_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "lieferung_rev"
     mutateInsert_lieferung_rev(variables, resultSelector = lieferung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_lieferung_rev($objects: [lieferung_rev_insert_input!]!, $on_conflict: lieferung_rev_on_conflict) { insert_lieferung_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "lieferung_rev"
     mutateInsert_lieferung_rev_one(variables, resultSelector = lieferung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_lieferung_rev_one($object: lieferung_rev_insert_input!, $on_conflict: lieferung_rev_on_conflict) { insert_lieferung_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "person"
     mutateInsert_person(variables, resultSelector = person_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person($objects: [person_insert_input!]!, $on_conflict: person_on_conflict) { insert_person(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "person_file"
     mutateInsert_person_file(variables, resultSelector = person_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_file($objects: [person_file_insert_input!]!, $on_conflict: person_file_on_conflict) { insert_person_file(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "person_file"
     mutateInsert_person_file_one(variables, resultSelector = person_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_file_one($object: person_file_insert_input!, $on_conflict: person_file_on_conflict) { insert_person_file_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "person"
     mutateInsert_person_one(variables, resultSelector = personModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_one($object: person_insert_input!, $on_conflict: person_on_conflict) { insert_person_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "person_option"
     mutateInsert_person_option(variables, resultSelector = person_option_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_option($objects: [person_option_insert_input!]!, $on_conflict: person_option_on_conflict) { insert_person_option(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "person_option"
     mutateInsert_person_option_one(variables, resultSelector = person_optionModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_option_one($object: person_option_insert_input!, $on_conflict: person_option_on_conflict) { insert_person_option_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_optionModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "person_option_rev"
     mutateInsert_person_option_rev(variables, resultSelector = person_option_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_option_rev($objects: [person_option_rev_insert_input!]!, $on_conflict: person_option_rev_on_conflict) { insert_person_option_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "person_option_rev"
     mutateInsert_person_option_rev_one(variables, resultSelector = person_option_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_option_rev_one($object: person_option_rev_insert_input!, $on_conflict: person_option_rev_on_conflict) { insert_person_option_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "person_rev"
     mutateInsert_person_rev(variables, resultSelector = person_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_rev($objects: [person_rev_insert_input!]!, $on_conflict: person_rev_on_conflict) { insert_person_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "person_rev"
     mutateInsert_person_rev_one(variables, resultSelector = person_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_person_rev_one($object: person_rev_insert_input!, $on_conflict: person_rev_on_conflict) { insert_person_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "sammel_lieferung"
     mutateInsert_sammel_lieferung(variables, resultSelector = sammel_lieferung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammel_lieferung($objects: [sammel_lieferung_insert_input!]!, $on_conflict: sammel_lieferung_on_conflict) { insert_sammel_lieferung(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "sammel_lieferung"
     mutateInsert_sammel_lieferung_one(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammel_lieferung_one($object: sammel_lieferung_insert_input!, $on_conflict: sammel_lieferung_on_conflict) { insert_sammel_lieferung_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "sammel_lieferung_rev"
     mutateInsert_sammel_lieferung_rev(variables, resultSelector = sammel_lieferung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammel_lieferung_rev($objects: [sammel_lieferung_rev_insert_input!]!, $on_conflict: sammel_lieferung_rev_on_conflict) { insert_sammel_lieferung_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "sammel_lieferung_rev"
     mutateInsert_sammel_lieferung_rev_one(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammel_lieferung_rev_one($object: sammel_lieferung_rev_insert_input!, $on_conflict: sammel_lieferung_rev_on_conflict) { insert_sammel_lieferung_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "sammlung"
     mutateInsert_sammlung(variables, resultSelector = sammlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammlung($objects: [sammlung_insert_input!]!, $on_conflict: sammlung_on_conflict) { insert_sammlung(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "sammlung_file"
     mutateInsert_sammlung_file(variables, resultSelector = sammlung_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammlung_file($objects: [sammlung_file_insert_input!]!, $on_conflict: sammlung_file_on_conflict) { insert_sammlung_file(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "sammlung_file"
     mutateInsert_sammlung_file_one(variables, resultSelector = sammlung_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammlung_file_one($object: sammlung_file_insert_input!, $on_conflict: sammlung_file_on_conflict) { insert_sammlung_file_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "sammlung"
     mutateInsert_sammlung_one(variables, resultSelector = sammlungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammlung_one($object: sammlung_insert_input!, $on_conflict: sammlung_on_conflict) { insert_sammlung_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "sammlung_rev"
     mutateInsert_sammlung_rev(variables, resultSelector = sammlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammlung_rev($objects: [sammlung_rev_insert_input!]!, $on_conflict: sammlung_rev_on_conflict) { insert_sammlung_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "sammlung_rev"
     mutateInsert_sammlung_rev_one(variables, resultSelector = sammlung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_sammlung_rev_one($object: sammlung_rev_insert_input!, $on_conflict: sammlung_rev_on_conflict) { insert_sammlung_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "spatial_ref_sys"
     mutateInsert_spatial_ref_sys(variables, resultSelector = spatial_ref_sys_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_spatial_ref_sys($objects: [spatial_ref_sys_insert_input!]!, $on_conflict: spatial_ref_sys_on_conflict) { insert_spatial_ref_sys(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "spatial_ref_sys"
     mutateInsert_spatial_ref_sys_one(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_spatial_ref_sys_one($object: spatial_ref_sys_insert_input!, $on_conflict: spatial_ref_sys_on_conflict) { insert_spatial_ref_sys_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "teilkultur"
     mutateInsert_teilkultur(variables, resultSelector = teilkultur_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilkultur($objects: [teilkultur_insert_input!]!, $on_conflict: teilkultur_on_conflict) { insert_teilkultur(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "teilkultur"
     mutateInsert_teilkultur_one(variables, resultSelector = teilkulturModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilkultur_one($object: teilkultur_insert_input!, $on_conflict: teilkultur_on_conflict) { insert_teilkultur_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "teilkultur_rev"
     mutateInsert_teilkultur_rev(variables, resultSelector = teilkultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilkultur_rev($objects: [teilkultur_rev_insert_input!]!, $on_conflict: teilkultur_rev_on_conflict) { insert_teilkultur_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "teilkultur_rev"
     mutateInsert_teilkultur_rev_one(variables, resultSelector = teilkultur_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilkultur_rev_one($object: teilkultur_rev_insert_input!, $on_conflict: teilkultur_rev_on_conflict) { insert_teilkultur_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "teilzaehlung"
     mutateInsert_teilzaehlung(variables, resultSelector = teilzaehlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilzaehlung($objects: [teilzaehlung_insert_input!]!, $on_conflict: teilzaehlung_on_conflict) { insert_teilzaehlung(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "teilzaehlung"
     mutateInsert_teilzaehlung_one(variables, resultSelector = teilzaehlungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilzaehlung_one($object: teilzaehlung_insert_input!, $on_conflict: teilzaehlung_on_conflict) { insert_teilzaehlung_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "teilzaehlung_rev"
     mutateInsert_teilzaehlung_rev(variables, resultSelector = teilzaehlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilzaehlung_rev($objects: [teilzaehlung_rev_insert_input!]!, $on_conflict: teilzaehlung_rev_on_conflict) { insert_teilzaehlung_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "teilzaehlung_rev"
     mutateInsert_teilzaehlung_rev_one(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_teilzaehlung_rev_one($object: teilzaehlung_rev_insert_input!, $on_conflict: teilzaehlung_rev_on_conflict) { insert_teilzaehlung_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "user_role"
     mutateInsert_user_role(variables, resultSelector = user_role_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_user_role($objects: [user_role_insert_input!]!, $on_conflict: user_role_on_conflict) { insert_user_role(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new user_role_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "user_role"
     mutateInsert_user_role_one(variables, resultSelector = user_roleModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_user_role_one($object: user_role_insert_input!, $on_conflict: user_role_on_conflict) { insert_user_role_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "zaehlung"
     mutateInsert_zaehlung(variables, resultSelector = zaehlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_zaehlung($objects: [zaehlung_insert_input!]!, $on_conflict: zaehlung_on_conflict) { insert_zaehlung(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "zaehlung"
     mutateInsert_zaehlung_one(variables, resultSelector = zaehlungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_zaehlung_one($object: zaehlung_insert_input!, $on_conflict: zaehlung_on_conflict) { insert_zaehlung_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert data into the table: "zaehlung_rev"
     mutateInsert_zaehlung_rev(variables, resultSelector = zaehlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_zaehlung_rev($objects: [zaehlung_rev_insert_input!]!, $on_conflict: zaehlung_rev_on_conflict) { insert_zaehlung_rev(objects: $objects, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // insert a single row into the table: "zaehlung_rev"
     mutateInsert_zaehlung_rev_one(variables, resultSelector = zaehlung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation insert_zaehlung_rev_one($object: zaehlung_rev_insert_input!, $on_conflict: zaehlung_rev_on_conflict) { insert_zaehlung_rev_one(object: $object, on_conflict: $on_conflict) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "ae_art"
     mutateUpdate_ae_art(variables, resultSelector = ae_art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_ae_art($_set: ae_art_set_input, $where: ae_art_bool_exp!) { update_ae_art(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "art"
     mutateUpdate_art(variables, resultSelector = art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art($_inc: art_inc_input, $_set: art_set_input, $where: art_bool_exp!) { update_art(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "art"
     mutateUpdate_art_by_pk(variables, resultSelector = artModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_by_pk($_inc: art_inc_input, $_set: art_set_input, $pk_columns: art_pk_columns_input!) { update_art_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "art_file"
     mutateUpdate_art_file(variables, resultSelector = art_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_file($_set: art_file_set_input, $where: art_file_bool_exp!) { update_art_file(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "art_file"
     mutateUpdate_art_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_file_by_pk($_set: art_file_set_input, $pk_columns: art_file_pk_columns_input!) { update_art_file_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "art_qk"
     mutateUpdate_art_qk(variables, resultSelector = art_qk_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_qk($_inc: art_qk_inc_input, $_set: art_qk_set_input, $where: art_qk_bool_exp!) { update_art_qk(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "art_qk"
     mutateUpdate_art_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_qk_by_pk($_inc: art_qk_inc_input, $_set: art_qk_set_input, $pk_columns: art_qk_pk_columns_input!) { update_art_qk_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "art_qk_choosen"
     mutateUpdate_art_qk_choosen(variables, resultSelector = art_qk_choosen_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_qk_choosen($_set: art_qk_choosen_set_input, $where: art_qk_choosen_bool_exp!) { update_art_qk_choosen(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "art_rev"
     mutateUpdate_art_rev(variables, resultSelector = art_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_rev($_inc: art_rev_inc_input, $_set: art_rev_set_input, $where: art_rev_bool_exp!) { update_art_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "art_rev"
     mutateUpdate_art_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_art_rev_by_pk($_inc: art_rev_inc_input, $_set: art_rev_set_input, $pk_columns: art_rev_pk_columns_input!) { update_art_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "av_art"
     mutateUpdate_av_art(variables, resultSelector = av_art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_av_art($_set: av_art_set_input, $where: av_art_bool_exp!) { update_av_art(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_art_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "av_art"
     mutateUpdate_av_art_by_pk(variables, resultSelector = av_artModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_av_art_by_pk($_set: av_art_set_input, $pk_columns: av_art_pk_columns_input!) { update_av_art_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new av_artModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "event"
     mutateUpdate_event(variables, resultSelector = event_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_event($_inc: event_inc_input, $_set: event_set_input, $where: event_bool_exp!) { update_event(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "event"
     mutateUpdate_event_by_pk(variables, resultSelector = eventModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_event_by_pk($_inc: event_inc_input, $_set: event_set_input, $pk_columns: event_pk_columns_input!) { update_event_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "event_rev"
     mutateUpdate_event_rev(variables, resultSelector = event_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_event_rev($_inc: event_rev_inc_input, $_set: event_rev_set_input, $where: event_rev_bool_exp!) { update_event_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "event_rev"
     mutateUpdate_event_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_event_rev_by_pk($_inc: event_rev_inc_input, $_set: event_rev_set_input, $pk_columns: event_rev_pk_columns_input!) { update_event_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "garten"
     mutateUpdate_garten(variables, resultSelector = garten_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_garten($_inc: garten_inc_input, $_set: garten_set_input, $where: garten_bool_exp!) { update_garten(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "garten"
     mutateUpdate_garten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_garten_by_pk($_inc: garten_inc_input, $_set: garten_set_input, $pk_columns: garten_pk_columns_input!) { update_garten_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "garten_file"
     mutateUpdate_garten_file(variables, resultSelector = garten_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_garten_file($_set: garten_file_set_input, $where: garten_file_bool_exp!) { update_garten_file(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "garten_file"
     mutateUpdate_garten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_garten_file_by_pk($_set: garten_file_set_input, $pk_columns: garten_file_pk_columns_input!) { update_garten_file_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "garten_rev"
     mutateUpdate_garten_rev(variables, resultSelector = garten_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_garten_rev($_inc: garten_rev_inc_input, $_set: garten_rev_set_input, $where: garten_rev_bool_exp!) { update_garten_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "garten_rev"
     mutateUpdate_garten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_garten_rev_by_pk($_inc: garten_rev_inc_input, $_set: garten_rev_set_input, $pk_columns: garten_rev_pk_columns_input!) { update_garten_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "herkunft"
     mutateUpdate_herkunft(variables, resultSelector = herkunft_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_herkunft($_inc: herkunft_inc_input, $_set: herkunft_set_input, $where: herkunft_bool_exp!) { update_herkunft(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "herkunft"
     mutateUpdate_herkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_herkunft_by_pk($_inc: herkunft_inc_input, $_set: herkunft_set_input, $pk_columns: herkunft_pk_columns_input!) { update_herkunft_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "herkunft_file"
     mutateUpdate_herkunft_file(variables, resultSelector = herkunft_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_herkunft_file($_set: herkunft_file_set_input, $where: herkunft_file_bool_exp!) { update_herkunft_file(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "herkunft_file"
     mutateUpdate_herkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_herkunft_file_by_pk($_set: herkunft_file_set_input, $pk_columns: herkunft_file_pk_columns_input!) { update_herkunft_file_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "herkunft_rev"
     mutateUpdate_herkunft_rev(variables, resultSelector = herkunft_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_herkunft_rev($_inc: herkunft_rev_inc_input, $_set: herkunft_rev_set_input, $where: herkunft_rev_bool_exp!) { update_herkunft_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "herkunft_rev"
     mutateUpdate_herkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_herkunft_rev_by_pk($_inc: herkunft_rev_inc_input, $_set: herkunft_rev_set_input, $pk_columns: herkunft_rev_pk_columns_input!) { update_herkunft_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "kultur"
     mutateUpdate_kultur(variables, resultSelector = kultur_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur($_inc: kultur_inc_input, $_set: kultur_set_input, $where: kultur_bool_exp!) { update_kultur(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "kultur"
     mutateUpdate_kultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_by_pk($_inc: kultur_inc_input, $_set: kultur_set_input, $pk_columns: kultur_pk_columns_input!) { update_kultur_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "kultur_file"
     mutateUpdate_kultur_file(variables, resultSelector = kultur_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_file($_set: kultur_file_set_input, $where: kultur_file_bool_exp!) { update_kultur_file(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "kultur_file"
     mutateUpdate_kultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_file_by_pk($_set: kultur_file_set_input, $pk_columns: kultur_file_pk_columns_input!) { update_kultur_file_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "kultur_option"
     mutateUpdate_kultur_option(variables, resultSelector = kultur_option_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_option($_inc: kultur_option_inc_input, $_set: kultur_option_set_input, $where: kultur_option_bool_exp!) { update_kultur_option(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "kultur_option_rev"
     mutateUpdate_kultur_option_rev(variables, resultSelector = kultur_option_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_option_rev($_inc: kultur_option_rev_inc_input, $_set: kultur_option_rev_set_input, $where: kultur_option_rev_bool_exp!) { update_kultur_option_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "kultur_option_rev"
     mutateUpdate_kultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_option_rev_by_pk($_inc: kultur_option_rev_inc_input, $_set: kultur_option_rev_set_input, $pk_columns: kultur_option_rev_pk_columns_input!) { update_kultur_option_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "kultur_qk"
     mutateUpdate_kultur_qk(variables, resultSelector = kultur_qk_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_qk($_inc: kultur_qk_inc_input, $_set: kultur_qk_set_input, $where: kultur_qk_bool_exp!) { update_kultur_qk(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "kultur_qk"
     mutateUpdate_kultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_qk_by_pk($_inc: kultur_qk_inc_input, $_set: kultur_qk_set_input, $pk_columns: kultur_qk_pk_columns_input!) { update_kultur_qk_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "kultur_qk_choosen"
     mutateUpdate_kultur_qk_choosen(variables, resultSelector = kultur_qk_choosen_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_qk_choosen($_set: kultur_qk_choosen_set_input, $where: kultur_qk_choosen_bool_exp!) { update_kultur_qk_choosen(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "kultur_rev"
     mutateUpdate_kultur_rev(variables, resultSelector = kultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_rev($_inc: kultur_rev_inc_input, $_set: kultur_rev_set_input, $where: kultur_rev_bool_exp!) { update_kultur_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "kultur_rev"
     mutateUpdate_kultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_rev_by_pk($_inc: kultur_rev_inc_input, $_set: kultur_rev_set_input, $pk_columns: kultur_rev_pk_columns_input!) { update_kultur_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "lieferung"
     mutateUpdate_lieferung(variables, resultSelector = lieferung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_lieferung($_inc: lieferung_inc_input, $_set: lieferung_set_input, $where: lieferung_bool_exp!) { update_lieferung(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "lieferung"
     mutateUpdate_lieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_lieferung_by_pk($_inc: lieferung_inc_input, $_set: lieferung_set_input, $pk_columns: lieferung_pk_columns_input!) { update_lieferung_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "lieferung_file"
     mutateUpdate_lieferung_file(variables, resultSelector = lieferung_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_lieferung_file($_set: lieferung_file_set_input, $where: lieferung_file_bool_exp!) { update_lieferung_file(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "lieferung_file"
     mutateUpdate_lieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_lieferung_file_by_pk($_set: lieferung_file_set_input, $pk_columns: lieferung_file_pk_columns_input!) { update_lieferung_file_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "lieferung_rev"
     mutateUpdate_lieferung_rev(variables, resultSelector = lieferung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_lieferung_rev($_inc: lieferung_rev_inc_input, $_set: lieferung_rev_set_input, $where: lieferung_rev_bool_exp!) { update_lieferung_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "lieferung_rev"
     mutateUpdate_lieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_lieferung_rev_by_pk($_inc: lieferung_rev_inc_input, $_set: lieferung_rev_set_input, $pk_columns: lieferung_rev_pk_columns_input!) { update_lieferung_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "person"
     mutateUpdate_person(variables, resultSelector = person_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person($_inc: person_inc_input, $_set: person_set_input, $where: person_bool_exp!) { update_person(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "person"
     mutateUpdate_person_by_pk(variables, resultSelector = personModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_by_pk($_inc: person_inc_input, $_set: person_set_input, $pk_columns: person_pk_columns_input!) { update_person_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "person_file"
     mutateUpdate_person_file(variables, resultSelector = person_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_file($_set: person_file_set_input, $where: person_file_bool_exp!) { update_person_file(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "person_file"
     mutateUpdate_person_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_file_by_pk($_set: person_file_set_input, $pk_columns: person_file_pk_columns_input!) { update_person_file_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "person_option"
     mutateUpdate_person_option(variables, resultSelector = person_option_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_option($_inc: person_option_inc_input, $_set: person_option_set_input, $where: person_option_bool_exp!) { update_person_option(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "person_option_rev"
     mutateUpdate_person_option_rev(variables, resultSelector = person_option_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_option_rev($_inc: person_option_rev_inc_input, $_set: person_option_rev_set_input, $where: person_option_rev_bool_exp!) { update_person_option_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "person_option_rev"
     mutateUpdate_person_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_option_rev_by_pk($_inc: person_option_rev_inc_input, $_set: person_option_rev_set_input, $pk_columns: person_option_rev_pk_columns_input!) { update_person_option_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "person_rev"
     mutateUpdate_person_rev(variables, resultSelector = person_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_rev($_inc: person_rev_inc_input, $_set: person_rev_set_input, $where: person_rev_bool_exp!) { update_person_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "person_rev"
     mutateUpdate_person_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_person_rev_by_pk($_inc: person_rev_inc_input, $_set: person_rev_set_input, $pk_columns: person_rev_pk_columns_input!) { update_person_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "sammel_lieferung"
     mutateUpdate_sammel_lieferung(variables, resultSelector = sammel_lieferung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammel_lieferung($_inc: sammel_lieferung_inc_input, $_set: sammel_lieferung_set_input, $where: sammel_lieferung_bool_exp!) { update_sammel_lieferung(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "sammel_lieferung"
     mutateUpdate_sammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammel_lieferung_by_pk($_inc: sammel_lieferung_inc_input, $_set: sammel_lieferung_set_input, $pk_columns: sammel_lieferung_pk_columns_input!) { update_sammel_lieferung_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "sammel_lieferung_rev"
     mutateUpdate_sammel_lieferung_rev(variables, resultSelector = sammel_lieferung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammel_lieferung_rev($_inc: sammel_lieferung_rev_inc_input, $_set: sammel_lieferung_rev_set_input, $where: sammel_lieferung_rev_bool_exp!) { update_sammel_lieferung_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "sammel_lieferung_rev"
     mutateUpdate_sammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammel_lieferung_rev_by_pk($_inc: sammel_lieferung_rev_inc_input, $_set: sammel_lieferung_rev_set_input, $pk_columns: sammel_lieferung_rev_pk_columns_input!) { update_sammel_lieferung_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "sammlung"
     mutateUpdate_sammlung(variables, resultSelector = sammlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammlung($_inc: sammlung_inc_input, $_set: sammlung_set_input, $where: sammlung_bool_exp!) { update_sammlung(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "sammlung"
     mutateUpdate_sammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammlung_by_pk($_inc: sammlung_inc_input, $_set: sammlung_set_input, $pk_columns: sammlung_pk_columns_input!) { update_sammlung_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "sammlung_file"
     mutateUpdate_sammlung_file(variables, resultSelector = sammlung_file_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammlung_file($_set: sammlung_file_set_input, $where: sammlung_file_bool_exp!) { update_sammlung_file(_set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "sammlung_file"
     mutateUpdate_sammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammlung_file_by_pk($_set: sammlung_file_set_input, $pk_columns: sammlung_file_pk_columns_input!) { update_sammlung_file_by_pk(_set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "sammlung_rev"
     mutateUpdate_sammlung_rev(variables, resultSelector = sammlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammlung_rev($_inc: sammlung_rev_inc_input, $_set: sammlung_rev_set_input, $where: sammlung_rev_bool_exp!) { update_sammlung_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "sammlung_rev"
     mutateUpdate_sammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_sammlung_rev_by_pk($_inc: sammlung_rev_inc_input, $_set: sammlung_rev_set_input, $pk_columns: sammlung_rev_pk_columns_input!) { update_sammlung_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "spatial_ref_sys"
     mutateUpdate_spatial_ref_sys(variables, resultSelector = spatial_ref_sys_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_spatial_ref_sys($_inc: spatial_ref_sys_inc_input, $_set: spatial_ref_sys_set_input, $where: spatial_ref_sys_bool_exp!) { update_spatial_ref_sys(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "spatial_ref_sys"
     mutateUpdate_spatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_spatial_ref_sys_by_pk($_inc: spatial_ref_sys_inc_input, $_set: spatial_ref_sys_set_input, $pk_columns: spatial_ref_sys_pk_columns_input!) { update_spatial_ref_sys_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "teilkultur"
     mutateUpdate_teilkultur(variables, resultSelector = teilkultur_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilkultur($_inc: teilkultur_inc_input, $_set: teilkultur_set_input, $where: teilkultur_bool_exp!) { update_teilkultur(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "teilkultur"
     mutateUpdate_teilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilkultur_by_pk($_inc: teilkultur_inc_input, $_set: teilkultur_set_input, $pk_columns: teilkultur_pk_columns_input!) { update_teilkultur_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "teilkultur_rev"
     mutateUpdate_teilkultur_rev(variables, resultSelector = teilkultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilkultur_rev($_inc: teilkultur_rev_inc_input, $_set: teilkultur_rev_set_input, $where: teilkultur_rev_bool_exp!) { update_teilkultur_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "teilkultur_rev"
     mutateUpdate_teilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilkultur_rev_by_pk($_inc: teilkultur_rev_inc_input, $_set: teilkultur_rev_set_input, $pk_columns: teilkultur_rev_pk_columns_input!) { update_teilkultur_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "teilzaehlung"
     mutateUpdate_teilzaehlung(variables, resultSelector = teilzaehlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilzaehlung($_inc: teilzaehlung_inc_input, $_set: teilzaehlung_set_input, $where: teilzaehlung_bool_exp!) { update_teilzaehlung(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "teilzaehlung"
     mutateUpdate_teilzaehlung_by_pk(variables, resultSelector = teilzaehlungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilzaehlung_by_pk($_inc: teilzaehlung_inc_input, $_set: teilzaehlung_set_input, $pk_columns: teilzaehlung_pk_columns_input!) { update_teilzaehlung_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "teilzaehlung_rev"
     mutateUpdate_teilzaehlung_rev(variables, resultSelector = teilzaehlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilzaehlung_rev($_inc: teilzaehlung_rev_inc_input, $_set: teilzaehlung_rev_set_input, $where: teilzaehlung_rev_bool_exp!) { update_teilzaehlung_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "teilzaehlung_rev"
     mutateUpdate_teilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_teilzaehlung_rev_by_pk($_inc: teilzaehlung_rev_inc_input, $_set: teilzaehlung_rev_set_input, $pk_columns: teilzaehlung_rev_pk_columns_input!) { update_teilzaehlung_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "user_role"
     mutateUpdate_user_role(variables, resultSelector = user_role_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_user_role($_inc: user_role_inc_input, $_set: user_role_set_input, $where: user_role_bool_exp!) { update_user_role(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_role_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "user_role"
     mutateUpdate_user_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_user_role_by_pk($_inc: user_role_inc_input, $_set: user_role_set_input, $pk_columns: user_role_pk_columns_input!) { update_user_role_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "zaehlung"
     mutateUpdate_zaehlung(variables, resultSelector = zaehlung_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_zaehlung($_inc: zaehlung_inc_input, $_set: zaehlung_set_input, $where: zaehlung_bool_exp!) { update_zaehlung(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "zaehlung"
     mutateUpdate_zaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_zaehlung_by_pk($_inc: zaehlung_inc_input, $_set: zaehlung_set_input, $pk_columns: zaehlung_pk_columns_input!) { update_zaehlung_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update data of the table: "zaehlung_rev"
     mutateUpdate_zaehlung_rev(variables, resultSelector = zaehlung_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_zaehlung_rev($_inc: zaehlung_rev_inc_input, $_set: zaehlung_rev_set_input, $where: zaehlung_rev_bool_exp!) { update_zaehlung_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // update single row of the table: "zaehlung_rev"
     mutateUpdate_zaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_zaehlung_rev_by_pk($_inc: zaehlung_rev_inc_input, $_set: zaehlung_rev_set_input, $pk_columns: zaehlung_rev_pk_columns_input!) { update_zaehlung_rev_by_pk(_inc: $_inc, _set: $_set, pk_columns: $pk_columns) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
-    // fetch data from the table: "ae_art"
     subscribeAe_art(variables, resultSelector = ae_artModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription ae_art($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_artModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "ae_art"
     subscribeAe_art_aggregate(variables, resultSelector = ae_art_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription ae_art_aggregate($distinct_on: [ae_art_select_column!], $limit: Int, $offset: Int, $order_by: [ae_art_order_by!], $where: ae_art_bool_exp) { ae_art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new ae_art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art"
     subscribeArt(variables, resultSelector = artModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "art"
     subscribeArt_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_aggregate($distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art" using primary key columns
     subscribeArt_by_pk(variables, resultSelector = artModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription art_by_pk($id: uuid!) { art_by_pk(id: $id) {
+      return self.subscribe(`subscription art_by_pk($id: ID!) { art_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_file"
     subscribeArt_file(variables, resultSelector = art_fileModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_file($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "art_file"
     subscribeArt_file_aggregate(variables, resultSelector = art_file_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_file_aggregate($distinct_on: [art_file_select_column!], $limit: Int, $offset: Int, $order_by: [art_file_order_by!], $where: art_file_bool_exp) { art_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_file" using primary key columns
     subscribeArt_file_by_pk(variables, resultSelector = art_fileModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription art_file_by_pk($id: uuid!) { art_file_by_pk(id: $id) {
+      return self.subscribe(`subscription art_file_by_pk($id: ID!) { art_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_qk"
     subscribeArt_qk(variables, resultSelector = art_qkModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_qk($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "art_qk"
     subscribeArt_qk_aggregate(variables, resultSelector = art_qk_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_qk_aggregate($distinct_on: [art_qk_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_order_by!], $where: art_qk_bool_exp) { art_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_qk" using primary key columns
     subscribeArt_qk_by_pk(variables, resultSelector = art_qkModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_qk_by_pk($name: String!) { art_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qkModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_qk_choosen"
     subscribeArt_qk_choosen(variables, resultSelector = art_qk_choosenModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_qk_choosen($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "art_qk_choosen"
     subscribeArt_qk_choosen_aggregate(variables, resultSelector = art_qk_choosen_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_qk_choosen_aggregate($distinct_on: [art_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [art_qk_choosen_order_by!], $where: art_qk_choosen_bool_exp) { art_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_rev"
     subscribeArt_rev(variables, resultSelector = art_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_rev($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "art_rev"
     subscribeArt_rev_aggregate(variables, resultSelector = art_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_rev_aggregate($distinct_on: [art_rev_select_column!], $limit: Int, $offset: Int, $order_by: [art_rev_order_by!], $where: art_rev_bool_exp) { art_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_rev" using primary key columns
     subscribeArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription art_rev_by_pk($_rev: String!, $id: uuid!) { art_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription art_rev_by_pk($_rev: String!, $id: ID!) { art_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "art_search" which returns "art"
     subscribeArt_search(variables, resultSelector = artModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_search($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "art_search" and query aggregates on result of table type "art"
     subscribeArt_search_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_search_aggregate($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "art_sums"
     subscribeArt_sums(variables, resultSelector = art_sumsModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_sums($distinct_on: [art_sums_select_column!], $limit: Int, $offset: Int, $order_by: [art_sums_order_by!], $where: art_sums_bool_exp) { art_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_sumsModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "art_sums"
     subscribeArt_sums_aggregate(variables, resultSelector = art_sums_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_sums_aggregate($distinct_on: [art_sums_select_column!], $limit: Int, $offset: Int, $order_by: [art_sums_order_by!], $where: art_sums_bool_exp) { art_sums_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_sums_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "av_art"
     subscribeAv_art(variables, resultSelector = av_artModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription av_art($distinct_on: [av_art_select_column!], $limit: Int, $offset: Int, $order_by: [av_art_order_by!], $where: av_art_bool_exp) { av_art(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_artModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "av_art"
     subscribeAv_art_aggregate(variables, resultSelector = av_art_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription av_art_aggregate($distinct_on: [av_art_select_column!], $limit: Int, $offset: Int, $order_by: [av_art_order_by!], $where: av_art_bool_exp) { av_art_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new av_art_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "av_art" using primary key columns
     subscribeAv_art_by_pk(variables, resultSelector = av_artModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription av_art_by_pk($art_id: uuid!, $person_id: uuid!) { av_art_by_pk(art_id: $art_id, person_id: $person_id) {
         ${typeof resultSelector === "function" ? resultSelector(new av_artModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "event"
     subscribeEvent(variables, resultSelector = eventModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription event($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "event"
     subscribeEvent_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription event_aggregate($distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "event" using primary key columns
     subscribeEvent_by_pk(variables, resultSelector = eventModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription event_by_pk($id: uuid!) { event_by_pk(id: $id) {
+      return self.subscribe(`subscription event_by_pk($id: ID!) { event_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "event_rev"
     subscribeEvent_rev(variables, resultSelector = event_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription event_rev($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "event_rev"
     subscribeEvent_rev_aggregate(variables, resultSelector = event_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription event_rev_aggregate($distinct_on: [event_rev_select_column!], $limit: Int, $offset: Int, $order_by: [event_rev_order_by!], $where: event_rev_bool_exp) { event_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "event_rev" using primary key columns
     subscribeEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription event_rev_by_pk($_rev: String!, $id: uuid!) { event_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription event_rev_by_pk($_rev: String!, $id: ID!) { event_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "event_search" which returns "event"
     subscribeEvent_search(variables, resultSelector = eventModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription event_search($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "event_search" and query aggregates on result of table type "event"
     subscribeEvent_search_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription event_search_aggregate($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "garten"
     subscribeGarten(variables, resultSelector = gartenModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "garten"
     subscribeGarten_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_aggregate($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "garten" using primary key columns
     subscribeGarten_by_pk(variables, resultSelector = gartenModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription garten_by_pk($id: uuid!) { garten_by_pk(id: $id) {
+      return self.subscribe(`subscription garten_by_pk($id: ID!) { garten_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "garten_file"
     subscribeGarten_file(variables, resultSelector = garten_fileModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_file($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "garten_file"
     subscribeGarten_file_aggregate(variables, resultSelector = garten_file_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_file_aggregate($distinct_on: [garten_file_select_column!], $limit: Int, $offset: Int, $order_by: [garten_file_order_by!], $where: garten_file_bool_exp) { garten_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "garten_file" using primary key columns
     subscribeGarten_file_by_pk(variables, resultSelector = garten_fileModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription garten_file_by_pk($id: uuid!) { garten_file_by_pk(id: $id) {
+      return self.subscribe(`subscription garten_file_by_pk($id: ID!) { garten_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "garten_rev"
     subscribeGarten_rev(variables, resultSelector = garten_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_rev($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "garten_rev"
     subscribeGarten_rev_aggregate(variables, resultSelector = garten_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_rev_aggregate($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "garten_rev" using primary key columns
     subscribeGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription garten_rev_by_pk($_rev: String!, $id: uuid!) { garten_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription garten_rev_by_pk($_rev: String!, $id: ID!) { garten_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "garten_search" which returns "garten"
     subscribeGarten_search(variables, resultSelector = gartenModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_search($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "garten_search" and query aggregates on result of table type "garten"
     subscribeGarten_search_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_search_aggregate($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "garten_teilzaehlung_sums"
     subscribeGarten_teilzaehlung_sums(variables, resultSelector = garten_teilzaehlung_sumsModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_teilzaehlung_sums($distinct_on: [garten_teilzaehlung_sums_select_column!], $limit: Int, $offset: Int, $order_by: [garten_teilzaehlung_sums_order_by!], $where: garten_teilzaehlung_sums_bool_exp) { garten_teilzaehlung_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_teilzaehlung_sumsModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "garten_teilzaehlung_sums"
     subscribeGarten_teilzaehlung_sums_aggregate(variables, resultSelector = garten_teilzaehlung_sums_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_teilzaehlung_sums_aggregate($distinct_on: [garten_teilzaehlung_sums_select_column!], $limit: Int, $offset: Int, $order_by: [garten_teilzaehlung_sums_order_by!], $where: garten_teilzaehlung_sums_bool_exp) { garten_teilzaehlung_sums_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_teilzaehlung_sums_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "herkunft"
     subscribeHerkunft(variables, resultSelector = herkunftModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "herkunft"
     subscribeHerkunft_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_aggregate($distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "herkunft" using primary key columns
     subscribeHerkunft_by_pk(variables, resultSelector = herkunftModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription herkunft_by_pk($id: uuid!) { herkunft_by_pk(id: $id) {
+      return self.subscribe(`subscription herkunft_by_pk($id: ID!) { herkunft_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "herkunft_file"
     subscribeHerkunft_file(variables, resultSelector = herkunft_fileModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_file($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "herkunft_file"
     subscribeHerkunft_file_aggregate(variables, resultSelector = herkunft_file_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_file_aggregate($distinct_on: [herkunft_file_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_file_order_by!], $where: herkunft_file_bool_exp) { herkunft_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "herkunft_file" using primary key columns
     subscribeHerkunft_file_by_pk(variables, resultSelector = herkunft_fileModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription herkunft_file_by_pk($id: uuid!) { herkunft_file_by_pk(id: $id) {
+      return self.subscribe(`subscription herkunft_file_by_pk($id: ID!) { herkunft_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "herkunft_rev"
     subscribeHerkunft_rev(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_rev($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "herkunft_rev"
     subscribeHerkunft_rev_aggregate(variables, resultSelector = herkunft_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_rev_aggregate($distinct_on: [herkunft_rev_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_rev_order_by!], $where: herkunft_rev_bool_exp) { herkunft_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "herkunft_rev" using primary key columns
     subscribeHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription herkunft_rev_by_pk($_rev: String!, $id: uuid!) { herkunft_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription herkunft_rev_by_pk($_rev: String!, $id: ID!) { herkunft_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "herkunft_search" which returns "herkunft"
     subscribeHerkunft_search(variables, resultSelector = herkunftModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_search($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "herkunft_search" and query aggregates on result of table type "herkunft"
     subscribeHerkunft_search_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_search_aggregate($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "herkunft_sums"
     subscribeHerkunft_sums(variables, resultSelector = herkunft_sumsModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_sums($distinct_on: [herkunft_sums_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_sums_order_by!], $where: herkunft_sums_bool_exp) { herkunft_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_sumsModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "herkunft_sums"
     subscribeHerkunft_sums_aggregate(variables, resultSelector = herkunft_sums_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_sums_aggregate($distinct_on: [herkunft_sums_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_sums_order_by!], $where: herkunft_sums_bool_exp) { herkunft_sums_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_sums_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur"
     subscribeKultur(variables, resultSelector = kulturModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "kultur"
     subscribeKultur_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_aggregate($distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur" using primary key columns
     subscribeKultur_by_pk(variables, resultSelector = kulturModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription kultur_by_pk($id: uuid!) { kultur_by_pk(id: $id) {
+      return self.subscribe(`subscription kultur_by_pk($id: ID!) { kultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_file"
     subscribeKultur_file(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_file($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "kultur_file"
     subscribeKultur_file_aggregate(variables, resultSelector = kultur_file_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_file_aggregate($distinct_on: [kultur_file_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_file_order_by!], $where: kultur_file_bool_exp) { kultur_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_file" using primary key columns
     subscribeKultur_file_by_pk(variables, resultSelector = kultur_fileModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription kultur_file_by_pk($id: uuid!) { kultur_file_by_pk(id: $id) {
+      return self.subscribe(`subscription kultur_file_by_pk($id: ID!) { kultur_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_option"
     subscribeKultur_option(variables, resultSelector = kultur_optionModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_option($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_optionModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "kultur_option"
     subscribeKultur_option_aggregate(variables, resultSelector = kultur_option_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_option_aggregate($distinct_on: [kultur_option_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_order_by!], $where: kultur_option_bool_exp) { kultur_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_option_rev"
     subscribeKultur_option_rev(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_option_rev($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "kultur_option_rev"
     subscribeKultur_option_rev_aggregate(variables, resultSelector = kultur_option_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_option_rev_aggregate($distinct_on: [kultur_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_option_rev_order_by!], $where: kultur_option_rev_bool_exp) { kultur_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_option_rev" using primary key columns
     subscribeKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_option_rev_by_pk($_rev: String!, $kultur_id: uuid!) { kultur_option_rev_by_pk(_rev: $_rev, kultur_id: $kultur_id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_qk"
     subscribeKultur_qk(variables, resultSelector = kultur_qkModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_qk($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "kultur_qk"
     subscribeKultur_qk_aggregate(variables, resultSelector = kultur_qk_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_qk_aggregate($distinct_on: [kultur_qk_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_order_by!], $where: kultur_qk_bool_exp) { kultur_qk_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_qk" using primary key columns
     subscribeKultur_qk_by_pk(variables, resultSelector = kultur_qkModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_qk_by_pk($name: String!) { kultur_qk_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qkModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_qk_choosen"
     subscribeKultur_qk_choosen(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_qk_choosen($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "kultur_qk_choosen"
     subscribeKultur_qk_choosen_aggregate(variables, resultSelector = kultur_qk_choosen_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_qk_choosen_aggregate($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_rev"
     subscribeKultur_rev(variables, resultSelector = kultur_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_rev($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "kultur_rev"
     subscribeKultur_rev_aggregate(variables, resultSelector = kultur_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_rev_aggregate($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "kultur_rev" using primary key columns
     subscribeKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription kultur_rev_by_pk($_rev: String!, $id: uuid!) { kultur_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription kultur_rev_by_pk($_rev: String!, $id: ID!) { kultur_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "kultur_search" which returns "kultur"
     subscribeKultur_search(variables, resultSelector = kulturModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_search($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "kultur_search" and query aggregates on result of table type "kultur"
     subscribeKultur_search_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_search_aggregate($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "lieferung"
     subscribeLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "lieferung"
     subscribeLieferung_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_aggregate($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "lieferung" using primary key columns
     subscribeLieferung_by_pk(variables, resultSelector = lieferungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription lieferung_by_pk($id: uuid!) { lieferung_by_pk(id: $id) {
+      return self.subscribe(`subscription lieferung_by_pk($id: ID!) { lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "lieferung_file"
     subscribeLieferung_file(variables, resultSelector = lieferung_fileModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_file($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "lieferung_file"
     subscribeLieferung_file_aggregate(variables, resultSelector = lieferung_file_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_file_aggregate($distinct_on: [lieferung_file_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_file_order_by!], $where: lieferung_file_bool_exp) { lieferung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "lieferung_file" using primary key columns
     subscribeLieferung_file_by_pk(variables, resultSelector = lieferung_fileModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription lieferung_file_by_pk($id: uuid!) { lieferung_file_by_pk(id: $id) {
+      return self.subscribe(`subscription lieferung_file_by_pk($id: ID!) { lieferung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "lieferung_rev"
     subscribeLieferung_rev(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_rev($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "lieferung_rev"
     subscribeLieferung_rev_aggregate(variables, resultSelector = lieferung_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_rev_aggregate($distinct_on: [lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_rev_order_by!], $where: lieferung_rev_bool_exp) { lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "lieferung_rev" using primary key columns
     subscribeLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription lieferung_rev_by_pk($_rev: String!, $id: uuid!) { lieferung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription lieferung_rev_by_pk($_rev: String!, $id: ID!) { lieferung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "lieferung_search" which returns "lieferung"
     subscribeLieferung_search(variables, resultSelector = lieferungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_search($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "lieferung_search" and query aggregates on result of table type "lieferung"
     subscribeLieferung_search_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_search_aggregate($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person"
     subscribePerson(variables, resultSelector = personModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "person"
     subscribePerson_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_aggregate($distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person" using primary key columns
     subscribePerson_by_pk(variables, resultSelector = personModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription person_by_pk($id: uuid!) { person_by_pk(id: $id) {
+      return self.subscribe(`subscription person_by_pk($id: ID!) { person_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person_file"
     subscribePerson_file(variables, resultSelector = person_fileModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_file($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "person_file"
     subscribePerson_file_aggregate(variables, resultSelector = person_file_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_file_aggregate($distinct_on: [person_file_select_column!], $limit: Int, $offset: Int, $order_by: [person_file_order_by!], $where: person_file_bool_exp) { person_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person_file" using primary key columns
     subscribePerson_file_by_pk(variables, resultSelector = person_fileModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription person_file_by_pk($id: uuid!) { person_file_by_pk(id: $id) {
+      return self.subscribe(`subscription person_file_by_pk($id: ID!) { person_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person_option"
     subscribePerson_option(variables, resultSelector = person_optionModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_option($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_optionModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "person_option"
     subscribePerson_option_aggregate(variables, resultSelector = person_option_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_option_aggregate($distinct_on: [person_option_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_order_by!], $where: person_option_bool_exp) { person_option_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person_option_rev"
     subscribePerson_option_rev(variables, resultSelector = person_option_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_option_rev($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "person_option_rev"
     subscribePerson_option_rev_aggregate(variables, resultSelector = person_option_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_option_rev_aggregate($distinct_on: [person_option_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_option_rev_order_by!], $where: person_option_rev_bool_exp) { person_option_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person_option_rev" using primary key columns
     subscribePerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_option_rev_by_pk($_rev: String!, $person_id: uuid!) { person_option_rev_by_pk(_rev: $_rev, person_id: $person_id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person_rev"
     subscribePerson_rev(variables, resultSelector = person_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_rev($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "person_rev"
     subscribePerson_rev_aggregate(variables, resultSelector = person_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_rev_aggregate($distinct_on: [person_rev_select_column!], $limit: Int, $offset: Int, $order_by: [person_rev_order_by!], $where: person_rev_bool_exp) { person_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "person_rev" using primary key columns
     subscribePerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription person_rev_by_pk($_rev: String!, $id: uuid!) { person_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription person_rev_by_pk($_rev: String!, $id: ID!) { person_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "person_search" which returns "person"
     subscribePerson_search(variables, resultSelector = personModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_search($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "person_search" and query aggregates on result of table type "person"
     subscribePerson_search_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_search_aggregate($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammel_lieferung"
     subscribeSammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammel_lieferung($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "sammel_lieferung"
     subscribeSammel_lieferung_aggregate(variables, resultSelector = sammel_lieferung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammel_lieferung_aggregate($distinct_on: [sammel_lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_order_by!], $where: sammel_lieferung_bool_exp) { sammel_lieferung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammel_lieferung" using primary key columns
     subscribeSammel_lieferung_by_pk(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammel_lieferung_by_pk($id: uuid!) { sammel_lieferung_by_pk(id: $id) {
+      return self.subscribe(`subscription sammel_lieferung_by_pk($id: ID!) { sammel_lieferung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammel_lieferung_rev"
     subscribeSammel_lieferung_rev(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammel_lieferung_rev($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "sammel_lieferung_rev"
     subscribeSammel_lieferung_rev_aggregate(variables, resultSelector = sammel_lieferung_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammel_lieferung_rev_aggregate($distinct_on: [sammel_lieferung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammel_lieferung_rev_order_by!], $where: sammel_lieferung_rev_bool_exp) { sammel_lieferung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammel_lieferung_rev" using primary key columns
     subscribeSammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammel_lieferung_rev_by_pk($_rev: String!, $id: uuid!) { sammel_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription sammel_lieferung_rev_by_pk($_rev: String!, $id: ID!) { sammel_lieferung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammlung"
     subscribeSammlung(variables, resultSelector = sammlungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "sammlung"
     subscribeSammlung_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung_aggregate($distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammlung" using primary key columns
     subscribeSammlung_by_pk(variables, resultSelector = sammlungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammlung_by_pk($id: uuid!) { sammlung_by_pk(id: $id) {
+      return self.subscribe(`subscription sammlung_by_pk($id: ID!) { sammlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammlung_file"
     subscribeSammlung_file(variables, resultSelector = sammlung_fileModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung_file($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "sammlung_file"
     subscribeSammlung_file_aggregate(variables, resultSelector = sammlung_file_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung_file_aggregate($distinct_on: [sammlung_file_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_file_order_by!], $where: sammlung_file_bool_exp) { sammlung_file_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_file_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammlung_file" using primary key columns
     subscribeSammlung_file_by_pk(variables, resultSelector = sammlung_fileModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammlung_file_by_pk($id: uuid!) { sammlung_file_by_pk(id: $id) {
+      return self.subscribe(`subscription sammlung_file_by_pk($id: ID!) { sammlung_file_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_fileModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammlung_rev"
     subscribeSammlung_rev(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung_rev($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "sammlung_rev"
     subscribeSammlung_rev_aggregate(variables, resultSelector = sammlung_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung_rev_aggregate($distinct_on: [sammlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_rev_order_by!], $where: sammlung_rev_bool_exp) { sammlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "sammlung_rev" using primary key columns
     subscribeSammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammlung_rev_by_pk($_rev: String!, $id: uuid!) { sammlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription sammlung_rev_by_pk($_rev: String!, $id: ID!) { sammlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "sammlung_search" which returns "sammlung"
     subscribeSammlung_search(variables, resultSelector = sammlungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung_search($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "sammlung_search" and query aggregates on result of table type "sammlung"
     subscribeSammlung_search_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription sammlung_search_aggregate($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "spatial_ref_sys"
     subscribeSpatial_ref_sys(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription spatial_ref_sys($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "spatial_ref_sys"
     subscribeSpatial_ref_sys_aggregate(variables, resultSelector = spatial_ref_sys_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription spatial_ref_sys_aggregate($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sys_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "spatial_ref_sys" using primary key columns
     subscribeSpatial_ref_sys_by_pk(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription spatial_ref_sys_by_pk($srid: Int!) { spatial_ref_sys_by_pk(srid: $srid) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilkultur"
     subscribeTeilkultur(variables, resultSelector = teilkulturModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilkultur($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "teilkultur"
     subscribeTeilkultur_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilkultur_aggregate($distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilkultur" using primary key columns
     subscribeTeilkultur_by_pk(variables, resultSelector = teilkulturModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilkultur_by_pk($id: uuid!) { teilkultur_by_pk(id: $id) {
+      return self.subscribe(`subscription teilkultur_by_pk($id: ID!) { teilkultur_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilkultur_rev"
     subscribeTeilkultur_rev(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilkultur_rev($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "teilkultur_rev"
     subscribeTeilkultur_rev_aggregate(variables, resultSelector = teilkultur_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilkultur_rev_aggregate($distinct_on: [teilkultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_rev_order_by!], $where: teilkultur_rev_bool_exp) { teilkultur_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilkultur_rev" using primary key columns
     subscribeTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilkultur_rev_by_pk($_rev: String!, $id: uuid!) { teilkultur_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription teilkultur_rev_by_pk($_rev: String!, $id: ID!) { teilkultur_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "teilkultur_search" which returns "teilkultur"
     subscribeTeilkultur_search(variables, resultSelector = teilkulturModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilkultur_search($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "teilkultur_search" and query aggregates on result of table type "teilkultur"
     subscribeTeilkultur_search_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilkultur_search_aggregate($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilzaehlung"
     subscribeTeilzaehlung(variables, resultSelector = teilzaehlungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilzaehlung($distinct_on: [teilzaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_order_by!], $where: teilzaehlung_bool_exp) { teilzaehlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "teilzaehlung"
     subscribeTeilzaehlung_aggregate(variables, resultSelector = teilzaehlung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilzaehlung_aggregate($distinct_on: [teilzaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_order_by!], $where: teilzaehlung_bool_exp) { teilzaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilzaehlung" using primary key columns
     subscribeTeilzaehlung_by_pk(variables, resultSelector = teilzaehlungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilzaehlung_by_pk($id: uuid!) { teilzaehlung_by_pk(id: $id) {
+      return self.subscribe(`subscription teilzaehlung_by_pk($id: ID!) { teilzaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilzaehlung_rev"
     subscribeTeilzaehlung_rev(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilzaehlung_rev($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "teilzaehlung_rev"
     subscribeTeilzaehlung_rev_aggregate(variables, resultSelector = teilzaehlung_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilzaehlung_rev_aggregate($distinct_on: [teilzaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [teilzaehlung_rev_order_by!], $where: teilzaehlung_rev_bool_exp) { teilzaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "teilzaehlung_rev" using primary key columns
     subscribeTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilzaehlung_rev_by_pk($_rev: String!, $id: uuid!) { teilzaehlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription teilzaehlung_rev_by_pk($_rev: String!, $id: ID!) { teilzaehlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "user_role"
     subscribeUser_role(variables, resultSelector = user_roleModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription user_role($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "user_role"
     subscribeUser_role_aggregate(variables, resultSelector = user_role_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription user_role_aggregate($distinct_on: [user_role_select_column!], $limit: Int, $offset: Int, $order_by: [user_role_order_by!], $where: user_role_bool_exp) { user_role_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new user_role_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "user_role" using primary key columns
     subscribeUser_role_by_pk(variables, resultSelector = user_roleModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription user_role_by_pk($name: String!) { user_role_by_pk(name: $name) {
         ${typeof resultSelector === "function" ? resultSelector(new user_roleModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "zaehlung"
     subscribeZaehlung(variables, resultSelector = zaehlungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription zaehlung($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "zaehlung"
     subscribeZaehlung_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription zaehlung_aggregate($distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "zaehlung" using primary key columns
     subscribeZaehlung_by_pk(variables, resultSelector = zaehlungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription zaehlung_by_pk($id: uuid!) { zaehlung_by_pk(id: $id) {
+      return self.subscribe(`subscription zaehlung_by_pk($id: ID!) { zaehlung_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "zaehlung_rev"
     subscribeZaehlung_rev(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription zaehlung_rev($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch aggregated fields from the table: "zaehlung_rev"
     subscribeZaehlung_rev_aggregate(variables, resultSelector = zaehlung_rev_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription zaehlung_rev_aggregate($distinct_on: [zaehlung_rev_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_rev_order_by!], $where: zaehlung_rev_bool_exp) { zaehlung_rev_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_rev_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // fetch data from the table: "zaehlung_rev" using primary key columns
     subscribeZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription zaehlung_rev_by_pk($_rev: String!, $id: uuid!) { zaehlung_rev_by_pk(_rev: $_rev, id: $id) {
+      return self.subscribe(`subscription zaehlung_rev_by_pk($_rev: String!, $id: ID!) { zaehlung_rev_by_pk(_rev: $_rev, id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "zaehlung_search" which returns "zaehlung"
     subscribeZaehlung_search(variables, resultSelector = zaehlungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription zaehlung_search($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    // execute function "zaehlung_search" and query aggregates on result of table type "zaehlung"
     subscribeZaehlung_search_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription zaehlung_search_aggregate($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}

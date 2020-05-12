@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * event_sum_fieldsBase
  * auto generated base class for the model event_sum_fieldsModel.
- *
- * aggregate sum on columns
  */
 export const event_sum_fieldsModelBase = ModelBase
   .named('event_sum_fields')

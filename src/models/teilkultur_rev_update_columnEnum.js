@@ -6,22 +6,20 @@ import { types } from "mobx-state-tree"
 
 /**
 * teilkultur_rev_update_column
- *
- * update columns of table "teilkultur_rev"
 */
 export const teilkultur_rev_update_columnEnum = types.enumeration("teilkultur_rev_update_column", [
-        "_deleted", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "bemerkungen", // column name
-  "changed", // column name
-  "changed_by", // column name
-  "id", // column name
-  "kultur_id", // column name
-  "name", // column name
-  "ort1", // column name
-  "ort2", // column name
-  "ort3", // column name
+        "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "bemerkungen",
+  "changed",
+  "changed_by",
+  "id",
+  "kultur_id",
+  "name",
+  "ort1",
+  "ort2",
+  "ort3",
       ])

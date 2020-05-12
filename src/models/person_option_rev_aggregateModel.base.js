@@ -13,8 +13,6 @@ import { person_option_rev_aggregate_fieldsModelSelector } from "./person_option
 /**
  * person_option_rev_aggregateBase
  * auto generated base class for the model person_option_rev_aggregateModel.
- *
- * aggregated selection of "person_option_rev"
  */
 export const person_option_rev_aggregateModelBase = ModelBase
   .named('person_option_rev_aggregate')

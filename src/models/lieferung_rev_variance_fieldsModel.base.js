@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * lieferung_rev_variance_fieldsBase
  * auto generated base class for the model lieferung_rev_variance_fieldsModel.
- *
- * aggregate variance on columns
  */
 export const lieferung_rev_variance_fieldsModelBase = ModelBase
   .named('lieferung_rev_variance_fields')

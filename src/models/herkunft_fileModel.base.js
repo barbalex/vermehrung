@@ -11,8 +11,6 @@ import { herkunftModelSelector } from "./herkunftModel.base"
 /**
  * herkunft_fileBase
  * auto generated base class for the model herkunft_fileModel.
- *
- * columns and relationships of "herkunft_file"
  */
 export const herkunft_fileModelBase = ModelBase
   .named('herkunft_file')
@@ -21,10 +19,9 @@ export const herkunft_fileModelBase = ModelBase
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({

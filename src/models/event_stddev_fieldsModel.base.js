@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * event_stddev_fieldsBase
  * auto generated base class for the model event_stddev_fieldsModel.
- *
- * aggregate stddev on columns
  */
 export const event_stddev_fieldsModelBase = ModelBase
   .named('event_stddev_fields')

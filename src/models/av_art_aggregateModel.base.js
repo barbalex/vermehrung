@@ -13,8 +13,6 @@ import { av_art_aggregate_fieldsModelSelector } from "./av_art_aggregate_fieldsM
 /**
  * av_art_aggregateBase
  * auto generated base class for the model av_art_aggregateModel.
- *
- * aggregated selection of "av_art"
  */
 export const av_art_aggregateModelBase = ModelBase
   .named('av_art_aggregate')

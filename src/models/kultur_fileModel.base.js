@@ -11,8 +11,6 @@ import { kulturModelSelector } from "./kulturModel.base"
 /**
  * kultur_fileBase
  * auto generated base class for the model kultur_fileModel.
- *
- * columns and relationships of "kultur_file"
  */
 export const kultur_fileModelBase = ModelBase
   .named('kultur_file')
@@ -21,8 +19,7 @@ export const kultur_fileModelBase = ModelBase
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.frozen()),
-    /** An object relationship */
+    id: types.identifier,
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),

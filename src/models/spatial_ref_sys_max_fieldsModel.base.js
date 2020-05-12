@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * spatial_ref_sys_max_fieldsBase
  * auto generated base class for the model spatial_ref_sys_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const spatial_ref_sys_max_fieldsModelBase = ModelBase
   .named('spatial_ref_sys_max_fields')

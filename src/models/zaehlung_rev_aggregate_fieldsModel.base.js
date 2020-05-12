@@ -29,8 +29,6 @@ import { zaehlung_rev_variance_fieldsModelSelector } from "./zaehlung_rev_varian
 /**
  * zaehlung_rev_aggregate_fieldsBase
  * auto generated base class for the model zaehlung_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "zaehlung_rev"
  */
 export const zaehlung_rev_aggregate_fieldsModelBase = ModelBase
   .named('zaehlung_rev_aggregate_fields')

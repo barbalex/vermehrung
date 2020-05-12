@@ -6,28 +6,26 @@ import { types } from "mobx-state-tree"
 
 /**
 * sammel_lieferung_rev_update_column
- *
- * update columns of table "sammel_lieferung_rev"
 */
 export const sammel_lieferung_rev_update_columnEnum = types.enumeration("sammel_lieferung_rev_update_column", [
-        "_deleted", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "andere_menge", // column name
-  "anzahl_auspflanzbereit", // column name
-  "anzahl_pflanzen", // column name
-  "art_id", // column name
-  "bemerkungen", // column name
-  "datum", // column name
-  "geplant", // column name
-  "gramm_samen", // column name
-  "id", // column name
-  "nach_ausgepflanzt", // column name
-  "nach_kultur_id", // column name
-  "person_id", // column name
-  "von_anzahl_individuen", // column name
-  "von_kultur_id", // column name
-  "von_sammlung_id", // column name
+        "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "andere_menge",
+  "anzahl_auspflanzbereit",
+  "anzahl_pflanzen",
+  "art_id",
+  "bemerkungen",
+  "datum",
+  "geplant",
+  "gramm_samen",
+  "id",
+  "nach_ausgepflanzt",
+  "nach_kultur_id",
+  "person_id",
+  "von_anzahl_individuen",
+  "von_kultur_id",
+  "von_sammlung_id",
       ])

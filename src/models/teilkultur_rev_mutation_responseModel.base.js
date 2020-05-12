@@ -11,16 +11,12 @@ import { teilkultur_revModelSelector } from "./teilkultur_revModel.base"
 /**
  * teilkultur_rev_mutation_responseBase
  * auto generated base class for the model teilkultur_rev_mutation_responseModel.
- *
- * response of any mutation on the table "teilkultur_rev"
  */
 export const teilkultur_rev_mutation_responseModelBase = ModelBase
   .named('teilkultur_rev_mutation_response')
   .props({
     __typename: types.optional(types.literal("teilkultur_rev_mutation_response"), "teilkultur_rev_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkultur_revModel)))),
   })
   .views(self => ({

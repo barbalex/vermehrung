@@ -21,8 +21,6 @@ import { sammlungModelSelector } from "./sammlungModel.base"
 /**
  * sammel_lieferung_revBase
  * auto generated base class for the model sammel_lieferung_revModel.
- *
- * columns and relationships of "sammel_lieferung_rev"
  */
 export const sammel_lieferung_revModelBase = ModelBase
   .named('sammel_lieferung_rev')
@@ -36,28 +34,21 @@ export const sammel_lieferung_revModelBase = ModelBase
     andere_menge: types.union(types.undefined, types.null, types.string),
     anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.integer),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
-    /** An object relationship */
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
-    id: types.union(types.undefined, types.frozen()),
-    /** An object relationship */
+    id: types.identifier,
     kulturByNachKulturId: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
-    /** An object relationship */
     kulturByVonKulturId: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
-    /** An array relationship */
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    /** An aggregated array relationship */
     lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     nach_ausgepflanzt: types.union(types.undefined, types.null, types.boolean),
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     sammlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     von_kultur_id: types.union(types.undefined, types.null, types.frozen()),

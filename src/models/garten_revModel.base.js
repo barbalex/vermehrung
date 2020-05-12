@@ -15,8 +15,6 @@ import { personModelSelector } from "./personModel.base"
 /**
  * garten_revBase
  * auto generated base class for the model garten_revModel.
- *
- * columns and relationships of "garten_rev"
  */
 export const garten_revModelBase = ModelBase
   .named('garten_rev')
@@ -32,14 +30,11 @@ export const garten_revModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
-    /** An array relationship */
+    id: types.identifier,
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    /** An aggregated array relationship */
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     name: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),

@@ -13,8 +13,6 @@ import { teilzaehlung_aggregate_fieldsModelSelector } from "./teilzaehlung_aggre
 /**
  * teilzaehlung_aggregateBase
  * auto generated base class for the model teilzaehlung_aggregateModel.
- *
- * aggregated selection of "teilzaehlung"
  */
 export const teilzaehlung_aggregateModelBase = ModelBase
   .named('teilzaehlung_aggregate')

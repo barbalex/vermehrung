@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * zaehlung_rev_variance_fieldsBase
  * auto generated base class for the model zaehlung_rev_variance_fieldsModel.
- *
- * aggregate variance on columns
  */
 export const zaehlung_rev_variance_fieldsModelBase = ModelBase
   .named('zaehlung_rev_variance_fields')

@@ -13,8 +13,6 @@ import { kultur_file_min_fieldsModelSelector } from "./kultur_file_min_fieldsMod
 /**
  * kultur_file_aggregate_fieldsBase
  * auto generated base class for the model kultur_file_aggregate_fieldsModel.
- *
- * aggregate fields of "kultur_file"
  */
 export const kultur_file_aggregate_fieldsModelBase = ModelBase
   .named('kultur_file_aggregate_fields')

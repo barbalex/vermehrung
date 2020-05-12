@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_option_rev_sum_fieldsBase
  * auto generated base class for the model kultur_option_rev_sum_fieldsModel.
- *
- * aggregate sum on columns
  */
 export const kultur_option_rev_sum_fieldsModelBase = ModelBase
   .named('kultur_option_rev_sum_fields')

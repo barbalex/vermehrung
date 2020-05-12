@@ -29,8 +29,6 @@ import { spatial_ref_sys_variance_fieldsModelSelector } from "./spatial_ref_sys_
 /**
  * spatial_ref_sys_aggregate_fieldsBase
  * auto generated base class for the model spatial_ref_sys_aggregate_fieldsModel.
- *
- * aggregate fields of "spatial_ref_sys"
  */
 export const spatial_ref_sys_aggregate_fieldsModelBase = ModelBase
   .named('spatial_ref_sys_aggregate_fields')

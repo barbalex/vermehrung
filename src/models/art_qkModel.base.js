@@ -13,19 +13,14 @@ import { art_qk_choosen_aggregateModelSelector } from "./art_qk_choosen_aggregat
 /**
  * art_qkBase
  * auto generated base class for the model art_qkModel.
- *
- * columns and relationships of "art_qk"
  */
 export const art_qkModelBase = ModelBase
   .named('art_qk')
   .props({
     __typename: types.optional(types.literal("art_qk"), "art_qk"),
-    /** An array relationship */
     art_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosenModel)))),
-    /** An aggregated array relationship */
     art_qk_choosens_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
     beschreibung: types.union(types.undefined, types.null, types.string),
-    /** Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt */
     name: types.union(types.undefined, types.string),
     sort: types.union(types.undefined, types.null, types.frozen()),
     titel: types.union(types.undefined, types.null, types.string),

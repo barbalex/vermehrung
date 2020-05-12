@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_file_min_fieldsBase
  * auto generated base class for the model garten_file_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const garten_file_min_fieldsModelBase = ModelBase
   .named('garten_file_min_fields')
@@ -20,7 +18,7 @@ export const garten_file_min_fieldsModelBase = ModelBase
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({

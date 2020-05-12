@@ -13,8 +13,6 @@ import { zaehlung_rev_aggregate_fieldsModelSelector } from "./zaehlung_rev_aggre
 /**
  * zaehlung_rev_aggregateBase
  * auto generated base class for the model zaehlung_rev_aggregateModel.
- *
- * aggregated selection of "zaehlung_rev"
  */
 export const zaehlung_rev_aggregateModelBase = ModelBase
   .named('zaehlung_rev_aggregate')

@@ -11,16 +11,12 @@ import { kultur_qk_choosenModelSelector } from "./kultur_qk_choosenModel.base"
 /**
  * kultur_qk_choosen_mutation_responseBase
  * auto generated base class for the model kultur_qk_choosen_mutation_responseModel.
- *
- * response of any mutation on the table "kultur_qk_choosen"
  */
 export const kultur_qk_choosen_mutation_responseModelBase = ModelBase
   .named('kultur_qk_choosen_mutation_response')
   .props({
     __typename: types.optional(types.literal("kultur_qk_choosen_mutation_response"), "kultur_qk_choosen_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
   })
   .views(self => ({

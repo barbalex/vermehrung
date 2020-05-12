@@ -17,8 +17,6 @@ import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
 /**
  * herkunft_revBase
  * auto generated base class for the model herkunft_revModel.
- *
- * columns and relationships of "herkunft_rev"
  */
 export const herkunft_revModelBase = ModelBase
   .named('herkunft_rev')
@@ -34,18 +32,14 @@ export const herkunft_revModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     gemeinde: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    /** An aggregated array relationship */
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     land: types.union(types.undefined, types.null, types.string),
     lokalname: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
-    /** An aggregated array relationship */
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
   })
   .views(self => ({

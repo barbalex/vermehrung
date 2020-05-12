@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * person_option_min_fieldsBase
  * auto generated base class for the model person_option_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const person_option_min_fieldsModelBase = ModelBase
   .named('person_option_min_fields')

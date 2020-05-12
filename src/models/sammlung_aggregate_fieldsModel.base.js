@@ -29,8 +29,6 @@ import { sammlung_variance_fieldsModelSelector } from "./sammlung_variance_field
 /**
  * sammlung_aggregate_fieldsBase
  * auto generated base class for the model sammlung_aggregate_fieldsModel.
- *
- * aggregate fields of "sammlung"
  */
 export const sammlung_aggregate_fieldsModelBase = ModelBase
   .named('sammlung_aggregate_fields')

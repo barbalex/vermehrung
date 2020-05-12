@@ -11,8 +11,6 @@ import { personModelSelector } from "./personModel.base"
 /**
  * person_fileBase
  * auto generated base class for the model person_fileModel.
- *
- * columns and relationships of "person_file"
  */
 export const person_fileModelBase = ModelBase
   .named('person_file')
@@ -21,9 +19,8 @@ export const person_fileModelBase = ModelBase
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
   })

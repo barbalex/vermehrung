@@ -29,8 +29,6 @@ import { herkunft_rev_variance_fieldsModelSelector } from "./herkunft_rev_varian
 /**
  * herkunft_rev_aggregate_fieldsBase
  * auto generated base class for the model herkunft_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "herkunft_rev"
  */
 export const herkunft_rev_aggregate_fieldsModelBase = ModelBase
   .named('herkunft_rev_aggregate_fields')

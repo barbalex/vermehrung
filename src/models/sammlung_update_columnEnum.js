@@ -6,33 +6,31 @@ import { types } from "mobx-state-tree"
 
 /**
 * sammlung_update_column
- *
- * update columns of table "sammlung"
 */
 export const sammlung_update_columnEnum = types.enumeration("sammlung_update_column", [
-        "_conflicts", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "andere_menge", // column name
-  "anzahl_pflanzen", // column name
-  "art_id", // column name
-  "bemerkungen", // column name
-  "changed", // column name
-  "changed_by", // column name
-  "datum", // column name
-  "geom_point", // column name
-  "geplant", // column name
-  "gramm_samen", // column name
-  "herkunft_id", // column name
-  "id", // column name
-  "lv95_x", // column name
-  "lv95_y", // column name
-  "nr", // column name
-  "person_id", // column name
-  "tsv", // column name
-  "von_anzahl_individuen", // column name
-  "wgs84_lat", // column name
-  "wgs84_long", // column name
+        "_conflicts",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "andere_menge",
+  "anzahl_pflanzen",
+  "art_id",
+  "bemerkungen",
+  "changed",
+  "changed_by",
+  "datum",
+  "geom_point",
+  "geplant",
+  "gramm_samen",
+  "herkunft_id",
+  "id",
+  "lv95_x",
+  "lv95_y",
+  "nr",
+  "person_id",
+  "tsv",
+  "von_anzahl_individuen",
+  "wgs84_lat",
+  "wgs84_long",
       ])

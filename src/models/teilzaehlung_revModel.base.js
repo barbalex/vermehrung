@@ -17,8 +17,6 @@ import { zaehlungModelSelector } from "./zaehlungModel.base"
 /**
  * teilzaehlung_revBase
  * auto generated base class for the model teilzaehlung_revModel.
- *
- * columns and relationships of "teilzaehlung_rev"
  */
 export const teilzaehlung_revModelBase = ModelBase
   .named('teilzaehlung_rev')
@@ -37,18 +35,13 @@ export const teilzaehlung_revModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     prognose_von_tz: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     teilzaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
-    /** An array relationship */
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
-    /** An aggregated array relationship */
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
-    /** An object relationship */
     zaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })

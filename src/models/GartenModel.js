@@ -6,8 +6,6 @@ export { selectFromgarten, gartenModelPrimitives, gartenModelSelector } from "./
 
 /**
  * gartenModel
- *
- * columns and relationships of "garten"
  */
 export const gartenModel = gartenModelBase
   .actions(self => ({

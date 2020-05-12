@@ -6,8 +6,6 @@ export { selectFromteilzaehlung, teilzaehlungModelPrimitives, teilzaehlungModelS
 
 /**
  * teilzaehlungModel
- *
- * columns and relationships of "teilzaehlung"
  */
 export const teilzaehlungModel = teilzaehlungModelBase
   .actions(self => ({

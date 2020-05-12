@@ -4,10 +4,11 @@ module.exports = {
   client: {
     service: {
       name: 'api',
-      url: constants.graphQlUri,
+      localSchemaFile: './schema.graphql',
+      /*url: constants.graphQlUri,
       headers: {
         'X-Hasura-Access-Key': process.env.HASURA_ACCESS_KEY,
-      },
+      },*/
     },
   },
 }

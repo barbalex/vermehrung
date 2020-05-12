@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * zaehlung_rev_min_fieldsBase
  * auto generated base class for the model zaehlung_rev_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const zaehlung_rev_min_fieldsModelBase = ModelBase
   .named('zaehlung_rev_min_fields')
@@ -23,7 +21,7 @@ export const zaehlung_rev_min_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({

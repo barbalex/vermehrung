@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * lieferung_var_samp_fieldsBase
  * auto generated base class for the model lieferung_var_samp_fieldsModel.
- *
- * aggregate var_samp on columns
  */
 export const lieferung_var_samp_fieldsModelBase = ModelBase
   .named('lieferung_var_samp_fields')

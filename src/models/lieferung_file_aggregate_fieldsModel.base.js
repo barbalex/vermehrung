@@ -13,8 +13,6 @@ import { lieferung_file_min_fieldsModelSelector } from "./lieferung_file_min_fie
 /**
  * lieferung_file_aggregate_fieldsBase
  * auto generated base class for the model lieferung_file_aggregate_fieldsModel.
- *
- * aggregate fields of "lieferung_file"
  */
 export const lieferung_file_aggregate_fieldsModelBase = ModelBase
   .named('lieferung_file_aggregate_fields')

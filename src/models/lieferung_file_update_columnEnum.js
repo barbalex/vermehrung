@@ -6,14 +6,12 @@ import { types } from "mobx-state-tree"
 
 /**
 * lieferung_file_update_column
- *
- * update columns of table "lieferung_file"
 */
 export const lieferung_file_update_columnEnum = types.enumeration("lieferung_file_update_column", [
-        "beschreibung", // column name
-  "file_id", // column name
-  "file_mime_type", // column name
-  "id", // column name
-  "lieferung_id", // column name
-  "name", // column name
+        "beschreibung",
+  "file_id",
+  "file_mime_type",
+  "id",
+  "lieferung_id",
+  "name",
       ])
