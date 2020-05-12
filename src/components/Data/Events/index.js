@@ -14,7 +14,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import createNew from '../../TreeContainer/Tree/createNew'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -106,9 +105,43 @@ const Events = ({ filter: showFilter }) => {
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: activeNodeArray }
-    createNew({ node, store, client })
-  }, [activeNodeArray, client, store])
+    const id = uuidv1()
+    const _rev = `1-${md5({ id, _deleted: false }.toString())}`
+    const _depth = 1
+    const _revisions = `{"${_rev}"}`
+    const newObject = { id, _rev, _depth, _revisions }
+    addQueuedQuery({
+      name: 'mutateInsert_event_rev',
+      variables: JSON.stringify({
+        objects: [newObject],
+        on_conflict: {
+          constraint: 'event_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      callbackQuery: 'queryEvent',
+      callbackQueryVariables: JSON.stringify({
+        where: { id: { _eq: id } },
+      }),
+    })
+    // optimistically update store
+    addEvent(newObject)
+    setTimeout(() => {
+      // will be unnecessary once tree is converted to mst
+      refetchTree()
+      // update tree status
+      const newActiveNodeArray = [...activeNodeArray, id]
+      setActiveNodeArray(newActiveNodeArray)
+      addOpenNodes([newActiveNodeArray])
+    })
+  }, [
+    activeNodeArray,
+    addEvent,
+    addOpenNodes,
+    addQueuedQuery,
+    refetchTree,
+    setActiveNodeArray,
+  ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
