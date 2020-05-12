@@ -17,5 +17,13 @@ export const wrapRootElement = ({ element }) => <App element={element} />
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
 export const onServiceWorkerUpdateReady = () => {
   // ensure this happens _after_ app.js ataches store to window
-  setTimeout(() => window.localStore.setUpdateExists(true))
+  // did not work: Uncaught TypeError: Cannot read property 'setUpdateExists' of undefined
+  setTimeout(() => window.store.setUpdateExists(true))
+  /*if (
+    window.confirm(
+      'vermehrung neu laden, um die neuste Version zu installieren?',
+    )
+  ) {
+    window.location.reload(true)
+  }*/
 }
