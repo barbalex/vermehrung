@@ -11,14 +11,11 @@ import { artModelSelector } from "./artModel.base"
 /**
  * garten_teilzaehlung_sumsBase
  * auto generated base class for the model garten_teilzaehlung_sumsModel.
- *
- * columns and relationships of "garten_teilzaehlung_sums"
  */
 export const garten_teilzaehlung_sumsModelBase = ModelBase
   .named('garten_teilzaehlung_sums')
   .props({
     __typename: types.optional(types.literal("garten_teilzaehlung_sums"), "garten_teilzaehlung_sums"),
-    /** An object relationship */
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     garten_aktiv: types.union(types.undefined, types.null, types.boolean),
     garten_anzahl_kulturen: types.union(types.undefined, types.null, types.frozen()),

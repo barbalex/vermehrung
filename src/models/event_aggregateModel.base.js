@@ -13,8 +13,6 @@ import { event_aggregate_fieldsModelSelector } from "./event_aggregate_fieldsMod
 /**
  * event_aggregateBase
  * auto generated base class for the model event_aggregateModel.
- *
- * aggregated selection of "event"
  */
 export const event_aggregateModelBase = ModelBase
   .named('event_aggregate')

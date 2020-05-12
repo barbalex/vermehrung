@@ -13,8 +13,6 @@ import { art_file_aggregate_fieldsModelSelector } from "./art_file_aggregate_fie
 /**
  * art_file_aggregateBase
  * auto generated base class for the model art_file_aggregateModel.
- *
- * aggregated selection of "art_file"
  */
 export const art_file_aggregateModelBase = ModelBase
   .named('art_file_aggregate')

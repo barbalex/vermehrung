@@ -11,8 +11,6 @@ import { personModelSelector } from "./personModel.base"
 /**
  * person_option_revBase
  * auto generated base class for the model person_option_revModel.
- *
- * columns and relationships of "person_option_rev"
  */
 export const person_option_revModelBase = ModelBase
   .named('person_option_rev')
@@ -37,7 +35,6 @@ export const person_option_revModelBase = ModelBase
     hk_land: types.union(types.undefined, types.null, types.boolean),
     li_show_sl: types.union(types.undefined, types.null, types.boolean),
     li_show_sl_felder: types.union(types.undefined, types.null, types.boolean),
-    /** An object relationship */
     person: types.union(types.undefined, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.frozen()),
     sl_auto_copy_edits: types.union(types.undefined, types.null, types.boolean),

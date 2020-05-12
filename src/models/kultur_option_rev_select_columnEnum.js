@@ -6,26 +6,24 @@ import { types } from "mobx-state-tree"
 
 /**
 * kultur_option_rev_select_column
- *
- * select columns of table "kultur_option_rev"
 */
 export const kultur_option_rev_select_columnEnum = types.enumeration("kultur_option_rev_select_column", [
-        "_deleted", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "ev_datum", // column name
-  "ev_geplant", // column name
-  "ev_person_id", // column name
-  "ev_teilkultur_id", // column name
-  "kultur_id", // column name
-  "tk", // column name
-  "tk_bemerkungen", // column name
-  "tz_andere_menge", // column name
-  "tz_anzahl_mutterpflanzen", // column name
-  "tz_auspflanzbereit_beschreibung", // column name
-  "tz_bemerkungen", // column name
-  "tz_teilkultur_id", // column name
-  "z_bemerkungen", // column name
+        "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "ev_datum",
+  "ev_geplant",
+  "ev_person_id",
+  "ev_teilkultur_id",
+  "kultur_id",
+  "tk",
+  "tk_bemerkungen",
+  "tz_andere_menge",
+  "tz_anzahl_mutterpflanzen",
+  "tz_auspflanzbereit_beschreibung",
+  "tz_bemerkungen",
+  "tz_teilkultur_id",
+  "z_bemerkungen",
       ])

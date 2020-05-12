@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * person_option_max_fieldsBase
  * auto generated base class for the model person_option_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const person_option_max_fieldsModelBase = ModelBase
   .named('person_option_max_fields')

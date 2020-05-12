@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * spatial_ref_sysBase
  * auto generated base class for the model spatial_ref_sysModel.
- *
- * columns and relationships of "spatial_ref_sys"
  */
 export const spatial_ref_sysModelBase = ModelBase
   .named('spatial_ref_sys')

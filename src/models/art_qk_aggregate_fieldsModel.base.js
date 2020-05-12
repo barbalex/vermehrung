@@ -29,8 +29,6 @@ import { art_qk_variance_fieldsModelSelector } from "./art_qk_variance_fieldsMod
 /**
  * art_qk_aggregate_fieldsBase
  * auto generated base class for the model art_qk_aggregate_fieldsModel.
- *
- * aggregate fields of "art_qk"
  */
 export const art_qk_aggregate_fieldsModelBase = ModelBase
   .named('art_qk_aggregate_fields')

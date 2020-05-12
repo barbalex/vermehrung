@@ -11,16 +11,12 @@ import { kultur_revModelSelector } from "./kultur_revModel.base"
 /**
  * kultur_rev_mutation_responseBase
  * auto generated base class for the model kultur_rev_mutation_responseModel.
- *
- * response of any mutation on the table "kultur_rev"
  */
 export const kultur_rev_mutation_responseModelBase = ModelBase
   .named('kultur_rev_mutation_response')
   .props({
     __typename: types.optional(types.literal("kultur_rev_mutation_response"), "kultur_rev_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_revModel)))),
   })
   .views(self => ({

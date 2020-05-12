@@ -11,8 +11,6 @@ import { personModelSelector } from "./personModel.base"
 /**
  * person_optionBase
  * auto generated base class for the model person_optionModel.
- *
- * columns and relationships of "person_option"
  */
 export const person_optionModelBase = ModelBase
   .named('person_option')
@@ -23,7 +21,6 @@ export const person_optionModelBase = ModelBase
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
-    /** Dieses Feld wird (momentan) nicht benutzt */
     ar_name_deutsch: types.union(types.undefined, types.null, types.boolean),
     ga_aktiv: types.union(types.undefined, types.null, types.boolean),
     ga_bemerkungen: types.union(types.undefined, types.null, types.boolean),
@@ -36,15 +33,11 @@ export const person_optionModelBase = ModelBase
     hk_geom_point: types.union(types.undefined, types.null, types.boolean),
     hk_kanton: types.union(types.undefined, types.null, types.boolean),
     hk_land: types.union(types.undefined, types.null, types.boolean),
-    /** Ob die Sammel-Lieferung neben der Lieferung angezeigt wird */
     li_show_sl: types.union(types.undefined, types.null, types.boolean),
-    /** Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind */
     li_show_sl_felder: types.union(types.undefined, types.null, types.boolean),
-    /** An object relationship */
     person: types.union(types.undefined, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.frozen()),
     sl_auto_copy_edits: types.union(types.undefined, types.null, types.boolean),
-    /** Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird) */
     sl_show_empty_when_next_to_li: types.union(types.undefined, types.null, types.boolean),
     tree_event: types.union(types.undefined, types.null, types.boolean),
     tree_kultur: types.union(types.undefined, types.null, types.boolean),

@@ -13,8 +13,6 @@ import { spatial_ref_sys_aggregate_fieldsModelSelector } from "./spatial_ref_sys
 /**
  * spatial_ref_sys_aggregateBase
  * auto generated base class for the model spatial_ref_sys_aggregateModel.
- *
- * aggregated selection of "spatial_ref_sys"
  */
 export const spatial_ref_sys_aggregateModelBase = ModelBase
   .named('spatial_ref_sys_aggregate')

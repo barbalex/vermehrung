@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * event_rev_max_fieldsBase
  * auto generated base class for the model event_rev_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const event_rev_max_fieldsModelBase = ModelBase
   .named('event_rev_max_fields')
@@ -23,7 +21,7 @@ export const event_rev_max_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),

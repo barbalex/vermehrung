@@ -6,9 +6,7 @@ import { types } from "mobx-state-tree"
 
 /**
 * lieferung_constraint
- *
- * unique or primary key constraints on table "lieferung"
 */
 export const lieferung_constraintEnum = types.enumeration("lieferung_constraint", [
-        "lieferung_pkey", // unique or primary key constraint
+        "lieferung_pkey",
       ])

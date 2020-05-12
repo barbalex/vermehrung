@@ -45,8 +45,6 @@ import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
 /**
  * artBase
  * auto generated base class for the model artModel.
- *
- * columns and relationships of "art"
  */
 export const artModelBase = ModelBase
   .named('art')
@@ -58,44 +56,26 @@ export const artModelBase = ModelBase
     _rev: types.union(types.undefined, types.null, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     art_ae_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => ae_artModel))),
-    /** An array relationship */
     art_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_fileModel)))),
-    /** An aggregated array relationship */
     art_files_aggregate: types.union(types.undefined, types.late(() => art_file_aggregateModel)),
-    /** An array relationship */
     art_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosenModel)))),
-    /** An aggregated array relationship */
     art_qk_choosens_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
-    /** An array relationship */
     art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
-    /** An aggregated array relationship */
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
-    /** An object relationship */
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     garten_teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
-    /** An aggregated array relationship */
     garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
-    id: types.union(types.undefined, types.frozen()),
-    /** An array relationship */
+    id: types.identifier,
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    /** An aggregated array relationship */
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
-    /** An array relationship */
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    /** An aggregated array relationship */
     lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
-    /** An array relationship */
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
-    /** An aggregated array relationship */
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
-    /** An array relationship */
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
-    /** An aggregated array relationship */
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })

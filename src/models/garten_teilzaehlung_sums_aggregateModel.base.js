@@ -13,8 +13,6 @@ import { garten_teilzaehlung_sums_aggregate_fieldsModelSelector } from "./garten
 /**
  * garten_teilzaehlung_sums_aggregateBase
  * auto generated base class for the model garten_teilzaehlung_sums_aggregateModel.
- *
- * aggregated selection of "garten_teilzaehlung_sums"
  */
 export const garten_teilzaehlung_sums_aggregateModelBase = ModelBase
   .named('garten_teilzaehlung_sums_aggregate')

@@ -6,8 +6,6 @@ export { selectFromsammlung, sammlungModelPrimitives, sammlungModelSelector } fr
 
 /**
  * sammlungModel
- *
- * columns and relationships of "sammlung"
  */
 export const sammlungModel = sammlungModelBase
   .actions(self => ({

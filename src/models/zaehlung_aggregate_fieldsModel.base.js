@@ -29,8 +29,6 @@ import { zaehlung_variance_fieldsModelSelector } from "./zaehlung_variance_field
 /**
  * zaehlung_aggregate_fieldsBase
  * auto generated base class for the model zaehlung_aggregate_fieldsModel.
- *
- * aggregate fields of "zaehlung"
  */
 export const zaehlung_aggregate_fieldsModelBase = ModelBase
   .named('zaehlung_aggregate_fields')

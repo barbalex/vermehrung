@@ -13,8 +13,6 @@ import { sammlung_file_min_fieldsModelSelector } from "./sammlung_file_min_field
 /**
  * sammlung_file_aggregate_fieldsBase
  * auto generated base class for the model sammlung_file_aggregate_fieldsModel.
- *
- * aggregate fields of "sammlung_file"
  */
 export const sammlung_file_aggregate_fieldsModelBase = ModelBase
   .named('sammlung_file_aggregate_fields')

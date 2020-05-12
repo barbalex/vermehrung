@@ -11,16 +11,12 @@ import { sammel_lieferungModelSelector } from "./sammel_lieferungModel.base"
 /**
  * sammel_lieferung_mutation_responseBase
  * auto generated base class for the model sammel_lieferung_mutation_responseModel.
- *
- * response of any mutation on the table "sammel_lieferung"
  */
 export const sammel_lieferung_mutation_responseModelBase = ModelBase
   .named('sammel_lieferung_mutation_response')
   .props({
     __typename: types.optional(types.literal("sammel_lieferung_mutation_response"), "sammel_lieferung_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
   })
   .views(self => ({

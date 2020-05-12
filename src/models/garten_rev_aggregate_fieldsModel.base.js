@@ -29,8 +29,6 @@ import { garten_rev_variance_fieldsModelSelector } from "./garten_rev_variance_f
 /**
  * garten_rev_aggregate_fieldsBase
  * auto generated base class for the model garten_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "garten_rev"
  */
 export const garten_rev_aggregate_fieldsModelBase = ModelBase
   .named('garten_rev_aggregate_fields')

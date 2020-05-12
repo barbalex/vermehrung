@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * person_rev_min_fieldsBase
  * auto generated base class for the model person_rev_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const person_rev_min_fieldsModelBase = ModelBase
   .named('person_rev_min_fields')
@@ -25,7 +23,7 @@ export const person_rev_min_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     email: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),

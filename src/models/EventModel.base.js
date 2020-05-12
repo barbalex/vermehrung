@@ -15,8 +15,6 @@ import { teilkulturModelSelector } from "./teilkulturModel.base"
 /**
  * eventBase
  * auto generated base class for the model eventModel.
- *
- * columns and relationships of "event"
  */
 export const eventModelBase = ModelBase
   .named('event')
@@ -32,14 +30,11 @@ export const eventModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
-    id: types.union(types.undefined, types.frozen()),
-    /** An object relationship */
+    id: types.identifier,
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
     tsv: types.union(types.undefined, types.null, types.frozen()),

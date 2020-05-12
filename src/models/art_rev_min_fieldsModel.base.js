@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * art_rev_min_fieldsBase
  * auto generated base class for the model art_rev_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const art_rev_min_fieldsModelBase = ModelBase
   .named('art_rev_min_fields')
@@ -22,7 +20,7 @@ export const art_rev_min_fieldsModelBase = ModelBase
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
   })
   .views(self => ({
     get store() {

@@ -6,14 +6,12 @@ import { types } from "mobx-state-tree"
 
 /**
 * kultur_file_update_column
- *
- * update columns of table "kultur_file"
 */
 export const kultur_file_update_columnEnum = types.enumeration("kultur_file_update_column", [
-        "beschreibung", // column name
-  "file_id", // column name
-  "file_mime_type", // column name
-  "id", // column name
-  "kultur_id", // column name
-  "name", // column name
+        "beschreibung",
+  "file_id",
+  "file_mime_type",
+  "id",
+  "kultur_id",
+  "name",
       ])

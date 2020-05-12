@@ -45,8 +45,6 @@ import { zaehlung_aggregateModelSelector } from "./zaehlung_aggregateModel.base"
 /**
  * kulturBase
  * auto generated base class for the model kulturModel.
- *
- * columns and relationships of "kultur"
  */
 export const kulturModelBase = ModelBase
   .named('kultur')
@@ -58,59 +56,37 @@ export const kulturModelBase = ModelBase
     _rev: types.union(types.undefined, types.null, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     aktiv: types.union(types.undefined, types.null, types.boolean),
-    /** An object relationship */
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     erhaltungskultur: types.union(types.undefined, types.null, types.boolean),
-    /** An array relationship */
     events: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
-    /** An aggregated array relationship */
     events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
-    /** An object relationship */
     garten: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
-    /** An array relationship */
+    id: types.identifier,
     kultur_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_fileModel)))),
-    /** An aggregated array relationship */
     kultur_files_aggregate: types.union(types.undefined, types.late(() => kultur_file_aggregateModel)),
-    /** An object relationship */
     kultur_option: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_optionModel))),
-    /** An array relationship */
     kultur_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
-    /** An aggregated array relationship */
     kultur_qk_choosens_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
-    /** An array relationship */
     lieferungsByNachKulturId: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    /** An aggregated array relationship */
     lieferungsByNachKulturId_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
-    /** An array relationship */
     lieferungsByVonKulturId: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    /** An aggregated array relationship */
     lieferungsByVonKulturId_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
-    /** An array relationship */
     sammelLieferungsByNachKulturId: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
-    /** An aggregated array relationship */
     sammelLieferungsByNachKulturId_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
-    /** An array relationship */
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
-    /** An aggregated array relationship */
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
-    /** An array relationship */
     teilkulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkulturModel)))),
-    /** An aggregated array relationship */
     teilkulturs_aggregate: types.union(types.undefined, types.late(() => teilkultur_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
-    /** An array relationship */
     zaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlungModel)))),
-    /** An aggregated array relationship */
     zaehlungs_aggregate: types.union(types.undefined, types.late(() => zaehlung_aggregateModel)),
     zwischenlager: types.union(types.undefined, types.null, types.boolean),
   })

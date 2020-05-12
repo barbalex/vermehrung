@@ -29,8 +29,6 @@ import { person_rev_variance_fieldsModelSelector } from "./person_rev_variance_f
 /**
  * person_rev_aggregate_fieldsBase
  * auto generated base class for the model person_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "person_rev"
  */
 export const person_rev_aggregate_fieldsModelBase = ModelBase
   .named('person_rev_aggregate_fields')

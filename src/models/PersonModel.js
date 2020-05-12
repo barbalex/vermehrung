@@ -6,8 +6,6 @@ export { selectFromperson, personModelPrimitives, personModelSelector } from "./
 
 /**
  * personModel
- *
- * columns and relationships of "person"
  */
 export const personModel = personModelBase
   .actions(self => ({

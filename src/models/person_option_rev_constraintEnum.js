@@ -6,9 +6,7 @@ import { types } from "mobx-state-tree"
 
 /**
 * person_option_rev_constraint
- *
- * unique or primary key constraints on table "person_option_rev"
 */
 export const person_option_rev_constraintEnum = types.enumeration("person_option_rev_constraint", [
-        "person_option_rev_pkey", // unique or primary key constraint
+        "person_option_rev_pkey",
       ])

@@ -29,8 +29,6 @@ import { kultur_variance_fieldsModelSelector } from "./kultur_variance_fieldsMod
 /**
  * kultur_aggregate_fieldsBase
  * auto generated base class for the model kultur_aggregate_fieldsModel.
- *
- * aggregate fields of "kultur"
  */
 export const kultur_aggregate_fieldsModelBase = ModelBase
   .named('kultur_aggregate_fields')

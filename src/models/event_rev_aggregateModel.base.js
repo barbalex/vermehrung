@@ -13,8 +13,6 @@ import { event_rev_aggregate_fieldsModelSelector } from "./event_rev_aggregate_f
 /**
  * event_rev_aggregateBase
  * auto generated base class for the model event_rev_aggregateModel.
- *
- * aggregated selection of "event_rev"
  */
 export const event_rev_aggregateModelBase = ModelBase
   .named('event_rev_aggregate')

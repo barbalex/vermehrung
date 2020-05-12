@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * user_role_max_fieldsBase
  * auto generated base class for the model user_role_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const user_role_max_fieldsModelBase = ModelBase
   .named('user_role_max_fields')

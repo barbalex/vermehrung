@@ -6,25 +6,23 @@ import { types } from "mobx-state-tree"
 
 /**
 * teilzaehlung_rev_select_column
- *
- * select columns of table "teilzaehlung_rev"
 */
 export const teilzaehlung_rev_select_columnEnum = types.enumeration("teilzaehlung_rev_select_column", [
-        "_deleted", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "andere_menge", // column name
-  "anzahl_auspflanzbereit", // column name
-  "anzahl_mutterpflanzen", // column name
-  "anzahl_pflanzen", // column name
-  "auspflanzbereit_beschreibung", // column name
-  "bemerkungen", // column name
-  "changed", // column name
-  "changed_by", // column name
-  "id", // column name
-  "prognose_von_tz", // column name
-  "teilkultur_id", // column name
-  "zaehlung_id", // column name
+        "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "andere_menge",
+  "anzahl_auspflanzbereit",
+  "anzahl_mutterpflanzen",
+  "anzahl_pflanzen",
+  "auspflanzbereit_beschreibung",
+  "bemerkungen",
+  "changed",
+  "changed_by",
+  "id",
+  "prognose_von_tz",
+  "teilkultur_id",
+  "zaehlung_id",
       ])

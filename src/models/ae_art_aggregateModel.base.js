@@ -13,8 +13,6 @@ import { ae_art_aggregate_fieldsModelSelector } from "./ae_art_aggregate_fieldsM
 /**
  * ae_art_aggregateBase
  * auto generated base class for the model ae_art_aggregateModel.
- *
- * aggregated selection of "ae_art"
  */
 export const ae_art_aggregateModelBase = ModelBase
   .named('ae_art_aggregate')

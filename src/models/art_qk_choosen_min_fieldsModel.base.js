@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * art_qk_choosen_min_fieldsBase
  * auto generated base class for the model art_qk_choosen_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const art_qk_choosen_min_fieldsModelBase = ModelBase
   .named('art_qk_choosen_min_fields')

@@ -13,8 +13,6 @@ import { herkunft_file_min_fieldsModelSelector } from "./herkunft_file_min_field
 /**
  * herkunft_file_aggregate_fieldsBase
  * auto generated base class for the model herkunft_file_aggregate_fieldsModel.
- *
- * aggregate fields of "herkunft_file"
  */
 export const herkunft_file_aggregate_fieldsModelBase = ModelBase
   .named('herkunft_file_aggregate_fields')

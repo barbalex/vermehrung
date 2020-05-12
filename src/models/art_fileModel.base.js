@@ -11,20 +11,17 @@ import { artModelSelector } from "./artModel.base"
 /**
  * art_fileBase
  * auto generated base class for the model art_fileModel.
- *
- * columns and relationships of "art_file"
  */
 export const art_fileModelBase = ModelBase
   .named('art_file')
   .props({
     __typename: types.optional(types.literal("art_file"), "art_file"),
-    /** An object relationship */
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({

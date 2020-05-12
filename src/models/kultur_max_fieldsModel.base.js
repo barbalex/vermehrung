@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_max_fieldsBase
  * auto generated base class for the model kultur_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const kultur_max_fieldsModelBase = ModelBase
   .named('kultur_max_fields')
@@ -25,7 +23,7 @@ export const kultur_max_fieldsModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({

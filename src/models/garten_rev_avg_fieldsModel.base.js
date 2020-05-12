@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_rev_avg_fieldsBase
  * auto generated base class for the model garten_rev_avg_fieldsModel.
- *
- * aggregate avg on columns
  */
 export const garten_rev_avg_fieldsModelBase = ModelBase
   .named('garten_rev_avg_fields')

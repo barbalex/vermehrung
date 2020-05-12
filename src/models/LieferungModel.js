@@ -6,8 +6,6 @@ export { selectFromlieferung, lieferungModelPrimitives, lieferungModelSelector }
 
 /**
  * lieferungModel
- *
- * columns and relationships of "lieferung"
  */
 export const lieferungModel = lieferungModelBase
   .actions(self => ({

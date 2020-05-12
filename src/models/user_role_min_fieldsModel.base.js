@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * user_role_min_fieldsBase
  * auto generated base class for the model user_role_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const user_role_min_fieldsModelBase = ModelBase
   .named('user_role_min_fields')

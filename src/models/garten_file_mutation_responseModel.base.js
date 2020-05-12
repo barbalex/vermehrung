@@ -11,16 +11,12 @@ import { garten_fileModelSelector } from "./garten_fileModel.base"
 /**
  * garten_file_mutation_responseBase
  * auto generated base class for the model garten_file_mutation_responseModel.
- *
- * response of any mutation on the table "garten_file"
  */
 export const garten_file_mutation_responseModelBase = ModelBase
   .named('garten_file_mutation_response')
   .props({
     __typename: types.optional(types.literal("garten_file_mutation_response"), "garten_file_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_fileModel)))),
   })
   .views(self => ({

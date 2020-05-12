@@ -13,8 +13,6 @@ import { art_sums_aggregate_fieldsModelSelector } from "./art_sums_aggregate_fie
 /**
  * art_sums_aggregateBase
  * auto generated base class for the model art_sums_aggregateModel.
- *
- * aggregated selection of "art_sums"
  */
 export const art_sums_aggregateModelBase = ModelBase
   .named('art_sums_aggregate')

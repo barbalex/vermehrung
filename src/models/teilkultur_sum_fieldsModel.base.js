@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * teilkultur_sum_fieldsBase
  * auto generated base class for the model teilkultur_sum_fieldsModel.
- *
- * aggregate sum on columns
  */
 export const teilkultur_sum_fieldsModelBase = ModelBase
   .named('teilkultur_sum_fields')

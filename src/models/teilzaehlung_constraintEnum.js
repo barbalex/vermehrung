@@ -6,9 +6,7 @@ import { types } from "mobx-state-tree"
 
 /**
 * teilzaehlung_constraint
- *
- * unique or primary key constraints on table "teilzaehlung"
 */
 export const teilzaehlung_constraintEnum = types.enumeration("teilzaehlung_constraint", [
-        "teilzaehlung_pkey", // unique or primary key constraint
+        "teilzaehlung_pkey",
       ])

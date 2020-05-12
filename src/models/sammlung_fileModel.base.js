@@ -11,8 +11,6 @@ import { sammlungModelSelector } from "./sammlungModel.base"
 /**
  * sammlung_fileBase
  * auto generated base class for the model sammlung_fileModel.
- *
- * columns and relationships of "sammlung_file"
  */
 export const sammlung_fileModelBase = ModelBase
   .named('sammlung_file')
@@ -21,9 +19,8 @@ export const sammlung_fileModelBase = ModelBase
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     sammlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     sammlung_id: types.union(types.undefined, types.null, types.frozen()),
   })

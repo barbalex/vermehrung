@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * event_rev_variance_fieldsBase
  * auto generated base class for the model event_rev_variance_fieldsModel.
- *
- * aggregate variance on columns
  */
 export const event_rev_variance_fieldsModelBase = ModelBase
   .named('event_rev_variance_fields')

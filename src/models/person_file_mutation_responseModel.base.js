@@ -11,16 +11,12 @@ import { person_fileModelSelector } from "./person_fileModel.base"
 /**
  * person_file_mutation_responseBase
  * auto generated base class for the model person_file_mutation_responseModel.
- *
- * response of any mutation on the table "person_file"
  */
 export const person_file_mutation_responseModelBase = ModelBase
   .named('person_file_mutation_response')
   .props({
     __typename: types.optional(types.literal("person_file_mutation_response"), "person_file_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_fileModel)))),
   })
   .views(self => ({

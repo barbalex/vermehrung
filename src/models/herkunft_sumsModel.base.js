@@ -11,8 +11,6 @@ import { herkunftModelSelector } from "./herkunftModel.base"
 /**
  * herkunft_sumsBase
  * auto generated base class for the model herkunft_sumsModel.
- *
- * columns and relationships of "herkunft_sums"
  */
 export const herkunft_sumsModelBase = ModelBase
   .named('herkunft_sums')
@@ -28,7 +26,6 @@ export const herkunft_sumsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     partitioner: types.union(types.undefined, types.null, types.frozen()),

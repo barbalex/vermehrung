@@ -66,7 +66,7 @@ function sizeReducer(state, action) {
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
 
-  const { filter, user, mutateInsert_person, addQueuedQuery, addPerson } = store
+  const { filter, user, addQueuedQuery, addPerson } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const {

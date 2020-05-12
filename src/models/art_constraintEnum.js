@@ -6,9 +6,7 @@ import { types } from "mobx-state-tree"
 
 /**
 * art_constraint
- *
- * unique or primary key constraints on table "art"
 */
 export const art_constraintEnum = types.enumeration("art_constraint", [
-        "art_pkey", // unique or primary key constraint
+        "art_pkey",
       ])

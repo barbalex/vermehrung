@@ -13,8 +13,6 @@ import { sammlung_aggregate_fieldsModelSelector } from "./sammlung_aggregate_fie
 /**
  * sammlung_aggregateBase
  * auto generated base class for the model sammlung_aggregateModel.
- *
- * aggregated selection of "sammlung"
  */
 export const sammlung_aggregateModelBase = ModelBase
   .named('sammlung_aggregate')

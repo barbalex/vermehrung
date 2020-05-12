@@ -37,8 +37,6 @@ import { user_roleModelSelector } from "./user_roleModel.base"
 /**
  * person_revBase
  * auto generated base class for the model person_revModel.
- *
- * columns and relationships of "person_rev"
  */
 export const person_revModelBase = ModelBase
   .named('person_rev')
@@ -52,49 +50,35 @@ export const person_revModelBase = ModelBase
     account_id: types.union(types.undefined, types.null, types.string),
     adresszusatz: types.union(types.undefined, types.null, types.string),
     aktiv: types.union(types.undefined, types.null, types.boolean),
-    /** An array relationship */
     av_art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
-    /** An aggregated array relationship */
     av_art_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     email: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     events: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
-    /** An aggregated array relationship */
     events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
-    /** An array relationship */
     gartens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
-    /** An aggregated array relationship */
     gartens_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     info: types.union(types.undefined, types.null, types.boolean),
     kein_email: types.union(types.undefined, types.null, types.boolean),
     kommerziell: types.union(types.undefined, types.null, types.boolean),
     name: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     person_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_fileModel)))),
-    /** An aggregated array relationship */
     person_files_aggregate: types.union(types.undefined, types.late(() => person_file_aggregateModel)),
-    /** An object relationship */
     person_option: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => person_optionModel))),
     plz: types.union(types.undefined, types.null, types.integer),
-    /** An array relationship */
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
-    /** An aggregated array relationship */
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
-    /** An array relationship */
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
-    /** An aggregated array relationship */
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     strasse: types.union(types.undefined, types.null, types.string),
     telefon_geschaeft: types.union(types.undefined, types.null, types.string),
     telefon_mobile: types.union(types.undefined, types.null, types.string),
     telefon_privat: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     userRoleByUserRole: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => user_roleModel))),
     user_role: types.union(types.undefined, types.null, types.string),
   })

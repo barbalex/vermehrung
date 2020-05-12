@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * user_role_var_samp_fieldsBase
  * auto generated base class for the model user_role_var_samp_fieldsModel.
- *
- * aggregate var_samp on columns
  */
 export const user_role_var_samp_fieldsModelBase = ModelBase
   .named('user_role_var_samp_fields')

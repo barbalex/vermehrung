@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * lieferung_rev_max_fieldsBase
  * auto generated base class for the model lieferung_rev_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const lieferung_rev_max_fieldsModelBase = ModelBase
   .named('lieferung_rev_max_fields')
@@ -28,7 +26,7 @@ export const lieferung_rev_max_fieldsModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     sammel_lieferung_id: types.union(types.undefined, types.null, types.frozen()),

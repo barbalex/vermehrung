@@ -11,16 +11,12 @@ import { teilzaehlungModelSelector } from "./teilzaehlungModel.base"
 /**
  * teilzaehlung_mutation_responseBase
  * auto generated base class for the model teilzaehlung_mutation_responseModel.
- *
- * response of any mutation on the table "teilzaehlung"
  */
 export const teilzaehlung_mutation_responseModelBase = ModelBase
   .named('teilzaehlung_mutation_response')
   .props({
     __typename: types.optional(types.literal("teilzaehlung_mutation_response"), "teilzaehlung_mutation_response"),
-    /** number of affected rows by the mutation */
     affected_rows: types.union(types.undefined, types.integer),
-    /** data of the affected rows by the mutation */
     returning: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
   })
   .views(self => ({

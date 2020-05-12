@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_variance_fieldsBase
  * auto generated base class for the model kultur_variance_fieldsModel.
- *
- * aggregate variance on columns
  */
 export const kultur_variance_fieldsModelBase = ModelBase
   .named('kultur_variance_fields')

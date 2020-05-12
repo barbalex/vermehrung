@@ -29,8 +29,6 @@ import { teilkultur_variance_fieldsModelSelector } from "./teilkultur_variance_f
 /**
  * teilkultur_aggregate_fieldsBase
  * auto generated base class for the model teilkultur_aggregate_fieldsModel.
- *
- * aggregate fields of "teilkultur"
  */
 export const teilkultur_aggregate_fieldsModelBase = ModelBase
   .named('teilkultur_aggregate_fields')

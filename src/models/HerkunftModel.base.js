@@ -25,8 +25,6 @@ import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
 /**
  * herkunftBase
  * auto generated base class for the model herkunftModel.
- *
- * columns and relationships of "herkunft"
  */
 export const herkunftModelBase = ModelBase
   .named('herkunft')
@@ -42,28 +40,20 @@ export const herkunftModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     gemeinde: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
-    /** An array relationship */
     herkunft_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_fileModel)))),
-    /** An aggregated array relationship */
     herkunft_files_aggregate: types.union(types.undefined, types.late(() => herkunft_file_aggregateModel)),
-    /** An array relationship */
     herkunft_sums: types.union(types.undefined, types.array(types.late(() => herkunft_sumsModel))),
-    /** An aggregated array relationship */
     herkunft_sums_aggregate: types.union(types.undefined, types.late(() => herkunft_sums_aggregateModel)),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    /** An aggregated array relationship */
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     land: types.union(types.undefined, types.null, types.string),
     lokalname: types.union(types.undefined, types.null, types.string),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     nr: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
-    /** An aggregated array relationship */
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),

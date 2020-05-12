@@ -29,8 +29,6 @@ import { herkunft_sums_variance_fieldsModelSelector } from "./herkunft_sums_vari
 /**
  * herkunft_sums_aggregate_fieldsBase
  * auto generated base class for the model herkunft_sums_aggregate_fieldsModel.
- *
- * aggregate fields of "herkunft_sums"
  */
 export const herkunft_sums_aggregate_fieldsModelBase = ModelBase
   .named('herkunft_sums_aggregate_fields')

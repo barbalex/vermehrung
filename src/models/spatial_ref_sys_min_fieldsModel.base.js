@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * spatial_ref_sys_min_fieldsBase
  * auto generated base class for the model spatial_ref_sys_min_fieldsModel.
- *
- * aggregate min on columns
  */
 export const spatial_ref_sys_min_fieldsModelBase = ModelBase
   .named('spatial_ref_sys_min_fields')

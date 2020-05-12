@@ -13,19 +13,14 @@ import { kultur_qk_choosen_aggregateModelSelector } from "./kultur_qk_choosen_ag
 /**
  * kultur_qkBase
  * auto generated base class for the model kultur_qkModel.
- *
- * columns and relationships of "kultur_qk"
  */
 export const kultur_qkModelBase = ModelBase
   .named('kultur_qk')
   .props({
     __typename: types.optional(types.literal("kultur_qk"), "kultur_qk"),
     beschreibung: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     kultur_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
-    /** An aggregated array relationship */
     kultur_qk_choosens_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
-    /** Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt */
     name: types.union(types.undefined, types.string),
     sort: types.union(types.undefined, types.null, types.frozen()),
     titel: types.union(types.undefined, types.null, types.string),

@@ -29,8 +29,6 @@ import { teilzaehlung_rev_variance_fieldsModelSelector } from "./teilzaehlung_re
 /**
  * teilzaehlung_rev_aggregate_fieldsBase
  * auto generated base class for the model teilzaehlung_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "teilzaehlung_rev"
  */
 export const teilzaehlung_rev_aggregate_fieldsModelBase = ModelBase
   .named('teilzaehlung_rev_aggregate_fields')

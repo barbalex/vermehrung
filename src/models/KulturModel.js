@@ -6,8 +6,6 @@ export { selectFromkultur, kulturModelPrimitives, kulturModelSelector } from "./
 
 /**
  * kulturModel
- *
- * columns and relationships of "kultur"
  */
 export const kulturModel = kulturModelBase
   .actions(self => ({

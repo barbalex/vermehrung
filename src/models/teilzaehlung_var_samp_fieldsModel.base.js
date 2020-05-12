@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * teilzaehlung_var_samp_fieldsBase
  * auto generated base class for the model teilzaehlung_var_samp_fieldsModel.
- *
- * aggregate var_samp on columns
  */
 export const teilzaehlung_var_samp_fieldsModelBase = ModelBase
   .named('teilzaehlung_var_samp_fields')

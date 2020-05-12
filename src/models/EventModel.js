@@ -6,8 +6,6 @@ export { selectFromevent, eventModelPrimitives, eventModelSelector } from "./eve
 
 /**
  * eventModel
- *
- * columns and relationships of "event"
  */
 export const eventModel = eventModelBase
   .actions(self => ({

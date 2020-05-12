@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * sammlung_rev_stddev_pop_fieldsBase
  * auto generated base class for the model sammlung_rev_stddev_pop_fieldsModel.
- *
- * aggregate stddev_pop on columns
  */
 export const sammlung_rev_stddev_pop_fieldsModelBase = ModelBase
   .named('sammlung_rev_stddev_pop_fields')

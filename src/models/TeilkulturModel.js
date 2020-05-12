@@ -6,8 +6,6 @@ export { selectFromteilkultur, teilkulturModelPrimitives, teilkulturModelSelecto
 
 /**
  * teilkulturModel
- *
- * columns and relationships of "teilkultur"
  */
 export const teilkulturModel = teilkulturModelBase
   .actions(self => ({

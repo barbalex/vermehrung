@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * sammlung_var_pop_fieldsBase
  * auto generated base class for the model sammlung_var_pop_fieldsModel.
- *
- * aggregate var_pop on columns
  */
 export const sammlung_var_pop_fieldsModelBase = ModelBase
   .named('sammlung_var_pop_fields')

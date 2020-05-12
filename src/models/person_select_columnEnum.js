@@ -6,34 +6,32 @@ import { types } from "mobx-state-tree"
 
 /**
 * person_select_column
- *
- * select columns of table "person"
 */
 export const person_select_columnEnum = types.enumeration("person_select_column", [
-        "_conflicts", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "account_id", // column name
-  "adresszusatz", // column name
-  "aktiv", // column name
-  "bemerkungen", // column name
-  "changed", // column name
-  "changed_by", // column name
-  "email", // column name
-  "id", // column name
-  "info", // column name
-  "kein_email", // column name
-  "kommerziell", // column name
-  "name", // column name
-  "nr", // column name
-  "ort", // column name
-  "plz", // column name
-  "strasse", // column name
-  "telefon_geschaeft", // column name
-  "telefon_mobile", // column name
-  "telefon_privat", // column name
-  "tsv", // column name
-  "user_role", // column name
+        "_conflicts",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "account_id",
+  "adresszusatz",
+  "aktiv",
+  "bemerkungen",
+  "changed",
+  "changed_by",
+  "email",
+  "id",
+  "info",
+  "kein_email",
+  "kommerziell",
+  "name",
+  "nr",
+  "ort",
+  "plz",
+  "strasse",
+  "telefon_geschaeft",
+  "telefon_mobile",
+  "telefon_privat",
+  "tsv",
+  "user_role",
       ])

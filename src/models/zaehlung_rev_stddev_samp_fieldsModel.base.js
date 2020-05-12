@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * zaehlung_rev_stddev_samp_fieldsBase
  * auto generated base class for the model zaehlung_rev_stddev_samp_fieldsModel.
- *
- * aggregate stddev_samp on columns
  */
 export const zaehlung_rev_stddev_samp_fieldsModelBase = ModelBase
   .named('zaehlung_rev_stddev_samp_fields')

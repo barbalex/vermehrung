@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * person_max_fieldsBase
  * auto generated base class for the model person_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const person_max_fieldsModelBase = ModelBase
   .named('person_max_fields')
@@ -25,7 +23,7 @@ export const person_max_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     email: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),

@@ -13,8 +13,6 @@ import { art_rev_aggregate_fieldsModelSelector } from "./art_rev_aggregate_field
 /**
  * art_rev_aggregateBase
  * auto generated base class for the model art_rev_aggregateModel.
- *
- * aggregated selection of "art_rev"
  */
 export const art_rev_aggregateModelBase = ModelBase
   .named('art_rev_aggregate')

@@ -29,8 +29,6 @@ import { art_sums_variance_fieldsModelSelector } from "./art_sums_variance_field
 /**
  * art_sums_aggregate_fieldsBase
  * auto generated base class for the model art_sums_aggregate_fieldsModel.
- *
- * aggregate fields of "art_sums"
  */
 export const art_sums_aggregate_fieldsModelBase = ModelBase
   .named('art_sums_aggregate_fields')

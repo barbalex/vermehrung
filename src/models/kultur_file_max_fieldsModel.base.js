@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_file_max_fieldsBase
  * auto generated base class for the model kultur_file_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const kultur_file_max_fieldsModelBase = ModelBase
   .named('kultur_file_max_fields')
@@ -19,7 +17,7 @@ export const kultur_file_max_fieldsModelBase = ModelBase
     beschreibung: types.union(types.undefined, types.null, types.string),
     file_id: types.union(types.undefined, types.null, types.frozen()),
     file_mime_type: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
   })

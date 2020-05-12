@@ -13,8 +13,6 @@ import { art_qk_aggregate_fieldsModelSelector } from "./art_qk_aggregate_fieldsM
 /**
  * art_qk_aggregateBase
  * auto generated base class for the model art_qk_aggregateModel.
- *
- * aggregated selection of "art_qk"
  */
 export const art_qk_aggregateModelBase = ModelBase
   .named('art_qk_aggregate')

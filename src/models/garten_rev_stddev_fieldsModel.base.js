@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_rev_stddev_fieldsBase
  * auto generated base class for the model garten_rev_stddev_fieldsModel.
- *
- * aggregate stddev on columns
  */
 export const garten_rev_stddev_fieldsModelBase = ModelBase
   .named('garten_rev_stddev_fields')

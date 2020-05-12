@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * person_variance_fieldsBase
  * auto generated base class for the model person_variance_fieldsModel.
- *
- * aggregate variance on columns
  */
 export const person_variance_fieldsModelBase = ModelBase
   .named('person_variance_fields')

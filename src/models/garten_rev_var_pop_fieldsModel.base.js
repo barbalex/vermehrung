@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_rev_var_pop_fieldsBase
  * auto generated base class for the model garten_rev_var_pop_fieldsModel.
- *
- * aggregate var_pop on columns
  */
 export const garten_rev_var_pop_fieldsModelBase = ModelBase
   .named('garten_rev_var_pop_fields')

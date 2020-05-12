@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * kultur_qk_avg_fieldsBase
  * auto generated base class for the model kultur_qk_avg_fieldsModel.
- *
- * aggregate avg on columns
  */
 export const kultur_qk_avg_fieldsModelBase = ModelBase
   .named('kultur_qk_avg_fields')

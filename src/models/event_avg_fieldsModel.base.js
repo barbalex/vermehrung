@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * event_avg_fieldsBase
  * auto generated base class for the model event_avg_fieldsModel.
- *
- * aggregate avg on columns
  */
 export const event_avg_fieldsModelBase = ModelBase
   .named('event_avg_fields')

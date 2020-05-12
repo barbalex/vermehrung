@@ -13,8 +13,6 @@ import { av_artModelSelector } from "./av_artModel.base"
 /**
  * art_sumsBase
  * auto generated base class for the model art_sumsModel.
- *
- * columns and relationships of "art_sums"
  */
 export const art_sumsModelBase = ModelBase
   .named('art_sums')
@@ -25,11 +23,9 @@ export const art_sumsModelBase = ModelBase
     anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.frozen()),
     anzahl_mutterpflanzen: types.union(types.undefined, types.null, types.frozen()),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.frozen()),
-    /** An object relationship */
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     auspflanzbereit_beschreibung: types.union(types.undefined, types.null, types.string),
-    /** An object relationship */
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),

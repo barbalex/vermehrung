@@ -17,8 +17,6 @@ import { person_rev_aggregateModelSelector } from "./person_rev_aggregateModel.b
 /**
  * user_roleBase
  * auto generated base class for the model user_roleModel.
- *
- * columns and relationships of "user_role"
  */
 export const user_roleModelBase = ModelBase
   .named('user_role')
@@ -26,13 +24,9 @@ export const user_roleModelBase = ModelBase
     __typename: types.optional(types.literal("user_role"), "user_role"),
     comment: types.union(types.undefined, types.null, types.string),
     name: types.union(types.undefined, types.string),
-    /** An array relationship */
     people: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => personModel)))),
-    /** An aggregated array relationship */
     people_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
-    /** An array relationship */
     person_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_revModel)))),
-    /** An aggregated array relationship */
     person_revs_aggregate: types.union(types.undefined, types.late(() => person_rev_aggregateModel)),
     sort: types.union(types.undefined, types.null, types.integer),
   })

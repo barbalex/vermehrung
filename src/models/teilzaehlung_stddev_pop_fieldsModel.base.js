@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * teilzaehlung_stddev_pop_fieldsBase
  * auto generated base class for the model teilzaehlung_stddev_pop_fieldsModel.
- *
- * aggregate stddev_pop on columns
  */
 export const teilzaehlung_stddev_pop_fieldsModelBase = ModelBase
   .named('teilzaehlung_stddev_pop_fields')

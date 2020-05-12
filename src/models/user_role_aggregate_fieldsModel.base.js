@@ -29,8 +29,6 @@ import { user_role_variance_fieldsModelSelector } from "./user_role_variance_fie
 /**
  * user_role_aggregate_fieldsBase
  * auto generated base class for the model user_role_aggregate_fieldsModel.
- *
- * aggregate fields of "user_role"
  */
 export const user_role_aggregate_fieldsModelBase = ModelBase
   .named('user_role_aggregate_fields')

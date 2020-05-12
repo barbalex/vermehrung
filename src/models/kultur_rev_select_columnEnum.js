@@ -6,24 +6,22 @@ import { types } from "mobx-state-tree"
 
 /**
 * kultur_rev_select_column
- *
- * select columns of table "kultur_rev"
 */
 export const kultur_rev_select_columnEnum = types.enumeration("kultur_rev_select_column", [
-        "_deleted", // column name
-  "_depth", // column name
-  "_parent_rev", // column name
-  "_rev", // column name
-  "_revisions", // column name
-  "aktiv", // column name
-  "art_id", // column name
-  "bemerkungen", // column name
-  "changed", // column name
-  "changed_by", // column name
-  "erhaltungskultur", // column name
-  "garten_id", // column name
-  "herkunft_id", // column name
-  "id", // column name
-  "von_anzahl_individuen", // column name
-  "zwischenlager", // column name
+        "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "aktiv",
+  "art_id",
+  "bemerkungen",
+  "changed",
+  "changed_by",
+  "erhaltungskultur",
+  "garten_id",
+  "herkunft_id",
+  "id",
+  "von_anzahl_individuen",
+  "zwischenlager",
       ])

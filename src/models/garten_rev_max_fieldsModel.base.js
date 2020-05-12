@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * garten_rev_max_fieldsBase
  * auto generated base class for the model garten_rev_max_fieldsModel.
- *
- * aggregate max on columns
  */
 export const garten_rev_max_fieldsModelBase = ModelBase
   .named('garten_rev_max_fields')
@@ -22,7 +20,7 @@ export const garten_rev_max_fieldsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
     person_id: types.union(types.undefined, types.null, types.frozen()),

@@ -9,8 +9,6 @@ import { ModelBase } from "./ModelBase"
 /**
  * art_sums_avg_fieldsBase
  * auto generated base class for the model art_sums_avg_fieldsModel.
- *
- * aggregate avg on columns
  */
 export const art_sums_avg_fieldsModelBase = ModelBase
   .named('art_sums_avg_fields')

@@ -19,8 +19,6 @@ import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateMod
 /**
  * teilkulturBase
  * auto generated base class for the model teilkulturModel.
- *
- * columns and relationships of "teilkultur"
  */
 export const teilkulturModelBase = ModelBase
   .named('teilkultur')
@@ -34,21 +32,16 @@ export const teilkulturModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     events: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
-    /** An aggregated array relationship */
     events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
-    id: types.union(types.undefined, types.frozen()),
-    /** An object relationship */
+    id: types.identifier,
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort1: types.union(types.undefined, types.null, types.string),
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
-    /** An array relationship */
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
-    /** An aggregated array relationship */
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })

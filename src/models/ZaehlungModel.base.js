@@ -15,8 +15,6 @@ import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateMod
 /**
  * zaehlungBase
  * auto generated base class for the model zaehlungModel.
- *
- * columns and relationships of "zaehlung"
  */
 export const zaehlungModelBase = ModelBase
   .named('zaehlung')
@@ -31,14 +29,11 @@ export const zaehlungModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
-    /** An object relationship */
+    id: types.identifier,
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
-    /** An array relationship */
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
-    /** An aggregated array relationship */
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
   })

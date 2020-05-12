@@ -11,8 +11,6 @@ import { kulturModelSelector } from "./kulturModel.base"
 /**
  * kultur_option_revBase
  * auto generated base class for the model kultur_option_revModel.
- *
- * columns and relationships of "kultur_option_rev"
  */
 export const kultur_option_revModelBase = ModelBase
   .named('kultur_option_rev')
@@ -27,7 +25,6 @@ export const kultur_option_revModelBase = ModelBase
     ev_geplant: types.union(types.undefined, types.null, types.boolean),
     ev_person_id: types.union(types.undefined, types.null, types.boolean),
     ev_teilkultur_id: types.union(types.undefined, types.null, types.boolean),
-    /** An object relationship */
     kultur: types.union(types.undefined, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.frozen()),
     tk: types.union(types.undefined, types.null, types.boolean),

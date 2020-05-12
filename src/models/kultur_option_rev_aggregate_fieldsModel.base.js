@@ -29,8 +29,6 @@ import { kultur_option_rev_variance_fieldsModelSelector } from "./kultur_option_
 /**
  * kultur_option_rev_aggregate_fieldsBase
  * auto generated base class for the model kultur_option_rev_aggregate_fieldsModel.
- *
- * aggregate fields of "kultur_option_rev"
  */
 export const kultur_option_rev_aggregate_fieldsModelBase = ModelBase
   .named('kultur_option_rev_aggregate_fields')
