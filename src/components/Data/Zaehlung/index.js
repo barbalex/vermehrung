@@ -10,10 +10,8 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import isUuid from 'is-uuid'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -136,15 +134,14 @@ const kulturQuery = gql`
   ${kulturOptionFragment}
 `
 
-const Zaehlung = ({ filter: showFilter }) => {
+const Zaehlung = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+}) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
-  const id = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
