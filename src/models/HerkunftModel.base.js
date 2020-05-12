@@ -32,6 +32,11 @@ export const herkunftModelBase = ModelBase
   .named('herkunft')
   .props({
     __typename: types.optional(types.literal("herkunft"), "herkunft"),
+    _conflicts: types.union(types.undefined, types.null, types.frozen()),
+    _depth: types.union(types.undefined, types.null, types.integer),
+    _parent_rev: types.union(types.undefined, types.null, types.string),
+    _rev: types.union(types.undefined, types.null, types.string),
+    _revisions: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -71,6 +76,11 @@ export const herkunftModelBase = ModelBase
   }))
 
 export class herkunftModelSelector extends QueryBuilder {
+  get _conflicts() { return this.__attr(`_conflicts`) }
+  get _depth() { return this.__attr(`_depth`) }
+  get _parent_rev() { return this.__attr(`_parent_rev`) }
+  get _rev() { return this.__attr(`_rev`) }
+  get _revisions() { return this.__attr(`_revisions`) }
   get bemerkungen() { return this.__attr(`bemerkungen`) }
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
@@ -99,4 +109,4 @@ export function selectFromherkunft() {
   return new herkunftModelSelector()
 }
 
-export const herkunftModelPrimitives = selectFromherkunft().bemerkungen.changed.changed_by.gemeinde.geom_point.kanton.land.lokalname.lv95_x.lv95_y.nr.tsv.wgs84_lat.wgs84_long
+export const herkunftModelPrimitives = selectFromherkunft()._conflicts._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.gemeinde.geom_point.kanton.land.lokalname.lv95_x.lv95_y.nr.tsv.wgs84_lat.wgs84_long

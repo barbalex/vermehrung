@@ -16,6 +16,9 @@ export const herkunft_min_fieldsModelBase = ModelBase
   .named('herkunft_min_fields')
   .props({
     __typename: types.optional(types.literal("herkunft_min_fields"), "herkunft_min_fields"),
+    _depth: types.union(types.undefined, types.null, types.integer),
+    _parent_rev: types.union(types.undefined, types.null, types.string),
+    _rev: types.union(types.undefined, types.null, types.string),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -37,6 +40,9 @@ export const herkunft_min_fieldsModelBase = ModelBase
   }))
 
 export class herkunft_min_fieldsModelSelector extends QueryBuilder {
+  get _depth() { return this.__attr(`_depth`) }
+  get _parent_rev() { return this.__attr(`_parent_rev`) }
+  get _rev() { return this.__attr(`_rev`) }
   get bemerkungen() { return this.__attr(`bemerkungen`) }
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
@@ -55,4 +61,4 @@ export function selectFromherkunft_min_fields() {
   return new herkunft_min_fieldsModelSelector()
 }
 
-export const herkunft_min_fieldsModelPrimitives = selectFromherkunft_min_fields().bemerkungen.changed.changed_by.gemeinde.kanton.land.lokalname.lv95_x.lv95_y.nr.wgs84_lat.wgs84_long
+export const herkunft_min_fieldsModelPrimitives = selectFromherkunft_min_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.gemeinde.kanton.land.lokalname.lv95_x.lv95_y.nr.wgs84_lat.wgs84_long

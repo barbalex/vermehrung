@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
@@ -16,7 +15,6 @@ import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import artQuery from './artQuery'
 import Row from './Row'
-import createNew from '../../TreeContainer/Tree/createNew'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -66,7 +64,6 @@ function sizeReducer(state, action) {
 }
 
 const Arten = ({ filter: showFilter }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter, addQueuedQuery, addArt } = store
   const { isFiltered: runIsFiltered } = filter
