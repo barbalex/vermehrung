@@ -10,13 +10,12 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import last from 'lodash/last'
 import uniq from 'lodash/uniq'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaDownload } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton' // see: https://github.com/guyonroche/exceljs/issues/313
+import IconButton from '@material-ui/core/IconButton'
+// see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
-import isUuid from 'is-uuid'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -96,16 +95,15 @@ const FieldRow = styled.div`
   }
 `
 
-const Kultur = ({ filter: showFilter }) => {
+const Kultur = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+}) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
 
-  const id = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const kulturFilter = queryFromTable({ store, table: 'kultur' })
   const kulturResult = useQuery(kulturQuery, {
@@ -477,7 +475,7 @@ const Kultur = ({ filter: showFilter }) => {
             error={errors.bemerkungen}
             multiLine
           />
-          {!showFilter && (
+          {!showFilter && row.id && (
             <>
               <Timeline row={row} />
               <QK kultur={row} />

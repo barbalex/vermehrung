@@ -10,8 +10,6 @@ import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import last from 'lodash/last'
-import isUuid from 'is-uuid'
 
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
@@ -71,22 +69,15 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const getId = ({ activeNodeArray, showFilter }) =>
-  showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
-
-const Person = ({ filter: showFilter }) => {
+const Person = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+}) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray: aNAProxy } = store.tree
-  const activeNodeArray = aNAProxy.slice()
-
-  const id = getId({ activeNodeArray, showFilter })
-  //console.log('Person, id:', id)
 
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })

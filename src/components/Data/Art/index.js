@@ -4,9 +4,7 @@ import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
-import isUuid from 'is-uuid'
 
 import { StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
@@ -72,7 +70,10 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Art = ({ filter: showFilter }) => {
+const Art = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+}) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter, tree } = store
@@ -80,12 +81,9 @@ const Art = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
-  const artId = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const artFilter = queryFromTable({ store, table: 'art' })
   const { data, error, loading } = useQuery(artQuery, {
-    variables: { id: artId, filter: artFilter, isFiltered },
+    variables: { id: id, filter: artFilter, isFiltered },
   })
 
   const [errors, setErrors] = useState({})
@@ -164,18 +162,18 @@ const Art = ({ filter: showFilter }) => {
         ? {
             _or: [
               { _not: { ae_art_art: { id: { _is_null: false } } } },
-              { ae_art_art: { id: { _eq: artId } } },
+              { ae_art_art: { id: { _eq: id } } },
             ],
             name: { _ilike: `%${val}%` },
           }
         : {
             _or: [
               { _not: { ae_art_art: { id: { _is_null: false } } } },
-              { ae_art_art: { id: { _eq: artId } } },
+              { ae_art_art: { id: { _eq: id } } },
             ],
           }
     },
-    [artId, showFilter],
+    [id, showFilter],
   )
   const onClickToArten = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),

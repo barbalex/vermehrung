@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import last from 'lodash/last'
+import isUuid from 'is-uuid'
 
 import Art from './Art'
 import Arten from './Arten'
@@ -27,74 +29,79 @@ import Root from './Root'
 import { StoreContext } from '../../models/reactUtils'
 
 const Data = () => {
-  const { activeForm } = useContext(StoreContext)
+  const store = useContext(StoreContext)
+  const { activeForm } = store
+  const { activeNodeArray } = store.tree
+
+  const id = last(activeNodeArray.filter((e) => isUuid.v1(e)))
+  console.log('Data, id:', id)
 
   switch (activeForm) {
     case 'root': {
       return <Root />
     }
     case 'art': {
-      return <Art />
+      return <Art id={id} />
     }
     case 'arten': {
       return <Arten />
     }
     case 'event': {
-      return <Event />
+      return <Event id={id} />
     }
     case 'events': {
       return <Events />
     }
     case 'garten': {
-      return <Garten />
+      return <Garten id={id} />
     }
     case 'gaerten': {
       return <Gaerten />
     }
     case 'herkunft': {
-      return <Herkunft />
+      return <Herkunft id={id} />
     }
     case 'herkuenfte': {
       return <Herkuenfte />
     }
     case 'kultur': {
-      return <Kultur />
+      return <Kultur id={id} />
     }
     case 'kulturen': {
       return <Kulturen />
     }
     case 'sammel_lieferung': {
-      return <SammelLieferung />
+      return <SammelLieferung id={id} />
     }
     case 'sammelLieferungen': {
       return <SammelLieferungen />
     }
     case 'lieferung': {
-      return <Lieferung />
+      return <Lieferung id={id} />
     }
     case 'lieferungen': {
       return <Lieferungen />
     }
     case 'person': {
-      return <Person />
+      return <Person id={id} />
     }
     case 'personen': {
       return <Personen />
     }
     case 'sammlung': {
-      return <Sammlung />
+      return <Sammlung id={id} />
     }
     case 'sammlungen': {
       return <Sammlungen />
     }
     case 'teilkultur': {
-      return <Teilkultur />
+      return <Teilkultur id={id} />
     }
     case 'teilkulturen': {
       return <Teilkulturen />
     }
     case 'zaehlung': {
-      return <Zaehlung />
+      return <Zaehlung id={id} />
     }
     case 'zaehlungen': {
       return <Zaehlungen />

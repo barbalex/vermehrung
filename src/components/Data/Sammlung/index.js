@@ -12,8 +12,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import last from 'lodash/last'
-import isUuid from 'is-uuid'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -132,16 +130,15 @@ const dataQuery = gql`
   ${artFragment}
 `
 
-const Sammlung = ({ filter: showFilter }) => {
+const Sammlung = ({
+  filter: showFilter,
+  id = '99999999-9999-9999-9999-999999999999',
+}) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
 
-  const id = showFilter
-    ? '99999999-9999-9999-9999-999999999999'
-    : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
   const { data, error, loading } = useQuery(query, {

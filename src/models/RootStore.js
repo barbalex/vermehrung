@@ -91,82 +91,115 @@ export const RootStore = RootStoreBase.props({
         self.queuedQueries.push(val)
       },
       addArt(val) {
-        self.arts = { val, ...self.arts.toJS() }
+        self.arts = { ...{ [val.id]: val }, ...self.arts.toJS() }
       },
       addArtFile(val) {
-        self.art_files = { val, ...self.art_files.toJS() }
+        self.art_files = { ...{ [val.id]: val }, ...self.art_files.toJS() }
       },
       addArtQk(val) {
-        self.art_qks = { val, ...self.art_qks.toJS() }
+        self.art_qks = { ...{ [val.id]: val }, ...self.art_qks.toJS() }
       },
       addAvArt(val) {
-        self.av_arts = { val, ...self.av_arts.toJS() }
+        self.av_arts = { ...{ [val.id]: val }, ...self.av_arts.toJS() }
       },
       addEvent(val) {
-        self.events = { val, ...self.events.toJS() }
+        self.events = { ...{ [val.id]: val }, ...self.events.toJS() }
       },
       addGarten(val) {
-        self.gartens = { val, ...self.gartens.toJS() }
+        self.gartens = { ...{ [val.id]: val }, ...self.gartens.toJS() }
       },
       addGartenFile(val) {
-        self.garten_files = { val, ...self.garten_files.toJS() }
+        self.garten_files = {
+          ...{ [val.id]: val },
+          ...self.garten_files.toJS(),
+        }
       },
       addHerkunft(val) {
-        self.herkunfts = { val, ...self.herkunfts.toJS() }
+        self.herkunfts = { ...{ [val.id]: val }, ...self.herkunfts.toJS() }
       },
       addHerkunftFile(val) {
-        self.herkunft_files = { val, ...self.herkunft_files.toJS() }
+        self.herkunft_files = {
+          ...{ [val.id]: val },
+          ...self.herkunft_files.toJS(),
+        }
       },
       addKultur(val) {
-        self.kulturs = { val, ...self.kulturs.toJS() }
+        self.kulturs = { ...{ [val.id]: val }, ...self.kulturs.toJS() }
       },
       addKulturFile(val) {
-        self.kultur_files = { val, ...self.kultur_files.toJS() }
+        self.kultur_files = {
+          ...{ [val.id]: val },
+          ...self.kultur_files.toJS(),
+        }
       },
       addKulturOption(val) {
-        self.kultur_options = { val, ...self.kultur_options.toJS() }
+        self.kultur_options = {
+          ...{ [val.id]: val },
+          ...self.kultur_options.toJS(),
+        }
       },
       addKulturQk(val) {
-        self.kultur_qks = { val, ...self.kultur_qks.toJS() }
+        self.kultur_qks = { ...{ [val.id]: val }, ...self.kultur_qks.toJS() }
       },
       addKulturQkChoosen(val) {
-        self.kultur_qk_choosens = { val, ...self.kultur_qk_choosens.toJS() }
+        self.kultur_qk_choosens = {
+          ...{ [val.id]: val },
+          ...self.kultur_qk_choosens.toJS(),
+        }
       },
       addLieferung(val) {
-        self.lieferungs = { val, ...self.lieferungs.toJS() }
+        self.lieferungs = { ...{ [val.id]: val }, ...self.lieferungs.toJS() }
       },
       addLieferungFile(val) {
-        self.lieferung_files = { val, ...self.lieferung_files.toJS() }
+        self.lieferung_files = {
+          ...{ [val.id]: val },
+          ...self.lieferung_files.toJS(),
+        }
       },
       addPerson(val) {
-        self.persons = { val, ...self.persons.toJS() }
+        self.persons = { ...{ [val.id]: val }, ...self.persons.toJS() }
       },
       addPersonFile(val) {
-        self.person_files = { val, ...self.person_files.toJS() }
+        self.person_files = {
+          ...{ [val.id]: val },
+          ...self.person_files.toJS(),
+        }
       },
       addPersonOption(val) {
-        self.person_options = { val, ...self.person_options.toJS() }
+        self.person_options = {
+          ...{ [val.id]: val },
+          ...self.person_options.toJS(),
+        }
       },
       addSammelLieferung(val) {
-        self.sammel_lieferungs = { val, ...self.sammel_lieferungs.toJS() }
+        self.sammel_lieferungs = {
+          ...{ [val.id]: val },
+          ...self.sammel_lieferungs.toJS(),
+        }
       },
       addSammlung(val) {
-        self.sammlungs = { val, ...self.sammlungs.toJS() }
+        self.sammlungs = { ...{ [val.id]: val }, ...self.sammlungs.toJS() }
       },
       addSammlungFile(val) {
-        self.sammlung_files = { val, ...self.sammlung_files.toJS() }
+        self.sammlung_files = {
+          ...{ [val.id]: val },
+          ...self.sammlung_files.toJS(),
+        }
       },
       addTeilkultur(val) {
-        self.teilkulturs = { val, ...self.teilkulturs.toJS() }
+        self.teilkulturs = { ...{ [val.id]: val }, ...self.teilkulturs.toJS() }
       },
       addTeilzaehlung(val) {
-        self.teilzaehlungs = { val, ...self.teilzaehlungs.toJS() }
+        self.teilzaehlungs = {
+          ...{ [val.id]: val },
+          ...self.teilzaehlungs.toJS(),
+        }
       },
       addUserRole(val) {
-        self.user_roles = { val, ...self.user_roles.toJS() }
+        self.user_roles = { ...{ [val.id]: val }, ...self.user_roles.toJS() }
       },
       addZaehlung(val) {
-        self.zaehlungs = { val, ...self.zaehlungs.toJS() }
+        self.zaehlungs = { ...{ [val.id]: val }, ...self.zaehlungs.toJS() }
       },
       setOnline(val) {
         self.online = val
