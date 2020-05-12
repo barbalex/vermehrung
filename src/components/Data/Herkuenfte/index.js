@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 import { v1 as uuidv1 } from 'uuid'
-import md5 from 'crypto-js/md5'
+import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
@@ -86,7 +86,6 @@ const Herkuenfte = ({ filter: showFilter }) => {
     data: dataFiltered,
     error: errorFiltered,
     loading: loadingFiltered,
-    query: queryFiltered,
   } = useQuery((store) =>
     store.queryHerkunft(
       {
@@ -124,21 +123,21 @@ const Herkuenfte = ({ filter: showFilter }) => {
         where: { id: { _eq: id } },
       }),
     })
+    // optimistically update store
+    addHerkunft(newObject)
     setTimeout(() => {
-      addHerkunft(newObject)
-      queryFiltered.refetch()
+      // will be unnecessary once tree is converted to mst
       refetchTree()
+      // update tree status
       const newActiveNodeArray = [...activeNodeArray, id]
       setActiveNodeArray(newActiveNodeArray)
-      // add node.url just in case it was not yet open
-      addOpenNodes([newActiveNodeArray, newActiveNodeArray])
+      addOpenNodes([newActiveNodeArray])
     })
   }, [
     activeNodeArray,
     addHerkunft,
     addOpenNodes,
     addQueuedQuery,
-    queryFiltered,
     refetchTree,
     setActiveNodeArray,
   ])

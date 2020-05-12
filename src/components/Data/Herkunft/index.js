@@ -128,14 +128,11 @@ const Herkunft = ({ filter: showFilter }) => {
     variables: { isFiltered, filter: herkunftFilter },
   })
 
-  let row = get(dataHerkunft, 'herkunft[0]') || {}
+  const row = showFilter
+    ? filter.herkunft
+    : get(dataHerkunft, 'herkunft[0]') || {}
   const totalNr = get(dataAll, 'herkunft', []).length
   const filteredNr = get(dataFiltered, 'herkunft', []).length
-  if (showFilter) {
-    row = filter.herkunft
-  } /* else {
-    row = get(dataHerkunft, 'herkunft[0]') || {}
-  }*/
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
