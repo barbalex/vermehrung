@@ -68,10 +68,15 @@ function sizeReducer(state, action) {
 const Arten = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, addQueuedQuery, addArt } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
-  const { activeNodeArray } = store.tree
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    addOpenNodes,
+    refetch: refetchTree,
+  } = store.tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
   /**
@@ -104,9 +109,43 @@ const Arten = ({ filter: showFilter }) => {
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const node = { nodeType: 'folder', url: activeNodeArray }
-    createNew({ node, store, client })
-  }, [activeNodeArray, client, store])
+    const id = uuidv1()
+    const _rev = `1-${md5({ id, _deleted: false }.toString())}`
+    const _depth = 1
+    const _revisions = `{"${_rev}"}`
+    const newObject = { id, _rev, _depth, _revisions }
+    addQueuedQuery({
+      name: 'mutateInsert_art_rev',
+      variables: JSON.stringify({
+        objects: [newObject],
+        on_conflict: {
+          constraint: 'art_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      callbackQuery: 'queryArt',
+      callbackQueryVariables: JSON.stringify({
+        where: { id: { _eq: id } },
+      }),
+    })
+    // optimistically update store
+    addArt(newObject)
+    setTimeout(() => {
+      // will be unnecessary once tree is converted to mst
+      refetchTree()
+      // update tree status
+      const newActiveNodeArray = [...activeNodeArray, id]
+      setActiveNodeArray(newActiveNodeArray)
+      addOpenNodes([newActiveNodeArray])
+    })
+  }, [
+    activeNodeArray,
+    addArt,
+    addOpenNodes,
+    addQueuedQuery,
+    refetchTree,
+    setActiveNodeArray,
+  ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
