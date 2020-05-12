@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/Roadmap"
-date: "2020-05-05"
+date: "2020-05-12"
 title: "Roadmap"
 sort1: 26
 ---
@@ -49,3 +49,4 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Funktionalitäten mit Topos für v1 bereinigt
 - :white_medium_square: Vorhandene Daten importiert (verzögert sich etwas)
 - :white_medium_square: Produktive Version 1 ist live (geplant: Juni 2020)
+- :ballot_box_with_check: Es kann ohne Netzwerk-Verbindung gearbeitet werden
