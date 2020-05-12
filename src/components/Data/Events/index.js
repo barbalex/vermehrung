@@ -1,20 +1,20 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import { v1 as uuidv1 } from 'uuid'
+import md5 from 'blueimp-md5'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import createNew from '../../TreeContainer/Tree/createNew'
-import { event as eventFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -60,21 +60,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query EventQueryForEvents($filter: event_bool_exp!) {
-    rowsUnfiltered: event {
-      id
-    }
-    rowsFiltered: event(
-      where: $filter
-      order_by: { beschreibung: asc_nulls_first }
-    ) {
-      ...EventFields
-    }
-  }
-  ${eventFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -83,9 +68,14 @@ function sizeReducer(state, action) {
 const Events = ({ filter: showFilter }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, addQueuedQuery, addEvent } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    addOpenNodes,
+    refetch: refetchTree,
+  } = store.tree
   const isFiltered = runIsFiltered()
 
   const eventFilter = queryFromTable({
@@ -97,12 +87,22 @@ const Events = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
     }
   }
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: eventFilter },
-  })
+  const {
+    data: dataFiltered,
+    error: errorFiltered,
+    loading: loadingFiltered,
+  } = useQuery((store) =>
+    store.queryEvent({
+      where: eventFilter,
+      order_by: { beschreibung: 'asc_nulls_first' },
+    }),
+  )
+  const { data: dataAll } = useQuery((store) =>
+    store.queryEvent(undefined, (d) => d.id),
+  )
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
+  const totalNr = get(dataAll, 'event', []).length
+  const rows = get(dataFiltered, 'event', [])
   const filteredNr = rows.length
 
   const add = useCallback(() => {
@@ -119,7 +119,7 @@ const Events = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loading) {
+  if (loadingFiltered) {
     return (
       <Container>
         <FormTitle title="Events" />
@@ -128,7 +128,7 @@ const Events = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error
+  const errorToShow = errorFiltered
   if (errorToShow) {
     return (
       <Container>

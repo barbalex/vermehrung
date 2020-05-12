@@ -10,7 +10,12 @@ import { types } from "mobx-state-tree"
  * select columns of table "herkunft"
 */
 export const herkunft_select_columnEnum = types.enumeration("herkunft_select_column", [
-        "bemerkungen", // column name
+        "_conflicts", // column name
+  "_depth", // column name
+  "_parent_rev", // column name
+  "_rev", // column name
+  "_revisions", // column name
+  "bemerkungen", // column name
   "changed", // column name
   "changed_by", // column name
   "gemeinde", // column name
