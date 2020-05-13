@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
@@ -15,7 +14,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import createNew from '../../TreeContainer/Tree/createNew'
 import { sammelLieferung as sammelLieferungFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -100,7 +98,6 @@ function sizeReducer(state, action) {
 }
 
 const SammelLieferungen = ({ filter: showFilter }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter, addSammelLieferung, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
