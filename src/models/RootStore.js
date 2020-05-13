@@ -93,20 +93,38 @@ export const RootStore = RootStoreBase.props({
       addArt(val) {
         self.arts = { ...{ [val.id]: val }, ...self.arts.toJS() }
       },
+      editArt(val) {
+        self.arts[val.id] = val
+      },
       addArtFile(val) {
         self.art_files = { ...{ [val.id]: val }, ...self.art_files.toJS() }
+      },
+      editArtFile(val) {
+        self.art_files[val.id] = val
       },
       addArtQk(val) {
         self.art_qks = { ...{ [val.id]: val }, ...self.art_qks.toJS() }
       },
+      editArtQk(val) {
+        self.art_qks[val.id] = val
+      },
       addAvArt(val) {
         self.av_arts = { ...{ [val.id]: val }, ...self.av_arts.toJS() }
+      },
+      editAvArt(val) {
+        self.av_arts[val.id] = val
       },
       addEvent(val) {
         self.events = { ...{ [val.id]: val }, ...self.events.toJS() }
       },
+      editEvent(val) {
+        self.events[val.id] = val
+      },
       addGarten(val) {
         self.gartens = { ...{ [val.id]: val }, ...self.gartens.toJS() }
+      },
+      editGarten(val) {
+        self.gartens[val.id] = val
       },
       addGartenFile(val) {
         self.garten_files = {
@@ -114,8 +132,14 @@ export const RootStore = RootStoreBase.props({
           ...self.garten_files.toJS(),
         }
       },
+      editGartenFile(val) {
+        self.garten_files[val.id] = val
+      },
       addHerkunft(val) {
         self.herkunfts = { ...{ [val.id]: val }, ...self.herkunfts.toJS() }
+      },
+      editHerkunft(val) {
+        self.herkunfts[val.id] = val
       },
       addHerkunftFile(val) {
         self.herkunft_files = {
@@ -123,8 +147,14 @@ export const RootStore = RootStoreBase.props({
           ...self.herkunft_files.toJS(),
         }
       },
+      editHerkunftFile(val) {
+        self.herkunft_files[val.id] = val
+      },
       addKultur(val) {
         self.kulturs = { ...{ [val.id]: val }, ...self.kulturs.toJS() }
+      },
+      editKultur(val) {
+        self.kulturs[val.id] = val
       },
       addKulturFile(val) {
         self.kultur_files = {
@@ -132,14 +162,23 @@ export const RootStore = RootStoreBase.props({
           ...self.kultur_files.toJS(),
         }
       },
+      editKulturFile(val) {
+        self.kultur_files[val.id] = val
+      },
       addKulturOption(val) {
         self.kultur_options = {
           ...{ [val.id]: val },
           ...self.kultur_options.toJS(),
         }
       },
+      editKulturOption(val) {
+        self.kultur_options[val.id] = val
+      },
       addKulturQk(val) {
         self.kultur_qks = { ...{ [val.id]: val }, ...self.kultur_qks.toJS() }
+      },
+      editKulturQk(val) {
+        self.kultur_qks[val.id] = val
       },
       addKulturQkChoosen(val) {
         self.kultur_qk_choosens = {
@@ -147,8 +186,14 @@ export const RootStore = RootStoreBase.props({
           ...self.kultur_qk_choosens.toJS(),
         }
       },
+      editKulturQkChoosen(val) {
+        self.kultur_qk_choosens[val.id] = val
+      },
       addLieferung(val) {
         self.lieferungs = { ...{ [val.id]: val }, ...self.lieferungs.toJS() }
+      },
+      editLieferung(val) {
+        self.lieferungs[val.id] = val
       },
       addLieferungFile(val) {
         self.lieferung_files = {
@@ -156,8 +201,14 @@ export const RootStore = RootStoreBase.props({
           ...self.lieferung_files.toJS(),
         }
       },
+      editLieferungFile(val) {
+        self.lieferung_files[val.id] = val
+      },
       addPerson(val) {
         self.persons = { ...{ [val.id]: val }, ...self.persons.toJS() }
+      },
+      editPerson(val) {
+        self.persons[val.id] = val
       },
       addPersonFile(val) {
         self.person_files = {
@@ -165,11 +216,17 @@ export const RootStore = RootStoreBase.props({
           ...self.person_files.toJS(),
         }
       },
+      editPersonFile(val) {
+        self.person_files[val.id] = val
+      },
       addPersonOption(val) {
         self.person_options = {
           ...{ [val.id]: val },
           ...self.person_options.toJS(),
         }
+      },
+      editPersonOption(val) {
+        self.person_options[val.id] = val
       },
       addSammelLieferung(val) {
         self.sammel_lieferungs = {
@@ -177,8 +234,14 @@ export const RootStore = RootStoreBase.props({
           ...self.sammel_lieferungs.toJS(),
         }
       },
+      editSammelLieferung(val) {
+        self.sammel_lieferungs[val.id] = val
+      },
       addSammlung(val) {
         self.sammlungs = { ...{ [val.id]: val }, ...self.sammlungs.toJS() }
+      },
+      editSammlung(val) {
+        self.sammlungs[val.id] = val
       },
       addSammlungFile(val) {
         self.sammlung_files = {
@@ -186,8 +249,14 @@ export const RootStore = RootStoreBase.props({
           ...self.sammlung_files.toJS(),
         }
       },
+      editSammlungFile(val) {
+        self.sammlung_files[val.id] = val
+      },
       addTeilkultur(val) {
         self.teilkulturs = { ...{ [val.id]: val }, ...self.teilkulturs.toJS() }
+      },
+      editTeilkultur(val) {
+        self.teilkulturs[val.id] = val
       },
       addTeilzaehlung(val) {
         self.teilzaehlungs = {
@@ -195,11 +264,20 @@ export const RootStore = RootStoreBase.props({
           ...self.teilzaehlungs.toJS(),
         }
       },
+      editTeilzaehlung(val) {
+        self.teilzaehlungs[val.id] = val
+      },
       addUserRole(val) {
         self.user_roles = { ...{ [val.id]: val }, ...self.user_roles.toJS() }
       },
+      editUserRole(val) {
+        self.user_roles[val.id] = val
+      },
       addZaehlung(val) {
         self.zaehlungs = { ...{ [val.id]: val }, ...self.zaehlungs.toJS() }
+      },
+      editZaehlung(val) {
+        self.zaehlungs[val.id] = val
       },
       setOnline(val) {
         self.online = val
