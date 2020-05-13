@@ -6,12 +6,13 @@
  * BUT DOES NOT SHOW THEM WHEN USER ENTERS FIELD
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import get from 'lodash/get'
+
+import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -85,41 +86,39 @@ const SelectTypable = ({
   labelSize = 12,
   error: saveToDbError,
   saveToDb,
-  query,
-  filter,
+  queryName,
+  where,
+  order_by,
   resultNodesName,
   resultNodesLabelName,
 }) => {
-  const client = useApolloClient()
+  const store = useContext(StoreContext)
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
       let result
       try {
-        result = await client.query({
-          query,
-          variables: {
-            filter: filter(inputValue),
-          },
+        result = await store[queryName]({
+          where: where(inputValue),
+          order_by,
+          limit: 7,
         })
       } catch (error) {
-        console.log({ error })
+        store.enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
       }
-      const options = get(result.data, resultNodesName, []).map((o) => ({
+      const options = get(result, resultNodesName, []).map((o) => ({
         value: o.id,
         label: o[resultNodesLabelName],
       }))
       cb(options)
     },
-    [client, filter, query, resultNodesLabelName, resultNodesName],
+    [order_by, queryName, resultNodesLabelName, resultNodesName, store, where],
   )
-
-  /*console.log('SelectLoadingOptions', {
-    row,
-    field,
-    loadOptions,
-    valueLabelPath,
-  })*/
 
   const onChange = useCallback(
     (option) => {
