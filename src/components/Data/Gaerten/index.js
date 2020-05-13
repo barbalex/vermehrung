@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
@@ -65,7 +64,6 @@ function sizeReducer(state, action) {
 }
 
 const Gaerten = ({ filter: showFilter }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter, addGarten, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
