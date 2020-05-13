@@ -97,15 +97,14 @@ export const RootStore = RootStoreBase.props({
           self.shiftQueuedQueries()
         }
       }),
-      /*{
+      {
         // make sure retried in a minute
         // https://github.com/mobxjs/mst-gql/issues/198#issuecomment-628083160
-        // this made the first run wait!!!????
         scheduler: (run) => {
-          setInterval(run, 1000) // 60000 = one minute
+          run() // ensure it runs immediately if online
+          setInterval(run, 30000) // 30000 = thirty seconds
         },
-        fireImmediately: true,
-      },*/
+      },
     )
     return {
       shiftQueuedQueries() {
