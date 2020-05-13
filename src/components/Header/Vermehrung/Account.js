@@ -46,6 +46,7 @@ const Account = () => {
     setAnchorEl(null)
     firebase.auth().signOut()
     client.resetStore()
+    // TODO: reset mst-store! How? Action that sets default values?
   }, [client, firebase])
 
   const { picture, email } = user || {}
