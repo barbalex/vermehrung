@@ -72,7 +72,7 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, tree, addQueuedQuery, editArt, user } = store
+  const { filter, tree, addQueuedQuery, upsertArt, user } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
@@ -145,11 +145,11 @@ const Art = ({
         }),
       })
       // optimistically update store
-      editArt(newObject)
+      upsertArt(newObject)
       // refetch query becaus is not a model instance
       query.refetch()
     },
-    [addQueuedQuery, editArt, filter, id, row, showFilter, user, query],
+    [addQueuedQuery, upsertArt, filter, id, row, showFilter, user, query],
   )
 
   const artSelectFilter = useCallback(

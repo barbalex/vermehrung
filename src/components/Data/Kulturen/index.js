@@ -102,7 +102,7 @@ function sizeReducer(state, action) {
 
 const Kulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addKultur, addQueuedQuery } = store
+  const { filter, upsertKultur, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -183,7 +183,7 @@ const Kulturen = ({ filter: showFilter }) => {
       }),
     })
     // optimistically update store
-    addKultur(newObject)
+    upsertKultur(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -194,7 +194,7 @@ const Kulturen = ({ filter: showFilter }) => {
     })
   }, [
     activeNodeArray,
-    addKultur,
+    upsertKultur,
     addOpenNodes,
     addQueuedQuery,
     refetchTree,
