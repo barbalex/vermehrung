@@ -76,7 +76,6 @@ const Art = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
   const { filter, tree, addQueuedQuery, editArt, user } = store
   const { isFiltered: runIsFiltered } = filter
@@ -150,55 +149,6 @@ const Art = ({
     [addQueuedQuery, editArt, filter, id, row, showFilter, user],
   )
 
-  const saveToDbOld = useCallback(
-    async (event) => {
-      const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if (event.target.value === undefined) value = null
-      if (event.target.value === '') value = null
-      const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
-      if (showFilter) {
-        filter.setValue({ table: 'art', key: field, value })
-      } else {
-        try {
-          await client.mutate({
-            mutation: gql`
-              mutation update_art($id: uuid!, $ae_id: uuid) {
-                update_art(
-                  where: { id: { _eq: $id } }
-                  _set: { ae_id: $ae_id }
-                ) {
-                  affected_rows
-                  returning {
-                    ...ArtFields
-                  }
-                }
-              }
-              ${artFragment}
-            `,
-            variables: {
-              id: row.id,
-              ae_id: value,
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateArt: {
-                id: row.id,
-                __typename: 'Art',
-                content: { ...row, ae_id: value },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
-      }
-    },
-    [client, filter, row, showFilter],
-  )
   const artSelectFilter = useCallback(
     (val) => {
       if (showFilter) {
@@ -236,16 +186,6 @@ const Art = ({
     () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
     [activeNodeArray, setActiveNodeArray],
   )
-
-  // maybe: sort dependent on person_option.ar_name_deutsch
-  const aeArtQuery = gql`
-    query aeArtQuery($filter: ae_art_bool_exp!) {
-      ae_art(where: $filter, order_by: { name: asc_nulls_first }, limit: 7) {
-        ...AeArtFields
-      }
-    }
-    ${aeArtFragment}
-  `
 
   if (loading) {
     return (
@@ -316,8 +256,9 @@ const Art = ({
             row={row}
             saveToDb={saveToDb}
             error={errors.ae_id}
-            query={aeArtQuery}
-            filter={artSelectFilter}
+            queryName={'queryAe_art'}
+            where={artSelectFilter}
+            order_by={{ name: 'asc_nulls_first' }}
             resultNodesName="ae_art"
             resultNodesLabelName="name"
           />
