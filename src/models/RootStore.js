@@ -93,80 +93,158 @@ export const RootStore = RootStoreBase.props({
       upsertArt(val) {
         self.arts.set(val.id, val)
       },
+      deleteArt(val) {
+        self.arts.delete(val.id)
+      },
       upsertArtFile(val) {
         self.art_files.set(val.id, val)
+      },
+      deleteArtFile(val) {
+        self.art_files.delete(val.id)
       },
       upsertArtQk(val) {
         self.art_qks.set(val.id, val)
       },
+      deleteArtQk(val) {
+        self.art_qks.delete(val.id)
+      },
       upsertAvArt(val) {
         self.av_arts.set(val.id, val)
+      },
+      deleteAvArt(val) {
+        self.av_arts.delete(val.id)
       },
       upsertEvent(val) {
         self.events.set(val.id, val)
       },
+      deleteEvent(val) {
+        self.events.delete(val.id)
+      },
       upsertGarten(val) {
         self.gartens.set(val.id, val)
+      },
+      deleteGarten(val) {
+        self.gartens.delete(val.id)
       },
       upsertGartenFile(val) {
         self.garten_files.set(val.id, val)
       },
+      deleteGartenFile(val) {
+        self.garten_files.delete(val.id)
+      },
       upsertHerkunft(val) {
         self.herkunfts.set(val.id, val)
+      },
+      deleteHerkunft(val) {
+        self.herkunfts.delete(val.id)
       },
       upsertHerkunftFile(val) {
         self.herkunft_files.set(val.id, val)
       },
+      deleteHerkunftFile(val) {
+        self.herkunft_files.delete(val.id)
+      },
       upsertKultur(val) {
         self.kulturs.set(val.id, val)
+      },
+      deleteKultur(val) {
+        self.kulturs.delete(val.id)
       },
       upsertKulturFile(val) {
         self.kultur_files.set(val.id, val)
       },
+      deleteKulturFile(val) {
+        self.kultur_files.delete(val.id)
+      },
       upsertKulturOption(val) {
         self.kultur_options.set(val.id, val)
+      },
+      deleteKulturOption(val) {
+        self.kultur_options.delete(val.id)
       },
       upsertKulturQk(val) {
         self.kultur_qks.set(val.id, val)
       },
+      deleteKulturQk(val) {
+        self.kultur_qks.delete(val.id)
+      },
       upsertKulturQkChoosen(val) {
         self.kultur_qk_choosens.set(val.id, val)
+      },
+      deleteKulturQkChoosen(val) {
+        self.kultur_qk_choosens.delete(val.id)
       },
       upsertLieferung(val) {
         self.lieferungs.set(val.id, val)
       },
+      deleteLieferung(val) {
+        self.lieferungs.delete(val.id)
+      },
       upsertLieferungFile(val) {
         self.lieferung_files.set(val.id, val)
+      },
+      deleteLieferungFile(val) {
+        self.lieferung_files.delete(val.id)
       },
       upsertPerson(val) {
         self.persons.set(val.id, val)
       },
+      deletePerson(val) {
+        self.persons.delete(val.id)
+      },
       upsertPersonFile(val) {
         self.person_files.set(val.id, val)
+      },
+      deletePersonFile(val) {
+        self.person_files.delete(val.id)
       },
       upsertPersonOption(val) {
         self.person_options.set(val.id, val)
       },
+      deletePersonOption(val) {
+        self.person_options.delete(val.id)
+      },
       upsertSammelLieferung(val) {
         self.sammel_lieferungs.set(val.id, val)
+      },
+      deleteSammelLieferung(val) {
+        self.sammel_lieferungs.delete(val.id)
       },
       upsertSammlung(val) {
         self.sammlungs.set(val.id, val)
       },
-      addSammlungFile(val) {
+      deleteSammlung(val) {
+        self.sammlungs.delete(val.id)
+      },
+      upsertSammlungFile(val) {
         self.sammlung_files.set(val.id, val)
       },
-      eilkultur(val) {
+      deleteSammlungFile(val) {
+        self.sammlung_files.delete(val.id)
+      },
+      upsertTeilkultur(val) {
         self.teilkulturs.set(val.id, val)
       },
-      addTeilzaehlung(val) {
+      deleteTeilkultur(val) {
+        self.teilkulturs.delete(val.id)
+      },
+      upsertTeilzaehlung(val) {
         self.teilzaehlungs.set(val.id, val)
       },
-      addUserRole(val) {
+      deleteTeilzaehlung(val) {
+        self.teilzaehlungs.delete(val.id)
+      },
+      upsertUserRole(val) {
         self.user_roles.set(val.id, val)
       },
-      addZaehlung(val) {
+      deleteUserRole(val) {
+        self.user_roles.delete(val.id)
+      },
+      upsertZaehlung(val) {
         self.zaehlungs.set(val.id, val)
+      },
+      deleteZaehlung(val) {
+        self.zaehlungs.delete(val.id)
       },
       setOnline(val) {
         self.online = val
