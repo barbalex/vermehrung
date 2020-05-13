@@ -13,7 +13,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import artQuery from './artQuery'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -76,11 +75,6 @@ const Arten = ({ filter: showFilter }) => {
   } = store.tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
-  /**
-   * Problem: art_ae_art: Error: Failed to resolve reference...
-   * so the name is never shown
-   */
-  /*
   const {
     data: dataFiltered,
     error: errorFiltered,
@@ -93,16 +87,13 @@ const Arten = ({ filter: showFilter }) => {
       },
       (d) => d.id.ae_id.art_ae_art((d) => d.id.name),
     ),
-  )*/
-  const { data, error, loading } = useQuery(artQuery, {
-    variables: { filter: artFilter },
-  })
+  )
   const { data: dataAll } = useQuery((store) =>
     store.queryArt(undefined, (d) => d.id),
   )
 
   const totalNr = get(dataAll, 'art', []).length
-  const rows = get(data, 'art', [])
+  const rows = get(dataFiltered, 'art', [])
   const filteredNr = rows.length
 
   const add = useCallback(() => {
@@ -153,7 +144,7 @@ const Arten = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loading) {
+  if (loadingFiltered) {
     return (
       <Container>
         <FormTitle title="Arten" />
@@ -162,7 +153,7 @@ const Arten = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = error
+  const errorToShow = errorFiltered
   if (errorToShow) {
     return (
       <Container>
