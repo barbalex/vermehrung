@@ -34,7 +34,6 @@ const Data = () => {
   const { activeNodeArray } = store.tree
 
   const id = last(activeNodeArray.filter((e) => isUuid.v1(e)))
-  console.log('Data, id:', id)
 
   switch (activeForm) {
     case 'root': {
