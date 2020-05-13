@@ -1,12 +1,14 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -76,7 +78,7 @@ const Art = ({
 }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter, tree } = store
+  const { filter, tree, addQueuedQuery, editArt, user } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
@@ -102,6 +104,53 @@ const Art = ({
   }, [row.id])
 
   const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      // TODO: still necessary?
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
+
+      if (showFilter) {
+        return filter.setValue({ table: 'art', key: field, value })
+      }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id: row.id,
+        ae_id: value,
+        changed: moment(new Date()).format('YYYY-MM-DD'),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      newObject._rev = `${depth}-${md5(newObject.toString())}`
+      //newObject._revisions = 'TODO:' //`{"${_rev}"}`
+      console.log('Art, saveToDb', { row, newObject })
+      addQueuedQuery({
+        name: 'mutateInsert_art_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'art_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryArt',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      // optimistically update store
+      editArt(newObject)
+    },
+    [addQueuedQuery, editArt, filter, id, row, showFilter, user],
+  )
+
+  const saveToDbOld = useCallback(
     async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
