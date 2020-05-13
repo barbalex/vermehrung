@@ -146,7 +146,21 @@ const Kulturen = ({ filter: showFilter }) => {
   const totalNr = get(dataAll, 'kultur', []).length
   const rowsFiltered = get(dataFiltered, 'kultur', [])
   const filteredNr = rowsFiltered.length
-  console.log('Kulturen, rowsFiltered:', rowsFiltered)
+
+  const arten = rowsFiltered.map((row) => row.art).filter((r) => !!r)
+  const ids_of_arten = arten.map((a) => a.id)
+  const art_ids = rowsFiltered.map((row) => row.art_id).filter((r) => !!r)
+  const artenNotLoaded = art_ids.filter((id) => !ids_of_arten.includes(id))
+  // TODO: why are arten not returned? Even when they exist?
+  //store.queryArt()
+  //store.queryAe_art()
+  console.log('Kulturen:', {
+    rowsFiltered,
+    arten,
+    art_ids,
+    ids_of_arten,
+    artenNotLoaded,
+  })
 
   const add = useCallback(() => {
     const id = uuidv1()
