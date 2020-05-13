@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
+//import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 import { v1 as uuidv1 } from 'uuid'
@@ -14,12 +14,12 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import {
-  art as artFragment,
-  garten as gartenFragment,
-  kultur as kulturFragment,
-  person as personFragment,
-} from '../../../utils/fragments'
+//import {
+//  art as artFragment,
+//  garten as gartenFragment,
+//  kultur as kulturFragment,
+//  person as personFragment,
+//} from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -65,7 +65,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
+/*const query = gql`
   query KulturQueryForKulturs($filter: kultur_bool_exp!) {
     rowsUnfiltered: kultur {
       id
@@ -93,7 +93,7 @@ const query = gql`
   ${gartenFragment}
   ${kulturFragment}
   ${personFragment}
-`
+`*/
 
 const singleRowHeight = 48
 function sizeReducer(state, action) {
