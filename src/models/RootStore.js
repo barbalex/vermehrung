@@ -91,10 +91,10 @@ export const RootStore = RootStoreBase.props({
         self.queuedQueries.push(val)
       },
       addArt(val) {
-        self.arts = { ...{ [val.id]: val }, ...self.arts.toJS() }
+        self.arts.set(val.id, val)
       },
       editArt(val) {
-        self.arts[val.id] = val
+        self.arts.set(val.id, val)
       },
       addArtFile(val) {
         self.art_files = { ...{ [val.id]: val }, ...self.art_files.toJS() }

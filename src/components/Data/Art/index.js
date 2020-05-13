@@ -1,7 +1,5 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
@@ -14,10 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import {
-  art as artFragment,
-  aeArt as aeArtFragment,
-} from '../../../utils/fragments'
+import toPgArray from '../../../utils/toPgArray'
 import Files from '../Files'
 import artQuery from './artQuery'
 import Timeline from './Timeline'
@@ -83,19 +78,21 @@ const Art = ({
   const { activeNodeArray, setActiveNodeArray } = tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
-  const { data, error, loading } = useQuery(artQuery, {
+  const { data, error, loading, query } = useQuery(artQuery, {
     variables: { id: id, filter: artFilter, isFiltered },
   })
 
   const [errors, setErrors] = useState({})
 
   let row
+  //let row0
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
   if (showFilter) {
     row = filter.art
   } else {
     row = get(data, 'art[0]') || {}
+    //row = store.arts.get(row0.id) // does not work because reference to ae_art is undefined
   }
 
   useEffect(() => {
@@ -126,9 +123,13 @@ const Art = ({
         _parent_rev: row._rev,
         _depth: depth,
       }
-      newObject._rev = `${depth}-${md5(newObject.toString())}`
-      //newObject._revisions = 'TODO:' //`{"${_rev}"}`
-      console.log('Art, saveToDb', { row, newObject })
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
       addQueuedQuery({
         name: 'mutateInsert_art_rev',
         variables: JSON.stringify({
@@ -145,8 +146,10 @@ const Art = ({
       })
       // optimistically update store
       editArt(newObject)
+      // refetch query becaus is not a model instance
+      query.refetch()
     },
-    [addQueuedQuery, editArt, filter, id, row, showFilter, user],
+    [addQueuedQuery, editArt, filter, id, row, showFilter, user, query],
   )
 
   const artSelectFilter = useCallback(
