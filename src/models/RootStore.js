@@ -90,194 +90,83 @@ export const RootStore = RootStoreBase.props({
       addQueuedQuery(val) {
         self.queuedQueries.push(val)
       },
-      addArt(val) {
+      upsertArt(val) {
         self.arts.set(val.id, val)
       },
-      editArt(val) {
-        self.arts.set(val.id, val)
+      upsertArtFile(val) {
+        self.art_files.set(val.id, val)
       },
-      addArtFile(val) {
-        self.art_files = { ...{ [val.id]: val }, ...self.art_files.toJS() }
+      upsertArtQk(val) {
+        self.art_qks.set(val.id, val)
       },
-      editArtFile(val) {
-        self.art_files[val.id] = val
+      upsertAvArt(val) {
+        self.av_arts.set(val.id, val)
       },
-      addArtQk(val) {
-        self.art_qks = { ...{ [val.id]: val }, ...self.art_qks.toJS() }
+      upsertEvent(val) {
+        self.events.set(val.id, val)
       },
-      editArtQk(val) {
-        self.art_qks[val.id] = val
+      upsertGarten(val) {
+        self.gartens.set(val.id, val)
       },
-      addAvArt(val) {
-        self.av_arts = { ...{ [val.id]: val }, ...self.av_arts.toJS() }
+      upsertGartenFile(val) {
+        self.garten_files.set(val.id, val)
       },
-      editAvArt(val) {
-        self.av_arts[val.id] = val
+      upsertHerkunft(val) {
+        self.herkunfts.set(val.id, val)
       },
-      addEvent(val) {
-        self.events = { ...{ [val.id]: val }, ...self.events.toJS() }
+      upsertHerkunftFile(val) {
+        self.herkunft_files.set(val.id, val)
       },
-      editEvent(val) {
-        self.events[val.id] = val
+      upsertKultur(val) {
+        self.kulturs.set(val.id, val)
       },
-      addGarten(val) {
-        self.gartens = { ...{ [val.id]: val }, ...self.gartens.toJS() }
+      upsertKulturFile(val) {
+        self.kultur_files.set(val.id, val)
       },
-      editGarten(val) {
-        self.gartens[val.id] = val
+      upsertKulturOption(val) {
+        self.kultur_options.set(val.id, val)
       },
-      addGartenFile(val) {
-        self.garten_files = {
-          ...{ [val.id]: val },
-          ...self.garten_files.toJS(),
-        }
+      upsertKulturQk(val) {
+        self.kultur_qks.set(val.id, val)
       },
-      editGartenFile(val) {
-        self.garten_files[val.id] = val
+      upsertKulturQkChoosen(val) {
+        self.kultur_qk_choosens.set(val.id, val)
       },
-      addHerkunft(val) {
-        self.herkunfts = { ...{ [val.id]: val }, ...self.herkunfts.toJS() }
+      upsertLieferung(val) {
+        self.lieferungs.set(val.id, val)
       },
-      editHerkunft(val) {
-        self.herkunfts[val.id] = val
+      upsertLieferungFile(val) {
+        self.lieferung_files.set(val.id, val)
       },
-      addHerkunftFile(val) {
-        self.herkunft_files = {
-          ...{ [val.id]: val },
-          ...self.herkunft_files.toJS(),
-        }
+      upsertPerson(val) {
+        self.persons.set(val.id, val)
       },
-      editHerkunftFile(val) {
-        self.herkunft_files[val.id] = val
+      upsertPersonFile(val) {
+        self.person_files.set(val.id, val)
       },
-      addKultur(val) {
-        self.kulturs = { ...{ [val.id]: val }, ...self.kulturs.toJS() }
+      upsertPersonOption(val) {
+        self.person_options.set(val.id, val)
       },
-      editKultur(val) {
-        self.kulturs[val.id] = val
+      upsertSammelLieferung(val) {
+        self.sammel_lieferungs.set(val.id, val)
       },
-      addKulturFile(val) {
-        self.kultur_files = {
-          ...{ [val.id]: val },
-          ...self.kultur_files.toJS(),
-        }
-      },
-      editKulturFile(val) {
-        self.kultur_files[val.id] = val
-      },
-      addKulturOption(val) {
-        self.kultur_options = {
-          ...{ [val.id]: val },
-          ...self.kultur_options.toJS(),
-        }
-      },
-      editKulturOption(val) {
-        self.kultur_options[val.id] = val
-      },
-      addKulturQk(val) {
-        self.kultur_qks = { ...{ [val.id]: val }, ...self.kultur_qks.toJS() }
-      },
-      editKulturQk(val) {
-        self.kultur_qks[val.id] = val
-      },
-      addKulturQkChoosen(val) {
-        self.kultur_qk_choosens = {
-          ...{ [val.id]: val },
-          ...self.kultur_qk_choosens.toJS(),
-        }
-      },
-      editKulturQkChoosen(val) {
-        self.kultur_qk_choosens[val.id] = val
-      },
-      addLieferung(val) {
-        self.lieferungs = { ...{ [val.id]: val }, ...self.lieferungs.toJS() }
-      },
-      editLieferung(val) {
-        self.lieferungs[val.id] = val
-      },
-      addLieferungFile(val) {
-        self.lieferung_files = {
-          ...{ [val.id]: val },
-          ...self.lieferung_files.toJS(),
-        }
-      },
-      editLieferungFile(val) {
-        self.lieferung_files[val.id] = val
-      },
-      addPerson(val) {
-        self.persons = { ...{ [val.id]: val }, ...self.persons.toJS() }
-      },
-      editPerson(val) {
-        self.persons[val.id] = val
-      },
-      addPersonFile(val) {
-        self.person_files = {
-          ...{ [val.id]: val },
-          ...self.person_files.toJS(),
-        }
-      },
-      editPersonFile(val) {
-        self.person_files[val.id] = val
-      },
-      addPersonOption(val) {
-        self.person_options = {
-          ...{ [val.id]: val },
-          ...self.person_options.toJS(),
-        }
-      },
-      editPersonOption(val) {
-        self.person_options[val.id] = val
-      },
-      addSammelLieferung(val) {
-        self.sammel_lieferungs = {
-          ...{ [val.id]: val },
-          ...self.sammel_lieferungs.toJS(),
-        }
-      },
-      editSammelLieferung(val) {
-        self.sammel_lieferungs[val.id] = val
-      },
-      addSammlung(val) {
-        self.sammlungs = { ...{ [val.id]: val }, ...self.sammlungs.toJS() }
-      },
-      editSammlung(val) {
-        self.sammlungs[val.id] = val
+      upsertSammlung(val) {
+        self.sammlungs.set(val.id, val)
       },
       addSammlungFile(val) {
-        self.sammlung_files = {
-          ...{ [val.id]: val },
-          ...self.sammlung_files.toJS(),
-        }
+        self.sammlung_files.set(val.id, val)
       },
-      editSammlungFile(val) {
-        self.sammlung_files[val.id] = val
-      },
-      addTeilkultur(val) {
-        self.teilkulturs = { ...{ [val.id]: val }, ...self.teilkulturs.toJS() }
-      },
-      editTeilkultur(val) {
-        self.teilkulturs[val.id] = val
+      eilkultur(val) {
+        self.teilkulturs.set(val.id, val)
       },
       addTeilzaehlung(val) {
-        self.teilzaehlungs = {
-          ...{ [val.id]: val },
-          ...self.teilzaehlungs.toJS(),
-        }
-      },
-      editTeilzaehlung(val) {
-        self.teilzaehlungs[val.id] = val
+        self.teilzaehlungs.set(val.id, val)
       },
       addUserRole(val) {
-        self.user_roles = { ...{ [val.id]: val }, ...self.user_roles.toJS() }
-      },
-      editUserRole(val) {
-        self.user_roles[val.id] = val
+        self.user_roles.set(val.id, val)
       },
       addZaehlung(val) {
-        self.zaehlungs = { ...{ [val.id]: val }, ...self.zaehlungs.toJS() }
-      },
-      editZaehlung(val) {
-        self.zaehlungs[val.id] = val
+        self.zaehlungs.set(val.id, val)
       },
       setOnline(val) {
         self.online = val

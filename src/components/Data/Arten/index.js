@@ -64,7 +64,7 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addQueuedQuery, addArt } = store
+  const { filter, addQueuedQuery, upsertArt } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const {
@@ -117,7 +117,7 @@ const Arten = ({ filter: showFilter }) => {
       }),
     })
     // optimistically update store
-    addArt(newObject)
+    upsertArt(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -128,7 +128,7 @@ const Arten = ({ filter: showFilter }) => {
     })
   }, [
     activeNodeArray,
-    addArt,
+    upsertArt,
     addOpenNodes,
     addQueuedQuery,
     refetchTree,

@@ -101,7 +101,7 @@ function sizeReducer(state, action) {
 
 const Lieferungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addLieferung, addQueuedQuery } = store
+  const { filter, upsertLieferung, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -168,7 +168,7 @@ const Lieferungen = ({ filter: showFilter }) => {
       }),
     })
     // optimistically update store
-    addLieferung(newObject)
+    upsertLieferung(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -179,7 +179,7 @@ const Lieferungen = ({ filter: showFilter }) => {
     })
   }, [
     activeNodeArray,
-    addLieferung,
+    upsertLieferung,
     addOpenNodes,
     addQueuedQuery,
     refetchTree,
