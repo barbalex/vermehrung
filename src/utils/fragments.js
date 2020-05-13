@@ -8,6 +8,13 @@ export const art = gql`
       id
       name
     }
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const artQk = gql`
@@ -50,6 +57,13 @@ export const event = gql`
     beschreibung
     geplant
     datum
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const garten = gql`
@@ -66,6 +80,13 @@ export const garten = gql`
     lv95_y
     wgs84_lat
     wgs84_long
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const gartenTeilzaehlungSums = gql`
@@ -151,6 +172,13 @@ export const herkunft = gql`
     lv95_y
     wgs84_lat
     wgs84_long
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const herkunftFile = gql`
@@ -173,6 +201,13 @@ export const kultur = gql`
     von_anzahl_individuen
     aktiv
     bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const kulturQk = gql`
@@ -213,6 +248,11 @@ export const kulturOption = gql`
     tz_teilkultur_id
     tz_bemerkungen
     z_bemerkungen
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const lieferung = gql`
@@ -233,6 +273,13 @@ export const lieferung = gql`
     andere_menge
     geplant
     bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const lieferungFile = gql`
@@ -264,6 +311,13 @@ export const person = gql`
     kommerziell
     info
     aktiv
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const personOption = gql`
@@ -290,6 +344,11 @@ export const personOption = gql`
     tree_zaehlung
     tree_lieferung
     tree_event
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const personFile = gql`
@@ -318,6 +377,11 @@ export const sammelLieferung = gql`
     andere_menge
     geplant
     bemerkungen
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const sammlung = gql`
@@ -338,6 +402,13 @@ export const sammlung = gql`
     lv95_y
     wgs84_lat
     wgs84_long
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const sammlungFile = gql`
@@ -358,6 +429,13 @@ export const teilkultur = gql`
     ort2
     ort3
     bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const teilzaehlung = gql`
@@ -371,6 +449,13 @@ export const teilzaehlung = gql`
     andere_menge
     auspflanzbereit_beschreibung
     bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const zaehlung = gql`
@@ -380,6 +465,13 @@ export const zaehlung = gql`
     datum
     prognose
     bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
   }
 `
 export const artSums = gql`
