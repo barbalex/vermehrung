@@ -316,8 +316,6 @@ const Event = ({
     }
   }, [])
 
-  console.log('Event, row:', row)
-
   if (loading) {
     return (
       <Container>
