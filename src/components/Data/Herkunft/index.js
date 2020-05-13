@@ -4,10 +4,8 @@ import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import isUuid from 'is-uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
@@ -105,7 +103,7 @@ const Herkunft = ({
 
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
-  const {
+  /*const {
     data: dataHerkunft,
     error: errorHerkunft,
     loading: loadingHerkunft,
@@ -113,10 +111,12 @@ const Herkunft = ({
     store.queryHerkunft({
       where: { id: { _eq: id } },
     }),
-  )
-  const { data: dataAll } = useQuery((store) =>
-    store.queryHerkunft(/*undefined, (d) => d.id*/),
-  )
+  )*/
+  const {
+    data: dataAll,
+    error: errorAll,
+    loading: loadingAll,
+  } = useQuery((store) => store.queryHerkunft(/*undefined, (d) => d.id*/))
   const { data: dataFiltered } = useQuery((store) =>
     store.queryHerkunft(
       {
@@ -230,7 +230,7 @@ const Herkunft = ({
     }
   }, [])
 
-  if (loadingHerkunft) {
+  if (loadingAll) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
@@ -239,11 +239,11 @@ const Herkunft = ({
     )
   }
 
-  if (errorHerkunft) {
+  if (errorAll) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorHerkunft.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorAll.message}`}</FieldsContainer>
       </Container>
     )
   }
