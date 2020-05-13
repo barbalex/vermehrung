@@ -1,6 +1,6 @@
 import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
-import { reaction } from 'mobx'
+import { reaction, flow } from 'mobx'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -42,7 +42,7 @@ export const RootStore = RootStoreBase.props({
   .actions((self) => {
     reaction(
       () => `${self.queuedQueries.length}/${self.online}`,
-      () => {
+      flow(function* () {
         /**
          * TODO:
          * When new query is added
@@ -62,31 +62,55 @@ export const RootStore = RootStoreBase.props({
               callbackQuery,
               callbackQueryVariables,
             } = query
-            console.log('will execute query:', name)
+            console.log('executing query:', name)
             try {
-              variables ? self[name](JSON.parse(variables)) : self[name]()
+              if (variables) {
+                yield self[name](JSON.parse(variables))
+              } else {
+                yield self[name]()
+              }
             } catch (error) {
               // Maybe do it like superhuman and check if network error
               // then retry and set online without using tool?
-              return
+              return self.enqueNotification({
+                message: error.message,
+                options: {
+                  variant: 'error',
+                },
+              })
             }
-            // idea: query to refresh the data updated in all used views (tree...)
+            // query to refresh the data updated in all used views (tree...)
             if (callbackQuery) {
               try {
-                callbackQueryVariables
-                  ? self[callbackQuery](JSON.parse(callbackQueryVariables))
-                  : self[callbackQuery]()
+                if (callbackQueryVariables) {
+                  self[callbackQuery](JSON.parse(callbackQueryVariables))
+                } else {
+                  self[callbackQuery]()
+                }
               } catch (error) {
-                return
+                // do nothing
               }
             }
           }
           // remove operation from queue
-          self.queuedQueries.shift()
+          // use action because this is async
+          self.shiftQueuedQueries()
         }
-      },
+      }),
+      /*{
+        // make sure retried in a minute
+        // https://github.com/mobxjs/mst-gql/issues/198#issuecomment-628083160
+        // this made the first run wait!!!????
+        scheduler: (run) => {
+          setInterval(run, 1000) // 60000 = one minute
+        },
+        fireImmediately: true,
+      },*/
     )
     return {
+      shiftQueuedQueries() {
+        self.queuedQueries.shift()
+      },
       addQueuedQuery(val) {
         self.queuedQueries.push(val)
       },

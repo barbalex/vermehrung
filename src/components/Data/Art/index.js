@@ -92,7 +92,7 @@ const Art = ({
     row = filter.art
   } else {
     row = get(data, 'art[0]') || {}
-    //row = store.arts.get(row0.id) // does not work because reference to ae_art is undefined
+    //row0 = store.arts.get(id) // does not work because reference to ae_art is undefined
   }
 
   useEffect(() => {
@@ -118,7 +118,7 @@ const Art = ({
       const newObject = {
         id: row.id,
         ae_id: value,
-        changed: moment(new Date()).format('YYYY-MM-DD'),
+        changed: moment().format('YYYY-MM-DD'),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -144,10 +144,12 @@ const Art = ({
           where: { id: { _eq: id } },
         }),
       })
-      // optimistically update store
-      upsertArt(newObject)
-      // refetch query becaus is not a model instance
-      query.refetch()
+      setTimeout(() => {
+        // optimistically update store
+        upsertArt(newObject)
+        // refetch query because is not a model instance
+        query.refetch()
+      }, 50)
     },
     [addQueuedQuery, upsertArt, filter, id, row, showFilter, user, query],
   )

@@ -7,13 +7,14 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
@@ -27,7 +28,7 @@ import {
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import types from '../../../models/Filter/simpleTypes'
+import toPgArray from '../../../utils/toPgArray'
 import queryFromTable from '../../../utils/queryFromTable'
 import Settings from './Settings'
 import AddButton from './AddButton'
@@ -160,9 +161,8 @@ const Event = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, upsertEvent, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -170,7 +170,7 @@ const Event = ({
   const eventResult = useQuery(eventQuery, {
     variables: { id, isFiltered, filter: eventFilter },
   })
-  const { data, error, loading } = eventResult
+  const { data, error, loading, query } = eventResult
 
   const [errors, setErrors] = useState({})
 
@@ -239,64 +239,63 @@ const Event = ({
     get(row, 'kultur.kultur_option') || {}
 
   const saveToDb = useCallback(
-    async (event) => {
+    (event) => {
       const field = event.target.name
+      // TODO: still necessary?
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.event[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'event', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split ? value.split('"').join('\\"') : value
-            }"`
-          }
-          await client.mutate({
-            mutation: gql`
-              mutation update_event($id: uuid!) {
-                update_event(
-                  where: { id: { _eq: $id } }
-                  _set: { 
-                    ${field}: ${valueToSet} }
-                ) {
-                  affected_rows
-                  returning {
-                    ...EventFields
-                  }
-                }
-              }
-              ${eventFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateEvent: {
-                id: row.id,
-                __typename: 'Event',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'event', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id,
+        kultur_id: field === 'kultur_id' ? value : row.kultur_id,
+        teilkultur_id: field === 'teilkultur_id' ? value : row.teilkultur_id,
+        person_id: field === 'person_id' ? value : row.person_id,
+        beschreibung: field === 'beschreibung' ? value : row.beschreibung,
+        geplant: field === 'geplant' ? value : row.geplant,
+        datum: field === 'datum' ? value : row.datum,
+        changed: moment().format('YYYY-MM-DD'), //'2000-05-03',
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_event_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'event_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryEvent',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertEvent(newObject)
+        // refetch query because is not a model instance
+        query.refetch()
+      }, 100)
     },
-    [client, filter, row, showFilter],
+    [addQueuedQuery, upsertEvent, filter, id, row, showFilter, user, query],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
@@ -316,6 +315,8 @@ const Event = ({
       window.open(url)
     }
   }, [])
+
+  console.log('Event, row:', row)
 
   if (loading) {
     return (
