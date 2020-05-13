@@ -31,7 +31,7 @@ create table person (
   kein_email boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   account_id text default null,
   user_role text default null references user_role (name) on delete set null on update cascade,
@@ -68,7 +68,7 @@ create table person_rev (
   kein_email boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   account_id text default null,
   user_role text default null references user_role (name) on delete no action on update cascade,
   kommerziell boolean default false,
@@ -106,7 +106,7 @@ create table art (
   id uuid primary key default uuid_generate_v1mc(),
   ae_id uuid default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -123,7 +123,7 @@ create table art_rev (
   id uuid default uuid_generate_v1mc(),
   ae_id uuid default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -187,7 +187,7 @@ create table herkunft (
   lv95_y numeric generated always as (case when (st_xmin(geom_point) >= -180 and st_xmax(geom_point) <= 180 and st_ymin(geom_point) >= -90 and st_ymax(geom_point) <= 90) then round(st_y(st_transform(geom_point, 2056))) end) stored,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -195,11 +195,6 @@ create table herkunft (
   _depth integer default 1,
   _conflicts text[] default null
 );
-alter table herkunft add column _rev text default null;
-alter table herkunft add column _parent_rev text default null;
-alter table herkunft add column _revisions text[] default null;
-alter table herkunft add column _depth integer default 1;
-alter table herkunft add column _conflicts text[] default null;
 create index on herkunft using btree (id);
 create index on herkunft using btree (nr);
 create index on herkunft using btree (gemeinde);
@@ -217,7 +212,7 @@ create table herkunft_rev (
   geom_point geometry(Point, 4326) default null,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -265,7 +260,7 @@ create table sammlung (
   geplant boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -300,7 +295,7 @@ create table sammlung_rev (
   geplant boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -344,7 +339,7 @@ create table garten (
   aktiv boolean default true,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -373,7 +368,7 @@ create table garten_rev (
   aktiv boolean default true,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -413,7 +408,7 @@ create table kultur (
   bemerkungen text default null,
   aktiv boolean default true,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -444,7 +439,7 @@ create table kultur_rev (
   bemerkungen text default null,
   aktiv boolean default true,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -453,10 +448,10 @@ create table kultur_rev (
   primary key (id, _rev)
 );
 create index on kultur_rev using btree (id);
-create index on art_rev using btree (_rev);
-create index on art_rev using btree (_parent_rev);
-create index on art_rev using btree (_depth);
-create index on art_rev using btree (_deleted);
+create index on kultur_rev using btree (_rev);
+create index on kultur_rev using btree (_parent_rev);
+create index on kultur_rev using btree (_depth);
+create index on kultur_rev using btree (_deleted);
 
 drop table if exists kultur_qk cascade;
 create table kultur_qk (
@@ -503,7 +498,7 @@ create table teilkultur (
   ort3 text default null,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -526,7 +521,7 @@ create table teilkultur_rev (
   ort3 text default null,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -550,7 +545,7 @@ create table event (
   geplant boolean default false,
   datum date default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -577,7 +572,7 @@ create table event_rev (
   geplant boolean default false,
   datum date default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -599,7 +594,7 @@ create table zaehlung (
   prognose boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -621,7 +616,7 @@ create table zaehlung_rev (
   prognose boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -648,7 +643,7 @@ create table teilzaehlung (
   bemerkungen text default null,
   prognose_von_tz uuid default null references teilzaehlung (id) on delete set null on update cascade,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -679,7 +674,7 @@ create table teilzaehlung_rev (
   bemerkungen text default null,
   prognose_von_tz uuid default null references teilzaehlung (id) on delete no action on update cascade,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -837,7 +832,7 @@ create table lieferung (
   geplant boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
@@ -881,7 +876,7 @@ create table lieferung_rev (
   geplant boolean default false,
   bemerkungen text default null,
   changed date default now(),
-  changed_by varchar(20) default null,
+  changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -890,10 +885,10 @@ create table lieferung_rev (
   primary key (id, _rev)
 );
 create index on lieferung_rev using btree (id);
-create index on art_rev using btree (_rev);
-create index on art_rev using btree (_parent_rev);
-create index on art_rev using btree (_depth);
-create index on art_rev using btree (_deleted);
+create index on lieferung_rev using btree (_rev);
+create index on lieferung_rev using btree (_parent_rev);
+create index on lieferung_rev using btree (_depth);
+create index on lieferung_rev using btree (_deleted);
 
 drop table if exists sammel_lieferung cascade;
 create table sammel_lieferung (
