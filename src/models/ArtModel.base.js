@@ -20,10 +20,6 @@ import { art_sums_aggregateModel } from "./art_sums_aggregateModel"
 import { art_sums_aggregateModelSelector } from "./art_sums_aggregateModel.base"
 import { av_artModel } from "./av_artModel"
 import { av_artModelSelector } from "./av_artModel.base"
-import { garten_teilzaehlung_sumsModel } from "./garten_teilzaehlung_sumsModel"
-import { garten_teilzaehlung_sumsModelSelector } from "./garten_teilzaehlung_sumsModel.base"
-import { garten_teilzaehlung_sums_aggregateModel } from "./garten_teilzaehlung_sums_aggregateModel"
-import { garten_teilzaehlung_sums_aggregateModelSelector } from "./garten_teilzaehlung_sums_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
@@ -66,8 +62,6 @@ export const artModelBase = ModelBase
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    garten_teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
-    garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
     id: types.identifier,
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
@@ -104,8 +98,6 @@ export class artModelSelector extends QueryBuilder {
   art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
   art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
   av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
-  garten_teilzaehlung_sums(builder) { return this.__child(`garten_teilzaehlung_sums`, garten_teilzaehlung_sumsModelSelector, builder) }
-  garten_teilzaehlung_sums_aggregate(builder) { return this.__child(`garten_teilzaehlung_sums_aggregate`, garten_teilzaehlung_sums_aggregateModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
   lieferungs(builder) { return this.__child(`lieferungs`, lieferungModelSelector, builder) }

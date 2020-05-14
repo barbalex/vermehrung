@@ -56,7 +56,7 @@ export default gql`
     $personId: uuid
     $personExists: Boolean!
   ) {
-    person_option(where: { person_id: { _eq: $personId } })
+    person_option(where: { id: { _eq: $personId } })
       @include(if: $personExists) {
       ...PersonOptionFields
     }

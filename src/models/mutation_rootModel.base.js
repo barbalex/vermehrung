@@ -194,6 +194,7 @@ export const mutation_rootModelBase = ModelBase
     delete_art_qk: types.union(types.undefined, types.null, types.late(() => art_qk_mutation_responseModel)),
     delete_art_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
     delete_art_qk_choosen: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_mutation_responseModel)),
+    delete_art_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
     delete_art_rev: types.union(types.undefined, types.null, types.late(() => art_rev_mutation_responseModel)),
     delete_art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
     delete_av_art: types.union(types.undefined, types.null, types.late(() => av_art_mutation_responseModel)),
@@ -361,6 +362,7 @@ export const mutation_rootModelBase = ModelBase
     update_art_qk: types.union(types.undefined, types.null, types.late(() => art_qk_mutation_responseModel)),
     update_art_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
     update_art_qk_choosen: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_mutation_responseModel)),
+    update_art_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
     update_art_rev: types.union(types.undefined, types.null, types.late(() => art_rev_mutation_responseModel)),
     update_art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
     update_av_art: types.union(types.undefined, types.null, types.late(() => av_art_mutation_responseModel)),
@@ -450,6 +452,7 @@ export class mutation_rootModelSelector extends QueryBuilder {
   delete_art_qk(builder) { return this.__child(`delete_art_qk`, art_qk_mutation_responseModelSelector, builder) }
   delete_art_qk_by_pk(builder) { return this.__child(`delete_art_qk_by_pk`, art_qkModelSelector, builder) }
   delete_art_qk_choosen(builder) { return this.__child(`delete_art_qk_choosen`, art_qk_choosen_mutation_responseModelSelector, builder) }
+  delete_art_qk_choosen_by_pk(builder) { return this.__child(`delete_art_qk_choosen_by_pk`, art_qk_choosenModelSelector, builder) }
   delete_art_rev(builder) { return this.__child(`delete_art_rev`, art_rev_mutation_responseModelSelector, builder) }
   delete_art_rev_by_pk(builder) { return this.__child(`delete_art_rev_by_pk`, art_revModelSelector, builder) }
   delete_av_art(builder) { return this.__child(`delete_av_art`, av_art_mutation_responseModelSelector, builder) }
@@ -617,6 +620,7 @@ export class mutation_rootModelSelector extends QueryBuilder {
   update_art_qk(builder) { return this.__child(`update_art_qk`, art_qk_mutation_responseModelSelector, builder) }
   update_art_qk_by_pk(builder) { return this.__child(`update_art_qk_by_pk`, art_qkModelSelector, builder) }
   update_art_qk_choosen(builder) { return this.__child(`update_art_qk_choosen`, art_qk_choosen_mutation_responseModelSelector, builder) }
+  update_art_qk_choosen_by_pk(builder) { return this.__child(`update_art_qk_choosen_by_pk`, art_qk_choosenModelSelector, builder) }
   update_art_rev(builder) { return this.__child(`update_art_rev`, art_rev_mutation_responseModelSelector, builder) }
   update_art_rev_by_pk(builder) { return this.__child(`update_art_rev_by_pk`, art_revModelSelector, builder) }
   update_av_art(builder) { return this.__child(`update_av_art`, av_art_mutation_responseModelSelector, builder) }

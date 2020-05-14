@@ -8,10 +8,6 @@ import { garten_fileModel } from "./garten_fileModel"
 import { garten_fileModelSelector } from "./garten_fileModel.base"
 import { garten_file_aggregateModel } from "./garten_file_aggregateModel"
 import { garten_file_aggregateModelSelector } from "./garten_file_aggregateModel.base"
-import { garten_teilzaehlung_sumsModel } from "./garten_teilzaehlung_sumsModel"
-import { garten_teilzaehlung_sumsModelSelector } from "./garten_teilzaehlung_sumsModel.base"
-import { garten_teilzaehlung_sums_aggregateModel } from "./garten_teilzaehlung_sums_aggregateModel"
-import { garten_teilzaehlung_sums_aggregateModelSelector } from "./garten_teilzaehlung_sums_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
@@ -51,8 +47,6 @@ export const gartenModelBase = ModelBase
     person_id: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
     strasse: types.union(types.undefined, types.null, types.string),
-    teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
-    teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
     wgs84_long: types.union(types.undefined, types.null, types.frozen()),
@@ -90,8 +84,6 @@ export class gartenModelSelector extends QueryBuilder {
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }
-  teilzaehlung_sums(builder) { return this.__child(`teilzaehlung_sums`, garten_teilzaehlung_sumsModelSelector, builder) }
-  teilzaehlung_sums_aggregate(builder) { return this.__child(`teilzaehlung_sums_aggregate`, garten_teilzaehlung_sums_aggregateModelSelector, builder) }
 }
 export function selectFromgarten() {
   return new gartenModelSelector()

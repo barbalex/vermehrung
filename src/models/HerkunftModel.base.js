@@ -8,10 +8,6 @@ import { herkunft_fileModel } from "./herkunft_fileModel"
 import { herkunft_fileModelSelector } from "./herkunft_fileModel.base"
 import { herkunft_file_aggregateModel } from "./herkunft_file_aggregateModel"
 import { herkunft_file_aggregateModelSelector } from "./herkunft_file_aggregateModel.base"
-import { herkunft_sumsModel } from "./herkunft_sumsModel"
-import { herkunft_sumsModelSelector } from "./herkunft_sumsModel.base"
-import { herkunft_sums_aggregateModel } from "./herkunft_sums_aggregateModel"
-import { herkunft_sums_aggregateModelSelector } from "./herkunft_sums_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
@@ -42,8 +38,6 @@ export const herkunftModelBase = ModelBase
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     herkunft_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_fileModel)))),
     herkunft_files_aggregate: types.union(types.undefined, types.late(() => herkunft_file_aggregateModel)),
-    herkunft_sums: types.union(types.undefined, types.array(types.late(() => herkunft_sumsModel))),
-    herkunft_sums_aggregate: types.union(types.undefined, types.late(() => herkunft_sums_aggregateModel)),
     id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
@@ -88,8 +82,6 @@ export class herkunftModelSelector extends QueryBuilder {
   get wgs84_long() { return this.__attr(`wgs84_long`) }
   herkunft_files(builder) { return this.__child(`herkunft_files`, herkunft_fileModelSelector, builder) }
   herkunft_files_aggregate(builder) { return this.__child(`herkunft_files_aggregate`, herkunft_file_aggregateModelSelector, builder) }
-  herkunft_sums(builder) { return this.__child(`herkunft_sums`, herkunft_sumsModelSelector, builder) }
-  herkunft_sums_aggregate(builder) { return this.__child(`herkunft_sums_aggregate`, herkunft_sums_aggregateModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
   sammlungs(builder) { return this.__child(`sammlungs`, sammlungModelSelector, builder) }

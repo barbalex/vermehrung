@@ -15,6 +15,7 @@ export const kultur_qk_min_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_qk_min_fields"), "kultur_qk_min_fields"),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     sort: types.union(types.undefined, types.null, types.frozen()),
     titel: types.union(types.undefined, types.null, types.string),
@@ -27,6 +28,7 @@ export const kultur_qk_min_fieldsModelBase = ModelBase
 
 export class kultur_qk_min_fieldsModelSelector extends QueryBuilder {
   get beschreibung() { return this.__attr(`beschreibung`) }
+  get id() { return this.__attr(`id`) }
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
   get titel() { return this.__attr(`titel`) }

@@ -25,8 +25,8 @@ export const kultur_optionModelBase = ModelBase
     ev_geplant: types.union(types.undefined, types.null, types.boolean),
     ev_person_id: types.union(types.undefined, types.null, types.boolean),
     ev_teilkultur_id: types.union(types.undefined, types.null, types.boolean),
+    id: types.identifier,
     kultur: types.union(types.undefined, MSTGQLRef(types.late(() => kulturModel))),
-    kultur_id: types.union(types.undefined, types.frozen()),
     tk: types.union(types.undefined, types.null, types.boolean),
     tk_bemerkungen: types.union(types.undefined, types.null, types.boolean),
     tz_andere_menge: types.union(types.undefined, types.null, types.boolean),
@@ -52,7 +52,7 @@ export class kultur_optionModelSelector extends QueryBuilder {
   get ev_geplant() { return this.__attr(`ev_geplant`) }
   get ev_person_id() { return this.__attr(`ev_person_id`) }
   get ev_teilkultur_id() { return this.__attr(`ev_teilkultur_id`) }
-  get kultur_id() { return this.__attr(`kultur_id`) }
+  get id() { return this.__attr(`id`) }
   get tk() { return this.__attr(`tk`) }
   get tk_bemerkungen() { return this.__attr(`tk_bemerkungen`) }
   get tz_andere_menge() { return this.__attr(`tz_andere_menge`) }
@@ -67,4 +67,4 @@ export function selectFromkultur_option() {
   return new kultur_optionModelSelector()
 }
 
-export const kultur_optionModelPrimitives = selectFromkultur_option()._conflicts._depth._parent_rev._rev._revisions.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.kultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_bemerkungen.tz_teilkultur_id.z_bemerkungen
+export const kultur_optionModelPrimitives = selectFromkultur_option()._conflicts._depth._parent_rev._rev._revisions.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_bemerkungen.tz_teilkultur_id.z_bemerkungen

@@ -8,6 +8,6 @@ import { types } from "mobx-state-tree"
 * kultur_qk_choosen_update_column
 */
 export const kultur_qk_choosen_update_columnEnum = types.enumeration("kultur_qk_choosen_update_column", [
-        "kultur_id",
+        "id",
   "qk_name",
       ])

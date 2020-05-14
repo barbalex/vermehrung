@@ -30,13 +30,15 @@ export const artQk = gql`
 `
 export const artQkChoosen = gql`
   fragment ArtQkChoosenFields on art_qk_choosen {
-    art_id
+    id
     __typename
+    art_id
     qk_name
   }
 `
 export const artFile = gql`
   fragment ArtFileFields on art_file {
+    id
     art_id
     file_id
     __typename
@@ -161,8 +163,9 @@ export const gartenTeilzaehlungSums = gql`
 `
 export const gartenFile = gql`
   fragment GartenFileFields on garten_file {
-    garten_id
+    id
     __typename
+    garten_id
     file_id
     file_mime_type
     name
@@ -194,8 +197,9 @@ export const herkunft = gql`
 `
 export const herkunftFile = gql`
   fragment HerkunftFileFields on herkunft_file {
-    herkunft_id
+    id
     __typename
+    herkunft_id
     file_id
     file_mime_type
     name
@@ -225,8 +229,9 @@ export const kultur = gql`
 `
 export const kulturQk = gql`
   fragment KulturQkFields on kultur_qk {
-    name
+    id
     __typename
+    name
     titel
     beschreibung
     sort
@@ -235,8 +240,8 @@ export const kulturQk = gql`
 export const kulturQkChoosen = gql`
   fragment KulturQkChoosenFields on kultur_qk_choosen {
     id
-    qk_name
     __typename
+    qk_name
   }
 `
 export const kulturFile = gql`
@@ -303,8 +308,9 @@ export const lieferung = gql`
 `
 export const lieferungFile = gql`
   fragment LieferungFileFields on lieferung_file {
-    lieferung_id
+    id
     __typename
+    lieferung_id
     file_id
     file_mime_type
     name
@@ -439,9 +445,10 @@ export const sammlung = gql`
 `
 export const sammlungFile = gql`
   fragment SammlungFileFields on sammlung_file {
+    id
+    __typename
     sammlung_id
     file_id
-    __typename
     file_mime_type
     name
     beschreibung
