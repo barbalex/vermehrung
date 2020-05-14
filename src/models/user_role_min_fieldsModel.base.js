@@ -15,6 +15,7 @@ export const user_role_min_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("user_role_min_fields"), "user_role_min_fields"),
     comment: types.union(types.undefined, types.null, types.string),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     sort: types.union(types.undefined, types.null, types.integer),
   })
@@ -26,6 +27,7 @@ export const user_role_min_fieldsModelBase = ModelBase
 
 export class user_role_min_fieldsModelSelector extends QueryBuilder {
   get comment() { return this.__attr(`comment`) }
+  get id() { return this.__attr(`id`) }
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
 }

@@ -9,5 +9,6 @@ import { types } from "mobx-state-tree"
 */
 export const av_art_update_columnEnum = types.enumeration("av_art_update_column", [
         "art_id",
+  "id",
   "person_id",
       ])

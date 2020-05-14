@@ -15,6 +15,7 @@ export const art_qk_max_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("art_qk_max_fields"), "art_qk_max_fields"),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     sort: types.union(types.undefined, types.null, types.frozen()),
     titel: types.union(types.undefined, types.null, types.string),
@@ -27,6 +28,7 @@ export const art_qk_max_fieldsModelBase = ModelBase
 
 export class art_qk_max_fieldsModelSelector extends QueryBuilder {
   get beschreibung() { return this.__attr(`beschreibung`) }
+  get id() { return this.__attr(`id`) }
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
   get titel() { return this.__attr(`titel`) }

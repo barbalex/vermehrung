@@ -23,11 +23,12 @@ export const user_roleModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("user_role"), "user_role"),
     comment: types.union(types.undefined, types.null, types.string),
+    id: types.identifier,
     name: types.union(types.undefined, types.string),
-    people: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => personModel)))),
-    people_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
     person_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_revModel)))),
     person_revs_aggregate: types.union(types.undefined, types.late(() => person_rev_aggregateModel)),
+    persons: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => personModel)))),
+    persons_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
     sort: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
@@ -38,12 +39,13 @@ export const user_roleModelBase = ModelBase
 
 export class user_roleModelSelector extends QueryBuilder {
   get comment() { return this.__attr(`comment`) }
+  get id() { return this.__attr(`id`) }
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
-  people(builder) { return this.__child(`people`, personModelSelector, builder) }
-  people_aggregate(builder) { return this.__child(`people_aggregate`, person_aggregateModelSelector, builder) }
   person_revs(builder) { return this.__child(`person_revs`, person_revModelSelector, builder) }
   person_revs_aggregate(builder) { return this.__child(`person_revs_aggregate`, person_rev_aggregateModelSelector, builder) }
+  persons(builder) { return this.__child(`persons`, personModelSelector, builder) }
+  persons_aggregate(builder) { return this.__child(`persons_aggregate`, person_aggregateModelSelector, builder) }
 }
 export function selectFromuser_role() {
   return new user_roleModelSelector()
