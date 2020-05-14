@@ -1,21 +1,19 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import {
-  herkunft as herkunftFragment,
-  personOption as personOptionFragment,
-} from '../../../utils/fragments'
-import types from '../../../models/Filter/simpleTypes'
+import { personOption as personOptionFragment } from '../../../utils/fragments'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -81,9 +79,8 @@ const Herkunft = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter, user } = store
+  const { filter, user, upsertHerkunft, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -104,7 +101,7 @@ const Herkunft = ({
     error: errorAll,
     loading: loadingAll,
     query: queryAll,
-  } = useQuery((store) => store.queryHerkunft(/*undefined, (d) => d.id*/))
+  } = useQuery((store) => store.queryHerkunft())
   const { data: dataFiltered } = useQuery((store) =>
     store.queryHerkunft(
       {
@@ -144,6 +141,83 @@ const Herkunft = ({
   }, [row.id])
 
   const saveToDb = useCallback(
+    async (event) => {
+      const field = event.target.name
+      // TODO: still necessary?
+      let value = ifIsNumericAsNumber(event.target.value)
+      if (event.target.value === undefined) value = null
+      if (event.target.value === '') value = null
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
+
+      if (showFilter) {
+        return filter.setValue({ table: 'herkunft', key: field, value })
+      }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id: row.id,
+        nr: field === 'nr' ? value.toString() : row.nr,
+        lokalname: field === 'lokalname' ? value.toString() : row.lokalname,
+        gemeinde: field === 'gemeinde' ? value.toString() : row.gemeinde,
+        kanton: field === 'kanton' ? value.toString() : row.kanton,
+        land: field === 'land' ? value.toString() : row.land,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        changed: moment().format('YYYY-MM-DD'),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      console.log('Herkunft, saveToDb', {
+        eventTargetValue: event.target.value,
+        value,
+        previousValue,
+        field,
+        newObject,
+      })
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_herkunft_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'herkunft_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryHerkunft',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertHerkunft(newObject)
+        // refetch query because is not a model instance
+        queryAll.refetch()
+      }, 50)
+    },
+    [
+      addQueuedQuery,
+      upsertHerkunft,
+      filter,
+      id,
+      row,
+      showFilter,
+      user,
+      queryAll,
+    ],
+  )
+
+  /*const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
@@ -209,7 +283,7 @@ const Herkunft = ({
       }
     },
     [client, filter, row, showFilter],
-  )
+  )*/
   const openHerkunftDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Herkuenfte`
     if (typeof window !== 'undefined') {

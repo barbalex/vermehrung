@@ -268,7 +268,8 @@ const Event = ({
         kultur_id: field === 'kultur_id' ? value : row.kultur_id,
         teilkultur_id: field === 'teilkultur_id' ? value : row.teilkultur_id,
         person_id: field === 'person_id' ? value : row.person_id,
-        beschreibung: field === 'beschreibung' ? value : row.beschreibung,
+        beschreibung:
+          field === 'beschreibung' ? value.toString() : row.beschreibung,
         geplant: field === 'geplant' ? value : row.geplant,
         datum: field === 'datum' ? value : row.datum,
         changed: moment().format('YYYY-MM-DD'), //'2000-05-03',
