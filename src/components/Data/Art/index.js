@@ -91,9 +91,10 @@ const Art = ({
   if (showFilter) {
     row = filter.art
   } else {
-    row = get(data, 'art[0]') || {}
-    //row0 = store.arts.get(id) // does not work because reference to ae_art is undefined
+    //row = get(data, 'art[0]') || {}
+    row = store.arts.get(id) // does not work because reference to ae_art is undefined
   }
+  //console.log('Art', { row, row0 })
 
   useEffect(() => {
     setErrors({})

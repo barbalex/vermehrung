@@ -165,6 +165,7 @@ const Teilzaehlung = ({
             delete_teilzaehlung(where: { id: { _eq: $id } }) {
               returning {
                 id
+                __typename
               }
             }
           }

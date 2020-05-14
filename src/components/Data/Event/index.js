@@ -95,6 +95,7 @@ const eventQuery = gql`
       ...EventFields
       kultur {
         id
+        __typename
         art_id
         kultur_option {
           ...KulturOptionFields
@@ -103,9 +104,11 @@ const eventQuery = gql`
     }
     rowsUnfiltered: event @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: event(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${eventFragment}
@@ -122,19 +125,24 @@ const kulturQuery = gql`
       ]
     ) {
       id
+      __typename
       art_id
       art {
         id
+        __typename
         art_ae_art {
           id
+          __typename
           name
         }
       }
       garten {
         id
+        __typename
         name
         person {
           id
+          __typename
           name
           ort
         }
@@ -151,6 +159,7 @@ const personQuery = gql`
   query personQueryForEvent {
     person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
+      __typename
       name
       ort
     }

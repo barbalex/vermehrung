@@ -111,6 +111,7 @@ export default async ({ node, store, client }) => {
           query getArt {
             kultur(where: { id: { _eq: ${parentId} } }) {
               id
+              __typename
               art_id
             }
           }
@@ -132,6 +133,7 @@ export default async ({ node, store, client }) => {
           query getArt {
             sammlung(where: { id: { _eq: ${parentId} } }) {
               id
+              __typename
               art_id
             }
           }
@@ -202,7 +204,10 @@ export default async ({ node, store, client }) => {
     mutation = gql`
       mutation InsertDatasetForCreateNew2 {
         insert_${table} (objects: [{}]) {
-          returning { id }
+          returning {
+            id
+            __typename
+          }
         }
       }
     `

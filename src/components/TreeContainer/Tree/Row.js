@@ -202,6 +202,7 @@ const personQuery = gql`
   query PersonQueryForTree($accountId: String) {
     person(where: { account_id: { _eq: $accountId } }) {
       id
+      __typename
       user_role
     }
   }
@@ -279,6 +280,7 @@ const Row = ({ style, node, nodes }) => {
           query getPerson($id: Int!) {
             person (where: { id: { _eq: ${personId} } }) {
               id
+              __typename
               email
               user_role
             }
@@ -377,6 +379,7 @@ const Row = ({ style, node, nodes }) => {
           query getPerson($id: Int!) {
             person (where: { id: { _eq: ${personId} } }) {
               id
+              __typename
               email
               user_role
             }

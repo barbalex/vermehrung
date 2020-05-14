@@ -19,9 +19,11 @@ export default gql`
     }
     rowsUnfiltered: art @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: art(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${artFragment}

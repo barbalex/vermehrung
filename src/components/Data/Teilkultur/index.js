@@ -78,6 +78,7 @@ const teilkulturQuery = gql`
       ...TeilkulturFields
       kultur {
         id
+        __typename
         art_id
         kultur_option {
           ...KulturOptionFields
@@ -86,9 +87,11 @@ const teilkulturQuery = gql`
     }
     rowsUnfiltered: teilkultur @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: teilkultur(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${teilkulturFragment}
@@ -105,19 +108,24 @@ const kulturQuery = gql`
       ]
     ) {
       id
+      __typename
       art_id
       art {
         id
+        __typename
         art_ae_art {
           id
+          __typename
           name
         }
       }
       garten {
         id
+        __typename
         name
         person {
           id
+          __typename
           name
           ort
         }

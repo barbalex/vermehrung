@@ -128,8 +128,10 @@ const lieferungQuery = gql`
       ...LieferungFields
       sammlung {
         id
+        __typename
         herkunft {
           id
+          __typename
           nr
           lokalname
           gemeinde
@@ -137,10 +139,12 @@ const lieferungQuery = gql`
       }
       kulturByVonKulturId {
         id
+        __typename
         art_id
         herkunft_id
         herkunft {
           id
+          __typename
           nr
           lokalname
           gemeinde
@@ -148,10 +152,12 @@ const lieferungQuery = gql`
       }
       kulturByNachKulturId {
         id
+        __typename
         art_id
         herkunft_id
         herkunft {
           id
+          __typename
           nr
           lokalname
           gemeinde
@@ -160,9 +166,11 @@ const lieferungQuery = gql`
     }
     rowsUnfiltered: lieferung @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: lieferung(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${lieferungFragment}
@@ -178,17 +186,20 @@ const sammlungQuery = gql`
       ]
     ) {
       id
+      __typename
       art_id
       datum
       herkunft_id
       herkunft {
         id
+        __typename
         nr
         lokalname
         gemeinde
       }
       person {
         id
+        __typename
         name
         ort
       }
@@ -205,13 +216,16 @@ const kulturQuery = gql`
       ]
     ) {
       id
+      __typename
       art_id
       herkunft_id
       garten {
         id
+        __typename
         name
         person {
           id
+          __typename
           name
           ort
         }
@@ -231,6 +245,7 @@ const personQuery = gql`
   query personQueryForLieferung {
     person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
+      __typename
       name
       ort
     }

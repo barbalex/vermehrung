@@ -25,6 +25,7 @@ export default gql`
         ...GartenFields
         kulturs(where: { art: { ae_id: { _is_null: false } } }) {
           id
+          __typename
           art_id
           herkunft_id
         }
@@ -69,6 +70,7 @@ export default gql`
         }
         teilzaehlungs {
           id
+          __typename
           andere_menge
           auspflanzbereit_beschreibung
           bemerkungen
@@ -90,6 +92,7 @@ export default gql`
         }
         teilzaehlungs {
           id
+          __typename
           andere_menge
           auspflanzbereit_beschreibung
           bemerkungen
@@ -98,9 +101,11 @@ export default gql`
     }
     rowsUnfiltered: kultur @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: kultur(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${kulturFragment}

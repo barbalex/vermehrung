@@ -41,6 +41,7 @@ export default gql`
       }
       garten {
         id
+        __typename
         name
         person {
           ...PersonFields

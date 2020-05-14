@@ -292,7 +292,7 @@ const Kultur = ({
               __typename: 'Mutation',
               updateKultur: {
                 id: row.id,
-                __typename: 'Kultur',
+                __typename: 'kultur',
                 content: { ...row, [field]: valueToSet },
               },
             },

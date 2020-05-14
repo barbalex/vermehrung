@@ -11,6 +11,7 @@ export default gql`
       ]
     ) {
       id
+      __typename
       nr
       lokalname
       gemeinde

@@ -64,6 +64,7 @@ const query = gql`
   query ZaehlungQueryForZaehlungs($filter: zaehlung_bool_exp!) {
     rowsUnfiltered: zaehlung {
       id
+      __typename
     }
     rowsFiltered: zaehlung(
       where: $filter

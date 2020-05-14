@@ -94,6 +94,7 @@ const personQuery = gql`
   query personQueryForLieferschein($id: uuid!) {
     person(where: { id: { _eq: $id } }) {
       id
+      __typename
       name
       ort
     }
@@ -103,8 +104,10 @@ const kulturQuery = gql`
   query kulturQueryForLieferschein($id: uuid!) {
     kultur(where: { id: { _eq: $id } }) {
       id
+      __typename
       garten {
         id
+      __typename
         name
         ort
       }
@@ -121,11 +124,14 @@ const lieferungQuery = gql`
       ]
     ) {
       id
+      __typename
       art_id
       art {
         id
+      __typename
         art_ae_art {
           id
+      __typename
           name
         }
       }
@@ -137,9 +143,11 @@ const lieferungQuery = gql`
       von_kultur_id
       kulturByVonKulturId {
         id
+      __typename
         herkunft_id
         herkunft {
           id
+      __typename
           nr
           gemeinde
           lokalname

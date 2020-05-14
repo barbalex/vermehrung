@@ -7,11 +7,14 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -85,9 +88,11 @@ const gartenQuery = gql`
     }
     rowsUnfiltered: garten @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: garten(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${gartenFragment}
@@ -96,6 +101,7 @@ const personQuery = gql`
   query personQueryForGarten {
     person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
+      __typename
       name
       ort
     }

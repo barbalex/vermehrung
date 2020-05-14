@@ -75,9 +75,11 @@ const herkunftQuery = gql`
   ) {
     rowsUnfiltered: herkunft @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: herkunft(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
 `

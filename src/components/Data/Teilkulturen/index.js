@@ -64,6 +64,7 @@ const query = gql`
   query TeilkulturQueryForTeilkulturs($filter: teilkultur_bool_exp!) {
     rowsUnfiltered: teilkultur {
       id
+      __typename
     }
     rowsFiltered: teilkultur(
       where: $filter

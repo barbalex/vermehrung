@@ -12,8 +12,10 @@ export default gql`
       person_id
       art {
         id
+        __typename
         art_ae_art {
           id
+          __typename
           name
         }
       }

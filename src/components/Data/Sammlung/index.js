@@ -97,9 +97,11 @@ const query = gql`
     }
     rowsUnfiltered: sammlung @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: sammlung(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${sammlungFragment}
@@ -108,6 +110,7 @@ const dataQuery = gql`
   query dataQuery {
     person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
       id
+      __typename
       name
       ort
     }
@@ -119,6 +122,7 @@ const dataQuery = gql`
       ]
     ) {
       id
+      __typename
       nr
       lokalname
       gemeinde

@@ -67,6 +67,7 @@ const query = gql`
   query LieferungQueryForLieferungs($filter: lieferung_bool_exp!) {
     rowsUnfiltered: lieferung {
       id
+      __typename
     }
     rowsFiltered: lieferung(
       where: $filter
@@ -75,6 +76,7 @@ const query = gql`
       ...LieferungFields
       kulturByNachKulturId {
         id
+        __typename
         zaehlungs {
           ...ZaehlungFields
           teilzaehlungs_aggregate {

@@ -173,14 +173,17 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
           name
+          __typename
         }
       }
       herkunft {
         id
         nr
+        __typename
       }
     }
     kultursWithoutGarten: kultur(
@@ -188,9 +191,11 @@ export default gql`
       order_by: { herkunft: { nr: asc_nulls_first } }
     ) @include(if: $kultursWithoutGarten) {
       id
+      __typename
       herkunft {
         id
         nr
+        __typename
       }
     }
     kultursWithoutHerkunft: kultur(
@@ -200,9 +205,11 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
           name
+          __typename
         }
       }
     }
@@ -223,14 +230,17 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
           name
+          __typename
         }
       }
       herkunft {
         id
         nr
+        __typename
       }
     }
     teilkultursWithoutName: kultur(
@@ -246,14 +256,17 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
           name
+          __typename
         }
       }
       herkunft {
         id
         nr
+        __typename
       }
       teilkulturs(where: { name: { _is_null: true } }, order_by: { id: asc }) {
         ...TeilkulturFields
@@ -272,14 +285,17 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
           name
+          __typename
         }
       }
       herkunft {
         id
         nr
+        __typename
       }
       zaehlungs(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
         ...ZaehlungFields
@@ -298,13 +314,16 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
           name
+          __typename
         }
       }
       herkunft {
         id
+        __typename
         nr
       }
       events(
@@ -324,13 +343,16 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
+          __typename
           name
         }
       }
       herkunft {
         id
+        __typename
         nr
       }
       events(where: { datum: { _is_null: true } }, order_by: { id: asc }) {
@@ -350,13 +372,16 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
+          __typename
           name
         }
       }
       herkunft {
         id
+        __typename
         nr
       }
       zaehlungs(
@@ -387,13 +412,16 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
+          __typename
           name
         }
       }
       herkunft {
         id
+        __typename
         nr
       }
       zaehlungs(
@@ -424,13 +452,16 @@ export default gql`
       ...KulturFields
       garten {
         id
+        __typename
         person {
           id
+          __typename
           name
         }
       }
       herkunft {
         id
+        __typename
         nr
       }
       zaehlungs(

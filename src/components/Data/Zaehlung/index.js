@@ -93,6 +93,7 @@ const zaehlungQuery = gql`
       ...ZaehlungFields
       kultur {
         id
+        __typename
         art_id
         kultur_option {
           ...KulturOptionFields
@@ -101,9 +102,11 @@ const zaehlungQuery = gql`
     }
     rowsUnfiltered: zaehlung @include(if: $isFiltered) {
       id
+      __typename
     }
     rowsFiltered: zaehlung(where: $filter) @include(if: $isFiltered) {
       id
+      __typename
     }
   }
   ${zaehlungFragment}
@@ -119,12 +122,15 @@ const kulturQuery = gql`
       ]
     ) {
       id
+      __typename
       art_id
       garten {
         id
+        __typename
         name
         person {
           id
+          __typename
           name
           ort
         }

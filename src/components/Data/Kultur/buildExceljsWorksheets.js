@@ -25,22 +25,27 @@ export default async ({
           query GetKulturForKulturDownload($id: uuid!) {
             kultur(where: { id: { _eq: $id } }) {
               id
+              __typename
               art_id
               art {
                 id
+                __typename
                 art_ae_art {
                   id
+                  __typename
                   name
                 }
               }
               herkunft_id
               herkunft {
                 id
+                __typename
                 nr
               }
               garten_id
               garten {
                 id
+                __typename
                 name
               }
               zwischenlager
@@ -88,6 +93,7 @@ export default async ({
         query GetZaehlungForKulturDownload($id: uuid!) {
           zaehlung(where: { kultur_id: { _eq: $id } }) {
             id
+            __typename
             kultur_id
             datum
             prognose
@@ -103,8 +109,10 @@ export default async ({
               }
               nodes {
                 id
+                __typename
                 teilkultur {
                   id
+                  __typename
                   name
                   ort1
                   ort2
@@ -184,10 +192,12 @@ export default async ({
         query GetTeilzaehlungForKulturDownload($id: uuid!) {
           teilzaehlung(where: { zaehlung: { kultur_id: { _eq: $id } } }) {
             id
+            __typename
             zaehlung_id
             teilkultur_id
             teilkultur {
               id
+              __typename
               name
             }
             anzahl_pflanzen
@@ -235,46 +245,56 @@ export default async ({
         query GetAnlieferungForKulturDownload($id: uuid!) {
           lieferung(where: { nach_kultur_id: { _eq: $id } }) {
             id
+            __typename
             sammel_lieferung_id
             art_id
             art {
               id
+              __typename
               art_ae_art {
                 id
+                __typename
                 name
               }
             }
             person_id
             person {
               id
+              __typename
               name
             }
             von_sammlung_id
             von_sammlung: sammlung {
               id
+              __typename
               datum
               herkunft_id
               herkunft {
                 id
+                __typename
                 nr
               }
               person_id
               person {
                 id
+                __typename
                 name
               }
             }
             von_kultur_id
             kulturByVonKulturId {
               id
+              __typename
               garten_id
               garten {
                 id
+                __typename
                 name
               }
               herkunft_id
               herkunft {
                 id
+                __typename
                 nr
               }
             }
@@ -282,14 +302,17 @@ export default async ({
             nach_kultur_id
             kulturByNachKulturId {
               id
+              __typename
               garten_id
               garten {
                 id
+                __typename
                 name
               }
               herkunft_id
               herkunft {
                 id
+                __typename
                 nr
               }
             }
@@ -359,46 +382,56 @@ export default async ({
         query GetAuslieferungForKulturDownload($id: uuid!) {
           lieferung(where: { von_kultur_id: { _eq: $id } }) {
             id
+            __typename
             sammel_lieferung_id
             art_id
             art {
               id
+              __typename
               art_ae_art {
                 id
+                __typename
                 name
               }
             }
             person_id
             person {
               id
+              __typename
               name
             }
             von_sammlung_id
             von_sammlung: sammlung {
               id
+              __typename
               datum
               herkunft_id
               herkunft {
                 id
+                __typename
                 nr
               }
               person_id
               person {
                 id
+                __typename
                 name
               }
             }
             von_kultur_id
             kulturByVonKulturId {
               id
+              __typename
               garten_id
               garten {
                 id
+                __typename
                 name
               }
               herkunft_id
               herkunft {
                 id
+                __typename
                 nr
               }
             }
@@ -406,14 +439,17 @@ export default async ({
             nach_kultur_id
             kulturByNachKulturId {
               id
+              __typename
               garten_id
               garten {
                 id
+                __typename
                 name
               }
               herkunft_id
               herkunft {
                 id
+                __typename
                 nr
               }
             }
@@ -483,15 +519,18 @@ export default async ({
         query GetEventsForKulturDownload($id: uuid!) {
           event(where: { kultur_id: { _eq: $id } }) {
             id
+            __typename
             kultur_id
             teilkultur_id
             teilkultur {
               id
+              __typename
               name
             }
             person_id
             person {
               id
+              __typename
               name
             }
             beschreibung
