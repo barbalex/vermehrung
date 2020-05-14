@@ -1,14 +1,16 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
@@ -17,7 +19,6 @@ import {
   kulturOption as kulturOptionFragment,
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
-import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
@@ -139,9 +140,8 @@ const Teilkultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, user, upsertTeilkultur, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -149,7 +149,7 @@ const Teilkultur = ({
   const teilkulturResult = useQuery(teilkulturQuery, {
     variables: { id, isFiltered, filter: teilkulturFilter },
   })
-  const { data, error, loading } = teilkulturResult
+  const { data, error, loading, query } = teilkulturResult
 
   const [errors, setErrors] = useState({})
 
@@ -193,62 +193,77 @@ const Teilkultur = ({
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
+      // TODO: still necessary?
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.teilkultur[field]
       const previousValue = row[field]
+      console.log('Teilkultur, saveToDb', {
+        eventTargetValue: event.target.value,
+        value,
+        previousValue,
+        field,
+      })
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'teilkultur', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split ? value.split('"').join('\\"') : value
-            }"`
-          }
-          await client.mutate({
-            mutation: gql`
-              mutation update_teilkultur($id: uuid!) {
-                update_teilkultur(
-                  where: { id: { _eq: $id } }
-                  _set: { 
-                    ${field}: ${valueToSet} }
-                ) {
-                  affected_rows
-                  returning {
-                    ...TeilkulturFields
-                  }
-                }
-              }
-              ${teilkulturFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateTeilkultur: {
-                id: row.id,
-                __typename: 'Teilkultur',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'teilkultur', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id: row.id,
+        kultur_id: field === 'kultur_id' ? value : row.kultur_id,
+        name: field === 'name' ? value.toString() : row.name,
+        ort1: field === 'ort1' ? value.toString() : row.ort1,
+        ort2: field === 'ort2' ? value.toString() : row.ort2,
+        ort3: field === 'ort3' ? value.toString() : row.ort3,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        changed: moment().format('YYYY-MM-DD'),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_teilkultur_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'teilkultur_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryTeilkultur',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertTeilkultur(newObject)
+        // refetch query because is not a model instance
+        query.refetch()
+      }, 50)
     },
-    [client, filter, row, showFilter],
+    [
+      addQueuedQuery,
+      upsertTeilkultur,
+      filter,
+      id,
+      row,
+      showFilter,
+      user,
+      query,
+    ],
   )
   const openTeilkulturDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Teilkulturen`

@@ -6,13 +6,14 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import get from 'lodash/get'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
+import { StoreContext } from '../../../../../models/reactUtils'
+import toPgArray from '../../../../../utils/toPgArray'
 import TextField from '../../../../shared/TextField'
 import Select from '../../../../shared/SelectCreatable'
-import { teilzaehlung as teilzaehlungFragment } from '../../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
-import types from '../../../../../models/Filter/simpleTypes'
-import { StoreContext } from '../../../../../models/reactUtils'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
@@ -69,7 +70,7 @@ const Teilzaehlung = ({
 }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { enqueNotification } = store
+  const { enqueNotification, user, upsertTeilzaehlung, addQueuedQuery } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -101,61 +102,80 @@ const Teilzaehlung = ({
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
+      // TODO: still necessary?
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.lieferung[field]
       const previousValue = row[field]
+      console.log('Teilzaehlung, saveToDb', {
+        eventTargetValue: event.target.value,
+        value,
+        previousValue,
+        field,
+      })
       // only update if value has changed
       if (value === previousValue) return
-      // update tree if numbers were changed
-      const refetchQueries = [
-        'anzahl_pflanzen',
-        'anzahl_auspflanzbereit',
-        'anzahl_mutterpflanzen',
-        'prognose',
-      ].includes(field)
-        ? ['TreeQueryForTreeContainer']
-        : []
-      try {
-        let valueToSet
-        if (value === null) {
-          valueToSet = null
-        } else if (['number', 'boolean'].includes(type)) {
-          valueToSet = value
-        } else {
-          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
-        }
-        await client.mutate({
-          mutation: gql`
-              mutation update_teilzaehlung(
-                $id: uuid!
-              ) {
-                update_teilzaehlung(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...TeilzaehlungFields
-                  }
-                }
-              }
-              ${teilzaehlungFragment}
-            `,
-          variables: {
-            id: row.id,
-          },
-          refetchQueries,
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id: row.id,
+        zaehlung_id: field === 'zaehlung_id' ? value : row.zaehlung_id,
+        teilkultur_id: field === 'teilkultur_id' ? value : row.teilkultur_id,
+        anzahl_pflanzen:
+          field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
+        anzahl_auspflanzbereit:
+          field === 'anzahl_auspflanzbereit'
+            ? value
+            : row.anzahl_auspflanzbereit,
+        anzahl_mutterpflanzen:
+          field === 'anzahl_mutterpflanzen' ? value : row.anzahl_mutterpflanzen,
+        andere_menge:
+          field === 'andere_menge' ? value.toString() : row.andere_menge,
+        auspflanzbereit_beschreibung:
+          field === 'auspflanzbereit_beschreibung'
+            ? value.toString()
+            : row.auspflanzbereit_beschreibung,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        prognose_von_tz:
+          field === 'prognose_von_tz' ? value : row.prognose_von_tz,
+        changed: moment().format('YYYY-MM-DD'),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
       }
-      setErrors({})
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_teilzaehlung_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'teilzaehlung_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryTeilzaehlung',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: row.id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertTeilzaehlung(newObject)
+        // refetch query because is not a model instance
+        zaehlungResult.query.refetch()
+        // update tree if one of these fields were changed
+        // 'anzahl_pflanzen', 'anzahl_auspflanzbereit', 'anzahl_mutterpflanzen', 'prognose',
+      }, 50)
     },
-    [client, row],
+    [addQueuedQuery, row, upsertTeilzaehlung, user.email, zaehlungResult.query],
   )
   const onClickDelete = useCallback(async () => {
     try {

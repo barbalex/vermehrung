@@ -7,13 +7,15 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -24,7 +26,6 @@ import {
   zaehlung as zaehlungFragment,
   kulturOption as kulturOptionFragment,
 } from '../../../utils/fragments'
-import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
@@ -144,9 +145,8 @@ const Zaehlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, upsertZaehlung, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -154,7 +154,7 @@ const Zaehlung = ({
   const zaehlungResult = useQuery(zaehlungQuery, {
     variables: { id, isFiltered, filter: zaehlungFilter },
   })
-  const { data, error, loading } = zaehlungResult
+  const { data, error, loading, query } = zaehlungResult
 
   const [errors, setErrors] = useState({})
 
@@ -206,65 +206,66 @@ const Zaehlung = ({
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
+      // TODO: still necessary?
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.zaehlung[field]
       const previousValue = row[field]
+      console.log('Zaehlung, saveToDb', {
+        eventTargetValue: event.target.value,
+        value,
+        previousValue,
+        field,
+      })
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'zaehlung', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split ? value.split('"').join('\\"') : value
-            }"`
-          }
-          await client.mutate({
-            mutation: gql`
-              mutation update_zaehlung(
-                $id: uuid!
-              ) {
-                update_zaehlung(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                  ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...ZaehlungFields
-                  }
-                }
-              }
-              ${zaehlungFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateZaehlung: {
-                id: row.id,
-                __typename: 'Zaehlung',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'zaehlung', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id: row.id,
+        kultur_id: field === 'kultur_id' ? value : row.kultur_id,
+        datum: field === 'datum' ? value : row.datum,
+        prognose: field === 'prognose' ? value : row.prognose,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        changed: moment().format('YYYY-MM-DD'),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_zaehlung_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'zaehlung_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryZaehlung',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertZaehlung(newObject)
+        // refetch query because is not a model instance
+        query.refetch()
+      }, 50)
     },
-    [client, filter, row, showFilter],
+    [addQueuedQuery, upsertZaehlung, filter, id, row, showFilter, user, query],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
