@@ -65,7 +65,7 @@ const SettingsTree = ({ data, personId }) => {
                 $personId: uuid!
               ) {
                 update_person_option(
-                  where: { person_id: { _eq: $personId } }
+                  where: { id: { _eq: $personId } }
                   _set: {
                     ${field}: ${!value}
                   }
@@ -86,7 +86,7 @@ const SettingsTree = ({ data, personId }) => {
           optimisticResponse: {
             __typename: 'Mutation',
             updatePersonOption: {
-              person_id: personOption.person_id,
+              id: personOption.id,
               __typename: 'PersonOption',
               content: { ...personOption, [field]: !value },
             },

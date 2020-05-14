@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree'
 
 export const type = types.model({
-  kultur_id: types.optional(types.maybeNull(types.number), null),
+  id: types.optional(types.maybeNull(types.number), null),
   tk: types.optional(types.maybeNull(types.boolean), false),
   tk_bemerkungen: types.optional(types.maybeNull(types.boolean), true),
   z_bemerkungen: types.optional(types.maybeNull(types.boolean), true),
@@ -23,7 +23,7 @@ export const type = types.model({
 })
 
 export const initial = {
-  kultur_id: null,
+  id: null,
   tk: false,
   tk_bemerkungen: true,
   z_bemerkungen: true,
@@ -39,7 +39,7 @@ export const initial = {
 }
 
 export const empty = {
-  kultur_id: null,
+  id: null,
   tk: false,
   tk_bemerkungen: true,
   z_bemerkungen: true,
@@ -55,7 +55,7 @@ export const empty = {
 }
 
 export const simpleTypes = {
-  kultur_id: 'uuid',
+  id: 'uuid',
   tk: 'boolean',
   tk_bemerkungen: 'boolean',
   z_bemerkungen: 'boolean',

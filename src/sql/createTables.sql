@@ -467,11 +467,11 @@ comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen un
 
 drop table if exists kultur_qk_choosen cascade;
 create table kultur_qk_choosen (
-  kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  unique(kultur_id, qk_name)
+  unique(id, qk_name)
 );
-create index on kultur_qk_choosen using btree (kultur_id);
+create index on kultur_qk_choosen using btree (id);
 create index on kultur_qk_choosen using btree (qk_name);
 
 drop table if exists kultur_file cascade;
@@ -690,7 +690,7 @@ create index on teilzaehlung_rev using btree (_deleted);
 
 drop table if exists kultur_option cascade;
 create table kultur_option (
-  kultur_id uuid unique not null references kultur (id) on delete cascade on update cascade,
+  id uuid unique not null references kultur (id) on delete cascade on update cascade,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
@@ -709,12 +709,12 @@ create table kultur_option (
   _depth integer default 1,
   _conflicts text[] default null
 );
-create index on kultur_option using btree (kultur_id);
+create index on kultur_option using btree (id);
 COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists kultur_option_rev cascade;
 create table kultur_option_rev (
-  kultur_id uuid not null references kultur (id) on delete no action on update cascade,
+  id uuid not null references kultur (id) on delete no action on update cascade,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
@@ -732,9 +732,9 @@ create table kultur_option_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (kultur_id, _rev)
+  primary key (id, _rev)
 );
-create index on kultur_option_rev using btree (kultur_id);
+create index on kultur_option_rev using btree (id);
 create index on kultur_option_rev using btree (_rev);
 create index on kultur_option_rev using btree (_parent_rev);
 create index on kultur_option_rev using btree (_depth);
@@ -742,7 +742,7 @@ create index on kultur_option_rev using btree (_deleted);
 
 drop table if exists person_option cascade;
 create table person_option (
-  person_id uuid unique not null references person (id) on delete cascade on update cascade,
+  id uuid unique not null references person (id) on delete cascade on update cascade,
   ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
   ga_plz boolean default true,
@@ -770,7 +770,7 @@ create table person_option (
   _depth integer default 1,
   _conflicts text[] default null
 );
-create index on person_option using btree (person_id);
+create index on person_option using btree (id);
 comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
 comment on column person_option.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
 comment on column person_option.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
@@ -778,7 +778,7 @@ comment on column person_option.ar_name_deutsch is 'Dieses Feld wird (momentan) 
 
 drop table if exists person_option_rev cascade;
 create table person_option_rev (
-  person_id uuid not null references person (id) on delete no action on update cascade,
+  id uuid not null references person (id) on delete no action on update cascade,
   ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
   ga_plz boolean default true,
@@ -805,9 +805,9 @@ create table person_option_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (person_id, _rev)
+  primary key (id, _rev)
 );
-create index on person_option_rev using btree (person_id);
+create index on person_option_rev using btree (id);
 create index on person_option_rev using btree (_rev);
 create index on person_option_rev using btree (_parent_rev);
 create index on person_option_rev using btree (_depth);

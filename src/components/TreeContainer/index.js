@@ -13,12 +13,11 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { StoreContext } from '../../models/reactUtils'
+import { StoreContext, useQuery } from '../../models/reactUtils'
 import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'

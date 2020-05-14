@@ -53,7 +53,7 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
                 $personId: uuid!
               ) {
                 update_person_option(
-                  where: { person_id: { _eq: $personId } }
+                  where: { id: { _eq: $personId } }
                   _set: {
                     ${field}: ${!value}
                   }

@@ -3,7 +3,7 @@ create or replace function kultur_option_rev_set_winning_revision ()
   as $body$
 begin
   insert into kultur_option (
-      kultur_id,
+      id,
       z_bemerkungen,
       tz_teilkultur_id,
       tz_anzahl_mutterpflanzen,
@@ -61,7 +61,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      kultur_option_rev.kultur_id,
+      kultur_option_rev.id,
       kultur_option_rev.z_bemerkungen,
       kultur_option_rev.tz_teilkultur_id,
       kultur_option_rev.tz_anzahl_mutterpflanzen,
