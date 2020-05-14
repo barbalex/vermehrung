@@ -8,6 +8,8 @@ export default gql`
       where: { person_id: { _eq: $personId } }
       order_by: { art: { art_ae_art: { name: asc } } }
     ) {
+      id
+      __typename
       art_id
       person_id
       art {

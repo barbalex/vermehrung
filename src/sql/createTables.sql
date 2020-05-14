@@ -4,10 +4,12 @@ CREATE EXTENSION if not exists postgis;
 
 drop table if exists user_role cascade;
 create table user_role (
-  name text primary key,
+  id uuid primary key default uuid_generate_v1mc(),
+  name text unique,
   sort integer,
   comment text
 );
+create index on user_role using btree (id);
 create index on user_role using btree (name);
 create index on user_role using btree (sort);
 INSERT INTO user_role (name, sort, comment) VALUES
@@ -139,7 +141,8 @@ create index on art_rev using btree (_deleted);
 
 drop table if exists art_qk cascade;
 create table art_qk (
-  name text primary key,
+  id uuid primary key default uuid_generate_v1mc(),
+  name text unique,
   titel text,
   beschreibung text,
   sort smallint default null
@@ -967,10 +970,12 @@ create index on lieferung_file using btree (file_mime_type);
 
 drop table if exists av_art cascade;
 create table av_art (
+  id uuid primary key default uuid_generate_v1mc(),
   art_id uuid unique REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id uuid references person (id) on delete cascade on update cascade,
-  primary key (person_id, art_id)
+  unique (person_id, art_id)
 );
+create index on av_art using btree (id);
 create index on av_art using btree (art_id);
 create index on av_art using btree (person_id);
 
