@@ -831,42 +831,8 @@ input art_pk_columns_input {
 
 # columns and relationships of "art_qk"
 type art_qk {
-  # An array relationship
-  art_qk_choosens(
-    # distinct select on columns
-    distinct_on: [art_qk_choosen_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_qk_choosen_order_by!]
-
-    # filter the rows returned
-    where: art_qk_choosen_bool_exp
-  ): [art_qk_choosen!]!
-
-  # An aggregated array relationship
-  art_qk_choosens_aggregate(
-    # distinct select on columns
-    distinct_on: [art_qk_choosen_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_qk_choosen_order_by!]
-
-    # filter the rows returned
-    where: art_qk_choosen_bool_exp
-  ): art_qk_choosen_aggregate!
   beschreibung: String
+  id: ID!
 
   # Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt
   name: String!
@@ -931,8 +897,8 @@ input art_qk_bool_exp {
   _and: [art_qk_bool_exp]
   _not: art_qk_bool_exp
   _or: [art_qk_bool_exp]
-  art_qk_choosens: art_qk_choosen_bool_exp
   beschreibung: String_comparison_exp
+  id: uuid_comparison_exp
   name: String_comparison_exp
   sort: smallint_comparison_exp
   titel: String_comparison_exp
@@ -943,9 +909,6 @@ type art_qk_choosen {
   # An object relationship
   art: art!
   art_id: uuid!
-
-  # An object relationship
-  art_qk: art_qk!
   id: ID!
   qk_name: String!
 }
@@ -983,7 +946,6 @@ input art_qk_choosen_bool_exp {
   _or: [art_qk_choosen_bool_exp]
   art: art_bool_exp
   art_id: uuid_comparison_exp
-  art_qk: art_qk_bool_exp
   id: uuid_comparison_exp
   qk_name: String_comparison_exp
 }
@@ -1001,7 +963,6 @@ enum art_qk_choosen_constraint {
 input art_qk_choosen_insert_input {
   art: art_obj_rel_insert_input
   art_id: uuid
-  art_qk: art_qk_obj_rel_insert_input
   id: ID
   qk_name: String
 }
@@ -1060,7 +1021,6 @@ input art_qk_choosen_on_conflict {
 input art_qk_choosen_order_by {
   art: art_order_by
   art_id: order_by
-  art_qk: art_qk_order_by
   id: order_by
   qk_name: order_by
 }
@@ -1104,6 +1064,9 @@ enum art_qk_choosen_update_column {
 # unique or primary key constraints on table "art_qk"
 enum art_qk_constraint {
   # unique or primary key constraint
+  art_qk_name_key
+
+  # unique or primary key constraint
   art_qk_pkey
 }
 
@@ -1114,8 +1077,8 @@ input art_qk_inc_input {
 
 # input type for inserting data into table "art_qk"
 input art_qk_insert_input {
-  art_qk_choosens: art_qk_choosen_arr_rel_insert_input
   beschreibung: String
+  id: ID
   name: String
   sort: smallint
   titel: String
@@ -1124,6 +1087,7 @@ input art_qk_insert_input {
 # aggregate max on columns
 type art_qk_max_fields {
   beschreibung: String
+  id: ID
   name: String
   sort: smallint
   titel: String
@@ -1132,6 +1096,7 @@ type art_qk_max_fields {
 # order by max() on columns of table "art_qk"
 input art_qk_max_order_by {
   beschreibung: order_by
+  id: order_by
   name: order_by
   sort: order_by
   titel: order_by
@@ -1140,6 +1105,7 @@ input art_qk_max_order_by {
 # aggregate min on columns
 type art_qk_min_fields {
   beschreibung: String
+  id: ID
   name: String
   sort: smallint
   titel: String
@@ -1148,6 +1114,7 @@ type art_qk_min_fields {
 # order by min() on columns of table "art_qk"
 input art_qk_min_order_by {
   beschreibung: order_by
+  id: order_by
   name: order_by
   sort: order_by
   titel: order_by
@@ -1177,8 +1144,8 @@ input art_qk_on_conflict {
 
 # ordering options when selecting data from "art_qk"
 input art_qk_order_by {
-  art_qk_choosens_aggregate: art_qk_choosen_aggregate_order_by
   beschreibung: order_by
+  id: order_by
   name: order_by
   sort: order_by
   titel: order_by
@@ -1186,14 +1153,16 @@ input art_qk_order_by {
 
 # primary key columns input for table: "art_qk"
 input art_qk_pk_columns_input {
-  # Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt
-  name: String!
+  id: ID!
 }
 
 # select columns of table "art_qk"
 enum art_qk_select_column {
   # column name
   beschreibung
+
+  # column name
+  id
 
   # column name
   name
@@ -1208,6 +1177,7 @@ enum art_qk_select_column {
 # input type for updating data in table "art_qk"
 input art_qk_set_input {
   beschreibung: String
+  id: ID
   name: String
   sort: smallint
   titel: String
@@ -1257,6 +1227,9 @@ input art_qk_sum_order_by {
 enum art_qk_update_column {
   # column name
   beschreibung
+
+  # column name
+  id
 
   # column name
   name
@@ -2390,6 +2363,7 @@ type av_art {
     # filter the rows returned
     where: art_sums_bool_exp
   ): art_sums_aggregate!
+  id: ID!
 
   # An object relationship
   person: person!
@@ -2430,6 +2404,7 @@ input av_art_bool_exp {
   art: art_bool_exp
   art_id: uuid_comparison_exp
   art_sums: art_sums_bool_exp
+  id: uuid_comparison_exp
   person: person_bool_exp
   person_id: uuid_comparison_exp
 }
@@ -2437,7 +2412,7 @@ input av_art_bool_exp {
 # unique or primary key constraints on table "av_art"
 enum av_art_constraint {
   # unique or primary key constraint
-  av_art_art_id_key
+  av_art_person_id_art_id_key
 
   # unique or primary key constraint
   av_art_pkey
@@ -2447,6 +2422,7 @@ enum av_art_constraint {
 input av_art_insert_input {
   art: art_obj_rel_insert_input
   art_id: uuid
+  id: ID
   person: person_obj_rel_insert_input
   person_id: uuid
 }
@@ -2454,24 +2430,28 @@ input av_art_insert_input {
 # aggregate max on columns
 type av_art_max_fields {
   art_id: uuid
+  id: ID
   person_id: uuid
 }
 
 # order by max() on columns of table "av_art"
 input av_art_max_order_by {
   art_id: order_by
+  id: order_by
   person_id: order_by
 }
 
 # aggregate min on columns
 type av_art_min_fields {
   art_id: uuid
+  id: ID
   person_id: uuid
 }
 
 # order by min() on columns of table "av_art"
 input av_art_min_order_by {
   art_id: order_by
+  id: order_by
   person_id: order_by
 }
 
@@ -2502,14 +2482,14 @@ input av_art_order_by {
   art: art_order_by
   art_id: order_by
   art_sums_aggregate: art_sums_aggregate_order_by
+  id: order_by
   person: person_order_by
   person_id: order_by
 }
 
 # primary key columns input for table: "av_art"
 input av_art_pk_columns_input {
-  art_id: uuid!
-  person_id: uuid!
+  id: ID!
 }
 
 # select columns of table "av_art"
@@ -2518,12 +2498,16 @@ enum av_art_select_column {
   art_id
 
   # column name
+  id
+
+  # column name
   person_id
 }
 
 # input type for updating data in table "av_art"
 input av_art_set_input {
   art_id: uuid
+  id: ID
   person_id: uuid
 }
 
@@ -2531,6 +2515,9 @@ input av_art_set_input {
 enum av_art_update_column {
   # column name
   art_id
+
+  # column name
+  id
 
   # column name
   person_id
@@ -12300,10 +12287,7 @@ type mutation_root {
   ): art_qk_mutation_response
 
   # delete single row from the table: "art_qk"
-  delete_art_qk_by_pk(
-    # Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt
-    name: String!
-  ): art_qk
+  delete_art_qk_by_pk(id: ID!): art_qk
 
   # delete data from the table: "art_qk_choosen"
   delete_art_qk_choosen(
@@ -12330,7 +12314,7 @@ type mutation_root {
   ): av_art_mutation_response
 
   # delete single row from the table: "av_art"
-  delete_av_art_by_pk(art_id: uuid!, person_id: uuid!): av_art
+  delete_av_art_by_pk(id: ID!): av_art
 
   # delete data from the table: "event"
   delete_event(
@@ -12633,7 +12617,7 @@ type mutation_root {
   ): user_role_mutation_response
 
   # delete single row from the table: "user_role"
-  delete_user_role_by_pk(name: String!): user_role
+  delete_user_role_by_pk(id: ID!): user_role
 
   # delete data from the table: "zaehlung"
   delete_zaehlung(
@@ -16398,9 +16382,6 @@ type person_rev {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-
-  # An object relationship
-  userRoleByUserRole: user_role
   user_role: String
 }
 
@@ -16494,7 +16475,6 @@ input person_rev_bool_exp {
   telefon_geschaeft: String_comparison_exp
   telefon_mobile: String_comparison_exp
   telefon_privat: String_comparison_exp
-  userRoleByUserRole: user_role_bool_exp
   user_role: String_comparison_exp
 }
 
@@ -16546,7 +16526,6 @@ input person_rev_insert_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  userRoleByUserRole: user_role_obj_rel_insert_input
   user_role: String
 }
 
@@ -16697,7 +16676,6 @@ input person_rev_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  userRoleByUserRole: user_role_order_by
   user_role: order_by
 }
 
@@ -17409,10 +17387,7 @@ type query_root {
   ): art_qk_aggregate!
 
   # fetch data from the table: "art_qk" using primary key columns
-  art_qk_by_pk(
-    # Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt
-    name: String!
-  ): art_qk
+  art_qk_by_pk(id: ID!): art_qk
 
   # fetch data from the table: "art_qk_choosen"
   art_qk_choosen(
@@ -17607,7 +17582,7 @@ type query_root {
   ): av_art_aggregate!
 
   # fetch data from the table: "av_art" using primary key columns
-  av_art_by_pk(art_id: uuid!, person_id: uuid!): av_art
+  av_art_by_pk(id: ID!): av_art
 
   # fetch data from the table: "event"
   event(
@@ -19335,7 +19310,7 @@ type query_root {
   ): user_role_aggregate!
 
   # fetch data from the table: "user_role" using primary key columns
-  user_role_by_pk(name: String!): user_role
+  user_role_by_pk(id: ID!): user_role
 
   # fetch data from the table: "zaehlung"
   zaehlung(
@@ -22867,10 +22842,7 @@ type subscription_root {
   ): art_qk_aggregate!
 
   # fetch data from the table: "art_qk" using primary key columns
-  art_qk_by_pk(
-    # Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt
-    name: String!
-  ): art_qk
+  art_qk_by_pk(id: ID!): art_qk
 
   # fetch data from the table: "art_qk_choosen"
   art_qk_choosen(
@@ -23065,7 +23037,7 @@ type subscription_root {
   ): av_art_aggregate!
 
   # fetch data from the table: "av_art" using primary key columns
-  av_art_by_pk(art_id: uuid!, person_id: uuid!): av_art
+  av_art_by_pk(id: ID!): av_art
 
   # fetch data from the table: "event"
   event(
@@ -24793,7 +24765,7 @@ type subscription_root {
   ): user_role_aggregate!
 
   # fetch data from the table: "user_role" using primary key columns
-  user_role_by_pk(name: String!): user_role
+  user_role_by_pk(id: ID!): user_role
 
   # fetch data from the table: "zaehlung"
   zaehlung(
@@ -27064,43 +27036,8 @@ input tsvector_comparison_exp {
 # columns and relationships of "user_role"
 type user_role {
   comment: String
+  id: ID!
   name: String!
-
-  # An array relationship
-  people(
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): [person!]!
-
-  # An aggregated array relationship
-  people_aggregate(
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): person_aggregate!
 
   # An array relationship
   person_revs(
@@ -27137,6 +27074,42 @@ type user_role {
     # filter the rows returned
     where: person_rev_bool_exp
   ): person_rev_aggregate!
+
+  # An array relationship
+  persons(
+    # distinct select on columns
+    distinct_on: [person_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [person_order_by!]
+
+    # filter the rows returned
+    where: person_bool_exp
+  ): [person!]!
+
+  # An aggregated array relationship
+  persons_aggregate(
+    # distinct select on columns
+    distinct_on: [person_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [person_order_by!]
+
+    # filter the rows returned
+    where: person_bool_exp
+  ): person_aggregate!
   sort: Int
 }
 
@@ -27198,14 +27171,18 @@ input user_role_bool_exp {
   _not: user_role_bool_exp
   _or: [user_role_bool_exp]
   comment: String_comparison_exp
+  id: uuid_comparison_exp
   name: String_comparison_exp
-  people: person_bool_exp
   person_revs: person_rev_bool_exp
+  persons: person_bool_exp
   sort: Int_comparison_exp
 }
 
 # unique or primary key constraints on table "user_role"
 enum user_role_constraint {
+  # unique or primary key constraint
+  user_role_name_key
+
   # unique or primary key constraint
   user_role_pkey
 }
@@ -27218,15 +27195,17 @@ input user_role_inc_input {
 # input type for inserting data into table "user_role"
 input user_role_insert_input {
   comment: String
+  id: ID
   name: String
-  people: person_arr_rel_insert_input
   person_revs: person_rev_arr_rel_insert_input
+  persons: person_arr_rel_insert_input
   sort: Int
 }
 
 # aggregate max on columns
 type user_role_max_fields {
   comment: String
+  id: ID
   name: String
   sort: Int
 }
@@ -27234,6 +27213,7 @@ type user_role_max_fields {
 # order by max() on columns of table "user_role"
 input user_role_max_order_by {
   comment: order_by
+  id: order_by
   name: order_by
   sort: order_by
 }
@@ -27241,6 +27221,7 @@ input user_role_max_order_by {
 # aggregate min on columns
 type user_role_min_fields {
   comment: String
+  id: ID
   name: String
   sort: Int
 }
@@ -27248,6 +27229,7 @@ type user_role_min_fields {
 # order by min() on columns of table "user_role"
 input user_role_min_order_by {
   comment: order_by
+  id: order_by
   name: order_by
   sort: order_by
 }
@@ -27277,21 +27259,25 @@ input user_role_on_conflict {
 # ordering options when selecting data from "user_role"
 input user_role_order_by {
   comment: order_by
+  id: order_by
   name: order_by
-  people_aggregate: person_aggregate_order_by
   person_revs_aggregate: person_rev_aggregate_order_by
+  persons_aggregate: person_aggregate_order_by
   sort: order_by
 }
 
 # primary key columns input for table: "user_role"
 input user_role_pk_columns_input {
-  name: String!
+  id: ID!
 }
 
 # select columns of table "user_role"
 enum user_role_select_column {
   # column name
   comment
+
+  # column name
+  id
 
   # column name
   name
@@ -27303,6 +27289,7 @@ enum user_role_select_column {
 # input type for updating data in table "user_role"
 input user_role_set_input {
   comment: String
+  id: ID
   name: String
   sort: Int
 }
@@ -27351,6 +27338,9 @@ input user_role_sum_order_by {
 enum user_role_update_column {
   # column name
   comment
+
+  # column name
+  id
 
   # column name
   name

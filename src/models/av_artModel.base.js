@@ -26,6 +26,7 @@ export const av_artModelBase = ModelBase
     art_id: types.union(types.undefined, types.frozen()),
     art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
+    id: types.identifier,
     person: types.union(types.undefined, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.frozen()),
   })
@@ -37,6 +38,7 @@ export const av_artModelBase = ModelBase
 
 export class av_artModelSelector extends QueryBuilder {
   get art_id() { return this.__attr(`art_id`) }
+  get id() { return this.__attr(`id`) }
   get person_id() { return this.__attr(`person_id`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
   art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }

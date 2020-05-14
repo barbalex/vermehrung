@@ -15,6 +15,7 @@ export const av_art_max_fieldsModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("av_art_max_fields"), "av_art_max_fields"),
     art_id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     person_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -25,6 +26,7 @@ export const av_art_max_fieldsModelBase = ModelBase
 
 export class av_art_max_fieldsModelSelector extends QueryBuilder {
   get art_id() { return this.__attr(`art_id`) }
+  get id() { return this.__attr(`id`) }
   get person_id() { return this.__attr(`person_id`) }
 }
 export function selectFromav_art_max_fields() {

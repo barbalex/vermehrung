@@ -9,6 +9,7 @@ import { types } from "mobx-state-tree"
 */
 export const user_role_update_columnEnum = types.enumeration("user_role_update_column", [
         "comment",
+  "id",
   "name",
   "sort",
       ])
