@@ -250,7 +250,6 @@ const Event = ({
   const saveToDb = useCallback(
     (event) => {
       const field = event.target.name
-      // TODO: still necessary?
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
