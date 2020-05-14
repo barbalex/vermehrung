@@ -17,10 +17,6 @@ export default gql`
         ...ArtSumsFields
       }
     }
-    rowsUnfiltered: art @include(if: $isFiltered) {
-      id
-      __typename
-    }
     rowsFiltered: art(where: $filter) @include(if: $isFiltered) {
       id
       __typename

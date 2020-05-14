@@ -234,13 +234,14 @@ export const kulturQk = gql`
 `
 export const kulturQkChoosen = gql`
   fragment KulturQkChoosenFields on kultur_qk_choosen {
-    kultur_id
+    id
     qk_name
     __typename
   }
 `
 export const kulturFile = gql`
   fragment KulturFileFields on kultur_file {
+    id
     kultur_id
     file_id
     __typename
@@ -251,7 +252,7 @@ export const kulturFile = gql`
 `
 export const kulturOption = gql`
   fragment KulturOptionFields on kultur_option {
-    kultur_id
+    id
     __typename
     ev_datum
     ev_geplant
@@ -342,7 +343,7 @@ export const person = gql`
 `
 export const personOption = gql`
   fragment PersonOptionFields on person_option {
-    person_id
+    id
     __typename
     ar_name_deutsch
     ga_strasse
@@ -374,6 +375,7 @@ export const personOption = gql`
 `
 export const personFile = gql`
   fragment PersonFileFields on person_file {
+    id
     person_id
     file_id
     __typename

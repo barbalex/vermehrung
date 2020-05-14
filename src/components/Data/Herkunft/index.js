@@ -143,7 +143,7 @@ const Herkunft = ({
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
   })
-  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, person_id } =
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, id: person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
   const [errors, setErrors] = useState({})

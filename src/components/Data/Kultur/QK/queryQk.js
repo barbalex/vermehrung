@@ -7,7 +7,7 @@ export default gql`
     kultur_qk(order_by: [{ sort: asc_nulls_last }, { name: asc_nulls_first }]) {
       ...KulturQkFields
     }
-    kultur_qk_choosen(where: { kultur_id: { _eq: $kulturId } }) {
+    kultur_qk_choosen(where: { id: { _eq: $kulturId } }) {
       ...KulturQkChoosenFields
     }
   }

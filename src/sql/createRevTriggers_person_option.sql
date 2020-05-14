@@ -3,7 +3,7 @@ create or replace function person_option_rev_set_winning_revision ()
   as $body$
 begin
   insert into person_option (
-      person_id,
+      id,
       ar_name_deutsch,
       ga_strasse,
       ga_plz,
@@ -70,7 +70,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      person_option_rev.person_id,
+      person_option_rev.id,
       person_option_rev.ar_name_deutsch,
       person_option_rev.ga_strasse,
       person_option_rev.ga_plz,

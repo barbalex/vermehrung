@@ -306,7 +306,7 @@ const SammelLieferung = ({
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
   })
-  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits, person_id } =
+  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits, id: person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
   const sammlungFilter = row.art_id

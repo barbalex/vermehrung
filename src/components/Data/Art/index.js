@@ -81,20 +81,21 @@ const Art = ({
   const { data, error, loading, query } = useQuery(artQuery, {
     variables: { id: id, filter: artFilter, isFiltered },
   })
+  const { data: dataArtAggregate } = useQuery((store) =>
+    store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
 
   const [errors, setErrors] = useState({})
 
   let row
-  //let row0
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const totalNr = get(dataArtAggregate, 'art_aggregate.aggregate.count', 0)
   const filteredNr = get(data, 'rowsFiltered', []).length
   if (showFilter) {
     row = filter.art
   } else {
-    //row = get(data, 'art[0]') || {}
-    row = store.arts.get(id) // does not work because reference to ae_art is undefined
+    row = store.arts.get(id)
   }
-  //console.log('Art', { row, row0 })
+  console.log('Art', { dataArtAggregate })
 
   useEffect(() => {
     setErrors({})

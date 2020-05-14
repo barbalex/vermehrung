@@ -49,7 +49,7 @@ const SettingsKultur = ({ kulturResult }) => {
                 $kulturId: uuid!
               ) {
                 update_kultur_option(
-                  where: { kultur_id: { _eq: $kulturId } }
+                  where: { id: { _eq: $kulturId } }
                   _set: {
                     ${field}: ${!value}
                   }

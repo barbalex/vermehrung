@@ -27,7 +27,7 @@ DROP FUNCTION IF EXISTS kultur_has_felder() cascade;
 CREATE FUNCTION kultur_has_felder() RETURNS trigger AS $kultur_has_felder$
 BEGIN
   INSERT INTO
-    kultur_option (kultur_id)
+    kultur_option (id)
   VALUES (NEW.id);
   RETURN NEW;
 END;
@@ -49,7 +49,7 @@ DROP FUNCTION IF EXISTS person_has_felder() cascade;
 CREATE FUNCTION person_has_felder() RETURNS trigger AS $person_has_felder$
 BEGIN
   INSERT INTO
-    person_option (person_id)
+    person_option (id)
   VALUES (NEW.id);
   RETURN NEW;
 END;
@@ -60,17 +60,17 @@ CREATE TRIGGER person_has_felder AFTER INSERT ON person
 
 -- in case this trigger was not working
 -- add person where they are missing
-insert into person_option (person_id)
+insert into person_option (id)
 select person.id from person
 left join person_option
-on person_option.person_id = person.id
-where person_option.person_id is null;
+on person_option.id = person.id
+where person_option.id is null;
 
 DROP TRIGGER IF EXISTS kultur_has_qk_choosen ON kultur_qk_choosen cascade;
 DROP FUNCTION IF EXISTS kultur_has_qk_choosen() cascade;
 CREATE FUNCTION kultur_has_qk_choosen() RETURNS trigger AS $kultur_has_qk_choosen$
 BEGIN
-  insert into kultur_qk_choosen(kultur_id, qk_name)
+  insert into kultur_qk_choosen(id, qk_name)
   select distinct kultur.id, kultur_qk.name from kultur, kultur_qk where kultur.id = NEW.id;
   RETURN NEW;
 END;
