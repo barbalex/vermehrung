@@ -157,10 +157,6 @@ const Herkunft = ({
         filter.setValue({ table: 'herkunft', key: field, value })
       } else {
         try {
-          /*console.log('Herkunft, saveToDb', {
-            value,
-            targetValue: event.target.value,
-          })*/
           let valueToSet
           if (value === null) {
             valueToSet = null
