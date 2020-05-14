@@ -206,17 +206,10 @@ const Zaehlung = ({
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      // TODO: still necessary?
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
       const previousValue = row[field]
-      console.log('Zaehlung, saveToDb', {
-        eventTargetValue: event.target.value,
-        value,
-        previousValue,
-        field,
-      })
       // only update if value has changed
       if (value === previousValue) return
 
