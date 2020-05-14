@@ -269,7 +269,7 @@ const Event = ({
       }
       const rev = `${depth}-${md5(newObject.toString())}`
       newObject._rev = rev
-      // convert to string as hasura does not support arrays yet
+      // convert array to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
       newObject._revisions = row._revisions
         ? toPgArray([rev, ...row._revisions])
