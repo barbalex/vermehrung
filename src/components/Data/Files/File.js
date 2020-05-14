@@ -106,6 +106,7 @@ const File = ({ file, parent }) => {
             delete_${parent}_file (where: {file_id: {_eq: "${file.file_id}"}}) {
               returning {
                 id
+                __typename
               }
             }
           }

@@ -38,36 +38,47 @@ const query = gql`
   ) {
     garten(where: $gartenFilter) {
       id
+      __typename
     }
     art(where: $artFilter) {
       id
+      __typename
     }
     event(where: $eventFilter) {
       id
+      __typename
     }
     zaehlung(where: $zaehlungFilter) {
       id
+      __typename
     }
     teilkultur(where: $teilkulturFilter) {
       id
+      __typename
     }
     kultur(where: $kulturFilter) {
       id
+      __typename
     }
     herkunft(where: $herkunftFilter) {
       id
+      __typename
     }
     sammel_lieferung(where: $sammelLieferungFilter) {
       id
+      __typename
     }
     lieferung(where: $lieferungFilter) {
       id
+      __typename
     }
     person(where: $personFilter) {
       id
+      __typename
     }
     sammlung(where: $sammlungFilter) {
       id
+      __typename
     }
   }
 `
@@ -75,6 +86,7 @@ const personQuery = gql`
   query PersonQueryForRoot($accountId: String) {
     person(where: { account_id: { _eq: $accountId } }) {
       id
+      __typename
       user_role
     }
   }

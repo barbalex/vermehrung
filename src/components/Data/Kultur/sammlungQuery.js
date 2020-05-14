@@ -6,6 +6,7 @@ export default gql`
       where: { art_id: { _is_null: false }, herkunft_id: { _is_null: false } }
     ) {
       id
+      __typename
       art_id
       herkunft_id
     }

@@ -11,6 +11,7 @@ export default gql`
       ...GartenFields
       person {
         id
+        __typename
         name
       }
       kulturs @include(if: $include) {

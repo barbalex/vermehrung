@@ -66,6 +66,7 @@ const query = gql`
   ) {
     rowsUnfiltered: sammel_lieferung {
       id
+      __typename
     }
     rowsFiltered: sammel_lieferung(
       where: $filter
@@ -74,15 +75,19 @@ const query = gql`
       ...SammelLieferungFields
       person {
         id
+        __typename
         name
       }
       kulturByVonKulturId {
         id
+        __typename
         garten {
           id
+          __typename
           name
           person {
             id
+            __typename
             name
           }
         }

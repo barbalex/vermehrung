@@ -82,6 +82,7 @@ const zaehlungQuery = gql`
       order_by: { datum: desc_nulls_last }
     ) {
       id
+      __typename
       datum
       prognose
       teilzaehlungs {

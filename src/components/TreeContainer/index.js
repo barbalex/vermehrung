@@ -40,6 +40,7 @@ const personQuery = gql`
   query PersonQueryForTreeContinerByAccoutId($accountId: String) {
     person(where: { account_id: { _eq: $accountId } }) {
       id
+      __typename
       user_role
     }
   }
@@ -76,7 +77,7 @@ const TreeContainer = () => {
     teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
     zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
     isArt: openNodes.some((n) => n[0] === 'Arten'),
-    isEvent: openNodes.some((n) => n[0] === 'Events'),
+    //isEvent: openNodes.some((n) => n[0] === 'Events'),
     isArtKultur: openNodes.some((n) => n[0] === 'Arten' && n[2] === 'Kulturen'),
     isArtSammlung: openNodes.some(
       (n) => n[0] === 'Arten' && n[2] === 'Sammlungen',
@@ -114,15 +115,15 @@ const TreeContainer = () => {
         n[2] === 'Aus-Lieferungen' &&
         n[4] === 'Kulturen',
     ),
-    isTeilkultur: openNodes.some((n) => n[0] === 'Teilkulturen'),
+    //isTeilkultur: openNodes.some((n) => n[0] === 'Teilkulturen'),
     isKultur: openNodes.some((n) => n[0] === 'Kulturen'),
-    isKulturAnLieferung: openNodes.some(
-      (n) => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
-    ),
-    isKulturAusLieferung: openNodes.some(
-      (n) => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
-    ),
-    isWerteListe: openNodes.some((n) => n[0] === 'Werte-Listen'),
+    //isKulturAnLieferung: openNodes.some(
+    //  (n) => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
+    //),
+    //isKulturAusLieferung: openNodes.some(
+    //  (n) => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
+    //),
+    //isWerteListe: openNodes.some((n) => n[0] === 'Werte-Listen'),
     isGardener,
     personId,
     personExists: !!personId,

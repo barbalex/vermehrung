@@ -25,10 +25,12 @@ export default async ({
         query GetGartenForGartenDownload($id: uuid!) {
           garten(where: { id: { _eq: $id } }) {
             id
+            __typename
             name
             person_id
             person {
               id
+              __typename
               name
             }
             strasse
@@ -72,22 +74,27 @@ export default async ({
         query GetKultursForGartenDownload($id: uuid!) {
           kultur(where: { garten_id: { _eq: $id } }, order_by: { id: asc }) {
             id
+            __typename
             art_id
             art {
               id
+              __typename
               art_ae_art {
                 id
+                __typename
                 name
               }
             }
             herkunft_id
             herkunft {
               id
+              __typename
               nr
             }
             garten_id
             garten {
               id
+              __typename
               name
             }
             zwischenlager

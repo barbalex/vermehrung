@@ -30,7 +30,7 @@ export default gql`
     $lieferungFilter: lieferung_bool_exp!
     $sammelLieferungFilter: sammel_lieferung_bool_exp!
     $isArt: Boolean!
-    $isEvent: Boolean!
+    #$isEvent: Boolean!
     $isArtKultur: Boolean!
     $isArtSammlung: Boolean!
     $isGarten: Boolean!
@@ -48,10 +48,10 @@ export default gql`
     $isSammlungLieferung: Boolean!
     $isSammlungLieferungKultur: Boolean!
     $isKultur: Boolean!
-    $isKulturAnLieferung: Boolean!
-    $isKulturAusLieferung: Boolean!
-    $isTeilkultur: Boolean!
-    $isWerteListe: Boolean!
+    #$isKulturAnLieferung: Boolean!
+    #$isKulturAusLieferung: Boolean!
+    #$isTeilkultur: Boolean!
+    #$isWerteListe: Boolean!
     $isGardener: Boolean!
     $personId: uuid
     $personExists: Boolean!
@@ -78,6 +78,7 @@ export default gql`
         ...KulturFields
         herkunft {
           id
+          __typename
           nr
         }
         art {
@@ -154,6 +155,7 @@ export default gql`
         }
         herkunft @include(if: $isArtKultur) {
           id
+          __typename
           nr
         }
         events(
@@ -207,6 +209,7 @@ export default gql`
         ...SammlungFields
         herkunft @include(if: $isArtSammlung) {
           id
+          __typename
           nr
           lokalname @skip(if: $isGardener)
           gemeinde @skip(if: $isGardener)
@@ -297,6 +300,7 @@ export default gql`
       ...KulturFields
       herkunft {
         id
+        __typename
         nr
       }
       art {
@@ -418,15 +422,19 @@ export default gql`
       }
       person {
         id
+        __typename
         name
       }
       kulturByVonKulturId {
         id
+        __typename
         garten {
           id
+          __typename
           name
           person {
             id
+            __typename
             name
           }
         }
@@ -479,6 +487,7 @@ export default gql`
           ...KulturFields
           herkunft {
             id
+            __typename
             nr
           }
           art {
@@ -530,6 +539,7 @@ export default gql`
         }
         herkunft @include(if: $isPersonSammlung) {
           id
+          __typename
           nr
           lokalname @skip(if: $isGardener)
           gemeinde @skip(if: $isGardener)
@@ -558,6 +568,7 @@ export default gql`
       }
       herkunft @include(if: $isSammlung) {
         id
+        __typename
         nr
         lokalname @skip(if: $isGardener)
         gemeinde @skip(if: $isGardener)

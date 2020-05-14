@@ -69,6 +69,7 @@ const query = gql`
   query SammlungQueryForSammlungs($filter: sammlung_bool_exp!) {
     rowsUnfiltered: sammlung {
       id
+      __typename
     }
     rowsFiltered: sammlung(
       where: $filter

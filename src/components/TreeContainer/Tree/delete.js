@@ -24,6 +24,7 @@ export default async ({ node, store, client }) => {
         delete_${table} (where: {id: {_eq: ${id}}}) {
           returning {
             id
+            __typename
           }
         }
       }
