@@ -68,7 +68,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const ApQkQk = ({ art, qkNameQueries, qks }) => {
+const ApQkQk = ({ artId, qkNameQueries, qks }) => {
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
     (event) => setFilter(event.target.value),
@@ -80,21 +80,21 @@ const ApQkQk = ({ art, qkNameQueries, qks }) => {
   const startNextYear = `${year + 1}.01.01`
   console.log('ApQkQk', {
     qkNameQueries,
-    artId: art.id,
+    artId,
     startYear,
     startNextYear,
   })
   const { data, error, loading, refetch } = useQuery(query, {
     variables: {
       ...qkNameQueries,
-      artId: art.id,
+      artId,
       startYear,
       startNextYear,
     },
   })
   const messageFunctions = createMessageFunctions({
     data,
-    artId: art.id,
+    artId,
   })
   const messageGroups = qks
     .map((qk) => ({

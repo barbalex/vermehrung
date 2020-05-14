@@ -45,14 +45,14 @@ const Body = styled.div`
   padding: 10px 0;
 `
 
-const ApQk = ({ art }) => {
+const ApQk = ({ artId }) => {
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
   const { data, loading, error, refetch } = useQuery(queryQk, {
-    variables: { artId: art.id },
+    variables: { artId },
     fetchPolicy: 'no-cache',
   })
   const allQks = get(data, 'art_qk') || []
@@ -133,7 +133,7 @@ const ApQk = ({ art }) => {
           </StyledTabs>
           <Body>
             {tab === 'qk' ? (
-              <Qk art={art} qkNameQueries={qkNameQueries} qks={qks} />
+              <Qk artId={artId} qkNameQueries={qkNameQueries} qks={qks} />
             ) : (
               <Choose refetchTab={refetch} />
             )}

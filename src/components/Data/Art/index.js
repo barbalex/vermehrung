@@ -273,7 +273,7 @@ const Art = ({
             <>
               <Timeline artId={row.id} />
               <Herkunft artId={row.id} />
-              <QK art={row} />
+              <QK artId={row.id} />
               <Files parentId={row.id} parent="art" />
             </>
           )}
