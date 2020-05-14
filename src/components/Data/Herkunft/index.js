@@ -68,21 +68,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const herkunftQuery = gql`
-  query HerkunftQueryForHerkunft(
-    $isFiltered: Boolean!
-    $filter: herkunft_bool_exp!
-  ) {
-    rowsUnfiltered: herkunft @include(if: $isFiltered) {
-      id
-      __typename
-    }
-    rowsFiltered: herkunft(where: $filter) @include(if: $isFiltered) {
-      id
-      __typename
-    }
-  }
-`
 const personOptionQuery = gql`
   query PersonOptionQueryForHerkunft($accountId: String) {
     person_option(where: { person: { account_id: { _eq: $accountId } } }) {
@@ -101,10 +86,10 @@ const Herkunft = ({
   const { filter, user } = store
   const { isFiltered: runIsFiltered } = filter
 
-  //console.log('Herkunft, id:', id)
-
   const isFiltered = runIsFiltered()
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
+  // this does not work as not re-queried when id changes
+  // see: https://github.com/mobxjs/mst-gql/issues/162
   /*const {
     data: dataHerkunft,
     error: errorHerkunft,
@@ -118,6 +103,7 @@ const Herkunft = ({
     data: dataAll,
     error: errorAll,
     loading: loadingAll,
+    query: queryAll,
   } = useQuery((store) => store.queryHerkunft(/*undefined, (d) => d.id*/))
   const { data: dataFiltered } = useQuery((store) =>
     store.queryHerkunft(
@@ -127,16 +113,22 @@ const Herkunft = ({
       (d) => d.id,
     ),
   )
-  const { refetch } = useQuery(herkunftQuery, {
-    variables: { isFiltered, filter: herkunftFilter },
-  })
+  const { data: dataHerkunftAggregate } = useQuery((store) =>
+    store.queryHerkunft_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
 
   const allRows = get(dataAll, 'herkunft', [])
   const row = showFilter
     ? filter.herkunft
     : //: get(dataHerkunft, 'herkunft[0]') || {}
       allRows.find((r) => r.id === id) || {}
-  const totalNr = get(dataAll, 'herkunft', []).length
+  const totalNr = get(
+    dataHerkunftAggregate,
+    'herkunft_aggregate.aggregate.count',
+    0,
+  )
   const filteredNr = get(dataFiltered, 'herkunft', []).length
   //console.log('Herkunft, row:', row)
 
@@ -331,7 +323,11 @@ const Herkunft = ({
             />
           )}
           {!showFilter && hk_geom_point && (
-            <Coordinates row={row} refetchForm={refetch} table="herkunft" />
+            <Coordinates
+              row={row}
+              refetchForm={queryAll.refetch}
+              table="herkunft"
+            />
           )}
           {hk_bemerkungen && (
             <TextField
