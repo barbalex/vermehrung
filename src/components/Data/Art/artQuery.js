@@ -13,9 +13,6 @@ export default gql`
   ) {
     art(where: { id: { _eq: $id } }) {
       ...ArtFields
-      artSums: art_sums(where: { art_id: { _eq: $id } }) {
-        ...ArtSumsFields
-      }
     }
     rowsFiltered: art(where: $filter) @include(if: $isFiltered) {
       id
