@@ -286,6 +286,8 @@ export default gql`
       kultur {
         ...KulturFields
         kultur_option {
+          id
+          __typename
           tk
         }
       }
