@@ -19,6 +19,7 @@ export const kultur_qkModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_qk"), "kultur_qk"),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    id: types.identifier,
     kultur_qk_choosens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
     kultur_qk_choosens_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
     name: types.union(types.undefined, types.string),
@@ -33,6 +34,7 @@ export const kultur_qkModelBase = ModelBase
 
 export class kultur_qkModelSelector extends QueryBuilder {
   get beschreibung() { return this.__attr(`beschreibung`) }
+  get id() { return this.__attr(`id`) }
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
   get titel() { return this.__attr(`titel`) }

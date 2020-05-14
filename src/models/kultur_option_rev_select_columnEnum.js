@@ -17,7 +17,7 @@ export const kultur_option_rev_select_columnEnum = types.enumeration("kultur_opt
   "ev_geplant",
   "ev_person_id",
   "ev_teilkultur_id",
-  "kultur_id",
+  "id",
   "tk",
   "tk_bemerkungen",
   "tz_andere_menge",

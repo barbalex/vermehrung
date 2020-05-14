@@ -277,42 +277,6 @@ type art {
   av_art: av_art
   changed: date
   changed_by: String
-
-  # An array relationship
-  garten_teilzaehlung_sums(
-    # distinct select on columns
-    distinct_on: [garten_teilzaehlung_sums_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_teilzaehlung_sums_order_by!]
-
-    # filter the rows returned
-    where: garten_teilzaehlung_sums_bool_exp
-  ): [garten_teilzaehlung_sums!]!
-
-  # An aggregated array relationship
-  garten_teilzaehlung_sums_aggregate(
-    # distinct select on columns
-    distinct_on: [garten_teilzaehlung_sums_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_teilzaehlung_sums_order_by!]
-
-    # filter the rows returned
-    where: garten_teilzaehlung_sums_bool_exp
-  ): garten_teilzaehlung_sums_aggregate!
   id: ID!
 
   # An array relationship
@@ -531,7 +495,6 @@ input art_bool_exp {
   av_art: av_art_bool_exp
   changed: date_comparison_exp
   changed_by: String_comparison_exp
-  garten_teilzaehlung_sums: garten_teilzaehlung_sums_bool_exp
   id: uuid_comparison_exp
   kulturs: kultur_bool_exp
   lieferungs: lieferung_bool_exp
@@ -853,7 +816,6 @@ input art_order_by {
   av_art: av_art_order_by
   changed: order_by
   changed_by: order_by
-  garten_teilzaehlung_sums_aggregate: garten_teilzaehlung_sums_aggregate_order_by
   id: order_by
   kulturs_aggregate: kultur_aggregate_order_by
   lieferungs_aggregate: lieferung_aggregate_order_by
@@ -984,6 +946,7 @@ type art_qk_choosen {
 
   # An object relationship
   art_qk: art_qk!
+  id: ID!
   qk_name: String!
 }
 
@@ -1021,6 +984,7 @@ input art_qk_choosen_bool_exp {
   art: art_bool_exp
   art_id: uuid_comparison_exp
   art_qk: art_qk_bool_exp
+  id: uuid_comparison_exp
   qk_name: String_comparison_exp
 }
 
@@ -1028,6 +992,9 @@ input art_qk_choosen_bool_exp {
 enum art_qk_choosen_constraint {
   # unique or primary key constraint
   art_qk_choosen_art_id_qk_name_key
+
+  # unique or primary key constraint
+  art_qk_choosen_pkey
 }
 
 # input type for inserting data into table "art_qk_choosen"
@@ -1035,30 +1002,35 @@ input art_qk_choosen_insert_input {
   art: art_obj_rel_insert_input
   art_id: uuid
   art_qk: art_qk_obj_rel_insert_input
+  id: ID
   qk_name: String
 }
 
 # aggregate max on columns
 type art_qk_choosen_max_fields {
   art_id: uuid
+  id: ID
   qk_name: String
 }
 
 # order by max() on columns of table "art_qk_choosen"
 input art_qk_choosen_max_order_by {
   art_id: order_by
+  id: order_by
   qk_name: order_by
 }
 
 # aggregate min on columns
 type art_qk_choosen_min_fields {
   art_id: uuid
+  id: ID
   qk_name: String
 }
 
 # order by min() on columns of table "art_qk_choosen"
 input art_qk_choosen_min_order_by {
   art_id: order_by
+  id: order_by
   qk_name: order_by
 }
 
@@ -1089,7 +1061,13 @@ input art_qk_choosen_order_by {
   art: art_order_by
   art_id: order_by
   art_qk: art_qk_order_by
+  id: order_by
   qk_name: order_by
+}
+
+# primary key columns input for table: "art_qk_choosen"
+input art_qk_choosen_pk_columns_input {
+  id: ID!
 }
 
 # select columns of table "art_qk_choosen"
@@ -1098,12 +1076,16 @@ enum art_qk_choosen_select_column {
   art_id
 
   # column name
+  id
+
+  # column name
   qk_name
 }
 
 # input type for updating data in table "art_qk_choosen"
 input art_qk_choosen_set_input {
   art_id: uuid
+  id: ID
   qk_name: String
 }
 
@@ -1111,6 +1093,9 @@ input art_qk_choosen_set_input {
 enum art_qk_choosen_update_column {
   # column name
   art_id
+
+  # column name
+  id
 
   # column name
   qk_name
@@ -3547,42 +3532,6 @@ type garten {
   person_id: uuid
   plz: Int
   strasse: String
-
-  # An array relationship
-  teilzaehlung_sums(
-    # distinct select on columns
-    distinct_on: [garten_teilzaehlung_sums_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_teilzaehlung_sums_order_by!]
-
-    # filter the rows returned
-    where: garten_teilzaehlung_sums_bool_exp
-  ): [garten_teilzaehlung_sums!]!
-
-  # An aggregated array relationship
-  teilzaehlung_sums_aggregate(
-    # distinct select on columns
-    distinct_on: [garten_teilzaehlung_sums_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_teilzaehlung_sums_order_by!]
-
-    # filter the rows returned
-    where: garten_teilzaehlung_sums_bool_exp
-  ): garten_teilzaehlung_sums_aggregate!
   tsv: tsvector
   wgs84_lat: numeric
   wgs84_long: numeric
@@ -3676,7 +3625,6 @@ input garten_bool_exp {
   person_id: uuid_comparison_exp
   plz: Int_comparison_exp
   strasse: String_comparison_exp
-  teilzaehlung_sums: garten_teilzaehlung_sums_bool_exp
   tsv: tsvector_comparison_exp
   wgs84_lat: numeric_comparison_exp
   wgs84_long: numeric_comparison_exp
@@ -4051,7 +3999,6 @@ input garten_order_by {
   person_id: order_by
   plz: order_by
   strasse: order_by
-  teilzaehlung_sums_aggregate: garten_teilzaehlung_sums_aggregate_order_by
   tsv: order_by
   wgs84_lat: order_by
   wgs84_long: order_by
@@ -4731,8 +4678,6 @@ input garten_sum_order_by {
 
 # columns and relationships of "garten_teilzaehlung_sums"
 type garten_teilzaehlung_sums {
-  # An object relationship
-  art: art
   garten_aktiv: Boolean
   garten_anzahl_kulturen: bigint
   garten_bemerkungen: String
@@ -4770,6 +4715,45 @@ type garten_teilzaehlung_sums {
   kultur_von_anzahl_individuen: Int
   kultur_zaehlungen_anzahl: bigint
   kultur_zwischenlager: Boolean
+
+  # An array relationship
+  kulturs(
+    # distinct select on columns
+    distinct_on: [kultur_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_order_by!]
+
+    # filter the rows returned
+    where: kultur_bool_exp
+  ): [kultur!]!
+
+  # An aggregated array relationship
+  kulturs_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_order_by!]
+
+    # filter the rows returned
+    where: kultur_bool_exp
+  ): kultur_aggregate!
+
+  # An object relationship
+  person: person
   teilzaehlung_andere_menge: String
   teilzaehlung_anzahl_auspflanzbereit: Int
   teilzaehlung_anzahl_mutterpflanzen: Int
@@ -4876,7 +4860,6 @@ input garten_teilzaehlung_sums_bool_exp {
   _and: [garten_teilzaehlung_sums_bool_exp]
   _not: garten_teilzaehlung_sums_bool_exp
   _or: [garten_teilzaehlung_sums_bool_exp]
-  art: art_bool_exp
   garten_aktiv: Boolean_comparison_exp
   garten_anzahl_kulturen: bigint_comparison_exp
   garten_bemerkungen: String_comparison_exp
@@ -4914,6 +4897,8 @@ input garten_teilzaehlung_sums_bool_exp {
   kultur_von_anzahl_individuen: Int_comparison_exp
   kultur_zaehlungen_anzahl: bigint_comparison_exp
   kultur_zwischenlager: Boolean_comparison_exp
+  kulturs: kultur_bool_exp
+  person: person_bool_exp
   teilzaehlung_andere_menge: String_comparison_exp
   teilzaehlung_anzahl_auspflanzbereit: Int_comparison_exp
   teilzaehlung_anzahl_mutterpflanzen: Int_comparison_exp
@@ -5158,7 +5143,6 @@ input garten_teilzaehlung_sums_min_order_by {
 
 # ordering options when selecting data from "garten_teilzaehlung_sums"
 input garten_teilzaehlung_sums_order_by {
-  art: art_order_by
   garten_aktiv: order_by
   garten_anzahl_kulturen: order_by
   garten_bemerkungen: order_by
@@ -5196,6 +5180,8 @@ input garten_teilzaehlung_sums_order_by {
   kultur_von_anzahl_individuen: order_by
   kultur_zaehlungen_anzahl: order_by
   kultur_zwischenlager: order_by
+  kulturs_aggregate: kultur_aggregate_order_by
+  person: person_order_by
   teilzaehlung_andere_menge: order_by
   teilzaehlung_anzahl_auspflanzbereit: order_by
   teilzaehlung_anzahl_mutterpflanzen: order_by
@@ -5920,42 +5906,6 @@ type herkunft {
     # filter the rows returned
     where: herkunft_file_bool_exp
   ): herkunft_file_aggregate!
-
-  # An array relationship
-  herkunft_sums(
-    # distinct select on columns
-    distinct_on: [herkunft_sums_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [herkunft_sums_order_by!]
-
-    # filter the rows returned
-    where: herkunft_sums_bool_exp
-  ): [herkunft_sums!]!
-
-  # An aggregated array relationship
-  herkunft_sums_aggregate(
-    # distinct select on columns
-    distinct_on: [herkunft_sums_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [herkunft_sums_order_by!]
-
-    # filter the rows returned
-    where: herkunft_sums_bool_exp
-  ): herkunft_sums_aggregate!
   id: ID!
   kanton: String
 
@@ -6116,7 +6066,6 @@ input herkunft_bool_exp {
   gemeinde: String_comparison_exp
   geom_point: geometry_comparison_exp
   herkunft_files: herkunft_file_bool_exp
-  herkunft_sums: herkunft_sums_bool_exp
   id: uuid_comparison_exp
   kanton: String_comparison_exp
   kulturs: kultur_bool_exp
@@ -6491,7 +6440,6 @@ input herkunft_order_by {
   gemeinde: order_by
   geom_point: order_by
   herkunft_files_aggregate: herkunft_file_aggregate_order_by
-  herkunft_sums_aggregate: herkunft_sums_aggregate_order_by
   id: order_by
   kanton: order_by
   kulturs_aggregate: kultur_aggregate_order_by
@@ -8498,10 +8446,10 @@ type kultur_option {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
+  id: ID!
 
   # An object relationship
   kultur: kultur!
-  kultur_id: uuid!
 
   # opt-in Option für Teilkulturen
   tk: Boolean
@@ -8580,8 +8528,8 @@ input kultur_option_bool_exp {
   ev_geplant: Boolean_comparison_exp
   ev_person_id: Boolean_comparison_exp
   ev_teilkultur_id: Boolean_comparison_exp
+  id: uuid_comparison_exp
   kultur: kultur_bool_exp
-  kultur_id: uuid_comparison_exp
   tk: Boolean_comparison_exp
   tk_bemerkungen: Boolean_comparison_exp
   tz_andere_menge: Boolean_comparison_exp
@@ -8614,8 +8562,8 @@ input kultur_option_insert_input {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
+  id: ID
   kultur: kultur_obj_rel_insert_input
-  kultur_id: uuid
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -8631,7 +8579,7 @@ type kultur_option_max_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  kultur_id: uuid
+  id: ID
 }
 
 # order by max() on columns of table "kultur_option"
@@ -8639,7 +8587,7 @@ input kultur_option_max_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  kultur_id: order_by
+  id: order_by
 }
 
 # aggregate min on columns
@@ -8647,7 +8595,7 @@ type kultur_option_min_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  kultur_id: uuid
+  id: ID
 }
 
 # order by min() on columns of table "kultur_option"
@@ -8655,7 +8603,7 @@ input kultur_option_min_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  kultur_id: order_by
+  id: order_by
 }
 
 # response of any mutation on the table "kultur_option"
@@ -8691,8 +8639,8 @@ input kultur_option_order_by {
   ev_geplant: order_by
   ev_person_id: order_by
   ev_teilkultur_id: order_by
+  id: order_by
   kultur: kultur_order_by
-  kultur_id: order_by
   tk: order_by
   tk_bemerkungen: order_by
   tz_andere_menge: order_by
@@ -8714,10 +8662,10 @@ type kultur_option_rev {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
+  id: ID!
 
   # An object relationship
   kultur: kultur!
-  kultur_id: uuid!
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -8794,8 +8742,8 @@ input kultur_option_rev_bool_exp {
   ev_geplant: Boolean_comparison_exp
   ev_person_id: Boolean_comparison_exp
   ev_teilkultur_id: Boolean_comparison_exp
+  id: uuid_comparison_exp
   kultur: kultur_bool_exp
-  kultur_id: uuid_comparison_exp
   tk: Boolean_comparison_exp
   tk_bemerkungen: Boolean_comparison_exp
   tz_andere_menge: Boolean_comparison_exp
@@ -8828,8 +8776,8 @@ input kultur_option_rev_insert_input {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
+  id: ID
   kultur: kultur_obj_rel_insert_input
-  kultur_id: uuid
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -8845,7 +8793,7 @@ type kultur_option_rev_max_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  kultur_id: uuid
+  id: ID
 }
 
 # order by max() on columns of table "kultur_option_rev"
@@ -8853,7 +8801,7 @@ input kultur_option_rev_max_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  kultur_id: order_by
+  id: order_by
 }
 
 # aggregate min on columns
@@ -8861,7 +8809,7 @@ type kultur_option_rev_min_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  kultur_id: uuid
+  id: ID
 }
 
 # order by min() on columns of table "kultur_option_rev"
@@ -8869,7 +8817,7 @@ input kultur_option_rev_min_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  kultur_id: order_by
+  id: order_by
 }
 
 # response of any mutation on the table "kultur_option_rev"
@@ -8905,8 +8853,8 @@ input kultur_option_rev_order_by {
   ev_geplant: order_by
   ev_person_id: order_by
   ev_teilkultur_id: order_by
+  id: order_by
   kultur: kultur_order_by
-  kultur_id: order_by
   tk: order_by
   tk_bemerkungen: order_by
   tz_andere_menge: order_by
@@ -8920,7 +8868,7 @@ input kultur_option_rev_order_by {
 # primary key columns input for table: "kultur_option_rev"
 input kultur_option_rev_pk_columns_input {
   _rev: String!
-  kultur_id: uuid!
+  id: ID!
 }
 
 # select columns of table "kultur_option_rev"
@@ -8953,7 +8901,7 @@ enum kultur_option_rev_select_column {
   ev_teilkultur_id
 
   # column name
-  kultur_id
+  id
 
   # column name
   tk
@@ -8991,7 +8939,7 @@ input kultur_option_rev_set_input {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
-  kultur_id: uuid
+  id: ID
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -9072,7 +9020,7 @@ enum kultur_option_rev_update_column {
   ev_teilkultur_id
 
   # column name
-  kultur_id
+  id
 
   # column name
   tk
@@ -9159,7 +9107,7 @@ enum kultur_option_select_column {
   ev_teilkultur_id
 
   # column name
-  kultur_id
+  id
 
   # column name
   tk
@@ -9197,7 +9145,7 @@ input kultur_option_set_input {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
-  kultur_id: uuid
+  id: ID
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -9278,7 +9226,7 @@ enum kultur_option_update_column {
   ev_teilkultur_id
 
   # column name
-  kultur_id
+  id
 
   # column name
   tk
@@ -9377,6 +9325,7 @@ input kultur_pk_columns_input {
 # columns and relationships of "kultur_qk"
 type kultur_qk {
   beschreibung: String
+  id: ID
 
   # An array relationship
   kultur_qk_choosens(
@@ -9478,6 +9427,7 @@ input kultur_qk_bool_exp {
   _not: kultur_qk_bool_exp
   _or: [kultur_qk_bool_exp]
   beschreibung: String_comparison_exp
+  id: uuid_comparison_exp
   kultur_qk_choosens: kultur_qk_choosen_bool_exp
   name: String_comparison_exp
   sort: smallint_comparison_exp
@@ -9486,9 +9436,10 @@ input kultur_qk_bool_exp {
 
 # columns and relationships of "kultur_qk_choosen"
 type kultur_qk_choosen {
+  id: ID!
+
   # An object relationship
   kultur: kultur!
-  kultur_id: uuid!
 
   # An object relationship
   kultur_qk: kultur_qk!
@@ -9526,8 +9477,8 @@ input kultur_qk_choosen_bool_exp {
   _and: [kultur_qk_choosen_bool_exp]
   _not: kultur_qk_choosen_bool_exp
   _or: [kultur_qk_choosen_bool_exp]
+  id: uuid_comparison_exp
   kultur: kultur_bool_exp
-  kultur_id: uuid_comparison_exp
   kultur_qk: kultur_qk_bool_exp
   qk_name: String_comparison_exp
 }
@@ -9540,33 +9491,33 @@ enum kultur_qk_choosen_constraint {
 
 # input type for inserting data into table "kultur_qk_choosen"
 input kultur_qk_choosen_insert_input {
+  id: ID
   kultur: kultur_obj_rel_insert_input
-  kultur_id: uuid
   kultur_qk: kultur_qk_obj_rel_insert_input
   qk_name: String
 }
 
 # aggregate max on columns
 type kultur_qk_choosen_max_fields {
-  kultur_id: uuid
+  id: ID
   qk_name: String
 }
 
 # order by max() on columns of table "kultur_qk_choosen"
 input kultur_qk_choosen_max_order_by {
-  kultur_id: order_by
+  id: order_by
   qk_name: order_by
 }
 
 # aggregate min on columns
 type kultur_qk_choosen_min_fields {
-  kultur_id: uuid
+  id: ID
   qk_name: String
 }
 
 # order by min() on columns of table "kultur_qk_choosen"
 input kultur_qk_choosen_min_order_by {
-  kultur_id: order_by
+  id: order_by
   qk_name: order_by
 }
 
@@ -9594,8 +9545,8 @@ input kultur_qk_choosen_on_conflict {
 
 # ordering options when selecting data from "kultur_qk_choosen"
 input kultur_qk_choosen_order_by {
+  id: order_by
   kultur: kultur_order_by
-  kultur_id: order_by
   kultur_qk: kultur_qk_order_by
   qk_name: order_by
 }
@@ -9603,7 +9554,7 @@ input kultur_qk_choosen_order_by {
 # select columns of table "kultur_qk_choosen"
 enum kultur_qk_choosen_select_column {
   # column name
-  kultur_id
+  id
 
   # column name
   qk_name
@@ -9611,14 +9562,14 @@ enum kultur_qk_choosen_select_column {
 
 # input type for updating data in table "kultur_qk_choosen"
 input kultur_qk_choosen_set_input {
-  kultur_id: uuid
+  id: ID
   qk_name: String
 }
 
 # update columns of table "kultur_qk_choosen"
 enum kultur_qk_choosen_update_column {
   # column name
-  kultur_id
+  id
 
   # column name
   qk_name
@@ -9638,6 +9589,7 @@ input kultur_qk_inc_input {
 # input type for inserting data into table "kultur_qk"
 input kultur_qk_insert_input {
   beschreibung: String
+  id: ID
   kultur_qk_choosens: kultur_qk_choosen_arr_rel_insert_input
   name: String
   sort: smallint
@@ -9647,6 +9599,7 @@ input kultur_qk_insert_input {
 # aggregate max on columns
 type kultur_qk_max_fields {
   beschreibung: String
+  id: ID
   name: String
   sort: smallint
   titel: String
@@ -9655,6 +9608,7 @@ type kultur_qk_max_fields {
 # order by max() on columns of table "kultur_qk"
 input kultur_qk_max_order_by {
   beschreibung: order_by
+  id: order_by
   name: order_by
   sort: order_by
   titel: order_by
@@ -9663,6 +9617,7 @@ input kultur_qk_max_order_by {
 # aggregate min on columns
 type kultur_qk_min_fields {
   beschreibung: String
+  id: ID
   name: String
   sort: smallint
   titel: String
@@ -9671,6 +9626,7 @@ type kultur_qk_min_fields {
 # order by min() on columns of table "kultur_qk"
 input kultur_qk_min_order_by {
   beschreibung: order_by
+  id: order_by
   name: order_by
   sort: order_by
   titel: order_by
@@ -9701,6 +9657,7 @@ input kultur_qk_on_conflict {
 # ordering options when selecting data from "kultur_qk"
 input kultur_qk_order_by {
   beschreibung: order_by
+  id: order_by
   kultur_qk_choosens_aggregate: kultur_qk_choosen_aggregate_order_by
   name: order_by
   sort: order_by
@@ -9719,6 +9676,9 @@ enum kultur_qk_select_column {
   beschreibung
 
   # column name
+  id
+
+  # column name
   name
 
   # column name
@@ -9731,6 +9691,7 @@ enum kultur_qk_select_column {
 # input type for updating data in table "kultur_qk"
 input kultur_qk_set_input {
   beschreibung: String
+  id: ID
   name: String
   sort: smallint
   titel: String
@@ -9780,6 +9741,9 @@ input kultur_qk_sum_order_by {
 enum kultur_qk_update_column {
   # column name
   beschreibung
+
+  # column name
+  id
 
   # column name
   name
@@ -12347,6 +12311,9 @@ type mutation_root {
     where: art_qk_choosen_bool_exp!
   ): art_qk_choosen_mutation_response
 
+  # delete single row from the table: "art_qk_choosen"
+  delete_art_qk_choosen_by_pk(id: ID!): art_qk_choosen
+
   # delete data from the table: "art_rev"
   delete_art_rev(
     # filter the rows which have to be deleted
@@ -12468,10 +12435,7 @@ type mutation_root {
   ): kultur_option_rev_mutation_response
 
   # delete single row from the table: "kultur_option_rev"
-  delete_kultur_option_rev_by_pk(
-    _rev: String!
-    kultur_id: uuid!
-  ): kultur_option_rev
+  delete_kultur_option_rev_by_pk(_rev: String!, id: ID!): kultur_option_rev
 
   # delete data from the table: "kultur_qk"
   delete_kultur_qk(
@@ -12558,10 +12522,7 @@ type mutation_root {
   ): person_option_rev_mutation_response
 
   # delete single row from the table: "person_option_rev"
-  delete_person_option_rev_by_pk(
-    _rev: String!
-    person_id: uuid!
-  ): person_option_rev
+  delete_person_option_rev_by_pk(_rev: String!, id: ID!): person_option_rev
 
   # delete data from the table: "person_rev"
   delete_person_rev(
@@ -13537,6 +13498,13 @@ type mutation_root {
     # filter the rows which have to be updated
     where: art_qk_choosen_bool_exp!
   ): art_qk_choosen_mutation_response
+
+  # update single row of the table: "art_qk_choosen"
+  update_art_qk_choosen_by_pk(
+    # sets the columns of the filtered rows to the given values
+    _set: art_qk_choosen_set_input
+    pk_columns: art_qk_choosen_pk_columns_input!
+  ): art_qk_choosen
 
   # update data of the table: "art_rev"
   update_art_rev(
@@ -15109,6 +15077,7 @@ type person_option {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
+  id: ID!
 
   # Ob die Sammel-Lieferung neben der Lieferung angezeigt wird
   li_show_sl: Boolean
@@ -15118,7 +15087,6 @@ type person_option {
 
   # An object relationship
   person: person!
-  person_id: uuid!
   sl_auto_copy_edits: Boolean
 
   # Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn
@@ -15205,10 +15173,10 @@ input person_option_bool_exp {
   hk_geom_point: Boolean_comparison_exp
   hk_kanton: Boolean_comparison_exp
   hk_land: Boolean_comparison_exp
+  id: uuid_comparison_exp
   li_show_sl: Boolean_comparison_exp
   li_show_sl_felder: Boolean_comparison_exp
   person: person_bool_exp
-  person_id: uuid_comparison_exp
   sl_auto_copy_edits: Boolean_comparison_exp
   sl_show_empty_when_next_to_li: Boolean_comparison_exp
   tree_event: Boolean_comparison_exp
@@ -15248,10 +15216,10 @@ input person_option_insert_input {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
+  id: ID
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
   person: person_obj_rel_insert_input
-  person_id: uuid
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -15266,7 +15234,7 @@ type person_option_max_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  person_id: uuid
+  id: ID
 }
 
 # order by max() on columns of table "person_option"
@@ -15274,7 +15242,7 @@ input person_option_max_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  person_id: order_by
+  id: order_by
 }
 
 # aggregate min on columns
@@ -15282,7 +15250,7 @@ type person_option_min_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  person_id: uuid
+  id: ID
 }
 
 # order by min() on columns of table "person_option"
@@ -15290,7 +15258,7 @@ input person_option_min_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  person_id: order_by
+  id: order_by
 }
 
 # response of any mutation on the table "person_option"
@@ -15334,10 +15302,10 @@ input person_option_order_by {
   hk_geom_point: order_by
   hk_kanton: order_by
   hk_land: order_by
+  id: order_by
   li_show_sl: order_by
   li_show_sl_felder: order_by
   person: person_order_by
-  person_id: order_by
   sl_auto_copy_edits: order_by
   sl_show_empty_when_next_to_li: order_by
   tree_event: order_by
@@ -15366,12 +15334,12 @@ type person_option_rev {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
+  id: ID!
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
 
   # An object relationship
   person: person!
-  person_id: uuid!
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -15455,10 +15423,10 @@ input person_option_rev_bool_exp {
   hk_geom_point: Boolean_comparison_exp
   hk_kanton: Boolean_comparison_exp
   hk_land: Boolean_comparison_exp
+  id: uuid_comparison_exp
   li_show_sl: Boolean_comparison_exp
   li_show_sl_felder: Boolean_comparison_exp
   person: person_bool_exp
-  person_id: uuid_comparison_exp
   sl_auto_copy_edits: Boolean_comparison_exp
   sl_show_empty_when_next_to_li: Boolean_comparison_exp
   tree_event: Boolean_comparison_exp
@@ -15498,10 +15466,10 @@ input person_option_rev_insert_input {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
+  id: ID
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
   person: person_obj_rel_insert_input
-  person_id: uuid
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -15516,7 +15484,7 @@ type person_option_rev_max_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  person_id: uuid
+  id: ID
 }
 
 # order by max() on columns of table "person_option_rev"
@@ -15524,7 +15492,7 @@ input person_option_rev_max_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  person_id: order_by
+  id: order_by
 }
 
 # aggregate min on columns
@@ -15532,7 +15500,7 @@ type person_option_rev_min_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  person_id: uuid
+  id: ID
 }
 
 # order by min() on columns of table "person_option_rev"
@@ -15540,7 +15508,7 @@ input person_option_rev_min_order_by {
   _depth: order_by
   _parent_rev: order_by
   _rev: order_by
-  person_id: order_by
+  id: order_by
 }
 
 # response of any mutation on the table "person_option_rev"
@@ -15584,10 +15552,10 @@ input person_option_rev_order_by {
   hk_geom_point: order_by
   hk_kanton: order_by
   hk_land: order_by
+  id: order_by
   li_show_sl: order_by
   li_show_sl_felder: order_by
   person: person_order_by
-  person_id: order_by
   sl_auto_copy_edits: order_by
   sl_show_empty_when_next_to_li: order_by
   tree_event: order_by
@@ -15600,7 +15568,7 @@ input person_option_rev_order_by {
 # primary key columns input for table: "person_option_rev"
 input person_option_rev_pk_columns_input {
   _rev: String!
-  person_id: uuid!
+  id: ID!
 }
 
 # select columns of table "person_option_rev"
@@ -15657,13 +15625,13 @@ enum person_option_rev_select_column {
   hk_land
 
   # column name
+  id
+
+  # column name
   li_show_sl
 
   # column name
   li_show_sl_felder
-
-  # column name
-  person_id
 
   # column name
   sl_auto_copy_edits
@@ -15706,9 +15674,9 @@ input person_option_rev_set_input {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
+  id: ID
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
-  person_id: uuid
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -15812,13 +15780,13 @@ enum person_option_rev_update_column {
   hk_land
 
   # column name
+  id
+
+  # column name
   li_show_sl
 
   # column name
   li_show_sl_felder
-
-  # column name
-  person_id
 
   # column name
   sl_auto_copy_edits
@@ -15926,13 +15894,13 @@ enum person_option_select_column {
   hk_land
 
   # column name
+  id
+
+  # column name
   li_show_sl
 
   # column name
   li_show_sl_felder
-
-  # column name
-  person_id
 
   # column name
   sl_auto_copy_edits
@@ -15975,9 +15943,9 @@ input person_option_set_input {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
+  id: ID
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
-  person_id: uuid
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -16081,13 +16049,13 @@ enum person_option_update_column {
   hk_land
 
   # column name
+  id
+
+  # column name
   li_show_sl
 
   # column name
   li_show_sl_felder
-
-  # column name
-  person_id
 
   # column name
   sl_auto_copy_edits
@@ -17482,6 +17450,9 @@ type query_root {
     where: art_qk_choosen_bool_exp
   ): art_qk_choosen_aggregate!
 
+  # fetch data from the table: "art_qk_choosen" using primary key columns
+  art_qk_choosen_by_pk(id: ID!): art_qk_choosen
+
   # fetch data from the table: "art_rev"
   art_rev(
     # distinct select on columns
@@ -18299,7 +18270,7 @@ type query_root {
   ): kultur_option_rev_aggregate!
 
   # fetch data from the table: "kultur_option_rev" using primary key columns
-  kultur_option_rev_by_pk(_rev: String!, kultur_id: uuid!): kultur_option_rev
+  kultur_option_rev_by_pk(_rev: String!, id: ID!): kultur_option_rev
 
   # fetch data from the table: "kultur_qk"
   kultur_qk(
@@ -18770,7 +18741,7 @@ type query_root {
   ): person_option_rev_aggregate!
 
   # fetch data from the table: "person_option_rev" using primary key columns
-  person_option_rev_by_pk(_rev: String!, person_id: uuid!): person_option_rev
+  person_option_rev_by_pk(_rev: String!, id: ID!): person_option_rev
 
   # fetch data from the table: "person_rev"
   person_rev(
@@ -22937,6 +22908,9 @@ type subscription_root {
     where: art_qk_choosen_bool_exp
   ): art_qk_choosen_aggregate!
 
+  # fetch data from the table: "art_qk_choosen" using primary key columns
+  art_qk_choosen_by_pk(id: ID!): art_qk_choosen
+
   # fetch data from the table: "art_rev"
   art_rev(
     # distinct select on columns
@@ -23754,7 +23728,7 @@ type subscription_root {
   ): kultur_option_rev_aggregate!
 
   # fetch data from the table: "kultur_option_rev" using primary key columns
-  kultur_option_rev_by_pk(_rev: String!, kultur_id: uuid!): kultur_option_rev
+  kultur_option_rev_by_pk(_rev: String!, id: ID!): kultur_option_rev
 
   # fetch data from the table: "kultur_qk"
   kultur_qk(
@@ -24225,7 +24199,7 @@ type subscription_root {
   ): person_option_rev_aggregate!
 
   # fetch data from the table: "person_option_rev" using primary key columns
-  person_option_rev_by_pk(_rev: String!, person_id: uuid!): person_option_rev
+  person_option_rev_by_pk(_rev: String!, id: ID!): person_option_rev
 
   # fetch data from the table: "person_rev"
   person_rev(

@@ -211,6 +211,7 @@ export const subscription_rootModelBase = ModelBase
     art_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
     art_qk_choosen: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosenModel)))),
     art_qk_choosen_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
+    art_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
     art_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_revModel)))),
     art_rev_aggregate: types.union(types.undefined, types.late(() => art_rev_aggregateModel)),
     art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
@@ -369,6 +370,7 @@ export class subscription_rootModelSelector extends QueryBuilder {
   art_qk_by_pk(builder) { return this.__child(`art_qk_by_pk`, art_qkModelSelector, builder) }
   art_qk_choosen(builder) { return this.__child(`art_qk_choosen`, art_qk_choosenModelSelector, builder) }
   art_qk_choosen_aggregate(builder) { return this.__child(`art_qk_choosen_aggregate`, art_qk_choosen_aggregateModelSelector, builder) }
+  art_qk_choosen_by_pk(builder) { return this.__child(`art_qk_choosen_by_pk`, art_qk_choosenModelSelector, builder) }
   art_rev(builder) { return this.__child(`art_rev`, art_revModelSelector, builder) }
   art_rev_aggregate(builder) { return this.__child(`art_rev_aggregate`, art_rev_aggregateModelSelector, builder) }
   art_rev_by_pk(builder) { return this.__child(`art_rev_by_pk`, art_revModelSelector, builder) }

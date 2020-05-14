@@ -21,6 +21,7 @@ export const art_qk_choosenModelBase = ModelBase
     art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
     art_qk: types.union(types.undefined, MSTGQLRef(types.late(() => art_qkModel))),
+    id: types.identifier,
     qk_name: types.union(types.undefined, types.string),
   })
   .views(self => ({
@@ -31,6 +32,7 @@ export const art_qk_choosenModelBase = ModelBase
 
 export class art_qk_choosenModelSelector extends QueryBuilder {
   get art_id() { return this.__attr(`art_id`) }
+  get id() { return this.__attr(`id`) }
   get qk_name() { return this.__attr(`qk_name`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
   art_qk(builder) { return this.__child(`art_qk`, art_qkModelSelector, builder) }

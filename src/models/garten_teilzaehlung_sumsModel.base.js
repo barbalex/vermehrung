@@ -4,8 +4,12 @@
 import { types } from "mobx-state-tree"
 import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { artModel } from "./artModel"
-import { artModelSelector } from "./artModel.base"
+import { kulturModel } from "./kulturModel"
+import { kulturModelSelector } from "./kulturModel.base"
+import { kultur_aggregateModel } from "./kultur_aggregateModel"
+import { kultur_aggregateModelSelector } from "./kultur_aggregateModel.base"
+import { personModel } from "./personModel"
+import { personModelSelector } from "./personModel.base"
 
 
 /**
@@ -16,7 +20,6 @@ export const garten_teilzaehlung_sumsModelBase = ModelBase
   .named('garten_teilzaehlung_sums')
   .props({
     __typename: types.optional(types.literal("garten_teilzaehlung_sums"), "garten_teilzaehlung_sums"),
-    art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     garten_aktiv: types.union(types.undefined, types.null, types.boolean),
     garten_anzahl_kulturen: types.union(types.undefined, types.null, types.frozen()),
     garten_bemerkungen: types.union(types.undefined, types.null, types.string),
@@ -54,6 +57,9 @@ export const garten_teilzaehlung_sumsModelBase = ModelBase
     kultur_von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     kultur_zaehlungen_anzahl: types.union(types.undefined, types.null, types.frozen()),
     kultur_zwischenlager: types.union(types.undefined, types.null, types.boolean),
+    kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
+    kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
+    person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     teilzaehlung_andere_menge: types.union(types.undefined, types.null, types.string),
     teilzaehlung_anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.integer),
     teilzaehlung_anzahl_mutterpflanzen: types.union(types.undefined, types.null, types.integer),
@@ -139,7 +145,9 @@ export class garten_teilzaehlung_sumsModelSelector extends QueryBuilder {
   get zaehlung_datum() { return this.__attr(`zaehlung_datum`) }
   get zaehlung_id() { return this.__attr(`zaehlung_id`) }
   get zaehlung_prognose() { return this.__attr(`zaehlung_prognose`) }
-  art(builder) { return this.__child(`art`, artModelSelector, builder) }
+  kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
+  kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
+  person(builder) { return this.__child(`person`, personModelSelector, builder) }
 }
 export function selectFromgarten_teilzaehlung_sums() {
   return new garten_teilzaehlung_sumsModelSelector()

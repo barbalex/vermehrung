@@ -151,10 +151,12 @@ comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und c
 
 drop table if exists art_qk_choosen cascade;
 create table art_qk_choosen (
+  id uuid primary key default uuid_generate_v1mc(),
   art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
   unique(art_id, qk_name)
 );
+create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
 
@@ -455,11 +457,13 @@ create index on kultur_rev using btree (_deleted);
 
 drop table if exists kultur_qk cascade;
 create table kultur_qk (
+  id uuid default uuid_generate_v1mc(),
   name text primary key,
   titel text,
   beschreibung text,
   sort smallint default null
 );
+create index on kultur_qk using btree (id);
 create index on kultur_qk using btree (name);
 create index on kultur_qk using btree (titel);
 create index on kultur_qk using btree (sort);
