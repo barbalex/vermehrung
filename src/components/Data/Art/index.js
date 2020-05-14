@@ -14,7 +14,6 @@ import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import toPgArray from '../../../utils/toPgArray'
 import Files from '../Files'
-import artQuery from './artQuery'
 import Timeline from './Timeline'
 import Herkunft from './Herkunft'
 import DeleteButton from './DeleteButton'
@@ -78,24 +77,30 @@ const Art = ({
   const { activeNodeArray, setActiveNodeArray } = tree
 
   const artFilter = queryFromTable({ store, table: 'art' })
-  const { data, error, loading, query } = useQuery(artQuery, {
-    variables: { id: id, filter: artFilter, isFiltered },
-  })
   const { data: dataArtAggregate } = useQuery((store) =>
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const {
+    data: dataFiltered,
+    error: errorFiltered,
+    loading: loadingFiltered,
+    query,
+  } = useQuery((store) =>
+    store.queryArt({
+      where: artFilter,
+    }),
   )
 
   const [errors, setErrors] = useState({})
 
   let row
   const totalNr = get(dataArtAggregate, 'art_aggregate.aggregate.count', 0)
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const filteredNr = get(dataFiltered, 'art', []).length
   if (showFilter) {
     row = filter.art
   } else {
     row = store.arts.get(id)
   }
-  console.log('Art', { dataArtAggregate })
 
   useEffect(() => {
     setErrors({})
@@ -194,7 +199,7 @@ const Art = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  if (loading) {
+  if (loadingFiltered) {
     return (
       <Container>
         <FormTitle title="Art" />
@@ -203,7 +208,7 @@ const Art = ({
     )
   }
 
-  const errorToShow = error
+  const errorToShow = errorFiltered
   if (errorToShow) {
     return (
       <Container>
