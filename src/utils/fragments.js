@@ -21,6 +21,7 @@ export const art = gql`
 `
 export const artQk = gql`
   fragment ArtQkFields on art_qk {
+    id
     __typename
     name
     titel
@@ -54,6 +55,14 @@ export const aeArt = gql`
     name
     # name_deutsch
     # name_latein
+  }
+`
+export const avArt = gql`
+  fragment AvArtFields on av_art {
+    id
+    __typename
+    art_id
+    person_id
   }
 `
 export const event = gql`
@@ -492,6 +501,15 @@ export const teilzaehlung = gql`
     _revisions
     _depth
     _conflicts
+  }
+`
+export const user_role = gql`
+  fragment UserRoleFields on user_role {
+    id
+    __typename
+    name
+    sort
+    comment
   }
 `
 export const zaehlung = gql`
