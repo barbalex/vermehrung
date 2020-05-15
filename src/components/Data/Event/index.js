@@ -15,6 +15,7 @@ import md5 from 'blueimp-md5'
 import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
@@ -28,7 +29,6 @@ import {
   teilkultur as teilkulturFragment,
 } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import toPgArray from '../../../utils/toPgArray'
 import queryFromTable from '../../../utils/queryFromTable'
 import Settings from './Settings'
 import AddButton from './AddButton'
