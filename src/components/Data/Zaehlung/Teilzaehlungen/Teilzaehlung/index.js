@@ -134,7 +134,7 @@ const Teilzaehlung = ({
           field === 'bemerkungen' ? value.toString() : row.bemerkungen,
         prognose_von_tz:
           field === 'prognose_von_tz' ? value : row.prognose_von_tz,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,

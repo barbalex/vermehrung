@@ -12,7 +12,6 @@ import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
-import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -225,7 +224,7 @@ const Zaehlung = ({
         prognose: field === 'prognose' ? value : row.prognose,
         bemerkungen:
           field === 'bemerkungen' ? value.toString() : row.bemerkungen,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,

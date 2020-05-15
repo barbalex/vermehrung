@@ -178,18 +178,13 @@ const Event = ({
   const eventResult = useQuery(eventQuery, {
     variables: { id, isFiltered, filter: eventFilter },
   })
-  const { data, error, loading, query } = eventResult
+  const { data, error, loading } = eventResult
 
   const [errors, setErrors] = useState({})
 
-  let row
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
-  if (showFilter) {
-    row = filter.event
-  } else {
-    row = get(data, 'event[0]') || {}
-  }
+  const row = showFilter ? filter.event : store.events.get(id)
 
   const {
     data: kulturData,
@@ -270,7 +265,7 @@ const Event = ({
           field === 'beschreibung' ? value.toString() : row.beschreibung,
         geplant: field === 'geplant' ? value : row.geplant,
         datum: field === 'datum' ? value : row.datum,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -299,11 +294,19 @@ const Event = ({
       setTimeout(() => {
         // optimistically update store
         upsertEvent(newObject)
-        // refetch query because is not a model instance
-        query.refetch()
+        if (['datum', 'beschreibung'].includes(field)) store.tree.refetch()
       }, 100)
     },
-    [addQueuedQuery, upsertEvent, filter, id, row, showFilter, user, query],
+    [
+      row,
+      showFilter,
+      id,
+      user.email,
+      addQueuedQuery,
+      filter,
+      upsertEvent,
+      store.tree,
+    ],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`

@@ -96,7 +96,6 @@ const Herkunft = ({
     }),
   )*/
   const {
-    data: dataAll,
     error: errorAll,
     loading: loadingAll,
     query: queryAll,
@@ -115,18 +114,13 @@ const Herkunft = ({
     ),
   )
 
-  const allRows = get(dataAll, 'herkunft', [])
-  const row = showFilter
-    ? filter.herkunft
-    : //: get(dataHerkunft, 'herkunft[0]') || {}
-      allRows.find((r) => r.id === id) || {}
+  const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
   const totalNr = get(
     dataHerkunftAggregate,
     'herkunft_aggregate.aggregate.count',
     0,
   )
   const filteredNr = get(dataFiltered, 'herkunft', []).length
-  //console.log('Herkunft, row:', row)
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
@@ -163,18 +157,11 @@ const Herkunft = ({
         land: field === 'land' ? value.toString() : row.land,
         bemerkungen:
           field === 'bemerkungen' ? value.toString() : row.bemerkungen,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
       }
-      console.log('Herkunft, saveToDb', {
-        eventTargetValue: event.target.value,
-        value,
-        previousValue,
-        field,
-        newObject,
-      })
       const rev = `${depth}-${md5(newObject.toString())}`
       newObject._rev = rev
       // convert to string as hasura does not support arrays yet
@@ -199,89 +186,20 @@ const Herkunft = ({
       setTimeout(() => {
         // optimistically update store
         upsertHerkunft(newObject)
-        // refetch query because is not a model instance
-        queryAll.refetch()
+        if (['nr'].includes(field)) store.tree.refetch()
       }, 50)
     },
     [
       addQueuedQuery,
-      upsertHerkunft,
       filter,
       id,
       row,
       showFilter,
-      user,
-      queryAll,
+      store.tree,
+      upsertHerkunft,
+      user.email,
     ],
   )
-
-  /*const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if (event.target.value === undefined) value = null
-      if (event.target.value === '') value = null
-      const type = types.herkunft[field]
-      const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
-      if (showFilter) {
-        filter.setValue({ table: 'herkunft', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split
-                ? value.split
-                  ? value.split('"').join('\\"')
-                  : value
-                : value
-            }"`
-          }
-          await client.mutate({
-            mutation: gql`
-              mutation update_herkunft(
-                $id: uuid!
-              ) {
-                update_herkunft(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...HerkunftFields
-                  }
-                }
-              }
-              ${herkunftFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateHerkunft: {
-                id: row.id,
-                __typename: 'Herkunft',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
-      }
-    },
-    [client, filter, row, showFilter],
-  )*/
   const openHerkunftDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Herkuenfte`
     if (typeof window !== 'undefined') {

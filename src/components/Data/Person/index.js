@@ -176,7 +176,7 @@ const Person = ({
         kommerziell: field === 'kommerziell' ? value : row.kommerziell,
         info: field === 'info' ? value : row.info,
         aktiv: field === 'aktiv' ? value : row.aktiv,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
