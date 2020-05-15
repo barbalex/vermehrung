@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
@@ -15,7 +14,6 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 import md5 from 'blueimp-md5'
-import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -263,7 +261,6 @@ const SammelLieferung = ({
   id = '99999999-9999-9999-9999-999999999999',
   lieferungId,
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const {
@@ -578,7 +575,6 @@ const SammelLieferung = ({
     },
     [
       addQueuedQuery,
-      client,
       filter,
       id,
       query,
