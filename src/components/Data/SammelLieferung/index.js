@@ -7,15 +7,18 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -33,8 +36,6 @@ import {
   sammlung as sammlungFragment,
 } from '../../../utils/fragments'
 import exists from '../../../utils/exists'
-import types from '../../../models/Filter/simpleTypes'
-import updateSammelLieferung from './updateSammelLieferung'
 import Settings from './Settings'
 import Copy from './Copy'
 import updateAllLieferungen from './Copy/updateAllLieferungen'
@@ -265,16 +266,23 @@ const SammelLieferung = ({
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { filter, isPrint, setIsPrint, user } = store
+  const {
+    filter,
+    isPrint,
+    setIsPrint,
+    upsertSammelLieferung,
+    addQueuedQuery,
+    user,
+  } = store
   const { isFiltered: runIsFiltered } = filter
-  const { setWidthInPercentOfScreen } = store.tree
+  const { setWidthInPercentOfScreen, refetch: refetchTree } = store.tree
 
   const isFiltered = runIsFiltered()
   const sammelLieferungFilter = queryFromTable({
     store,
     table: 'sammel_lieferung',
   })
-  const { data, error, loading } = useQuery(sammelLieferungQuery, {
+  const { data, error, loading, query } = useQuery(sammelLieferungQuery, {
     variables: {
       id,
       isFiltered,
@@ -474,70 +482,114 @@ const SammelLieferung = ({
   )
 
   const saveToDb = useCallback(
-    async (event) => {
+    (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.sammel_lieferung[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'sammel_lieferung', key: field, value })
-      } else {
-        let valueToSet
-        if (value === null) {
-          valueToSet = null
-        } else if (['number', 'boolean'].includes(type)) {
-          valueToSet = value
-        } else {
-          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
-        }
-        const refetchQueries = [
-          'nach_kultur_id',
-          'von_kultur_id',
-          'von_sammlung_id',
-          'art_id',
-        ].includes(field)
-          ? ['SammelLieferungQueryForSammelLieferung']
-          : []
-        try {
-          await client.mutate({
-            mutation: updateSammelLieferung({ field, valueToSet }),
-            variables: {
-              id: row.id,
-            },
-            refetchQueries,
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateSammelLieferung: {
-                id: row.id,
-                __typename: 'SammelLieferung',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          console.log(error)
-          return setErrors({ [field]: error.message })
-        }
+        return filter.setValue({ table: 'sammel_lieferung', key: field, value })
+      }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id,
+        art_id: field === 'art_id' ? value : row.art_id,
+        person_id: field === 'person_id' ? value : row.person_id,
+        von_sammlung_id:
+          field === 'von_sammlung_id' ? value : row.von_sammlung_id,
+        von_kultur_id: field === 'von_kultur_id' ? value : row.von_kultur_id,
+        datum: field === 'datum' ? value : row.datum,
+        nach_kultur_id: field === 'nach_kultur_id' ? value : row.nach_kultur_id,
+        nach_ausgepflanzt:
+          field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
+        von_anzahl_individuen:
+          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
+        anzahl_pflanzen:
+          field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
+        anzahl_auspflanzbereit:
+          field === 'anzahl_auspflanzbereit'
+            ? value
+            : row.anzahl_auspflanzbereit,
+        gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
+        andere_menge:
+          field === 'andere_menge' ? value.toString() : row.andere_menge,
+        geplant: field === 'geplant' ? value : row.geplant,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        changed: moment().format('YYYY-MM-DD'),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject)}`
+      newObject._rev = rev
+      // convert array to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_sammel_lieferung_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'sammel_lieferung_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'querySammel_lieferung',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(async () => {
+        // optimistically update store
+        upsertSammelLieferung(newObject)
+        // refetch query because is not a model instance
+        query.refetch()
         // if sl_auto_copy_edits is true
         // copy to all lieferungen
         if (sl_auto_copy_edits) {
           // pass field to mark which field should be updated
           // even if it has value null
           await updateAllLieferungen({
-            sammelLieferung: { ...row, ...{ [field]: valueToSet } },
+            sammelLieferung: newObject,
             field,
-            client,
             store,
           })
         }
-        setErrors({})
-      }
+        // update tree if one of these fields were changed
+        if (
+          [
+            'nach_kultur_id',
+            'von_kultur_id',
+            'von_sammlung_id',
+            'art_id',
+          ].includes(field)
+        ) {
+          refetchTree()
+        }
+      }, 100)
     },
-    [client, filter, row, showFilter, sl_auto_copy_edits, store],
+    [
+      addQueuedQuery,
+      client,
+      filter,
+      id,
+      query,
+      refetchTree,
+      row,
+      showFilter,
+      sl_auto_copy_edits,
+      store,
+      upsertSammelLieferung,
+      user.email,
+    ],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
@@ -645,12 +697,6 @@ const SammelLieferung = ({
               )}
               <AddButton />
               <DeleteButton row={row} />
-              {id && (
-                <Settings
-                  personId={person_id}
-                  personOptionResult={personOptionResult}
-                />
-              )}
               <IconButton
                 aria-label={printPreview ? 'Formular' : 'Lieferschein'}
                 title={printPreview ? 'Formular' : 'Lieferschein'}
@@ -666,6 +712,12 @@ const SammelLieferung = ({
                 >
                   <MdPrint />
                 </IconButton>
+              )}
+              {id && (
+                <Settings
+                  personId={person_id}
+                  personOptionResult={personOptionResult}
+                />
               )}
               <IconButton
                 aria-label="Anleitung öffnen"

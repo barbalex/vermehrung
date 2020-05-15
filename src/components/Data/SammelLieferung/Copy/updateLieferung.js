@@ -1,19 +1,15 @@
 import gql from 'graphql-tag'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
 import { lieferung as lieferungFragment } from '../../../../utils/fragments'
 import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
-import isString from '../../../../utils/isString'
 import exists from '../../../../utils/exists'
+import toPgArray from '../../../../utils/toPgArray'
 
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
-export default async ({
-  lieferungId,
-  sammelLieferung,
-  field,
-  client,
-  store,
-}) => {
+export default async ({ lieferungId, sammelLieferung, field, store }) => {
   // pass field to mark which field should be updated
   // even if it has value null
   const lieferung = {
@@ -21,52 +17,56 @@ export default async ({
     id: lieferungId,
     sammel_lieferung_id: sammelLieferung.id,
   }
-  const objectString = Object.entries(lieferung)
-    .filter(
-      // only accept lieferung's fields
+  const newObject = Object.fromEntries(
+    Object.entries(lieferung)
+      .filter(
+        // only accept lieferung's fields
+        // eslint-disable-next-line no-unused-vars
+        ([key, value]) => lieferungFields.includes(key),
+      )
+      // only update with existing values
       // eslint-disable-next-line no-unused-vars
-      ([key, value]) => lieferungFields.includes(key),
-    )
-    // only update with existing values
-    // eslint-disable-next-line no-unused-vars
-    .filter(([key, val]) => exists(val) || key === field)
-    .map(([key, value]) => {
-      if (isString(value)) {
-        return `${key}: "${value}"`
-      }
-      return `${key}: ${value}`
-    })
-    .join(', ')
+      .filter(([key, val]) => exists(val) || key === field),
+  )
+  // need to query existing object to get revisions
+  let result
   try {
-    await client.mutate({
-      mutation: gql`
-    mutation update_lieferung(
-      $id: uuid!
-    ) {
-      update_lieferung(
-        where: { id: { _eq: $id } }
-        _set: {
-          ${objectString}
-        }
-      ) {
-        affected_rows
-        returning {
-          ...LieferungFields
-        }
-      }
-    }
-    ${lieferungFragment}
-    `,
-      variables: {
-        id: lieferungId,
-      },
+    result = store.queryLieferung({
+      where: { id: { _eq: lieferungId } },
     })
   } catch (error) {
     return store.enqueNotification({
-      message: error.message,
+      message: `Eine der Lieferungen konnte nicht aktualisert werden. Fehlermeldung: ${error.message}`,
       options: {
         variant: 'error',
       },
     })
   }
+  const lfLastVersion = result.data.lieferung
+  const depth = lfLastVersion._depth + 1
+  newObject.changed = moment().format('YYYY-MM-DD')
+  newObject.changed_by = store.user.email
+  newObject._parent_rev = lfLastVersion._rev
+  newObject._depth = depth
+  const rev = `${depth}-${md5(newObject)}`
+  newObject._rev = rev
+  // convert array to string as hasura does not support arrays yet
+  // https://github.com/hasura/graphql-engine/pull/2243
+  newObject._revisions = lfLastVersion._revisions
+    ? toPgArray([rev, ...lfLastVersion._revisions])
+    : toPgArray([rev])
+  store.addQueuedQuery({
+    name: 'mutateInsert_lieferung_rev',
+    variables: JSON.stringify({
+      objects: [newObject],
+      on_conflict: {
+        constraint: 'lieferung_rev_pkey',
+        update_columns: ['id'],
+      },
+    }),
+    callbackQuery: 'queryLieferung',
+    callbackQueryVariables: JSON.stringify({
+      where: { id: { _eq: lieferungId } },
+    }),
+  })
 }
