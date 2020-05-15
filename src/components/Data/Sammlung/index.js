@@ -12,7 +12,6 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
-import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'

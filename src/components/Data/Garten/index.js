@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
@@ -24,7 +23,6 @@ import {
   personOption as personOptionFragment,
 } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'

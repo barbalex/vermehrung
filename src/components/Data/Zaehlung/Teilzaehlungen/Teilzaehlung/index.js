@@ -7,7 +7,6 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
-import moment from 'moment'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import toPgArray from '../../../../../utils/toPgArray'
