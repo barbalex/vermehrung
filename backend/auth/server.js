@@ -158,14 +158,14 @@ async function start() {
             })
             .catch((adminError) => {
               console.log('Error creating custom token:', adminError)
-              h.response(
-                `Error creating custom token: ${adminError.message}`,
-              ).code(500)
+              return h
+                .response(`Error creating custom token: ${adminError.message}`)
+                .code(500)
             })
         })
         .catch((sqlError) => {
           console.log('Error querying db:', sqlError)
-          h.response(`Error querying db: ${sqlError.message}`).code(500)
+          return h.response(`Error querying db: ${sqlError.message}`).code(500)
         })
     },
   })
