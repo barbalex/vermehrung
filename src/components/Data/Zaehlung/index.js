@@ -225,7 +225,7 @@ const Zaehlung = ({
         prognose: field === 'prognose' ? value : row.prognose,
         bemerkungen:
           field === 'bemerkungen' ? value.toString() : row.bemerkungen,
-        changed: moment().format('YYYY-MM-DD'),
+        changed: new Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,

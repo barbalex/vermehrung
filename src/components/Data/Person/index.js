@@ -134,7 +134,7 @@ const Person = ({
     }),
   )
   const { user_role } = get(dataUser, 'person[0]') || {}
-  //console.log('Person, user_role:', user_role)
+  console.log('Person:', { row })
 
   const saveToDb = useCallback(
     (event) => {
@@ -177,7 +177,7 @@ const Person = ({
         kommerziell: field === 'kommerziell' ? value : row.kommerziell,
         info: field === 'info' ? value : row.info,
         aktiv: field === 'aktiv' ? value : row.aktiv,
-        changed: moment().format('YYYY-MM-DD'),
+        changed: new Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,

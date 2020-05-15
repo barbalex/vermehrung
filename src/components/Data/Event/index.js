@@ -271,7 +271,7 @@ const Event = ({
           field === 'beschreibung' ? value.toString() : row.beschreibung,
         geplant: field === 'geplant' ? value : row.geplant,
         datum: field === 'datum' ? value : row.datum,
-        changed: moment().format('YYYY-MM-DD'), //'2000-05-03',
+        changed: new Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,

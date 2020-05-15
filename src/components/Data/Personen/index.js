@@ -106,7 +106,14 @@ const Personen = ({ filter: showFilter }) => {
     const _rev = `1-${md5({ id, _deleted: false }.toString())}`
     const _depth = 1
     const _revisions = `{"${_rev}"}`
-    const newObject = { id, _rev, _depth, _revisions }
+    const newObject = {
+      id,
+      _rev,
+      _depth,
+      _revisions,
+      changed: new Date().toISOString(),
+      changed_by: user.email,
+    }
     addQueuedQuery({
       name: 'mutateInsert_person_rev',
       variables: JSON.stringify({
@@ -133,10 +140,11 @@ const Personen = ({ filter: showFilter }) => {
   }, [
     activeNodeArray,
     addOpenNodes,
-    upsertPerson,
     addQueuedQuery,
     refetchTree,
     setActiveNodeArray,
+    upsertPerson,
+    user.email,
   ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
