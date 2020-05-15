@@ -7,13 +7,15 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -25,7 +27,6 @@ import {
   sammlung as sammlungFragment,
   art as artFragment,
 } from '../../../utils/fragments'
-import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -138,14 +139,14 @@ const Sammlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, upsertSammlung, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
+  const { refetch: refetchTree } = store.tree
 
   const isFiltered = runIsFiltered()
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, query: theQuery } = useQuery(query, {
     variables: { id, isFiltered, filter: sammlungFilter },
   })
   const {
@@ -184,14 +185,10 @@ const Sammlung = ({
       get(dataData, 'herkunft', []).map((el) => {
         // only show lokal if exist
         // does not exist if user does not have right to see it
-        const lokal =
-          el.gemeinde || el.lokalname
-            ? `, ${el.gemeinde && `${el.gemeinde}, `}${
-                el.lokalname && el.lokalname
-              }`
-            : ''
+        const gemeinde = el.gemeinde || ''
+        const lokalname = el.lokalname || ''
         const nr = el.nr || '(keine Nr.)'
-        const label = `${nr}${lokal}`
+        const label = [nr, gemeinde, lokalname].filter((e) => !!e).join(', ')
 
         return {
           value: el.id,
@@ -211,75 +208,85 @@ const Sammlung = ({
   )
 
   const saveToDb = useCallback(
-    async (event) => {
+    (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.sammlung[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'sammlung', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split ? value.split('"').join('\\"') : value
-            }"`
-          }
-          const refetchQueries = [
-            'herkunft_id',
-            'person_id',
-            'art_id',
-          ].includes(field)
-            ? ['TreeQueryForTreeContainer']
-            : []
-          await client.mutate({
-            mutation: gql`
-              mutation update_sammlung(
-                $id: uuid!
-              ) {
-                update_sammlung(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...SammlungFields
-                  }
-                }
-              }
-              ${sammlungFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-            refetchQueries,
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateSammlung: {
-                id: row.id,
-                __typename: 'Sammlung',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'sammlung', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id,
+        art_id: field === 'art_id' ? value : row.art_id,
+        person_id: field === 'person_id' ? value : row.person_id,
+        herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
+        nr: field === 'nr' ? value.toString() : row.nr,
+        datum: field === 'datum' ? value : row.datum,
+        von_anzahl_individuen:
+          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
+        anzahl_pflanzen:
+          field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
+        gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
+        andere_menge:
+          field === 'andere_menge' ? value.toString() : row.andere_menge,
+        geplant: field === 'geplant' ? value : row.geplant,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        changed: moment().format('YYYY-MM-DD'), //'2000-05-03',
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject)}`
+      newObject._rev = rev
+      // convert array to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_sammlung_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'sammlung_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'querySammlung',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertSammlung(newObject)
+        // refetch query because is not a model instance
+        theQuery.refetch()
+        // TODO: update tree if one of these fields were changed
+        if (['herkunft_id', 'person_id', 'art_id', 'nr'].includes(field)) {
+          refetchTree()
+        }
+      }, 100)
     },
-    [client, filter, row, showFilter],
+    [
+      addQueuedQuery,
+      filter,
+      id,
+      refetchTree,
+      row,
+      showFilter,
+      theQuery,
+      upsertSammlung,
+      user.email,
+    ],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
