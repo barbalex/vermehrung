@@ -216,14 +216,10 @@ const Kultur = ({
       (get(herkunftData, 'herkunft') || []).map((el) => {
         // only show lokal if exist
         // does not exist if user does not have right to see it
-        const lokal =
-          el.gemeinde || el.lokalname
-            ? `, ${el.gemeinde && `${el.gemeinde}, `}${
-                el.lokalname && el.lokalname
-              }`
-            : ''
+        const gemeinde = el.gemeinde || ''
+        const lokalname = el.lokalname || ''
         const nr = el.nr || '(keine Nr.)'
-        const label = `${nr}${lokal}`
+        const label = [nr, gemeinde, lokalname].filter((e) => !!e).join(', ')
 
         return {
           value: el.id,
