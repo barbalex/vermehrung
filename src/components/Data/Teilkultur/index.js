@@ -214,7 +214,7 @@ const Teilkultur = ({
         ort3: field === 'ort3' ? value.toString() : row.ort3,
         bemerkungen:
           field === 'bemerkungen' ? value.toString() : row.bemerkungen,
-        changed: moment().format('YYYY-MM-DD'),
+        changed: new Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,

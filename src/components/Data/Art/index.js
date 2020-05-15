@@ -124,7 +124,7 @@ const Art = ({
       const newObject = {
         id: row.id,
         ae_id: value,
-        changed: moment().format('YYYY-MM-DD'),
+        changed: new Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
