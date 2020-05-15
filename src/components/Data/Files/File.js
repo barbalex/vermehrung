@@ -144,7 +144,7 @@ const File = ({ file, parent }) => {
           'Access-Control-Allow-Headers': '*',
           'Access-Control-Allow-Credentials': 'true',
           Accept: 'application/vnd.uploadcare-v0.5+json',
-          Date: new Date().toISOString(),
+          Date: new window.Date().toISOString(),
           Authorization: `Uploadcare ${
             process.env.UPLOADCARE_PUBLIC_KEY
           }:${signature}`,

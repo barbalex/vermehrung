@@ -10,7 +10,7 @@ export default ({ verb, uri }) => {
   // seems that we are sending an empty string?
   const contentMd5 = md5Hex('')
   const contentType = 'application/json'
-  const date = new Date().toISOString()
+  const date = new window.Date().toISOString()
   const signString = [verb, contentMd5, contentType, date, uri].join('\n')
   return md5Hex(secret + signString)
 }

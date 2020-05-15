@@ -126,7 +126,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
       _rev,
       _depth,
       _revisions,
-      changed: new Date().toISOString(),
+      changed: new window.Date().toISOString(),
       changed_by: user.email,
     }
     addQueuedQuery({

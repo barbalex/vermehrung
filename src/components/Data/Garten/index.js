@@ -124,9 +124,12 @@ const Garten = ({
 
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
-  const { data, error, loading, query: gartenQuery } = useQuery(gartenQuery, {
-    variables: { id, isFiltered, filter: gartenFilter },
-  })
+  const { data, error, loading, query: queryOfGartenQuery } = useQuery(
+    gartenQuery,
+    {
+      variables: { id, isFiltered, filter: gartenFilter },
+    },
+  )
   const {
     data: personData,
     error: personError,
@@ -135,14 +138,9 @@ const Garten = ({
 
   const [errors, setErrors] = useState({})
 
-  let row
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
-  if (showFilter) {
-    row = filter.garten
-  } else {
-    row = get(data, 'garten[0]') || {}
-  }
+  const row = showFilter ? filter.garten : store.gartens.get(id)
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
@@ -195,7 +193,7 @@ const Garten = ({
         aktiv: field === 'aktiv' ? value : row.aktiv,
         bemerkungen:
           field === 'bemerkungen' ? value.toString() : row.bemerkungen,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -224,19 +222,18 @@ const Garten = ({
       setTimeout(() => {
         // optimistically update store
         upsertGarten(newObject)
-        // refetch query because is not a model instance
-        gartenQuery.refetch()
+        if (['name'].includes(field)) store.tree.refetch()
       }, 100)
     },
     [
       addQueuedQuery,
-      upsertGarten,
       filter,
       id,
       row,
       showFilter,
-      user,
-      gartenQuery,
+      store.tree,
+      upsertGarten,
+      user.email,
     ],
   )
 
@@ -347,7 +344,11 @@ const Garten = ({
             />
           )}
           {!showFilter && ga_geom_point && (
-            <Coordinates row={row} refetchForm={refetch} table="garten" />
+            <Coordinates
+              row={row}
+              refetchForm={queryOfGartenQuery.refetch}
+              table="garten"
+            />
           )}
           {ga_aktiv && (
             <Checkbox2States

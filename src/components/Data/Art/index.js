@@ -83,7 +83,6 @@ const Art = ({
     data: dataFiltered,
     error: errorFiltered,
     loading: loadingFiltered,
-    query,
   } = useQuery((store) =>
     store.queryArt({
       where: artFilter,
@@ -92,14 +91,9 @@ const Art = ({
 
   const [errors, setErrors] = useState({})
 
-  let row
   const totalNr = get(dataArtAggregate, 'art_aggregate.aggregate.count', 0)
   const filteredNr = get(dataFiltered, 'art', []).length
-  if (showFilter) {
-    row = filter.art
-  } else {
-    row = store.arts.get(id)
-  }
+  const row = showFilter ? filter.art : store.arts.get(id)
 
   useEffect(() => {
     setErrors({})
@@ -123,7 +117,7 @@ const Art = ({
       const newObject = {
         id: row.id,
         ae_id: value,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -152,11 +146,19 @@ const Art = ({
       setTimeout(() => {
         // optimistically update store
         upsertArt(newObject)
-        // refetch query because is not a model instance
-        query.refetch()
+        if (['ae_id'].includes(field)) store.tree.refetch()
       }, 50)
     },
-    [addQueuedQuery, upsertArt, filter, id, row, showFilter, user, query],
+    [
+      row,
+      showFilter,
+      user.email,
+      addQueuedQuery,
+      id,
+      filter,
+      upsertArt,
+      store.tree,
+    ],
   )
 
   const artSelectFilter = useCallback(

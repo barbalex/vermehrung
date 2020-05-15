@@ -518,7 +518,7 @@ const SammelLieferung = ({
         geplant: field === 'geplant' ? value : row.geplant,
         bemerkungen:
           field === 'bemerkungen' ? value.toString() : row.bemerkungen,
-        changed: new Date().toISOString(),
+        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,

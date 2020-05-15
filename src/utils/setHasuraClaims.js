@@ -9,7 +9,7 @@ export default async ({ store, user, gqlHttpClient }) => {
       `https://auth.vermehrung.ch/add-hasura-claims/${user.uid}`,
     )
   } catch (error) {
-    console.log(error)
+    console.log('error from getting claims from auth.vermehrung.ch:', error)
     setAuthorizing(false)
     return enqueNotification({
       message: error.response.data,
@@ -23,7 +23,7 @@ export default async ({ store, user, gqlHttpClient }) => {
     try {
       tokenWithRoles = await user.getIdToken(true)
     } catch (error) {
-      console.log(error)
+      console.log('error from calling getting id token:', error)
       setAuthorizing(false)
       return enqueNotification({
         message: error.message,
