@@ -867,13 +867,13 @@ create index on lieferung using gin (tsv);
 drop table if exists lieferung_rev cascade;
 create table lieferung_rev (
   id uuid default uuid_generate_v1mc(),
-  sammel_lieferung_id uuid default null,-- references sammel_lieferung (id) on delete set null on update cascade ,
-  art_id uuid default null references art (id) on delete no action on update cascade,
-  person_id uuid default null references person (id) on delete no action on update cascade,
-  von_sammlung_id uuid default null references sammlung (id) on delete no action on update cascade,
-  von_kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  sammel_lieferung_id uuid default null,
+  art_id uuid default null references art (id) on update no action on delete set null,
+  person_id uuid default null references person (id) on update no action on delete set null,
+  von_sammlung_id uuid default null references sammlung (id) on update no action on delete set null,
+  von_kultur_id uuid default null references kultur (id) on update no action on delete set null,
   datum date default null,
-  nach_kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  nach_kultur_id uuid default null references kultur (id) on update no action on delete set null,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
@@ -891,9 +891,6 @@ create table lieferung_rev (
   _deleted boolean default false,
   primary key (id, _rev)
 );
-alter table public.person_option_rev drop constraint person_option_rev_person_id_fkey;
-alter table person_option_rev add constraint person_option_rev_id_fkey foreign key (person_id) references person (id) on update no action on delete set null;
-
 create index on lieferung_rev using btree (id);
 create index on lieferung_rev using btree (_rev);
 create index on lieferung_rev using btree (_parent_rev);
@@ -932,12 +929,12 @@ alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lie
 drop table if exists sammel_lieferung_rev cascade;
 create table sammel_lieferung_rev (
   id uuid default uuid_generate_v1mc(),
-  art_id uuid default null references art (id) on delete no action on update cascade,
-  person_id uuid default null references person (id) on delete no action on update cascade,
-  von_sammlung_id uuid default null references sammlung (id) on delete no action on update cascade,
-  von_kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  art_id uuid default null references art (id) on update no action on delete set null,
+  person_id uuid default null references person (id) on update no action on delete set null,
+  von_sammlung_id uuid default null references sammlung (id) on update no action on delete set null,
+  von_kultur_id uuid default null references kultur (id) on update no action on delete set null,
   datum date default null,
-  nach_kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  nach_kultur_id uuid default null references kultur (id) on update no action on delete set null,
   nach_ausgepflanzt boolean default false,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
