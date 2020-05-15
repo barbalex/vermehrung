@@ -6,17 +6,14 @@ export default ({ nodes, data }) => {
   return (
     herkuenfte
       // only show if parent node exists
-      .filter(() => nodes.map(n => n.id).includes('herkunftFolder'))
-      .map(el => {
+      .filter(() => nodes.map((n) => n.id).includes('herkunftFolder'))
+      .map((el) => {
         // only show lokal if exist
         // does not exist if user does not have right to see it
-        const lokal =
-          el.gemeinde || el.lokalname
-            ? `, ${el.gemeinde && `${el.gemeinde}, `}${el.lokalname &&
-                el.lokalname}`
-            : ''
+        const gemeinde = el.gemeinde || ''
+        const lokalname = el.lokalname || ''
         const nr = el.nr || '(keine Nr.)'
-        const label = `${nr}${lokal}`
+        const label = [nr, gemeinde, lokalname].filter((e) => !!e).join(', ')
 
         return {
           nodeType: 'table',
