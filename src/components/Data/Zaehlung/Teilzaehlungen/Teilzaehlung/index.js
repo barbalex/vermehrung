@@ -60,6 +60,7 @@ const TopLine = styled.div`
 `
 
 const Teilzaehlung = ({
+  id,
   kulturId,
   teilzaehlung: row,
   teilkulturenWerte,
@@ -98,7 +99,7 @@ const Teilzaehlung = ({
   const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const saveToDb = useCallback(
     async (event) => {

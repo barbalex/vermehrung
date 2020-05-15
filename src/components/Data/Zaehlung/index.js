@@ -185,7 +185,7 @@ const Zaehlung = ({
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const kulturWerte = useMemo(
     () =>

@@ -408,7 +408,7 @@ const SammelLieferung = ({
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
   useEffect(() => {
     if (id) setWidthInPercentOfScreen(25)
     return () => {

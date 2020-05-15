@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
-import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -104,7 +103,7 @@ const Art = ({
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const saveToDb = useCallback(
     async (event) => {

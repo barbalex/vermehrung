@@ -172,7 +172,7 @@ const Teilkultur = ({
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const kulturWerte = memoizeOne(() =>
     get(kulturData, 'kultur', []).map((el) => {

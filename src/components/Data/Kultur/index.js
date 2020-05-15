@@ -124,7 +124,7 @@ const Kultur = ({
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   // From all collected combinations of art and herkunft show only arten of those not present in this garten
   // => find all combinations of art and herkunft in sammlungen

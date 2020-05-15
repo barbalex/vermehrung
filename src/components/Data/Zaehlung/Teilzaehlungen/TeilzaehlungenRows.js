@@ -54,6 +54,7 @@ const TeilzaehlungenRows = ({ kulturId, rows, zaehlungResult }) => {
       {rows.map((r, index) => (
         <Teilzaehlung
           key={r.id}
+          if={r.id}
           index={index}
           kulturId={kulturId}
           teilzaehlung={r}

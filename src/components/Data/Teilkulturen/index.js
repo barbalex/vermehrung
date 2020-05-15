@@ -83,7 +83,7 @@ function sizeReducer(state, action) {
 
 const Teilkulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addTeilkultur, addQueuedQuery } = store
+  const { filter, addTeilkultur, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -112,7 +112,14 @@ const Teilkulturen = ({ filter: showFilter }) => {
     const _rev = `1-${md5({ id, _deleted: false }.toString())}`
     const _depth = 1
     const _revisions = `{"${_rev}"}`
-    const newObject = { id, _rev, _depth, _revisions }
+    const newObject = {
+      id,
+      _rev,
+      _depth,
+      _revisions,
+      changed: new Date().toISOString(),
+      changed_by: user.email,
+    }
     addQueuedQuery({
       name: 'mutateInsert_teilkultur_rev',
       variables: JSON.stringify({
@@ -138,12 +145,13 @@ const Teilkulturen = ({ filter: showFilter }) => {
       addOpenNodes([newActiveNodeArray])
     })
   }, [
-    activeNodeArray,
-    addTeilkultur,
-    addOpenNodes,
+    user.email,
     addQueuedQuery,
+    addTeilkultur,
     refetchTree,
+    activeNodeArray,
     setActiveNodeArray,
+    addOpenNodes,
   ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
