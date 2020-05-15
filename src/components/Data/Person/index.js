@@ -6,18 +6,18 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import md5 from 'blueimp-md5'
+import moment from 'moment'
 
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
-import { person as personFragment } from '../../../utils/fragments'
-import types from '../../../models/Filter/simpleTypes'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -25,7 +25,6 @@ import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { useQuery, StoreContext } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -73,11 +72,11 @@ const Person = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { filter, user } = store
+  const { filter, upsertPerson, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
+  const { refetch: refetchTree } = store.tree
 
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
@@ -85,6 +84,7 @@ const Person = ({
     data: dataPerson,
     error: errorPerson,
     loading: loadingPerson,
+    query: queryPerson,
   } = useQuery((store) =>
     store.queryPerson({
       where: { id: { _eq: id } },
@@ -137,67 +137,95 @@ const Person = ({
   //console.log('Person, user_role:', user_role)
 
   const saveToDb = useCallback(
-    async (event) => {
+    (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.person[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'person', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split ? value.split('"').join('\\"') : value
-            }"`
-          }
-          await client.mutate({
-            mutation: gql`
-              mutation update_person_for_person(
-                $id: uuid!
-              ) {
-                update_person(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...PersonFields
-                  }
-                }
-              }
-              ${personFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updatePerson: {
-                id: row.id,
-                __typename: 'Person',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'person', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id,
+        nr: field === 'nr' ? value.toString() : row.nr,
+        name: field === 'name' ? value.toString() : row.name,
+        adresszusatz:
+          field === 'adresszusatz' ? value.toString() : row.adresszusatz,
+        strasse: field === 'strasse' ? value.toString() : row.strasse,
+        plz: field === 'plz' ? value : row.plz,
+        ort: field === 'ort' ? value.toString() : row.ort,
+        telefon_privat:
+          field === 'telefon_privat' ? value.toString() : row.telefon_privat,
+        telefon_geschaeft:
+          field === 'telefon_geschaeft'
+            ? value.toString()
+            : row.telefon_geschaeft,
+        telefon_mobile:
+          field === 'telefon_mobile' ? value.toString() : row.telefon_mobile,
+        email: field === 'email' ? value.toString() : row.email,
+        kein_email: field === 'kein_email' ? value : row.kein_email,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        account_id: field === 'account_id' ? value.toString() : row.account_id,
+        user_role: field === 'user_role' ? value.toString() : row.user_role,
+        kommerziell: field === 'kommerziell' ? value : row.kommerziell,
+        info: field === 'info' ? value : row.info,
+        aktiv: field === 'aktiv' ? value : row.aktiv,
+        changed: moment().format('YYYY-MM-DD'),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject)}`
+      newObject._rev = rev
+      // convert array to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_person_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'person_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryPerson',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertPerson(newObject)
+        // refetch query because is not a model instance
+        queryPerson.refetch()
+        // update tree if one of these fields were changed
+        if (['name'].includes(field)) {
+          refetchTree()
+        }
+        console.log('Person, saveToDb', { newObject, field, value })
+      }, 100)
     },
-    [client, filter, row, showFilter],
+    [
+      addQueuedQuery,
+      filter,
+      id,
+      queryPerson,
+      refetchTree,
+      row,
+      showFilter,
+      upsertPerson,
+      user.email,
+    ],
   )
 
   if (loadingPerson) {
