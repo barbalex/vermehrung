@@ -103,7 +103,7 @@ function sizeReducer(state, action) {
 
 const Lieferungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertLieferung, addQueuedQuery } = store
+  const { filter, upsertLieferung, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -154,7 +154,14 @@ const Lieferungen = ({ filter: showFilter }) => {
     const _rev = `1-${md5({ id, _deleted: false }.toString())}`
     const _depth = 1
     const _revisions = `{"${_rev}"}`
-    const newObject = { id, _rev, _depth, _revisions }
+    const newObject = {
+      id,
+      _rev,
+      _depth,
+      _revisions,
+      changed: new Date().toISOString(),
+      changed_by: user.email,
+    }
     addQueuedQuery({
       name: 'mutateInsert_lieferung_rev',
       variables: JSON.stringify({
@@ -180,12 +187,13 @@ const Lieferungen = ({ filter: showFilter }) => {
       addOpenNodes([newActiveNodeArray])
     })
   }, [
-    activeNodeArray,
-    upsertLieferung,
-    addOpenNodes,
+    user.email,
     addQueuedQuery,
+    upsertLieferung,
     refetchTree,
+    activeNodeArray,
     setActiveNodeArray,
+    addOpenNodes,
   ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {

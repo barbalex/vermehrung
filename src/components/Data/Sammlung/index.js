@@ -169,7 +169,7 @@ const Sammlung = ({
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const personWerte = useMemo(
     () =>

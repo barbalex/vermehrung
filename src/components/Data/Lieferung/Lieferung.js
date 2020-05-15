@@ -440,7 +440,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const vonKulturWerte = useMemo(
     () =>

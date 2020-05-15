@@ -138,7 +138,7 @@ const Herkunft = ({
   const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const saveToDb = useCallback(
     async (event) => {

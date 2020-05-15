@@ -11,7 +11,6 @@ import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
-import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -120,15 +119,14 @@ const Garten = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { filter, user } = store
+  const { filter, upsertGarten, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
-  const { data, error, loading, refetch } = useQuery(gartenQuery, {
+  const { data, error, loading, query: gartenQuery } = useQuery(gartenQuery, {
     variables: { id, isFiltered, filter: gartenFilter },
   })
   const {
@@ -163,7 +161,7 @@ const Garten = ({
 
   useEffect(() => {
     setErrors({})
-  }, [row.id])
+  }, [id])
 
   const personWerte = useMemo(
     () =>
@@ -175,58 +173,73 @@ const Garten = ({
   )
 
   const saveToDb = useCallback(
-    async (event) => {
+    (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.garten[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
-      //console.log('Garten, saveToDb saving to db')
+
       if (showFilter) {
-        filter.setValue({ table: 'garten', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split ? value.split('"').join('\\"') : value
-            }"`
-          }
-          await client.mutate({
-            mutation: gql`
-              mutation update_garten($id: uuid!) {
-                update_garten(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...GartenFields
-                  }
-                }
-              }
-              ${gartenFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'garten', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id,
+        name: field === 'name' ? value.toString() : row.name,
+        person_id: field === 'person_id' ? value : row.person_id,
+        strasse: field === 'strasse' ? value.toString() : row.strasse,
+        plz: field === 'plz' ? value : row.plz,
+        ort: field === 'ort' ? value.toString() : row.ort,
+        aktiv: field === 'aktiv' ? value : row.aktiv,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        changed: new Date().toISOString(),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert array to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_garten_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'garten_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryGarten',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertGarten(newObject)
+        // refetch query because is not a model instance
+        gartenQuery.refetch()
+      }, 100)
     },
-    [client, filter, row, showFilter],
+    [
+      addQueuedQuery,
+      upsertGarten,
+      filter,
+      id,
+      row,
+      showFilter,
+      user,
+      gartenQuery,
+    ],
   )
 
   if (loading) {

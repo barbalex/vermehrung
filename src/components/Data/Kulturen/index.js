@@ -102,7 +102,7 @@ function sizeReducer(state, action) {
 
 const Kulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertKultur, addQueuedQuery } = store
+  const { filter, upsertKultur, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -167,7 +167,14 @@ const Kulturen = ({ filter: showFilter }) => {
     const _rev = `1-${md5({ id, _deleted: false }.toString())}`
     const _depth = 1
     const _revisions = `{"${_rev}"}`
-    const newObject = { id, _rev, _depth, _revisions }
+    const newObject = {
+      id,
+      _rev,
+      _depth,
+      _revisions,
+      changed: new Date().toISOString(),
+      changed_by: user.email,
+    }
     addQueuedQuery({
       name: 'mutateInsert_kultur_rev',
       variables: JSON.stringify({
@@ -193,12 +200,13 @@ const Kulturen = ({ filter: showFilter }) => {
       addOpenNodes([newActiveNodeArray])
     })
   }, [
-    activeNodeArray,
-    upsertKultur,
-    addOpenNodes,
+    user.email,
     addQueuedQuery,
+    upsertKultur,
     refetchTree,
+    activeNodeArray,
     setActiveNodeArray,
+    addOpenNodes,
   ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
