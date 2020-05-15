@@ -71,6 +71,7 @@ const Teilzaehlung = ({
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { enqueNotification, user, upsertTeilzaehlung, addQueuedQuery } = store
+  const { refetch: refetchTree } = store.tree
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -164,11 +165,27 @@ const Teilzaehlung = ({
         upsertTeilzaehlung(newObject)
         // refetch query because is not a model instance
         zaehlungResult.query.refetch()
-        // update tree if one of these fields were changed
-        // 'anzahl_pflanzen', 'anzahl_auspflanzbereit', 'anzahl_mutterpflanzen', 'prognose',
+        // TODO: no more necessary when mobx does its magic
+        if (
+          [
+            'anzahl_pflanzen',
+            'anzahl_auspflanzbereit',
+            'anzahl_mutterpflanzen',
+            'prognose',
+          ].includes(field)
+        ) {
+          refetchTree()
+        }
       }, 50)
     },
-    [addQueuedQuery, row, upsertTeilzaehlung, user.email, zaehlungResult.query],
+    [
+      addQueuedQuery,
+      refetchTree,
+      row,
+      upsertTeilzaehlung,
+      user.email,
+      zaehlungResult.query,
+    ],
   )
   const onClickDelete = useCallback(async () => {
     try {
