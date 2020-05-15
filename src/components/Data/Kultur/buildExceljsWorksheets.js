@@ -7,21 +7,15 @@ import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsW
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
-export default async ({
-  client,
-  store,
-  kultur_id,
-  workbook,
-  calledFromHigherUp,
-}) => {
+export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   const { enqueNotification } = store
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
     let kulturResult
     try {
-      kulturResult = await client.query({
-        query: gql`
+      kulturResult = await store.query(
+        gql`
           query GetKulturForKulturDownload($id: uuid!) {
             kultur(where: { id: { _eq: $id } }) {
               id
@@ -56,10 +50,10 @@ export default async ({
             }
           }
         `,
-        variables: {
+        {
           id: kultur_id,
         },
-      })
+      )
     } catch (error) {
       return enqueNotification({
         message: error.message,
@@ -68,7 +62,7 @@ export default async ({
         },
       })
     }
-    const kultur = { ...get(kulturResult, 'data.kultur[0]') }
+    const kultur = { ...get(kulturResult, 'kultur[0]') }
     kultur.art_ae_id = get(kultur, 'art.art_ae_art.id', '')
     kultur.art_ae_name = get(kultur, 'art.art_ae_art.name', '')
     delete kultur.art
@@ -79,6 +73,37 @@ export default async ({
     kultur.garten_name = get(kultur, 'garten.name', '')
     delete kultur.garten
     delete kultur.__typename
+    delete kultur._conflicts
+    delete kultur._depth
+    delete kultur._parent_rev
+    delete kultur._rev
+    delete kultur._revisions
+    delete kultur.events
+    delete kultur.events_aggregate
+    delete kultur.kultur_files
+    delete kultur.kultur_files_aggregate
+    delete kultur.kultur_option
+    delete kultur.kultur_qk_choosens
+    delete kultur.kultur_qk_choosens_aggregate
+    delete kultur.lieferungsByNachKulturId
+    delete kultur.lieferungsByNachKulturId_aggregate
+    delete kultur.lieferungsByVonKulturId
+    delete kultur.lieferungsByVonKulturId_aggregate
+    delete kultur.sammelLieferungsByNachKulturId
+    delete kultur.sammelLieferungsByNachKulturId_aggregate
+    delete kultur.sammel_lieferungs
+    delete kultur.sammel_lieferungs_aggregate
+    delete kultur.teilkulturs
+    delete kultur.teilkulturs_aggregate
+    delete kultur.tsv
+    delete kultur.zaehlungs
+    delete kultur.zaehlungs_aggregate
+    delete kultur.ausLieferungsDone
+    delete kultur.ausLieferungsPlanned
+    delete kultur.anLieferungsDone
+    delete kultur.anLieferungsPlanned
+    delete kultur.zaehlungsDone
+    delete kultur.zaehlungsPlanned
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp ? `Kultur_${kultur_id}` : 'Kultur',
@@ -88,8 +113,8 @@ export default async ({
   // 2. Get Zählungen
   let zaehlungResult
   try {
-    zaehlungResult = await client.query({
-      query: gql`
+    zaehlungResult = await store.query(
+      gql`
         query GetZaehlungForKulturDownload($id: uuid!) {
           zaehlung(where: { kultur_id: { _eq: $id } }) {
             id
@@ -124,10 +149,10 @@ export default async ({
           }
         }
       `,
-      variables: {
+      {
         id: kultur_id,
       },
-    })
+    )
   } catch (error) {
     return enqueNotification({
       message: error.message,
@@ -136,7 +161,7 @@ export default async ({
       },
     })
   }
-  const zaehlungenArray = get(zaehlungResult, 'data.zaehlung') || []
+  const zaehlungenArray = get(zaehlungResult, 'zaehlung') || []
   const zaehlungen = zaehlungenArray.map((z) => {
     z.teilzaehlungen_anzahl = get(
       z,
@@ -187,8 +212,8 @@ export default async ({
   // 3. Get Teil-Zählungen
   let teilzaehlungResult
   try {
-    teilzaehlungResult = await client.query({
-      query: gql`
+    teilzaehlungResult = await store.query(
+      gql`
         query GetTeilzaehlungForKulturDownload($id: uuid!) {
           teilzaehlung(where: { zaehlung: { kultur_id: { _eq: $id } } }) {
             id
@@ -209,10 +234,10 @@ export default async ({
           }
         }
       `,
-      variables: {
+      {
         id: kultur_id,
       },
-    })
+    )
   } catch (error) {
     return enqueNotification({
       message: error.message,
@@ -221,7 +246,7 @@ export default async ({
       },
     })
   }
-  const teilzaehlungenArray = get(teilzaehlungResult, 'data.teilzaehlung') || []
+  const teilzaehlungenArray = get(teilzaehlungResult, 'teilzaehlung') || []
   const teilzaehlungen = teilzaehlungenArray.map((z) => {
     z.teilkultur_name = get(z, 'teilkultur.name', '')
     delete z.teilkultur
@@ -240,8 +265,8 @@ export default async ({
   // 4. Get An-Lieferungen
   let anlieferungResult
   try {
-    anlieferungResult = await client.query({
-      query: gql`
+    anlieferungResult = await store.query(
+      gql`
         query GetAnlieferungForKulturDownload($id: uuid!) {
           lieferung(where: { nach_kultur_id: { _eq: $id } }) {
             id
@@ -327,10 +352,10 @@ export default async ({
           }
         }
       `,
-      variables: {
+      {
         id: kultur_id,
       },
-    })
+    )
   } catch (error) {
     return enqueNotification({
       message: error.message,
@@ -339,7 +364,7 @@ export default async ({
       },
     })
   }
-  const anlieferungenArray = get(anlieferungResult, 'data.lieferung') || []
+  const anlieferungenArray = get(anlieferungResult, 'lieferung') || []
   const anlieferungen = anlieferungenArray.map((z) => {
     z.art_ae_id = get(z, 'art.art_ae_art.id', '')
     z.art_ae_name = get(z, 'art.art_ae_art.name', '')
@@ -377,8 +402,8 @@ export default async ({
   // 5. Get Aus-Lieferungen
   let auslieferungResult
   try {
-    auslieferungResult = await client.query({
-      query: gql`
+    auslieferungResult = await store.query(
+      gql`
         query GetAuslieferungForKulturDownload($id: uuid!) {
           lieferung(where: { von_kultur_id: { _eq: $id } }) {
             id
@@ -464,10 +489,10 @@ export default async ({
           }
         }
       `,
-      variables: {
+      {
         id: kultur_id,
       },
-    })
+    )
   } catch (error) {
     return enqueNotification({
       message: error.message,
@@ -476,7 +501,7 @@ export default async ({
       },
     })
   }
-  const auslieferungenArray = get(auslieferungResult, 'data.lieferung') || []
+  const auslieferungenArray = get(auslieferungResult, 'lieferung') || []
   const auslieferungen = auslieferungenArray.map((z) => {
     z.art_ae_id = get(z, 'art.art_ae_art.id', '')
     z.art_ae_name = get(z, 'art.art_ae_art.name', '')
@@ -514,8 +539,8 @@ export default async ({
   // 6. Get Events
   let eventResult
   try {
-    eventResult = await client.query({
-      query: gql`
+    eventResult = await store.query(
+      gql`
         query GetEventsForKulturDownload($id: uuid!) {
           event(where: { kultur_id: { _eq: $id } }) {
             id
@@ -539,10 +564,10 @@ export default async ({
           }
         }
       `,
-      variables: {
+      {
         id: kultur_id,
       },
-    })
+    )
   } catch (error) {
     return enqueNotification({
       message: error.message,
@@ -551,7 +576,7 @@ export default async ({
       },
     })
   }
-  const eventsArray = get(eventResult, 'data.event') || []
+  const eventsArray = get(eventResult, 'event') || []
   const events = eventsArray.map((z) => {
     z.teilkultur_name = get(z, 'teilkultur.name', '')
     delete z.teilkultur
