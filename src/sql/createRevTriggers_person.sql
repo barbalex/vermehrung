@@ -32,6 +32,7 @@ begin
   with leaves as (
     select
       id,
+      nr,
       _rev,
       _depth
     from
@@ -58,7 +59,11 @@ begin
       select _rev from leaves 
       where 
         _depth = new._depth
-        and _rev <> new._rev
+        and (
+          _rev <> new._rev
+          -- ensure nr is unique
+          or nr = new.nr
+        )
     ),
     winning_revisions as (
       select
