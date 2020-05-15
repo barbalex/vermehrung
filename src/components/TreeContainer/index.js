@@ -127,13 +127,13 @@ const TreeContainer = () => {
     personId,
     personExists: !!personId,
   }
-  const { data, error, loading, refetch } = useQuery(query, {
+  const { data, error, loading, query: theQuery } = useQuery(query, {
     variables,
   })
 
   const [nodes, setNodes] = useState([])
   useEffect(() => {
-    setRefetch(refetch)
+    setRefetch(theQuery.refetch)
     if (!data && loading) {
       // fetch on first load to show loading state
       setNodes(buildNodes({ store, data, loading, role }))
@@ -147,7 +147,7 @@ const TreeContainer = () => {
         ),
       )
     }
-  }, [data, loading, refetch, role, setRefetch, store, nodesToAddRaw])
+  }, [data, loading, theQuery.refetch, role, setRefetch, store])
   useEffect(() => {
     if (nodesToAddRaw.length) {
       setNodes([...nodes, ...nodesToAddRaw])
