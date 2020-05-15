@@ -287,9 +287,9 @@ create index on sammlung using gin (tsv);
 drop table if exists sammlung_rev cascade;
 create table sammlung_rev (
   id uuid default uuid_generate_v1mc(),
-  art_id uuid default null references art (id) on delete no action on update cascade,
-  person_id uuid default null references person (id) on delete no action on update cascade,
-  herkunft_id uuid default null references herkunft (id) on delete no action on update cascade,
+  art_id uuid default null references art (id) on update no action on delete set null,
+  person_id uuid default null references person (id) on update no action on delete set null,
+  herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
   nr text default null,  -- DO NOT set unique - does not work for offline edits
   datum date default null,
   von_anzahl_individuen integer default null,
@@ -365,7 +365,7 @@ drop table if exists garten_rev cascade;
 create table garten_rev (
   id uuid default uuid_generate_v1mc(),
   name text default null,
-  person_id uuid default null references person (id) on delete no action on update cascade,
+  person_id uuid default null references person (id) on update no action on delete set null,
   strasse text default null,
   plz integer default null,
   ort text default null,
@@ -435,9 +435,9 @@ create index on kultur using gin (tsv);
 drop table if exists kultur_rev cascade;
 create table kultur_rev (
   id uuid default uuid_generate_v1mc(),
-  art_id uuid default null references art (id) on delete no action on update cascade,
-  herkunft_id uuid default null references herkunft (id) on delete no action on update cascade,
-  garten_id uuid default null references garten (id) on delete no action on update cascade,
+  art_id uuid default null references art (id) on update no action on delete set null,
+  herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
+  garten_id uuid default null references garten (id) on update no action on delete set null,
   zwischenlager boolean default false,
   erhaltungskultur boolean default false,
   von_anzahl_individuen integer default null,
@@ -521,7 +521,7 @@ create index on teilkultur using gin (tsv);
 drop table if exists teilkultur_rev cascade;
 create table teilkultur_rev (
   id uuid default uuid_generate_v1mc(),
-  kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  kultur_id uuid default null references kultur (id) on update no action on delete set null,
   name text default null,
   ort1 text default null,
   ort2 text default null,
@@ -572,9 +572,9 @@ create index on event using gin (tsv);
 drop table if exists event_rev cascade;
 create table event_rev (
   id uuid default uuid_generate_v1mc(),
-  kultur_id uuid default null references kultur (id) on delete no action on update cascade,
-  teilkultur_id uuid default null references teilkultur (id) on delete no action on update cascade,
-  person_id uuid default null references person (id) on delete no action on update cascade,
+  kultur_id uuid default null references kultur (id) on update no action on delete set null,
+  teilkultur_id uuid default null references teilkultur (id) on update no action on delete set null,
+  person_id uuid default null references person (id) on update no action on delete set null,
   beschreibung text default null,
   geplant boolean default false,
   datum date default null,
@@ -618,7 +618,7 @@ create index on zaehlung using gin (tsv);
 drop table if exists zaehlung_rev cascade;
 create table zaehlung_rev (
   id uuid default uuid_generate_v1mc(),
-  kultur_id uuid default null references kultur (id) on delete no action on update cascade,
+  kultur_id uuid default null references kultur (id) on update no action on delete set null,
   datum date default null,
   prognose boolean default false,
   bemerkungen text default null,
@@ -671,15 +671,15 @@ create index on teilzaehlung using gin (tsv);
 drop table if exists teilzaehlung_rev cascade;
 create table teilzaehlung_rev (
   id uuid default uuid_generate_v1mc(),
-  zaehlung_id uuid default null references zaehlung (id) on delete no action on update cascade,
-  teilkultur_id uuid default null references teilkultur (id) on delete no action on update cascade,
+  zaehlung_id uuid default null references zaehlung (id) on update no action on delete set null,
+  teilkultur_id uuid default null references teilkultur (id) on update no action on delete set null,
   anzahl_pflanzen integer default null,
   anzahl_auspflanzbereit integer default null,
   anzahl_mutterpflanzen integer default null,
   andere_menge text default null,
   auspflanzbereit_beschreibung text default null,
   bemerkungen text default null,
-  prognose_von_tz uuid default null references teilzaehlung (id) on delete no action on update cascade,
+  prognose_von_tz uuid default null references teilzaehlung (id) on update no action on delete set null,
   changed date default now(),
   changed_by text default null,
   _rev text default null,
@@ -721,7 +721,7 @@ COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists kultur_option_rev cascade;
 create table kultur_option_rev (
-  id uuid not null references kultur (id) on delete no action on update cascade,
+  id uuid not null references kultur (id) on update no action on delete set null,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
   tz_anzahl_mutterpflanzen boolean default true,
@@ -785,7 +785,7 @@ comment on column person_option.ar_name_deutsch is 'Dieses Feld wird (momentan) 
 
 drop table if exists person_option_rev cascade;
 create table person_option_rev (
-  id uuid not null references person (id) on delete no action on update cascade,
+  id uuid not null references person (id) on update no action on delete set null,
   ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
   ga_plz boolean default true,
@@ -891,6 +891,9 @@ create table lieferung_rev (
   _deleted boolean default false,
   primary key (id, _rev)
 );
+alter table public.person_option_rev drop constraint person_option_rev_person_id_fkey;
+alter table person_option_rev add constraint person_option_rev_id_fkey foreign key (person_id) references person (id) on update no action on delete set null;
+
 create index on lieferung_rev using btree (id);
 create index on lieferung_rev using btree (_rev);
 create index on lieferung_rev using btree (_parent_rev);
