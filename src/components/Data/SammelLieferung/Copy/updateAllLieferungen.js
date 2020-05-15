@@ -1,6 +1,6 @@
 import updateLieferung from './updateLieferung'
 
-export default async ({ sammelLieferung, field, client, store }) => {
+export default async ({ sammelLieferung, field, store }) => {
   // pass field to mark which field should be updated
   // even if it has value null
   let error = null
@@ -10,7 +10,6 @@ export default async ({ sammelLieferung, field, client, store }) => {
         lieferungId: l.id,
         sammelLieferung,
         field,
-        client,
         store,
       })
     } catch (err) {
