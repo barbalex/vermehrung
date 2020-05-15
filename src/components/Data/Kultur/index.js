@@ -6,8 +6,6 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
@@ -16,8 +14,10 @@ import { FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
+import md5 from 'blueimp-md5'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -25,8 +25,6 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import { kultur as kulturFragment } from '../../../utils/fragments'
-import types from '../../../models/Filter/simpleTypes'
 import Files from '../Files'
 import Settings from './Settings'
 import herkunftQuery from './herkunftQuery'
@@ -99,9 +97,8 @@ const Kultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { filter } = store
+  const { filter, user, upsertKultur, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -113,14 +110,9 @@ const Kultur = ({
 
   const [errors, setErrors] = useState({})
 
-  let row
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
-  if (showFilter) {
-    row = filter.kultur
-  } else {
-    row = get(data, 'kultur[0]') || {}
-  }
+  const row = showFilter ? filter.kultur : store.kulturs.get(id)
 
   useEffect(() => {
     setErrors({})
@@ -235,71 +227,72 @@ const Kultur = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.kultur[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'kultur', key: field, value })
-      } else {
-        try {
-          let valueToSet
-          if (value === null) {
-            valueToSet = null
-          } else if (['number', 'boolean'].includes(type)) {
-            valueToSet = value
-          } else {
-            valueToSet = `"${
-              value.split ? value.split('"').join('\\"') : value
-            }"`
-          }
-          // need to refetch or related data will not be updated
-          const refetchQueries = [
-            'art_id',
-            'herkunft_id',
-            'garten_id',
-          ].includes(field)
-            ? ['TreeQueryForTreeContainer']
-            : []
-          await client.mutate({
-            mutation: gql`
-              mutation update_kultur(
-                $id: uuid!
-              ) {
-                update_kultur(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...KulturFields
-                  }
-                }
-              }
-              ${kulturFragment}
-            `,
-            variables: {
-              id: row.id,
-            },
-            refetchQueries,
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateKultur: {
-                id: row.id,
-                __typename: 'kultur',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'kultur', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id: row.id,
+        art_id: field === 'art_id' ? value : row.art_id,
+        herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
+        garten_id: field === 'garten_id' ? value : row.garten_id,
+        zwischenlager: field === 'zwischenlager' ? value : row.zwischenlager,
+        erhaltungskultur:
+          field === 'erhaltungskultur' ? value : row.erhaltungskultur,
+        von_anzahl_individuen:
+          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        aktiv: field === 'aktiv' ? value : row.aktiv,
+        changed: new window.Date().toISOString(),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_kultur_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'kultur_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryKultur',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertKultur(newObject)
+        if (['art_id', 'herkunft_id', 'garten_id'].includes(field)) {
+          store.tree.refetch()
+        }
+      }, 50)
     },
-    [client, filter, row, showFilter],
+    [
+      addQueuedQuery,
+      filter,
+      id,
+      row,
+      showFilter,
+      store.tree,
+      upsertKultur,
+      user.email,
+    ],
   )
   const openKulturDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Kulturen`
@@ -321,9 +314,9 @@ const Kultur = ({
   }, [])
   const onClickDownload = useCallback(async () => {
     const workbook = new ExcelJs.Workbook()
-    await buildExceljsWorksheets({ client, store, kultur_id: row.id, workbook })
+    await buildExceljsWorksheets({ store, kultur_id: row.id, workbook })
     downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
-  }, [client, row.id, store])
+  }, [row.id, store])
 
   if (loading) {
     return (
