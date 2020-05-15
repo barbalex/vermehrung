@@ -20,7 +20,7 @@ INSERT INTO user_role (name, sort, comment) VALUES
 drop table if exists person cascade;
 create table person (
   id uuid primary key default uuid_generate_v1mc(),
-  nr text default null unique,
+  nr text default null, -- DO NOT set unique - does not work for offline
   name text default null,
   adresszusatz text default null,
   strasse text default null,
@@ -57,7 +57,7 @@ create index on person using gin (tsv);
 drop table if exists person_rev cascade;
 create table person_rev (
   id uuid default uuid_generate_v1mc(),
-  nr text default null unique,
+  nr text default null, -- DO NOT set unique - does not work for offline
   name text default null,
   adresszusatz text default null,
   strasse text default null,
@@ -142,7 +142,7 @@ create index on art_rev using btree (_deleted);
 drop table if exists art_qk cascade;
 create table art_qk (
   id uuid primary key default uuid_generate_v1mc(),
-  name text unique,
+  name text unique, -- beware of unique - does not work for offline
   titel text,
   beschreibung text,
   sort smallint default null
@@ -180,7 +180,7 @@ create index on art_file using btree (file_mime_type);
 drop table if exists herkunft cascade;
 create table herkunft (
   id uuid primary key default uuid_generate_v1mc(),
-  nr text default null unique,
+  nr text default null, -- DO NOT set unique - does not work for offline
   lokalname text default null,
   gemeinde text default null,
   kanton text default null,
@@ -209,7 +209,7 @@ create index on herkunft using gin (tsv);
 drop table if exists herkunft_rev cascade;
 create table herkunft_rev (
   id uuid default uuid_generate_v1mc(),
-  nr text default null unique,
+  nr text default null, -- DO NOT set unique - does not work for offline
   lokalname text default null,
   gemeinde text default null,
   kanton text default null,
@@ -251,7 +251,7 @@ create table sammlung (
   art_id uuid default null references art (id) on delete cascade on update cascade,
   person_id uuid default null references person (id) on delete cascade on update cascade,
   herkunft_id uuid default null references herkunft (id) on delete cascade on update cascade,
-  nr text default null unique,
+  nr text default null, -- DO NOT set unique - does not work for offline
   datum date default null,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
@@ -290,7 +290,7 @@ create table sammlung_rev (
   art_id uuid default null references art (id) on delete no action on update cascade,
   person_id uuid default null references person (id) on delete no action on update cascade,
   herkunft_id uuid default null references herkunft (id) on delete no action on update cascade,
-  nr text default null unique,
+  nr text default null,  -- DO NOT set unique - does not work for offline edits
   datum date default null,
   von_anzahl_individuen integer default null,
   anzahl_pflanzen integer default null,
