@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
@@ -28,14 +27,10 @@ import queryFromTable from '../../../utils/queryFromTable'
 import exists from '../../../utils/exists'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import {
-  art as artFragment,
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
 } from '../../../utils/fragments'
-import types from '../../../models/Filter/simpleTypes'
 import Files from '../Files'
-import updateLieferung from './updateLieferung'
-import updateLieferungArtId from './updateLieferungArtId'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
@@ -235,24 +230,6 @@ const kulturQuery = gql`
     }
   }
 `
-const artQuery = gql`
-  query artQueryForLieferung {
-    art(order_by: { art_ae_art: { name: asc } }) {
-      ...ArtFields
-    }
-  }
-  ${artFragment}
-`
-const personQuery = gql`
-  query personQueryForLieferung {
-    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
-      id
-      __typename
-      name
-      ort
-    }
-  }
-`
 const personOptionQuery = gql`
   query PersonOptionQueryForLieferungLieferung($accountId: String) {
     person_option(where: { person: { account_id: { _eq: $accountId } } }) {
@@ -264,7 +241,6 @@ const personOptionQuery = gql`
 
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!get(sammelLieferung, 'id')
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const { filter, user, upsertLieferung, addQueuedQuery } = store
@@ -280,26 +256,31 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     variables: { id, isFiltered, filter: lieferungFilter },
   })
 
-  const { data: artData, error: artError, loading: artLoading } = useQuery(
-    artQuery,
+  const {
+    data: artData,
+    error: artError,
+    loading: artLoading,
+  } = useQuery((store) =>
+    store.queryArt({ order_by: { art_ae_art: { name: 'asc' } } }),
   )
 
   const {
     data: personData,
     error: personError,
     loading: personLoading,
-  } = useQuery(personQuery)
+  } = useQuery(
+    (store) =>
+      store.queryPerson({
+        order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }],
+      }),
+    (p) => p.id.name.ort,
+  )
 
   const [errors, setErrors] = useState({})
 
-  let row
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
-  if (showFilter) {
-    row = filter.lieferung
-  } else {
-    row = get(data, 'lieferung[0]') || {}
-  }
+  const row = showFilter ? filter.lieferung : store.lieferungs.get(id)
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
