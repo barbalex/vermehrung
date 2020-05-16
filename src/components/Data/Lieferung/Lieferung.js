@@ -7,15 +7,17 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
+import md5 from 'blueimp-md5'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
+import toPgArray from '../../../utils/toPgArray'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -265,7 +267,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { filter, user } = store
+  const { filter, user, upsertLieferung, addQueuedQuery } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -513,57 +515,98 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const type = types.lieferung[field]
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+
       if (showFilter) {
-        filter.setValue({ table: 'lieferung', key: field, value })
-      } else {
-        let valueToSet
-        if (value === null) {
-          valueToSet = null
-        } else if (['number', 'boolean'].includes(type)) {
-          valueToSet = value
-        } else {
-          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
-        }
-        // ensure Herkunft updates
-        const refetchQueries = [
-          'nach_kultur_id',
-          'von_kultur_id',
-          'von_sammlung_id',
-          'art_id',
-        ].includes(field)
-          ? ['LieferungQueryForLieferungLieferung']
-          : []
-        try {
-          await client.mutate({
-            mutation:
-              field === 'art_id'
-                ? updateLieferungArtId({ field, valueToSet })
-                : updateLieferung({ field, valueToSet }),
-            variables: {
-              id: row.id,
-            },
-            refetchQueries,
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateLieferung: {
-                id: row.id,
-                __typename: 'Lieferung',
-                content: { ...row, [field]: valueToSet },
-              },
-            },
-          })
-        } catch (error) {
-          console.log(error)
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
+        return filter.setValue({ table: 'lieferung', key: field, value })
       }
+      // first build the part that will be revisioned
+      const depth = row._depth + 1
+      const newObject = {
+        id: row.id,
+        sammel_lieferung_id:
+          field === 'sammel_lieferung_id' ? value : row.sammel_lieferung_id,
+        art_id: field === 'art_id' ? value : row.art_id,
+        person_id: field === 'person_id' ? value : row.person_id,
+        von_sammlung_id:
+          field === 'von_sammlung_id' ? value : row.von_sammlung_id,
+        von_kultur_id: field === 'von_kultur_id' ? value : row.von_kultur_id,
+        datum: field === 'datum' ? value : row.datum,
+        nach_kultur_id: field === 'nach_kultur_id' ? value : row.nach_kultur_id,
+        nach_ausgepflanzt:
+          field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
+        von_anzahl_individuen:
+          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
+        anzahl_pflanzen:
+          field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
+        anzahl_auspflanzbereit:
+          field === 'anzahl_auspflanzbereit'
+            ? value
+            : row.anzahl_auspflanzbereit,
+        gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
+        andere_menge:
+          field === 'andere_menge' ? value.toString() : row.andere_menge,
+        geplant: field === 'geplant' ? value : row.geplant,
+        bemerkungen:
+          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+        changed: new window.Date().toISOString(),
+        changed_by: user.email,
+        _parent_rev: row._rev,
+        _depth: depth,
+      }
+      if (field === 'art_id') {
+        newObject.von_kultur_id = null
+        newObject.von_sammlung_id = null
+        newObject.nach_kultur_id = null
+      }
+      const rev = `${depth}-${md5(newObject.toString())}`
+      newObject._rev = rev
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = row._revisions
+        ? toPgArray([rev, ...row._revisions])
+        : toPgArray([rev])
+      addQueuedQuery({
+        name: 'mutateInsert_lieferung_rev',
+        variables: JSON.stringify({
+          objects: [newObject],
+          on_conflict: {
+            constraint: 'lieferung_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryLieferung',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: id } },
+        }),
+      })
+      setTimeout(() => {
+        // optimistically update store
+        upsertLieferung(newObject)
+        if (
+          [
+            'nach_kultur_id',
+            'von_kultur_id',
+            'von_sammlung_id',
+            'art_id',
+          ].includes(field)
+        ) {
+          store.tree.refetch()
+        }
+      }, 50)
     },
-    [client, filter, row, showFilter],
+    [
+      addQueuedQuery,
+      filter,
+      id,
+      row,
+      showFilter,
+      store.tree,
+      upsertLieferung,
+      user.email,
+    ],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
