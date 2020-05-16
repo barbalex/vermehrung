@@ -44,22 +44,23 @@ begin
       from
         leaves
     ),
+    conflicts_per_depth as (
+      select l1._rev 
+      from 
+        leaves l1
+        join leaves l2
+        on l1._depth = l2._depth
+      where 
+        l1._rev <> l2._rev
+    ),
     conflicts as (
       select _rev from leaves 
       where 
         _depth = new._depth
         and _rev <> new._rev
     ),
-    conflicts_above as (
-      select _rev from leaves 
-      where 
-        _depth <> new._depth
-        and exists (
-          select _rev from leaves 
-          where 
-            leaves._depth = _depth
-            and leaves._rev <> _rev
-        )
+    parent_has_conflict as (
+      
     ),
     winning_revisions as (
       select
@@ -83,8 +84,7 @@ begin
       herkunft_rev._revisions,
       herkunft_rev._parent_rev,
       herkunft_rev._depth,
-      (select array(select * from conflicts)) as _conflicts,
-      (select array(select * from conflicts_above)) as _conflicts_above
+      (select array(select * from conflicts)) as _conflicts
     from
       herkunft_rev
       join winning_revisions on herkunft_rev._rev = winning_revisions._rev
