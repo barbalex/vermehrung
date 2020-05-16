@@ -549,11 +549,17 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
+      const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
       newObject._revisions = row._revisions
         ? toPgArray([rev, ...row._revisions])
         : toPgArray([rev])
+      // do not stringify revisions for store
+      // as _that_ is a real array
+      newObjectForStore._revisions = row._revisions
+        ? [rev, ...row._revisions]
+        : [rev]
       addQueuedQuery({
         name: 'mutateInsert_lieferung_rev',
         variables: JSON.stringify({
@@ -570,7 +576,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       })
       setTimeout(() => {
         // optimistically update store
-        upsertLieferung(newObject)
+        upsertLieferung(newObjectForStore)
         if (
           [
             'nach_kultur_id',

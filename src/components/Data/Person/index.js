@@ -177,11 +177,17 @@ const Person = ({
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
+      const newObjectForStore = { ...newObject }
       // convert array to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
       newObject._revisions = row._revisions
         ? toPgArray([rev, ...row._revisions])
         : toPgArray([rev])
+      // do not stringify revisions for store
+      // as _that_ is a real array
+      newObjectForStore._revisions = row._revisions
+        ? [rev, ...row._revisions]
+        : [rev]
       addQueuedQuery({
         name: 'mutateInsert_person_rev',
         variables: JSON.stringify({
@@ -198,7 +204,7 @@ const Person = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertPerson(newObject)
+        upsertPerson(newObjectForStore)
         // update tree if one of these fields were changed
         if (['name'].includes(field)) {
           refetchTree()

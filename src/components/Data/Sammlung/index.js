@@ -245,11 +245,17 @@ const Sammlung = ({
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
+      const newObjectForStore = { ...newObject }
       // convert array to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
       newObject._revisions = row._revisions
         ? toPgArray([rev, ...row._revisions])
         : toPgArray([rev])
+      // do not stringify revisions for store
+      // as _that_ is a real array
+      newObjectForStore._revisions = row._revisions
+        ? [rev, ...row._revisions]
+        : [rev]
       addQueuedQuery({
         name: 'mutateInsert_sammlung_rev',
         variables: JSON.stringify({
@@ -266,7 +272,7 @@ const Sammlung = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertSammlung(newObject)
+        upsertSammlung(newObjectForStore)
         // refetch query because is not a model instance
         theQuery.refetch()
         // TODO: update tree if one of these fields were changed
