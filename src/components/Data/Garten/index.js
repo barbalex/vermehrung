@@ -201,7 +201,7 @@ const Garten = ({
         _parent_rev: row._rev,
         _depth: depth,
       }
-      const rev = `${depth}-${md5(newObject.toString())}`
+      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       // convert array to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
