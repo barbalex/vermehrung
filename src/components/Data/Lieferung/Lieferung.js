@@ -161,10 +161,6 @@ const lieferungQuery = gql`
         }
       }
     }
-    rowsUnfiltered: lieferung @include(if: $isFiltered) {
-      id
-      __typename
-    }
     rowsFiltered: lieferung(where: $filter) @include(if: $isFiltered) {
       id
       __typename
@@ -278,7 +274,16 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const { data: dataLieferungAggregate } = useQuery((store) =>
+    store.queryLieferung_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr = get(
+    dataLieferungAggregate,
+    'lieferung_aggregate.aggregate.count',
+    0,
+  )
   const filteredNr = get(data, 'rowsFiltered', []).length
   const row = showFilter ? filter.lieferung : store.lieferungs.get(id)
 

@@ -99,10 +99,6 @@ export default gql`
         }
       }
     }
-    rowsUnfiltered: kultur @include(if: $isFiltered) {
-      id
-      __typename
-    }
     rowsFiltered: kultur(where: $filter) @include(if: $isFiltered) {
       id
       __typename

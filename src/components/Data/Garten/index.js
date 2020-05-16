@@ -83,10 +83,6 @@ const gartenQuery = gql`
     garten(where: { id: { _eq: $id } }) {
       ...GartenFields
     }
-    rowsUnfiltered: garten @include(if: $isFiltered) {
-      id
-      __typename
-    }
     rowsFiltered: garten(where: $filter) @include(if: $isFiltered) {
       id
       __typename
@@ -138,7 +134,14 @@ const Garten = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const { data: dataGartenAggregate } = useQuery((store) =>
+    store.queryGarten_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const totalNr = get(
+    dataGartenAggregate,
+    'garten_aggregate.aggregate.count',
+    0,
+  )
   const filteredNr = get(data, 'rowsFiltered', []).length
   const row = showFilter ? filter.garten : store.gartens.get(id)
 

@@ -79,18 +79,10 @@ const Person = ({
 
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
-  const {
-    data: dataPerson,
-    error: errorPerson,
-    loading: loadingPerson,
-    query: queryPerson,
-  } = useQuery((store) =>
+  const { error: errorPerson, loading: loadingPerson } = useQuery((store) =>
     store.queryPerson({
       where: { id: { _eq: id } },
     }),
-  )
-  const { data: dataAll } = useQuery((store) =>
-    store.queryPerson(undefined, (d) => d.id),
   )
   const { data: dataFiltered } = useQuery((store) =>
     store.queryPerson(
@@ -113,14 +105,16 @@ const Person = ({
     [dataUserRole],
   )
 
-  let row
-  const totalNr = get(dataAll, 'person', []).length
+  const { data: dataPersonAggregate } = useQuery((store) =>
+    store.queryPerson_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const totalNr = get(
+    dataPersonAggregate,
+    'person_aggregate.aggregate.count',
+    0,
+  )
   const filteredNr = get(dataFiltered, 'person', []).length
-  if (showFilter) {
-    row = filter.person
-  } else {
-    row = get(dataPerson, 'person[0]') || {}
-  }
+  const row = showFilter ? filter.person : store.persons.get(id)
 
   const [errors, setErrors] = useState({})
   useEffect(() => {
@@ -205,8 +199,6 @@ const Person = ({
       setTimeout(() => {
         // optimistically update store
         upsertPerson(newObject)
-        // refetch query because is not a model instance
-        queryPerson.refetch()
         // update tree if one of these fields were changed
         if (['name'].includes(field)) {
           refetchTree()
@@ -218,7 +210,6 @@ const Person = ({
       addQueuedQuery,
       filter,
       id,
-      queryPerson,
       refetchTree,
       row,
       showFilter,
