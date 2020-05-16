@@ -101,10 +101,6 @@ const eventQuery = gql`
         }
       }
     }
-    rowsUnfiltered: event @include(if: $isFiltered) {
-      id
-      __typename
-    }
     rowsFiltered: event(where: $filter) @include(if: $isFiltered) {
       id
       __typename
@@ -182,7 +178,11 @@ const Event = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const { data: dataEventAggregate } = useQuery((store) =>
+    store.queryEvent_aggregate(/*undefined, (d) => d.aggregate((d) => d.count)*/),
+  )
+  const totalNr = get(dataEventAggregate, 'event_aggregate.aggregate.count', 0)
+  console.log('Event', { dataEventAggregate, totalNr })
   const filteredNr = get(data, 'rowsFiltered', []).length
   const row = showFilter ? filter.event : store.events.get(id)
 

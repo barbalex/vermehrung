@@ -100,27 +100,29 @@ const Herkunft = ({
     loading: loadingAll,
     query: queryAll,
   } = useQuery((store) => store.queryHerkunft())
-  const { data: dataFiltered } = useQuery((store) =>
-    store.queryHerkunft(
-      {
-        where: herkunftFilter,
-      },
-      (d) => d.id,
-    ),
-  )
-  const { data: dataHerkunftAggregate } = useQuery((store) =>
+
+  const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
+
+  const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate(undefined, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
-
-  const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
   const totalNr = get(
-    dataHerkunftAggregate,
+    dataHerkunftTotalAggregate,
     'herkunft_aggregate.aggregate.count',
     0,
   )
-  const filteredNr = get(dataFiltered, 'herkunft', []).length
+  const { data: dataHerkunftFilteredAggregate } = useQuery((store) =>
+    store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr = get(
+    dataHerkunftFilteredAggregate,
+    'herkunft_aggregate.aggregate.count',
+    0,
+  )
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },

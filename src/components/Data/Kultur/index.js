@@ -110,7 +110,14 @@ const Kultur = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const { data: dataKulturAggregate } = useQuery((store) =>
+    store.queryKultur_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const totalNr = get(
+    dataKulturAggregate,
+    'kultur_aggregate.aggregate.count',
+    0,
+  )
   const filteredNr = get(data, 'rowsFiltered', []).length
   const row = showFilter ? filter.kultur : store.kulturs.get(id)
 
