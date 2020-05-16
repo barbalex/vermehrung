@@ -95,11 +95,17 @@ const Herkuenfte = ({ filter: showFilter }) => {
       (d) => d.id.gemeinde.lokalname.nr,
     ),
   )
-  const { data: dataAll } = useQuery((store) =>
-    store.queryHerkunft(undefined, (d) => d.id),
-  )
 
-  const totalNr = get(dataAll, 'herkunft', []).length
+  const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
+    store.queryHerkunft_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr = get(
+    dataHerkunftTotalAggregate,
+    'herkunft_aggregate.aggregate.count',
+    0,
+  )
   const rowsFiltered = get(dataFiltered, 'herkunft', [])
   const filteredNr = rowsFiltered.length
 

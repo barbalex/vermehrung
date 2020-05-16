@@ -547,7 +547,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         newObject.von_sammlung_id = null
         newObject.nach_kultur_id = null
       }
-      const rev = `${depth}-${md5(newObject.toString())}`
+      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243

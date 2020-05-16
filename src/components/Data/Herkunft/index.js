@@ -83,23 +83,15 @@ const Herkunft = ({
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
-  // this does not work as not re-queried when id changes
-  // see: https://github.com/mobxjs/mst-gql/issues/162
-  /*const {
-    data: dataHerkunft,
+  const {
     error: errorHerkunft,
     loading: loadingHerkunft,
+    query: queryOfHerkunft,
   } = useQuery((store) =>
     store.queryHerkunft({
       where: { id: { _eq: id } },
     }),
-  )*/
-  const {
-    error: errorAll,
-    loading: loadingAll,
-    query: queryAll,
-  } = useQuery((store) => store.queryHerkunft())
+  )
 
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
 
@@ -113,6 +105,7 @@ const Herkunft = ({
     'herkunft_aggregate.aggregate.count',
     0,
   )
+  const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const { data: dataHerkunftFilteredAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
       d.aggregate((d) => d.count),
@@ -164,7 +157,8 @@ const Herkunft = ({
         _parent_rev: row._rev,
         _depth: depth,
       }
-      const rev = `${depth}-${md5(newObject.toString())}`
+      // TODO: hash is same for all revisiona???????????
+      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
@@ -212,7 +206,7 @@ const Herkunft = ({
     }
   }, [])
 
-  if (loadingAll) {
+  if (loadingHerkunft) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
@@ -221,11 +215,11 @@ const Herkunft = ({
     )
   }
 
-  if (errorAll) {
+  if (errorHerkunft) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorAll.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorHerkunft.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -313,7 +307,7 @@ const Herkunft = ({
           {!showFilter && hk_geom_point && (
             <Coordinates
               row={row}
-              refetchForm={queryAll.refetch}
+              refetchForm={queryOfHerkunft.refetch}
               table="herkunft"
             />
           )}
@@ -328,6 +322,11 @@ const Herkunft = ({
               multiLine
             />
           )}
+          {row._conflicts &&
+            row._conflicts.map &&
+            row._conflicts.map((c) => (
+              <div key={c}>{`Konflikt mit: ${c}`}</div>
+            ))}
           {!showFilter && row.id && (
             <Files parentId={row.id} parent="herkunft" />
           )}
