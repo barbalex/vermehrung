@@ -47,7 +47,7 @@ export default async ({ lieferungId, sammelLieferung, field, store }) => {
   newObject.changed_by = store.user.email
   newObject._parent_rev = lfLastVersion._rev
   newObject._depth = depth
-  const rev = `${depth}-${md5(newObject)}`
+  const rev = `${depth}-${md5(JSON.stringify(newObject))}`
   newObject._rev = rev
   // convert array to string as hasura does not support arrays yet
   // https://github.com/hasura/graphql-engine/pull/2243

@@ -157,7 +157,6 @@ const Herkunft = ({
         _parent_rev: row._rev,
         _depth: depth,
       }
-      // TODO: hash is same for all revisiona???????????
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       // convert to string as hasura does not support arrays yet
