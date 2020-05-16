@@ -128,7 +128,7 @@ const SammelLieferungen = ({ filter: showFilter }) => {
 
   const add = useCallback(() => {
     const id = uuidv1()
-    const _rev = `1-${md5({ id, _deleted: false }.toString())}`
+    const _rev = `1-${md5(JSON.stringify({ id, _deleted: false }))}`
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
