@@ -50,6 +50,17 @@ begin
         _depth = new._depth
         and _rev <> new._rev
     ),
+    conflicts_above as (
+      select _rev from leaves 
+      where 
+        _depth <> new._depth
+        and exists (
+          select _rev from leaves 
+          where 
+            leaves._depth = _depth
+            and leaves._rev <> _rev
+        )
+    ),
     winning_revisions as (
       select
         max(leaves._rev) as _rev
@@ -72,7 +83,8 @@ begin
       herkunft_rev._revisions,
       herkunft_rev._parent_rev,
       herkunft_rev._depth,
-      (select array(select * from conflicts)) as _conflicts
+      (select array(select * from conflicts)) as _conflicts,
+      (select array(select * from conflicts_above)) as _conflicts_above
     from
       herkunft_rev
       join winning_revisions on herkunft_rev._rev = winning_revisions._rev

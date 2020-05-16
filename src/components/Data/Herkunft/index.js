@@ -159,11 +159,17 @@ const Herkunft = ({
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
+      const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
       newObject._revisions = row._revisions
         ? toPgArray([rev, ...row._revisions])
         : toPgArray([rev])
+      // do not stringify revisions for store
+      // as _that_ is a real array
+      newObjectForStore._revisions = row._revisions
+        ? [rev, ...row._revisions]
+        : [rev]
       addQueuedQuery({
         name: 'mutateInsert_herkunft_rev',
         variables: JSON.stringify({
@@ -180,7 +186,7 @@ const Herkunft = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertHerkunft(newObject)
+        upsertHerkunft(newObjectForStore)
         if (['nr'].includes(field)) store.tree.refetch()
       }, 50)
     },
@@ -204,6 +210,8 @@ const Herkunft = ({
       window.open(url)
     }
   }, [])
+
+  console.log('Herkunft, row:', row)
 
   if (loadingHerkunft) {
     return (
