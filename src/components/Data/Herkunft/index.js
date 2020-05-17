@@ -24,6 +24,7 @@ import Settings from './Settings'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
+import ConflictList from './ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -389,21 +390,16 @@ const Herkunft = ({
                   multiLine
                 />
               )}
-              {online && !showFilter && row._conflicts && row._conflicts.map && (
-                <Konflikte>
-                  {[...row._conflicts].sort().map((c) => (
-                    <Konflikt
-                      key={c}
-                      data-active={activeConflict === c}
-                      onClick={() =>
-                        setActiveConflict(
-                          !activeConflict ? c : activeConflict !== c ? c : null,
-                        )
-                      }
-                    >{`Konflikt mit Version ${c}`}</Konflikt>
-                  ))}
-                </Konflikte>
-              )}
+              {online &&
+                !showFilter &&
+                row._conflicts &&
+                row._conflicts.map && (
+                  <ConflictList
+                    row={row}
+                    activeConflict={activeConflict}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
               {!showFilter && row.id && (
                 <Files parentId={row.id} parent="herkunft" />
               )}
