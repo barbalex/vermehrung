@@ -8,9 +8,9 @@ const Konflikte = styled.div`
   margin-bottom: 10px;
 `
 
-const ConflictList = ({ row, activeConflict, setActiveConflict }) => (
+const ConflictList = ({ conflicts, activeConflict, setActiveConflict }) => (
   <Konflikte>
-    {[...row._conflicts].sort().map((conflict) => (
+    {[...conflicts].sort().map((conflict) => (
       <Conflict
         key={conflict}
         conflict={conflict}

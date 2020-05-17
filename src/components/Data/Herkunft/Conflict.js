@@ -42,14 +42,14 @@ const query = gql`
 `
 
 const Conflict = ({ id, rev }) => {
-  console.log('Conflict:', { id, rev })
-  // TODO: this does not update!!!!!!
+  //console.log('Conflict:', { id, rev })
+  // TODO: this does not update without a key on the component!!!!!!
   const { data, error, loading } = useQuery(query, {
     variables: { rev, id },
   })
 
   const row = data?.herkunft_rev?.[0] || {}
-  console.log('Conflict:', { row, data })
+  //console.log('Conflict:', { row, data })
   const dataArray = [
     { key: 'Nr', value: row.nr },
     { key: 'Lokalname', value: row.lokalname },
