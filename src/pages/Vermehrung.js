@@ -129,6 +129,7 @@ const Vermehrung = ({ location }) => {
       </ErrorBoundary>
     )
   }
+  // hide resizer when tree is hidden
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
 
   return (
