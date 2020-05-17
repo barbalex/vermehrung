@@ -21,11 +21,12 @@ export const herkunft_rev_max_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     gemeinde: types.union(types.undefined, types.null, types.string),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
     kanton: types.union(types.undefined, types.null, types.string),
     land: types.union(types.undefined, types.null, types.string),
     lokalname: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
+    rev_id: types.identifier,
   })
   .views(self => ({
     get store() {
@@ -46,9 +47,10 @@ export class herkunft_rev_max_fieldsModelSelector extends QueryBuilder {
   get land() { return this.__attr(`land`) }
   get lokalname() { return this.__attr(`lokalname`) }
   get nr() { return this.__attr(`nr`) }
+  get rev_id() { return this.__attr(`rev_id`) }
 }
 export function selectFromherkunft_rev_max_fields() {
   return new herkunft_rev_max_fieldsModelSelector()
 }
 
-export const herkunft_rev_max_fieldsModelPrimitives = selectFromherkunft_rev_max_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.gemeinde.kanton.land.lokalname.nr
+export const herkunft_rev_max_fieldsModelPrimitives = selectFromherkunft_rev_max_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.gemeinde.kanton.land.lokalname.nr.rev_id

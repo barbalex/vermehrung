@@ -8,5 +8,6 @@ import { types } from "mobx-state-tree"
 * teilzaehlung_rev_constraint
 */
 export const teilzaehlung_rev_constraintEnum = types.enumeration("teilzaehlung_rev_constraint", [
-        "teilzaehlung_rev_pkey",
+        "teilzaehlung_rev_id__rev_key",
+  "teilzaehlung_rev_pkey",
       ])

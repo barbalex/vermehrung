@@ -21,9 +21,10 @@ export const event_rev_min_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person_id: types.union(types.undefined, types.null, types.frozen()),
+    rev_id: types.identifier,
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -43,10 +44,11 @@ export class event_rev_min_fieldsModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
 }
 export function selectFromevent_rev_min_fields() {
   return new event_rev_min_fieldsModelSelector()
 }
 
-export const event_rev_min_fieldsModelPrimitives = selectFromevent_rev_min_fields()._depth._parent_rev._rev.beschreibung.changed.changed_by.datum.kultur_id.person_id.teilkultur_id
+export const event_rev_min_fieldsModelPrimitives = selectFromevent_rev_min_fields()._depth._parent_rev._rev.beschreibung.changed.changed_by.datum.kultur_id.person_id.rev_id.teilkultur_id

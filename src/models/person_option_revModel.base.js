@@ -33,10 +33,11 @@ export const person_option_revModelBase = ModelBase
     hk_geom_point: types.union(types.undefined, types.null, types.boolean),
     hk_kanton: types.union(types.undefined, types.null, types.boolean),
     hk_land: types.union(types.undefined, types.null, types.boolean),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     li_show_sl: types.union(types.undefined, types.null, types.boolean),
     li_show_sl_felder: types.union(types.undefined, types.null, types.boolean),
     person: types.union(types.undefined, MSTGQLRef(types.late(() => personModel))),
+    rev_id: types.identifier,
     sl_auto_copy_edits: types.union(types.undefined, types.null, types.boolean),
     sl_show_empty_when_next_to_li: types.union(types.undefined, types.null, types.boolean),
     tree_event: types.union(types.undefined, types.null, types.boolean),
@@ -72,6 +73,7 @@ export class person_option_revModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get li_show_sl() { return this.__attr(`li_show_sl`) }
   get li_show_sl_felder() { return this.__attr(`li_show_sl_felder`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get sl_auto_copy_edits() { return this.__attr(`sl_auto_copy_edits`) }
   get sl_show_empty_when_next_to_li() { return this.__attr(`sl_show_empty_when_next_to_li`) }
   get tree_event() { return this.__attr(`tree_event`) }
@@ -85,4 +87,4 @@ export function selectFromperson_option_rev() {
   return new person_option_revModelSelector()
 }
 
-export const person_option_revModelPrimitives = selectFromperson_option_rev()._deleted._depth._parent_rev._rev._revisions.ar_name_deutsch.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.li_show_sl.li_show_sl_felder.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung
+export const person_option_revModelPrimitives = selectFromperson_option_rev()._deleted._depth._parent_rev._rev._revisions.ar_name_deutsch.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.li_show_sl.li_show_sl_felder.rev_id.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung

@@ -22,6 +22,8 @@ export const sammel_lieferung_min_fieldsModelBase = ModelBase
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
     id: types.identifier,
@@ -46,6 +48,8 @@ export class sammel_lieferung_min_fieldsModelSelector extends QueryBuilder {
   get anzahl_pflanzen() { return this.__attr(`anzahl_pflanzen`) }
   get art_id() { return this.__attr(`art_id`) }
   get bemerkungen() { return this.__attr(`bemerkungen`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get datum() { return this.__attr(`datum`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
   get id() { return this.__attr(`id`) }
@@ -59,4 +63,4 @@ export function selectFromsammel_lieferung_min_fields() {
   return new sammel_lieferung_min_fieldsModelSelector()
 }
 
-export const sammel_lieferung_min_fieldsModelPrimitives = selectFromsammel_lieferung_min_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.datum.gramm_samen.nach_kultur_id.person_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
+export const sammel_lieferung_min_fieldsModelPrimitives = selectFromsammel_lieferung_min_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.nach_kultur_id.person_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id

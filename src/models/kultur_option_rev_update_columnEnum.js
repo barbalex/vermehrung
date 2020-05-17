@@ -18,6 +18,7 @@ export const kultur_option_rev_update_columnEnum = types.enumeration("kultur_opt
   "ev_person_id",
   "ev_teilkultur_id",
   "id",
+  "rev_id",
   "tk",
   "tk_bemerkungen",
   "tz_andere_menge",

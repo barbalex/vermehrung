@@ -17,7 +17,8 @@ export const person_option_rev_min_fieldsModelBase = ModelBase
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
+    rev_id: types.identifier,
   })
   .views(self => ({
     get store() {
@@ -30,9 +31,10 @@ export class person_option_rev_min_fieldsModelSelector extends QueryBuilder {
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
   get id() { return this.__attr(`id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
 }
 export function selectFromperson_option_rev_min_fields() {
   return new person_option_rev_min_fieldsModelSelector()
 }
 
-export const person_option_rev_min_fieldsModelPrimitives = selectFromperson_option_rev_min_fields()._depth._parent_rev._rev
+export const person_option_rev_min_fieldsModelPrimitives = selectFromperson_option_rev_min_fields()._depth._parent_rev._rev.rev_id

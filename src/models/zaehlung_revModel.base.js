@@ -29,10 +29,11 @@ export const zaehlung_revModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
+    rev_id: types.identifier,
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
   })
@@ -55,6 +56,7 @@ export class zaehlung_revModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
   get prognose() { return this.__attr(`prognose`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
   teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, teilzaehlungModelSelector, builder) }
   teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
@@ -63,4 +65,4 @@ export function selectFromzaehlung_rev() {
   return new zaehlung_revModelSelector()
 }
 
-export const zaehlung_revModelPrimitives = selectFromzaehlung_rev()._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.datum.kultur_id.prognose
+export const zaehlung_revModelPrimitives = selectFromzaehlung_rev()._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.datum.kultur_id.prognose.rev_id

@@ -18,6 +18,8 @@ export const sammel_lieferung_update_columnEnum = types.enumeration("sammel_lief
   "anzahl_pflanzen",
   "art_id",
   "bemerkungen",
+  "changed",
+  "changed_by",
   "datum",
   "geplant",
   "gramm_samen",

@@ -20,6 +20,8 @@ import { art_sums_aggregateModel } from "./art_sums_aggregateModel"
 import { art_sums_aggregateModelSelector } from "./art_sums_aggregateModel.base"
 import { av_artModel } from "./av_artModel"
 import { av_artModelSelector } from "./av_artModel.base"
+import { av_art_aggregateModel } from "./av_art_aggregateModel"
+import { av_art_aggregateModelSelector } from "./av_art_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
@@ -60,6 +62,8 @@ export const artModelBase = ModelBase
     art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
+    av_arts: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
+    av_arts_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -98,6 +102,8 @@ export class artModelSelector extends QueryBuilder {
   art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
   art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
   av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
+  av_arts(builder) { return this.__child(`av_arts`, av_artModelSelector, builder) }
+  av_arts_aggregate(builder) { return this.__child(`av_arts_aggregate`, av_art_aggregateModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
   lieferungs(builder) { return this.__child(`lieferungs`, lieferungModelSelector, builder) }

@@ -37,6 +37,8 @@ export const sammel_lieferungModelBase = ModelBase
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
@@ -71,6 +73,8 @@ export class sammel_lieferungModelSelector extends QueryBuilder {
   get anzahl_pflanzen() { return this.__attr(`anzahl_pflanzen`) }
   get art_id() { return this.__attr(`art_id`) }
   get bemerkungen() { return this.__attr(`bemerkungen`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get datum() { return this.__attr(`datum`) }
   get geplant() { return this.__attr(`geplant`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
@@ -93,4 +97,4 @@ export function selectFromsammel_lieferung() {
   return new sammel_lieferungModelSelector()
 }
 
-export const sammel_lieferungModelPrimitives = selectFromsammel_lieferung()._conflicts._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.datum.geplant.gramm_samen.nach_ausgepflanzt.nach_kultur_id.person_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
+export const sammel_lieferungModelPrimitives = selectFromsammel_lieferung()._conflicts._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geplant.gramm_samen.nach_ausgepflanzt.nach_kultur_id.person_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id

@@ -28,6 +28,7 @@ export const person_option_rev_select_columnEnum = types.enumeration("person_opt
   "id",
   "li_show_sl",
   "li_show_sl_felder",
+  "rev_id",
   "sl_auto_copy_edits",
   "sl_show_empty_when_next_to_li",
   "tree_event",

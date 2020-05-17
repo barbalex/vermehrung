@@ -27,6 +27,7 @@ export const lieferung_rev_select_columnEnum = types.enumeration("lieferung_rev_
   "nach_ausgepflanzt",
   "nach_kultur_id",
   "person_id",
+  "rev_id",
   "sammel_lieferung_id",
   "von_anzahl_individuen",
   "von_kultur_id",

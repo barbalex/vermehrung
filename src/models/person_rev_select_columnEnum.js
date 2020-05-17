@@ -28,6 +28,7 @@ export const person_rev_select_columnEnum = types.enumeration("person_rev_select
   "nr",
   "ort",
   "plz",
+  "rev_id",
   "strasse",
   "telefon_geschaeft",
   "telefon_mobile",

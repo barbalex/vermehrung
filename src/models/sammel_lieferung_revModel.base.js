@@ -37,10 +37,12 @@ export const sammel_lieferung_revModelBase = ModelBase
     art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.null, types.frozen()),
     bemerkungen: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     kulturByNachKulturId: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kulturByVonKulturId: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
@@ -49,6 +51,7 @@ export const sammel_lieferung_revModelBase = ModelBase
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
+    rev_id: types.identifier,
     sammlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     von_kultur_id: types.union(types.undefined, types.null, types.frozen()),
@@ -71,6 +74,8 @@ export class sammel_lieferung_revModelSelector extends QueryBuilder {
   get anzahl_pflanzen() { return this.__attr(`anzahl_pflanzen`) }
   get art_id() { return this.__attr(`art_id`) }
   get bemerkungen() { return this.__attr(`bemerkungen`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get datum() { return this.__attr(`datum`) }
   get geplant() { return this.__attr(`geplant`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
@@ -78,6 +83,7 @@ export class sammel_lieferung_revModelSelector extends QueryBuilder {
   get nach_ausgepflanzt() { return this.__attr(`nach_ausgepflanzt`) }
   get nach_kultur_id() { return this.__attr(`nach_kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get von_kultur_id() { return this.__attr(`von_kultur_id`) }
   get von_sammlung_id() { return this.__attr(`von_sammlung_id`) }
@@ -93,4 +99,4 @@ export function selectFromsammel_lieferung_rev() {
   return new sammel_lieferung_revModelSelector()
 }
 
-export const sammel_lieferung_revModelPrimitives = selectFromsammel_lieferung_rev()._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.datum.geplant.gramm_samen.nach_ausgepflanzt.nach_kultur_id.person_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
+export const sammel_lieferung_revModelPrimitives = selectFromsammel_lieferung_rev()._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geplant.gramm_samen.nach_ausgepflanzt.nach_kultur_id.person_id.rev_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id

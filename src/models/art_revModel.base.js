@@ -41,11 +41,12 @@ export const art_revModelBase = ModelBase
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
+    rev_id: types.identifier,
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
@@ -67,6 +68,7 @@ export class art_revModelSelector extends QueryBuilder {
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
@@ -81,4 +83,4 @@ export function selectFromart_rev() {
   return new art_revModelSelector()
 }
 
-export const art_revModelPrimitives = selectFromart_rev()._deleted._depth._parent_rev._rev._revisions.ae_id.changed.changed_by
+export const art_revModelPrimitives = selectFromart_rev()._deleted._depth._parent_rev._rev._revisions.ae_id.changed.changed_by.rev_id

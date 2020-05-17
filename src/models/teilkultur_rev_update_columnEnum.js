@@ -22,4 +22,5 @@ export const teilkultur_rev_update_columnEnum = types.enumeration("teilkultur_re
   "ort1",
   "ort2",
   "ort3",
+  "rev_id",
       ])
