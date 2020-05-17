@@ -6,7 +6,6 @@ import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
-import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -65,33 +64,6 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
-const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px) !important;
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
-`
 
 const personOptionQuery = gql`
   query PersonOptionQueryForHerkunftHerkunft($accountId: String) {
@@ -109,8 +81,6 @@ const Herkunft = ({
   const store = useContext(StoreContext)
   const { filter, user, upsertHerkunft, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
-
-  const [conflictToSolve, setConflictToSolve] = useState(null)
 
   const isFiltered = runIsFiltered()
   const {
@@ -262,15 +232,6 @@ const Herkunft = ({
   }
 
   if (!row || (!showFilter && filter.show)) return null
-
-  if (conflictToSolve) {
-    return (
-      <StyledSplitPane split="vertical" minSize={200}>
-        <Tree />
-        {showFilter ? <Filter /> : <Data />}
-      </StyledSplitPane>
-    )
-  }
 
   return (
     <ErrorBoundary>
