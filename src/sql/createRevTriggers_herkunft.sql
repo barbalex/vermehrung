@@ -34,9 +34,10 @@ begin
           herkunft_rev as t
         where
           t.id = new.id
-          and t._parent_rev = herkunft_rev._rev)
-        and _deleted = false
-        and id = new.id
+          and t._parent_rev = herkunft_rev._rev
+      )
+      and _deleted = false
+      and id = new.id
     ),
     max_depths as (
       select
@@ -44,23 +45,33 @@ begin
       from
         leaves
     ),
-    conflicts_per_depth as (
-      select l1._rev 
-      from 
-        leaves l1
-        join leaves l2
-        on l1._depth = l2._depth
-      where 
-        l1._rev <> l2._rev
-    ),
     conflicts as (
       select _rev from leaves 
       where 
         _depth = new._depth
         and _rev <> new._rev
     ),
-    parent_has_conflict as (
-      
+    branches as (
+      select
+        id,
+        _rev,
+        _depth
+      from
+        herkunft_rev
+      where
+        _deleted = false
+        and id = new.id
+    ),
+    leaves_conflicting_with_branch as (
+      select _rev from leaves l 
+      where
+        exists (
+          select _rev from branches b
+          where
+            b._depth = l._depth
+            and b._rev <> l._rev
+            and l._rev <> new._rev
+        )
     ),
     winning_revisions as (
       select
@@ -84,7 +95,10 @@ begin
       herkunft_rev._revisions,
       herkunft_rev._parent_rev,
       herkunft_rev._depth,
-      (select array(select * from conflicts)) as _conflicts
+      (select array(
+        select * from conflicts
+        union select * from leaves_conflicting_with_branch
+      )) as _conflicts
     from
       herkunft_rev
       join winning_revisions on herkunft_rev._rev = winning_revisions._rev
