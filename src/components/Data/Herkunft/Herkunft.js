@@ -241,6 +241,8 @@ const Herkunft = ({
     }
   }, [])
 
+  console.log('Herkunft, row:', row)
+
   if (loadingHerkunft) {
     return (
       <Container>
@@ -261,10 +263,14 @@ const Herkunft = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = conflictToSolve ? '50%' : '100%'
-
-  // hide resizer when tree is hidden
-  const resizerStyle = !conflictToSolve ? { width: 0 } : {}
+  if (conflictToSolve) {
+    return (
+      <StyledSplitPane split="vertical" minSize={200}>
+        <Tree />
+        {showFilter ? <Filter /> : <Data />}
+      </StyledSplitPane>
+    )
+  }
 
   return (
     <ErrorBoundary>
@@ -299,97 +305,80 @@ const Herkunft = ({
             </TitleSymbols>
           </TitleContainer>
         )}
-        <Container>
-          <StyledSplitPane
-            split="vertical"
-            size={firstPaneWidth}
-            minSize={200}
-            resizerStyle={resizerStyle}
-          >
-            <FieldsContainer>
-              <TextField
-                key={`${row.id}nr`}
-                name="nr"
-                label="Nr"
-                value={row.nr}
-                saveToDb={saveToDb}
-                error={errors.nr}
-              />
-              <TextField
-                key={`${row.id}lokalname`}
-                name="lokalname"
-                label="Lokalname"
-                value={row.lokalname}
-                saveToDb={saveToDb}
-                error={errors.lokalname}
-              />
-              <TextField
-                key={`${row.id}gemeinde`}
-                name="gemeinde"
-                label="Gemeinde"
-                value={row.gemeinde}
-                saveToDb={saveToDb}
-                error={errors.gemeinde}
-              />
-              {hk_kanton && (
-                <TextField
-                  key={`${row.id}kanton`}
-                  name="kanton"
-                  label="Kanton"
-                  value={row.kanton}
-                  saveToDb={saveToDb}
-                  error={errors.kanton}
-                />
-              )}
-              {hk_land && (
-                <TextField
-                  key={`${row.id}land`}
-                  name="land"
-                  label="Land"
-                  value={row.land}
-                  saveToDb={saveToDb}
-                  error={errors.land}
-                />
-              )}
-              {!showFilter && hk_geom_point && (
-                <Coordinates
-                  row={row}
-                  refetchForm={queryOfHerkunft.refetch}
-                  table="herkunft"
-                />
-              )}
-              {hk_bemerkungen && (
-                <TextField
-                  key={`${row.id}bemerkungen`}
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  value={row.bemerkungen}
-                  saveToDb={saveToDb}
-                  error={errors.bemerkungen}
-                  multiLine
-                />
-              )}
-              {online &&
-                !showFilter &&
-                row._conflicts &&
-                row._conflicts.map &&
-                [...row._conflicts]
-                  .sort()
-                  .map((c) => (
-                    <div
-                      key={c}
-                      onClick={() =>
-                        setConflictToSolve(conflictToSolve ? null : c)
-                      }
-                    >{`Konflikt mit ${c}`}</div>
-                  ))}
-              {!showFilter && row.id && (
-                <Files parentId={row.id} parent="herkunft" />
-              )}
-            </FieldsContainer>
-            <div>conflict</div>
-          </StyledSplitPane>
-        </Container>
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}nr`}
+            name="nr"
+            label="Nr"
+            value={row.nr}
+            saveToDb={saveToDb}
+            error={errors.nr}
+          />
+          <TextField
+            key={`${row.id}lokalname`}
+            name="lokalname"
+            label="Lokalname"
+            value={row.lokalname}
+            saveToDb={saveToDb}
+            error={errors.lokalname}
+          />
+          <TextField
+            key={`${row.id}gemeinde`}
+            name="gemeinde"
+            label="Gemeinde"
+            value={row.gemeinde}
+            saveToDb={saveToDb}
+            error={errors.gemeinde}
+          />
+          {hk_kanton && (
+            <TextField
+              key={`${row.id}kanton`}
+              name="kanton"
+              label="Kanton"
+              value={row.kanton}
+              saveToDb={saveToDb}
+              error={errors.kanton}
+            />
+          )}
+          {hk_land && (
+            <TextField
+              key={`${row.id}land`}
+              name="land"
+              label="Land"
+              value={row.land}
+              saveToDb={saveToDb}
+              error={errors.land}
+            />
+          )}
+          {!showFilter && hk_geom_point && (
+            <Coordinates
+              row={row}
+              refetchForm={queryOfHerkunft.refetch}
+              table="herkunft"
+            />
+          )}
+          {hk_bemerkungen && (
+            <TextField
+              key={`${row.id}bemerkungen`}
+              name="bemerkungen"
+              label="Bemerkungen"
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={errors.bemerkungen}
+              multiLine
+            />
+          )}
+          {online &&
+            !showFilter &&
+            row._conflicts &&
+            row._conflicts.map &&
+            [...row._conflicts]
+              .sort()
+              .map((c) => <div key={c}>{`Konflikt mit: ${c}`}</div>)}
+          {!showFilter && row.id && (
+            <Files parentId={row.id} parent="herkunft" />
+          )}
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
