@@ -282,8 +282,6 @@ const Herkunft = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('Herkunft, activeConflict:', activeConflict)
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -395,7 +393,7 @@ const Herkunft = ({
                 row._conflicts &&
                 row._conflicts.map && (
                   <ConflictList
-                    row={row}
+                    conflicts={row._conflicts}
                     activeConflict={activeConflict}
                     setActiveConflict={setActiveConflict}
                   />
@@ -404,7 +402,13 @@ const Herkunft = ({
                 <Files parentId={row.id} parent="herkunft" />
               )}
             </FieldsContainer>
-            {!!activeConflict && <Conflict rev={activeConflict} id={id} />}
+            {!!activeConflict && (
+              <Conflict
+                key={`${activeConflict}/${id}`}
+                rev={activeConflict}
+                id={id}
+              />
+            )}
           </StyledSplitPane>
         </Container>
       </Container>
