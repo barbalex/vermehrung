@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { useQuery } from '../../../models/reactUtils'
 import ConflictExplainer from '../../shared/ConflictExplainer'
+import ConflictData from '../../shared/ConflictData'
 
 const Container = styled.div`
   padding: 10px;
@@ -40,14 +41,26 @@ const query = gql`
 `
 
 const Conflict = ({ id, rev }) => {
-  const store = useContext(StoreContext)
-
+  console.log('Conflict:', { id, rev })
   const { data, error, loading } = useQuery(query, {
     variables: { rev, id },
   })
 
   const row = data?.herkunft_rev?.[0]
-  console.log('Conflict', { id, rev, data, row })
+  console.log('Conflict:', { row, data })
+  const dataArray = [
+    { key: 'Nr', value: row.nr },
+    { key: 'Lokalname', value: row.lokalname },
+    { key: 'Gemeinde', value: row.gemeinde },
+    { key: 'Kanton', value: row.kanton },
+    { key: 'Land', value: row.land },
+    { key: 'Geometrie', value: row.geom_point },
+    { key: 'Bemerkungen', value: row.bemerkungen },
+  ]
+
+  if (error) {
+    return <Container>{error.message}</Container>
+  }
 
   return (
     <Container>
@@ -55,7 +68,7 @@ const Conflict = ({ id, rev }) => {
         Widersprüchliche Version<Rev>{rev}</Rev>
       </Title>
       <ConflictExplainer name="Herkunft" />
-      <div>{`Konflikt ${rev}`}</div>
+      <ConflictData dataArray={dataArray} loading={loading} />
     </Container>
   )
 }
