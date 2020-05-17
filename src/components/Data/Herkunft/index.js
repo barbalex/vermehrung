@@ -281,6 +281,8 @@ const Herkunft = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
+  console.log('Herkunft, activeConflict:', activeConflict)
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
