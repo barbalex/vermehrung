@@ -23,11 +23,12 @@ export const person_rev_max_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     email: types.union(types.undefined, types.null, types.string),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
     plz: types.union(types.undefined, types.null, types.integer),
+    rev_id: types.identifier,
     strasse: types.union(types.undefined, types.null, types.string),
     telefon_geschaeft: types.union(types.undefined, types.null, types.string),
     telefon_mobile: types.union(types.undefined, types.null, types.string),
@@ -55,6 +56,7 @@ export class person_rev_max_fieldsModelSelector extends QueryBuilder {
   get nr() { return this.__attr(`nr`) }
   get ort() { return this.__attr(`ort`) }
   get plz() { return this.__attr(`plz`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get strasse() { return this.__attr(`strasse`) }
   get telefon_geschaeft() { return this.__attr(`telefon_geschaeft`) }
   get telefon_mobile() { return this.__attr(`telefon_mobile`) }
@@ -65,4 +67,4 @@ export function selectFromperson_rev_max_fields() {
   return new person_rev_max_fieldsModelSelector()
 }
 
-export const person_rev_max_fieldsModelPrimitives = selectFromperson_rev_max_fields()._depth._parent_rev._rev.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role
+export const person_rev_max_fieldsModelPrimitives = selectFromperson_rev_max_fields()._depth._parent_rev._rev.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.plz.rev_id.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role

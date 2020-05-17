@@ -23,5 +23,6 @@ export const garten_rev_select_columnEnum = types.enumeration("garten_rev_select
   "ort",
   "person_id",
   "plz",
+  "rev_id",
   "strasse",
       ])

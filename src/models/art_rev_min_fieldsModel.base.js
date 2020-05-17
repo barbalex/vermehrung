@@ -20,7 +20,8 @@ export const art_rev_min_fieldsModelBase = ModelBase
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
+    rev_id: types.identifier,
   })
   .views(self => ({
     get store() {
@@ -36,9 +37,10 @@ export class art_rev_min_fieldsModelSelector extends QueryBuilder {
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
 }
 export function selectFromart_rev_min_fields() {
   return new art_rev_min_fieldsModelSelector()
 }
 
-export const art_rev_min_fieldsModelPrimitives = selectFromart_rev_min_fields()._depth._parent_rev._rev.ae_id.changed.changed_by
+export const art_rev_min_fieldsModelPrimitives = selectFromart_rev_min_fields()._depth._parent_rev._rev.ae_id.changed.changed_by.rev_id

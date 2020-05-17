@@ -30,11 +30,12 @@ export const event_revModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
+    rev_id: types.identifier,
     teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
   })
@@ -58,6 +59,7 @@ export class event_revModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }
@@ -67,4 +69,4 @@ export function selectFromevent_rev() {
   return new event_revModelSelector()
 }
 
-export const event_revModelPrimitives = selectFromevent_rev()._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.geplant.kultur_id.person_id.teilkultur_id
+export const event_revModelPrimitives = selectFromevent_rev()._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.geplant.kultur_id.person_id.rev_id.teilkultur_id

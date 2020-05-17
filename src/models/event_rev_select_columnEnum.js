@@ -21,5 +21,6 @@ export const event_rev_select_columnEnum = types.enumeration("event_rev_select_c
   "id",
   "kultur_id",
   "person_id",
+  "rev_id",
   "teilkultur_id",
       ])

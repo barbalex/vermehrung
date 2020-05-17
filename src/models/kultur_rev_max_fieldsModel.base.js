@@ -23,7 +23,8 @@ export const kultur_rev_max_fieldsModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
+    rev_id: types.identifier,
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
@@ -43,10 +44,11 @@ export class kultur_rev_max_fieldsModelSelector extends QueryBuilder {
   get garten_id() { return this.__attr(`garten_id`) }
   get herkunft_id() { return this.__attr(`herkunft_id`) }
   get id() { return this.__attr(`id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
 }
 export function selectFromkultur_rev_max_fields() {
   return new kultur_rev_max_fieldsModelSelector()
 }
 
-export const kultur_rev_max_fieldsModelPrimitives = selectFromkultur_rev_max_fields()._depth._parent_rev._rev.art_id.bemerkungen.changed.changed_by.garten_id.herkunft_id.von_anzahl_individuen
+export const kultur_rev_max_fieldsModelPrimitives = selectFromkultur_rev_max_fields()._depth._parent_rev._rev.art_id.bemerkungen.changed.changed_by.garten_id.herkunft_id.rev_id.von_anzahl_individuen

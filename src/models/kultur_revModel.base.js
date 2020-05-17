@@ -58,11 +58,12 @@ export const kultur_revModelBase = ModelBase
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     lieferungsByNachKulturId: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     lieferungsByNachKulturId_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     lieferungsByVonKulturId: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     lieferungsByVonKulturId_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
+    rev_id: types.identifier,
     sammelLieferungsByNachKulturId: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     sammelLieferungsByNachKulturId_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
@@ -95,6 +96,7 @@ export class kultur_revModelSelector extends QueryBuilder {
   get garten_id() { return this.__attr(`garten_id`) }
   get herkunft_id() { return this.__attr(`herkunft_id`) }
   get id() { return this.__attr(`id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get zwischenlager() { return this.__attr(`zwischenlager`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
@@ -119,4 +121,4 @@ export function selectFromkultur_rev() {
   return new kultur_revModelSelector()
 }
 
-export const kultur_revModelPrimitives = selectFromkultur_rev()._deleted._depth._parent_rev._rev._revisions.aktiv.art_id.bemerkungen.changed.changed_by.erhaltungskultur.garten_id.herkunft_id.von_anzahl_individuen.zwischenlager
+export const kultur_revModelPrimitives = selectFromkultur_rev()._deleted._depth._parent_rev._rev._revisions.aktiv.art_id.bemerkungen.changed.changed_by.erhaltungskultur.garten_id.herkunft_id.rev_id.von_anzahl_individuen.zwischenlager

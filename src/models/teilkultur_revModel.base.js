@@ -34,13 +34,14 @@ export const teilkultur_revModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     events: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
     events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort1: types.union(types.undefined, types.null, types.string),
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
+    rev_id: types.identifier,
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
   })
@@ -65,6 +66,7 @@ export class teilkultur_revModelSelector extends QueryBuilder {
   get ort1() { return this.__attr(`ort1`) }
   get ort2() { return this.__attr(`ort2`) }
   get ort3() { return this.__attr(`ort3`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   events(builder) { return this.__child(`events`, eventModelSelector, builder) }
   events_aggregate(builder) { return this.__child(`events_aggregate`, event_aggregateModelSelector, builder) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
@@ -75,4 +77,4 @@ export function selectFromteilkultur_rev() {
   return new teilkultur_revModelSelector()
 }
 
-export const teilkultur_revModelPrimitives = selectFromteilkultur_rev()._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3
+export const teilkultur_revModelPrimitives = selectFromteilkultur_rev()._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3.rev_id

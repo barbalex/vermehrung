@@ -27,5 +27,6 @@ export const sammlung_rev_update_columnEnum = types.enumeration("sammlung_rev_up
   "id",
   "nr",
   "person_id",
+  "rev_id",
   "von_anzahl_individuen",
       ])

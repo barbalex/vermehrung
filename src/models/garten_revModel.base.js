@@ -30,7 +30,7 @@ export const garten_revModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
-    id: types.identifier,
+    id: types.union(types.undefined, types.frozen()),
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     name: types.union(types.undefined, types.null, types.string),
@@ -38,6 +38,7 @@ export const garten_revModelBase = ModelBase
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
+    rev_id: types.identifier,
     strasse: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
@@ -62,6 +63,7 @@ export class garten_revModelSelector extends QueryBuilder {
   get ort() { return this.__attr(`ort`) }
   get person_id() { return this.__attr(`person_id`) }
   get plz() { return this.__attr(`plz`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get strasse() { return this.__attr(`strasse`) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
@@ -71,4 +73,4 @@ export function selectFromgarten_rev() {
   return new garten_revModelSelector()
 }
 
-export const garten_revModelPrimitives = selectFromgarten_rev()._deleted._depth._parent_rev._rev._revisions.aktiv.bemerkungen.changed.changed_by.geom_point.name.ort.person_id.plz.strasse
+export const garten_revModelPrimitives = selectFromgarten_rev()._deleted._depth._parent_rev._rev._revisions.aktiv.bemerkungen.changed.changed_by.geom_point.name.ort.person_id.plz.rev_id.strasse

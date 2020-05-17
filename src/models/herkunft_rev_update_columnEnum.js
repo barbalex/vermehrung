@@ -23,4 +23,5 @@ export const herkunft_rev_update_columnEnum = types.enumeration("herkunft_rev_up
   "land",
   "lokalname",
   "nr",
+  "rev_id",
       ])

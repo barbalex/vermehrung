@@ -20,11 +20,12 @@ export const garten_rev_min_fieldsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort: types.union(types.undefined, types.null, types.string),
     person_id: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
+    rev_id: types.identifier,
     strasse: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
@@ -45,10 +46,11 @@ export class garten_rev_min_fieldsModelSelector extends QueryBuilder {
   get ort() { return this.__attr(`ort`) }
   get person_id() { return this.__attr(`person_id`) }
   get plz() { return this.__attr(`plz`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get strasse() { return this.__attr(`strasse`) }
 }
 export function selectFromgarten_rev_min_fields() {
   return new garten_rev_min_fieldsModelSelector()
 }
 
-export const garten_rev_min_fieldsModelPrimitives = selectFromgarten_rev_min_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.name.ort.person_id.plz.strasse
+export const garten_rev_min_fieldsModelPrimitives = selectFromgarten_rev_min_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.name.ort.person_id.plz.rev_id.strasse

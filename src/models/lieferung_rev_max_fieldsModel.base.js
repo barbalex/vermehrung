@@ -26,9 +26,10 @@ export const lieferung_rev_max_fieldsModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
-    id: types.identifier,
+    id: types.union(types.undefined, types.null, types.frozen()),
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person_id: types.union(types.undefined, types.null, types.frozen()),
+    rev_id: types.identifier,
     sammel_lieferung_id: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     von_kultur_id: types.union(types.undefined, types.null, types.frozen()),
@@ -56,6 +57,7 @@ export class lieferung_rev_max_fieldsModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get nach_kultur_id() { return this.__attr(`nach_kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
+  get rev_id() { return this.__attr(`rev_id`) }
   get sammel_lieferung_id() { return this.__attr(`sammel_lieferung_id`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get von_kultur_id() { return this.__attr(`von_kultur_id`) }
@@ -65,4 +67,4 @@ export function selectFromlieferung_rev_max_fields() {
   return new lieferung_rev_max_fieldsModelSelector()
 }
 
-export const lieferung_rev_max_fieldsModelPrimitives = selectFromlieferung_rev_max_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.nach_kultur_id.person_id.sammel_lieferung_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
+export const lieferung_rev_max_fieldsModelPrimitives = selectFromlieferung_rev_max_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.nach_kultur_id.person_id.rev_id.sammel_lieferung_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
