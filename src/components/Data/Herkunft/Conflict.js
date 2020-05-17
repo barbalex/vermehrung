@@ -21,6 +21,7 @@ const Rev = styled.span`
 const query = gql`
   query herkunftForConflictQuery($id: uuid!, $rev: String!) {
     herkunft_rev(where: { id: { _eq: $id }, _rev: { _eq: $rev } }) {
+      rev_id
       _rev
       _deleted
       _depth
@@ -42,11 +43,12 @@ const query = gql`
 
 const Conflict = ({ id, rev }) => {
   console.log('Conflict:', { id, rev })
+  // TODO: this does not update!!!!!!
   const { data, error, loading } = useQuery(query, {
     variables: { rev, id },
   })
 
-  const row = data?.herkunft_rev?.[0]
+  const row = data?.herkunft_rev?.[0] || {}
   console.log('Conflict:', { row, data })
   const dataArray = [
     { key: 'Nr', value: row.nr },
@@ -68,7 +70,11 @@ const Conflict = ({ id, rev }) => {
         Widersprüchliche Version<Rev>{rev}</Rev>
       </Title>
       <ConflictExplainer name="Herkunft" />
-      <ConflictData dataArray={dataArray} loading={loading} />
+      {loading ? (
+        'Lade...'
+      ) : (
+        <ConflictData dataArray={dataArray} loading={loading} />
+      )}
     </Container>
   )
 }
