@@ -79,7 +79,7 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertHerkunft, addQueuedQuery } = store
+  const { filter, user, upsertHerkunft, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -329,11 +329,13 @@ const Herkunft = ({
               multiLine
             />
           )}
-          {row._conflicts &&
+          {online &&
+            !showFilter &&
+            row._conflicts &&
             row._conflicts.map &&
-            row._conflicts.map((c) => (
-              <div key={c}>{`Konflikt mit: ${c}`}</div>
-            ))}
+            [...row._conflicts]
+              .sort()
+              .map((c) => <div key={c}>{`Konflikt mit: ${c}`}</div>)}
           {!showFilter && row.id && (
             <Files parentId={row.id} parent="herkunft" />
           )}
