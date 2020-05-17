@@ -98,7 +98,7 @@ const Konflikte = styled.div`
 `
 const Konflikt = styled.div`
   color: #d84315;
-  font-weight: 500;
+  font-weight: ${(props) => (props['data-active'] ? 500 : 400)};
   &:hover {
     text-decoration: underline;
     cursor: pointer;
@@ -122,7 +122,7 @@ const Herkunft = ({
   const { filter, user, upsertHerkunft, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
-  const [conflictToSolve, setConflictToSolve] = useState(null)
+  const [activeConflict, setActiveConflict] = useState(null)
 
   const isFiltered = runIsFiltered()
   const {
@@ -273,10 +273,10 @@ const Herkunft = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = conflictToSolve ? '50%' : '100%'
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
 
   // hide resizer when tree is hidden
-  const resizerStyle = !conflictToSolve ? { width: 0 } : {}
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
@@ -386,13 +386,10 @@ const Herkunft = ({
                   {[...row._conflicts].sort().map((c) => (
                     <Konflikt
                       key={c}
+                      data-active={activeConflict === c}
                       onClick={() =>
-                        setConflictToSolve(
-                          !conflictToSolve
-                            ? c
-                            : conflictToSolve !== c
-                            ? c
-                            : null,
+                        setActiveConflict(
+                          !activeConflict ? c : activeConflict !== c ? c : null,
                         )
                       }
                     >{`Konflikt mit Version ${c}`}</Konflikt>
@@ -403,7 +400,7 @@ const Herkunft = ({
                 <Files parentId={row.id} parent="herkunft" />
               )}
             </FieldsContainer>
-            <Conflict rev={conflictToSolve} />
+            <Conflict rev={activeConflict} />
           </StyledSplitPane>
         </Container>
       </Container>
