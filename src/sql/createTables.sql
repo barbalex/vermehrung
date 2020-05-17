@@ -56,7 +56,8 @@ create index on person using gin (tsv);
 
 drop table if exists person_rev cascade;
 create table person_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   nr text default null, -- DO NOT set unique - does not work for offline
   name text default null,
   adresszusatz text default null,
@@ -81,8 +82,9 @@ create table person_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on person_rev using btree (rev_id);
 create index on person_rev using btree (id);
 create index on person_rev using btree (_rev);
 create index on person_rev using btree (_parent_rev);
@@ -122,7 +124,8 @@ create index on art using gin (tsv);
 
 drop table if exists art_rev cascade;
 create table art_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   ae_id uuid default null,
   changed timestamp default now(),
   changed_by text default null,
@@ -131,8 +134,9 @@ create table art_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on art_rev using btree (rev_id);
 create index on art_rev using btree (id);
 create index on art_rev using btree (_rev);
 create index on art_rev using btree (_parent_rev);
@@ -208,7 +212,8 @@ create index on herkunft using gin (tsv);
 
 drop table if exists herkunft_rev cascade;
 create table herkunft_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   nr text default null, -- DO NOT set unique - does not work for offline
   lokalname text default null,
   gemeinde text default null,
@@ -223,8 +228,9 @@ create table herkunft_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on herkunft_rev using btree (rev_id);
 create index on herkunft_rev using btree (id);
 create index on herkunft_rev using btree (_rev);
 create index on herkunft_rev using btree (_parent_rev);
@@ -286,7 +292,8 @@ create index on sammlung using gin (tsv);
 
 drop table if exists sammlung_rev cascade;
 create table sammlung_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   art_id uuid default null references art (id) on update no action on delete set null,
   person_id uuid default null references person (id) on update no action on delete set null,
   herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
@@ -306,8 +313,9 @@ create table sammlung_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on sammlung_rev using btree (rev_id);
 create index on sammlung_rev using btree (id);
 create index on sammlung_rev using btree (_rev);
 create index on sammlung_rev using btree (_parent_rev);
@@ -363,7 +371,8 @@ create index on garten using gin (tsv);
 
 drop table if exists garten_rev cascade;
 create table garten_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   name text default null,
   person_id uuid default null references person (id) on update no action on delete set null,
   strasse text default null,
@@ -379,8 +388,9 @@ create table garten_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on garten_rev using btree (rev_id);
 create index on garten_rev using btree (id);
 create index on garten_rev using btree (_rev);
 create index on garten_rev using btree (_parent_rev);
@@ -434,7 +444,8 @@ create index on kultur using gin (tsv);
 
 drop table if exists kultur_rev cascade;
 create table kultur_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   art_id uuid default null references art (id) on update no action on delete set null,
   herkunft_id uuid default null references herkunft (id) on update no action on delete set null,
   garten_id uuid default null references garten (id) on update no action on delete set null,
@@ -450,8 +461,9 @@ create table kultur_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on kultur_rev using btree (rev_id);
 create index on kultur_rev using btree (id);
 create index on kultur_rev using btree (_rev);
 create index on kultur_rev using btree (_parent_rev);
@@ -520,7 +532,8 @@ create index on teilkultur using gin (tsv);
 
 drop table if exists teilkultur_rev cascade;
 create table teilkultur_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   kultur_id uuid default null references kultur (id) on update no action on delete set null,
   name text default null,
   ort1 text default null,
@@ -534,8 +547,9 @@ create table teilkultur_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on teilkultur_rev using btree (rev_id);
 create index on teilkultur_rev using btree (id);
 create index on teilkultur_rev using btree (_rev);
 create index on teilkultur_rev using btree (_parent_rev);
@@ -571,7 +585,8 @@ create index on event using gin (tsv);
 
 drop table if exists event_rev cascade;
 create table event_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   kultur_id uuid default null references kultur (id) on update no action on delete set null,
   teilkultur_id uuid default null references teilkultur (id) on update no action on delete set null,
   person_id uuid default null references person (id) on update no action on delete set null,
@@ -585,8 +600,9 @@ create table event_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on event_rev using btree (rev_id);
 create index on event_rev using btree (id);
 create index on event_rev using btree (_rev);
 create index on event_rev using btree (_parent_rev);
@@ -617,7 +633,8 @@ create index on zaehlung using gin (tsv);
 
 drop table if exists zaehlung_rev cascade;
 create table zaehlung_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   kultur_id uuid default null references kultur (id) on update no action on delete set null,
   datum date default null,
   prognose boolean default false,
@@ -629,8 +646,9 @@ create table zaehlung_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on zaehlung_rev using btree (rev_id);
 create index on zaehlung_rev using btree (id);
 create index on zaehlung_rev using btree (_rev);
 create index on zaehlung_rev using btree (_parent_rev);
@@ -670,7 +688,8 @@ create index on teilzaehlung using gin (tsv);
 
 drop table if exists teilzaehlung_rev cascade;
 create table teilzaehlung_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   zaehlung_id uuid default null references zaehlung (id) on update no action on delete set null,
   teilkultur_id uuid default null references teilkultur (id) on update no action on delete set null,
   anzahl_pflanzen integer default null,
@@ -687,8 +706,9 @@ create table teilzaehlung_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on teilzaehlung_rev using btree (rev_id);
 create index on teilzaehlung_rev using btree (id);
 create index on teilzaehlung_rev using btree (_rev);
 create index on teilzaehlung_rev using btree (_parent_rev);
@@ -721,6 +741,7 @@ COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists kultur_option_rev cascade;
 create table kultur_option_rev (
+  rev_id uuid primary key default uuid_generate_v1mc(),
   id uuid not null references kultur (id) on update no action on delete set null,
   z_bemerkungen boolean default true,
   tz_teilkultur_id boolean default true,
@@ -739,8 +760,9 @@ create table kultur_option_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on kultur_option_rev using btree (rev_id);
 create index on kultur_option_rev using btree (id);
 create index on kultur_option_rev using btree (_rev);
 create index on kultur_option_rev using btree (_parent_rev);
@@ -785,6 +807,7 @@ comment on column person_option.ar_name_deutsch is 'Dieses Feld wird (momentan) 
 
 drop table if exists person_option_rev cascade;
 create table person_option_rev (
+  rev_id uuid primary key default uuid_generate_v1mc(),
   id uuid not null references person (id) on update no action on delete set null,
   ar_name_deutsch boolean default true,  -- not in use
   ga_strasse boolean default true,
@@ -812,8 +835,9 @@ create table person_option_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on person_option_rev using btree (rev_id);
 create index on person_option_rev using btree (id);
 create index on person_option_rev using btree (_rev);
 create index on person_option_rev using btree (_parent_rev);
@@ -866,7 +890,8 @@ create index on lieferung using gin (tsv);
 
 drop table if exists lieferung_rev cascade;
 create table lieferung_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   sammel_lieferung_id uuid default null,
   art_id uuid default null references art (id) on update no action on delete set null,
   person_id uuid default null references person (id) on update no action on delete set null,
@@ -889,8 +914,9 @@ create table lieferung_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on lieferung_rev using btree (rev_id);
 create index on lieferung_rev using btree (id);
 create index on lieferung_rev using btree (_rev);
 create index on lieferung_rev using btree (_parent_rev);
@@ -928,7 +954,8 @@ alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lie
 
 drop table if exists sammel_lieferung_rev cascade;
 create table sammel_lieferung_rev (
-  id uuid default uuid_generate_v1mc(),
+  rev_id uuid primary key default uuid_generate_v1mc(),
+  id uuid default null,
   art_id uuid default null references art (id) on update no action on delete set null,
   person_id uuid default null references person (id) on update no action on delete set null,
   von_sammlung_id uuid default null references sammlung (id) on update no action on delete set null,
@@ -950,8 +977,9 @@ create table sammel_lieferung_rev (
   _revisions text[] default null,
   _depth integer default 1,
   _deleted boolean default false,
-  primary key (id, _rev)
+  unique (id, _rev)
 );
+create index on sammel_lieferung_rev using btree (rev_id);
 create index on sammel_lieferung_rev using btree (id);
 create index on sammel_lieferung_rev using btree (_rev);
 create index on sammel_lieferung_rev using btree (_parent_rev);
