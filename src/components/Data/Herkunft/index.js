@@ -23,6 +23,7 @@ import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Conflict from './Conflict'
 
 const Container = styled.div`
   height: 100%;
@@ -96,6 +97,8 @@ const Konflikte = styled.div`
   margin-bottom: 10px;
 `
 const Konflikt = styled.div`
+  color: #d84315;
+  font-weight: 500;
   &:hover {
     text-decoration: underline;
     cursor: pointer;
@@ -400,7 +403,7 @@ const Herkunft = ({
                 <Files parentId={row.id} parent="herkunft" />
               )}
             </FieldsContainer>
-            <div>{`Konflikt ${conflictToSolve}`}</div>
+            <Conflict rev={conflictToSolve} />
           </StyledSplitPane>
         </Container>
       </Container>
