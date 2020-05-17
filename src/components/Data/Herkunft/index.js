@@ -92,6 +92,15 @@ const StyledSplitPane = styled(SplitPane)`
     overflow: hidden;
   }
 `
+const Konflikte = styled.div`
+  margin-bottom: 10px;
+`
+const Konflikt = styled.div`
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`
 
 const personOptionQuery = gql`
   query PersonOptionQueryForHerkunft($accountId: String) {
@@ -369,25 +378,29 @@ const Herkunft = ({
                   multiLine
                 />
               )}
-              {online &&
-                !showFilter &&
-                row._conflicts &&
-                row._conflicts.map &&
-                [...row._conflicts]
-                  .sort()
-                  .map((c) => (
-                    <div
+              {online && !showFilter && row._conflicts && row._conflicts.map && (
+                <Konflikte>
+                  {[...row._conflicts].sort().map((c) => (
+                    <Konflikt
                       key={c}
                       onClick={() =>
-                        setConflictToSolve(conflictToSolve ? null : c)
+                        setConflictToSolve(
+                          !conflictToSolve
+                            ? c
+                            : conflictToSolve !== c
+                            ? c
+                            : null,
+                        )
                       }
-                    >{`Konflikt mit ${c}`}</div>
+                    >{`Konflikt mit Version ${c}`}</Konflikt>
                   ))}
+                </Konflikte>
+              )}
               {!showFilter && row.id && (
                 <Files parentId={row.id} parent="herkunft" />
               )}
             </FieldsContainer>
-            <div>conflict</div>
+            <div>{`Konflikt ${conflictToSolve}`}</div>
           </StyledSplitPane>
         </Container>
       </Container>
