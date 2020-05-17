@@ -104,6 +104,9 @@ const Konflikt = styled.div`
     cursor: pointer;
   }
 `
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
 
 const personOptionQuery = gql`
   query PersonOptionQueryForHerkunft($accountId: String) {
@@ -319,6 +322,9 @@ const Herkunft = ({
             resizerStyle={resizerStyle}
           >
             <FieldsContainer>
+              {activeConflict && (
+                <CaseConflictTitle>Aktuelle Version</CaseConflictTitle>
+              )}
               <TextField
                 key={`${row.id}nr`}
                 name="nr"
