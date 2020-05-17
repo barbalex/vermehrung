@@ -94,7 +94,7 @@ const StyledSplitPane = styled(SplitPane)`
 `
 
 const personOptionQuery = gql`
-  query PersonOptionQueryForHerkunft($accountId: String) {
+  query PersonOptionQueryForHerkunftHerkunft($accountId: String) {
     person_option(where: { person: { account_id: { _eq: $accountId } } }) {
       ...PersonOptionFields
     }
