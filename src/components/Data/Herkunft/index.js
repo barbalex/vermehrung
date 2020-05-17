@@ -406,7 +406,7 @@ const Herkunft = ({
                 <Files parentId={row.id} parent="herkunft" />
               )}
             </FieldsContainer>
-            <Conflict rev={activeConflict} />
+            {!!activeConflict && <Conflict rev={activeConflict} id={id} />}
           </StyledSplitPane>
         </Container>
       </Container>

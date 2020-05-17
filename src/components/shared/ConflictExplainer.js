@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ExplainText = styled.p`
+const ExplainText = styled.div`
   margin-bottom: 10px;
   li {
     margin-bottom: 0;
