@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import Button from '@material-ui/core/Button'
+import md5 from 'blueimp-md5'
 
-import { useQuery } from '../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../models/reactUtils'
 import ConflictExplainer from '../../shared/ConflictExplainer'
 import ConflictData from '../../shared/ConflictData'
 
@@ -54,10 +55,12 @@ const query = gql`
 `
 
 const Conflict = ({ id, rev, row }) => {
+  const store = useContext(StoreContext)
+  const { user, enqueNotification } = store
   //console.log('Conflict:', { id, rev })
   // TODO: this does not update without a key on the component!!!!!!
   // also it seems not to update the loading key...
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, query: queryFromHerkunft } = useQuery(query, {
     variables: { rev, id },
   })
 
@@ -72,9 +75,56 @@ const Conflict = ({ id, rev, row }) => {
     { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
   ]
 
-  const onClickVerwerfen = useCallback(() => {
-    console.log('TODO:')
-  }, [])
+  const onClickVerwerfen = useCallback(async () => {
+    const depth = revRow._depth + 1
+    const newObject = {
+      id: revRow.id,
+      nr: revRow.nr,
+      lokalname: revRow.lokalname,
+      gemeinde: revRow.gemeinde,
+      kanton: revRow.kanton,
+      land: revRow.land,
+      bemerkungen: revRow.bemerkungen,
+      changed: new window.Date().toISOString(),
+      changed_by: user.email,
+      _parent_rev: revRow._rev,
+      _depth: depth,
+      _deleted: true,
+    }
+    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    try {
+      await store.mutateInsert_herkunft_rev_one({
+        object: newObject,
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    queryFromHerkunft.refetch()
+  }, [
+    enqueNotification,
+    queryFromHerkunft,
+    revRow._depth,
+    revRow._rev,
+    revRow.bemerkungen,
+    revRow.gemeinde,
+    revRow.id,
+    revRow.kanton,
+    revRow.land,
+    revRow.lokalname,
+    revRow.nr,
+    store,
+    user.email,
+  ])
   const onClickUebernehmen = useCallback(() => {
     console.log('TODO:')
   }, [])
