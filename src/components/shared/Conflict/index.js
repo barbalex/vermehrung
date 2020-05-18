@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import { observer } from 'mobx-react-lite'
 
-import ConflictExplainer from './Explainer'
-import ConflictData from './Data'
+import Explainer from './Explainer'
+import Data from './Data'
 
 const Container = styled.div`
   padding: 10px;
@@ -30,6 +30,7 @@ const StyledButton = styled(Button)`
 `
 
 const Conflict = ({
+  name,
   rev,
   row,
   dataArray,
@@ -48,8 +49,8 @@ const Conflict = ({
       <Title>
         Widersprüchliche Version<Rev>{rev}</Rev>
       </Title>
-      <ConflictExplainer name="Herkunft" />
-      <ConflictData dataArray={dataArray} row={row} loading={loading} />
+      <Explainer name={name} />
+      <Data dataArray={dataArray} row={row} loading={loading} />
       <ButtonRow>
         <StyledButton
           onClick={onClickVerwerfen}
