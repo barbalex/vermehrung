@@ -51,6 +51,13 @@ begin
         _depth = new._depth
         and _rev <> new._rev
     ),
+    winning_revisions as (
+      select
+        max(leaves._rev) as _rev
+      from
+        leaves
+        join max_depths on leaves._depth = max_depths.max_depth
+    ),
     branches as (
       select
         herkunft_id,
@@ -63,13 +70,6 @@ begin
         and herkunft_id = new.herkunft_id
         and _rev <> new._rev
     ),
-    winning_revisions as (
-      select
-        max(leaves._rev) as _rev
-      from
-        leaves
-        join max_depths on leaves._depth = max_depths.max_depth
-    ),
     leaves_conflicting_with_branch as (
       select _rev from leaves l
       where
@@ -78,7 +78,8 @@ begin
           where
             b._depth = l._depth
             and b._rev <> l._rev
-            -- exclude all branches above the winning revision
+            -- exclude all branches above the winning revision?
+            -- never got this to work
             --and b._rev <> ANY (
             --  select _revisions from herkunft_rev
             --  inner join winning_revisions on herkunft_rev._rev = winning_revisions._rev
@@ -105,6 +106,7 @@ begin
           select * from conflicts
           union select * from leaves_conflicting_with_branch
         ) as all_conflicts
+        -- prevent ever choosing same rev as conflict
         where all_conflicts._rev <> herkunft_rev._rev
       )) as _conflicts
     from
