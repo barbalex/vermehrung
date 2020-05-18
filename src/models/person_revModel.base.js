@@ -58,7 +58,7 @@ export const person_revModelBase = ModelBase
     events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     gartens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
     gartens_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     info: types.union(types.undefined, types.null, types.boolean),
     kein_email: types.union(types.undefined, types.null, types.boolean),
     kommerziell: types.union(types.undefined, types.null, types.boolean),
@@ -67,9 +67,9 @@ export const person_revModelBase = ModelBase
     ort: types.union(types.undefined, types.null, types.string),
     person_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_fileModel)))),
     person_files_aggregate: types.union(types.undefined, types.late(() => person_file_aggregateModel)),
+    person_id: types.union(types.undefined, types.frozen()),
     person_option: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => person_optionModel))),
     plz: types.union(types.undefined, types.null, types.integer),
-    rev_id: types.identifier,
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
@@ -106,8 +106,8 @@ export class person_revModelSelector extends QueryBuilder {
   get name() { return this.__attr(`name`) }
   get nr() { return this.__attr(`nr`) }
   get ort() { return this.__attr(`ort`) }
+  get person_id() { return this.__attr(`person_id`) }
   get plz() { return this.__attr(`plz`) }
-  get rev_id() { return this.__attr(`rev_id`) }
   get strasse() { return this.__attr(`strasse`) }
   get telefon_geschaeft() { return this.__attr(`telefon_geschaeft`) }
   get telefon_mobile() { return this.__attr(`telefon_mobile`) }
@@ -131,4 +131,4 @@ export function selectFromperson_rev() {
   return new person_revModelSelector()
 }
 
-export const person_revModelPrimitives = selectFromperson_rev()._deleted._depth._parent_rev._rev._revisions.account_id.adresszusatz.aktiv.bemerkungen.changed.changed_by.email.info.kein_email.kommerziell.name.nr.ort.plz.rev_id.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role
+export const person_revModelPrimitives = selectFromperson_rev()._deleted._depth._parent_rev._rev._revisions.account_id.adresszusatz.aktiv.bemerkungen.changed.changed_by.email.info.kein_email.kommerziell.name.nr.ort.person_id.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role

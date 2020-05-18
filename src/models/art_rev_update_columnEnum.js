@@ -14,8 +14,8 @@ export const art_rev_update_columnEnum = types.enumeration("art_rev_update_colum
   "_rev",
   "_revisions",
   "ae_id",
+  "art_id",
   "changed",
   "changed_by",
   "id",
-  "rev_id",
       ])

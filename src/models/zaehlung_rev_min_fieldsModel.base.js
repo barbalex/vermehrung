@@ -21,9 +21,9 @@ export const zaehlung_rev_min_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
-    rev_id: types.identifier,
+    zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -41,10 +41,10 @@ export class zaehlung_rev_min_fieldsModelSelector extends QueryBuilder {
   get datum() { return this.__attr(`datum`) }
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
-  get rev_id() { return this.__attr(`rev_id`) }
+  get zaehlung_id() { return this.__attr(`zaehlung_id`) }
 }
 export function selectFromzaehlung_rev_min_fields() {
   return new zaehlung_rev_min_fieldsModelSelector()
 }
 
-export const zaehlung_rev_min_fieldsModelPrimitives = selectFromzaehlung_rev_min_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.datum.kultur_id.rev_id
+export const zaehlung_rev_min_fieldsModelPrimitives = selectFromzaehlung_rev_min_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.datum.kultur_id.zaehlung_id

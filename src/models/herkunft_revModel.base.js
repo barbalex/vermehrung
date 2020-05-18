@@ -32,14 +32,14 @@ export const herkunft_revModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     gemeinde: types.union(types.undefined, types.null, types.string),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
+    herkunft_id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     land: types.union(types.undefined, types.null, types.string),
     lokalname: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
-    rev_id: types.identifier,
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
   })
@@ -60,12 +60,12 @@ export class herkunft_revModelSelector extends QueryBuilder {
   get changed_by() { return this.__attr(`changed_by`) }
   get gemeinde() { return this.__attr(`gemeinde`) }
   get geom_point() { return this.__attr(`geom_point`) }
+  get herkunft_id() { return this.__attr(`herkunft_id`) }
   get id() { return this.__attr(`id`) }
   get kanton() { return this.__attr(`kanton`) }
   get land() { return this.__attr(`land`) }
   get lokalname() { return this.__attr(`lokalname`) }
   get nr() { return this.__attr(`nr`) }
-  get rev_id() { return this.__attr(`rev_id`) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
   sammlungs(builder) { return this.__child(`sammlungs`, sammlungModelSelector, builder) }
@@ -75,4 +75,4 @@ export function selectFromherkunft_rev() {
   return new herkunft_revModelSelector()
 }
 
-export const herkunft_revModelPrimitives = selectFromherkunft_rev()._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.gemeinde.geom_point.kanton.land.lokalname.nr.rev_id
+export const herkunft_revModelPrimitives = selectFromherkunft_rev()._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.gemeinde.geom_point.herkunft_id.kanton.land.lokalname.nr

@@ -21,12 +21,12 @@ export const herkunft_rev_min_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     gemeinde: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    herkunft_id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
     land: types.union(types.undefined, types.null, types.string),
     lokalname: types.union(types.undefined, types.null, types.string),
     nr: types.union(types.undefined, types.null, types.string),
-    rev_id: types.identifier,
   })
   .views(self => ({
     get store() {
@@ -42,15 +42,15 @@ export class herkunft_rev_min_fieldsModelSelector extends QueryBuilder {
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get gemeinde() { return this.__attr(`gemeinde`) }
+  get herkunft_id() { return this.__attr(`herkunft_id`) }
   get id() { return this.__attr(`id`) }
   get kanton() { return this.__attr(`kanton`) }
   get land() { return this.__attr(`land`) }
   get lokalname() { return this.__attr(`lokalname`) }
   get nr() { return this.__attr(`nr`) }
-  get rev_id() { return this.__attr(`rev_id`) }
 }
 export function selectFromherkunft_rev_min_fields() {
   return new herkunft_rev_min_fieldsModelSelector()
 }
 
-export const herkunft_rev_min_fieldsModelPrimitives = selectFromherkunft_rev_min_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.gemeinde.kanton.land.lokalname.nr.rev_id
+export const herkunft_rev_min_fieldsModelPrimitives = selectFromherkunft_rev_min_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.gemeinde.herkunft_id.kanton.land.lokalname.nr

@@ -17,10 +17,10 @@ export const event_rev_select_columnEnum = types.enumeration("event_rev_select_c
   "changed",
   "changed_by",
   "datum",
+  "event_id",
   "geplant",
   "id",
   "kultur_id",
   "person_id",
-  "rev_id",
   "teilkultur_id",
       ])

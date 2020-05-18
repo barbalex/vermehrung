@@ -26,10 +26,10 @@ export const sammel_lieferung_rev_min_fieldsModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.integer),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    rev_id: types.identifier,
+    sammel_lieferung_id: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     von_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     von_sammlung_id: types.union(types.undefined, types.null, types.frozen()),
@@ -56,7 +56,7 @@ export class sammel_lieferung_rev_min_fieldsModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get nach_kultur_id() { return this.__attr(`nach_kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
-  get rev_id() { return this.__attr(`rev_id`) }
+  get sammel_lieferung_id() { return this.__attr(`sammel_lieferung_id`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get von_kultur_id() { return this.__attr(`von_kultur_id`) }
   get von_sammlung_id() { return this.__attr(`von_sammlung_id`) }
@@ -65,4 +65,4 @@ export function selectFromsammel_lieferung_rev_min_fields() {
   return new sammel_lieferung_rev_min_fieldsModelSelector()
 }
 
-export const sammel_lieferung_rev_min_fieldsModelPrimitives = selectFromsammel_lieferung_rev_min_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.nach_kultur_id.person_id.rev_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
+export const sammel_lieferung_rev_min_fieldsModelPrimitives = selectFromsammel_lieferung_rev_min_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.gramm_samen.nach_kultur_id.person_id.sammel_lieferung_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id
