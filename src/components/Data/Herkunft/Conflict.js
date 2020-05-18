@@ -143,6 +143,7 @@ const HerkunftConflict = ({
 
   return (
     <Conflict
+      name="Herkunft"
       rev={rev}
       row={row}
       dataArray={dataArray}
