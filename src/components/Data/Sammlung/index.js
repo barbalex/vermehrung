@@ -265,7 +265,7 @@ const Sammlung = ({
       addQueuedQuery({
         name: 'mutateInsert_sammlung_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'sammlung_rev_pkey',
             update_columns: ['id'],

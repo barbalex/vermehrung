@@ -249,7 +249,7 @@ const Zaehlung = ({
       addQueuedQuery({
         name: 'mutateInsert_zaehlung_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'zaehlung_rev_pkey',
             update_columns: ['id'],
