@@ -5820,6 +5820,11 @@ diff-sequences@^25.2.6:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-25.2.6.tgz#5f467c00edd35352b7bca46d7927d60e687a76dd"
   integrity sha512-Hq8o7+6GaZeoFjtpgvRBUknSXNeJiCx7V9Fr94ZMljNiCr9n9L8H8aJqgWOQiDDGdyn29fRNcDdRVJ5fdyihfg==
 
+diff@^1.2.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-1.4.0.tgz#7f28d2eb9ee7b15a97efd89ce63dcfdaa3ccbabf"
+  integrity sha1-fyjS657nsVqX79ic5j3P2qPMur8=
+
 diff@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
@@ -13778,6 +13783,15 @@ react-split-pane@0.1.91:
     react-lifecycles-compat "^3.0.4"
     react-style-proptype "^3.2.2"
 
+react-stylable-diff@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-stylable-diff/-/react-stylable-diff-2.0.0.tgz#65ac25f2c09d43a81cf61a0b0f60e689019b7c81"
+  integrity sha512-7PdaBpfqlxBveX4+NfSvNPMFvH+uXI3F0iHGjcs4y7RWdiQ9XAkgP7Y+qHqADPGqTVdCDqzS7ZHY18/pzTnHlg==
+  dependencies:
+    diff "^1.2.0"
+    prop-types "^15.6.0"
+    react "^16.0.0"
+
 react-style-proptype@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/react-style-proptype/-/react-style-proptype-3.2.2.tgz#d8e998e62ce79ec35b087252b90f19f1c33968a0"
@@ -13825,7 +13839,7 @@ react-window@1.8.5:
     "@babel/runtime" "^7.0.0"
     memoize-one ">=3.1.1 <6"
 
-react@16.13.1, react@^16.12.0, react@^16.8.0:
+react@16.13.1, react@^16.0.0, react@^16.12.0, react@^16.8.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==

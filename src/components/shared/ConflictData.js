@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Diff from 'react-stylable-diff'
 
 const Row = styled.div`
   display: flex;
@@ -8,21 +9,28 @@ const Row = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: ${(props) =>
     props['data-last'] ? '1px solid rgba(0, 0, 0, 0.1)' : 'none'};
+  .Difference > ins {
+    padding-left: 2px;
+  }
 `
 const Key = styled.div`
   width: 130px;
   color: rgba(0, 0, 0, 0.54);
 `
-const Value = styled.div``
 
-const ConflictData = ({ dataArray, loading }) => {
+const ConflictData = ({ dataArray, loading, row }) => {
   if (loading) return 'Lade...'
-  return dataArray.map((d, index) => (
-    <Row key={d.key} data-last={index + 1 === dataArray.length}>
-      <Key>{`${d.key}:`}</Key>
-      <Value>{d.value}</Value>
-    </Row>
-  ))
+  return dataArray.map((d, index) => {
+    const inputA = row[d.key]
+    const inputB = d.value
+    console.log('ConflictData', { inputA, inputB })
+    return (
+      <Row key={d.key} data-last={index + 1 === dataArray.length}>
+        <Key>{`${d.key}:`}</Key>
+        <Diff inputA={row[d.key]} inputB={d.value} type="sentences" />
+      </Row>
+    )
+  })
 }
 
 export default ConflictData
