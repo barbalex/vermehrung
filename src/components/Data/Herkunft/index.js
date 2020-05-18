@@ -217,9 +217,9 @@ const Herkunft = ({
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_herkunft_rev',
+        name: 'mutateInsert_herkunft_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          object: newObject,
           on_conflict: {
             constraint: 'herkunft_rev_pkey',
             update_columns: ['id'],
@@ -405,7 +405,7 @@ const Herkunft = ({
               )}
             </FieldsContainer>
             <>
-              {!!activeConflict && (
+              {online && !!activeConflict && (
                 <Conflict
                   key={`${activeConflict}/${id}`}
                   rev={activeConflict}
