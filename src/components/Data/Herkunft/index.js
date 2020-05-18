@@ -26,7 +26,7 @@ import Settings from './Settings'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
-import ConflictList from './ConflictList'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -137,15 +137,14 @@ const Herkunft = ({
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterEditingConflict = useCallback(() => {
+  const callbackAfterVerwerfen = useCallback(() => {
     setActiveConflict(null)
     queryOfHerkunft.refetch()
   }, [queryOfHerkunft])
-  useEffect(() => {
-    if (row && row._conflicts && !row._conflicts.includes(activeConflict)) {
-      setActiveConflict(null)
-    }
-  }, [activeConflict, row, showFilter])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfHerkunft.refetch()
+    setActiveConflict(row._rev)
+  }, [queryOfHerkunft, row._rev])
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate(undefined, (d) =>
@@ -304,7 +303,9 @@ const Herkunft = ({
           />
         ) : (
           <TitleContainer>
-            <Title>Herkunft</Title>
+            <Title>{`Herkunft${
+              activeConflict ? ': Konflikt lösen' : ''
+            }`}</Title>
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
@@ -420,7 +421,8 @@ const Herkunft = ({
                   rev={activeConflict}
                   id={id}
                   row={row}
-                  callbackAfterEditingConflict={callbackAfterEditingConflict}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
                   setActiveConflict={setActiveConflict}
                 />
               )}

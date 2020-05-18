@@ -21,12 +21,16 @@ const Conflict = ({ conflict, activeConflict, setActiveConflict }) => {
         : null,
     )
   }, [activeConflict, conflict, setActiveConflict])
+  const title = activeConflict
+    ? 'Klicken um den Konflikt zu schliessen'
+    : 'Klicken um den Konflikt zu lösen'
 
   return (
     <Konflikt
       key={conflict}
       data-active={activeConflict === conflict}
       onClick={onClick}
+      title={title}
     >{`Konflikt mit Version ${conflict}`}</Konflikt>
   )
 }
