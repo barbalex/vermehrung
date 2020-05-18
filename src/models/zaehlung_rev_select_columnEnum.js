@@ -20,5 +20,5 @@ export const zaehlung_rev_select_columnEnum = types.enumeration("zaehlung_rev_se
   "id",
   "kultur_id",
   "prognose",
-  "rev_id",
+  "zaehlung_id",
       ])

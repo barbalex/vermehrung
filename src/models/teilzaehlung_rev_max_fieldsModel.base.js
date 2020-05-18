@@ -25,10 +25,10 @@ export const teilzaehlung_rev_max_fieldsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     prognose_von_tz: types.union(types.undefined, types.null, types.frozen()),
-    rev_id: types.identifier,
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
+    teilzaehlung_id: types.union(types.undefined, types.null, types.frozen()),
     zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -51,12 +51,12 @@ export class teilzaehlung_rev_max_fieldsModelSelector extends QueryBuilder {
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
   get prognose_von_tz() { return this.__attr(`prognose_von_tz`) }
-  get rev_id() { return this.__attr(`rev_id`) }
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
+  get teilzaehlung_id() { return this.__attr(`teilzaehlung_id`) }
   get zaehlung_id() { return this.__attr(`zaehlung_id`) }
 }
 export function selectFromteilzaehlung_rev_max_fields() {
   return new teilzaehlung_rev_max_fieldsModelSelector()
 }
 
-export const teilzaehlung_rev_max_fieldsModelPrimitives = selectFromteilzaehlung_rev_max_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.rev_id.teilkultur_id.zaehlung_id
+export const teilzaehlung_rev_max_fieldsModelPrimitives = selectFromteilzaehlung_rev_max_fields()._depth._parent_rev._rev.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.teilkultur_id.teilzaehlung_id.zaehlung_id

@@ -18,10 +18,10 @@ export const herkunft_rev_update_columnEnum = types.enumeration("herkunft_rev_up
   "changed_by",
   "gemeinde",
   "geom_point",
+  "herkunft_id",
   "id",
   "kanton",
   "land",
   "lokalname",
   "nr",
-  "rev_id",
       ])

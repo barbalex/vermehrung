@@ -1249,7 +1249,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_rev_by_pk($rev_id: ID!) { art_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query art_rev_by_pk($id: ID!) { art_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1314,7 +1314,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query event_rev_by_pk($rev_id: ID!) { event_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query event_rev_by_pk($id: ID!) { event_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1369,7 +1369,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_rev_by_pk($rev_id: ID!) { garten_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query garten_rev_by_pk($id: ID!) { garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1434,7 +1434,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_rev_by_pk($rev_id: ID!) { herkunft_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query herkunft_rev_by_pk($id: ID!) { herkunft_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1509,7 +1509,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_option_rev_by_pk($rev_id: ID!) { kultur_option_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query kultur_option_rev_by_pk($id: ID!) { kultur_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1549,7 +1549,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_rev_by_pk($rev_id: ID!) { kultur_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query kultur_rev_by_pk($id: ID!) { kultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1604,7 +1604,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_rev_by_pk($rev_id: ID!) { lieferung_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query lieferung_rev_by_pk($id: ID!) { lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1669,7 +1669,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryPerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_option_rev_by_pk($rev_id: ID!) { person_option_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query person_option_rev_by_pk($id: ID!) { person_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1684,7 +1684,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryPerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_rev_by_pk($rev_id: ID!) { person_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query person_rev_by_pk($id: ID!) { person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1724,7 +1724,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     querySammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammel_lieferung_rev_by_pk($rev_id: ID!) { sammel_lieferung_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query sammel_lieferung_rev_by_pk($id: ID!) { sammel_lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1769,7 +1769,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     querySammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_rev_by_pk($rev_id: ID!) { sammlung_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query sammlung_rev_by_pk($id: ID!) { sammlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1824,7 +1824,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilkultur_rev_by_pk($rev_id: ID!) { teilkultur_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query teilkultur_rev_by_pk($id: ID!) { teilkultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1864,7 +1864,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilzaehlung_rev_by_pk($rev_id: ID!) { teilzaehlung_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query teilzaehlung_rev_by_pk($id: ID!) { teilzaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1909,7 +1909,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, options)
     },
     queryZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), options = {}) {
-      return self.query(`query zaehlung_rev_by_pk($rev_id: ID!) { zaehlung_rev_by_pk(rev_id: $rev_id) {
+      return self.query(`query zaehlung_rev_by_pk($id: ID!) { zaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
@@ -1974,7 +1974,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_art_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_art_rev_by_pk($rev_id: ID!) { delete_art_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_art_rev_by_pk($id: ID!) { delete_art_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2004,7 +2004,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_event_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_event_rev_by_pk($rev_id: ID!) { delete_event_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_event_rev_by_pk($id: ID!) { delete_event_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2034,7 +2034,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_garten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_garten_rev_by_pk($rev_id: ID!) { delete_garten_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_garten_rev_by_pk($id: ID!) { delete_garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2064,7 +2064,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_herkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_herkunft_rev_by_pk($rev_id: ID!) { delete_herkunft_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_herkunft_rev_by_pk($id: ID!) { delete_herkunft_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2099,7 +2099,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_kultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_kultur_option_rev_by_pk($rev_id: ID!) { delete_kultur_option_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_kultur_option_rev_by_pk($id: ID!) { delete_kultur_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2124,7 +2124,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_kultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_kultur_rev_by_pk($rev_id: ID!) { delete_kultur_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_kultur_rev_by_pk($id: ID!) { delete_kultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2154,7 +2154,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_lieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_lieferung_rev_by_pk($rev_id: ID!) { delete_lieferung_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_lieferung_rev_by_pk($id: ID!) { delete_lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2189,7 +2189,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_person_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_person_option_rev_by_pk($rev_id: ID!) { delete_person_option_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_person_option_rev_by_pk($id: ID!) { delete_person_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2199,7 +2199,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_person_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_person_rev_by_pk($rev_id: ID!) { delete_person_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_person_rev_by_pk($id: ID!) { delete_person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2219,7 +2219,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_sammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_sammel_lieferung_rev_by_pk($rev_id: ID!) { delete_sammel_lieferung_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_sammel_lieferung_rev_by_pk($id: ID!) { delete_sammel_lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2249,7 +2249,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_sammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_sammlung_rev_by_pk($rev_id: ID!) { delete_sammlung_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_sammlung_rev_by_pk($id: ID!) { delete_sammlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2279,7 +2279,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_teilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_teilkultur_rev_by_pk($rev_id: ID!) { delete_teilkultur_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_teilkultur_rev_by_pk($id: ID!) { delete_teilkultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2299,7 +2299,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_teilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_teilzaehlung_rev_by_pk($rev_id: ID!) { delete_teilzaehlung_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_teilzaehlung_rev_by_pk($id: ID!) { delete_teilzaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -2329,7 +2329,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_zaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), optimisticUpdate) {
-      return self.mutate(`mutation delete_zaehlung_rev_by_pk($rev_id: ID!) { delete_zaehlung_rev_by_pk(rev_id: $rev_id) {
+      return self.mutate(`mutation delete_zaehlung_rev_by_pk($id: ID!) { delete_zaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
@@ -3254,7 +3254,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeArt_rev_by_pk(variables, resultSelector = art_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription art_rev_by_pk($rev_id: ID!) { art_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription art_rev_by_pk($id: ID!) { art_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3319,7 +3319,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeEvent_rev_by_pk(variables, resultSelector = event_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription event_rev_by_pk($rev_id: ID!) { event_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription event_rev_by_pk($id: ID!) { event_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3374,7 +3374,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription garten_rev_by_pk($rev_id: ID!) { garten_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription garten_rev_by_pk($id: ID!) { garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3439,7 +3439,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription herkunft_rev_by_pk($rev_id: ID!) { herkunft_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription herkunft_rev_by_pk($id: ID!) { herkunft_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3514,7 +3514,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeKultur_option_rev_by_pk(variables, resultSelector = kultur_option_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription kultur_option_rev_by_pk($rev_id: ID!) { kultur_option_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription kultur_option_rev_by_pk($id: ID!) { kultur_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3554,7 +3554,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeKultur_rev_by_pk(variables, resultSelector = kultur_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription kultur_rev_by_pk($rev_id: ID!) { kultur_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription kultur_rev_by_pk($id: ID!) { kultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3609,7 +3609,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription lieferung_rev_by_pk($rev_id: ID!) { lieferung_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription lieferung_rev_by_pk($id: ID!) { lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3674,7 +3674,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribePerson_option_rev_by_pk(variables, resultSelector = person_option_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription person_option_rev_by_pk($rev_id: ID!) { person_option_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription person_option_rev_by_pk($id: ID!) { person_option_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_option_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3689,7 +3689,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribePerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription person_rev_by_pk($rev_id: ID!) { person_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription person_rev_by_pk($id: ID!) { person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3729,7 +3729,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeSammel_lieferung_rev_by_pk(variables, resultSelector = sammel_lieferung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammel_lieferung_rev_by_pk($rev_id: ID!) { sammel_lieferung_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription sammel_lieferung_rev_by_pk($id: ID!) { sammel_lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammel_lieferung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3774,7 +3774,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeSammlung_rev_by_pk(variables, resultSelector = sammlung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammlung_rev_by_pk($rev_id: ID!) { sammlung_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription sammlung_rev_by_pk($id: ID!) { sammlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3829,7 +3829,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilkultur_rev_by_pk($rev_id: ID!) { teilkultur_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription teilkultur_rev_by_pk($id: ID!) { teilkultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3869,7 +3869,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeTeilzaehlung_rev_by_pk(variables, resultSelector = teilzaehlung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilzaehlung_rev_by_pk($rev_id: ID!) { teilzaehlung_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription teilzaehlung_rev_by_pk($id: ID!) { teilzaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilzaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
@@ -3914,7 +3914,7 @@ export const RootStoreBase = MSTGQLStore
       } }`, variables, onData)
     },
     subscribeZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription zaehlung_rev_by_pk($rev_id: ID!) { zaehlung_rev_by_pk(rev_id: $rev_id) {
+      return self.subscribe(`subscription zaehlung_rev_by_pk($id: ID!) { zaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },

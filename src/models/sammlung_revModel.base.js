@@ -46,15 +46,15 @@ export const sammlung_revModelBase = ModelBase
     gramm_samen: types.union(types.undefined, types.null, types.integer),
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     nr: types.union(types.undefined, types.null, types.string),
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    rev_id: types.identifier,
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
+    sammlung_id: types.union(types.undefined, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
@@ -83,7 +83,7 @@ export class sammlung_revModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get nr() { return this.__attr(`nr`) }
   get person_id() { return this.__attr(`person_id`) }
-  get rev_id() { return this.__attr(`rev_id`) }
+  get sammlung_id() { return this.__attr(`sammlung_id`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
   herkunft(builder) { return this.__child(`herkunft`, herkunftModelSelector, builder) }
@@ -97,4 +97,4 @@ export function selectFromsammlung_rev() {
   return new sammlung_revModelSelector()
 }
 
-export const sammlung_revModelPrimitives = selectFromsammlung_rev()._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.nr.person_id.rev_id.von_anzahl_individuen
+export const sammlung_revModelPrimitives = selectFromsammlung_rev()._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.nr.person_id.sammlung_id.von_anzahl_individuen

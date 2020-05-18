@@ -20,13 +20,13 @@ export const teilkultur_rev_max_fieldsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
-    id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     name: types.union(types.undefined, types.null, types.string),
     ort1: types.union(types.undefined, types.null, types.string),
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
-    rev_id: types.identifier,
+    teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -47,10 +47,10 @@ export class teilkultur_rev_max_fieldsModelSelector extends QueryBuilder {
   get ort1() { return this.__attr(`ort1`) }
   get ort2() { return this.__attr(`ort2`) }
   get ort3() { return this.__attr(`ort3`) }
-  get rev_id() { return this.__attr(`rev_id`) }
+  get teilkultur_id() { return this.__attr(`teilkultur_id`) }
 }
 export function selectFromteilkultur_rev_max_fields() {
   return new teilkultur_rev_max_fieldsModelSelector()
 }
 
-export const teilkultur_rev_max_fieldsModelPrimitives = selectFromteilkultur_rev_max_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3.rev_id
+export const teilkultur_rev_max_fieldsModelPrimitives = selectFromteilkultur_rev_max_fields()._depth._parent_rev._rev.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3.teilkultur_id

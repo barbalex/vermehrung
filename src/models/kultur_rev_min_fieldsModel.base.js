@@ -23,8 +23,8 @@ export const kultur_rev_min_fieldsModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
-    id: types.union(types.undefined, types.null, types.frozen()),
-    rev_id: types.identifier,
+    id: types.identifier,
+    kultur_id: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
@@ -44,11 +44,11 @@ export class kultur_rev_min_fieldsModelSelector extends QueryBuilder {
   get garten_id() { return this.__attr(`garten_id`) }
   get herkunft_id() { return this.__attr(`herkunft_id`) }
   get id() { return this.__attr(`id`) }
-  get rev_id() { return this.__attr(`rev_id`) }
+  get kultur_id() { return this.__attr(`kultur_id`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
 }
 export function selectFromkultur_rev_min_fields() {
   return new kultur_rev_min_fieldsModelSelector()
 }
 
-export const kultur_rev_min_fieldsModelPrimitives = selectFromkultur_rev_min_fields()._depth._parent_rev._rev.art_id.bemerkungen.changed.changed_by.garten_id.herkunft_id.rev_id.von_anzahl_individuen
+export const kultur_rev_min_fieldsModelPrimitives = selectFromkultur_rev_min_fields()._depth._parent_rev._rev.art_id.bemerkungen.changed.changed_by.garten_id.herkunft_id.kultur_id.von_anzahl_individuen

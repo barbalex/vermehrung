@@ -29,13 +29,13 @@ export const event_revModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
+    event_id: types.union(types.undefined, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
-    id: types.union(types.undefined, types.frozen()),
+    id: types.identifier,
     kultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
-    rev_id: types.identifier,
     teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
   })
@@ -55,11 +55,11 @@ export class event_revModelSelector extends QueryBuilder {
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get datum() { return this.__attr(`datum`) }
+  get event_id() { return this.__attr(`event_id`) }
   get geplant() { return this.__attr(`geplant`) }
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
-  get rev_id() { return this.__attr(`rev_id`) }
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }
@@ -69,4 +69,4 @@ export function selectFromevent_rev() {
   return new event_revModelSelector()
 }
 
-export const event_revModelPrimitives = selectFromevent_rev()._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.geplant.kultur_id.person_id.rev_id.teilkultur_id
+export const event_revModelPrimitives = selectFromevent_rev()._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.event_id.geplant.kultur_id.person_id.teilkultur_id
