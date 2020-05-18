@@ -33,8 +33,8 @@ const StyledButton = styled(Button)`
 
 const query = gql`
   query herkunftForConflictQuery($id: uuid!, $rev: String!) {
-    herkunft_rev(where: { id: { _eq: $id }, _rev: { _eq: $rev } }) {
-      rev_id
+    herkunft_rev(where: { herkunft_id: { _eq: $id }, _rev: { _eq: $rev } }) {
+      id
       _rev
       _deleted
       _depth
@@ -45,7 +45,7 @@ const query = gql`
       changed_by
       gemeinde
       geom_point
-      id
+      herkunft_id
       kanton
       land
       lokalname
@@ -78,7 +78,7 @@ const Conflict = ({ id, rev, row }) => {
   const onClickVerwerfen = useCallback(async () => {
     const depth = revRow._depth + 1
     const newObject = {
-      id: revRow.id,
+      herkunft_id: revRow.herkunft_id,
       nr: revRow.nr,
       lokalname: revRow.lokalname,
       gemeinde: revRow.gemeinde,
@@ -117,7 +117,7 @@ const Conflict = ({ id, rev, row }) => {
     revRow._rev,
     revRow.bemerkungen,
     revRow.gemeinde,
-    revRow.id,
+    revRow.herkunft_id,
     revRow.kanton,
     revRow.land,
     revRow.lokalname,
