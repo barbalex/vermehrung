@@ -16,6 +16,7 @@ const Rev = styled.span`
   font-weight: normal;
   padding-left: 7px;
   color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
 `
 
 const query = gql`
@@ -41,23 +42,23 @@ const query = gql`
   }
 `
 
-const Conflict = ({ id, rev }) => {
+const Conflict = ({ id, rev, row }) => {
   //console.log('Conflict:', { id, rev })
   // TODO: this does not update without a key on the component!!!!!!
+  // also it seems not to update the loading key...
   const { data, error, loading } = useQuery(query, {
     variables: { rev, id },
   })
 
-  const row = data?.herkunft_rev?.[0] || {}
-  //console.log('Conflict:', { row, data })
+  const revRow = data?.herkunft_rev?.[0] || {}
+  //console.log('Conflict:', { revRow, data })
   const dataArray = [
-    { key: 'Nr', value: row.nr },
-    { key: 'Lokalname', value: row.lokalname },
-    { key: 'Gemeinde', value: row.gemeinde },
-    { key: 'Kanton', value: row.kanton },
-    { key: 'Land', value: row.land },
-    { key: 'Geometrie', value: row.geom_point },
-    { key: 'Bemerkungen', value: row.bemerkungen },
+    { key: 'nr', value: revRow.nr, label: 'Nr' },
+    { key: 'lokalname', value: revRow.lokalname, label: 'Lokalname' },
+    { key: 'gemeinde', value: revRow.gemeinde, label: 'Gemeinde' },
+    { key: 'kanton', value: revRow.kanton, label: 'Kanton' },
+    { key: 'land', value: revRow.land, label: 'Land' },
+    { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
   ]
 
   if (error) {
@@ -70,11 +71,7 @@ const Conflict = ({ id, rev }) => {
         Widersprüchliche Version<Rev>{rev}</Rev>
       </Title>
       <ConflictExplainer name="Herkunft" />
-      {loading ? (
-        'Lade...'
-      ) : (
-        <ConflictData dataArray={dataArray} loading={loading} />
-      )}
+      <ConflictData dataArray={dataArray} row={row} loading={loading} />
     </Container>
   )
 }

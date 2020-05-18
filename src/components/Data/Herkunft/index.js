@@ -97,6 +97,12 @@ const StyledSplitPane = styled(SplitPane)`
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
 `
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
+`
 
 const personOptionQuery = gql`
   query PersonOptionQueryForHerkunft($accountId: String) {
@@ -115,8 +121,6 @@ const Herkunft = ({
   const { filter, user, upsertHerkunft, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
-  const [activeConflict, setActiveConflict] = useState(null)
-
   const isFiltered = runIsFiltered()
   const {
     error: errorHerkunft,
@@ -129,6 +133,13 @@ const Herkunft = ({
   )
 
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  useEffect(() => {
+    if (!showFilter && row && !row._conflicts.includes(activeConflict)) {
+      setActiveConflict(null)
+    }
+  }, [activeConflict, row, row._conflicts, showFilter])
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate(undefined, (d) =>
@@ -313,7 +324,9 @@ const Herkunft = ({
           >
             <FieldsContainer>
               {activeConflict && (
-                <CaseConflictTitle>Aktuelle Version</CaseConflictTitle>
+                <CaseConflictTitle>
+                  Aktuelle Version<Rev>{row._rev}</Rev>
+                </CaseConflictTitle>
               )}
               <TextField
                 key={`${row.id}nr`}
@@ -396,6 +409,7 @@ const Herkunft = ({
                 key={`${activeConflict}/${id}`}
                 rev={activeConflict}
                 id={id}
+                row={row}
               />
             )}
           </StyledSplitPane>
