@@ -23,11 +23,11 @@ const ConflictData = ({ dataArray, loading, row }) => {
   return dataArray.map((d, index) => {
     const inputA = row[d.key]
     const inputB = d.value
-    console.log('ConflictData', { inputA, inputB })
+
     return (
       <Row key={d.key} data-last={index + 1 === dataArray.length}>
         <Key>{`${d.key}:`}</Key>
-        <Diff inputA={row[d.key]} inputB={d.value} type="sentences" />
+        <Diff inputA={inputA} inputB={inputB} type="sentences" />
       </Row>
     )
   })
