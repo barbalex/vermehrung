@@ -1,38 +1,18 @@
 import React, { useCallback, useContext } from 'react'
-import styled from 'styled-components'
-import Button from '@material-ui/core/Button'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import ConflictExplainer from '../../shared/ConflictExplainer'
-import ConflictData from '../../shared/ConflictData'
+import Conflict from '../../shared/Conflict'
 
-const Container = styled.div`
-  padding: 10px;
-`
-const Title = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
-const ButtonRow = styled.div`
-  padding: 15px;
-  display: flex;
-  justify-content: space-evenly;
-`
-const StyledButton = styled(Button)`
-  > span {
-    text-transform: none;
-  }
-`
-
-const Conflict = ({ id, rev, row, callbackAfterEditingConflict }) => {
+const HerkunftConflict = ({
+  id,
+  rev,
+  row,
+  callbackAfterEditingConflict,
+  setActiveConflict,
+}) => {
   const store = useContext(StoreContext)
   const { user, enqueNotification } = store
 
@@ -146,6 +126,7 @@ const Conflict = ({ id, rev, row, callbackAfterEditingConflict }) => {
     callbackAfterEditingConflict,
     enqueNotification,
     revRow._depth,
+    revRow._rev,
     revRow.bemerkungen,
     revRow.gemeinde,
     revRow.herkunft_id,
@@ -153,32 +134,25 @@ const Conflict = ({ id, rev, row, callbackAfterEditingConflict }) => {
     revRow.land,
     revRow.lokalname,
     revRow.nr,
-    row._rev,
     store,
     user.email,
   ])
-
-  if (error) {
-    return <Container>{error.message}</Container>
-  }
+  const onClickSchliessen = useCallback(() => setActiveConflict(null), [
+    setActiveConflict,
+  ])
 
   return (
-    <Container>
-      <Title>
-        Widersprüchliche Version<Rev>{rev}</Rev>
-      </Title>
-      <ConflictExplainer name="Herkunft" />
-      <ConflictData dataArray={dataArray} row={row} loading={loading} />
-      <ButtonRow>
-        <StyledButton onClick={onClickVerwerfen} variant="outlined">
-          verwerfen
-        </StyledButton>
-        <StyledButton onClick={onClickUebernehmen} variant="outlined">
-          übernehmen
-        </StyledButton>
-      </ButtonRow>
-    </Container>
+    <Conflict
+      rev={rev}
+      row={row}
+      dataArray={dataArray}
+      loading={loading}
+      error={error}
+      onClickVerwerfen={onClickVerwerfen}
+      onClickUebernehmen={onClickUebernehmen}
+      onClickSchliessen={onClickSchliessen}
+    />
   )
 }
 
-export default observer(Conflict)
+export default observer(HerkunftConflict)
