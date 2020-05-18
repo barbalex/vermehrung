@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
+import Button from '@material-ui/core/Button'
 
 import { useQuery } from '../../../models/reactUtils'
 import ConflictExplainer from '../../shared/ConflictExplainer'
@@ -17,6 +18,16 @@ const Rev = styled.span`
   padding-left: 7px;
   color: rgba(0, 0, 0, 0.4);
   font-size: 0.8em;
+`
+const ButtonRow = styled.div`
+  padding: 15px;
+  display: flex;
+  justify-content: space-evenly;
+`
+const StyledButton = styled(Button)`
+  > span {
+    text-transform: none;
+  }
 `
 
 const query = gql`
@@ -61,6 +72,13 @@ const Conflict = ({ id, rev, row }) => {
     { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
   ]
 
+  const onClickVerwerfen = useCallback(() => {
+    console.log('TODO:')
+  }, [])
+  const onClickUebernehmen = useCallback(() => {
+    console.log('TODO:')
+  }, [])
+
   if (error) {
     return <Container>{error.message}</Container>
   }
@@ -72,6 +90,14 @@ const Conflict = ({ id, rev, row }) => {
       </Title>
       <ConflictExplainer name="Herkunft" />
       <ConflictData dataArray={dataArray} row={row} loading={loading} />
+      <ButtonRow>
+        <StyledButton onClick={onClickVerwerfen} variant="outlined">
+          verwerfen
+        </StyledButton>
+        <StyledButton onClick={onClickUebernehmen} variant="outlined">
+          übernehmen
+        </StyledButton>
+      </ButtonRow>
     </Container>
   )
 }
