@@ -139,7 +139,7 @@ const Herkunft = ({
     if (!showFilter && row && !row._conflicts.includes(activeConflict)) {
       setActiveConflict(null)
     }
-  }, [activeConflict, row, row._conflicts, showFilter])
+  }, [activeConflict, row, showFilter])
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate(undefined, (d) =>
