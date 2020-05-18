@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import toPgArray from '../../../../../utils/toPgArray'
@@ -114,7 +115,7 @@ const Teilzaehlung = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id: row.id,
+        teilzaehlung_id: row.id,
         zaehlung_id: field === 'zaehlung_id' ? value : row.zaehlung_id,
         teilkultur_id: field === 'teilkultur_id' ? value : row.teilkultur_id,
         anzahl_pflanzen:
@@ -143,6 +144,8 @@ const Teilzaehlung = ({
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       newObject._rev = rev
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
@@ -156,9 +159,9 @@ const Teilzaehlung = ({
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_teilzaehlung_rev',
+        name: 'mutateInsert_teilzaehlung_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          object: newObject,
           on_conflict: {
             constraint: 'teilzaehlung_rev_pkey',
             update_columns: ['id'],

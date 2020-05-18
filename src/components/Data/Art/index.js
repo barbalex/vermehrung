@@ -141,7 +141,7 @@ const Art = ({
       addQueuedQuery({
         name: 'mutateInsert_art_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'art_rev_pkey',
             update_columns: ['id'],

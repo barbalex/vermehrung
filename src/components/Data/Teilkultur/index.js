@@ -238,7 +238,7 @@ const Teilkultur = ({
       addQueuedQuery({
         name: 'mutateInsert_teilkultur_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'teilkultur_rev_pkey',
             update_columns: ['id'],

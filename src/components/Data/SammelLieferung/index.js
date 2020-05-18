@@ -545,7 +545,7 @@ const SammelLieferung = ({
       addQueuedQuery({
         name: 'mutateInsert_sammel_lieferung_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'sammel_lieferung_rev_pkey',
             update_columns: ['id'],

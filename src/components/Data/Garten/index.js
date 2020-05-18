@@ -221,7 +221,7 @@ const Garten = ({
       addQueuedQuery({
         name: 'mutateInsert_garten_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'garten_rev_pkey',
             update_columns: ['id'],

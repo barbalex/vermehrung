@@ -281,7 +281,7 @@ const Kultur = ({
       addQueuedQuery({
         name: 'mutateInsert_kultur_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'kultur_rev_pkey',
             update_columns: ['id'],

@@ -569,7 +569,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       addQueuedQuery({
         name: 'mutateInsert_lieferung_rev_one',
         variables: JSON.stringify({
-          objects: newObject,
+          object: newObject,
           on_conflict: {
             constraint: 'lieferung_rev_pkey',
             update_columns: ['id'],
