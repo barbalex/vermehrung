@@ -21,9 +21,13 @@ const Key = styled.div`
 const ConflictData = ({ dataArray, loading, row }) => {
   if (loading) return 'Lade...'
   return dataArray.map((d, index) => {
-    const inputA = row[d.key]
-    const inputB = d.value
-
+    let inputA = row[d.key]
+    let inputB = d.value
+    // explicitly show when only one of the values is empty
+    if (inputA !== inputB) {
+      inputA = inputA ?? '(kein Wert)'
+      inputB = inputB ?? '(kein Wert)'
+    }
     return (
       <Row key={d.key} data-last={index + 1 === dataArray.length}>
         <Key>{`${d.key}:`}</Key>

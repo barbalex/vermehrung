@@ -59,7 +59,6 @@ const Conflict = ({ id, rev, row, callbackAfterEditingConflict }) => {
   const onClickVerwerfen = useCallback(async () => {
     const depth = revRow._depth + 1
     const newObject = {
-      id: uuidv1(),
       herkunft_id: revRow.herkunft_id,
       nr: revRow.nr,
       lokalname: revRow.lokalname,
@@ -75,6 +74,7 @@ const Conflict = ({ id, rev, row, callbackAfterEditingConflict }) => {
     }
     const rev = `${depth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
+    newObject.id = uuidv1()
     try {
       await store.mutateInsert_herkunft_rev_one({
         object: newObject,
@@ -91,7 +91,6 @@ const Conflict = ({ id, rev, row, callbackAfterEditingConflict }) => {
         },
       })
     }
-    //queryFromHerkunft.refetch()
     callbackAfterEditingConflict()
   }, [
     callbackAfterEditingConflict,
@@ -108,9 +107,56 @@ const Conflict = ({ id, rev, row, callbackAfterEditingConflict }) => {
     store,
     user.email,
   ])
-  const onClickUebernehmen = useCallback(() => {
-    console.log('TODO:')
-  }, [])
+  const onClickUebernehmen = useCallback(async () => {
+    const depth = revRow._depth + 1
+    const newObject = {
+      herkunft_id: revRow.herkunft_id,
+      nr: revRow.nr,
+      lokalname: revRow.lokalname,
+      gemeinde: revRow.gemeinde,
+      kanton: revRow.kanton,
+      land: revRow.land,
+      bemerkungen: revRow.bemerkungen,
+      changed: new window.Date().toISOString(),
+      changed_by: user.email,
+      _parent_rev: revRow._rev,
+      _depth: depth,
+    }
+    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    try {
+      await store.mutateInsert_herkunft_rev_one({
+        object: newObject,
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
+      })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    callbackAfterEditingConflict()
+  }, [
+    callbackAfterEditingConflict,
+    enqueNotification,
+    revRow._depth,
+    revRow.bemerkungen,
+    revRow.gemeinde,
+    revRow.herkunft_id,
+    revRow.kanton,
+    revRow.land,
+    revRow.lokalname,
+    revRow.nr,
+    row._rev,
+    store,
+    user.email,
+  ])
 
   if (error) {
     return <Container>{error.message}</Container>
