@@ -122,13 +122,7 @@ const HerkunftConflict = ({
         },
       })
     }
-    console.log('Conflict, onUebernehmen', {
-      rev,
-      rowRev: row._rev,
-      revRowRev: revRow._rev,
-    })
     callbackAfterUebernehmen()
-    //setActiveConflict(row._rev)
   }, [
     callbackAfterUebernehmen,
     enqueNotification,
@@ -141,7 +135,6 @@ const HerkunftConflict = ({
     revRow.land,
     revRow.lokalname,
     revRow.nr,
-    row._rev,
     store,
     user.email,
   ])

@@ -19,11 +19,13 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 const ButtonRow = styled.div`
-  padding: 15px;
+  padding: 15px 0;
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
 `
 const StyledButton = styled(Button)`
+  margin: 5px !important;
   > span {
     text-transform: none;
   }
