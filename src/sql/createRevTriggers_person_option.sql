@@ -33,7 +33,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      person_id,
       _rev,
       _depth
     from
@@ -41,14 +41,14 @@ begin
     where
       not exists (
         select
-          id
+          person_id
         from
           person_option_rev as t
         where
-          t.id = new.id
+          t.person_id = new.person_id
           and t._parent_rev = person_option_rev._rev)
         and _deleted = false
-        and id = new.id
+        and person_id = new.person_id
     ),
     max_depths as (
       select
@@ -70,7 +70,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      person_option_rev.id,
+      person_option_rev.person_id,
       person_option_rev.ar_name_deutsch,
       person_option_rev.ga_strasse,
       person_option_rev.ga_plz,

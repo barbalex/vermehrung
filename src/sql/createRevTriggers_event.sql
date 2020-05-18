@@ -20,7 +20,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      event_id,
       _rev,
       _depth
     from
@@ -28,14 +28,14 @@ begin
     where
       not exists (
         select
-          id
+          event_id
         from
           event_rev as t
         where
-          t.id = new.id
+          t.event_id = new.event_id
           and t._parent_rev = event_rev._rev)
         and _deleted = false
-        and id = new.id
+        and event_id = new.event_id
     ),
     max_depths as (
       select
@@ -57,7 +57,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      event_rev.id,
+      event_rev.event_id,
       event_rev.kultur_id,
       event_rev.teilkultur_id,
       event_rev.person_id,

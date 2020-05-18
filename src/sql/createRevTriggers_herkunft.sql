@@ -21,7 +21,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      herkunft_id,
       _rev,
       _depth
     from
@@ -29,15 +29,15 @@ begin
     where
       not exists (
         select
-          id
+          herkunft_id
         from
           herkunft_rev as t
         where
-          t.id = new.id
+          t.herkunft_id = new.herkunft_id
           and t._parent_rev = herkunft_rev._rev
       )
       and _deleted = false
-      and id = new.id
+      and herkunft_id = new.herkunft_id
     ),
     max_depths as (
       select
@@ -53,14 +53,14 @@ begin
     ),
     branches as (
       select
-        id,
+        herkunft_id,
         _rev,
         _depth
       from
         herkunft_rev
       where
         _deleted = false
-        and id = new.id
+        and herkunft_id = new.herkunft_id
     ),
     leaves_conflicting_with_branch as (
       select _rev from leaves l 
@@ -81,7 +81,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      herkunft_rev.id,
+      herkunft_rev.herkunft_id,
       herkunft_rev.nr,
       herkunft_rev.lokalname,
       herkunft_rev.gemeinde,
