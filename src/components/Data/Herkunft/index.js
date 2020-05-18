@@ -421,6 +421,7 @@ const Herkunft = ({
                   id={id}
                   row={row}
                   callbackAfterEditingConflict={callbackAfterEditingConflict}
+                  setActiveConflict={setActiveConflict}
                 />
               )}
             </>
