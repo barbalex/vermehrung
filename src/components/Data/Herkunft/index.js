@@ -94,17 +94,6 @@ const StyledSplitPane = styled(SplitPane)`
     overflow: hidden;
   }
 `
-const Konflikte = styled.div`
-  margin-bottom: 10px;
-`
-const Konflikt = styled.div`
-  color: #d84315;
-  font-weight: ${(props) => (props['data-active'] ? 500 : 400)};
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
 `
