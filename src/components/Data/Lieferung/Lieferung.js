@@ -17,6 +17,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -533,10 +534,12 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             : row.anzahl_auspflanzbereit,
         gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
         andere_menge:
-          field === 'andere_menge' ? value.toString() : row.andere_menge,
+          field === 'andere_menge'
+            ? toStringIfPossible(value)
+            : row.andere_menge,
         geplant: field === 'geplant' ? value : row.geplant,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,

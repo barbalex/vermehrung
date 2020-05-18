@@ -15,6 +15,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -226,7 +227,7 @@ const Sammlung = ({
         art_id: field === 'art_id' ? value : row.art_id,
         person_id: field === 'person_id' ? value : row.person_id,
         herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
-        nr: field === 'nr' ? value.toString() : row.nr,
+        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
         datum: field === 'datum' ? value : row.datum,
         von_anzahl_individuen:
           field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
@@ -234,10 +235,12 @@ const Sammlung = ({
           field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
         gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
         andere_menge:
-          field === 'andere_menge' ? value.toString() : row.andere_menge,
+          field === 'andere_menge'
+            ? toStringIfPossible(value)
+            : row.andere_menge,
         geplant: field === 'geplant' ? value : row.geplant,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,

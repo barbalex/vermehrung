@@ -9,6 +9,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -145,13 +146,15 @@ const Herkunft = ({
       const depth = row._depth + 1
       const newObject = {
         id: row.id,
-        nr: field === 'nr' ? value.toString() : row.nr,
-        lokalname: field === 'lokalname' ? value.toString() : row.lokalname,
-        gemeinde: field === 'gemeinde' ? value.toString() : row.gemeinde,
-        kanton: field === 'kanton' ? value.toString() : row.kanton,
-        land: field === 'land' ? value.toString() : row.land,
+        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
+        lokalname:
+          field === 'lokalname' ? toStringIfPossible(value) : row.lokalname,
+        gemeinde:
+          field === 'gemeinde' ? toStringIfPossible(value) : row.gemeinde,
+        kanton: field === 'kanton' ? toStringIfPossible(value) : row.kanton,
+        land: field === 'land' ? toStringIfPossible(value) : row.land,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,

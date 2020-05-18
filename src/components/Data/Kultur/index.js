@@ -18,6 +18,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -254,7 +255,7 @@ const Kultur = ({
         von_anzahl_individuen:
           field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         aktiv: field === 'aktiv' ? value : row.aktiv,
         changed: new window.Date().toISOString(),
         changed_by: user.email,

@@ -10,6 +10,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
@@ -207,12 +208,12 @@ const Teilkultur = ({
       const newObject = {
         id: row.id,
         kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-        name: field === 'name' ? value.toString() : row.name,
-        ort1: field === 'ort1' ? value.toString() : row.ort1,
-        ort2: field === 'ort2' ? value.toString() : row.ort2,
-        ort3: field === 'ort3' ? value.toString() : row.ort3,
+        name: field === 'name' ? toStringIfPossible(value) : row.name,
+        ort1: field === 'ort1' ? toStringIfPossible(value) : row.ort1,
+        ort2: field === 'ort2' ? toStringIfPossible(value) : row.ort2,
+        ort3: field === 'ort3' ? toStringIfPossible(value) : row.ort3,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
