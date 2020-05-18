@@ -23,7 +23,7 @@ const HerkunftConflict = ({
     }),
   )
 
-  const revRow = data?.herkunft_rev?.[0] || {}
+  const revRow = data?.herkunft_rev?.[0] ?? {}
   /*const revRow =
     [...store.herkunft_revs.values()].find(
       (v) => v._rev === rev && v.herkunft_id === id,
