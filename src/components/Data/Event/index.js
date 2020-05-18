@@ -15,6 +15,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
@@ -262,7 +263,9 @@ const Event = ({
         teilkultur_id: field === 'teilkultur_id' ? value : row.teilkultur_id,
         person_id: field === 'person_id' ? value : row.person_id,
         beschreibung:
-          field === 'beschreibung' ? value.toString() : row.beschreibung,
+          field === 'beschreibung'
+            ? toStringIfPossible(value)
+            : row.beschreibung,
         geplant: field === 'geplant' ? value : row.geplant,
         datum: field === 'datum' ? value : row.datum,
         changed: new window.Date().toISOString(),

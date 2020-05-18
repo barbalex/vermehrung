@@ -13,6 +13,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -188,14 +189,14 @@ const Garten = ({
       const depth = row._depth + 1
       const newObject = {
         id,
-        name: field === 'name' ? value.toString() : row.name,
+        name: field === 'name' ? toStringIfPossible(value) : row.name,
         person_id: field === 'person_id' ? value : row.person_id,
-        strasse: field === 'strasse' ? value.toString() : row.strasse,
+        strasse: field === 'strasse' ? toStringIfPossible(value) : row.strasse,
         plz: field === 'plz' ? value : row.plz,
-        ort: field === 'ort' ? value.toString() : row.ort,
+        ort: field === 'ort' ? toStringIfPossible(value) : row.ort,
         aktiv: field === 'aktiv' ? value : row.aktiv,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,

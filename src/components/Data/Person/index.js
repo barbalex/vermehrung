@@ -12,6 +12,7 @@ import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
@@ -146,27 +147,35 @@ const Person = ({
       const depth = row._depth + 1
       const newObject = {
         id,
-        nr: field === 'nr' ? value.toString() : row.nr,
-        name: field === 'name' ? value.toString() : row.name,
+        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
+        name: field === 'name' ? toStringIfPossible(value) : row.name,
         adresszusatz:
-          field === 'adresszusatz' ? value.toString() : row.adresszusatz,
-        strasse: field === 'strasse' ? value.toString() : row.strasse,
+          field === 'adresszusatz'
+            ? toStringIfPossible(value)
+            : row.adresszusatz,
+        strasse: field === 'strasse' ? toStringIfPossible(value) : row.strasse,
         plz: field === 'plz' ? value : row.plz,
-        ort: field === 'ort' ? value.toString() : row.ort,
+        ort: field === 'ort' ? toStringIfPossible(value) : row.ort,
         telefon_privat:
-          field === 'telefon_privat' ? value.toString() : row.telefon_privat,
+          field === 'telefon_privat'
+            ? toStringIfPossible(value)
+            : row.telefon_privat,
         telefon_geschaeft:
           field === 'telefon_geschaeft'
-            ? value.toString()
+            ? toStringIfPossible(value)
             : row.telefon_geschaeft,
         telefon_mobile:
-          field === 'telefon_mobile' ? value.toString() : row.telefon_mobile,
-        email: field === 'email' ? value.toString() : row.email,
+          field === 'telefon_mobile'
+            ? toStringIfPossible(value)
+            : row.telefon_mobile,
+        email: field === 'email' ? toStringIfPossible(value) : row.email,
         kein_email: field === 'kein_email' ? value : row.kein_email,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
-        account_id: field === 'account_id' ? value.toString() : row.account_id,
-        user_role: field === 'user_role' ? value.toString() : row.user_role,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
+        account_id:
+          field === 'account_id' ? toStringIfPossible(value) : row.account_id,
+        user_role:
+          field === 'user_role' ? toStringIfPossible(value) : row.user_role,
         kommerziell: field === 'kommerziell' ? value : row.kommerziell,
         info: field === 'info' ? value : row.info,
         aktiv: field === 'aktiv' ? value : row.aktiv,

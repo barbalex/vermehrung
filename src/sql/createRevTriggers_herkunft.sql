@@ -61,6 +61,7 @@ begin
       where
         _deleted = false
         and herkunft_id = new.herkunft_id
+        and _rev <> new._rev
     ),
     leaves_conflicting_with_branch as (
       select _rev from leaves l 
@@ -70,7 +71,6 @@ begin
           where
             b._depth = l._depth
             and b._rev <> l._rev
-            and l._rev <> new._rev
         )
     ),
     winning_revisions as (

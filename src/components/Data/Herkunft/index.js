@@ -7,9 +7,11 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
 import SplitPane from 'react-split-pane'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -135,11 +137,20 @@ const Herkunft = ({
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterEditingConflict = useCallback(() => {
+    setActiveConflict(null)
+    queryOfHerkunft.refetch()
+  }, [queryOfHerkunft])
   useEffect(() => {
-    if (!showFilter && row && !row._conflicts.includes(activeConflict)) {
+    if (row && row._conflicts && !row._conflicts.includes(activeConflict)) {
       setActiveConflict(null)
     }
   }, [activeConflict, row, showFilter])
+  console.log('Herkunft', {
+    row,
+    activeConflict,
+    _conflicts: row && row._conflicts ? row._conflicts : null,
+  })
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate(undefined, (d) =>
@@ -190,20 +201,24 @@ const Herkunft = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id: row.id,
-        nr: field === 'nr' ? value.toString() : row.nr,
-        lokalname: field === 'lokalname' ? value.toString() : row.lokalname,
-        gemeinde: field === 'gemeinde' ? value.toString() : row.gemeinde,
-        kanton: field === 'kanton' ? value.toString() : row.kanton,
-        land: field === 'land' ? value.toString() : row.land,
+        herkunft_id: row.id,
+        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
+        lokalname:
+          field === 'lokalname' ? toStringIfPossible(value) : row.lokalname,
+        gemeinde:
+          field === 'gemeinde' ? toStringIfPossible(value) : row.gemeinde,
+        kanton: field === 'kanton' ? toStringIfPossible(value) : row.kanton,
+        land: field === 'land' ? toStringIfPossible(value) : row.land,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       newObject._rev = rev
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
@@ -216,6 +231,7 @@ const Herkunft = ({
       newObjectForStore._revisions = row._revisions
         ? [rev, ...row._revisions]
         : [rev]
+      console.log('Herkunft, saveToDb', { row, newObject, newObjectForStore })
       addQueuedQuery({
         name: 'mutateInsert_herkunft_rev_one',
         variables: JSON.stringify({
@@ -407,10 +423,10 @@ const Herkunft = ({
             <>
               {online && !!activeConflict && (
                 <Conflict
-                  key={`${activeConflict}/${id}`}
                   rev={activeConflict}
                   id={id}
                   row={row}
+                  callbackAfterEditingConflict={callbackAfterEditingConflict}
                 />
               )}
             </>

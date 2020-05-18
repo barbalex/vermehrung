@@ -10,6 +10,7 @@ import md5 from 'blueimp-md5'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import toPgArray from '../../../../../utils/toPgArray'
+import toStringIfPossible from '../../../../../utils/toStringIfPossible'
 import TextField from '../../../../shared/TextField'
 import Select from '../../../../shared/SelectCreatable'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
@@ -125,13 +126,15 @@ const Teilzaehlung = ({
         anzahl_mutterpflanzen:
           field === 'anzahl_mutterpflanzen' ? value : row.anzahl_mutterpflanzen,
         andere_menge:
-          field === 'andere_menge' ? value.toString() : row.andere_menge,
+          field === 'andere_menge'
+            ? toStringIfPossible(value)
+            : row.andere_menge,
         auspflanzbereit_beschreibung:
           field === 'auspflanzbereit_beschreibung'
-            ? value.toString()
+            ? toStringIfPossible(value)
             : row.auspflanzbereit_beschreibung,
         bemerkungen:
-          field === 'bemerkungen' ? value.toString() : row.bemerkungen,
+          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         prognose_von_tz:
           field === 'prognose_von_tz' ? value : row.prognose_von_tz,
         changed: new window.Date().toISOString(),

@@ -8,6 +8,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
+import toStringIfPossible from '../../utils/toStringIfPossible'
+
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`
   padding-left: 1px !important;
@@ -36,7 +38,7 @@ const RadioButtonGroup = ({
   saveToDb,
 }) => {
   const onClickButton = useCallback(
-    event => {
+    (event) => {
       /**
        * if clicked element is active value: set null
        * Problem: does not work on change event on RadioGroup
@@ -60,7 +62,7 @@ const RadioButtonGroup = ({
     [value, name, saveToDb],
   )
   const onChangeGroup = useCallback(
-    event => {
+    (event) => {
       // group only changes if value changes
       const targetValue = event.target.value
       // values are passed as strings > need to convert
@@ -84,7 +86,7 @@ const RadioButtonGroup = ({
   )
 
   const valueSelected =
-    value !== null && value !== undefined ? value.toString() : ''
+    value !== null && value !== undefined ? toStringIfPossible(value) : ''
 
   return (
     <StyledFormControl
@@ -101,7 +103,7 @@ const RadioButtonGroup = ({
         {dataSource.map((e, index) => (
           <FormControlLabel
             key={index}
-            value={e.value.toString()}
+            value={toStringIfPossible(e.value)}
             control={<StyledRadio color="primary" />}
             label={e.label}
             onClick={onClickButton}
