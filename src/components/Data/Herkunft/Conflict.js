@@ -10,7 +10,8 @@ const HerkunftConflict = ({
   id,
   rev,
   row,
-  callbackAfterEditingConflict,
+  callbackAfterVerwerfen,
+  callbackAfterUebernehmen,
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
@@ -71,9 +72,9 @@ const HerkunftConflict = ({
         },
       })
     }
-    callbackAfterEditingConflict()
+    callbackAfterVerwerfen()
   }, [
-    callbackAfterEditingConflict,
+    callbackAfterVerwerfen,
     enqueNotification,
     revRow._depth,
     revRow._rev,
@@ -121,9 +122,15 @@ const HerkunftConflict = ({
         },
       })
     }
-    callbackAfterEditingConflict()
+    console.log('Conflict, onUebernehmen', {
+      rev,
+      rowRev: row._rev,
+      revRowRev: revRow._rev,
+    })
+    callbackAfterUebernehmen()
+    //setActiveConflict(row._rev)
   }, [
-    callbackAfterEditingConflict,
+    callbackAfterUebernehmen,
     enqueNotification,
     revRow._depth,
     revRow._rev,
@@ -134,6 +141,7 @@ const HerkunftConflict = ({
     revRow.land,
     revRow.lokalname,
     revRow.nr,
+    row._rev,
     store,
     user.email,
   ])
