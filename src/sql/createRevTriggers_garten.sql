@@ -22,7 +22,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      garten_id,
       _rev,
       _depth
     from
@@ -30,14 +30,14 @@ begin
     where
       not exists (
         select
-          id
+          garten_id
         from
           garten_rev as t
         where
-          t.id = new.id
+          t.garten_id = new.garten_id
           and t._parent_rev = garten_rev._rev)
         and _deleted = false
-        and id = new.id
+        and garten_id = new.garten_id
     ),
     max_depths as (
       select
@@ -59,7 +59,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      garten_rev.id,
+      garten_rev.garten_id,
       garten_rev.name,
       garten_rev.person_id,
       garten_rev.strasse,

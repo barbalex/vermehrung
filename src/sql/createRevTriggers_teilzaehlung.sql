@@ -23,7 +23,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      teilzaehlung_id,
       _rev,
       _depth
     from
@@ -31,14 +31,14 @@ begin
     where
       not exists (
         select
-          id
+          teilzaehlung_id
         from
           teilzaehlung_rev as t
         where
-          t.id = new.id
+          t.teilzaehlung_id = new.teilzaehlung_id
           and t._parent_rev = teilzaehlung_rev._rev)
         and _deleted = false
-        and id = new.id
+        and teilzaehlung_id = new.teilzaehlung_id
     ),
     max_depths as (
       select
@@ -60,7 +60,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      teilzaehlung_rev.id,
+      teilzaehlung_rev.teilzaehlung_id,
       teilzaehlung_rev.zaehlung_id,
       teilzaehlung_rev.teilkultur_id,
       teilzaehlung_rev.anzahl_pflanzen,

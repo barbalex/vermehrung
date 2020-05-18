@@ -15,7 +15,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      art_id,
       _rev,
       _depth
     from
@@ -23,14 +23,14 @@ begin
     where
       not exists (
         select
-          id
+          art_id
         from
           art_rev as t
         where
-          t.id = new.id
+          t.art_id = new.art_id
           and t._parent_rev = art_rev._rev)
         and _deleted = false
-        and id = new.id
+        and art_id = new.art_id
     ),
     max_depths as (
       select
@@ -52,7 +52,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      art_rev.id,
+      art_rev.art_id,
       art_rev.ae_id,
       art_rev.changed,
       art_rev.changed_by,
@@ -67,7 +67,6 @@ begin
   on conflict on constraint art_pkey
     do update set
       -- do not update id
-      id = excluded.id,
       ae_id = excluded.ae_id,
       changed = excluded.changed,
       changed_by = excluded.changed_by,

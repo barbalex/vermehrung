@@ -28,7 +28,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      sammel_lieferung_id,
       _rev,
       _depth
     from
@@ -36,14 +36,14 @@ begin
     where
       not exists (
         select
-          id
+          sammel_lieferung_id
         from
           sammel_lieferung_rev as t
         where
-          t.id = new.id
+          t.sammel_lieferung_id = new.sammel_lieferung_id
           and t._parent_rev = sammel_lieferung_rev._rev)
         and _deleted = false
-        and id = new.id
+        and sammel_lieferung_id = new.sammel_lieferung_id
     ),
     max_depths as (
       select
@@ -65,7 +65,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      sammel_lieferung_rev.id,
+      sammel_lieferung_rev.sammel_lieferung_id,
       sammel_lieferung_rev.art_id,
       sammel_lieferung_rev.person_id,
       sammel_lieferung_rev.von_sammlung_id,

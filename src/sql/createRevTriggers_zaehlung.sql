@@ -18,7 +18,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      zaehlung_id,
       _rev,
       _depth
     from
@@ -26,14 +26,14 @@ begin
     where
       not exists (
         select
-          id
+          zaehlung_id
         from
           zaehlung_rev as t
         where
-          t.id = new.id
+          t.zaehlung_id = new.zaehlung_id
           and t._parent_rev = zaehlung_rev._rev)
         and _deleted = false
-        and id = new.id
+        and zaehlung_id = new.zaehlung_id
     ),
     max_depths as (
       select
@@ -55,7 +55,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      zaehlung_rev.id,
+      zaehlung_rev.zaehlung_id,
       zaehlung_rev.kultur_id,
       zaehlung_rev.datum,
       zaehlung_rev.prognose,

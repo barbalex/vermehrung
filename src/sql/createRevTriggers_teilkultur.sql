@@ -20,7 +20,7 @@ begin
   )
   with leaves as (
     select
-      id,
+      teilkultur_id,
       _rev,
       _depth
     from
@@ -28,14 +28,14 @@ begin
     where
       not exists (
         select
-          id
+          teilkultur_id
         from
           teilkultur_rev as t
         where
-          t.id = new.id
+          t.teilkultur_id = new.teilkultur_id
           and t._parent_rev = teilkultur_rev._rev)
         and _deleted = false
-        and id = new.id
+        and teilkultur_id = new.teilkultur_id
     ),
     max_depths as (
       select
@@ -57,7 +57,7 @@ begin
         join max_depths on leaves._depth = max_depths.max_depth
     )
     select
-      teilkultur_rev.id,
+      teilkultur_rev.teilkultur_id,
       teilkultur_rev.kultur_id,
       teilkultur_rev.name,
       teilkultur_rev.ort1,
