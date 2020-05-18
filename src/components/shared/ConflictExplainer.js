@@ -13,6 +13,7 @@ const OptionalHelp = styled.details`
 const Summary = styled.summary`
   user-select: none;
   padding-bottom: 5px;
+  font-weight: 500;
   &:focus {
     outline: none !important;
   }
@@ -23,6 +24,9 @@ const Summary = styled.summary`
 `
 const Details = styled.div`
   padding-left: 17px;
+`
+const Ul = styled.ul`
+  margin-bottom: 0;
 `
 
 const ConflictExplainer = ({ name }) => (
@@ -35,7 +39,7 @@ const ConflictExplainer = ({ name }) => (
       </ExplainText>
       <ExplainText>
         Konflikte können entstehen, wenn:
-        <ul>
+        <Ul>
           <li>
             zwei Personen
             <br /> oder eine Person an verschiedenen Geräten
@@ -44,7 +48,7 @@ const ConflictExplainer = ({ name }) => (
             gleichzeitig <br />
             oder während mindestens eine der Personen offline ist
           </li>
-        </ul>
+        </Ul>
         {`...an derselben ${name} arbeiten.`}
       </ExplainText>
       <ExplainText>
