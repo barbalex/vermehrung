@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -115,7 +116,7 @@ const Art = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id: row.id,
+        art_id: row.id,
         ae_id: value,
         changed: new window.Date().toISOString(),
         changed_by: user.email,
@@ -123,6 +124,8 @@ const Art = ({
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       newObject._rev = rev
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
@@ -136,9 +139,9 @@ const Art = ({
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_art_rev',
+        name: 'mutateInsert_art_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          objects: newObject,
           on_conflict: {
             constraint: 'art_rev_pkey',
             update_columns: ['id'],

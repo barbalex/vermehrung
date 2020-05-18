@@ -231,7 +231,6 @@ const Herkunft = ({
       newObjectForStore._revisions = row._revisions
         ? [rev, ...row._revisions]
         : [rev]
-      console.log('Herkunft, saveToDb', { row, newObject, newObjectForStore })
       addQueuedQuery({
         name: 'mutateInsert_herkunft_rev_one',
         variables: JSON.stringify({

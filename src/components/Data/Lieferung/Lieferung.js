@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -512,7 +513,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id: row.id,
+        lieferung_id: row.id,
         sammel_lieferung_id:
           field === 'sammel_lieferung_id' ? value : row.sammel_lieferung_id,
         art_id: field === 'art_id' ? value : row.art_id,
@@ -551,6 +552,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         newObject.nach_kultur_id = null
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       newObject._rev = rev
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
@@ -564,9 +567,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_lieferung_rev',
+        name: 'mutateInsert_lieferung_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          objects: newObject,
           on_conflict: {
             constraint: 'lieferung_rev_pkey',
             update_columns: ['id'],

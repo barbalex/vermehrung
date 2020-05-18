@@ -7,6 +7,7 @@ import memoizeOne from 'memoize-one'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -206,7 +207,7 @@ const Teilkultur = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id: row.id,
+        teilkultur_id: row.id,
         kultur_id: field === 'kultur_id' ? value : row.kultur_id,
         name: field === 'name' ? toStringIfPossible(value) : row.name,
         ort1: field === 'ort1' ? toStringIfPossible(value) : row.ort1,
@@ -220,6 +221,8 @@ const Teilkultur = ({
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       newObject._rev = rev
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
@@ -233,9 +236,9 @@ const Teilkultur = ({
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_teilkultur_rev',
+        name: 'mutateInsert_teilkultur_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          objects: newObject,
           on_conflict: {
             constraint: 'teilkultur_rev_pkey',
             update_columns: ['id'],

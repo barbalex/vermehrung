@@ -53,6 +53,30 @@ begin
       from
         leaves
         join max_depths on leaves._depth = max_depths.max_depth
+    ),
+    branches as (
+      select
+        zaehlung_id,
+        _rev,
+        _depth
+      from
+        zaehlung_rev
+      where
+        _deleted = false
+        and zaehlung_id = new.zaehlung_id
+        and _rev <> new._rev
+    ),
+    leaves_conflicting_with_branch as (
+      select _rev from leaves l
+      where
+        exists (
+          select _rev from branches b
+          where
+            b._depth = l._depth
+            and b._rev <> l._rev
+            -- exclude all branches above the winning revision? 
+            -- see herkunft for more
+        )
     )
     select
       zaehlung_rev.zaehlung_id,
@@ -66,7 +90,14 @@ begin
       zaehlung_rev._revisions,
       zaehlung_rev._parent_rev,
       zaehlung_rev._depth,
-      (select array(select * from conflicts)) as _conflicts
+      (select array(
+        select * from (
+          select * from conflicts
+          union select * from leaves_conflicting_with_branch
+        ) as all_conflicts
+        -- prevent ever choosing same rev as conflict
+        where all_conflicts._rev <> zaehlung_rev._rev
+      )) as _conflicts
     from
       zaehlung_rev
       join winning_revisions on zaehlung_rev._rev = winning_revisions._rev
