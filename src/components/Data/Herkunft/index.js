@@ -404,14 +404,16 @@ const Herkunft = ({
                 <Files parentId={row.id} parent="herkunft" />
               )}
             </FieldsContainer>
-            {!!activeConflict && (
-              <Conflict
-                key={`${activeConflict}/${id}`}
-                rev={activeConflict}
-                id={id}
-                row={row}
-              />
-            )}
+            <>
+              {!!activeConflict && (
+                <Conflict
+                  key={`${activeConflict}/${id}`}
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                />
+              )}
+            </>
           </StyledSplitPane>
         </Container>
       </Container>
