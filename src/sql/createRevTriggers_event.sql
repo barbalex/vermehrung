@@ -55,6 +55,30 @@ begin
       from
         leaves
         join max_depths on leaves._depth = max_depths.max_depth
+    ),
+    branches as (
+      select
+        event_id,
+        _rev,
+        _depth
+      from
+        event_rev
+      where
+        _deleted = false
+        and event_id = new.event_id
+        and _rev <> new._rev
+    ),
+    leaves_conflicting_with_branch as (
+      select _rev from leaves l
+      where
+        exists (
+          select _rev from branches b
+          where
+            b._depth = l._depth
+            and b._rev <> l._rev
+            -- exclude all branches above the winning revision? 
+            -- see herkunft for more
+        )
     )
     select
       event_rev.event_id,
@@ -70,7 +94,14 @@ begin
       event_rev._revisions,
       event_rev._parent_rev,
       event_rev._depth,
-      (select array(select * from conflicts)) as _conflicts
+      (select array(
+        select * from (
+          select * from conflicts
+          union select * from leaves_conflicting_with_branch
+        ) as all_conflicts
+        -- prevent ever choosing same rev as conflict
+        where all_conflicts._rev <> event_rev._rev
+      )) as _conflicts
     from
       event_rev
       join winning_revisions on event_rev._rev = winning_revisions._rev

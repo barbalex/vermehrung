@@ -61,6 +61,30 @@ begin
       from
         leaves
         join max_depths on leaves._depth = max_depths.max_depth
+    ),
+    branches as (
+      select
+        sammlung_id,
+        _rev,
+        _depth
+      from
+        sammlung_rev
+      where
+        _deleted = false
+        and sammlung_id = new.sammlung_id
+        and _rev <> new._rev
+    ),
+    leaves_conflicting_with_branch as (
+      select _rev from leaves l
+      where
+        exists (
+          select _rev from branches b
+          where
+            b._depth = l._depth
+            and b._rev <> l._rev
+            -- exclude all branches above the winning revision? 
+            -- see herkunft for more
+        )
     )
     select
       sammlung_rev.sammlung_id,
@@ -82,7 +106,14 @@ begin
       sammlung_rev._revisions,
       sammlung_rev._parent_rev,
       sammlung_rev._depth,
-      (select array(select * from conflicts)) as _conflicts
+      (select array(
+        select * from (
+          select * from conflicts
+          union select * from leaves_conflicting_with_branch
+        ) as all_conflicts
+        -- prevent ever choosing same rev as conflict
+        where all_conflicts._rev <> sammlung_rev._rev
+      )) as _conflicts
     from
       sammlung_rev
       join winning_revisions on sammlung_rev._rev = winning_revisions._rev

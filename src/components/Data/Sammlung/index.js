@@ -12,6 +12,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -223,7 +224,7 @@ const Sammlung = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id,
+        sammlung_id: id,
         art_id: field === 'art_id' ? value : row.art_id,
         person_id: field === 'person_id' ? value : row.person_id,
         herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
@@ -247,6 +248,8 @@ const Sammlung = ({
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       newObject._rev = rev
       const newObjectForStore = { ...newObject }
       // convert array to string as hasura does not support arrays yet
@@ -260,9 +263,9 @@ const Sammlung = ({
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_sammlung_rev',
+        name: 'mutateInsert_sammlung_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          objects: newObject,
           on_conflict: {
             constraint: 'sammlung_rev_pkey',
             update_columns: ['id'],

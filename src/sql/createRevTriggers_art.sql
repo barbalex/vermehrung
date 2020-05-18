@@ -50,6 +50,30 @@ begin
       from
         leaves
         join max_depths on leaves._depth = max_depths.max_depth
+    ),
+    branches as (
+      select
+        art_id,
+        _rev,
+        _depth
+      from
+        art_rev
+      where
+        _deleted = false
+        and art_id = new.art_id
+        and _rev <> new._rev
+    ),
+    leaves_conflicting_with_branch as (
+      select _rev from leaves l
+      where
+        exists (
+          select _rev from branches b
+          where
+            b._depth = l._depth
+            and b._rev <> l._rev
+            -- exclude all branches above the winning revision? 
+            -- see herkunft for more
+        )
     )
     select
       art_rev.art_id,
@@ -60,7 +84,14 @@ begin
       art_rev._revisions,
       art_rev._parent_rev,
       art_rev._depth,
-      (select array(select * from conflicts)) as _conflicts
+      (select array(
+        select * from (
+          select * from conflicts
+          union select * from leaves_conflicting_with_branch
+        ) as all_conflicts
+        -- prevent ever choosing same rev as conflict
+        where all_conflicts._rev <> art_rev._rev
+      )) as _conflicts
     from
       art_rev
       join winning_revisions on art_rev._rev = winning_revisions._rev

@@ -10,6 +10,7 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -188,7 +189,7 @@ const Garten = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id,
+        garten_id: id,
         name: field === 'name' ? toStringIfPossible(value) : row.name,
         person_id: field === 'person_id' ? value : row.person_id,
         strasse: field === 'strasse' ? toStringIfPossible(value) : row.strasse,
@@ -203,6 +204,8 @@ const Garten = ({
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       newObject._rev = rev
       const newObjectForStore = { ...newObject }
       // convert array to string as hasura does not support arrays yet
@@ -216,9 +219,9 @@ const Garten = ({
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_garten_rev',
+        name: 'mutateInsert_garten_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          objects: newObject,
           on_conflict: {
             constraint: 'garten_rev_pkey',
             update_columns: ['id'],
