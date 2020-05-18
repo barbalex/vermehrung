@@ -1318,12 +1318,13 @@ type art_rev {
   _rev: String!
   _revisions: _text
   ae_id: uuid
+  art_id: uuid!
 
   # An object relationship
   av_art: av_art
   changed: timestamp
   changed_by: String
-  id: uuid!
+  id: ID!
 
   # An array relationship
   kulturs(
@@ -1396,7 +1397,6 @@ type art_rev {
     # filter the rows returned
     where: lieferung_bool_exp
   ): lieferung_aggregate!
-  rev_id: ID!
 
   # An array relationship
   sammel_lieferungs(
@@ -1534,13 +1534,13 @@ input art_rev_bool_exp {
   _rev: String_comparison_exp
   _revisions: _text_comparison_exp
   ae_id: uuid_comparison_exp
+  art_id: uuid_comparison_exp
   av_art: av_art_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   id: uuid_comparison_exp
   kulturs: kultur_bool_exp
   lieferungs: lieferung_bool_exp
-  rev_id: uuid_comparison_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
   sammlungs: sammlung_bool_exp
 }
@@ -1567,13 +1567,13 @@ input art_rev_insert_input {
   _rev: String
   _revisions: _text
   ae_id: uuid
+  art_id: uuid
   av_art: av_art_obj_rel_insert_input
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   kulturs: kultur_arr_rel_insert_input
   lieferungs: lieferung_arr_rel_insert_input
-  rev_id: ID
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
   sammlungs: sammlung_arr_rel_insert_input
 }
@@ -1584,10 +1584,10 @@ type art_rev_max_fields {
   _parent_rev: String
   _rev: String
   ae_id: uuid
+  art_id: uuid
   changed: timestamp
   changed_by: String
-  id: uuid
-  rev_id: ID
+  id: ID
 }
 
 # order by max() on columns of table "art_rev"
@@ -1596,10 +1596,10 @@ input art_rev_max_order_by {
   _parent_rev: order_by
   _rev: order_by
   ae_id: order_by
+  art_id: order_by
   changed: order_by
   changed_by: order_by
   id: order_by
-  rev_id: order_by
 }
 
 # aggregate min on columns
@@ -1608,10 +1608,10 @@ type art_rev_min_fields {
   _parent_rev: String
   _rev: String
   ae_id: uuid
+  art_id: uuid
   changed: timestamp
   changed_by: String
-  id: uuid
-  rev_id: ID
+  id: ID
 }
 
 # order by min() on columns of table "art_rev"
@@ -1620,10 +1620,10 @@ input art_rev_min_order_by {
   _parent_rev: order_by
   _rev: order_by
   ae_id: order_by
+  art_id: order_by
   changed: order_by
   changed_by: order_by
   id: order_by
-  rev_id: order_by
 }
 
 # response of any mutation on the table "art_rev"
@@ -1656,20 +1656,20 @@ input art_rev_order_by {
   _rev: order_by
   _revisions: order_by
   ae_id: order_by
+  art_id: order_by
   av_art: av_art_order_by
   changed: order_by
   changed_by: order_by
   id: order_by
   kulturs_aggregate: kultur_aggregate_order_by
   lieferungs_aggregate: lieferung_aggregate_order_by
-  rev_id: order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
 }
 
 # primary key columns input for table: "art_rev"
 input art_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "art_rev"
@@ -1693,6 +1693,9 @@ enum art_rev_select_column {
   ae_id
 
   # column name
+  art_id
+
+  # column name
   changed
 
   # column name
@@ -1700,9 +1703,6 @@ enum art_rev_select_column {
 
   # column name
   id
-
-  # column name
-  rev_id
 }
 
 # input type for updating data in table "art_rev"
@@ -1713,10 +1713,10 @@ input art_rev_set_input {
   _rev: String
   _revisions: _text
   ae_id: uuid
+  art_id: uuid
   changed: timestamp
   changed_by: String
-  id: uuid
-  rev_id: ID
+  id: ID
 }
 
 # aggregate stddev on columns
@@ -1780,6 +1780,9 @@ enum art_rev_update_column {
   ae_id
 
   # column name
+  art_id
+
+  # column name
   changed
 
   # column name
@@ -1787,9 +1790,6 @@ enum art_rev_update_column {
 
   # column name
   id
-
-  # column name
-  rev_id
 }
 
 # aggregate var_pop on columns
@@ -2880,8 +2880,9 @@ type event_rev {
   changed: timestamp
   changed_by: String
   datum: date
+  event_id: uuid!
   geplant: Boolean
-  id: uuid!
+  id: ID!
 
   # An object relationship
   kultur: kultur
@@ -2890,7 +2891,6 @@ type event_rev {
   # An object relationship
   person: person
   person_id: uuid
-  rev_id: ID!
 
   # An object relationship
   teilkultur: teilkultur
@@ -2963,13 +2963,13 @@ input event_rev_bool_exp {
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   datum: date_comparison_exp
+  event_id: uuid_comparison_exp
   geplant: Boolean_comparison_exp
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
   person: person_bool_exp
   person_id: uuid_comparison_exp
-  rev_id: uuid_comparison_exp
   teilkultur: teilkultur_bool_exp
   teilkultur_id: uuid_comparison_exp
 }
@@ -2999,13 +2999,13 @@ input event_rev_insert_input {
   changed: timestamp
   changed_by: String
   datum: date
+  event_id: uuid
   geplant: Boolean
-  id: uuid
+  id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
   person: person_obj_rel_insert_input
   person_id: uuid
-  rev_id: ID
   teilkultur: teilkultur_obj_rel_insert_input
   teilkultur_id: uuid
 }
@@ -3019,10 +3019,10 @@ type event_rev_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  id: uuid
+  event_id: uuid
+  id: ID
   kultur_id: uuid
   person_id: uuid
-  rev_id: ID
   teilkultur_id: uuid
 }
 
@@ -3035,10 +3035,10 @@ input event_rev_max_order_by {
   changed: order_by
   changed_by: order_by
   datum: order_by
+  event_id: order_by
   id: order_by
   kultur_id: order_by
   person_id: order_by
-  rev_id: order_by
   teilkultur_id: order_by
 }
 
@@ -3051,10 +3051,10 @@ type event_rev_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  id: uuid
+  event_id: uuid
+  id: ID
   kultur_id: uuid
   person_id: uuid
-  rev_id: ID
   teilkultur_id: uuid
 }
 
@@ -3067,10 +3067,10 @@ input event_rev_min_order_by {
   changed: order_by
   changed_by: order_by
   datum: order_by
+  event_id: order_by
   id: order_by
   kultur_id: order_by
   person_id: order_by
-  rev_id: order_by
   teilkultur_id: order_by
 }
 
@@ -3107,20 +3107,20 @@ input event_rev_order_by {
   changed: order_by
   changed_by: order_by
   datum: order_by
+  event_id: order_by
   geplant: order_by
   id: order_by
   kultur: kultur_order_by
   kultur_id: order_by
   person: person_order_by
   person_id: order_by
-  rev_id: order_by
   teilkultur: teilkultur_order_by
   teilkultur_id: order_by
 }
 
 # primary key columns input for table: "event_rev"
 input event_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "event_rev"
@@ -3153,6 +3153,9 @@ enum event_rev_select_column {
   datum
 
   # column name
+  event_id
+
+  # column name
   geplant
 
   # column name
@@ -3163,9 +3166,6 @@ enum event_rev_select_column {
 
   # column name
   person_id
-
-  # column name
-  rev_id
 
   # column name
   teilkultur_id
@@ -3182,11 +3182,11 @@ input event_rev_set_input {
   changed: timestamp
   changed_by: String
   datum: date
+  event_id: uuid
   geplant: Boolean
-  id: uuid
+  id: ID
   kultur_id: uuid
   person_id: uuid
-  rev_id: ID
   teilkultur_id: uuid
 }
 
@@ -3260,6 +3260,9 @@ enum event_rev_update_column {
   datum
 
   # column name
+  event_id
+
+  # column name
   geplant
 
   # column name
@@ -3270,9 +3273,6 @@ enum event_rev_update_column {
 
   # column name
   person_id
-
-  # column name
-  rev_id
 
   # column name
   teilkultur_id
@@ -4080,8 +4080,9 @@ type garten_rev {
   bemerkungen: String
   changed: timestamp
   changed_by: String
+  garten_id: uuid!
   geom_point: geometry
-  id: uuid!
+  id: ID!
 
   # An array relationship
   kulturs(
@@ -4125,7 +4126,6 @@ type garten_rev {
   person: person
   person_id: uuid
   plz: Int
-  rev_id: ID!
   strasse: String
 }
 
@@ -4197,6 +4197,7 @@ input garten_rev_bool_exp {
   bemerkungen: String_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
+  garten_id: uuid_comparison_exp
   geom_point: geometry_comparison_exp
   id: uuid_comparison_exp
   kulturs: kultur_bool_exp
@@ -4205,7 +4206,6 @@ input garten_rev_bool_exp {
   person: person_bool_exp
   person_id: uuid_comparison_exp
   plz: Int_comparison_exp
-  rev_id: uuid_comparison_exp
   strasse: String_comparison_exp
 }
 
@@ -4235,15 +4235,15 @@ input garten_rev_insert_input {
   bemerkungen: String
   changed: timestamp
   changed_by: String
+  garten_id: uuid
   geom_point: geometry
-  id: uuid
+  id: ID
   kulturs: kultur_arr_rel_insert_input
   name: String
   ort: String
   person: person_obj_rel_insert_input
   person_id: uuid
   plz: Int
-  rev_id: ID
   strasse: String
 }
 
@@ -4255,12 +4255,12 @@ type garten_rev_max_fields {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  garten_id: uuid
+  id: ID
   name: String
   ort: String
   person_id: uuid
   plz: Int
-  rev_id: ID
   strasse: String
 }
 
@@ -4272,12 +4272,12 @@ input garten_rev_max_order_by {
   bemerkungen: order_by
   changed: order_by
   changed_by: order_by
+  garten_id: order_by
   id: order_by
   name: order_by
   ort: order_by
   person_id: order_by
   plz: order_by
-  rev_id: order_by
   strasse: order_by
 }
 
@@ -4289,12 +4289,12 @@ type garten_rev_min_fields {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  garten_id: uuid
+  id: ID
   name: String
   ort: String
   person_id: uuid
   plz: Int
-  rev_id: ID
   strasse: String
 }
 
@@ -4306,12 +4306,12 @@ input garten_rev_min_order_by {
   bemerkungen: order_by
   changed: order_by
   changed_by: order_by
+  garten_id: order_by
   id: order_by
   name: order_by
   ort: order_by
   person_id: order_by
   plz: order_by
-  rev_id: order_by
   strasse: order_by
 }
 
@@ -4348,6 +4348,7 @@ input garten_rev_order_by {
   bemerkungen: order_by
   changed: order_by
   changed_by: order_by
+  garten_id: order_by
   geom_point: order_by
   id: order_by
   kulturs_aggregate: kultur_aggregate_order_by
@@ -4356,13 +4357,12 @@ input garten_rev_order_by {
   person: person_order_by
   person_id: order_by
   plz: order_by
-  rev_id: order_by
   strasse: order_by
 }
 
 # primary key columns input for table: "garten_rev"
 input garten_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "garten_rev"
@@ -4395,6 +4395,9 @@ enum garten_rev_select_column {
   changed_by
 
   # column name
+  garten_id
+
+  # column name
   geom_point
 
   # column name
@@ -4413,9 +4416,6 @@ enum garten_rev_select_column {
   plz
 
   # column name
-  rev_id
-
-  # column name
   strasse
 }
 
@@ -4430,13 +4430,13 @@ input garten_rev_set_input {
   bemerkungen: String
   changed: timestamp
   changed_by: String
+  garten_id: uuid
   geom_point: geometry
-  id: uuid
+  id: ID
   name: String
   ort: String
   person_id: uuid
   plz: Int
-  rev_id: ID
   strasse: String
 }
 
@@ -4518,6 +4518,9 @@ enum garten_rev_update_column {
   changed_by
 
   # column name
+  garten_id
+
+  # column name
   geom_point
 
   # column name
@@ -4534,9 +4537,6 @@ enum garten_rev_update_column {
 
   # column name
   plz
-
-  # column name
-  rev_id
 
   # column name
   strasse
@@ -6545,7 +6545,8 @@ type herkunft_rev {
   changed_by: String
   gemeinde: String
   geom_point: geometry
-  id: uuid!
+  herkunft_id: uuid!
+  id: ID!
   kanton: String
 
   # An array relationship
@@ -6586,7 +6587,6 @@ type herkunft_rev {
   land: String
   lokalname: String
   nr: String
-  rev_id: ID!
 
   # An array relationship
   sammlungs(
@@ -6692,13 +6692,13 @@ input herkunft_rev_bool_exp {
   changed_by: String_comparison_exp
   gemeinde: String_comparison_exp
   geom_point: geometry_comparison_exp
+  herkunft_id: uuid_comparison_exp
   id: uuid_comparison_exp
   kanton: String_comparison_exp
   kulturs: kultur_bool_exp
   land: String_comparison_exp
   lokalname: String_comparison_exp
   nr: String_comparison_exp
-  rev_id: uuid_comparison_exp
   sammlungs: sammlung_bool_exp
 }
 
@@ -6728,13 +6728,13 @@ input herkunft_rev_insert_input {
   changed_by: String
   gemeinde: String
   geom_point: geometry
-  id: uuid
+  herkunft_id: uuid
+  id: ID
   kanton: String
   kulturs: kultur_arr_rel_insert_input
   land: String
   lokalname: String
   nr: String
-  rev_id: ID
   sammlungs: sammlung_arr_rel_insert_input
 }
 
@@ -6747,12 +6747,12 @@ type herkunft_rev_max_fields {
   changed: timestamp
   changed_by: String
   gemeinde: String
-  id: uuid
+  herkunft_id: uuid
+  id: ID
   kanton: String
   land: String
   lokalname: String
   nr: String
-  rev_id: ID
 }
 
 # order by max() on columns of table "herkunft_rev"
@@ -6764,12 +6764,12 @@ input herkunft_rev_max_order_by {
   changed: order_by
   changed_by: order_by
   gemeinde: order_by
+  herkunft_id: order_by
   id: order_by
   kanton: order_by
   land: order_by
   lokalname: order_by
   nr: order_by
-  rev_id: order_by
 }
 
 # aggregate min on columns
@@ -6781,12 +6781,12 @@ type herkunft_rev_min_fields {
   changed: timestamp
   changed_by: String
   gemeinde: String
-  id: uuid
+  herkunft_id: uuid
+  id: ID
   kanton: String
   land: String
   lokalname: String
   nr: String
-  rev_id: ID
 }
 
 # order by min() on columns of table "herkunft_rev"
@@ -6798,12 +6798,12 @@ input herkunft_rev_min_order_by {
   changed: order_by
   changed_by: order_by
   gemeinde: order_by
+  herkunft_id: order_by
   id: order_by
   kanton: order_by
   land: order_by
   lokalname: order_by
   nr: order_by
-  rev_id: order_by
 }
 
 # response of any mutation on the table "herkunft_rev"
@@ -6840,19 +6840,19 @@ input herkunft_rev_order_by {
   changed_by: order_by
   gemeinde: order_by
   geom_point: order_by
+  herkunft_id: order_by
   id: order_by
   kanton: order_by
   kulturs_aggregate: kultur_aggregate_order_by
   land: order_by
   lokalname: order_by
   nr: order_by
-  rev_id: order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
 }
 
 # primary key columns input for table: "herkunft_rev"
 input herkunft_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "herkunft_rev"
@@ -6888,6 +6888,9 @@ enum herkunft_rev_select_column {
   geom_point
 
   # column name
+  herkunft_id
+
+  # column name
   id
 
   # column name
@@ -6901,9 +6904,6 @@ enum herkunft_rev_select_column {
 
   # column name
   nr
-
-  # column name
-  rev_id
 }
 
 # input type for updating data in table "herkunft_rev"
@@ -6918,12 +6918,12 @@ input herkunft_rev_set_input {
   changed_by: String
   gemeinde: String
   geom_point: geometry
-  id: uuid
+  herkunft_id: uuid
+  id: ID
   kanton: String
   land: String
   lokalname: String
   nr: String
-  rev_id: ID
 }
 
 # aggregate stddev on columns
@@ -6999,6 +6999,9 @@ enum herkunft_rev_update_column {
   geom_point
 
   # column name
+  herkunft_id
+
+  # column name
   id
 
   # column name
@@ -7012,9 +7015,6 @@ enum herkunft_rev_update_column {
 
   # column name
   nr
-
-  # column name
-  rev_id
 }
 
 # aggregate var_pop on columns
@@ -8750,11 +8750,11 @@ type kultur_option_rev {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
-  id: uuid!
+  id: ID!
 
   # An object relationship
   kultur: kultur!
-  rev_id: ID!
+  kultur_id: uuid!
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -8833,7 +8833,7 @@ input kultur_option_rev_bool_exp {
   ev_teilkultur_id: Boolean_comparison_exp
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
-  rev_id: uuid_comparison_exp
+  kultur_id: uuid_comparison_exp
   tk: Boolean_comparison_exp
   tk_bemerkungen: Boolean_comparison_exp
   tz_andere_menge: Boolean_comparison_exp
@@ -8869,9 +8869,9 @@ input kultur_option_rev_insert_input {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
-  id: uuid
+  id: ID
   kultur: kultur_obj_rel_insert_input
-  rev_id: ID
+  kultur_id: uuid
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -8887,8 +8887,8 @@ type kultur_option_rev_max_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  id: uuid
-  rev_id: ID
+  id: ID
+  kultur_id: uuid
 }
 
 # order by max() on columns of table "kultur_option_rev"
@@ -8897,7 +8897,7 @@ input kultur_option_rev_max_order_by {
   _parent_rev: order_by
   _rev: order_by
   id: order_by
-  rev_id: order_by
+  kultur_id: order_by
 }
 
 # aggregate min on columns
@@ -8905,8 +8905,8 @@ type kultur_option_rev_min_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  id: uuid
-  rev_id: ID
+  id: ID
+  kultur_id: uuid
 }
 
 # order by min() on columns of table "kultur_option_rev"
@@ -8915,7 +8915,7 @@ input kultur_option_rev_min_order_by {
   _parent_rev: order_by
   _rev: order_by
   id: order_by
-  rev_id: order_by
+  kultur_id: order_by
 }
 
 # response of any mutation on the table "kultur_option_rev"
@@ -8953,7 +8953,7 @@ input kultur_option_rev_order_by {
   ev_teilkultur_id: order_by
   id: order_by
   kultur: kultur_order_by
-  rev_id: order_by
+  kultur_id: order_by
   tk: order_by
   tk_bemerkungen: order_by
   tz_andere_menge: order_by
@@ -8966,7 +8966,7 @@ input kultur_option_rev_order_by {
 
 # primary key columns input for table: "kultur_option_rev"
 input kultur_option_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "kultur_option_rev"
@@ -9002,7 +9002,7 @@ enum kultur_option_rev_select_column {
   id
 
   # column name
-  rev_id
+  kultur_id
 
   # column name
   tk
@@ -9040,8 +9040,8 @@ input kultur_option_rev_set_input {
   ev_geplant: Boolean
   ev_person_id: Boolean
   ev_teilkultur_id: Boolean
-  id: uuid
-  rev_id: ID
+  id: ID
+  kultur_id: uuid
   tk: Boolean
   tk_bemerkungen: Boolean
   tz_andere_menge: Boolean
@@ -9125,7 +9125,7 @@ enum kultur_option_rev_update_column {
   id
 
   # column name
-  rev_id
+  kultur_id
 
   # column name
   tk
@@ -9950,7 +9950,8 @@ type kultur_rev {
   # An object relationship
   herkunft: herkunft
   herkunft_id: uuid
-  id: uuid!
+  id: ID!
+  kultur_id: uuid!
 
   # An array relationship
   lieferungsByNachKulturId(
@@ -10023,7 +10024,6 @@ type kultur_rev {
     # filter the rows returned
     where: lieferung_bool_exp
   ): lieferung_aggregate!
-  rev_id: ID!
 
   # An array relationship
   sammelLieferungsByNachKulturId(
@@ -10249,9 +10249,9 @@ input kultur_rev_bool_exp {
   herkunft: herkunft_bool_exp
   herkunft_id: uuid_comparison_exp
   id: uuid_comparison_exp
+  kultur_id: uuid_comparison_exp
   lieferungsByNachKulturId: lieferung_bool_exp
   lieferungsByVonKulturId: lieferung_bool_exp
-  rev_id: uuid_comparison_exp
   sammelLieferungsByNachKulturId: sammel_lieferung_bool_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
   teilkulturs: teilkultur_bool_exp
@@ -10294,10 +10294,10 @@ input kultur_rev_insert_input {
   garten_id: uuid
   herkunft: herkunft_obj_rel_insert_input
   herkunft_id: uuid
-  id: uuid
+  id: ID
+  kultur_id: uuid
   lieferungsByNachKulturId: lieferung_arr_rel_insert_input
   lieferungsByVonKulturId: lieferung_arr_rel_insert_input
-  rev_id: ID
   sammelLieferungsByNachKulturId: sammel_lieferung_arr_rel_insert_input
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
   teilkulturs: teilkultur_arr_rel_insert_input
@@ -10317,8 +10317,8 @@ type kultur_rev_max_fields {
   changed_by: String
   garten_id: uuid
   herkunft_id: uuid
-  id: uuid
-  rev_id: ID
+  id: ID
+  kultur_id: uuid
   von_anzahl_individuen: Int
 }
 
@@ -10334,7 +10334,7 @@ input kultur_rev_max_order_by {
   garten_id: order_by
   herkunft_id: order_by
   id: order_by
-  rev_id: order_by
+  kultur_id: order_by
   von_anzahl_individuen: order_by
 }
 
@@ -10349,8 +10349,8 @@ type kultur_rev_min_fields {
   changed_by: String
   garten_id: uuid
   herkunft_id: uuid
-  id: uuid
-  rev_id: ID
+  id: ID
+  kultur_id: uuid
   von_anzahl_individuen: Int
 }
 
@@ -10366,7 +10366,7 @@ input kultur_rev_min_order_by {
   garten_id: order_by
   herkunft_id: order_by
   id: order_by
-  rev_id: order_by
+  kultur_id: order_by
   von_anzahl_individuen: order_by
 }
 
@@ -10412,9 +10412,9 @@ input kultur_rev_order_by {
   herkunft: herkunft_order_by
   herkunft_id: order_by
   id: order_by
+  kultur_id: order_by
   lieferungsByNachKulturId_aggregate: lieferung_aggregate_order_by
   lieferungsByVonKulturId_aggregate: lieferung_aggregate_order_by
-  rev_id: order_by
   sammelLieferungsByNachKulturId_aggregate: sammel_lieferung_aggregate_order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
   teilkulturs_aggregate: teilkultur_aggregate_order_by
@@ -10425,7 +10425,7 @@ input kultur_rev_order_by {
 
 # primary key columns input for table: "kultur_rev"
 input kultur_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "kultur_rev"
@@ -10473,7 +10473,7 @@ enum kultur_rev_select_column {
   id
 
   # column name
-  rev_id
+  kultur_id
 
   # column name
   von_anzahl_individuen
@@ -10497,8 +10497,8 @@ input kultur_rev_set_input {
   erhaltungskultur: Boolean
   garten_id: uuid
   herkunft_id: uuid
-  id: uuid
-  rev_id: ID
+  id: ID
+  kultur_id: uuid
   von_anzahl_individuen: Int
   zwischenlager: Boolean
 }
@@ -10596,7 +10596,7 @@ enum kultur_rev_update_column {
   id
 
   # column name
-  rev_id
+  kultur_id
 
   # column name
   von_anzahl_individuen
@@ -11462,20 +11462,20 @@ type lieferung_rev {
   datum: date
   geplant: Boolean
   gramm_samen: Int
-  id: uuid!
+  id: ID!
 
   # An object relationship
   kulturByNachKulturId: kultur
 
   # An object relationship
   kulturByVonKulturId: kultur
+  lieferung_id: uuid!
   nach_ausgepflanzt: Boolean
   nach_kultur_id: uuid
 
   # An object relationship
   person: person
   person_id: uuid
-  rev_id: ID!
 
   # An object relationship
   sammel_lieferung: sammel_lieferung
@@ -11572,11 +11572,11 @@ input lieferung_rev_bool_exp {
   id: uuid_comparison_exp
   kulturByNachKulturId: kultur_bool_exp
   kulturByVonKulturId: kultur_bool_exp
+  lieferung_id: uuid_comparison_exp
   nach_ausgepflanzt: Boolean_comparison_exp
   nach_kultur_id: uuid_comparison_exp
   person: person_bool_exp
   person_id: uuid_comparison_exp
-  rev_id: uuid_comparison_exp
   sammel_lieferung: sammel_lieferung_bool_exp
   sammel_lieferung_id: uuid_comparison_exp
   sammlung: sammlung_bool_exp
@@ -11621,14 +11621,14 @@ input lieferung_rev_insert_input {
   datum: date
   geplant: Boolean
   gramm_samen: Int
-  id: uuid
+  id: ID
   kulturByNachKulturId: kultur_obj_rel_insert_input
   kulturByVonKulturId: kultur_obj_rel_insert_input
+  lieferung_id: uuid
   nach_ausgepflanzt: Boolean
   nach_kultur_id: uuid
   person: person_obj_rel_insert_input
   person_id: uuid
-  rev_id: ID
   sammel_lieferung: sammel_lieferung_obj_rel_insert_input
   sammel_lieferung_id: uuid
   sammlung: sammlung_obj_rel_insert_input
@@ -11651,10 +11651,10 @@ type lieferung_rev_max_fields {
   changed_by: String
   datum: date
   gramm_samen: Int
-  id: uuid
+  id: ID
+  lieferung_id: uuid
   nach_kultur_id: uuid
   person_id: uuid
-  rev_id: ID
   sammel_lieferung_id: uuid
   von_anzahl_individuen: Int
   von_kultur_id: uuid
@@ -11676,9 +11676,9 @@ input lieferung_rev_max_order_by {
   datum: order_by
   gramm_samen: order_by
   id: order_by
+  lieferung_id: order_by
   nach_kultur_id: order_by
   person_id: order_by
-  rev_id: order_by
   sammel_lieferung_id: order_by
   von_anzahl_individuen: order_by
   von_kultur_id: order_by
@@ -11699,10 +11699,10 @@ type lieferung_rev_min_fields {
   changed_by: String
   datum: date
   gramm_samen: Int
-  id: uuid
+  id: ID
+  lieferung_id: uuid
   nach_kultur_id: uuid
   person_id: uuid
-  rev_id: ID
   sammel_lieferung_id: uuid
   von_anzahl_individuen: Int
   von_kultur_id: uuid
@@ -11724,9 +11724,9 @@ input lieferung_rev_min_order_by {
   datum: order_by
   gramm_samen: order_by
   id: order_by
+  lieferung_id: order_by
   nach_kultur_id: order_by
   person_id: order_by
-  rev_id: order_by
   sammel_lieferung_id: order_by
   von_anzahl_individuen: order_by
   von_kultur_id: order_by
@@ -11776,11 +11776,11 @@ input lieferung_rev_order_by {
   id: order_by
   kulturByNachKulturId: kultur_order_by
   kulturByVonKulturId: kultur_order_by
+  lieferung_id: order_by
   nach_ausgepflanzt: order_by
   nach_kultur_id: order_by
   person: person_order_by
   person_id: order_by
-  rev_id: order_by
   sammel_lieferung: sammel_lieferung_order_by
   sammel_lieferung_id: order_by
   sammlung: sammlung_order_by
@@ -11791,7 +11791,7 @@ input lieferung_rev_order_by {
 
 # primary key columns input for table: "lieferung_rev"
 input lieferung_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "lieferung_rev"
@@ -11845,6 +11845,9 @@ enum lieferung_rev_select_column {
   id
 
   # column name
+  lieferung_id
+
+  # column name
   nach_ausgepflanzt
 
   # column name
@@ -11852,9 +11855,6 @@ enum lieferung_rev_select_column {
 
   # column name
   person_id
-
-  # column name
-  rev_id
 
   # column name
   sammel_lieferung_id
@@ -11886,11 +11886,11 @@ input lieferung_rev_set_input {
   datum: date
   geplant: Boolean
   gramm_samen: Int
-  id: uuid
+  id: ID
+  lieferung_id: uuid
   nach_ausgepflanzt: Boolean
   nach_kultur_id: uuid
   person_id: uuid
-  rev_id: ID
   sammel_lieferung_id: uuid
   von_anzahl_individuen: Int
   von_kultur_id: uuid
@@ -12020,6 +12020,9 @@ enum lieferung_rev_update_column {
   id
 
   # column name
+  lieferung_id
+
+  # column name
   nach_ausgepflanzt
 
   # column name
@@ -12027,9 +12030,6 @@ enum lieferung_rev_update_column {
 
   # column name
   person_id
-
-  # column name
-  rev_id
 
   # column name
   sammel_lieferung_id
@@ -12457,7 +12457,7 @@ type mutation_root {
   ): art_rev_mutation_response
 
   # delete single row from the table: "art_rev"
-  delete_art_rev_by_pk(rev_id: ID!): art_rev
+  delete_art_rev_by_pk(id: ID!): art_rev
 
   # delete data from the table: "av_art"
   delete_av_art(
@@ -12484,7 +12484,7 @@ type mutation_root {
   ): event_rev_mutation_response
 
   # delete single row from the table: "event_rev"
-  delete_event_rev_by_pk(rev_id: ID!): event_rev
+  delete_event_rev_by_pk(id: ID!): event_rev
 
   # delete data from the table: "garten"
   delete_garten(
@@ -12511,7 +12511,7 @@ type mutation_root {
   ): garten_rev_mutation_response
 
   # delete single row from the table: "garten_rev"
-  delete_garten_rev_by_pk(rev_id: ID!): garten_rev
+  delete_garten_rev_by_pk(id: ID!): garten_rev
 
   # delete data from the table: "herkunft"
   delete_herkunft(
@@ -12538,7 +12538,7 @@ type mutation_root {
   ): herkunft_rev_mutation_response
 
   # delete single row from the table: "herkunft_rev"
-  delete_herkunft_rev_by_pk(rev_id: ID!): herkunft_rev
+  delete_herkunft_rev_by_pk(id: ID!): herkunft_rev
 
   # delete data from the table: "kultur"
   delete_kultur(
@@ -12571,7 +12571,7 @@ type mutation_root {
   ): kultur_option_rev_mutation_response
 
   # delete single row from the table: "kultur_option_rev"
-  delete_kultur_option_rev_by_pk(rev_id: ID!): kultur_option_rev
+  delete_kultur_option_rev_by_pk(id: ID!): kultur_option_rev
 
   # delete data from the table: "kultur_qk"
   delete_kultur_qk(
@@ -12598,7 +12598,7 @@ type mutation_root {
   ): kultur_rev_mutation_response
 
   # delete single row from the table: "kultur_rev"
-  delete_kultur_rev_by_pk(rev_id: ID!): kultur_rev
+  delete_kultur_rev_by_pk(id: ID!): kultur_rev
 
   # delete data from the table: "lieferung"
   delete_lieferung(
@@ -12625,7 +12625,7 @@ type mutation_root {
   ): lieferung_rev_mutation_response
 
   # delete single row from the table: "lieferung_rev"
-  delete_lieferung_rev_by_pk(rev_id: ID!): lieferung_rev
+  delete_lieferung_rev_by_pk(id: ID!): lieferung_rev
 
   # delete data from the table: "person"
   delete_person(
@@ -12658,7 +12658,7 @@ type mutation_root {
   ): person_option_rev_mutation_response
 
   # delete single row from the table: "person_option_rev"
-  delete_person_option_rev_by_pk(rev_id: ID!): person_option_rev
+  delete_person_option_rev_by_pk(id: ID!): person_option_rev
 
   # delete data from the table: "person_rev"
   delete_person_rev(
@@ -12667,7 +12667,7 @@ type mutation_root {
   ): person_rev_mutation_response
 
   # delete single row from the table: "person_rev"
-  delete_person_rev_by_pk(rev_id: ID!): person_rev
+  delete_person_rev_by_pk(id: ID!): person_rev
 
   # delete data from the table: "sammel_lieferung"
   delete_sammel_lieferung(
@@ -12685,7 +12685,7 @@ type mutation_root {
   ): sammel_lieferung_rev_mutation_response
 
   # delete single row from the table: "sammel_lieferung_rev"
-  delete_sammel_lieferung_rev_by_pk(rev_id: ID!): sammel_lieferung_rev
+  delete_sammel_lieferung_rev_by_pk(id: ID!): sammel_lieferung_rev
 
   # delete data from the table: "sammlung"
   delete_sammlung(
@@ -12712,7 +12712,7 @@ type mutation_root {
   ): sammlung_rev_mutation_response
 
   # delete single row from the table: "sammlung_rev"
-  delete_sammlung_rev_by_pk(rev_id: ID!): sammlung_rev
+  delete_sammlung_rev_by_pk(id: ID!): sammlung_rev
 
   # delete data from the table: "spatial_ref_sys"
   delete_spatial_ref_sys(
@@ -12739,7 +12739,7 @@ type mutation_root {
   ): teilkultur_rev_mutation_response
 
   # delete single row from the table: "teilkultur_rev"
-  delete_teilkultur_rev_by_pk(rev_id: ID!): teilkultur_rev
+  delete_teilkultur_rev_by_pk(id: ID!): teilkultur_rev
 
   # delete data from the table: "teilzaehlung"
   delete_teilzaehlung(
@@ -12757,7 +12757,7 @@ type mutation_root {
   ): teilzaehlung_rev_mutation_response
 
   # delete single row from the table: "teilzaehlung_rev"
-  delete_teilzaehlung_rev_by_pk(rev_id: ID!): teilzaehlung_rev
+  delete_teilzaehlung_rev_by_pk(id: ID!): teilzaehlung_rev
 
   # delete data from the table: "user_role"
   delete_user_role(
@@ -12784,7 +12784,7 @@ type mutation_root {
   ): zaehlung_rev_mutation_response
 
   # delete single row from the table: "zaehlung_rev"
-  delete_zaehlung_rev_by_pk(rev_id: ID!): zaehlung_rev
+  delete_zaehlung_rev_by_pk(id: ID!): zaehlung_rev
 
   # insert data into the table: "ae_art"
   insert_ae_art(
@@ -15464,13 +15464,13 @@ type person_option_rev {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
-  id: uuid!
+  id: ID!
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
 
   # An object relationship
   person: person!
-  rev_id: ID!
+  person_id: uuid!
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -15558,7 +15558,7 @@ input person_option_rev_bool_exp {
   li_show_sl: Boolean_comparison_exp
   li_show_sl_felder: Boolean_comparison_exp
   person: person_bool_exp
-  rev_id: uuid_comparison_exp
+  person_id: uuid_comparison_exp
   sl_auto_copy_edits: Boolean_comparison_exp
   sl_show_empty_when_next_to_li: Boolean_comparison_exp
   tree_event: Boolean_comparison_exp
@@ -15601,11 +15601,11 @@ input person_option_rev_insert_input {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
-  id: uuid
+  id: ID
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
   person: person_obj_rel_insert_input
-  rev_id: ID
+  person_id: uuid
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -15620,8 +15620,8 @@ type person_option_rev_max_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  id: uuid
-  rev_id: ID
+  id: ID
+  person_id: uuid
 }
 
 # order by max() on columns of table "person_option_rev"
@@ -15630,7 +15630,7 @@ input person_option_rev_max_order_by {
   _parent_rev: order_by
   _rev: order_by
   id: order_by
-  rev_id: order_by
+  person_id: order_by
 }
 
 # aggregate min on columns
@@ -15638,8 +15638,8 @@ type person_option_rev_min_fields {
   _depth: Int
   _parent_rev: String
   _rev: String
-  id: uuid
-  rev_id: ID
+  id: ID
+  person_id: uuid
 }
 
 # order by min() on columns of table "person_option_rev"
@@ -15648,7 +15648,7 @@ input person_option_rev_min_order_by {
   _parent_rev: order_by
   _rev: order_by
   id: order_by
-  rev_id: order_by
+  person_id: order_by
 }
 
 # response of any mutation on the table "person_option_rev"
@@ -15696,7 +15696,7 @@ input person_option_rev_order_by {
   li_show_sl: order_by
   li_show_sl_felder: order_by
   person: person_order_by
-  rev_id: order_by
+  person_id: order_by
   sl_auto_copy_edits: order_by
   sl_show_empty_when_next_to_li: order_by
   tree_event: order_by
@@ -15708,7 +15708,7 @@ input person_option_rev_order_by {
 
 # primary key columns input for table: "person_option_rev"
 input person_option_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "person_option_rev"
@@ -15774,7 +15774,7 @@ enum person_option_rev_select_column {
   li_show_sl_felder
 
   # column name
-  rev_id
+  person_id
 
   # column name
   sl_auto_copy_edits
@@ -15817,10 +15817,10 @@ input person_option_rev_set_input {
   hk_geom_point: Boolean
   hk_kanton: Boolean
   hk_land: Boolean
-  id: uuid
+  id: ID
   li_show_sl: Boolean
   li_show_sl_felder: Boolean
-  rev_id: ID
+  person_id: uuid
   sl_auto_copy_edits: Boolean
   sl_show_empty_when_next_to_li: Boolean
   tree_event: Boolean
@@ -15933,7 +15933,7 @@ enum person_option_rev_update_column {
   li_show_sl_felder
 
   # column name
-  rev_id
+  person_id
 
   # column name
   sl_auto_copy_edits
@@ -16422,7 +16422,7 @@ type person_rev {
     # filter the rows returned
     where: garten_bool_exp
   ): garten_aggregate!
-  id: uuid!
+  id: ID!
   info: Boolean
   kein_email: Boolean
   kommerziell: Boolean
@@ -16465,11 +16465,11 @@ type person_rev {
     # filter the rows returned
     where: person_file_bool_exp
   ): person_file_aggregate!
+  person_id: uuid!
 
   # An object relationship
   person_option: person_option
   plz: Int
-  rev_id: ID!
 
   # An array relationship
   sammel_lieferungs(
@@ -16631,9 +16631,9 @@ input person_rev_bool_exp {
   nr: String_comparison_exp
   ort: String_comparison_exp
   person_files: person_file_bool_exp
+  person_id: uuid_comparison_exp
   person_option: person_option_bool_exp
   plz: Int_comparison_exp
-  rev_id: uuid_comparison_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
   sammlungs: sammlung_bool_exp
   strasse: String_comparison_exp
@@ -16675,7 +16675,7 @@ input person_rev_insert_input {
   email: String
   events: event_arr_rel_insert_input
   gartens: garten_arr_rel_insert_input
-  id: uuid
+  id: ID
   info: Boolean
   kein_email: Boolean
   kommerziell: Boolean
@@ -16683,9 +16683,9 @@ input person_rev_insert_input {
   nr: String
   ort: String
   person_files: person_file_arr_rel_insert_input
+  person_id: uuid
   person_option: person_option_obj_rel_insert_input
   plz: Int
-  rev_id: ID
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
   sammlungs: sammlung_arr_rel_insert_input
   strasse: String
@@ -16706,12 +16706,12 @@ type person_rev_max_fields {
   changed: timestamp
   changed_by: String
   email: String
-  id: uuid
+  id: ID
   name: String
   nr: String
   ort: String
+  person_id: uuid
   plz: Int
-  rev_id: ID
   strasse: String
   telefon_geschaeft: String
   telefon_mobile: String
@@ -16734,8 +16734,8 @@ input person_rev_max_order_by {
   name: order_by
   nr: order_by
   ort: order_by
+  person_id: order_by
   plz: order_by
-  rev_id: order_by
   strasse: order_by
   telefon_geschaeft: order_by
   telefon_mobile: order_by
@@ -16754,12 +16754,12 @@ type person_rev_min_fields {
   changed: timestamp
   changed_by: String
   email: String
-  id: uuid
+  id: ID
   name: String
   nr: String
   ort: String
+  person_id: uuid
   plz: Int
-  rev_id: ID
   strasse: String
   telefon_geschaeft: String
   telefon_mobile: String
@@ -16782,8 +16782,8 @@ input person_rev_min_order_by {
   name: order_by
   nr: order_by
   ort: order_by
+  person_id: order_by
   plz: order_by
-  rev_id: order_by
   strasse: order_by
   telefon_geschaeft: order_by
   telefon_mobile: order_by
@@ -16838,9 +16838,9 @@ input person_rev_order_by {
   nr: order_by
   ort: order_by
   person_files_aggregate: person_file_aggregate_order_by
+  person_id: order_by
   person_option: person_option_order_by
   plz: order_by
-  rev_id: order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
   strasse: order_by
@@ -16852,7 +16852,7 @@ input person_rev_order_by {
 
 # primary key columns input for table: "person_rev"
 input person_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "person_rev"
@@ -16915,10 +16915,10 @@ enum person_rev_select_column {
   ort
 
   # column name
-  plz
+  person_id
 
   # column name
-  rev_id
+  plz
 
   # column name
   strasse
@@ -16950,15 +16950,15 @@ input person_rev_set_input {
   changed: timestamp
   changed_by: String
   email: String
-  id: uuid
+  id: ID
   info: Boolean
   kein_email: Boolean
   kommerziell: Boolean
   name: String
   nr: String
   ort: String
+  person_id: uuid
   plz: Int
-  rev_id: ID
   strasse: String
   telefon_geschaeft: String
   telefon_mobile: String
@@ -17074,10 +17074,10 @@ enum person_rev_update_column {
   ort
 
   # column name
-  plz
+  person_id
 
   # column name
-  rev_id
+  plz
 
   # column name
   strasse
@@ -17642,7 +17642,7 @@ type query_root {
   ): art_rev_aggregate!
 
   # fetch data from the table: "art_rev" using primary key columns
-  art_rev_by_pk(rev_id: ID!): art_rev
+  art_rev_by_pk(id: ID!): art_rev
 
   # execute function "art_search" which returns "art"
   art_search(
@@ -17837,7 +17837,7 @@ type query_root {
   ): event_rev_aggregate!
 
   # fetch data from the table: "event_rev" using primary key columns
-  event_rev_by_pk(rev_id: ID!): event_rev
+  event_rev_by_pk(id: ID!): event_rev
 
   # execute function "event_search" which returns "event"
   event_search(
@@ -17996,7 +17996,7 @@ type query_root {
   ): garten_rev_aggregate!
 
   # fetch data from the table: "garten_rev" using primary key columns
-  garten_rev_by_pk(rev_id: ID!): garten_rev
+  garten_rev_by_pk(id: ID!): garten_rev
 
   # execute function "garten_search" which returns "garten"
   garten_search(
@@ -18191,7 +18191,7 @@ type query_root {
   ): herkunft_rev_aggregate!
 
   # fetch data from the table: "herkunft_rev" using primary key columns
-  herkunft_rev_by_pk(rev_id: ID!): herkunft_rev
+  herkunft_rev_by_pk(id: ID!): herkunft_rev
 
   # execute function "herkunft_search" which returns "herkunft"
   herkunft_search(
@@ -18422,7 +18422,7 @@ type query_root {
   ): kultur_option_rev_aggregate!
 
   # fetch data from the table: "kultur_option_rev" using primary key columns
-  kultur_option_rev_by_pk(rev_id: ID!): kultur_option_rev
+  kultur_option_rev_by_pk(id: ID!): kultur_option_rev
 
   # fetch data from the table: "kultur_qk"
   kultur_qk(
@@ -18539,7 +18539,7 @@ type query_root {
   ): kultur_rev_aggregate!
 
   # fetch data from the table: "kultur_rev" using primary key columns
-  kultur_rev_by_pk(rev_id: ID!): kultur_rev
+  kultur_rev_by_pk(id: ID!): kultur_rev
 
   # execute function "kultur_search" which returns "kultur"
   kultur_search(
@@ -18698,7 +18698,7 @@ type query_root {
   ): lieferung_rev_aggregate!
 
   # fetch data from the table: "lieferung_rev" using primary key columns
-  lieferung_rev_by_pk(rev_id: ID!): lieferung_rev
+  lieferung_rev_by_pk(id: ID!): lieferung_rev
 
   # execute function "lieferung_search" which returns "lieferung"
   lieferung_search(
@@ -18893,7 +18893,7 @@ type query_root {
   ): person_option_rev_aggregate!
 
   # fetch data from the table: "person_option_rev" using primary key columns
-  person_option_rev_by_pk(rev_id: ID!): person_option_rev
+  person_option_rev_by_pk(id: ID!): person_option_rev
 
   # fetch data from the table: "person_rev"
   person_rev(
@@ -18932,7 +18932,7 @@ type query_root {
   ): person_rev_aggregate!
 
   # fetch data from the table: "person_rev" using primary key columns
-  person_rev_by_pk(rev_id: ID!): person_rev
+  person_rev_by_pk(id: ID!): person_rev
 
   # execute function "person_search" which returns "person"
   person_search(
@@ -19052,7 +19052,7 @@ type query_root {
   ): sammel_lieferung_rev_aggregate!
 
   # fetch data from the table: "sammel_lieferung_rev" using primary key columns
-  sammel_lieferung_rev_by_pk(rev_id: ID!): sammel_lieferung_rev
+  sammel_lieferung_rev_by_pk(id: ID!): sammel_lieferung_rev
 
   # fetch data from the table: "sammlung"
   sammlung(
@@ -19169,7 +19169,7 @@ type query_root {
   ): sammlung_rev_aggregate!
 
   # fetch data from the table: "sammlung_rev" using primary key columns
-  sammlung_rev_by_pk(rev_id: ID!): sammlung_rev
+  sammlung_rev_by_pk(id: ID!): sammlung_rev
 
   # execute function "sammlung_search" which returns "sammlung"
   sammlung_search(
@@ -19328,7 +19328,7 @@ type query_root {
   ): teilkultur_rev_aggregate!
 
   # fetch data from the table: "teilkultur_rev" using primary key columns
-  teilkultur_rev_by_pk(rev_id: ID!): teilkultur_rev
+  teilkultur_rev_by_pk(id: ID!): teilkultur_rev
 
   # execute function "teilkultur_search" which returns "teilkultur"
   teilkultur_search(
@@ -19448,7 +19448,7 @@ type query_root {
   ): teilzaehlung_rev_aggregate!
 
   # fetch data from the table: "teilzaehlung_rev" using primary key columns
-  teilzaehlung_rev_by_pk(rev_id: ID!): teilzaehlung_rev
+  teilzaehlung_rev_by_pk(id: ID!): teilzaehlung_rev
 
   # fetch data from the table: "user_role"
   user_role(
@@ -19565,7 +19565,7 @@ type query_root {
   ): zaehlung_rev_aggregate!
 
   # fetch data from the table: "zaehlung_rev" using primary key columns
-  zaehlung_rev_by_pk(rev_id: ID!): zaehlung_rev
+  zaehlung_rev_by_pk(id: ID!): zaehlung_rev
 
   # execute function "zaehlung_search" which returns "zaehlung"
   zaehlung_search(
@@ -19996,7 +19996,7 @@ type sammel_lieferung_rev {
   datum: date
   geplant: Boolean
   gramm_samen: Int
-  id: uuid!
+  id: ID!
 
   # An object relationship
   kulturByNachKulturId: kultur
@@ -20045,7 +20045,7 @@ type sammel_lieferung_rev {
   # An object relationship
   person: person
   person_id: uuid
-  rev_id: ID!
+  sammel_lieferung_id: uuid!
 
   # An object relationship
   sammlung: sammlung
@@ -20143,7 +20143,7 @@ input sammel_lieferung_rev_bool_exp {
   nach_kultur_id: uuid_comparison_exp
   person: person_bool_exp
   person_id: uuid_comparison_exp
-  rev_id: uuid_comparison_exp
+  sammel_lieferung_id: uuid_comparison_exp
   sammlung: sammlung_bool_exp
   von_anzahl_individuen: Int_comparison_exp
   von_kultur_id: uuid_comparison_exp
@@ -20186,7 +20186,7 @@ input sammel_lieferung_rev_insert_input {
   datum: date
   geplant: Boolean
   gramm_samen: Int
-  id: uuid
+  id: ID
   kulturByNachKulturId: kultur_obj_rel_insert_input
   kulturByVonKulturId: kultur_obj_rel_insert_input
   lieferungs: lieferung_arr_rel_insert_input
@@ -20194,7 +20194,7 @@ input sammel_lieferung_rev_insert_input {
   nach_kultur_id: uuid
   person: person_obj_rel_insert_input
   person_id: uuid
-  rev_id: ID
+  sammel_lieferung_id: uuid
   sammlung: sammlung_obj_rel_insert_input
   von_anzahl_individuen: Int
   von_kultur_id: uuid
@@ -20215,10 +20215,10 @@ type sammel_lieferung_rev_max_fields {
   changed_by: String
   datum: date
   gramm_samen: Int
-  id: uuid
+  id: ID
   nach_kultur_id: uuid
   person_id: uuid
-  rev_id: ID
+  sammel_lieferung_id: uuid
   von_anzahl_individuen: Int
   von_kultur_id: uuid
   von_sammlung_id: uuid
@@ -20241,7 +20241,7 @@ input sammel_lieferung_rev_max_order_by {
   id: order_by
   nach_kultur_id: order_by
   person_id: order_by
-  rev_id: order_by
+  sammel_lieferung_id: order_by
   von_anzahl_individuen: order_by
   von_kultur_id: order_by
   von_sammlung_id: order_by
@@ -20261,10 +20261,10 @@ type sammel_lieferung_rev_min_fields {
   changed_by: String
   datum: date
   gramm_samen: Int
-  id: uuid
+  id: ID
   nach_kultur_id: uuid
   person_id: uuid
-  rev_id: ID
+  sammel_lieferung_id: uuid
   von_anzahl_individuen: Int
   von_kultur_id: uuid
   von_sammlung_id: uuid
@@ -20287,7 +20287,7 @@ input sammel_lieferung_rev_min_order_by {
   id: order_by
   nach_kultur_id: order_by
   person_id: order_by
-  rev_id: order_by
+  sammel_lieferung_id: order_by
   von_anzahl_individuen: order_by
   von_kultur_id: order_by
   von_sammlung_id: order_by
@@ -20341,7 +20341,7 @@ input sammel_lieferung_rev_order_by {
   nach_kultur_id: order_by
   person: person_order_by
   person_id: order_by
-  rev_id: order_by
+  sammel_lieferung_id: order_by
   sammlung: sammlung_order_by
   von_anzahl_individuen: order_by
   von_kultur_id: order_by
@@ -20350,7 +20350,7 @@ input sammel_lieferung_rev_order_by {
 
 # primary key columns input for table: "sammel_lieferung_rev"
 input sammel_lieferung_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "sammel_lieferung_rev"
@@ -20413,7 +20413,7 @@ enum sammel_lieferung_rev_select_column {
   person_id
 
   # column name
-  rev_id
+  sammel_lieferung_id
 
   # column name
   von_anzahl_individuen
@@ -20442,11 +20442,11 @@ input sammel_lieferung_rev_set_input {
   datum: date
   geplant: Boolean
   gramm_samen: Int
-  id: uuid
+  id: ID
   nach_ausgepflanzt: Boolean
   nach_kultur_id: uuid
   person_id: uuid
-  rev_id: ID
+  sammel_lieferung_id: uuid
   von_anzahl_individuen: Int
   von_kultur_id: uuid
   von_sammlung_id: uuid
@@ -20584,7 +20584,7 @@ enum sammel_lieferung_rev_update_column {
   person_id
 
   # column name
-  rev_id
+  sammel_lieferung_id
 
   # column name
   von_anzahl_individuen
@@ -21625,7 +21625,7 @@ type sammlung_rev {
   # An object relationship
   herkunft: herkunft
   herkunft_id: uuid
-  id: uuid!
+  id: ID!
 
   # An array relationship
   lieferungs(
@@ -21667,7 +21667,6 @@ type sammlung_rev {
   # An object relationship
   person: person
   person_id: uuid
-  rev_id: ID!
 
   # An array relationship
   sammel_lieferungs(
@@ -21704,6 +21703,7 @@ type sammlung_rev {
     # filter the rows returned
     where: sammel_lieferung_bool_exp
   ): sammel_lieferung_aggregate!
+  sammlung_id: uuid!
   von_anzahl_individuen: Int
 }
 
@@ -21793,8 +21793,8 @@ input sammlung_rev_bool_exp {
   nr: String_comparison_exp
   person: person_bool_exp
   person_id: uuid_comparison_exp
-  rev_id: uuid_comparison_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
+  sammlung_id: uuid_comparison_exp
   von_anzahl_individuen: Int_comparison_exp
 }
 
@@ -21835,13 +21835,13 @@ input sammlung_rev_insert_input {
   gramm_samen: Int
   herkunft: herkunft_obj_rel_insert_input
   herkunft_id: uuid
-  id: uuid
+  id: ID
   lieferungs: lieferung_arr_rel_insert_input
   nr: String
   person: person_obj_rel_insert_input
   person_id: uuid
-  rev_id: ID
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
+  sammlung_id: uuid
   von_anzahl_individuen: Int
 }
 
@@ -21859,10 +21859,10 @@ type sammlung_rev_max_fields {
   datum: date
   gramm_samen: Int
   herkunft_id: uuid
-  id: uuid
+  id: ID
   nr: String
   person_id: uuid
-  rev_id: ID
+  sammlung_id: uuid
   von_anzahl_individuen: Int
 }
 
@@ -21883,7 +21883,7 @@ input sammlung_rev_max_order_by {
   id: order_by
   nr: order_by
   person_id: order_by
-  rev_id: order_by
+  sammlung_id: order_by
   von_anzahl_individuen: order_by
 }
 
@@ -21901,10 +21901,10 @@ type sammlung_rev_min_fields {
   datum: date
   gramm_samen: Int
   herkunft_id: uuid
-  id: uuid
+  id: ID
   nr: String
   person_id: uuid
-  rev_id: ID
+  sammlung_id: uuid
   von_anzahl_individuen: Int
 }
 
@@ -21925,7 +21925,7 @@ input sammlung_rev_min_order_by {
   id: order_by
   nr: order_by
   person_id: order_by
-  rev_id: order_by
+  sammlung_id: order_by
   von_anzahl_individuen: order_by
 }
 
@@ -21976,14 +21976,14 @@ input sammlung_rev_order_by {
   nr: order_by
   person: person_order_by
   person_id: order_by
-  rev_id: order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
+  sammlung_id: order_by
   von_anzahl_individuen: order_by
 }
 
 # primary key columns input for table: "sammlung_rev"
 input sammlung_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "sammlung_rev"
@@ -22046,7 +22046,7 @@ enum sammlung_rev_select_column {
   person_id
 
   # column name
-  rev_id
+  sammlung_id
 
   # column name
   von_anzahl_individuen
@@ -22070,10 +22070,10 @@ input sammlung_rev_set_input {
   geplant: Boolean
   gramm_samen: Int
   herkunft_id: uuid
-  id: uuid
+  id: ID
   nr: String
   person_id: uuid
-  rev_id: ID
+  sammlung_id: uuid
   von_anzahl_individuen: Int
 }
 
@@ -22201,7 +22201,7 @@ enum sammlung_rev_update_column {
   person_id
 
   # column name
-  rev_id
+  sammlung_id
 
   # column name
   von_anzahl_individuen
@@ -23185,7 +23185,7 @@ type subscription_root {
   ): art_rev_aggregate!
 
   # fetch data from the table: "art_rev" using primary key columns
-  art_rev_by_pk(rev_id: ID!): art_rev
+  art_rev_by_pk(id: ID!): art_rev
 
   # execute function "art_search" which returns "art"
   art_search(
@@ -23380,7 +23380,7 @@ type subscription_root {
   ): event_rev_aggregate!
 
   # fetch data from the table: "event_rev" using primary key columns
-  event_rev_by_pk(rev_id: ID!): event_rev
+  event_rev_by_pk(id: ID!): event_rev
 
   # execute function "event_search" which returns "event"
   event_search(
@@ -23539,7 +23539,7 @@ type subscription_root {
   ): garten_rev_aggregate!
 
   # fetch data from the table: "garten_rev" using primary key columns
-  garten_rev_by_pk(rev_id: ID!): garten_rev
+  garten_rev_by_pk(id: ID!): garten_rev
 
   # execute function "garten_search" which returns "garten"
   garten_search(
@@ -23734,7 +23734,7 @@ type subscription_root {
   ): herkunft_rev_aggregate!
 
   # fetch data from the table: "herkunft_rev" using primary key columns
-  herkunft_rev_by_pk(rev_id: ID!): herkunft_rev
+  herkunft_rev_by_pk(id: ID!): herkunft_rev
 
   # execute function "herkunft_search" which returns "herkunft"
   herkunft_search(
@@ -23965,7 +23965,7 @@ type subscription_root {
   ): kultur_option_rev_aggregate!
 
   # fetch data from the table: "kultur_option_rev" using primary key columns
-  kultur_option_rev_by_pk(rev_id: ID!): kultur_option_rev
+  kultur_option_rev_by_pk(id: ID!): kultur_option_rev
 
   # fetch data from the table: "kultur_qk"
   kultur_qk(
@@ -24082,7 +24082,7 @@ type subscription_root {
   ): kultur_rev_aggregate!
 
   # fetch data from the table: "kultur_rev" using primary key columns
-  kultur_rev_by_pk(rev_id: ID!): kultur_rev
+  kultur_rev_by_pk(id: ID!): kultur_rev
 
   # execute function "kultur_search" which returns "kultur"
   kultur_search(
@@ -24241,7 +24241,7 @@ type subscription_root {
   ): lieferung_rev_aggregate!
 
   # fetch data from the table: "lieferung_rev" using primary key columns
-  lieferung_rev_by_pk(rev_id: ID!): lieferung_rev
+  lieferung_rev_by_pk(id: ID!): lieferung_rev
 
   # execute function "lieferung_search" which returns "lieferung"
   lieferung_search(
@@ -24436,7 +24436,7 @@ type subscription_root {
   ): person_option_rev_aggregate!
 
   # fetch data from the table: "person_option_rev" using primary key columns
-  person_option_rev_by_pk(rev_id: ID!): person_option_rev
+  person_option_rev_by_pk(id: ID!): person_option_rev
 
   # fetch data from the table: "person_rev"
   person_rev(
@@ -24475,7 +24475,7 @@ type subscription_root {
   ): person_rev_aggregate!
 
   # fetch data from the table: "person_rev" using primary key columns
-  person_rev_by_pk(rev_id: ID!): person_rev
+  person_rev_by_pk(id: ID!): person_rev
 
   # execute function "person_search" which returns "person"
   person_search(
@@ -24595,7 +24595,7 @@ type subscription_root {
   ): sammel_lieferung_rev_aggregate!
 
   # fetch data from the table: "sammel_lieferung_rev" using primary key columns
-  sammel_lieferung_rev_by_pk(rev_id: ID!): sammel_lieferung_rev
+  sammel_lieferung_rev_by_pk(id: ID!): sammel_lieferung_rev
 
   # fetch data from the table: "sammlung"
   sammlung(
@@ -24712,7 +24712,7 @@ type subscription_root {
   ): sammlung_rev_aggregate!
 
   # fetch data from the table: "sammlung_rev" using primary key columns
-  sammlung_rev_by_pk(rev_id: ID!): sammlung_rev
+  sammlung_rev_by_pk(id: ID!): sammlung_rev
 
   # execute function "sammlung_search" which returns "sammlung"
   sammlung_search(
@@ -24871,7 +24871,7 @@ type subscription_root {
   ): teilkultur_rev_aggregate!
 
   # fetch data from the table: "teilkultur_rev" using primary key columns
-  teilkultur_rev_by_pk(rev_id: ID!): teilkultur_rev
+  teilkultur_rev_by_pk(id: ID!): teilkultur_rev
 
   # execute function "teilkultur_search" which returns "teilkultur"
   teilkultur_search(
@@ -24991,7 +24991,7 @@ type subscription_root {
   ): teilzaehlung_rev_aggregate!
 
   # fetch data from the table: "teilzaehlung_rev" using primary key columns
-  teilzaehlung_rev_by_pk(rev_id: ID!): teilzaehlung_rev
+  teilzaehlung_rev_by_pk(id: ID!): teilzaehlung_rev
 
   # fetch data from the table: "user_role"
   user_role(
@@ -25108,7 +25108,7 @@ type subscription_root {
   ): zaehlung_rev_aggregate!
 
   # fetch data from the table: "zaehlung_rev" using primary key columns
-  zaehlung_rev_by_pk(rev_id: ID!): zaehlung_rev
+  zaehlung_rev_by_pk(id: ID!): zaehlung_rev
 
   # execute function "zaehlung_search" which returns "zaehlung"
   zaehlung_search(
@@ -25516,7 +25516,7 @@ type teilkultur_rev {
     # filter the rows returned
     where: event_bool_exp
   ): event_aggregate!
-  id: uuid!
+  id: ID!
 
   # An object relationship
   kultur: kultur
@@ -25525,7 +25525,7 @@ type teilkultur_rev {
   ort1: String
   ort2: String
   ort3: String
-  rev_id: ID!
+  teilkultur_id: uuid!
 
   # An array relationship
   teilzaehlungs(
@@ -25637,7 +25637,7 @@ input teilkultur_rev_bool_exp {
   ort1: String_comparison_exp
   ort2: String_comparison_exp
   ort3: String_comparison_exp
-  rev_id: uuid_comparison_exp
+  teilkultur_id: uuid_comparison_exp
   teilzaehlungs: teilzaehlung_bool_exp
 }
 
@@ -25666,14 +25666,14 @@ input teilkultur_rev_insert_input {
   changed: timestamp
   changed_by: String
   events: event_arr_rel_insert_input
-  id: uuid
+  id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
   name: String
   ort1: String
   ort2: String
   ort3: String
-  rev_id: ID
+  teilkultur_id: uuid
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
 }
 
@@ -25685,13 +25685,13 @@ type teilkultur_rev_max_fields {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   kultur_id: uuid
   name: String
   ort1: String
   ort2: String
   ort3: String
-  rev_id: ID
+  teilkultur_id: uuid
 }
 
 # order by max() on columns of table "teilkultur_rev"
@@ -25708,7 +25708,7 @@ input teilkultur_rev_max_order_by {
   ort1: order_by
   ort2: order_by
   ort3: order_by
-  rev_id: order_by
+  teilkultur_id: order_by
 }
 
 # aggregate min on columns
@@ -25719,13 +25719,13 @@ type teilkultur_rev_min_fields {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   kultur_id: uuid
   name: String
   ort1: String
   ort2: String
   ort3: String
-  rev_id: ID
+  teilkultur_id: uuid
 }
 
 # order by min() on columns of table "teilkultur_rev"
@@ -25742,7 +25742,7 @@ input teilkultur_rev_min_order_by {
   ort1: order_by
   ort2: order_by
   ort3: order_by
-  rev_id: order_by
+  teilkultur_id: order_by
 }
 
 # response of any mutation on the table "teilkultur_rev"
@@ -25785,13 +25785,13 @@ input teilkultur_rev_order_by {
   ort1: order_by
   ort2: order_by
   ort3: order_by
-  rev_id: order_by
+  teilkultur_id: order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
 }
 
 # primary key columns input for table: "teilkultur_rev"
 input teilkultur_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "teilkultur_rev"
@@ -25839,7 +25839,7 @@ enum teilkultur_rev_select_column {
   ort3
 
   # column name
-  rev_id
+  teilkultur_id
 }
 
 # input type for updating data in table "teilkultur_rev"
@@ -25852,13 +25852,13 @@ input teilkultur_rev_set_input {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   kultur_id: uuid
   name: String
   ort1: String
   ort2: String
   ort3: String
-  rev_id: ID
+  teilkultur_id: uuid
 }
 
 # aggregate stddev on columns
@@ -25946,7 +25946,7 @@ enum teilkultur_rev_update_column {
   ort3
 
   # column name
-  rev_id
+  teilkultur_id
 }
 
 # aggregate var_pop on columns
@@ -26506,13 +26506,13 @@ type teilzaehlung_rev {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid!
+  id: ID!
   prognose_von_tz: uuid
-  rev_id: ID!
 
   # An object relationship
   teilkultur: teilkultur
   teilkultur_id: uuid
+  teilzaehlung_id: uuid!
 
   # An array relationship
   teilzaehlungs(
@@ -26633,9 +26633,9 @@ input teilzaehlung_rev_bool_exp {
   changed_by: String_comparison_exp
   id: uuid_comparison_exp
   prognose_von_tz: uuid_comparison_exp
-  rev_id: uuid_comparison_exp
   teilkultur: teilkultur_bool_exp
   teilkultur_id: uuid_comparison_exp
+  teilzaehlung_id: uuid_comparison_exp
   teilzaehlungs: teilzaehlung_bool_exp
   zaehlung: zaehlung_bool_exp
   zaehlung_id: uuid_comparison_exp
@@ -26673,11 +26673,11 @@ input teilzaehlung_rev_insert_input {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   prognose_von_tz: uuid
-  rev_id: ID
   teilkultur: teilkultur_obj_rel_insert_input
   teilkultur_id: uuid
+  teilzaehlung_id: uuid
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
   zaehlung: zaehlung_obj_rel_insert_input
   zaehlung_id: uuid
@@ -26696,10 +26696,10 @@ type teilzaehlung_rev_max_fields {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   prognose_von_tz: uuid
-  rev_id: ID
   teilkultur_id: uuid
+  teilzaehlung_id: uuid
   zaehlung_id: uuid
 }
 
@@ -26718,8 +26718,8 @@ input teilzaehlung_rev_max_order_by {
   changed_by: order_by
   id: order_by
   prognose_von_tz: order_by
-  rev_id: order_by
   teilkultur_id: order_by
+  teilzaehlung_id: order_by
   zaehlung_id: order_by
 }
 
@@ -26736,10 +26736,10 @@ type teilzaehlung_rev_min_fields {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   prognose_von_tz: uuid
-  rev_id: ID
   teilkultur_id: uuid
+  teilzaehlung_id: uuid
   zaehlung_id: uuid
 }
 
@@ -26758,8 +26758,8 @@ input teilzaehlung_rev_min_order_by {
   changed_by: order_by
   id: order_by
   prognose_von_tz: order_by
-  rev_id: order_by
   teilkultur_id: order_by
+  teilzaehlung_id: order_by
   zaehlung_id: order_by
 }
 
@@ -26802,9 +26802,9 @@ input teilzaehlung_rev_order_by {
   changed_by: order_by
   id: order_by
   prognose_von_tz: order_by
-  rev_id: order_by
   teilkultur: teilkultur_order_by
   teilkultur_id: order_by
+  teilzaehlung_id: order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
   zaehlung: zaehlung_order_by
   zaehlung_id: order_by
@@ -26812,7 +26812,7 @@ input teilzaehlung_rev_order_by {
 
 # primary key columns input for table: "teilzaehlung_rev"
 input teilzaehlung_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "teilzaehlung_rev"
@@ -26863,10 +26863,10 @@ enum teilzaehlung_rev_select_column {
   prognose_von_tz
 
   # column name
-  rev_id
+  teilkultur_id
 
   # column name
-  teilkultur_id
+  teilzaehlung_id
 
   # column name
   zaehlung_id
@@ -26887,10 +26887,10 @@ input teilzaehlung_rev_set_input {
   bemerkungen: String
   changed: timestamp
   changed_by: String
-  id: uuid
+  id: ID
   prognose_von_tz: uuid
-  rev_id: ID
   teilkultur_id: uuid
+  teilzaehlung_id: uuid
   zaehlung_id: uuid
 }
 
@@ -27006,10 +27006,10 @@ enum teilzaehlung_rev_update_column {
   prognose_von_tz
 
   # column name
-  rev_id
+  teilkultur_id
 
   # column name
-  teilkultur_id
+  teilzaehlung_id
 
   # column name
   zaehlung_id
@@ -27971,13 +27971,12 @@ type zaehlung_rev {
   changed: timestamp
   changed_by: String
   datum: date
-  id: uuid!
+  id: ID!
 
   # An object relationship
   kultur: kultur
   kultur_id: uuid
   prognose: Boolean
-  rev_id: ID!
 
   # An array relationship
   teilzaehlungs(
@@ -28014,6 +28013,7 @@ type zaehlung_rev {
     # filter the rows returned
     where: teilzaehlung_bool_exp
   ): teilzaehlung_aggregate!
+  zaehlung_id: uuid!
 }
 
 # aggregated selection of "zaehlung_rev"
@@ -28086,8 +28086,8 @@ input zaehlung_rev_bool_exp {
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
   prognose: Boolean_comparison_exp
-  rev_id: uuid_comparison_exp
   teilzaehlungs: teilzaehlung_bool_exp
+  zaehlung_id: uuid_comparison_exp
 }
 
 # unique or primary key constraints on table "zaehlung_rev"
@@ -28115,12 +28115,12 @@ input zaehlung_rev_insert_input {
   changed: timestamp
   changed_by: String
   datum: date
-  id: uuid
+  id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
   prognose: Boolean
-  rev_id: ID
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
+  zaehlung_id: uuid
 }
 
 # aggregate max on columns
@@ -28132,9 +28132,9 @@ type zaehlung_rev_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  id: uuid
+  id: ID
   kultur_id: uuid
-  rev_id: ID
+  zaehlung_id: uuid
 }
 
 # order by max() on columns of table "zaehlung_rev"
@@ -28148,7 +28148,7 @@ input zaehlung_rev_max_order_by {
   datum: order_by
   id: order_by
   kultur_id: order_by
-  rev_id: order_by
+  zaehlung_id: order_by
 }
 
 # aggregate min on columns
@@ -28160,9 +28160,9 @@ type zaehlung_rev_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  id: uuid
+  id: ID
   kultur_id: uuid
-  rev_id: ID
+  zaehlung_id: uuid
 }
 
 # order by min() on columns of table "zaehlung_rev"
@@ -28176,7 +28176,7 @@ input zaehlung_rev_min_order_by {
   datum: order_by
   id: order_by
   kultur_id: order_by
-  rev_id: order_by
+  zaehlung_id: order_by
 }
 
 # response of any mutation on the table "zaehlung_rev"
@@ -28216,13 +28216,13 @@ input zaehlung_rev_order_by {
   kultur: kultur_order_by
   kultur_id: order_by
   prognose: order_by
-  rev_id: order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
+  zaehlung_id: order_by
 }
 
 # primary key columns input for table: "zaehlung_rev"
 input zaehlung_rev_pk_columns_input {
-  rev_id: ID!
+  id: ID!
 }
 
 # select columns of table "zaehlung_rev"
@@ -28264,7 +28264,7 @@ enum zaehlung_rev_select_column {
   prognose
 
   # column name
-  rev_id
+  zaehlung_id
 }
 
 # input type for updating data in table "zaehlung_rev"
@@ -28278,10 +28278,10 @@ input zaehlung_rev_set_input {
   changed: timestamp
   changed_by: String
   datum: date
-  id: uuid
+  id: ID
   kultur_id: uuid
   prognose: Boolean
-  rev_id: ID
+  zaehlung_id: uuid
 }
 
 # aggregate stddev on columns
@@ -28363,7 +28363,7 @@ enum zaehlung_rev_update_column {
   prognose
 
   # column name
-  rev_id
+  zaehlung_id
 }
 
 # aggregate var_pop on columns
