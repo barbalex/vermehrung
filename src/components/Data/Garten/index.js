@@ -235,12 +235,13 @@ const Garten = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        garten_id: id,
+        garten_id: row.id,
         name: field === 'name' ? toStringIfPossible(value) : row.name,
         person_id: field === 'person_id' ? value : row.person_id,
         strasse: field === 'strasse' ? toStringIfPossible(value) : row.strasse,
         plz: field === 'plz' ? value : row.plz,
         ort: field === 'ort' ? toStringIfPossible(value) : row.ort,
+        geom_point: field === 'geom_point' ? value : row.geom_point,
         aktiv: field === 'aktiv' ? value : row.aktiv,
         bemerkungen:
           field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,

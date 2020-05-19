@@ -31,6 +31,8 @@ const Key = styled.div`
 const ConflictData = ({ dataArray, loading, row }) => {
   if (loading) return 'Lade...'
 
+  //console.log('Conflict Data rendering row:', { row, dataArray })
+
   return dataArray.map((d, index) => {
     // need to use get to enable passing paths as key, for instance 'person.name'
     // also stringify because Diff split's it

@@ -229,6 +229,7 @@ const Sammlung = ({
         person_id: field === 'person_id' ? value : row.person_id,
         herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
         nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
+        geom_point: field === 'geom_point' ? value : row.geom_point,
         datum: field === 'datum' ? value : row.datum,
         von_anzahl_individuen:
           field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,

@@ -108,7 +108,7 @@ const Events = ({ filter: showFilter }) => {
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
-      id,
+      event_id: id,
       _rev,
       _depth,
       _revisions,
@@ -116,9 +116,9 @@ const Events = ({ filter: showFilter }) => {
       changed_by: user.email,
     }
     addQueuedQuery({
-      name: 'mutateInsert_event_rev',
+      name: 'mutateInsert_event_rev_one',
       variables: JSON.stringify({
-        objects: [newObject],
+        object: newObject,
         on_conflict: {
           constraint: 'event_rev_pkey',
           update_columns: ['id'],

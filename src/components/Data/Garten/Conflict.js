@@ -40,14 +40,19 @@ const GartenConflict = ({
   const { user, enqueNotification } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { data, error, loading } = useQuery(gartenRevQuery, {
+  const { error, loading } = useQuery(gartenRevQuery, {
     variables: {
       rev,
       id,
     },
   })
 
-  const revRow = data?.garten_rev?.[0] ?? {}
+  //const revRow = data?.garten_rev?.[0] ?? {}
+  // need to grab store object to ensure this remains up to date
+  const revRow =
+    [...store.garten_revs.values()].find(
+      (v) => v._rev === rev && v.garten_id === id,
+    ) || {}
 
   const dataArray = [
     { key: 'name', value: revRow.name, label: 'Name' },
