@@ -9,11 +9,13 @@ const Container = styled.div`
   padding: 10px;
   border-radius: 3px;
   background-color: ${(props) => props['data-color']};
+  color: white;
+  font-weight: 500;
 `
 const colorMap = {
-  error: '#ff7246',
-  success: '#00d700',
-  info: '#4a148c1a',
+  error: '#D84315',
+  success: '#00a300',
+  info: '#4a148c',
   warning: 'orange',
 }
 
@@ -24,7 +26,7 @@ const Notification = ({ notification: n }) => {
 
   return (
     <Container data-color={color}>
-      <p>{n.text}</p>
+      <div>{n.message}</div>
     </Container>
   )
 }

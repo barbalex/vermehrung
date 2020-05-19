@@ -115,11 +115,8 @@ const File = ({ file, parent }) => {
       })
     } catch (error) {
       console.log(error)
-      return store.addNotif({
+      return store.addNotification({
         message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
       })
     }
     // 2. remove file

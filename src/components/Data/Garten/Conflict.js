@@ -37,7 +37,7 @@ const GartenConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, addNotif } = store
+  const { user, addNotification } = store
 
   // need to use this query to ensure that the person's name is queried
   const { error, loading } = useQuery(gartenRevQuery, {
@@ -116,17 +116,14 @@ const GartenConflict = ({
         },
       })
     } catch (error) {
-      addNotif({
+      addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
     callbackAfterVerwerfen()
   }, [
     callbackAfterVerwerfen,
-    addNotif,
+    addNotification,
     revRow._depth,
     revRow._rev,
     revRow.aktiv,
@@ -168,17 +165,14 @@ const GartenConflict = ({
         },
       })
     } catch (error) {
-      addNotif({
+      addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
     callbackAfterUebernehmen()
   }, [
     callbackAfterUebernehmen,
-    addNotif,
+    addNotification,
     revRow._depth,
     revRow._rev,
     revRow.aktiv,
