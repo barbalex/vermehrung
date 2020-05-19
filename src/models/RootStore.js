@@ -1,6 +1,6 @@
 import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
-import { reaction, flow, autorun } from 'mobx'
+import { reaction, flow } from 'mobx'
 import sortBy from 'lodash/sortBy'
 import { v1 as uuidv1 } from 'uuid'
 
@@ -44,12 +44,6 @@ export const RootStore = RootStoreBase.props({
     firebase: null,
   }))
   .actions((self) => {
-    autorun((data) => {
-      console.log('notification changed:', {
-        data,
-        notifications: self.notifications,
-      })
-    })
     reaction(
       () => `${self.queuedQueries.length}/${self.online}`,
       flow(function* () {
@@ -334,12 +328,13 @@ export const RootStore = RootStoreBase.props({
         const val = {
           id: uuidv1(),
           time: Date.now(),
-          duration: 10000,
+          duration: 100000, // TODO: RESET to 10000
           dismissable: true,
           allDismissable: true,
           type: 'error',
           ...valPassed,
         }
+        console.log('store, addNotification, val:', val)
         self.notifications.set(val.id, val)
         // remove after duration
         setTimeout(() => {

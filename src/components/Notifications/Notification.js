@@ -2,17 +2,29 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-const Container = styled.div``
-
 import { StoreContext } from '../../models/reactUtils'
 
-const Notification = ({ notification }) => {
+const Container = styled.div`
+  margin: 5px;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: ${(props) => props['data-color']};
+`
+const colorMap = {
+  error: '#ff7246',
+  success: '#00d700',
+  info: '#4a148c1a',
+  warning: 'orange',
+}
+
+const Notification = ({ notification: n }) => {
   const store = useContext(StoreContext)
-  console.log('Notification, notification:', notification)
+  const color = colorMap[n.type] ?? 'error'
+  console.log('Notification, notification:', { n, color, type: n.type })
 
   return (
-    <Container>
-      <p>{notification.text}</p>
+    <Container data-color={color}>
+      <p>{n.text}</p>
     </Container>
   )
 }

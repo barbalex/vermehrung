@@ -1,5 +1,4 @@
 import { types } from 'mobx-state-tree'
-import { v1 as uuidv1 } from 'uuid'
 
 export default types.model('Notification', {
   id: types.identifier,
@@ -22,10 +21,5 @@ export default types.model('Notification', {
     types.null,
     types.undefined,
   ),
-  type: types.optional(types.string, 'error', [
-    'success',
-    'warning',
-    'info',
-    'error',
-  ]),
+  type: types.union(types.string, types.undefined), // 'success', 'warning', 'info', 'error'
 })
