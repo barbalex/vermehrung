@@ -51,7 +51,7 @@ Meine Idee ist nun, dass:
 
 ### 2. Warteschlange für Operationen
 
-Die App muss alle Operationen so durchführen, dass sie - wenn offline - erhalten bzw. zwischen-gespeichert bleiben. Auch wenn die Benutzerin das App schliesst. Und durchgeführt werden, sobald die App offen und online ist.<br/><br/>
+Die App muss alle Operationen so durchführen, dass sie - wenn offline - erhalten bzw. zwischen-gespeichert bleiben. Auch wenn die Benutzerin das App schliesst. Und durchgeführt werden, sobald die App offen und wieder online ist.<br/><br/>
 
 Dazu muss eine andere Architektur gewählt werden, als bisher für die lokale Datenhaltung verwendet. Mit anderen Worten: App-seitig ändert sich sehr viel. Im Prinzip wird sie neu aufgebaut - wobei recht viel wiederverwendet werden kann.<br/><br/>
 
