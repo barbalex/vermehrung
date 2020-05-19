@@ -5,8 +5,9 @@ import { observer } from 'mobx-react-lite'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 
-const HerkunftConflict = ({
+const GartenConflict = ({
   id,
   rev,
   row,
@@ -17,38 +18,49 @@ const HerkunftConflict = ({
   const store = useContext(StoreContext)
   const { user, enqueNotification } = store
 
-  const { data, error, loading } = useQuery((store) =>
-    store.queryHerkunft_rev({
-      where: { _rev: { _eq: rev }, herkunft_id: { _eq: id } },
-    }),
+  const { data, error, loading } = useQuery(
+    (store) =>
+      store.queryGarten_rev({
+        where: { _rev: { _eq: rev }, garten_id: { _eq: id } },
+      }),
+    (d) => d.name.strasse.ort.aktiv.bemerkungen.changed.changed_by,
   )
 
-  const revRow = data?.herkunft_rev?.[0] ?? {}
+  const revRow = data?.garten_rev?.[0] ?? {}
   /*const revRow =
-    [...store.herkunft_revs.values()].find(
-      (v) => v._rev === rev && v.herkunft_id === id,
+    [...store.garten_revs.values()].find(
+      (v) => v._rev === rev && v.garten_id === id,
     ) || {}*/
   // TODO: geom_point
   const dataArray = [
-    { key: 'nr', value: revRow.nr, label: 'Nr' },
-    { key: 'lokalname', value: revRow.lokalname, label: 'Lokalname' },
-    { key: 'gemeinde', value: revRow.gemeinde, label: 'Gemeinde' },
-    { key: 'kanton', value: revRow.kanton, label: 'Kanton' },
-    { key: 'land', value: revRow.land, label: 'Land' },
-    { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
-    { key: 'changed', value: revRow.changed, label: 'geändert' },
+    { key: 'name', value: revRow.name, label: 'Name' },
+    /*{
+      key: 'person_id',
+      value: revRow.person.name,
+      label: 'Person',
+    },*/
+    { key: 'strasse', value: revRow.strasse, label: 'Strasse' },
+    //{ key: 'plz', value: toStringIfPossible(revRow.plz), label: 'PLZ' },
+    { key: 'ort', value: revRow.ort, label: 'Ort' },
+    { key: 'aktiv', value: revRow.aktiv == 'true', label: 'aktiv' },
+    { key: 'bemerkungen', value: revRow.bemerkungen, label: 'bemerkungen' },
+    {
+      key: 'changed',
+      value: toStringIfPossible(revRow.changed),
+      label: 'geändert',
+    },
     { key: 'changed_by', value: revRow.changed_by, label: 'geändert von' },
   ]
 
   const onClickVerwerfen = useCallback(async () => {
     const depth = revRow._depth + 1
     const newObject = {
-      herkunft_id: revRow.herkunft_id,
-      nr: revRow.nr,
-      lokalname: revRow.lokalname,
-      gemeinde: revRow.gemeinde,
-      kanton: revRow.kanton,
-      land: revRow.land,
+      name: revRow.name,
+      person_id: revRow.person_id,
+      strasse: revRow.strasse,
+      plz: revRow.plz,
+      ort: revRow.ort,
+      aktiv: revRow.aktiv,
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
@@ -60,10 +72,10 @@ const HerkunftConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     try {
-      await store.mutateInsert_herkunft_rev_one({
+      await store.mutateInsert_garten_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'herkunft_rev_pkey',
+          constraint: 'garten_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -81,25 +93,25 @@ const HerkunftConflict = ({
     enqueNotification,
     revRow._depth,
     revRow._rev,
+    revRow.aktiv,
     revRow.bemerkungen,
-    revRow.gemeinde,
-    revRow.herkunft_id,
-    revRow.kanton,
-    revRow.land,
-    revRow.lokalname,
-    revRow.nr,
+    revRow.name,
+    revRow.ort,
+    revRow.person_id,
+    revRow.plz,
+    revRow.strasse,
     store,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {
     const depth = revRow._depth + 1
     const newObject = {
-      herkunft_id: revRow.herkunft_id,
-      nr: revRow.nr,
-      lokalname: revRow.lokalname,
-      gemeinde: revRow.gemeinde,
-      kanton: revRow.kanton,
-      land: revRow.land,
+      name: revRow.name,
+      person_id: revRow.person_id,
+      strasse: revRow.strasse,
+      plz: revRow.plz,
+      ort: revRow.ort,
+      aktiv: revRow.aktiv,
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
@@ -110,10 +122,10 @@ const HerkunftConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     try {
-      await store.mutateInsert_herkunft_rev_one({
+      await store.mutateInsert_garten_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'herkunft_rev_pkey',
+          constraint: 'garten_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -131,13 +143,13 @@ const HerkunftConflict = ({
     enqueNotification,
     revRow._depth,
     revRow._rev,
+    revRow.aktiv,
     revRow.bemerkungen,
-    revRow.gemeinde,
-    revRow.herkunft_id,
-    revRow.kanton,
-    revRow.land,
-    revRow.lokalname,
-    revRow.nr,
+    revRow.name,
+    revRow.ort,
+    revRow.person_id,
+    revRow.plz,
+    revRow.strasse,
     store,
     user.email,
   ])
@@ -145,9 +157,11 @@ const HerkunftConflict = ({
     setActiveConflict,
   ])
 
+  console.log('Garten Conflict', { dataArray, row, revRow })
+
   return (
     <Conflict
-      name="Herkunft"
+      name="Garten"
       rev={rev}
       row={row}
       dataArray={dataArray}
@@ -160,4 +174,4 @@ const HerkunftConflict = ({
   )
 }
 
-export default observer(HerkunftConflict)
+export default observer(GartenConflict)

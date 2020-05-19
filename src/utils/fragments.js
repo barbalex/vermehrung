@@ -90,6 +90,11 @@ export const garten = gql`
     __typename
     name
     person_id
+    person {
+      id
+      __typename
+      name
+    }
     strasse
     plz
     ort
@@ -106,6 +111,33 @@ export const garten = gql`
     _revisions
     _depth
     _conflicts
+  }
+`
+export const garten_rev = gql`
+  fragment GartenRevFields on garten_rev {
+    id
+    __typename
+    garten_id
+    name
+    person_id
+    person {
+      id
+      __typename
+      name
+    }
+    strasse
+    plz
+    ort
+    geom_point
+    aktiv
+    bemerkungen
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _deleted
   }
 `
 export const gartenTeilzaehlungSums = gql`
