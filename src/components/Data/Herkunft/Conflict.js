@@ -38,7 +38,7 @@ const HerkunftConflict = ({
     {
       key: 'geom_point.coordinates',
       value: revRow?.geom_point?.coordinates,
-      label: 'Koordinaten',
+      label: 'Koordinaten (in Grad)',
     },
     { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
     { key: 'changed', value: revRow.changed, label: 'geändert' },
