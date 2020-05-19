@@ -3,7 +3,7 @@ import { types } from 'mobx-state-tree'
 export default types.model('Notification', {
   id: types.identifier,
   time: types.union(types.number, types.undefined),
-  text: types.union(types.string, types.number, types.null, types.undefined),
+  message: types.union(types.string, types.number, types.null, types.undefined),
   duration: types.union(types.number, types.undefined),
   dismissable: types.union(types.boolean, types.undefined),
   allDismissable: types.optional(types.boolean, true),

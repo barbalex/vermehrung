@@ -129,11 +129,8 @@ const Files = ({ parentId, parent }) => {
               refetchQueries: ['GeneralFileQuery'],
             })
           } catch (error) {
-            return store.addNotif({
+            return store.addNotification({
               message: error.message,
-              options: {
-                variant: 'error',
-              },
             })
           }
           //console.log('File uploaded: ', { info, responce })

@@ -37,7 +37,7 @@ const Info = styled.div`
 const SettingsZaehlungen = ({ eventResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
 
   const { error, loading } = eventResult
   const kulturId = get(eventResult, 'data.event[0].kultur.id')
@@ -74,24 +74,18 @@ const SettingsZaehlungen = ({ eventResult }) => {
           refetchQueries: ['EventQueryForEvent'],
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
     },
-    [client, kulturId, addNotif],
+    [client, kulturId, addNotification],
   )
   const onClickFrown = useCallback(() => {
-    addNotif({
+    addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
-  }, [addNotif, error])
+  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`

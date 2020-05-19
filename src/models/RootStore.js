@@ -324,14 +324,15 @@ export const RootStore = RootStoreBase.props({
         self.notifs = self.notifs.filter((n) => n.key !== note)
       },
       addNotification(valPassed) {
-        // set default values
         const val = {
+          // set default values
           id: uuidv1(),
           time: Date.now(),
-          duration: 100000, // TODO: RESET to 10000
+          duration: 10000, // standard value: 10000
           dismissable: true,
           allDismissable: true,
           type: 'error',
+          // overwrite with passed in ones:
           ...valPassed,
         }
         console.log('store, addNotification, val:', val)
