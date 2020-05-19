@@ -10,11 +10,8 @@ export default async ({ store, fileName, workbook }) => {
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
-    return store.addNotif({
+    return store.addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`

@@ -34,11 +34,8 @@ export default async ({ lieferungId, sammelLieferung, field, store }) => {
       where: { id: { _eq: lieferungId } },
     })
   } catch (error) {
-    return store.addNotif({
+    return store.addNotification({
       message: `Eine der Lieferungen konnte nicht aktualisert werden. Fehlermeldung: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const lfLastVersion = result.data.lieferung

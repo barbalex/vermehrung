@@ -37,7 +37,7 @@ const Info = styled.div`
 const SettingsTeilkulturen = ({ teilkulturResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
 
   const { data, error, loading } = teilkulturResult
   const { tk_bemerkungen } =
@@ -74,24 +74,18 @@ const SettingsTeilkulturen = ({ teilkulturResult }) => {
           refetchQueries: ['TeilkulturQueryForTeilkultur'],
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
     },
-    [data, client, addNotif],
+    [data, client, addNotification],
   )
   const onClickFrown = useCallback(() => {
-    addNotif({
+    addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
-  }, [addNotif, error])
+  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`

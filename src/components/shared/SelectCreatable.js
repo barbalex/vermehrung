@@ -99,7 +99,7 @@ const SharedSelect = ({
 }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
   const { refetch: refetchTree } = store.tree
 
   const onChange = useCallback(
@@ -123,11 +123,8 @@ const SharedSelect = ({
           `,
           })
         } catch (error) {
-          return addNotif({
+          return addNotification({
             message: `Error inserting dataset: ${error.message}`,
-            options: {
-              variant: 'error',
-            },
           })
         }
         const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
@@ -159,7 +156,7 @@ const SharedSelect = ({
       creatableIdField,
       creatablePropertiesToPass,
       creatablePropertyName,
-      addNotif,
+      addNotification,
       name,
       saveToDb,
       table,

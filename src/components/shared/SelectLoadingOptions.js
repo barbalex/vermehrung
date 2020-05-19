@@ -104,11 +104,8 @@ const SelectTypable = ({
           limit: 7,
         })
       } catch (error) {
-        store.addNotif({
+        store.addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
       const options = get(result, resultNodesName, []).map((o) => ({

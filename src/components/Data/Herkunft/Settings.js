@@ -37,7 +37,7 @@ const Info = styled.div`
 const SettingsGarten = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
 
   const { data, error, loading } = personOptionResult
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
@@ -73,24 +73,18 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
           refetchQueries: ['PersonOptionQueryForHerkunft'],
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
     },
-    [client, personId, addNotif],
+    [client, personId, addNotification],
   )
   const onClickFrown = useCallback(() => {
-    addNotif({
+    addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
-  }, [addNotif, error])
+  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`

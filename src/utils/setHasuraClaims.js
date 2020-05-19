@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export default async ({ store, user, gqlHttpClient }) => {
-  const { addNotif, setAuthorizing } = store
+  const { addNotification, setAuthorizing } = store
   setAuthorizing(true)
   let res
   try {
@@ -11,11 +11,8 @@ export default async ({ store, user, gqlHttpClient }) => {
   } catch (error) {
     console.log('error from getting claims from auth.vermehrung.ch:', error)
     setAuthorizing(false)
-    return addNotif({
+    return addNotification({
       message: error.response.data,
-      options: {
-        variant: 'error',
-      },
     })
   }
   if (res.status === 200) {
@@ -25,11 +22,8 @@ export default async ({ store, user, gqlHttpClient }) => {
     } catch (error) {
       console.log('error from calling getting id token:', error)
       setAuthorizing(false)
-      return addNotif({
+      return addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
     //console.log('tokenWithRoles:', tokenWithRoles)

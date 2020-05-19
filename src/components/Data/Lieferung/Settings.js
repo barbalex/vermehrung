@@ -37,7 +37,7 @@ const Info = styled.div`
 const SettingsLieferung = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
 
   const { data, error, loading } = personOptionResult
   const { li_show_sl_felder, li_show_sl } = get(data, 'person_option[0]') || {}
@@ -72,24 +72,18 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
           refetchQueries: ['PersonOptionQueryForLieferungLieferung'],
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
     },
-    [client, personId, addNotif],
+    [client, personId, addNotification],
   )
   const onClickFrown = useCallback(() => {
-    addNotif({
+    addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
-  }, [addNotif, error])
+  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`

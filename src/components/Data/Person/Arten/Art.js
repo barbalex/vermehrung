@@ -77,11 +77,8 @@ const AvArt = ({ avArt }) => {
       })
     } catch (error) {
       console.log(error)
-      return store.addNotif({
+      return store.addNotification({
         message: `Die Art konnte nicht entfernt werden: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
       })
     }
   }, [client, avArt.art_id, avArt.person_id, store])
