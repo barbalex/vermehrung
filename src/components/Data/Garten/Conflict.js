@@ -2,10 +2,32 @@ import React, { useCallback, useContext } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 import toStringIfPossible from '../../../utils/toStringIfPossible'
+
+const gartenRevQuery = gql`
+  query gartenRevForConflictQuery($id: uuid!, $rev: String!) {
+    garten_rev(where: { garten_id: { _eq: $id }, _rev: { _eq: $rev } }) {
+      id
+      __typename
+      name
+      strasse
+      ort
+      aktiv
+      bemerkungen
+      changed
+      changed_by
+      person {
+        id
+        __typename
+        name
+      }
+    }
+  }
+`
 
 const GartenConflict = ({
   id,
@@ -18,13 +40,20 @@ const GartenConflict = ({
   const store = useContext(StoreContext)
   const { user, enqueNotification } = store
 
-  const { data, error, loading } = useQuery(
+  /*const { data, error, loading } = useQuery(
     (store) =>
       store.queryGarten_rev({
         where: { _rev: { _eq: rev }, garten_id: { _eq: id } },
       }),
     (d) => d.name.strasse.ort.aktiv.bemerkungen.changed.changed_by,
-  )
+  )*/
+  // need to use this query to ensure that the person's name is loaded
+  const { data, error, loading } = useQuery(gartenRevQuery, {
+    variables: {
+      rev,
+      id,
+    },
+  })
 
   const revRow = data?.garten_rev?.[0] ?? {}
   /*const revRow =

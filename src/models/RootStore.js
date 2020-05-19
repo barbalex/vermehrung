@@ -2,11 +2,11 @@ import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
 import { reaction, flow } from 'mobx'
 
-import {
-  garten_revModelPrimitives,
-  garten_revModelSelector,
-} from './garten_revModel.base'
-import { garten as gartenFragment } from '../utils/fragments'
+//import {
+//  garten_revModelPrimitives,
+//  garten_revModelSelector,
+//} from './garten_revModel.base'
+//import { garten as gartenFragment } from '../utils/fragments'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
@@ -32,23 +32,6 @@ export const RootStore = RootStoreBase.props({
   // until hasura claims have been added
   // this is _after_ user is set so need another variable
   authorizing: types.optional(types.boolean, true),
-  queryGarten_rev_manual(
-    variables,
-    resultSelector = garten_revModelPrimitives.toString(),
-    options = {},
-  ) {
-    return self.query(
-      `query garten_rev($distinct_on: [garten_rev_select_column!], $limit: Int, $offset: Int, $order_by: [garten_rev_order_by!], $where: garten_rev_bool_exp) { garten_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-      ${
-        typeof resultSelector === 'function'
-          ? resultSelector(new garten_revModelSelector()).toString()
-          : resultSelector
-      }
-    } }`,
-      variables,
-      options,
-    )
-  },
 })
   // structure of these variables is not controlled
   // so need to define this as volatile
