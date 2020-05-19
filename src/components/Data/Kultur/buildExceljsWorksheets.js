@@ -8,7 +8,7 @@ import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsW
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
 export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
-  const { addNotif } = store
+  const { addNotification } = store
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
@@ -55,11 +55,8 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
         },
       )
     } catch (error) {
-      return addNotif({
+      return addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
     const kultur = { ...get(kulturResult, 'kultur[0]') }
@@ -154,11 +151,8 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const zaehlungenArray = get(zaehlungResult, 'zaehlung') || []
@@ -239,11 +233,8 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const teilzaehlungenArray = get(teilzaehlungResult, 'teilzaehlung') || []
@@ -357,11 +348,8 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const anlieferungenArray = get(anlieferungResult, 'lieferung') || []
@@ -494,11 +482,8 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const auslieferungenArray = get(auslieferungResult, 'lieferung') || []
@@ -569,11 +554,8 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const eventsArray = get(eventResult, 'event') || []

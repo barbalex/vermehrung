@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
-import { SnackbarProvider } from 'notistack'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
@@ -19,8 +18,6 @@ import 'isomorphic-fetch'
 import localForage from 'localforage'
 import { navigate } from '@reach/router'
 
-import Notifier from './components/Notifier'
-import NotifDismisser from './components/NotifDismisser'
 import Notifications from './components/Notifications'
 
 import materialTheme from './utils/materialTheme'
@@ -133,20 +130,12 @@ const App = ({ element }) => {
     <MuiThemeProvider theme={materialTheme}>
       <StoreContext.Provider value={store}>
         <ApolloProvider client={apolloClient}>
-          <SnackbarProvider
-            maxSnack={5}
-            preventDuplicate
-            autoHideDuration={10000}
-            action={(key) => <NotifDismisser nKey={key} />}
-          >
-            <>
-              <GlobalStyle />
-              {element}
-              <Notifier />
-              <Notifications />
-              <UpdateExists />
-            </>
-          </SnackbarProvider>
+          <>
+            <GlobalStyle />
+            {element}
+            <Notifications />
+            <UpdateExists />
+          </>
         </ApolloProvider>
       </StoreContext.Provider>
     </MuiThemeProvider>

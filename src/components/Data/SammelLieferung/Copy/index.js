@@ -32,7 +32,7 @@ const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
@@ -66,13 +66,11 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
     } catch (error) {
       return
     }
-    addNotif({
+    addNotification({
       message: 'Lieferung aktualisiert',
-      options: {
-        variant: 'info',
-      },
+      type: 'info',
     })
-  }, [client, addNotif, lieferungId, sammelLieferung, store])
+  }, [client, addNotification, lieferungId, sammelLieferung, store])
   const onClickAllLieferung = useCallback(async () => {
     setAnchorEl(null)
     updateAllLieferungen({

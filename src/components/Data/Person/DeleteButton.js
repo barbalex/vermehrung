@@ -27,7 +27,7 @@ const Title = styled.div`
 const PersonDeleteButton = ({ row }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -49,15 +49,12 @@ const PersonDeleteButton = ({ row }) => {
         )
       } catch (error) {
         console.log(error)
-        return addNotif({
+        return addNotification({
           message: error.response.data,
-          options: {
-            variant: 'error',
-          },
         })
       }
     }
-  }, [client, addNotif, row.account_id, row.id, store])
+  }, [client, addNotification, row.account_id, row.id, store])
 
   return (
     <ErrorBoundary>

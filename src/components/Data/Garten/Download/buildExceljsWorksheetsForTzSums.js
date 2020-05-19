@@ -9,7 +9,7 @@ import { gartenTeilzaehlungSums as gartenTeilzaehlungSumsFragment } from '../../
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
 export default async ({ client, store, garten_id, workbook }) => {
-  const { addNotif } = store
+  const { addNotification } = store
 
   let gaertenResult
   try {
@@ -27,11 +27,8 @@ export default async ({ client, store, garten_id, workbook }) => {
       },
     })
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const data = get(gaertenResult, 'data.garten_teilzaehlung_sums', [])

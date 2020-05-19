@@ -212,7 +212,7 @@ const Row = ({ style, node, nodes }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { tree, addNotif, user, firebase } = store
+  const { tree, addNotification, user, firebase } = store
   const { openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -260,15 +260,12 @@ const Row = ({ style, node, nodes }) => {
         )
       } catch (error) {
         console.log(error)
-        return addNotif({
+        return addNotification({
           message: error.response.data,
-          options: {
-            variant: 'error',
-          },
         })
       }
     }
-  }, [client, addNotif, node, store])
+  }, [client, addNotification, node, store])
 
   const onClickSetPassword = useCallback(async () => {
     const personId = last(node.url).toString()
@@ -289,11 +286,8 @@ const Row = ({ style, node, nodes }) => {
         variables: { id: personId },
       })
     } catch (error) {
-      addNotif({
+      addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
     const email = get(result, 'data.person[0].email')
@@ -303,20 +297,15 @@ const Row = ({ style, node, nodes }) => {
         handleCodeInApp: true,
       })
     } catch (error) {
-      addNotif({
+      addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
-    store.addNotif({
+    store.addNotification({
       message: `${email} erhält einen Link, um ein Passwort zu setzen`,
-      options: {
-        variant: 'success',
-      },
+      type: 'success',
     })
-  }, [client, addNotif, firebase, node.url, store])
+  }, [client, addNotification, firebase, node.url, store])
   const onClickDeleteAccout = useCallback(async () => {
     // delete firebase user
     if (node.accountId) {
@@ -326,11 +315,8 @@ const Row = ({ style, node, nodes }) => {
         )
       } catch (error) {
         console.log(error)
-        return addNotif({
+        return addNotification({
           message: error.response.data,
-          options: {
-            variant: 'error',
-          },
         })
       }
     }
@@ -361,14 +347,11 @@ const Row = ({ style, node, nodes }) => {
       })
     } catch (error) {
       console.log(error)
-      return addNotif({
+      return addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
-  }, [client, addNotif, node.accountId, node.url])
+  }, [client, addNotification, node.accountId, node.url])
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
     // fetch email of this person
@@ -388,29 +371,22 @@ const Row = ({ style, node, nodes }) => {
         variables: { id: personId },
       })
     } catch (error) {
-      addNotif({
+      addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
     const email = get(result, 'data.person[0].email')
     if (!email) {
-      return addNotif({
+      return addNotification({
         message: 'Eine email-Adresse muss erfasst sein',
-        options: {
-          variant: 'warning',
-        },
+        type: 'warning',
       })
     }
     const userRole = get(result, 'data.person[0].user_role')
     if (!userRole) {
-      return addNotif({
+      return addNotification({
         message: 'Eine Rolle muss erfasst sein',
-        options: {
-          variant: 'warning',
-        },
+        type: 'warning',
       })
     }
     let res
@@ -418,18 +394,13 @@ const Row = ({ style, node, nodes }) => {
       res = await axios.get(`https://auth.vermehrung.ch/create-user/${email}`)
     } catch (error) {
       console.log(error)
-      return addNotif({
+      return addNotification({
         message: error.response.data,
-        options: {
-          variant: 'error',
-        },
       })
     }
-    store.addNotif({
+    store.addNotification({
       message: `Für ${email} wurde ein Konto erstellt. Schicken Sie ein Email, um das Passwort zu setzen.`,
-      options: {
-        variant: 'success',
-      },
+      type: 'success',
     })
 
     // save resp.Id to mark users with account
@@ -456,7 +427,7 @@ const Row = ({ style, node, nodes }) => {
         id: last(node.url).toString(),
       },
     })
-  }, [client, addNotif, node.url, store])
+  }, [client, addNotification, node.url, store])
 
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })

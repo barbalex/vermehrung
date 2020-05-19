@@ -35,7 +35,6 @@ export const RootStore = RootStoreBase.props({
   // structure of these variables is not controlled
   // so need to define this as volatile
   .volatile(() => ({
-    notifs: [],
     user: {},
     // started out using context for firebase
     // refactored here because of some weird stuff
@@ -79,11 +78,8 @@ export const RootStore = RootStoreBase.props({
               // TODO: add button to remove this operation
               // TODO: add button to remove all queued operations
               // use new notification system for this
-              return self.addNotif({
+              return self.addNotification({
                 message: error.message,
-                options: {
-                  variant: 'error',
-                },
               })
             }
             // query to refresh the data updated in all used views (tree...)
@@ -311,24 +307,12 @@ export const RootStore = RootStoreBase.props({
         self.filter.setValue({ table: 'garten', key, value })
         self.filter.setValue({ table: 'kultur', key, value })
       },
-      addNotif(note) {
-        self.notifs = [
-          ...self.notifs,
-          {
-            key: new Date().getTime() + Math.random(),
-            ...note,
-          },
-        ]
-      },
-      removeNotif(note) {
-        self.notifs = self.notifs.filter((n) => n.key !== note)
-      },
       addNotification(valPassed) {
         const val = {
           // set default values
           id: uuidv1(),
           time: Date.now(),
-          duration: 10000, // standard value: 10000
+          duration: 100000, // standard value: 10000
           dismissable: true,
           allDismissable: true,
           type: 'error',

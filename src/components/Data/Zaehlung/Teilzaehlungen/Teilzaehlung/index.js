@@ -72,7 +72,7 @@ const Teilzaehlung = ({
 }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif, user, upsertTeilzaehlung, addQueuedQuery } = store
+  const { addNotification, user, upsertTeilzaehlung, addQueuedQuery } = store
   const { refetch: refetchTree } = store.tree
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
@@ -218,14 +218,11 @@ const Teilzaehlung = ({
         refetchQueries: ['TeilzaehlungenQuery'],
       })
     } catch (error) {
-      return addNotif({
+      return addNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
       })
     }
-  }, [client, addNotif, row.id])
+  }, [client, addNotification, row.id])
 
   return (
     <ErrorBoundary>

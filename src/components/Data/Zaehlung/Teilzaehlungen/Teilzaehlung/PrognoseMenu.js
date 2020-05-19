@@ -49,7 +49,7 @@ const Teilzaehlung = ({
 }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
   const { refetch: refetchTree } = store.tree
 
   const [jahr, setJahr] = useState(null)
@@ -102,11 +102,8 @@ const Teilzaehlung = ({
           },
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
       const existingZaehlung = get(existingZaehlungData, 'data.zaehlung[0]')
@@ -142,11 +139,8 @@ const Teilzaehlung = ({
             },
           })
         } catch (error) {
-          return addNotif({
+          return addNotification({
             message: error.message,
-            options: {
-              variant: 'error',
-            },
           })
         }
         newZaehlung = get(zaehlungData, 'data.insert_zaehlung.returning[0]')
@@ -185,11 +179,8 @@ const Teilzaehlung = ({
           refetchQueries: ['TreeQueryForTreeContainer'],
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
       // delete empty teilzaehlung
@@ -221,11 +212,8 @@ const Teilzaehlung = ({
           refetchQueries: ['TreeQueryForTreeContainer'],
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
       const emptyTeilzaehlung = get(
@@ -247,19 +235,14 @@ const Teilzaehlung = ({
             },
           })
         } catch (error) {
-          return addNotif({
+          return addNotification({
             message: error.message,
-            options: {
-              variant: 'error',
-            },
           })
         }
       }
-      addNotif({
+      addNotification({
         message: 'Die Prognose wurde gespeichert',
-        options: {
-          variant: 'info',
-        },
+        type: 'info',
       })
       setAnchorEl(null)
       // update tree
@@ -269,7 +252,7 @@ const Teilzaehlung = ({
     [
       anz,
       client,
-      addNotif,
+      addNotification,
       jahr,
       refetchTree,
       setAnchorEl,

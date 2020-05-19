@@ -30,7 +30,7 @@ const Title = styled.div`
 const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotif } = store
+  const { addNotification } = store
 
   const { data, error, loading } = personOptionResult
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
@@ -66,24 +66,18 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
           refetchQueries: ['PersonOptionQueryForSammelLieferung'],
         })
       } catch (error) {
-        return addNotif({
+        return addNotification({
           message: error.message,
-          options: {
-            variant: 'error',
-          },
         })
       }
     },
-    [client, personId, addNotif],
+    [client, personId, addNotification],
   )
   const onClickFrown = useCallback(() => {
-    addNotif({
+    addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
-  }, [addNotif, error])
+  }, [addNotification, error])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])

@@ -53,7 +53,7 @@ const fragmentFieldsNames = {
 
 export default async ({ node, store, client }) => {
   // get parent table, parent table id and table from url
-  const { addNotif } = store
+  const { addNotification } = store
   const { setActiveNodeArray, refetch, addOpenNodes } = store.tree
   const { nodeType, url } = node
 
@@ -218,11 +218,8 @@ export default async ({ node, store, client }) => {
       mutation,
     })
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: `Error inserting dataset: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const newObject = get(responce, `data.insert_${table}.returning`, [])[0]

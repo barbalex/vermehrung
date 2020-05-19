@@ -15,7 +15,7 @@ export default async ({
   workbook,
   calledFromHigherUp,
 }) => {
-  const { addNotif } = store
+  const { addNotification } = store
 
   // 1. Get Garten
   let gartenResult
@@ -50,11 +50,8 @@ export default async ({
       },
     })
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const garten = { ...get(gartenResult, 'data.garten[0]') }
@@ -110,11 +107,8 @@ export default async ({
       },
     })
   } catch (error) {
-    return addNotif({
+    return addNotification({
       message: error.message,
-      options: {
-        variant: 'error',
-      },
     })
   }
   const kultursArray = get(kulturResult, 'data.kultur') || []
