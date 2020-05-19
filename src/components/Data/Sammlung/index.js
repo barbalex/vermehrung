@@ -150,12 +150,9 @@ const Sammlung = ({
   const { data, error, loading, query: theQuery } = useQuery(query, {
     variables: { id, isFiltered, filter: sammlungFilter },
   })
-  const {
-    data: dataData,
-    error: dataError,
-    loading: dataLoading,
-    refetch,
-  } = useQuery(dataQuery)
+  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
+    dataQuery,
+  )
 
   const [errors, setErrors] = useState({})
 
