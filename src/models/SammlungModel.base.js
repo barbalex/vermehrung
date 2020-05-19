@@ -12,12 +12,20 @@ import { lieferungModel } from "./lieferungModel"
 import { lieferungModelSelector } from "./lieferungModel.base"
 import { lieferung_aggregateModel } from "./lieferung_aggregateModel"
 import { lieferung_aggregateModelSelector } from "./lieferung_aggregateModel.base"
+import { lieferung_revModel } from "./lieferung_revModel"
+import { lieferung_revModelSelector } from "./lieferung_revModel.base"
+import { lieferung_rev_aggregateModel } from "./lieferung_rev_aggregateModel"
+import { lieferung_rev_aggregateModelSelector } from "./lieferung_rev_aggregateModel.base"
 import { personModel } from "./personModel"
 import { personModelSelector } from "./personModel.base"
 import { sammel_lieferungModel } from "./sammel_lieferungModel"
 import { sammel_lieferungModelSelector } from "./sammel_lieferungModel.base"
 import { sammel_lieferung_aggregateModel } from "./sammel_lieferung_aggregateModel"
 import { sammel_lieferung_aggregateModelSelector } from "./sammel_lieferung_aggregateModel.base"
+import { sammel_lieferung_revModel } from "./sammel_lieferung_revModel"
+import { sammel_lieferung_revModelSelector } from "./sammel_lieferung_revModel.base"
+import { sammel_lieferung_rev_aggregateModel } from "./sammel_lieferung_rev_aggregateModel"
+import { sammel_lieferung_rev_aggregateModelSelector } from "./sammel_lieferung_rev_aggregateModel.base"
 import { sammlung_fileModel } from "./sammlung_fileModel"
 import { sammlung_fileModelSelector } from "./sammlung_fileModel.base"
 import { sammlung_file_aggregateModel } from "./sammlung_file_aggregateModel"
@@ -51,6 +59,8 @@ export const sammlungModelBase = ModelBase
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
+    lieferung_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferung_revModel)))),
+    lieferung_revs_aggregate: types.union(types.undefined, types.late(() => lieferung_rev_aggregateModel)),
     lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     lieferungs_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
@@ -58,6 +68,8 @@ export const sammlungModelBase = ModelBase
     nr: types.union(types.undefined, types.null, types.string),
     person: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
     person_id: types.union(types.undefined, types.null, types.frozen()),
+    sammel_lieferung_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferung_revModel)))),
+    sammel_lieferung_revs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_rev_aggregateModel)),
     sammel_lieferungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     sammlung_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_fileModel)))),
@@ -101,9 +113,13 @@ export class sammlungModelSelector extends QueryBuilder {
   get wgs84_long() { return this.__attr(`wgs84_long`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
   herkunft(builder) { return this.__child(`herkunft`, herkunftModelSelector, builder) }
+  lieferung_revs(builder) { return this.__child(`lieferung_revs`, lieferung_revModelSelector, builder) }
+  lieferung_revs_aggregate(builder) { return this.__child(`lieferung_revs_aggregate`, lieferung_rev_aggregateModelSelector, builder) }
   lieferungs(builder) { return this.__child(`lieferungs`, lieferungModelSelector, builder) }
   lieferungs_aggregate(builder) { return this.__child(`lieferungs_aggregate`, lieferung_aggregateModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }
+  sammel_lieferung_revs(builder) { return this.__child(`sammel_lieferung_revs`, sammel_lieferung_revModelSelector, builder) }
+  sammel_lieferung_revs_aggregate(builder) { return this.__child(`sammel_lieferung_revs_aggregate`, sammel_lieferung_rev_aggregateModelSelector, builder) }
   sammel_lieferungs(builder) { return this.__child(`sammel_lieferungs`, sammel_lieferungModelSelector, builder) }
   sammel_lieferungs_aggregate(builder) { return this.__child(`sammel_lieferungs_aggregate`, sammel_lieferung_aggregateModelSelector, builder) }
   sammlung_files(builder) { return this.__child(`sammlung_files`, sammlung_fileModelSelector, builder) }

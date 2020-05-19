@@ -9,6 +9,10 @@ import { teilkulturModelSelector } from "./teilkulturModel.base"
 import { teilzaehlungModel } from "./teilzaehlungModel"
 import { teilzaehlung_aggregateModel } from "./teilzaehlung_aggregateModel"
 import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateModel.base"
+import { teilzaehlung_revModel } from "./teilzaehlung_revModel"
+import { teilzaehlung_revModelSelector } from "./teilzaehlung_revModel.base"
+import { teilzaehlung_rev_aggregateModel } from "./teilzaehlung_rev_aggregateModel"
+import { teilzaehlung_rev_aggregateModelSelector } from "./teilzaehlung_rev_aggregateModel.base"
 import { zaehlungModel } from "./zaehlungModel"
 import { zaehlungModelSelector } from "./zaehlungModel.base"
 
@@ -39,6 +43,8 @@ export const teilzaehlungModelBase = ModelBase
     teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
     teilzaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
+    teilzaehlung_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlung_revModel)))),
+    teilzaehlung_revs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_rev_aggregateModel)),
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
@@ -72,6 +78,8 @@ export class teilzaehlungModelSelector extends QueryBuilder {
   get zaehlung_id() { return this.__attr(`zaehlung_id`) }
   teilkultur(builder) { return this.__child(`teilkultur`, teilkulturModelSelector, builder) }
   teilzaehlung(builder) { return this.__child(`teilzaehlung`, teilzaehlungModelSelector, builder) }
+  teilzaehlung_revs(builder) { return this.__child(`teilzaehlung_revs`, teilzaehlung_revModelSelector, builder) }
+  teilzaehlung_revs_aggregate(builder) { return this.__child(`teilzaehlung_revs_aggregate`, teilzaehlung_rev_aggregateModelSelector, builder) }
   teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, teilzaehlungModelSelector, builder) }
   teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
   zaehlung(builder) { return this.__child(`zaehlung`, zaehlungModelSelector, builder) }

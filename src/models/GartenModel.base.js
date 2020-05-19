@@ -12,6 +12,10 @@ import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
 import { kultur_aggregateModelSelector } from "./kultur_aggregateModel.base"
+import { kultur_revModel } from "./kultur_revModel"
+import { kultur_revModelSelector } from "./kultur_revModel.base"
+import { kultur_rev_aggregateModel } from "./kultur_rev_aggregateModel"
+import { kultur_rev_aggregateModelSelector } from "./kultur_rev_aggregateModel.base"
 import { personModel } from "./personModel"
 import { personModelSelector } from "./personModel.base"
 
@@ -37,6 +41,8 @@ export const gartenModelBase = ModelBase
     garten_files_aggregate: types.union(types.undefined, types.late(() => garten_file_aggregateModel)),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
+    kultur_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_revModel)))),
+    kultur_revs_aggregate: types.union(types.undefined, types.late(() => kultur_rev_aggregateModel)),
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
@@ -81,6 +87,8 @@ export class gartenModelSelector extends QueryBuilder {
   get wgs84_long() { return this.__attr(`wgs84_long`) }
   garten_files(builder) { return this.__child(`garten_files`, garten_fileModelSelector, builder) }
   garten_files_aggregate(builder) { return this.__child(`garten_files_aggregate`, garten_file_aggregateModelSelector, builder) }
+  kultur_revs(builder) { return this.__child(`kultur_revs`, kultur_revModelSelector, builder) }
+  kultur_revs_aggregate(builder) { return this.__child(`kultur_revs_aggregate`, kultur_rev_aggregateModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }

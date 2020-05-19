@@ -30,6 +30,8 @@ import { sammlungModel } from "./sammlungModel"
 import { sammlungModelSelector } from "./sammlungModel.base"
 import { sammlung_aggregateModel } from "./sammlung_aggregateModel"
 import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
+import { user_roleModel } from "./user_roleModel"
+import { user_roleModelSelector } from "./user_roleModel.base"
 
 
 /**
@@ -78,6 +80,7 @@ export const person_revModelBase = ModelBase
     telefon_geschaeft: types.union(types.undefined, types.null, types.string),
     telefon_mobile: types.union(types.undefined, types.null, types.string),
     telefon_privat: types.union(types.undefined, types.null, types.string),
+    userRoleByUserRole: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => user_roleModel))),
     user_role: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
@@ -126,6 +129,7 @@ export class person_revModelSelector extends QueryBuilder {
   sammel_lieferungs_aggregate(builder) { return this.__child(`sammel_lieferungs_aggregate`, sammel_lieferung_aggregateModelSelector, builder) }
   sammlungs(builder) { return this.__child(`sammlungs`, sammlungModelSelector, builder) }
   sammlungs_aggregate(builder) { return this.__child(`sammlungs_aggregate`, sammlung_aggregateModelSelector, builder) }
+  userRoleByUserRole(builder) { return this.__child(`userRoleByUserRole`, user_roleModelSelector, builder) }
 }
 export function selectFromperson_rev() {
   return new person_revModelSelector()
