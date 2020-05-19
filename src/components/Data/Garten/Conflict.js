@@ -63,15 +63,25 @@ const GartenConflict = ({
   // TODO: geom_point
   const dataArray = [
     { key: 'name', value: revRow.name, label: 'Name' },
-    /*{
-      key: 'person_id',
-      value: revRow.person.name,
+    {
+      key: 'person.name',
+      value: revRow?.person?.name,
       label: 'Person',
-    },*/
+    },
     { key: 'strasse', value: revRow.strasse, label: 'Strasse' },
-    //{ key: 'plz', value: toStringIfPossible(revRow.plz), label: 'PLZ' },
+    {
+      key: 'plz',
+      value: revRow.plz,
+      label: 'PLZ',
+      type: 'number',
+    },
     { key: 'ort', value: revRow.ort, label: 'Ort' },
-    { key: 'aktiv', value: revRow.aktiv == 'true', label: 'aktiv' },
+    {
+      key: 'aktiv',
+      value: revRow.aktiv == 'true',
+      label: 'aktiv',
+      type: 'boolean',
+    },
     { key: 'bemerkungen', value: revRow.bemerkungen, label: 'bemerkungen' },
     {
       key: 'changed',

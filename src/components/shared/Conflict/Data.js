@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Diff from 'react-stylable-diff'
+import get from 'lodash/get'
+
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 
 const Row = styled.div`
   display: flex;
@@ -21,8 +24,14 @@ const Key = styled.div`
 const ConflictData = ({ dataArray, loading, row }) => {
   if (loading) return 'Lade...'
   return dataArray.map((d, index) => {
-    let inputA = row[d.key]
+    // need to use get to enable passing paths as key, for instance 'person.name'
+    let inputA = get(row, d.key)
     let inputB = d.value
+    if (['boolean', 'number'].includes(d?.type)) {
+      inputA = toStringIfPossible(inputA)
+      inputB = toStringIfPossible(inputB)
+    }
+    console.log('Data', { row, key: d.key, inputA })
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
       inputA = inputA ?? '(kein Wert)'
