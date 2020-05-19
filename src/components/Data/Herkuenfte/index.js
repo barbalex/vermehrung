@@ -115,7 +115,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
-      id,
+      herkunft_id: id,
       _rev,
       _depth,
       _revisions,
@@ -123,9 +123,9 @@ const Herkuenfte = ({ filter: showFilter }) => {
       changed_by: user.email,
     }
     addQueuedQuery({
-      name: 'mutateInsert_herkunft_rev',
+      name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({
-        objects: [newObject],
+        object: newObject,
         on_conflict: {
           constraint: 'herkunft_rev_pkey',
           update_columns: ['id'],

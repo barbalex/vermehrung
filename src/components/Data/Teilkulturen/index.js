@@ -113,7 +113,7 @@ const Teilkulturen = ({ filter: showFilter }) => {
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
-      id,
+      teilkultur_id: id,
       _rev,
       _depth,
       _revisions,
@@ -121,9 +121,9 @@ const Teilkulturen = ({ filter: showFilter }) => {
       changed_by: user.email,
     }
     addQueuedQuery({
-      name: 'mutateInsert_teilkultur_rev',
+      name: 'mutateInsert_teilkultur_rev_one',
       variables: JSON.stringify({
-        objects: [newObject],
+        object: newObject,
         on_conflict: {
           constraint: 'teilkultur_rev_pkey',
           update_columns: ['id'],

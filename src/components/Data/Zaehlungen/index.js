@@ -122,7 +122,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
-      id,
+      zaehlung_id: id,
       _rev,
       _depth,
       _revisions,
@@ -130,9 +130,9 @@ const Zaehlungen = ({ filter: showFilter }) => {
       changed_by: user.email,
     }
     addQueuedQuery({
-      name: 'mutateInsert_zaehlung_rev',
+      name: 'mutateInsert_zaehlung_rev_one',
       variables: JSON.stringify({
-        objects: [newObject],
+        object: newObject,
         on_conflict: {
           constraint: 'zaehlung_rev_pkey',
           update_columns: ['id'],

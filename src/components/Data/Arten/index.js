@@ -102,7 +102,7 @@ const Arten = ({ filter: showFilter }) => {
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
-      id,
+      art_id: id,
       _rev,
       _depth,
       _revisions,
@@ -112,7 +112,7 @@ const Arten = ({ filter: showFilter }) => {
     addQueuedQuery({
       name: 'mutateInsert_art_rev',
       variables: JSON.stringify({
-        objects: [newObject],
+        object: newObject,
         on_conflict: {
           constraint: 'art_rev_pkey',
           update_columns: ['id'],

@@ -77,6 +77,8 @@ export const RootStore = RootStoreBase.props({
             } catch (error) {
               // Maybe do it like superhuman and check if network error
               // then retry and set online without using tool?
+              // TODO: add button to remove this operation
+              // TODO: add button to remove all queued operations
               return self.enqueNotification({
                 message: error.message,
                 options: {

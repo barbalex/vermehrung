@@ -17,18 +17,17 @@ const HerkunftConflict = ({
   const store = useContext(StoreContext)
   const { user, enqueNotification } = store
 
-  const { data, error, loading } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.queryHerkunft_rev({
       where: { _rev: { _eq: rev }, herkunft_id: { _eq: id } },
     }),
   )
 
-  const revRow = data?.herkunft_rev?.[0] ?? {}
-  /*const revRow =
+  // need to grab store object to ensure this remains up to date
+  const revRow =
     [...store.herkunft_revs.values()].find(
       (v) => v._rev === rev && v.herkunft_id === id,
-    ) || {}*/
-  // TODO: geom_point
+    ) || {}
 
   const dataArray = [
     { key: 'nr', value: revRow.nr, label: 'Nr' },
@@ -161,6 +160,7 @@ const HerkunftConflict = ({
       rev={rev}
       row={row}
       dataArray={dataArray}
+      dataArrayKey={JSON.stringify(dataArray)}
       loading={loading}
       error={error}
       onClickVerwerfen={onClickVerwerfen}

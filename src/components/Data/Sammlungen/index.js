@@ -140,7 +140,7 @@ const Sammlungen = ({ filter: showFilter }) => {
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
-      id,
+      sammlung_id: id,
       _rev,
       _depth,
       _revisions,
@@ -148,9 +148,9 @@ const Sammlungen = ({ filter: showFilter }) => {
       changed_by: user.email,
     }
     addQueuedQuery({
-      name: 'mutateInsert_sammlung_rev',
+      name: 'mutateInsert_sammlung_rev_one',
       variables: JSON.stringify({
-        objects: [newObject],
+        object: newObject,
         on_conflict: {
           constraint: 'sammlung_rev_pkey',
           update_columns: ['id'],
