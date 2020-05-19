@@ -12,8 +12,14 @@ const Row = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: ${(props) =>
     props['data-last'] ? '1px solid rgba(0, 0, 0, 0.1)' : 'none'};
+  .Difference > del {
+    background-color: rgba(216, 67, 21, 0.2);
+    text-decoration: none;
+  }
   .Difference > ins {
     padding-left: 2px;
+    background-color: rgb(201, 238, 211);
+    text-decoration: none;
   }
 `
 const Key = styled.div`
@@ -25,13 +31,9 @@ const ConflictData = ({ dataArray, loading, row }) => {
   if (loading) return 'Lade...'
   return dataArray.map((d, index) => {
     // need to use get to enable passing paths as key, for instance 'person.name'
-    let inputA = get(row, d.key)
-    let inputB = d.value
-    if (['boolean', 'number'].includes(d?.type)) {
-      inputA = toStringIfPossible(inputA)
-      inputB = toStringIfPossible(inputB)
-    }
-    console.log('Data', { row, key: d.key, inputA })
+    // also stringify because Diff split's it
+    let inputA = toStringIfPossible(get(row, d.key))
+    let inputB = toStringIfPossible(d.value)
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
       inputA = inputA ?? '(kein Wert)'
@@ -39,7 +41,7 @@ const ConflictData = ({ dataArray, loading, row }) => {
     }
     return (
       <Row key={d.key} data-last={index + 1 === dataArray.length}>
-        <Key>{`${d.key}:`}</Key>
+        <Key>{`${d.label}:`}</Key>
         <Diff inputA={inputA} inputB={inputB} type="sentences" />
       </Row>
     )
