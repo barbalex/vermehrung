@@ -212,7 +212,7 @@ const Row = ({ style, node, nodes }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { tree, enqueNotification, user, firebase } = store
+  const { tree, addNotif, user, firebase } = store
   const { openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -260,7 +260,7 @@ const Row = ({ style, node, nodes }) => {
         )
       } catch (error) {
         console.log(error)
-        return enqueNotification({
+        return addNotif({
           message: error.response.data,
           options: {
             variant: 'error',
@@ -268,7 +268,7 @@ const Row = ({ style, node, nodes }) => {
         })
       }
     }
-  }, [client, enqueNotification, node, store])
+  }, [client, addNotif, node, store])
 
   const onClickSetPassword = useCallback(async () => {
     const personId = last(node.url).toString()
@@ -289,7 +289,7 @@ const Row = ({ style, node, nodes }) => {
         variables: { id: personId },
       })
     } catch (error) {
-      enqueNotification({
+      addNotif({
         message: error.message,
         options: {
           variant: 'error',
@@ -303,20 +303,20 @@ const Row = ({ style, node, nodes }) => {
         handleCodeInApp: true,
       })
     } catch (error) {
-      enqueNotification({
+      addNotif({
         message: error.message,
         options: {
           variant: 'error',
         },
       })
     }
-    store.enqueNotification({
+    store.addNotif({
       message: `${email} erhält einen Link, um ein Passwort zu setzen`,
       options: {
         variant: 'success',
       },
     })
-  }, [client, enqueNotification, firebase, node.url, store])
+  }, [client, addNotif, firebase, node.url, store])
   const onClickDeleteAccout = useCallback(async () => {
     // delete firebase user
     if (node.accountId) {
@@ -326,7 +326,7 @@ const Row = ({ style, node, nodes }) => {
         )
       } catch (error) {
         console.log(error)
-        return enqueNotification({
+        return addNotif({
           message: error.response.data,
           options: {
             variant: 'error',
@@ -361,14 +361,14 @@ const Row = ({ style, node, nodes }) => {
       })
     } catch (error) {
       console.log(error)
-      return enqueNotification({
+      return addNotif({
         message: error.message,
         options: {
           variant: 'error',
         },
       })
     }
-  }, [client, enqueNotification, node.accountId, node.url])
+  }, [client, addNotif, node.accountId, node.url])
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
     // fetch email of this person
@@ -388,7 +388,7 @@ const Row = ({ style, node, nodes }) => {
         variables: { id: personId },
       })
     } catch (error) {
-      enqueNotification({
+      addNotif({
         message: error.message,
         options: {
           variant: 'error',
@@ -397,7 +397,7 @@ const Row = ({ style, node, nodes }) => {
     }
     const email = get(result, 'data.person[0].email')
     if (!email) {
-      return enqueNotification({
+      return addNotif({
         message: 'Eine email-Adresse muss erfasst sein',
         options: {
           variant: 'warning',
@@ -406,7 +406,7 @@ const Row = ({ style, node, nodes }) => {
     }
     const userRole = get(result, 'data.person[0].user_role')
     if (!userRole) {
-      return enqueNotification({
+      return addNotif({
         message: 'Eine Rolle muss erfasst sein',
         options: {
           variant: 'warning',
@@ -418,14 +418,14 @@ const Row = ({ style, node, nodes }) => {
       res = await axios.get(`https://auth.vermehrung.ch/create-user/${email}`)
     } catch (error) {
       console.log(error)
-      return enqueNotification({
+      return addNotif({
         message: error.response.data,
         options: {
           variant: 'error',
         },
       })
     }
-    store.enqueNotification({
+    store.addNotif({
       message: `Für ${email} wurde ein Konto erstellt. Schicken Sie ein Email, um das Passwort zu setzen.`,
       options: {
         variant: 'success',
@@ -456,7 +456,7 @@ const Row = ({ style, node, nodes }) => {
         id: last(node.url).toString(),
       },
     })
-  }, [client, enqueNotification, node.url, store])
+  }, [client, addNotif, node.url, store])
 
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })

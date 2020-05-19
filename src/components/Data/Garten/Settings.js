@@ -36,7 +36,7 @@ const Info = styled.div`
 const SettingsGarten = ({ personId, personOptionResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { enqueNotification } = store
+  const { addNotif } = store
 
   const { data, error, loading } = personOptionResult
   const {
@@ -79,7 +79,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
           refetchQueries: ['PersonOptionQueryForGarten'],
         })
       } catch (error) {
-        return enqueNotification({
+        return addNotif({
           message: error.message,
           options: {
             variant: 'error',
@@ -87,16 +87,16 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
         })
       }
     },
-    [client, personId, enqueNotification],
+    [client, personId, addNotif],
   )
   const onClickFrown = useCallback(() => {
-    enqueNotification({
+    addNotif({
       message: error.message,
       options: {
         variant: 'error',
       },
     })
-  }, [enqueNotification, error])
+  }, [addNotif, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`

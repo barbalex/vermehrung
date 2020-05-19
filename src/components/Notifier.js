@@ -7,11 +7,11 @@ import { StoreContext } from '../models/reactUtils'
 const Notifier = () => {
   const { enqueueSnackbar } = useSnackbar()
   const store = useContext(StoreContext)
-  const { notifications, removeNotification } = store
+  const { notifs, removeNotif } = store
   const [displayed, setDisplayed] = useState([])
 
   useEffect(() => {
-    notifications.forEach((notification) => {
+    notifs.forEach((notification) => {
       // Do nothing if snackbar is already displayed
       if (displayed.includes(notification.key)) return
       console.log('notification:', notification)
@@ -20,9 +20,9 @@ const Notifier = () => {
       // Keep track of snackbars that we've displayed
       setDisplayed([...displayed, notification.key])
       // Dispatch action to remove snackbar from mobx store
-      removeNotification(notification.key)
+      removeNotif(notification.key)
     })
-  }, [displayed, enqueueSnackbar, notifications, removeNotification])
+  }, [displayed, enqueueSnackbar, notifs, removeNotif])
 
   return null
 }

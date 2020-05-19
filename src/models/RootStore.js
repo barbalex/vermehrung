@@ -2,16 +2,12 @@ import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
 import { reaction, flow } from 'mobx'
 
-//import {
-//  garten_revModelPrimitives,
-//  garten_revModelSelector,
-//} from './garten_revModel.base'
-//import { garten as gartenFragment } from '../utils/fragments'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
 import QueuedQueryType from './QueuedQuery'
+import NotificationType from './Notification'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -27,7 +23,8 @@ export const RootStore = RootStoreBase.props({
    * When online they they are immediatly executed by the reaction
    * When offline they remain queued until connectivity is back
    */
-  queuedQueries: types.optional(types.array(QueuedQueryType), []),
+  queuedQueries: types.array(QueuedQueryType),
+  notifications: types.map(NotificationType),
   // on startup need to wait with showing data
   // until hasura claims have been added
   // this is _after_ user is set so need another variable
@@ -36,7 +33,7 @@ export const RootStore = RootStoreBase.props({
   // structure of these variables is not controlled
   // so need to define this as volatile
   .volatile(() => ({
-    notifications: [],
+    notifs: [],
     user: {},
     // started out using context for firebase
     // refactored here because of some weird stuff
@@ -79,7 +76,8 @@ export const RootStore = RootStoreBase.props({
               // then retry and set online without using tool?
               // TODO: add button to remove this operation
               // TODO: add button to remove all queued operations
-              return self.enqueNotification({
+              // use new notification system for this
+              return self.addNotif({
                 message: error.message,
                 options: {
                   variant: 'error',
@@ -311,17 +309,26 @@ export const RootStore = RootStoreBase.props({
         self.filter.setValue({ table: 'garten', key, value })
         self.filter.setValue({ table: 'kultur', key, value })
       },
-      enqueNotification(note) {
-        self.notifications = [
-          ...self.notifications,
+      addNotif(note) {
+        self.notifs = [
+          ...self.notifs,
           {
             key: new Date().getTime() + Math.random(),
             ...note,
           },
         ]
       },
-      removeNotification(note) {
-        self.notifications = self.notifications.filter((n) => n.key !== note)
+      removeNotif(note) {
+        self.notifs = self.notifs.filter((n) => n.key !== note)
+      },
+      addNotification(val) {
+        self.notifications.set(val.id, val)
+      },
+      removeNotificationById(id) {
+        self.notifications.delete(id)
+      },
+      removeAllNotifications() {
+        self.notifications.clear()
       },
       setDocFilter(val) {
         self.docFilter = val

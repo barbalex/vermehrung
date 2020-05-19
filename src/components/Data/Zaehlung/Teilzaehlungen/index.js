@@ -66,7 +66,7 @@ const insertTeilzaehlungMutation = gql`
 const Teilzaehlungen = ({ zaehlungResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { enqueNotification } = store
+  const { addNotif } = store
 
   const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
 
@@ -87,14 +87,14 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
         refetchQueries: ['TeilzaehlungenQuery'],
       })
     } catch (error) {
-      return enqueNotification({
+      return addNotif({
         message: error.message,
         options: {
           variant: 'error',
         },
       })
     }
-  }, [client, enqueNotification, zaehlung.id])
+  }, [client, addNotif, zaehlung.id])
 
   const showNew = rows.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'

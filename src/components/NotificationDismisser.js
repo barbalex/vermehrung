@@ -13,6 +13,7 @@ const NotificationDismisser = ({ nKey }) => {
       aria-label="Close"
       color="inherit"
       onClick={onClick}
+      title="Diese Meldung schliessen"
     >
       <CloseIcon />
     </IconButton>
