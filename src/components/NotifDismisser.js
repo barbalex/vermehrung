@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { MdClose as CloseIcon } from 'react-icons/md'
 import { useSnackbar } from 'notistack'
 
-const NotificationDismisser = ({ nKey }) => {
+const NotifDismisser = ({ nKey }) => {
   const { closeSnackbar } = useSnackbar()
   const onClick = useCallback(() => closeSnackbar(nKey), [closeSnackbar, nKey])
 
@@ -20,4 +20,4 @@ const NotificationDismisser = ({ nKey }) => {
   )
 }
 
-export default NotificationDismisser
+export default NotifDismisser
