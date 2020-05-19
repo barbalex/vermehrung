@@ -6,7 +6,6 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 
 const gartenRevQuery = gql`
   query gartenRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -73,19 +72,17 @@ const GartenConflict = ({
       key: 'plz',
       value: revRow.plz,
       label: 'PLZ',
-      type: 'number',
     },
     { key: 'ort', value: revRow.ort, label: 'Ort' },
     {
       key: 'aktiv',
       value: revRow.aktiv == 'true',
       label: 'aktiv',
-      type: 'boolean',
     },
     { key: 'bemerkungen', value: revRow.bemerkungen, label: 'bemerkungen' },
     {
       key: 'changed',
-      value: toStringIfPossible(revRow.changed),
+      value: revRow.changed,
       label: 'geändert',
     },
     { key: 'changed_by', value: revRow.changed_by, label: 'geändert von' },
