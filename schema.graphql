@@ -316,6 +316,42 @@ type art {
   id: ID!
 
   # An array relationship
+  kultur_revs(
+    # distinct select on columns
+    distinct_on: [kultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_rev_bool_exp
+  ): [kultur_rev!]!
+
+  # An aggregated array relationship
+  kultur_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_rev_bool_exp
+  ): kultur_rev_aggregate!
+
+  # An array relationship
   kulturs(
     # distinct select on columns
     distinct_on: [kultur_select_column!]
@@ -350,6 +386,42 @@ type art {
     # filter the rows returned
     where: kultur_bool_exp
   ): kultur_aggregate!
+
+  # An array relationship
+  lieferung_revs(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): [lieferung_rev!]!
+
+  # An aggregated array relationship
+  lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): lieferung_rev_aggregate!
 
   # An array relationship
   lieferungs(
@@ -388,6 +460,42 @@ type art {
   ): lieferung_aggregate!
 
   # An array relationship
+  sammel_lieferung_revs(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): [sammel_lieferung_rev!]!
+
+  # An aggregated array relationship
+  sammel_lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): sammel_lieferung_rev_aggregate!
+
+  # An array relationship
   sammel_lieferungs(
     # distinct select on columns
     distinct_on: [sammel_lieferung_select_column!]
@@ -422,6 +530,42 @@ type art {
     # filter the rows returned
     where: sammel_lieferung_bool_exp
   ): sammel_lieferung_aggregate!
+
+  # An array relationship
+  sammlung_revs(
+    # distinct select on columns
+    distinct_on: [sammlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammlung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammlung_rev_bool_exp
+  ): [sammlung_rev!]!
+
+  # An aggregated array relationship
+  sammlung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [sammlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammlung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammlung_rev_bool_exp
+  ): sammlung_rev_aggregate!
 
   # An array relationship
   sammlungs(
@@ -533,9 +677,13 @@ input art_bool_exp {
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   id: uuid_comparison_exp
+  kultur_revs: kultur_rev_bool_exp
   kulturs: kultur_bool_exp
+  lieferung_revs: lieferung_rev_bool_exp
   lieferungs: lieferung_bool_exp
+  sammel_lieferung_revs: sammel_lieferung_rev_bool_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
+  sammlung_revs: sammlung_rev_bool_exp
   sammlungs: sammlung_bool_exp
   tsv: tsvector_comparison_exp
 }
@@ -766,9 +914,13 @@ input art_insert_input {
   changed: timestamp
   changed_by: String
   id: ID
+  kultur_revs: kultur_rev_arr_rel_insert_input
   kulturs: kultur_arr_rel_insert_input
+  lieferung_revs: lieferung_rev_arr_rel_insert_input
   lieferungs: lieferung_arr_rel_insert_input
+  sammel_lieferung_revs: sammel_lieferung_rev_arr_rel_insert_input
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
+  sammlung_revs: sammlung_rev_arr_rel_insert_input
   sammlungs: sammlung_arr_rel_insert_input
   tsv: tsvector
 }
@@ -856,9 +1008,13 @@ input art_order_by {
   changed: order_by
   changed_by: order_by
   id: order_by
+  kultur_revs_aggregate: kultur_rev_aggregate_order_by
   kulturs_aggregate: kultur_aggregate_order_by
+  lieferung_revs_aggregate: lieferung_rev_aggregate_order_by
   lieferungs_aggregate: lieferung_aggregate_order_by
+  sammel_lieferung_revs_aggregate: sammel_lieferung_rev_aggregate_order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
+  sammlung_revs_aggregate: sammlung_rev_aggregate_order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
   tsv: order_by
 }
@@ -3548,6 +3704,42 @@ type garten {
   id: ID!
 
   # An array relationship
+  kultur_revs(
+    # distinct select on columns
+    distinct_on: [kultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_rev_bool_exp
+  ): [kultur_rev!]!
+
+  # An aggregated array relationship
+  kultur_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_rev_bool_exp
+  ): kultur_rev_aggregate!
+
+  # An array relationship
   kulturs(
     # distinct select on columns
     distinct_on: [kultur_select_column!]
@@ -3676,6 +3868,7 @@ input garten_bool_exp {
   garten_files: garten_file_bool_exp
   geom_point: geometry_comparison_exp
   id: uuid_comparison_exp
+  kultur_revs: kultur_rev_bool_exp
   kulturs: kultur_bool_exp
   lv95_x: numeric_comparison_exp
   lv95_y: numeric_comparison_exp
@@ -3920,6 +4113,7 @@ input garten_insert_input {
   garten_files: garten_file_arr_rel_insert_input
   geom_point: geometry
   id: ID
+  kultur_revs: kultur_rev_arr_rel_insert_input
   kulturs: kultur_arr_rel_insert_input
   lv95_x: numeric
   lv95_y: numeric
@@ -4050,6 +4244,7 @@ input garten_order_by {
   garten_files_aggregate: garten_file_aggregate_order_by
   geom_point: order_by
   id: order_by
+  kultur_revs_aggregate: kultur_rev_aggregate_order_by
   kulturs_aggregate: kultur_aggregate_order_by
   lv95_x: order_by
   lv95_y: order_by
@@ -5987,6 +6182,42 @@ type herkunft {
   kanton: String
 
   # An array relationship
+  kultur_revs(
+    # distinct select on columns
+    distinct_on: [kultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_rev_bool_exp
+  ): [kultur_rev!]!
+
+  # An aggregated array relationship
+  kultur_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_rev_bool_exp
+  ): kultur_rev_aggregate!
+
+  # An array relationship
   kulturs(
     # distinct select on columns
     distinct_on: [kultur_select_column!]
@@ -6026,6 +6257,42 @@ type herkunft {
   lv95_x: numeric
   lv95_y: numeric
   nr: String
+
+  # An array relationship
+  sammlung_revs(
+    # distinct select on columns
+    distinct_on: [sammlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammlung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammlung_rev_bool_exp
+  ): [sammlung_rev!]!
+
+  # An aggregated array relationship
+  sammlung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [sammlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammlung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammlung_rev_bool_exp
+  ): sammlung_rev_aggregate!
 
   # An array relationship
   sammlungs(
@@ -6145,12 +6412,14 @@ input herkunft_bool_exp {
   herkunft_files: herkunft_file_bool_exp
   id: uuid_comparison_exp
   kanton: String_comparison_exp
+  kultur_revs: kultur_rev_bool_exp
   kulturs: kultur_bool_exp
   land: String_comparison_exp
   lokalname: String_comparison_exp
   lv95_x: numeric_comparison_exp
   lv95_y: numeric_comparison_exp
   nr: String_comparison_exp
+  sammlung_revs: sammlung_rev_bool_exp
   sammlungs: sammlung_bool_exp
   tsv: tsvector_comparison_exp
   wgs84_lat: numeric_comparison_exp
@@ -6387,12 +6656,14 @@ input herkunft_insert_input {
   herkunft_files: herkunft_file_arr_rel_insert_input
   id: ID
   kanton: String
+  kultur_revs: kultur_rev_arr_rel_insert_input
   kulturs: kultur_arr_rel_insert_input
   land: String
   lokalname: String
   lv95_x: numeric
   lv95_y: numeric
   nr: String
+  sammlung_revs: sammlung_rev_arr_rel_insert_input
   sammlungs: sammlung_arr_rel_insert_input
   tsv: tsvector
   wgs84_lat: numeric
@@ -6516,12 +6787,14 @@ input herkunft_order_by {
   herkunft_files_aggregate: herkunft_file_aggregate_order_by
   id: order_by
   kanton: order_by
+  kultur_revs_aggregate: kultur_rev_aggregate_order_by
   kulturs_aggregate: kultur_aggregate_order_by
   land: order_by
   lokalname: order_by
   lv95_x: order_by
   lv95_y: order_by
   nr: order_by
+  sammlung_revs_aggregate: sammlung_rev_aggregate_order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
   tsv: order_by
   wgs84_lat: order_by
@@ -7765,6 +8038,42 @@ type kultur {
   erhaltungskultur: Boolean
 
   # An array relationship
+  event_revs(
+    # distinct select on columns
+    distinct_on: [event_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [event_rev_order_by!]
+
+    # filter the rows returned
+    where: event_rev_bool_exp
+  ): [event_rev!]!
+
+  # An aggregated array relationship
+  event_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [event_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [event_rev_order_by!]
+
+    # filter the rows returned
+    where: event_rev_bool_exp
+  ): event_rev_aggregate!
+
+  # An array relationship
   events(
     # distinct select on columns
     distinct_on: [event_select_column!]
@@ -7849,6 +8158,42 @@ type kultur {
   kultur_option: kultur_option
 
   # An array relationship
+  kultur_option_revs(
+    # distinct select on columns
+    distinct_on: [kultur_option_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_option_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_option_rev_bool_exp
+  ): [kultur_option_rev!]!
+
+  # An aggregated array relationship
+  kultur_option_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_option_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_option_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_option_rev_bool_exp
+  ): kultur_option_rev_aggregate!
+
+  # An array relationship
   kultur_qk_choosens(
     # distinct select on columns
     distinct_on: [kultur_qk_choosen_select_column!]
@@ -7883,6 +8228,78 @@ type kultur {
     # filter the rows returned
     where: kultur_qk_choosen_bool_exp
   ): kultur_qk_choosen_aggregate!
+
+  # An array relationship
+  lieferungRevsByNachKulturId(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): [lieferung_rev!]!
+
+  # An aggregated array relationship
+  lieferungRevsByNachKulturId_aggregate(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): lieferung_rev_aggregate!
+
+  # An array relationship
+  lieferung_revs(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): [lieferung_rev!]!
+
+  # An aggregated array relationship
+  lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): lieferung_rev_aggregate!
 
   # An array relationship
   lieferungsByNachKulturId(
@@ -7957,6 +8374,42 @@ type kultur {
   ): lieferung_aggregate!
 
   # An array relationship
+  sammelLieferungRevsByVonKulturId(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): [sammel_lieferung_rev!]!
+
+  # An aggregated array relationship
+  sammelLieferungRevsByVonKulturId_aggregate(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): sammel_lieferung_rev_aggregate!
+
+  # An array relationship
   sammelLieferungsByNachKulturId(
     # distinct select on columns
     distinct_on: [sammel_lieferung_select_column!]
@@ -7991,6 +8444,42 @@ type kultur {
     # filter the rows returned
     where: sammel_lieferung_bool_exp
   ): sammel_lieferung_aggregate!
+
+  # An array relationship
+  sammel_lieferung_revs(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): [sammel_lieferung_rev!]!
+
+  # An aggregated array relationship
+  sammel_lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): sammel_lieferung_rev_aggregate!
 
   # An array relationship
   sammel_lieferungs(
@@ -8029,6 +8518,42 @@ type kultur {
   ): sammel_lieferung_aggregate!
 
   # An array relationship
+  teilkultur_revs(
+    # distinct select on columns
+    distinct_on: [teilkultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilkultur_rev_order_by!]
+
+    # filter the rows returned
+    where: teilkultur_rev_bool_exp
+  ): [teilkultur_rev!]!
+
+  # An aggregated array relationship
+  teilkultur_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [teilkultur_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilkultur_rev_order_by!]
+
+    # filter the rows returned
+    where: teilkultur_rev_bool_exp
+  ): teilkultur_rev_aggregate!
+
+  # An array relationship
   teilkulturs(
     # distinct select on columns
     distinct_on: [teilkultur_select_column!]
@@ -8065,6 +8590,42 @@ type kultur {
   ): teilkultur_aggregate!
   tsv: tsvector
   von_anzahl_individuen: Int
+
+  # An array relationship
+  zaehlung_revs(
+    # distinct select on columns
+    distinct_on: [zaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [zaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: zaehlung_rev_bool_exp
+  ): [zaehlung_rev!]!
+
+  # An aggregated array relationship
+  zaehlung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [zaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [zaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: zaehlung_rev_bool_exp
+  ): zaehlung_rev_aggregate!
 
   # An array relationship
   zaehlungs(
@@ -8175,6 +8736,7 @@ input kultur_bool_exp {
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   erhaltungskultur: Boolean_comparison_exp
+  event_revs: event_rev_bool_exp
   events: event_bool_exp
   garten: garten_bool_exp
   garten_id: uuid_comparison_exp
@@ -8183,14 +8745,21 @@ input kultur_bool_exp {
   id: uuid_comparison_exp
   kultur_files: kultur_file_bool_exp
   kultur_option: kultur_option_bool_exp
+  kultur_option_revs: kultur_option_rev_bool_exp
   kultur_qk_choosens: kultur_qk_choosen_bool_exp
+  lieferungRevsByNachKulturId: lieferung_rev_bool_exp
+  lieferung_revs: lieferung_rev_bool_exp
   lieferungsByNachKulturId: lieferung_bool_exp
   lieferungsByVonKulturId: lieferung_bool_exp
+  sammelLieferungRevsByVonKulturId: sammel_lieferung_rev_bool_exp
   sammelLieferungsByNachKulturId: sammel_lieferung_bool_exp
+  sammel_lieferung_revs: sammel_lieferung_rev_bool_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
+  teilkultur_revs: teilkultur_rev_bool_exp
   teilkulturs: teilkultur_bool_exp
   tsv: tsvector_comparison_exp
   von_anzahl_individuen: Int_comparison_exp
+  zaehlung_revs: zaehlung_rev_bool_exp
   zaehlungs: zaehlung_bool_exp
   zwischenlager: Boolean_comparison_exp
 }
@@ -8421,6 +8990,7 @@ input kultur_insert_input {
   changed: timestamp
   changed_by: String
   erhaltungskultur: Boolean
+  event_revs: event_rev_arr_rel_insert_input
   events: event_arr_rel_insert_input
   garten: garten_obj_rel_insert_input
   garten_id: uuid
@@ -8429,14 +8999,21 @@ input kultur_insert_input {
   id: ID
   kultur_files: kultur_file_arr_rel_insert_input
   kultur_option: kultur_option_obj_rel_insert_input
+  kultur_option_revs: kultur_option_rev_arr_rel_insert_input
   kultur_qk_choosens: kultur_qk_choosen_arr_rel_insert_input
+  lieferungRevsByNachKulturId: lieferung_rev_arr_rel_insert_input
+  lieferung_revs: lieferung_rev_arr_rel_insert_input
   lieferungsByNachKulturId: lieferung_arr_rel_insert_input
   lieferungsByVonKulturId: lieferung_arr_rel_insert_input
+  sammelLieferungRevsByVonKulturId: sammel_lieferung_rev_arr_rel_insert_input
   sammelLieferungsByNachKulturId: sammel_lieferung_arr_rel_insert_input
+  sammel_lieferung_revs: sammel_lieferung_rev_arr_rel_insert_input
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
+  teilkultur_revs: teilkultur_rev_arr_rel_insert_input
   teilkulturs: teilkultur_arr_rel_insert_input
   tsv: tsvector
   von_anzahl_individuen: Int
+  zaehlung_revs: zaehlung_rev_arr_rel_insert_input
   zaehlungs: zaehlung_arr_rel_insert_input
   zwischenlager: Boolean
 }
@@ -9402,6 +9979,7 @@ input kultur_order_by {
   changed: order_by
   changed_by: order_by
   erhaltungskultur: order_by
+  event_revs_aggregate: event_rev_aggregate_order_by
   events_aggregate: event_aggregate_order_by
   garten: garten_order_by
   garten_id: order_by
@@ -9410,14 +9988,21 @@ input kultur_order_by {
   id: order_by
   kultur_files_aggregate: kultur_file_aggregate_order_by
   kultur_option: kultur_option_order_by
+  kultur_option_revs_aggregate: kultur_option_rev_aggregate_order_by
   kultur_qk_choosens_aggregate: kultur_qk_choosen_aggregate_order_by
+  lieferungRevsByNachKulturId_aggregate: lieferung_rev_aggregate_order_by
+  lieferung_revs_aggregate: lieferung_rev_aggregate_order_by
   lieferungsByNachKulturId_aggregate: lieferung_aggregate_order_by
   lieferungsByVonKulturId_aggregate: lieferung_aggregate_order_by
+  sammelLieferungRevsByVonKulturId_aggregate: sammel_lieferung_rev_aggregate_order_by
   sammelLieferungsByNachKulturId_aggregate: sammel_lieferung_aggregate_order_by
+  sammel_lieferung_revs_aggregate: sammel_lieferung_rev_aggregate_order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
+  teilkultur_revs_aggregate: teilkultur_rev_aggregate_order_by
   teilkulturs_aggregate: teilkultur_aggregate_order_by
   tsv: order_by
   von_anzahl_individuen: order_by
+  zaehlung_revs_aggregate: zaehlung_rev_aggregate_order_by
   zaehlungs_aggregate: zaehlung_aggregate_order_by
   zwischenlager: order_by
 }
@@ -14489,6 +15074,42 @@ type person {
   email: String
 
   # An array relationship
+  event_revs(
+    # distinct select on columns
+    distinct_on: [event_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [event_rev_order_by!]
+
+    # filter the rows returned
+    where: event_rev_bool_exp
+  ): [event_rev!]!
+
+  # An aggregated array relationship
+  event_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [event_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [event_rev_order_by!]
+
+    # filter the rows returned
+    where: event_rev_bool_exp
+  ): event_rev_aggregate!
+
+  # An array relationship
   events(
     # distinct select on columns
     distinct_on: [event_select_column!]
@@ -14523,6 +15144,42 @@ type person {
     # filter the rows returned
     where: event_bool_exp
   ): event_aggregate!
+
+  # An array relationship
+  garten_revs(
+    # distinct select on columns
+    distinct_on: [garten_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [garten_rev_order_by!]
+
+    # filter the rows returned
+    where: garten_rev_bool_exp
+  ): [garten_rev!]!
+
+  # An aggregated array relationship
+  garten_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [garten_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [garten_rev_order_by!]
+
+    # filter the rows returned
+    where: garten_rev_bool_exp
+  ): garten_rev_aggregate!
 
   # An array relationship
   gartens(
@@ -14563,6 +15220,42 @@ type person {
   info: Boolean
   kein_email: Boolean
   kommerziell: Boolean
+
+  # An array relationship
+  lieferung_revs(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): [lieferung_rev!]!
+
+  # An aggregated array relationship
+  lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): lieferung_rev_aggregate!
 
   # An array relationship
   lieferungs(
@@ -14641,7 +15334,79 @@ type person {
 
   # An object relationship
   person_option: person_option
+
+  # An array relationship
+  person_option_revs(
+    # distinct select on columns
+    distinct_on: [person_option_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [person_option_rev_order_by!]
+
+    # filter the rows returned
+    where: person_option_rev_bool_exp
+  ): [person_option_rev!]!
+
+  # An aggregated array relationship
+  person_option_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [person_option_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [person_option_rev_order_by!]
+
+    # filter the rows returned
+    where: person_option_rev_bool_exp
+  ): person_option_rev_aggregate!
   plz: Int
+
+  # An array relationship
+  sammel_lieferung_revs(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): [sammel_lieferung_rev!]!
+
+  # An aggregated array relationship
+  sammel_lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): sammel_lieferung_rev_aggregate!
 
   # An array relationship
   sammel_lieferungs(
@@ -14678,6 +15443,42 @@ type person {
     # filter the rows returned
     where: sammel_lieferung_bool_exp
   ): sammel_lieferung_aggregate!
+
+  # An array relationship
+  sammlung_revs(
+    # distinct select on columns
+    distinct_on: [sammlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammlung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammlung_rev_bool_exp
+  ): [sammlung_rev!]!
+
+  # An aggregated array relationship
+  sammlung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [sammlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammlung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammlung_rev_bool_exp
+  ): sammlung_rev_aggregate!
 
   # An array relationship
   sammlungs(
@@ -14797,20 +15598,26 @@ input person_bool_exp {
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   email: String_comparison_exp
+  event_revs: event_rev_bool_exp
   events: event_bool_exp
+  garten_revs: garten_rev_bool_exp
   gartens: garten_bool_exp
   id: uuid_comparison_exp
   info: Boolean_comparison_exp
   kein_email: Boolean_comparison_exp
   kommerziell: Boolean_comparison_exp
+  lieferung_revs: lieferung_rev_bool_exp
   lieferungs: lieferung_bool_exp
   name: String_comparison_exp
   nr: String_comparison_exp
   ort: String_comparison_exp
   person_files: person_file_bool_exp
   person_option: person_option_bool_exp
+  person_option_revs: person_option_rev_bool_exp
   plz: Int_comparison_exp
+  sammel_lieferung_revs: sammel_lieferung_rev_bool_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
+  sammlung_revs: sammlung_rev_bool_exp
   sammlungs: sammlung_bool_exp
   strasse: String_comparison_exp
   telefon_geschaeft: String_comparison_exp
@@ -15048,20 +15855,26 @@ input person_insert_input {
   changed: timestamp
   changed_by: String
   email: String
+  event_revs: event_rev_arr_rel_insert_input
   events: event_arr_rel_insert_input
+  garten_revs: garten_rev_arr_rel_insert_input
   gartens: garten_arr_rel_insert_input
   id: ID
   info: Boolean
   kein_email: Boolean
   kommerziell: Boolean
+  lieferung_revs: lieferung_rev_arr_rel_insert_input
   lieferungs: lieferung_arr_rel_insert_input
   name: String
   nr: String
   ort: String
   person_files: person_file_arr_rel_insert_input
   person_option: person_option_obj_rel_insert_input
+  person_option_revs: person_option_rev_arr_rel_insert_input
   plz: Int
+  sammel_lieferung_revs: sammel_lieferung_rev_arr_rel_insert_input
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
+  sammlung_revs: sammlung_rev_arr_rel_insert_input
   sammlungs: sammlung_arr_rel_insert_input
   strasse: String
   telefon_geschaeft: String
@@ -16271,20 +17084,26 @@ input person_order_by {
   changed: order_by
   changed_by: order_by
   email: order_by
+  event_revs_aggregate: event_rev_aggregate_order_by
   events_aggregate: event_aggregate_order_by
+  garten_revs_aggregate: garten_rev_aggregate_order_by
   gartens_aggregate: garten_aggregate_order_by
   id: order_by
   info: order_by
   kein_email: order_by
   kommerziell: order_by
+  lieferung_revs_aggregate: lieferung_rev_aggregate_order_by
   lieferungs_aggregate: lieferung_aggregate_order_by
   name: order_by
   nr: order_by
   ort: order_by
   person_files_aggregate: person_file_aggregate_order_by
   person_option: person_option_order_by
+  person_option_revs_aggregate: person_option_rev_aggregate_order_by
   plz: order_by
+  sammel_lieferung_revs_aggregate: sammel_lieferung_rev_aggregate_order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
+  sammlung_revs_aggregate: sammlung_rev_aggregate_order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
   strasse: order_by
   telefon_geschaeft: order_by
@@ -16546,6 +17365,9 @@ type person_rev {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
+
+  # An object relationship
+  userRoleByUserRole: user_role
   user_role: String
 }
 
@@ -16640,6 +17462,7 @@ input person_rev_bool_exp {
   telefon_geschaeft: String_comparison_exp
   telefon_mobile: String_comparison_exp
   telefon_privat: String_comparison_exp
+  userRoleByUserRole: user_role_bool_exp
   user_role: String_comparison_exp
 }
 
@@ -16692,6 +17515,7 @@ input person_rev_insert_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
+  userRoleByUserRole: user_role_obj_rel_insert_input
   user_role: String
 }
 
@@ -16847,6 +17671,7 @@ input person_rev_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
+  userRoleByUserRole: user_role_order_by
   user_role: order_by
 }
 
@@ -20967,6 +21792,42 @@ type sammlung {
   id: ID!
 
   # An array relationship
+  lieferung_revs(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): [lieferung_rev!]!
+
+  # An aggregated array relationship
+  lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: lieferung_rev_bool_exp
+  ): lieferung_rev_aggregate!
+
+  # An array relationship
   lieferungs(
     # distinct select on columns
     distinct_on: [lieferung_select_column!]
@@ -21008,6 +21869,42 @@ type sammlung {
   # An object relationship
   person: person
   person_id: uuid
+
+  # An array relationship
+  sammel_lieferung_revs(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): [sammel_lieferung_rev!]!
+
+  # An aggregated array relationship
+  sammel_lieferung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [sammel_lieferung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [sammel_lieferung_rev_order_by!]
+
+    # filter the rows returned
+    where: sammel_lieferung_rev_bool_exp
+  ): sammel_lieferung_rev_aggregate!
 
   # An array relationship
   sammel_lieferungs(
@@ -21176,12 +22073,14 @@ input sammlung_bool_exp {
   herkunft: herkunft_bool_exp
   herkunft_id: uuid_comparison_exp
   id: uuid_comparison_exp
+  lieferung_revs: lieferung_rev_bool_exp
   lieferungs: lieferung_bool_exp
   lv95_x: numeric_comparison_exp
   lv95_y: numeric_comparison_exp
   nr: String_comparison_exp
   person: person_bool_exp
   person_id: uuid_comparison_exp
+  sammel_lieferung_revs: sammel_lieferung_rev_bool_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
   sammlung_files: sammlung_file_bool_exp
   tsv: tsvector_comparison_exp
@@ -21429,12 +22328,14 @@ input sammlung_insert_input {
   herkunft: herkunft_obj_rel_insert_input
   herkunft_id: uuid
   id: ID
+  lieferung_revs: lieferung_rev_arr_rel_insert_input
   lieferungs: lieferung_arr_rel_insert_input
   lv95_x: numeric
   lv95_y: numeric
   nr: String
   person: person_obj_rel_insert_input
   person_id: uuid
+  sammel_lieferung_revs: sammel_lieferung_rev_arr_rel_insert_input
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
   sammlung_files: sammlung_file_arr_rel_insert_input
   tsv: tsvector
@@ -21582,12 +22483,14 @@ input sammlung_order_by {
   herkunft: herkunft_order_by
   herkunft_id: order_by
   id: order_by
+  lieferung_revs_aggregate: lieferung_rev_aggregate_order_by
   lieferungs_aggregate: lieferung_aggregate_order_by
   lv95_x: order_by
   lv95_y: order_by
   nr: order_by
   person: person_order_by
   person_id: order_by
+  sammel_lieferung_revs_aggregate: sammel_lieferung_rev_aggregate_order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
   sammlung_files_aggregate: sammlung_file_aggregate_order_by
   tsv: order_by
@@ -25165,6 +26068,42 @@ type teilkultur {
   changed_by: String
 
   # An array relationship
+  event_revs(
+    # distinct select on columns
+    distinct_on: [event_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [event_rev_order_by!]
+
+    # filter the rows returned
+    where: event_rev_bool_exp
+  ): [event_rev!]!
+
+  # An aggregated array relationship
+  event_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [event_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [event_rev_order_by!]
+
+    # filter the rows returned
+    where: event_rev_bool_exp
+  ): event_rev_aggregate!
+
+  # An array relationship
   events(
     # distinct select on columns
     distinct_on: [event_select_column!]
@@ -25208,6 +26147,42 @@ type teilkultur {
   ort1: String
   ort2: String
   ort3: String
+
+  # An array relationship
+  teilzaehlung_revs(
+    # distinct select on columns
+    distinct_on: [teilzaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilzaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: teilzaehlung_rev_bool_exp
+  ): [teilzaehlung_rev!]!
+
+  # An aggregated array relationship
+  teilzaehlung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [teilzaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilzaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: teilzaehlung_rev_bool_exp
+  ): teilzaehlung_rev_aggregate!
 
   # An array relationship
   teilzaehlungs(
@@ -25312,6 +26287,7 @@ input teilkultur_bool_exp {
   bemerkungen: String_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
+  event_revs: event_rev_bool_exp
   events: event_bool_exp
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
@@ -25320,6 +26296,7 @@ input teilkultur_bool_exp {
   ort1: String_comparison_exp
   ort2: String_comparison_exp
   ort3: String_comparison_exp
+  teilzaehlung_revs: teilzaehlung_rev_bool_exp
   teilzaehlungs: teilzaehlung_bool_exp
   tsv: tsvector_comparison_exp
 }
@@ -25345,6 +26322,7 @@ input teilkultur_insert_input {
   bemerkungen: String
   changed: timestamp
   changed_by: String
+  event_revs: event_rev_arr_rel_insert_input
   events: event_arr_rel_insert_input
   id: ID
   kultur: kultur_obj_rel_insert_input
@@ -25353,6 +26331,7 @@ input teilkultur_insert_input {
   ort1: String
   ort2: String
   ort3: String
+  teilzaehlung_revs: teilzaehlung_rev_arr_rel_insert_input
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
   tsv: tsvector
 }
@@ -25453,6 +26432,7 @@ input teilkultur_order_by {
   bemerkungen: order_by
   changed: order_by
   changed_by: order_by
+  event_revs_aggregate: event_rev_aggregate_order_by
   events_aggregate: event_aggregate_order_by
   id: order_by
   kultur: kultur_order_by
@@ -25461,6 +26441,7 @@ input teilkultur_order_by {
   ort1: order_by
   ort2: order_by
   ort3: order_by
+  teilzaehlung_revs_aggregate: teilzaehlung_rev_aggregate_order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
   tsv: order_by
 }
@@ -26194,6 +27175,42 @@ type teilzaehlung {
   teilzaehlung: teilzaehlung
 
   # An array relationship
+  teilzaehlung_revs(
+    # distinct select on columns
+    distinct_on: [teilzaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilzaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: teilzaehlung_rev_bool_exp
+  ): [teilzaehlung_rev!]!
+
+  # An aggregated array relationship
+  teilzaehlung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [teilzaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilzaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: teilzaehlung_rev_bool_exp
+  ): teilzaehlung_rev_aggregate!
+
+  # An array relationship
   teilzaehlungs(
     # distinct select on columns
     distinct_on: [teilzaehlung_select_column!]
@@ -26316,6 +27333,7 @@ input teilzaehlung_bool_exp {
   teilkultur: teilkultur_bool_exp
   teilkultur_id: uuid_comparison_exp
   teilzaehlung: teilzaehlung_bool_exp
+  teilzaehlung_revs: teilzaehlung_rev_bool_exp
   teilzaehlungs: teilzaehlung_bool_exp
   tsv: tsvector_comparison_exp
   zaehlung: zaehlung_bool_exp
@@ -26356,6 +27374,7 @@ input teilzaehlung_insert_input {
   teilkultur: teilkultur_obj_rel_insert_input
   teilkultur_id: uuid
   teilzaehlung: teilzaehlung_obj_rel_insert_input
+  teilzaehlung_revs: teilzaehlung_rev_arr_rel_insert_input
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
   tsv: tsvector
   zaehlung: zaehlung_obj_rel_insert_input
@@ -26480,6 +27499,7 @@ input teilzaehlung_order_by {
   teilkultur: teilkultur_order_by
   teilkultur_id: order_by
   teilzaehlung: teilzaehlung_order_by
+  teilzaehlung_revs_aggregate: teilzaehlung_rev_aggregate_order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
   tsv: order_by
   zaehlung: zaehlung_order_by
@@ -26512,6 +27532,9 @@ type teilzaehlung_rev {
   # An object relationship
   teilkultur: teilkultur
   teilkultur_id: uuid
+
+  # An object relationship
+  teilzaehlung: teilzaehlung
   teilzaehlung_id: uuid!
 
   # An array relationship
@@ -26635,6 +27658,7 @@ input teilzaehlung_rev_bool_exp {
   prognose_von_tz: uuid_comparison_exp
   teilkultur: teilkultur_bool_exp
   teilkultur_id: uuid_comparison_exp
+  teilzaehlung: teilzaehlung_bool_exp
   teilzaehlung_id: uuid_comparison_exp
   teilzaehlungs: teilzaehlung_bool_exp
   zaehlung: zaehlung_bool_exp
@@ -26677,6 +27701,7 @@ input teilzaehlung_rev_insert_input {
   prognose_von_tz: uuid
   teilkultur: teilkultur_obj_rel_insert_input
   teilkultur_id: uuid
+  teilzaehlung: teilzaehlung_obj_rel_insert_input
   teilzaehlung_id: uuid
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
   zaehlung: zaehlung_obj_rel_insert_input
@@ -26804,6 +27829,7 @@ input teilzaehlung_rev_order_by {
   prognose_von_tz: order_by
   teilkultur: teilkultur_order_by
   teilkultur_id: order_by
+  teilzaehlung: teilzaehlung_order_by
   teilzaehlung_id: order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
   zaehlung: zaehlung_order_by
@@ -27721,6 +28747,42 @@ type zaehlung {
   prognose: Boolean
 
   # An array relationship
+  teilzaehlung_revs(
+    # distinct select on columns
+    distinct_on: [teilzaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilzaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: teilzaehlung_rev_bool_exp
+  ): [teilzaehlung_rev!]!
+
+  # An aggregated array relationship
+  teilzaehlung_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [teilzaehlung_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [teilzaehlung_rev_order_by!]
+
+    # filter the rows returned
+    where: teilzaehlung_rev_bool_exp
+  ): teilzaehlung_rev_aggregate!
+
+  # An array relationship
   teilzaehlungs(
     # distinct select on columns
     distinct_on: [teilzaehlung_select_column!]
@@ -27828,6 +28890,7 @@ input zaehlung_bool_exp {
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
   prognose: Boolean_comparison_exp
+  teilzaehlung_revs: teilzaehlung_rev_bool_exp
   teilzaehlungs: teilzaehlung_bool_exp
   tsv: tsvector_comparison_exp
 }
@@ -27858,6 +28921,7 @@ input zaehlung_insert_input {
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
   prognose: Boolean
+  teilzaehlung_revs: teilzaehlung_rev_arr_rel_insert_input
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
   tsv: tsvector
 }
@@ -27951,6 +29015,7 @@ input zaehlung_order_by {
   kultur: kultur_order_by
   kultur_id: order_by
   prognose: order_by
+  teilzaehlung_revs_aggregate: teilzaehlung_rev_aggregate_order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
   tsv: order_by
 }
