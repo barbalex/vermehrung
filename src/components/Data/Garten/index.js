@@ -419,11 +419,7 @@ const Garten = ({
                 />
               )}
               {!showFilter && ga_geom_point && (
-                <Coordinates
-                  row={row}
-                  refetchForm={queryOfGarten.refetch}
-                  table="garten"
-                />
+                <Coordinates row={row} saveToDb={saveToDb} />
               )}
               {ga_aktiv && (
                 <Checkbox2States

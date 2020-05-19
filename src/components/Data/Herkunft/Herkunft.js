@@ -315,11 +315,7 @@ const Herkunft = ({
             />
           )}
           {!showFilter && hk_geom_point && (
-            <Coordinates
-              row={row}
-              refetchForm={queryOfHerkunft.refetch}
-              table="herkunft"
-            />
+            <Coordinates row={row} saveToDb={saveToDb} />
           )}
           {hk_bemerkungen && (
             <TextField

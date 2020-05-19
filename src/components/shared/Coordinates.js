@@ -5,9 +5,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import upperFirst from 'lodash/upperFirst'
 import get from 'lodash/get'
 
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
@@ -28,13 +26,8 @@ import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
 } from '../../utils/wgs84LongIsValid'
-import {
-  herkunft as herkunftFragment,
-  garten as gartenFragment,
-  sammlung as sammlungFragment,
-  personOption as personOptionFragment,
-} from '../../utils/fragments'
-import { StoreContext } from '../../models/reactUtils'
+import { personOption as personOptionFragment } from '../../utils/fragments'
+import { StoreContext, useQuery } from '../../models/reactUtils'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -58,18 +51,10 @@ const personOptionQuery = gql`
   ${personOptionFragment}
 `
 
-const fragments = {
-  herkunft: herkunftFragment,
-  garten: gartenFragment,
-  sammlung: sammlungFragment,
-}
-
-const Coordinates = ({ row, refetchForm, table }) => {
+const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
   const store = useContext(StoreContext)
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
-
-  const client = useApolloClient()
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: store.user.uid },
@@ -200,50 +185,16 @@ const Coordinates = ({ row, refetchForm, table }) => {
   )
 
   const saveToDb = useCallback(
-    async (geomPoint, projection) => {
-      try {
-        const fragment = fragments[table]
-        const Fields = `${upperFirst(table)}Fields`
-        const mutationName = `update_${table}`
-        await client.mutate({
-          mutation: gql`
-            mutation ${mutationName}(
-              $id: uuid!
-              $geomPoint: geometry
-            ) {
-              ${mutationName}(
-                  where: { id: { _eq: $id } }
-                  _set: {
-                    geom_point: $geomPoint
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...${Fields}
-                  }
-              }
-            }
-            ${fragment}
-          `,
-          variables: {
-            id: row.id,
-            geomPoint,
-          },
-        })
-      } catch (error) {
-        console.log('saveToDb, error:', error)
-        return projection === 'lv95'
-          ? setYError(error.message)
-          : setWgs84LatError(error.message)
+    async (geomPoint) => {
+      const fakeEvent = {
+        target: {
+          name: 'geom_point',
+          value: geomPoint,
+        },
       }
-      // refetch form
-      refetchForm()
-      setYError('')
-      setXError('')
-      setWgs84LatError('')
-      setWgs84LongError('')
+      originalSaveToDb(fakeEvent)
     },
-    [client, refetchForm, row.id, table],
+    [originalSaveToDb],
   )
 
   return (

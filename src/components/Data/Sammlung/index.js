@@ -477,9 +477,7 @@ const Sammlung = ({
               </IconButton>
             </div>
           </FieldRow>
-          {!showFilter && (
-            <Coordinates row={row} refetchForm={refetch} table="sammlung" />
-          )}
+          {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
           <FieldRow>
             <Checkbox2States
               key={`${row.id}geplant`}
