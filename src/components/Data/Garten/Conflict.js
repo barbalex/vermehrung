@@ -90,6 +90,8 @@ const GartenConflict = ({
   const onClickVerwerfen = useCallback(async () => {
     const depth = revRow._depth + 1
     const newObject = {
+      // TODO: remove below error - done to provoke messages
+      garten_id: revRow.garten_id,
       name: revRow.name,
       person_id: revRow.person_id,
       strasse: revRow.strasse,
@@ -122,12 +124,13 @@ const GartenConflict = ({
     }
     callbackAfterVerwerfen()
   }, [
-    callbackAfterVerwerfen,
     addNotification,
+    callbackAfterVerwerfen,
     revRow._depth,
     revRow._rev,
     revRow.aktiv,
     revRow.bemerkungen,
+    revRow.garten_id,
     revRow.geom_point,
     revRow.name,
     revRow.ort,
@@ -140,6 +143,7 @@ const GartenConflict = ({
   const onClickUebernehmen = useCallback(async () => {
     const depth = revRow._depth + 1
     const newObject = {
+      garten_id: revRow.garten_id,
       name: revRow.name,
       person_id: revRow.person_id,
       strasse: revRow.strasse,
@@ -171,12 +175,13 @@ const GartenConflict = ({
     }
     callbackAfterUebernehmen()
   }, [
-    callbackAfterUebernehmen,
     addNotification,
+    callbackAfterUebernehmen,
     revRow._depth,
     revRow._rev,
     revRow.aktiv,
     revRow.bemerkungen,
+    revRow.garten_id,
     revRow.geom_point,
     revRow.name,
     revRow.ort,
@@ -190,7 +195,7 @@ const GartenConflict = ({
     setActiveConflict,
   ])
 
-  console.log('Garten Conflict', { dataArray, row, revRow })
+  //console.log('Garten Conflict', { dataArray, row, revRow })
 
   return (
     <Conflict

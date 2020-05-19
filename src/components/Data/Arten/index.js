@@ -102,6 +102,7 @@ const Arten = ({ filter: showFilter }) => {
     const _depth = 1
     const _revisions = `{"${_rev}"}`
     const newObject = {
+      id: uuidv1(),
       art_id: id,
       _rev,
       _depth,
