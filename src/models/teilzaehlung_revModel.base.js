@@ -39,6 +39,7 @@ export const teilzaehlung_revModelBase = ModelBase
     prognose_von_tz: types.union(types.undefined, types.null, types.frozen()),
     teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
+    teilzaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
     teilzaehlung_id: types.union(types.undefined, types.frozen()),
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
@@ -71,6 +72,7 @@ export class teilzaehlung_revModelSelector extends QueryBuilder {
   get teilzaehlung_id() { return this.__attr(`teilzaehlung_id`) }
   get zaehlung_id() { return this.__attr(`zaehlung_id`) }
   teilkultur(builder) { return this.__child(`teilkultur`, teilkulturModelSelector, builder) }
+  teilzaehlung(builder) { return this.__child(`teilzaehlung`, teilzaehlungModelSelector, builder) }
   teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, teilzaehlungModelSelector, builder) }
   teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
   zaehlung(builder) { return this.__child(`zaehlung`, zaehlungModelSelector, builder) }

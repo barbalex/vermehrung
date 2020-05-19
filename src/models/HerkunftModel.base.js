@@ -12,10 +12,18 @@ import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
 import { kultur_aggregateModelSelector } from "./kultur_aggregateModel.base"
+import { kultur_revModel } from "./kultur_revModel"
+import { kultur_revModelSelector } from "./kultur_revModel.base"
+import { kultur_rev_aggregateModel } from "./kultur_rev_aggregateModel"
+import { kultur_rev_aggregateModelSelector } from "./kultur_rev_aggregateModel.base"
 import { sammlungModel } from "./sammlungModel"
 import { sammlungModelSelector } from "./sammlungModel.base"
 import { sammlung_aggregateModel } from "./sammlung_aggregateModel"
 import { sammlung_aggregateModelSelector } from "./sammlung_aggregateModel.base"
+import { sammlung_revModel } from "./sammlung_revModel"
+import { sammlung_revModelSelector } from "./sammlung_revModel.base"
+import { sammlung_rev_aggregateModel } from "./sammlung_rev_aggregateModel"
+import { sammlung_rev_aggregateModelSelector } from "./sammlung_rev_aggregateModel.base"
 
 
 /**
@@ -40,6 +48,8 @@ export const herkunftModelBase = ModelBase
     herkunft_files_aggregate: types.union(types.undefined, types.late(() => herkunft_file_aggregateModel)),
     id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
+    kultur_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_revModel)))),
+    kultur_revs_aggregate: types.union(types.undefined, types.late(() => kultur_rev_aggregateModel)),
     kulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     kulturs_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     land: types.union(types.undefined, types.null, types.string),
@@ -47,6 +57,8 @@ export const herkunftModelBase = ModelBase
     lv95_x: types.union(types.undefined, types.null, types.frozen()),
     lv95_y: types.union(types.undefined, types.null, types.frozen()),
     nr: types.union(types.undefined, types.null, types.string),
+    sammlung_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_revModel)))),
+    sammlung_revs_aggregate: types.union(types.undefined, types.late(() => sammlung_rev_aggregateModel)),
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
@@ -82,8 +94,12 @@ export class herkunftModelSelector extends QueryBuilder {
   get wgs84_long() { return this.__attr(`wgs84_long`) }
   herkunft_files(builder) { return this.__child(`herkunft_files`, herkunft_fileModelSelector, builder) }
   herkunft_files_aggregate(builder) { return this.__child(`herkunft_files_aggregate`, herkunft_file_aggregateModelSelector, builder) }
+  kultur_revs(builder) { return this.__child(`kultur_revs`, kultur_revModelSelector, builder) }
+  kultur_revs_aggregate(builder) { return this.__child(`kultur_revs_aggregate`, kultur_rev_aggregateModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
+  sammlung_revs(builder) { return this.__child(`sammlung_revs`, sammlung_revModelSelector, builder) }
+  sammlung_revs_aggregate(builder) { return this.__child(`sammlung_revs_aggregate`, sammlung_rev_aggregateModelSelector, builder) }
   sammlungs(builder) { return this.__child(`sammlungs`, sammlungModelSelector, builder) }
   sammlungs_aggregate(builder) { return this.__child(`sammlungs_aggregate`, sammlung_aggregateModelSelector, builder) }
 }

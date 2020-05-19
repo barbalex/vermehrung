@@ -8,12 +8,20 @@ import { eventModel } from "./eventModel"
 import { eventModelSelector } from "./eventModel.base"
 import { event_aggregateModel } from "./event_aggregateModel"
 import { event_aggregateModelSelector } from "./event_aggregateModel.base"
+import { event_revModel } from "./event_revModel"
+import { event_revModelSelector } from "./event_revModel.base"
+import { event_rev_aggregateModel } from "./event_rev_aggregateModel"
+import { event_rev_aggregateModelSelector } from "./event_rev_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { teilzaehlungModel } from "./teilzaehlungModel"
 import { teilzaehlungModelSelector } from "./teilzaehlungModel.base"
 import { teilzaehlung_aggregateModel } from "./teilzaehlung_aggregateModel"
 import { teilzaehlung_aggregateModelSelector } from "./teilzaehlung_aggregateModel.base"
+import { teilzaehlung_revModel } from "./teilzaehlung_revModel"
+import { teilzaehlung_revModelSelector } from "./teilzaehlung_revModel.base"
+import { teilzaehlung_rev_aggregateModel } from "./teilzaehlung_rev_aggregateModel"
+import { teilzaehlung_rev_aggregateModelSelector } from "./teilzaehlung_rev_aggregateModel.base"
 
 
 /**
@@ -32,6 +40,8 @@ export const teilkulturModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
+    event_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => event_revModel)))),
+    event_revs_aggregate: types.union(types.undefined, types.late(() => event_rev_aggregateModel)),
     events: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
     events_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     id: types.identifier,
@@ -41,6 +51,8 @@ export const teilkulturModelBase = ModelBase
     ort1: types.union(types.undefined, types.null, types.string),
     ort2: types.union(types.undefined, types.null, types.string),
     ort3: types.union(types.undefined, types.null, types.string),
+    teilzaehlung_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlung_revModel)))),
+    teilzaehlung_revs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_rev_aggregateModel)),
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     tsv: types.union(types.undefined, types.null, types.frozen()),
@@ -67,9 +79,13 @@ export class teilkulturModelSelector extends QueryBuilder {
   get ort2() { return this.__attr(`ort2`) }
   get ort3() { return this.__attr(`ort3`) }
   get tsv() { return this.__attr(`tsv`) }
+  event_revs(builder) { return this.__child(`event_revs`, event_revModelSelector, builder) }
+  event_revs_aggregate(builder) { return this.__child(`event_revs_aggregate`, event_rev_aggregateModelSelector, builder) }
   events(builder) { return this.__child(`events`, eventModelSelector, builder) }
   events_aggregate(builder) { return this.__child(`events_aggregate`, event_aggregateModelSelector, builder) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
+  teilzaehlung_revs(builder) { return this.__child(`teilzaehlung_revs`, teilzaehlung_revModelSelector, builder) }
+  teilzaehlung_revs_aggregate(builder) { return this.__child(`teilzaehlung_revs_aggregate`, teilzaehlung_rev_aggregateModelSelector, builder) }
   teilzaehlungs(builder) { return this.__child(`teilzaehlungs`, teilzaehlungModelSelector, builder) }
   teilzaehlungs_aggregate(builder) { return this.__child(`teilzaehlungs_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
 }
