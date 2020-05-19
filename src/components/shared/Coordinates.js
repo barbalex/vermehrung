@@ -255,6 +255,27 @@ const Coordinates = ({ row, refetchForm, table }) => {
             error={!!wgs84LatError}
             aria-describedby={`${id}wgs84LatErrorText`}
           >
+            <InputLabel htmlFor={`${id}wgs84_long`} shrink>
+              Längengrad
+            </InputLabel>
+            <Input
+              id={`${id}wgs84_long`}
+              data-id="wgs84_long"
+              name="wgs84_long"
+              value={wgs84LongState}
+              type="number"
+              onChange={onChangeWgs84Long}
+              onBlur={onBlurWgs84Long}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+            />
+          </LeftFormControl>
+          <StyledFormControl
+            fullWidth
+            error={!!wgs84LongError}
+            aria-describedby={`${id}wgs84LongErrorText`}
+          >
             <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
               Breitengrad
             </InputLabel>
@@ -278,27 +299,6 @@ const Coordinates = ({ row, refetchForm, table }) => {
                 {wgs84LatError}
               </FormHelperText>
             )}
-          </LeftFormControl>
-          <StyledFormControl
-            fullWidth
-            error={!!wgs84LongError}
-            aria-describedby={`${id}wgs84LongErrorText`}
-          >
-            <InputLabel htmlFor={`${id}wgs84_long`} shrink>
-              Längengrad
-            </InputLabel>
-            <Input
-              id={`${id}wgs84_long`}
-              data-id="wgs84_long"
-              name="wgs84_long"
-              value={wgs84LongState}
-              type="number"
-              onChange={onChangeWgs84Long}
-              onBlur={onBlurWgs84Long}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-            />
             {!!wgs84LongError && (
               <FormHelperText
                 id={`${id}wgs84LongErrorText`}
