@@ -39,14 +39,7 @@ const GartenConflict = ({
   const store = useContext(StoreContext)
   const { user, enqueNotification } = store
 
-  /*const { data, error, loading } = useQuery(
-    (store) =>
-      store.queryGarten_rev({
-        where: { _rev: { _eq: rev }, garten_id: { _eq: id } },
-      }),
-    (d) => d.name.strasse.ort.aktiv.bemerkungen.changed.changed_by,
-  )*/
-  // need to use this query to ensure that the person's name is loaded
+  // need to use this query to ensure that the person's name is queried
   const { data, error, loading } = useQuery(gartenRevQuery, {
     variables: {
       rev,
@@ -55,11 +48,7 @@ const GartenConflict = ({
   })
 
   const revRow = data?.garten_rev?.[0] ?? {}
-  /*const revRow =
-    [...store.garten_revs.values()].find(
-      (v) => v._rev === rev && v.garten_id === id,
-    ) || {}*/
-  // TODO: geom_point
+
   const dataArray = [
     { key: 'name', value: revRow.name, label: 'Name' },
     {
@@ -74,6 +63,11 @@ const GartenConflict = ({
       label: 'PLZ',
     },
     { key: 'ort', value: revRow.ort, label: 'Ort' },
+    {
+      key: 'geom_point.coordinates',
+      value: revRow?.geom_point?.coordinates,
+      label: 'Längen- und Breitengrad',
+    },
     {
       key: 'aktiv',
       value: revRow.aktiv == 'true',
@@ -96,6 +90,7 @@ const GartenConflict = ({
       strasse: revRow.strasse,
       plz: revRow.plz,
       ort: revRow.ort,
+      geom_point: revRow.geom_point,
       aktiv: revRow.aktiv,
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
@@ -131,6 +126,7 @@ const GartenConflict = ({
     revRow._rev,
     revRow.aktiv,
     revRow.bemerkungen,
+    revRow.geom_point,
     revRow.name,
     revRow.ort,
     revRow.person_id,
@@ -147,6 +143,7 @@ const GartenConflict = ({
       strasse: revRow.strasse,
       plz: revRow.plz,
       ort: revRow.ort,
+      geom_point: revRow.geom_point,
       aktiv: revRow.aktiv,
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
@@ -181,6 +178,7 @@ const GartenConflict = ({
     revRow._rev,
     revRow.aktiv,
     revRow.bemerkungen,
+    revRow.geom_point,
     revRow.name,
     revRow.ort,
     revRow.person_id,

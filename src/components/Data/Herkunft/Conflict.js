@@ -29,6 +29,7 @@ const HerkunftConflict = ({
       (v) => v._rev === rev && v.herkunft_id === id,
     ) || {}*/
   // TODO: geom_point
+
   const dataArray = [
     { key: 'nr', value: revRow.nr, label: 'Nr' },
     { key: 'lokalname', value: revRow.lokalname, label: 'Lokalname' },
@@ -38,7 +39,7 @@ const HerkunftConflict = ({
     {
       key: 'geom_point.coordinates',
       value: revRow?.geom_point?.coordinates,
-      label: 'Koordinaten (in Grad)',
+      label: 'Längen- und Breitengrad',
     },
     { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
     { key: 'changed', value: revRow.changed, label: 'geändert' },
@@ -54,6 +55,7 @@ const HerkunftConflict = ({
       gemeinde: revRow.gemeinde,
       kanton: revRow.kanton,
       land: revRow.land,
+      geom_point: revRow.geom_point,
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
@@ -88,6 +90,7 @@ const HerkunftConflict = ({
     revRow._rev,
     revRow.bemerkungen,
     revRow.gemeinde,
+    revRow.geom_point,
     revRow.herkunft_id,
     revRow.kanton,
     revRow.land,
@@ -105,6 +108,7 @@ const HerkunftConflict = ({
       gemeinde: revRow.gemeinde,
       kanton: revRow.kanton,
       land: revRow.land,
+      geom_point: revRow.geom_point,
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
@@ -138,6 +142,7 @@ const HerkunftConflict = ({
     revRow._rev,
     revRow.bemerkungen,
     revRow.gemeinde,
+    revRow.geom_point,
     revRow.herkunft_id,
     revRow.kanton,
     revRow.land,
