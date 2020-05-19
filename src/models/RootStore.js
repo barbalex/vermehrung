@@ -1,6 +1,8 @@
 import { RootStoreBase } from './RootStore.base'
 import { types } from 'mobx-state-tree'
-import { reaction, flow } from 'mobx'
+import { reaction, flow, autorun } from 'mobx'
+import sortBy from 'lodash/sortBy'
+import { v1 as uuidv1 } from 'uuid'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -42,6 +44,12 @@ export const RootStore = RootStoreBase.props({
     firebase: null,
   }))
   .actions((self) => {
+    autorun((data) => {
+      console.log('notification changed:', {
+        data,
+        notifications: self.notifications,
+      })
+    })
     reaction(
       () => `${self.queuedQueries.length}/${self.online}`,
       flow(function* () {
@@ -321,8 +329,22 @@ export const RootStore = RootStoreBase.props({
       removeNotif(note) {
         self.notifs = self.notifs.filter((n) => n.key !== note)
       },
-      addNotification(val) {
+      addNotification(valPassed) {
+        // set default values
+        const val = {
+          id: uuidv1(),
+          time: Date.now(),
+          duration: 10000,
+          dismissable: true,
+          allDismissable: true,
+          type: 'error',
+          ...valPassed,
+        }
         self.notifications.set(val.id, val)
+        // remove after duration
+        setTimeout(() => {
+          self.removeNotificationById(val.id)
+        }, val.duration)
       },
       removeNotificationById(id) {
         self.notifications.delete(id)
@@ -338,5 +360,13 @@ export const RootStore = RootStoreBase.props({
   .views((self) => ({
     get activeForm() {
       return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
+    },
+    get notificationsSorted() {
+      return (
+        sortBy([...self.notifications.values()], 'time')
+          .reverse()
+          // limit number to 5
+          .slice(0, 5)
+      )
     },
   }))

@@ -20,7 +20,8 @@ import localForage from 'localforage'
 import { navigate } from '@reach/router'
 
 import Notifier from './components/Notifier'
-import NotificationDismisser from './components/NotificationDismisser'
+import NotifDismisser from './components/NotifDismisser'
+import Notifications from './components/Notifications'
 
 import materialTheme from './utils/materialTheme'
 import createApolloClient from '../apolloClient'
@@ -136,12 +137,13 @@ const App = ({ element }) => {
             maxSnack={5}
             preventDuplicate
             autoHideDuration={10000}
-            action={(key) => <NotificationDismisser nKey={key} />}
+            action={(key) => <NotifDismisser nKey={key} />}
           >
             <>
               <GlobalStyle />
               {element}
               <Notifier />
+              <Notifications />
               <UpdateExists />
             </>
           </SnackbarProvider>
