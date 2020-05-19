@@ -9,7 +9,7 @@ import { gartenTeilzaehlungSums as gartenTeilzaehlungSumsFragment } from '../../
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
 export default async ({ client, store, garten_id, workbook }) => {
-  const { enqueNotification } = store
+  const { addNotif } = store
 
   let gaertenResult
   try {
@@ -27,7 +27,7 @@ export default async ({ client, store, garten_id, workbook }) => {
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',

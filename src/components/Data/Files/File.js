@@ -115,7 +115,7 @@ const File = ({ file, parent }) => {
       })
     } catch (error) {
       console.log(error)
-      return store.enqueNotification({
+      return store.addNotif({
         message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
         options: {
           variant: 'error',

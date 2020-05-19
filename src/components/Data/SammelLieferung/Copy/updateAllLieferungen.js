@@ -17,7 +17,7 @@ export default async ({ sammelLieferung, field, store }) => {
     }
   }
   if (!error) {
-    store.enqueNotification({
+    store.addNotif({
       message: 'Alle Lieferungen aktualisiert',
       options: {
         variant: 'info',

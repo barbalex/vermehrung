@@ -43,7 +43,7 @@ const Info = styled.div`
 const SettingsTree = ({ data, personId }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { enqueNotification } = store
+  const { addNotif } = store
 
   const personOption = get(data, 'person_option[0]') || {}
   const {
@@ -93,7 +93,7 @@ const SettingsTree = ({ data, personId }) => {
           },
         })
       } catch (error) {
-        return enqueNotification({
+        return addNotif({
           message: error.message,
           options: {
             variant: 'error',
@@ -102,7 +102,7 @@ const SettingsTree = ({ data, personId }) => {
       }
       console.log('hi')
     },
-    [client, personId, personOption, enqueNotification],
+    [client, personId, personOption, addNotif],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)

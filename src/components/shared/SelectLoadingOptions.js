@@ -104,7 +104,7 @@ const SelectTypable = ({
           limit: 7,
         })
       } catch (error) {
-        store.enqueNotification({
+        store.addNotif({
           message: error.message,
           options: {
             variant: 'error',

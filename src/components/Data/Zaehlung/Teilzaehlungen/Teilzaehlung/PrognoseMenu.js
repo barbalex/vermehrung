@@ -49,7 +49,7 @@ const Teilzaehlung = ({
 }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { enqueNotification } = store
+  const { addNotif } = store
   const { refetch: refetchTree } = store.tree
 
   const [jahr, setJahr] = useState(null)
@@ -102,7 +102,7 @@ const Teilzaehlung = ({
           },
         })
       } catch (error) {
-        return enqueNotification({
+        return addNotif({
           message: error.message,
           options: {
             variant: 'error',
@@ -142,7 +142,7 @@ const Teilzaehlung = ({
             },
           })
         } catch (error) {
-          return enqueNotification({
+          return addNotif({
             message: error.message,
             options: {
               variant: 'error',
@@ -185,7 +185,7 @@ const Teilzaehlung = ({
           refetchQueries: ['TreeQueryForTreeContainer'],
         })
       } catch (error) {
-        return enqueNotification({
+        return addNotif({
           message: error.message,
           options: {
             variant: 'error',
@@ -221,7 +221,7 @@ const Teilzaehlung = ({
           refetchQueries: ['TreeQueryForTreeContainer'],
         })
       } catch (error) {
-        return enqueNotification({
+        return addNotif({
           message: error.message,
           options: {
             variant: 'error',
@@ -247,7 +247,7 @@ const Teilzaehlung = ({
             },
           })
         } catch (error) {
-          return enqueNotification({
+          return addNotif({
             message: error.message,
             options: {
               variant: 'error',
@@ -255,7 +255,7 @@ const Teilzaehlung = ({
           })
         }
       }
-      enqueNotification({
+      addNotif({
         message: 'Die Prognose wurde gespeichert',
         options: {
           variant: 'info',
@@ -269,7 +269,7 @@ const Teilzaehlung = ({
     [
       anz,
       client,
-      enqueNotification,
+      addNotif,
       jahr,
       refetchTree,
       setAnchorEl,

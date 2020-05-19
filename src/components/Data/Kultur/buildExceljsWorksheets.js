@@ -8,7 +8,7 @@ import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsW
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
 export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
-  const { enqueNotification } = store
+  const { addNotif } = store
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
@@ -55,7 +55,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
         },
       )
     } catch (error) {
-      return enqueNotification({
+      return addNotif({
         message: error.message,
         options: {
           variant: 'error',
@@ -154,7 +154,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',
@@ -239,7 +239,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',
@@ -357,7 +357,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',
@@ -494,7 +494,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',
@@ -569,7 +569,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       },
     )
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',

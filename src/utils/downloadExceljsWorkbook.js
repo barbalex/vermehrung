@@ -10,7 +10,7 @@ export default async ({ store, fileName, workbook }) => {
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
-    return store.enqueNotification({
+    return store.addNotif({
       message: error.message,
       options: {
         variant: 'error',

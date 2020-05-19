@@ -129,7 +129,7 @@ const Files = ({ parentId, parent }) => {
               refetchQueries: ['GeneralFileQuery'],
             })
           } catch (error) {
-            return store.enqueNotification({
+            return store.addNotif({
               message: error.message,
               options: {
                 variant: 'error',

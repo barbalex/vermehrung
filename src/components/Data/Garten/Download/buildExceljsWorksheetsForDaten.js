@@ -15,7 +15,7 @@ export default async ({
   workbook,
   calledFromHigherUp,
 }) => {
-  const { enqueNotification } = store
+  const { addNotif } = store
 
   // 1. Get Garten
   let gartenResult
@@ -50,7 +50,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',
@@ -110,7 +110,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return addNotif({
       message: error.message,
       options: {
         variant: 'error',

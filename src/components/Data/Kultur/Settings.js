@@ -32,7 +32,7 @@ const Info = styled.div`
 const SettingsKultur = ({ kulturResult }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { enqueNotification } = store
+  const { addNotif } = store
 
   const { data, error, loading } = kulturResult
   const { tk } = get(data, 'kultur[0].kultur_option') || {}
@@ -68,7 +68,7 @@ const SettingsKultur = ({ kulturResult }) => {
           refetchQueries: ['TreeQueryForTreeContainer', 'KulturQueryForKultur'],
         })
       } catch (error) {
-        return enqueNotification({
+        return addNotif({
           message: error.message,
           options: {
             variant: 'error',
@@ -76,16 +76,16 @@ const SettingsKultur = ({ kulturResult }) => {
         })
       }
     },
-    [client, kulturId, enqueNotification],
+    [client, kulturId, addNotif],
   )
   const onClickFrown = useCallback(() => {
-    enqueNotification({
+    addNotif({
       message: error.message,
       options: {
         variant: 'error',
       },
     })
-  }, [enqueNotification, error])
+  }, [addNotif, error])
 
   const [anchorEl, setAnchorEl] = useState(null)
 

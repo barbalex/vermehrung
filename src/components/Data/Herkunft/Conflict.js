@@ -15,7 +15,7 @@ const HerkunftConflict = ({
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
-  const { user, enqueNotification } = store
+  const { user, addNotif } = store
 
   const { error, loading } = useQuery((store) =>
     store.queryHerkunft_rev({
@@ -74,7 +74,7 @@ const HerkunftConflict = ({
         },
       })
     } catch (error) {
-      enqueNotification({
+      addNotif({
         message: error.message,
         options: {
           variant: 'error',
@@ -84,7 +84,7 @@ const HerkunftConflict = ({
     callbackAfterVerwerfen()
   }, [
     callbackAfterVerwerfen,
-    enqueNotification,
+    addNotif,
     revRow._depth,
     revRow._rev,
     revRow.bemerkungen,
@@ -126,7 +126,7 @@ const HerkunftConflict = ({
         },
       })
     } catch (error) {
-      enqueNotification({
+      addNotif({
         message: error.message,
         options: {
           variant: 'error',
@@ -136,7 +136,7 @@ const HerkunftConflict = ({
     callbackAfterUebernehmen()
   }, [
     callbackAfterUebernehmen,
-    enqueNotification,
+    addNotif,
     revRow._depth,
     revRow._rev,
     revRow.bemerkungen,
