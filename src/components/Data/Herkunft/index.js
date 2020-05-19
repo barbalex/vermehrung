@@ -212,6 +212,7 @@ const Herkunft = ({
           field === 'gemeinde' ? toStringIfPossible(value) : row.gemeinde,
         kanton: field === 'kanton' ? toStringIfPossible(value) : row.kanton,
         land: field === 'land' ? toStringIfPossible(value) : row.land,
+        geom_point: field === 'geom_point' ? value : row.geom_point,
         bemerkungen:
           field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         changed: new window.Date().toISOString(),
