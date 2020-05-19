@@ -8,6 +8,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
 import SplitPane from 'react-split-pane'
 import { v1 as uuidv1 } from 'uuid'
+import { getSnapshot } from 'mobx-state-tree'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -141,10 +142,18 @@ const Herkunft = ({
     setActiveConflict(null)
     queryOfHerkunft.refetch()
   }, [queryOfHerkunft])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfHerkunft.refetch()
-    setActiveConflict(row._rev)
-  }, [queryOfHerkunft, row._rev])
+  const callbackAfterUebernehmen = useCallback(async () => {
+    const oldRow = getSnapshot(row)
+    // need to wait until after refetching
+    // unitl after useEffect sets activeConflict to null
+    await queryOfHerkunft.refetch()
+    setActiveConflict(oldRow._rev)
+  }, [queryOfHerkunft, row])
+  // ensure that activeConflict is reset
+  // when changing dataset
+  useEffect(() => {
+    setActiveConflict(null)
+  }, [id])
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate(undefined, (d) =>
@@ -417,6 +426,7 @@ const Herkunft = ({
             <>
               {online && !!activeConflict && (
                 <Conflict
+                  //key={activeConflict}
                   rev={activeConflict}
                   id={id}
                   row={row}
