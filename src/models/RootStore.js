@@ -25,7 +25,7 @@ export const RootStore = RootStoreBase.props({
    * When online they they are immediatly executed by the reaction
    * When offline they remain queued until connectivity is back
    */
-  queuedQueries: types.array(QueuedQueryType),
+  queuedQueries: types.map(QueuedQueryType),
   notifications: types.map(NotificationType),
   // on startup need to wait with showing data
   // until hasura claims have been added
@@ -44,8 +44,8 @@ export const RootStore = RootStoreBase.props({
   }))
   .actions((self) => {
     reaction(
-      () => `${self.queuedQueries.length}/${self.online}`,
-      flow(function* () {
+      () => `${self.queuedQueries}/${self.online}`,
+      flow(function* (data, reaction) {
         /**
          * TODO:
          * When new query is added
@@ -57,7 +57,9 @@ export const RootStore = RootStoreBase.props({
          */
         if (self.online) {
           // execute operation
-          const query = self.queuedQueries[0]
+          const query = self.queuedQueriesSorted[0]
+          if (!query) return
+          console.log('store, reaction:', { query, data, reaction })
           if (query) {
             const {
               name,
@@ -73,6 +75,7 @@ export const RootStore = RootStoreBase.props({
                 yield self[name]()
               }
             } catch (error) {
+              console.log('store, queuedQueriesReaction, error:', error)
               // Maybe do it like superhuman and check if network error
               // then retry and set online without using tool?
               // TODO: add button to remove this operation
@@ -80,6 +83,9 @@ export const RootStore = RootStoreBase.props({
               // use new notification system for this
               return self.addNotification({
                 message: error.message,
+                action1Label: 'Operation löschen',
+                action1Name: 'removeQueuedQueryById',
+                action1Argument: query.id,
               })
             }
             // query to refresh the data updated in all used views (tree...)
@@ -97,7 +103,7 @@ export const RootStore = RootStoreBase.props({
           }
           // remove operation from queue
           // use action because this is async
-          self.shiftQueuedQueries()
+          self.removeQueuedQueryById(query.id)
         }
       }),
       {
@@ -110,11 +116,42 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
-      shiftQueuedQueries() {
-        self.queuedQueries.shift()
+      removeQueuedQueryById(id) {
+        self.queuedQueries.delete(id)
       },
-      addQueuedQuery(val) {
-        self.queuedQueries.push(val)
+      addQueuedQuery(valPassed) {
+        const val = {
+          // set default values
+          id: uuidv1(),
+          time: Date.now(),
+          // overwrite with passed in ones:
+          ...valPassed,
+        }
+        self.queuedQueries.set(val.id, val)
+      },
+      addNotification(valPassed) {
+        const val = {
+          // set default values
+          id: uuidv1(),
+          time: Date.now(),
+          duration: 100000, // standard value: 10000
+          dismissable: true,
+          allDismissable: true,
+          type: 'error',
+          // overwrite with passed in ones:
+          ...valPassed,
+        }
+        self.notifications.set(val.id, val)
+        // remove after duration
+        setTimeout(() => {
+          self.removeNotificationById(val.id)
+        }, val.duration)
+      },
+      removeNotificationById(id) {
+        self.notifications.delete(id)
+      },
+      removeAllNotifications() {
+        self.notifications.clear()
       },
       upsertArt(val) {
         self.arts.set(val.id, val)
@@ -307,31 +344,6 @@ export const RootStore = RootStoreBase.props({
         self.filter.setValue({ table: 'garten', key, value })
         self.filter.setValue({ table: 'kultur', key, value })
       },
-      addNotification(valPassed) {
-        const val = {
-          // set default values
-          id: uuidv1(),
-          time: Date.now(),
-          duration: 100000, // standard value: 10000
-          dismissable: true,
-          allDismissable: true,
-          type: 'error',
-          // overwrite with passed in ones:
-          ...valPassed,
-        }
-        console.log('store, addNotification, val:', val)
-        self.notifications.set(val.id, val)
-        // remove after duration
-        setTimeout(() => {
-          self.removeNotificationById(val.id)
-        }, val.duration)
-      },
-      removeNotificationById(id) {
-        self.notifications.delete(id)
-      },
-      removeAllNotifications() {
-        self.notifications.clear()
-      },
       setDocFilter(val) {
         self.docFilter = val
       },
@@ -345,8 +357,11 @@ export const RootStore = RootStoreBase.props({
       return (
         sortBy([...self.notifications.values()], 'time')
           .reverse()
-          // limit number to 5
-          .slice(0, 5)
+          // limit number to 4
+          .slice(0, 4)
       )
+    },
+    get queuedQueriesSorted() {
+      return sortBy([...self.queuedQueries.values()], 'time')
     },
   }))

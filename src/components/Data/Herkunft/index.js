@@ -147,10 +147,6 @@ const Herkunft = ({
     // need to wait until after refetching
     // unitl after useEffect sets activeConflict to null
     await queryOfHerkunft.refetch()
-    console.log(
-      'Herkunft, callbackAfterUebernehmen, setting activeConflict rev:',
-      oldRow._rev,
-    )
     setTimeout(() => setActiveConflict(oldRow._rev))
   }, [queryOfHerkunft, row])
   // ensure that activeConflict is reset

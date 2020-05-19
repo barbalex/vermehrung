@@ -190,8 +190,8 @@ const Garten = ({
   }, [queryOfGarten])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfGarten.refetch()
-    setActiveConflict(row._rev)
-  }, [queryOfGarten, row._rev])
+    setActiveConflict(row?._rev ?? null)
+  }, [queryOfGarten, row?._rev])
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
@@ -235,7 +235,7 @@ const Garten = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        garten_id: row.id,
+        //garten_id: row.id,
         name: field === 'name' ? toStringIfPossible(value) : row.name,
         person_id: field === 'person_id' ? value : row.person_id,
         strasse: field === 'strasse' ? toStringIfPossible(value) : row.strasse,

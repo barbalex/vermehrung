@@ -7,6 +7,7 @@ export default types.model('Notification', {
   duration: types.union(types.number, types.undefined),
   dismissable: types.union(types.boolean, types.undefined),
   allDismissable: types.optional(types.boolean, true),
+  action1Label: types.union(types.string, types.null, types.undefined),
   action1Name: types.union(types.string, types.null, types.undefined),
   action1Argument: types.union(
     types.string,

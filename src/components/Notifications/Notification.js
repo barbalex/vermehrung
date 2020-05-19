@@ -2,13 +2,16 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
 import { MdClose as CloseIcon } from 'react-icons/md'
 
 import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   margin: 5px;
   padding: 10px;
   border-radius: 3px;
@@ -16,10 +19,20 @@ const Container = styled.div`
   color: white;
   font-weight: 500;
   min-height: 18px;
+  max-width: calc(100% - 10px);
+  word-wrap: break-word;
 `
 const StyledIconButton = styled(IconButton)`
   margin-left: 8px !important;
 `
+const StyledButton = styled(Button)`
+  color: white !important;
+  border-color: white !important;
+  > span {
+    text-transform: none;
+  }
+`
+
 const colorMap = {
   error: '#D84315',
   success: '#00a300',
@@ -30,16 +43,26 @@ const colorMap = {
 const Notification = ({ notification: n }) => {
   const store = useContext(StoreContext)
   const { removeNotificationById } = store
+
   const color = colorMap[n.type] ?? 'error'
+
   const onClickClose = useCallback(() => removeNotificationById(n.id), [
     n.id,
     removeNotificationById,
   ])
-  //console.log('Notification, notification:', { n, color, type: n.type }))
+  const onClickAction1 = useCallback(() => {
+    store[n.action1Name](n.action1Argument)
+    removeNotificationById(n.id)
+  }, [n, removeNotificationById, store])
 
   return (
     <Container data-color={color}>
       <div>{n.message}</div>
+      {!!n.action1Name && (
+        <StyledButton onClick={onClickAction1} variant="outlined">
+          {n.action1Label}
+        </StyledButton>
+      )}
       <StyledIconButton
         key="close"
         aria-label="Close"
