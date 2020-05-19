@@ -10,6 +10,7 @@ import gql from 'graphql-tag'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
+import SplitPane from 'react-split-pane'
 import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
@@ -33,6 +34,8 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Download from './Download'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import Conflict from './Conflict'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -74,6 +77,42 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
+`
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
 `
 
 const gartenQuery = gql`
@@ -117,17 +156,14 @@ const Garten = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, upsertGarten, addQueuedQuery, user } = store
+  const { filter, upsertGarten, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
-  const { data, error, loading, query: queryOfGartenQuery } = useQuery(
-    gartenQuery,
-    {
-      variables: { id, isFiltered, filter: gartenFilter },
-    },
-  )
+  const { data, error, loading, query: queryOfGarten } = useQuery(gartenQuery, {
+    variables: { id, isFiltered, filter: gartenFilter },
+  })
   const {
     data: personData,
     error: personError,
@@ -146,6 +182,16 @@ const Garten = ({
   )
   const filteredNr = get(data, 'rowsFiltered', []).length
   const row = showFilter ? filter.garten : store.gartens.get(id)
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => {
+    setActiveConflict(null)
+    queryOfGarten.refetch()
+  }, [queryOfGarten])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfGarten.refetch()
+    setActiveConflict(row._rev)
+  }, [queryOfGarten, row._rev])
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
@@ -278,6 +324,10 @@ const Garten = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -305,87 +355,123 @@ const Garten = ({
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer>
-          <TextField
-            key={`${row.id}name`}
-            name="name"
-            label="Name"
-            value={row.name}
-            saveToDb={saveToDb}
-            error={errors.name}
-          />
-          <Select
-            key={`${row.id}${row.person_id}person_id`}
-            name="person_id"
-            value={row.person_id}
-            field="person_id"
-            label="Person"
-            options={personWerte}
-            loading={personLoading}
-            saveToDb={saveToDb}
-            error={errors.person_id}
-          />
-          {ga_strasse && (
-            <TextField
-              key={`${row.id}strasse`}
-              name="strasse"
-              label="Strasse"
-              value={row.strasse}
-              saveToDb={saveToDb}
-              error={errors.strasse}
-            />
-          )}
-          {ga_plz && (
-            <TextField
-              key={`${row.id}plz`}
-              name="plz"
-              label="PLZ"
-              value={row.plz}
-              saveToDb={saveToDb}
-              error={errors.plz}
-              type="number"
-            />
-          )}
-          {ga_ort && (
-            <TextField
-              key={`${row.id}ort`}
-              name="ort"
-              label="Ort"
-              value={row.ort}
-              saveToDb={saveToDb}
-              error={errors.ort}
-            />
-          )}
-          {!showFilter && ga_geom_point && (
-            <Coordinates
-              row={row}
-              refetchForm={queryOfGartenQuery.refetch}
-              table="garten"
-            />
-          )}
-          {ga_aktiv && (
-            <Checkbox2States
-              key={`${row.id}aktiv`}
-              label="aktiv"
-              name="aktiv"
-              value={row.aktiv}
-              saveToDb={saveToDb}
-              error={errors.aktiv}
-            />
-          )}
-          {ga_bemerkungen && (
-            <TextField
-              key={`${row.id}bemerkungen`}
-              name="bemerkungen"
-              label="Bemerkungen"
-              value={row.bemerkungen}
-              saveToDb={saveToDb}
-              error={errors.bemerkungen}
-              multiLine
-            />
-          )}
-          {!showFilter && <Files parentId={row.id} parent="garten" />}
-        </FieldsContainer>
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={firstPaneWidth}
+            minSize={200}
+            resizerStyle={resizerStyle}
+          >
+            <FieldsContainer>
+              {activeConflict && (
+                <CaseConflictTitle>
+                  Aktuelle Version<Rev>{row._rev}</Rev>
+                </CaseConflictTitle>
+              )}
+              <TextField
+                key={`${row.id}name`}
+                name="name"
+                label="Name"
+                value={row.name}
+                saveToDb={saveToDb}
+                error={errors.name}
+              />
+              <Select
+                key={`${row.id}${row.person_id}person_id`}
+                name="person_id"
+                value={row.person_id}
+                field="person_id"
+                label="Person"
+                options={personWerte}
+                loading={personLoading}
+                saveToDb={saveToDb}
+                error={errors.person_id}
+              />
+              {ga_strasse && (
+                <TextField
+                  key={`${row.id}strasse`}
+                  name="strasse"
+                  label="Strasse"
+                  value={row.strasse}
+                  saveToDb={saveToDb}
+                  error={errors.strasse}
+                />
+              )}
+              {ga_plz && (
+                <TextField
+                  key={`${row.id}plz`}
+                  name="plz"
+                  label="PLZ"
+                  value={row.plz}
+                  saveToDb={saveToDb}
+                  error={errors.plz}
+                  type="number"
+                />
+              )}
+              {ga_ort && (
+                <TextField
+                  key={`${row.id}ort`}
+                  name="ort"
+                  label="Ort"
+                  value={row.ort}
+                  saveToDb={saveToDb}
+                  error={errors.ort}
+                />
+              )}
+              {!showFilter && ga_geom_point && (
+                <Coordinates
+                  row={row}
+                  refetchForm={queryOfGarten.refetch}
+                  table="garten"
+                />
+              )}
+              {ga_aktiv && (
+                <Checkbox2States
+                  key={`${row.id}aktiv`}
+                  label="aktiv"
+                  name="aktiv"
+                  value={row.aktiv}
+                  saveToDb={saveToDb}
+                  error={errors.aktiv}
+                />
+              )}
+              {ga_bemerkungen && (
+                <TextField
+                  key={`${row.id}bemerkungen`}
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  value={row.bemerkungen}
+                  saveToDb={saveToDb}
+                  error={errors.bemerkungen}
+                  multiLine
+                />
+              )}
+              {online &&
+                !showFilter &&
+                row._conflicts &&
+                row._conflicts.map && (
+                  <ConflictList
+                    conflicts={row._conflicts}
+                    activeConflict={activeConflict}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+              {!showFilter && <Files parentId={row.id} parent="garten" />}
+            </FieldsContainer>
+            <>
+              {online && !!activeConflict && (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  setActiveConflict={setActiveConflict}
+                />
+              )}
+            </>
+          </StyledSplitPane>
+        </Container>
       </Container>
     </ErrorBoundary>
   )
