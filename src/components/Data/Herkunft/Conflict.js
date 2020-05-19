@@ -35,6 +35,11 @@ const HerkunftConflict = ({
     { key: 'gemeinde', value: revRow.gemeinde, label: 'Gemeinde' },
     { key: 'kanton', value: revRow.kanton, label: 'Kanton' },
     { key: 'land', value: revRow.land, label: 'Land' },
+    {
+      key: 'geom_point.coordinates',
+      value: revRow?.geom_point?.coordinates,
+      label: 'Koordinaten',
+    },
     { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
     { key: 'changed', value: revRow.changed, label: 'geändert' },
     { key: 'changed_by', value: revRow.changed_by, label: 'geändert von' },
