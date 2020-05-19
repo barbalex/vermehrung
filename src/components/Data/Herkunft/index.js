@@ -249,9 +249,9 @@ const Herkunft = ({
           where: { id: { _eq: id } },
         }),
       })
+      // optimistically update store
+      upsertHerkunft(newObjectForStore)
       setTimeout(() => {
-        // optimistically update store
-        upsertHerkunft(newObjectForStore)
         if (['nr'].includes(field)) store.tree.refetch()
       }, 50)
     },
@@ -393,11 +393,7 @@ const Herkunft = ({
                 />
               )}
               {!showFilter && hk_geom_point && (
-                <Coordinates
-                  row={row}
-                  refetchForm={queryOfHerkunft.refetch}
-                  table="herkunft"
-                />
+                <Coordinates row={row} saveToDb={saveToDb} />
               )}
               {hk_bemerkungen && (
                 <TextField
