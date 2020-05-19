@@ -75,10 +75,9 @@ export const RootStore = RootStoreBase.props({
                 yield self[name]()
               }
             } catch (error) {
-              console.log('store, queuedQueriesReaction, error:', error)
               // Maybe do it like superhuman and check if network error
               // then retry and set online without using tool?
-              // TODO: add button to remove this operation
+              // TODO: describe operation better. User should know what is happening
               // TODO: add button to remove all queued operations
               // use new notification system for this
               return self.addNotification({
