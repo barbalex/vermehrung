@@ -6,10 +6,10 @@ import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -25,7 +25,7 @@ import ArUpSvg from '../../../svg/to_ar_up.inline.svg'
 import SaSvg from '../../../svg/to_sa.inline.svg'
 import KuSvg from '../../../svg/to_ku.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
@@ -106,6 +106,33 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const artQuery = gql`
+  query artForArtQuery($id: uuid!) {
+    art(where: { id: { _eq: $id } }) {
+      id
+      __typename
+      ae_id
+      art_ae_art {
+        id
+        __typename
+        name
+      }
+      changed
+      changed_by
+      _rev
+      _depth
+      _conflicts
+    }
+  }
+`
+const artFilteredQuery = gql`
+  query artFilteredForArtQuery($filter: art_bool_exp!) {
+    art(where: $filter) {
+      id
+    }
+  }
+`
+
 const Art = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -120,16 +147,21 @@ const Art = ({
   const { data: dataArtAggregate } = useQuery((store) =>
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-    query: queryOfArt,
-  } = useQuery((store) =>
-    store.queryArt({
-      where: artFilter,
-    }),
+
+  // need to use this query to ensure that the person's name is queried
+  const { error: errorArt, loading: loadingArt, query: queryOfArt } = useQuery(
+    artQuery,
+    {
+      variables: {
+        id,
+      },
+    },
   )
+  const { data: dataFiltered } = useQuery(artFilteredQuery, {
+    variables: {
+      filter: artFilter,
+    },
+  })
 
   const [errors, setErrors] = useState({})
 
@@ -203,9 +235,9 @@ const Art = ({
           where: { id: { _eq: id } },
         }),
       })
+      // optimistically update store
+      upsertArt(newObjectForStore)
       setTimeout(() => {
-        // optimistically update store
-        upsertArt(newObjectForStore)
         if (['ae_id'].includes(field)) store.tree.refetch()
       }, 50)
     },
@@ -259,7 +291,7 @@ const Art = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  if (loadingFiltered) {
+  if (loadingArt) {
     return (
       <Container>
         <FormTitle title="Art" />
@@ -268,7 +300,7 @@ const Art = ({
     )
   }
 
-  const errorToShow = errorFiltered
+  const errorToShow = errorArt
   if (errorToShow) {
     return (
       <Container>
@@ -283,8 +315,6 @@ const Art = ({
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
-
-  //console.log('Art', { row })
 
   return (
     <ErrorBoundary>
@@ -369,6 +399,18 @@ const Art = ({
                 </>
               )}
             </FieldsContainer>
+            <>
+              {online && !!activeConflict && (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  setActiveConflict={setActiveConflict}
+                />
+              )}
+            </>
           </StyledSplitPane>
         </Container>
       </Container>

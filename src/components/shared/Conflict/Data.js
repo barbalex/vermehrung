@@ -36,17 +36,8 @@ const ConflictData = ({ dataArray, loading, row }) => {
   return dataArray.map((d, index) => {
     // need to use get to enable passing paths as key, for instance 'person.name'
     // also stringify because Diff split's it
-    let inputA = toStringIfPossible(get(row, d.key))
-    let inputB = toStringIfPossible(d.value)
-    d.key === 'geom_point' &&
-      console.log('Data', {
-        inputB,
-        inputA,
-        d,
-        row,
-        key: d.key,
-        rowKey: get(row, d.key),
-      })
+    let inputA = toStringIfPossible(get(row, d.keyInRow))
+    let inputB = toStringIfPossible(d.valueInRev)
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
       inputA = inputA ?? '(kein Wert)'
@@ -54,7 +45,7 @@ const ConflictData = ({ dataArray, loading, row }) => {
     }
 
     return (
-      <Row key={d.key} data-last={index + 1 === dataArray.length}>
+      <Row key={d.keyInRow} data-last={index + 1 === dataArray.length}>
         <Key>{`${d.label}:`}</Key>
         <Diff inputA={inputA} inputB={inputB} type="sentences" />
       </Row>
