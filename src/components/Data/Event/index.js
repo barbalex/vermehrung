@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -36,6 +37,8 @@ import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+//import Conflict from './Conflict'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -84,6 +87,42 @@ const FieldRow = styled.div`
   > div > button {
     margin-top: 8px;
   }
+`
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
 `
 
 const eventQuery = gql`
@@ -168,7 +207,7 @@ const Event = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertEvent, addQueuedQuery, user } = store
+  const { filter, upsertEvent, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -176,7 +215,7 @@ const Event = ({
   const eventResult = useQuery(eventQuery, {
     variables: { id, isFiltered, filter: eventFilter },
   })
-  const { data, error, loading } = eventResult
+  const { data, error, loading, query: queryOfEvent } = eventResult
 
   const [errors, setErrors] = useState({})
 
@@ -187,6 +226,16 @@ const Event = ({
   console.log('Event', { dataEventAggregate, totalNr })
   const filteredNr = get(data, 'rowsFiltered', []).length
   const row = showFilter ? filter.event : store.events.get(id)
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => {
+    setActiveConflict(null)
+    queryOfEvent.refetch()
+  }, [queryOfEvent])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfEvent.refetch()
+    setActiveConflict(row?._rev ?? null)
+  }, [queryOfEvent, row?._rev])
 
   const {
     data: kulturData,
@@ -375,6 +424,10 @@ const Event = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -407,90 +460,114 @@ const Event = ({
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer>
-          <Select
-            key={`${row.id}${row.kultur_id}kultur_id`}
-            name="kultur_id"
-            value={row.kultur_id}
-            field="kultur_id"
-            label="Kultur"
-            options={kulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.kultur_id}
-          />
-          {((tk && ev_teilkultur_id) || showFilter) && (
-            <SelectCreatable
-              key={`${row.id}teilkultur_id`}
-              name="teilkultur_id"
-              value={row.teilkultur_id}
-              field="teilkultur_id"
-              label="Teilkultur"
-              options={teilkulturWerte}
-              loading={kulturLoading}
-              saveToDb={saveToDb}
-              error={errors.teilkultur_id}
-              creatablePropertiesToPass={{ kultur_id: row.kultur_id }}
-              creatablePropertyName="name"
-              creatableIdField="id"
-              table="teilkultur"
-              callback={refetchKultur}
-            />
-          )}
-          <TextField
-            key={`${row.id}beschreibung`}
-            name="beschreibung"
-            label="Beschreibung"
-            value={row.beschreibung}
-            saveToDb={saveToDb}
-            error={errors.beschreibung}
-            multiline
-          />
-          {(ev_person_id || showFilter) && (
-            <Select
-              key={`${row.id}${row.person_id}person_id`}
-              name="person_id"
-              value={row.person_id}
-              field="person_id"
-              label="Wer"
-              options={personWerte}
-              loading={personLoading}
-              saveToDb={saveToDb}
-              error={errors.person_id}
-            />
-          )}
-          {(ev_datum || showFilter) && (
-            <Date
-              key={`${row.id}datum`}
-              name="datum"
-              label="Datum"
-              value={row.datum}
-              saveToDb={saveToDb}
-              error={errors.datum}
-            />
-          )}
-          {(ev_geplant || showFilter) && (
-            <FieldRow>
-              <Checkbox2States
-                key={`${row.id}geplant`}
-                label="geplant"
-                name="geplant"
-                value={row.geplant}
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={firstPaneWidth}
+            minSize={200}
+            resizerStyle={resizerStyle}
+          >
+            <FieldsContainer>
+              {activeConflict && (
+                <CaseConflictTitle>
+                  Aktuelle Version<Rev>{row._rev}</Rev>
+                </CaseConflictTitle>
+              )}
+              <Select
+                key={`${row.id}${row.kultur_id}kultur_id`}
+                name="kultur_id"
+                value={row.kultur_id}
+                field="kultur_id"
+                label="Kultur"
+                options={kulturWerte}
+                loading={kulturLoading}
                 saveToDb={saveToDb}
-                error={errors.geplant}
+                error={errors.kultur_id}
               />
-              <div>
-                <IconButton
-                  aria-label="Anleitung öffnen"
-                  title="Anleitung öffnen"
-                  onClick={openPlanenDocs}
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </div>
-            </FieldRow>
-          )}
-        </FieldsContainer>
+              {((tk && ev_teilkultur_id) || showFilter) && (
+                <SelectCreatable
+                  key={`${row.id}teilkultur_id`}
+                  name="teilkultur_id"
+                  value={row.teilkultur_id}
+                  field="teilkultur_id"
+                  label="Teilkultur"
+                  options={teilkulturWerte}
+                  loading={kulturLoading}
+                  saveToDb={saveToDb}
+                  error={errors.teilkultur_id}
+                  creatablePropertiesToPass={{ kultur_id: row.kultur_id }}
+                  creatablePropertyName="name"
+                  creatableIdField="id"
+                  table="teilkultur"
+                  callback={refetchKultur}
+                />
+              )}
+              <TextField
+                key={`${row.id}beschreibung`}
+                name="beschreibung"
+                label="Beschreibung"
+                value={row.beschreibung}
+                saveToDb={saveToDb}
+                error={errors.beschreibung}
+                multiline
+              />
+              {(ev_person_id || showFilter) && (
+                <Select
+                  key={`${row.id}${row.person_id}person_id`}
+                  name="person_id"
+                  value={row.person_id}
+                  field="person_id"
+                  label="Wer"
+                  options={personWerte}
+                  loading={personLoading}
+                  saveToDb={saveToDb}
+                  error={errors.person_id}
+                />
+              )}
+              {(ev_datum || showFilter) && (
+                <Date
+                  key={`${row.id}datum`}
+                  name="datum"
+                  label="Datum"
+                  value={row.datum}
+                  saveToDb={saveToDb}
+                  error={errors.datum}
+                />
+              )}
+              {(ev_geplant || showFilter) && (
+                <FieldRow>
+                  <Checkbox2States
+                    key={`${row.id}geplant`}
+                    label="geplant"
+                    name="geplant"
+                    value={row.geplant}
+                    saveToDb={saveToDb}
+                    error={errors.geplant}
+                  />
+                  <div>
+                    <IconButton
+                      aria-label="Anleitung öffnen"
+                      title="Anleitung öffnen"
+                      onClick={openPlanenDocs}
+                    >
+                      <IoMdInformationCircleOutline />
+                    </IconButton>
+                  </div>
+                </FieldRow>
+              )}
+              {online &&
+                !showFilter &&
+                row._conflicts &&
+                row._conflicts.map && (
+                  <ConflictList
+                    conflicts={row._conflicts}
+                    activeConflict={activeConflict}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+            </FieldsContainer>
+          </StyledSplitPane>
+        </Container>
       </Container>
     </ErrorBoundary>
   )

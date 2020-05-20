@@ -8,6 +8,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -28,6 +29,8 @@ import AddButton from './AddButton'
 import Zaehlungen from './Zaehlungen'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+//import Conflict from './Conflict'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -68,6 +71,42 @@ const TitleFilterNumbers = styled.div`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
+`
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
 `
 
 const teilkulturQuery = gql`
@@ -142,7 +181,7 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertTeilkultur, addQueuedQuery } = store
+  const { filter, user, upsertTeilkultur, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -150,7 +189,7 @@ const Teilkultur = ({
   const teilkulturResult = useQuery(teilkulturQuery, {
     variables: { id, isFiltered, filter: teilkulturFilter },
   })
-  const { data, error, loading, query } = teilkulturResult
+  const { data, error, loading, query: queryOfTeilkultur } = teilkulturResult
 
   const [errors, setErrors] = useState({})
 
@@ -162,6 +201,16 @@ const Teilkultur = ({
   } else {
     row = get(data, 'teilkultur[0]') || {}
   }
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => {
+    setActiveConflict(null)
+    queryOfTeilkultur.refetch()
+  }, [queryOfTeilkultur])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfTeilkultur.refetch()
+    setActiveConflict(row?._rev ?? null)
+  }, [queryOfTeilkultur, row?._rev])
 
   const {
     data: kulturData,
@@ -252,8 +301,8 @@ const Teilkultur = ({
       setTimeout(() => {
         // optimistically update store
         upsertTeilkultur(newObjectForStore)
-        // refetch query because is not a model instance
-        query.refetch()
+        // refetch queryOfTeilkultur because is not a model instance
+        queryOfTeilkultur.refetch()
       }, 50)
     },
     [
@@ -264,7 +313,7 @@ const Teilkultur = ({
       row,
       showFilter,
       user,
-      query,
+      queryOfTeilkultur,
     ],
   )
   const openTeilkulturDocs = useCallback(() => {
@@ -305,6 +354,10 @@ const Teilkultur = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -335,62 +388,86 @@ const Teilkultur = ({
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer>
-          <Select
-            key={`${row.id}${row.kultur_id}kultur_id`}
-            name="kultur_id"
-            value={row.kultur_id}
-            field="kultur_id"
-            label="Kultur"
-            options={kulturWerte}
-            loading={kulturLoading}
-            saveToDb={saveToDb}
-            error={errors.kultur_id}
-          />
-          <TextField
-            key={`${row.id}name`}
-            name="name"
-            label="Name"
-            value={row.name}
-            saveToDb={saveToDb}
-            error={errors.name}
-          />
-          <TextField
-            key={`${row.id}ort1`}
-            name="ort1"
-            label="Ort 1"
-            value={row.ort1}
-            saveToDb={saveToDb}
-            error={errors.ort1}
-          />
-          <TextField
-            key={`${row.id}ort2`}
-            name="ort2"
-            label="Ort 2"
-            value={row.ort2}
-            saveToDb={saveToDb}
-            error={errors.ort2}
-          />
-          <TextField
-            key={`${row.id}ort3`}
-            name="ort3"
-            label="Ort 3"
-            value={row.ort3}
-            saveToDb={saveToDb}
-            error={errors.ort3}
-          />
-          {(tk_bemerkungen || showFilter) && (
-            <TextField
-              key={`${row.id}bemerkungen`}
-              name="bemerkungen"
-              label="Bemerkungen"
-              value={row.bemerkungen}
-              saveToDb={saveToDb}
-              error={errors.bemerkungen}
-              multiline
-            />
-          )}
-        </FieldsContainer>
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={firstPaneWidth}
+            minSize={200}
+            resizerStyle={resizerStyle}
+          >
+            <FieldsContainer>
+              {activeConflict && (
+                <CaseConflictTitle>
+                  Aktuelle Version<Rev>{row._rev}</Rev>
+                </CaseConflictTitle>
+              )}
+              <Select
+                key={`${row.id}${row.kultur_id}kultur_id`}
+                name="kultur_id"
+                value={row.kultur_id}
+                field="kultur_id"
+                label="Kultur"
+                options={kulturWerte}
+                loading={kulturLoading}
+                saveToDb={saveToDb}
+                error={errors.kultur_id}
+              />
+              <TextField
+                key={`${row.id}name`}
+                name="name"
+                label="Name"
+                value={row.name}
+                saveToDb={saveToDb}
+                error={errors.name}
+              />
+              <TextField
+                key={`${row.id}ort1`}
+                name="ort1"
+                label="Ort 1"
+                value={row.ort1}
+                saveToDb={saveToDb}
+                error={errors.ort1}
+              />
+              <TextField
+                key={`${row.id}ort2`}
+                name="ort2"
+                label="Ort 2"
+                value={row.ort2}
+                saveToDb={saveToDb}
+                error={errors.ort2}
+              />
+              <TextField
+                key={`${row.id}ort3`}
+                name="ort3"
+                label="Ort 3"
+                value={row.ort3}
+                saveToDb={saveToDb}
+                error={errors.ort3}
+              />
+              {(tk_bemerkungen || showFilter) && (
+                <TextField
+                  key={`${row.id}bemerkungen`}
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  value={row.bemerkungen}
+                  saveToDb={saveToDb}
+                  error={errors.bemerkungen}
+                  multiline
+                />
+              )}
+              {online &&
+                !showFilter &&
+                row._conflicts &&
+                row._conflicts.map && (
+                  <ConflictList
+                    conflicts={row._conflicts}
+                    activeConflict={activeConflict}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+            </FieldsContainer>
+          </StyledSplitPane>
+        </Container>
         {!showFilter && (
           <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
         )}

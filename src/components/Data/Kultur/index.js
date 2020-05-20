@@ -16,6 +16,7 @@ import IconButton from '@material-ui/core/IconButton'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -42,6 +43,8 @@ import buildExceljsWorksheets from './buildExceljsWorksheets'
 import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+//import Conflict from './Conflict'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -94,13 +97,49 @@ const FieldRow = styled.div`
     margin-top: 8px;
   }
 `
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
+`
 
 const Kultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertKultur, addQueuedQuery } = store
+  const { filter, user, upsertKultur, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -108,7 +147,7 @@ const Kultur = ({
   const kulturResult = useQuery(kulturQuery, {
     variables: { id, isFiltered, filter: kulturFilter },
   })
-  const { data, error, loading } = kulturResult
+  const { data, error, loading, query: queryOfKultur } = kulturResult
 
   const [errors, setErrors] = useState({})
 
@@ -122,6 +161,16 @@ const Kultur = ({
   )
   const filteredNr = get(data, 'rowsFiltered', []).length
   const row = showFilter ? filter.kultur : store.kulturs.get(id)
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => {
+    setActiveConflict(null)
+    queryOfKultur.refetch()
+  }, [queryOfKultur])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfKultur.refetch()
+    setActiveConflict(row?._rev ?? null)
+  }, [queryOfKultur, row?._rev])
 
   useEffect(() => {
     setErrors({})
@@ -357,6 +406,10 @@ const Kultur = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -394,101 +447,125 @@ const Kultur = ({
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer>
-          <Select
-            key={`${row.id}${row.art_id}art_id`}
-            name="art_id"
-            value={row.art_id}
-            field="art_id"
-            label="Art"
-            options={artWerte}
-            loading={loadingArt}
-            saveToDb={saveToDb}
-            error={errors.art_id}
-          />
-          <Select
-            key={`${row.id}${row.herkunft_id}herkunft_id`}
-            name="herkunft_id"
-            value={row.herkunft_id}
-            field="herkunft_id"
-            label="Herkunft"
-            options={herkunftWerte}
-            loading={herkunftLoading}
-            saveToDb={saveToDb}
-            error={errors.herkunft_id}
-          />
-          <Select
-            key={`${row.id}${row.garten_id}garten_id`}
-            name="garten_id"
-            value={row.garten_id}
-            field="garten_id"
-            label="Garten"
-            options={gartenWerte}
-            loading={loadingGarten}
-            saveToDb={saveToDb}
-            error={errors.garten_id}
-          />
-          <Checkbox2States
-            key={`${row.id}zwischenlager`}
-            label="Zwischenlager"
-            name="zwischenlager"
-            value={row.zwischenlager}
-            saveToDb={saveToDb}
-            error={errors.zwischenlager}
-          />
-          <Checkbox2States
-            key={`${row.id}erhaltungskultur`}
-            label="Erhaltungskultur"
-            name="erhaltungskultur"
-            value={row.erhaltungskultur}
-            saveToDb={saveToDb}
-            error={errors.erhaltungskultur}
-          />
-          <FieldRow>
-            <TextField
-              key={`${row.id}von_anzahl_individuen`}
-              name="von_anzahl_individuen"
-              label="von Anzahl Individuen"
-              value={row.von_anzahl_individuen}
-              saveToDb={saveToDb}
-              error={errors.von_anzahl_individuen}
-              type="number"
-            />
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openGenVielfaldDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
-          </FieldRow>
-          <Checkbox2States
-            key={`${row.id}aktiv`}
-            label="aktiv"
-            name="aktiv"
-            value={row.aktiv}
-            saveToDb={saveToDb}
-            error={errors.aktiv}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors.bemerkungen}
-            multiLine
-          />
-          {!showFilter && row.id && (
-            <>
-              <Timeline row={row} />
-              <QK kultur={row} />
-              <Files parentId={row.id} parent="kultur" />
-            </>
-          )}
-        </FieldsContainer>
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={firstPaneWidth}
+            minSize={200}
+            resizerStyle={resizerStyle}
+          >
+            <FieldsContainer>
+              {activeConflict && (
+                <CaseConflictTitle>
+                  Aktuelle Version<Rev>{row._rev}</Rev>
+                </CaseConflictTitle>
+              )}
+              <Select
+                key={`${row.id}${row.art_id}art_id`}
+                name="art_id"
+                value={row.art_id}
+                field="art_id"
+                label="Art"
+                options={artWerte}
+                loading={loadingArt}
+                saveToDb={saveToDb}
+                error={errors.art_id}
+              />
+              <Select
+                key={`${row.id}${row.herkunft_id}herkunft_id`}
+                name="herkunft_id"
+                value={row.herkunft_id}
+                field="herkunft_id"
+                label="Herkunft"
+                options={herkunftWerte}
+                loading={herkunftLoading}
+                saveToDb={saveToDb}
+                error={errors.herkunft_id}
+              />
+              <Select
+                key={`${row.id}${row.garten_id}garten_id`}
+                name="garten_id"
+                value={row.garten_id}
+                field="garten_id"
+                label="Garten"
+                options={gartenWerte}
+                loading={loadingGarten}
+                saveToDb={saveToDb}
+                error={errors.garten_id}
+              />
+              <Checkbox2States
+                key={`${row.id}zwischenlager`}
+                label="Zwischenlager"
+                name="zwischenlager"
+                value={row.zwischenlager}
+                saveToDb={saveToDb}
+                error={errors.zwischenlager}
+              />
+              <Checkbox2States
+                key={`${row.id}erhaltungskultur`}
+                label="Erhaltungskultur"
+                name="erhaltungskultur"
+                value={row.erhaltungskultur}
+                saveToDb={saveToDb}
+                error={errors.erhaltungskultur}
+              />
+              <FieldRow>
+                <TextField
+                  key={`${row.id}von_anzahl_individuen`}
+                  name="von_anzahl_individuen"
+                  label="von Anzahl Individuen"
+                  value={row.von_anzahl_individuen}
+                  saveToDb={saveToDb}
+                  error={errors.von_anzahl_individuen}
+                  type="number"
+                />
+                <div>
+                  <IconButton
+                    aria-label="Anleitung öffnen"
+                    title="Anleitung öffnen"
+                    onClick={openGenVielfaldDocs}
+                  >
+                    <IoMdInformationCircleOutline />
+                  </IconButton>
+                </div>
+              </FieldRow>
+              <Checkbox2States
+                key={`${row.id}aktiv`}
+                label="aktiv"
+                name="aktiv"
+                value={row.aktiv}
+                saveToDb={saveToDb}
+                error={errors.aktiv}
+              />
+              <TextField
+                key={`${row.id}bemerkungen`}
+                name="bemerkungen"
+                label="Bemerkungen"
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={errors.bemerkungen}
+                multiLine
+              />
+              {online &&
+                !showFilter &&
+                row._conflicts &&
+                row._conflicts.map && (
+                  <ConflictList
+                    conflicts={row._conflicts}
+                    activeConflict={activeConflict}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+              {!showFilter && row.id && (
+                <>
+                  <Timeline row={row} />
+                  <QK kultur={row} />
+                  <Files parentId={row.id} parent="kultur" />
+                </>
+              )}
+            </FieldsContainer>
+          </StyledSplitPane>
+        </Container>
       </Container>
     </ErrorBoundary>
   )
