@@ -5,9 +5,11 @@ import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
+import toStringIfPossible from '../../../utils/toStringIfPossible'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -23,6 +25,8 @@ import ArUpSvg from '../../../svg/to_ar_up.inline.svg'
 import SaSvg from '../../../svg/to_sa.inline.svg'
 import KuSvg from '../../../svg/to_ku.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+//import Conflict from './Conflict'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -65,13 +69,49 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
+`
 
 const Art = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, tree, addQueuedQuery, upsertArt, user } = store
+  const { filter, tree, addQueuedQuery, upsertArt, user, online } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
@@ -84,6 +124,7 @@ const Art = ({
     data: dataFiltered,
     error: errorFiltered,
     loading: loadingFiltered,
+    query: queryOfArt,
   } = useQuery((store) =>
     store.queryArt({
       where: artFilter,
@@ -95,6 +136,16 @@ const Art = ({
   const totalNr = get(dataArtAggregate, 'art_aggregate.aggregate.count', 0)
   const filteredNr = get(dataFiltered, 'art', []).length
   const row = showFilter ? filter.art : store.arts.get(id)
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => {
+    setActiveConflict(null)
+    queryOfArt.refetch()
+  }, [queryOfArt])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfArt.refetch()
+    setActiveConflict(row?._rev ?? null)
+  }, [queryOfArt, row?._rev])
 
   useEffect(() => {
     setErrors({})
@@ -229,6 +280,10 @@ const Art = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   //console.log('Art', { row })
 
   return (
@@ -268,30 +323,54 @@ const Art = ({
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer>
-          <SelectLoadingOptions
-            key={`${row.id}ae_id2`}
-            field="ae_id"
-            valueLabelPath="art_ae_art.name"
-            label="Art"
-            row={row}
-            saveToDb={saveToDb}
-            error={errors.ae_id}
-            queryName={'queryAe_art'}
-            where={artSelectFilter}
-            order_by={{ name: 'asc_nulls_first' }}
-            resultNodesName="ae_art"
-            resultNodesLabelName="name"
-          />
-          {!showFilter && (
-            <>
-              <Timeline artId={row.id} />
-              <Herkunft artId={row.id} />
-              <QK artId={row.id} />
-              <Files parentId={row.id} parent="art" />
-            </>
-          )}
-        </FieldsContainer>
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={firstPaneWidth}
+            minSize={200}
+            resizerStyle={resizerStyle}
+          >
+            <FieldsContainer>
+              {activeConflict && (
+                <CaseConflictTitle>
+                  Aktuelle Version<Rev>{row._rev}</Rev>
+                </CaseConflictTitle>
+              )}
+              <SelectLoadingOptions
+                key={`${row.id}ae_id2`}
+                field="ae_id"
+                valueLabelPath="art_ae_art.name"
+                label="Art"
+                row={row}
+                saveToDb={saveToDb}
+                error={errors.ae_id}
+                queryName={'queryAe_art'}
+                where={artSelectFilter}
+                order_by={{ name: 'asc_nulls_first' }}
+                resultNodesName="ae_art"
+                resultNodesLabelName="name"
+              />
+              {online &&
+                !showFilter &&
+                row._conflicts &&
+                row._conflicts.map && (
+                  <ConflictList
+                    conflicts={row._conflicts}
+                    activeConflict={activeConflict}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+              {!showFilter && (
+                <>
+                  <Timeline artId={row.id} />
+                  <Herkunft artId={row.id} />
+                  <QK artId={row.id} />
+                  <Files parentId={row.id} parent="art" />
+                </>
+              )}
+            </FieldsContainer>
+          </StyledSplitPane>
+        </Container>
       </Container>
     </ErrorBoundary>
   )

@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -35,6 +36,8 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+//import Conflict from './Conflict'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -86,6 +89,42 @@ const FieldRow = styled.div`
   > div > button {
     margin-top: 8px;
   }
+`
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
 `
 
 const query = gql`
@@ -141,13 +180,13 @@ const Sammlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertSammlung, addQueuedQuery, user } = store
+  const { filter, upsertSammlung, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
   const { refetch: refetchTree } = store.tree
 
   const isFiltered = runIsFiltered()
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
-  const { data, error, loading, query: theQuery } = useQuery(query, {
+  const { data, error, loading, query: queryOfSammlung } = useQuery(query, {
     variables: { id, isFiltered, filter: sammlungFilter },
   })
   const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
@@ -164,6 +203,16 @@ const Sammlung = ({
   } else {
     row = get(data, 'sammlung[0]') || {}
   }
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => {
+    setActiveConflict(null)
+    queryOfSammlung.refetch()
+  }, [queryOfSammlung])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfSammlung.refetch()
+    setActiveConflict(row?._rev ?? null)
+  }, [queryOfSammlung, row?._rev])
 
   useEffect(() => {
     setErrors({})
@@ -278,7 +327,7 @@ const Sammlung = ({
         // optimistically update store
         upsertSammlung(newObjectForStore)
         // refetch query because is not a model instance
-        theQuery.refetch()
+        queryOfSammlung.refetch()
         // TODO: update tree if one of these fields were changed
         if (['herkunft_id', 'person_id', 'art_id', 'nr'].includes(field)) {
           refetchTree()
@@ -292,7 +341,7 @@ const Sammlung = ({
       refetchTree,
       row,
       showFilter,
-      theQuery,
+      queryOfSammlung,
       upsertSammlung,
       user.email,
     ],
@@ -346,6 +395,10 @@ const Sammlung = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -375,137 +428,161 @@ const Sammlung = ({
             </TitleSymbols>
           </TitleContainer>
         )}
-        <FieldsContainer>
-          <TextField
-            key={`${row.id}nr`}
-            name="nr"
-            label="Nr."
-            value={row.nr}
-            saveToDb={saveToDb}
-            error={errors.nr}
-            type="text"
-          />
-          <Select
-            key={`${row.id}${row.art_id}art_id`}
-            name="art_id"
-            value={row.art_id}
-            field="art_id"
-            label="Art"
-            options={artWerte}
-            loading={dataLoading}
-            saveToDb={saveToDb}
-            error={errors.art_id}
-          />
-          <Select
-            key={`${row.id}${row.herkunft_id}herkunft_id`}
-            name="herkunft_id"
-            value={row.herkunft_id}
-            field="herkunft_id"
-            label="Herkunft"
-            options={herkunftWerte}
-            loading={dataLoading}
-            saveToDb={saveToDb}
-            error={errors.herkunft_id}
-          />
-          <Select
-            key={`${row.id}${row.person_id}person_id`}
-            name="person_id"
-            value={row.person_id}
-            field="person_id"
-            label="Person"
-            options={personWerte}
-            loading={dataLoading}
-            saveToDb={saveToDb}
-            error={errors.person_id}
-          />
-          <Date
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={errors.datum}
-          />
-          <TextField
-            key={`${row.id}anzahl_pflanzen`}
-            name="anzahl_pflanzen"
-            label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
-            saveToDb={saveToDb}
-            error={errors.anzahl_pflanzen}
-            type="number"
-          />
-          <FieldRow>
-            <TextField
-              key={`${row.id}gramm_samen`}
-              name="gramm_samen"
-              label="Gramm Samen"
-              value={row.gramm_samen}
-              saveToDb={saveToDb}
-              error={errors.gramm_samen}
-              type="number"
-            />
-            <TextField
-              key={`${row.id}andere_menge`}
-              name="andere_menge"
-              label={`Andere Menge (z.B. "3 Zwiebeln")`}
-              value={row.andere_menge}
-              saveToDb={saveToDb}
-              error={errors.andere_menge}
-              type="text"
-            />
-          </FieldRow>
-          <FieldRow>
-            <TextField
-              key={`${row.id}von_anzahl_individuen`}
-              name="von_anzahl_individuen"
-              label="von Anzahl Individuen"
-              value={row.von_anzahl_individuen}
-              saveToDb={saveToDb}
-              error={errors.von_anzahl_individuen}
-              type="number"
-            />
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openGenVielfaldDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
-          </FieldRow>
-          {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
-          <FieldRow>
-            <Checkbox2States
-              key={`${row.id}geplant`}
-              label="Geplant"
-              name="geplant"
-              value={row.geplant}
-              saveToDb={saveToDb}
-              error={errors.geplant}
-            />
-            <div>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openPlanenDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </div>
-          </FieldRow>
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            saveToDb={saveToDb}
-            error={errors.bemerkungen}
-            multiLine
-          />
-          {!showFilter && <Files parentId={row.id} parent="sammlung" />}
-        </FieldsContainer>
+        <Container>
+          <StyledSplitPane
+            split="vertical"
+            size={firstPaneWidth}
+            minSize={200}
+            resizerStyle={resizerStyle}
+          >
+            <FieldsContainer>
+              {activeConflict && (
+                <CaseConflictTitle>
+                  Aktuelle Version<Rev>{row._rev}</Rev>
+                </CaseConflictTitle>
+              )}
+              <TextField
+                key={`${row.id}nr`}
+                name="nr"
+                label="Nr."
+                value={row.nr}
+                saveToDb={saveToDb}
+                error={errors.nr}
+                type="text"
+              />
+              <Select
+                key={`${row.id}${row.art_id}art_id`}
+                name="art_id"
+                value={row.art_id}
+                field="art_id"
+                label="Art"
+                options={artWerte}
+                loading={dataLoading}
+                saveToDb={saveToDb}
+                error={errors.art_id}
+              />
+              <Select
+                key={`${row.id}${row.herkunft_id}herkunft_id`}
+                name="herkunft_id"
+                value={row.herkunft_id}
+                field="herkunft_id"
+                label="Herkunft"
+                options={herkunftWerte}
+                loading={dataLoading}
+                saveToDb={saveToDb}
+                error={errors.herkunft_id}
+              />
+              <Select
+                key={`${row.id}${row.person_id}person_id`}
+                name="person_id"
+                value={row.person_id}
+                field="person_id"
+                label="Person"
+                options={personWerte}
+                loading={dataLoading}
+                saveToDb={saveToDb}
+                error={errors.person_id}
+              />
+              <Date
+                key={`${row.id}datum`}
+                name="datum"
+                label="Datum"
+                value={row.datum}
+                saveToDb={saveToDb}
+                error={errors.datum}
+              />
+              <TextField
+                key={`${row.id}anzahl_pflanzen`}
+                name="anzahl_pflanzen"
+                label="Anzahl Pflanzen"
+                value={row.anzahl_pflanzen}
+                saveToDb={saveToDb}
+                error={errors.anzahl_pflanzen}
+                type="number"
+              />
+              <FieldRow>
+                <TextField
+                  key={`${row.id}gramm_samen`}
+                  name="gramm_samen"
+                  label="Gramm Samen"
+                  value={row.gramm_samen}
+                  saveToDb={saveToDb}
+                  error={errors.gramm_samen}
+                  type="number"
+                />
+                <TextField
+                  key={`${row.id}andere_menge`}
+                  name="andere_menge"
+                  label={`Andere Menge (z.B. "3 Zwiebeln")`}
+                  value={row.andere_menge}
+                  saveToDb={saveToDb}
+                  error={errors.andere_menge}
+                  type="text"
+                />
+              </FieldRow>
+              <FieldRow>
+                <TextField
+                  key={`${row.id}von_anzahl_individuen`}
+                  name="von_anzahl_individuen"
+                  label="von Anzahl Individuen"
+                  value={row.von_anzahl_individuen}
+                  saveToDb={saveToDb}
+                  error={errors.von_anzahl_individuen}
+                  type="number"
+                />
+                <div>
+                  <IconButton
+                    aria-label="Anleitung öffnen"
+                    title="Anleitung öffnen"
+                    onClick={openGenVielfaldDocs}
+                  >
+                    <IoMdInformationCircleOutline />
+                  </IconButton>
+                </div>
+              </FieldRow>
+              {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
+              <FieldRow>
+                <Checkbox2States
+                  key={`${row.id}geplant`}
+                  label="Geplant"
+                  name="geplant"
+                  value={row.geplant}
+                  saveToDb={saveToDb}
+                  error={errors.geplant}
+                />
+                <div>
+                  <IconButton
+                    aria-label="Anleitung öffnen"
+                    title="Anleitung öffnen"
+                    onClick={openPlanenDocs}
+                  >
+                    <IoMdInformationCircleOutline />
+                  </IconButton>
+                </div>
+              </FieldRow>
+              <TextField
+                key={`${row.id}bemerkungen`}
+                name="bemerkungen"
+                label="Bemerkungen"
+                value={row.bemerkungen}
+                saveToDb={saveToDb}
+                error={errors.bemerkungen}
+                multiLine
+              />
+              {online &&
+                !showFilter &&
+                row._conflicts &&
+                row._conflicts.map && (
+                  <ConflictList
+                    conflicts={row._conflicts}
+                    activeConflict={activeConflict}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+              {!showFilter && <Files parentId={row.id} parent="sammlung" />}
+            </FieldsContainer>
+          </StyledSplitPane>
+        </Container>
       </Container>
     </ErrorBoundary>
   )

@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
+import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -35,6 +36,8 @@ import AddButton from './AddButton'
 import DelteButton from './DeleteButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+//import Conflict from './Conflict'
+import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
   height: 100%;
@@ -83,6 +86,42 @@ const FieldRow = styled.div`
   > div > button {
     margin-top: 8px;
   }
+`
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
 `
 
 const zaehlungQuery = gql`
@@ -147,7 +186,7 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertZaehlung, addQueuedQuery, user } = store
+  const { filter, upsertZaehlung, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -155,7 +194,7 @@ const Zaehlung = ({
   const zaehlungResult = useQuery(zaehlungQuery, {
     variables: { id, isFiltered, filter: zaehlungFilter },
   })
-  const { data, error, loading, query } = zaehlungResult
+  const { data, error, loading, query: queryOfZaehlung } = zaehlungResult
 
   const [errors, setErrors] = useState({})
 
@@ -167,6 +206,16 @@ const Zaehlung = ({
   } else {
     row = get(data, 'zaehlung[0]') || {}
   }
+
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => {
+    setActiveConflict(null)
+    queryOfZaehlung.refetch()
+  }, [queryOfZaehlung])
+  const callbackAfterUebernehmen = useCallback(() => {
+    queryOfZaehlung.refetch()
+    setActiveConflict(row?._rev ?? null)
+  }, [queryOfZaehlung, row?._rev])
 
   const artId = get(row, 'kultur.art_id')
   const kulturFilter = artId
@@ -264,10 +313,19 @@ const Zaehlung = ({
         // optimistically update store
         upsertZaehlung(newObjectForStore)
         // refetch query because is not a model instance
-        query.refetch()
+        queryOfZaehlung.refetch()
       }, 50)
     },
-    [addQueuedQuery, upsertZaehlung, filter, id, row, showFilter, user, query],
+    [
+      addQueuedQuery,
+      upsertZaehlung,
+      filter,
+      id,
+      row,
+      showFilter,
+      user,
+      queryOfZaehlung,
+    ],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
@@ -309,6 +367,10 @@ const Zaehlung = ({
 
   if (!row || (!showFilter && filter.show)) return null
 
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   return (
     <ErrorBoundary>
       <>
@@ -345,58 +407,84 @@ const Zaehlung = ({
               </TitleSymbols>
             </TitleContainer>
           )}
-          <FieldsContainer>
-            <Select
-              key={`${row.id}${row.kultur_id}kultur_id`}
-              name="kultur_id"
-              value={row.kultur_id}
-              field="kultur_id"
-              label="Kultur"
-              options={kulturWerte}
-              loading={kulturLoading}
-              saveToDb={saveToDb}
-              error={errors.kultur_id}
-            />
-            <Date
-              key={`${row.id}datum`}
-              name="datum"
-              label="Datum"
-              value={row.datum}
-              saveToDb={saveToDb}
-              error={errors.datum}
-            />
-            <FieldRow>
-              <Checkbox2States
-                key={`${row.id}prognose`}
-                label="Prognose"
-                name="prognose"
-                value={row.prognose}
-                saveToDb={saveToDb}
-                error={errors.prognose}
-              />
-              <div>
-                <IconButton
-                  aria-label="Anleitung öffnen"
-                  title="Anleitung öffnen"
-                  onClick={openPlanenDocs}
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </div>
-            </FieldRow>
-            {(z_bemerkungen || showFilter) && (
-              <TextField
-                key={`${row.id}bemerkungen`}
-                name="bemerkungen"
-                label="Bemerkungen"
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={errors.bemerkungen}
-                multiLine
-              />
-            )}
-            {!showFilter && <Teilzaehlungen zaehlungResult={zaehlungResult} />}
-          </FieldsContainer>
+          <Container>
+            <StyledSplitPane
+              split="vertical"
+              size={firstPaneWidth}
+              minSize={200}
+              resizerStyle={resizerStyle}
+            >
+              <FieldsContainer>
+                {activeConflict && (
+                  <CaseConflictTitle>
+                    Aktuelle Version<Rev>{row._rev}</Rev>
+                  </CaseConflictTitle>
+                )}
+                <Select
+                  key={`${row.id}${row.kultur_id}kultur_id`}
+                  name="kultur_id"
+                  value={row.kultur_id}
+                  field="kultur_id"
+                  label="Kultur"
+                  options={kulturWerte}
+                  loading={kulturLoading}
+                  saveToDb={saveToDb}
+                  error={errors.kultur_id}
+                />
+                <Date
+                  key={`${row.id}datum`}
+                  name="datum"
+                  label="Datum"
+                  value={row.datum}
+                  saveToDb={saveToDb}
+                  error={errors.datum}
+                />
+                <FieldRow>
+                  <Checkbox2States
+                    key={`${row.id}prognose`}
+                    label="Prognose"
+                    name="prognose"
+                    value={row.prognose}
+                    saveToDb={saveToDb}
+                    error={errors.prognose}
+                  />
+                  <div>
+                    <IconButton
+                      aria-label="Anleitung öffnen"
+                      title="Anleitung öffnen"
+                      onClick={openPlanenDocs}
+                    >
+                      <IoMdInformationCircleOutline />
+                    </IconButton>
+                  </div>
+                </FieldRow>
+                {(z_bemerkungen || showFilter) && (
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    name="bemerkungen"
+                    label="Bemerkungen"
+                    value={row.bemerkungen}
+                    saveToDb={saveToDb}
+                    error={errors.bemerkungen}
+                    multiLine
+                  />
+                )}
+                {online &&
+                  !showFilter &&
+                  row._conflicts &&
+                  row._conflicts.map && (
+                    <ConflictList
+                      conflicts={row._conflicts}
+                      activeConflict={activeConflict}
+                      setActiveConflict={setActiveConflict}
+                    />
+                  )}
+                {!showFilter && (
+                  <Teilzaehlungen zaehlungResult={zaehlungResult} />
+                )}
+              </FieldsContainer>
+            </StyledSplitPane>
+          </Container>
         </Container>
       </>
     </ErrorBoundary>
