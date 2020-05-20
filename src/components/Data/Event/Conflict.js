@@ -26,6 +26,7 @@ const eventRevQuery = gql`
       person_id
       person {
         id
+        __typename
         name
       }
       beschreibung
@@ -33,11 +34,6 @@ const eventRevQuery = gql`
       datum
       changed
       changed_by
-      person {
-        id
-        __typename
-        name
-      }
       _rev
       _parent_rev
     }
