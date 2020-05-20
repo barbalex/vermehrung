@@ -7,17 +7,30 @@ import gql from 'graphql-tag'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 
-const gartenRevQuery = gql`
-  query gartenRevForConflictQuery($id: uuid!, $rev: String!) {
-    garten_rev(where: { garten_id: { _eq: $id }, _rev: { _eq: $rev } }) {
+const eventRevQuery = gql`
+  query eventRevForConflictQuery($id: uuid!, $rev: String!) {
+    event_rev(where: { event_id: { _eq: $id }, _rev: { _eq: $rev } }) {
       id
       __typename
-      garten_id
-      name
-      strasse
-      ort
-      aktiv
-      bemerkungen
+      event_id
+      kultur_id
+      kultur {
+        id
+        __typename
+      }
+      teilkultur_id
+      teilkultur {
+        id
+        __typename
+      }
+      person_id
+      person {
+        id
+        name
+      }
+      beschreibung
+      geplant
+      datum
       changed
       changed_by
       person {
@@ -31,7 +44,7 @@ const gartenRevQuery = gql`
   }
 `
 
-const GartenConflict = ({
+const EventConflict = ({
   id,
   rev,
   row,
@@ -43,7 +56,7 @@ const GartenConflict = ({
   const { user, addNotification } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(gartenRevQuery, {
+  const { error, loading } = useQuery(eventRevQuery, {
     variables: {
       rev,
       id,
@@ -52,8 +65,8 @@ const GartenConflict = ({
 
   // need to grab store object to ensure this remains up to date
   const revRow =
-    [...store.garten_revs.values()].find(
-      (v) => v._rev === rev && v.garten_id === id,
+    [...store.event_revs.values()].find(
+      (v) => v._rev === rev && v.event_id === id,
     ) || {}
 
   const dataArray = [
@@ -100,7 +113,7 @@ const GartenConflict = ({
   const onClickVerwerfen = useCallback(async () => {
     const newDepth = revRow._depth + 1
     const newObject = {
-      garten_id: revRow.garten_id,
+      event_id: revRow.event_id,
       name: revRow.name,
       person_id: revRow.person_id,
       strasse: revRow.strasse,
@@ -118,12 +131,12 @@ const GartenConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
-    //console.log('Garten Conflict', { row, revRow, newObject })
+    //console.log('Event Conflict', { row, revRow, newObject })
     try {
-      await store.mutateInsert_garten_rev_one({
+      await store.mutateInsert_event_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'garten_rev_pkey',
+          constraint: 'event_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -140,7 +153,7 @@ const GartenConflict = ({
     revRow._rev,
     revRow.aktiv,
     revRow.bemerkungen,
-    revRow.garten_id,
+    revRow.event_id,
     revRow.geom_point,
     revRow.name,
     revRow.ort,
@@ -155,7 +168,7 @@ const GartenConflict = ({
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
     const newObject = {
-      garten_id: revRow.garten_id,
+      event_id: revRow.event_id,
       name: revRow.name,
       person_id: revRow.person_id,
       strasse: revRow.strasse,
@@ -172,12 +185,12 @@ const GartenConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
-    //console.log('Garten Conflict', { row, revRow, newObject })
+    //console.log('Event Conflict', { row, revRow, newObject })
     try {
-      await store.mutateInsert_garten_rev_one({
+      await store.mutateInsert_event_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'garten_rev_pkey',
+          constraint: 'event_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -192,7 +205,7 @@ const GartenConflict = ({
     callbackAfterUebernehmen,
     revRow.aktiv,
     revRow.bemerkungen,
-    revRow.garten_id,
+    revRow.event_id,
     revRow.geom_point,
     revRow.name,
     revRow.ort,
@@ -208,11 +221,11 @@ const GartenConflict = ({
     setActiveConflict,
   ])
 
-  //console.log('Garten Conflict', { dataArray, row, revRow })
+  //console.log('Event Conflict', { dataArray, row, revRow })
 
   return (
     <Conflict
-      name="Garten"
+      name="Event"
       rev={rev}
       row={row}
       dataArray={dataArray}
@@ -225,4 +238,4 @@ const GartenConflict = ({
   )
 }
 
-export default observer(GartenConflict)
+export default observer(EventConflict)
