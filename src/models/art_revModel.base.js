@@ -4,6 +4,8 @@
 import { types } from "mobx-state-tree"
 import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
+import { ae_artModel } from "./ae_artModel"
+import { ae_artModelSelector } from "./ae_artModel.base"
 import { av_artModel } from "./av_artModel"
 import { av_artModelSelector } from "./av_artModel.base"
 import { kulturModel } from "./kulturModel"
@@ -39,6 +41,7 @@ export const art_revModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     art_id: types.union(types.undefined, types.frozen()),
+    art_rev_ae_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => ae_artModel))),
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -69,6 +72,7 @@ export class art_revModelSelector extends QueryBuilder {
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
+  art_rev_ae_art(builder) { return this.__child(`art_rev_ae_art`, ae_artModelSelector, builder) }
   av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }

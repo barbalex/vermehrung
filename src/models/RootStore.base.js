@@ -1117,6 +1117,10 @@ import { subscription_rootModel } from "./subscription_rootModel"
 import { subscription_rootModelPrimitives, subscription_rootModelSelector } from "./subscription_rootModel.base"
 
 
+
+
+
+
 /**
 * Store, managing, among others, all the objects received through graphQL
 */
