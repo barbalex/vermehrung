@@ -46,7 +46,6 @@ const ArtConflict = ({
     },
   })
 
-  //const revRow = data?.art_rev?.[0] ?? {}
   // need to grab store object to ensure this remains up to date
   const revRow =
     [...store.art_revs.values()].find(
@@ -112,13 +111,15 @@ const ArtConflict = ({
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
+    // need to attach to the winner, that is row
+    // otherwise risk to still have lower depth and thus loosing
+    const newDepth = row._depth + 1
     const newObject = {
       art_id: revRow.art_id,
       ae_id: revRow.ae_id,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
-      _parent_rev: revRow._rev,
+      _parent_rev: row._rev,
       _depth: newDepth,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
@@ -141,10 +142,10 @@ const ArtConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
-    revRow._depth,
-    revRow._rev,
     revRow.ae_id,
     revRow.art_id,
+    row._depth,
+    row._rev,
     store,
     user.email,
   ])
