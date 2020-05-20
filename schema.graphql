@@ -1477,6 +1477,9 @@ type art_rev {
   art_id: uuid!
 
   # An object relationship
+  art_rev_ae_art: ae_art
+
+  # An object relationship
   av_art: av_art
   changed: timestamp
   changed_by: String
@@ -1691,6 +1694,7 @@ input art_rev_bool_exp {
   _revisions: _text_comparison_exp
   ae_id: uuid_comparison_exp
   art_id: uuid_comparison_exp
+  art_rev_ae_art: ae_art_bool_exp
   av_art: av_art_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -1724,6 +1728,7 @@ input art_rev_insert_input {
   _revisions: _text
   ae_id: uuid
   art_id: uuid
+  art_rev_ae_art: ae_art_obj_rel_insert_input
   av_art: av_art_obj_rel_insert_input
   changed: timestamp
   changed_by: String
@@ -1813,6 +1818,7 @@ input art_rev_order_by {
   _revisions: order_by
   ae_id: order_by
   art_id: order_by
+  art_rev_ae_art: ae_art_order_by
   av_art: av_art_order_by
   changed: order_by
   changed_by: order_by
