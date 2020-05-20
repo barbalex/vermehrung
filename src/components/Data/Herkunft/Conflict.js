@@ -105,7 +105,9 @@ const HerkunftConflict = ({
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
+    // need to attach to the winner, that is row
+    // otherwise risk to still have lower depth and thus loosing
+    const newDepth = row._depth + 1
     const newObject = {
       herkunft_id: revRow.herkunft_id,
       nr: revRow.nr,
@@ -117,7 +119,7 @@ const HerkunftConflict = ({
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
-      _parent_rev: revRow._rev,
+      _parent_rev: row._rev,
       _depth: newDepth,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
@@ -138,10 +140,8 @@ const HerkunftConflict = ({
     }
     callbackAfterUebernehmen()
   }, [
-    callbackAfterUebernehmen,
     addNotification,
-    revRow._depth,
-    revRow._rev,
+    callbackAfterUebernehmen,
     revRow.bemerkungen,
     revRow.gemeinde,
     revRow.geom_point,
@@ -150,6 +150,8 @@ const HerkunftConflict = ({
     revRow.land,
     revRow.lokalname,
     revRow.nr,
+    row._depth,
+    row._rev,
     store,
     user.email,
   ])
