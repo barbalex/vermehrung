@@ -12,6 +12,7 @@ const gartenRevQuery = gql`
     garten_rev(where: { garten_id: { _eq: $id }, _rev: { _eq: $rev } }) {
       id
       __typename
+      garten_id
       name
       strasse
       ort
@@ -24,6 +25,8 @@ const gartenRevQuery = gql`
         __typename
         name
       }
+      _rev
+      _parent_rev
     }
   }
 `
@@ -55,42 +58,49 @@ const GartenConflict = ({
     ) || {}
 
   const dataArray = [
-    { key: 'name', value: revRow.name, label: 'Name' },
+    { keyInRow: 'name', valueInRev: revRow.name, label: 'Name' },
     {
-      key: 'person.name',
-      value: revRow?.person?.name,
+      keyInRow: 'person.name', // this is key in row
+      valueInRev: revRow?.person?.name, // this is key in rev
       label: 'Person',
     },
-    { key: 'strasse', value: revRow.strasse, label: 'Strasse' },
+    { keyInRow: 'strasse', valueInRev: revRow.strasse, label: 'Strasse' },
     {
-      key: 'plz',
-      value: revRow.plz,
+      keyInRow: 'plz',
+      valueInRev: revRow.plz,
       label: 'PLZ',
     },
-    { key: 'ort', value: revRow.ort, label: 'Ort' },
+    { keyInRow: 'ort', valueInRev: revRow.ort, label: 'Ort' },
     {
-      key: 'geom_point.coordinates',
-      value: revRow?.geom_point?.coordinates,
+      keyInRow: 'geom_point.coordinates',
+      valueInRev: revRow?.geom_point?.coordinates,
       label: 'Längen- und Breitengrad',
     },
     {
-      key: 'aktiv',
-      value: revRow.aktiv == 'true',
+      keyInRow: 'aktiv',
+      valueInRev: revRow.aktiv == 'true',
       label: 'aktiv',
     },
-    { key: 'bemerkungen', value: revRow.bemerkungen, label: 'bemerkungen' },
     {
-      key: 'changed',
-      value: revRow.changed,
+      keyInRow: 'bemerkungen',
+      valueInRev: revRow.bemerkungen,
+      label: 'bemerkungen',
+    },
+    {
+      keyInRow: 'changed',
+      valueInRev: revRow.changed,
       label: 'geändert',
     },
-    { key: 'changed_by', value: revRow.changed_by, label: 'geändert von' },
+    {
+      keyInRow: 'changed_by',
+      valueInRev: revRow.changed_by,
+      label: 'geändert von',
+    },
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const depth = revRow._depth + 1
+    const newDepth = revRow._depth + 1
     const newObject = {
-      // TODO: remove below error - done to provoke messages
       garten_id: revRow.garten_id,
       name: revRow.name,
       person_id: revRow.person_id,
@@ -103,12 +113,13 @@ const GartenConflict = ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
-      _depth: depth,
+      _depth: newDepth,
       _deleted: true,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    //console.log('Garten Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_garten_rev_one({
         object: newObject,
@@ -141,7 +152,9 @@ const GartenConflict = ({
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {
-    const depth = revRow._depth + 1
+    // need to attach to the winner, that is row
+    // otherwise risk to still have lower depth and thus loosing
+    const newDepth = row._depth + 1
     const newObject = {
       garten_id: revRow.garten_id,
       name: revRow.name,
@@ -154,12 +167,13 @@ const GartenConflict = ({
       bemerkungen: revRow.bemerkungen,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: depth,
+      _parent_rev: row._rev,
+      _depth: newDepth,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    //console.log('Garten Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_garten_rev_one({
         object: newObject,
@@ -177,8 +191,6 @@ const GartenConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
-    revRow._depth,
-    revRow._rev,
     revRow.aktiv,
     revRow.bemerkungen,
     revRow.garten_id,
@@ -188,6 +200,8 @@ const GartenConflict = ({
     revRow.person_id,
     revRow.plz,
     revRow.strasse,
+    row._depth,
+    row._rev,
     store,
     user.email,
   ])

@@ -12,9 +12,17 @@ const artRevQuery = gql`
     art_rev(where: { art_id: { _eq: $id }, _rev: { _eq: $rev } }) {
       id
       __typename
+      art_id
       ae_id
+      art_rev_ae_art {
+        id
+        __typename
+        name
+      }
       changed
       changed_by
+      _rev
+      _depth
     }
   }
 `
@@ -46,58 +54,37 @@ const ArtConflict = ({
     ) || {}
 
   const dataArray = [
-    { key: 'name', value: revRow.name, label: 'Name' },
     {
-      key: 'person.name',
-      value: revRow?.person?.name,
-      label: 'Person',
-    },
-    { key: 'strasse', value: revRow.strasse, label: 'Strasse' },
-    {
-      key: 'plz',
-      value: revRow.plz,
-      label: 'PLZ',
-    },
-    { key: 'ort', value: revRow.ort, label: 'Ort' },
-    {
-      key: 'geom_point.coordinates',
-      value: revRow?.geom_point?.coordinates,
-      label: 'Längen- und Breitengrad',
+      keyInRow: 'art_ae_art.name', // this is key in row
+      valueInRev: revRow?.art_rev_ae_art?.name, // this is key in rev
+      label: 'Art',
     },
     {
-      key: 'aktiv',
-      value: revRow.aktiv == 'true',
-      label: 'aktiv',
-    },
-    { key: 'bemerkungen', value: revRow.bemerkungen, label: 'bemerkungen' },
-    {
-      key: 'changed',
-      value: revRow.changed,
+      keyInRow: 'changed',
+      valueInRev: revRow.changed,
       label: 'geändert',
     },
-    { key: 'changed_by', value: revRow.changed_by, label: 'geändert von' },
+    {
+      keyInRow: 'changed_by',
+      valueInRev: revRow.changed_by,
+      label: 'geändert von',
+    },
   ]
 
+  //console.log('Art Conflict', { dataArray, row, revRow, id, rev })
+
   const onClickVerwerfen = useCallback(async () => {
-    const depth = revRow._depth + 1
+    const newDepth = revRow._depth + 1
     const newObject = {
-      // TODO: remove below error - done to provoke messages
       art_id: revRow.art_id,
-      name: revRow.name,
-      person_id: revRow.person_id,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
-      bemerkungen: revRow.bemerkungen,
+      ae_id: revRow.ae_id,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
-      _depth: depth,
+      _depth: newDepth,
       _deleted: true,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
     try {
@@ -119,36 +106,22 @@ const ArtConflict = ({
     callbackAfterVerwerfen,
     revRow._depth,
     revRow._rev,
-    revRow.aktiv,
-    revRow.bemerkungen,
+    revRow.ae_id,
     revRow.art_id,
-    revRow.geom_point,
-    revRow.name,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
     store,
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {
-    const depth = revRow._depth + 1
+    const newDepth = revRow._depth + 1
     const newObject = {
       art_id: revRow.art_id,
-      name: revRow.name,
-      person_id: revRow.person_id,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
-      bemerkungen: revRow.bemerkungen,
+      ae_id: revRow.ae_id,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
-      _depth: depth,
+      _depth: newDepth,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
     try {
@@ -170,23 +143,14 @@ const ArtConflict = ({
     callbackAfterUebernehmen,
     revRow._depth,
     revRow._rev,
-    revRow.aktiv,
-    revRow.bemerkungen,
+    revRow.ae_id,
     revRow.art_id,
-    revRow.geom_point,
-    revRow.name,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
     store,
     user.email,
   ])
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [
     setActiveConflict,
   ])
-
-  //console.log('Art Conflict', { dataArray, row, revRow })
 
   return (
     <Conflict

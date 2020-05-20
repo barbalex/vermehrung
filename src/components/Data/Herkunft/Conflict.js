@@ -28,25 +28,34 @@ const HerkunftConflict = ({
     [...store.herkunft_revs.values()].find(
       (v) => v._rev === rev && v.herkunft_id === id,
     ) || {}
+  console.log('Herkunft Conflict, revRow:', revRow)
 
   const dataArray = [
-    { key: 'nr', value: revRow.nr, label: 'Nr' },
-    { key: 'lokalname', value: revRow.lokalname, label: 'Lokalname' },
-    { key: 'gemeinde', value: revRow.gemeinde, label: 'Gemeinde' },
-    { key: 'kanton', value: revRow.kanton, label: 'Kanton' },
-    { key: 'land', value: revRow.land, label: 'Land' },
+    { keyInRow: 'nr', valueInRev: revRow.nr, label: 'Nr' },
+    { keyInRow: 'lokalname', valueInRev: revRow.lokalname, label: 'Lokalname' },
+    { keyInRow: 'gemeinde', valueInRev: revRow.gemeinde, label: 'Gemeinde' },
+    { keyInRow: 'kanton', valueInRev: revRow.kanton, label: 'Kanton' },
+    { keyInRow: 'land', valueInRev: revRow.land, label: 'Land' },
     {
-      key: 'geom_point.coordinates',
-      value: revRow?.geom_point?.coordinates,
+      keyInRow: 'geom_point.coordinates',
+      valueInRev: revRow?.geom_point?.coordinates,
       label: 'Längen- und Breitengrad',
     },
-    { key: 'bemerkungen', value: revRow.bemerkungen, label: 'Bemerkungen' },
-    { key: 'changed', value: revRow.changed, label: 'geändert' },
-    { key: 'changed_by', value: revRow.changed_by, label: 'geändert von' },
+    {
+      keyInRow: 'bemerkungen',
+      valueInRev: revRow.bemerkungen,
+      label: 'Bemerkungen',
+    },
+    { keyInRow: 'changed', valueInRev: revRow.changed, label: 'geändert' },
+    {
+      keyInRow: 'changed_by',
+      valueInRev: revRow.changed_by,
+      label: 'geändert von',
+    },
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const depth = revRow._depth + 1
+    const newDepth = revRow._depth + 1
     const newObject = {
       herkunft_id: revRow.herkunft_id,
       nr: revRow.nr,
@@ -59,10 +68,10 @@ const HerkunftConflict = ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
-      _depth: depth,
+      _depth: newDepth,
       _deleted: true,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
     try {
@@ -96,7 +105,7 @@ const HerkunftConflict = ({
     user.email,
   ])
   const onClickUebernehmen = useCallback(async () => {
-    const depth = revRow._depth + 1
+    const newDepth = revRow._depth + 1
     const newObject = {
       herkunft_id: revRow.herkunft_id,
       nr: revRow.nr,
@@ -109,9 +118,9 @@ const HerkunftConflict = ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
-      _depth: depth,
+      _depth: newDepth,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
     try {
