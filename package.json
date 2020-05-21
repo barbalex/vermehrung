@@ -98,7 +98,7 @@
     "typeface-roboto-mono": "0.0.75",
     "typography": "0.16.19",
     "uploadcare-widget": "3.9.1",
-    "uuid": "8.0.0"
+    "uuid": "8.1.0"
   },
   "devDependencies": {
     "copyfiles": "2.2.0"
