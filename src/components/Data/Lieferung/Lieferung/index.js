@@ -41,6 +41,7 @@ import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 //import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
+import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 
 const Container = styled.div`
   height: 100%;
@@ -181,12 +182,18 @@ const lieferungQuery = gql`
       sammlung {
         id
         __typename
+        datum
         herkunft {
           id
           __typename
           nr
           lokalname
           gemeinde
+        }
+        person {
+          id
+          __typename
+          name
         }
       }
       kulturByVonKulturId {
@@ -531,17 +538,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const sammlungWerte = useMemo(
     () =>
-      get(sammlungData, 'sammlung', []).map((el) => {
-        const datum = el.datum || '(kein Datum)'
-        const nr = get(el, 'herkunft.nr') || '(keine Nr)'
-        const person = get(el, 'person.name') || '(kein Name)'
-        const label = `${datum}: Herkunft ${nr}; ${person}`
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      get(sammlungData, 'sammlung', []).map((el) => ({
+        value: el.id,
+        label: sammlungLabelFromSammlung(el),
+      })),
     [sammlungData],
   )
 
