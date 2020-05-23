@@ -12,10 +12,10 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
-import { personOption as personOptionFragment } from '../../../utils/fragments'
-import appBaseUrl from '../../../utils/appBaseUrl'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../models/reactUtils'
+import { personOption as personOptionFragment } from '../../../../utils/fragments'
+import appBaseUrl from '../../../../utils/appBaseUrl'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;

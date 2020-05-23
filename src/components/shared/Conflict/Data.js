@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import Diff from 'react-stylable-diff'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../utils/toStringIfPossible'
