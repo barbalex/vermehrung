@@ -81,6 +81,12 @@ const lieferungRevQuery = gql`
         }
       }
       nach_ausgepflanzt
+      von_anzahl_individuen
+      anzahl_pflanzen
+      anzahl_auspflanzbereit
+      gramm_samen
+      andere_menge
+      geplant
       bemerkungen
       changed
       changed_by
@@ -123,6 +129,31 @@ const LieferungConflict = ({
       label: 'Art',
     },
     {
+      valueInRow: row?.von_anzahl_individuen,
+      valueInRev: revRow?.von_anzahl_individuen,
+      label: 'Von Anzahl Individuen',
+    },
+    {
+      valueInRow: row?.anzahl_pflanzen,
+      valueInRev: revRow?.anzahl_pflanzen,
+      label: 'Anzahl Pflanzen',
+    },
+    {
+      valueInRow: row?.anzahl_auspflanzbereit,
+      valueInRev: revRow?.anzahl_auspflanzbereit,
+      label: 'Anzahl ausfplanzbereit',
+    },
+    {
+      valueInRow: row?.gramm_samen,
+      valueInRev: revRow?.gramm_samen,
+      label: 'Gramm Samen',
+    },
+    {
+      valueInRow: row?.andere_menge,
+      valueInRev: revRow?.andere_menge,
+      label: 'Andere Menge',
+    },
+    {
       valueInRow: row?.person?.name,
       valueInRev: revRow?.person?.name,
       label: 'Person',
@@ -155,9 +186,14 @@ const LieferungConflict = ({
       label: 'Nach ausgepflanzt',
     },
     {
+      valueInRow: row?.geplant == true,
+      valueInRev: revRow?.geplant == true,
+      label: 'geplant',
+    },
+    {
       valueInRow: row?.bemerkungen,
       valueInRev: revRow?.bemerkungen,
-      label: 'bemerkungen',
+      label: 'Bemerkungen',
     },
     {
       valueInRow: row?.changed,
@@ -182,6 +218,12 @@ const LieferungConflict = ({
       datum: revRow.datum,
       nach_kultur_id: revRow.nach_kultur_id,
       nach_ausgepflanzt: revRow.nach_ausgepflanzt,
+      von_anzahl_individuen: revRow.von_anzahl_individuen,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
+      gramm_samen: revRow.gramm_samen,
+      andere_menge: revRow.andere_menge,
+      geplant: revRow.geplant,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: revRow._rev,
@@ -212,15 +254,21 @@ const LieferungConflict = ({
     callbackAfterVerwerfen,
     revRow._depth,
     revRow._rev,
-    revRow.aktiv,
+    revRow.andere_menge,
+    revRow.anzahl_auspflanzbereit,
+    revRow.anzahl_pflanzen,
+    revRow.art_id,
     revRow.bemerkungen,
+    revRow.datum,
+    revRow.geplant,
+    revRow.gramm_samen,
     revRow.lieferung_id,
-    revRow.geom_point,
-    revRow.name,
-    revRow.ort,
+    revRow.nach_ausgepflanzt,
+    revRow.nach_kultur_id,
     revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
+    revRow.von_anzahl_individuen,
+    revRow.von_kultur_id,
+    revRow.von_sammlung_id,
     store,
     user.email,
   ])
@@ -237,6 +285,12 @@ const LieferungConflict = ({
       datum: revRow.datum,
       nach_kultur_id: revRow.nach_kultur_id,
       nach_ausgepflanzt: revRow.nach_ausgepflanzt,
+      von_anzahl_individuen: revRow.von_anzahl_individuen,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
+      gramm_samen: revRow.gramm_samen,
+      andere_menge: revRow.andere_menge,
+      geplant: revRow.geplant,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: row._rev,
@@ -264,15 +318,21 @@ const LieferungConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
-    revRow.aktiv,
+    revRow.andere_menge,
+    revRow.anzahl_auspflanzbereit,
+    revRow.anzahl_pflanzen,
+    revRow.art_id,
     revRow.bemerkungen,
+    revRow.datum,
+    revRow.geplant,
+    revRow.gramm_samen,
     revRow.lieferung_id,
-    revRow.geom_point,
-    revRow.name,
-    revRow.ort,
+    revRow.nach_ausgepflanzt,
+    revRow.nach_kultur_id,
     revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
+    revRow.von_anzahl_individuen,
+    revRow.von_kultur_id,
+    revRow.von_sammlung_id,
     row._depth,
     row._rev,
     store,
