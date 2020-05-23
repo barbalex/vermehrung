@@ -39,9 +39,10 @@ import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
+import kulturLabelFromKultur from './kulturLabelFromKultur'
 
 const Container = styled.div`
   height: 100%;
@@ -207,6 +208,16 @@ const lieferungQuery = gql`
           nr
           lokalname
           gemeinde
+        }
+        garten {
+          id
+          __typename
+          person {
+            id
+            __typename
+            name
+            ort
+          }
         }
       }
       kulturByNachKulturId {
@@ -522,17 +533,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   )
   const nachKulturWerte = useMemo(
     () =>
-      get(nachKulturData, 'kultur', []).map((el) => {
-        const personName = get(el, 'garten.person.name') || '(kein Name)'
-        const personOrt = get(el, 'garten.person.ort') || null
-        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const label = get(el, 'garten.name') || personLabel
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      get(nachKulturData, 'kultur', []).map((el) => ({
+        value: el.id,
+        label: kulturLabelFromKultur(el),
+      })),
     [nachKulturData],
   )
 
