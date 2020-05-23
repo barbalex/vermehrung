@@ -164,6 +164,20 @@ const lieferungQuery = gql`
   ) {
     lieferung(where: { id: { _eq: $id } }) {
       ...LieferungFields
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
+      person {
+        id
+        __typename
+        name
+      }
       sammlung {
         id
         __typename
@@ -1024,6 +1038,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                   />
                 )}
             </FieldsContainer>
+            <></>
           </StyledSplitPane>
         </Container>
       </Container>
