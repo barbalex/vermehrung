@@ -15,7 +15,9 @@ const gartenRevQuery = gql`
       garten_id
       name
       strasse
+      plz
       ort
+      geom_point
       aktiv
       bemerkungen
       changed
@@ -57,42 +59,46 @@ const GartenConflict = ({
     ) || {}
 
   const dataArray = [
-    { keyInRow: 'name', valueInRev: revRow.name, label: 'Name' },
     {
-      keyInRow: 'person.name', // this is key in row
-      valueInRev: revRow?.person?.name, // this is key in rev
+      valueInRow: row?.name,
+      valueInRev: revRow?.name,
+      label: 'Name',
+    },
+    {
+      valueInRow: row?.person?.name,
+      valueInRev: revRow?.person?.name,
       label: 'Person',
     },
-    { keyInRow: 'strasse', valueInRev: revRow.strasse, label: 'Strasse' },
+    { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
     {
-      keyInRow: 'plz',
-      valueInRev: revRow.plz,
+      valueInRow: row?.plz,
+      valueInRev: revRow?.plz,
       label: 'PLZ',
     },
-    { keyInRow: 'ort', valueInRev: revRow.ort, label: 'Ort' },
+    { valueInRow: row?.ort, valueInRev: revRow?.ort, label: 'Ort' },
     {
-      keyInRow: 'geom_point.coordinates',
+      valueInRow: row?.geom_point?.coordinates,
       valueInRev: revRow?.geom_point?.coordinates,
       label: 'Längen- und Breitengrad',
     },
     {
-      keyInRow: 'aktiv',
-      valueInRev: revRow.aktiv == 'true',
+      valueInRow: row?.aktiv,
+      valueInRev: revRow?.aktiv == 'true',
       label: 'aktiv',
     },
     {
-      keyInRow: 'bemerkungen',
-      valueInRev: revRow.bemerkungen,
+      valueInRow: row?.bemerkungen,
+      valueInRev: revRow?.bemerkungen,
       label: 'bemerkungen',
     },
     {
-      keyInRow: 'changed',
-      valueInRev: revRow.changed,
+      valueInRow: row?.changed,
+      valueInRev: revRow?.changed,
       label: 'geändert',
     },
     {
-      keyInRow: 'changed_by',
-      valueInRev: revRow.changed_by,
+      valueInRow: row?.changed_by,
+      valueInRev: revRow?.changed_by,
       label: 'geändert von',
     },
   ]
@@ -214,7 +220,6 @@ const GartenConflict = ({
     <Conflict
       name="Garten"
       rev={rev}
-      row={row}
       dataArray={dataArray}
       loading={loading}
       error={error}
