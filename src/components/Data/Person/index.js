@@ -232,13 +232,13 @@ const Person = ({
         kommerziell: field === 'kommerziell' ? value : row.kommerziell,
         info: field === 'info' ? value : row.info,
         aktiv: field === 'aktiv' ? value : row.aktiv,
-        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
+      newObject.changed = new window.Date().toISOString()
       const newObjectForStore = { ...newObject }
       // convert array to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243

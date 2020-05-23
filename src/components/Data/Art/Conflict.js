@@ -77,7 +77,6 @@ const ArtConflict = ({
     const newObject = {
       art_id: revRow.art_id,
       ae_id: revRow.ae_id,
-      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
       _depth: newDepth,
@@ -86,6 +85,7 @@ const ArtConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
     try {
       await store.mutateInsert_art_rev_one({
         object: newObject,
@@ -117,7 +117,6 @@ const ArtConflict = ({
     const newObject = {
       art_id: revRow.art_id,
       ae_id: revRow.ae_id,
-      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
@@ -125,6 +124,7 @@ const ArtConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
     try {
       await store.mutateInsert_art_rev_one({
         object: newObject,

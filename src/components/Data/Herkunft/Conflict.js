@@ -76,7 +76,6 @@ const HerkunftConflict = ({
       land: revRow.land,
       geom_point: revRow.geom_point,
       bemerkungen: revRow.bemerkungen,
-      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
       _depth: newDepth,
@@ -85,6 +84,7 @@ const HerkunftConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
     try {
       await store.mutateInsert_herkunft_rev_one({
         object: newObject,
@@ -128,7 +128,6 @@ const HerkunftConflict = ({
       land: revRow.land,
       geom_point: revRow.geom_point,
       bemerkungen: revRow.bemerkungen,
-      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
@@ -136,6 +135,7 @@ const HerkunftConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
     try {
       await store.mutateInsert_herkunft_rev_one({
         object: newObject,

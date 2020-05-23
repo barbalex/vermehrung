@@ -43,8 +43,10 @@ import buildExceljsWorksheets from './buildExceljsWorksheets'
 import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
+import gartenLabelFromGarten from './gartenLabelFromGarten'
 
 const Container = styled.div`
   height: 100%;
@@ -256,26 +258,17 @@ const Kultur = ({
     () =>
       (get(dataGarten, 'garten') || []).map((el) => ({
         value: el.id,
-        label: el.name || get(el, 'person.name') || '(kein Name)',
+        label: gartenLabelFromGarten(el),
       })),
     [dataGarten],
   )
 
   const herkunftWerte = useMemo(
     () =>
-      (get(herkunftData, 'herkunft') || []).map((el) => {
-        // only show lokal if exist
-        // does not exist if user does not have right to see it
-        const gemeinde = el.gemeinde || ''
-        const lokalname = el.lokalname || ''
-        const nr = el.nr || '(keine Nr.)'
-        const label = [nr, gemeinde, lokalname].filter((e) => !!e).join(', ')
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      (get(herkunftData, 'herkunft') || []).map((el) => ({
+        value: el.id,
+        label: herkunftLabelFromHerkunft(el),
+      })),
     [herkunftData],
   )
 
@@ -307,7 +300,6 @@ const Kultur = ({
         bemerkungen:
           field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         aktiv: field === 'aktiv' ? value : row.aktiv,
-        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -316,6 +308,7 @@ const Kultur = ({
       // DO NOT include id in rev - or revs with same data will conflict
       newObject.id = uuidv1()
       newObject._rev = rev
+      newObject.changed = new window.Date().toISOString()
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
@@ -564,6 +557,18 @@ const Kultur = ({
                 </>
               )}
             </FieldsContainer>
+            <>
+              {online && !!activeConflict && (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  setActiveConflict={setActiveConflict}
+                />
+              )}
+            </>
           </StyledSplitPane>
         </Container>
       </Container>

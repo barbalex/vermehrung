@@ -109,8 +109,8 @@ const EventConflict = ({
       label: 'Beschreibung',
     },
     {
-      valueInRow: row?.geplant == 'true',
-      valueInRev: revRow?.geplant == 'true',
+      valueInRow: row?.geplant == true,
+      valueInRev: revRow?.geplant == true,
       label: 'geplant',
     },
     {
@@ -140,7 +140,6 @@ const EventConflict = ({
       beschreibung: revRow.beschreibung,
       geplant: revRow.geplant,
       datum: revRow.datum,
-      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: revRow._rev,
       _depth: newDepth,
@@ -149,6 +148,7 @@ const EventConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
     //console.log('Event Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_event_rev_one({
@@ -191,7 +191,6 @@ const EventConflict = ({
       beschreibung: revRow.beschreibung,
       geplant: revRow.geplant,
       datum: revRow.datum,
-      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
@@ -199,6 +198,7 @@ const EventConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
     //console.log('Event Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_event_rev_one({

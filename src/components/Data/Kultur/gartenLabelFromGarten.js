@@ -1,0 +1,1 @@
+export default (g) => g?.name ?? g?.person?.name ?? '(kein Name)'
