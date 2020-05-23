@@ -1036,21 +1036,21 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       multiLine
                     />
                   )}
+                  {online &&
+                    !showFilter &&
+                    row._conflicts &&
+                    row._conflicts.map && (
+                      <ConflictList
+                        conflicts={row._conflicts}
+                        activeConflict={activeConflict}
+                        setActiveConflict={setActiveConflict}
+                      />
+                    )}
                   {!showFilter && (
                     <Files parentId={row.id} parent="lieferung" />
                   )}
                 </>
               )}
-              {online &&
-                !showFilter &&
-                row._conflicts &&
-                row._conflicts.map && (
-                  <ConflictList
-                    conflicts={row._conflicts}
-                    activeConflict={activeConflict}
-                    setActiveConflict={setActiveConflict}
-                  />
-                )}
             </FieldsContainer>
             <>
               {online && !!activeConflict && (
