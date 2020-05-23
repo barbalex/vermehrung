@@ -4,9 +4,9 @@ import { useApolloClient } from '@apollo/react-hooks'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
-import { StoreContext } from '../../../models/reactUtils'
-import createNew from '../../TreeContainer/Tree/createNew'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../models/reactUtils'
+import createNew from '../../../TreeContainer/Tree/createNew'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const LieferungAddButton = () => {
   const client = useApolloClient()

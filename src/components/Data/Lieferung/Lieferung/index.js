@@ -35,7 +35,7 @@ import {
 } from '../../../../utils/fragments'
 import Files from '../../Files'
 import Settings from './Settings'
-import AddButton from '.AddButton/AddButton'
+import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
