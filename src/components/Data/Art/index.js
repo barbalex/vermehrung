@@ -201,7 +201,6 @@ const Art = ({
       const newObject = {
         art_id: row.id,
         ae_id: value,
-        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -210,6 +209,7 @@ const Art = ({
       // DO NOT include id in rev - or revs with same data will conflict
       newObject.id = uuidv1()
       newObject._rev = rev
+      newObject.changed = new window.Date().toISOString()
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243

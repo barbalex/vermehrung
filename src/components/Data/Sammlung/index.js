@@ -289,7 +289,6 @@ const Sammlung = ({
         geplant: field === 'geplant' ? value : row.geplant,
         bemerkungen:
           field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -298,6 +297,7 @@ const Sammlung = ({
       // DO NOT include id in rev - or revs with same data will conflict
       newObject.id = uuidv1()
       newObject._rev = rev
+      newObject.changed = new window.Date().toISOString()
       const newObjectForStore = { ...newObject }
       // convert array to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243

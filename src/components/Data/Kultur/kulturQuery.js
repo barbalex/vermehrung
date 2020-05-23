@@ -18,11 +18,32 @@ export default gql`
   ) {
     kultur(where: { id: { _eq: $id } }) {
       ...KulturFields
+      herkunft {
+        id
+        __typename
+        gemeinde
+        lokalname
+        nr
+      }
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
       kultur_option {
         ...KulturOptionFields
       }
       garten {
         ...GartenFields
+        person {
+          id
+          __typename
+          name
+        }
         kulturs(where: { art: { ae_id: { _is_null: false } } }) {
           id
           __typename

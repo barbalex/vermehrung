@@ -194,7 +194,6 @@ const Teilzaehlung = ({
           field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
         prognose_von_tz:
           field === 'prognose_von_tz' ? value : row.prognose_von_tz,
-        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
@@ -203,6 +202,7 @@ const Teilzaehlung = ({
       // DO NOT include id in rev - or revs with same data will conflict
       newObject.id = uuidv1()
       newObject._rev = rev
+      newObject.changed = new window.Date().toISOString()
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243

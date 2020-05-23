@@ -156,13 +156,13 @@ const Herkunft = ({
         geom_point: field === 'geom_point' ? value : row.geom_point,
         bemerkungen:
           field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed: new window.Date().toISOString(),
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
+      newObject.changed = new window.Date().toISOString()
       const newObjectForStore = { ...newObject }
       // convert to string as hasura does not support arrays yet
       // https://github.com/hasura/graphql-engine/pull/2243
