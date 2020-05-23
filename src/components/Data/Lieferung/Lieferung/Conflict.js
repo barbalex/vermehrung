@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Conflict from '../../../shared/Conflict'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
+import kulturLabelFromKultur from './kulturLabelFromKultur'
 
 const lieferungRevQuery = gql`
   query lieferungRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -45,6 +46,21 @@ const lieferungRevQuery = gql`
           id
           __typename
           name
+        }
+      }
+      von_kultur_id
+      kulturByVonKulturId {
+        id
+        __typename
+        garten {
+          id
+          __typename
+          person {
+            id
+            __typename
+            name
+            ort
+          }
         }
       }
       bemerkungen
@@ -99,9 +115,9 @@ const LieferungConflict = ({
       label: 'Von Sammlung',
     },
     {
-      valueInRow: row?.plz,
-      valueInRev: revRow?.plz,
-      label: 'PLZ',
+      valueInRow: kulturLabelFromKultur(row.kulturByVonKulturId),
+      valueInRev: kulturLabelFromKultur(revRow.kulturByVonKulturId),
+      label: 'Von Kultur',
     },
     { valueInRow: row?.ort, valueInRev: revRow?.ort, label: 'Ort' },
     {
@@ -138,7 +154,7 @@ const LieferungConflict = ({
       art_id: revRow.art_id,
       person_id: revRow.person_id,
       von_sammlung_id: revRow.von_sammlung_id,
-      plz: revRow.plz,
+      von_kultur_id: revRow.von_kultur_id,
       ort: revRow.ort,
       geom_point: revRow.geom_point,
       aktiv: revRow.aktiv,
@@ -193,7 +209,7 @@ const LieferungConflict = ({
       art_id: revRow.art_id,
       person_id: revRow.person_id,
       von_sammlung_id: revRow.von_sammlung_id,
-      plz: revRow.plz,
+      von_kultur_id: revRow.von_kultur_id,
       ort: revRow.ort,
       geom_point: revRow.geom_point,
       aktiv: revRow.aktiv,
