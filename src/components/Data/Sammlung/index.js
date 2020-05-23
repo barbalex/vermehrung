@@ -36,7 +36,7 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 
@@ -136,6 +136,15 @@ const query = gql`
   ) {
     sammlung(where: { id: { _eq: $id } }) {
       ...SammlungFields
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
       person {
         id
         __typename
@@ -148,10 +157,6 @@ const query = gql`
         lokalname
         nr
       }
-    }
-    rowsUnfiltered: sammlung @include(if: $isFiltered) {
-      id
-      __typename
     }
     rowsFiltered: sammlung(where: $filter) @include(if: $isFiltered) {
       id
@@ -208,14 +213,18 @@ const Sammlung = ({
 
   const [errors, setErrors] = useState({})
 
-  let row
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const { data: dataSammlungAggregate } = useQuery((store) =>
+    store.querySammlung_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr = get(
+    dataSammlungAggregate,
+    'sammlung_aggregate.aggregate.count',
+    0,
+  )
   const filteredNr = get(data, 'rowsFiltered', []).length
-  if (showFilter) {
-    row = filter.sammlung
-  } else {
-    row = get(data, 'sammlung[0]') || {}
-  }
+  const row = showFilter ? filter.sammlung : store.sammlungs.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -585,6 +594,18 @@ const Sammlung = ({
                 )}
               {!showFilter && <Files parentId={row.id} parent="sammlung" />}
             </FieldsContainer>
+            <>
+              {online && !!activeConflict && (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  setActiveConflict={setActiveConflict}
+                />
+              )}
+            </>
           </StyledSplitPane>
         </Container>
       </Container>

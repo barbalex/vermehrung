@@ -3,9 +3,11 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
+import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 
 const sammlungRevQuery = gql`
   query sammlungRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -14,6 +16,15 @@ const sammlungRevQuery = gql`
       __typename
       sammlung_id
       art_id
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
       person_id
       person {
         id
@@ -73,31 +84,59 @@ const SammlungConflict = ({
 
   const dataArray = [
     {
-      valueInRow: row?.name,
-      valueInRev: revRow?.name,
-      label: 'Name',
+      valueInRow: row?.art?.art_ae_art?.name,
+      valueInRev: revRow?.art?.art_ae_art?.name,
+      label: 'Art',
     },
     {
       valueInRow: row?.person?.name,
       valueInRev: revRow?.person?.name,
       label: 'Person',
     },
-    { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
     {
-      valueInRow: row?.plz,
-      valueInRev: revRow?.plz,
-      label: 'PLZ',
+      valueInRow: herkunftLabelFromHerkunft(row.herkunft),
+      valueInRev: herkunftLabelFromHerkunft(revRow.herkunft),
+      label: 'Herkunft',
     },
-    { valueInRow: row?.ort, valueInRev: revRow?.ort, label: 'Ort' },
+    {
+      valueInRow: row?.nr,
+      valueInRev: revRow?.nr,
+      label: 'Nr',
+    },
+    {
+      valueInRow: moment(row?.datum).format('DD.MM.YYYY'),
+      valueInRev: moment(revRow?.datum).format('DD.MM.YYYY'),
+      label: 'Datum',
+    },
+    {
+      valueInRow: row?.von_anzahl_individuen,
+      valueInRev: revRow?.von_anzahl_individuen,
+      label: 'Von Anzahl Individuen',
+    },
+    {
+      valueInRow: row?.anzahl_pflanzen,
+      valueInRev: revRow?.anzahl_pflanzen,
+      label: 'Anzahl Pflanzen',
+    },
+    {
+      valueInRow: row?.gramm_samen,
+      valueInRev: revRow?.gramm_samen,
+      label: 'Gramm Samen',
+    },
+    {
+      valueInRow: row?.andere_menge,
+      valueInRev: revRow?.andere_menge,
+      label: 'Andere Menge',
+    },
     {
       valueInRow: row?.geom_point?.coordinates,
       valueInRev: revRow?.geom_point?.coordinates,
       label: 'Längen- und Breitengrad',
     },
     {
-      valueInRow: row?.aktiv == true,
-      valueInRev: revRow?.aktiv == true,
-      label: 'aktiv',
+      valueInRow: row?.geplant == true,
+      valueInRev: revRow?.geplant == true,
+      label: 'geplant',
     },
     {
       valueInRow: row?.bemerkungen,
@@ -120,13 +159,17 @@ const SammlungConflict = ({
     const newDepth = revRow._depth + 1
     const newObject = {
       sammlung_id: revRow.sammlung_id,
-      name: revRow.name,
+      art_id: revRow.art_id,
       person_id: revRow.person_id,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
+      herkunft_id: revRow.herkunft_id,
+      nr: revRow.nr,
+      datum: revRow.datum,
+      von_anzahl_individuen: revRow.von_anzahl_individuen,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      gramm_samen: revRow.gramm_samen,
+      andere_menge: revRow.andere_menge,
       geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
+      geplant: revRow.geplant,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: revRow._rev,
@@ -157,15 +200,19 @@ const SammlungConflict = ({
     callbackAfterVerwerfen,
     revRow._depth,
     revRow._rev,
-    revRow.aktiv,
+    revRow.andere_menge,
+    revRow.anzahl_pflanzen,
+    revRow.art_id,
     revRow.bemerkungen,
-    revRow.sammlung_id,
+    revRow.datum,
     revRow.geom_point,
-    revRow.name,
-    revRow.ort,
+    revRow.geplant,
+    revRow.gramm_samen,
+    revRow.herkunft_id,
+    revRow.nr,
     revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
+    revRow.sammlung_id,
+    revRow.von_anzahl_individuen,
     store,
     user.email,
   ])
@@ -175,13 +222,17 @@ const SammlungConflict = ({
     const newDepth = row._depth + 1
     const newObject = {
       sammlung_id: revRow.sammlung_id,
-      name: revRow.name,
+      art_id: revRow.art_id,
       person_id: revRow.person_id,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
+      herkunft_id: revRow.herkunft_id,
+      nr: revRow.nr,
+      datum: revRow.datum,
+      von_anzahl_individuen: revRow.von_anzahl_individuen,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      gramm_samen: revRow.gramm_samen,
+      andere_menge: revRow.andere_menge,
       geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
+      geplant: revRow.geplant,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: row._rev,
@@ -209,15 +260,19 @@ const SammlungConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
-    revRow.aktiv,
+    revRow.andere_menge,
+    revRow.anzahl_pflanzen,
+    revRow.art_id,
     revRow.bemerkungen,
-    revRow.sammlung_id,
+    revRow.datum,
     revRow.geom_point,
-    revRow.name,
-    revRow.ort,
+    revRow.geplant,
+    revRow.gramm_samen,
+    revRow.herkunft_id,
+    revRow.nr,
     revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
+    revRow.sammlung_id,
+    revRow.von_anzahl_individuen,
     row._depth,
     row._rev,
     store,
