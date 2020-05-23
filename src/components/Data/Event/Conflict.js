@@ -89,8 +89,8 @@ const EventConflict = ({
 
   const dataArray = [
     {
-      keyInRow: kulturLabelFromKultur(row?.kultur), // this is key in row
-      valueInRev: kulturLabelFromKultur(revRow?.kultur), // this is key in rev
+      keyInRow: kulturLabelFromKultur(row?.kultur),
+      valueInRev: kulturLabelFromKultur(revRow?.kultur),
       label: 'Kultur',
     },
     { keyInRow: 'strasse', valueInRev: revRow.strasse, label: 'Strasse' },
