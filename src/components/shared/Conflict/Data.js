@@ -36,7 +36,6 @@ const ConflictData = ({ dataArray, loading }) => {
     // also stringify because Diff split's it
     let inputA = toStringIfPossible(d.valueInRow)
     let inputB = toStringIfPossible(d.valueInRev)
-    console.log('Data', { inputA, inputB, d })
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
       inputA = inputA ?? '(kein Wert)'
