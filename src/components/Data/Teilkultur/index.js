@@ -1,9 +1,14 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
@@ -31,6 +36,7 @@ import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 //import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import kulturLabelFromKultur from './kulturLabelFromKultur'
 
 const Container = styled.div`
   height: 100%;
@@ -121,6 +127,25 @@ const teilkulturQuery = gql`
         id
         __typename
         art_id
+        garten {
+          id
+          __typename
+          name
+          person {
+            id
+            __typename
+            name
+          }
+        }
+        art {
+          id
+          __typename
+          art_ae_art {
+            id
+            __typename
+            name
+          }
+        }
         kultur_option {
           ...KulturOptionFields
         }
@@ -224,21 +249,14 @@ const Teilkultur = ({
     setErrors({})
   }, [id])
 
-  const kulturWerte = memoizeOne(() =>
-    get(kulturData, 'kultur', []).map((el) => {
-      const personName = get(el, 'garten.person.name') || '(kein Name)'
-      const personOrt = get(el, 'garten.person.ort') || null
-      const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-      const gartenName = get(el, 'garten.name') || personLabel
-      const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
-      const label = `${gartenName}: ${artName}`
-
-      return {
+  const kulturWerte = useMemo(
+    () =>
+      get(kulturData, 'kultur', []).map((el) => ({
         value: el.id,
-        label,
-      }
-    }),
-  )()
+        label: kulturLabelFromKultur(el),
+      })),
+    [kulturData],
+  )
 
   const saveToDb = useCallback(
     async (event) => {
