@@ -89,39 +89,39 @@ const EventConflict = ({
 
   const dataArray = [
     {
-      keyInRow: kulturLabelFromKultur(row?.kultur),
+      valueInRow: kulturLabelFromKultur(row?.kultur),
       valueInRev: kulturLabelFromKultur(revRow?.kultur),
       label: 'Kultur',
     },
-    { keyInRow: 'strasse', valueInRev: revRow.strasse, label: 'Strasse' },
+    { valueInRow: 'strasse', valueInRev: revRow.strasse, label: 'Strasse' },
     {
-      keyInRow: 'plz',
+      valueInRow: 'plz',
       valueInRev: revRow.plz,
       label: 'PLZ',
     },
-    { keyInRow: 'ort', valueInRev: revRow.ort, label: 'Ort' },
+    { valueInRow: 'ort', valueInRev: revRow.ort, label: 'Ort' },
     {
-      keyInRow: 'geom_point.coordinates',
+      valueInRow: 'geom_point.coordinates',
       valueInRev: revRow?.geom_point?.coordinates,
       label: 'Längen- und Breitengrad',
     },
     {
-      keyInRow: 'aktiv',
+      valueInRow: 'aktiv',
       valueInRev: revRow.aktiv == 'true',
       label: 'aktiv',
     },
     {
-      keyInRow: 'bemerkungen',
+      valueInRow: 'bemerkungen',
       valueInRev: revRow.bemerkungen,
       label: 'bemerkungen',
     },
     {
-      keyInRow: 'changed',
+      valueInRow: 'changed',
       valueInRev: revRow.changed,
       label: 'geändert',
     },
     {
-      keyInRow: 'changed_by',
+      valueInRow: 'changed_by',
       valueInRev: revRow.changed_by,
       label: 'geändert von',
     },
@@ -244,7 +244,6 @@ const EventConflict = ({
     <Conflict
       name="Event"
       rev={rev}
-      row={row}
       dataArray={dataArray}
       loading={loading}
       error={error}

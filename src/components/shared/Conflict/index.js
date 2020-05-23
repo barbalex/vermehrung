@@ -34,7 +34,6 @@ const StyledButton = styled(Button)`
 const Conflict = ({
   name,
   rev,
-  row,
   dataArray,
   loading,
   error,
@@ -52,7 +51,7 @@ const Conflict = ({
         Widersprüchliche Version<Rev>{rev}</Rev>
       </Title>
       <Explainer name={name} />
-      <Data dataArray={dataArray} row={row} loading={loading} />
+      <Data dataArray={dataArray} loading={loading} />
       <ButtonRow>
         <StyledButton
           onClick={onClickVerwerfen}

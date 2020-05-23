@@ -54,18 +54,18 @@ const ArtConflict = ({
 
   const dataArray = [
     {
-      keyInRow: 'art_ae_art.name', // this is key in row
+      valueInRow: row?.art_ae_art.name, // this is key in row
       valueInRev: revRow?.art_rev_ae_art?.name, // this is key in rev
       label: 'Art',
     },
     {
-      keyInRow: 'changed',
-      valueInRev: revRow.changed,
+      valueInRow: row?.changed,
+      valueInRev: revRow?.changed,
       label: 'geändert',
     },
     {
-      keyInRow: 'changed_by',
-      valueInRev: revRow.changed_by,
+      valueInRow: row?.changed_by,
+      valueInRev: revRow?.changed_by,
       label: 'geändert von',
     },
   ]
@@ -157,7 +157,6 @@ const ArtConflict = ({
     <Conflict
       name="Art"
       rev={rev}
-      row={row}
       dataArray={dataArray}
       loading={loading}
       error={error}

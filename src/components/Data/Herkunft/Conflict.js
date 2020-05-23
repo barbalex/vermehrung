@@ -28,28 +28,39 @@ const HerkunftConflict = ({
     [...store.herkunft_revs.values()].find(
       (v) => v._rev === rev && v.herkunft_id === id,
     ) || {}
-  console.log('Herkunft Conflict, revRow:', revRow)
 
   const dataArray = [
-    { keyInRow: 'nr', valueInRev: revRow.nr, label: 'Nr' },
-    { keyInRow: 'lokalname', valueInRev: revRow.lokalname, label: 'Lokalname' },
-    { keyInRow: 'gemeinde', valueInRev: revRow.gemeinde, label: 'Gemeinde' },
-    { keyInRow: 'kanton', valueInRev: revRow.kanton, label: 'Kanton' },
-    { keyInRow: 'land', valueInRev: revRow.land, label: 'Land' },
+    { valueInRow: row?.nr, valueInRev: revRow?.nr, label: 'Nr' },
     {
-      keyInRow: 'geom_point.coordinates',
+      valueInRow: row?.lokalname,
+      valueInRev: revRow?.lokalname,
+      label: 'Lokalname',
+    },
+    {
+      valueInRow: row?.gemeinde,
+      valueInRev: revRow?.gemeinde,
+      label: 'Gemeinde',
+    },
+    { valueInRow: row?.kanton, valueInRev: revRow?.kanton, label: 'Kanton' },
+    { valueInRow: row?.land, valueInRev: revRow?.land, label: 'Land' },
+    {
+      valueInRow: row?.geom_point?.coordinates,
       valueInRev: revRow?.geom_point?.coordinates,
       label: 'Längen- und Breitengrad',
     },
     {
-      keyInRow: 'bemerkungen',
-      valueInRev: revRow.bemerkungen,
+      valueInRow: row?.bemerkungen,
+      valueInRev: revRow?.bemerkungen,
       label: 'Bemerkungen',
     },
-    { keyInRow: 'changed', valueInRev: revRow.changed, label: 'geändert' },
     {
-      keyInRow: 'changed_by',
-      valueInRev: revRow.changed_by,
+      valueInRow: row?.changed,
+      valueInRev: revRow?.changed,
+      label: 'geändert',
+    },
+    {
+      valueInRow: row?.changed_by,
+      valueInRev: revRow?.changed_by,
       label: 'geändert von',
     },
   ]
@@ -163,7 +174,6 @@ const HerkunftConflict = ({
     <Conflict
       name="Herkunft"
       rev={rev}
-      row={row}
       dataArray={dataArray}
       dataArrayKey={JSON.stringify(dataArray)}
       loading={loading}

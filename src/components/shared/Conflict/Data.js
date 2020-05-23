@@ -28,16 +28,15 @@ const Key = styled.div`
   color: rgba(0, 0, 0, 0.54);
 `
 
-const ConflictData = ({ dataArray, loading, row }) => {
+const ConflictData = ({ dataArray, loading }) => {
   if (loading) return 'Lade...'
-
-  //console.log('Conflict Data rendering row:', { row, dataArray })
 
   return dataArray.map((d, index) => {
     // need to use get to enable passing paths as key, for instance 'person.name'
     // also stringify because Diff split's it
-    let inputA = toStringIfPossible(get(row, d.keyInRow))
+    let inputA = toStringIfPossible(d.valueInRow)
     let inputB = toStringIfPossible(d.valueInRev)
+    console.log('Data', { inputA, inputB, d })
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
       inputA = inputA ?? '(kein Wert)'
@@ -45,7 +44,7 @@ const ConflictData = ({ dataArray, loading, row }) => {
     }
 
     return (
-      <Row key={d.keyInRow} data-last={index + 1 === dataArray.length}>
+      <Row key={d.label} data-last={index + 1 === dataArray.length}>
         <Key>{`${d.label}:`}</Key>
         <Diff inputA={inputA} inputB={inputB} type="sentences" />
       </Row>
