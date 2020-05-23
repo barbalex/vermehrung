@@ -3,6 +3,7 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Conflict from '../../../shared/Conflict'
@@ -63,6 +64,23 @@ const lieferungRevQuery = gql`
           }
         }
       }
+      datum
+      nach_kultur_id
+      kulturByNachKulturId {
+        id
+        __typename
+        garten {
+          id
+          __typename
+          person {
+            id
+            __typename
+            name
+            ort
+          }
+        }
+      }
+      nach_ausgepflanzt
       bemerkungen
       changed
       changed_by
@@ -119,16 +137,22 @@ const LieferungConflict = ({
       valueInRev: kulturLabelFromKultur(revRow.kulturByVonKulturId),
       label: 'Von Kultur',
     },
-    { valueInRow: row?.ort, valueInRev: revRow?.ort, label: 'Ort' },
     {
-      valueInRow: row?.geom_point?.coordinates,
-      valueInRev: revRow?.geom_point?.coordinates,
-      label: 'Längen- und Breitengrad',
+      valueInRow: row?.datum ? moment(row?.datum).format('DD.MM.YYYY') : null,
+      valueInRev: row?.datum
+        ? moment(revRow?.datum).format('DD.MM.YYYY')
+        : null,
+      label: 'Datum',
     },
     {
-      valueInRow: row?.aktiv == true,
-      valueInRev: revRow?.aktiv == true,
-      label: 'aktiv',
+      valueInRow: kulturLabelFromKultur(row.kulturByNachKulturId),
+      valueInRev: kulturLabelFromKultur(revRow.kulturByNachKulturId),
+      label: 'Nach Kultur',
+    },
+    {
+      valueInRow: row?.nach_ausgepflanzt == true,
+      valueInRev: revRow?.nach_ausgepflanzt == true,
+      label: 'Nach ausgepflanzt',
     },
     {
       valueInRow: row?.bemerkungen,
@@ -155,9 +179,9 @@ const LieferungConflict = ({
       person_id: revRow.person_id,
       von_sammlung_id: revRow.von_sammlung_id,
       von_kultur_id: revRow.von_kultur_id,
-      ort: revRow.ort,
-      geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
+      datum: revRow.datum,
+      nach_kultur_id: revRow.nach_kultur_id,
+      nach_ausgepflanzt: revRow.nach_ausgepflanzt,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: revRow._rev,
@@ -210,9 +234,9 @@ const LieferungConflict = ({
       person_id: revRow.person_id,
       von_sammlung_id: revRow.von_sammlung_id,
       von_kultur_id: revRow.von_kultur_id,
-      ort: revRow.ort,
-      geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
+      datum: revRow.datum,
+      nach_kultur_id: revRow.nach_kultur_id,
+      nach_ausgepflanzt: revRow.nach_ausgepflanzt,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: row._rev,

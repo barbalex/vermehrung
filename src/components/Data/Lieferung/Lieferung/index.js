@@ -232,6 +232,16 @@ const lieferungQuery = gql`
           lokalname
           gemeinde
         }
+        garten {
+          id
+          __typename
+          person {
+            id
+            __typename
+            name
+            ort
+          }
+        }
       }
     }
     rowsFiltered: lieferung(where: $filter) @include(if: $isFiltered) {
