@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Conflict from '../../../shared/Conflict'
+import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 
 const lieferungRevQuery = gql`
   query lieferungRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -31,6 +32,21 @@ const lieferungRevQuery = gql`
         name
       }
       von_sammlung_id
+      sammlung {
+        id
+        __typename
+        datum
+        herkunft {
+          id
+          __typename
+          nr
+        }
+        person {
+          id
+          __typename
+          name
+        }
+      }
       bemerkungen
       changed
       changed_by
@@ -78,8 +94,8 @@ const LieferungConflict = ({
       label: 'Person',
     },
     {
-      valueInRow: row?.strasse,
-      valueInRev: revRow?.strasse,
+      valueInRow: sammlungLabelFromSammlung(row.sammlung),
+      valueInRev: sammlungLabelFromSammlung(revRow.sammlung),
       label: 'Von Sammlung',
     },
     {
