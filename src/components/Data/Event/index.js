@@ -37,7 +37,7 @@ import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 
@@ -588,6 +588,18 @@ const Event = ({
                   />
                 )}
             </FieldsContainer>
+            <>
+              {online && !!activeConflict && (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  setActiveConflict={setActiveConflict}
+                />
+              )}
+            </>
           </StyledSplitPane>
         </Container>
       </Container>
