@@ -134,6 +134,16 @@ const eventQuery = gql`
   ) {
     event(where: { id: { _eq: $id } }) {
       ...EventFields
+      teilkultur {
+        id
+        __typename
+        name
+      }
+      person {
+        id
+        __typename
+        name
+      }
       kultur {
         id
         __typename
