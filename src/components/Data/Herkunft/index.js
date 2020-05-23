@@ -136,7 +136,6 @@ const Herkunft = ({
   )
 
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
-  console.log('Herkunft, row:', row)
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {

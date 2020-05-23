@@ -215,8 +215,6 @@ const Herkunft = ({
     }
   }, [])
 
-  console.log('Herkunft, row:', row)
-
   if (loadingHerkunft) {
     return (
       <Container>
