@@ -181,7 +181,6 @@ const Person = ({
     }),
   )
   const { user_role } = get(dataUser, 'person[0]') || {}
-  console.log('Person:', { row })
 
   const saveToDb = useCallback(
     (event) => {
@@ -264,14 +263,13 @@ const Person = ({
           where: { id: { _eq: id } },
         }),
       })
+      // optimistically update store
+      upsertPerson(newObjectForStore)
       setTimeout(() => {
-        // optimistically update store
-        upsertPerson(newObjectForStore)
         // update tree if one of these fields were changed
         if (['name'].includes(field)) {
           refetchTree()
         }
-        console.log('Person, saveToDb', { newObject, field, value })
       }, 100)
     },
     [
