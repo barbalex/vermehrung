@@ -45,8 +45,10 @@ import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
+import kulturLabelFromKultur from '../Lieferung/Lieferung/kulturLabelFromKultur'
 
 const Container = styled.div`
   height: 100%;
@@ -470,48 +472,27 @@ const SammelLieferung = ({
 
   const vonKulturWerte = useMemo(
     () =>
-      get(vonKulturData, 'kultur', []).map((el) => {
-        const personName = get(el, 'garten.person.name') || '(kein Name)'
-        const personOrt = get(el, 'garten.person.ort') || null
-        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const label = get(el, 'garten.name') || personLabel
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      get(vonKulturData, 'kultur', []).map((el) => ({
+        value: el.id,
+        label: kulturLabelFromKultur(el),
+      })),
     [vonKulturData],
   )
   const nachKulturWerte = useMemo(
     () =>
-      get(nachKulturData, 'kultur', []).map((el) => {
-        const personName = get(el, 'garten.person.name') || '(kein Name)'
-        const personOrt = get(el, 'garten.person.ort') || null
-        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const label = get(el, 'garten.name') || personLabel
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      get(nachKulturData, 'kultur', []).map((el) => ({
+        value: el.id,
+        label: kulturLabelFromKultur(el),
+      })),
     [nachKulturData],
   )
 
   const sammlungWerte = useMemo(
     () =>
-      get(sammlungData, 'sammlung', []).map((el) => {
-        const datum = el.datum || '(kein Datum)'
-        const nr = get(el, 'herkunft.nr') || '(keine Nr)'
-        const person = get(el, 'person.name') || '(kein Name)'
-        const label = `${datum}: Herkunft ${nr}; ${person}`
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      get(sammlungData, 'sammlung', []).map((el) => ({
+        value: el.id,
+        label: sammlungLabelFromSammlung(el),
+      })),
     [sammlungData],
   )
 
@@ -609,9 +590,9 @@ const SammelLieferung = ({
           where: { id: { _eq: id } },
         }),
       })
+      // optimistically update store
+      upsertSammelLieferung(newObjectForStore)
       setTimeout(async () => {
-        // optimistically update store
-        upsertSammelLieferung(newObjectForStore)
         // refetch query because is not a model instance
         queryOfSammelLieferung.refetch()
         // if sl_auto_copy_edits is true
@@ -621,6 +602,7 @@ const SammelLieferung = ({
           // even if it has value null
           await updateAllLieferungen({
             sammelLieferung: newObject,
+            lieferungs: row.lieferungs,
             field,
             store,
           })
@@ -1073,6 +1055,18 @@ const SammelLieferung = ({
                     />
                   )}
               </FieldsContainer>
+              <>
+                {online && !!activeConflict && (
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    callbackAfterVerwerfen={callbackAfterVerwerfen}
+                    callbackAfterUebernehmen={callbackAfterUebernehmen}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+              </>
             </StyledSplitPane>
           </Container>
         )}
