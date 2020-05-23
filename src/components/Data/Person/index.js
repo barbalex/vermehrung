@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import md5 from 'blueimp-md5'
 import SplitPane from 'react-split-pane'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -26,7 +27,7 @@ import Arten from './Arten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
@@ -198,7 +199,7 @@ const Person = ({
       // first build the part that will be revisioned
       const depth = row._depth + 1
       const newObject = {
-        id,
+        person_id: id,
         nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
         name: field === 'name' ? toStringIfPossible(value) : row.name,
         adresszusatz:
@@ -235,6 +236,8 @@ const Person = ({
         _parent_rev: row._rev,
         _depth: depth,
       }
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       newObject.changed = new window.Date().toISOString()
@@ -250,9 +253,9 @@ const Person = ({
         ? [rev, ...row._revisions]
         : [rev]
       addQueuedQuery({
-        name: 'mutateInsert_person_rev',
+        name: 'mutateInsert_person_rev_one',
         variables: JSON.stringify({
-          objects: [newObject],
+          object: newObject,
           on_conflict: {
             constraint: 'person_rev_pkey',
             update_columns: ['id'],
@@ -497,6 +500,18 @@ const Person = ({
                 <Files parentId={row.id} parent="person" />
               )}
             </FieldsContainer>
+            <>
+              {online && !!activeConflict && (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  setActiveConflict={setActiveConflict}
+                />
+              )}
+            </>
           </StyledSplitPane>
         </Container>
       </Container>
