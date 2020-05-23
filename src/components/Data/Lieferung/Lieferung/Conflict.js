@@ -211,6 +211,7 @@ const LieferungConflict = ({
     const newDepth = revRow._depth + 1
     const newObject = {
       lieferung_id: revRow.lieferung_id,
+      sammel_lieferung_id: revRow.sammel_lieferung_id,
       art_id: revRow.art_id,
       person_id: revRow.person_id,
       von_sammlung_id: revRow.von_sammlung_id,
@@ -266,6 +267,7 @@ const LieferungConflict = ({
     revRow.nach_ausgepflanzt,
     revRow.nach_kultur_id,
     revRow.person_id,
+    revRow.sammel_lieferung_id,
     revRow.von_anzahl_individuen,
     revRow.von_kultur_id,
     revRow.von_sammlung_id,
@@ -278,6 +280,7 @@ const LieferungConflict = ({
     const newDepth = row._depth + 1
     const newObject = {
       lieferung_id: revRow.lieferung_id,
+      sammel_lieferung_id: revRow.sammel_lieferung_id,
       art_id: revRow.art_id,
       person_id: revRow.person_id,
       von_sammlung_id: revRow.von_sammlung_id,
@@ -330,6 +333,7 @@ const LieferungConflict = ({
     revRow.nach_ausgepflanzt,
     revRow.nach_kultur_id,
     revRow.person_id,
+    revRow.sammel_lieferung_id,
     revRow.von_anzahl_individuen,
     revRow.von_kultur_id,
     revRow.von_sammlung_id,
