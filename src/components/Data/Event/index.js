@@ -39,6 +39,7 @@ import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 //import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import kulturLabelFromKultur from './kulturLabelFromKultur'
 
 const Container = styled.div`
   height: 100%;
@@ -137,6 +138,26 @@ const eventQuery = gql`
         id
         __typename
         art_id
+        art {
+          id
+          __typename
+          art_ae_art {
+            id
+            __typename
+            name
+          }
+        }
+        garten {
+          id
+          __typename
+          name
+          person {
+            id
+            __typename
+            name
+            ort
+          }
+        }
         kultur_option {
           ...KulturOptionFields
         }
@@ -256,19 +277,10 @@ const Event = ({
   const kulturs = get(kulturData, 'kultur', []) || []
   const kulturWerte = useMemo(
     () =>
-      kulturs.map((el) => {
-        const personName = get(el, 'garten.person.name') || '(kein Name)'
-        const personOrt = get(el, 'garten.person.ort') || null
-        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const gartenName = get(el, 'garten.name') || personLabel
-        const artName = get(el, 'art.art_ae_art.name') || '(keine Art)'
-        const label = `${gartenName}: ${artName}`
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      kulturs.map((el) => ({
+        value: el.id,
+        label: kulturLabelFromKultur(el),
+      })),
     [kulturs],
   )
   const teilkulturWerte = useMemo(() => {

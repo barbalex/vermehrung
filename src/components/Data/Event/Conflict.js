@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
+import kulturLabelFromKultur from './kulturLabelFromKultur'
 
 const eventRevQuery = gql`
   query eventRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -87,11 +88,10 @@ const EventConflict = ({
     ) || {}
 
   const dataArray = [
-    { keyInRow: 'name', valueInRev: revRow.name, label: 'Name' },
     {
-      keyInRow: 'person.name', // this is key in row
-      valueInRev: revRow?.person?.name, // this is key in rev
-      label: 'Person',
+      keyInRow: kulturLabelFromKultur(row?.kultur), // this is key in row
+      valueInRev: kulturLabelFromKultur(revRow?.kultur), // this is key in rev
+      label: 'Kultur',
     },
     { keyInRow: 'strasse', valueInRev: revRow.strasse, label: 'Strasse' },
     {
