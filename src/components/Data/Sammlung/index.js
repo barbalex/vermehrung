@@ -38,6 +38,7 @@ import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 //import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 
 const Container = styled.div`
   height: 100%;
@@ -135,6 +136,18 @@ const query = gql`
   ) {
     sammlung(where: { id: { _eq: $id } }) {
       ...SammlungFields
+      person {
+        id
+        __typename
+        name
+      }
+      herkunft {
+        id
+        __typename
+        gemeinde
+        lokalname
+        nr
+      }
     }
     rowsUnfiltered: sammlung @include(if: $isFiltered) {
       id
@@ -229,19 +242,10 @@ const Sammlung = ({
 
   const herkunftWerte = useMemo(
     () =>
-      get(dataData, 'herkunft', []).map((el) => {
-        // only show lokal if exist
-        // does not exist if user does not have right to see it
-        const gemeinde = el.gemeinde || ''
-        const lokalname = el.lokalname || ''
-        const nr = el.nr || '(keine Nr.)'
-        const label = [nr, gemeinde, lokalname].filter((e) => !!e).join(', ')
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
+      get(dataData, 'herkunft', []).map((el) => ({
+        value: el.id,
+        label: herkunftLabelFromHerkunft(el),
+      })),
     [dataData],
   )
 
