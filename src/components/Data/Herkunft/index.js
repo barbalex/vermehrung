@@ -1,8 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
@@ -16,7 +14,6 @@ import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import { personOption as personOptionFragment } from '../../../utils/fragments'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -107,15 +104,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const personOptionQuery = gql`
-  query PersonOptionQueryForHerkunft($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
-
 const Herkunft = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -160,28 +148,26 @@ const Herkunft = ({
       d.aggregate((d) => d.count),
     ),
   )
-  const totalNr = get(
-    dataHerkunftTotalAggregate,
-    'herkunft_aggregate.aggregate.count',
-    0,
-  )
+  const totalNr =
+    dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
+
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
+
   const { data: dataHerkunftFilteredAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
-  const filteredNr = get(
-    dataHerkunftFilteredAggregate,
-    'herkunft_aggregate.aggregate.count',
-    0,
-  )
+  const filteredNr =
+    dataHerkunftFilteredAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
-  const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: user.uid },
-  })
+  const personOptionResult = useQuery((store) =>
+    store.queryPerson_option({
+      where: { person: { account_id: { _eq: user.uid } } },
+    }),
+  )
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, id: person_id } =
-    get(personOptionResult.data, 'person_option[0]') || {}
+    personOptionResult?.data?.person_option[0] ?? {}
 
   const [errors, setErrors] = useState({})
   useEffect(() => {
