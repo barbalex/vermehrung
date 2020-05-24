@@ -149,19 +149,23 @@ const Kultur = ({
   const kulturResult = useQuery(kulturQuery, {
     variables: { id, isFiltered, filter: kulturFilter },
   })
-  const { data, error, loading, query: queryOfKultur } = kulturResult
+  const { error, loading, query: queryOfKultur } = kulturResult
 
   const [errors, setErrors] = useState({})
 
   const { data: dataKulturAggregate } = useQuery((store) =>
     store.queryKultur_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
-  const totalNr = get(
-    dataKulturAggregate,
-    'kultur_aggregate.aggregate.count',
-    0,
+  const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
+
+  const { data: dataKulturFilteredAggregate } = useQuery((store) =>
+    store.queryKultur_aggregate({ where: kulturFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
   )
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const filteredNr =
+    dataKulturFilteredAggregate?.kultur_aggregate?.aggregate?.count ?? 0
+
   const row = showFilter ? filter.kultur : store.kulturs.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
@@ -183,10 +187,10 @@ const Kultur = ({
   // => substract the ones existing in this garden
   // => present arten of the rest
   const { data: sammlungData, error: sammlungError } = useQuery(sammlungQuery)
-  const artHerkunftInGarten = get(row, 'garten.kulturs', [])
+  const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => o.art_id && o.herkunft_id)
-  const sammlungs = get(sammlungData, 'sammlung', [])
+  const sammlungs = sammlungData?.sammlung ?? []
   const artHerkunftToChoose = sammlungs.filter(
     (s) =>
       !artHerkunftInGarten.find(
@@ -247,11 +251,11 @@ const Kultur = ({
 
   const artWerte = useMemo(
     () =>
-      get(dataArt, 'art', []).map((el) => ({
+      (dataArt?.art ?? []).map((el) => ({
         value: el.id,
-        label: get(el, 'art_ae_art.name') || '(keine Art)',
+        label: el?.art_ae_art?.name ?? '(keine Art)',
       })),
-    [dataArt],
+    [dataArt?.art],
   )
 
   const gartenWerte = useMemo(
