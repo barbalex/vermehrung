@@ -160,10 +160,6 @@ const zaehlungQuery = gql`
         }
       }
     }
-    rowsUnfiltered: zaehlung @include(if: $isFiltered) {
-      id
-      __typename
-    }
     rowsFiltered: zaehlung(where: $filter) @include(if: $isFiltered) {
       id
       __typename
@@ -217,14 +213,18 @@ const Zaehlung = ({
 
   const [errors, setErrors] = useState({})
 
-  let row
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const { data: dataZaehlungAggregate } = useQuery((store) =>
+    store.queryZaehlung_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr = get(
+    dataZaehlungAggregate,
+    'zaehlung_aggregate.aggregate.count',
+    0,
+  )
   const filteredNr = get(data, 'rowsFiltered', []).length
-  if (showFilter) {
-    row = filter.zaehlung
-  } else {
-    row = get(data, 'zaehlung[0]') || {}
-  }
+  const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
