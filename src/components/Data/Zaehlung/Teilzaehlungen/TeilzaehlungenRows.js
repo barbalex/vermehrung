@@ -27,6 +27,7 @@ const teilkulturenQuery = gql`
 
 const TeilzaehlungenRows = ({ kulturId, rows, zaehlungResult }) => {
   const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
+  console.log('TeilzaehlungenRows', { zaehlungResult })
   const {
     data: teilkulturenData,
     error: teilkulturenError,

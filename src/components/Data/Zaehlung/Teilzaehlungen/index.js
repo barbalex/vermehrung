@@ -41,19 +41,6 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const teilzaehlungenQuery = gql`
-  query TeilzaehlungenQuery($zaehlId: uuid) {
-    teilzaehlung(
-      where: { zaehlung_id: { _eq: $zaehlId } }
-      order_by: { teilkultur: { name: asc_nulls_first } }
-    ) {
-      ...TeilzaehlungFields
-    }
-  }
-  ${teilzaehlungFragment}
-  ${teilkulturFragment}
-`
-
 const Teilzaehlungen = ({ zaehlungResult }) => {
   const store = useContext(StoreContext)
   const { upsertTeilzaehlung, addQueuedQuery, user } = store
@@ -66,9 +53,12 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
 
   const zaehlung = zaehlungResult?.data?.zaehlung?.[0] ?? {}
 
-  const { data, error, loading } = useQuery(teilzaehlungenQuery, {
-    variables: { zaehlId: zaehlung.id },
-  })
+  const { data, error, loading } = useQuery((store) =>
+    store.queryTeilzaehlung({
+      where: { zaehlung_id: { _eq: zaehlung.id } },
+      order_by: { teilkultur: { name: 'asc_nulls_first' } },
+    }),
+  )
   const rows = get(data, 'teilzaehlung', [])
 
   const { tk } = get(zaehlung, 'kultur.kultur_option') || {}

@@ -115,41 +115,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const gartenQuery = gql`
-  query GartenQueryForGarten(
-    $id: uuid!
-    $isFiltered: Boolean!
-    $filter: garten_bool_exp!
-  ) {
-    garten(where: { id: { _eq: $id } }) {
-      ...GartenFields
-    }
-    rowsFiltered: garten(where: $filter) @include(if: $isFiltered) {
-      id
-      __typename
-    }
-  }
-  ${gartenFragment}
-`
-const personQuery = gql`
-  query personQueryForGarten {
-    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
-      id
-      __typename
-      name
-      ort
-    }
-  }
-`
-const personOptionQuery = gql`
-  query PersonOptionQueryForGarten($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
-
 const Garten = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -161,14 +126,18 @@ const Garten = ({
 
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
-  const { data, error, loading, query: queryOfGarten } = useQuery(gartenQuery, {
-    variables: { id, isFiltered, filter: gartenFilter },
-  })
+
   const {
     data: personData,
     error: personError,
     loading: personLoading,
-  } = useQuery(personQuery)
+  } = useQuery(
+    (store) =>
+      store.queryPerson({
+        order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }],
+      }),
+    (p) => p.id.name.ort,
+  )
 
   const [errors, setErrors] = useState({})
 
@@ -180,7 +149,20 @@ const Garten = ({
     'garten_aggregate.aggregate.count',
     0,
   )
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const { data: dataGartenFilteredAggregate } = useQuery((store) =>
+    store.queryGarten_aggregate({ where: gartenFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr = get(
+    dataGartenFilteredAggregate,
+    'garten_aggregate.aggregate.count',
+    0,
+  )
+
+  const { error, loading, query: queryOfGarten } = useQuery((store) =>
+    store.queryGarten({ where: { id: { _eq: id } } }),
+  )
   const row = showFilter ? filter.garten : store.gartens.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
@@ -193,9 +175,11 @@ const Garten = ({
     setActiveConflict(row?._rev ?? null)
   }, [queryOfGarten, row?._rev])
 
-  const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: user.uid },
-  })
+  const personOptionResult = useQuery((store) =>
+    store.queryPerson_option({
+      where: { person: { account_id: { _eq: user.uid } } },
+    }),
+  )
   const {
     ga_strasse,
     ga_plz,
