@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
@@ -94,12 +93,13 @@ const Events = ({ filter: showFilter }) => {
       order_by: { beschreibung: 'asc_nulls_first' },
     }),
   )
-  const { data: dataAll } = useQuery((store) =>
-    store.queryEvent(undefined, (d) => d.id),
-  )
 
-  const totalNr = get(dataAll, 'event', []).length
-  const rows = get(dataFiltered, 'event', [])
+  const { data: dataEventAggregate } = useQuery((store) =>
+    store.queryEvent_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
+
+  const rows = dataFiltered?.event ?? []
   const filteredNr = rows.length
 
   const add = useCallback(() => {
