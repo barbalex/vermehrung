@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaDownload } from 'react-icons/fa'
@@ -260,20 +259,20 @@ const Kultur = ({
 
   const gartenWerte = useMemo(
     () =>
-      (get(dataGarten, 'garten') || []).map((el) => ({
+      (dataGarten?.garten ?? []).map((el) => ({
         value: el.id,
         label: gartenLabelFromGarten(el),
       })),
-    [dataGarten],
+    [dataGarten?.garten],
   )
 
   const herkunftWerte = useMemo(
     () =>
-      (get(herkunftData, 'herkunft') || []).map((el) => ({
+      (herkunftData?.herkunft ?? []).map((el) => ({
         value: el.id,
         label: herkunftLabelFromHerkunft(el),
       })),
-    [herkunftData],
+    [herkunftData?.herkunft],
   )
 
   const saveToDb = useCallback(
