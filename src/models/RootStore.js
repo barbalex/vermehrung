@@ -75,17 +75,29 @@ export const RootStore = RootStoreBase.props({
                 yield self[name]()
               }
             } catch (error) {
-              // Maybe do it like superhuman and check if network error
-              // then retry and set online without using tool?
-              // TODO: describe operation better. User should know what is happening
-              // TODO: add button to remove all queued operations
-              // use new notification system for this
-              return self.addNotification({
-                message: error.message,
-                action1Label: 'Operation löschen',
-                action1Name: 'removeQueuedQueryById',
-                action1Argument: query.id,
-              })
+              console.log({ error })
+              // In case a conflict was caused by two EXACT SAME changes,
+              // this will bounce because of the same rev. We want to ignore this:
+              if (
+                error.message.includes('Uniqueness violation') &&
+                error.message.includes('teilkultur_rev_id__rev_key')
+              ) {
+                console.log(
+                  'There is a conflict with exact same changes - ingore it',
+                )
+              } else {
+                // Maybe do it like superhuman and check if network error
+                // then retry and set online without using tool?
+                // TODO: describe operation better. User should know what is happening
+                // TODO: add button to remove all queued operations
+                // use new notification system for this
+                return self.addNotification({
+                  message: error.message,
+                  action1Label: 'Operation löschen',
+                  action1Name: 'removeQueuedQueryById',
+                  action1Argument: query.id,
+                })
+              }
             }
             // query to refresh the data updated in all used views (tree...)
             if (callbackQuery) {
