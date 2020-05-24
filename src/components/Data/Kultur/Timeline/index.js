@@ -224,10 +224,10 @@ const KulturTimeline = ({ row }) => {
     [...anLieferungenDone, ...anLieferungenPlannedIncluded],
     'datum',
   )
-  const ausLieferungenDone = (get(row, 'ausLieferungsDone') || []).filter(
+  const ausLieferungenDone = (row?.ausLieferungsDone ?? []).filter(
     (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
   )
-  const ausLieferungenPlanned = get(row, 'ausLieferungsPlanned') || []
+  const ausLieferungenPlanned = row?.ausLieferungsPlanned ?? []
   const ausLieferungenPlannedIgnored = useMemo(
     () =>
       ausLieferungenPlanned.filter((lg) =>
@@ -267,17 +267,13 @@ const KulturTimeline = ({ row }) => {
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_pflanzen ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_auspflanzbereit ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -321,17 +317,13 @@ const KulturTimeline = ({ row }) => {
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_pflanzen ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_auspflanzbereit ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -376,10 +368,8 @@ const KulturTimeline = ({ row }) => {
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_pflanzen ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
