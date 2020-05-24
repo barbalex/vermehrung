@@ -1,10 +1,8 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 import { v1 as uuidv1 } from 'uuid'
@@ -14,7 +12,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import { sammelLieferung as sammelLieferungFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -60,39 +57,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query SammelLieferungQueryForSammelLieferungs(
-    $filter: sammel_lieferung_bool_exp!
-  ) {
-    rowsFiltered: sammel_lieferung(
-      where: $filter
-      order_by: { datum: desc_nulls_first }
-    ) {
-      ...SammelLieferungFields
-      person {
-        id
-        __typename
-        name
-      }
-      kulturByVonKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-          }
-        }
-      }
-    }
-  }
-  ${sammelLieferungFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -114,9 +78,20 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     store,
     table: 'sammel_lieferung',
   })
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: sammelLieferungFilter },
-  })
+
+  const { data, error, loading } = useQuery(
+    (store) =>
+      store.querySammel_lieferung({
+        where: sammelLieferungFilter,
+        order_by: { datum: 'desc_nulls_first' },
+      }),
+    (l) =>
+      l.id.datum
+        .person((p) => p.id.name)
+        .kulturByVonKulturId((k) =>
+          k.id.garten((g) => g.id.name.person((p) => p.id.name)),
+        ),
+  )
 
   const { data: dataSammelLieferungAggregate } = useQuery((store) =>
     store.querySammel_lieferung_aggregate(undefined, (d) =>
@@ -127,7 +102,7 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     dataSammelLieferungAggregate?.sammel_lieferung_aggregate?.aggregate
       ?.count ?? 0
 
-  const rows = get(data, 'rowsFiltered', [])
+  const rows = data?.sammel_lieferung ?? []
   const filteredNr = rows.length
 
   const add = useCallback(() => {
