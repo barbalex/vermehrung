@@ -88,16 +88,21 @@ const Personen = ({ filter: showFilter }) => {
       order_by: { name: 'asc_nulls_first' },
     }),
   )
-  const { data: dataAll } = useQuery((store) => store.queryPerson())
 
-  const totalNr = get(dataAll, 'person', []).length
+  const { data: dataPersonAggregate } = useQuery((store) =>
+    store.queryPerson_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
+
   const rowsFiltered = get(dataFiltered, 'person', [])
   const filteredNr = rowsFiltered.length
 
-  const { data: dataUser } = useQuery((store) =>
-    store.queryPerson({
-      where: { account_id: { _eq: user.uid } },
-    }),
+  const { data: dataUser } = useQuery(
+    (store) =>
+      store.queryPerson({
+        where: { account_id: { _eq: user.uid } },
+      }),
+    (p) => p.id.name,
   )
   const { user_role } = get(dataUser, 'person[0]') || {}
 

@@ -110,10 +110,12 @@ const Lieferungen = ({ filter: showFilter }) => {
     }),
   )
 
-  const { data: dataLieferungAggregate } = useQuery((store) =>
-    store.queryLieferung_aggregate(undefined, (d) =>
-      d.aggregate((d) => d.count),
-    ),
+  const { data: dataLieferungAggregate } = useQuery(
+    (store) =>
+      store.queryLieferung_aggregate(undefined, (d) =>
+        d.aggregate((d) => d.count),
+      ),
+    (l) => l.id.datum.anzahl_pflanzen.anzahl_auspflanzbereit.geplant,
   )
   const totalNr =
     dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0

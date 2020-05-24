@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import moment from 'moment'
 
 import { StoreContext } from '../../../models/reactUtils'
-import exists from '../../../utils/exists'
 
 const singleRowHeight = 48
 const Row = styled.div`
@@ -40,10 +39,8 @@ const EventsRows = ({ row, style, last }) => {
   const datum = row.datum
     ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
     : 'kein Datum'
-  const anz = exists(row.anzahl_pflanzen) ? row.anzahl_pflanzen : '_'
-  const anzAb = exists(row.anzahl_auspflanzbereit)
-    ? row.anzahl_auspflanzbereit
-    : '_'
+  const anz = row.anzahl_pflanzen ?? '_'
+  const anzAb = row.anzahl_auspflanzbereit ?? '_'
   const numbers = `${anz
     .toString()
     .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`
