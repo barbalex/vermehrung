@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import sumBy from 'lodash/sumBy'
@@ -183,10 +182,10 @@ const KulturTimeline = ({ row }) => {
     [zaehlungenDataGroupedByDatum],
   )
 
-  const anLieferungenDone = (get(row, 'anLieferungsDone') || []).filter(
+  const anLieferungenDone = (row?.anLieferungsDone ?? []).filter(
     (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
   )
-  const anLieferungenPlanned = get(row, 'anLieferungsPlanned') || []
+  const anLieferungenPlanned = row?.anLieferungsPlanned ?? []
   const anLieferungenPlannedIgnored = useMemo(
     () =>
       anLieferungenPlanned.filter((lg) =>
