@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import moment from 'moment'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -40,10 +39,10 @@ const EventsRows = ({ row, style, last }) => {
   const datum = row.datum
     ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
     : `Kein Datum. ID: ${row.id}`
-  const garten = get(row, 'kulturByVonKulturId.garten.name')
-  const gartenPerson = get(row, 'kulturByVonKulturId.garten.person.name')
+  const garten = row?.kulturByVonKulturId?.garten?.name
+  const gartenPerson = row?.kulturByVonKulturId?.garten?.person?.name
   const von = garten || gartenPerson ? `, von: ${garten || gartenPerson}` : ''
-  const werPerson = get(row, 'person.name')
+  const werPerson = row?.person?.name
   const wer = werPerson ? `, wer: ${werPerson}` : ''
   const label = `${datum}${von}${wer}`
 
