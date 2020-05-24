@@ -1,18 +1,12 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
 import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
-import {
-  teilzaehlung as teilzaehlungFragment,
-  teilkultur as teilkulturFragment,
-} from '../../../../utils/fragments'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -59,9 +53,9 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
       order_by: { teilkultur: { name: 'asc_nulls_first' } },
     }),
   )
-  const rows = get(data, 'teilzaehlung', [])
+  const rows = data?.teilzaehlung ?? []
 
-  const { tk } = get(zaehlung, 'kultur.kultur_option') || {}
+  const { tk } = zaehlung?.kultur?.kultur_option ?? {}
 
   const onClickNew = useCallback(() => {
     const id = uuidv1()
