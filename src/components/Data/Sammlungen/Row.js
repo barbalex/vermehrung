@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import moment from 'moment'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -37,16 +36,15 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const { datum } = row
-  const art = get(row, 'art.art_ae_art.name') || '(keine Art)'
-  const person = get(row, 'person.name') || '(keine Person)'
-  const herkunft = get(row, 'herkunft.nr') || '(keine Herkunft-Nr)'
-  const date = datum
-    ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+  const art = row?.art?.art_ae_art?.name ?? '(keine Art)'
+  const person = row?.person?.name ?? '(keine Person)'
+  const herkunft = row?.herkunft?.nr ?? '(keine Herkunft-Nr)'
+  const date = row?.datum
+    ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
     : 'kein Datum'
   const geplant = row.geplant ? ' (geplant)' : ''
   const label = `${
-    row.nr || '(keine Nr)'
+    row.nr ?? '(keine Nr)'
   }, ${date}: Herkunft ${herkunft}, ${person}; ${art}${geplant}`
 
   return (
