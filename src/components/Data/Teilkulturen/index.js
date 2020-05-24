@@ -60,22 +60,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query TeilkulturQueryForTeilkulturs($filter: teilkultur_bool_exp!) {
-    rowsUnfiltered: teilkultur {
-      id
-      __typename
-    }
-    rowsFiltered: teilkultur(
-      where: $filter
-      order_by: { name: asc_nulls_first }
-    ) {
-      ...TeilkulturFields
-    }
-  }
-  ${teilkulturFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -99,12 +83,25 @@ const Teilkulturen = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
     }
   }
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: teilkulturFilter },
-  })
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
+  const { data, error, loading } = useQuery(
+    (store) =>
+      store.queryTeilkultur({
+        where: teilkulturFilter,
+        order_by: { name: 'asc_nulls_first' },
+      }),
+    (t) => t.id.name,
+  )
+
+  const { data: dataTeilkulturAggregate } = useQuery((store) =>
+    store.queryTeilkultur_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr =
+    dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
+
+  const rows = data?.teilkultur ?? []
   const filteredNr = rows.length
 
   const add = useCallback(() => {
