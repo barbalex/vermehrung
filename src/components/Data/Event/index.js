@@ -6,9 +6,7 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
@@ -25,11 +23,6 @@ import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import {
-  event as eventFragment,
-  kulturOption as kulturOptionFragment,
-  teilkultur as teilkulturFragment,
-} from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import queryFromTable from '../../../utils/queryFromTable'
 import Settings from './Settings'
@@ -126,113 +119,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const eventQuery = gql`
-  query EventQueryForEvent(
-    $id: uuid!
-    $filter: event_bool_exp!
-    $isFiltered: Boolean!
-  ) {
-    event(where: { id: { _eq: $id } }) {
-      ...EventFields
-      teilkultur {
-        id
-        __typename
-        name
-      }
-      person {
-        id
-        __typename
-        name
-      }
-      kultur {
-        id
-        __typename
-        art_id
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-        kultur_option {
-          ...KulturOptionFields
-        }
-      }
-    }
-    rowsFiltered: event(where: $filter) @include(if: $isFiltered) {
-      id
-      __typename
-    }
-  }
-  ${eventFragment}
-  ${kulturOptionFragment}
-`
-// garten.person.name
-const kulturQuery = gql`
-  query kulturQueryForEvent {
-    kultur(
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { garten: { person: { ort: asc_nulls_first } } }
-        { art: { art_ae_art: { name: asc_nulls_first } } }
-      ]
-    ) {
-      id
-      __typename
-      art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-      teilkulturs(order_by: { name: asc_nulls_last }) {
-        ...TeilkulturFields
-      }
-    }
-  }
-  ${eventFragment}
-  ${teilkulturFragment}
-`
-const personQuery = gql`
-  query personQueryForEvent {
-    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
-      id
-      __typename
-      name
-      ort
-    }
-  }
-`
-
 const Event = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -243,9 +129,25 @@ const Event = ({
 
   const isFiltered = runIsFiltered()
   const eventFilter = queryFromTable({ store, table: 'event' })
-  const eventResult = useQuery(eventQuery, {
-    variables: { id, isFiltered, filter: eventFilter },
-  })
+
+  const eventResult = useQuery((store) =>
+    store.queryEvent(
+      { where: { id: { _eq: id } } },
+      (e) =>
+        e.id.kultur_id
+          .kultur(
+            (k) =>
+              k.id.art_id
+                .art((a) => a.id.art_ae_art((ae) => ae.id.name))
+                .garten_id.garten((g) =>
+                  g.id.name.person_id.person((p) => p.id.name.ort),
+                ).kultur_option,
+          )
+          .teilkultur_id.teilkultur((t) => t.id.name)
+          .person_id.person((p) => p.id.name).beschreibung.geplant.datum.changed
+          .changed_by._rev._parent_rev._revisions._depth._conflicts,
+    ),
+  )
   const { error, loading, query: queryOfEvent } = eventResult
 
   const [errors, setErrors] = useState({})
@@ -280,18 +182,40 @@ const Event = ({
     error: kulturError,
     loading: kulturLoading,
     refetch: refetchKultur,
-  } = useQuery(kulturQuery)
+  } = useQuery((store) =>
+    store.queryKultur(
+      {
+        order_by: [
+          { garten: { person: { name: 'asc_nulls_first' } } },
+          { garten: { person: { ort: 'asc_nulls_first' } } },
+          { art: { art_ae_art: { name: 'asc_nulls_first' } } },
+        ],
+      },
+      (k) =>
+        k.id.art_id
+          .art((a) => a.id.art_ae_art((ae) => ae.id.name))
+          .garten_id.garten((g) =>
+            g.id.name.person_id.person((p) => p.id.name.ort),
+          )
+          .teilkulturs({ order_by: { name: 'asc_nulls_last' } }),
+    ),
+  )
   const {
     data: personData,
     error: personError,
     loading: personLoading,
-  } = useQuery(personQuery)
+  } = useQuery((store) =>
+    store.queryPerson(
+      { order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }] },
+      (p) => p.id.name.ort,
+    ),
+  )
 
   useEffect(() => {
     setErrors({})
   }, [id])
 
-  const kulturs = get(kulturData, 'kultur', []) || []
+  const kulturs = kulturData?.kultur ?? []
   const kulturWerte = useMemo(
     () =>
       kulturs.map((el) => ({
@@ -302,7 +226,7 @@ const Event = ({
   )
   const teilkulturWerte = useMemo(() => {
     const kultur = kulturs.find((k) => k.id === row.kultur_id)
-    const tks = get(kultur, 'teilkulturs', []) || []
+    const tks = kultur?.teilkulturs ?? []
     return tks.map((t) => ({
       value: t.id,
       label: t.name || '(kein Name)',
@@ -311,15 +235,15 @@ const Event = ({
 
   const personWerte = useMemo(
     () =>
-      get(personData, 'person', []).map((el) => ({
+      (personData?.person ?? []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [personData],
+    [personData?.person],
   )
 
   const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
-    get(row, 'kultur.kultur_option') || {}
+    row?.kultur?.kultur_option ?? {}
 
   const saveToDb = useCallback(
     (event) => {
