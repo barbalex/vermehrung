@@ -167,6 +167,10 @@ create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
 
+--insert into art_qk_choosen (art_id, qk_name)
+--select art.id, art_qk.name
+--from art_qk, art;
+
 drop table if exists art_file cascade;
 create table art_file (
   id uuid primary key default uuid_generate_v1mc(),
@@ -492,6 +496,10 @@ create table kultur_qk_choosen (
 );
 create index on kultur_qk_choosen using btree (id);
 create index on kultur_qk_choosen using btree (qk_name);
+
+--insert into kultur_qk_choosen (id, qk_name)
+--select kultur.id, kultur_qk.name
+--from kultur_qk, kultur
 
 drop table if exists kultur_file cascade;
 create table kultur_file (

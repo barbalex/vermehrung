@@ -33,7 +33,6 @@ import herkunftQuery from './herkunftQuery'
 import gartenQuery from './gartenQuery'
 import kulturQuery from './kulturQuery'
 import artQuery from './artQuery'
-import sammlungQuery from './sammlungQuery'
 import Timeline from './Timeline'
 import QK from './QK'
 import DeleteButton from './DeleteButton'
@@ -185,7 +184,17 @@ const Kultur = ({
   // => find all combinations of art and herkunft in sammlungen
   // => substract the ones existing in this garden
   // => present arten of the rest
-  const { data: sammlungData, error: sammlungError } = useQuery(sammlungQuery)
+  const { data: sammlungData, error: sammlungError } = useQuery((store) =>
+    store.querySammlung(
+      {
+        where: {
+          art_id: { _is_null: false },
+          herkunft_id: { _is_null: false },
+        },
+      },
+      (s) => s.id.art_id.herkunft_id,
+    ),
+  )
   const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => o.art_id && o.herkunft_id)
