@@ -1,10 +1,8 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 import { v1 as uuidv1 } from 'uuid'
@@ -14,7 +12,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import { zaehlung as zaehlungFragment } from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -60,31 +57,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query ZaehlungQueryForZaehlungs($filter: zaehlung_bool_exp!) {
-    rowsUnfiltered: zaehlung {
-      id
-      __typename
-    }
-    rowsFiltered: zaehlung(
-      where: $filter
-      order_by: { datum: desc_nulls_first }
-    ) {
-      ...ZaehlungFields
-      teilzaehlungs_aggregate {
-        aggregate {
-          sum {
-            anzahl_pflanzen
-            anzahl_auspflanzbereit
-            anzahl_mutterpflanzen
-          }
-        }
-      }
-    }
-  }
-  ${zaehlungFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -92,7 +64,7 @@ function sizeReducer(state, action) {
 
 const Zaehlungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addZaehlung, addQueuedQuery, user } = store
+  const { filter, upsertZaehlung, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -108,12 +80,33 @@ const Zaehlungen = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
     }
   }
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: zaehlungFilter },
-  })
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
+  const { data, error, loading } = useQuery((store) =>
+    store.queryZaehlung({
+      where: zaehlungFilter,
+      order_by: { datum: 'desc_nulls_first' },
+    }),
+  )
+
+  const { data: dataZaehlungAggregate } = useQuery(
+    (store) =>
+      store.queryZaehlung_aggregate(undefined, (d) =>
+        d.aggregate((d) => d.count),
+      ),
+    (z) =>
+      z.id.datum.prognose.teilzaehlungs_aggregate((a) =>
+        a.id.aggregate((ag) =>
+          ag.id.sum(
+            (s) =>
+              s.id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen,
+          ),
+        ),
+      ),
+  )
+  const totalNr =
+    dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
+
+  const rows = data?.zaehlung ?? []
   const filteredNr = rows.length
 
   const add = useCallback(() => {
@@ -145,7 +138,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
       }),
     })
     // optimistically update store
-    addZaehlung(newObject)
+    upsertZaehlung(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -157,7 +150,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
   }, [
     user.email,
     addQueuedQuery,
-    addZaehlung,
+    upsertZaehlung,
     refetchTree,
     activeNodeArray,
     setActiveNodeArray,

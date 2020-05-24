@@ -124,6 +124,33 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const kulturQuery = gql`
+  query kulturQueryForZaehlung($filter: kultur_bool_exp!) {
+    kultur(
+      where: $filter
+      order_by: [
+        { garten: { person: { name: asc_nulls_first } } }
+        { garten: { person: { ort: asc_nulls_first } } }
+      ]
+    ) {
+      id
+      __typename
+      art_id
+      garten {
+        id
+        __typename
+        name
+        person {
+          id
+          __typename
+          name
+          ort
+        }
+      }
+    }
+  }
+  ${kulturOptionFragment}
+`
 const zaehlungQuery = gql`
   query ZaehlungQueryForZaehlung(
     $id: uuid!
@@ -168,33 +195,6 @@ const zaehlungQuery = gql`
   ${zaehlungFragment}
   ${kulturOptionFragment}
 `
-const kulturQuery = gql`
-  query kulturQueryForZaehlung($filter: kultur_bool_exp!) {
-    kultur(
-      where: $filter
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { garten: { person: { ort: asc_nulls_first } } }
-      ]
-    ) {
-      id
-      __typename
-      art_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-  }
-  ${kulturOptionFragment}
-`
 
 const Zaehlung = ({
   filter: showFilter,
@@ -206,6 +206,9 @@ const Zaehlung = ({
 
   const isFiltered = runIsFiltered()
   const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
+  /*const zaehlungResult = useQuery(zaehlungQuery, {
+    variables: { id, isFiltered, filter: zaehlungFilter },
+  })*/
   const zaehlungResult = useQuery(zaehlungQuery, {
     variables: { id, isFiltered, filter: zaehlungFilter },
   })
