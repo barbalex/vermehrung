@@ -55,11 +55,11 @@ const Title = styled.div`
 const KulturTimeline = ({ row }) => {
   const [narrow, setNarrow] = useState(false)
 
-  const zaehlungenDone = (get(row, 'zaehlungsDone') || []).filter(
+  const zaehlungenDone = (row?.zaehlungsDone ?? []).filter(
     (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
   )
-  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
-  const zaehlungenPlanned = get(row, 'zaehlungsPlanned') || []
+  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] ?? {}
+  const zaehlungenPlanned = row?.zaehlungsPlanned ?? []
   const zaehlungenPlannedIgnored = zaehlungenPlanned.filter((zg) =>
     // check if more recent zaehlungenDone exists
     zaehlungenDone.some((z) => z.datum >= zg.datum),
@@ -82,7 +82,7 @@ const KulturTimeline = ({ row }) => {
   const zaehlungenDoneData = useMemo(
     () =>
       zaehlungenDone.map((l) => {
-        const teilzaehlungs = get(l, 'teilzaehlungs', [])
+        const teilzaehlungs = l?.teilzaehlungs ?? []
 
         return {
           datum: new Date(l.datum).getTime(),
@@ -373,10 +373,8 @@ const KulturTimeline = ({ row }) => {
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_auspflanzbereit ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
@@ -445,17 +443,13 @@ const KulturTimeline = ({ row }) => {
           (a) => a.datum > previousZaehlung.datum && a.datum < l.datum,
         )
         const sumAnzahlPflanzen =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_pflanzen ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_pflanzen') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_pflanzen') || 0)
         const sumAnzahlAuspflanzbereit =
-          (get(
-            previousZaehlung,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || 0) +
+          (previousZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_auspflanzbereit ?? 0) +
           (sumBy(anLieferungenSince, 'anzahl_auspflanzbereit') || 0) -
           (sumBy(ausLieferungenSince, 'anzahl_auspflanzbereit') || 0)
 
