@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
@@ -101,12 +100,10 @@ const Herkuenfte = ({ filter: showFilter }) => {
       d.aggregate((d) => d.count),
     ),
   )
-  const totalNr = get(
-    dataHerkunftTotalAggregate,
-    'herkunft_aggregate.aggregate.count',
-    0,
-  )
-  const rowsFiltered = get(dataFiltered, 'herkunft', [])
+  const totalNr =
+    dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
+
+  const rowsFiltered = dataFiltered?.herkunft ?? []
   const filteredNr = rowsFiltered.length
 
   const add = useCallback(async () => {
