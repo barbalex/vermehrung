@@ -34,7 +34,7 @@ import AddButton from './AddButton'
 import Zaehlungen from './Zaehlungen'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 
@@ -483,12 +483,24 @@ const Teilkultur = ({
                     setActiveConflict={setActiveConflict}
                   />
                 )}
+              {!showFilter && (
+                <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
+              )}
             </FieldsContainer>
+            <>
+              {online && !!activeConflict && (
+                <Conflict
+                  rev={activeConflict}
+                  id={id}
+                  row={row}
+                  callbackAfterVerwerfen={callbackAfterVerwerfen}
+                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  setActiveConflict={setActiveConflict}
+                />
+              )}
+            </>
           </StyledSplitPane>
         </Container>
-        {!showFilter && (
-          <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
-        )}
       </Container>
     </ErrorBoundary>
   )
