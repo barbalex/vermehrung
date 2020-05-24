@@ -36,7 +36,7 @@ import AddButton from './AddButton'
 import DelteButton from './DeleteButton'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
+import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 
 const Container = styled.div`
@@ -138,6 +138,25 @@ const zaehlungQuery = gql`
         art_id
         kultur_option {
           ...KulturOptionFields
+        }
+        garten {
+          id
+          __typename
+          name
+          person {
+            id
+            __typename
+            name
+          }
+        }
+        art {
+          id
+          __typename
+          art_ae_art {
+            id
+            __typename
+            name
+          }
         }
       }
     }
@@ -483,6 +502,18 @@ const Zaehlung = ({
                   <Teilzaehlungen zaehlungResult={zaehlungResult} />
                 )}
               </FieldsContainer>
+              <>
+                {online && !!activeConflict && (
+                  <Conflict
+                    rev={activeConflict}
+                    id={id}
+                    row={row}
+                    callbackAfterVerwerfen={callbackAfterVerwerfen}
+                    callbackAfterUebernehmen={callbackAfterUebernehmen}
+                    setActiveConflict={setActiveConflict}
+                  />
+                )}
+              </>
             </StyledSplitPane>
           </Container>
         </Container>
