@@ -15,6 +15,8 @@ const TitleRow = styled.div`
   display: flex;
   height: 48px;
   justify-content: space-between;
+  margin-left: -10px;
+  margin-right: -10px;
   padding: 0 10px;
   position: sticky;
   top: -10px;
@@ -95,7 +97,11 @@ const zaehlungQuery = gql`
 
 const TkZaehlungen = ({ kulturId, teilkulturId }) => {
   const { data, error, loading } = useQuery(zaehlungQuery, {
-    variables: { kulturId, teilkulturId },
+    variables: {
+      // beware: kulturId can be null if new Teilkultur was created in root node of tree
+      kulturId: kulturId ?? '99999999-9999-9999-9999-999999999999',
+      teilkulturId,
+    },
   })
   const rows = get(data, 'zaehlung', [])
   const tzs = rows.flatMap((row) => {
