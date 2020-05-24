@@ -12,7 +12,7 @@ export default async ({ store, user, gqlHttpClient }) => {
     console.log('error from getting claims from auth.vermehrung.ch:', error)
     setAuthorizing(false)
     return addNotification({
-      message: error.response.data,
+      message: error?.response?.data,
     })
   }
   if (res.status === 200) {
