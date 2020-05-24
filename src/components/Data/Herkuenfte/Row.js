@@ -38,7 +38,7 @@ const HerkunftRow = ({ row, style, last }) => {
   // only show lokal if exist
   // does not exist if user does not have right to see it
   const lokal =
-    row.gemeinde || row.lokalname
+    row.gemeinde ?? row.lokalname
       ? `, ${row.gemeinde && `${row.gemeinde}, `}${
           row.lokalname && row.lokalname
         }`

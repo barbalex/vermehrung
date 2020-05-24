@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import { StoreContext } from '../../../models/reactUtils'
 
@@ -36,8 +35,7 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const label =
-    row.name || `(${get(row, 'person.name') || 'keine Person gewählt'})`
+  const label = row.name || `(${row?.person?.name ?? 'keine Person gewählt'})`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>

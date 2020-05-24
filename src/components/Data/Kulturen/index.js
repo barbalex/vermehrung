@@ -105,7 +105,11 @@ const Kulturen = ({ filter: showFilter }) => {
           { art: { art_ae_art: { name: 'asc_nulls_first' } } },
         ],
       },
-      (d) => d.id.art_id.herkunft_id.garten_id.garten((g) => g.id.name),
+      (d) =>
+        d.id.art_id
+          .art((a) => a.id.art_ae_art((ae) => ae.id.name))
+          .herkunft_id.herkunft((h) => h.id.nr)
+          .garten_id.garten((g) => g.id.name.person((p) => p.id.name)),
     ),
   )
 

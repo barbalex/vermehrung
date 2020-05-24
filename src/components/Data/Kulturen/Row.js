@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import { StoreContext } from '../../../models/reactUtils'
 
@@ -37,10 +36,9 @@ const Arten = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const garten =
-    get(row, 'garten.name') ||
-    `(${get(row, 'garten.person.name') || 'kein Name'})`
-  const art = get(row, 'art.art_ae_art.name') || '(keine Art)'
-  const herkunft = get(row, 'herkunft.nr') || '(Herkunft ohne Nr)'
+    row?.garten?.name ?? `(${row?.garten?.person?.name ?? 'kein Name'})`
+  const art = row?.art?.art_ae_art?.name ?? '(keine Art)'
+  const herkunft = row?.herkunft?.nr ?? '(Herkunft ohne Nr)'
   const label = `${art}, von: ${herkunft}, in: ${garten}`
 
   return (

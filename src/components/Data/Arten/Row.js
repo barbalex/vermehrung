@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import { StoreContext } from '../../../models/reactUtils'
 
@@ -39,7 +38,7 @@ const Arten = ({ row, style, last }) => {
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
-      <div>{get(row, 'art_ae_art.name')}</div>
+      <div>{row?.art_ae_art?.name}</div>
     </Row>
   )
 }

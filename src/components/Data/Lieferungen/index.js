@@ -1,10 +1,8 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 import { v1 as uuidv1 } from 'uuid'
@@ -14,10 +12,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import {
-  lieferung as lieferungFragment,
-  zaehlung as zaehlungFragment,
-} from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -61,39 +55,6 @@ const TitleFilterNumbers = styled.div`
 const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
-`
-
-const query = gql`
-  query LieferungQueryForLieferungs($filter: lieferung_bool_exp!) {
-    rowsUnfiltered: lieferung {
-      id
-      __typename
-    }
-    rowsFiltered: lieferung(
-      where: $filter
-      order_by: { datum: desc_nulls_first }
-    ) {
-      ...LieferungFields
-      kulturByNachKulturId {
-        id
-        __typename
-        zaehlungs {
-          ...ZaehlungFields
-          teilzaehlungs_aggregate {
-            aggregate {
-              sum {
-                anzahl_pflanzen
-                anzahl_auspflanzbereit
-                anzahl_mutterpflanzen
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  ${lieferungFragment}
-  ${zaehlungFragment}
 `
 
 const singleRowHeight = 48
@@ -141,12 +102,23 @@ const Lieferungen = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Sammlungen') + 1],
     }
   }
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: lieferungFilter },
-  })
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
+  const { data, error, loading } = useQuery((store) =>
+    store.queryLieferung({
+      where: lieferungFilter,
+      order_by: { datum: 'desc_nulls_first' },
+    }),
+  )
+
+  const { data: dataLieferungAggregate } = useQuery((store) =>
+    store.queryLieferung_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr =
+    dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
+
+  const rows = data?.lieferung ?? []
   const filteredNr = rows.length
 
   const add = useCallback(() => {
