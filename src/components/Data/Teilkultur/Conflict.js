@@ -41,6 +41,9 @@ const teilkulturRevQuery = gql`
         }
       }
       name
+      ort1
+      ort2
+      ort3
       bemerkungen
       changed
       changed_by
@@ -83,27 +86,17 @@ const TeilkulturConflict = ({
       label: 'Kultur',
     },
     {
-      valueInRow: row?.person?.name,
-      valueInRev: revRow?.person?.name,
-      label: 'Person',
+      valueInRow: row?.name,
+      valueInRev: revRow?.name,
+      label: 'Name',
     },
-    { valueInRow: row?.strasse, valueInRev: revRow?.strasse, label: 'Strasse' },
+    { valueInRow: row?.ort1, valueInRev: revRow?.ort1, label: 'Ort 1' },
     {
-      valueInRow: row?.plz,
-      valueInRev: revRow?.plz,
-      label: 'PLZ',
+      valueInRow: row?.ort2,
+      valueInRev: revRow?.ort2,
+      label: 'Ort 2',
     },
-    { valueInRow: row?.ort, valueInRev: revRow?.ort, label: 'Ort' },
-    {
-      valueInRow: row?.geom_point?.coordinates,
-      valueInRev: revRow?.geom_point?.coordinates,
-      label: 'Längen- und Breitengrad',
-    },
-    {
-      valueInRow: row?.aktiv == true,
-      valueInRev: revRow?.aktiv == true,
-      label: 'aktiv',
-    },
+    { valueInRow: row?.ort3, valueInRev: revRow?.ort3, label: 'Ort 3' },
     {
       valueInRow: row?.bemerkungen,
       valueInRev: revRow?.bemerkungen,
@@ -125,13 +118,11 @@ const TeilkulturConflict = ({
     const newDepth = revRow._depth + 1
     const newObject = {
       teilkultur_id: revRow.teilkultur_id,
+      kultur_id: revRow.kultur_id,
       name: revRow.name,
-      person_id: revRow.person_id,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
+      ort1: revRow.ort1,
+      ort2: revRow.ort2,
+      ort3: revRow.ort3,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: revRow._rev,
@@ -162,15 +153,13 @@ const TeilkulturConflict = ({
     callbackAfterVerwerfen,
     revRow._depth,
     revRow._rev,
-    revRow.aktiv,
     revRow.bemerkungen,
-    revRow.teilkultur_id,
-    revRow.geom_point,
+    revRow.kultur_id,
     revRow.name,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
+    revRow.ort1,
+    revRow.ort2,
+    revRow.ort3,
+    revRow.teilkultur_id,
     store,
     user.email,
   ])
@@ -180,13 +169,11 @@ const TeilkulturConflict = ({
     const newDepth = row._depth + 1
     const newObject = {
       teilkultur_id: revRow.teilkultur_id,
+      kultur_id: revRow.kultur_id,
       name: revRow.name,
-      person_id: revRow.person_id,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
+      ort1: revRow.ort1,
+      ort2: revRow.ort2,
+      ort3: revRow.ort3,
       bemerkungen: revRow.bemerkungen,
       changed_by: user.email,
       _parent_rev: row._rev,
@@ -214,15 +201,13 @@ const TeilkulturConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
-    revRow.aktiv,
     revRow.bemerkungen,
-    revRow.teilkultur_id,
-    revRow.geom_point,
+    revRow.kultur_id,
     revRow.name,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
+    revRow.ort1,
+    revRow.ort2,
+    revRow.ort3,
+    revRow.teilkultur_id,
     row._depth,
     row._rev,
     store,
@@ -231,8 +216,6 @@ const TeilkulturConflict = ({
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [
     setActiveConflict,
   ])
-
-  //console.log('Teilkultur Conflict', { dataArray, row, revRow })
 
   return (
     <Conflict
