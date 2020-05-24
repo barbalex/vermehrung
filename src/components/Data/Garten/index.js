@@ -6,9 +6,7 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import md5 from 'blueimp-md5'
 import SplitPane from 'react-split-pane'
 import { v1 as uuidv1 } from 'uuid'
@@ -21,10 +19,6 @@ import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import {
-  garten as gartenFragment,
-  personOption as personOptionFragment,
-} from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import queryFromTable from '../../../utils/queryFromTable'
 import Files from '../Files'
@@ -144,21 +138,14 @@ const Garten = ({
   const { data: dataGartenAggregate } = useQuery((store) =>
     store.queryGarten_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
-  const totalNr = get(
-    dataGartenAggregate,
-    'garten_aggregate.aggregate.count',
-    0,
-  )
+  const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
   const { data: dataGartenFilteredAggregate } = useQuery((store) =>
     store.queryGarten_aggregate({ where: gartenFilter }, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
-  const filteredNr = get(
-    dataGartenFilteredAggregate,
-    'garten_aggregate.aggregate.count',
-    0,
-  )
+  const filteredNr =
+    dataGartenFilteredAggregate?.garten_aggregate?.aggregate?.count ?? 0
 
   const { error, loading, query: queryOfGarten } = useQuery((store) =>
     store.queryGarten({ where: { id: { _eq: id } } }),
@@ -188,7 +175,7 @@ const Garten = ({
     ga_aktiv,
     ga_bemerkungen,
     person_id,
-  } = get(personOptionResult.data, 'person_option[0]', {}) || {}
+  } = personOptionResult?.data?.person_option[0] ?? {}
 
   useEffect(() => {
     setErrors({})
@@ -196,11 +183,11 @@ const Garten = ({
 
   const personWerte = useMemo(
     () =>
-      get(personData, 'person', []).map((el) => ({
+      (personData?.person ?? []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [personData],
+    [personData?.person],
   )
 
   const saveToDb = useCallback(
