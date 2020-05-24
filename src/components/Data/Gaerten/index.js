@@ -84,14 +84,16 @@ const Gaerten = ({ filter: showFilter }) => {
     data: dataFiltered,
     error: errorFiltered,
     loading: loadingFiltered,
-  } = useQuery((store) =>
-    store.queryGarten({
-      where: gartenFilter,
-      order_by: [
-        { name: 'asc_nulls_first' },
-        { person: { name: 'asc_nulls_first' } },
-      ],
-    }),
+  } = useQuery(
+    (store) =>
+      store.queryGarten({
+        where: gartenFilter,
+        order_by: [
+          { name: 'asc_nulls_first' },
+          { person: { name: 'asc_nulls_first' } },
+        ],
+      }),
+    (g) => g.id.name.person((p) => p.id.name),
   )
 
   const { data: dataGartenAggregate } = useQuery((store) =>

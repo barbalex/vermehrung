@@ -87,11 +87,13 @@ const Events = ({ filter: showFilter }) => {
     data: dataFiltered,
     error: errorFiltered,
     loading: loadingFiltered,
-  } = useQuery((store) =>
-    store.queryEvent({
-      where: eventFilter,
-      order_by: { beschreibung: 'asc_nulls_first' },
-    }),
+  } = useQuery(
+    (store) =>
+      store.queryEvent({
+        where: eventFilter,
+        order_by: { beschreibung: 'asc_nulls_first' },
+      }),
+    (e) => e.id.datum.beschreibung,
   )
 
   const { data: dataEventAggregate } = useQuery((store) =>

@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import moment from 'moment'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -41,7 +40,7 @@ const EventsRows = ({ row, style, last }) => {
     ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
     : null
   const geplant = row.geplant ? ' (geplant)' : ''
-  const event = `${get(row, 'beschreibung') || '(nicht beschrieben)'}${geplant}`
+  const event = `${row?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
   const label = `${datum || '(kein Datum)'}: ${event}`
 
   return (
