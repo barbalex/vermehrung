@@ -79,6 +79,13 @@ $kultur_has_qk_choosen$ LANGUAGE plpgsql;
 CREATE TRIGGER kultur_has_qk_choosen AFTER INSERT ON kultur
   FOR EACH ROW EXECUTE PROCEDURE kultur_has_qk_choosen();
 
+
+insert into kultur_qk_choosen (id)
+select kultur.id, kultur_qk.name from kultur, kultur_qk
+left join kultur_qk_choosen
+on kultur_qk_choosen.id = kultur.id
+where kultur_qk_choosen.id is null;
+
 DROP TRIGGER IF EXISTS art_has_qk_choosen ON art_qk_choosen cascade;
 DROP FUNCTION IF EXISTS art_has_qk_choosen() cascade;
 CREATE FUNCTION art_has_qk_choosen() RETURNS trigger AS $art_has_qk_choosen$

@@ -6,9 +6,9 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
 
+import { useQuery } from '../../../../models/reactUtils'
 import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'
@@ -51,10 +51,15 @@ const KulturQk = ({ kultur }) => {
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const { data, loading, error, refetch } = useQuery(queryQk, {
-    variables: { kulturId: kultur.id },
-    fetchPolicy: 'no-cache',
-  })
+  const { data, loading, error, query } = useQuery(
+    queryQk,
+    {
+      variables: { kulturId: kultur.id },
+    },
+    {
+      fetchPolicy: 'no-cache',
+    },
+  )
   const allQks = get(data, 'kultur_qk') || []
   const qks = allQks.filter(
     (qk) =>
@@ -138,7 +143,7 @@ const KulturQk = ({ kultur }) => {
             {tab === 'qk' ? (
               <Qk kultur={kultur} qkNameQueries={qkNameQueries} qks={qks} />
             ) : (
-              <Choose refetchTab={refetch} />
+              <Choose refetchTab={query.refetch} />
             )}
           </Body>
         </>
