@@ -5,7 +5,6 @@ import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import toPgArray from '../../../utils/toPgArray'
@@ -105,26 +104,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const artQuery = gql`
-  query artForArtQuery($id: uuid!) {
-    art(where: { id: { _eq: $id } }) {
-      id
-      __typename
-      ae_id
-      art_ae_art {
-        id
-        __typename
-        name
-      }
-      changed
-      changed_by
-      _rev
-      _depth
-      _conflicts
-    }
-  }
-`
-
 const Art = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -140,14 +119,11 @@ const Art = ({
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
 
-  // need to use this query to ensure that the person's name is queried
   const { error: errorArt, loading: loadingArt, query: queryOfArt } = useQuery(
-    artQuery,
-    {
-      variables: {
-        id,
-      },
-    },
+    (store) => store.queryArt({ where: { id: { _eq: id } } }),
+    (a) =>
+      a.id.ae_id.art_ae_art((ae) => ae.id.name).changed.changed_by._rev._depth
+        ._conflicts,
   )
 
   const [errors, setErrors] = useState({})
