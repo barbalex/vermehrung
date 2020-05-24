@@ -9,7 +9,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -35,8 +34,8 @@ const SettingsKultur = ({ kulturResult }) => {
   const { addNotification } = store
 
   const { data, error, loading } = kulturResult
-  const { tk } = get(data, 'kultur[0].kultur_option') || {}
-  const kulturId = get(data, 'kultur[0].id')
+  const { tk } = data?.kultur[0]?.kultur_option ?? {}
+  const kulturId = data?.kultur[0]?.id
 
   const saveToDb = useCallback(
     async (event) => {
