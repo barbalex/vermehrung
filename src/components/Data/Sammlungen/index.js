@@ -1,10 +1,8 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
 import { v1 as uuidv1 } from 'uuid'
@@ -14,12 +12,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import {
-  sammlung as sammlungFragment,
-  art as artFragment,
-  person as personFragment,
-  herkunft as herkunftFragment,
-} from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -65,34 +57,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const query = gql`
-  query SammlungQueryForSammlungs($filter: sammlung_bool_exp!) {
-    rowsUnfiltered: sammlung {
-      id
-      __typename
-    }
-    rowsFiltered: sammlung(
-      where: $filter
-      order_by: [{ nr: asc_nulls_first }, { datum: desc_nulls_first }]
-    ) {
-      ...SammlungFields
-      art {
-        ...ArtFields
-      }
-      herkunft {
-        ...HerkunftFields
-      }
-      person {
-        ...PersonFields
-      }
-    }
-  }
-  ${artFragment}
-  ${herkunftFragment}
-  ${personFragment}
-  ${sammlungFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -126,12 +90,28 @@ const Sammlungen = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
     }
   }
-  const { data, error, loading } = useQuery(query, {
-    variables: { filter: sammlungFilter },
-  })
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const rows = get(data, 'rowsFiltered', [])
+  const { data: dataSammlungAggregate } = useQuery((store) =>
+    store.querySammlung_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr =
+    dataSammlungAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
+
+  const { data, error, loading } = useQuery(
+    (store) =>
+      store.querySammlung({
+        where: sammlungFilter,
+        order_by: [{ nr: 'asc_nulls_first' }, { datum: 'desc_nulls_first' }],
+      }),
+    (s) =>
+      s.id.nr.geplant
+        .art((a) => a.id.art_ae_art((ae) => ae.id.name))
+        .person((p) => p.id.name)
+        .herkunft((h) => h.id.nr),
+  )
+  const rows = data?.sammlung ?? []
   const filteredNr = rows.length
 
   const add = useCallback(() => {
