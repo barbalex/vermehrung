@@ -1,13 +1,14 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
+import { v1 as uuidv1 } from 'uuid'
+import md5 from 'blueimp-md5'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import {
   teilzaehlung as teilzaehlungFragment,
   teilkultur as teilkulturFragment,
@@ -52,23 +53,18 @@ const teilzaehlungenQuery = gql`
   ${teilzaehlungFragment}
   ${teilkulturFragment}
 `
-const insertTeilzaehlungMutation = gql`
-  mutation insertTeilzaehlung($zaehlId: uuid!) {
-    insert_teilzaehlung(objects: [{ zaehlung_id: $zaehlId }]) {
-      returning {
-        ...TeilzaehlungFields
-      }
-    }
-  }
-  ${teilzaehlungFragment}
-`
 
 const Teilzaehlungen = ({ zaehlungResult }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { upsertTeilzaehlung, addQueuedQuery, user } = store
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    addOpenNodes,
+    refetch: refetchTree,
+  } = store.tree
 
-  const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
+  const zaehlung = zaehlungResult?.data?.zaehlung?.[0] ?? {}
 
   const { data, error, loading } = useQuery(teilzaehlungenQuery, {
     variables: { zaehlId: zaehlung.id },
@@ -77,21 +73,53 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
 
   const { tk } = get(zaehlung, 'kultur.kultur_option') || {}
 
-  const onClickNew = useCallback(async () => {
-    try {
-      await client.mutate({
-        mutation: insertTeilzaehlungMutation,
-        variables: {
-          zaehlId: zaehlung.id,
-        },
-        refetchQueries: ['TeilzaehlungenQuery'],
-      })
-    } catch (error) {
-      return addNotification({
-        message: error.message,
-      })
+  const onClickNew = useCallback(() => {
+    const id = uuidv1()
+    const _rev = `1-${md5(JSON.stringify({ id, _deleted: false }))}`
+    const _depth = 1
+    const _revisions = `{"${_rev}"}`
+    const newObject = {
+      id: uuidv1(),
+      teilzaehlung_id: id,
+      _rev,
+      _depth,
+      _revisions,
+      changed: new window.Date().toISOString(),
+      changed_by: user.email,
     }
-  }, [client, addNotification, zaehlung.id])
+    addQueuedQuery({
+      name: 'mutateInsert_teilzaehlung_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'teilzaehlung_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      callbackQuery: 'queryTeilzaehlung',
+      callbackQueryVariables: JSON.stringify({
+        where: { id: { _eq: id } },
+      }),
+    })
+    // optimistically update store
+    upsertTeilzaehlung(newObject)
+    setTimeout(() => {
+      // will be unnecessary once tree is converted to mst
+      refetchTree()
+      // update tree status
+      const newActiveNodeArray = [...activeNodeArray, id]
+      setActiveNodeArray(newActiveNodeArray)
+      addOpenNodes([newActiveNodeArray])
+    })
+  }, [
+    activeNodeArray,
+    addOpenNodes,
+    addQueuedQuery,
+    refetchTree,
+    setActiveNodeArray,
+    upsertTeilzaehlung,
+    user.email,
+  ])
 
   const showNew = rows.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
