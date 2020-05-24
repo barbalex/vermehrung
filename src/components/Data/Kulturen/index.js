@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 //import gql from 'graphql-tag'
@@ -65,36 +64,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-/*const query = gql`
-  query KulturQueryForKulturs($filter: kultur_bool_exp!) {
-    rowsUnfiltered: kultur {
-      id
-    }
-    rowsFiltered: kultur(
-      where: $filter
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { art: { art_ae_art: { name: asc_nulls_first } } }
-      ]
-    ) {
-      ...KulturFields
-      art {
-        ...ArtFields
-      }
-      garten {
-        ...GartenFields
-        person {
-          ...PersonFields
-        }
-      }
-    }
-  }
-  ${artFragment}
-  ${gartenFragment}
-  ${kulturFragment}
-  ${personFragment}
-`*/
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -139,28 +108,14 @@ const Kulturen = ({ filter: showFilter }) => {
       (d) => d.id.art_id.herkunft_id.garten_id.garten((g) => g.id.name),
     ),
   )
-  const { data: dataAll } = useQuery((store) =>
-    store.queryKultur(undefined, (d) => d.id),
+
+  const { data: dataKulturAggregate } = useQuery((store) =>
+    store.queryKultur_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
+  const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
 
-  const totalNr = get(dataAll, 'kultur', []).length
-  const rowsFiltered = get(dataFiltered, 'kultur', [])
+  const rowsFiltered = dataFiltered?.kultur ?? []
   const filteredNr = rowsFiltered.length
-
-  const arten = rowsFiltered.map((row) => row.art).filter((r) => !!r)
-  const ids_of_arten = arten.map((a) => a.id)
-  const art_ids = rowsFiltered.map((row) => row.art_id).filter((r) => !!r)
-  const artenNotLoaded = art_ids.filter((id) => !ids_of_arten.includes(id))
-  // TODO: why are arten not returned? Even when they exist?
-  //store.queryArt()
-  //store.queryAe_art()
-  console.log('Kulturen:', {
-    rowsFiltered,
-    arten,
-    art_ids,
-    ids_of_arten,
-    artenNotLoaded,
-  })
 
   const add = useCallback(() => {
     const id = uuidv1()
