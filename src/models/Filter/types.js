@@ -45,7 +45,6 @@ export default types
         .filter((k) => !!k)
         .filter((k) => k !== 'show')
         .forEach((key) => {
-          console.log({ key, emptyValues: emptyValues[key] })
           self[key] = emptyValues[key]
         })
     },
