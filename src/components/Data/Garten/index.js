@@ -139,6 +139,7 @@ const Garten = ({
     store.queryGarten_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
   const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
+
   const { data: dataGartenFilteredAggregate } = useQuery((store) =>
     store.queryGarten_aggregate({ where: gartenFilter }, (d) =>
       d.aggregate((d) => d.count),
