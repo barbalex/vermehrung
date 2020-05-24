@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
@@ -88,12 +87,12 @@ const Arten = ({ filter: showFilter }) => {
       (d) => d.id.ae_id.art_ae_art((d) => d.id.name),
     ),
   )
-  const { data: dataAll } = useQuery((store) =>
-    store.queryArt(undefined, (d) => d.id),
-  )
 
-  const totalNr = get(dataAll, 'art', []).length
-  const rows = get(dataFiltered, 'art', [])
+  const { data: dataArtAggregate } = useQuery((store) =>
+    store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
+  const rows = dataFiltered?.art ?? []
   const filteredNr = rows.length
 
   const add = useCallback(() => {
