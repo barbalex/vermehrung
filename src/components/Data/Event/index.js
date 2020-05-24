@@ -246,16 +246,23 @@ const Event = ({
   const eventResult = useQuery(eventQuery, {
     variables: { id, isFiltered, filter: eventFilter },
   })
-  const { data, error, loading, query: queryOfEvent } = eventResult
+  const { error, loading, query: queryOfEvent } = eventResult
 
   const [errors, setErrors] = useState({})
 
   const { data: dataEventAggregate } = useQuery((store) =>
-    store.queryEvent_aggregate(/*undefined, (d) => d.aggregate((d) => d.count)*/),
+    store.queryEvent_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
-  const totalNr = get(dataEventAggregate, 'event_aggregate.aggregate.count', 0)
-  //console.log('Event', { dataEventAggregate, totalNr })
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
+
+  const { data: dataEventFilteredAggregate } = useQuery((store) =>
+    store.queryEvent_aggregate({ where: eventFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataEventFilteredAggregate?.event_aggregate?.aggregate?.count ?? 0
+
   const row = showFilter ? filter.event : store.events.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
