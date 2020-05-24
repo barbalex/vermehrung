@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
@@ -125,13 +124,6 @@ const artQuery = gql`
     }
   }
 `
-const artFilteredQuery = gql`
-  query artFilteredForArtQuery($filter: art_bool_exp!) {
-    art(where: $filter) {
-      id
-    }
-  }
-`
 
 const Art = ({
   filter: showFilter,
@@ -157,16 +149,19 @@ const Art = ({
       },
     },
   )
-  const { data: dataFiltered } = useQuery(artFilteredQuery, {
-    variables: {
-      filter: artFilter,
-    },
-  })
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = get(dataArtAggregate, 'art_aggregate.aggregate.count', 0)
-  const filteredNr = get(dataFiltered, 'art', []).length
+  const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
+
+  const { data: dataArtFilteredAggregate } = useQuery((store) =>
+    store.queryArt_aggregate({ where: artFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataArtFilteredAggregate?.art_aggregate?.aggregate?.count ?? 0
+
   const row = showFilter ? filter.art : store.arts.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
