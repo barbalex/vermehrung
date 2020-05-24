@@ -45,7 +45,7 @@ export const RootStore = RootStoreBase.props({
   .actions((self) => {
     reaction(
       () => `${self.queuedQueries}/${self.online}`,
-      flow(function* (data, reaction) {
+      flow(function* () {
         /**
          * TODO:
          * When new query is added
@@ -59,7 +59,6 @@ export const RootStore = RootStoreBase.props({
           // execute operation
           const query = self.queuedQueriesSorted[0]
           if (!query) return
-          console.log('store, reaction:', { query, data, reaction })
           if (query) {
             const {
               name,
@@ -83,7 +82,7 @@ export const RootStore = RootStoreBase.props({
                 error.message.includes('teilkultur_rev_id__rev_key')
               ) {
                 console.log(
-                  'There is a conflict with exact same changes - ingore it',
+                  'There is a conflict with exact same changes - ingoring the error thrown',
                 )
               } else {
                 // Maybe do it like superhuman and check if network error
