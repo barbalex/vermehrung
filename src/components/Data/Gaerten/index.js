@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
@@ -94,12 +93,13 @@ const Gaerten = ({ filter: showFilter }) => {
       ],
     }),
   )
-  const { data: dataAll } = useQuery((store) =>
-    store.queryGarten(undefined, (d) => d.id),
-  )
 
-  const totalNr = get(dataAll, 'garten', []).length
-  const rowsFiltered = get(dataFiltered, 'garten', [])
+  const { data: dataGartenAggregate } = useQuery((store) =>
+    store.queryGarten_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
+  const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
+
+  const rowsFiltered = dataFiltered?.garten ?? []
   const filteredNr = rowsFiltered.length
 
   const add = useCallback(() => {
