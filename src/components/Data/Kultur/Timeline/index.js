@@ -86,18 +86,12 @@ const KulturTimeline = ({ row }) => {
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-          ),
-          'Zählung Pflanzen auspflanzbereit': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ),
-          'Zählung Mutterpflanzen': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-          ),
+          'Zählung Pflanzen':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
+          'Zählung Pflanzen auspflanzbereit':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit,
+          'Zählung Mutterpflanzen':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen,
           'Zählung andere Mengen': teilzaehlungs
             .map((t) => t.andere_menge)
             .join(', '),
@@ -115,22 +109,16 @@ const KulturTimeline = ({ row }) => {
   const zaehlungenPlannedIncludedData = useMemo(
     () =>
       zaehlungenPlannedIncluded.map((l) => {
-        const teilzaehlungs = get(l, 'teilzaehlungs', [])
+        const teilzaehlungs = l?.teilzaehlungs ?? []
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen Prognose': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-          ),
-          'Zählung Pflanzen auspflanzbereit Prognose': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ),
-          'Zählung Mutterpflanzen Prognose': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-          ),
+          'Zählung Pflanzen Prognose':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
+          'Zählung Pflanzen auspflanzbereit Prognose':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit,
+          'Zählung Mutterpflanzen Prognose':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen,
           'Zählung Prognose': teilzaehlungs
             .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
@@ -151,22 +139,16 @@ const KulturTimeline = ({ row }) => {
   const zaehlungenPlannedIgnoredData = useMemo(
     () =>
       zaehlungenPlannedIgnored.map((l) => {
-        const teilzaehlungs = get(l, 'teilzaehlungs', [])
+        const teilzaehlungs = l?.teilzaehlungs ?? []
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Zählung Pflanzen Prognose, ignoriert': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen',
-          ),
-          'Zählung Pflanzen auspflanzbereit Prognose, ignoriert': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ),
-          'Zählung Mutterpflanzen Prognose, ignoriert': get(
-            l,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-          ),
+          'Zählung Pflanzen Prognose, ignoriert':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
+          'Zählung Pflanzen auspflanzbereit Prognose, ignoriert':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit,
+          'Zählung Mutterpflanzen Prognose, ignoriert':
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen,
           'Zählung Prognose': teilzaehlungs
             .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
