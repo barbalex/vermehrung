@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import { StoreContext } from '../../../models/reactUtils'
 
@@ -36,7 +35,7 @@ const EventsRows = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const label = get(row, 'name') || '(kein Name)'
+  const label = row?.name ?? '(kein Name)'
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>

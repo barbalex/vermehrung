@@ -64,10 +64,6 @@ const query = gql`
   query SammelLieferungQueryForSammelLieferungs(
     $filter: sammel_lieferung_bool_exp!
   ) {
-    rowsUnfiltered: sammel_lieferung {
-      id
-      __typename
-    }
     rowsFiltered: sammel_lieferung(
       where: $filter
       order_by: { datum: desc_nulls_first }
@@ -122,7 +118,15 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     variables: { filter: sammelLieferungFilter },
   })
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
+  const { data: dataSammelLieferungAggregate } = useQuery((store) =>
+    store.querySammel_lieferung_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr =
+    dataSammelLieferungAggregate?.sammel_lieferung_aggregate?.aggregate
+      ?.count ?? 0
+
   const rows = get(data, 'rowsFiltered', [])
   const filteredNr = rows.length
 
