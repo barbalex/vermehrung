@@ -1542,6 +1542,11 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
+    queryKultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), options = {}) {
+      return self.query(`query kultur_qk_choosen_by_pk($id: ID!) { kultur_qk_choosen_by_pk(id: $id) {
+        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
+      } }`, variables, options)
+    },
     queryKultur_rev(variables, resultSelector = kultur_revModelPrimitives.toString(), options = {}) {
       return self.query(`query kultur_rev($distinct_on: [kultur_rev_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_rev_order_by!], $where: kultur_rev_bool_exp) { kultur_rev(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
@@ -2120,6 +2125,11 @@ export const RootStoreBase = MSTGQLStore
     mutateDelete_kultur_qk_choosen(variables, resultSelector = kultur_qk_choosen_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation delete_kultur_qk_choosen($where: kultur_qk_choosen_bool_exp!) { delete_kultur_qk_choosen(where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
+      } }`, variables, optimisticUpdate)
+    },
+    mutateDelete_kultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), optimisticUpdate) {
+      return self.mutate(`mutation delete_kultur_qk_choosen_by_pk($id: ID!) { delete_kultur_qk_choosen_by_pk(id: $id) {
+        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
     mutateDelete_kultur_rev(variables, resultSelector = kultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
@@ -2962,6 +2972,11 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_mutation_responseModelSelector()).toString() : resultSelector}
       } }`, variables, optimisticUpdate)
     },
+    mutateUpdate_kultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), optimisticUpdate) {
+      return self.mutate(`mutation update_kultur_qk_choosen_by_pk($_set: kultur_qk_choosen_set_input, $pk_columns: kultur_qk_choosen_pk_columns_input!) { update_kultur_qk_choosen_by_pk(_set: $_set, pk_columns: $pk_columns) {
+        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
+      } }`, variables, optimisticUpdate)
+    },
     mutateUpdate_kultur_rev(variables, resultSelector = kultur_rev_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
       return self.mutate(`mutation update_kultur_rev($_inc: kultur_rev_inc_input, $_set: kultur_rev_set_input, $where: kultur_rev_bool_exp!) { update_kultur_rev(_inc: $_inc, _set: $_set, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_rev_mutation_responseModelSelector()).toString() : resultSelector}
@@ -3545,6 +3560,11 @@ export const RootStoreBase = MSTGQLStore
     subscribeKultur_qk_choosen_aggregate(variables, resultSelector = kultur_qk_choosen_aggregateModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription kultur_qk_choosen_aggregate($distinct_on: [kultur_qk_choosen_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_qk_choosen_order_by!], $where: kultur_qk_choosen_bool_exp) { kultur_qk_choosen_aggregate(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosen_aggregateModelSelector()).toString() : resultSelector}
+      } }`, variables, onData)
+    },
+    subscribeKultur_qk_choosen_by_pk(variables, resultSelector = kultur_qk_choosenModelPrimitives.toString(), onData) {
+      return self.subscribe(`subscription kultur_qk_choosen_by_pk($id: ID!) { kultur_qk_choosen_by_pk(id: $id) {
+        ${typeof resultSelector === "function" ? resultSelector(new kultur_qk_choosenModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
     subscribeKultur_rev(variables, resultSelector = kultur_revModelPrimitives.toString(), onData) {

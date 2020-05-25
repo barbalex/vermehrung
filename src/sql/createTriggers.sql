@@ -70,8 +70,8 @@ DROP TRIGGER IF EXISTS kultur_has_qk_choosen ON kultur_qk_choosen cascade;
 DROP FUNCTION IF EXISTS kultur_has_qk_choosen() cascade;
 CREATE FUNCTION kultur_has_qk_choosen() RETURNS trigger AS $kultur_has_qk_choosen$
 BEGIN
-  insert into kultur_qk_choosen(id, qk_name)
-  select distinct kultur.id, kultur_qk.name from kultur, kultur_qk where kultur.id = NEW.id;
+  insert into kultur_qk_choosen(kultur_id, qk_name)
+  select distinct kultur.id, kultur_qk.name from kultur, kultur_qk where kultur.id = NEW.kultur_id;
   RETURN NEW;
 END;
 $kultur_has_qk_choosen$ LANGUAGE plpgsql;
@@ -80,11 +80,11 @@ CREATE TRIGGER kultur_has_qk_choosen AFTER INSERT ON kultur
   FOR EACH ROW EXECUTE PROCEDURE kultur_has_qk_choosen();
 
 
-insert into kultur_qk_choosen (id)
-select kultur.id, kultur_qk.name from kultur, kultur_qk
-left join kultur_qk_choosen
-on kultur_qk_choosen.id = kultur.id
-where kultur_qk_choosen.id is null;
+--insert into kultur_qk_choosen (kultur_id)
+--select kultur.id, kultur_qk.name from kultur, kultur_qk
+--left join kultur_qk_choosen
+--on kultur_qk_choosen.kultur_id = kultur.id
+--where kultur_qk_choosen.kultur_id is null;
 
 DROP TRIGGER IF EXISTS art_has_qk_choosen ON art_qk_choosen cascade;
 DROP FUNCTION IF EXISTS art_has_qk_choosen() cascade;

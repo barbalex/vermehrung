@@ -272,6 +272,7 @@ export const subscription_rootModelBase = ModelBase
     kultur_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qkModel))),
     kultur_qk_choosen: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
     kultur_qk_choosen_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
+    kultur_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
     kultur_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_revModel)))),
     kultur_rev_aggregate: types.union(types.undefined, types.late(() => kultur_rev_aggregateModel)),
     kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
@@ -431,6 +432,7 @@ export class subscription_rootModelSelector extends QueryBuilder {
   kultur_qk_by_pk(builder) { return this.__child(`kultur_qk_by_pk`, kultur_qkModelSelector, builder) }
   kultur_qk_choosen(builder) { return this.__child(`kultur_qk_choosen`, kultur_qk_choosenModelSelector, builder) }
   kultur_qk_choosen_aggregate(builder) { return this.__child(`kultur_qk_choosen_aggregate`, kultur_qk_choosen_aggregateModelSelector, builder) }
+  kultur_qk_choosen_by_pk(builder) { return this.__child(`kultur_qk_choosen_by_pk`, kultur_qk_choosenModelSelector, builder) }
   kultur_rev(builder) { return this.__child(`kultur_rev`, kultur_revModelSelector, builder) }
   kultur_rev_aggregate(builder) { return this.__child(`kultur_rev_aggregate`, kultur_rev_aggregateModelSelector, builder) }
   kultur_rev_by_pk(builder) { return this.__child(`kultur_rev_by_pk`, kultur_revModelSelector, builder) }

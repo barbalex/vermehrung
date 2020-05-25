@@ -225,6 +225,7 @@ export const mutation_rootModelBase = ModelBase
     delete_kultur_qk: types.union(types.undefined, types.null, types.late(() => kultur_qk_mutation_responseModel)),
     delete_kultur_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qkModel))),
     delete_kultur_qk_choosen: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_mutation_responseModel)),
+    delete_kultur_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
     delete_kultur_rev: types.union(types.undefined, types.null, types.late(() => kultur_rev_mutation_responseModel)),
     delete_kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
     delete_lieferung: types.union(types.undefined, types.null, types.late(() => lieferung_mutation_responseModel)),
@@ -393,6 +394,7 @@ export const mutation_rootModelBase = ModelBase
     update_kultur_qk: types.union(types.undefined, types.null, types.late(() => kultur_qk_mutation_responseModel)),
     update_kultur_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qkModel))),
     update_kultur_qk_choosen: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_mutation_responseModel)),
+    update_kultur_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
     update_kultur_rev: types.union(types.undefined, types.null, types.late(() => kultur_rev_mutation_responseModel)),
     update_kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
     update_lieferung: types.union(types.undefined, types.null, types.late(() => lieferung_mutation_responseModel)),
@@ -483,6 +485,7 @@ export class mutation_rootModelSelector extends QueryBuilder {
   delete_kultur_qk(builder) { return this.__child(`delete_kultur_qk`, kultur_qk_mutation_responseModelSelector, builder) }
   delete_kultur_qk_by_pk(builder) { return this.__child(`delete_kultur_qk_by_pk`, kultur_qkModelSelector, builder) }
   delete_kultur_qk_choosen(builder) { return this.__child(`delete_kultur_qk_choosen`, kultur_qk_choosen_mutation_responseModelSelector, builder) }
+  delete_kultur_qk_choosen_by_pk(builder) { return this.__child(`delete_kultur_qk_choosen_by_pk`, kultur_qk_choosenModelSelector, builder) }
   delete_kultur_rev(builder) { return this.__child(`delete_kultur_rev`, kultur_rev_mutation_responseModelSelector, builder) }
   delete_kultur_rev_by_pk(builder) { return this.__child(`delete_kultur_rev_by_pk`, kultur_revModelSelector, builder) }
   delete_lieferung(builder) { return this.__child(`delete_lieferung`, lieferung_mutation_responseModelSelector, builder) }
@@ -651,6 +654,7 @@ export class mutation_rootModelSelector extends QueryBuilder {
   update_kultur_qk(builder) { return this.__child(`update_kultur_qk`, kultur_qk_mutation_responseModelSelector, builder) }
   update_kultur_qk_by_pk(builder) { return this.__child(`update_kultur_qk_by_pk`, kultur_qkModelSelector, builder) }
   update_kultur_qk_choosen(builder) { return this.__child(`update_kultur_qk_choosen`, kultur_qk_choosen_mutation_responseModelSelector, builder) }
+  update_kultur_qk_choosen_by_pk(builder) { return this.__child(`update_kultur_qk_choosen_by_pk`, kultur_qk_choosenModelSelector, builder) }
   update_kultur_rev(builder) { return this.__child(`update_kultur_rev`, kultur_rev_mutation_responseModelSelector, builder) }
   update_kultur_rev_by_pk(builder) { return this.__child(`update_kultur_rev_by_pk`, kultur_revModelSelector, builder) }
   update_lieferung(builder) { return this.__child(`update_lieferung`, lieferung_mutation_responseModelSelector, builder) }
