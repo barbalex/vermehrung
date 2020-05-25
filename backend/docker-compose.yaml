@@ -18,6 +18,10 @@ services:
       - sik_data:/sik_data
     # hasura needs higher max_locks_per_transaction
     command: postgres -c max_locks_per_transaction=2000
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
   auth:
     build:
       context: ./auth
