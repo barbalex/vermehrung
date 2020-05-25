@@ -59,15 +59,15 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
         message: error.message,
       })
     }
-    const kultur = { ...get(kulturResult, 'kultur[0]') }
-    kultur.art_ae_id = get(kultur, 'art.art_ae_art.id', '')
-    kultur.art_ae_name = get(kultur, 'art.art_ae_art.name', '')
+    const kultur = { ...kulturResult?.kultur[0] }
+    kultur.art_ae_id = kultur?.art?.art_ae_art?.id ?? ''
+    kultur.art_ae_name = kultur?.art?.art_ae_art?.name ?? ''
     delete kultur.art
-    kultur.herkunft_id = get(kultur, 'herkunft.id', '')
-    kultur.herkunft_nr = get(kultur, 'herkunft.nr', '')
+    kultur.herkunft_id = kultur?.herkunft?.id ?? ''
+    kultur.herkunft_nr = kultur?.herkunft?.nr ?? ''
     delete kultur.herkunft
-    kultur.garten_id = get(kultur, 'garten.id', '')
-    kultur.garten_name = get(kultur, 'garten.name', '')
+    kultur.garten_id = kultur?.garten?.id ?? ''
+    kultur.garten_name = kultur?.garten?.name ?? ''
     delete kultur.garten
     delete kultur.__typename
     delete kultur._conflicts
@@ -155,18 +155,11 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       message: error.message,
     })
   }
-  const zaehlungenArray = get(zaehlungResult, 'zaehlung') || []
+  const zaehlungenArray = zaehlungResult?.zaehlung ?? []
   const zaehlungen = zaehlungenArray.map((z) => {
-    z.teilzaehlungen_anzahl = get(
-      z,
-      'teilzaehlungs_aggregate.aggregate.count',
-      '',
-    )
-    z.teilzaehlungen_anzahl_pflanzen = get(
-      z,
-      'teilzaehlungs_aggregate.aggregate.anzahl_pflanzen',
-      '',
-    )
+    z.teilzaehlungen_anzahl = z?.teilzaehlungs_aggregate?.aggregate?.count ?? ''
+    z.teilzaehlungen_anzahl_pflanzen =
+      z?.teilzaehlungs_aggregate?.aggregate?.anzahl_pflanzen ?? ''
     z.teilzaehlungen_anzahl_auspflanzbereit = get(
       z,
       'teilzaehlungs_aggregate.aggregate.anzahl_auspflanzbereit',

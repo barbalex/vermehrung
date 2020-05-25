@@ -29,8 +29,6 @@ import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Settings from './Settings'
-import herkunftQuery from './herkunftQuery'
-import gartenQuery from './gartenQuery'
 import kulturQuery from './kulturQuery'
 import artQuery from './artQuery'
 import Timeline from './Timeline'
@@ -242,20 +240,30 @@ const Kultur = ({
     data: herkunftData,
     error: herkunftError,
     loading: herkunftLoading,
-  } = useQuery(herkunftQuery, {
-    variables: {
-      filter: herkunftFilter,
-    },
-  })
+  } = useQuery((store) =>
+    store.queryHerkunft(
+      {
+        where: herkunftFilter,
+        order_by: [
+          { nr: 'asc_nulls_first' },
+          { gemeinde: 'asc_nulls_first' },
+          { lokalname: 'asc_nulls_first' },
+        ],
+      },
+      (h) => h.id.nr.lokalname.gemeinde,
+    ),
+  )
 
-  const artId = row.art_id || 999999999
   const {
     data: dataGarten,
     error: errorGarten,
     loading: loadingGarten,
-  } = useQuery(gartenQuery, {
-    variables: { include: !!artId },
-  })
+  } = useQuery((store) =>
+    store.queryGarten(
+      { order_by: { person: { name: 'asc_nulls_first' } } },
+      (g) => g.id.name.person((p) => p.id.name),
+    ),
+  )
 
   const artWerte = useMemo(
     () =>
