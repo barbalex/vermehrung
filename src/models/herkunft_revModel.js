@@ -45,8 +45,6 @@ export const herkunft_revModel = herkunft_revModelBase.actions((self) => ({
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
 
-    console.log('herkunft_revModel:', { newObject, self: self.toJSON() })
-
     addQueuedQuery({
       name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({
