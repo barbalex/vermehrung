@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 
-import { useQuery } from '../../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Qk from './Qk'
 import Choose from './Choose'
 import appBaseUrl from '../../../../utils/appBaseUrl'
@@ -44,6 +44,7 @@ const Body = styled.div`
 `
 
 const KulturQk = ({ kultur }) => {
+  const store = useContext(StoreContext)
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
@@ -53,7 +54,6 @@ const KulturQk = ({ kultur }) => {
     data: dataKulturQk,
     loading: loadingKulturQk,
     error: errorKulturQk,
-    query: queryKulturQk,
   } = useQuery(
     (store) =>
       store.queryKultur_qk({
@@ -64,15 +64,18 @@ const KulturQk = ({ kultur }) => {
   )
 
   const {
-    data: dataKulturQkChoosen,
     loading: loadingKulturQkChoosen,
     error: errorKulturQkChoosen,
-    query: queryKulturQkChoosen,
   } = useQuery(
     (store) =>
-      store.queryKultur_qk_choosen({ where: { id: { _eq: kultur.id } } }),
+      store.queryKultur_qk_choosen({
+        where: { kultur_id: { _eq: kultur.id } },
+      }),
     undefined,
     { fetchPolicy: 'no-cache' },
+  )
+  const kulturQkChoosen = [...store.kultur_qk_choosens.values()].filter(
+    (q) => q.kultur_id === kultur.id,
   )
 
   const loading = loadingKulturQk || loadingKulturQkChoosen
@@ -80,24 +83,17 @@ const KulturQk = ({ kultur }) => {
 
   const allQks = dataKulturQk?.kultur_qk ?? []
   const qks = allQks.filter(
-    (qk) =>
-      !!(dataKulturQkChoosen?.kultur_qk_choosen ?? []).find(
-        (no) => no.qk_name === qk.name,
-      ),
+    (qk) => !!kulturQkChoosen.find((no) => no.qk_name === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
     allQks.map((n) => [
       n.name,
-      !!(dataKulturQkChoosen?.kultur_qk_choosen ?? []).find(
-        (no) => no.qk_name === n.name,
-      ),
+      !!kulturQkChoosen.find((no) => no.qk_name === n.name),
     ]),
   )
 
   const qkCount = loading ? '...' : allQks.length
-  const kulturQkCount = loading
-    ? '...'
-    : (dataKulturQkChoosen?.kultur_qk_choosen ?? []).length
+  const kulturQkCount = loading ? '...' : kulturQkChoosen.length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -161,7 +157,7 @@ const KulturQk = ({ kultur }) => {
             {tab === 'qk' ? (
               <Qk kultur={kultur} qkNameQueries={qkNameQueries} qks={qks} />
             ) : (
-              <Choose refetchTab={queryKulturQkChoosen.refetch} />
+              <Choose />
             )}
           </Body>
         </>

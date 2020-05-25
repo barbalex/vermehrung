@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import format from 'date-fns/format'
 
 export default ({ data, kulturId }) => ({

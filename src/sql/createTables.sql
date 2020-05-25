@@ -495,10 +495,6 @@ create table kultur_qk_choosen (
   qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
   unique(id, qk_name)
 );
-alter table kultur_qk_choosen rename id to kultur_id;
-alter table kultur_qk_choosen add column id uuid primary key default uuid_generate_v1mc();
-create index on kultur_qk_choosen using btree (id);
-
 create index on kultur_qk_choosen using btree (id);
 create index on kultur_qk using btree (kultur_id);
 create index on kultur_qk_choosen using btree (qk_name);

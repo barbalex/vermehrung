@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
+import { getSnapshot } from 'mobx-state-tree'
 
 import RowComponent from './Row'
 import { StoreContext, useQuery } from '../../../../../models/reactUtils'
@@ -21,12 +22,16 @@ const ChooseQk = ({ refetchTab }) => {
   const { activeNodeArray } = store.tree
   const kulturId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
-  const { data, error, loading } = useQuery((store) =>
-    store.queryKultur_qk({
-      order_by: [{ sort: 'asc_nulls_last' }, { name: 'asc_nulls_first' }],
-    }),
+  const { error, loading } = useQuery((store) =>
+    store.queryKultur_qk(
+      {
+        order_by: [{ sort: 'asc_nulls_last' }, { name: 'asc_nulls_first' }],
+      },
+      (q) => q.id.name.titel.beschreibung,
+    ),
   )
-  const rows = data?.kultur_qk ?? []
+  //const rows = data?.kultur_qk ?? []
+  const rows = [...store.kultur_qks.values()]
 
   if (error) return <Container>{`Fehler: ${error.message}`}</Container>
   if (loading) return <Container>Lade Daten...</Container>
