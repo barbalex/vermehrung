@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import get from 'lodash/get'
 
 import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
 
@@ -341,26 +340,26 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   }
   const anlieferungenArray = anlieferungResult?.lieferung ?? []
   const anlieferungen = anlieferungenArray.map((z) => {
-    z.art_ae_id = get(z, 'art.art_ae_art.id', '')
-    z.art_ae_name = get(z, 'art.art_ae_art.name', '')
+    z.art_ae_id = z?.art?.art_ae_art?.id ?? ''
+    z.art_ae_name = z?.art?.art_ae_art?.name ?? ''
     delete z.art
-    z.person_name = get(z, 'person.name', '')
+    z.person_name = z?.person?.name ?? ''
     delete z.person
-    z.von_sammlung_datum = get(z, 'von_sammlung.datum', '')
-    z.von_sammlung_herkunft_id = get(z, 'von_sammlung.herkunft_id', '')
-    z.von_sammlung_herkunft_nr = get(z, 'von_sammlung.herkunft.nr', '')
-    z.von_sammlung_person_id = get(z, 'von_sammlung.person_id', '')
-    z.von_sammlung_person_name = get(z, 'von_sammlung.person.name', '')
+    z.von_sammlung_datum = z?.von_sammlung?.datum ?? ''
+    z.von_sammlung_herkunft_id = z?.von_sammlung?.herkunft_id ?? ''
+    z.von_sammlung_herkunft_nr = z?.von_sammlung?.herkunft?.nr ?? ''
+    z.von_sammlung_person_id = z?.von_sammlung?.person_id ?? ''
+    z.von_sammlung_person_name = z?.von_sammlung?.person?.name ?? ''
     delete z.von_sammlung
-    z.von_kultur_garten_id = get(z, 'kulturByVonKulturId.garten_id', '')
-    z.von_kultur_garten_name = get(z, 'kulturByVonKulturId.garten.name', '')
-    z.von_kultur_herkunft_id = get(z, 'kulturByVonKulturId.herkunft_id', '')
-    z.von_kultur_herkunft_nr = get(z, 'kulturByVonKulturId.herkunft.nr', '')
+    z.von_kultur_garten_id = z?.kulturByVonKulturId?.garten_id ?? ''
+    z.von_kultur_garten_name = z?.kulturByVonKulturId?.garten?.name ?? ''
+    z.von_kultur_herkunft_id = z?.kulturByVonKulturId?.herkunft_id ?? ''
+    z.von_kultur_herkunft_nr = z?.kulturByVonKulturId?.herkunft?.nr ?? ''
     delete z.kulturByVonKulturId
-    z.nach_kultur_garten_id = get(z, 'kulturByNachKulturId.garten_id', '')
-    z.nach_kultur_garten_name = get(z, 'kulturByNachKulturId.garten.name', '')
-    z.nach_kultur_herkunft_id = get(z, 'kulturByNachKulturId.herkunft_id', '')
-    z.nach_kultur_herkunft_nr = get(z, 'kulturByNachKulturId.herkunft.nr', '')
+    z.nach_kultur_garten_id = z?.kulturByNachKulturId?.garten_id ?? ''
+    z.nach_kultur_garten_name = z?.kulturByNachKulturId?.garten?.name ?? ''
+    z.nach_kultur_herkunft_id = z?.kulturByNachKulturId?.herkunft_id ?? ''
+    z.nach_kultur_herkunft_nr = z?.kulturByNachKulturId?.herkunft?.nr ?? ''
     delete z.kulturByNachKulturId
     delete z.__typename
     return z
@@ -473,28 +472,28 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       message: error.message,
     })
   }
-  const auslieferungenArray = get(auslieferungResult, 'lieferung') || []
+  const auslieferungenArray = auslieferungResult?.lieferung ?? []
   const auslieferungen = auslieferungenArray.map((z) => {
-    z.art_ae_id = get(z, 'art.art_ae_art.id', '')
-    z.art_ae_name = get(z, 'art.art_ae_art.name', '')
+    z.art_ae_id = z?.art?.art_ae_art?.id ?? ''
+    z.art_ae_name = z?.art?.art_ae_art?.name ?? ''
     delete z.art
-    z.person_name = get(z, 'person.name', '')
+    z.person_name = z?.person?.name ?? ''
     delete z.person
-    z.von_sammlung_datum = get(z, 'von_sammlung.datum', '')
-    z.von_sammlung_herkunft_id = get(z, 'von_sammlung.herkunft_id', '')
-    z.von_sammlung_herkunft_nr = get(z, 'von_sammlung.herkunft.nr', '')
-    z.von_sammlung_person_id = get(z, 'von_sammlung.person_id', '')
-    z.von_sammlung_person_name = get(z, 'von_sammlung.person.name', '')
+    z.von_sammlung_datum = z?.von_sammlung?.datum ?? ''
+    z.von_sammlung_herkunft_id = z?.von_sammlung?.herkunft_id ?? ''
+    z.von_sammlung_herkunft_nr = z?.von_sammlung?.herkunft?.nr ?? ''
+    z.von_sammlung_person_id = z?.von_sammlung?.person_id ?? ''
+    z.von_sammlung_person_name = z?.von_sammlung?.person?.name ?? ''
     delete z.von_sammlung
-    z.von_kultur_garten_id = get(z, 'kulturByVonKulturId.garten_id', '')
-    z.von_kultur_garten_name = get(z, 'kulturByVonKulturId.garten.name', '')
-    z.von_kultur_herkunft_id = get(z, 'kulturByVonKulturId.herkunft_id', '')
-    z.von_kultur_herkunft_nr = get(z, 'kulturByVonKulturId.herkunft.nr', '')
+    z.von_kultur_garten_id = z?.kulturByVonKulturId?.garten_id ?? ''
+    z.von_kultur_garten_name = z?.kulturByVonKulturId?.garten?.name ?? ''
+    z.von_kultur_herkunft_id = z?.kulturByVonKulturId?.herkunft_id ?? ''
+    z.von_kultur_herkunft_nr = z?.kulturByVonKulturId?.herkunft?.nr ?? ''
     delete z.kulturByVonKulturId
-    z.nach_kultur_garten_id = get(z, 'kulturByNachKulturId.garten_id', '')
-    z.nach_kultur_garten_name = get(z, 'kulturByNachKulturId.garten.name', '')
-    z.nach_kultur_herkunft_id = get(z, 'kulturByNachKulturId.herkunft_id', '')
-    z.nach_kultur_herkunft_nr = get(z, 'kulturByNachKulturId.herkunft.nr', '')
+    z.nach_kultur_garten_id = z?.kulturByNachKulturId?.garten_id ?? ''
+    z.nach_kultur_garten_name = z?.kulturByNachKulturId?.garten?.name ?? ''
+    z.nach_kultur_herkunft_id = z?.kulturByNachKulturId?.herkunft_id ?? ''
+    z.nach_kultur_herkunft_nr = z?.kulturByNachKulturId?.herkunft?.nr ?? ''
     delete z.kulturByNachKulturId
     delete z.__typename
     return z
@@ -545,11 +544,11 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       message: error.message,
     })
   }
-  const eventsArray = get(eventResult, 'event') || []
+  const eventsArray = eventResult?.event ?? []
   const events = eventsArray.map((z) => {
-    z.teilkultur_name = get(z, 'teilkultur.name', '')
+    z.teilkultur_name = z?.teilkultur?.name ?? ''
     delete z.teilkultur
-    z.person_name = get(z, 'person.name', '')
+    z.person_name = z?.person?.name ?? ''
     delete z.person
     delete z.__typename
     return z
