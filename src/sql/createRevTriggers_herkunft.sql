@@ -55,7 +55,7 @@ begin
     ),
     conflicts as (
       select _rev from leaves
-      -- no conflicts that are parents
+      -- exclude parents
       where _rev <> ANY(new._revisions)
     )
     select

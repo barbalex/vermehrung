@@ -68,13 +68,7 @@ const ConflictExplainer = ({ name }) => (
           Passen Sie die aktuelle Version wenn nötig an und verwerfen Sie
           anschliessend die widersprüchliche
         </li>
-        <li>
-          Oder: Übernehmen Sie die widersprüchliche Version. Sie wird damit zur
-          aktuellen, die bisher aktuelle wird zur widersprüchlichen.
-          <br />
-          Anschliessend können Sie die aktuelle Version wenn nötig anpassen und
-          die widersprüchliche verwerfen
-        </li>
+        <li>Oder: Übernehmen Sie die widersprüchliche Version</li>
       </ul>
     </Details>
   </OptionalHelp>
