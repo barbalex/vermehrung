@@ -2,6 +2,10 @@ create or replace function sammlung_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from sammlung where id = new.sammlung_id;
+  return new;
+else
   insert into sammlung (
       id,
       art_id,
@@ -87,7 +91,7 @@ begin
         )
     )
     select
-      sammlung_rev.sammlung_id,
+      sammlung_rev.sammlung_id as id,
       sammlung_rev.art_id,
       sammlung_rev.person_id,
       sammlung_rev.herkunft_id,
@@ -140,7 +144,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

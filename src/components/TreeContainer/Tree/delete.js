@@ -11,28 +11,8 @@ export default async ({ node, store, client }) => {
   const id = node.url.slice(-1)[0]
   const table = tableFromTitleHash[title]
 
-  const refetchQueries = ['TreeQueryForTreeContainer']
-  // ensure list form's query is refetched
-  const tableExtract = upperFirst(camelCase(table))
-  const listQueryName = `${tableExtract}QueryFor${tableExtract}s`
-  refetchQueries.push(listQueryName)
-
-  try {
-    await client.mutate({
-      mutation: gql`
-      mutation deleteDatasetInTree {
-        delete_${table} (where: {id: {_eq: ${id}}}) {
-          returning {
-            id
-            __typename
-          }
-        }
-      }
-    `,
-      refetchQueries,
-    })
-  } catch (error) {
-    return console.log('Error deleting dataset', error.message)
-  }
+  const me = store[`${table}s`].get(id)
+  console.log('tree delete, me:', me)
+  me.delete()
   setActiveNodeArray(activeNodeArray.slice(0, -1))
 }

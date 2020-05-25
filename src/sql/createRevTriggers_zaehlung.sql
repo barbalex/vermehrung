@@ -2,6 +2,10 @@ create or replace function zaehlung_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from zaehlung where id = new.zaehlung_id;
+  return new;
+else
   insert into zaehlung (
       id,
       kultur_id,
@@ -79,7 +83,7 @@ begin
         )
     )
     select
-      zaehlung_rev.zaehlung_id,
+      zaehlung_rev.zaehlung_id as id,
       zaehlung_rev.kultur_id,
       zaehlung_rev.datum,
       zaehlung_rev.prognose,
@@ -116,7 +120,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

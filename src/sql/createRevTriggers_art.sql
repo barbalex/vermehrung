@@ -2,6 +2,10 @@ create or replace function art_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from art where id = new.art_id;
+  return new;
+else
   insert into art (
       id,
       ae_id,
@@ -76,7 +80,7 @@ begin
         )
     )
     select
-      art_rev.art_id,
+      art_rev.art_id as id,
       art_rev.ae_id,
       art_rev.changed,
       art_rev.changed_by,
@@ -107,7 +111,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

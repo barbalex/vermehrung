@@ -2,6 +2,10 @@ create or replace function event_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from event where id = new.event_id;
+  return new;
+else
   insert into event (
       id,
       kultur_id,
@@ -81,7 +85,7 @@ begin
         )
     )
     select
-      event_rev.event_id,
+      event_rev.event_id as id,
       event_rev.kultur_id,
       event_rev.teilkultur_id,
       event_rev.person_id,
@@ -122,7 +126,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 
