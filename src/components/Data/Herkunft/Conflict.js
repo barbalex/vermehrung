@@ -65,7 +65,6 @@ const HerkunftConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(() => {
-    console.log('Herkunft Conflict, onClickVerwerfen, revRow:', revRow)
     revRow.setDeleted()
     setTimeout(() => callbackAfterVerwerfen())
   }, [callbackAfterVerwerfen, revRow])
