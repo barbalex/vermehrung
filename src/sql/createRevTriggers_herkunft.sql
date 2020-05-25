@@ -2,7 +2,7 @@ create or replace function herkunft_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
-  delete from herkunft where id = new.id;
+  delete from herkunft where id = new.herkunft_id;
   insert into herkunft (
       id,
       nr,
@@ -52,14 +52,9 @@ begin
       from
         leaves
         join max_depths on leaves._depth = max_depths.max_depth
-    ),
-    conflicts as (
-      select _rev from leaves
-      -- exclude parents
-      where _rev <> ANY(new._revisions)
     )
     select
-      herkunft_rev.herkunft_id as id,
+      herkunft_rev.herkunft_id,
       herkunft_rev.nr,
       herkunft_rev.lokalname,
       herkunft_rev.gemeinde,
@@ -74,32 +69,14 @@ begin
       herkunft_rev._parent_rev,
       herkunft_rev._depth,
       (select array(
-        select * from (
-          select _rev from conflicts
-        ) as all_conflicts
-        -- prevent ever choosing same rev as conflict
-        where all_conflicts._rev <> herkunft_rev._rev
+        select _rev from leaves
+        where 
+          _rev <> herkunft_rev._rev
+          and _rev <> ANY(herkunft_rev._revisions)
       )) as _conflicts
     from
       herkunft_rev
-      join winning_revisions on herkunft_rev._rev = winning_revisions._rev
-  on conflict on constraint herkunft_pkey
-    do update set
-      -- do not update id
-      nr = excluded.nr,
-      lokalname = excluded.lokalname,
-      gemeinde = excluded.gemeinde,
-      kanton = excluded.kanton,
-      land = excluded.land,
-      geom_point = excluded.geom_point,
-      bemerkungen = excluded.bemerkungen,
-      changed = excluded.changed,
-      changed_by = excluded.changed_by,
-      _rev = excluded._rev,
-      _revisions = excluded._revisions,
-      _parent_rev = excluded._parent_rev,
-      _depth = excluded._depth,
-      _conflicts = excluded._conflicts;
+      join winning_revisions on herkunft_rev._rev = winning_revisions._rev;
   return new;
 end;
 $body$

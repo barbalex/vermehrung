@@ -127,12 +127,11 @@ const Herkunft = ({
     queryOfHerkunft.refetch() // necessary?
   }, [queryOfHerkunft])
   const callbackAfterUebernehmen = useCallback(async () => {
-    const oldRow = getSnapshot(row)
     // need to wait until after refetching
     // unitl after useEffect sets activeConflict to null
-    await queryOfHerkunft.refetch()
-    setTimeout(() => setActiveConflict(oldRow._rev))
-  }, [queryOfHerkunft, row])
+    queryOfHerkunft.refetch()
+    setActiveConflict(null)
+  }, [queryOfHerkunft])
   // ensure that activeConflict is reset
   // when changing dataset
   useEffect(() => {
