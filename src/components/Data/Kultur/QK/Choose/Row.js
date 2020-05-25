@@ -4,11 +4,9 @@ import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
-import get from 'lodash/get'
 
-import query from './query'
-import { kulturQkChoosen as kulturQkChoosenFragment } from '../../../../../../utils/fragments'
+import { kulturQkChoosen as kulturQkChoosenFragment } from '../../../../../utils/fragments'
+import { useQuery } from '../../../../../models/reactUtils'
 
 const Row = styled.div`
   display: flex;
@@ -33,10 +31,12 @@ const Beschreibung = styled.div`
 const ChooseKulturQkRow = ({ kulturId, qk, refetchTab }) => {
   const client = useApolloClient()
 
-  const { data, loading, error } = useQuery(query, {
-    variables: { kulturId, qkName: qk.name },
-  })
-  const kulturQkChoosen = get(data, 'kultur_qk_choosen')
+  const { data, loading, error } = useQuery((store) =>
+    store.queryKultur_qk_choosen({
+      where: { id: { _eq: kulturId }, qk_name: { _eq: qk.name } },
+    }),
+  )
+  const kulturQkChoosen = data?.kultur_qk_choosen ?? []
 
   const checked = !loading && !!kulturQkChoosen.length
 
