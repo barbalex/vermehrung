@@ -2,10 +2,7 @@ create or replace function herkunft_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
-if new._deleted = true then
-  delete from herkunft where id = new.id and _rev = new._parent_rev;
-  return new;
-else
+  delete from herkunft where id = new.id;
   insert into herkunft (
       id,
       nr,
@@ -49,12 +46,6 @@ else
       from
         leaves
     ),
-    conflicts as (
-      select _rev from leaves 
-      where 
-        _depth = new._depth
-        and _rev <> new._rev
-    ),
     winning_revisions as (
       select
         max(leaves._rev) as _rev
@@ -62,33 +53,10 @@ else
         leaves
         join max_depths on leaves._depth = max_depths.max_depth
     ),
-    branches as (
-      select
-        herkunft_id,
-        _rev,
-        _depth
-      from
-        herkunft_rev
-      where
-        _deleted = false
-        and herkunft_id = new.herkunft_id
-        and _rev <> new._rev
-    ),
-    leaves_conflicting_with_branch as (
-      select _rev from leaves l
-      where
-        exists (
-          select _rev from branches b
-          where
-            b._depth = l._depth
-            and b._rev <> l._rev
-            -- exclude all branches above the winning revision?
-            -- never got this to work
-            --and b._rev <> ANY (
-            --  select _revisions from herkunft_rev
-            --  inner join winning_revisions on herkunft_rev._rev = winning_revisions._rev
-            --)
-        )
+    conflicts as (
+      select _rev from leaves
+      -- no conflicts that are parents
+      where _rev <> ANY(new._revisions)
     )
     select
       herkunft_rev.herkunft_id as id,
@@ -107,8 +75,7 @@ else
       herkunft_rev._depth,
       (select array(
         select * from (
-          select * from conflicts
-          union select * from leaves_conflicting_with_branch
+          select _rev from conflicts
         ) as all_conflicts
         -- prevent ever choosing same rev as conflict
         where all_conflicts._rev <> herkunft_rev._rev
@@ -134,8 +101,7 @@ else
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-END IF;
-end
+end;
 $body$
 language plpgsql;
 
