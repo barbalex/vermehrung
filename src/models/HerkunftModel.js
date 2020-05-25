@@ -21,10 +21,6 @@ export const herkunftModel = herkunftModelBase
     nr: types.union(types.undefined, types.null, types.integer, types.string),
   })
   .actions((self) => ({
-    // This is an auto-generated example action.
-    log() {
-      console.log(JSON.stringify(self))
-    },
     edit({ field, value }) {
       const store = getParent(self, 2)
       const { addQueuedQuery, user, upsertHerkunft, tree } = store
@@ -112,7 +108,6 @@ export const herkunftModel = herkunftModelBase
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])
-      console.log('herkunftModel, newObject:', newObject)
 
       addQueuedQuery({
         name: 'mutateInsert_herkunft_rev_one',
