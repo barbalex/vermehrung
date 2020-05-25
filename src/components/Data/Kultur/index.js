@@ -30,7 +30,6 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Settings from './Settings'
 import kulturQuery from './kulturQuery'
-import artQuery from './artQuery'
 import Timeline from './Timeline'
 import QK from './QK'
 import DeleteButton from './DeleteButton'
@@ -229,10 +228,14 @@ const Kultur = ({
     artFilter.id = { _in: artenToChoose }
   }
   const { data: dataArt, error: errorArt, loading: loadingArt } = useQuery(
-    artQuery,
-    {
-      variables: { filter: artFilter },
-    },
+    (store) =>
+      store.queryArt(
+        {
+          where: artFilter,
+          order_by: { art_ae_art: { name: 'asc_nulls_first' } },
+        },
+        (a) => a.id.art_ae_art((ae) => ae.id.name),
+      ),
   )
 
   const herkunftFilter = { id: { _in: herkunftToChoose } }
