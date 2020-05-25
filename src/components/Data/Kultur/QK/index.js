@@ -11,7 +11,6 @@ import get from 'lodash/get'
 import { useQuery } from '../../../../models/reactUtils'
 import Qk from './Qk'
 import Choose from './Choose'
-import queryQk from './queryQk'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -51,26 +50,46 @@ const KulturQk = ({ kultur }) => {
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const { data, loading, error, query } = useQuery(
-    queryQk,
-    {
-      variables: { kulturId: kultur.id },
-    },
-    {
-      fetchPolicy: 'no-cache',
-    },
+  const {
+    data: dataKulturQk,
+    loading: loadingKulturQk,
+    error: errorKulturQk,
+    query: queryKulturQk,
+  } = useQuery(
+    (store) =>
+      store.queryKultur_qk({
+        order_by: [{ sort: 'asc_nulls_last' }, { name: 'asc_nulls_first' }],
+      }),
+    undefined,
+    { fetchPolicy: 'no-cache' },
   )
-  const allQks = get(data, 'kultur_qk') || []
+
+  const {
+    data: dataKulturQkChoosen,
+    loading: loadingKulturQkChoosen,
+    error: errorKulturQkChoosen,
+    query: queryKulturQkChoosen,
+  } = useQuery(
+    (store) =>
+      store.queryKultur_qk_choosen({ where: { id: { _eq: kultur.id } } }),
+    undefined,
+    { fetchPolicy: 'no-cache' },
+  )
+
+  const loading = loadingKulturQk || loadingKulturQkChoosen
+  const error = errorKulturQk || errorKulturQkChoosen
+
+  const allQks = dataKulturQk?.kultur_qk ?? []
   const qks = allQks.filter(
     (qk) =>
-      !!(get(data, 'kultur_qk_choosen') || []).find(
+      !!(dataKulturQkChoosen?.kultur_qk_choosen ?? []).find(
         (no) => no.qk_name === qk.name,
       ),
   )
   const qkNameQueries = Object.fromEntries(
     allQks.map((n) => [
       n.name,
-      !!(get(data, 'kultur_qk_choosen') || []).find(
+      !!(get(dataKulturQkChoosen, 'kultur_qk_choosen') || []).find(
         (no) => no.qk_name === n.name,
       ),
     ]),
@@ -79,7 +98,7 @@ const KulturQk = ({ kultur }) => {
   const qkCount = loading ? '...' : allQks.length
   const kulturQkCount = loading
     ? '...'
-    : (get(data, 'kultur_qk_choosen') || []).length
+    : (get(dataKulturQkChoosen, 'kultur_qk_choosen') || []).length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -143,7 +162,7 @@ const KulturQk = ({ kultur }) => {
             {tab === 'qk' ? (
               <Qk kultur={kultur} qkNameQueries={qkNameQueries} qks={qks} />
             ) : (
-              <Choose refetchTab={query.refetch} />
+              <Choose refetchTab={queryKulturQkChoosen.refetch} />
             )}
           </Body>
         </>
