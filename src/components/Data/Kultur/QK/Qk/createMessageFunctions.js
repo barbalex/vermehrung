@@ -3,11 +3,10 @@ import format from 'date-fns/format'
 
 export default ({ data, kulturId }) => ({
   kultursWithoutVonAnzahlIndividuen: () =>
-    get(data, 'kultursWithoutVonAnzahlIndividuen', []).map(k => {
+    (data?.kultursWithoutVonAnzahlIndividuen ?? []).map((k) => {
       const garten =
-        get(k, 'garten.name') ||
-        `(${get(k, 'garten.person.name') || 'kein Name'})`
-      const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+      const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
       const text = `von: ${herkunft}, in: ${garten}`
 
       return {
@@ -16,8 +15,8 @@ export default ({ data, kulturId }) => ({
       }
     }),
   kultursWithoutGarten: () =>
-    get(data, 'kultursWithoutGarten', []).map(k => {
-      const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+    (data?.kultursWithoutGarten ?? []).map((k) => {
+      const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
       const text = `ID: ${k.id}, von: ${herkunft}`
 
       return {
@@ -26,7 +25,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   kultursWithoutHerkunft: () =>
-    get(data, 'kultursWithoutHerkunft', []).map(k => {
+    (data?.kultursWithoutHerkunft ?? []).map((k) => {
       const garten =
         get(k, 'garten.name') ||
         `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -38,7 +37,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   kultursWithoutZaehlungThisYear: () =>
-    get(data, 'kultursWithoutZaehlungThisYear', []).map(k => {
+    get(data, 'kultursWithoutZaehlungThisYear', []).map((k) => {
       const garten =
         get(k, 'garten.name') ||
         `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -51,8 +50,8 @@ export default ({ data, kulturId }) => ({
       }
     }),
   teilkultursWithoutName: () =>
-    get(data, 'teilkultursWithoutName', []).flatMap(k =>
-      (get(k, 'teilkulturs') || []).map(tk => {
+    get(data, 'teilkultursWithoutName', []).flatMap((k) =>
+      (get(k, 'teilkulturs') || []).map((tk) => {
         const garten =
           get(k, 'garten.name') ||
           `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -66,8 +65,8 @@ export default ({ data, kulturId }) => ({
       }),
     ),
   zaehlungsWithoutDatum: () =>
-    get(data, 'zaehlungsWithoutDatum', []).flatMap(k =>
-      (get(k, 'zaehlungs') || []).map(z => {
+    get(data, 'zaehlungsWithoutDatum', []).flatMap((k) =>
+      (get(k, 'zaehlungs') || []).map((z) => {
         const garten =
           get(k, 'garten.name') ||
           `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -81,8 +80,8 @@ export default ({ data, kulturId }) => ({
       }),
     ),
   zaehlungsWithoutAnzahlPflanzen: () =>
-    get(data, 'zaehlungsWithoutAnzahlPflanzen', []).flatMap(k =>
-      (get(k, 'zaehlungs') || []).map(z => {
+    get(data, 'zaehlungsWithoutAnzahlPflanzen', []).flatMap((k) =>
+      (get(k, 'zaehlungs') || []).map((z) => {
         const garten =
           get(k, 'garten.name') ||
           `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -101,8 +100,8 @@ export default ({ data, kulturId }) => ({
       }),
     ),
   zaehlungsWithoutAnzahlAuspflanzbereit: () =>
-    get(data, 'zaehlungsWithoutAnzahlAuspflanzbereit', []).flatMap(k =>
-      (get(k, 'zaehlungs') || []).map(z => {
+    get(data, 'zaehlungsWithoutAnzahlAuspflanzbereit', []).flatMap((k) =>
+      (get(k, 'zaehlungs') || []).map((z) => {
         const garten =
           get(k, 'garten.name') ||
           `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -121,8 +120,8 @@ export default ({ data, kulturId }) => ({
       }),
     ),
   zaehlungsWithoutAnzahlMutterpflanzen: () =>
-    get(data, 'zaehlungsWithoutAnzahlMutterpflanzen', []).flatMap(k =>
-      (get(k, 'zaehlungs') || []).map(z => {
+    get(data, 'zaehlungsWithoutAnzahlMutterpflanzen', []).flatMap((k) =>
+      (get(k, 'zaehlungs') || []).map((z) => {
         const garten =
           get(k, 'garten.name') ||
           `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -141,7 +140,7 @@ export default ({ data, kulturId }) => ({
       }),
     ),
   anLieferungsWithoutAnzahlPflanzen: () =>
-    get(data, 'anLieferungsWithoutAnzahlPflanzen', []).map(l => {
+    get(data, 'anLieferungsWithoutAnzahlPflanzen', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -154,7 +153,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   ausLieferungsWithoutAnzahlPflanzen: () =>
-    get(data, 'ausLieferungsWithoutAnzahlPflanzen', []).map(l => {
+    get(data, 'ausLieferungsWithoutAnzahlPflanzen', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -167,7 +166,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   anLieferungsWithoutAnzahlAuspflanzbereit: () =>
-    get(data, 'anLieferungsWithoutAnzahlAuspflanzbereit', []).map(l => {
+    get(data, 'anLieferungsWithoutAnzahlAuspflanzbereit', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -180,7 +179,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   ausLieferungsWithoutAnzahlAuspflanzbereit: () =>
-    get(data, 'ausLieferungsWithoutAnzahlAuspflanzbereit', []).map(l => {
+    get(data, 'ausLieferungsWithoutAnzahlAuspflanzbereit', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -193,7 +192,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   anLieferungsWithoutVonAnzahlIndividuen: () =>
-    get(data, 'anLieferungsWithoutVonAnzahlIndividuen', []).map(l => {
+    get(data, 'anLieferungsWithoutVonAnzahlIndividuen', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -206,7 +205,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   ausLieferungsWithoutVonAnzahlIndividuen: () =>
-    get(data, 'ausLieferungsWithoutVonAnzahlIndividuen', []).map(l => {
+    get(data, 'ausLieferungsWithoutVonAnzahlIndividuen', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -219,7 +218,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   anLieferungsWithoutVon: () =>
-    get(data, 'anLieferungsWithoutVon', []).map(l => {
+    get(data, 'anLieferungsWithoutVon', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -232,7 +231,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   ausLieferungsWithoutNach: () =>
-    get(data, 'ausLieferungsWithoutNach', []).map(l => {
+    get(data, 'ausLieferungsWithoutNach', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -245,7 +244,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   anLieferungsWithoutDatum: () =>
-    get(data, 'anLieferungsWithoutDatum', []).map(l => {
+    get(data, 'anLieferungsWithoutDatum', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -258,7 +257,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   ausLieferungsWithoutDatum: () =>
-    get(data, 'ausLieferungsWithoutDatum', []).map(l => {
+    get(data, 'ausLieferungsWithoutDatum', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -271,7 +270,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   anLieferungsWithoutPerson: () =>
-    get(data, 'anLieferungsWithoutPerson', []).map(l => {
+    get(data, 'anLieferungsWithoutPerson', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -284,7 +283,7 @@ export default ({ data, kulturId }) => ({
       }
     }),
   ausLieferungsWithoutPerson: () =>
-    get(data, 'ausLieferungsWithoutPerson', []).map(l => {
+    get(data, 'ausLieferungsWithoutPerson', []).map((l) => {
       const datum = l.datum
         ? format(new Date(l.datum), 'yyyy.MM.dd')
         : `kein Datum`
@@ -297,8 +296,8 @@ export default ({ data, kulturId }) => ({
       }
     }),
   eventsWithoutBeschreibung: () =>
-    get(data, 'eventsWithoutBeschreibung', []).flatMap(k =>
-      (get(k, 'events') || []).map(ev => {
+    get(data, 'eventsWithoutBeschreibung', []).flatMap((k) =>
+      (get(k, 'events') || []).map((ev) => {
         const garten =
           get(k, 'garten.name') ||
           `(${get(k, 'garten.person.name') || 'kein Name'})`
@@ -312,8 +311,8 @@ export default ({ data, kulturId }) => ({
       }),
     ),
   eventsWithoutDatum: () =>
-    get(data, 'eventsWithoutDatum', []).flatMap(k =>
-      (get(k, 'events') || []).map(ev => {
+    get(data, 'eventsWithoutDatum', []).flatMap((k) =>
+      (get(k, 'events') || []).map((ev) => {
         const garten =
           get(k, 'garten.name') ||
           `(${get(k, 'garten.person.name') || 'kein Name'})`

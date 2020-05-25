@@ -6,7 +6,6 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import get from 'lodash/get'
 
 import { useQuery } from '../../../../models/reactUtils'
 import Qk from './Qk'
@@ -89,7 +88,7 @@ const KulturQk = ({ kultur }) => {
   const qkNameQueries = Object.fromEntries(
     allQks.map((n) => [
       n.name,
-      !!(get(dataKulturQkChoosen, 'kultur_qk_choosen') || []).find(
+      !!(dataKulturQkChoosen?.kultur_qk_choosen ?? []).find(
         (no) => no.qk_name === n.name,
       ),
     ]),
@@ -98,7 +97,7 @@ const KulturQk = ({ kultur }) => {
   const qkCount = loading ? '...' : allQks.length
   const kulturQkCount = loading
     ? '...'
-    : (get(dataKulturQkChoosen, 'kultur_qk_choosen') || []).length
+    : (dataKulturQkChoosen?.kultur_qk_choosen ?? []).length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
