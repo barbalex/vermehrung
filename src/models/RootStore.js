@@ -169,6 +169,9 @@ export const RootStore = RootStoreBase.props({
       deleteArt(val) {
         self.arts.delete(val.id)
       },
+      deleteArtRev(val) {
+        self.art_revs.delete(val.id)
+      },
       upsertArtFile(val) {
         self.art_files.set(val.id, val)
       },
@@ -187,17 +190,26 @@ export const RootStore = RootStoreBase.props({
       deleteAvArt(val) {
         self.av_arts.delete(val.id)
       },
+      deleteAvArtRev(val) {
+        self.av_art_revs.delete(val.id)
+      },
       upsertEvent(val) {
         self.events.set(val.id, val)
       },
       deleteEvent(val) {
         self.events.delete(val.id)
       },
+      deleteEventRev(val) {
+        self.event_revs.delete(val.id)
+      },
       upsertGarten(val) {
         self.gartens.set(val.id, val)
       },
       deleteGarten(val) {
         self.gartens.delete(val.id)
+      },
+      deleteGartenRev(val) {
+        self.garten_revs.delete(val.id)
       },
       upsertGartenFile(val) {
         self.garten_files.set(val.id, val)
@@ -226,6 +238,9 @@ export const RootStore = RootStoreBase.props({
       deleteKultur(val) {
         self.kulturs.delete(val.id)
       },
+      deleteKulturRev(val) {
+        self.kultur_revs.delete(val.id)
+      },
       upsertKulturFile(val) {
         self.kultur_files.set(val.id, val)
       },
@@ -237,6 +252,9 @@ export const RootStore = RootStoreBase.props({
       },
       deleteKulturOption(val) {
         self.kultur_options.delete(val.id)
+      },
+      deleteKulturOptionRev(val) {
+        self.kultur_option_revs.delete(val.id)
       },
       upsertKulturQk(val) {
         self.kultur_qks.set(val.id, val)
@@ -256,6 +274,9 @@ export const RootStore = RootStoreBase.props({
       deleteLieferung(val) {
         self.lieferungs.delete(val.id)
       },
+      deleteLieferungRev(val) {
+        self.lieferung_revs.delete(val.id)
+      },
       upsertLieferungFile(val) {
         self.lieferung_files.set(val.id, val)
       },
@@ -267,6 +288,9 @@ export const RootStore = RootStoreBase.props({
       },
       deletePerson(val) {
         self.persons.delete(val.id)
+      },
+      deletePersonRev(val) {
+        self.person_revs.delete(val.id)
       },
       upsertPersonFile(val) {
         self.person_files.set(val.id, val)
@@ -280,17 +304,26 @@ export const RootStore = RootStoreBase.props({
       deletePersonOption(val) {
         self.person_options.delete(val.id)
       },
+      deletePersonOptionRev(val) {
+        self.person_option_revs.delete(val.id)
+      },
       upsertSammelLieferung(val) {
         self.sammel_lieferungs.set(val.id, val)
       },
       deleteSammelLieferung(val) {
         self.sammel_lieferungs.delete(val.id)
       },
+      deleteSammelLieferungRev(val) {
+        self.sammel_lieferung_revs.delete(val.id)
+      },
       upsertSammlung(val) {
         self.sammlungs.set(val.id, val)
       },
       deleteSammlung(val) {
         self.sammlungs.delete(val.id)
+      },
+      deleteSammlungRev(val) {
+        self.sammlung_revs.delete(val.id)
       },
       upsertSammlungFile(val) {
         self.sammlung_files.set(val.id, val)
@@ -304,11 +337,17 @@ export const RootStore = RootStoreBase.props({
       deleteTeilkultur(val) {
         self.teilkulturs.delete(val.id)
       },
+      deleteTeilkulturRev(val) {
+        self.teilkultur_revs.delete(val.id)
+      },
       upsertTeilzaehlung(val) {
         self.teilzaehlungs.set(val.id, val)
       },
       deleteTeilzaehlung(val) {
         self.teilzaehlungs.delete(val.id)
+      },
+      deleteTeilzaehlungRev(val) {
+        self.teilzaehlung_revs.delete(val.id)
       },
       upsertUserRole(val) {
         self.user_roles.set(val.id, val)
@@ -321,6 +360,9 @@ export const RootStore = RootStoreBase.props({
       },
       deleteZaehlung(val) {
         self.zaehlungs.delete(val.id)
+      },
+      deleteZaehlungRev(val) {
+        self.zaehlung_revs.delete(val.id)
       },
       setOnline(val) {
         self.online = val
