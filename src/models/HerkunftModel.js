@@ -4,6 +4,7 @@ import { v1 as uuidv1 } from 'uuid'
 
 import { herkunftModelBase } from './herkunftModel.base'
 import toPgArray from '../utils/toPgArray'
+import toStringIfPossible from '../utils/toStringIfPossible'
 
 /* A graphql query fragment builders for herkunftModel */
 export {
@@ -23,6 +24,66 @@ export const herkunftModel = herkunftModelBase
     // This is an auto-generated example action.
     log() {
       console.log(JSON.stringify(self))
+    },
+    edit({ field, value }) {
+      const store = getParent(self, 2)
+      const { addQueuedQuery, user, upsertHerkunft, tree } = store
+
+      // first build the part that will be revisioned
+      const depth = self._depth + 1
+      const newObject = {
+        herkunft_id: self.id,
+        nr: field === 'nr' ? toStringIfPossible(value) : self.nr,
+        lokalname:
+          field === 'lokalname' ? toStringIfPossible(value) : self.lokalname,
+        gemeinde:
+          field === 'gemeinde' ? toStringIfPossible(value) : self.gemeinde,
+        kanton: field === 'kanton' ? toStringIfPossible(value) : self.kanton,
+        land: field === 'land' ? toStringIfPossible(value) : self.land,
+        geom_point: field === 'geom_point' ? value : self.geom_point,
+        bemerkungen:
+          field === 'bemerkungen'
+            ? toStringIfPossible(value)
+            : self.bemerkungen,
+        changed_by: user.email,
+        _parent_rev: self._rev,
+        _depth: depth,
+      }
+      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+      // DO NOT include id in rev - or revs with same data will conflict
+      newObject.id = uuidv1()
+      newObject._rev = rev
+      newObject.changed = new window.Date().toISOString()
+      const newObjectForStore = { ...newObject }
+      // convert to string as hasura does not support arrays yet
+      // https://github.com/hasura/graphql-engine/pull/2243
+      newObject._revisions = self._revisions
+        ? toPgArray([rev, ...self._revisions])
+        : toPgArray([rev])
+      // do not stringify revisions for store
+      // as _that_ is a real array
+      newObjectForStore._revisions = self._revisions
+        ? [rev, ...self._revisions]
+        : [rev]
+      addQueuedQuery({
+        name: 'mutateInsert_herkunft_rev_one',
+        variables: JSON.stringify({
+          object: newObject,
+          on_conflict: {
+            constraint: 'herkunft_rev_pkey',
+            update_columns: ['id'],
+          },
+        }),
+        callbackQuery: 'queryHerkunft',
+        callbackQueryVariables: JSON.stringify({
+          where: { id: { _eq: self.id } },
+        }),
+      })
+      // optimistically update store
+      upsertHerkunft(newObjectForStore)
+      setTimeout(() => {
+        if (['nr'].includes(field)) tree.refetch()
+      }, 50)
     },
     delete() {
       const store = getParent(self, 2)

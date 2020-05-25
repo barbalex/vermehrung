@@ -187,70 +187,9 @@ const Herkunft = ({
       if (showFilter) {
         return filter.setValue({ table: 'herkunft', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        herkunft_id: row.id,
-        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
-        lokalname:
-          field === 'lokalname' ? toStringIfPossible(value) : row.lokalname,
-        gemeinde:
-          field === 'gemeinde' ? toStringIfPossible(value) : row.gemeinde,
-        kanton: field === 'kanton' ? toStringIfPossible(value) : row.kanton,
-        land: field === 'land' ? toStringIfPossible(value) : row.land,
-        geom_point: field === 'geom_point' ? value : row.geom_point,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_herkunft_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'herkunft_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryHerkunft',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      // optimistically update store
-      upsertHerkunft(newObjectForStore)
-      setTimeout(() => {
-        if (['nr'].includes(field)) store.tree.refetch()
-      }, 50)
+      row.edit({ field, value })
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      row,
-      showFilter,
-      store.tree,
-      upsertHerkunft,
-      user.email,
-    ],
+    [filter, row, showFilter],
   )
   const openHerkunftDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Herkuenfte`
