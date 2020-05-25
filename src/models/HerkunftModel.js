@@ -16,116 +16,110 @@ export {
 /**
  * herkunftModel
  */
-export const herkunftModel = herkunftModelBase
-  .props({
-    nr: types.union(types.undefined, types.null, types.integer, types.string),
-  })
-  .actions((self) => ({
-    edit({ field, value }) {
-      const store = getParent(self, 2)
-      const { addQueuedQuery, user, upsertHerkunft, tree } = store
+export const herkunftModel = herkunftModelBase.actions((self) => ({
+  edit({ field, value }) {
+    const store = getParent(self, 2)
+    const { addQueuedQuery, user, upsertHerkunft, tree } = store
 
-      // first build the part that will be revisioned
-      const depth = self._depth + 1
-      const newObject = {
-        herkunft_id: self.id,
-        nr: field === 'nr' ? toStringIfPossible(value) : self.nr,
-        lokalname:
-          field === 'lokalname' ? toStringIfPossible(value) : self.lokalname,
-        gemeinde:
-          field === 'gemeinde' ? toStringIfPossible(value) : self.gemeinde,
-        kanton: field === 'kanton' ? toStringIfPossible(value) : self.kanton,
-        land: field === 'land' ? toStringIfPossible(value) : self.land,
-        geom_point: field === 'geom_point' ? value : self.geom_point,
-        bemerkungen:
-          field === 'bemerkungen'
-            ? toStringIfPossible(value)
-            : self.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: self._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = self._revisions
-        ? toPgArray([rev, ...self._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = self._revisions
-        ? [rev, ...self._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_herkunft_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'herkunft_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryHerkunft',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
-      })
-      // optimistically update store
-      upsertHerkunft(newObjectForStore)
-      setTimeout(() => {
-        if (['nr'].includes(field)) tree.refetch()
-      }, 50)
-    },
-    delete() {
-      const store = getParent(self, 2)
-      const { addQueuedQuery, user, tree, deleteHerkunft } = store
+    // first build the part that will be revisioned
+    const depth = self._depth + 1
+    const newObject = {
+      herkunft_id: self.id,
+      nr: field === 'nr' ? toStringIfPossible(value) : self.nr,
+      lokalname:
+        field === 'lokalname' ? toStringIfPossible(value) : self.lokalname,
+      gemeinde:
+        field === 'gemeinde' ? toStringIfPossible(value) : self.gemeinde,
+      kanton: field === 'kanton' ? toStringIfPossible(value) : self.kanton,
+      land: field === 'land' ? toStringIfPossible(value) : self.land,
+      geom_point: field === 'geom_point' ? value : self.geom_point,
+      bemerkungen:
+        field === 'bemerkungen' ? toStringIfPossible(value) : self.bemerkungen,
+      changed_by: user.email,
+      _parent_rev: self._rev,
+      _depth: depth,
+    }
+    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    // DO NOT include id in rev - or revs with same data will conflict
+    newObject.id = uuidv1()
+    newObject._rev = rev
+    newObject.changed = new window.Date().toISOString()
+    const newObjectForStore = { ...newObject }
+    // convert to string as hasura does not support arrays yet
+    // https://github.com/hasura/graphql-engine/pull/2243
+    newObject._revisions = self._revisions
+      ? toPgArray([rev, ...self._revisions])
+      : toPgArray([rev])
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    addQueuedQuery({
+      name: 'mutateInsert_herkunft_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      callbackQuery: 'queryHerkunft',
+      callbackQueryVariables: JSON.stringify({
+        where: { id: { _eq: self.id } },
+      }),
+    })
+    // optimistically update store
+    upsertHerkunft(newObjectForStore)
+    setTimeout(() => {
+      if (['nr'].includes(field)) tree.refetch()
+    }, 50)
+  },
+  delete() {
+    const store = getParent(self, 2)
+    const { addQueuedQuery, user, tree, deleteHerkunft } = store
 
-      // build new object
-      const newDepth = self._depth + 1
-      const newObject = {
-        herkunft_id: self.id,
-        nr: self.nr,
-        lokalname: self.lokalname,
-        gemeinde: self.gemeinde,
-        kanton: self.kanton,
-        land: self.land,
-        geom_point: self.geom_point,
-        bemerkungen: self.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: self._rev,
-        _depth: newDepth,
-        _deleted: true,
-      }
-      const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-      newObject._rev = rev
-      newObject.id = uuidv1()
-      newObject.changed = new window.Date().toISOString()
-      newObject._revisions = self._revisions
-        ? toPgArray([rev, ...self._revisions])
-        : toPgArray([rev])
+    // build new object
+    const newDepth = self._depth + 1
+    const newObject = {
+      herkunft_id: self.id,
+      nr: self.nr,
+      lokalname: self.lokalname,
+      gemeinde: self.gemeinde,
+      kanton: self.kanton,
+      land: self.land,
+      geom_point: self.geom_point,
+      bemerkungen: self.bemerkungen,
+      changed_by: user.email,
+      _parent_rev: self._rev,
+      _depth: newDepth,
+      _deleted: true,
+    }
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
+    newObject._rev = rev
+    newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject._revisions = self._revisions
+      ? toPgArray([rev, ...self._revisions])
+      : toPgArray([rev])
 
-      addQueuedQuery({
-        name: 'mutateInsert_herkunft_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'herkunft_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryHerkunft',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
-      })
-      deleteHerkunft({ id: self.id })
-      setTimeout(() => {
-        tree.refetch()
-      }, 50)
-    },
-  }))
+    addQueuedQuery({
+      name: 'mutateInsert_herkunft_rev_one',
+      variables: JSON.stringify({
+        object: newObject,
+        on_conflict: {
+          constraint: 'herkunft_rev_pkey',
+          update_columns: ['id'],
+        },
+      }),
+      callbackQuery: 'queryHerkunft',
+      callbackQueryVariables: JSON.stringify({
+        where: { id: { _eq: self.id } },
+      }),
+    })
+    deleteHerkunft({ id: self.id })
+    setTimeout(() => {
+      tree.refetch()
+    }, 50)
+  },
+}))
