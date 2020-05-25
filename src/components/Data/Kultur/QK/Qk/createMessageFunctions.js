@@ -27,8 +27,7 @@ export default ({ data, kulturId }) => ({
   kultursWithoutHerkunft: () =>
     (data?.kultursWithoutHerkunft ?? []).map((k) => {
       const garten =
-        get(k, 'garten.name') ||
-        `(${get(k, 'garten.person.name') || 'kein Name'})`
+        k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
       const text = `ID: ${k.id}, in: ${garten}`
 
       return {
@@ -37,11 +36,10 @@ export default ({ data, kulturId }) => ({
       }
     }),
   kultursWithoutZaehlungThisYear: () =>
-    get(data, 'kultursWithoutZaehlungThisYear', []).map((k) => {
+    (data?.kultursWithoutZaehlungThisYear ?? []).map((k) => {
       const garten =
-        get(k, 'garten.name') ||
-        `(${get(k, 'garten.person.name') || 'kein Name'})`
-      const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+        k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+      const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
       const text = `von: ${herkunft}, in: ${garten}`
 
       return {
@@ -50,12 +48,11 @@ export default ({ data, kulturId }) => ({
       }
     }),
   teilkultursWithoutName: () =>
-    get(data, 'teilkultursWithoutName', []).flatMap((k) =>
-      (get(k, 'teilkulturs') || []).map((tk) => {
+    (data?.teilkultursWithoutName ?? []).flatMap((k) =>
+      (k?.teilkulturs ?? []).map((tk) => {
         const garten =
-          get(k, 'garten.name') ||
-          `(${get(k, 'garten.person.name') || 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const text = `von: ${herkunft}, in: ${garten}, Teilkultur-ID: ${tk.id}`
 
         return {
@@ -65,12 +62,11 @@ export default ({ data, kulturId }) => ({
       }),
     ),
   zaehlungsWithoutDatum: () =>
-    get(data, 'zaehlungsWithoutDatum', []).flatMap((k) =>
-      (get(k, 'zaehlungs') || []).map((z) => {
+    (data?.zaehlungsWithoutDatum ?? []).flatMap((k) =>
+      (k?.zaehlungs ?? []).map((z) => {
         const garten =
-          get(k, 'garten.name') ||
-          `(${get(k, 'garten.person.name') || 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
 
         return {
