@@ -251,21 +251,19 @@ const Row = ({ style, node, nodes }) => {
     createNew({ node, store, client })
   }, [node, store, client])
   const onClickDelete = useCallback(async () => {
-    deleteDataset({ node, store, client })
+    deleteDataset({ node, store })
     // delete firebase user
     if (node.accountId) {
       try {
-        await axios.get(
-          `https://auth.vermehrung.ch/delete-user/${node.accountId}`,
-        )
+        axios.get(`https://auth.vermehrung.ch/delete-user/${node.accountId}`)
       } catch (error) {
         console.log(error)
-        return addNotification({
+        addNotification({
           message: error.response.data,
         })
       }
     }
-  }, [client, addNotification, node, store])
+  }, [addNotification, node, store])
 
   const onClickSetPassword = useCallback(async () => {
     const personId = last(node.url).toString()
