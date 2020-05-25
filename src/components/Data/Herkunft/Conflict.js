@@ -7,7 +7,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 
 const HerkunftConflict = ({
-  id,
   rev,
   row,
   callbackAfterVerwerfen,
@@ -19,14 +18,14 @@ const HerkunftConflict = ({
 
   const { error, loading } = useQuery((store) =>
     store.queryHerkunft_rev({
-      where: { _rev: { _eq: rev }, herkunft_id: { _eq: id } },
+      where: { _rev: { _eq: rev }, herkunft_id: { _eq: row.id } },
     }),
   )
 
   // need to grab store object to ensure this remains up to date
   const revRow =
     [...store.herkunft_revs.values()].find(
-      (v) => v._rev === rev && v.herkunft_id === id,
+      (v) => v._rev === rev && v.herkunft_id === row.id,
     ) || {}
 
   const dataArray = [
@@ -65,56 +64,11 @@ const HerkunftConflict = ({
     },
   ]
 
-  const onClickVerwerfen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      herkunft_id: revRow.herkunft_id,
-      nr: revRow.nr,
-      lokalname: revRow.lokalname,
-      gemeinde: revRow.gemeinde,
-      kanton: revRow.kanton,
-      land: revRow.land,
-      geom_point: revRow.geom_point,
-      bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    try {
-      await store.mutateInsert_herkunft_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'herkunft_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
-    callbackAfterVerwerfen()
-  }, [
-    callbackAfterVerwerfen,
-    addNotification,
-    revRow._depth,
-    revRow._rev,
-    revRow.bemerkungen,
-    revRow.gemeinde,
-    revRow.geom_point,
-    revRow.herkunft_id,
-    revRow.kanton,
-    revRow.land,
-    revRow.lokalname,
-    revRow.nr,
-    store,
-    user.email,
-  ])
+  const onClickVerwerfen = useCallback(() => {
+    console.log('Herkunft Conflict, onClickVerwerfen, revRow:', revRow)
+    revRow.setDeleted()
+    setTimeout(() => callbackAfterVerwerfen())
+  }, [callbackAfterVerwerfen, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
@@ -128,6 +82,7 @@ const HerkunftConflict = ({
       land: revRow.land,
       geom_point: revRow.geom_point,
       bemerkungen: revRow.bemerkungen,
+      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
@@ -135,7 +90,6 @@ const HerkunftConflict = ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
     try {
       await store.mutateInsert_herkunft_rev_one({
         object: newObject,

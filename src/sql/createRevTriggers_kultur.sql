@@ -3,7 +3,7 @@ create or replace function kultur_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from kultur where id = new.kultur_id;
+  delete from kultur where id = new.kultur_id and _rev = new._parent_rev;
   return new;
 else
   insert into kultur (

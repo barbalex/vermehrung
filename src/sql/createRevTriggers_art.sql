@@ -3,7 +3,7 @@ create or replace function art_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from art where id = new.art_id;
+  delete from art where id = new.art_id and _rev = new._parent_rev;
   return new;
 else
   insert into art (

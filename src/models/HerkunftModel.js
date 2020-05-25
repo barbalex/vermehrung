@@ -1,4 +1,4 @@
-import { types, getParent } from 'mobx-state-tree'
+import { getParent } from 'mobx-state-tree'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
@@ -35,6 +35,7 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
       geom_point: field === 'geom_point' ? value : self.geom_point,
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : self.bemerkungen,
+      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
       _depth: depth,
@@ -43,7 +44,6 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
-    newObject.changed = new window.Date().toISOString()
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
@@ -75,9 +75,10 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
       if (['nr'].includes(field)) tree.refetch()
     }, 50)
   },
-  delete() {
+  setDeleted() {
+    // seperate from delete() to enable setting loosing revs deleted
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, tree, deleteHerkunft } = store
+    const { addQueuedQuery, user } = store
 
     // build new object
     const newDepth = self._depth + 1
@@ -90,6 +91,7 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
       land: self.land,
       geom_point: self.geom_point,
       bemerkungen: self.bemerkungen,
+      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
@@ -98,7 +100,6 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
@@ -117,6 +118,12 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+  },
+  delete() {
+    const store = getParent(self, 2)
+    const { tree, deleteHerkunft } = store
+
+    self.setDeleted()
     deleteHerkunft({ id: self.id })
     setTimeout(() => {
       tree.refetch()

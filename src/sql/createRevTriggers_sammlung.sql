@@ -3,7 +3,7 @@ create or replace function sammlung_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from sammlung where id = new.sammlung_id;
+  delete from sammlung where id = new.sammlung_id and _rev = new._parent_rev;
   return new;
 else
   insert into sammlung (

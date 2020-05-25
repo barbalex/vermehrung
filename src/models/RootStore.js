@@ -79,7 +79,7 @@ export const RootStore = RootStoreBase.props({
               // this will bounce because of the same rev. We want to ignore this:
               if (
                 error.message.includes('Uniqueness violation') &&
-                error.message.includes('teilkultur_rev_id__rev_key')
+                error.message.includes('_rev_id__rev_key')
               ) {
                 console.log(
                   'There is a conflict with exact same changes - ingoring the error thrown',
@@ -210,6 +210,9 @@ export const RootStore = RootStoreBase.props({
       },
       deleteHerkunft(val) {
         self.herkunfts.delete(val.id)
+      },
+      deleteHerkunftRev(val) {
+        self.herkunft_revs.delete(val.id)
       },
       upsertHerkunftFile(val) {
         self.herkunft_files.set(val.id, val)

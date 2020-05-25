@@ -3,14 +3,10 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import md5 from 'blueimp-md5'
 import SplitPane from 'react-split-pane'
-import { v1 as uuidv1 } from 'uuid'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -109,7 +105,7 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertHerkunft, addQueuedQuery, online } = store
+  const { filter, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -128,7 +124,7 @@ const Herkunft = ({
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
     setActiveConflict(null)
-    queryOfHerkunft.refetch()
+    queryOfHerkunft.refetch() // necessary?
   }, [queryOfHerkunft])
   const callbackAfterUebernehmen = useCallback(async () => {
     const oldRow = getSnapshot(row)
@@ -349,7 +345,6 @@ const Herkunft = ({
               {online && !!activeConflict && (
                 <Conflict
                   rev={activeConflict}
-                  id={id}
                   row={row}
                   callbackAfterVerwerfen={callbackAfterVerwerfen}
                   callbackAfterUebernehmen={callbackAfterUebernehmen}

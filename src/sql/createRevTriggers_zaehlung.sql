@@ -3,7 +3,7 @@ create or replace function zaehlung_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from zaehlung where id = new.zaehlung_id;
+  delete from zaehlung where id = new.zaehlung_id and _rev = new._parent_rev;
   return new;
 else
   insert into zaehlung (
