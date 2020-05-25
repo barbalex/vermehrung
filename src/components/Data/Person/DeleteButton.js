@@ -1,6 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { FaMinus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -9,7 +8,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import axios from 'axios'
 
 import { StoreContext } from '../../../models/reactUtils'
-import deleteDataset from '../../TreeContainer/Tree/delete'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -25,9 +23,9 @@ const Title = styled.div`
 `
 
 const PersonDeleteButton = ({ row }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
   const { addNotification } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -39,8 +37,6 @@ const PersonDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(async () => {
-    const node = { url: ['Personen', row.id] }
-    deleteDataset({ node, store, client })
     // delete firebase user
     if (row.account_id) {
       try {
@@ -49,12 +45,14 @@ const PersonDeleteButton = ({ row }) => {
         )
       } catch (error) {
         console.log(error)
-        return addNotification({
+        addNotification({
           message: error.response.data,
         })
       }
     }
-  }, [client, addNotification, row.account_id, row.id, store])
+    row.delete()
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, addNotification, row, setActiveNodeArray])
 
   return (
     <ErrorBoundary>

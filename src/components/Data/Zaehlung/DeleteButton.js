@@ -1,6 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { FaMinus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
@@ -8,7 +7,6 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { StoreContext } from '../../../models/reactUtils'
-import deleteDataset from '../../TreeContainer/Tree/delete'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -24,8 +22,8 @@ const Title = styled.div`
 `
 
 const ZaehlungDeleteButton = ({ row }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
+  const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -37,9 +35,9 @@ const ZaehlungDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(() => {
-    const node = { url: ['Zaehlungen', row.id] }
-    deleteDataset({ node, store, client })
-  }, [client, row.id, store])
+    row.delete()
+    setActiveNodeArray(activeNodeArray.slice(0, -1))
+  }, [activeNodeArray, row, setActiveNodeArray])
 
   return (
     <ErrorBoundary>

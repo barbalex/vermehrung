@@ -3,8 +3,7 @@ create or replace function herkunft_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from herkunft where id = new.herkunft_id;
-  return new;
+  delete from herkunft where id = new.id
 else
   insert into herkunft (
       id,
@@ -134,8 +133,7 @@ else
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-END IF;
-end
+end;
 $body$
 language plpgsql;
 
