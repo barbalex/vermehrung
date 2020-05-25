@@ -164,7 +164,7 @@ const Kultur = ({
   const filteredNr =
     dataKulturFilteredAggregate?.kultur_aggregate?.aggregate?.count ?? 0
 
-  const row = showFilter ? filter.kultur : store.kulturs.get(id)
+  const row = showFilter ? filter.kultur : store.kulturs.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {

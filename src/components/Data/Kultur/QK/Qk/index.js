@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
 import format from 'date-fns/format'
 import Badge from '@material-ui/core/Badge'
 import Button from '@material-ui/core/Button'
@@ -13,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl'
 import query from './query'
 import createMessageFunctions from './createMessageFunctions'
 import getAppBaseUrl from '../../../../../utils/appBaseUrl'
+import { useQuery } from '../../../../../models/reactUtils'
 
 const appBaseUrl = getAppBaseUrl()
 
@@ -51,7 +51,7 @@ const ButtonContainer = styled.div`
 const StyledButton = styled(Button)`
   margin-bottom: 15px !important;
   margin-top: -5px !important;
-  color: ${props =>
+  color: ${(props) =>
     props.loading === 'true'
       ? '#D84315 !important'
       : 'rgb(46, 125, 50) !important'};
@@ -68,14 +68,17 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const ApQkQk = ({ kultur, qkNameQueries, qks }) => {
+const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
   const [filter, setFilter] = useState('')
-  const onChangeFilter = useCallback(event => setFilter(event.target.value), [])
+  const onChangeFilter = useCallback(
+    (event) => setFilter(event.target.value),
+    [],
+  )
 
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}.01.01`
   const startNextYear = `${year + 1}.01.01`
-  const { data, error, loading, refetch } = useQuery(query, {
+  const { data, error, loading, query: queryOfQuery } = useQuery(query, {
     variables: {
       ...qkNameQueries,
       kulturId: kultur.id,
@@ -88,12 +91,12 @@ const ApQkQk = ({ kultur, qkNameQueries, qks }) => {
     kulturId: kultur.id,
   })
   const messageGroups = qks
-    .map(qk => ({
+    .map((qk) => ({
       title: qk.titel,
       messages: messageFunctions[qk.name](),
     }))
-    .filter(q => q.messages.length)
-  const messageGroupsFiltered = messageGroups.filter(messageGroup => {
+    .filter((q) => q.messages.length)
+  const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
     }
@@ -117,7 +120,7 @@ const ApQkQk = ({ kultur, qkNameQueries, qks }) => {
             color="primary"
           >
             <StyledButton
-              onClick={() => refetch()}
+              onClick={() => queryOfQuery.refetch()}
               variant="outlined"
               loading={loading.toString()}
             >
@@ -137,7 +140,7 @@ const ApQkQk = ({ kultur, qkNameQueries, qks }) => {
           />
         </StyledFormControl>
       </Row>
-      {messageGroupsFiltered.map(messageGroup => (
+      {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{messageGroup.title}</Title>
           {messageGroup.messages.map((m, i) => (
@@ -162,4 +165,4 @@ const ApQkQk = ({ kultur, qkNameQueries, qks }) => {
   )
 }
 
-export default observer(ApQkQk)
+export default observer(KulturQkQk)
