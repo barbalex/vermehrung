@@ -3,7 +3,7 @@ create or replace function event_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from event where id = new.event_id;
+  delete from event where id = new.event_id and _rev = new._parent_rev;
   return new;
 else
   insert into event (

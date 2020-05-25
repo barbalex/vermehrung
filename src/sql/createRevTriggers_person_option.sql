@@ -3,7 +3,7 @@ create or replace function person_option_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from person_option where id = new.person_option_id;
+  delete from person_option where id = new.person_option_id and _rev = new._parent_rev;
   return new;
 else
   insert into person_option (

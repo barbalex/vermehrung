@@ -3,7 +3,7 @@ create or replace function teilzaehlung_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from teilzaehlung where id = new.teilzaehlung_id;
+  delete from teilzaehlung where id = new.teilzaehlung_id and _rev = new._parent_rev;
   return new;
 else
   insert into teilzaehlung (

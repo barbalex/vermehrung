@@ -3,7 +3,7 @@ create or replace function garten_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from garten where id = new.garten_id;
+  delete from garten where id = new.garten_id and _rev = new._parent_rev;
   return new;
 else
   insert into garten (

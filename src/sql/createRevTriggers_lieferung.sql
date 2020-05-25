@@ -3,7 +3,7 @@ create or replace function lieferung_rev_set_winning_revision ()
   as $body$
 begin
 if new._deleted = true then
-  delete from lieferung where id = new.lieferung_id;
+  delete from lieferung where id = new.lieferung_id and _rev = new._parent_rev;
   return new;
 else
   insert into lieferung (
