@@ -2,10 +2,7 @@ create or replace function person_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
-if new._deleted = true then
-  delete from person where id = new.person_id and _rev = new._parent_rev;
-  return new;
-else
+  delete from person where id = new.person_id;
   insert into person (
       id,
       nr,
@@ -58,45 +55,15 @@ else
       from
         leaves
     ),
-    conflicts as (
-      select _rev from leaves 
-      where 
-        _depth = new._depth
-        and _rev <> new._rev
-    ),
     winning_revisions as (
       select
         max(leaves._rev) as _rev
       from
         leaves
         join max_depths on leaves._depth = max_depths.max_depth
-    ),
-    branches as (
-      select
-        person_id,
-        _rev,
-        _depth
-      from
-        person_rev
-      where
-        _deleted = false
-        and person_id = new.person_id
-        and _rev <> new._rev
-    ),
-    leaves_conflicting_with_branch as (
-      select _rev from leaves l
-      where
-        exists (
-          select _rev from branches b
-          where
-            b._depth = l._depth
-            and b._rev <> l._rev
-            -- exclude all branches above the winning revision? 
-            -- see herkunft for more
-        )
     )
     select
-      person_rev.person_id as id,
+      person_rev.person_id,
       person_rev.nr,
       person_rev.name,
       person_rev.adresszusatz,
@@ -121,46 +88,16 @@ else
       person_rev._parent_rev,
       person_rev._depth,
       (select array(
-        select * from (
-          select * from conflicts
-          union select * from leaves_conflicting_with_branch
-        ) as all_conflicts
-        -- prevent ever choosing same rev as conflict
-        where all_conflicts._rev <> person_rev._rev
+        select _rev from leaves
+        where 
+          _rev <> person_rev._rev
+          and _rev <> ANY(person_rev._revisions)
       )) as _conflicts
     from
       person_rev
-      join winning_revisions on person_rev._rev = winning_revisions._rev
-  on conflict on constraint person_pkey
-    do update set
-      -- do not update id
-      nr = excluded.nr,
-      name = excluded.name,
-      adresszusatz = excluded.adresszusatz,
-      strasse = excluded.strasse,
-      plz = excluded.plz,
-      ort = excluded.ort,
-      telefon_privat = excluded.telefon_privat,
-      telefon_geschaeft = excluded.telefon_geschaeft,
-      telefon_mobile = excluded.telefon_mobile,
-      email = excluded.email,
-      kein_email = excluded.kein_email,
-      bemerkungen = excluded.bemerkungen,
-      changed = excluded.changed,
-      changed_by = excluded.changed_by,
-      account_id = excluded.account_id,
-      user_role = excluded.user_role,
-      kommerziell = excluded.kommerziell,
-      info = excluded.info,
-      aktiv = excluded.aktiv,
-      _rev = excluded._rev,
-      _revisions = excluded._revisions,
-      _parent_rev = excluded._parent_rev,
-      _depth = excluded._depth,
-      _conflicts = excluded._conflicts;
+      join winning_revisions on person_rev._rev = winning_revisions._rev;
   return new;
-END IF;
-end
+end;
 $body$
 language plpgsql;
 
