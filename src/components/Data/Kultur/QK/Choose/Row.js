@@ -49,7 +49,10 @@ const ChooseKulturQkRow = ({ kulturId, qk, refetchTab }) => {
         mutation: gql`
           mutation deleteKulturQkChoosen($kulturId: uuid!, $qkName: String!) {
             delete_kultur_qk_choosen(
-              where: { id: { _eq: $kulturId }, qk_name: { _eq: $qkName } }
+              where: {
+                kultur_id: { _eq: $kulturId }
+                qk_name: { _eq: $qkName }
+              }
             ) {
               returning {
                 ...KulturQkChoosenFields
@@ -65,7 +68,7 @@ const ChooseKulturQkRow = ({ kulturId, qk, refetchTab }) => {
         mutation: gql`
           mutation insertKulturQkChoosen($kulturId: uuid!, $qkName: String!) {
             insert_kultur_qk_choosen(
-              objects: [{ id: $kulturId, qk_name: $qkName }]
+              objects: [{ kultur_id: $kulturId, qk_name: $qkName }]
             ) {
               returning {
                 ...KulturQkChoosenFields

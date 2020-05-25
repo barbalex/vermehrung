@@ -490,14 +490,20 @@ comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen un
 
 drop table if exists kultur_qk_choosen cascade;
 create table kultur_qk_choosen (
-  id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  id uuid primary key default uuid_generate_v1mc(),
+  kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
   unique(id, qk_name)
 );
+alter table kultur_qk_choosen rename id to kultur_id;
+alter table kultur_qk_choosen add column id uuid primary key default uuid_generate_v1mc();
 create index on kultur_qk_choosen using btree (id);
+
+create index on kultur_qk_choosen using btree (id);
+create index on kultur_qk using btree (kultur_id);
 create index on kultur_qk_choosen using btree (qk_name);
 
---insert into kultur_qk_choosen (id, qk_name)
+--insert into kultur_qk_choosen (kultur_id, qk_name)
 --select kultur.id, kultur_qk.name
 --from kultur_qk, kultur
 

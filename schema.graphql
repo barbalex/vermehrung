@@ -10136,6 +10136,7 @@ type kultur_qk_choosen {
 
   # An object relationship
   kultur: kultur!
+  kultur_id: uuid!
 
   # An object relationship
   kultur_qk: kultur_qk!
@@ -10175,6 +10176,7 @@ input kultur_qk_choosen_bool_exp {
   _or: [kultur_qk_choosen_bool_exp]
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
+  kultur_id: uuid_comparison_exp
   kultur_qk: kultur_qk_bool_exp
   qk_name: String_comparison_exp
 }
@@ -10183,12 +10185,16 @@ input kultur_qk_choosen_bool_exp {
 enum kultur_qk_choosen_constraint {
   # unique or primary key constraint
   kultur_qk_choosen_kultur_id_qk_name_key
+
+  # unique or primary key constraint
+  kultur_qk_choosen_pkey
 }
 
 # input type for inserting data into table "kultur_qk_choosen"
 input kultur_qk_choosen_insert_input {
   id: ID
   kultur: kultur_obj_rel_insert_input
+  kultur_id: uuid
   kultur_qk: kultur_qk_obj_rel_insert_input
   qk_name: String
 }
@@ -10196,24 +10202,28 @@ input kultur_qk_choosen_insert_input {
 # aggregate max on columns
 type kultur_qk_choosen_max_fields {
   id: ID
+  kultur_id: uuid
   qk_name: String
 }
 
 # order by max() on columns of table "kultur_qk_choosen"
 input kultur_qk_choosen_max_order_by {
   id: order_by
+  kultur_id: order_by
   qk_name: order_by
 }
 
 # aggregate min on columns
 type kultur_qk_choosen_min_fields {
   id: ID
+  kultur_id: uuid
   qk_name: String
 }
 
 # order by min() on columns of table "kultur_qk_choosen"
 input kultur_qk_choosen_min_order_by {
   id: order_by
+  kultur_id: order_by
   qk_name: order_by
 }
 
@@ -10243,8 +10253,14 @@ input kultur_qk_choosen_on_conflict {
 input kultur_qk_choosen_order_by {
   id: order_by
   kultur: kultur_order_by
+  kultur_id: order_by
   kultur_qk: kultur_qk_order_by
   qk_name: order_by
+}
+
+# primary key columns input for table: "kultur_qk_choosen"
+input kultur_qk_choosen_pk_columns_input {
+  id: ID!
 }
 
 # select columns of table "kultur_qk_choosen"
@@ -10253,12 +10269,16 @@ enum kultur_qk_choosen_select_column {
   id
 
   # column name
+  kultur_id
+
+  # column name
   qk_name
 }
 
 # input type for updating data in table "kultur_qk_choosen"
 input kultur_qk_choosen_set_input {
   id: ID
+  kultur_id: uuid
   qk_name: String
 }
 
@@ -10266,6 +10286,9 @@ input kultur_qk_choosen_set_input {
 enum kultur_qk_choosen_update_column {
   # column name
   id
+
+  # column name
+  kultur_id
 
   # column name
   qk_name
@@ -13182,6 +13205,9 @@ type mutation_root {
     where: kultur_qk_choosen_bool_exp!
   ): kultur_qk_choosen_mutation_response
 
+  # delete single row from the table: "kultur_qk_choosen"
+  delete_kultur_qk_choosen_by_pk(id: ID!): kultur_qk_choosen
+
   # delete data from the table: "kultur_rev"
   delete_kultur_rev(
     # filter the rows which have to be deleted
@@ -14534,6 +14560,13 @@ type mutation_root {
     # filter the rows which have to be updated
     where: kultur_qk_choosen_bool_exp!
   ): kultur_qk_choosen_mutation_response
+
+  # update single row of the table: "kultur_qk_choosen"
+  update_kultur_qk_choosen_by_pk(
+    # sets the columns of the filtered rows to the given values
+    _set: kultur_qk_choosen_set_input
+    pk_columns: kultur_qk_choosen_pk_columns_input!
+  ): kultur_qk_choosen
 
   # update data of the table: "kultur_rev"
   update_kultur_rev(
@@ -19332,6 +19365,9 @@ type query_root {
     # filter the rows returned
     where: kultur_qk_choosen_bool_exp
   ): kultur_qk_choosen_aggregate!
+
+  # fetch data from the table: "kultur_qk_choosen" using primary key columns
+  kultur_qk_choosen_by_pk(id: ID!): kultur_qk_choosen
 
   # fetch data from the table: "kultur_rev"
   kultur_rev(
@@ -24953,6 +24989,9 @@ type subscription_root {
     # filter the rows returned
     where: kultur_qk_choosen_bool_exp
   ): kultur_qk_choosen_aggregate!
+
+  # fetch data from the table: "kultur_qk_choosen" using primary key columns
+  kultur_qk_choosen_by_pk(id: ID!): kultur_qk_choosen
 
   # fetch data from the table: "kultur_rev"
   kultur_rev(

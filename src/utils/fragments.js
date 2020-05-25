@@ -282,6 +282,7 @@ export const kulturQkChoosen = gql`
   fragment KulturQkChoosenFields on kultur_qk_choosen {
     id
     __typename
+    kultur_id
     qk_name
   }
 `
