@@ -14,12 +14,10 @@ export {
 
 /**
  * herkunft_revModel
- *
  * columns and relationships of "herkunft_rev"
  */
 export const herkunft_revModel = herkunft_revModelBase.actions((self) => ({
   setDeleted() {
-    // seperate from delete() to enable setting loosing revs deleted
     const store = getParent(self, 2)
     const { addQueuedQuery, user, deleteHerkunftRev } = store
 
