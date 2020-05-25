@@ -1,7 +1,3 @@
-import gql from 'graphql-tag'
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
-
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 
 export default async ({ node, store }) => {
