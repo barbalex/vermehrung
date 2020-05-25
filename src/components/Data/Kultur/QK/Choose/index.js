@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
-import { getSnapshot } from 'mobx-state-tree'
 
 import RowComponent from './Row'
 import { StoreContext, useQuery } from '../../../../../models/reactUtils'

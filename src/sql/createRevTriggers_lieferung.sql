@@ -2,6 +2,10 @@ create or replace function lieferung_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from lieferung where id = new.lieferung_id;
+  return new;
+else
   insert into lieferung (
       id,
       sammel_lieferung_id,
@@ -90,7 +94,7 @@ begin
         )
     )
     select
-      lieferung_rev.lieferung_id,
+      lieferung_rev.lieferung_id as id,
       lieferung_rev.sammel_lieferung_id,
       lieferung_rev.art_id,
       lieferung_rev.person_id,
@@ -149,7 +153,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

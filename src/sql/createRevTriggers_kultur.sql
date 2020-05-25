@@ -2,6 +2,10 @@ create or replace function kultur_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from kultur where id = new.kultur_id;
+  return new;
+else
   insert into kultur (
       id,
       art_id,
@@ -83,7 +87,7 @@ begin
         )
     )
     select
-      kultur_rev.kultur_id,
+      kultur_rev.kultur_id as id,
       kultur_rev.art_id,
       kultur_rev.herkunft_id,
       kultur_rev.garten_id,
@@ -128,7 +132,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

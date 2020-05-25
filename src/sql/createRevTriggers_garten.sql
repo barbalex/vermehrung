@@ -2,6 +2,10 @@ create or replace function garten_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from garten where id = new.garten_id;
+  return new;
+else
   insert into garten (
       id,
       name,
@@ -83,7 +87,7 @@ begin
         )
     )
     select
-      garten_rev.garten_id,
+      garten_rev.garten_id as id,
       garten_rev.name,
       garten_rev.person_id,
       garten_rev.strasse,
@@ -128,7 +132,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

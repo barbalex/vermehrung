@@ -2,6 +2,10 @@ create or replace function teilkultur_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from teilkultur where id = new.teilkultur_id;
+  return new;
+else
   insert into teilkultur (
       id,
       kultur_id,
@@ -81,7 +85,7 @@ begin
         )
     )
     select
-      teilkultur_rev.teilkultur_id,
+      teilkultur_rev.teilkultur_id as id,
       teilkultur_rev.kultur_id,
       teilkultur_rev.name,
       teilkultur_rev.ort1,
@@ -122,7 +126,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

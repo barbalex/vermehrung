@@ -2,6 +2,10 @@ create or replace function herkunft_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from herkunft where id = new.herkunft_id;
+  return new;
+else
   insert into herkunft (
       id,
       nr,
@@ -87,7 +91,7 @@ begin
         )
     )
     select
-      herkunft_rev.herkunft_id,
+      herkunft_rev.herkunft_id as id,
       herkunft_rev.nr,
       herkunft_rev.lokalname,
       herkunft_rev.gemeinde,
@@ -130,7 +134,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

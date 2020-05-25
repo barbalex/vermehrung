@@ -2,6 +2,10 @@ create or replace function person_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from person where id = new.person_id;
+  return new;
+else
   insert into person (
       id,
       nr,
@@ -92,7 +96,7 @@ begin
         )
     )
     select
-      person_rev.person_id,
+      person_rev.person_id as id,
       person_rev.nr,
       person_rev.name,
       person_rev.adresszusatz,
@@ -155,7 +159,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 

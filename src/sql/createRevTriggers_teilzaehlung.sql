@@ -2,6 +2,10 @@ create or replace function teilzaehlung_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+if new._deleted = true then
+  delete from teilzaehlung where id = new.teilzaehlung_id;
+  return new;
+else
   insert into teilzaehlung (
       id,
       zaehlung_id,
@@ -84,7 +88,7 @@ begin
         )
     )
     select
-      teilzaehlung_rev.teilzaehlung_id,
+      teilzaehlung_rev.teilzaehlung_id as id,
       teilzaehlung_rev.zaehlung_id,
       teilzaehlung_rev.teilkultur_id,
       teilzaehlung_rev.anzahl_pflanzen,
@@ -131,7 +135,8 @@ begin
       _depth = excluded._depth,
       _conflicts = excluded._conflicts;
   return new;
-end;
+END IF;
+end
 $body$
 language plpgsql;
 
