@@ -160,28 +160,22 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     z.teilzaehlungen_anzahl = z?.teilzaehlungs_aggregate?.aggregate?.count ?? ''
     z.teilzaehlungen_anzahl_pflanzen =
       z?.teilzaehlungs_aggregate?.aggregate?.anzahl_pflanzen ?? ''
-    z.teilzaehlungen_anzahl_auspflanzbereit = get(
-      z,
-      'teilzaehlungs_aggregate.aggregate.anzahl_auspflanzbereit',
-      '',
-    )
-    z.teilzaehlungen_anzahl_mutterpflanzen = get(
-      z,
-      'teilzaehlungs_aggregate.aggregate.anzahl_mutterpflanzen',
-      '',
-    )
-    const tknodes = get(z, 'teilzaehlungs_aggregate.nodes') || []
+    z.teilzaehlungen_anzahl_auspflanzbereit =
+      z?.teilzaehlungs_aggregate?.aggregate?.anzahl_auspflanzbereit ?? ''
+    z.teilzaehlungen_anzahl_mutterpflanzen =
+      z?.teilzaehlungs_aggregate?.aggregate?.anzahl_mutterpflanzen ?? ''
+    const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
     z.teilzaehlungen_ids = tknodes
-      .filter((tk) => !!get(tk, 'id'))
-      .map((tk) => get(tk, 'id'))
+      .filter((tk) => !!tk?.id)
+      .map((tk) => tk?.id)
       .join(', ')
     z.teilzaehlungen_teilkulturen = tknodes
-      .filter((tk) => !!get(tk, 'teilkultur.name'))
-      .map((tk) => get(tk, 'teilkultur.name'))
+      .filter((tk) => !!tk?.teilkultur?.name)
+      .map((tk) => tk?.teilkultur?.name)
       .join(', ')
     z.teilzaehlungen_andere_mengen = tknodes
-      .filter((tk) => !!get(tk, 'andere_menge'))
-      .map((tk) => get(tk, 'andere_menge'))
+      .filter((tk) => !!tk?.andere_menge)
+      .map((tk) => tk?.andere_menge)
       .join(', ')
     delete z.teilzaehlungs_aggregate
     delete z.__typename
@@ -230,9 +224,9 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       message: error.message,
     })
   }
-  const teilzaehlungenArray = get(teilzaehlungResult, 'teilzaehlung') || []
+  const teilzaehlungenArray = teilzaehlungResult?.teilzaehlung ?? []
   const teilzaehlungen = teilzaehlungenArray.map((z) => {
-    z.teilkultur_name = get(z, 'teilkultur.name', '')
+    z.teilkultur_name = z?.teilkultur?.name ?? ''
     delete z.teilkultur
     delete z.__typename
     return z
@@ -345,7 +339,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       message: error.message,
     })
   }
-  const anlieferungenArray = get(anlieferungResult, 'lieferung') || []
+  const anlieferungenArray = anlieferungResult?.lieferung ?? []
   const anlieferungen = anlieferungenArray.map((z) => {
     z.art_ae_id = get(z, 'art.art_ae_art.id', '')
     z.art_ae_name = get(z, 'art.art_ae_art.name', '')
