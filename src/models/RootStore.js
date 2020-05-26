@@ -69,7 +69,7 @@ export const RootStore = RootStoreBase.props({
               callbackQuery,
               callbackQueryVariables,
             } = query
-            console.log('executing query:', name)
+            //console.log('executing query:', name)
             try {
               if (variables) {
                 yield self[name](JSON.parse(variables))
@@ -995,12 +995,6 @@ export const RootStore = RootStoreBase.props({
     },
     get artIdInActiveNodeArray() {
       const { activeNodeArray: aNaRaw } = self.tree
-      console.log('store, get artIdInActiveNodeArray', {
-        self,
-        aNaRaw,
-        selfActiveNodeArray: self.activeNodeArray,
-        selfSelf: self.self,
-      })
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Arten')) {
         const indexOfId = activeNodeArray.indexOf('Arten') + 1
