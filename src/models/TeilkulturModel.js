@@ -19,7 +19,7 @@ export {
 export const teilkulturModel = teilkulturModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertTeilkulturModel, tree } = store
+    const { addQueuedQuery, user, upsertTeilkulturModel } = store
 
     // first build the part that will be revisioned
     const depth = self._depth + 1
