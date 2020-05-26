@@ -314,6 +314,63 @@ export const RootStore = RootStoreBase.props({
       deleteGartenModel(val) {
         self.gartens.delete(val.id)
       },
+      insertGartenRev(args) {
+        const person_id = args?.person_id ?? undefined
+        const { user, addQueuedQuery, upsertGartenModel, tree } = self
+        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          garten_id: id,
+          name: undefined,
+          // pass in possibly passed person_id or undefined
+          person_id,
+          strasse: undefined,
+          plz: undefined,
+          ort: undefined,
+          geom_point: undefined,
+          aktiv: undefined,
+          bemerkungen: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_garten_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'garten_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryGarten',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertGartenModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
+      },
       deleteGartenRevModel(val) {
         self.garten_revs.delete(val.id)
       },

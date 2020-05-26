@@ -105,58 +105,9 @@ const GartenConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      garten_id: revRow.garten_id,
-      name: revRow.name,
-      person_id: revRow.person_id,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      geom_point: revRow.geom_point,
-      aktiv: revRow.aktiv,
-      bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    //console.log('Garten Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_garten_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'garten_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
+    revRow.setDeleted()
     callbackAfterVerwerfen()
-  }, [
-    addNotification,
-    callbackAfterVerwerfen,
-    revRow._depth,
-    revRow._rev,
-    revRow.aktiv,
-    revRow.bemerkungen,
-    revRow.garten_id,
-    revRow.geom_point,
-    revRow.name,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
-    store,
-    user.email,
-  ])
+  }, [callbackAfterVerwerfen, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
