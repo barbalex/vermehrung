@@ -13,13 +13,9 @@ import { FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -136,7 +132,7 @@ const Kultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertKulturModel, addQueuedQuery, online } = store
+  const { filter, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -308,73 +304,9 @@ const Kultur = ({
       if (showFilter) {
         return filter.setValue({ table: 'kultur', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        kultur_id: row.id,
-        art_id: field === 'art_id' ? value : row.art_id,
-        herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
-        garten_id: field === 'garten_id' ? value : row.garten_id,
-        zwischenlager: field === 'zwischenlager' ? value : row.zwischenlager,
-        erhaltungskultur:
-          field === 'erhaltungskultur' ? value : row.erhaltungskultur,
-        von_anzahl_individuen:
-          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        aktiv: field === 'aktiv' ? value : row.aktiv,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_kultur_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'kultur_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryKultur',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      setTimeout(() => {
-        // optimistically update store
-        upsertKulturModel(newObjectForStore)
-        if (['art_id', 'herkunft_id', 'garten_id'].includes(field)) {
-          store.tree.refetch()
-        }
-      }, 50)
+      row.edit({ field, value })
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      row,
-      showFilter,
-      store.tree,
-      upsertKulturModel,
-      user.email,
-    ],
+    [filter, row, showFilter],
   )
   const openKulturDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Kulturen`

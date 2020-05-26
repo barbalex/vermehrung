@@ -495,6 +495,75 @@ export const RootStore = RootStoreBase.props({
       deleteLieferungModel(val) {
         self.lieferungs.delete(val.id)
       },
+      insertLieferungRev(args) {
+        const sammel_lieferung_id = args?.sammel_lieferung_id ?? undefined
+        const art_id = args?.art_id ?? undefined
+        const person_id = args?.person_id ?? undefined
+        const von_sammlung_id = args?.von_sammlung_id ?? undefined
+        const von_kultur_id = args?.von_kultur_id ?? undefined
+        const nach_kultur_id = args?.nach_kultur_id ?? undefined
+
+        const { user, addQueuedQuery, upsertLieferungModel, tree } = self
+        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          lieferung_id: id,
+          sammel_lieferung_id,
+          art_id,
+          person_id,
+          von_sammlung_id,
+          von_kultur_id,
+          datum: undefined,
+          nach_kultur_id,
+          nach_ausgepflanzt: undefined,
+          von_anzahl_individuen: undefined,
+          anzahl_pflanzen: undefined,
+          anzahl_auspflanzbereit: undefined,
+          gramm_samen: undefined,
+          andere_menge: undefined,
+          geplant: undefined,
+          bemerkungen: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_lieferung_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'lieferung_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryLieferung',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertLieferungModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
+      },
       deleteLieferungRevModel(val) {
         self.lieferung_revs.delete(val.id)
       },
