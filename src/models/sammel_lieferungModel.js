@@ -99,6 +99,11 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
         (o) => o.account_id === store.user.uid,
       )
       const { sl_auto_copy_edits } = store.person_options.get(userPerson.id)
+      console.log('sammel_lieferungModel', {
+        sl_auto_copy_edits,
+        selfLieferungs: self.lieferungs,
+        newObject,
+      })
       setTimeout(() => {
         // copy to all lieferungen
         if (sl_auto_copy_edits) {
@@ -106,7 +111,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
           // even if it has value null
           updateAllLieferungen({
             sammelLieferung: newObject,
-            lieferungs: self.lieferungs,
+            lieferungs: self.lieferungs.toJSON(),
             field,
             store,
           })

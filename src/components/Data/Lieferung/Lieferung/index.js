@@ -28,6 +28,7 @@ import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import {
   lieferung as lieferungFragment,
   personOption as personOptionFragment,
+  sammelLieferung as sammelLieferungFragment,
 } from '../../../../utils/fragments'
 import Files from '../../Files'
 import Settings from './Settings'
@@ -162,6 +163,12 @@ const lieferungQuery = gql`
   ) {
     lieferung(where: { id: { _eq: $id } }) {
       ...LieferungFields
+      sammel_lieferung {
+        ...SammelLieferungFields
+        lieferungs {
+          ...LieferungFields
+        }
+      }
       art {
         id
         __typename
@@ -246,6 +253,7 @@ const lieferungQuery = gql`
     }
   }
   ${lieferungFragment}
+  ${sammelLieferungFragment}
 `
 const sammlungQuery = gql`
   query sammlungQueryForLieferung($filter: sammlung_bool_exp!) {
