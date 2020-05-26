@@ -9,13 +9,9 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
@@ -124,7 +120,7 @@ const Event = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertEventModel, addQueuedQuery, user, online } = store
+  const { filter, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -225,13 +221,13 @@ const Event = ({
     [kulturs],
   )
   const teilkulturWerte = useMemo(() => {
-    const kultur = kulturs.find((k) => k.id === row.kultur_id)
+    const kultur = kulturs.find((k) => k.id === row?.kultur_id)
     const tks = kultur?.teilkulturs ?? []
     return tks.map((t) => ({
       value: t.id,
       label: t.name || '(kein Name)',
     }))
-  }, [kulturs, row.kultur_id])
+  }, [kulturs, row?.kultur_id])
 
   const personWerte = useMemo(
     () =>
@@ -251,76 +247,16 @@ const Event = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
+      const previousValue = row?.[field]
       // only update if value has changed
       if (value === previousValue) return
 
       if (showFilter) {
         return filter.setValue({ table: 'event', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        event_id: row.id,
-        kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-        teilkultur_id: field === 'teilkultur_id' ? value : row.teilkultur_id,
-        person_id: field === 'person_id' ? value : row.person_id,
-        beschreibung:
-          field === 'beschreibung'
-            ? toStringIfPossible(value)
-            : row.beschreibung,
-        geplant: field === 'geplant' ? value : row.geplant,
-        datum: field === 'datum' ? value : row.datum,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert array to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_event_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'event_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryEvent',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      setTimeout(() => {
-        // optimistically update store
-        upsertEventModel(newObjectForStore)
-        if (['datum', 'beschreibung'].includes(field)) store.tree.refetch()
-      }, 100)
+      row.edit({ field, value })
     },
-    [
-      row,
-      showFilter,
-      id,
-      user.email,
-      addQueuedQuery,
-      filter,
-      upsertEventModel,
-      store.tree,
-    ],
+    [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`

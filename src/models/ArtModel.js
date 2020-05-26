@@ -4,7 +4,6 @@ import { v1 as uuidv1 } from 'uuid'
 
 import { artModelBase } from './artModel.base'
 import toPgArray from '../utils/toPgArray'
-import toStringIfPossible from '../utils/toStringIfPossible'
 
 /* A graphql query fragment builders for artModel */
 export {
@@ -26,6 +25,7 @@ export const artModel = artModelBase.actions((self) => ({
     const newObject = {
       art_id: self.id,
       ae_id: value,
+      changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
       _depth: depth,
@@ -34,7 +34,6 @@ export const artModel = artModelBase.actions((self) => ({
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
-    newObject.changed = new window.Date().toISOString()
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243

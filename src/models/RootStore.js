@@ -173,13 +173,8 @@ export const RootStore = RootStoreBase.props({
         self.arts.delete(val.id)
       },
       insertArtRev() {
-        const { user, addQueuedQuery, upsertArtModel } = self
-        const {
-          activeNodeArray,
-          setActiveNodeArray,
-          addOpenNodes,
-          refetch,
-        } = self.tree
+        const { user, addQueuedQuery, upsertArtModel, tree } = self
+        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
 
         const id = uuidv1()
         const _depth = 1
@@ -215,15 +210,11 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertArtModel(newObjectForStore)
         setTimeout(() => {
-          // will be unnecessary once tree is converted to mst
-          refetch()
-          let newActiveNodeArray
-          // slice if last is uuid
-          if (isUuid.v1(last(activeNodeArray))) {
-            newActiveNodeArray = [...activeNodeArray.slice(0, -1), id]
-          } else {
-            newActiveNodeArray = [...activeNodeArray, id]
-          }
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
           addOpenNodes([newActiveNodeArray])
@@ -258,6 +249,61 @@ export const RootStore = RootStoreBase.props({
       },
       deleteEventModel(val) {
         self.events.delete(val.id)
+      },
+      insertEventRev(args) {
+        const kultur_id = args?.kultur_id ?? undefined
+        const { user, addQueuedQuery, upsertEventModel, tree } = self
+        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          event_id: id,
+          // pass in possibly passed kultur_id or undefined
+          kultur_id,
+          teilkultur_id: undefined,
+          person_id: undefined,
+          beschreibung: undefined,
+          geplant: undefined,
+          datum: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_event_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'event_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryEvent',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertEventModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
       },
       deleteEventRevModel(val) {
         self.event_revs.delete(val.id)
