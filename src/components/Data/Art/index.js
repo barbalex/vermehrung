@@ -109,7 +109,7 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, tree, addQueuedQuery, upsertArt, user, online } = store
+  const { filter, tree, online } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
@@ -167,61 +167,9 @@ const Art = ({
       if (showFilter) {
         return filter.setValue({ table: 'art', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        art_id: row.id,
-        ae_id: value,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_art_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'art_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryArt',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      // optimistically update store
-      upsertArt(newObjectForStore)
-      setTimeout(() => {
-        if (['ae_id'].includes(field)) store.tree.refetch()
-      }, 50)
+      row.edit({ field, value })
     },
-    [
-      row,
-      showFilter,
-      user.email,
-      addQueuedQuery,
-      id,
-      filter,
-      upsertArt,
-      store.tree,
-    ],
+    [filter, row, showFilter],
   )
 
   const artSelectFilter = useCallback(

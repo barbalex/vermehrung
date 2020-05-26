@@ -53,7 +53,7 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
           },
         },
         undefined,
-        () => store.deleteKulturQkChoosen({ id: kulturQkChoosenId }),
+        () => store.deleteKulturQkChoosenModel({ id: kulturQkChoosenId }),
       )
     }
     store.mutateInsert_kultur_qk_choosen_one({

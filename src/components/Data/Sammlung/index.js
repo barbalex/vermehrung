@@ -198,7 +198,7 @@ const Sammlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertSammlung, addQueuedQuery, user, online } = store
+  const { filter, upsertSammlungModel, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
   const { refetch: refetchTree } = store.tree
 
@@ -338,7 +338,7 @@ const Sammlung = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertSammlung(newObjectForStore)
+        upsertSammlungModel(newObjectForStore)
         // refetch query because is not a model instance
         queryOfSammlung.refetch()
         // TODO: update tree if one of these fields were changed
@@ -355,7 +355,7 @@ const Sammlung = ({
       row,
       showFilter,
       queryOfSammlung,
-      upsertSammlung,
+      upsertSammlungModel,
       user.email,
     ],
   )

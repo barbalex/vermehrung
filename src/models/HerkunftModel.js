@@ -19,7 +19,7 @@ export {
 export const herkunftModel = herkunftModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertHerkunft, tree } = store
+    const { addQueuedQuery, user, upsertHerkunftModel, tree } = store
 
     // first build the part that will be revisioned
     const depth = self._depth + 1
@@ -70,13 +70,12 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
       }),
     })
     // optimistically update store
-    upsertHerkunft(newObjectForStore)
+    upsertHerkunftModel(newObjectForStore)
     setTimeout(() => {
       if (['nr'].includes(field)) tree.refetch()
     }, 50)
   },
   setDeleted() {
-    // seperate from delete() to enable setting loosing revs deleted
     const store = getParent(self, 2)
     const { addQueuedQuery, user } = store
 
@@ -121,10 +120,10 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
   },
   delete() {
     const store = getParent(self, 2)
-    const { tree, deleteHerkunft } = store
+    const { tree, deleteHerkunftModel } = store
 
     self.setDeleted()
-    deleteHerkunft({ id: self.id })
+    deleteHerkunftModel({ id: self.id })
     setTimeout(() => {
       tree.refetch()
     }, 50)

@@ -114,7 +114,7 @@ const Person = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, upsertPerson, addQueuedQuery, user, online } = store
+  const { filter, upsertPersonModel, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
   const { refetch: refetchTree } = store.tree
 
@@ -267,7 +267,7 @@ const Person = ({
         }),
       })
       // optimistically update store
-      upsertPerson(newObjectForStore)
+      upsertPersonModel(newObjectForStore)
       setTimeout(() => {
         // update tree if one of these fields were changed
         if (['name'].includes(field)) {
@@ -282,7 +282,7 @@ const Person = ({
       refetchTree,
       row,
       showFilter,
-      upsertPerson,
+      upsertPersonModel,
       user.email,
     ],
   )

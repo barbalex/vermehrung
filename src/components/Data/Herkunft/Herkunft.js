@@ -80,7 +80,7 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertHerkunft, addQueuedQuery, online } = store
+  const { filter, user, upsertHerkunftModel, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -190,7 +190,7 @@ const Herkunft = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertHerkunft(newObjectForStore)
+        upsertHerkunftModel(newObjectForStore)
         if (['nr'].includes(field)) store.tree.refetch()
       }, 50)
     },
@@ -201,7 +201,7 @@ const Herkunft = ({
       row,
       showFilter,
       store.tree,
-      upsertHerkunft,
+      upsertHerkunftModel,
       user.email,
     ],
   )

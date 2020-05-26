@@ -66,7 +66,7 @@ function sizeReducer(state, action) {
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
 
-  const { filter, user, addQueuedQuery, upsertPerson } = store
+  const { filter, user, addQueuedQuery, upsertPersonModel } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const {
@@ -134,7 +134,7 @@ const Personen = ({ filter: showFilter }) => {
         where: { id: { _eq: id } },
       }),
     })
-    upsertPerson(newObject)
+    upsertPersonModel(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -149,7 +149,7 @@ const Personen = ({ filter: showFilter }) => {
     addQueuedQuery,
     refetchTree,
     setActiveNodeArray,
-    upsertPerson,
+    upsertPersonModel,
     user.email,
   ])
 

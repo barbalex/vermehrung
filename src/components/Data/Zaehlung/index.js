@@ -201,7 +201,7 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertZaehlung, addQueuedQuery, user, online } = store
+  const { filter, upsertZaehlungModel, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -333,14 +333,14 @@ const Zaehlung = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertZaehlung(newObjectForStore)
+        upsertZaehlungModel(newObjectForStore)
         // refetch query because is not a model instance
         queryOfZaehlung.refetch()
       }, 50)
     },
     [
       addQueuedQuery,
-      upsertZaehlung,
+      upsertZaehlungModel,
       filter,
       id,
       row,
