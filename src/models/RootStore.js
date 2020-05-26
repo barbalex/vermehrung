@@ -579,6 +579,70 @@ export const RootStore = RootStoreBase.props({
       deletePersonModel(val) {
         self.persons.delete(val.id)
       },
+      insertPersonRev() {
+        const { user, addQueuedQuery, upsertPersonModel, tree } = self
+        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          person_id: id,
+          nr: undefined,
+          name: undefined,
+          adresszusatz: undefined,
+          strasse: undefined,
+          plz: undefined,
+          ort: undefined,
+          telefon_privat: undefined,
+          telefon_geschaeft: undefined,
+          telefon_mobile: undefined,
+          email: undefined,
+          kein_email: undefined,
+          bemerkungen: undefined,
+          account_id: undefined,
+          user_role: undefined,
+          kommerziell: undefined,
+          info: undefined,
+          aktiv: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_person_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'person_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryPerson',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertPersonModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
+      },
       deletePersonRevModel(val) {
         self.person_revs.delete(val.id)
       },
