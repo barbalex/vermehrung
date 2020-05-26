@@ -16,7 +16,7 @@ export default async ({ sammelLieferung, lieferungs, field, store }) => {
       error = true
     }
   }
-  if (!error) {
+  if (!error && lieferungs.length) {
     store.addNotification({
       message: 'Alle Lieferungen aktualisiert',
       type: 'info',
