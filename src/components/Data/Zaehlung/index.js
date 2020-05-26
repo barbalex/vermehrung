@@ -11,13 +11,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -201,7 +197,7 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertZaehlungModel, addQueuedQuery, user, online } = store
+  const { filter, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -288,66 +284,13 @@ const Zaehlung = ({
       if (showFilter) {
         return filter.setValue({ table: 'zaehlung', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        zaehlung_id: row.id,
-        kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-        datum: field === 'datum' ? value : row.datum,
-        prognose: field === 'prognose' ? value : row.prognose,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_zaehlung_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'zaehlung_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryZaehlung',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
+      row.edit({ field, value })
       setTimeout(() => {
-        // optimistically update store
-        upsertZaehlungModel(newObjectForStore)
         // refetch query because is not a model instance
         queryOfZaehlung.refetch()
       }, 50)
     },
-    [
-      addQueuedQuery,
-      upsertZaehlungModel,
-      filter,
-      id,
-      row,
-      showFilter,
-      user,
-      queryOfZaehlung,
-    ],
+    [filter, queryOfZaehlung, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`

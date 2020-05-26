@@ -987,6 +987,79 @@ export const RootStore = RootStoreBase.props({
       deleteTeilzaehlungModel(val) {
         self.teilzaehlungs.delete(val.id)
       },
+      insertTeilzaehlungRev(args) {
+        const {
+          user,
+          addQueuedQuery,
+          upsertTeilzaehlungModel,
+          tree,
+          zaehlungIdInActiveNodeArray,
+          teilkulturIdInActiveNodeArray,
+        } = self
+
+        const zaehlung_id = args?.zaehlung_id ?? zaehlungIdInActiveNodeArray
+        const teilkultur_id =
+          args?.teilkultur_id ?? teilkulturIdInActiveNodeArray
+
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+        const activeNodeArray = aNaRaw.toJSON()
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          teilzaehlung_id: id,
+          zaehlung_id,
+          teilkultur_id,
+          anzahl_pflanzen: undefined,
+          anzahl_auspflanzbereit: undefined,
+          anzahl_mutterpflanzen: undefined,
+          andere_menge: undefined,
+          auspflanzbereit_beschreibung: undefined,
+          bemerkungen: undefined,
+          prognose_von_tz: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_teilzaehlung_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'teilzaehlung_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryTeilzaehlung',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertTeilzaehlungModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
+      },
       deleteTeilzaehlungRevModel(val) {
         self.teilzaehlung_revs.delete(val.id)
       },
@@ -1001,6 +1074,71 @@ export const RootStore = RootStoreBase.props({
       },
       deleteZaehlungModel(val) {
         self.zaehlungs.delete(val.id)
+      },
+      insertZaehlungRev(args) {
+        const {
+          user,
+          addQueuedQuery,
+          upsertZaehlungModel,
+          tree,
+          kulturIdInActiveNodeArray,
+        } = self
+
+        const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
+
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+        const activeNodeArray = aNaRaw.toJSON()
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          zaehlung_id: id,
+          kultur_id,
+          datum: undefined,
+          prognose: undefined,
+          bemerkungen: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_zaehlung_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'zaehlung_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryZaehlung',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertZaehlungModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
       },
       deleteZaehlungRevModel(val) {
         self.zaehlung_revs.delete(val.id)
@@ -1164,6 +1302,18 @@ export const RootStore = RootStoreBase.props({
         activeNodeArray.includes('Kulturen')
       ) {
         const indexOfId = activeNodeArray.indexOf('Kulturen') + 1
+        if (activeNodeArray.length > indexOfId) {
+          const id = activeNodeArray?.[indexOfId]
+          if (isUuid.v1(id)) return id
+        }
+      }
+      return undefined
+    },
+    get zaehlungIdInActiveNodeArray() {
+      const { activeNodeArray: aNaRaw } = self.tree
+      const activeNodeArray = aNaRaw.toJSON()
+      if (activeNodeArray.includes('Zaehlungen')) {
+        const indexOfId = activeNodeArray.indexOf('Zaehlungen') + 1
         if (activeNodeArray.length > indexOfId) {
           const id = activeNodeArray?.[indexOfId]
           if (isUuid.v1(id)) return id
