@@ -225,8 +225,8 @@ export default async ({ node, store, client }) => {
   const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
   if (newObject && newObject.id) {
     let newActiveNodeArray
-    // slice if last is number
-    if (isNaN(last(node.url))) {
+    // slice if last is uuid
+    if (isUuid.v1(last(node.url))) {
       newActiveNodeArray = [...node.url, newObject.id]
     } else {
       newActiveNodeArray = [...node.url.slice(0, -1), newObject.id]
