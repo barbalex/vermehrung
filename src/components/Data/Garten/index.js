@@ -7,13 +7,9 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import md5 from 'blueimp-md5'
 import SplitPane from 'react-split-pane'
-import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
@@ -115,7 +111,7 @@ const Garten = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, upsertGartenModel, addQueuedQuery, user, online } = store
+  const { filter, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -204,69 +200,9 @@ const Garten = ({
       if (showFilter) {
         return filter.setValue({ table: 'garten', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        garten_id: row.id,
-        name: field === 'name' ? toStringIfPossible(value) : row.name,
-        person_id: field === 'person_id' ? value : row.person_id,
-        strasse: field === 'strasse' ? toStringIfPossible(value) : row.strasse,
-        plz: field === 'plz' ? value : row.plz,
-        ort: field === 'ort' ? toStringIfPossible(value) : row.ort,
-        geom_point: field === 'geom_point' ? value : row.geom_point,
-        aktiv: field === 'aktiv' ? value : row.aktiv,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert array to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_garten_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'garten_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryGarten',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      setTimeout(() => {
-        // optimistically update store
-        upsertGartenModel(newObjectForStore)
-        if (['name'].includes(field)) store.tree.refetch()
-      }, 100)
+      row.edit({ field, value })
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      row,
-      showFilter,
-      store.tree,
-      upsertGartenModel,
-      user.email,
-    ],
+    [filter, row, showFilter],
   )
 
   if (loading) {
