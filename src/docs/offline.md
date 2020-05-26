@@ -31,25 +31,26 @@ CouchDB und darum herum entstandene Werkzeuge erleben gerade ein revival. "offli
 CouchDB selbst ist für apflora.ch und vermehrung.ch nicht geeignet. Ihre Methodik, Konflikte zu managen, kann allerdings auf andere Datenbanken und Apps übertragen werden. Die von uns verwendete Datenbank PostgreSQL ist dafür sehr gut geeignet.<br/><br/>
 
 Vereinfacht gesagt funktioniert das so:
-- Datensätze werden in der Datenbank nie geändert. Jede Änderung wird in einer neuen Version gespeichert
+- Datensätze werden nie geändert. Jede Änderung wird in eine neue Version geschrieben
 - Datensätze speichern eine Liste ihrer "Vorfahren" (= vorgängigen Versionen)
-- Wird derselbe Datensatz parallel von mehreren (offline) Benutzern verändert, entsteht eine "Ast-Gabel" im "Ahnen-Baum". Der Stamm ist der Ur-Ahne dieses Datensatzes. So entsteht mit der Zeit ein mehr oder weniger stark verästelter Ahnen-Baum für diesen Datensatz
+- Wird derselbe Datensatz parallel von mehreren (offline) Benutzern verändert, entsteht eine "Ast-Gabel" im "Ahnen-Baum". Der Stamm ist der Ur-Ahne dieses Datensatzes. So entsteht mit der Zeit für jeden Datensatz ein mehr oder weniger stark verästelter Ahnen-Baum
 
-Nun gibt es schlaue Abfragen, welche:
+Nun gibt es schlaue Abfragen, welche immer wenn eine Version eintrifft:
 - Konflikte finden (Ast-Gabeln)
 - Automatisch einen "Sieger" wählen
-- Eine Liste aller "Sieger" bauen
+- Eine Liste aller "Sieger" bauen, mit Hinweis auf allfällige Konflikte
 
 **Das Konzept ist**:
 - Die Datenbank führt jede Tabelle doppelt:
-  - Eine Tabelle mit allen Versionen
-  - Eine Tabelle mit den Siegern
-- Immer, wenn eine Version geschrieben wird, berechnet und aktualisiert die Datenbank den neuen Sieger
+  - Eine Tabelle mit allen "Versionen"
+  - Eine Tabelle mit den "Siegern"
+- Löscht die Benutzerin einen Datensatz, wird eine neue Version geschrieben, welche die Löschung dokumentiert
+- Immer, wenn eine Version geschrieben wird, berechnet und aktualisiert die Datenbank den Sieger. Oder entfernt ihn, wenn die gewinnende Version eine Löschung ist
 - Findet die Datenbank Konflikte, listet sie sie beim Sieger auf
-- Die App muss sich somit im Normalfall nicht selber um Versionen kümmern. Sie liest "Sieger" und schreibt "Versionen"
-- Die App fragt entweder nach jeder erfolgreichen Operation nach dem neuen Sieger. Oder lässt sich gleich generell über alle Änderungen laufend informieren ("live")
+- Die App muss sich somit nicht selber um Versionen kümmern. Sie liest Sieger und schreibt Versionen
+- Die App fragt entweder nach jeder erfolgreichen Operation bei der Datenbank nach dem neuen Sieger. Oder lässt sich gleich generell über alle Änderungen laufend informieren ("live")
 - Entstehen Konflikte, zeigt die App sie der Benutzerin. Und gibt ihr die Möglichkeit:
-  - Den richtigen Sieger zu wählen
+  - Den richtigen Sieger zu bestimmen
   - Informationen aller Konflikte zu vereinigen
 
 ### 2. Warteschlange für Operationen
