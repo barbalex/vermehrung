@@ -156,66 +156,9 @@ const SammlungConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      sammlung_id: revRow.sammlung_id,
-      art_id: revRow.art_id,
-      person_id: revRow.person_id,
-      herkunft_id: revRow.herkunft_id,
-      nr: revRow.nr,
-      datum: revRow.datum,
-      von_anzahl_individuen: revRow.von_anzahl_individuen,
-      anzahl_pflanzen: revRow.anzahl_pflanzen,
-      gramm_samen: revRow.gramm_samen,
-      andere_menge: revRow.andere_menge,
-      geom_point: revRow.geom_point,
-      geplant: revRow.geplant,
-      bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    //console.log('Sammlung Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_sammlung_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
+    revRow.setDeleted()
     callbackAfterVerwerfen()
-  }, [
-    addNotification,
-    callbackAfterVerwerfen,
-    revRow._depth,
-    revRow._rev,
-    revRow.andere_menge,
-    revRow.anzahl_pflanzen,
-    revRow.art_id,
-    revRow.bemerkungen,
-    revRow.datum,
-    revRow.geom_point,
-    revRow.geplant,
-    revRow.gramm_samen,
-    revRow.herkunft_id,
-    revRow.nr,
-    revRow.person_id,
-    revRow.sammlung_id,
-    revRow.von_anzahl_individuen,
-    store,
-    user.email,
-  ])
+  }, [callbackAfterVerwerfen, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
