@@ -545,7 +545,7 @@ export const RootStore = RootStoreBase.props({
           personIdInActiveNodeArray,
           sammelLieferungIdInActiveNodeArray,
           sammlungIdInActiveNodeArray,
-          ausLieferungIdInActiveNodeArray,
+          kulturIdOfAnLieferungInActiveNodeArray,
         } = self
 
         const sammel_lieferung_id =
@@ -554,30 +554,16 @@ export const RootStore = RootStoreBase.props({
         const person_id = args?.person_id ?? personIdInActiveNodeArray
         const von_sammlung_id =
           args?.von_sammlung_id ?? sammlungIdInActiveNodeArray
-        let von_kultur_id = args?.von_kultur_id ?? undefined
-        let nach_kultur_id = args?.nach_kultur_id ?? undefined
+        const von_kultur_id =
+          args?.von_kultur_id ?? kulturIdOfAnLieferungInActiveNodeArray
+        const nach_kultur_id = args?.nach_kultur_id ?? undefined
 
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
           addOpenNodes,
         } = self.tree
-
         const activeNodeArray = aNaRaw.toJSON()
-        if (activeNodeArray.includes('Aus-Lieferungen')) {
-          const indexOfId = activeNodeArray.indexOf('Aus-Lieferungen') + 1
-          if (activeNodeArray.length > indexOfId) {
-            const id = activeNodeArray?.[indexOfId]
-            if (isUuid.v1(id)) von_kultur_id = id
-          }
-        }
-        if (activeNodeArray.includes('An-Lieferungen')) {
-          const indexOfId = activeNodeArray.indexOf('An-Lieferungen') + 1
-          if (activeNodeArray.length > indexOfId) {
-            const id = activeNodeArray?.[indexOfId]
-            if (isUuid.v1(id)) nach_kultur_id = id
-          }
-        }
 
         const id = uuidv1()
         const _depth = 1
@@ -749,36 +735,23 @@ export const RootStore = RootStoreBase.props({
           artIdInActiveNodeArray,
           personIdInActiveNodeArray,
           sammlungIdInActiveNodeArray,
+          kulturIdOfAnLieferungInActiveNodeArray,
         } = self
 
         const art_id = args?.art_id ?? artIdInActiveNodeArray
         const person_id = args?.person_id ?? personIdInActiveNodeArray
         const von_sammlung_id =
           args?.von_sammlung_id ?? sammlungIdInActiveNodeArray
-        let von_kultur_id = args?.von_kultur_id ?? undefined
-        let nach_kultur_id = args?.nach_kultur_id ?? undefined
+        const von_kultur_id =
+          args?.von_kultur_id ?? kulturIdOfAnLieferungInActiveNodeArray
+        const nach_kultur_id = args?.nach_kultur_id ?? undefined
 
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
           addOpenNodes,
         } = self.tree
-
         const activeNodeArray = aNaRaw.toJSON()
-        if (activeNodeArray.includes('Aus-Lieferungen')) {
-          const indexOfId = activeNodeArray.indexOf('Aus-Lieferungen') + 1
-          if (activeNodeArray.length > indexOfId) {
-            const id = activeNodeArray?.[indexOfId]
-            if (isUuid.v1(id)) von_kultur_id = id
-          }
-        }
-        if (activeNodeArray.includes('An-Lieferungen')) {
-          const indexOfId = activeNodeArray.indexOf('An-Lieferungen') + 1
-          if (activeNodeArray.length > indexOfId) {
-            const id = activeNodeArray?.[indexOfId]
-            if (isUuid.v1(id)) nach_kultur_id = id
-          }
-        }
 
         const id = uuidv1()
         const _depth = 1
@@ -1116,11 +1089,14 @@ export const RootStore = RootStoreBase.props({
       }
       return undefined
     },
-    get ausLieferungIdInActiveNodeArray() {
+    get kulturIdOfAnLieferungInActiveNodeArray() {
       const { activeNodeArray: aNaRaw } = self
       const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Aus-Lieferungen')) {
-        const indexOfId = activeNodeArray.indexOf('Aus-Lieferungen') + 1
+      if (
+        activeNodeArray.includes('An-Lieferungen') &&
+        activeNodeArray.includes('Kulturen')
+      ) {
+        const indexOfId = activeNodeArray.indexOf('Kulturen') + 1
         if (activeNodeArray.length > indexOfId) {
           const id = activeNodeArray?.[indexOfId]
           if (isUuid.v1(id)) return id
