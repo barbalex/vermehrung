@@ -4,7 +4,6 @@ import { v1 as uuidv1 } from 'uuid'
 
 import { sammlung_revModelBase } from './sammlung_revModel.base'
 import toPgArray from '../utils/toPgArray'
-import toStringIfPossible from '../utils/toStringIfPossible'
 
 /* A graphql query fragment builders for sammlung_revModel */
 export {

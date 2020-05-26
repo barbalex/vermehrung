@@ -271,68 +271,13 @@ const Teilkultur = ({
       if (showFilter) {
         return filter.setValue({ table: 'teilkultur', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        teilkultur_id: row.id,
-        kultur_id: field === 'kultur_id' ? value : row.kultur_id,
-        name: field === 'name' ? toStringIfPossible(value) : row.name,
-        ort1: field === 'ort1' ? toStringIfPossible(value) : row.ort1,
-        ort2: field === 'ort2' ? toStringIfPossible(value) : row.ort2,
-        ort3: field === 'ort3' ? toStringIfPossible(value) : row.ort3,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_teilkultur_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'teilkultur_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryTeilkultur',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
+      row.edit({ field, value })
       setTimeout(() => {
-        // optimistically update store
-        upsertTeilkulturModel(newObjectForStore)
         // refetch queryOfTeilkultur because is not a model instance
         queryOfTeilkultur.refetch()
       }, 50)
     },
-    [
-      addQueuedQuery,
-      upsertTeilkulturModel,
-      filter,
-      id,
-      row,
-      showFilter,
-      user,
-      queryOfTeilkultur,
-    ],
+    [filter, queryOfTeilkultur, row, showFilter],
   )
   const openTeilkulturDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Teilkulturen`

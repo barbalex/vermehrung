@@ -115,54 +115,9 @@ const TeilkulturConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      teilkultur_id: revRow.teilkultur_id,
-      kultur_id: revRow.kultur_id,
-      name: revRow.name,
-      ort1: revRow.ort1,
-      ort2: revRow.ort2,
-      ort3: revRow.ort3,
-      bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    //console.log('Teilkultur Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_teilkultur_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilkultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
+    revRow.setDeleted()
     callbackAfterVerwerfen()
-  }, [
-    addNotification,
-    callbackAfterVerwerfen,
-    revRow._depth,
-    revRow._rev,
-    revRow.bemerkungen,
-    revRow.kultur_id,
-    revRow.name,
-    revRow.ort1,
-    revRow.ort2,
-    revRow.ort3,
-    revRow.teilkultur_id,
-    store,
-    user.email,
-  ])
+  }, [callbackAfterVerwerfen, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
