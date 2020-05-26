@@ -53,11 +53,15 @@ Nun gibt es schlaue Abfragen, welche immer wenn eine Version eintrifft:
   - Den richtigen Sieger zu bestimmen
   - Informationen aller Konflikte zu vereinigen
 
+Umsetzungstand: weitgehend umgesetzt.<br/><br/>
+
 ### 2. Warteschlange für Operationen
 
 Die App verpackt alle Daten-Änderungen (Operationen) in "Päckli". Die Päckli werden online sofort verarbeitet bzw. der Datenbank übermittelt. Offline werden sie zwischen-gespeichert. Und verarbeitet, sobald die App wieder online ist.<br/><br/>
 
 Dazu muss für die lokale Datenhaltung eine neue Architektur gewählt werden. Mit anderen Worten: App-seitig ändert sich sehr viel. Im Prinzip wird die App neu aufgebaut - wobei recht viel wiederverwendet werden kann.<br/><br/>
+
+Umsetzungstand: in Umsetzung.<br/><br/>
 
 ### 3. Daten gezielt voraus laden
 
@@ -68,17 +72,25 @@ Bevor die App offline ist, muss sie die für die Feld- bzw. Garten-Arbeit gewün
 - Um Konflikte zu minimieren werden diese Daten vor einer geplanten Offline-Benutzung am besten nochmals aktualisiert.<br/>
   Oder die App aktualisiert laufend alle geladenen Daten ("live")
 
+Umsetzungstand: pendent.<br/><br/>
+
 ### 4. Authentifikation
 
 Offline ist Authentifikation nicht möglich. Die App muss mit den vorhandenen Daten auch dann weiter funktionieren, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie online ist, muss die Authentifikation erneuert werden.<br/><br/>
+
+Umsetzungstand: zu prüfen.<br/><br/>
 
 ### 5. Suche
 
 Suche ist offline nicht möglich und wird daher ausgeblendet.<br/><br/>
 
+Umsetzungstand: umgesetzt.<br/><br/>
+
 ### 6. Dateien
 
 Dateien können offline nicht verwaltet werden. Sie werden daher ausgeblendet.<br/><br/>
+
+Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 7. Schrittweise Umsetzung
 
@@ -89,13 +101,13 @@ Es gibt viel Arbeit. Sehr viel. Beispiele:
 - Das Management der Operationen (App), Konflikte und Daten (Datenbank) werden künftig mehr Ressourcen (Leistung und Speicher) beanspruchen
 - Während die neue App aufgebaut wird, muss die bisherige weiter betrieben werden (sobald der Import erfolgt ist)
 
-Das lässt sich nicht einfach nebenbei umsetzen.<br/><br/>
+Das lässt sich nicht einfach nebenbei machen.<br/><br/>
 
-Weil apflora.ch viel komplexer ist, werde ich das zuerst in vermehrung.ch schrittweise einführen. Je nach vorhandenen Kapazitäten kann es eine Weile dauern, bis das in vermehrung.ch sichtbar wird.<br/><br/>
+Weil apflora.ch viel komplexer ist, werde ich das zuerst in vermehrung.ch schrittweise einführen. Je nach vorhandenen Kapazitäten kann es eine Weile dauern, bis es umgesetzt ist. Wenn möglich noch dieses Jahr.<br/><br/>
 
 Wenn:
 - es sich in vermehrung.ch bewährt,
-- für apflora.ch gewünscht wird 
-- und der Aufwand gerechtfertigt und finanziert werden kann,
+- für apflora.ch gewünscht wird,
+- der Aufwand gerechtfertigt und finanziert werden kann,
 
 ...können wir beginnen, es für apflora.ch umsetzen.
