@@ -13,13 +13,9 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -32,14 +28,12 @@ import {
   art as artFragment,
   herkunft as herkunftFragment,
   lieferung as lieferungFragment,
-  personOption as personOptionFragment,
   sammelLieferung as sammelLieferungFragment,
   sammlung as sammlungFragment,
 } from '../../../utils/fragments'
 import exists from '../../../utils/exists'
 import Settings from './Settings'
 import Copy from './Copy'
-import updateAllLieferungen from './Copy/updateAllLieferungen'
 import Lieferschein from './Lieferschein'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
@@ -290,14 +284,6 @@ const personQuery = gql`
     }
   }
 `
-const personOptionQuery = gql`
-  query PersonOptionQueryForSammelLieferung($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
 
 const SammelLieferung = ({
   filter: showFilter,
@@ -306,17 +292,9 @@ const SammelLieferung = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const {
-    filter,
-    isPrint,
-    setIsPrint,
-    upsertSammelLieferungModel,
-    addQueuedQuery,
-    user,
-    online,
-  } = store
+  const { filter, isPrint, setIsPrint, user, online } = store
   const { isFiltered: runIsFiltered } = filter
-  const { setWidthInPercentOfScreen, refetch: refetchTree } = store.tree
+  const { setWidthInPercentOfScreen } = store.tree
 
   const isFiltered = runIsFiltered()
   const sammelLieferungFilter = queryFromTable({
@@ -365,9 +343,11 @@ const SammelLieferung = ({
     setActiveConflict(row?._rev ?? null)
   }, [queryOfSammelLieferung, row?._rev])
 
-  const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: user.uid },
-  })
+  const personOptionResult = useQuery((store) =>
+    store.queryPerson_option({
+      where: { person: { account_id: { _eq: user.uid } } },
+    }),
+  )
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits, id: person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
@@ -527,112 +507,9 @@ const SammelLieferung = ({
       if (showFilter) {
         return filter.setValue({ table: 'sammel_lieferung', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        sammel_lieferung_id: id,
-        art_id: field === 'art_id' ? value : row.art_id,
-        person_id: field === 'person_id' ? value : row.person_id,
-        von_sammlung_id:
-          field === 'von_sammlung_id' ? value : row.von_sammlung_id,
-        von_kultur_id: field === 'von_kultur_id' ? value : row.von_kultur_id,
-        datum: field === 'datum' ? value : row.datum,
-        nach_kultur_id: field === 'nach_kultur_id' ? value : row.nach_kultur_id,
-        nach_ausgepflanzt:
-          field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
-        von_anzahl_individuen:
-          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
-        anzahl_pflanzen:
-          field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
-        anzahl_auspflanzbereit:
-          field === 'anzahl_auspflanzbereit'
-            ? value
-            : row.anzahl_auspflanzbereit,
-        gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
-        andere_menge:
-          field === 'andere_menge'
-            ? toStringIfPossible(value)
-            : row.andere_menge,
-        geplant: field === 'geplant' ? value : row.geplant,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert array to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_sammel_lieferung_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'sammel_lieferung_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'querySammel_lieferung',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      // optimistically update store
-      upsertSammelLieferungModel(newObjectForStore)
-      setTimeout(async () => {
-        // refetch query because is not a model instance
-        queryOfSammelLieferung.refetch()
-        // if sl_auto_copy_edits is true
-        // copy to all lieferungen
-        if (sl_auto_copy_edits) {
-          // pass field to mark which field should be updated
-          // even if it has value null
-          await updateAllLieferungen({
-            sammelLieferung: newObject,
-            lieferungs: row.lieferungs,
-            field,
-            store,
-          })
-        }
-        // update tree if one of these fields were changed
-        if (
-          [
-            'nach_kultur_id',
-            'von_kultur_id',
-            'von_sammlung_id',
-            'art_id',
-          ].includes(field)
-        ) {
-          refetchTree()
-        }
-      }, 100)
+      row.edit({ field, value })
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      queryOfSammelLieferung,
-      refetchTree,
-      row,
-      showFilter,
-      sl_auto_copy_edits,
-      store,
-      upsertSammelLieferungModel,
-      user.email,
-    ],
+    [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`

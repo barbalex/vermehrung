@@ -149,76 +149,9 @@ const PersonConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      person_id: revRow.person_id,
-      nr: revRow.nr,
-      name: revRow.name,
-      adresszusatz: revRow.adresszusatz,
-      strasse: revRow.strasse,
-      plz: revRow.plz,
-      ort: revRow.ort,
-      telefon_privat: revRow.telefon_privat,
-      telefon_geschaeft: revRow.telefon_geschaeft,
-      telefon_mobile: revRow.telefon_mobile,
-      email: revRow.email,
-      kein_email: revRow.kein_email,
-      bemerkungen: revRow.bemerkungen,
-      account_id: revRow.account_id,
-      user_role: revRow.user_role,
-      kommerziell: revRow.kommerziell,
-      info: revRow.info,
-      aktiv: revRow.aktiv,
-      changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    //console.log('Person Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_person_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
+    revRow.setDeleted()
     callbackAfterVerwerfen()
-  }, [
-    addNotification,
-    callbackAfterVerwerfen,
-    revRow._depth,
-    revRow._rev,
-    revRow.account_id,
-    revRow.adresszusatz,
-    revRow.aktiv,
-    revRow.bemerkungen,
-    revRow.email,
-    revRow.info,
-    revRow.kein_email,
-    revRow.kommerziell,
-    revRow.name,
-    revRow.nr,
-    revRow.ort,
-    revRow.person_id,
-    revRow.plz,
-    revRow.strasse,
-    revRow.telefon_geschaeft,
-    revRow.telefon_mobile,
-    revRow.telefon_privat,
-    revRow.user_role,
-    store,
-    user.email,
-  ])
+  }, [callbackAfterVerwerfen, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

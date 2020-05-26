@@ -8,13 +8,9 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import md5 from 'blueimp-md5'
 import SplitPane from 'react-split-pane'
-import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import FormTitle from '../../shared/FormTitle'
@@ -114,9 +110,8 @@ const Person = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, upsertPersonModel, addQueuedQuery, user, online } = store
+  const { filter, user, online } = store
   const { isFiltered: runIsFiltered } = filter
-  const { refetch: refetchTree } = store.tree
 
   const isFiltered = runIsFiltered()
   const personFilter = queryFromTable({ store, table: 'person' })
@@ -196,95 +191,9 @@ const Person = ({
       if (showFilter) {
         return filter.setValue({ table: 'person', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        person_id: id,
-        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
-        name: field === 'name' ? toStringIfPossible(value) : row.name,
-        adresszusatz:
-          field === 'adresszusatz'
-            ? toStringIfPossible(value)
-            : row.adresszusatz,
-        strasse: field === 'strasse' ? toStringIfPossible(value) : row.strasse,
-        plz: field === 'plz' ? value : row.plz,
-        ort: field === 'ort' ? toStringIfPossible(value) : row.ort,
-        telefon_privat:
-          field === 'telefon_privat'
-            ? toStringIfPossible(value)
-            : row.telefon_privat,
-        telefon_geschaeft:
-          field === 'telefon_geschaeft'
-            ? toStringIfPossible(value)
-            : row.telefon_geschaeft,
-        telefon_mobile:
-          field === 'telefon_mobile'
-            ? toStringIfPossible(value)
-            : row.telefon_mobile,
-        email: field === 'email' ? toStringIfPossible(value) : row.email,
-        kein_email: field === 'kein_email' ? value : row.kein_email,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        account_id:
-          field === 'account_id' ? toStringIfPossible(value) : row.account_id,
-        user_role:
-          field === 'user_role' ? toStringIfPossible(value) : row.user_role,
-        kommerziell: field === 'kommerziell' ? value : row.kommerziell,
-        info: field === 'info' ? value : row.info,
-        aktiv: field === 'aktiv' ? value : row.aktiv,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert array to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_person_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'person_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryPerson',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      // optimistically update store
-      upsertPersonModel(newObjectForStore)
-      setTimeout(() => {
-        // update tree if one of these fields were changed
-        if (['name'].includes(field)) {
-          refetchTree()
-        }
-      }, 100)
+      row.edit({ field, value })
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      refetchTree,
-      row,
-      showFilter,
-      upsertPersonModel,
-      user.email,
-    ],
+    [filter, row, showFilter],
   )
 
   if (loadingPerson) {

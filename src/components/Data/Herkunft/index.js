@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'

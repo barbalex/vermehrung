@@ -5,8 +5,6 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import { v1 as uuidv1 } from 'uuid'
-import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
@@ -64,20 +62,9 @@ function sizeReducer(state, action) {
 
 const Events = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    addQueuedQuery,
-    upsertEventModel,
-    user,
-    insertEventRev,
-  } = store
+  const { filter, insertEventRev } = store
   const { isFiltered: runIsFiltered } = filter
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    addOpenNodes,
-    refetch: refetchTree,
-  } = store.tree
+  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const eventFilter = queryFromTable({
