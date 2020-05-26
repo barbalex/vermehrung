@@ -64,7 +64,13 @@ function sizeReducer(state, action) {
 
 const Events = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addQueuedQuery, upsertEventModel, user } = store
+  const {
+    filter,
+    addQueuedQuery,
+    upsertEventModel,
+    user,
+    insertEventRev,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -105,52 +111,8 @@ const Events = ({ filter: showFilter }) => {
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const id = uuidv1()
-    const _rev = `1-${md5(JSON.stringify({ id, _deleted: false }))}`
-    const _depth = 1
-    const _revisions = `{"${_rev}"}`
-    const newObject = {
-      id: uuidv1(),
-      event_id: id,
-      _rev,
-      _depth,
-      _revisions,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-    }
-    addQueuedQuery({
-      name: 'mutateInsert_event_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'event_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryEvent',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: id } },
-      }),
-    })
-    // optimistically update store
-    upsertEventModel(newObject)
-    setTimeout(() => {
-      // will be unnecessary once tree is converted to mst
-      refetchTree()
-      // update tree status
-      const newActiveNodeArray = [...activeNodeArray, id]
-      setActiveNodeArray(newActiveNodeArray)
-      addOpenNodes([newActiveNodeArray])
-    })
-  }, [
-    activeNodeArray,
-    addOpenNodes,
-    addQueuedQuery,
-    refetchTree,
-    setActiveNodeArray,
-    upsertEventModel,
-    user.email,
-  ])
+    insertEventRev()
+  }, [insertEventRev])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,

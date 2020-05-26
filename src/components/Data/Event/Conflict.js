@@ -131,54 +131,9 @@ const EventConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      event_id: revRow.event_id,
-      kultur_id: revRow.kultur_id,
-      teilkultur_id: revRow.teilkultur_id,
-      person_id: revRow.person_id,
-      beschreibung: revRow.beschreibung,
-      geplant: revRow.geplant,
-      datum: revRow.datum,
-      changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    //console.log('Event Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_event_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'event_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
+    revRow.setDeleted()
     callbackAfterVerwerfen()
-  }, [
-    addNotification,
-    callbackAfterVerwerfen,
-    revRow._depth,
-    revRow._rev,
-    revRow.beschreibung,
-    revRow.datum,
-    revRow.event_id,
-    revRow.geplant,
-    revRow.kultur_id,
-    revRow.person_id,
-    revRow.teilkultur_id,
-    store,
-    user.email,
-  ])
+  }, [callbackAfterVerwerfen, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
@@ -199,7 +154,6 @@ const EventConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
-    //console.log('Event Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_event_rev_one({
         object: newObject,
