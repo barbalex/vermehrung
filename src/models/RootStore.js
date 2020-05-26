@@ -401,6 +401,64 @@ export const RootStore = RootStoreBase.props({
       deleteKulturModel(val) {
         self.kulturs.delete(val.id)
       },
+      insertKulturRev(args) {
+        const art_id = args?.art_id ?? undefined
+        const herkunft_id = args?.herkunft_id ?? undefined
+        const garten_id = args?.garten_id ?? undefined
+        const { user, addQueuedQuery, upsertKulturModel, tree } = self
+        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          kultur_id: id,
+          art_id,
+          herkunft_id,
+          garten_id,
+          zwischenlager: undefined,
+          erhaltungskultur: undefined,
+          von_anzahl_individuen: undefined,
+          bemerkungen: undefined,
+          aktiv: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_kultur_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'kultur_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryKultur',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertKulturModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
+      },
       deleteKulturRevModel(val) {
         self.kultur_revs.delete(val.id)
       },
