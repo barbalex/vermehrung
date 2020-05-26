@@ -994,7 +994,13 @@ export const RootStore = RootStoreBase.props({
       return sortBy([...self.queuedQueries.values()], 'time')
     },
     get artIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
+      console.log('store, get artIdInActiveNodeArray', {
+        self,
+        aNaRaw,
+        selfActiveNodeArray: self.activeNodeArray,
+        selfSelf: self.self,
+      })
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Arten')) {
         const indexOfId = activeNodeArray.indexOf('Arten') + 1
@@ -1006,7 +1012,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get herkunftIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Herkuenfte')) {
         const indexOfId = activeNodeArray.indexOf('Herkuenfte') + 1
@@ -1018,7 +1024,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get gartenIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Gaerten')) {
         const indexOfId = activeNodeArray.indexOf('Gaerten') + 1
@@ -1030,7 +1036,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get kulturIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Kulturen')) {
         const indexOfId = activeNodeArray.indexOf('Kulturen') + 1
@@ -1042,7 +1048,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get teilkulturIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Teilkulturen')) {
         const indexOfId = activeNodeArray.indexOf('Teilkulturen') + 1
@@ -1054,7 +1060,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get personIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Personen')) {
         const indexOfId = activeNodeArray.indexOf('Personen') + 1
@@ -1066,7 +1072,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get sammelLieferungIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Sammel-Lieferungen')) {
         const indexOfId = activeNodeArray.indexOf('Sammel-Lieferungen') + 1
@@ -1078,7 +1084,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get sammlungIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (activeNodeArray.includes('Sammlungen')) {
         const indexOfId = activeNodeArray.indexOf('Sammlungen') + 1
@@ -1090,7 +1096,7 @@ export const RootStore = RootStoreBase.props({
       return undefined
     },
     get kulturIdOfAnLieferungInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self
+      const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
       if (
         activeNodeArray.includes('An-Lieferungen') &&
