@@ -251,9 +251,30 @@ export const RootStore = RootStoreBase.props({
         self.events.delete(val.id)
       },
       insertEventRev(args) {
-        const kultur_id = args?.kultur_id ?? undefined
+        let kultur_id = args?.kultur_id ?? undefined
+        let teilkultur_id = args?.teilkultur_id ?? undefined
         const { user, addQueuedQuery, upsertEventModel, tree } = self
-        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+
+        const activeNodeArray = aNaRaw.toJSON()
+        if (activeNodeArray.includes('Kulturen')) {
+          const indexOfId = activeNodeArray.indexOf('Kulturen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) kultur_id = id
+          }
+        }
+        if (activeNodeArray.includes('Teilkulturen')) {
+          const indexOfId = activeNodeArray.indexOf('Teilkulturen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) teilkultur_id = id
+          }
+        }
 
         const id = uuidv1()
         const _depth = 1
@@ -261,7 +282,7 @@ export const RootStore = RootStoreBase.props({
           event_id: id,
           // pass in possibly passed kultur_id or undefined
           kultur_id,
-          teilkultur_id: undefined,
+          teilkultur_id,
           person_id: undefined,
           beschreibung: undefined,
           geplant: undefined,
@@ -315,9 +336,22 @@ export const RootStore = RootStoreBase.props({
         self.gartens.delete(val.id)
       },
       insertGartenRev(args) {
-        const person_id = args?.person_id ?? undefined
+        let person_id = args?.person_id ?? undefined
         const { user, addQueuedQuery, upsertGartenModel, tree } = self
-        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+
+        const activeNodeArray = aNaRaw.toJSON()
+        if (activeNodeArray.includes('Personen')) {
+          const indexOfId = activeNodeArray.indexOf('Personen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) person_id = id
+          }
+        }
 
         const id = uuidv1()
         const _depth = 1
@@ -402,11 +436,38 @@ export const RootStore = RootStoreBase.props({
         self.kulturs.delete(val.id)
       },
       insertKulturRev(args) {
-        const art_id = args?.art_id ?? undefined
-        const herkunft_id = args?.herkunft_id ?? undefined
-        const garten_id = args?.garten_id ?? undefined
+        let art_id = args?.art_id ?? undefined
+        let herkunft_id = args?.herkunft_id ?? undefined
+        let garten_id = args?.garten_id ?? undefined
         const { user, addQueuedQuery, upsertKulturModel, tree } = self
-        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+
+        const activeNodeArray = aNaRaw.toJSON()
+        if (activeNodeArray.includes('Arten')) {
+          const indexOfId = activeNodeArray.indexOf('Arten') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) art_id = id
+          }
+        }
+        if (activeNodeArray.includes('Herkuenfte')) {
+          const indexOfId = activeNodeArray.indexOf('Herkuenfte') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) herkunft_id = id
+          }
+        }
+        if (activeNodeArray.includes('Gaerten')) {
+          const indexOfId = activeNodeArray.indexOf('Gaerten') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) garten_id = id
+          }
+        }
 
         const id = uuidv1()
         const _depth = 1
@@ -496,15 +557,63 @@ export const RootStore = RootStoreBase.props({
         self.lieferungs.delete(val.id)
       },
       insertLieferungRev(args) {
-        const sammel_lieferung_id = args?.sammel_lieferung_id ?? undefined
-        const art_id = args?.art_id ?? undefined
-        const person_id = args?.person_id ?? undefined
-        const von_sammlung_id = args?.von_sammlung_id ?? undefined
-        const von_kultur_id = args?.von_kultur_id ?? undefined
-        const nach_kultur_id = args?.nach_kultur_id ?? undefined
+        let sammel_lieferung_id = args?.sammel_lieferung_id ?? undefined
+        let art_id = args?.art_id ?? undefined
+        let person_id = args?.person_id ?? undefined
+        let von_sammlung_id = args?.von_sammlung_id ?? undefined
+        let von_kultur_id = args?.von_kultur_id ?? undefined
+        let nach_kultur_id = args?.nach_kultur_id ?? undefined
 
         const { user, addQueuedQuery, upsertLieferungModel, tree } = self
-        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+
+        const activeNodeArray = aNaRaw.toJSON()
+        if (activeNodeArray.includes('Sammel-Lieferungen')) {
+          const indexOfId = activeNodeArray.indexOf('Sammel-Lieferungen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) sammel_lieferung_id = id
+          }
+        }
+        if (activeNodeArray.includes('Arten')) {
+          const indexOfId = activeNodeArray.indexOf('Arten') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) art_id = id
+          }
+        }
+        if (activeNodeArray.includes('Personen')) {
+          const indexOfId = activeNodeArray.indexOf('Personen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) person_id = id
+          }
+        }
+        if (activeNodeArray.includes('Sammlungen')) {
+          const indexOfId = activeNodeArray.indexOf('Sammlungen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) von_sammlung_id = id
+          }
+        }
+        if (activeNodeArray.includes('Aus-Lieferungen')) {
+          const indexOfId = activeNodeArray.indexOf('Aus-Lieferungen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) von_kultur_id = id
+          }
+        }
+        if (activeNodeArray.includes('An-Lieferungen')) {
+          const indexOfId = activeNodeArray.indexOf('An-Lieferungen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) nach_kultur_id = id
+          }
+        }
 
         const id = uuidv1()
         const _depth = 1
@@ -668,14 +777,55 @@ export const RootStore = RootStoreBase.props({
         self.sammel_lieferungs.delete(val.id)
       },
       insertSammelLieferungRev(args) {
-        const art_id = args?.art_id ?? undefined
-        const person_id = args?.person_id ?? undefined
-        const von_sammlung_id = args?.von_sammlung_id ?? undefined
-        const von_kultur_id = args?.von_kultur_id ?? undefined
-        const nach_kultur_id = args?.nach_kultur_id ?? undefined
+        let art_id = args?.art_id ?? undefined
+        let person_id = args?.person_id ?? undefined
+        let von_sammlung_id = args?.von_sammlung_id ?? undefined
+        let von_kultur_id = args?.von_kultur_id ?? undefined
+        let nach_kultur_id = args?.nach_kultur_id ?? undefined
 
         const { user, addQueuedQuery, upsertSammelLieferungModel, tree } = self
-        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+
+        const activeNodeArray = aNaRaw.toJSON()
+        if (activeNodeArray.includes('Arten')) {
+          const indexOfId = activeNodeArray.indexOf('Arten') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) art_id = id
+          }
+        }
+        if (activeNodeArray.includes('Personen')) {
+          const indexOfId = activeNodeArray.indexOf('Personen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) person_id = id
+          }
+        }
+        if (activeNodeArray.includes('Sammlungen')) {
+          const indexOfId = activeNodeArray.indexOf('Sammlungen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) von_sammlung_id = id
+          }
+        }
+        if (activeNodeArray.includes('Aus-Lieferungen')) {
+          const indexOfId = activeNodeArray.indexOf('Aus-Lieferungen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) von_kultur_id = id
+          }
+        }
+        if (activeNodeArray.includes('An-Lieferungen')) {
+          const indexOfId = activeNodeArray.indexOf('An-Lieferungen') + 1
+          if (activeNodeArray.length > indexOfId) {
+            const id = activeNodeArray?.[indexOfId]
+            if (isUuid.v1(id)) nach_kultur_id = id
+          }
+        }
 
         const id = uuidv1()
         const _depth = 1

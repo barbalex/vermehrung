@@ -385,7 +385,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const { li_show_sl_felder, person_id } =
     get(personOptionResult.data, 'person_option[0]') || {}
 
-  const sammlungFilter = row.art_id
+  const sammlungFilter = row?.art_id
     ? { art_id: { _eq: row.art_id } }
     : { id: { _is_null: false } }
   const {
@@ -433,7 +433,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       }, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
   const showVon =
-    (!!row.art_id && !isAuslieferung) ||
+    (!!row?.art_id && !isAuslieferung) ||
     (existsSammelLieferung && ifAllNeeded(['von_sammlung_id', 'von_kultur_id']))
   const showNach =
     (herkunft && !isAnlieferung) ||
@@ -443,13 +443,13 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   // beware: art_id, herkunft_id and nach_kultur_id can be null
   let vonKulturFilter = { id: { _is_null: false } }
   // show only kulturen of art_id
-  if (row.art_id) {
+  if (row?.art_id) {
     vonKulturFilter = {
       art_id: { _eq: row.art_id },
     }
   }
   // show only kulturen with same herkunft
-  if (row.art_id && herkunft && herkunft.id) {
+  if (row?.art_id && herkunft && herkunft.id) {
     vonKulturFilter = {
       art_id: { _eq: row.art_id },
       herkunft_id: { _eq: herkunft.id },
@@ -457,13 +457,13 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }
   // shall not be delivered to same kultur it came from
   if (
-    row.art_id &&
+    row?.art_id &&
     herkunft &&
     herkunft.id &&
-    row.nach_kultur_id &&
+    row?.nach_kultur_id &&
     // ensure set value is always shown
-    row.von_kultur_id &&
-    row.von_kultur_id !== row.nach_kultur_id
+    row?.von_kultur_id &&
+    row?.von_kultur_id !== row.nach_kultur_id
   ) {
     vonKulturFilter = {
       art_id: { _eq: row.art_id },
@@ -483,13 +483,13 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   // beware: art_id, herkunft_id and von_kultur_id can be null
   let nachKulturFilter = { id: { _is_null: false } }
   // show only kulturen of art_id
-  if (row.art_id) {
+  if (row?.art_id) {
     nachKulturFilter = {
       art_id: { _eq: row.art_id },
     }
   }
   // show only kulturen with same herkunft
-  if (row.art_id && herkunft && herkunft.id) {
+  if (row?.art_id && herkunft && herkunft.id) {
     nachKulturFilter = {
       art_id: { _eq: row.art_id },
       herkunft_id: { _eq: herkunft.id },
@@ -497,12 +497,12 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }
   // shall be delivered to same kultur it came from
   if (
-    row.art_id &&
+    row?.art_id &&
     herkunft &&
     herkunft.id &&
     // ensure set value is always shown
-    row.von_kultur_id &&
-    row.von_kultur_id !== row.nach_kultur_id
+    row?.von_kultur_id &&
+    row?.von_kultur_id !== row.nach_kultur_id
   ) {
     nachKulturFilter = {
       art_id: { _eq: row.art_id },
