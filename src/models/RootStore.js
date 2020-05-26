@@ -911,6 +911,73 @@ export const RootStore = RootStoreBase.props({
       deleteTeilkulturModel(val) {
         self.teilkulturs.delete(val.id)
       },
+      insertTeilkulturRev(args) {
+        const {
+          user,
+          addQueuedQuery,
+          upsertTeilkulturModel,
+          tree,
+          kulturIdInActiveNodeArray,
+        } = self
+
+        const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
+
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+        const activeNodeArray = aNaRaw.toJSON()
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          teilkultur_id: id,
+          kultur_id,
+          name: undefined,
+          ort1: undefined,
+          ort2: undefined,
+          ort3: undefined,
+          bemerkungen: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_teilkultur_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'teilkultur_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryTeilkultur',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertTeilkulturModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
+      },
       deleteTeilkulturRevModel(val) {
         self.teilkultur_revs.delete(val.id)
       },
