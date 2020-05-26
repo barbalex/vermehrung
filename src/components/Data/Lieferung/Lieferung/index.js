@@ -13,13 +13,9 @@ import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
-import toPgArray from '../../../../utils/toPgArray'
-import toStringIfPossible from '../../../../utils/toStringIfPossible'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Date from '../../../shared/Date'
@@ -322,7 +318,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!get(sammelLieferung, 'id')
   const store = useContext(StoreContext)
 
-  const { filter, user, upsertLieferungModel, addQueuedQuery, online } = store
+  const { filter, user, online } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -590,101 +586,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       if (showFilter) {
         return filter.setValue({ table: 'lieferung', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        lieferung_id: row.id,
-        sammel_lieferung_id:
-          field === 'sammel_lieferung_id' ? value : row.sammel_lieferung_id,
-        art_id: field === 'art_id' ? value : row.art_id,
-        person_id: field === 'person_id' ? value : row.person_id,
-        von_sammlung_id:
-          field === 'von_sammlung_id' ? value : row.von_sammlung_id,
-        von_kultur_id: field === 'von_kultur_id' ? value : row.von_kultur_id,
-        datum: field === 'datum' ? value : row.datum,
-        nach_kultur_id: field === 'nach_kultur_id' ? value : row.nach_kultur_id,
-        nach_ausgepflanzt:
-          field === 'nach_ausgepflanzt' ? value : row.nach_ausgepflanzt,
-        von_anzahl_individuen:
-          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
-        anzahl_pflanzen:
-          field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
-        anzahl_auspflanzbereit:
-          field === 'anzahl_auspflanzbereit'
-            ? value
-            : row.anzahl_auspflanzbereit,
-        gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
-        andere_menge:
-          field === 'andere_menge'
-            ? toStringIfPossible(value)
-            : row.andere_menge,
-        geplant: field === 'geplant' ? value : row.geplant,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      if (field === 'art_id') {
-        newObject.von_kultur_id = null
-        newObject.von_sammlung_id = null
-        newObject.nach_kultur_id = null
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_lieferung_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'lieferung_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryLieferung',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      setTimeout(() => {
-        // optimistically update store
-        upsertLieferungModel(newObjectForStore)
-        if (
-          [
-            'nach_kultur_id',
-            'von_kultur_id',
-            'von_sammlung_id',
-            'art_id',
-          ].includes(field)
-        ) {
-          store.tree.refetch()
-        }
-      }, 50)
+      row.edit({ field, value })
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      row,
-      showFilter,
-      store.tree,
-      upsertLieferungModel,
-      user.email,
-    ],
+    [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`

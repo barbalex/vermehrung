@@ -141,58 +141,9 @@ const KulturConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(async () => {
-    const newDepth = revRow._depth + 1
-    const newObject = {
-      kultur_id: revRow.kultur_id,
-      art_id: revRow.art_id,
-      herkunft_id: revRow.herkunft_id,
-      garten_id: revRow.garten_id,
-      zwischenlager: revRow.zwischenlager,
-      erhaltungskultur: revRow.erhaltungskultur,
-      von_anzahl_individuen: revRow.geom_point,
-      bemerkungen: revRow.bemerkungen,
-      aktiv: revRow.aktiv,
-      changed_by: user.email,
-      _parent_rev: revRow._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
-    newObject.id = uuidv1()
-    newObject.changed = new window.Date().toISOString()
-    //console.log('Kultur Conflict', { row, revRow, newObject })
-    try {
-      await store.mutateInsert_kultur_rev_one({
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
+    revRow.setDeleted()
     callbackAfterVerwerfen()
-  }, [
-    addNotification,
-    callbackAfterVerwerfen,
-    revRow._depth,
-    revRow._rev,
-    revRow.aktiv,
-    revRow.art_id,
-    revRow.bemerkungen,
-    revRow.erhaltungskultur,
-    revRow.garten_id,
-    revRow.geom_point,
-    revRow.herkunft_id,
-    revRow.kultur_id,
-    revRow.zwischenlager,
-    store,
-    user.email,
-  ])
+  }, [callbackAfterVerwerfen, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing

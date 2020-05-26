@@ -3,22 +3,13 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-//import gql from 'graphql-tag'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import { v1 as uuidv1 } from 'uuid'
-import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-//import {
-//  art as artFragment,
-//  garten as gartenFragment,
-//  kultur as kulturFragment,
-//  person as personFragment,
-//} from '../../../utils/fragments'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -71,14 +62,9 @@ function sizeReducer(state, action) {
 
 const Kulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertKulturModel, addQueuedQuery, user } = store
+  const { filter, insertKulturRev } = store
   const { isFiltered: runIsFiltered } = filter
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    addOpenNodes,
-    refetch: refetchTree,
-  } = store.tree
+  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const kulturFilter = queryFromTable({ store, table: 'kultur' })
@@ -122,52 +108,8 @@ const Kulturen = ({ filter: showFilter }) => {
   const filteredNr = rowsFiltered.length
 
   const add = useCallback(() => {
-    const id = uuidv1()
-    const _rev = `1-${md5(JSON.stringify({ id, _deleted: false }))}`
-    const _depth = 1
-    const _revisions = `{"${_rev}"}`
-    const newObject = {
-      id: uuidv1(),
-      kultur_id: id,
-      _rev,
-      _depth,
-      _revisions,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-    }
-    addQueuedQuery({
-      name: 'mutateInsert_kultur_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryKultur',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: id } },
-      }),
-    })
-    // optimistically update store
-    upsertKulturModel(newObject)
-    setTimeout(() => {
-      // will be unnecessary once tree is converted to mst
-      refetchTree()
-      // update tree status
-      const newActiveNodeArray = [...activeNodeArray, id]
-      setActiveNodeArray(newActiveNodeArray)
-      addOpenNodes([newActiveNodeArray])
-    })
-  }, [
-    user.email,
-    addQueuedQuery,
-    upsertKulturModel,
-    refetchTree,
-    activeNodeArray,
-    setActiveNodeArray,
-    addOpenNodes,
-  ])
+    insertKulturRev()
+  }, [insertKulturRev])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
