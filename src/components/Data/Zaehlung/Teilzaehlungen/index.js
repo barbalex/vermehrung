@@ -37,7 +37,7 @@ const Title = styled.div`
 
 const Teilzaehlungen = ({ zaehlungResult }) => {
   const store = useContext(StoreContext)
-  const { upsertTeilzaehlung, addQueuedQuery, user } = store
+  const { upsertTeilzaehlungModel, addQueuedQuery, user } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -86,7 +86,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
       }),
     })
     // optimistically update store
-    upsertTeilzaehlung(newObject)
+    upsertTeilzaehlungModel(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -101,7 +101,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
     addQueuedQuery,
     refetchTree,
     setActiveNodeArray,
-    upsertTeilzaehlung,
+    upsertTeilzaehlungModel,
     user.email,
   ])
 

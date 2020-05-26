@@ -136,7 +136,7 @@ const Kultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertKultur, addQueuedQuery, online } = store
+  const { filter, user, upsertKulturModel, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -359,7 +359,7 @@ const Kultur = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertKultur(newObjectForStore)
+        upsertKulturModel(newObjectForStore)
         if (['art_id', 'herkunft_id', 'garten_id'].includes(field)) {
           store.tree.refetch()
         }
@@ -372,7 +372,7 @@ const Kultur = ({
       row,
       showFilter,
       store.tree,
-      upsertKultur,
+      upsertKulturModel,
       user.email,
     ],
   )

@@ -115,7 +115,7 @@ const Garten = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, upsertGarten, addQueuedQuery, user, online } = store
+  const { filter, upsertGartenModel, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -253,7 +253,7 @@ const Garten = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertGarten(newObjectForStore)
+        upsertGartenModel(newObjectForStore)
         if (['name'].includes(field)) store.tree.refetch()
       }, 100)
     },
@@ -264,7 +264,7 @@ const Garten = ({
       row,
       showFilter,
       store.tree,
-      upsertGarten,
+      upsertGartenModel,
       user.email,
     ],
   )

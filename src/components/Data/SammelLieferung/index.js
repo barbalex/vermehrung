@@ -310,7 +310,7 @@ const SammelLieferung = ({
     filter,
     isPrint,
     setIsPrint,
-    upsertSammelLieferung,
+    upsertSammelLieferungModel,
     addQueuedQuery,
     user,
     online,
@@ -591,7 +591,7 @@ const SammelLieferung = ({
         }),
       })
       // optimistically update store
-      upsertSammelLieferung(newObjectForStore)
+      upsertSammelLieferungModel(newObjectForStore)
       setTimeout(async () => {
         // refetch query because is not a model instance
         queryOfSammelLieferung.refetch()
@@ -630,7 +630,7 @@ const SammelLieferung = ({
       showFilter,
       sl_auto_copy_edits,
       store,
-      upsertSammelLieferung,
+      upsertSammelLieferungModel,
       user.email,
     ],
   )

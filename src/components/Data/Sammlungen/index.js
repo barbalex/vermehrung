@@ -64,7 +64,7 @@ function sizeReducer(state, action) {
 
 const Sammlungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertSammlung, addQueuedQuery, user } = store
+  const { filter, upsertSammlungModel, addQueuedQuery, user } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -143,7 +143,7 @@ const Sammlungen = ({ filter: showFilter }) => {
       }),
     })
     // optimistically update store
-    upsertSammlung(newObject)
+    upsertSammlungModel(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -155,7 +155,7 @@ const Sammlungen = ({ filter: showFilter }) => {
   }, [
     user.email,
     addQueuedQuery,
-    upsertSammlung,
+    upsertSammlungModel,
     refetchTree,
     activeNodeArray,
     setActiveNodeArray,

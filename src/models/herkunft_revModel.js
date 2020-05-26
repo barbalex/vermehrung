@@ -19,7 +19,7 @@ export {
 export const herkunft_revModel = herkunft_revModelBase.actions((self) => ({
   setDeleted() {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, deleteHerkunftRev } = store
+    const { addQueuedQuery, user, deleteHerkunftRevModel } = store
 
     // build new object
     const newDepth = self._depth + 1
@@ -59,6 +59,6 @@ export const herkunft_revModel = herkunft_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteHerkunftRev({ id: self.id })
+    deleteHerkunftRevModel({ id: self.id })
   },
 }))

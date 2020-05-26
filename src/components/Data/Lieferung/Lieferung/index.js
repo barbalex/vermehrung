@@ -322,7 +322,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!get(sammelLieferung, 'id')
   const store = useContext(StoreContext)
 
-  const { filter, user, upsertLieferung, addQueuedQuery, online } = store
+  const { filter, user, upsertLieferungModel, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -662,7 +662,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       })
       setTimeout(() => {
         // optimistically update store
-        upsertLieferung(newObjectForStore)
+        upsertLieferungModel(newObjectForStore)
         if (
           [
             'nach_kultur_id',
@@ -682,7 +682,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       row,
       showFilter,
       store.tree,
-      upsertLieferung,
+      upsertLieferungModel,
       user.email,
     ],
   )

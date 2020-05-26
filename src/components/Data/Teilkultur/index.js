@@ -206,7 +206,7 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertTeilkultur, addQueuedQuery, online } = store
+  const { filter, user, upsertTeilkulturModel, addQueuedQuery, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -318,14 +318,14 @@ const Teilkultur = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertTeilkultur(newObjectForStore)
+        upsertTeilkulturModel(newObjectForStore)
         // refetch queryOfTeilkultur because is not a model instance
         queryOfTeilkultur.refetch()
       }, 50)
     },
     [
       addQueuedQuery,
-      upsertTeilkultur,
+      upsertTeilkulturModel,
       filter,
       id,
       row,

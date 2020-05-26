@@ -163,205 +163,205 @@ export const RootStore = RootStoreBase.props({
       removeAllNotifications() {
         self.notifications.clear()
       },
-      upsertArt(val) {
+      upsertArtModel(val) {
         self.arts.set(val.id, val)
       },
-      deleteArt(val) {
+      deleteArtModel(val) {
         self.arts.delete(val.id)
       },
-      deleteArtRev(val) {
+      deleteArtRevModel(val) {
         self.art_revs.delete(val.id)
       },
-      upsertArtFile(val) {
+      upsertArtFileModel(val) {
         self.art_files.set(val.id, val)
       },
-      deleteArtFile(val) {
+      deleteArtFileModel(val) {
         self.art_files.delete(val.id)
       },
-      upsertArtQk(val) {
+      upsertArtQkModel(val) {
         self.art_qks.set(val.id, val)
       },
-      deleteArtQk(val) {
+      deleteArtQkModel(val) {
         self.art_qks.delete(val.id)
       },
-      upsertAvArt(val) {
+      upsertAvArtModel(val) {
         self.av_arts.set(val.id, val)
       },
-      deleteAvArt(val) {
+      deleteAvArtModel(val) {
         self.av_arts.delete(val.id)
       },
-      deleteAvArtRev(val) {
+      deleteAvArtRevModel(val) {
         self.av_art_revs.delete(val.id)
       },
-      upsertEvent(val) {
+      upsertEventModel(val) {
         self.events.set(val.id, val)
       },
-      deleteEvent(val) {
+      deleteEventModel(val) {
         self.events.delete(val.id)
       },
-      deleteEventRev(val) {
+      deleteEventRevModel(val) {
         self.event_revs.delete(val.id)
       },
-      upsertGarten(val) {
+      upsertGartenModel(val) {
         self.gartens.set(val.id, val)
       },
-      deleteGarten(val) {
+      deleteGartenModel(val) {
         self.gartens.delete(val.id)
       },
-      deleteGartenRev(val) {
+      deleteGartenRevModel(val) {
         self.garten_revs.delete(val.id)
       },
-      upsertGartenFile(val) {
+      upsertGartenFileModel(val) {
         self.garten_files.set(val.id, val)
       },
-      deleteGartenFile(val) {
+      deleteGartenFileModel(val) {
         self.garten_files.delete(val.id)
       },
-      upsertHerkunft(val) {
+      upsertHerkunftModel(val) {
         self.herkunfts.set(val.id, val)
       },
-      deleteHerkunft(val) {
+      deleteHerkunftModel(val) {
         self.herkunfts.delete(val.id)
       },
-      deleteHerkunftRev(val) {
+      deleteHerkunftRevModel(val) {
         self.herkunft_revs.delete(val.id)
       },
-      upsertHerkunftFile(val) {
+      upsertHerkunftFileModel(val) {
         self.herkunft_files.set(val.id, val)
       },
-      deleteHerkunftFile(val) {
+      deleteHerkunftFileModel(val) {
         self.herkunft_files.delete(val.id)
       },
-      upsertKultur(val) {
+      upsertKulturModel(val) {
         self.kulturs.set(val.id, val)
       },
-      deleteKultur(val) {
+      deleteKulturModel(val) {
         self.kulturs.delete(val.id)
       },
-      deleteKulturRev(val) {
+      deleteKulturRevModel(val) {
         self.kultur_revs.delete(val.id)
       },
-      upsertKulturFile(val) {
+      upsertKulturFileModel(val) {
         self.kultur_files.set(val.id, val)
       },
-      deleteKulturFile(val) {
+      deleteKulturFileModel(val) {
         self.kultur_files.delete(val.id)
       },
-      upsertKulturOption(val) {
+      upsertKulturOptionModel(val) {
         self.kultur_options.set(val.id, val)
       },
-      deleteKulturOption(val) {
+      deleteKulturOptionModel(val) {
         self.kultur_options.delete(val.id)
       },
-      deleteKulturOptionRev(val) {
+      deleteKulturOptionRevModel(val) {
         self.kultur_option_revs.delete(val.id)
       },
-      upsertKulturQk(val) {
+      upsertKulturQkModel(val) {
         self.kultur_qks.set(val.id, val)
       },
-      deleteKulturQk(val) {
+      deleteKulturQkModel(val) {
         self.kultur_qks.delete(val.id)
       },
-      upsertKulturQkChoosen(val) {
+      upsertKulturQkChoosenModel(val) {
         self.kultur_qk_choosens.set(val.id, val)
       },
-      deleteKulturQkChoosen(val) {
+      deleteKulturQkChoosenModel(val) {
         self.kultur_qk_choosens.delete(val.id)
       },
-      upsertLieferung(val) {
+      upsertLieferungModel(val) {
         self.lieferungs.set(val.id, val)
       },
-      deleteLieferung(val) {
+      deleteLieferungModel(val) {
         self.lieferungs.delete(val.id)
       },
-      deleteLieferungRev(val) {
+      deleteLieferungRevModel(val) {
         self.lieferung_revs.delete(val.id)
       },
-      upsertLieferungFile(val) {
+      upsertLieferungFileModel(val) {
         self.lieferung_files.set(val.id, val)
       },
-      deleteLieferungFile(val) {
+      deleteLieferungFileModel(val) {
         self.lieferung_files.delete(val.id)
       },
-      upsertPerson(val) {
+      upsertPersonModel(val) {
         self.persons.set(val.id, val)
       },
-      deletePerson(val) {
+      deletePersonModel(val) {
         self.persons.delete(val.id)
       },
-      deletePersonRev(val) {
+      deletePersonRevModel(val) {
         self.person_revs.delete(val.id)
       },
-      upsertPersonFile(val) {
+      upsertPersonFileModel(val) {
         self.person_files.set(val.id, val)
       },
-      deletePersonFile(val) {
+      deletePersonFileModel(val) {
         self.person_files.delete(val.id)
       },
-      upsertPersonOption(val) {
+      upsertPersonOptionModel(val) {
         self.person_options.set(val.id, val)
       },
-      deletePersonOption(val) {
+      deletePersonOptionModel(val) {
         self.person_options.delete(val.id)
       },
-      deletePersonOptionRev(val) {
+      deletePersonOptionRevModel(val) {
         self.person_option_revs.delete(val.id)
       },
-      upsertSammelLieferung(val) {
+      upsertSammelLieferungModel(val) {
         self.sammel_lieferungs.set(val.id, val)
       },
-      deleteSammelLieferung(val) {
+      deleteSammelLieferungModel(val) {
         self.sammel_lieferungs.delete(val.id)
       },
-      deleteSammelLieferungRev(val) {
+      deleteSammelLieferungRevModel(val) {
         self.sammel_lieferung_revs.delete(val.id)
       },
-      upsertSammlung(val) {
+      upsertSammlungModel(val) {
         self.sammlungs.set(val.id, val)
       },
-      deleteSammlung(val) {
+      deleteSammlungModel(val) {
         self.sammlungs.delete(val.id)
       },
-      deleteSammlungRev(val) {
+      deleteSammlungRevModel(val) {
         self.sammlung_revs.delete(val.id)
       },
-      upsertSammlungFile(val) {
+      upsertSammlungFileModel(val) {
         self.sammlung_files.set(val.id, val)
       },
-      deleteSammlungFile(val) {
+      deleteSammlungFileModel(val) {
         self.sammlung_files.delete(val.id)
       },
-      upsertTeilkultur(val) {
+      upsertTeilkulturModel(val) {
         self.teilkulturs.set(val.id, val)
       },
-      deleteTeilkultur(val) {
+      deleteTeilkulturModel(val) {
         self.teilkulturs.delete(val.id)
       },
-      deleteTeilkulturRev(val) {
+      deleteTeilkulturRevModel(val) {
         self.teilkultur_revs.delete(val.id)
       },
-      upsertTeilzaehlung(val) {
+      upsertTeilzaehlungModel(val) {
         self.teilzaehlungs.set(val.id, val)
       },
-      deleteTeilzaehlung(val) {
+      deleteTeilzaehlungModel(val) {
         self.teilzaehlungs.delete(val.id)
       },
-      deleteTeilzaehlungRev(val) {
+      deleteTeilzaehlungRevModel(val) {
         self.teilzaehlung_revs.delete(val.id)
       },
-      upsertUserRole(val) {
+      upsertUserRoleModel(val) {
         self.user_roles.set(val.id, val)
       },
-      deleteUserRole(val) {
+      deleteUserRoleModel(val) {
         self.user_roles.delete(val.id)
       },
-      upsertZaehlung(val) {
+      upsertZaehlungModel(val) {
         self.zaehlungs.set(val.id, val)
       },
-      deleteZaehlung(val) {
+      deleteZaehlungModel(val) {
         self.zaehlungs.delete(val.id)
       },
-      deleteZaehlungRev(val) {
+      deleteZaehlungRevModel(val) {
         self.zaehlung_revs.delete(val.id)
       },
       setOnline(val) {

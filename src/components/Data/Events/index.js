@@ -64,7 +64,7 @@ function sizeReducer(state, action) {
 
 const Events = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addQueuedQuery, upsertEvent, user } = store
+  const { filter, addQueuedQuery, upsertEventModel, user } = store
   const { isFiltered: runIsFiltered } = filter
   const {
     activeNodeArray,
@@ -133,7 +133,7 @@ const Events = ({ filter: showFilter }) => {
       }),
     })
     // optimistically update store
-    upsertEvent(newObject)
+    upsertEventModel(newObject)
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -148,7 +148,7 @@ const Events = ({ filter: showFilter }) => {
     addQueuedQuery,
     refetchTree,
     setActiveNodeArray,
-    upsertEvent,
+    upsertEventModel,
     user.email,
   ])
 

@@ -114,7 +114,7 @@ const Teilzaehlung = ({
   const {
     addNotification,
     user,
-    upsertTeilzaehlung,
+    upsertTeilzaehlungModel,
     addQueuedQuery,
     online,
   } = store
@@ -230,7 +230,7 @@ const Teilzaehlung = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertTeilzaehlung(newObjectForStore)
+        upsertTeilzaehlungModel(newObjectForStore)
         // refetch query because is not a model instance
         zaehlungResult.query.refetch()
         // TODO: no more necessary when mobx does its magic
@@ -250,7 +250,7 @@ const Teilzaehlung = ({
       addQueuedQuery,
       refetchTree,
       row,
-      upsertTeilzaehlung,
+      upsertTeilzaehlungModel,
       user.email,
       zaehlungResult.query,
     ],

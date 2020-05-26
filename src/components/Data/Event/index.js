@@ -124,7 +124,7 @@ const Event = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertEvent, addQueuedQuery, user, online } = store
+  const { filter, upsertEventModel, addQueuedQuery, user, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -307,7 +307,7 @@ const Event = ({
       })
       setTimeout(() => {
         // optimistically update store
-        upsertEvent(newObjectForStore)
+        upsertEventModel(newObjectForStore)
         if (['datum', 'beschreibung'].includes(field)) store.tree.refetch()
       }, 100)
     },
@@ -318,7 +318,7 @@ const Event = ({
       user.email,
       addQueuedQuery,
       filter,
-      upsertEvent,
+      upsertEventModel,
       store.tree,
     ],
   )
