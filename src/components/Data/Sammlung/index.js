@@ -11,13 +11,9 @@ import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -198,9 +194,8 @@ const Sammlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertSammlungModel, addQueuedQuery, user, online } = store
+  const { filter, online } = store
   const { isFiltered: runIsFiltered } = filter
-  const { refetch: refetchTree } = store.tree
 
   const isFiltered = runIsFiltered()
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
@@ -280,84 +275,13 @@ const Sammlung = ({
       if (showFilter) {
         return filter.setValue({ table: 'sammlung', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        sammlung_id: id,
-        art_id: field === 'art_id' ? value : row.art_id,
-        person_id: field === 'person_id' ? value : row.person_id,
-        herkunft_id: field === 'herkunft_id' ? value : row.herkunft_id,
-        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
-        geom_point: field === 'geom_point' ? value : row.geom_point,
-        datum: field === 'datum' ? value : row.datum,
-        von_anzahl_individuen:
-          field === 'von_anzahl_individuen' ? value : row.von_anzahl_individuen,
-        anzahl_pflanzen:
-          field === 'anzahl_pflanzen' ? value : row.anzahl_pflanzen,
-        gramm_samen: field === 'gramm_samen' ? value : row.gramm_samen,
-        andere_menge:
-          field === 'andere_menge'
-            ? toStringIfPossible(value)
-            : row.andere_menge,
-        geplant: field === 'geplant' ? value : row.geplant,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      // DO NOT include id in rev - or revs with same data will conflict
-      newObject.id = uuidv1()
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert array to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_sammlung_rev_one',
-        variables: JSON.stringify({
-          object: newObject,
-          on_conflict: {
-            constraint: 'sammlung_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'querySammlung',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
+      row.edit({ field, value })
       setTimeout(() => {
-        // optimistically update store
-        upsertSammlungModel(newObjectForStore)
         // refetch query because is not a model instance
         queryOfSammlung.refetch()
-        // TODO: update tree if one of these fields were changed
-        if (['herkunft_id', 'person_id', 'art_id', 'nr'].includes(field)) {
-          refetchTree()
-        }
       }, 100)
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      refetchTree,
-      row,
-      showFilter,
-      queryOfSammlung,
-      upsertSammlungModel,
-      user.email,
-    ],
+    [filter, queryOfSammlung, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`

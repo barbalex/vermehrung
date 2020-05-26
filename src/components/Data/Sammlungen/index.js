@@ -5,8 +5,6 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import { v1 as uuidv1 } from 'uuid'
-import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
@@ -64,14 +62,9 @@ function sizeReducer(state, action) {
 
 const Sammlungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, upsertSammlungModel, addQueuedQuery, user } = store
+  const { filter, insertSammlungRev } = store
   const { isFiltered: runIsFiltered } = filter
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    addOpenNodes,
-    refetch: refetchTree,
-  } = store.tree
+  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
@@ -115,52 +108,8 @@ const Sammlungen = ({ filter: showFilter }) => {
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const id = uuidv1()
-    const _rev = `1-${md5(JSON.stringify({ id, _deleted: false }))}`
-    const _depth = 1
-    const _revisions = `{"${_rev}"}`
-    const newObject = {
-      id: uuidv1(),
-      sammlung_id: id,
-      _rev,
-      _depth,
-      _revisions,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-    }
-    addQueuedQuery({
-      name: 'mutateInsert_sammlung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'querySammlung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: id } },
-      }),
-    })
-    // optimistically update store
-    upsertSammlungModel(newObject)
-    setTimeout(() => {
-      // will be unnecessary once tree is converted to mst
-      refetchTree()
-      // update tree status
-      const newActiveNodeArray = [...activeNodeArray, id]
-      setActiveNodeArray(newActiveNodeArray)
-      addOpenNodes([newActiveNodeArray])
-    })
-  }, [
-    user.email,
-    addQueuedQuery,
-    upsertSammlungModel,
-    refetchTree,
-    activeNodeArray,
-    setActiveNodeArray,
-    addOpenNodes,
-  ])
+    insertSammlungRev()
+  }, [insertSammlungRev])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
