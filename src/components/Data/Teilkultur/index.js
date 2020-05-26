@@ -11,13 +11,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
-import md5 from 'blueimp-md5'
-import { v1 as uuidv1 } from 'uuid'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
@@ -206,7 +202,7 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertTeilkulturModel, addQueuedQuery, online } = store
+  const { filter, online } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
