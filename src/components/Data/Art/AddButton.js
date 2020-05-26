@@ -9,25 +9,10 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 const ArtAddButton = () => {
   const store = useContext(StoreContext)
   const { insertArtRev } = store
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    addOpenNodes,
-    refetch,
-  } = store.tree
 
   const add = useCallback(() => {
-    const id = insertArtRev()
-    setTimeout(() => {
-      // will be unnecessary once tree is converted to mst
-      refetch()
-      // update tree status
-      const aNaPopped = activeNodeArray.slice(0, -1)
-      const newActiveNodeArray = [...aNaPopped, id]
-      setActiveNodeArray(newActiveNodeArray)
-      addOpenNodes([newActiveNodeArray])
-    })
-  }, [activeNodeArray, addOpenNodes, insertArtRev, refetch, setActiveNodeArray])
+    insertArtRev()
+  }, [insertArtRev])
 
   return (
     <ErrorBoundary>

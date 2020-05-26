@@ -4,6 +4,8 @@ import { reaction, flow } from 'mobx'
 import sortBy from 'lodash/sortBy'
 import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
+import last from 'lodash/last'
+import isUuid from 'is-uuid'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -172,6 +174,13 @@ export const RootStore = RootStoreBase.props({
       },
       insertArtRev() {
         const { user, addQueuedQuery, upsertArtModel } = self
+        const {
+          activeNodeArray,
+          setActiveNodeArray,
+          addOpenNodes,
+          refetch,
+        } = self.tree
+
         const id = uuidv1()
         const _depth = 1
         const newObject = {
@@ -205,7 +214,20 @@ export const RootStore = RootStoreBase.props({
         })
         // optimistically update store
         upsertArtModel(newObjectForStore)
-        return id
+        setTimeout(() => {
+          // will be unnecessary once tree is converted to mst
+          refetch()
+          let newActiveNodeArray
+          // slice if last is uuid
+          if (isUuid.v1(last(activeNodeArray))) {
+            newActiveNodeArray = [...activeNodeArray.slice(0, -1), id]
+          } else {
+            newActiveNodeArray = [...activeNodeArray, id]
+          }
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
       },
       deleteArtRevModel(val) {
         self.art_revs.delete(val.id)
