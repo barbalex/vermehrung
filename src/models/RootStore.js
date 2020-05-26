@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree'
 import { reaction, flow } from 'mobx'
 import sortBy from 'lodash/sortBy'
 import { v1 as uuidv1 } from 'uuid'
+import md5 from 'blueimp-md5'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -168,6 +169,43 @@ export const RootStore = RootStoreBase.props({
       },
       deleteArtModel(val) {
         self.arts.delete(val.id)
+      },
+      insertArtRev() {
+        const { user, addQueuedQuery, upsertArtModel } = self
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          art_id: id,
+          ae_id: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        addQueuedQuery({
+          name: 'mutateInsert_art_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'art_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryArt',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertArtModel(newObjectForStore)
+        return id
       },
       deleteArtRevModel(val) {
         self.art_revs.delete(val.id)

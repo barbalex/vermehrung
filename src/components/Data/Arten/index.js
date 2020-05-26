@@ -63,7 +63,7 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, addQueuedQuery, upsertArtModel, user } = store
+  const { filter, addQueuedQuery, upsertArtModel, user, insertArtRev } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const {
@@ -96,35 +96,7 @@ const Arten = ({ filter: showFilter }) => {
   const filteredNr = rows.length
 
   const add = useCallback(() => {
-    const id = uuidv1()
-    const _rev = `1-${md5(JSON.stringify({ id, _deleted: false }))}`
-    const _depth = 1
-    const _revisions = `{"${_rev}"}`
-    const newObject = {
-      id: uuidv1(),
-      art_id: id,
-      _rev,
-      _depth,
-      _revisions,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-    }
-    addQueuedQuery({
-      name: 'mutateInsert_art_rev',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'art_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryArt',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: id } },
-      }),
-    })
-    // optimistically update store
-    upsertArtModel(newObject)
+    const id = insertArtRev()
     setTimeout(() => {
       // will be unnecessary once tree is converted to mst
       refetchTree()
@@ -134,13 +106,11 @@ const Arten = ({ filter: showFilter }) => {
       addOpenNodes([newActiveNodeArray])
     })
   }, [
-    user.email,
-    addQueuedQuery,
-    upsertArtModel,
-    refetchTree,
     activeNodeArray,
-    setActiveNodeArray,
     addOpenNodes,
+    insertArtRev,
+    refetchTree,
+    setActiveNodeArray,
   ])
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
