@@ -71,7 +71,7 @@ DROP FUNCTION IF EXISTS kultur_has_qk_choosen() cascade;
 CREATE FUNCTION kultur_has_qk_choosen() RETURNS trigger AS $kultur_has_qk_choosen$
 BEGIN
   insert into kultur_qk_choosen(kultur_id, qk_name)
-  select distinct kultur.id, kultur_qk.name from kultur, kultur_qk where kultur.id = NEW.kultur_id;
+  select distinct kultur.id, kultur_qk.name from kultur, kultur_qk where kultur.id = NEW.id;
   RETURN NEW;
 END;
 $kultur_has_qk_choosen$ LANGUAGE plpgsql;
