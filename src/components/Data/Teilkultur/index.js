@@ -8,7 +8,6 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
@@ -215,12 +214,12 @@ const Teilkultur = ({
   const [errors, setErrors] = useState({})
 
   let row
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const totalNr = (data?.rowsUnfiltered ?? []).length
+  const filteredNr = (data?.rowsFiltered ?? []).length
   if (showFilter) {
     row = filter.teilkultur
   } else {
-    row = get(data, 'teilkultur[0]') || {}
+    row = data?.teilkultur?.[0] ?? {}
   }
 
   const [activeConflict, setActiveConflict] = useState(null)
@@ -239,7 +238,7 @@ const Teilkultur = ({
     loading: kulturLoading,
   } = useQuery(kulturQuery)
 
-  const { tk_bemerkungen } = get(row, 'kultur.kultur_option', {}) || {}
+  const { tk_bemerkungen } = row?.kultur?.kultur_option ?? {}
 
   useEffect(() => {
     setErrors({})
@@ -247,11 +246,11 @@ const Teilkultur = ({
 
   const kulturWerte = useMemo(
     () =>
-      get(kulturData, 'kultur', []).map((el) => ({
+      (kulturData?.kultur ?? []).map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
-    [kulturData],
+    [kulturData?.kultur],
   )
 
   const saveToDb = useCallback(
