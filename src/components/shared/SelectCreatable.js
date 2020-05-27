@@ -92,26 +92,13 @@ const SharedSelect = ({
   callback,
 }) => {
   const store = useContext(StoreContext)
-  const { refetch: refetchTree } = store.tree
 
   const onChange = useCallback((option, actionMeta) => {
     // if action is create-option
     // need to first create new dataset
     if (actionMeta.action === 'create-option') {
       // 1. create new dataset
-      const newId = onCreateNew({ name: option.label })
-      if (newId) {
-        // 2. update value using new id
-        const fakeEvent = {
-          target: {
-            name,
-            value: newId,
-          },
-        }
-        saveToDb(fakeEvent)
-      }
-      !!callback && callback()
-      refetchTree()
+      onCreateNew({ name: option.label })
       return
     }
     // now update value
@@ -122,6 +109,7 @@ const SharedSelect = ({
       },
     }
     saveToDb(fakeEvent)
+    !!callback && callback()
   }, [])
 
   // show ... whyle options are loading
