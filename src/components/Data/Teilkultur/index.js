@@ -23,6 +23,7 @@ import {
 } from '../../../utils/fragments'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
+import queryFromStore from '../../../utils/queryFromStore'
 import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
@@ -209,18 +210,26 @@ const Teilkultur = ({
   const teilkulturResult = useQuery(teilkulturQuery, {
     variables: { id, isFiltered, filter: teilkulturFilter },
   })
-  const { data, error, loading, query: queryOfTeilkultur } = teilkulturResult
+  const { error, loading, query: queryOfTeilkultur } = teilkulturResult
 
   const [errors, setErrors] = useState({})
 
-  let row
-  const totalNr = (data?.rowsUnfiltered ?? []).length
-  const filteredNr = (data?.rowsFiltered ?? []).length
-  if (showFilter) {
-    row = filter.teilkultur
-  } else {
-    row = data?.teilkultur?.[0] ?? {}
-  }
+  const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id)
+  const { data: dataTeilkulturAggregate } = useQuery((store) =>
+    store.queryTeilkultur_aggregate({ where: teilkulturFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr =
+    dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
+  const filterForStoreRows = row.kultur_id ? { kultur_id: row.kultur_id } : {}
+  console.log('Teilkultur', { filterForStoreRows, row })
+  const storeRowsFiltered = queryFromStore({
+    store,
+    table: 'teilkultur',
+    filter: filterForStoreRows,
+  })
+  const filteredNr = storeRowsFiltered.length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {

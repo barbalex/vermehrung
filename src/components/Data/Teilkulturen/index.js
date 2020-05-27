@@ -63,7 +63,7 @@ function sizeReducer(state, action) {
 
 const Teilkulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertTeilkulturRev } = store
+  const { filter, insertTeilkulturRev, kulturIdInActiveNodeArray } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
@@ -84,15 +84,25 @@ const Teilkulturen = ({ filter: showFilter }) => {
     (t) => t.id.name,
   )
 
+  const aggregateFilter = kulturIdInActiveNodeArray
+    ? { kultur_id: { _eq: kulturIdInActiveNodeArray } }
+    : {}
   const { data: dataTeilkulturAggregate } = useQuery((store) =>
-    store.queryTeilkultur_aggregate(undefined, (d) =>
+    store.queryTeilkultur_aggregate({ where: aggregateFilter }, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
   const totalNr =
     dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'teilkultur' })
+  const filterForStoreRows = kulturIdInActiveNodeArray
+    ? { kultur_id: kulturIdInActiveNodeArray }
+    : {}
+  const storeRowsFiltered = queryFromStore({
+    store,
+    table: 'teilkultur',
+    filter: filterForStoreRows,
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
