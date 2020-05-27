@@ -25,8 +25,7 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     // first build the part that will be revisioned
     const depth = self._depth + 1
     const newObject = {
-      kultur_option_id: self.id,
-      kultur_id: field === 'kultur_id' ? value : self.kultur_id,
+      kultur_id: self.id,
       z_bemerkungen: field === 'z_bemerkungen' ? value : self.z_bemerkungen,
       tz_teilkultur_id:
         field === 'tz_teilkultur_id' ? value : self.tz_teilkultur_id,
@@ -95,8 +94,7 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     // build new object
     const newDepth = self._depth + 1
     const newObject = {
-      kultur_option_id: self.id,
-      kultur_id: self.kultur_id,
+      kultur_id: self.id,
       z_bemerkungen: self.z_bemerkungen,
       tz_teilkultur_id: self.tz_teilkultur_id,
       tz_anzahl_mutterpflanzen: self.tz_anzahl_mutterpflanzen,

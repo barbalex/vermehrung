@@ -26,7 +26,6 @@ export const kultur_option_revModel = kultur_option_revModelBase.actions(
       // build new object
       const newDepth = self._depth + 1
       const newObject = {
-        kultur_option_id: self.kultur_option_id,
         kultur_id: self.kultur_id,
         z_bemerkungen: self.z_bemerkungen,
         tz_teilkultur_id: self.tz_teilkultur_id,

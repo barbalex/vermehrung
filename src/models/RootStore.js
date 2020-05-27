@@ -589,16 +589,8 @@ export const RootStore = RootStoreBase.props({
       deleteKulturOptionModel(val) {
         self.kultur_options.delete(val.id)
       },
-      insertKulturOptionRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          upsertKulturOptionModel,
-          tree,
-          kulturIdInActiveNodeArray,
-        } = self
-
-        const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
+      insertKulturOptionRev() {
+        const { user, addQueuedQuery, upsertKulturOptionModel, tree } = self
 
         const {
           activeNodeArray: aNaRaw,
@@ -610,8 +602,7 @@ export const RootStore = RootStoreBase.props({
         const id = uuidv1()
         const _depth = 1
         const newObject = {
-          kultur_option_id: id,
-          kultur_id,
+          kultur_id: id,
           z_bemerkungen: undefined,
           tz_teilkultur_id: undefined,
           tz_anzahl_mutterpflanzen: undefined,

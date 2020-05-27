@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -12,7 +11,6 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -34,50 +32,20 @@ const Info = styled.div`
 `
 
 const SettingsZaehlungen = ({ zaehlungId }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotification } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId)
-  const { z_bemerkungen } = zaehlung?.kultur?.kultur_option ?? {}
   const kulturId = zaehlung.kultur_id
+  const kulturOption = store.kultur_options.get(kulturId)
+  const { z_bemerkungen } = kulturOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_kultur_option(
-                $kulturId: uuid!
-              ) {
-                update_kultur_option(
-                  where: { id: { _eq: $kulturId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...KulturOptionFields
-                  }
-                }
-              }
-              ${kulturOptionFragment}
-            `,
-          variables: {
-            kulturId,
-          },
-          refetchQueries: ['ZaehlungQueryForZaehlung'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      kulturOption.edit({ field, value })
     },
-    [client, kulturId, addNotification],
+    [kulturOption],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
