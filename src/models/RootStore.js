@@ -1150,7 +1150,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertTeilzaehlungModel,
-          tree,
           zaehlungIdInActiveNodeArray,
           teilkulturIdInActiveNodeArray,
         } = self
@@ -1158,13 +1157,6 @@ export const RootStore = RootStoreBase.props({
         const zaehlung_id = args?.zaehlung_id ?? zaehlungIdInActiveNodeArray
         const teilkultur_id =
           args?.teilkultur_id ?? teilkulturIdInActiveNodeArray
-
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-          addOpenNodes,
-        } = self.tree
-        const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
         const _depth = 1
@@ -1210,16 +1202,6 @@ export const RootStore = RootStoreBase.props({
         })
         // optimistically update store
         upsertTeilzaehlungModel(newObjectForStore)
-        setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
-        })
       },
       deleteTeilzaehlungRevModel(val) {
         self.teilzaehlung_revs.delete(val.id)
