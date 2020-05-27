@@ -10,6 +10,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
+import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -76,11 +77,7 @@ const Events = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
     }
   }
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-  } = useQuery(
+  const { error: errorFiltered, loading: loadingFiltered } = useQuery(
     (store) =>
       store.queryEvent({
         where: eventFilter,
@@ -94,8 +91,8 @@ const Events = ({ filter: showFilter }) => {
   )
   const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
 
-  const rows = dataFiltered?.event ?? []
-  const filteredNr = rows.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'event' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertEventRev()
@@ -160,7 +157,7 @@ const Events = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -169,8 +166,8 @@ const Events = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

@@ -10,6 +10,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
+import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -66,11 +67,7 @@ const Arten = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
 
   const artFilter = queryFromTable({ store, table: 'art' })
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-  } = useQuery((store) =>
+  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryArt(
       {
         where: artFilter,
@@ -84,8 +81,8 @@ const Arten = ({ filter: showFilter }) => {
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
   const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
-  const rows = dataFiltered?.art ?? []
-  const filteredNr = rows.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'art' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertArtRev()
@@ -146,7 +143,7 @@ const Arten = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -155,8 +152,8 @@ const Arten = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

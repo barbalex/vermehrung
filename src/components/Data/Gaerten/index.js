@@ -10,6 +10,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
+import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -73,11 +74,7 @@ const Gaerten = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
     }
   }
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-  } = useQuery(
+  const { error: errorFiltered, loading: loadingFiltered } = useQuery(
     (store) =>
       store.queryGarten({
         where: gartenFilter,
@@ -94,8 +91,8 @@ const Gaerten = ({ filter: showFilter }) => {
   )
   const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
 
-  const rowsFiltered = dataFiltered?.garten ?? []
-  const filteredNr = rowsFiltered.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'garten' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertGartenRev()
@@ -160,7 +157,7 @@ const Gaerten = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rowsFiltered.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -169,8 +166,8 @@ const Gaerten = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rowsFiltered[index]}
-                last={index === rowsFiltered.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>
