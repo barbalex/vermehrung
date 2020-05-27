@@ -11,7 +11,7 @@ export default ({ store, table, filter = {} }) => {
   const filterValues = [
     ...Object.entries(storeFilter[table]),
     ...Object.entries(filter),
-  ].filter((e) => e[1] || e[1] === 0)
+  ].filter((e) => !!e?.[1])
   const values = [...store[`${table}s`].values()]
 
   if (!filterValues.length) return values

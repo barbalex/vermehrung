@@ -202,11 +202,20 @@ const Teilkultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, kulturIdInActiveNodeArray } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })
+  const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id)
+  const teilkulturFilter = queryFromTable({
+    store,
+    table: 'teilkultur',
+  })
+  if (kulturIdInActiveNodeArray && !showFilter) {
+    teilkulturFilter.kultur_id = {
+      _eq: kulturIdInActiveNodeArray,
+    }
+  }
   const teilkulturResult = useQuery(teilkulturQuery, {
     variables: { id, isFiltered, filter: teilkulturFilter },
   })
@@ -214,7 +223,6 @@ const Teilkultur = ({
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id)
   const { data: dataTeilkulturAggregate } = useQuery((store) =>
     store.queryTeilkultur_aggregate({ where: teilkulturFilter }, (d) =>
       d.aggregate((d) => d.count),
@@ -222,8 +230,9 @@ const Teilkultur = ({
   )
   const totalNr =
     dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
-  const filterForStoreRows = row.kultur_id ? { kultur_id: row.kultur_id } : {}
-  console.log('Teilkultur', { filterForStoreRows, row })
+  const filterForStoreRows =
+    !showFilter && row?.kultur_id ? { kultur_id: row.kultur_id } : {}
+  //console.log('Teilkultur', { filterForStoreRows, row })
   const storeRowsFiltered = queryFromStore({
     store,
     table: 'teilkultur',
