@@ -153,8 +153,6 @@ const Zaehlung = ({
   const filteredNr = storeRowsFiltered.length
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id)
 
-  console.log('Zaehlung, row:', row)
-
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
     setActiveConflict(null)

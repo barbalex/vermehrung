@@ -22,7 +22,7 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertKulturOptionModel } = store
 
-    console.log('store, kultur_optionModel:', { self, field, value })
+    //console.log('store, kultur_optionModel:', { self, field, value })
 
     // first build the part that will be revisioned
     const depth = self._depth + 1

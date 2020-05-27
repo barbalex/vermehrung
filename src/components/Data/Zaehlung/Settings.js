@@ -42,13 +42,12 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const { z_bemerkungen } = kulturOption
 
-  console.log('Zaehlung Settings', { kulturOption })
-
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
       kulturOption.edit({ field, value })
+      setAnchorEl(null)
     },
     [kulturOption],
   )
