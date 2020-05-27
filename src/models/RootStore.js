@@ -1111,11 +1111,6 @@ export const RootStore = RootStoreBase.props({
         // for store: convert rev to winner
         newObjectForStore.id = id
         delete newObjectForStore.teilkultur_id
-
-        console.log('store, insertTeilkulturRev', {
-          newObject,
-          newObjectForStore,
-        })
         addQueuedQuery({
           name: 'mutateInsert_teilkultur_rev_one',
           variables: JSON.stringify({

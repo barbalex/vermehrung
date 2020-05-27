@@ -65,13 +65,12 @@ const Teilkulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
   const { filter, insertTeilkulturRev, kulturIdInActiveNodeArray } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })
-  if (activeNodeArray.includes('Kulturen')) {
+  if (kulturIdInActiveNodeArray) {
     teilkulturFilter.kultur_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
+      _eq: kulturIdInActiveNodeArray,
     }
   }
 
@@ -84,11 +83,8 @@ const Teilkulturen = ({ filter: showFilter }) => {
     (t) => t.id.name,
   )
 
-  const aggregateFilter = kulturIdInActiveNodeArray
-    ? { kultur_id: { _eq: kulturIdInActiveNodeArray } }
-    : {}
   const { data: dataTeilkulturAggregate } = useQuery((store) =>
-    store.queryTeilkultur_aggregate({ where: aggregateFilter }, (d) =>
+    store.queryTeilkultur_aggregate({ where: teilkulturFilter }, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
@@ -97,7 +93,7 @@ const Teilkulturen = ({ filter: showFilter }) => {
 
   const filterForStoreRows = kulturIdInActiveNodeArray
     ? { kultur_id: kulturIdInActiveNodeArray }
-    : {}
+    : undefined
   const storeRowsFiltered = queryFromStore({
     store,
     table: 'teilkultur',
