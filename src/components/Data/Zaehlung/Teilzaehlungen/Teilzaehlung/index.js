@@ -103,7 +103,6 @@ const Teilzaehlung = ({
   teilkulturenLoading,
   refetchTeilkulturen,
   index,
-  zaehlungResult,
 }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
@@ -121,8 +120,8 @@ const Teilzaehlung = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const { data, query: queryOfZaehlung } = zaehlungResult
-  const zaehlung = get(data, 'zaehlung', [{}])[0]
+  //const zaehlung = get(data, 'zaehlung', [{}])[0]
+  const zaehlung = store.zaehlungs.get(id)
   const {
     tk,
     tz_teilkultur_id,
@@ -135,12 +134,10 @@ const Teilzaehlung = ({
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
     setActiveConflict(null)
-    queryOfZaehlung.refetch()
-  }, [queryOfZaehlung])
+  }, [])
   const callbackAfterUebernehmen = useCallback(() => {
-    queryOfZaehlung.refetch()
     setActiveConflict(row?._rev ?? null)
-  }, [queryOfZaehlung, row?._rev])
+  }, [row?._rev])
 
   const [errors, setErrors] = useState({})
   useEffect(() => {
@@ -158,13 +155,8 @@ const Teilzaehlung = ({
       if (value === previousValue) return
 
       row.edit({ field, value })
-
-      setTimeout(() => {
-        // refetch query because is not a model instance
-        zaehlungResult.query.refetch()
-      }, 50)
     },
-    [row, zaehlungResult.query],
+    [row],
   )
   const onClickDelete = useCallback(async () => {
     try {

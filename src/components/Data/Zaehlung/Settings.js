@@ -7,7 +7,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
+import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import get from 'lodash/get'
 import styled from 'styled-components'
@@ -34,13 +34,12 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ zaehlungResult }) => {
+const SettingsZaehlungen = ({ zaehlungId }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { addNotification } = store
 
-  const { data, error, loading } = zaehlungResult
-  const zaehlung = get(data, 'zaehlung', [{}])[0]
+  const zaehlung = store.zaehlungs.get(zaehlungId)
   const { z_bemerkungen } = get(zaehlung, 'kultur.kultur_option') || {}
   const kulturId = zaehlung.kultur_id
 
@@ -81,11 +80,6 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
     },
     [client, kulturId, addNotification],
   )
-  const onClickFrown = useCallback(() => {
-    addNotification({
-      message: error.message,
-    })
-  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`
@@ -104,19 +98,6 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
     [],
   )
 
-  if (error) {
-    return (
-      <IconButton
-        aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title={error.message}
-        onClick={onClickFrown}
-      >
-        <FaFrown />
-      </IconButton>
-    )
-  }
   return (
     <ErrorBoundary>
       <IconButton
@@ -128,7 +109,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
       >
         <FaCog />
       </IconButton>
-      {!loading && (
+      {
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -168,7 +149,7 @@ const SettingsZaehlungen = ({ zaehlungResult }) => {
             Die Wahl gilt (nur) für diese Kultur.
           </Info>
         </Menu>
-      )}
+      }
     </ErrorBoundary>
   )
 }

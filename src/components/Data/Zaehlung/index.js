@@ -26,6 +26,7 @@ import {
 } from '../../../utils/fragments'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
+import queryFromStore from '../../../utils/queryFromStore'
 import Teilzaehlungen from './Teilzaehlungen'
 import Settings from './Settings'
 import AddButton from './AddButton'
@@ -147,50 +148,6 @@ const kulturQuery = gql`
   }
   ${kulturOptionFragment}
 `
-const zaehlungQuery = gql`
-  query ZaehlungQueryForZaehlung(
-    $id: uuid!
-    $isFiltered: Boolean!
-    $filter: zaehlung_bool_exp!
-  ) {
-    zaehlung(where: { id: { _eq: $id } }) {
-      ...ZaehlungFields
-      kultur {
-        id
-        __typename
-        art_id
-        kultur_option {
-          ...KulturOptionFields
-        }
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-          }
-        }
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-      }
-    }
-    rowsFiltered: zaehlung(where: $filter) @include(if: $isFiltered) {
-      id
-      __typename
-    }
-  }
-  ${zaehlungFragment}
-  ${kulturOptionFragment}
-`
 
 const Zaehlung = ({
   filter: showFilter,
@@ -201,14 +158,21 @@ const Zaehlung = ({
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
-  /*const zaehlungResult = useQuery(zaehlungQuery, {
-    variables: { id, isFiltered, filter: zaehlungFilter },
-  })*/
-  const zaehlungResult = useQuery(zaehlungQuery, {
-    variables: { id, isFiltered, filter: zaehlungFilter },
-  })
-  const { data, error, loading, query: queryOfZaehlung } = zaehlungResult
+  const { error, loading, query: queryOfZaehlung } = useQuery((store) =>
+    store.queryZaehlung(
+      {
+        where: { id: { _eq: id } },
+      },
+      (z) =>
+        z.id.kultur_id.kultur(
+          (k) =>
+            k.id.art_id
+              .art((a) => a.id.art_ae_art((ae) => ae.id.name))
+              .garten((g) => g.id.name.person((p) => p.id.name)).kultur_option,
+        ).datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev
+          ._revisions._depth._conflicts,
+    ),
+  )
 
   const [errors, setErrors] = useState({})
 
@@ -222,7 +186,8 @@ const Zaehlung = ({
     'zaehlung_aggregate.aggregate.count',
     0,
   )
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const storeRowsFiltered = queryFromStore({ store, table: 'zaehlung' })
+  const filteredNr = storeRowsFiltered.length
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id)
 
   const [activeConflict, setActiveConflict] = useState(null)
@@ -285,12 +250,8 @@ const Zaehlung = ({
         return filter.setValue({ table: 'zaehlung', key: field, value })
       }
       row.edit({ field, value })
-      setTimeout(() => {
-        // refetch query because is not a model instance
-        queryOfZaehlung.refetch()
-      }, 50)
     },
-    [filter, queryOfZaehlung, row, showFilter],
+    [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
@@ -354,10 +315,7 @@ const Zaehlung = ({
                 <AddButton />
                 <DelteButton row={row} />
                 {row.kultur_id && (
-                  <Settings
-                    kulturId={row.kultur_id}
-                    zaehlungResult={zaehlungResult}
-                  />
+                  <Settings kulturId={row.kultur_id} zaehlungId={id} />
                 )}
                 <IconButton
                   aria-label="Anleitung öffnen"
@@ -444,9 +402,7 @@ const Zaehlung = ({
                       setActiveConflict={setActiveConflict}
                     />
                   )}
-                {!showFilter && (
-                  <Teilzaehlungen zaehlungResult={zaehlungResult} />
-                )}
+                {!showFilter && <Teilzaehlungen zaehlungId={id} />}
               </FieldsContainer>
               <>
                 {online && !!activeConflict && (

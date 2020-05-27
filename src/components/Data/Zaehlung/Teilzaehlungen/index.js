@@ -33,19 +33,19 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const Teilzaehlungen = ({ zaehlungResult }) => {
+const Teilzaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
   const { insertTeilzaehlungRev } = store
 
-  const zaehlung = zaehlungResult?.data?.zaehlung?.[0] ?? {}
+  const zaehlung = store.zaehlungs.get(zaehlungId)
 
-  const { data, error, loading } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.queryTeilzaehlung({
-      where: { zaehlung_id: { _eq: zaehlung.id } },
+      where: { zaehlung_id: { _eq: zaehlungId } },
       order_by: { teilkultur: { name: 'asc_nulls_first' } },
     }),
   )
-  const rows = data?.teilzaehlung ?? []
+  const storeRows = [...store.teilzaehlungs.values()]
 
   const { tk } = zaehlung?.kultur?.kultur_option ?? {}
 
@@ -53,7 +53,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
     insertTeilzaehlungRev()
   }, [insertTeilzaehlungRev])
 
-  const showNew = rows.length === 0 || tk
+  const showNew = storeRows.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
 
   if (loading) {
@@ -72,10 +72,7 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
           <Title>{title}</Title>
           <div>
             {zaehlung.kultur_id && (
-              <Settings
-                kulturId={zaehlung.kultur_id}
-                zaehlungResult={zaehlungResult}
-              />
+              <Settings kulturId={zaehlung.kultur_id} zaehlungId={zaehlungId} />
             )}
             {showNew && (
               <IconButton
@@ -89,8 +86,8 @@ const Teilzaehlungen = ({ zaehlungResult }) => {
           </div>
         </TitleRow>
         <TeilzaehlungenRows
-          rows={rows}
-          zaehlungResult={zaehlungResult}
+          rows={storeRows}
+          zaehlungId={zaehlungId}
           kulturId={zaehlung.kultur_id}
         />
       </Container>
