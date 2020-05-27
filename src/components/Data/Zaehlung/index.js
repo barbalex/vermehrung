@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -19,7 +18,6 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import Date from '../../shared/Date'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import queryFromStore from '../../../utils/queryFromStore'
 import Teilzaehlungen from './Teilzaehlungen'
@@ -117,34 +115,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const kulturQuery = gql`
-  query kulturQueryForZaehlung($filter: kultur_bool_exp!) {
-    kultur(
-      where: $filter
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { garten: { person: { ort: asc_nulls_first } } }
-      ]
-    ) {
-      id
-      __typename
-      art_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-  }
-  ${kulturOptionFragment}
-`
-
 const Zaehlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -201,11 +171,18 @@ const Zaehlung = ({
     data: kulturData,
     error: kulturError,
     loading: kulturLoading,
-  } = useQuery(kulturQuery, {
-    variables: {
-      filter: kulturFilter,
-    },
-  })
+  } = useQuery((store) =>
+    store.queryKultur(
+      {
+        where: kulturFilter,
+        order_by: [
+          { garten: { person: { name: 'asc_nulls_first' } } },
+          { garten: { person: { ort: 'asc_nulls_first' } } },
+        ],
+      },
+      (k) => k.id.art_id.garten((g) => g.id.name.person((p) => p.id.name.ort)),
+    ),
+  )
 
   const { z_bemerkungen } = row?.kultur?.kultur_option ?? {}
 
