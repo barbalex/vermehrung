@@ -22,6 +22,8 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertKulturOptionModel } = store
 
+    console.log('store, kultur_optionModel:', { self, field, value })
+
     // first build the part that will be revisioned
     const depth = self._depth + 1
     const newObject = {
@@ -68,8 +70,8 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
       ? [rev, ...self._revisions]
       : [rev]
     // for store: convert herkuft_rev to kultur_option
-    newObjectForStore.id = newObjectForStore.kultur_option_id
-    delete newObjectForStore.kultur_option_id
+    newObjectForStore.id = self.id
+    delete newObjectForStore.kultur_id
     addQueuedQuery({
       name: 'mutateInsert_kultur_option_rev_one',
       variables: JSON.stringify({

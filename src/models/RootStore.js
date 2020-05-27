@@ -628,8 +628,8 @@ export const RootStore = RootStoreBase.props({
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
         // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.kultur_option_id
-        delete newObjectForStore.kultur_option_id
+        newObjectForStore.id = id
+        delete newObjectForStore.kultur_id
         addQueuedQuery({
           name: 'mutateInsert_kultur_option_rev_one',
           variables: JSON.stringify({

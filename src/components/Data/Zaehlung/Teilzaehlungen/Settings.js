@@ -1,18 +1,15 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog } from 'react-icons/fa'
+import { FaCog, FaFrown } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../models/reactUtils'
-import { kulturOption as kulturOptionFragment } from '../../../../utils/fragments'
+import { StoreContext, useQuery } from '../../../../models/reactUtils'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -33,56 +30,29 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTeilzaehlungen = ({ kulturId, zaehlungId }) => {
-  const client = useApolloClient()
+const SettingsTeilzaehlungen = ({ kulturId }) => {
   const store = useContext(StoreContext)
   const { addNotification } = store
 
-  const zaehlung = store.zaehlungs.get(zaehlungId)
+  const { error, loading } = useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
+  )
+  const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const {
     tz_teilkultur_id,
     tz_anzahl_mutterpflanzen,
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = zaehlung?.kultur?.kultur_option ?? {}
+  } = kulturOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_kultur_option(
-                $kulturId: uuid!
-              ) {
-                update_kultur_option(
-                  where: { id: { _eq: $kulturId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...KulturOptionFields
-                  }
-                }
-              }
-              ${kulturOptionFragment}
-            `,
-          variables: {
-            kulturId,
-          },
-          refetchQueries: ['ZaehlungQueryForZaehlung'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const value = event.target.value === 'false'
+      kulturOption.edit({ field, value })
     },
-    [client, kulturId, addNotification],
+    [kulturOption],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
@@ -94,6 +64,11 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungId }) => {
       window.open(url)
     }
   }, [])
+  const onClickFrown = useCallback(() => {
+    addNotification({
+      message: error.message,
+    })
+  }, [addNotification, error])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
@@ -101,6 +76,20 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungId }) => {
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
+
+  if (error) {
+    return (
+      <IconButton
+        aria-label="Felder wählen"
+        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-haspopup="true"
+        title={error.message}
+        onClick={onClickFrown}
+      >
+        <FaFrown />
+      </IconButton>
+    )
+  }
 
   return (
     <ErrorBoundary>
@@ -113,7 +102,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungId }) => {
       >
         <FaCog />
       </IconButton>
-      {
+      {!loading && (
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -215,7 +204,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungId }) => {
             Die Wahl gilt (nur) für diese Kultur.
           </Info>
         </Menu>
-      }
+      )}
     </ErrorBoundary>
   )
 }

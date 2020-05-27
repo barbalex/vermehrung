@@ -130,11 +130,11 @@ const Zaehlung = ({
         where: { id: { _eq: id } },
       },
       (z) =>
-        z.id.kultur_id.kultur(
-          (k) =>
-            k.id.art_id
-              .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-              .garten((g) => g.id.name.person((p) => p.id.name)).kultur_option,
+        z.id.kultur_id.kultur((k) =>
+          k.id
+            .kultur_option((o) => o.id.z_bemerkungen)
+            .art((a) => a.id.art_ae_art((ae) => ae.id.name))
+            .garten((g) => g.id.name.person((p) => p.id.name)),
         ).datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev
           ._revisions._depth._conflicts,
     ),
@@ -152,6 +152,8 @@ const Zaehlung = ({
   const storeRowsFiltered = queryFromStore({ store, table: 'zaehlung' })
   const filteredNr = storeRowsFiltered.length
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id)
+
+  console.log('Zaehlung, row:', row)
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
