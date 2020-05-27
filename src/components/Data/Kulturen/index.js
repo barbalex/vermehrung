@@ -79,11 +79,7 @@ const Kulturen = ({ filter: showFilter }) => {
       _eq: activeNodeArray[activeNodeArray.indexOf('Arten') + 1],
     }
   }
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-  } = useQuery((store) =>
+  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryKultur(
       {
         where: kulturFilter,
@@ -105,8 +101,8 @@ const Kulturen = ({ filter: showFilter }) => {
   )
   const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
 
-  const rowsFiltered = dataFiltered?.kultur ?? []
-  const filteredNr = rowsFiltered.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'kultur' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertKulturRev()
@@ -171,7 +167,7 @@ const Kulturen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rowsFiltered.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -180,8 +176,8 @@ const Kulturen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rowsFiltered[index]}
-                last={index === rowsFiltered.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

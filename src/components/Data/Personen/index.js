@@ -70,11 +70,7 @@ const Personen = ({ filter: showFilter }) => {
   const isFiltered = runIsFiltered()
 
   const personFilter = queryFromTable({ store, table: 'person' })
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-  } = useQuery((store) =>
+  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryPerson({
       where: personFilter,
       order_by: { name: 'asc_nulls_first' },
@@ -86,8 +82,8 @@ const Personen = ({ filter: showFilter }) => {
   )
   const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
 
-  const rowsFiltered = get(dataFiltered, 'person', [])
-  const filteredNr = rowsFiltered.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'person' })
+  const filteredNr = storeRowsFiltered.length
 
   const { data: dataUser } = useQuery(
     (store) =>
@@ -163,7 +159,7 @@ const Personen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rowsFiltered.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -172,8 +168,8 @@ const Personen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rowsFiltered[index]}
-                last={index === rowsFiltered.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>
