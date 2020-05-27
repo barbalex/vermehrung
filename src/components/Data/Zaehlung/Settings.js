@@ -1,16 +1,15 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog } from 'react-icons/fa'
+import { FaCog, FaFrown } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { StoreContext, useQuery } from '../../../models/reactUtils'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -33,16 +32,22 @@ const Info = styled.div`
 
 const SettingsZaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
+  const { addNotification } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId)
   const kulturId = zaehlung.kultur_id
-  const kulturOption = store.kultur_options.get(kulturId)
+  const { error, loading } = useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
+  )
+  const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const { z_bemerkungen } = kulturOption
+
+  console.log('Zaehlung Settings', { kulturOption })
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
+      const value = event.target.value === 'false'
       kulturOption.edit({ field, value })
     },
     [kulturOption],
@@ -64,7 +69,25 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
+  const onClickFrown = useCallback(() => {
+    addNotification({
+      message: error.message,
+    })
+  }, [addNotification, error])
 
+  if (error) {
+    return (
+      <IconButton
+        aria-label="Felder wählen"
+        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-haspopup="true"
+        title={error.message}
+        onClick={onClickFrown}
+      >
+        <FaFrown />
+      </IconButton>
+    )
+  }
   return (
     <ErrorBoundary>
       <IconButton
@@ -76,7 +99,7 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
       >
         <FaCog />
       </IconButton>
-      {
+      {!loading && (
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -116,7 +139,7 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
             Die Wahl gilt (nur) für diese Kultur.
           </Info>
         </Menu>
-      }
+      )}
     </ErrorBoundary>
   )
 }

@@ -57,7 +57,7 @@ export const kulturModel = kulturModelBase.actions((self) => ({
       ? [rev, ...self._revisions]
       : [rev]
     // for store: convert rev to winner
-    newObjectForStore.id = newObjectForStore.kultur_id
+    newObjectForStore.id = self.id
     delete newObjectForStore.kultur_id
     addQueuedQuery({
       name: 'mutateInsert_kultur_rev_one',

@@ -2,7 +2,7 @@ create or replace function kultur_option_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
-  delete from kultur_option where id = new.kultur_option_id;
+  delete from kultur_option where id = new.kultur_id;
   insert into kultur_option (
       id,
       z_bemerkungen,

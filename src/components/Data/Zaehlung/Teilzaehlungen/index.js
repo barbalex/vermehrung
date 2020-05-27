@@ -71,9 +71,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
         <TitleRow>
           <Title>{title}</Title>
           <div>
-            {zaehlung.kultur_id && (
-              <Settings kulturId={zaehlung.kultur_id} zaehlungId={zaehlungId} />
-            )}
+            {zaehlung.kultur_id && <Settings kulturId={zaehlung.kultur_id} />}
             {showNew && (
               <IconButton
                 aria-label="Neu"
