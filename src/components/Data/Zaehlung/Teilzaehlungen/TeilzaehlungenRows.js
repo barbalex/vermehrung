@@ -2,7 +2,6 @@ import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import { teilkultur as teilkulturFragment } from '../../../../utils/fragments'
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
@@ -37,13 +36,14 @@ const TeilzaehlungenRows = ({ kulturId, rows, zaehlungId }) => {
   } = useQuery(teilkulturenQuery, {
     variables: { kulturId: zaehlung.kultur_id },
   })
-  const teilkulturenWerte = useMemo(() => {
-    const data = get(teilkulturenData, 'teilkultur', []) || []
-    return data.map((el) => ({
-      value: el.id,
-      label: el.name,
-    }))
-  }, [teilkulturenData])
+  const teilkulturenWerte = useMemo(
+    () =>
+      (teilkulturenData?.teilkultur ?? []).map((el) => ({
+        value: el.id,
+        label: el.name,
+      })),
+    [teilkulturenData?.teilkultur],
+  )
 
   if (teilkulturenError) {
     return (
