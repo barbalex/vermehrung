@@ -97,7 +97,7 @@ const Lieferungen = ({ filter: showFilter }) => {
     }
   }
 
-  const { data, error, loading } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.queryLieferung({
       where: lieferungFilter,
       order_by: { datum: 'desc_nulls_first' },
@@ -114,8 +114,8 @@ const Lieferungen = ({ filter: showFilter }) => {
   const totalNr =
     dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
 
-  const rows = data?.lieferung ?? []
-  const filteredNr = rows.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'lieferung' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertLieferungRev()
@@ -180,7 +180,7 @@ const Lieferungen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -189,8 +189,8 @@ const Lieferungen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>
