@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
 import { teilkultur as teilkulturFragment } from '../../../../utils/fragments'
+import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Teilzaehlung from './Teilzaehlung'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -25,9 +25,10 @@ const teilkulturenQuery = gql`
   ${teilkulturFragment}
 `
 
-const TeilzaehlungenRows = ({ kulturId, rows, zaehlungResult }) => {
-  const zaehlung = get(zaehlungResult.data, 'zaehlung', [{}])[0]
-  console.log('TeilzaehlungenRows', { zaehlungResult })
+const TeilzaehlungenRows = ({ kulturId, rows, zaehlungId }) => {
+  const store = useContext(StoreContext)
+  const zaehlung = store.zaehlungs.get(zaehlungId)
+
   const {
     data: teilkulturenData,
     error: teilkulturenError,
@@ -62,7 +63,6 @@ const TeilzaehlungenRows = ({ kulturId, rows, zaehlungResult }) => {
           teilkulturenWerte={teilkulturenWerte}
           teilkulturenLoading={teilkulturenLoading}
           refetchTeilkulturen={refetchTeilkulturen}
-          zaehlungResult={zaehlungResult}
         />
       ))}
     </ErrorBoundary>
