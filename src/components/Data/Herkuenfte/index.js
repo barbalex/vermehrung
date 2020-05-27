@@ -75,11 +75,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
       id: { _eq: activeNodeArray[activeNodeArray.indexOf('Sammlungen') + 1] },
     }
   }
-  const {
-    data: dataFiltered,
-    error: errorFiltered,
-    loading: loadingFiltered,
-  } = useQuery((store) =>
+  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryHerkunft(
       {
         where: herkunftFilter,
@@ -97,15 +93,8 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const totalNr =
     dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
-  const queryRowsFiltered = dataFiltered?.herkunft ?? []
-  const filteredIds = queryRowsFiltered.map((r) => r.id)
-  const storeRowsFiltered = [...store.herkunfts.values()].filter((r) =>
-    filteredIds.includes(r.id),
-  )
-  //const storeRowsFiltered2 = queryFromStore({ store, table: 'herkunft' })
-  const filteredNr = queryRowsFiltered.length
-
-  //console.log('Herkuenfte', { storeRowsFiltered, storeRowsFiltered2 })
+  const storeRowsFiltered = queryFromStore({ store, table: 'herkunft' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(async () => {
     insertHerkunftRev()
