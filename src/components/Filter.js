@@ -53,7 +53,7 @@ export default () => {
         .replace('gaerten', 'garten')
         .replace('kulturen', 'kultur')
         .replace('lieferungen', 'lieferung')
-        .replace('sammelLieferungen', 'sammelLieferung')
+        .replace('sammelLieferungen', 'sammel_lieferung')
         .replace('personen', 'person')
         .replace('sammlungen', 'sammlung')
         .replace('teilkulturen', 'teilkultur')
@@ -71,7 +71,7 @@ export default () => {
     garten: <Garten filter />,
     kultur: <Kultur filter />,
     lieferung: <Lieferung filter />,
-    sammelLieferung: <SammelLieferung filter />,
+    sammel_lieferung: <SammelLieferung filter />,
     person: <Person filter />,
     sammlung: <Sammlung filter />,
     teilkultur: <Teilkultur filter />,
@@ -85,7 +85,7 @@ export default () => {
     herkunft: 'Herkunft Filter',
     kultur: 'Kultur Filter',
     lieferung: 'Lieferung Filter',
-    sammelLieferung: 'Sammel-Lieferung Filter',
+    sammel_lieferung: 'Sammel-Lieferung Filter',
     person: 'Person Filter',
     sammlung: 'Sammlung Filter',
     teilkultur: 'TeilKultur Filter',
@@ -123,8 +123,8 @@ export default () => {
             />
             <StyledTab
               label="Sammel-Lieferung"
-              value="sammelLieferung"
-              data-id="sammelLieferung"
+              value="sammel_lieferung"
+              data-id="sammel_lieferung"
             />
             <StyledTab label="Event" value="event" data-id="event" />
             <StyledTab label="Person" value="person" data-id="person" />
