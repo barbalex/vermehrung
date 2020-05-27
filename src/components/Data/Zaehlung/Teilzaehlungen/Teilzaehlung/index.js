@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
 import SplitPane from 'react-split-pane'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import { StoreContext, useQuery } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
 import Select from '../../../../shared/SelectCreatable'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
@@ -16,6 +16,7 @@ import ErrorBoundary from '../../../../shared/ErrorBoundary'
 //import Conflict from './Conflict'
 import ConflictList from '../../../../shared/ConflictList'
 
+const OuterContainer = styled.div``
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -120,6 +121,10 @@ const Teilzaehlung = ({
   }, [])
 
   const zaehlung = store.zaehlungs.get(id)
+  useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
+  )
+  const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const {
     tk,
     tz_teilkultur_id,
@@ -127,7 +132,7 @@ const Teilzaehlung = ({
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = zaehlung?.kultur?.kultur_option ?? {}
+  } = kulturOption
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -156,30 +161,9 @@ const Teilzaehlung = ({
     },
     [row],
   )
-  const onClickDelete = useCallback(async () => {
-    try {
-      await client.mutate({
-        mutation: gql`
-          mutation deleteTeilzaehlung($id: uuid!) {
-            delete_teilzaehlung(where: { id: { _eq: $id } }) {
-              returning {
-                id
-                __typename
-              }
-            }
-          }
-        `,
-        variables: {
-          id: row.id,
-        },
-        refetchQueries: ['TeilzaehlungenQuery'],
-      })
-    } catch (error) {
-      return addNotification({
-        message: error.message,
-      })
-    }
-  }, [client, addNotification, row.id])
+  const onClickDelete = useCallback(() => {
+    row.delete()
+  }, [row])
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
@@ -187,15 +171,15 @@ const Teilzaehlung = ({
 
   return (
     <ErrorBoundary>
-      <>
+      <OuterContainer>
         {!!index && <TopLine />}
-        <Container>
-          <StyledSplitPane
-            split="vertical"
-            size={firstPaneWidth}
-            minSize={200}
-            resizerStyle={resizerStyle}
-          >
+        <StyledSplitPane
+          split="vertical"
+          size={firstPaneWidth}
+          minSize={200}
+          resizerStyle={resizerStyle}
+        >
+          <Container>
             {activeConflict && (
               <CaseConflictTitle>
                 Aktuelle Version<Rev>{row._rev}</Rev>
@@ -328,9 +312,9 @@ const Teilzaehlung = ({
                 />
               )}
             </div>
-          </StyledSplitPane>
-        </Container>
-      </>
+          </Container>
+        </StyledSplitPane>
+      </OuterContainer>
     </ErrorBoundary>
   )
 }

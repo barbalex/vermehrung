@@ -38,7 +38,9 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   const { insertTeilzaehlungRev } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId)
+  const kulturId = zaehlung.kultur_id
 
+  // load data for teilzaehlungen
   const { error, loading } = useQuery((store) =>
     store.queryTeilzaehlung({
       where: { zaehlung_id: { _eq: zaehlungId } },
@@ -47,7 +49,12 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   )
   const storeRows = [...store.teilzaehlungs.values()]
 
-  const { tk } = zaehlung?.kultur?.kultur_option ?? {}
+  // load data for options
+  useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
+  )
+  const kulturOption = store.kultur_options.get(kulturId) ?? {}
+  const { tk } = kulturOption
 
   const onClickNew = useCallback(() => {
     insertTeilzaehlungRev()
@@ -71,7 +78,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
         <TitleRow>
           <Title>{title}</Title>
           <div>
-            {zaehlung.kultur_id && <Settings kulturId={zaehlung.kultur_id} />}
+            {kulturId && <Settings kulturId={kulturId} />}
             {showNew && (
               <IconButton
                 aria-label="Neu"
@@ -83,11 +90,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
             )}
           </div>
         </TitleRow>
-        <TeilzaehlungenRows
-          rows={storeRows}
-          zaehlungId={zaehlungId}
-          kulturId={zaehlung.kultur_id}
-        />
+        <TeilzaehlungenRows kulturId={kulturId} />
       </Container>
     </ErrorBoundary>
   )
