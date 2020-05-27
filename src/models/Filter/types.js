@@ -39,7 +39,6 @@ export default types
     empty() {
       const parent = getParent(self)
       parent.setHideInactive(false)
-      console.log('store Filter empty: self:', self)
       // maybe loop all keys and set values?
       Object.keys(self)
         .filter((k) => !!k)
