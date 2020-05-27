@@ -55,6 +55,9 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert herkuft_rev to herkunft
+    newObjectForStore.id = newObjectForStore.herkunft_id
+    delete newObjectForStore.herkunft_id
     addQueuedQuery({
       name: 'mutateInsert_herkunft_rev_one',
       variables: JSON.stringify({

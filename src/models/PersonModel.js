@@ -77,6 +77,9 @@ export const personModel = personModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.person_id
+    delete newObjectForStore.person_id
     addQueuedQuery({
       name: 'mutateInsert_person_rev_one',
       variables: JSON.stringify({

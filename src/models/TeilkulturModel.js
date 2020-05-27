@@ -52,6 +52,9 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.teilkultur_id
+    delete newObjectForStore.teilkultur_id
     addQueuedQuery({
       name: 'mutateInsert_teilkultur_rev_one',
       variables: JSON.stringify({

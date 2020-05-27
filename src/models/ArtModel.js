@@ -45,6 +45,9 @@ export const artModel = artModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.art_id
+    delete newObjectForStore.art_id
     addQueuedQuery({
       name: 'mutateInsert_art_rev_one',
       variables: JSON.stringify({

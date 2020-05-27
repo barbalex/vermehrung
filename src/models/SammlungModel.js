@@ -63,6 +63,9 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.sammlung_id
+    delete newObjectForStore.sammlung_id
     addQueuedQuery({
       name: 'mutateInsert_sammlung_rev_one',
       variables: JSON.stringify({

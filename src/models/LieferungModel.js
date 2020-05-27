@@ -72,6 +72,9 @@ export const lieferungModel = lieferungModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.lieferung_id
+    delete newObjectForStore.lieferung_id
     addQueuedQuery({
       name: 'mutateInsert_lieferung_rev_one',
       variables: JSON.stringify({
