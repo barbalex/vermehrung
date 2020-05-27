@@ -9,7 +9,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -40,7 +39,7 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
   const { addNotification } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId)
-  const { z_bemerkungen } = get(zaehlung, 'kultur.kultur_option') || {}
+  const { z_bemerkungen } = zaehlung?.kultur?.kultur_option ?? {}
   const kulturId = zaehlung.kultur_id
 
   const saveToDb = useCallback(

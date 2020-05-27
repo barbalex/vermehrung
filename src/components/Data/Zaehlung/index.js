@@ -8,7 +8,6 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
@@ -20,11 +19,7 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import Date from '../../shared/Date'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import {
-  zaehlung as zaehlungFragment,
-  kulturOption as kulturOptionFragment,
-} from '../../../utils/fragments'
-import queryFromTable from '../../../utils/queryFromTable'
+import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import queryFromStore from '../../../utils/queryFromStore'
 import Teilzaehlungen from './Teilzaehlungen'
@@ -35,6 +30,7 @@ import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import kulturLabelFromKultur from '../Teilkultur/kulturLabelFromKultur'
 
 const Container = styled.div`
   height: 100%;
@@ -181,11 +177,8 @@ const Zaehlung = ({
       d.aggregate((d) => d.count),
     ),
   )
-  const totalNr = get(
-    dataZaehlungAggregate,
-    'zaehlung_aggregate.aggregate.count',
-    0,
-  )
+  const totalNr =
+    dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
   const storeRowsFiltered = queryFromStore({ store, table: 'zaehlung' })
   const filteredNr = storeRowsFiltered.length
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id)
@@ -200,7 +193,7 @@ const Zaehlung = ({
     setActiveConflict(row?._rev ?? null)
   }, [queryOfZaehlung, row?._rev])
 
-  const artId = get(row, 'kultur.art_id')
+  const artId = row?.kultur?.art_id
   const kulturFilter = artId
     ? { art_id: { _eq: artId } }
     : { id: { _is_null: false } }
@@ -214,7 +207,7 @@ const Zaehlung = ({
     },
   })
 
-  const { z_bemerkungen } = get(row, 'kultur.kultur_option') || {}
+  const { z_bemerkungen } = row?.kultur?.kultur_option ?? {}
 
   useEffect(() => {
     setErrors({})
@@ -222,18 +215,11 @@ const Zaehlung = ({
 
   const kulturWerte = useMemo(
     () =>
-      get(kulturData, 'kultur', []).map((el) => {
-        const personName = get(el, 'garten.person.name') || '(kein Name)'
-        const personOrt = get(el, 'garten.person.ort') || null
-        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const label = get(el, 'garten.name') || personLabel
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
-    [kulturData],
+      (kulturData?.kultur ?? []).map((el) => ({
+        value: el.id,
+        label: kulturLabelFromKultur(el),
+      })),
+    [kulturData?.kultur],
   )
 
   const saveToDb = useCallback(
