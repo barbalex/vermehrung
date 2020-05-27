@@ -75,7 +75,7 @@ const Teilkulturen = ({ filter: showFilter }) => {
     }
   }
 
-  const { data, error, loading } = useQuery(
+  const { error, loading } = useQuery(
     (store) =>
       store.queryTeilkultur({
         where: teilkulturFilter,
@@ -92,8 +92,8 @@ const Teilkulturen = ({ filter: showFilter }) => {
   const totalNr =
     dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
 
-  const rows = data?.teilkultur ?? []
-  const filteredNr = rows.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'teilkultur' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertTeilkulturRev()
@@ -158,7 +158,7 @@ const Teilkulturen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -167,8 +167,8 @@ const Teilkulturen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>
