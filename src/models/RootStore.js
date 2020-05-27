@@ -589,6 +589,83 @@ export const RootStore = RootStoreBase.props({
       deleteKulturOptionModel(val) {
         self.kultur_options.delete(val.id)
       },
+      insertKulturOptionRev(args) {
+        const {
+          user,
+          addQueuedQuery,
+          upsertKulturOptionModel,
+          tree,
+          kulturIdInActiveNodeArray,
+        } = self
+
+        const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
+
+        const {
+          activeNodeArray: aNaRaw,
+          setActiveNodeArray,
+          addOpenNodes,
+        } = self.tree
+        const activeNodeArray = aNaRaw.toJSON()
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          kultur_option_id: id,
+          kultur_id,
+          z_bemerkungen: undefined,
+          tz_teilkultur_id: undefined,
+          tz_anzahl_mutterpflanzen: undefined,
+          tz_andere_menge: undefined,
+          tz_auspflanzbereit_beschreibung: undefined,
+          tz_bemerkungen: undefined,
+          tk: undefined,
+          tk_bemerkungen: undefined,
+          ev_teilkultur_id: undefined,
+          ev_geplant: undefined,
+          ev_person_id: undefined,
+          ev_datum: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.kultur_option_id
+        delete newObjectForStore.kultur_option_id
+        addQueuedQuery({
+          name: 'mutateInsert_kultur_option_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'kultur_option_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryKultur_option',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+        })
+        // optimistically update store
+        upsertKulturOptionModel(newObjectForStore)
+        setTimeout(() => {
+          tree.refetch() // will be unnecessary once tree consists of mst models
+          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+            ? // slice if last is uuid
+              [...activeNodeArray.slice(0, -1), id]
+            : [...activeNodeArray, id]
+          // update tree status
+          setActiveNodeArray(newActiveNodeArray)
+          addOpenNodes([newActiveNodeArray])
+        })
+      },
       deleteKulturOptionRevModel(val) {
         self.kultur_option_revs.delete(val.id)
       },
