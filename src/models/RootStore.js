@@ -1076,6 +1076,8 @@ export const RootStore = RootStoreBase.props({
         } = self
 
         const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
+        const noNavigateInTree = args?.noNavigateInTree ?? false
+        const name = args?.name ?? undefined
 
         const {
           activeNodeArray: aNaRaw,
@@ -1089,7 +1091,7 @@ export const RootStore = RootStoreBase.props({
         const newObject = {
           teilkultur_id: id,
           kultur_id,
-          name: undefined,
+          name,
           ort1: undefined,
           ort2: undefined,
           ort3: undefined,
@@ -1107,8 +1109,13 @@ export const RootStore = RootStoreBase.props({
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
         // for store: convert rev to winner
-        newObjectForStore.id = newObjectForStore.teilkultur_id
+        newObjectForStore.id = id
         delete newObjectForStore.teilkultur_id
+
+        console.log('store, insertTeilkulturRev', {
+          newObject,
+          newObjectForStore,
+        })
         addQueuedQuery({
           name: 'mutateInsert_teilkultur_rev_one',
           variables: JSON.stringify({
@@ -1125,16 +1132,19 @@ export const RootStore = RootStoreBase.props({
         })
         // optimistically update store
         upsertTeilkulturModel(newObjectForStore)
-        setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
-          const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
-            ? // slice if last is uuid
-              [...activeNodeArray.slice(0, -1), id]
-            : [...activeNodeArray, id]
-          // update tree status
-          setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
-        })
+        if (!noNavigateInTree) {
+          setTimeout(() => {
+            tree.refetch() // will be unnecessary once tree consists of mst models
+            const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
+              ? // slice if last is uuid
+                [...activeNodeArray.slice(0, -1), id]
+              : [...activeNodeArray, id]
+            // update tree status
+            setActiveNodeArray(newActiveNodeArray)
+            addOpenNodes([newActiveNodeArray])
+          })
+        }
+        return id
       },
       deleteTeilkulturRevModel(val) {
         self.teilkultur_revs.delete(val.id)

@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
-import SplitPane from 'react-split-pane'
 
 import { StoreContext, useQuery } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
@@ -13,10 +10,7 @@ import Select from '../../../../shared/SelectCreatable'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-//import Conflict from './Conflict'
-import ConflictList from '../../../../shared/ConflictList'
 
-const OuterContainer = styled.div``
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -58,42 +52,6 @@ const TopLine = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
 `
-const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px) !important;
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
-`
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
 
 const Teilzaehlung = ({
   id,
@@ -105,6 +63,7 @@ const Teilzaehlung = ({
   index,
 }) => {
   const store = useContext(StoreContext)
+  const { insertTeilkulturRev } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -132,6 +91,18 @@ const Teilzaehlung = ({
     tz_bemerkungen,
   } = kulturOption
 
+  const onCreateNewTeilkultur = useCallback(
+    ({ name }) => {
+      const teilkultur_id = insertTeilkulturRev({
+        noNavigateInTree: true,
+        name,
+        kultur_id: kulturId,
+      })
+      return teilkultur_id
+    },
+    [insertTeilkulturRev, kulturId],
+  )
+
   const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
@@ -146,6 +117,8 @@ const Teilzaehlung = ({
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
+
+      console.log('Teilzaehlung, saveToDb', { field, value, row })
 
       row.edit({ field, value })
     },
@@ -171,10 +144,7 @@ const Teilzaehlung = ({
               loading={teilkulturenLoading}
               saveToDb={saveToDb}
               error={errors.teilkultur_id}
-              creatablePropertiesToPass={{ kultur_id: kulturId }}
-              creatablePropertyName="name"
-              creatableIdField="id"
-              table="teilkultur"
+              onCreateNew={onCreateNewTeilkultur}
               callback={refetchTeilkulturen}
             />
           </Teilkultur>

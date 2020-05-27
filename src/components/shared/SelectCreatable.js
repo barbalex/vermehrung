@@ -1,10 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useContext } from 'react'
-import gql from 'graphql-tag'
-import get from 'lodash/get'
 import Select from 'react-select/creatable'
 import styled from 'styled-components'
-import { useApolloClient } from '@apollo/react-hooks'
 
 import { StoreContext } from '../../models/reactUtils'
 
@@ -91,77 +88,41 @@ const SharedSelect = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-  table,
-  creatablePropertiesToPass = {},
-  creatablePropertyName,
-  creatableIdField,
+  onCreateNew,
   callback,
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotification } = store
   const { refetch: refetchTree } = store.tree
 
-  const onChange = useCallback(
-    async (option, actionMeta) => {
-      // if action is create-option
-      // need to first create new dataset
-      if (actionMeta.action === 'create-option') {
-        // 1. create new dataset
-        let responce
-        try {
-          const propertiesToPass = Object.entries(creatablePropertiesToPass)
-            .map(([key, value]) => `${key}: ${value}`)
-            .join(', ')
-          responce = await client.mutate({
-            mutation: gql`
-            mutation insertDatasetForSelectCreatable {
-              insert_${table} (objects: [{${creatablePropertyName}: "${option.label}", ${propertiesToPass}}]) {
-                returning { id }
-              }
-            }
-          `,
-          })
-        } catch (error) {
-          return addNotification({
-            message: `Error inserting dataset: ${error.message}`,
-          })
+  const onChange = useCallback((option, actionMeta) => {
+    // if action is create-option
+    // need to first create new dataset
+    if (actionMeta.action === 'create-option') {
+      // 1. create new dataset
+      const newId = onCreateNew({ name: option.label })
+      if (newId) {
+        // 2. update value using new id
+        const fakeEvent = {
+          target: {
+            name,
+            value: newId,
+          },
         }
-        const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
-        if (newObject && newObject.id) {
-          // 2. update value using new id
-          const fakeEvent = {
-            target: {
-              name,
-              value: newObject.id,
-            },
-          }
-          saveToDb(fakeEvent)
-        }
-        !!callback && callback()
-        refetchTree()
-        return
+        saveToDb(fakeEvent)
       }
-      // now update value
-      const fakeEvent = {
-        target: {
-          name,
-          value: option ? option.value : null,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [
-      client,
-      creatableIdField,
-      creatablePropertiesToPass,
-      creatablePropertyName,
-      addNotification,
-      name,
-      saveToDb,
-      table,
-    ],
-  )
+      !!callback && callback()
+      refetchTree()
+      return
+    }
+    // now update value
+    const fakeEvent = {
+      target: {
+        name,
+        value: option ? option.value : null,
+      },
+    }
+    saveToDb(fakeEvent)
+  }, [])
 
   // show ... whyle options are loading
   const loadingOptions = [{ value, label: '...' }]
