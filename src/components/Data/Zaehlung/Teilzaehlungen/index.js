@@ -90,7 +90,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
             )}
           </div>
         </TitleRow>
-        <TeilzaehlungenRows kulturId={kulturId} />
+        <TeilzaehlungenRows zaehlungId={zaehlungId} kulturId={kulturId} />
       </Container>
     </ErrorBoundary>
   )

@@ -11,10 +11,16 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const TeilzaehlungenRows = ({ kulturId }) => {
+const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
   const store = useContext(StoreContext)
-
-  const rows = [...store.teilzaehlungs.values()]
+  const { loading, error } = useQuery((store) =>
+    store.queryTeilzaehlung({
+      where: { zaehlung_id: { _eq: zaehlungId } },
+    }),
+  )
+  const rows = [...store.teilzaehlungs.values()].filter(
+    (v) => v.zaehlung_id === zaehlungId,
+  )
 
   const {
     error: teilkulturenError,
@@ -36,7 +42,14 @@ const TeilzaehlungenRows = ({ kulturId }) => {
         })),
     [kulturId, store.teilkulturs],
   )
-  console.log('TeilzaehlungenRows, teilkulturenWerte:', teilkulturenWerte)
+
+  if (loading) return null
+
+  if (error) {
+    return (
+      <Container>{`Fehler beim Laden der Teilzaehlungen: ${teilkulturenError.message}`}</Container>
+    )
+  }
 
   if (teilkulturenError) {
     return (
