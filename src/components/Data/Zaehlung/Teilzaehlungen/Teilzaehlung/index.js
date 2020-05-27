@@ -104,9 +104,7 @@ const Teilzaehlung = ({
   refetchTeilkulturen,
   index,
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotification, online } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -134,14 +132,6 @@ const Teilzaehlung = ({
     tz_bemerkungen,
   } = kulturOption
 
-  const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-  }, [])
-  const callbackAfterUebernehmen = useCallback(() => {
-    setActiveConflict(row?._rev ?? null)
-  }, [row?._rev])
-
   const [errors, setErrors] = useState({})
   useEffect(() => {
     setErrors({})
@@ -165,156 +155,131 @@ const Teilzaehlung = ({
     row.delete()
   }, [row])
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
-  // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
-
   return (
     <ErrorBoundary>
-      <OuterContainer>
-        {!!index && <TopLine />}
-        <StyledSplitPane
-          split="vertical"
-          size={firstPaneWidth}
-          minSize={200}
-          resizerStyle={resizerStyle}
-        >
-          <Container>
-            {activeConflict && (
-              <CaseConflictTitle>
-                Aktuelle Version<Rev>{row._rev}</Rev>
-              </CaseConflictTitle>
-            )}
-            {tk && tz_teilkultur_id && (
-              <Teilkultur>
-                <Select
-                  key={`${row.id}teilkultur_id`}
-                  name="teilkultur_id"
-                  value={row.teilkultur_id}
-                  field="teilkultur_id"
-                  label="Teilkultur"
-                  options={teilkulturenWerte}
-                  loading={teilkulturenLoading}
-                  saveToDb={saveToDb}
-                  error={errors.teilkultur_id}
-                  creatablePropertiesToPass={{ kultur_id: kulturId }}
-                  creatablePropertyName="name"
-                  creatableIdField="id"
-                  table="teilkultur"
-                  callback={refetchTeilkulturen}
-                />
-              </Teilkultur>
-            )}
-            <Anzahl>
-              <TextField
-                key={`${row.id}anzahl_pflanzen`}
-                name="anzahl_pflanzen"
-                label="Anzahl Pflanzen"
-                value={row.anzahl_pflanzen}
-                saveToDb={saveToDb}
-                error={errors.anzahl_pflanzen}
-                type="number"
-              />
-            </Anzahl>
-            <Anzahl>
-              <TextField
-                key={`${row.id}anzahl_auspflanzbereit`}
-                name="anzahl_auspflanzbereit"
-                label="Anzahl auspflanz-bereit"
-                value={row.anzahl_auspflanzbereit}
-                saveToDb={saveToDb}
-                error={errors.anzahl_auspflanzbereit}
-                type="number"
-              />
-            </Anzahl>
-            {tz_anzahl_mutterpflanzen && (
-              <Anzahl>
-                <TextField
-                  key={`${row.id}anzahl_mutterpflanzen`}
-                  name="anzahl_mutterpflanzen"
-                  label="Anzahl Mutter-Pflanzen"
-                  value={row.anzahl_mutterpflanzen}
-                  saveToDb={saveToDb}
-                  error={errors.anzahl_mutterpflanzen}
-                  type="number"
-                />
-              </Anzahl>
-            )}
-            {tz_andere_menge && (
-              <Other>
-                <TextField
-                  key={`${row.id}andere_menge`}
-                  name="andere_menge"
-                  label={`Andere Menge (z.B. "3 Zwiebeln")`}
-                  value={row.andere_menge}
-                  saveToDb={saveToDb}
-                  error={errors.andere_menge}
-                  type="text"
-                />
-              </Other>
-            )}
-            {tz_auspflanzbereit_beschreibung && (
-              <Auspflanzbereit>
-                <TextField
-                  key={`${row.id}auspflanzbereit_beschreibung`}
-                  name="auspflanzbereit_beschreibung"
-                  label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
-                  value={row.auspflanzbereit_beschreibung}
-                  saveToDb={saveToDb}
-                  error={errors.auspflanzbereit_beschreibung}
-                  type="text"
-                />
-              </Auspflanzbereit>
-            )}
-            {tz_bemerkungen && (
-              <Last>
-                <TextField
-                  key={`${row.id}bemerkungen`}
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  value={row.bemerkungen}
-                  saveToDb={saveToDb}
-                  error={errors.bemerkungen}
-                  multiLine
-                />
-              </Last>
-            )}
-            {online && row._conflicts && row._conflicts.map && (
-              <ConflictList
-                conflicts={row._conflicts}
-                activeConflict={activeConflict}
-                setActiveConflict={setActiveConflict}
-              />
-            )}
-            <div>
-              <IconButton
-                aria-label="löschen"
-                title="löschen"
-                onClick={onClickDelete}
-              >
-                <FaRegTrashAlt />
-              </IconButton>
+      {!!index && <TopLine />}
+      <Container>
+        {tk && tz_teilkultur_id && (
+          <Teilkultur>
+            <Select
+              key={`${row.id}teilkultur_id`}
+              name="teilkultur_id"
+              value={row.teilkultur_id}
+              field="teilkultur_id"
+              label="Teilkultur"
+              options={teilkulturenWerte}
+              loading={teilkulturenLoading}
+              saveToDb={saveToDb}
+              error={errors.teilkultur_id}
+              creatablePropertiesToPass={{ kultur_id: kulturId }}
+              creatablePropertyName="name"
+              creatableIdField="id"
+              table="teilkultur"
+              callback={refetchTeilkulturen}
+            />
+          </Teilkultur>
+        )}
+        <Anzahl>
+          <TextField
+            key={`${row.id}anzahl_pflanzen`}
+            name="anzahl_pflanzen"
+            label="Anzahl Pflanzen"
+            value={row.anzahl_pflanzen}
+            saveToDb={saveToDb}
+            error={errors.anzahl_pflanzen}
+            type="number"
+          />
+        </Anzahl>
+        <Anzahl>
+          <TextField
+            key={`${row.id}anzahl_auspflanzbereit`}
+            name="anzahl_auspflanzbereit"
+            label="Anzahl auspflanz-bereit"
+            value={row.anzahl_auspflanzbereit}
+            saveToDb={saveToDb}
+            error={errors.anzahl_auspflanzbereit}
+            type="number"
+          />
+        </Anzahl>
+        {tz_anzahl_mutterpflanzen && (
+          <Anzahl>
+            <TextField
+              key={`${row.id}anzahl_mutterpflanzen`}
+              name="anzahl_mutterpflanzen"
+              label="Anzahl Mutter-Pflanzen"
+              value={row.anzahl_mutterpflanzen}
+              saveToDb={saveToDb}
+              error={errors.anzahl_mutterpflanzen}
+              type="number"
+            />
+          </Anzahl>
+        )}
+        {tz_andere_menge && (
+          <Other>
+            <TextField
+              key={`${row.id}andere_menge`}
+              name="andere_menge"
+              label={`Andere Menge (z.B. "3 Zwiebeln")`}
+              value={row.andere_menge}
+              saveToDb={saveToDb}
+              error={errors.andere_menge}
+              type="text"
+            />
+          </Other>
+        )}
+        {tz_auspflanzbereit_beschreibung && (
+          <Auspflanzbereit>
+            <TextField
+              key={`${row.id}auspflanzbereit_beschreibung`}
+              name="auspflanzbereit_beschreibung"
+              label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
+              value={row.auspflanzbereit_beschreibung}
+              saveToDb={saveToDb}
+              error={errors.auspflanzbereit_beschreibung}
+              type="text"
+            />
+          </Auspflanzbereit>
+        )}
+        {tz_bemerkungen && (
+          <Last>
+            <TextField
+              key={`${row.id}bemerkungen`}
+              name="bemerkungen"
+              label="Bemerkungen"
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={errors.bemerkungen}
+              multiLine
+            />
+          </Last>
+        )}
+        <div>
+          <IconButton
+            aria-label="löschen"
+            title="löschen"
+            onClick={onClickDelete}
+          >
+            <FaRegTrashAlt />
+          </IconButton>
 
-              <IconButton
-                aria-label="Prognose"
-                title="Prognose"
-                onClick={onClickPrognosis}
-              >
-                <FaChartLine />
-              </IconButton>
-              {openPrognosis && (
-                <PrognoseMenu
-                  onClosePrognosis={onClosePrognosis}
-                  anchorEl={anchorEl}
-                  setAnchorEl={setAnchorEl}
-                  teilzaehlung={row}
-                  zaehlung={zaehlung}
-                />
-              )}
-            </div>
-          </Container>
-        </StyledSplitPane>
-      </OuterContainer>
+          <IconButton
+            aria-label="Prognose"
+            title="Prognose"
+            onClick={onClickPrognosis}
+          >
+            <FaChartLine />
+          </IconButton>
+          {openPrognosis && (
+            <PrognoseMenu
+              onClosePrognosis={onClosePrognosis}
+              anchorEl={anchorEl}
+              setAnchorEl={setAnchorEl}
+              teilzaehlung={row}
+              zaehlung={zaehlung}
+            />
+          )}
+        </div>
+      </Container>
     </ErrorBoundary>
   )
 }
