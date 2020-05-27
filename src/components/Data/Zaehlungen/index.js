@@ -75,7 +75,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
     }
   }
 
-  const { data, error, loading } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.queryZaehlung({
       where: zaehlungFilter,
       order_by: { datum: 'desc_nulls_first' },
@@ -100,8 +100,8 @@ const Zaehlungen = ({ filter: showFilter }) => {
   const totalNr =
     dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
 
-  const rows = data?.zaehlung ?? []
-  const filteredNr = rows.length
+  const storeRowsFiltered = queryFromStore({ store, table: 'zaehlung' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertZaehlungRev()
@@ -166,7 +166,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -175,8 +175,8 @@ const Zaehlungen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

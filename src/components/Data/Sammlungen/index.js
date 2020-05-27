@@ -93,7 +93,7 @@ const Sammlungen = ({ filter: showFilter }) => {
   const totalNr =
     dataSammlungAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
 
-  const { data, error, loading } = useQuery(
+  const { error, loading } = useQuery(
     (store) =>
       store.querySammlung({
         where: sammlungFilter,
@@ -105,8 +105,9 @@ const Sammlungen = ({ filter: showFilter }) => {
         .person((p) => p.id.name)
         .herkunft((h) => h.id.nr),
   )
-  const rows = data?.sammlung ?? []
-  const filteredNr = rows.length
+
+  const storeRowsFiltered = queryFromStore({ store, table: 'sammlung' })
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertSammlungRev()
@@ -171,7 +172,7 @@ const Sammlungen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rows.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -180,8 +181,8 @@ const Sammlungen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rows[index]}
-                last={index === rows.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>
