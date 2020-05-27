@@ -22,15 +22,12 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
     (v) => v.zaehlung_id === zaehlungId,
   )
 
-  const {
-    error: teilkulturenError,
-    loading: teilkulturenLoading,
-    refetch: refetchTeilkulturen,
-  } = useQuery((store) =>
-    store.queryTeilkultur({
-      where: { kultur_id: { _eq: kulturId } },
-      order_by: { name: 'asc_nulls_first' },
-    }),
+  const { error: teilkulturenError, loading: teilkulturenLoading } = useQuery(
+    (store) =>
+      store.queryTeilkultur({
+        where: { kultur_id: { _eq: kulturId } },
+        order_by: { name: 'asc_nulls_first' },
+      }),
   )
   const teilkulturenWerte = useMemo(
     () =>
@@ -67,7 +64,6 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
           teilzaehlung={r}
           teilkulturenWerte={teilkulturenWerte}
           teilkulturenLoading={teilkulturenLoading}
-          refetchTeilkulturen={refetchTeilkulturen}
         />
       ))}
     </ErrorBoundary>

@@ -86,18 +86,6 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     })
     // optimistically update store
     upsertTeilzaehlungModel(newObjectForStore)
-    setTimeout(() => {
-      if (
-        [
-          'anzahl_pflanzen',
-          'anzahl_auspflanzbereit',
-          'anzahl_mutterpflanzen',
-          'prognose',
-        ].includes(field)
-      ) {
-        tree.refetch()
-      }
-    }, 50)
   },
   setDeleted() {
     const store = getParent(self, 2)

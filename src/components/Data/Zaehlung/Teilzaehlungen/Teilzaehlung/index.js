@@ -59,7 +59,6 @@ const Teilzaehlung = ({
   teilzaehlung: row,
   teilkulturenWerte,
   teilkulturenLoading,
-  refetchTeilkulturen,
   index,
 }) => {
   const store = useContext(StoreContext)
@@ -78,6 +77,9 @@ const Teilzaehlung = ({
   }, [])
 
   const zaehlung = store.zaehlungs.get(id)
+  const { query } = useQuery((store) =>
+    store.queryTeilzaehlung({ where: { id: { _eq: id } } }),
+  )
   useQuery((store) =>
     store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
   )
@@ -98,9 +100,10 @@ const Teilzaehlung = ({
         name,
         kultur_id: kulturId,
       })
-      return teilkultur_id
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+      query.refetch()
     },
-    [insertTeilkulturRev, kulturId],
+    [insertTeilkulturRev, kulturId, query, row],
   )
 
   const [errors, setErrors] = useState({})
@@ -145,7 +148,7 @@ const Teilzaehlung = ({
               saveToDb={saveToDb}
               error={errors.teilkultur_id}
               onCreateNew={onCreateNewTeilkultur}
-              callback={refetchTeilkulturen}
+              callback={query.refetch}
             />
           </Teilkultur>
         )}
