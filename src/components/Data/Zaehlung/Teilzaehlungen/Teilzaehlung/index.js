@@ -5,7 +5,6 @@ import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
-import get from 'lodash/get'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../../../models/reactUtils'
@@ -120,7 +119,6 @@ const Teilzaehlung = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  //const zaehlung = get(data, 'zaehlung', [{}])[0]
   const zaehlung = store.zaehlungs.get(id)
   const {
     tk,
@@ -129,7 +127,7 @@ const Teilzaehlung = ({
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = get(zaehlung, 'kultur.kultur_option') || {}
+  } = zaehlung?.kultur?.kultur_option ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {

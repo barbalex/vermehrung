@@ -9,7 +9,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -46,7 +45,7 @@ const SettingsTeilzaehlungen = ({ kulturId, zaehlungId }) => {
     tz_andere_menge,
     tz_auspflanzbereit_beschreibung,
     tz_bemerkungen,
-  } = get(zaehlung, 'kultur.kultur_option') || {}
+  } = zaehlung?.kultur?.kultur_option ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
