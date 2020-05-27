@@ -193,6 +193,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.art_id
+        delete newObjectForStore.art_id
         addQueuedQuery({
           name: 'mutateInsert_art_rev_one',
           variables: JSON.stringify({
@@ -293,6 +296,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.event_id
+        delete newObjectForStore.event_id
         addQueuedQuery({
           name: 'mutateInsert_event_rev_one',
           variables: JSON.stringify({
@@ -371,6 +377,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.garten_id
+        delete newObjectForStore.garten_id
         addQueuedQuery({
           name: 'mutateInsert_garten_rev_one',
           variables: JSON.stringify({
@@ -413,16 +422,9 @@ export const RootStore = RootStoreBase.props({
       deleteHerkunftModel(val) {
         self.herkunfts.delete(val.id)
       },
-      insertHerkunftRev(args) {
-        const {
-          user,
-          addQueuedQuery,
-          upsertHerkunftModel,
-          tree,
-          personIdInActiveNodeArray,
-        } = self
+      insertHerkunftRev() {
+        const { user, addQueuedQuery, upsertHerkunftModel, tree } = self
 
-        const person_id = args?.person_id ?? personIdInActiveNodeArray
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -453,6 +455,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert herkuft_rev to herkunft
+        newObjectForStore.id = newObjectForStore.herkunft_id
+        delete newObjectForStore.herkunft_id
         addQueuedQuery({
           name: 'mutateInsert_herkunft_rev_one',
           variables: JSON.stringify({
@@ -539,6 +544,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.kultur_id
+        delete newObjectForStore.kultur_id
         addQueuedQuery({
           name: 'mutateInsert_kultur_rev_one',
           variables: JSON.stringify({
@@ -663,6 +671,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.lieferung_id
+        delete newObjectForStore.lieferung_id
         addQueuedQuery({
           name: 'mutateInsert_lieferung_rev_one',
           variables: JSON.stringify({
@@ -742,6 +753,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.person_id
+        delete newObjectForStore.person_id
         addQueuedQuery({
           name: 'mutateInsert_person_rev_one',
           variables: JSON.stringify({
@@ -850,6 +864,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.sammel_lieferung_id
+        delete newObjectForStore.sammel_lieferung_id
         addQueuedQuery({
           name: 'mutateInsert_sammel_lieferung_rev_one',
           variables: JSON.stringify({
@@ -936,6 +953,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.sammlung_id
+        delete newObjectForStore.sammlung_id
         addQueuedQuery({
           name: 'mutateInsert_sammlung_rev_one',
           variables: JSON.stringify({
@@ -1018,6 +1038,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.teilkultur_id
+        delete newObjectForStore.teilkultur_id
         addQueuedQuery({
           name: 'mutateInsert_teilkultur_rev_one',
           variables: JSON.stringify({
@@ -1100,6 +1123,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.teilzaehlung_id
+        delete newObjectForStore.teilzaehlung_id
         addQueuedQuery({
           name: 'mutateInsert_teilzaehlung_rev_one',
           variables: JSON.stringify({
@@ -1180,6 +1206,9 @@ export const RootStore = RootStoreBase.props({
         const newObjectForStore = { ...newObject }
         newObject._revisions = `{"${rev}"}`
         newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.zaehlung_id
+        delete newObjectForStore.zaehlung_id
         addQueuedQuery({
           name: 'mutateInsert_zaehlung_rev_one',
           variables: JSON.stringify({

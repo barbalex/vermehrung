@@ -54,6 +54,9 @@ export const gartenModel = gartenModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.garten_id
+    delete newObjectForStore.garten_id
     addQueuedQuery({
       name: 'mutateInsert_garten_rev_one',
       variables: JSON.stringify({

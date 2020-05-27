@@ -79,6 +79,9 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       newObjectForStore._revisions = self._revisions
         ? [rev, ...self._revisions]
         : [rev]
+      // for store: convert rev to winner
+      newObjectForStore.id = newObjectForStore.sammel_lieferung_id
+      delete newObjectForStore.sammel_lieferung_id
       addQueuedQuery({
         name: 'mutateInsert_sammel_lieferung_rev_one',
         variables: JSON.stringify({

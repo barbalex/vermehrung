@@ -50,6 +50,9 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.zaehlung_id
+    delete newObjectForStore.zaehlung_id
     addQueuedQuery({
       name: 'mutateInsert_zaehlung_rev_one',
       variables: JSON.stringify({

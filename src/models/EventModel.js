@@ -54,6 +54,9 @@ export const eventModel = eventModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.event_id
+    delete newObjectForStore.event_id
     addQueuedQuery({
       name: 'mutateInsert_event_rev_one',
       variables: JSON.stringify({

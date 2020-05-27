@@ -10,6 +10,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
+import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -96,8 +97,15 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const totalNr =
     dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
-  const rowsFiltered = dataFiltered?.herkunft ?? []
-  const filteredNr = rowsFiltered.length
+  const queryRowsFiltered = dataFiltered?.herkunft ?? []
+  const filteredIds = queryRowsFiltered.map((r) => r.id)
+  const storeRowsFiltered = [...store.herkunfts.values()].filter((r) =>
+    filteredIds.includes(r.id),
+  )
+  //const storeRowsFiltered2 = queryFromStore({ store, table: 'herkunft' })
+  const filteredNr = queryRowsFiltered.length
+
+  //console.log('Herkuenfte', { storeRowsFiltered, storeRowsFiltered2 })
 
   const add = useCallback(async () => {
     insertHerkunftRev()
@@ -167,7 +175,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={rowsFiltered.length}
+            itemCount={storeRowsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -176,8 +184,8 @@ const Herkuenfte = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={rowsFiltered[index]}
-                last={index === rowsFiltered.length - 1}
+                row={storeRowsFiltered[index]}
+                last={index === storeRowsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

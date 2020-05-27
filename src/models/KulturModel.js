@@ -56,6 +56,9 @@ export const kulturModel = kulturModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = newObjectForStore.kultur_id
+    delete newObjectForStore.kultur_id
     addQueuedQuery({
       name: 'mutateInsert_kultur_rev_one',
       variables: JSON.stringify({
