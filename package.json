@@ -31,7 +31,7 @@
     "eslint-loader": "4.0.2",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-react-hooks": "4.0.3",
+    "eslint-plugin-react-hooks": "4.0.4",
     "exceljs": "3.9.0",
     "file-saver": "2.0.2",
     "firebase": "7.14.5",
@@ -58,7 +58,7 @@
     "gatsby-source-filesystem": "2.3.8",
     "gatsby-transformer-remark": "2.8.13",
     "gatsby-transformer-sharp": "2.5.3",
-    "graphql-request": "1.8.2",
+    "graphql-request": "2.0.0",
     "graphql-tag": "2.10.3",
     "is-uuid": "1.0.2",
     "isomorphic-fetch": "2.2.1",
@@ -101,7 +101,7 @@
     "uuid": "8.1.0"
   },
   "devDependencies": {
-    "copyfiles": "2.2.0"
+    "copyfiles": "2.3.0"
   },
   "dev-comments": {
     "gatsby": "DO NOT UPGRADE over 2.20.36. 2.21.19 tested to be bad in production. See: https://github.com/gatsbyjs/gatsby/issues/19618#issuecomment-625350450"
