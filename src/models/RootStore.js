@@ -104,10 +104,15 @@ export const RootStore = RootStoreBase.props({
             // query to refresh the data updated in all used views (tree...)
             if (callbackQuery) {
               try {
+                // delay to prevent app from requerying BEFORE trigger updated the winner
                 if (callbackQueryVariables) {
-                  self[callbackQuery](JSON.parse(callbackQueryVariables))
+                  setTimeout(
+                    () =>
+                      self[callbackQuery](JSON.parse(callbackQueryVariables)),
+                    500,
+                  )
                 } else {
-                  self[callbackQuery]()
+                  setTimeout(() => self[callbackQuery](), 500)
                 }
               } catch (error) {
                 // do nothing

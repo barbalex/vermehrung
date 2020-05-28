@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
@@ -17,10 +16,6 @@ import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import {
-  kulturOption as kulturOptionFragment,
-  teilkultur as teilkulturFragment,
-} from '../../../utils/fragments'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import queryFromStore from '../../../utils/queryFromStore'
@@ -111,92 +106,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const teilkulturQuery = gql`
-  query TeilkulturQueryForTeilkultur(
-    $id: uuid!
-    $filter: teilkultur_bool_exp!
-    $isFiltered: Boolean!
-  ) {
-    teilkultur(where: { id: { _eq: $id } }) {
-      ...TeilkulturFields
-      kultur {
-        id
-        __typename
-        art_id
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-          }
-        }
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-        kultur_option {
-          ...KulturOptionFields
-        }
-      }
-    }
-    rowsUnfiltered: teilkultur @include(if: $isFiltered) {
-      id
-      __typename
-    }
-    rowsFiltered: teilkultur(where: $filter) @include(if: $isFiltered) {
-      id
-      __typename
-    }
-  }
-  ${teilkulturFragment}
-  ${kulturOptionFragment}
-`
-// garten.person.name
-const kulturQuery = gql`
-  query kulturQueryForTk {
-    kultur(
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { garten: { person: { ort: asc_nulls_first } } }
-        { art: { art_ae_art: { name: asc_nulls_first } } }
-      ]
-    ) {
-      id
-      __typename
-      art_id
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-  }
-  ${teilkulturFragment}
-`
-
 const Teilkultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -206,7 +115,7 @@ const Teilkultur = ({
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id)
+  const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id) || {}
   const teilkulturFilter = queryFromTable({
     store,
     table: 'teilkultur',
@@ -216,10 +125,18 @@ const Teilkultur = ({
       _eq: kulturIdInActiveNodeArray,
     }
   }
-  const teilkulturResult = useQuery(teilkulturQuery, {
-    variables: { id, isFiltered, filter: teilkulturFilter },
-  })
-  const { error, loading, query: queryOfTeilkultur } = teilkulturResult
+  const { error, loading, query: queryOfTeilkultur } = useQuery((store) =>
+    store.queryTeilkultur(
+      { where: { id: { _eq: id } } },
+      (t) =>
+        t.id.kultur((k) =>
+          k.id
+            .garten((g) => g.id.name.person((p) => p.id.name))
+            .art((a) => a.id.art_ae_art((ae) => ae.id.name)),
+        ).name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev
+          ._revisions._depth._conflicts,
+    ),
+  )
 
   const [errors, setErrors] = useState({})
 
@@ -230,9 +147,11 @@ const Teilkultur = ({
   )
   const totalNr =
     dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
+
   const filterForStoreRows =
-    !showFilter && row?.kultur_id ? { kultur_id: row.kultur_id } : {}
-  //console.log('Teilkultur', { filterForStoreRows, row })
+    !showFilter && kulturIdInActiveNodeArray
+      ? { kultur_id: kulturIdInActiveNodeArray }
+      : undefined
   const storeRowsFiltered = queryFromStore({
     store,
     table: 'teilkultur',
@@ -250,13 +169,27 @@ const Teilkultur = ({
     setActiveConflict(row?._rev ?? null)
   }, [queryOfTeilkultur, row?._rev])
 
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery(kulturQuery)
+  const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
+    store.queryKultur(
+      {
+        order_by: [
+          { garten: { person: { name: 'asc_nulls_first' } } },
+          { garten: { person: { ort: 'asc_nulls_first' } } },
+          { art: { art_ae_art: { name: 'asc_nulls_first' } } },
+        ],
+      },
+      (k) =>
+        k.id
+          .art((a) => a.id.art_ae_art((ae) => ae.id.name))
+          .garten((g) => g.id.name.person((p) => p.id.name.ort)),
+    ),
+  )
 
-  const { tk_bemerkungen } = row?.kultur?.kultur_option ?? {}
+  useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: row.kultur_id } } }),
+  )
+  const kulturOpion = store.kultur_options.get(row.kultur_id) || {}
+  const { tk_bemerkungen } = kulturOpion
 
   useEffect(() => {
     setErrors({})
@@ -264,11 +197,11 @@ const Teilkultur = ({
 
   const kulturWerte = useMemo(
     () =>
-      (kulturData?.kultur ?? []).map((el) => ({
+      [...store.kulturs.values()].map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
-    [kulturData?.kultur],
+    [store.kulturs],
   )
 
   const saveToDb = useCallback(
@@ -350,7 +283,7 @@ const Teilkultur = ({
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
-              <Settings teilkulturResult={teilkulturResult} />
+              <Settings kulturId={row.kultur_id} />
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"

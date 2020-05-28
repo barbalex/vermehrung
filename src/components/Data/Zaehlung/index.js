@@ -151,7 +151,7 @@ const Zaehlung = ({
     dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
   const storeRowsFiltered = queryFromStore({ store, table: 'zaehlung' })
   const filteredNr = storeRowsFiltered.length
-  const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id)
+  const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {

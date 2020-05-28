@@ -120,7 +120,7 @@ const Event = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, insertTeilkulturRev } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -161,7 +161,7 @@ const Event = ({
   const filteredNr =
     dataEventFilteredAggregate?.event_aggregate?.aggregate?.count ?? 0
 
-  const row = showFilter ? filter.event : store.events.get(id)
+  const row = showFilter ? filter.event : store.events.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -173,12 +173,7 @@ const Event = ({
     setActiveConflict(row?._rev ?? null)
   }, [queryOfEvent, row?._rev])
 
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-    refetch: refetchKultur,
-  } = useQuery((store) =>
+  const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
     store.queryKultur(
       {
         order_by: [
@@ -211,7 +206,7 @@ const Event = ({
     setErrors({})
   }, [id])
 
-  const kulturs = kulturData?.kultur ?? []
+  const kulturs = [...store.kulturs.values()]
   const kulturWerte = useMemo(
     () =>
       kulturs.map((el) => ({
@@ -220,14 +215,20 @@ const Event = ({
       })),
     [kulturs],
   )
-  const teilkulturWerte = useMemo(() => {
-    const kultur = kulturs.find((k) => k.id === row?.kultur_id)
-    const tks = kultur?.teilkulturs ?? []
-    return tks.map((t) => ({
-      value: t.id,
-      label: t.name || '(kein Name)',
-    }))
-  }, [kulturs, row?.kultur_id])
+
+  const { query: teilkulturQuery } = useQuery((store) =>
+    store.queryTeilkultur({ where: { kultur_id: { _eq: row?.kultur_id } } }),
+  )
+  const teilkulturWerte = useMemo(
+    () =>
+      [...store.teilkulturs.values()]
+        .filter((t) => t.kultur_id === row?.kultur_id)
+        .map((t) => ({
+          value: t.id,
+          label: t.name || '(kein Name)',
+        })),
+    [row?.kultur_id, store.teilkulturs],
+  )
 
   const personWerte = useMemo(
     () =>
@@ -238,8 +239,17 @@ const Event = ({
     [personData?.person],
   )
 
-  const { tk, ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
-    row?.kultur?.kultur_option ?? {}
+  useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: row?.kultur_id } } }),
+  )
+  const kulturOption = store.kultur_options.get(row?.kultur_id) || {}
+  const {
+    tk,
+    ev_datum,
+    ev_teilkultur_id,
+    ev_geplant,
+    ev_person_id,
+  } = kulturOption
 
   const saveToDb = useCallback(
     (event) => {
@@ -276,6 +286,22 @@ const Event = ({
       window.open(url)
     }
   }, [])
+
+  const onCreateNewTeilkultur = useCallback(
+    ({ name }) => {
+      const teilkultur_id = insertTeilkulturRev({
+        noNavigateInTree: true,
+        name,
+        kultur_id: row.kultur_id,
+      })
+      row.edit({ field: 'teilkultur_id', value: teilkultur_id })
+      setTimeout(() => teilkulturQuery.refetch(), 100)
+      //setTimeout(() => {
+      //  queryOfEvent.refetch()
+      //})
+    },
+    [insertTeilkulturRev, row, teilkulturQuery],
+  )
 
   if (loading) {
     return (
@@ -316,6 +342,12 @@ const Event = ({
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
+
+  console.log('Event', {
+    row,
+    teilkultur_id: row.teilkultur_id,
+    teilkulturWerte,
+  })
 
   return (
     <ErrorBoundary>
@@ -375,20 +407,14 @@ const Event = ({
               />
               {((tk && ev_teilkultur_id) || showFilter) && (
                 <SelectCreatable
-                  key={`${row.id}teilkultur_id`}
-                  name="teilkultur_id"
-                  value={row.teilkultur_id}
+                  key={`${row.id}${row.teilkultur_id}teilkultur_id`}
+                  row={row}
                   field="teilkultur_id"
                   label="Teilkultur"
                   options={teilkulturWerte}
                   loading={kulturLoading}
-                  saveToDb={saveToDb}
                   error={errors.teilkultur_id}
-                  creatablePropertiesToPass={{ kultur_id: row.kultur_id }}
-                  creatablePropertyName="name"
-                  creatableIdField="id"
-                  table="teilkultur"
-                  callback={refetchKultur}
+                  onCreateNew={onCreateNewTeilkultur}
                 />
               )}
               <TextField

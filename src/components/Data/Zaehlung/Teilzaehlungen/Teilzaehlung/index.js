@@ -139,13 +139,11 @@ const Teilzaehlung = ({
           <Teilkultur>
             <Select
               key={`${row.id}teilkultur_id`}
-              name="teilkultur_id"
-              value={row.teilkultur_id}
+              row={row}
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturenWerte}
               loading={teilkulturenLoading}
-              saveToDb={saveToDb}
               error={errors.teilkultur_id}
               onCreateNew={onCreateNewTeilkultur}
               callback={query.refetch}
