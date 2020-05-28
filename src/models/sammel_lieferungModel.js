@@ -134,7 +134,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
     },
     setDeleted() {
       const store = getParent(self, 2)
-      const { addQueuedQuery, user } = store
+      const { addQueuedQuery, user, upsertSammelLieferungModel } = store
 
       // build new object
       const newDepth = self._depth + 1
@@ -163,10 +163,10 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       newObject.id = uuidv1()
+      const newObjectForStore = { ...newObject }
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])
-
       addQueuedQuery({
         name: 'mutateInsert_sammel_lieferung_rev_one',
         variables: JSON.stringify({
@@ -181,6 +181,16 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
           where: { id: { _eq: self.id } },
         }),
       })
+      // do not stringify revisions for store
+      // as _that_ is a real array
+      newObjectForStore._revisions = self._revisions
+        ? [rev, ...self._revisions]
+        : [rev]
+      // for store: convert rev to winner
+      newObjectForStore.id = self.id
+      delete newObjectForStore.sammel_lieferung_id
+      // optimistically update store
+      upsertSammelLieferungModel(newObjectForStore)
     },
     delete() {
       const store = getParent(self, 2)
