@@ -41,6 +41,7 @@ export const sammlungModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("sammlung"), "sammlung"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
+    _deleted: types.union(types.undefined, types.null, types.boolean),
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
@@ -87,6 +88,7 @@ export const sammlungModelBase = ModelBase
 
 export class sammlungModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
+  get _deleted() { return this.__attr(`_deleted`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
@@ -129,4 +131,4 @@ export function selectFromsammlung() {
   return new sammlungModelSelector()
 }
 
-export const sammlungModelPrimitives = selectFromsammlung()._conflicts._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.lv95_x.lv95_y.nr.person_id.tsv.von_anzahl_individuen.wgs84_lat.wgs84_long
+export const sammlungModelPrimitives = selectFromsammlung()._conflicts._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.lv95_x.lv95_y.nr.person_id.tsv.von_anzahl_individuen.wgs84_lat.wgs84_long

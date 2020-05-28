@@ -29,6 +29,7 @@ export const artModel = artModelBase.actions((self) => ({
       changed_by: user.email,
       _parent_rev: self._rev,
       _depth: depth,
+      _deleted: false,
     }
     const rev = `${depth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
@@ -40,14 +41,6 @@ export const artModel = artModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = newObjectForStore.art_id
-    delete newObjectForStore.art_id
     addQueuedQuery({
       name: 'mutateInsert_art_rev_one',
       variables: JSON.stringify({
@@ -62,6 +55,14 @@ export const artModel = artModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.art_id
     // optimistically update store
     upsertArtModel(newObjectForStore)
     setTimeout(() => {
@@ -70,7 +71,7 @@ export const artModel = artModelBase.actions((self) => ({
   },
   setDeleted() {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user } = store
+    const { addQueuedQuery, user, upsertArtModel } = store
 
     // build new object
     const newDepth = self._depth + 1
@@ -84,12 +85,12 @@ export const artModel = artModelBase.actions((self) => ({
       _deleted: true,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
     newObject.id = uuidv1()
+    newObject._rev = rev
+    const newObjectForStore = { ...newObject }
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-
     addQueuedQuery({
       name: 'mutateInsert_art_rev_one',
       variables: JSON.stringify({
@@ -104,6 +105,16 @@ export const artModel = artModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.art_id
+    // optimistically update store
+    upsertArtModel(newObjectForStore)
   },
   delete() {
     const store = getParent(self, 2)

@@ -9,11 +9,14 @@ import { types } from "mobx-state-tree"
 */
 export const person_option_select_columnEnum = types.enumeration("person_option_select_column", [
         "_conflicts",
+  "_deleted",
   "_depth",
   "_parent_rev",
   "_rev",
   "_revisions",
   "ar_name_deutsch",
+  "changed",
+  "changed_by",
   "ga_aktiv",
   "ga_bemerkungen",
   "ga_geom_point",

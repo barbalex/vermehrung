@@ -71,6 +71,7 @@ export const personModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("person"), "person"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
+    _deleted: types.union(types.undefined, types.null, types.boolean),
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
@@ -133,6 +134,7 @@ export const personModelBase = ModelBase
 
 export class personModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
+  get _deleted() { return this.__attr(`_deleted`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
@@ -191,4 +193,4 @@ export function selectFromperson() {
   return new personModelSelector()
 }
 
-export const personModelPrimitives = selectFromperson()._conflicts._depth._parent_rev._rev._revisions.account_id.adresszusatz.aktiv.bemerkungen.changed.changed_by.email.info.kein_email.kommerziell.name.nr.ort.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.tsv.user_role
+export const personModelPrimitives = selectFromperson()._conflicts._deleted._depth._parent_rev._rev._revisions.account_id.adresszusatz.aktiv.bemerkungen.changed.changed_by.email.info.kein_email.kommerziell.name.nr.ort.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.tsv.user_role

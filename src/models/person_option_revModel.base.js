@@ -22,6 +22,8 @@ export const person_option_revModelBase = ModelBase
     _rev: types.union(types.undefined, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ar_name_deutsch: types.union(types.undefined, types.null, types.boolean),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     ga_aktiv: types.union(types.undefined, types.null, types.boolean),
     ga_bemerkungen: types.union(types.undefined, types.null, types.boolean),
     ga_geom_point: types.union(types.undefined, types.null, types.boolean),
@@ -59,6 +61,8 @@ export class person_option_revModelSelector extends QueryBuilder {
   get _rev() { return this.__attr(`_rev`) }
   get _revisions() { return this.__attr(`_revisions`) }
   get ar_name_deutsch() { return this.__attr(`ar_name_deutsch`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get ga_aktiv() { return this.__attr(`ga_aktiv`) }
   get ga_bemerkungen() { return this.__attr(`ga_bemerkungen`) }
   get ga_geom_point() { return this.__attr(`ga_geom_point`) }
@@ -87,4 +91,4 @@ export function selectFromperson_option_rev() {
   return new person_option_revModelSelector()
 }
 
-export const person_option_revModelPrimitives = selectFromperson_option_rev()._deleted._depth._parent_rev._rev._revisions.ar_name_deutsch.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.li_show_sl.li_show_sl_felder.person_id.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung
+export const person_option_revModelPrimitives = selectFromperson_option_rev()._deleted._depth._parent_rev._rev._revisions.ar_name_deutsch.changed.changed_by.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.li_show_sl.li_show_sl_felder.person_id.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung

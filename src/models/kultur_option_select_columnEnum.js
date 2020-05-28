@@ -9,10 +9,13 @@ import { types } from "mobx-state-tree"
 */
 export const kultur_option_select_columnEnum = types.enumeration("kultur_option_select_column", [
         "_conflicts",
+  "_deleted",
   "_depth",
   "_parent_rev",
   "_rev",
   "_revisions",
+  "changed",
+  "changed_by",
   "ev_datum",
   "ev_geplant",
   "ev_person_id",

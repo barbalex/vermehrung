@@ -17,11 +17,14 @@ export const person_optionModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("person_option"), "person_option"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
+    _deleted: types.union(types.undefined, types.null, types.boolean),
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     ar_name_deutsch: types.union(types.undefined, types.null, types.boolean),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     ga_aktiv: types.union(types.undefined, types.null, types.boolean),
     ga_bemerkungen: types.union(types.undefined, types.null, types.boolean),
     ga_geom_point: types.union(types.undefined, types.null, types.boolean),
@@ -53,11 +56,14 @@ export const person_optionModelBase = ModelBase
 
 export class person_optionModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
+  get _deleted() { return this.__attr(`_deleted`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
   get _revisions() { return this.__attr(`_revisions`) }
   get ar_name_deutsch() { return this.__attr(`ar_name_deutsch`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get ga_aktiv() { return this.__attr(`ga_aktiv`) }
   get ga_bemerkungen() { return this.__attr(`ga_bemerkungen`) }
   get ga_geom_point() { return this.__attr(`ga_geom_point`) }
@@ -85,4 +91,4 @@ export function selectFromperson_option() {
   return new person_optionModelSelector()
 }
 
-export const person_optionModelPrimitives = selectFromperson_option()._conflicts._depth._parent_rev._rev._revisions.ar_name_deutsch.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.li_show_sl.li_show_sl_felder.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung
+export const person_optionModelPrimitives = selectFromperson_option()._conflicts._deleted._depth._parent_rev._rev._revisions.ar_name_deutsch.changed.changed_by.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.li_show_sl.li_show_sl_felder.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung
