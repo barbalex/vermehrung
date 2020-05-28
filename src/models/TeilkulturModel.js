@@ -48,14 +48,6 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = self.id
-    delete newObjectForStore.teilkultur_id
     addQueuedQuery({
       name: 'mutateInsert_teilkultur_rev_one',
       variables: JSON.stringify({
@@ -70,12 +62,20 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.teilkultur_id
     // optimistically update store
     upsertTeilkulturModel(newObjectForStore)
   },
   setDeleted() {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user } = store
+    const { addQueuedQuery, user, upsertTeilkulturModel } = store
 
     // build new object
     const newDepth = self._depth + 1
@@ -100,7 +100,6 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-
     addQueuedQuery({
       name: 'mutateInsert_teilkultur_rev_one',
       variables: JSON.stringify({
@@ -115,6 +114,16 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.teilkultur_id
+    // optimistically update store
+    upsertTeilkulturModel(newObjectForStore)
   },
   delete() {
     const store = getParent(self, 2)

@@ -59,14 +59,6 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = newObjectForStore.sammlung_id
-    delete newObjectForStore.sammlung_id
     addQueuedQuery({
       name: 'mutateInsert_sammlung_rev_one',
       variables: JSON.stringify({
@@ -81,6 +73,14 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.sammlung_id
     // optimistically update store
     upsertSammlungModel(newObjectForStore)
     setTimeout(() => {
@@ -91,7 +91,7 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
   },
   setDeleted() {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user } = store
+    const { addQueuedQuery, user, upsertSammlungModel } = store
 
     // build new object
     const newDepth = self._depth + 1
@@ -122,7 +122,6 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-
     addQueuedQuery({
       name: 'mutateInsert_sammlung_rev_one',
       variables: JSON.stringify({
@@ -137,6 +136,16 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.sammlung_id
+    // optimistically update store
+    upsertSammlungModel(newObjectForStore)
   },
   delete() {
     const store = getParent(self, 2)

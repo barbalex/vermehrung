@@ -63,14 +63,6 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = newObjectForStore.teilzaehlung_id
-    delete newObjectForStore.teilzaehlung_id
     addQueuedQuery({
       name: 'mutateInsert_teilzaehlung_rev_one',
       variables: JSON.stringify({
@@ -85,12 +77,20 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.teilzaehlung_id
     // optimistically update store
     upsertTeilzaehlungModel(newObjectForStore)
   },
   setDeleted() {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user } = store
+    const { addQueuedQuery, user, upsertTeilzaehlungModel } = store
 
     // build new object
     const newDepth = self._depth + 1
@@ -118,7 +118,6 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-
     addQueuedQuery({
       name: 'mutateInsert_teilzaehlung_rev_one',
       variables: JSON.stringify({
@@ -133,6 +132,16 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
+    // do not stringify revisions for store
+    // as _that_ is a real array
+    newObjectForStore._revisions = self._revisions
+      ? [rev, ...self._revisions]
+      : [rev]
+    // for store: convert rev to winner
+    newObjectForStore.id = self.id
+    delete newObjectForStore.teilzaehlung_id
+    // optimistically update store
+    upsertTeilzaehlungModel(newObjectForStore)
   },
   delete() {
     const store = getParent(self, 2)
