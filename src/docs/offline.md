@@ -17,6 +17,7 @@ Es muss also eine Methode geben:
 - Konflikte automatisiert zu lösen
 - Der Benutzerin alle (automatisiert gelösten) Konflikte aufzulisten...
 - ...und ihr die Möglichkeit zu geben, daraus die richtige Version zu wählen oder neu zu kombinieren
+- Obiges auch für Löschungen zu ermöglichen
 - Sowie der Benutzerin alle gescheiterten Operationen aufzulisten
 - Diese Methode darf nicht von der Reihenfolge der Operationen abhängig sein
 
@@ -44,8 +45,10 @@ Nun gibt es schlaue Abfragen, welche immer wenn eine Version eintrifft:
 - Die Datenbank führt jede Tabelle doppelt:
   - Eine Tabelle mit allen "Versionen"
   - Eine Tabelle mit den "Siegern"
-- Löscht die Benutzerin einen Datensatz, wird eine neue Version geschrieben, welche die Löschung dokumentiert
-- Immer, wenn eine Version geschrieben wird, berechnet und aktualisiert die Datenbank den Sieger. Oder entfernt ihn, wenn die gewinnende Version eine Löschung ist
+- Löscht die Benutzerin einen Datensatz
+  - Wird eine neue Version geschrieben, welche die Löschung dokumentiert
+  - Wird ein Sieger erstellt, der als gelöscht gekennzeichnet ist
+- Immer, wenn eine Version geschrieben wird, berechnet und aktualisiert die Datenbank den Sieger
 - Findet die Datenbank Konflikte, listet sie sie beim Sieger auf
 - Die App muss sich somit nicht selber um Versionen kümmern. Sie liest Sieger und schreibt Versionen
 - Die App fragt entweder nach jeder erfolgreichen Operation bei der Datenbank nach dem neuen Sieger. Oder lässt sich gleich generell über alle Änderungen laufend informieren ("live")
