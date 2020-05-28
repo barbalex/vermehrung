@@ -14,6 +14,8 @@ export const person_option_rev_select_columnEnum = types.enumeration("person_opt
   "_rev",
   "_revisions",
   "ar_name_deutsch",
+  "changed",
+  "changed_by",
   "ga_aktiv",
   "ga_bemerkungen",
   "ga_geom_point",

@@ -9,6 +9,7 @@ import { types } from "mobx-state-tree"
 */
 export const sammlung_select_columnEnum = types.enumeration("sammlung_select_column", [
         "_conflicts",
+  "_deleted",
   "_depth",
   "_parent_rev",
   "_rev",

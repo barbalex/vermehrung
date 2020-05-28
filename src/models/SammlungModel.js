@@ -47,6 +47,7 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
       changed_by: user.email,
       _parent_rev: self._rev,
       _depth: depth,
+      _deleted: false,
     }
     const rev = `${depth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
@@ -115,8 +116,9 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
       _deleted: true,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject._rev = rev
     newObject.id = uuidv1()
+    newObject._rev = rev
+    const newObjectForStore = { ...newObject }
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])

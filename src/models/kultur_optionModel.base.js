@@ -17,10 +17,13 @@ export const kultur_optionModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("kultur_option"), "kultur_option"),
     _conflicts: types.union(types.undefined, types.null, types.frozen()),
+    _deleted: types.union(types.undefined, types.null, types.boolean),
     _depth: types.union(types.undefined, types.null, types.integer),
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     ev_datum: types.union(types.undefined, types.null, types.boolean),
     ev_geplant: types.union(types.undefined, types.null, types.boolean),
     ev_person_id: types.union(types.undefined, types.null, types.boolean),
@@ -44,10 +47,13 @@ export const kultur_optionModelBase = ModelBase
 
 export class kultur_optionModelSelector extends QueryBuilder {
   get _conflicts() { return this.__attr(`_conflicts`) }
+  get _deleted() { return this.__attr(`_deleted`) }
   get _depth() { return this.__attr(`_depth`) }
   get _parent_rev() { return this.__attr(`_parent_rev`) }
   get _rev() { return this.__attr(`_rev`) }
   get _revisions() { return this.__attr(`_revisions`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get ev_datum() { return this.__attr(`ev_datum`) }
   get ev_geplant() { return this.__attr(`ev_geplant`) }
   get ev_person_id() { return this.__attr(`ev_person_id`) }
@@ -67,4 +73,4 @@ export function selectFromkultur_option() {
   return new kultur_optionModelSelector()
 }
 
-export const kultur_optionModelPrimitives = selectFromkultur_option()._conflicts._depth._parent_rev._rev._revisions.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_bemerkungen.tz_teilkultur_id.z_bemerkungen
+export const kultur_optionModelPrimitives = selectFromkultur_option()._conflicts._deleted._depth._parent_rev._rev._revisions.changed.changed_by.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_bemerkungen.tz_teilkultur_id.z_bemerkungen

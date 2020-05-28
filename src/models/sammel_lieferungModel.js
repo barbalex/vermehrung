@@ -63,6 +63,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
         changed_by: user.email,
         _parent_rev: self._rev,
         _depth: depth,
+        _deleted: false,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       // DO NOT include id in rev - or revs with same data will conflict
@@ -74,14 +75,6 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = self._revisions
-        ? [rev, ...self._revisions]
-        : [rev]
-      // for store: convert rev to winner
-      newObjectForStore.id = newObjectForStore.sammel_lieferung_id
-      delete newObjectForStore.sammel_lieferung_id
       addQueuedQuery({
         name: 'mutateInsert_sammel_lieferung_rev_one',
         variables: JSON.stringify({
@@ -96,6 +89,14 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
           where: { id: { _eq: self.id } },
         }),
       })
+      // do not stringify revisions for store
+      // as _that_ is a real array
+      newObjectForStore._revisions = self._revisions
+        ? [rev, ...self._revisions]
+        : [rev]
+      // for store: convert rev to winner
+      newObjectForStore.id = self.id
+      delete newObjectForStore.sammel_lieferung_id
       // optimistically update store
       upsertSammelLieferungModel(newObjectForStore)
       const userPerson = [...store.persons.values()].find(
