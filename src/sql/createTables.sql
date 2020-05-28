@@ -44,6 +44,7 @@ create table person (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on person using btree (id);
@@ -53,6 +54,7 @@ create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
 create index on person using btree (info);
 create index on person using gin (tsv);
+create index on person using btree (_deleted);
 
 drop table if exists person_rev cascade;
 create table person_rev (
@@ -116,11 +118,13 @@ create table art (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on art using btree (id);
 create index on art using btree (ae_id);
 create index on art using gin (tsv);
+create index on art using btree (_deleted);
 
 drop table if exists art_rev cascade;
 create table art_rev (
@@ -206,6 +210,7 @@ create table herkunft (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on herkunft using btree (id);
@@ -213,6 +218,7 @@ create index on herkunft using btree (nr);
 create index on herkunft using btree (gemeinde);
 create index on herkunft using btree (lokalname);
 create index on herkunft using gin (tsv);
+create index on herkunft using btree (_deleted);
 
 drop table if exists herkunft_rev cascade;
 create table herkunft_rev (
@@ -281,6 +287,7 @@ create table sammlung (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on sammlung using btree (id);
@@ -293,6 +300,7 @@ create index on sammlung using btree (anzahl_pflanzen);
 create index on sammlung using btree (gramm_samen);
 create index on sammlung using btree (geplant);
 create index on sammlung using gin (tsv);
+create index on sammlung using btree (_deleted);
 
 drop table if exists sammlung_rev cascade;
 create table sammlung_rev (
@@ -362,6 +370,7 @@ create table garten (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on garten using btree (id);
@@ -372,6 +381,7 @@ create index on garten using btree (plz);
 create index on garten using btree (ort);
 create index on garten using btree (aktiv);
 create index on garten using gin (tsv);
+create index on garten using btree (_deleted);
 
 drop table if exists garten_rev cascade;
 create table garten_rev (
@@ -433,6 +443,7 @@ create table kultur (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index single_active_herkunft_per_art_and_garden_idx on kultur (art_id, herkunft_id, garten_id) where aktiv is true and herkunft_id is not null;
@@ -445,6 +456,7 @@ create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
 create index on kultur using gin (tsv);
+create index on kultur using btree (_deleted);
 
 drop table if exists kultur_rev cascade;
 create table kultur_rev (
@@ -533,12 +545,14 @@ create table teilkultur (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on teilkultur using btree (id);
 create index on teilkultur using btree (kultur_id);
 create index on teilkultur using btree (name);
 create index on teilkultur using gin (tsv);
+create index on teilkultur using btree (_deleted);
 
 drop table if exists teilkultur_rev cascade;
 create table teilkultur_rev (
@@ -582,6 +596,7 @@ create table event (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on event using btree (id);
@@ -592,6 +607,7 @@ create index on event using btree (beschreibung);
 create index on event using btree (geplant);
 create index on event using btree (datum);
 create index on event using gin (tsv);
+create index on event using btree (_deleted);
 
 drop table if exists event_rev cascade;
 create table event_rev (
@@ -633,6 +649,7 @@ create table zaehlung (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on zaehlung using btree (id);
@@ -640,6 +657,7 @@ create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
 create index on zaehlung using btree (prognose);
 create index on zaehlung using gin (tsv);
+create index on zaehlung using btree (_deleted);
 
 drop table if exists zaehlung_rev cascade;
 create table zaehlung_rev (
@@ -684,6 +702,7 @@ create table teilzaehlung (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on teilzaehlung using btree (id);
@@ -695,6 +714,7 @@ create index on teilzaehlung using btree (anzahl_auspflanzbereit);
 create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using btree (andere_menge);
 create index on teilzaehlung using gin (tsv);
+create index on teilzaehlung using btree (_deleted);
 
 drop table if exists teilzaehlung_rev cascade;
 create table teilzaehlung_rev (
@@ -746,9 +766,11 @@ create table kultur_option (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on kultur_option using btree (id);
+create index on kultur_option using btree (_deleted);
 COMMENT ON COLUMN kultur_option.tk IS 'opt-in Option für Teilkulturen';
 
 drop table if exists kultur_option_rev cascade;
@@ -813,9 +835,11 @@ create table person_option (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on person_option using btree (id);
+create index on person_option using btree (_deleted);
 comment on column person_option.sl_show_empty_when_next_to_li is 'Ob in der Sammel-Lieferung leere Felder angezeigt werden (nur wirksam, wenn die Sammel-Lieferung neben einer Lieferung angezeigt wird)';
 comment on column person_option.li_show_sl is 'Ob die Sammel-Lieferung neben der Lieferung angezeigt wird';
 comment on column person_option.li_show_sl_felder is 'Ob Felder, deren Werte aus der Sammel-Lieferung stammen, sichtbar sind';
@@ -887,6 +911,7 @@ create table lieferung (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on lieferung using btree (id);
@@ -905,6 +930,7 @@ create index on lieferung using btree (gramm_samen);
 create index on lieferung using btree (andere_menge);
 create index on lieferung using btree (geplant);
 create index on lieferung using gin (tsv);
+create index on lieferung using btree (_deleted);
 
 drop table if exists lieferung_rev cascade;
 create table lieferung_rev (
@@ -964,9 +990,11 @@ create table sammel_lieferung (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
+  _deleted boolean default false,
   _conflicts text[] default null
 );
 create index on sammel_lieferung using btree (id);
+create index on sammel_lieferung using btree (_deleted);
 -- need to wait with adding this reference until sammel_lieferung was created
 alter table lieferung add constraint sammel_lieferung_fk foreign key (sammel_lieferung_id) references sammel_lieferung (id) on delete set null on update cascade;
 
