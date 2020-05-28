@@ -1,7 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -9,11 +7,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
-import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
+import { StoreContext, useQuery } from '../../../models/reactUtils'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -34,52 +30,23 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTeilkulturen = ({ teilkulturResult }) => {
-  const client = useApolloClient()
+const SettingsTeilkulturen = ({ kulturId }) => {
   const store = useContext(StoreContext)
   const { addNotification } = store
 
-  const { data, error, loading } = teilkulturResult
-  const { tk_bemerkungen } =
-    get(data, 'teilkultur[0].kultur.kultur_option') || {}
+  const { loading, error } = useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
+  )
+  const kulturOpion = store.kultur_options.get(kulturId) || {}
+  const { tk_bemerkungen } = kulturOpion
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      const kulturId = get(data, 'teilkultur[0].kultur_id')
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_kultur_option(
-                $kulturId: uuid!
-              ) {
-                update_kultur_option(
-                  where: { id: { _eq: $kulturId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...KulturOptionFields
-                  }
-                }
-              }
-              ${kulturOptionFragment}
-            `,
-          variables: {
-            kulturId,
-          },
-          refetchQueries: ['TeilkulturQueryForTeilkultur'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const value = event.target.value === 'false'
+      kulturOpion.edit({ field, value })
     },
-    [data, client, addNotification],
+    [kulturOpion],
   )
   const onClickFrown = useCallback(() => {
     addNotification({

@@ -73,7 +73,6 @@ const Teilkulturen = ({ filter: showFilter }) => {
       _eq: kulturIdInActiveNodeArray,
     }
   }
-
   const { error, loading } = useQuery(
     (store) =>
       store.queryTeilkultur({
@@ -91,9 +90,10 @@ const Teilkulturen = ({ filter: showFilter }) => {
   const totalNr =
     dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
 
-  const filterForStoreRows = kulturIdInActiveNodeArray
-    ? { kultur_id: kulturIdInActiveNodeArray }
-    : undefined
+  const filterForStoreRows =
+    !showFilter && kulturIdInActiveNodeArray
+      ? { kultur_id: kulturIdInActiveNodeArray }
+      : undefined
   const storeRowsFiltered = queryFromStore({
     store,
     table: 'teilkultur',

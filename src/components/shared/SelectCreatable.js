@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import Select from 'react-select/creatable'
 import styled from 'styled-components'
-
-import { StoreContext } from '../../models/reactUtils'
+import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   display: flex;
@@ -78,38 +77,28 @@ const emptyValue = {
 }
 
 const SharedSelect = ({
-  value,
   field = '',
   label,
-  name,
+  row,
   error,
   options,
   loading,
   maxHeight = null,
   noCaret = false,
-  saveToDb,
   onCreateNew,
-  callback,
+  callback = () => {},
 }) => {
-  const store = useContext(StoreContext)
-
+  const value = row[field]
   const onChange = useCallback((option, actionMeta) => {
     // if action is create-option
-    // need to first create new dataset
+    // need to create new dataset
     if (actionMeta.action === 'create-option') {
       // 1. create new dataset
       onCreateNew({ name: option.label })
       return
     }
-    // now update value
-    const fakeEvent = {
-      target: {
-        name,
-        value: option ? option.value : null,
-      },
-    }
-    saveToDb(fakeEvent)
-    !!callback && callback()
+    row.edit({ field, value: option ? option.value : null })
+    callback()
   }, [])
 
   // show ... whyle options are loading
@@ -141,4 +130,4 @@ const SharedSelect = ({
   )
 }
 
-export default SharedSelect
+export default observer(SharedSelect)

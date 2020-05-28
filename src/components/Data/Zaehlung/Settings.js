@@ -47,7 +47,6 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
       const field = event.target.name
       const value = event.target.value === 'false'
       kulturOption.edit({ field, value })
-      setAnchorEl(null)
     },
     [kulturOption],
   )
