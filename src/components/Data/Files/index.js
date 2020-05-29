@@ -1,23 +1,11 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 
-import { StoreContext } from '../../../models/reactUtils'
-import {
-  artFile as artFileFragment,
-  herkunftFile as herkunftFileFragment,
-  sammlungFile as sammlungFileFragment,
-  personFile as personFileFragment,
-  gartenFile as gartenFileFragment,
-  kulturFile as kulturFileFragment,
-  lieferungFile as lieferungFileFragment,
-} from '../../../utils/fragments'
+import { StoreContext, useQuery } from '../../../models/reactUtils'
 import Uploader from '../../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'
@@ -66,79 +54,45 @@ const LightboxButton = styled(Button)`
   }*/
 `
 
-const fragmentObject = {
-  art: artFileFragment,
-  herkunft: herkunftFileFragment,
-  sammlung: sammlungFileFragment,
-  person: personFileFragment,
-  garten: gartenFileFragment,
-  kultur: kulturFileFragment,
-  lieferung: lieferungFileFragment,
-}
-
 const Files = ({ parentId, parent }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const fieldsName = `${upperFirst(parent)}FileFields`
-  const fragment = fragmentObject[parent]
-  const queryObject = {
-    [parent]: gql`
-    query GeneralFileQuery($parentId: uuid!) {
-      ${parent}_file(
-        order_by: { name: asc }
-        where: { ${parent}_id: { _eq: $parentId } }
-      ) {
-        ...${fieldsName}
-      }
-    }
-    ${fragment}
-  `,
-  }
+  const { error, loading, query: fileQuery } = useQuery((store) =>
+    store[`query${upperFirst(parent)}_file`]({
+      where: { [`${parent}_id`]: { _eq: parentId } },
+      order_by: { name: 'asc' },
+    }),
+  )
 
-  const query = queryObject[parent]
-  const { data, error, loading } = useQuery(query, {
-    variables: { parentId },
-  })
-
-  const files = get(data, `${parent}_file`, [])
+  const files = [...store[`${parent}_files`].values()].filter(
+    (f) => f[`${parent}_id`] === parentId,
+  )
 
   const onChangeUploader = useCallback(
     (file) => {
       if (file) {
         file.done(async (info) => {
           //console.log({ info })
-          const mutation = gql`
-            mutation insertFile {
-              insert_${parent}_file (objects: [{
-                file_id: "${info.uuid}",
-                file_mime_type: "${info.mimeType}",
-                ${parent}_id: ${parentId},
-                name: "${info.name}"
-              }]) {
-                returning { ${parent}_id }
-              }
-            }
-          `
-          try {
-            await client.mutate({
-              mutation,
-              refetchQueries: ['GeneralFileQuery'],
-            })
-          } catch (error) {
-            return store.addNotification({
-              message: error.message,
-            })
-          }
-          //console.log('File uploaded: ', { info, responce })
-          // TODO: reinitiate uploader
+          await store[`mutateInsert_${parent}_file_one`]({
+            object: {
+              file_id: info.uuid,
+              file_mime_type: info.mimeType,
+              [`${parent}_id`]: parentId,
+              name: info.name,
+            },
+            on_conflict: {
+              constraint: `${parent}_file_pkey`,
+              update_columns: ['id'],
+            },
+          })
+          fileQuery.refetch()
         })
       }
     },
-    [client, parent, parentId, store],
+    [fileQuery, parent, parentId, store],
   )
 
   const images = files.filter((f) => isImageFile(f))
@@ -209,7 +163,12 @@ const Files = ({ parentId, parent }) => {
         )}
         <Spacer />
         {files.map((file) => (
-          <File key={file.file_id} file={file} parent={parent} />
+          <File
+            key={file.file_id}
+            file={file}
+            parent={parent}
+            fileQuery={fileQuery}
+          />
         ))}
       </Container>
     </ErrorBoundary>
