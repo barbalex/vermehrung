@@ -19,10 +19,10 @@ export {
 export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertTeilzaehlungModel } = store
+    const { addQueuedQuery, user, upsertTeilzaehlungModel, tree } = store
 
     // first build the part that will be revisioned
-    const depth = self._depth + 1
+    const newDepth = self._depth + 1
     const newObject = {
       teilzaehlung_id: self.id,
       zaehlung_id: field === 'zaehlung_id' ? value : self.zaehlung_id,
@@ -50,10 +50,10 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
-      _depth: depth,
-      _deleted: false,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : self._deleted,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
@@ -87,70 +87,11 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     delete newObjectForStore.teilzaehlung_id
     // optimistically update store
     upsertTeilzaehlungModel(newObjectForStore)
-  },
-  setDeleted() {
-    const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertTeilzaehlungModel } = store
-
-    // build new object
-    const newDepth = self._depth + 1
-    const newObject = {
-      teilzaehlung_id: self.id,
-      zaehlung_id: self.zaehlung_id,
-      teilkultur_id: self.teilkultur_id,
-      anzahl_pflanzen: self.anzahl_pflanzen,
-      anzahl_auspflanzbereit: self.anzahl_auspflanzbereit,
-      anzahl_mutterpflanzen: self.anzahl_mutterpflanzen,
-      andere_menge: self.andere_menge,
-      auspflanzbereit_beschreibung: self.auspflanzbereit_beschreibung,
-      bemerkungen: self.bemerkungen,
-      prognose_von_tz: self.prognose_von_tz,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-      _parent_rev: self._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    const newObjectForStore = { ...newObject }
-    newObject._revisions = self._revisions
-      ? toPgArray([rev, ...self._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_teilzaehlung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilzaehlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryTeilzaehlung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = self.id
-    delete newObjectForStore.teilzaehlung_id
-    // optimistically update store
-    upsertTeilzaehlungModel(newObjectForStore)
+    setTimeout(() => {
+      if (['_deleted'].includes(field)) tree.refetch()
+    }, 50)
   },
   delete() {
-    const store = getParent(self, 2)
-    const { tree, deleteTeilzaehlungModel } = store
-
-    self.setDeleted()
-    deleteTeilzaehlungModel({ id: self.id })
-    setTimeout(() => {
-      tree.refetch()
-    }, 50)
+    self.edit({ field: '_deleted', value: true })
   },
 }))

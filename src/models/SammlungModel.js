@@ -22,7 +22,7 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     const { addQueuedQuery, user, upsertSammlungModel, tree } = store
 
     // first build the part that will be revisioned
-    const depth = self._depth + 1
+    const newDepth = self._depth + 1
     const newObject = {
       sammlung_id: self.id,
       art_id: field === 'art_id' ? value : self.art_id,
@@ -46,10 +46,10 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
-      _depth: depth,
-      _deleted: false,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : self._deleted,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
@@ -84,77 +84,14 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     // optimistically update store
     upsertSammlungModel(newObjectForStore)
     setTimeout(() => {
-      if (['herkunft_id', 'person_id', 'art_id', 'nr'].includes(field)) {
+      if (
+        ['herkunft_id', 'person_id', 'art_id', 'nr', '_deleted'].includes(field)
+      ) {
         tree.refetch()
       }
     }, 50)
   },
-  setDeleted() {
-    const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertSammlungModel } = store
-
-    // build new object
-    const newDepth = self._depth + 1
-    const newObject = {
-      sammlung_id: self.id,
-      art_id: self.art_id,
-      person_id: self.person_id,
-      herkunft_id: self.herkunft_id,
-      nr: self.nr,
-      datum: self.datum,
-      von_anzahl_individuen: self.von_anzahl_individuen,
-      anzahl_pflanzen: self.anzahl_pflanzen,
-      gramm_samen: self.gramm_samen,
-      andere_menge: self.andere_menge,
-      geom_point: self.geom_point,
-      geplant: self.geplant,
-      bemerkungen: self.bemerkungen,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-      _parent_rev: self._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    const newObjectForStore = { ...newObject }
-    newObject._revisions = self._revisions
-      ? toPgArray([rev, ...self._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_sammlung_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'sammlung_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'querySammlung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = self.id
-    delete newObjectForStore.sammlung_id
-    // optimistically update store
-    upsertSammlungModel(newObjectForStore)
-  },
   delete() {
-    const store = getParent(self, 2)
-    const { tree, deleteSammlungModel } = store
-
-    self.setDeleted()
-    deleteSammlungModel({ id: self.id })
-    setTimeout(() => {
-      tree.refetch()
-    }, 50)
+    self.edit({ field: '_deleted', value: true })
   },
 }))

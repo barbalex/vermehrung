@@ -19,10 +19,10 @@ export {
 export const teilkulturModel = teilkulturModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertTeilkulturModel } = store
+    const { addQueuedQuery, user, upsertTeilkulturModel, tree } = store
 
     // first build the part that will be revisioned
-    const depth = self._depth + 1
+    const newDepth = self._depth + 1
     const newObject = {
       teilkultur_id: self.id,
       kultur_id: field === 'kultur_id' ? value : self.kultur_id,
@@ -35,10 +35,10 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
-      _depth: depth,
-      _deleted: false,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : self._deleted,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
@@ -72,67 +72,11 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     delete newObjectForStore.teilkultur_id
     // optimistically update store
     upsertTeilkulturModel(newObjectForStore)
-  },
-  setDeleted() {
-    const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertTeilkulturModel } = store
-
-    // build new object
-    const newDepth = self._depth + 1
-    const newObject = {
-      teilkultur_id: self.id,
-      kultur_id: self.kultur_id,
-      name: self.name,
-      ort1: self.ort1,
-      ort2: self.ort2,
-      ort3: self.ort3,
-      bemerkungen: self.bemerkungen,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-      _parent_rev: self._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    const newObjectForStore = { ...newObject }
-    newObject._revisions = self._revisions
-      ? toPgArray([rev, ...self._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_teilkultur_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'teilkultur_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryTeilkultur',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = self.id
-    delete newObjectForStore.teilkultur_id
-    // optimistically update store
-    upsertTeilkulturModel(newObjectForStore)
+    setTimeout(() => {
+      if (['_deleted'].includes(field)) tree.refetch()
+    }, 50)
   },
   delete() {
-    const store = getParent(self, 2)
-    const { tree, deleteTeilkulturModel } = store
-
-    self.setDeleted()
-    deleteTeilkulturModel({ id: self.id })
-    setTimeout(() => {
-      tree.refetch()
-    }, 50)
+    self.edit({ field: '_deleted', value: true })
   },
 }))

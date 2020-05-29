@@ -80,12 +80,6 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     }, 50)
   },
   delete() {
-    const store = getParent(self, 2)
-    const { tree } = store
-
     self.edit({ field: '_deleted', value: true })
-    setTimeout(() => {
-      tree.refetch()
-    }, 50)
   },
 }))

@@ -2,7 +2,6 @@ create or replace function herkunft_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
-  delete from herkunft where id = new.herkunft_id;
   insert into herkunft (
       id,
       nr,
@@ -18,6 +17,7 @@ begin
       _revisions,
       _parent_rev,
       _depth,
+      _deleted,
       _conflicts
   )
   with leaves as (
@@ -68,6 +68,7 @@ begin
       herkunft_rev._revisions,
       herkunft_rev._parent_rev,
       herkunft_rev._depth,
+      herkunft_rev._deleted,
       (select array(
         select _rev from leaves
         where 
@@ -76,7 +77,24 @@ begin
       )) as _conflicts
     from
       herkunft_rev
-      join winning_revisions on herkunft_rev._rev = winning_revisions._rev;
+      join winning_revisions on herkunft_rev._rev = winning_revisions._rev
+    on conflict on constraint herkunft_pkey do update set
+      -- do not update the id = pkey
+      nr = excluded.nr,
+      lokalname = excluded.lokalname,
+      gemeinde = excluded.gemeinde,
+      kanton = excluded.kanton,
+      land = excluded.land,
+      geom_point = excluded.geom_point,
+      bemerkungen = excluded.bemerkungen,
+      changed = excluded.changed,
+      changed_by = excluded.changed_by,
+      _rev = excluded._rev,
+      _revisions = excluded._revisions,
+      _parent_rev = excluded._parent_rev,
+      _depth = excluded._depth,
+      _deleted = excluded._deleted,
+      _conflicts = excluded._conflicts;
   return new;
 end;
 $body$
