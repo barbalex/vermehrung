@@ -1,25 +1,13 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import upperFirst from 'lodash/upperFirst'
 
 import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
-import {
-  artFile as artFileFragment,
-  herkunftFile as herkunftFileFragment,
-  sammlungFile as sammlungFileFragment,
-  personFile as personFileFragment,
-  gartenFile as gartenFileFragment,
-  kulturFile as kulturFileFragment,
-  lieferungFile as lieferungFileFragment,
-} from '../../../utils/fragments'
 import isImageFile from './isImageFile'
 //import uploadcareApiSignature from '../../../utils/uploadcareApiSignature'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -76,19 +64,9 @@ const MenuTitle = styled.h3`
   }
 `
 
-const fragmentObject = {
-  art: artFileFragment,
-  herkunft: herkunftFileFragment,
-  sammlung: sammlungFileFragment,
-  person: personFileFragment,
-  garten: gartenFileFragment,
-  kultur: kulturFileFragment,
-  lieferung: lieferungFileFragment,
-}
-
 const File = ({ file, parent }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
+  const { deleteArtFileModel } = store
 
   const [errors, setErrors] = useState({})
 
@@ -97,61 +75,20 @@ const File = ({ file, parent }) => {
 
   useEffect(() => setErrors({}), [file])
 
-  const onClickDelete = useCallback(async () => {
+  const onClickDelete = useCallback(() => {
+    console.log('File, onClickDelete:', { file, fileId: file.id })
     // 1. remove dataset
-    try {
-      await client.mutate({
-        mutation: gql`
-          mutation deleteFile {
-            delete_${parent}_file (where: {file_id: {_eq: "${file.file_id}"}}) {
-              returning {
-                id
-                __typename
-              }
-            }
-          }
-        `,
-        refetchQueries: ['GeneralFileQuery'],
-      })
-    } catch (error) {
-      console.log(error)
-      return store.addNotification({
-        message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
-      })
-    }
-    // 2. remove file
-    // actually no: not secure
-    // batch delete unneeded files using the api
-    // https://uploadcare.com/docs/api_reference/rest/accessing_files
-    // also: following does not work due to
-    // 1. cors issue, 2. "Date is an unsafe header"...
-    /*
-    const verb = 'DELETE'
-    const uri = `/files/${file.file_id}/storage`
-    const signature = uploadcareApiSignature({ verb, uri })
-    let res
-    try {
-      res = await axios.delete(`https://api.uploadcare.com${uri}`, {
-        mode: 'no-cors',
-        withCredentials: true,
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': '*',
-          'Access-Control-Allow-Credentials': 'true',
-          Accept: 'application/vnd.uploadcare-v0.5+json',
-          Date: new window.Date().toISOString(),
-          Authorization: `Uploadcare ${
-            process.env.UPLOADCARE_PUBLIC_KEY
-          }:${signature}`,
-        },
-      })
-    } catch (error) {
-      console.log(error)
-    }
-    console.log('File, onClickDelete', { res, file })*/
-  }, [client, file.file_id, parent, store])
+    store[`mutateDelete_${parent}_file`](
+      {
+        where: { id: { _eq: file.id } },
+      },
+      undefined,
+      () => {
+        store[`${parent}s`].delete(file.id)
+      },
+    )
+    deleteArtFileModel(file)
+  }, [deleteArtFileModel, file, parent, store])
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
     [file],
@@ -160,54 +97,16 @@ const File = ({ file, parent }) => {
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      let value = event.target.value || null
-      if (event.target.value === false) value = false
-      if (event.target.value === 0) value = 0
-      try {
-        let valueToSet
-        if (value === undefined || value === null) {
-          valueToSet = null
-        } else {
-          valueToSet = `"${value.split ? value.split('"').join('\\"') : value}"`
-        }
-        const fragment = fragmentObject[parent]
-        await client.mutate({
-          mutation: gql`
-              mutation update_${parent}_file(
-                $file_id: uuid!
-              ) {
-                update_${parent}_file(
-                  where: { file_id: { _eq: $file_id } }
-                  _set: {
-                    ${field}: ${valueToSet}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...${upperFirst(parent)}FileFields
-                  }
-                }
-              }
-              ${fragment}
-            `,
-          variables: {
-            file_id: file.file_id,
-          },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateFile: {
-              id: file.file_id,
-              __typename: 'File',
-              content: { ...file, [field]: valueToSet },
-            },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
+      const value = event.target.value || null
+      const newObject = { ...file.toJSON(), ...{ [field]: value } }
+      delete newObject.__typename
+      await store[`mutateUpdate_${parent}_file`]({
+        _set: newObject,
+        where: { id: { _eq: file.id } },
+      })
       setErrors({})
     },
-    [client, file, parent],
+    [file, parent, store],
   )
 
   if (!file) return null
