@@ -388,7 +388,7 @@ const Kultur = ({
               >
                 <IoMdInformationCircleOutline />
               </IconButton>
-              <Settings kulturResult={kulturResult} />
+              <Settings kulturId={id} />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

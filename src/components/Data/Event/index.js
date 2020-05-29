@@ -126,7 +126,7 @@ const Event = ({
   const isFiltered = runIsFiltered()
   const eventFilter = queryFromTable({ store, table: 'event' })
 
-  const eventResult = useQuery((store) =>
+  const { error, loading, query: queryOfEvent } = useQuery((store) =>
     store.queryEvent(
       { where: { id: { _eq: id } } },
       (e) =>
@@ -144,7 +144,6 @@ const Event = ({
           .changed_by._rev._parent_rev._revisions._depth._conflicts,
     ),
   )
-  const { error, loading, query: queryOfEvent } = eventResult
 
   const [errors, setErrors] = useState({})
 
@@ -365,9 +364,7 @@ const Event = ({
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
-              {row.kultur_id && (
-                <Settings kulturId={row.kultur_id} eventResult={eventResult} />
-              )}
+              {row.kultur_id && <Settings kulturId={row.kultur_id} />}
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"
