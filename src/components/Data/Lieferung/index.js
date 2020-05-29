@@ -11,7 +11,6 @@ import SammelLieferung from '../SammelLieferung'
 import { StoreContext } from '../../../models/reactUtils'
 import {
   lieferung as lieferungFragment,
-  personOption as personOptionFragment,
   sammelLieferung as sammelLieferungFragment,
 } from '../../../utils/fragments'
 import FormTitle from '../../shared/FormTitle'
@@ -67,21 +66,13 @@ const lieferungQuery = gql`
   ${lieferungFragment}
   ${sammelLieferungFragment}
 `
-const personOptionQuery = gql`
-  query personOptionQueryForLieferung($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
 
 const LieferungContainer = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { user } = store
+  const { userPersonOption } = store
 
   const {
     data: lieferungData,
@@ -97,11 +88,7 @@ const LieferungContainer = ({
   const sammelLieferung =
     get(lieferungData, 'lieferung[0].sammel_lieferung') || {}
 
-  const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: user.uid },
-  })
-  const { li_show_sl } =
-    get(personOptionResult.data, 'person_option[0]', {}) || {}
+  const { li_show_sl } = userPersonOption
 
   if (lieferungLoading) {
     return (
