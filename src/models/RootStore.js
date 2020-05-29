@@ -174,9 +174,6 @@ export const RootStore = RootStoreBase.props({
       upsertArtModel(val) {
         self.arts.set(val.id, val)
       },
-      deleteArtModel(val) {
-        self.arts.delete(val.id)
-      },
       insertArtRev() {
         const { user, addQueuedQuery, upsertArtModel, tree } = self
         const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
@@ -254,9 +251,6 @@ export const RootStore = RootStoreBase.props({
       },
       upsertEventModel(val) {
         self.events.set(val.id, val)
-      },
-      deleteEventModel(val) {
-        self.events.delete(val.id)
       },
       insertEventRev(args) {
         const {
@@ -336,9 +330,6 @@ export const RootStore = RootStoreBase.props({
       },
       upsertGartenModel(val) {
         self.gartens.set(val.id, val)
-      },
-      deleteGartenModel(val) {
-        self.gartens.delete(val.id)
       },
       insertGartenRev(args) {
         const {
@@ -424,9 +415,6 @@ export const RootStore = RootStoreBase.props({
       upsertHerkunftModel(val) {
         self.herkunfts.set(val.id, val)
       },
-      deleteHerkunftModel(val) {
-        self.herkunfts.delete(val.id)
-      },
       insertHerkunftRev() {
         const { user, addQueuedQuery, upsertHerkunftModel, tree } = self
 
@@ -501,9 +489,6 @@ export const RootStore = RootStoreBase.props({
       },
       upsertKulturModel(val) {
         self.kulturs.set(val.id, val)
-      },
-      deleteKulturModel(val) {
-        self.kulturs.delete(val.id)
       },
       insertKulturRev(args) {
         const {
@@ -591,9 +576,6 @@ export const RootStore = RootStoreBase.props({
       upsertKulturOptionModel(val) {
         self.kultur_options.set(val.id, val)
       },
-      deleteKulturOptionModel(val) {
-        self.kultur_options.delete(val.id)
-      },
       insertKulturOptionRev() {
         const { user, addQueuedQuery, upsertKulturOptionModel, tree } = self
 
@@ -679,9 +661,6 @@ export const RootStore = RootStoreBase.props({
       },
       upsertLieferungModel(val) {
         self.lieferungs.set(val.id, val)
-      },
-      deleteLieferungModel(val) {
-        self.lieferungs.delete(val.id)
       },
       insertLieferungRev(args) {
         const {
@@ -786,9 +765,6 @@ export const RootStore = RootStoreBase.props({
       upsertPersonModel(val) {
         self.persons.set(val.id, val)
       },
-      deletePersonModel(val) {
-        self.persons.delete(val.id)
-      },
       insertPersonRev() {
         const { user, addQueuedQuery, upsertPersonModel, tree } = self
         const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
@@ -868,17 +844,11 @@ export const RootStore = RootStoreBase.props({
       upsertPersonOptionModel(val) {
         self.person_options.set(val.id, val)
       },
-      deletePersonOptionModel(val) {
-        self.person_options.delete(val.id)
-      },
       deletePersonOptionRevModel(val) {
         self.person_option_revs.delete(val.id)
       },
       upsertSammelLieferungModel(val) {
         self.sammel_lieferungs.set(val.id, val)
-      },
-      deleteSammelLieferungModel(val) {
-        self.sammel_lieferungs.delete(val.id)
       },
       insertSammelLieferungRev(args) {
         const {
@@ -973,9 +943,6 @@ export const RootStore = RootStoreBase.props({
       upsertSammlungModel(val) {
         self.sammlungs.set(val.id, val)
       },
-      deleteSammlungModel(val) {
-        self.sammlungs.delete(val.id)
-      },
       insertSammlungRev(args) {
         const {
           user,
@@ -1068,9 +1035,6 @@ export const RootStore = RootStoreBase.props({
       upsertTeilkulturModel(val) {
         self.teilkulturs.set(val.id, val)
       },
-      deleteTeilkulturModel(val) {
-        self.teilkulturs.delete(val.id)
-      },
       insertTeilkulturRev(args) {
         const {
           user,
@@ -1152,9 +1116,6 @@ export const RootStore = RootStoreBase.props({
       upsertTeilzaehlungModel(val) {
         self.teilzaehlungs.set(val.id, val)
       },
-      deleteTeilzaehlungModel(val) {
-        self.teilzaehlungs.delete(val.id)
-      },
       insertTeilzaehlungRev(args) {
         const {
           user,
@@ -1224,9 +1185,6 @@ export const RootStore = RootStoreBase.props({
       },
       upsertZaehlungModel(val) {
         self.zaehlungs.set(val.id, val)
-      },
-      deleteZaehlungModel(val) {
-        self.zaehlungs.delete(val.id)
       },
       insertZaehlungRev(args) {
         const {
