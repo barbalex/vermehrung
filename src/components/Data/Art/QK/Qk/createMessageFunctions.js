@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import format from 'date-fns/format'
 
 export default ({ data, artId }) => ({
@@ -139,10 +138,10 @@ export default ({ data, artId }) => ({
     }),
   teilkultursWithoutName: () =>
     (data?.teilkultursWithoutName ?? []).flatMap((k) =>
-      (get(k, 'teilkulturs') || []).map((tk) => {
+      (k?.teilkulturs ?? []).map((tk) => {
         const garten =
-          get(k, 'garten.name') || `(${k?.garten?.person?.name ?? 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const text = `von: ${herkunft}, in: ${garten}, Teilkultur-ID: ${tk.id}`
 
         return {
@@ -153,10 +152,10 @@ export default ({ data, artId }) => ({
     ),
   zaehlungsWithoutDatum: () =>
     (data?.zaehlungsWithoutDatum ?? []).flatMap((k) =>
-      (get(k, 'zaehlungs') || []).map((z) => {
+      (k?.zaehlungs ?? []).map((z) => {
         const garten =
-          get(k, 'garten.name') || `(${k?.garten?.person?.name ?? 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
 
         return {
@@ -167,14 +166,14 @@ export default ({ data, artId }) => ({
     ),
   zaehlungsWithoutAnzahlPflanzen: () =>
     (data?.zaehlungsWithoutAnzahlPflanzen ?? []).flatMap((k) =>
-      (get(k, 'zaehlungs') || []).map((z) => {
+      (k?.zaehlungs ?? []).map((z) => {
         const garten =
-          get(k, 'garten.name') || `(${k?.garten?.person?.name ?? 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const zaehlung = z.datum
           ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
           : `Zählung-ID: ${z.id}`
-        const anzTz = (get(z, 'teilzaehlungs') || []).length
+        const anzTz = (z?.teilzaehlungs ?? []).length
         const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
         const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
@@ -186,15 +185,14 @@ export default ({ data, artId }) => ({
     ),
   zaehlungsWithoutAnzahlAuspflanzbereit: () =>
     (data?.zaehlungsWithoutAnzahlAuspflanzbereit ?? []).flatMap((k) =>
-      (get(k, 'zaehlungs') || []).map((z) => {
+      (k?.zaehlungs ?? []).map((z) => {
         const garten =
-          get(k, 'garten.name') ||
-          `(${get(k, 'garten.person.name') || 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const zaehlung = z.datum
           ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
           : `Zählung-ID: ${z.id}`
-        const anzTz = (get(z, 'teilzaehlungs') || []).length
+        const anzTz = (z?.teilzaehlungs ?? []).length
         const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
         const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
@@ -206,15 +204,14 @@ export default ({ data, artId }) => ({
     ),
   zaehlungsWithoutAnzahlMutterpflanzen: () =>
     (data?.zaehlungsWithoutAnzahlMutterpflanzen ?? []).flatMap((k) =>
-      (get(k, 'zaehlungs') || []).map((z) => {
+      (k?.zaehlungs ?? []).map((z) => {
         const garten =
-          get(k, 'garten.name') ||
-          `(${get(k, 'garten.person.name') || 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const zaehlung = z.datum
           ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
           : `Zählung-ID: ${z.id}`
-        const anzTz = (get(z, 'teilzaehlungs') || []).length
+        const anzTz = (z?.teilzaehlungs ?? []).length
         const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
         const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
@@ -317,11 +314,10 @@ export default ({ data, artId }) => ({
     }),
   eventsWithoutBeschreibung: () =>
     (data?.eventsWithoutBeschreibung ?? []).flatMap((k) =>
-      (get(k, 'events') || []).map((ev) => {
+      (k?.events ?? []).map((ev) => {
         const garten =
-          get(k, 'garten.name') ||
-          `(${get(k, 'garten.person.name') || 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
 
         return {
@@ -332,11 +328,10 @@ export default ({ data, artId }) => ({
     ),
   eventsWithoutDatum: () =>
     (data?.eventsWithoutDatum ?? []).flatMap((k) =>
-      (get(k, 'events') || []).map((ev) => {
+      (k?.events ?? []).map((ev) => {
         const garten =
-          get(k, 'garten.name') ||
-          `(${get(k, 'garten.person.name') || 'kein Name'})`
-        const herkunft = get(k, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
 
         return {
