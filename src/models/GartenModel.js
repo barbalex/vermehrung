@@ -22,7 +22,7 @@ export const gartenModel = gartenModelBase.actions((self) => ({
     const { addQueuedQuery, user, upsertGartenModel, tree } = store
 
     // first build the part that will be revisioned
-    const depth = self._depth + 1
+    const newDepth = self._depth + 1
     const newObject = {
       garten_id: self.id,
       name: field === 'name' ? toStringIfPossible(value) : self.name,
@@ -37,10 +37,10 @@ export const gartenModel = gartenModelBase.actions((self) => ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
-      _depth: depth,
-      _deleted: false,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : self._deleted,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
@@ -75,71 +75,10 @@ export const gartenModel = gartenModelBase.actions((self) => ({
     // optimistically update store
     upsertGartenModel(newObjectForStore)
     setTimeout(() => {
-      if (['name'].includes(field)) tree.refetch()
+      if (['name', '_deleted'].includes(field)) tree.refetch()
     }, 50)
-  },
-  setDeleted() {
-    const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertGartenModel } = store
-
-    // build new object
-    const newDepth = self._depth + 1
-    const newObject = {
-      garten_id: self.id,
-      name: self.name,
-      person_id: self.person_id,
-      strasse: self.strasse,
-      plz: self.plz,
-      ort: self.ort,
-      geom_point: self.geom_point,
-      aktiv: self.aktiv,
-      bemerkungen: self.bemerkungen,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-      _parent_rev: self._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    const newObjectForStore = { ...newObject }
-    newObject._revisions = self._revisions
-      ? toPgArray([rev, ...self._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_garten_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'garten_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryGarten',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = self.id
-    delete newObjectForStore.garten_id
-    // optimistically update store
-    upsertGartenModel(newObjectForStore)
   },
   delete() {
-    const store = getParent(self, 2)
-    const { tree, deleteGartenModel } = store
-
-    self.setDeleted()
-    deleteGartenModel({ id: self.id })
-    setTimeout(() => {
-      tree.refetch()
-    }, 50)
+    self.edit({ field: '_deleted', value: true })
   },
 }))

@@ -20,12 +20,12 @@ export {
 export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertKulturOptionModel } = store
+    const { addQueuedQuery, user, upsertKulturOptionModel, tree } = store
 
     //console.log('store, kultur_optionModel:', { self, field, value })
 
     // first build the part that will be revisioned
-    const depth = self._depth + 1
+    const newDepth = self._depth + 1
     const newObject = {
       kultur_id: self.id,
       z_bemerkungen: field === 'z_bemerkungen' ? value : self.z_bemerkungen,
@@ -52,10 +52,10 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
-      _depth: depth,
-      _deleted: false,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : self._deleted,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
@@ -89,73 +89,11 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     delete newObjectForStore.kultur_id
     // optimistically update store
     upsertKulturOptionModel(newObjectForStore)
-  },
-  setDeleted() {
-    const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertKulturOptionModel } = store
-
-    // build new object
-    const newDepth = self._depth + 1
-    const newObject = {
-      kultur_id: self.id,
-      z_bemerkungen: self.z_bemerkungen,
-      tz_teilkultur_id: self.tz_teilkultur_id,
-      tz_anzahl_mutterpflanzen: self.tz_anzahl_mutterpflanzen,
-      tz_andere_menge: self.tz_andere_menge,
-      tz_auspflanzbereit_beschreibung: self.tz_auspflanzbereit_beschreibung,
-      tz_bemerkungen: self.tz_bemerkungen,
-      tk: self.tk,
-      tk_bemerkungen: self.tk_bemerkungen,
-      ev_teilkultur_id: self.ev_teilkultur_id,
-      ev_geplant: self.ev_geplant,
-      ev_person_id: self.ev_person_id,
-      ev_datum: self.ev_datum,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-      _parent_rev: self._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    const newObjectForStore = { ...newObject }
-    newObject._revisions = self._revisions
-      ? toPgArray([rev, ...self._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_kultur_option_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'kultur_option_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryKultur_option',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert herkuft_rev to kultur_option
-    newObjectForStore.id = self.id
-    delete newObjectForStore.kultur_id
-    // optimistically update store
-    upsertKulturOptionModel(newObjectForStore)
+    setTimeout(() => {
+      if (['_deleted'].includes(field)) tree.refetch()
+    }, 50)
   },
   delete() {
-    const store = getParent(self, 2)
-    const { tree, deleteKulturOptionModel } = store
-
-    self.setDeleted()
-    deleteKulturOptionModel({ id: self.id })
-    setTimeout(() => {
-      tree.refetch()
-    }, 50)
+    self.edit({ field: '_deleted', value: true })
   },
 }))

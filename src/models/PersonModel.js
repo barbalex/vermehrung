@@ -22,7 +22,7 @@ export const personModel = personModelBase.actions((self) => ({
     const { addQueuedQuery, user, upsertPersonModel, tree } = store
 
     // first build the part that will be revisioned
-    const depth = self._depth + 1
+    const newDepth = self._depth + 1
     const newObject = {
       person_id: self.id,
       nr: field === 'nr' ? toStringIfPossible(value) : self.nr,
@@ -60,10 +60,10 @@ export const personModel = personModelBase.actions((self) => ({
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
-      _depth: depth,
-      _deleted: false,
+      _depth: newDepth,
+      _deleted: field === '_deleted' ? value : self._deleted,
     }
-    const rev = `${depth}-${md5(JSON.stringify(newObject))}`
+    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
@@ -98,80 +98,10 @@ export const personModel = personModelBase.actions((self) => ({
     // optimistically update store
     upsertPersonModel(newObjectForStore)
     setTimeout(() => {
-      if (['name'].includes(field)) tree.refetch()
+      if (['name', '_deleted'].includes(field)) tree.refetch()
     }, 50)
-  },
-  setDeleted() {
-    const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertPersonModel } = store
-
-    // build new object
-    const newDepth = self._depth + 1
-    const newObject = {
-      person_id: self.id,
-      nr: self.nr,
-      name: self.name,
-      adresszusatz: self.adresszusatz,
-      strasse: self.strasse,
-      plz: self.plz,
-      ort: self.ort,
-      telefon_privat: self.telefon_privat,
-      telefon_geschaeft: self.telefon_geschaeft,
-      telefon_mobile: self.telefon_mobile,
-      email: self.email,
-      kein_email: self.kein_email,
-      bemerkungen: self.bemerkungen,
-      account_id: self.account_id,
-      user_role: self.user_role,
-      kommerziell: self.kommerziell,
-      info: self.info,
-      aktiv: self.aktiv,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
-      _parent_rev: self._rev,
-      _depth: newDepth,
-      _deleted: true,
-    }
-    const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
-    newObject.id = uuidv1()
-    newObject._rev = rev
-    const newObjectForStore = { ...newObject }
-    newObject._revisions = self._revisions
-      ? toPgArray([rev, ...self._revisions])
-      : toPgArray([rev])
-    addQueuedQuery({
-      name: 'mutateInsert_person_rev_one',
-      variables: JSON.stringify({
-        object: newObject,
-        on_conflict: {
-          constraint: 'person_rev_pkey',
-          update_columns: ['id'],
-        },
-      }),
-      callbackQuery: 'queryPerson',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
-    })
-    // do not stringify revisions for store
-    // as _that_ is a real array
-    newObjectForStore._revisions = self._revisions
-      ? [rev, ...self._revisions]
-      : [rev]
-    // for store: convert rev to winner
-    newObjectForStore.id = self.id
-    delete newObjectForStore.person_id
-    // optimistically update store
-    upsertPersonModel(newObjectForStore)
   },
   delete() {
-    const store = getParent(self, 2)
-    const { tree, deletePersonModel } = store
-
-    self.setDeleted()
-    deletePersonModel({ id: self.id })
-    setTimeout(() => {
-      tree.refetch()
-    }, 50)
+    self.edit({ field: '_deleted', value: true })
   },
 }))
