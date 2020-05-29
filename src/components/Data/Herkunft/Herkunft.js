@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -12,7 +11,6 @@ import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import { personOption as personOptionFragment } from '../../../utils/fragments'
 import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -65,21 +63,19 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const personOptionQuery = gql`
-  query PersonOptionQueryForHerkunftHerkunft($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
-
 const Herkunft = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, user, upsertHerkunftModel, addQueuedQuery, online } = store
+  const {
+    filter,
+    user,
+    upsertHerkunftModel,
+    addQueuedQuery,
+    online,
+    userPersonOption,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -107,11 +103,7 @@ const Herkunft = ({
   const filteredNr =
     dataHerkunftFilteredAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
-  const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: user.uid },
-  })
-  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, id: person_id } =
-    personOptionResult?.data?.person_option?.[0] ?? {}
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
 
   const [errors, setErrors] = useState({})
   useEffect(() => {
@@ -247,10 +239,7 @@ const Herkunft = ({
               >
                 <IoMdInformationCircleOutline />
               </IconButton>
-              <Settings
-                personId={person_id}
-                personOptionResult={personOptionResult}
-              />
+              <Settings />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}
