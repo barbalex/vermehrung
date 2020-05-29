@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -6,14 +6,13 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { useQuery } from '@apollo/react-hooks'
-import get from 'lodash/get'
 
 import Qk from './Qk'
 import Choose from './Choose'
 import queryQk from './queryQk'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { useQuery, StoreContext } from '../../../../models/reactUtils'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -46,34 +45,30 @@ const Body = styled.div`
 `
 
 const ApQk = ({ artId }) => {
+  const store = useContext(StoreContext)
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const { data, loading, error, refetch } = useQuery(queryQk, {
+  const { loading, error, refetch } = useQuery(queryQk, {
     variables: { artId },
     fetchPolicy: 'no-cache',
   })
-  const allQks = get(data, 'art_qk') || []
+  const allQks = [...store.art_qks.values()]
+  const allQkChoosens = [...store.art_qk_choosens.values()]
   const qks = allQks.filter(
-    (qk) =>
-      !!(get(data, 'art_qk_choosen') || []).find(
-        (no) => no.qk_name === qk.name,
-      ),
+    (qk) => !!allQkChoosens.find((no) => no.qk_name === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
     allQks.map((n) => [
       n.name,
-      !!(get(data, 'art_qk_choosen') || []).find((no) => no.qk_name === n.name),
+      !!allQkChoosens.find((no) => no.qk_name === n.name),
     ]),
   )
-  //console.log('Qk', { allQks, qkNameQueries })
 
   const qkCount = loading ? '...' : allQks.length
-  const artQkCount = loading
-    ? '...'
-    : (get(data, 'art_qk_choosen') || []).length
+  const artQkCount = loading ? '...' : allQkChoosens.length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
