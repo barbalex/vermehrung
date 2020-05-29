@@ -26,7 +26,6 @@ import exists from '../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import {
   lieferung as lieferungFragment,
-  personOption as personOptionFragment,
   sammelLieferung as sammelLieferungFragment,
 } from '../../../../utils/fragments'
 import Files from '../../Files'
@@ -312,20 +311,12 @@ const kulturQuery = gql`
     }
   }
 `
-const personOptionQuery = gql`
-  query PersonOptionQueryForLieferungLieferung($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
 
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!sammelLieferung?.id
   const store = useContext(StoreContext)
 
-  const { filter, user, online } = store
+  const { filter, online, userPersonOption } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -383,11 +374,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     setActiveConflict(row?._rev ?? null)
   }, [queryOfLieferung, row?._rev])
 
-  const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: user.uid },
-  })
-  const { li_show_sl_felder, person_id } =
-    personOptionResult?.data?.person_option?.[0] ?? {}
+  const { li_show_sl_felder } = userPersonOption
 
   const sammlungFilter = row?.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -671,10 +658,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
             <TitleSymbols>
               <AddButton />
               <DeleteButton row={row} />
-              <Settings
-                personId={person_id}
-                personOptionResult={personOptionResult}
-              />
+              <Settings />
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"

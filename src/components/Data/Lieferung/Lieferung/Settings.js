@@ -1,19 +1,15 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
+import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../models/reactUtils'
-import { personOption as personOptionFragment } from '../../../../utils/fragments'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -34,56 +30,20 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsLieferung = ({ personId, personOptionResult }) => {
-  const client = useApolloClient()
+const SettingsLieferung = () => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { userPersonOption } = store
 
-  const { data, error, loading } = personOptionResult
-  const { li_show_sl_felder, li_show_sl } = get(data, 'person_option[0]') || {}
+  const { li_show_sl_felder, li_show_sl } = userPersonOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_person_option(
-                $personId: uuid!
-              ) {
-                update_person_option(
-                  where: { id: { _eq: $personId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...PersonOptionFields
-                  }
-                }
-              }
-              ${personOptionFragment}
-            `,
-          variables: {
-            personId,
-          },
-          refetchQueries: ['PersonOptionQueryForLieferungLieferung'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const value = event.target.value === 'false'
+      userPersonOption.edit({ field, value })
     },
-    [client, personId, addNotification],
+    [userPersonOption],
   )
-  const onClickFrown = useCallback(() => {
-    addNotification({
-      message: error.message,
-    })
-  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`
@@ -102,19 +62,6 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
     [],
   )
 
-  if (error) {
-    return (
-      <IconButton
-        aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title={error.message}
-        onClick={onClickFrown}
-      >
-        <FaFrown />
-      </IconButton>
-    )
-  }
   return (
     <ErrorBoundary>
       <IconButton
@@ -126,7 +73,7 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
       >
         <FaCog />
       </IconButton>
-      {!loading && (
+      {
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -177,7 +124,7 @@ const SettingsLieferung = ({ personId, personOptionResult }) => {
           </MenuItem>
           <Info>Die Wahl gilt für alle Lieferungen.</Info>
         </Menu>
-      )}
+      }
     </ErrorBoundary>
   )
 }

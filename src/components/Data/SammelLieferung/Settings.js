@@ -1,18 +1,14 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
-import get from 'lodash/get'
+import { FaCog } from 'react-icons/fa'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import { personOption as personOptionFragment } from '../../../utils/fragments'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -27,57 +23,20 @@ const Title = styled.div`
   user-select: none;
 `
 
-const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
-  const client = useApolloClient()
+const SettingsSammelLieferung = () => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { userPersonOption } = store
 
-  const { data, error, loading } = personOptionResult
-  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } =
-    get(data, 'person_option[0]') || {}
+  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } = userPersonOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_person_option(
-                $personId: uuid!
-              ) {
-                update_person_option(
-                  where: { id: { _eq: $personId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...PersonOptionFields
-                  }
-                }
-              }
-              ${personOptionFragment}
-            `,
-          variables: {
-            personId,
-          },
-          refetchQueries: ['PersonOptionQueryForSammelLieferung'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const value = event.target.value === 'false'
+      userPersonOption.edit({ field, value })
     },
-    [client, personId, addNotification],
+    [userPersonOption],
   )
-  const onClickFrown = useCallback(() => {
-    addNotification({
-      message: error.message,
-    })
-  }, [addNotification, error])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
@@ -86,19 +45,6 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
     [],
   )
 
-  if (error) {
-    return (
-      <IconButton
-        aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title={error.message}
-        onClick={onClickFrown}
-      >
-        <FaFrown />
-      </IconButton>
-    )
-  }
   return (
     <ErrorBoundary>
       <IconButton
@@ -110,7 +56,7 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
       >
         <FaCog />
       </IconButton>
-      {!loading && (
+      {
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -151,7 +97,7 @@ const SettingsSammelLieferung = ({ personId, personOptionResult }) => {
             />
           </MenuItem>
         </Menu>
-      )}
+      }
     </ErrorBoundary>
   )
 }
