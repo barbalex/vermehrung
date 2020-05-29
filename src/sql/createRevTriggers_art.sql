@@ -6,6 +6,67 @@ begin
   -- do not search for winner
   -- insert deletion as winner but list conflicts
   if new._deleted = true then
+    insert into art (
+        id,
+        ae_id,
+        changed,
+        changed_by,
+        _rev,
+        _revisions,
+        _parent_rev,
+        _depth,
+        _deleted,
+        _conflicts
+    )
+    with leaves as (
+      select
+        art_id,
+        _rev,
+        _depth
+      from
+        art_rev
+      where
+        not exists (
+          select
+            art_id
+          from
+            art_rev as t
+          where
+            t.art_id = new.art_id
+            and t._parent_rev = art_rev._rev)
+          and _deleted = false
+          and art_id = new.art_id
+      )
+      select
+        art_rev.art_id,
+        art_rev.ae_id,
+        art_rev.changed,
+        art_rev.changed_by,
+        art_rev._rev,
+        art_rev._revisions,
+        art_rev._parent_rev,
+        art_rev._depth,
+        art_rev._deleted,
+        (select array(
+          select _rev from leaves
+          where 
+            _rev <> art_rev._rev
+            and _rev <> ANY(art_rev._revisions)
+        )) as _conflicts
+      from
+        art_rev
+        where id = new.id
+      on conflict on constraint art_pkey do update set
+        -- do not update the id = pkey
+        ae_id = excluded.ae_id,
+        changed = excluded.changed,
+        changed_by = excluded.changed_by,
+        _rev = excluded._rev,
+        _revisions = excluded._revisions,
+        _parent_rev = excluded._parent_rev,
+        _depth = excluded._depth,
+        _deleted = excluded._deleted,
+        _conflicts = excluded._conflicts;
   else
     insert into art (
         id,
@@ -16,6 +77,7 @@ begin
         _revisions,
         _parent_rev,
         _depth,
+        _deleted,
         _conflicts
     )
     with leaves as (
@@ -59,6 +121,7 @@ begin
         art_rev._revisions,
         art_rev._parent_rev,
         art_rev._depth,
+        art_rev._deleted,
         (select array(
           select _rev from leaves
           where 
@@ -67,7 +130,18 @@ begin
         )) as _conflicts
       from
         art_rev
-        join winning_revisions on art_rev._rev = winning_revisions._rev;
+        join winning_revisions on art_rev._rev = winning_revisions._rev
+      on conflict on constraint art_pkey do update set
+        -- do not update the id = pkey
+        ae_id = excluded.ae_id,
+        changed = excluded.changed,
+        changed_by = excluded.changed_by,
+        _rev = excluded._rev,
+        _revisions = excluded._revisions,
+        _parent_rev = excluded._parent_rev,
+        _depth = excluded._depth,
+        _deleted = excluded._deleted,
+        _conflicts = excluded._conflicts;
   end if;
   return new;
 end;

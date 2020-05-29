@@ -6,6 +6,121 @@ begin
   -- do not search for winner
   -- insert deletion as winner but list conflicts
   if new._deleted = true then
+    insert into person_option (
+        id,
+        ar_name_deutsch,
+        ga_strasse,
+        ga_plz,
+        ga_ort,
+        ga_geom_point,
+        ga_lat_lng,
+        ga_aktiv,
+        ga_bemerkungen,
+        hk_kanton,
+        hk_land,
+        hk_bemerkungen,
+        hk_geom_point,
+        li_show_sl_felder,
+        li_show_sl,
+        sl_show_empty_when_next_to_li,
+        sl_auto_copy_edits,
+        tree_kultur,
+        tree_teilkultur,
+        tree_zaehlung,
+        tree_lieferung,
+        tree_event,
+        _rev,
+        _revisions,
+        _parent_rev,
+        _depth,
+        _deleted,
+        _conflicts
+    )
+    with leaves as (
+      select
+        person_id,
+        _rev,
+        _depth
+      from
+        person_option_rev
+      where
+        not exists (
+          select
+            person_id
+          from
+            person_option_rev as t
+          where
+            t.person_id = new.person_id
+            and t._parent_rev = person_option_rev._rev)
+          and _deleted = false
+          and person_id = new.person_id
+      )
+      select
+        person_option_rev.person_id,
+        person_option_rev.ar_name_deutsch,
+        person_option_rev.ga_strasse,
+        person_option_rev.ga_plz,
+        person_option_rev.ga_ort,
+        person_option_rev.ga_geom_point,
+        person_option_rev.ga_lat_lng,
+        person_option_rev.ga_aktiv,
+        person_option_rev.ga_bemerkungen,
+        person_option_rev.hk_kanton,
+        person_option_rev.hk_land,
+        person_option_rev.hk_bemerkungen,
+        person_option_rev.hk_geom_point,
+        person_option_rev.li_show_sl_felder,
+        person_option_rev.li_show_sl,
+        person_option_rev.sl_show_empty_when_next_to_li,
+        person_option_rev.sl_auto_copy_edits,
+        person_option_rev.tree_kultur,
+        person_option_rev.tree_teilkultur,
+        person_option_rev.tree_zaehlung,
+        person_option_rev.tree_lieferung,
+        person_option_rev.tree_event,
+        person_option_rev._rev,
+        person_option_rev._revisions,
+        person_option_rev._parent_rev,
+        person_option_rev._depth,
+        person_option_rev._deleted,
+        (select array(
+          select _rev from leaves
+          where 
+            _rev <> person_option_rev._rev
+            and _rev <> ANY(person_option_rev._revisions)
+        )) as _conflicts
+      from
+        person_option_rev
+        where id = new.id
+      on conflict on constraint person_option_pkey do update set
+        -- do not update the id = pkey
+        ar_name_deutsch = excluded.ar_name_deutsch,
+        ga_strasse = excluded.ga_strasse,
+        ga_plz = excluded.ga_plz,
+        ga_ort = excluded.ga_ort,
+        ga_geom_point = excluded.ga_geom_point,
+        ga_lat_lng = excluded.ga_lat_lng,
+        ga_aktiv = excluded.ga_aktiv,
+        ga_bemerkungen = excluded.ga_bemerkungen,
+        hk_kanton = excluded.hk_kanton,
+        hk_land = excluded.hk_land,
+        hk_bemerkungen = excluded.hk_bemerkungen,
+        hk_geom_point = excluded.hk_geom_point,
+        li_show_sl_felder = excluded.li_show_sl_felder,
+        li_show_sl = excluded.li_show_sl,
+        sl_show_empty_when_next_to_li = excluded.sl_show_empty_when_next_to_li,
+        sl_auto_copy_edits = excluded.sl_auto_copy_edits,
+        tree_kultur = excluded.tree_kultur,
+        tree_teilkultur = excluded.tree_teilkultur,
+        tree_zaehlung = excluded.tree_zaehlung,
+        tree_lieferung = excluded.tree_lieferung,
+        tree_event = excluded.tree_event,
+        _rev = excluded._rev,
+        _revisions = excluded._revisions,
+        _parent_rev = excluded._parent_rev,
+        _depth = excluded._depth,
+        _deleted = excluded._deleted,
+        _conflicts = excluded._conflicts;
   else
     insert into person_option (
         id,
@@ -34,6 +149,7 @@ begin
         _revisions,
         _parent_rev,
         _depth,
+        _deleted,
         _conflicts
     )
     with leaves as (
@@ -95,6 +211,7 @@ begin
         person_option_rev._revisions,
         person_option_rev._parent_rev,
         person_option_rev._depth,
+        person_option_rev._deleted,
         (select array(
           select _rev from leaves
           where 
@@ -103,7 +220,36 @@ begin
         )) as _conflicts
       from
         person_option_rev
-        join winning_revisions on person_option_rev._rev = winning_revisions._rev;
+        join winning_revisions on person_option_rev._rev = winning_revisions._rev
+      on conflict on constraint person_option_pkey do update set
+        -- do not update the id = pkey
+        ar_name_deutsch = excluded.ar_name_deutsch,
+        ga_strasse = excluded.ga_strasse,
+        ga_plz = excluded.ga_plz,
+        ga_ort = excluded.ga_ort,
+        ga_geom_point = excluded.ga_geom_point,
+        ga_lat_lng = excluded.ga_lat_lng,
+        ga_aktiv = excluded.ga_aktiv,
+        ga_bemerkungen = excluded.ga_bemerkungen,
+        hk_kanton = excluded.hk_kanton,
+        hk_land = excluded.hk_land,
+        hk_bemerkungen = excluded.hk_bemerkungen,
+        hk_geom_point = excluded.hk_geom_point,
+        li_show_sl_felder = excluded.li_show_sl_felder,
+        li_show_sl = excluded.li_show_sl,
+        sl_show_empty_when_next_to_li = excluded.sl_show_empty_when_next_to_li,
+        sl_auto_copy_edits = excluded.sl_auto_copy_edits,
+        tree_kultur = excluded.tree_kultur,
+        tree_teilkultur = excluded.tree_teilkultur,
+        tree_zaehlung = excluded.tree_zaehlung,
+        tree_lieferung = excluded.tree_lieferung,
+        tree_event = excluded.tree_event,
+        _rev = excluded._rev,
+        _revisions = excluded._revisions,
+        _parent_rev = excluded._parent_rev,
+        _depth = excluded._depth,
+        _deleted = excluded._deleted,
+        _conflicts = excluded._conflicts;
   end if;
   return new;
 end;
