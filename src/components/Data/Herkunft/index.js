@@ -154,20 +154,18 @@ const Herkunft = ({
   )
   const filteredNr =
     dataHerkunftFilteredAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
-
+  useQuery((store) =>
+    store.queryPerson({ where: { account_id: { _eq: user.uid } } }),
+  )
+  const person =
+    [...store.persons.values()].find((p) => p.account_id === user.uid) ?? {}
   useQuery((store) =>
     store.queryPerson_option({
-      where: { person: { account_id: { _eq: user.uid } } },
+      where: { id: { _eq: person?.id } },
     }),
   )
-  const personOption = store.person_options.get(person_id) ?? {}
-  const {
-    hk_kanton,
-    hk_land,
-    hk_bemerkungen,
-    hk_geom_point,
-    id: person_id,
-  } = personOption
+  const personOption = store.person_options.get(person?.id) ?? {}
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = personOption
 
   const [errors, setErrors] = useState({})
   useEffect(() => {
@@ -251,7 +249,7 @@ const Herkunft = ({
               >
                 <IoMdInformationCircleOutline />
               </IconButton>
-              <Settings personId={person_id} />
+              <Settings personId={person.id} />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}
