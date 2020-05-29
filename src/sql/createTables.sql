@@ -798,8 +798,8 @@ create table kultur_option_rev (
   _deleted boolean default false,
   unique (kultur_id, _rev)
 );
-create index on kultur_option_rev using btree (rev_id);
 create index on kultur_option_rev using btree (id);
+create index on kultur_option_rev using btree (kultur_id);
 create index on kultur_option_rev using btree (_rev);
 create index on kultur_option_rev using btree (_parent_rev);
 create index on kultur_option_rev using btree (_depth);

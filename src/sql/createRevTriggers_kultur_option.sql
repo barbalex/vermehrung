@@ -74,7 +74,7 @@ begin
       from
         kultur_option_rev
         where id = new.id
-      on conflict on constraint kultur_option_pkey do update set
+      on conflict on constraint kultur_option_kultur_id_key do update set
         -- do not update the id = pkey
         z_bemerkungen = excluded.z_bemerkungen,
         tz_teilkultur_id = excluded.tz_teilkultur_id,
@@ -176,7 +176,7 @@ begin
       from
         kultur_option_rev
         join winning_revisions on kultur_option_rev._rev = winning_revisions._rev
-      on conflict on constraint kultur_option_pkey do update set
+      on conflict on constraint kultur_option_kultur_id_key do update set
         -- do not update the id = pkey
         z_bemerkungen = excluded.z_bemerkungen,
         tz_teilkultur_id = excluded.tz_teilkultur_id,

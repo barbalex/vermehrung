@@ -37,16 +37,16 @@ const SettingsTeilkulturen = ({ kulturId }) => {
   const { loading, error } = useQuery((store) =>
     store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
   )
-  const kulturOpion = store.kultur_options.get(kulturId) || {}
-  const { tk_bemerkungen } = kulturOpion
+  const kulturOption = store.kultur_options.get(kulturId) || {}
+  const { tk_bemerkungen } = kulturOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      kulturOpion.edit({ field, value })
+      kulturOption.edit({ field, value })
     },
-    [kulturOpion],
+    [kulturOption],
   )
   const onClickFrown = useCallback(() => {
     addNotification({
