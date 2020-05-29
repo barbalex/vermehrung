@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import groupBy from 'lodash/groupBy'
-import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
 
 import Timeline from './Timeline'
@@ -49,7 +48,7 @@ const HerkunftTimelineArea = ({ artId }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id: artId },
   })
-  const herkunftSums = get(data, 'herkunft_sums', [])
+  const herkunftSums = data?.herkunft_sums ?? []
   const herkunftSumsGrouped = groupBy(herkunftSums, 'herkunft_id')
 
   return (
