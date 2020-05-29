@@ -208,37 +208,6 @@ const sammelLieferungQuery = gql`
   ${sammelLieferungFragment}
   ${sammlungFragment}
 `
-const sammlungQuery = gql`
-  query sammlungQueryForSammelLieferung($filter: sammlung_bool_exp!) {
-    sammlung(
-      where: $filter
-      order_by: [
-        { datum: asc_nulls_first }
-        { herkunft: { nr: asc_nulls_first } }
-        { person: { name: asc_nulls_first } }
-      ]
-    ) {
-      id
-      __typename
-      art_id
-      datum
-      herkunft_id
-      herkunft {
-        id
-        __typename
-        nr
-        lokalname
-        gemeinde
-      }
-      person {
-        id
-        __typename
-        name
-        ort
-      }
-    }
-  }
-`
 const kulturQuery = gql`
   query kulturQueryForSammelLieferung($filter: kultur_bool_exp!) {
     kultur(
@@ -263,24 +232,6 @@ const kulturQuery = gql`
           ort
         }
       }
-    }
-  }
-`
-const artQuery = gql`
-  query artQueryForSammelLieferung {
-    art(order_by: { art_ae_art: { name: asc } }) {
-      ...ArtFields
-    }
-  }
-  ${artFragment}
-`
-const personQuery = gql`
-  query personQueryForSammelLieferung {
-    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
-      id
-      __typename
-      name
-      ort
     }
   }
 `
@@ -312,26 +263,30 @@ const SammelLieferung = ({
     },
   )
 
-  const { data: artData, error: artError, loading: artLoading } = useQuery(
-    artQuery,
+  const {
+    data: artData,
+    error: artError,
+    loading: artLoading,
+  } = useQuery((store) =>
+    store.queryArt({ order_by: { art_ae_art: { name: 'asc' } } }, (a) =>
+      a.id.art_ae_art((ae) => ae.id.name),
+    ),
   )
 
-  const {
-    data: personData,
-    error: personError,
-    loading: personLoading,
-  } = useQuery(personQuery)
+  const { error: personError, loading: personLoading } = useQuery((store) =>
+    store.queryPerson(
+      { order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }] },
+      (p) => p.id.name.ort,
+    ),
+  )
 
   const [errors, setErrors] = useState({})
 
-  let row
   const totalNr = get(data, 'rowsUnfiltered', []).length
   const filteredNr = get(data, 'rowsFiltered', []).length
-  if (showFilter) {
-    row = filter.sammel_lieferung
-  } else {
-    row = get(data, 'sammel_lieferung[0]') || {}
-  }
+  const row = showFilter
+    ? filter.sammel_lieferung
+    : store.sammel_lieferungs.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -345,16 +300,23 @@ const SammelLieferung = ({
 
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } = userPersonOption
 
-  const sammlungFilter = row.art_id
-    ? { art_id: { _eq: row.art_id } }
-    : { id: { _is_null: false } }
-  const {
-    data: sammlungData,
-    error: sammlungError,
-    loading: sammlungLoading,
-  } = useQuery(sammlungQuery, {
-    variables: { filter: sammlungFilter },
-  })
+  const sammlungOptions = {
+    order_by: [
+      { datum: 'asc_nulls_first' },
+      { herkunft: { nr: 'asc_nulls_first' } },
+      { person: { name: 'asc_nulls_first' } },
+    ],
+  }
+  if (row.art_id) {
+    sammlungOptions.where = { art_id: { _eq: row.art_id } }
+  }
+  const { error: sammlungError, loading: sammlungLoading } = useQuery((store) =>
+    store.querySammlung(sammlungOptions, (s) =>
+      s.id.art_id.datum.herkunft_id
+        .herkunft((h) => h.id.nr.lokalname.gemeinde)
+        .person((p) => p.id.name.ort),
+    ),
+  )
 
   const herkunftByNachKultur = get(row, 'kulturByNachKulturId.herkunft')
   const herkunftByVonKultur = get(row, 'kulturByVonKulturId.herkunft')
@@ -454,7 +416,7 @@ const SammelLieferung = ({
   )
   const nachKulturWerte = useMemo(
     () =>
-      get(nachKulturData, 'kultur', []).map((el) => ({
+      [nachKulturData, 'kultur', []].map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
@@ -463,20 +425,25 @@ const SammelLieferung = ({
 
   const sammlungWerte = useMemo(
     () =>
-      get(sammlungData, 'sammlung', []).map((el) => ({
-        value: el.id,
-        label: sammlungLabelFromSammlung(el),
-      })),
-    [sammlungData],
+      [...store.sammlungs.values()]
+        .filter((s) => {
+          if (row.art_id) return s.art_id === row.art_id
+          return true
+        })
+        .map((el) => ({
+          value: el.id,
+          label: sammlungLabelFromSammlung(el),
+        })),
+    [row.art_id, store.sammlungs],
   )
 
   const personWerte = useMemo(
     () =>
-      get(personData, 'person', []).map((el) => ({
+      [...store.persons.values()].map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [personData],
+    [store.persons],
   )
 
   const artWerte = useMemo(
