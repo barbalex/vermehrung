@@ -1,14 +1,13 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
-import get from 'lodash/get'
+import { v1 as uuidv1 } from 'uuid'
 
-import query from './query'
 import { artQkChoosen as artQkChoosenFragment } from '../../../../../../utils/fragments'
+import { useQuery, StoreContext } from '../../../../../../models/reactUtils'
 
 const Row = styled.div`
   display: flex;
@@ -30,72 +29,60 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseArtQkRow = ({ artId, qk, refetchTab }) => {
-  const client = useApolloClient()
+const ChooseArtQkRow = ({ artId, qk }) => {
+  const store = useContext(StoreContext)
 
-  const { data, loading, error } = useQuery(query, {
-    variables: { artId, qkName: qk.name },
-  })
-  const artQkChoosen = get(data, 'art_qk_choosen')
+  const { loading, error } = useQuery((store) =>
+    store.queryArt_qk_choosen({
+      where: { art_id: { _eq: artId }, qk_name: { _eq: qk.name } },
+    }),
+  )
+  const artQkChoosen = [...store.art_qk_choosens.values()].find(
+    (v) => v.art_id === artId && v.qk_name === qk.name,
+  )
 
-  const checked = !loading && !!artQkChoosen.length
+  const artQkChoosenId = artQkChoosen?.id
+  const checked = !loading && !!artQkChoosenId
 
   const onChange = useCallback(async () => {
     // 1. if checked, delete artQkChoosen
     // 2. else create artQkChoosen
-    const variables = { artId, qkName: qk.name }
     if (checked) {
-      await client.mutate({
-        mutation: gql`
-          mutation deleteArtQkChoosen($artId: uuid!, $qkName: String!) {
-            delete_art_qk_choosen(
-              where: { art_id: { _eq: $artId }, qk_name: { _eq: $qkName } }
-            ) {
-              returning {
-                ...ArtQkChoosenFields
-              }
-            }
-          }
-          ${artQkChoosenFragment}
-        `,
-        variables,
-      })
-    } else {
-      await client.mutate({
-        mutation: gql`
-          mutation insertArtQkChoosen($artId: uuid!, $qkName: String!) {
-            insert_art_qk_choosen(
-              objects: [{ art_id: $artId, qk_name: $qkName }]
-            ) {
-              returning {
-                ...ArtQkChoosenFields
-              }
-            }
-          }
-          ${artQkChoosenFragment}
-        `,
-        variables,
-        refetchQueries: ['artQkChoosenQueryForRow'],
-      })
+      return store.mutateDelete_art_qk_choosen(
+        {
+          where: {
+            art_id: { _eq: artId },
+            qk_name: { _eq: qk.name },
+          },
+        },
+        undefined,
+        () => store.deleteKulturQkChoosenModel({ id: artQkChoosenId }),
+      )
     }
-    setTimeout(() => refetchTab())
-  }, [artId, checked, client, qk.name, refetchTab])
+    store.mutateInsert_art_qk_choosen_one({
+      object: { art_id: artId, qk_name: qk.name, id: uuidv1() },
+      on_conflict: {
+        constraint: 'art_qk_choosen_pkey',
+        update_columns: ['id'],
+      },
+    })
+  }, [artId, artQkChoosenId, checked, qk.name, store])
 
-  if (error)
+  if (error) {
     return (
       <Row>
-        <Check>Fehler</Check>
-        <Titel>{qk.titel}</Titel>
-        <Beschreibung>{qk.beschreibung}</Beschreibung>
+        <Titel>{`${qk?.titel}, Fehler:`}</Titel>
+        <Beschreibung>{error.message}</Beschreibung>
       </Row>
     )
+  }
   return (
     <Row>
       <Check>
         <Checkbox checked={checked} onChange={onChange} color="primary" />
       </Check>
-      <Titel>{qk.titel}</Titel>
-      <Beschreibung>{qk.beschreibung}</Beschreibung>
+      <Titel>{qk?.titel}</Titel>
+      {!!qk?.beschreibung && <Beschreibung>{qk?.beschreibung}</Beschreibung>}
     </Row>
   )
 }

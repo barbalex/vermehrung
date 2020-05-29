@@ -68,9 +68,8 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
   if (error) {
     return (
       <Row>
-        <Check>Fehler</Check>
-        <Titel>{qk.titel}</Titel>
-        <Beschreibung>{qk.beschreibung}</Beschreibung>
+        <Titel>{`${qk?.titel}, Fehler:`}</Titel>
+        <Beschreibung>{error.message}</Beschreibung>
       </Row>
     )
   }
