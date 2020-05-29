@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import get from 'lodash/get'
 
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import buildExceljsWorksheetsForKultur from '../../Kultur/buildExceljsWorksheets'
@@ -54,8 +53,8 @@ export default async ({
       message: error.message,
     })
   }
-  const garten = { ...get(gartenResult, 'data.garten[0]') }
-  garten.person_name = get(garten, 'person.name', '')
+  const garten = { ...gartenResult?.data?.garten?.[0] }
+  garten.person_name = garten?.person?.name ?? ''
   delete garten.person
   delete garten.__typename
   addWorksheetToExceljsWorkbook({
@@ -111,16 +110,16 @@ export default async ({
       message: error.message,
     })
   }
-  const kultursArray = get(kulturResult, 'data.kultur') || []
+  const kultursArray = kulturResult?.data?.kultur ?? []
   const kulturs = kultursArray.map((k) => {
-    k.art_ae_id = get(k, 'art.art_ae_art.id', '')
-    k.art_ae_name = get(k, 'art.art_ae_art.name', '')
+    k.art_ae_id = k?.art.art_ae_art?.id ?? ''
+    k.art_ae_name = k?.art.art_ae_art?.name ?? ''
     delete k.art
-    k.herkunft_id = get(k, 'herkunft.id', '')
-    k.herkunft_nr = get(k, 'herkunft.nr', '')
+    k.herkunft_id = k?.herkunft?.id ?? ''
+    k.herkunft_nr = k?.herkunft?.nr ?? ''
     delete k.herkunft
-    k.garten_id = get(k, 'garten.id', '')
-    k.garten_name = get(k, 'garten.name', '')
+    k.garten_id = k?.garten?.id ?? ''
+    k.garten_name = k?.garten?.name ?? ''
     delete k.garten
     delete k.__typename
     return k

@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import md5 from 'blueimp-md5'
@@ -84,45 +83,35 @@ const Herkunft = ({
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const {
-    error: errorHerkunft,
-    loading: loadingHerkunft,
-    query: queryOfHerkunft,
-  } = useQuery((store) =>
+  const { error: errorHerkunft, loading: loadingHerkunft } = useQuery((store) =>
     store.queryHerkunft({
       where: { id: { _eq: id } },
     }),
   )
 
-  const row = showFilter ? filter.herkunft : store.herkunfts.get(id)
+  const row = showFilter ? filter.herkunft : store.herkunfts.get(id) || {}
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate(undefined, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
-  const totalNr = get(
-    dataHerkunftTotalAggregate,
-    'herkunft_aggregate.aggregate.count',
-    0,
-  )
+  const totalNr =
+    dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
   const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
   const { data: dataHerkunftFilteredAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
-  const filteredNr = get(
-    dataHerkunftFilteredAggregate,
-    'herkunft_aggregate.aggregate.count',
-    0,
-  )
+  const filteredNr =
+    dataHerkunftFilteredAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
   const personOptionResult = useQuery(personOptionQuery, {
     variables: { accountId: user.uid },
   })
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point, id: person_id } =
-    get(personOptionResult.data, 'person_option[0]') || {}
+    personOptionResult?.data?.person_option?.[0] ?? {}
 
   const [errors, setErrors] = useState({})
   useEffect(() => {

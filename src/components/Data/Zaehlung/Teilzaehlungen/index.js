@@ -37,7 +37,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
   const { insertTeilzaehlungRev } = store
 
-  const zaehlung = store.zaehlungs.get(zaehlungId)
+  const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
 
   // load data for teilzaehlungen

@@ -76,7 +76,7 @@ const Teilzaehlung = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const zaehlung = store.zaehlungs.get(id)
+  const zaehlung = store.zaehlungs.get(id) ?? {}
   const { query } = useQuery((store) =>
     store.queryTeilzaehlung({ where: { id: { _eq: id } } }),
   )

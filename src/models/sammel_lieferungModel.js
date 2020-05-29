@@ -102,7 +102,8 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       const userPerson = [...store.persons.values()].find(
         (o) => o.account_id === store.user.uid,
       )
-      const { sl_auto_copy_edits } = store.person_options.get(userPerson.id)
+      const { sl_auto_copy_edits } =
+        store.person_options.get(userPerson.id) ?? {}
       /*console.log('sammel_lieferungModel', {
         sl_auto_copy_edits,
         selfLieferungs: self.lieferungs,

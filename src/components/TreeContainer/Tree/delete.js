@@ -8,6 +8,7 @@ export default async ({ node, store }) => {
   const table = tableFromTitleHash[title]
 
   const me = store[`${table}s`].get(id)
+  if (!me?.delete) throw new Error(`Kein Modell für Tabelle ${table} gefunden`)
   me.delete()
   setActiveNodeArray(activeNodeArray.slice(0, -1))
 }

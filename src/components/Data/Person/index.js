@@ -7,7 +7,6 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
@@ -138,23 +137,19 @@ const Person = ({
   )
   const userRoleWerte = useMemo(
     () =>
-      get(dataUserRole, 'user_role', []).map((el) => ({
+      (dataUserRole?.user_role ?? []).map((el) => ({
         value: el.name,
         label: `${el.name} (${el.comment})`,
       })),
-    [dataUserRole],
+    [dataUserRole?.user_role],
   )
 
   const { data: dataPersonAggregate } = useQuery((store) =>
     store.queryPerson_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
-  const totalNr = get(
-    dataPersonAggregate,
-    'person_aggregate.aggregate.count',
-    0,
-  )
-  const filteredNr = get(dataFiltered, 'person', []).length
-  const row = showFilter ? filter.person : store.persons.get(id)
+  const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
+  const filteredNr = (dataFiltered?.person ?? []).length
+  const row = showFilter ? filter.person : store.persons.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -176,7 +171,7 @@ const Person = ({
       where: { account_id: { _eq: user.uid } },
     }),
   )
-  const { user_role } = get(dataUser, 'person[0]') || {}
+  const { user_role } = dataUser?.person[0] ?? {}
 
   const saveToDb = useCallback(
     (event) => {

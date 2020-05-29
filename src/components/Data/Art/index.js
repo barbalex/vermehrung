@@ -135,7 +135,7 @@ const Art = ({
   const filteredNr =
     dataArtFilteredAggregate?.art_aggregate?.aggregate?.count ?? 0
 
-  const row = showFilter ? filter.art : store.arts.get(id)
+  const row = showFilter ? filter.art : store.arts.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
