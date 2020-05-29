@@ -12,7 +12,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { StoreContext, useQuery } from '../../../models/reactUtils'
 import { kulturOption as kulturOptionFragment } from '../../../utils/fragments'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -34,50 +34,22 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsZaehlungen = ({ eventResult }) => {
+const SettingsEvents = ({ kulturId }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
   const { addNotification } = store
 
-  const { error, loading } = eventResult
-  const kulturId = get(eventResult, 'data.event[0].kultur.id')
+  const { error, loading } = useQuery((store) =>
+    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
+  )
   const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } =
-    get(eventResult, 'data.event[0].kultur.kultur_option') || {}
+    store.kultur_events.get(kulturId) ?? {}
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_kultur_option(
-                $kulturId: uuid!
-              ) {
-                update_kultur_option(
-                  where: { id: { _eq: $kulturId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...KulturOptionFields
-                  }
-                }
-              }
-              ${kulturOptionFragment}
-            `,
-          variables: {
-            kulturId,
-          },
-          refetchQueries: ['EventQueryForEvent'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const value = event.target.value === 'false'
+      kulturOption.edit({ field, value })
     },
     [client, kulturId, addNotification],
   )
@@ -218,4 +190,4 @@ const SettingsZaehlungen = ({ eventResult }) => {
   )
 }
 
-export default observer(SettingsZaehlungen)
+export default observer(SettingsEvents)

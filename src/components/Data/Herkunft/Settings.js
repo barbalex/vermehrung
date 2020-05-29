@@ -1,7 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -9,11 +7,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog, FaFrown } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../models/reactUtils'
-import { personOption as personOptionFragment } from '../../../utils/fragments'
+import { StoreContext, useQuery } from '../../../models/reactUtils'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -34,51 +30,23 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsGarten = ({ personId, personOptionResult }) => {
-  const client = useApolloClient()
+const SettingsHerkunft = ({ personId }) => {
   const store = useContext(StoreContext)
   const { addNotification } = store
 
-  const { data, error, loading } = personOptionResult
-  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } =
-    get(data, 'person_option[0]', {}) || {}
+  const { loading, error } = useQuery((store) =>
+    store.queryPerson_option({ where: { id: { _eq: personId } } }),
+  )
+  const personOption = store.person_options.get(personId) || {}
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = personOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_person_option(
-                $personId: uuid!
-              ) {
-                update_person_option(
-                  where: { id: { _eq: $personId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...PersonOptionFields
-                  }
-                }
-              }
-              ${personOptionFragment}
-            `,
-          variables: {
-            personId,
-          },
-          refetchQueries: ['PersonOptionQueryForHerkunft'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const value = event.target.value === 'false'
+      personOption.edit({ field, value })
     },
-    [client, personId, addNotification],
+    [personOption],
   )
   const onClickFrown = useCallback(() => {
     addNotification({
@@ -217,4 +185,4 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
   )
 }
 
-export default observer(SettingsGarten)
+export default observer(SettingsHerkunft)
