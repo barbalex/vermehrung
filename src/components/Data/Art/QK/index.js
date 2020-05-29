@@ -51,7 +51,7 @@ const ApQk = ({ artId }) => {
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const { loading, error, refetch } = useQuery(queryQk, {
+  const { loading, error } = useQuery(queryQk, {
     variables: { artId },
     fetchPolicy: 'no-cache',
   })
@@ -130,7 +130,7 @@ const ApQk = ({ artId }) => {
             {tab === 'qk' ? (
               <Qk artId={artId} qkNameQueries={qkNameQueries} qks={qks} />
             ) : (
-              <Choose refetchTab={refetch} />
+              <Choose />
             )}
           </Body>
         </>

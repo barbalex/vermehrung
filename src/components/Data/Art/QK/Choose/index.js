@@ -16,7 +16,7 @@ const FieldsContainer = styled.div`
   padding: 10px 0;
 `
 
-const ChooseQk = ({ refetchTab }) => {
+const ChooseQk = () => {
   const store = useContext(StoreContext)
   const { activeNodeArray } = store.tree
   const artId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
@@ -35,12 +35,7 @@ const ChooseQk = ({ refetchTab }) => {
       <Container>
         <FieldsContainer>
           {rows.map((row) => (
-            <RowComponent
-              key={row.name}
-              artId={artId}
-              qk={row}
-              refetchTab={refetchTab}
-            />
+            <RowComponent key={row.name} artId={artId} qk={row} />
           ))}
         </FieldsContainer>
       </Container>
