@@ -92,7 +92,7 @@ begin
       from
         person_option_rev
         where id = new.id
-      on conflict on constraint person_option_pkey do update set
+      on conflict on constraint person_option_person_id_key do update set
         -- do not update the id = pkey
         ar_name_deutsch = excluded.ar_name_deutsch,
         ga_strasse = excluded.ga_strasse,
@@ -221,7 +221,7 @@ begin
       from
         person_option_rev
         join winning_revisions on person_option_rev._rev = winning_revisions._rev
-      on conflict on constraint person_option_pkey do update set
+      on conflict on constraint person_option_person_id_key do update set
         -- do not update the id = pkey
         ar_name_deutsch = excluded.ar_name_deutsch,
         ga_strasse = excluded.ga_strasse,
