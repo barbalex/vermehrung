@@ -2,17 +2,10 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { useQuery } from '@apollo/react-hooks'
-import get from 'lodash/get'
-import gql from 'graphql-tag'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
-import { StoreContext } from '../../../models/reactUtils'
-import {
-  lieferung as lieferungFragment,
-  sammelLieferung as sammelLieferungFragment,
-} from '../../../utils/fragments'
+import { StoreContext, useQuery } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
@@ -54,19 +47,6 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const lieferungQuery = gql`
-  query LieferungQueryForLieferung($id: uuid!, $include: Boolean!) {
-    lieferung(where: { id: { _eq: $id } }) @include(if: $include) {
-      ...LieferungFields
-      sammel_lieferung {
-        ...SammelLieferungFields
-      }
-    }
-  }
-  ${lieferungFragment}
-  ${sammelLieferungFragment}
-`
-
 const LieferungContainer = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -75,18 +55,16 @@ const LieferungContainer = ({
   const { userPersonOption } = store
 
   const {
-    data: lieferungData,
     error: lieferungError,
     loading: lieferungLoading,
-  } = useQuery(lieferungQuery, {
-    variables: { id, include: !!id },
-  })
-  const sammelLieferungId = get(
-    lieferungData,
-    'lieferung[0].sammel_lieferung_id',
+  } = useQuery((store) => store.queryLieferung({ where: { id: { _eq: id } } }))
+  const lieferung = store.lieferungs.get(id) || {}
+  const sammelLieferungId =
+    lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
+  useQuery((store) =>
+    store.querySammel_lieferung({ where: { id: { _eq: sammelLieferungId } } }),
   )
-  const sammelLieferung =
-    get(lieferungData, 'lieferung[0].sammel_lieferung') || {}
+  const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
   const { li_show_sl } = userPersonOption
 
