@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useContext } from 'react'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import {
@@ -16,24 +16,23 @@ import {
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
 import ReactResizeDetector from 'react-resize-detector'
-import get from 'lodash/get'
-import { useQuery } from '@apollo/react-hooks'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
-import query from './query'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import { useQuery, StoreContext } from '../../../../../models/reactUtils'
 
 const HerkunftTimeline = ({ herkunftId, herkunftSums }) => {
+  const store = useContext(StoreContext)
   // TODO: get label for herkunft and render it
   const [narrow, setNarrow] = useState(false)
 
-  const { data } = useQuery(query, {
-    variables: { id: herkunftId },
-  })
-  const herkunft = get(data, 'herkunft[0]', {})
+  useQuery((store) =>
+    store.queryHerkunft({ where: { id: { _eq: herkunftId } } }),
+  )
+  const herkunft = store.herkunfts.get(herkunftId) ?? {}
   const herkunftLabel = `${herkunft.nr || '(keine Nr)'}: ${
     herkunft.gemeinde || '(keine Gemeinde)'
   }, ${herkunft.lokalname || '(kein Lokalname)'}`
