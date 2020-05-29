@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
+import { v1 as uuidv1 } from 'uuid'
 
 import { StoreContext, useQuery } from '../../../models/reactUtils'
 import Uploader from '../../Uploader'
@@ -56,11 +57,12 @@ const LightboxButton = styled(Button)`
 
 const Files = ({ parentId, parent }) => {
   const store = useContext(StoreContext)
+  const { upsertArtFileModel } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const { error, loading, query: fileQuery } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store[`query${upperFirst(parent)}_file`]({
       where: { [`${parent}_id`]: { _eq: parentId } },
       order_by: { name: 'asc' },
@@ -76,23 +78,25 @@ const Files = ({ parentId, parent }) => {
       if (file) {
         file.done(async (info) => {
           //console.log({ info })
+          const newObject = {
+            id: uuidv1(),
+            file_id: info.uuid,
+            file_mime_type: info.mimeType,
+            [`${parent}_id`]: parentId,
+            name: info.name,
+          }
+          upsertArtFileModel(newObject)
           await store[`mutateInsert_${parent}_file_one`]({
-            object: {
-              file_id: info.uuid,
-              file_mime_type: info.mimeType,
-              [`${parent}_id`]: parentId,
-              name: info.name,
-            },
+            object: newObject,
             on_conflict: {
               constraint: `${parent}_file_pkey`,
               update_columns: ['id'],
             },
           })
-          fileQuery.refetch()
         })
       }
     },
-    [fileQuery, parent, parentId, store],
+    [parent, parentId, store, upsertArtFileModel],
   )
 
   const images = files.filter((f) => isImageFile(f))
@@ -163,12 +167,7 @@ const Files = ({ parentId, parent }) => {
         )}
         <Spacer />
         {files.map((file) => (
-          <File
-            key={file.file_id}
-            file={file}
-            parent={parent}
-            fileQuery={fileQuery}
-          />
+          <File key={file.file_id} file={file} parent={parent} />
         ))}
       </Container>
     </ErrorBoundary>
