@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
-import get from 'lodash/get'
 
 import exists from '../../../../../utils/exists'
 
@@ -27,7 +26,7 @@ const Ereignis = styled.span`
 const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
   // filter out zählung information if ereignis is not zählung
   const payload = [
-    ...payloadPassed.filter(p => {
+    ...payloadPassed.filter((p) => {
       if (
         p.payload.ereignis !== 'Zählung' &&
         p.dataKey.includes('Zählung Pflanzen')
@@ -39,7 +38,7 @@ const CustomTooltip = ({ payload: payloadPassed, label, active }) => {
   ]
 
   if (active) {
-    const ereignis = get(payload, '[0].payload.ereignis', '')
+    const ereignis = payload?.[0]?.payload?.ereignis ?? ''
 
     return (
       <Popup>
