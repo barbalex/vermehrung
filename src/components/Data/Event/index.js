@@ -342,12 +342,6 @@ const Event = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('Event', {
-    row,
-    teilkultur_id: row.teilkultur_id,
-    teilkulturWerte,
-  })
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
