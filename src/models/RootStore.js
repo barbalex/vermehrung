@@ -1367,4 +1367,22 @@ export const RootStore = RootStoreBase.props({
       }
       return undefined
     },
+    get userPerson() {
+      const { user, queryPerson, persons } = self
+      const userPerson = [...persons.values()].find(
+        (p) => p.account_id === user.uid,
+      )
+      if (!userPerson) {
+        queryPerson({ where: { account_id: { _eq: user.uid } } })
+      }
+      return userPerson ?? {}
+    },
+    get userPersonOption() {
+      const { userPerson, person_options, queryPerson_option } = self
+      const userPersonOption = person_options.get(userPerson.id) ?? {}
+      if (!userPersonOption) {
+        queryPerson_option({ where: { id: { _eq: userPerson.id } } })
+      }
+      return userPersonOption
+    },
   }))

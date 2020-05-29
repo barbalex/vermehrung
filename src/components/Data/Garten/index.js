@@ -111,17 +111,13 @@ const Garten = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, user, online } = store
+  const { filter, online, userPersonOption } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
   const gartenFilter = queryFromTable({ store, table: 'garten' })
 
-  const {
-    data: personData,
-    error: personError,
-    loading: personLoading,
-  } = useQuery(
+  const { error: personError, loading: personLoading } = useQuery(
     (store) =>
       store.queryPerson({
         order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }],
@@ -159,11 +155,6 @@ const Garten = ({
     setActiveConflict(row?._rev ?? null)
   }, [queryOfGarten, row?._rev])
 
-  const personOptionResult = useQuery((store) =>
-    store.queryPerson_option({
-      where: { person: { account_id: { _eq: user.uid } } },
-    }),
-  )
   const {
     ga_strasse,
     ga_plz,
@@ -171,8 +162,7 @@ const Garten = ({
     ga_geom_point,
     ga_aktiv,
     ga_bemerkungen,
-    person_id,
-  } = personOptionResult?.data?.person_option[0] ?? {}
+  } = userPersonOption
 
   useEffect(() => {
     setErrors({})
@@ -180,11 +170,11 @@ const Garten = ({
 
   const personWerte = useMemo(
     () =>
-      (personData?.person ?? []).map((el) => ({
+      [...store.persons.values()].map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [personData?.person],
+    [store.persons],
   )
 
   const saveToDb = useCallback(
@@ -254,10 +244,7 @@ const Garten = ({
               <AddButton />
               <DeleteButton row={row} />
               <Download gartenId={row.id} />
-              <Settings
-                personId={person_id}
-                personOptionResult={personOptionResult}
-              />
+              <Settings />
               {(store.filter.show || isFiltered) && (
                 <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
               )}

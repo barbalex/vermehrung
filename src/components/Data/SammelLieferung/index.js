@@ -292,7 +292,7 @@ const SammelLieferung = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, isPrint, setIsPrint, user, online } = store
+  const { filter, isPrint, setIsPrint, online, userPersonOption } = store
   const { isFiltered: runIsFiltered } = filter
   const { setWidthInPercentOfScreen } = store.tree
 
@@ -343,13 +343,7 @@ const SammelLieferung = ({
     setActiveConflict(row?._rev ?? null)
   }, [queryOfSammelLieferung, row?._rev])
 
-  const personOptionResult = useQuery((store) =>
-    store.queryPerson_option({
-      where: { person: { account_id: { _eq: user.uid } } },
-    }),
-  )
-  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits, id: person_id } =
-    get(personOptionResult.data, 'person_option[0]') || {}
+  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } = userPersonOption
 
   const sammlungFilter = row.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -637,12 +631,7 @@ const SammelLieferung = ({
                   <MdPrint />
                 </IconButton>
               )}
-              {id && (
-                <Settings
-                  personId={person_id}
-                  personOptionResult={personOptionResult}
-                />
-              )}
+              {id && <Settings />}
               <IconButton
                 aria-label="Anleitung öffnen"
                 title="Anleitung öffnen"

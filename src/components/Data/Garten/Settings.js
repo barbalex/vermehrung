@@ -7,9 +7,8 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
+import { FaCog } from 'react-icons/fa'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -33,12 +32,10 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsGarten = ({ personId, personOptionResult }) => {
-  const client = useApolloClient()
+const SettingsGarten = () => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { userPersonOption } = store
 
-  const { data, error, loading } = personOptionResult
   const {
     ga_strasse,
     ga_plz,
@@ -47,50 +44,16 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
     ga_lat_lng,
     ga_aktiv,
     ga_bemerkungen,
-  } = get(data, 'person_option[0]') || {}
+  } = userPersonOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_person_option(
-                $personId: uuid!
-              ) {
-                update_person_option(
-                  where: { id: { _eq: $personId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...PersonOptionFields
-                  }
-                }
-              }
-              ${personOptionFragment}
-            `,
-          variables: {
-            personId,
-          },
-          refetchQueries: ['PersonOptionQueryForGarten'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const value = event.target.value === 'false'
+      userPersonOption.edit({ field, value })
     },
-    [client, personId, addNotification],
+    [userPersonOption],
   )
-  const onClickFrown = useCallback(() => {
-    addNotification({
-      message: error.message,
-    })
-  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`
@@ -109,19 +72,6 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
     [],
   )
 
-  if (error) {
-    return (
-      <IconButton
-        aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title={error.message}
-        onClick={onClickFrown}
-      >
-        <FaFrown />
-      </IconButton>
-    )
-  }
   return (
     <ErrorBoundary>
       <IconButton
@@ -133,7 +83,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
       >
         <FaCog />
       </IconButton>
-      {!loading && (
+      {
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -263,7 +213,7 @@ const SettingsGarten = ({ personId, personOptionResult }) => {
             Die Wahl gilt für alle Gärten.
           </Info>
         </Menu>
-      )}
+      }
     </ErrorBoundary>
   )
 }

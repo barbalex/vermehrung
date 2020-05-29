@@ -5,11 +5,11 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
+import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext, useQuery } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -30,29 +30,20 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsHerkunft = ({ personId }) => {
+const SettingsHerkunft = () => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { userPersonOption } = store
 
-  const { loading, error } = useQuery((store) =>
-    store.queryPerson_option({ where: { id: { _eq: personId } } }),
-  )
-  const personOption = store.person_options.get(personId) || {}
-  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = personOption
+  const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
-      personOption.edit({ field, value })
+      userPersonOption.edit({ field, value })
     },
-    [personOption],
+    [userPersonOption],
   )
-  const onClickFrown = useCallback(() => {
-    addNotification({
-      message: error.message,
-    })
-  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`
@@ -71,19 +62,6 @@ const SettingsHerkunft = ({ personId }) => {
     [],
   )
 
-  if (error) {
-    return (
-      <IconButton
-        aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title={error.message}
-        onClick={onClickFrown}
-      >
-        <FaFrown />
-      </IconButton>
-    )
-  }
   return (
     <ErrorBoundary>
       <IconButton
@@ -95,7 +73,7 @@ const SettingsHerkunft = ({ personId }) => {
       >
         <FaCog />
       </IconButton>
-      {!loading && (
+      {
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -180,7 +158,7 @@ const SettingsHerkunft = ({ personId }) => {
             Die Wahl gilt für alle Herkünfte.
           </Info>
         </Menu>
-      )}
+      }
     </ErrorBoundary>
   )
 }
