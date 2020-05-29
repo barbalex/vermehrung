@@ -8,7 +8,6 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -323,7 +322,7 @@ const personOptionQuery = gql`
 `
 
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
-  const existsSammelLieferung = !!get(sammelLieferung, 'id')
+  const existsSammelLieferung = !!sammelLieferung?.id
   const store = useContext(StoreContext)
 
   const { filter, user, online } = store
@@ -369,13 +368,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       d.aggregate((d) => d.count),
     ),
   )
-  const totalNr = get(
-    dataLieferungAggregate,
-    'lieferung_aggregate.aggregate.count',
-    0,
-  )
-  const filteredNr = get(data, 'rowsFiltered', []).length
-  const row = showFilter ? filter.lieferung : store.lieferungs.get(id)
+  const totalNr =
+    dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
+  const filteredNr = (data?.rowsFiltered ?? []).length
+  const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -391,7 +387,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     variables: { accountId: user.uid },
   })
   const { li_show_sl_felder, person_id } =
-    get(personOptionResult.data, 'person_option[0]') || {}
+    personOptionResult?.data?.person_option?.[0] ?? {}
 
   const sammlungFilter = row?.art_id
     ? { art_id: { _eq: row.art_id } }
@@ -430,9 +426,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   )
 
   const herkunftByKultur = isAnlieferung
-    ? get(row, 'kulturByNachKulturId.herkunft')
-    : get(row, 'kulturByVonKulturId.herkunft')
-  const herkunftBySammlung = get(row, 'sammlung.herkunft')
+    ? row?.kulturByNachKulturId?.herkunft
+    : row?.kulturByVonKulturId?.herkunft
+  const herkunftBySammlung = row?.sammlung?.herkunft
   const herkunft = herkunftByKultur || herkunftBySammlung
   const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
   const herkunftValue = herkunft
@@ -532,53 +528,53 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const vonKulturWerte = useMemo(
     () =>
-      get(vonKulturData, 'kultur', []).map((el) => {
-        const personName = get(el, 'garten.person.name') || '(kein Name)'
-        const personOrt = get(el, 'garten.person.ort') || null
+      (vonKulturData?.kultur ?? []).map((el) => {
+        const personName = el?.garten?.person?.name ?? '(kein Name)'
+        const personOrt = el?.garten?.person?.ort ?? null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const label = get(el, 'garten.name') || personLabel
+        const label = el?.garten?.name ?? personLabel
 
         return {
           value: el.id,
           label,
         }
       }),
-    [vonKulturData],
+    [vonKulturData?.kultur],
   )
   const nachKulturWerte = useMemo(
     () =>
-      get(nachKulturData, 'kultur', []).map((el) => ({
+      (nachKulturData?.kultur ?? []).map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
-    [nachKulturData],
+    [nachKulturData?.kultur],
   )
 
   const sammlungWerte = useMemo(
     () =>
-      get(sammlungData, 'sammlung', []).map((el) => ({
+      (sammlungData?.sammlung ?? []).map((el) => ({
         value: el.id,
         label: sammlungLabelFromSammlung(el),
       })),
-    [sammlungData],
+    [sammlungData?.sammlung],
   )
 
   const personWerte = useMemo(
     () =>
-      get(personData, 'person', []).map((el) => ({
+      (personData?.person ?? []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [personData],
+    [personData?.person],
   )
 
   const artWerte = useMemo(
     () =>
-      get(artData, 'art', []).map((el) => ({
+      (artData?.art ?? []).map((el) => ({
         value: el.id,
-        label: get(el, 'art_ae_art.name') || '(kein Artname)',
+        label: el?.art_ae_art?.name ?? '(kein Artname)',
       })),
-    [artData],
+    [artData?.art],
   )
 
   const saveToDb = useCallback(

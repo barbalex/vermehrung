@@ -147,7 +147,7 @@ const Garten = ({
   const { error, loading, query: queryOfGarten } = useQuery((store) =>
     store.queryGarten({ where: { id: { _eq: id } } }),
   )
-  const row = showFilter ? filter.garten : store.gartens.get(id)
+  const row = showFilter ? filter.garten : store.gartens.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {

@@ -34,7 +34,7 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
   const { addNotification } = store
 
-  const zaehlung = store.zaehlungs.get(zaehlungId)
+  const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
   const { error, loading } = useQuery((store) =>
     store.queryKultur_option({ where: { id: { _eq: kulturId } } }),

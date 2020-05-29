@@ -10,7 +10,6 @@ import gql from 'graphql-tag'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
@@ -213,13 +212,10 @@ const Sammlung = ({
       d.aggregate((d) => d.count),
     ),
   )
-  const totalNr = get(
-    dataSammlungAggregate,
-    'sammlung_aggregate.aggregate.count',
-    0,
-  )
-  const filteredNr = get(data, 'rowsFiltered', []).length
-  const row = showFilter ? filter.sammlung : store.sammlungs.get(id)
+  const totalNr =
+    dataSammlungAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
+  const filteredNr = (data?.rowsFiltered ?? []).length
+  const row = showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -237,29 +233,29 @@ const Sammlung = ({
 
   const personWerte = useMemo(
     () =>
-      get(dataData, 'person', []).map((el) => ({
+      (dataData?.person ?? []).map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [dataData],
+    [dataData?.person],
   )
 
   const herkunftWerte = useMemo(
     () =>
-      get(dataData, 'herkunft', []).map((el) => ({
+      (dataData?.herkunft ?? []).map((el) => ({
         value: el.id,
         label: herkunftLabelFromHerkunft(el),
       })),
-    [dataData],
+    [dataData?.herkunft],
   )
 
   const artWerte = useMemo(
     () =>
-      get(dataData, 'art', []).map((el) => ({
+      (dataData?.art ?? []).map((el) => ({
         value: el.id,
-        label: get(el, 'art_ae_art.name') || '(kein Artname)',
+        label: el?.art_ae_art?.name ?? '(kein Artname)',
       })),
-    [dataData],
+    [dataData?.art],
   )
 
   const saveToDb = useCallback(
