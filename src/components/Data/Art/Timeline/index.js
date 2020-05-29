@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
 
 import Timeline from './Timeline'
@@ -59,7 +58,7 @@ const TimelineArea = ({ artId }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { id: artId },
   })
-  const artSums = get(data, 'art_sums', [])
+  const artSums = data?.art_sums ?? []
 
   return (
     <ErrorBoundary>
