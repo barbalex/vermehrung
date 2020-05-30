@@ -1,5 +1,4 @@
 import React from 'react'
-import get from 'lodash/get'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
@@ -12,18 +11,12 @@ const Zeile = ({ value }) => <div>{value}</div>
 
 const LieferungForLieferschein = ({ lieferung: l }) => {
   const art = l.art_id
-    ? get(l, 'art.art_ae_art.name', '(kein Name)')
+    ? l?.art?.art_ae_art?.name ?? '(kein Name)'
     : '(keine Art gewählt)'
   const herkunft = l.von_kultur_id
-    ? `${get(l, 'kulturByVonKulturId.herkunft.nr')} (${get(
-        l,
-        'kulturByVonKulturId.herkunft.gemeinde',
-        '(keine Gemeinde)',
-      )}, ${get(
-        l,
-        'kulturByVonKulturId.herkunft.lokalname',
-        '(kein Lokalname)',
-      )})`
+    ? `${l?.kulturByVonKulturId?.herkunft?.nr} (${
+        l?.kulturByVonKulturId?.herkunft?.gemeinde ?? '(keine Gemeinde)'
+      }, ${l?.kulturByVonKulturId?.herkunft?.lokalname ?? '(kein Lokalname)'})`
     : '(keine von-Kultur)'
   const wasArray = []
   l.anzahl_pflanzen && wasArray.push(`${l.anzahl_pflanzen} Pflanzen`)
