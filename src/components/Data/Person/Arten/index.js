@@ -1,12 +1,17 @@
-import React, { useCallback, useState, useMemo, useEffect } from 'react'
+import React, {
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+  useContext,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
-import get from 'lodash/get'
+import { v1 as uuidv1 } from 'uuid'
 
+import { StoreContext, useQuery } from '../../../../models/reactUtils'
 import Art from './Art'
 import query from './query'
 import Select from '../../../shared/Select'
@@ -44,7 +49,8 @@ const AvArten = styled.div`
 `
 
 const PersonArten = ({ personId }) => {
-  const client = useApolloClient()
+  const store = useContext(StoreContext)
+  const { upsertAvArtModel, deleteAvArtModel } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -58,53 +64,47 @@ const PersonArten = ({ personId }) => {
     [open],
   )
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading, query: avArtQuery } = useQuery(query, {
     variables: { personId },
   })
-  const avArten = get(data, 'av_art', [])
-  const artenChoosen = get(data, 'art_choosen', [])
+  const avArten = [...store.av_arts.values()].filter(
+    (a) => a.person_id === personId,
+  )
+  const artenChoosen = data?.art_choosen ?? []
+  const artenToChoose = data?.art_to_choose ?? []
 
   const artWerte = useMemo(
     () =>
-      get(data, 'art_to_choose', []).map((el) => ({
+      artenToChoose.map((el) => ({
         value: el.id,
-        label: get(el, 'art_ae_art.name') || '(kein Artname)',
+        label: el?.art_ae_art?.name ?? '(kein Artname)',
       })),
-    [data],
+    [artenToChoose],
   )
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
+      const newObject = { id: uuidv1(), art_id: value, person_id: personId }
+      upsertAvArtModel(newObject)
       try {
-        await client.mutate({
-          mutation: gql`
-            mutation insert_av_art_for_person($personId: uuid!, $artId: uuid!) {
-              insert_av_art(
-                objects: [{ art_id: $artId, person_id: $personId }]
-              ) {
-                affected_rows
-                returning {
-                  art_id
-                  person_id
-                }
-              }
-            }
-          `,
-          variables: {
-            personId,
-            artId: value,
+        await store.mutateInsert_av_art_one({
+          object: newObject,
+          on_conflict: {
+            constraint: 'av_art_pkey',
+            update_columns: ['id'],
           },
-          refetchQueries: ['ArtenForPersonQuery'],
         })
       } catch (error) {
         console.log({ error })
+        deleteAvArtModel(newObject)
         return setErrors({ [field]: error.message })
       }
+      avArtQuery.refetch()
       setErrors({})
     },
-    [client, personId],
+    [avArtQuery, deleteAvArtModel, personId, store, upsertAvArtModel],
   )
 
   return (
@@ -127,7 +127,7 @@ const PersonArten = ({ personId }) => {
       </TitleRow>
       {open && (
         <Content>
-          {loading ? (
+          {loading && !avArten.length ? (
             <AvArten>Lade Daten...</AvArten>
           ) : error ? (
             <AvArten>{`Fehler: ${error.message}`}</AvArten>
