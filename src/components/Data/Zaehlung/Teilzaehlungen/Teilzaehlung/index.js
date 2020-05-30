@@ -97,8 +97,10 @@ const Teilzaehlung = ({
     ({ name }) => {
       const teilkultur_id = insertTeilkulturRev({
         noNavigateInTree: true,
-        name,
-        kultur_id: kulturId,
+        values: {
+          name,
+          kultur_id: kulturId,
+        },
       })
       row.edit({ field: 'teilkultur_id', value: teilkultur_id })
       query.refetch()
