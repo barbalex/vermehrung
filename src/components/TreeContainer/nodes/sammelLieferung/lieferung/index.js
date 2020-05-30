@@ -1,23 +1,20 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-import exists from '../../../../../utils/exists'
-
 export default ({ nodes, data, url }) => {
   const sammelLieferungId = url[1]
-  const sammelLieferungen = get(data, 'sammel_lieferung') || []
+  const sammelLieferungen = data?.sammel_lieferung ?? []
   const sammelLieferung = sammelLieferungen.find(
-    k => k.id === sammelLieferungId,
+    (k) => k.id === sammelLieferungId,
   )
-  const lieferungen = get(sammelLieferung, 'lieferungs') || []
+  const lieferungen = sammelLieferung?.lieferungs ?? []
 
   const sammelLieferungNodes = nodes.filter(
-    n => n.parentId === `sammelLieferungFolder`,
+    (n) => n.parentId === `sammelLieferungFolder`,
   )
   const sammelLieferungIndex = findIndex(
     sammelLieferungNodes,
-    n => n.id === `sammelLieferung${sammelLieferungId}`,
+    (n) => n.id === `sammelLieferung${sammelLieferungId}`,
   )
 
   return (
@@ -25,17 +22,15 @@ export default ({ nodes, data, url }) => {
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(`sammelLieferung${sammelLieferungId}LieferungFolder`),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
-        const anz = exists(el.anzahl_pflanzen) ? el.anzahl_pflanzen : '_'
-        const anzAb = exists(el.anzahl_auspflanzbereit)
-          ? el.anzahl_auspflanzbereit
-          : '_'
+        const anz = el.anzahl_pflanzen ?? '_'
+        const anzAb = el.anzahl_auspflanzbereit ?? '_'
         const numbers = `${anz
           .toString()
           .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`

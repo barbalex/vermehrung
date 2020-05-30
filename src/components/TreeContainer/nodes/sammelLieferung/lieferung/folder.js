@@ -1,25 +1,24 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
   const sammelLieferungId = url[1]
-  const sammelLieferungen = get(data, 'sammel_lieferung') || []
+  const sammelLieferungen = data?.sammel_lieferung ?? []
   const sammelLieferung = sammelLieferungen.find(
-    k => k.id === sammelLieferungId,
+    (k) => k.id === sammelLieferungId,
   )
-  const lieferungen = get(sammelLieferung, 'lieferungs') || []
+  const lieferungen = sammelLieferung?.lieferungs ?? []
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   const sammelLieferungNodes = nodes.filter(
-    n => n.parentId === `sammelLieferungFolder`,
+    (n) => n.parentId === `sammelLieferungFolder`,
   )
   const sammelLieferungIndex = findIndex(
     sammelLieferungNodes,
-    n => n.id === `sammelLieferung${sammelLieferungId}`,
+    (n) => n.id === `sammelLieferung${sammelLieferungId}`,
   )
 
   // only return if parent exists
-  if (!nodes.map(n => n.id).includes(`sammelLieferung${sammelLieferungId}`))
+  if (!nodes.map((n) => n.id).includes(`sammelLieferung${sammelLieferungId}`))
     return []
 
   return [

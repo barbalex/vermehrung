@@ -1,24 +1,24 @@
-import get from 'lodash/get'
 import moment from 'moment'
 
 export default ({ nodes, data }) => {
-  const sammlungen = get(data, 'sammlung') || []
+  const sammlungen = data?.sammlung ?? []
 
   return (
     sammlungen
       // only show if parent node exists
-      .filter(() => nodes.map(n => n.id).includes('sammlungFolder'))
-      .map(el => {
+      .filter(() => nodes.map((n) => n.id).includes('sammlungFolder'))
+      .map((el) => {
         const { datum } = el
-        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
-        const person = get(el, 'person.name') || '(keine Person)'
-        const herkunft = get(el, 'herkunft.nr') || '(keine Herkunft-Nr)'
+        const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
+        const person = el?.person?.name ?? '(keine Person)'
+        const herkunft = el?.herkunft?.nr ?? '(keine Herkunft-Nr)'
         const date = datum
           ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
         const geplant = el.geplant ? ' (geplant)' : ''
-        const label = `${el.nr ||
-          '(keine Nr)'}, ${date}: Herkunft ${herkunft}, ${person}; ${art}${geplant}`
+        const label = `${
+          el.nr ?? '(keine Nr)'
+        }, ${date}: Herkunft ${herkunft}, ${person}; ${art}${geplant}`
 
         return {
           nodeType: 'table',
