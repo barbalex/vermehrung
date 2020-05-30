@@ -1,35 +1,37 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const personId = url[1]
   const gartenId = url[3]
   const kulturId = url[5]
-  const personen = get(data, 'person') || []
-  const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartens') || []
-  const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kulturs') || []
-  const kultur = kulturen.find(k => k.id === kulturId)
-  const teilkulturen = get(kultur, 'teilkulturs') || []
+  const personen = data?.person ?? []
+  const person = personen.find((p) => p.id === personId)
+  const gaerten = person?.gartens ?? []
+  const garten = gaerten.find((a) => a.id === gartenId)
+  const kulturen = garten?.kulturs ?? []
+  const kultur = kulturen.find((k) => k.id === kulturId)
+  const teilkulturen = kultur?.teilkulturs ?? []
 
-  const personNodes = nodes.filter(n => n.parentId === 'personFolder')
-  const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
+  const personIndex = findIndex(
+    personNodes,
+    (n) => n.id === `person${personId}`,
+  )
 
   const gartenNodes = nodes.filter(
-    n => n.parentId === `person${personId}GartenFolder`,
+    (n) => n.parentId === `person${personId}GartenFolder`,
   )
   const gartenIndex = findIndex(
     gartenNodes,
-    n => n.id === `person${personId}Garten${gartenId}`,
+    (n) => n.id === `person${personId}Garten${gartenId}`,
   )
 
   const kulturNodes = nodes.filter(
-    n => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
+    (n) => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
   )
   const kulturIndex = findIndex(
     kulturNodes,
-    n => n.id === `person${personId}Garten${gartenId}Kultur${kulturId}`,
+    (n) => n.id === `person${personId}Garten${gartenId}Kultur${kulturId}`,
   )
 
   return (
@@ -37,12 +39,12 @@ export default ({ nodes, data, url }) => {
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(
             `person${personId}Garten${gartenId}Kultur${kulturId}TeilkulturFolder`,
           ),
       )
-      .map(el => {
+      .map((el) => {
         const label = el.name || '(kein Name)'
 
         return {
