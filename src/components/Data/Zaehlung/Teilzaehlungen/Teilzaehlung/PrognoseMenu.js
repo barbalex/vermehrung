@@ -7,7 +7,6 @@ import Menu from '@material-ui/core/Menu'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
@@ -106,7 +105,7 @@ const Teilzaehlung = ({
           message: error.message,
         })
       }
-      const existingZaehlung = get(existingZaehlungData, 'data.zaehlung[0]')
+      const existingZaehlung = existingZaehlungData?.data?.zaehlung?.[0]
       // if not: create it first
       let newZaehlung
       // if not: create it first
@@ -143,7 +142,7 @@ const Teilzaehlung = ({
             message: error.message,
           })
         }
-        newZaehlung = get(zaehlungData, 'data.insert_zaehlung.returning[0]')
+        newZaehlung = zaehlungData?.data?.insert_zaehlung?.returning?.[0]
       }
       const zaehlung = existingZaehlung || newZaehlung
       // create new teilzaehlung
@@ -216,10 +215,7 @@ const Teilzaehlung = ({
           message: error.message,
         })
       }
-      const emptyTeilzaehlung = get(
-        emptyTeilzaehlungenData,
-        'data.teilzaehlung[0]',
-      )
+      const emptyTeilzaehlung = emptyTeilzaehlungenData?.data?.teilzaehlung?.[0]
       if (emptyTeilzaehlung) {
         try {
           await client.mutate({

@@ -1,7 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import moment from 'moment'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -41,13 +40,11 @@ const Arten = ({ row, style, last }) => {
     ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
     : 'kein Datum'
   const anz =
-    get(row, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') || '-'
+    row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
   const anzAb =
-    get(row, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit') ||
-    '-'
+    row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ?? '-'
   const anzMu =
-    get(row, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen') ||
-    '-'
+    row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ?? '-'
   const numbers = `${anz
     .toString()
     .padStart(3, '\u00A0')}/${anzAb
