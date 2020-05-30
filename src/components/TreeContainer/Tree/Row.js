@@ -7,8 +7,6 @@ import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import axios from 'axios'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -22,7 +20,6 @@ import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import { person as personFragment } from '../../../utils/fragments'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -199,7 +196,6 @@ const MenuSubtitle = styled.div`
 `
 
 const Row = ({ style, node, nodes }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const { tree, addNotification, userPerson, firebase } = store
@@ -296,56 +292,31 @@ const Row = ({ style, node, nodes }) => {
         })
       }
     }
+    const person = store.persons.get(last(node.url))
+    if (!person) {
+      return addNotification({
+        message: `Keine Person mit id ${last(node.url)} gefunden`,
+      })
+    }
     try {
       // remove users account_id
-      client.mutate({
-        mutation: gql`
-          mutation update_person_for_deleting_account(
-            $id: uuid!
-            $accountId: String
-          ) {
-            update_person(
-              where: { id: { _eq: $id } }
-              _set: { account_id: $accountId }
-            ) {
-              affected_rows
-              returning {
-                ...PersonFields
-              }
-            }
-          }
-          ${personFragment}
-        `,
-        variables: {
-          id: last(node.url).toString(),
-          accountId: null,
-        },
-      })
+      person.edit({ field: 'account_id', value: null })
     } catch (error) {
       console.log(error)
       return addNotification({
         message: error.message,
       })
     }
-  }, [client, addNotification, node.accountId, node.url])
+  }, [addNotification, node.accountId, node.url, store.persons])
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
     // fetch email of this person
     let result
     try {
-      result = await client.query({
-        query: gql`
-          query getPerson($id: Int!) {
-            person (where: { id: { _eq: ${personId} } }) {
-              id
-              __typename
-              email
-              user_role
-            }
-          }
-        `,
-        variables: { id: personId },
-      })
+      result = await store.queryPerson(
+        { where: { id: { _eq: personId } } },
+        (p) => p.id.email.user_role,
+      )
     } catch (error) {
       addNotification({
         message: error.message,
@@ -380,30 +351,14 @@ const Row = ({ style, node, nodes }) => {
     })
 
     // save resp.Id to mark users with account
-    client.mutate({
-      mutation: gql`
-        mutation update_person_for_signup(
-          $id: uuid!
-        ) {
-          update_person(
-            where: { id: { _eq: $id } }
-            _set: {
-              account_id: "${res.data}"
-            }
-          ) {
-            affected_rows
-            returning {
-              ...PersonFields
-            }
-          }
-        }
-        ${personFragment}
-      `,
-      variables: {
-        id: last(node.url).toString(),
-      },
-    })
-  }, [client, addNotification, node.url, store])
+    const person = store.persons.get(last(node.url))
+    if (!person) {
+      return addNotification({
+        message: `Keine Person mit id ${last(node.url)} gefunden`,
+      })
+    }
+    person.edit({ field: 'account_id', value: res.data })
+  }, [addNotification, node.url, store])
 
   const onClickOpenAllChildren = useCallback(() => {
     openAllChildren({ node, openNodes, store })
