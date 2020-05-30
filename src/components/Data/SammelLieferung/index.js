@@ -8,7 +8,6 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
@@ -24,7 +23,6 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import exists from '../../../utils/exists'
 import Settings from './Settings'
@@ -285,11 +283,11 @@ const SammelLieferung = ({
     ),
   )
 
-  const herkunftByNachKultur = get(row, 'kulturByNachKulturId.herkunft')
-  const herkunftByVonKultur = get(row, 'kulturByVonKulturId.herkunft')
-  const herkunftBySammlung = get(row, 'sammlung.herkunft')
+  const herkunftByNachKultur = row?.kulturByNachKulturId?.herkunft
+  const herkunftByVonKultur = row?.kulturByVonKulturId?.herkunft
+  const herkunftBySammlung = row?.sammlung?.herkunft
   const herkunft =
-    herkunftByNachKultur || herkunftByVonKultur || herkunftBySammlung
+    herkunftByNachKultur ?? herkunftByVonKultur ?? herkunftBySammlung
   const herkunftQuelle = herkunftByNachKultur
     ? 'nach-Kultur'
     : herkunftByVonKultur
@@ -375,11 +373,11 @@ const SammelLieferung = ({
 
   const vonKulturWerte = useMemo(
     () =>
-      get(vonKulturData, 'kultur', []).map((el) => ({
+      (vonKulturData?.kultur ?? []).map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
-    [vonKulturData],
+    [vonKulturData?.kultur],
   )
   const nachKulturWerte = useMemo(
     () =>
@@ -417,7 +415,7 @@ const SammelLieferung = ({
     () =>
       [...store.arts.values()].map((el) => ({
         value: el.id,
-        label: get(el, 'art_ae_art.name') || '(kein Artname)',
+        label: el?.art_ae_art?.name ?? '(kein Artname)',
       })),
     [store.arts],
   )
