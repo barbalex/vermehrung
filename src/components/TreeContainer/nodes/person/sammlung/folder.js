@@ -1,18 +1,20 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
   const personId = url[1]
-  const personen = get(data, 'person') || []
-  const person = personen.find(p => p.id === personId)
-  const sammlungen = get(person, 'sammlungs') || []
+  const personen = data?.person ?? []
+  const person = personen.find((p) => p.id === personId)
+  const sammlungen = person?.sammlungs ?? []
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
-  const personNodes = nodes.filter(n => n.parentId === 'personFolder')
-  const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
+  const personIndex = findIndex(
+    personNodes,
+    (n) => n.id === `person${personId}`,
+  )
 
   // only return if parent exists
-  if (!nodes.map(n => n.id).includes(`person${personId}`)) return []
+  if (!nodes.map((n) => n.id).includes(`person${personId}`)) return []
 
   return [
     {

@@ -1,7 +1,5 @@
-import get from 'lodash/get'
-
 export default ({ data, loading }) => {
-  const sammelLieferungen = get(data, 'sammel_lieferung') || []
+  const sammelLieferungen = data?.sammel_lieferung ?? []
   const nr =
     loading && !sammelLieferungen.length ? '...' : sammelLieferungen.length
 
