@@ -45,22 +45,24 @@ const MenuTitle = styled.h3`
 
 const AvArt = ({ avArt }) => {
   const store = useContext(StoreContext)
+  const { addNotification } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(async () => {
-    store.mutateDelete_av_art(
-      {
-        where: { id: { _eq: avArt.id } },
-      },
-      undefined,
-      () => {
-        store.av_arts.delete(avArt.id)
-      },
-    )
     store.deleteAvArtModel(avArt)
-  }, [avArt, store])
+    try {
+      store.mutateDelete_av_art({
+        where: { id: { _eq: avArt.id } },
+      })
+    } catch (error) {
+      store.insertAvArtModel(avArt)
+      addNotification({
+        message: error.message,
+      })
+    }
+  }, [addNotification, avArt, store])
 
   const artname = avArt?.art?.art_ae_art?.name
 

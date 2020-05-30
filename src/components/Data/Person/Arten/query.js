@@ -27,12 +27,20 @@ export default gql`
       order_by: { art_ae_art: { name: asc_nulls_first } }
     ) {
       ...ArtFields
+      av_art {
+        id
+        __typename
+      }
     }
     art_choosen: art(
       where: { av_art: {} }
       order_by: { art_ae_art: { name: asc_nulls_first } }
     ) {
       ...ArtFields
+      av_art {
+        id
+        __typename
+      }
     }
   }
   ${art}
