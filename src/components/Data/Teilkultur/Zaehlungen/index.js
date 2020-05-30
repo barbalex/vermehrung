@@ -1,10 +1,9 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import format from 'date-fns/format'
 
+import { useQuery } from '../../../../models/reactUtils'
 import { teilzaehlung as teilzahlungFragment } from '../../../../utils/fragments'
 import exists from '../../../../utils/exists'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -103,15 +102,14 @@ const TkZaehlungen = ({ kulturId, teilkulturId }) => {
       teilkulturId,
     },
   })
-  const rows = get(data, 'zaehlung', [])
-  const tzs = rows.flatMap((row) => {
-    const tz = get(row, 'teilzaehlungs') || []
-    return tz.map((t) => ({
+  const rows = data?.zaehlung ?? []
+  const tzs = rows.flatMap((row) =>
+    (row?.teilzaehlungs ?? []).map((t) => ({
       ...t,
       datum: row.datum,
       prognose: row.prognose,
-    }))
-  })
+    })),
+  )
 
   return (
     <ErrorBoundary>
