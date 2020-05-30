@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
@@ -6,40 +5,40 @@ export default ({ url, nodes, data, loading }) => {
   const lieferungId = url[3]
   const kulturId = url[5]
 
-  const sammlungen = get(data, 'sammlung', [])
-  const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs', [])
-  const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kultur = get(lieferung, 'kulturByNachKulturId')
-  const zaehlungen = get(kultur, 'zaehlungs') || []
+  const sammlungen = data?.sammlung ?? []
+  const sammlung = sammlungen.find((p) => p.id === sammlungId)
+  const lieferungen = sammlung?.lieferungs ?? []
+  const lieferung = lieferungen.find((p) => p.id === lieferungId)
+  const kultur = lieferung?.kulturByNachKulturId
+  const zaehlungen = kultur?.zaehlungs ?? []
   const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
 
-  const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
+  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    (n) => n.id === `sammlung${sammlungId}`,
   )
   const lieferungNodes = nodes.filter(
-    n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
+    (n) => n.parentId === `sammlung${sammlungId}LieferungFolder`,
   )
   const lieferungIndex = findIndex(
     lieferungNodes,
-    n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
+    (n) => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
   const kulturNodes = nodes.filter(
-    n =>
+    (n) =>
       n.parentId === `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
   )
   const kulturIndex = findIndex(
     kulturNodes,
-    n =>
+    (n) =>
       n.id === `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`,
   )
 
   // only return if parent exists
   if (
     !nodes
-      .map(n => n.id)
+      .map((n) => n.id)
       .includes(`sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`)
   )
     return []

@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
@@ -7,32 +6,32 @@ export default ({ nodes, data, url }) => {
   const lieferungId = url[3]
   const kulturId = url[5]
 
-  const sammlungen = get(data, 'sammlung', [])
-  const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs', [])
-  const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kultur = get(lieferung, 'kulturByNachKulturId')
-  const events = get(kultur, 'events') || []
+  const sammlungen = data?.sammlung ?? []
+  const sammlung = sammlungen.find((p) => p.id === sammlungId)
+  const lieferungen = sammlung?.lieferungs ?? []
+  const lieferung = lieferungen.find((p) => p.id === lieferungId)
+  const kultur = lieferung?.kulturByNachKulturId
+  const events = kultur?.events ?? []
 
-  const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
+  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    (n) => n.id === `sammlung${sammlungId}`,
   )
   const lieferungNodes = nodes.filter(
-    n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
+    (n) => n.parentId === `sammlung${sammlungId}LieferungFolder`,
   )
   const lieferungIndex = findIndex(
     lieferungNodes,
-    n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
+    (n) => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
   const kulturNodes = nodes.filter(
-    n =>
+    (n) =>
       n.parentId === `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
   )
   const kulturIndex = findIndex(
     kulturNodes,
-    n =>
+    (n) =>
       n.id === `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`,
   )
 
@@ -41,19 +40,18 @@ export default ({ nodes, data, url }) => {
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(
             `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}EventFolder`,
           ),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : null
         const geplant = el.geplant ? ' (geplant)' : ''
-        const event = `${get(el, 'beschreibung') ||
-          '(nicht beschrieben)'}${geplant}`
-        const label = `${datum || '(kein Datum)'}: ${event}`
+        const event = `${el?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
+        const label = `${datum ?? '(kein Datum)'}: ${event}`
 
         return {
           nodeType: 'table',
