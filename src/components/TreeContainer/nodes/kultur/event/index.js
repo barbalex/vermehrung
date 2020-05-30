@@ -1,30 +1,31 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const kulturId = url[1]
-  const kulturen = get(data, 'kultur') || []
-  const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'events') || []
+  const kulturen = data?.kultur ?? []
+  const kultur = kulturen.find((k) => k.id === kulturId)
+  const events = kultur?.events ?? []
 
-  const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    (n) => n.id === `kultur${kulturId}`,
+  )
 
   return (
     events
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`kultur${kulturId}EventFolder`),
+        nodes.map((n) => n.id).includes(`kultur${kulturId}EventFolder`),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : null
         const geplant = el.geplant ? ' (geplant)' : ''
-        const event = `${get(el, 'beschreibung') ||
-          '(nicht beschrieben)'}${geplant}`
-        const label = `${datum || '(kein Datum)'}: ${event}`
+        const event = `${el?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
+        const label = `${datum ?? '(kein Datum)'}: ${event}`
 
         return {
           nodeType: 'table',
