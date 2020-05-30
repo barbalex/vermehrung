@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
@@ -6,20 +5,23 @@ import exists from '../../../../../utils/exists'
 
 export default ({ nodes, data, url }) => {
   const personId = url[1]
-  const personen = get(data, 'person') || []
-  const person = personen.find(p => p.id === personId)
-  const lieferungen = get(person, 'lieferungs') || []
+  const personen = data?.person ?? []
+  const person = personen.find((p) => p.id === personId)
+  const lieferungen = person?.lieferungs ?? []
 
-  const personNodes = nodes.filter(n => n.parentId === 'personFolder')
-  const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
+  const personIndex = findIndex(
+    personNodes,
+    (n) => n.id === `person${personId}`,
+  )
 
   return (
     lieferungen
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`person${personId}LieferungFolder`),
+        nodes.map((n) => n.id).includes(`person${personId}LieferungFolder`),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'

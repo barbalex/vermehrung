@@ -1,4 +1,3 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
@@ -7,29 +6,32 @@ export default ({ nodes, data, url }) => {
   const gartenId = url[3]
   const kulturId = url[5]
 
-  const personen = get(data, 'person') || []
-  const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartens') || []
-  const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kulturs') || []
-  const kultur = kulturen.find(k => k.id === kulturId)
-  const zaehlungen = get(kultur, 'zaehlungs') || []
+  const personen = data?.person ?? []
+  const person = personen.find((p) => p.id === personId)
+  const gaerten = person?.gartens ?? []
+  const garten = gaerten.find((a) => a.id === gartenId)
+  const kulturen = garten?.kulturs ?? []
+  const kultur = kulturen.find((k) => k.id === kulturId)
+  const zaehlungen = kultur?.zaehlungs ?? []
 
-  const personNodes = nodes.filter(n => n.parentId === 'personFolder')
-  const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
+  const personIndex = findIndex(
+    personNodes,
+    (n) => n.id === `person${personId}`,
+  )
   const gartenNodes = nodes.filter(
-    n => n.parentId === `person${personId}GartenFolder`,
+    (n) => n.parentId === `person${personId}GartenFolder`,
   )
   const gartenIndex = findIndex(
     gartenNodes,
-    n => n.id === `person${personId}Garten${gartenId}`,
+    (n) => n.id === `person${personId}Garten${gartenId}`,
   )
   const kulturNodes = nodes.filter(
-    n => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
+    (n) => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
   )
   const kulturIndex = findIndex(
     kulturNodes,
-    n => n.id === `person${personId}Garten${gartenId}Kultur${kulturId}`,
+    (n) => n.id === `person${personId}Garten${gartenId}Kultur${kulturId}`,
   )
 
   return (
@@ -37,28 +39,23 @@ export default ({ nodes, data, url }) => {
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(
             `person${personId}Garten${gartenId}Kultur${kulturId}ZaehlungFolder`,
           ),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
         const anz =
-          get(el, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') ||
-          '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
         const anzAb =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
+          '-'
         const anzMu =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
+          '-'
         const numbers = `${anz
           .toString()
           .padStart(3, '\u00A0')}/${anzAb
