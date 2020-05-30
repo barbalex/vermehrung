@@ -1,24 +1,26 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const personId = url[1]
   const gartenId = url[3]
 
-  const personen = get(data, 'person') || []
-  const person = personen.find(p => p.id === personId)
-  const gaerten = get(person, 'gartens') || []
-  const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kulturs') || []
+  const personen = data?.person ?? []
+  const person = personen.find((p) => p.id === personId)
+  const gaerten = person?.gartens ?? []
+  const garten = gaerten.find((a) => a.id === gartenId)
+  const kulturen = garten?.kulturs ?? []
 
-  const personNodes = nodes.filter(n => n.parentId === 'personFolder')
-  const personIndex = findIndex(personNodes, n => n.id === `person${personId}`)
+  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
+  const personIndex = findIndex(
+    personNodes,
+    (n) => n.id === `person${personId}`,
+  )
   const gartenNodes = nodes.filter(
-    n => n.parentId === `person${personId}GartenFolder`,
+    (n) => n.parentId === `person${personId}GartenFolder`,
   )
   const gartenIndex = findIndex(
     gartenNodes,
-    n => n.id === `person${personId}Garten${gartenId}`,
+    (n) => n.id === `person${personId}Garten${gartenId}`,
   )
 
   return (
@@ -26,12 +28,12 @@ export default ({ nodes, data, url }) => {
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(`person${personId}Garten${gartenId}KulturFolder`),
       )
-      .map(el => {
-        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
-        const herkunft = get(el, 'herkunft.nr') || '(Herkunft ohne Nr)'
+      .map((el) => {
+        const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
+        const herkunft = el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const label = `${art}, von: ${herkunft}`
 
         return {
