@@ -235,8 +235,8 @@ const Row = ({ style, node, nodes }) => {
     toggleNodeSymbol({ node, store })
   }, [node, store])
   const onClickNeu = useCallback(() => {
-    createNew({ node, store, client })
-  }, [node, store, client])
+    createNew({ node, store })
+  }, [node, store])
   const onClickDelete = useCallback(async () => {
     deleteDataset({ node, store })
     // delete firebase user
