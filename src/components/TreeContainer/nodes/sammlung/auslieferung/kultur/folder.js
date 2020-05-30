@@ -1,34 +1,33 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, data, loading }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
 
-  const sammlungen = get(data, 'sammlung', [])
-  const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs', [])
-  const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kultur = get(lieferung, 'kulturByNachKulturId')
+  const sammlungen = data?.sammlung ?? []
+  const sammlung = sammlungen.find((p) => p.id === sammlungId)
+  const lieferungen = sammlung?.lieferungs ?? []
+  const lieferung = lieferungen.find((p) => p.id === lieferungId)
+  const kultur = lieferung?.kulturByNachKulturId
   const nr = loading || !kultur ? 0 : 1
 
-  const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
+  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    (n) => n.id === `sammlung${sammlungId}`,
   )
   const lieferungNodes = nodes.filter(
-    n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
+    (n) => n.parentId === `sammlung${sammlungId}LieferungFolder`,
   )
   const lieferungIndex = findIndex(
     lieferungNodes,
-    n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
+    (n) => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
 
   // only return if parent exists
   if (
     !nodes
-      .map(n => n.id)
+      .map((n) => n.id)
       .includes(`sammlung${sammlungId}Lieferung${lieferungId}`)
   )
     return []
