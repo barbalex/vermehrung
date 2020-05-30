@@ -1,5 +1,4 @@
 import memoizeOne from 'memoize-one'
-import get from 'lodash/get'
 
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
@@ -401,7 +400,6 @@ export default ({ store, data, loading, role }) => {
             loading,
           }),
         )(),
-        // TODO: build SammlungKulturFolder
       ]
     }
     if (url.length === 2 && url[0] === 'Kulturen') {
