@@ -1,22 +1,21 @@
-import get from 'lodash/get'
 import moment from 'moment'
 
 export default ({ nodes, data }) => {
-  const sammelLieferungen = get(data, 'sammel_lieferung') || []
+  const sammelLieferungen = data?.sammel_lieferung ?? []
 
   return (
     sammelLieferungen
       // only show if parent node exists
-      .filter(() => nodes.map(n => n.id).includes('sammelLieferungFolder'))
-      .map(el => {
+      .filter(() => nodes.map((n) => n.id).includes('sammelLieferungFolder'))
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : `Kein Datum. ID: ${el.id}`
-        const garten = get(el, 'kulturByVonKulturId.garten.name')
-        const gartenPerson = get(el, 'kulturByVonKulturId.garten.person.name')
+        const garten = el?.kulturByVonKulturId?.garten?.name
+        const gartenPerson = el?.kulturByVonKulturId?.garten?.person?.name
         const von =
-          garten || gartenPerson ? `, von: ${garten || gartenPerson}` : ''
-        const werPerson = get(el, 'person.name')
+          garten ?? gartenPerson ? `, von: ${garten || gartenPerson}` : ''
+        const werPerson = el?.person?.name
         const wer = werPerson ? `, wer: ${werPerson}` : ''
         const label = `${datum}${von}${wer}`
 
