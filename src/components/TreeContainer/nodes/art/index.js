@@ -1,16 +1,14 @@
-import get from 'lodash/get'
-
 export default ({ nodes, data }) =>
-  (get(data, 'art') || [])
+  (data?.art ?? [])
     // only show if parent node exists
-    .filter(() => nodes.map(n => n.id).includes('artFolder'))
-    .map(n => ({
+    .filter(() => nodes.map((n) => n.id).includes('artFolder'))
+    .map((n) => ({
       nodeType: 'table',
       menuTitle: 'Art',
       table: 'art',
       id: `art${n.id}`,
       parentId: 'artFolder',
-      label: get(n, 'art_ae_art.name') || '(keine Art gewählt)',
+      label: n?.art_ae_art?.name ?? '(keine Art gewählt)',
       url: ['Arten', n.id],
       hasChildren: true,
     }))
