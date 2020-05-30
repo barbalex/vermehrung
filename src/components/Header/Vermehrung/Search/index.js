@@ -2,14 +2,12 @@ import React, { useState, useCallback, useContext, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { FaSearch, FaTimes } from 'react-icons/fa'
 import styled from 'styled-components'
-import { useQuery } from '@apollo/react-hooks'
-import get from 'lodash/get'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import moment from 'moment'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import { StoreContext, useQuery } from '../../../../models/reactUtils'
 import queryFromTable from '../../../../utils/queryFromTable'
 import exists from '../../../../utils/exists'
 import filterSuggestionsQuery from './filterSuggestionsQuery'
@@ -93,54 +91,54 @@ export default () => {
     },
   })
 
-  const suggestionsArt = get(data, 'art', []).map((o) => ({
+  const suggestionsArt = (data?.art ?? []).map((o) => ({
     id: o.id,
-    name: get(o, 'art_ae_art.name') || '(kein Artname)',
+    name: o?.art_ae_art?.name ?? '(kein Artname)',
     type: 'Arten',
   }))
-  const suggestionsGarten = get(data, 'garten', []).map((o) => ({
+  const suggestionsGarten = (data?.garten ?? []).map((o) => ({
     id: o.id,
-    name: o.name || `(${get(o, 'person.name') || 'kein Name'})`,
+    name: o.name || `(${o?.person?.name ?? 'kein Name'})`,
     type: 'Gaerten',
   }))
-  const suggestionsHerkunft = get(data, 'herkunft', []).map((o) => ({
+  const suggestionsHerkunft = (data?.herkunft ?? []).map((o) => ({
     id: o.id,
-    name: `${get(o, 'nr') || '(keine Nr)'}: ${
-      get(o, 'gemeinde') || '(keine Gemeinde)'
-    }, ${get(o, 'lokalname') || '(kein Lokalname)'}`,
+    name: `${o?.nr ?? '(keine Nr)'}: ${o?.gemeinde ?? '(keine Gemeinde)'}, ${
+      o?.lokalname ?? '(kein Lokalname)'
+    }`,
     type: 'Herkuenfte',
   }))
-  const suggestionsKultur = get(data, 'kultur', []).map((o) => ({
+  const suggestionsKultur = (data?.kultur ?? []).map((o) => ({
     id: o.id,
-    name: get(o, 'garten.person.name') || '(kein Name)',
+    name: o?.garten?.person?.name ?? '(kein Name)',
     type: 'Kulturen',
   }))
-  const suggestionsEvent = get(data, 'event', []).map((o) => ({
+  const suggestionsEvent = (data?.event ?? []).map((o) => ({
     id: o.id,
     name: `${formatDatum(o.datum)}: ${
-      get(o, 'beschreibung') || '(nicht beschrieben)'
+      o?.beschreibung ?? '(nicht beschrieben)'
     }`,
     type: 'Events',
     parent: o.kultur_id,
   }))
-  const suggestionsLieferung = get(data, 'lieferung', []).map((o) => ({
+  const suggestionsLieferung = (data?.lieferung ?? []).map((o) => ({
     id: o.id,
     name: o.datum
       ? moment(o.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
       : '(kein Datum)',
     type: 'Lieferungen',
   }))
-  const suggestionsPerson = get(data, 'person', []).map((o) => ({
+  const suggestionsPerson = (data?.person ?? []).map((o) => ({
     id: o.id,
-    name: get(o, 'name') || '(kein Name)',
+    name: o?.name ?? '(kein Name)',
     type: 'Personen',
   }))
-  const suggestionsSammlung = get(data, 'sammlung', []).map((o) => ({
+  const suggestionsSammlung = (data?.sammlung ?? []).map((o) => ({
     id: o.id,
-    name: `${get(o, 'nr') || '(keine Nr)'}: ${formatDatum(o.datum)}`,
+    name: `${o?.nr ?? '(keine Nr)'}: ${formatDatum(o.datum)}`,
     type: 'Sammlungen',
   }))
-  const suggestionsZaehlung = get(data, 'zaehlung', []).map((o) => ({
+  const suggestionsZaehlung = (data?.zaehlung ?? []).map((o) => ({
     id: o.id,
     name: formatDatum(o.datum),
     type: 'Zaehlungen',

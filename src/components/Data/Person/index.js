@@ -109,7 +109,7 @@ const Person = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, user, online } = store
+  const { filter, online, userPerson } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -166,12 +166,7 @@ const Person = ({
     setErrors({})
   }, [id])
 
-  const { data: dataUser } = useQuery((store) =>
-    store.queryPerson({
-      where: { account_id: { _eq: user.uid } },
-    }),
-  )
-  const { user_role } = dataUser?.person[0] ?? {}
+  const { user_role } = userPerson
 
   const saveToDb = useCallback(
     (event) => {
