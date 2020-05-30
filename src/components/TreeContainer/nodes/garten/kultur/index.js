@@ -1,25 +1,24 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const gartenId = url[1]
-  const gaerten = get(data, 'garten') || []
-  const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kulturs') || []
+  const gaerten = data?.garten ?? []
+  const garten = gaerten.find((a) => a.id === gartenId)
+  const kulturen = garten?.kulturs ?? []
 
-  const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
+  const gartenNodes = nodes.filter((n) => n.parentId === 'gartenFolder')
   const gartenIndex =
-    findIndex(gartenNodes, n => n.id === `garten${gartenId}`) || 0
+    findIndex(gartenNodes, (n) => n.id === `garten${gartenId}`) || 0
 
   return (
     kulturen
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`garten${gartenId}KulturFolder`),
+        nodes.map((n) => n.id).includes(`garten${gartenId}KulturFolder`),
       )
-      .map(el => {
-        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
-        const herkunft = get(el, 'herkunft.nr') || '(Herkunft ohne Nr)'
+      .map((el) => {
+        const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
+        const herkunft = el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const label = `${art}, von: ${herkunft}`
 
         return {
