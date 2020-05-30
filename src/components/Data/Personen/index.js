@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useReducer } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
@@ -64,8 +63,9 @@ function sizeReducer(state, action) {
 
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
+  const { userPerson } = store
 
-  const { filter, user, insertPersonRev } = store
+  const { filter, insertPersonRev } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
@@ -85,14 +85,7 @@ const Personen = ({ filter: showFilter }) => {
   const storeRowsFiltered = queryFromStore({ store, table: 'person' })
   const filteredNr = storeRowsFiltered.length
 
-  const { data: dataUser } = useQuery(
-    (store) =>
-      store.queryPerson({
-        where: { account_id: { _eq: user.uid } },
-      }),
-    (p) => p.id.name,
-  )
-  const { user_role } = get(dataUser, 'person[0]') || {}
+  const { user_role } = userPerson
 
   const add = useCallback(() => {
     insertPersonRev()
