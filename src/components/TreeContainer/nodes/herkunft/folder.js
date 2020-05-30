@@ -1,7 +1,5 @@
-import get from 'lodash/get'
-
 export default ({ data, loading }) => {
-  const herkuenfte = get(data, 'herkunft') || []
+  const herkuenfte = data?.herkunft ?? []
   const nr = loading && !herkuenfte.length ? '...' : herkuenfte.length
 
   return [

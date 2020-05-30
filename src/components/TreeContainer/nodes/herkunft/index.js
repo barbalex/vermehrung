@@ -1,7 +1,5 @@
-import get from 'lodash/get'
-
 export default ({ nodes, data }) => {
-  const herkuenfte = get(data, 'herkunft') || []
+  const herkuenfte = data?.herkunft ?? []
 
   return (
     herkuenfte
