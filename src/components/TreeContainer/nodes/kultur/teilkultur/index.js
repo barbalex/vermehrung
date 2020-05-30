@@ -1,23 +1,25 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const kulturId = url[1]
-  const kulturen = get(data, 'kultur') || []
-  const kultur = kulturen.find(k => k.id === kulturId)
-  const teilkulturs = get(kultur, 'teilkulturs') || []
+  const kulturen = data?.kultur ?? []
+  const kultur = kulturen.find((k) => k.id === kulturId)
+  const teilkulturs = kultur?.teilkulturs ?? []
 
-  const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    (n) => n.id === `kultur${kulturId}`,
+  )
 
   return (
     teilkulturs
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`kultur${kulturId}TeilkulturFolder`),
+        nodes.map((n) => n.id).includes(`kultur${kulturId}TeilkulturFolder`),
       )
-      .map(el => {
-        const label = el.name || '(kein Name)'
+      .map((el) => {
+        const label = el.name ?? '(kein Name)'
 
         return {
           nodeType: 'table',
