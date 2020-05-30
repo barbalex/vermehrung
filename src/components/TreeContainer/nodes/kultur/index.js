@@ -1,18 +1,15 @@
-import get from 'lodash/get'
-
 export default ({ nodes, data }) => {
-  const kulturen = get(data, 'kultur') || []
+  const kulturen = data?.kultur ?? []
 
   return (
     kulturen
       // only show if parent node exists
-      .filter(() => nodes.map(n => n.id).includes('kulturFolder'))
-      .map(el => {
+      .filter(() => nodes.map((n) => n.id).includes('kulturFolder'))
+      .map((el) => {
         const garten =
-          get(el, 'garten.name') ||
-          `(${get(el, 'garten.person.name') || 'kein Name'})`
-        const art = get(el, 'art.art_ae_art.name') || '(keine Art)'
-        const herkunft = get(el, 'herkunft.nr') || '(Herkunft ohne Nr)'
+          el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`
+        const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
+        const herkunft = el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const label = `${art}, von: ${herkunft}, in: ${garten}`
 
         return {
