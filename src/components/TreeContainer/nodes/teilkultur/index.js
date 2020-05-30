@@ -1,7 +1,5 @@
-import get from 'lodash/get'
-
 export default ({ nodes, data }) => {
-  const teilkulturen = get(data, 'teilkultur') || []
+  const teilkulturen = data?.teilkultur ?? []
   /*.filter(t =>
     get(t, 'kultur.kultur_option.tk'),
   )*/
@@ -9,8 +7,8 @@ export default ({ nodes, data }) => {
   return (
     teilkulturen
       // only show if parent node exists
-      .filter(() => nodes.map(n => n.id).includes('teilkulturFolder'))
-      .map(el => {
+      .filter(() => nodes.map((n) => n.id).includes('teilkulturFolder'))
+      .map((el) => {
         return {
           nodeType: 'table',
           menuTitle: 'Teilkultur',

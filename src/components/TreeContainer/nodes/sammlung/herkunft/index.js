@@ -1,29 +1,29 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
-  const sammlungen = get(data, 'sammlung') || []
-  const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const herkunft = get(sammlung, 'herkunft')
+  const sammlungen = data?.sammlung ?? []
+  const sammlung = sammlungen.find((p) => p.id === sammlungId)
+  const herkunft = sammlung?.herkunft
 
-  const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
+  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    (n) => n.id === `sammlung${sammlungId}`,
   )
 
   return (
     [herkunft]
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`sammlung${sammlungId}HerkunftFolder`),
+        nodes.map((n) => n.id).includes(`sammlung${sammlungId}HerkunftFolder`),
       )
       // there were null values causing errors
-      .filter(n => !!n)
-      .map(el => {
-        const label = `${el.nr || '(keine Nr)'}: ${el.gemeinde ||
-          '(keine Gemeinde)'}, ${el.lokalname || '(kein Lokalname)'}`
+      .filter((n) => !!n)
+      .map((el) => {
+        const label = `${el.nr || '(keine Nr)'}: ${
+          el.gemeinde || '(keine Gemeinde)'
+        }, ${el.lokalname || '(kein Lokalname)'}`
 
         return {
           nodeType: 'table_no_menu',
