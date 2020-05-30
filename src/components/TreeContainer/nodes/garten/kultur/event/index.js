@@ -1,24 +1,26 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const gartenId = url[1]
   const kulturId = url[3]
-  const gaerten = get(data, 'garten') || []
-  const garten = gaerten.find(a => a.id === gartenId)
-  const kulturen = get(garten, 'kulturs') || []
-  const kultur = kulturen.find(k => k.id === kulturId)
-  const events = get(kultur, 'events') || []
+  const gaerten = data?.garten ?? []
+  const garten = gaerten.find((a) => a.id === gartenId)
+  const kulturen = garten?.kulturs ?? []
+  const kultur = kulturen.find((k) => k.id === kulturId)
+  const events = kultur?.events ?? []
 
-  const gartenNodes = nodes.filter(n => n.parentId === 'gartenFolder')
-  const gartenIndex = findIndex(gartenNodes, n => n.id === `garten${gartenId}`)
+  const gartenNodes = nodes.filter((n) => n.parentId === 'gartenFolder')
+  const gartenIndex = findIndex(
+    gartenNodes,
+    (n) => n.id === `garten${gartenId}`,
+  )
   const kulturNodes = nodes.filter(
-    n => n.parentId === `garten${gartenId}KulturFolder`,
+    (n) => n.parentId === `garten${gartenId}KulturFolder`,
   )
   const kulturIndex = findIndex(
     kulturNodes,
-    n => n.id === `garten${gartenId}Kultur${kulturId}`,
+    (n) => n.id === `garten${gartenId}Kultur${kulturId}`,
   )
 
   return (
@@ -26,16 +28,15 @@ export default ({ nodes, data, url }) => {
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(`garten${gartenId}Kultur${kulturId}EventFolder`),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : null
         const geplant = el.geplant ? ' (geplant)' : ''
-        const event = `${get(el, 'beschreibung') ||
-          '(nicht beschrieben)'}${geplant}`
+        const event = `${el?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
         const label = `${datum || '(kein Datum)'}: ${event}`
 
         return {
