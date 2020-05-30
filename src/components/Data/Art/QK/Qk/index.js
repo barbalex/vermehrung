@@ -9,7 +9,7 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 
-import { useQuery } from '../../../../models/reactUtils'
+import { useQuery } from '../../../../../models/reactUtils'
 import query from './query'
 import createMessageFunctions from './createMessageFunctions'
 import getAppBaseUrl from '../../../../../utils/appBaseUrl'
