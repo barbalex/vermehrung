@@ -257,19 +257,10 @@ const Row = ({ style, node, nodes }) => {
     // fetch email of this person
     let result
     try {
-      result = await client.query({
-        query: gql`
-          query getPerson($id: Int!) {
-            person (where: { id: { _eq: ${personId} } }) {
-              id
-              __typename
-              email
-              user_role
-            }
-          }
-        `,
-        variables: { id: personId },
-      })
+      result = await store.queryPerson(
+        { where: { id: { _eq: personId } } },
+        (p) => p.id.email.user_role,
+      )
     } catch (error) {
       addNotification({
         message: error.message,
@@ -290,7 +281,7 @@ const Row = ({ style, node, nodes }) => {
       message: `${email} erhält einen Link, um ein Passwort zu setzen`,
       type: 'success',
     })
-  }, [client, addNotification, firebase, node.url, store])
+  }, [addNotification, firebase, node.url, store])
   const onClickDeleteAccout = useCallback(async () => {
     // delete firebase user
     if (node.accountId) {
