@@ -5,7 +5,6 @@ import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -31,7 +30,6 @@ const StyledUserIcon = styled(UserIcon)`
 
 const Account = () => {
   const store = useContext(StoreContext)
-  const client = useApolloClient()
 
   const { user, firebase } = store
 
@@ -45,9 +43,8 @@ const Account = () => {
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
     firebase.auth().signOut()
-    client.resetStore()
     // TODO: reset mst-store! How? Action that sets default values?
-  }, [client, firebase])
+  }, [firebase])
 
   const { picture, email } = user || {}
 
