@@ -1,33 +1,32 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, data, url }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
-  const sammlungen = get(data, 'sammlung', [])
-  const sammlung = sammlungen.find(p => p.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs', [])
-  const lieferung = lieferungen.find(p => p.id === lieferungId)
-  const kultur = get(lieferung, 'kulturByNachKulturId')
+  const sammlungen = data?.sammlung ?? []
+  const sammlung = sammlungen.find((p) => p.id === sammlungId)
+  const lieferungen = sammlung?.lieferungs ?? []
+  const lieferung = lieferungen.find((p) => p.id === lieferungId)
+  const kultur = lieferung?.kulturByNachKulturId
 
-  const sammlungNodes = nodes.filter(n => n.parentId === 'sammlungFolder')
+  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `sammlung${sammlungId}`,
+    (n) => n.id === `sammlung${sammlungId}`,
   )
 
   const lieferungNodes = nodes.filter(
-    n => n.parentId === `sammlung${sammlungId}LieferungFolder`,
+    (n) => n.parentId === `sammlung${sammlungId}LieferungFolder`,
   )
   const lieferungIndex = findIndex(
     lieferungNodes,
-    n => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
+    (n) => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
   )
 
   // only return if parent exists
   if (
     !nodes
-      .map(n => n.id)
+      .map((n) => n.id)
       .includes(`sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`)
   )
     return []
@@ -35,15 +34,13 @@ export default ({ nodes, data, url }) => {
   if (!kultur) return []
 
   return [kultur]
-    .map(el => ({
+    .map((el) => ({
       nodeType: 'table',
       menuTitle: 'Kultur',
       table: 'kultur',
       id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
       parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
-      label:
-        get(el, 'garten.name') ||
-        `(${get(el, 'garten.person.name') || 'kein Name'})`,
+      label: el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`,
       url: [
         'Sammlungen',
         sammlungId,
