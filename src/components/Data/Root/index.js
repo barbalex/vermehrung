@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
-import get from 'lodash/get'
 
 import Row from './Row'
 import { StoreContext, useQuery } from '../../../models/reactUtils'
@@ -131,7 +130,7 @@ const Root = ({ filter: showFilter }) => {
     teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
     zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
   }
-  const { data, error, loading } = useQuery(query, {
+  const { error, loading } = useQuery(query, {
     variables,
   })
 
@@ -151,7 +150,7 @@ const Root = ({ filter: showFilter }) => {
             <Row
               key={row.name}
               row={row}
-              length={loading ? '...' : data[row.table].length}
+              length={loading ? '...' : store[`${row.table}s`].size}
             />
           ))}
         </FieldsContainer>
