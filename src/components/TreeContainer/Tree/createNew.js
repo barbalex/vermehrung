@@ -1,60 +1,11 @@
-import gql from 'graphql-tag'
-import get from 'lodash/get'
-import last from 'lodash/last'
+import upperFirst from 'lodash/upperFirst'
 import isUuid from 'is-uuid'
-//import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
-import {
-  art,
-  event,
-  garten,
-  herkunft,
-  kultur,
-  lieferung,
-  sammelLieferung as sammelLieferungFragment,
-  person,
-  sammlung,
-  zaehlung,
-  teilkultur,
-  teilzaehlung,
-} from '../../../utils/fragments'
 import exists from '../../../utils/exists'
-import isString from '../../../utils/isString'
-
-const fragments = {
-  art: art,
-  event: event,
-  garten: garten,
-  herkunft: herkunft,
-  kultur: kultur,
-  lieferung: lieferung,
-  sammelLieferung: sammelLieferungFragment,
-  person: person,
-  sammlung: sammlung,
-  zaehlung: zaehlung,
-  teilkultur: teilkultur,
-  teilzaehlung: teilzaehlung,
-}
-const fragmentFieldsNames = {
-  art: 'ArtFields',
-  event: 'EventFields',
-  garten: 'GartenFields',
-  herkunft: 'HerkunftFields',
-  kultur: 'KulturFields',
-  lieferung: 'LieferungFields',
-  sammelLieferung: 'SammelLieferungFields',
-  person: 'PersonFields',
-  sammlung: 'SammlungFields',
-  zaehlung: 'ZaehlungFields',
-  teilkultur: 'TeilkulturFields',
-  teilzaehlung: 'TeilzaehlungFields',
-}
 
 export default async ({ node, store, client }) => {
   // get parent table, parent table id and table from url
-  const { addNotification } = store
-  const { setActiveNodeArray, refetch, addOpenNodes } = store.tree
   const { nodeType, url } = node
 
   // get table and id from url
@@ -106,17 +57,10 @@ export default async ({ node, store, client }) => {
     // need to get art_id from kultur and set it
     let responce
     try {
-      responce = await client.query({
-        query: gql`
-          query getArt {
-            kultur(where: { id: { _eq: ${parentId} } }) {
-              id
-              __typename
-              art_id
-            }
-          }
-        `,
-      })
+      responce = await store.queryKultur(
+        { where: { id: { _eq: parentId } } },
+        (k) => k.id.art_id,
+      )
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
@@ -128,17 +72,10 @@ export default async ({ node, store, client }) => {
     // need to get art_id from sammlung and set it
     let responce
     try {
-      responce = await client.query({
-        query: gql`
-          query getArt {
-            sammlung(where: { id: { _eq: ${parentId} } }) {
-              id
-              __typename
-              art_id
-            }
-          }
-        `,
-      })
+      responce = await store.querySammlung(
+        { where: { id: { _eq: parentId } } },
+        (s) => s.id.art_id,
+      )
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
@@ -147,15 +84,8 @@ export default async ({ node, store, client }) => {
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
     let responce
     try {
-      responce = await client.query({
-        query: gql`
-          query getSammelLieferung {
-            sammel_lieferung(where: { id: { _eq: ${parentId} } }) {
-              ...SammelLieferungFields
-            }
-          }
-          ${sammelLieferungFragment}
-        `,
+      responce = await store.querySammel_lieferung({
+        where: { id: { _eq: parentId } },
       })
     } catch (error) {
       return console.log(
@@ -176,64 +106,7 @@ export default async ({ node, store, client }) => {
       additionalValuesToSet[keyToUse] = value
     }
   }
-  let mutation
   if (fkExists) additionalValuesToSet[fkName] = parentId
-  if (Object.entries(additionalValuesToSet).length) {
-    const objectString = Object.entries(additionalValuesToSet)
-      .map(([key, value]) => {
-        if (isString(value)) {
-          return `${key}: "${value}"`
-        }
-        return `${key}: ${value}`
-      })
-      .join(', ')
-    const returning = `{ ...${fragmentFieldsNames[table]} }`
-    mutation = gql`
-      mutation InsertDatasetForCreateNew_01 {
-        insert_${table} (objects: [
-          {
-            ${objectString}
-          }
-        ]) {
-          returning ${returning}
-        }
-      }
-      ${fragments[table]}
-    `
-  } else {
-    mutation = gql`
-      mutation InsertDatasetForCreateNew2 {
-        insert_${table} (objects: [{}]) {
-          returning {
-            id
-            __typename
-          }
-        }
-      }
-    `
-  }
-  let responce
-  try {
-    responce = await client.mutate({
-      mutation,
-    })
-  } catch (error) {
-    return addNotification({
-      message: `Error inserting dataset: ${error.message}`,
-    })
-  }
-  const newObject = get(responce, `data.insert_${table}.returning`, [])[0]
-  if (newObject && newObject.id) {
-    let newActiveNodeArray
-    // slice if last is uuid
-    if (isUuid.v1(last(node.url))) {
-      newActiveNodeArray = [...node.url, newObject.id]
-    } else {
-      newActiveNodeArray = [...node.url.slice(0, -1), newObject.id]
-    }
-    setActiveNodeArray(newActiveNodeArray)
-    // add node.url just in case it was not yet open
-    addOpenNodes([newActiveNodeArray, node.url])
-    setTimeout(() => refetch())
-  }
+
+  store[`insert${upperFirst(table)}Rev`](additionalValuesToSet)
 }

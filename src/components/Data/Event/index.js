@@ -290,8 +290,10 @@ const Event = ({
     ({ name }) => {
       const teilkultur_id = insertTeilkulturRev({
         noNavigateInTree: true,
-        name,
-        kultur_id: row.kultur_id,
+        values: {
+          name,
+          kultur_id: row.kultur_id,
+        },
       })
       row.edit({ field: 'teilkultur_id', value: teilkultur_id })
       setTimeout(() => teilkulturQuery.refetch(), 100)

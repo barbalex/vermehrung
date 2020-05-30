@@ -174,9 +174,10 @@ export const RootStore = RootStoreBase.props({
       upsertArtModel(val) {
         self.arts.set(val.id, val)
       },
-      insertArtRev() {
+      insertArtRev(args) {
         const { user, addQueuedQuery, upsertArtModel, tree } = self
         const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const valuesPassed = args?.values ?? {}
 
         const id = uuidv1()
         const _depth = 1
@@ -188,6 +189,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -262,9 +264,7 @@ export const RootStore = RootStoreBase.props({
           teilkulturIdInActiveNodeArray,
         } = self
 
-        const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
-        const teilkultur_id =
-          args?.teilkultur_id ?? teilkulturIdInActiveNodeArray
+        const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -277,8 +277,8 @@ export const RootStore = RootStoreBase.props({
         const newObject = {
           event_id: id,
           // pass in possibly passed kultur_id or undefined
-          kultur_id,
-          teilkultur_id,
+          kultur_id: kulturIdInActiveNodeArray,
+          teilkultur_id: teilkulturIdInActiveNodeArray,
           person_id: undefined,
           beschreibung: undefined,
           geplant: undefined,
@@ -288,6 +288,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -340,7 +341,7 @@ export const RootStore = RootStoreBase.props({
           personIdInActiveNodeArray,
         } = self
 
-        const person_id = args?.person_id ?? personIdInActiveNodeArray
+        const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -353,8 +354,7 @@ export const RootStore = RootStoreBase.props({
         const newObject = {
           garten_id: id,
           name: undefined,
-          // pass in possibly passed person_id or undefined
-          person_id,
+          person_id: personIdInActiveNodeArray,
           strasse: undefined,
           plz: undefined,
           ort: undefined,
@@ -366,6 +366,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -415,9 +416,10 @@ export const RootStore = RootStoreBase.props({
       upsertHerkunftModel(val) {
         self.herkunfts.set(val.id, val)
       },
-      insertHerkunftRev() {
+      insertHerkunftRev(args) {
         const { user, addQueuedQuery, upsertHerkunftModel, tree } = self
 
+        const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -441,6 +443,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -500,9 +503,7 @@ export const RootStore = RootStoreBase.props({
           herkunftIdInActiveNodeArray,
           gartenIdInActiveNodeArray,
         } = self
-        const art_id = args?.art_id ?? artIdInActiveNodeArray
-        const herkunft_id = args?.herkunft_id ?? herkunftIdInActiveNodeArray
-        const garten_id = args?.garten_id ?? gartenIdInActiveNodeArray
+        const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -514,9 +515,9 @@ export const RootStore = RootStoreBase.props({
         const _depth = 1
         const newObject = {
           kultur_id: id,
-          art_id,
-          herkunft_id,
-          garten_id,
+          art_id: artIdInActiveNodeArray,
+          herkunft_id: herkunftIdInActiveNodeArray,
+          garten_id: gartenIdInActiveNodeArray,
           zwischenlager: undefined,
           erhaltungskultur: undefined,
           von_anzahl_individuen: undefined,
@@ -527,6 +528,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -607,16 +609,7 @@ export const RootStore = RootStoreBase.props({
           kulturIdOfAnLieferungInActiveNodeArray,
         } = self
 
-        const sammel_lieferung_id =
-          args?.sammel_lieferung_id ?? sammelLieferungIdInActiveNodeArray
-        const art_id = args?.art_id ?? artIdInActiveNodeArray
-        const person_id = args?.person_id ?? personIdInActiveNodeArray
-        const von_sammlung_id =
-          args?.von_sammlung_id ?? sammlungIdInActiveNodeArray
-        const von_kultur_id =
-          args?.von_kultur_id ?? kulturIdOfAnLieferungInActiveNodeArray
-        const nach_kultur_id = args?.nach_kultur_id ?? undefined
-
+        const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -628,13 +621,13 @@ export const RootStore = RootStoreBase.props({
         const _depth = 1
         const newObject = {
           lieferung_id: id,
-          sammel_lieferung_id,
-          art_id,
-          person_id,
-          von_sammlung_id,
-          von_kultur_id,
+          sammel_lieferung_id: sammelLieferungIdInActiveNodeArray,
+          art_id: artIdInActiveNodeArray,
+          person_id: personIdInActiveNodeArray,
+          von_sammlung_id: sammlungIdInActiveNodeArray,
+          von_kultur_id: kulturIdOfAnLieferungInActiveNodeArray,
           datum: undefined,
-          nach_kultur_id,
+          nach_kultur_id: undefined,
           nach_ausgepflanzt: undefined,
           von_anzahl_individuen: undefined,
           anzahl_pflanzen: undefined,
@@ -648,6 +641,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -697,10 +691,11 @@ export const RootStore = RootStoreBase.props({
       upsertPersonModel(val) {
         self.persons.set(val.id, val)
       },
-      insertPersonRev() {
+      insertPersonRev(args) {
         const { user, addQueuedQuery, upsertPersonModel, tree } = self
         const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
 
+        const valuesPassed = args?.values ?? {}
         const id = uuidv1()
         const _depth = 1
         const newObject = {
@@ -727,6 +722,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -794,14 +790,7 @@ export const RootStore = RootStoreBase.props({
           kulturIdOfAnLieferungInActiveNodeArray,
         } = self
 
-        const art_id = args?.art_id ?? artIdInActiveNodeArray
-        const person_id = args?.person_id ?? personIdInActiveNodeArray
-        const von_sammlung_id =
-          args?.von_sammlung_id ?? sammlungIdInActiveNodeArray
-        const von_kultur_id =
-          args?.von_kultur_id ?? kulturIdOfAnLieferungInActiveNodeArray
-        const nach_kultur_id = args?.nach_kultur_id ?? undefined
-
+        const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -813,12 +802,12 @@ export const RootStore = RootStoreBase.props({
         const _depth = 1
         const newObject = {
           sammel_lieferung_id: id,
-          art_id,
-          person_id,
-          von_sammlung_id,
-          von_kultur_id,
+          art_id: artIdInActiveNodeArray,
+          person_id: personIdInActiveNodeArray,
+          von_sammlung_id: sammlungIdInActiveNodeArray,
+          von_kultur_id: kulturIdOfAnLieferungInActiveNodeArray,
           datum: undefined,
-          nach_kultur_id,
+          nach_kultur_id: undefined,
           nach_ausgepflanzt: undefined,
           von_anzahl_individuen: undefined,
           anzahl_pflanzen: undefined,
@@ -832,6 +821,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -886,10 +876,7 @@ export const RootStore = RootStoreBase.props({
           personIdInActiveNodeArray,
         } = self
 
-        const art_id = args?.art_id ?? artIdInActiveNodeArray
-        const person_id = args?.person_id ?? personIdInActiveNodeArray
-        const herkunft_id = args?.herkunft_id ?? herkunftIdInActiveNodeArray
-
+        const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
@@ -901,9 +888,9 @@ export const RootStore = RootStoreBase.props({
         const _depth = 1
         const newObject = {
           sammlung_id: id,
-          art_id,
-          person_id,
-          herkunft_id,
+          art_id: artIdInActiveNodeArray,
+          person_id: personIdInActiveNodeArray,
+          herkunft_id: herkunftIdInActiveNodeArray,
           nr: undefined,
           datum: undefined,
           von_anzahl_individuen: undefined,
@@ -918,6 +905,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -976,9 +964,8 @@ export const RootStore = RootStoreBase.props({
           kulturIdInActiveNodeArray,
         } = self
 
-        const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
         const noNavigateInTree = args?.noNavigateInTree ?? false
-        const name = args?.name ?? undefined
+        const valuesPassed = args?.values ?? {}
 
         const {
           activeNodeArray: aNaRaw,
@@ -991,8 +978,8 @@ export const RootStore = RootStoreBase.props({
         const _depth = 1
         const newObject = {
           teilkultur_id: id,
-          kultur_id,
-          name,
+          kultur_id: kulturIdInActiveNodeArray,
+          name: undefined,
           ort1: undefined,
           ort2: undefined,
           ort3: undefined,
@@ -1002,6 +989,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -1056,17 +1044,14 @@ export const RootStore = RootStoreBase.props({
           zaehlungIdInActiveNodeArray,
           teilkulturIdInActiveNodeArray,
         } = self
-
-        const zaehlung_id = args?.zaehlung_id ?? zaehlungIdInActiveNodeArray
-        const teilkultur_id =
-          args?.teilkultur_id ?? teilkulturIdInActiveNodeArray
+        const valuesPassed = args?.values ?? {}
 
         const id = uuidv1()
         const _depth = 1
         const newObject = {
           teilzaehlung_id: id,
-          zaehlung_id,
-          teilkultur_id,
+          zaehlung_id: zaehlungIdInActiveNodeArray,
+          teilkultur_id: teilkulturIdInActiveNodeArray,
           anzahl_pflanzen: undefined,
           anzahl_auspflanzbereit: undefined,
           anzahl_mutterpflanzen: undefined,
@@ -1079,6 +1064,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
@@ -1126,8 +1112,7 @@ export const RootStore = RootStoreBase.props({
           tree,
           kulturIdInActiveNodeArray,
         } = self
-
-        const kultur_id = args?.kultur_id ?? kulturIdInActiveNodeArray
+        const valuesPassed = args?.values ?? {}
 
         const {
           activeNodeArray: aNaRaw,
@@ -1140,7 +1125,7 @@ export const RootStore = RootStoreBase.props({
         const _depth = 1
         const newObject = {
           zaehlung_id: id,
-          kultur_id,
+          kultur_id: kulturIdInActiveNodeArray,
           datum: undefined,
           prognose: undefined,
           bemerkungen: undefined,
@@ -1149,6 +1134,7 @@ export const RootStore = RootStoreBase.props({
           _depth,
           _parent_rev: undefined,
           _deleted: false,
+          ...valuesPassed,
         }
         const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
         newObject._rev = rev
