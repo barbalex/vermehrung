@@ -1,45 +1,40 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
-
-import exists from '../../../../../../utils/exists'
 
 export default ({ nodes, data, url }) => {
   const artId = url[1]
   const sammlungId = url[3]
 
-  const artNodes = nodes.filter(n => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
+  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
+  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
   const sammlungNodes = nodes.filter(
-    n => n.parentId === `art${artId}SammlungFolder`,
+    (n) => n.parentId === `art${artId}SammlungFolder`,
   )
   const sammlungIndex = findIndex(
     sammlungNodes,
-    n => n.id === `art${artId}Sammlung${sammlungId}`,
+    (n) => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
-  const arten = get(data, 'art') || []
-  const art = arten.find(a => a.id === artId)
-  const sammlungen = get(art, 'sammlungs') || []
-  const sammlung = sammlungen.find(s => s.id === sammlungId)
-  const lieferungen = get(sammlung, 'lieferungs') || []
+  const arten = data?.art ?? []
+  const art = arten.find((a) => a.id === artId)
+  const sammlungen = art?.sammlungs ?? []
+  const sammlung = sammlungen.find((s) => s.id === sammlungId)
+  const lieferungen = sammlung?.lieferungs ?? []
 
   return (
     lieferungen
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(`art${artId}Sammlung${sammlungId}LieferungFolder`),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
-        const anz = exists(el.anzahl_pflanzen) ? el.anzahl_pflanzen : '_'
-        const anzAb = exists(el.anzahl_auspflanzbereit)
-          ? el.anzahl_auspflanzbereit
-          : '_'
+        const anz = el?.anzahl_pflanzen ?? '_'
+        const anzAb = el?.anzahl_auspflanzbereit ?? '_'
         const numbers = `${anz
           .toString()
           .padStart(3, '_')}/${anzAb.toString().padStart(3, '_')}`
