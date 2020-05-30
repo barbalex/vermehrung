@@ -7,7 +7,6 @@ import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
-import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { useApolloClient } from '@apollo/react-hooks'
 import axios from 'axios'
@@ -198,15 +197,6 @@ const TextSpan = styled.span`
 const MenuSubtitle = styled.div`
   padding-top: 7px;
 `
-const personQuery = gql`
-  query PersonQueryForTree($accountId: String) {
-    person(where: { account_id: { _eq: $accountId } }) {
-      id
-      __typename
-      user_role
-    }
-  }
-`
 
 const Row = ({ style, node, nodes }) => {
   const client = useApolloClient()
@@ -377,7 +367,7 @@ const Row = ({ style, node, nodes }) => {
         type: 'warning',
       })
     }
-    const userRole = get(result, 'data.person[0].user_role')
+    const userRole = result?.data?.person?.[0]?.user_role
     if (!userRole) {
       return addNotification({
         message: 'Eine Rolle muss erfasst sein',
