@@ -53,13 +53,7 @@ export default gql`
     #$isTeilkultur: Boolean!
     #$isWerteListe: Boolean!
     $isGardener: Boolean!
-    $personId: uuid
-    $personExists: Boolean!
   ) {
-    person_option(where: { id: { _eq: $personId } })
-      @include(if: $personExists) {
-      ...PersonOptionFields
-    }
     garten(
       where: $gartenFilter
       order_by: [

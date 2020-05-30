@@ -116,6 +116,7 @@ import buildKulturEventFolder from './kultur/event/folder'
 import buildKulturEventEvent from './kultur/event'
 
 export default ({ store, data, loading, role }) => {
+  const { userPersonOption } = store
   const openNodes = store.tree.openNodes.sort(sort)
 
   const {
@@ -124,7 +125,7 @@ export default ({ store, data, loading, role }) => {
     tree_zaehlung,
     tree_lieferung,
     tree_event,
-  } = get(data, 'person_option[0]') || {}
+  } = userPersonOption
   const showArtFolder = role !== 'gaertner'
   const showHerkunftFolder = role !== 'gaertner'
   const showSammlungFolder = role !== 'gaertner'
@@ -176,7 +177,7 @@ export default ({ store, data, loading, role }) => {
    * or some filter is active
    */
   let artArtNodes
-  openNodes.forEach(url => {
+  openNodes.forEach((url) => {
     //console.log('nodes, url:', url.slice())
     if (!allParentNodesAreOpen(openNodes, url)) return
     if (url.length === 1 && url[0] === 'Arten') {
