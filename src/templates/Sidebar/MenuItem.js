@@ -6,7 +6,6 @@ import Divider from '@material-ui/core/Divider'
 import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import { Location } from '@reach/router'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 
 import { StoreContext } from '../../models/reactUtils'
@@ -52,7 +51,7 @@ const MenuItem = ({ node }) => {
               ischild1={isChild1.toString()}
             >
               <ListItemText onClick={onClickMenuItem}>
-                {get(node, 'frontmatter.title', '(Titel fehlt)')}
+                {node?.frontmatter?.title ?? '(Titel fehlt)'}
               </ListItemText>
               {isParent1 && isParentOpen && <FaChevronDown />}
               {isParent1 && !isParentOpen && <FaChevronRight />}
