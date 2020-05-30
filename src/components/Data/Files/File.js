@@ -5,6 +5,7 @@ import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import upperFirst from 'lodash/upperFirst'
 
 import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
@@ -66,7 +67,6 @@ const MenuTitle = styled.h3`
 
 const File = ({ file, parent }) => {
   const store = useContext(StoreContext)
-  const { deleteArtFileModel } = store
 
   const [errors, setErrors] = useState({})
 
@@ -76,8 +76,6 @@ const File = ({ file, parent }) => {
   useEffect(() => setErrors({}), [file])
 
   const onClickDelete = useCallback(() => {
-    console.log('File, onClickDelete:', { file, fileId: file.id })
-    // 1. remove dataset
     store[`mutateDelete_${parent}_file`](
       {
         where: { id: { _eq: file.id } },
@@ -87,8 +85,8 @@ const File = ({ file, parent }) => {
         store[`${parent}s`].delete(file.id)
       },
     )
-    deleteArtFileModel(file)
-  }, [deleteArtFileModel, file, parent, store])
+    store[`delete${upperFirst(parent)}FileModel`](file)
+  }, [file, parent, store])
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
     [file],

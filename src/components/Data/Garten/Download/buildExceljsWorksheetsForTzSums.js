@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import get from 'lodash/get'
 
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import { gartenTeilzaehlungSums as gartenTeilzaehlungSumsFragment } from '../../../../utils/fragments'
@@ -31,7 +30,7 @@ export default async ({ client, store, garten_id, workbook }) => {
       message: error.message,
     })
   }
-  const data = get(gaertenResult, 'data.garten_teilzaehlung_sums', [])
+  const data = gaertenResult?.data?.garten_teilzaehlung_sums ?? []
   for (let row of data) {
     delete row.__typename
   }

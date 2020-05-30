@@ -1,13 +1,10 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import get from 'lodash/get'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -47,43 +44,25 @@ const MenuTitle = styled.h3`
 `
 
 const AvArt = ({ avArt }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(async () => {
-    try {
-      await client.mutate({
-        mutation: gql`
-          mutation deleteArtFile($artId: uuid!, $personId: uuid!) {
-            delete_av_art(
-              where: {
-                _and: [
-                  { art_id: { _eq: $artId } }
-                  { person_id: { _eq: $personId } }
-                ]
-              }
-            ) {
-              returning {
-                art_id
-              }
-            }
-          }
-        `,
-        variables: { artId: avArt.art_id, personId: avArt.person_id },
-        refetchQueries: ['ArtenForPersonQuery'],
-      })
-    } catch (error) {
-      console.log(error)
-      return store.addNotification({
-        message: `Die Art konnte nicht entfernt werden: ${error.message}`,
-      })
-    }
-  }, [client, avArt.art_id, avArt.person_id, store])
+    store.mutateDelete_av_art(
+      {
+        where: { id: { _eq: avArt.id } },
+      },
+      undefined,
+      () => {
+        store.av_arts.delete(avArt.id)
+      },
+    )
+    store.deleteAvArtModel(avArt)
+  }, [avArt, store])
 
-  const artname = get(avArt, 'art.art_ae_art.name')
+  const artname = avArt?.art?.art_ae_art?.name
 
   if (!avArt) return null
 
