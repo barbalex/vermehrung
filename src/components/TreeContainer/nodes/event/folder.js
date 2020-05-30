@@ -1,7 +1,5 @@
-import get from 'lodash/get'
-
 export default ({ data, loading }) => {
-  const events = get(data, 'event') || []
+  const events = data?.event ?? []
   const nr = loading && !events.length ? '...' : events.length
 
   return [
