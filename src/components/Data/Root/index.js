@@ -1,12 +1,11 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import Row from './Row'
-import { StoreContext } from '../../../models/reactUtils'
+import { StoreContext, useQuery } from '../../../models/reactUtils'
 import queryFromTable from '../../../utils/queryFromTable'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -82,26 +81,13 @@ const query = gql`
     }
   }
 `
-const personQuery = gql`
-  query PersonQueryForRoot($accountId: String) {
-    person(where: { account_id: { _eq: $accountId } }) {
-      id
-      __typename
-      user_role
-    }
-  }
-`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { user } = store
-  const accountId = user.uid
+  const { userPerson } = store
 
-  const personResult = useQuery(personQuery, {
-    variables: { accountId },
-  })
   // eslint-disable-next-line no-unused-vars
-  const { user_role } = get(personResult.data, 'person[0]') || {}
+  const { user_role } = userPerson
 
   // TODO: filter according to roles
   // by adding each role name as key and true/false as value
