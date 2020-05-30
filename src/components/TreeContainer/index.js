@@ -13,8 +13,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import get from 'lodash/get'
-import gql from 'graphql-tag'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { StoreContext, useQuery } from '../../models/reactUtils'
@@ -35,27 +33,14 @@ const Container = styled.div`
     display: none !important;
   }
 `
-const personQuery = gql`
-  query PersonQueryForTreeContinerByAccoutId($accountId: String) {
-    person(where: { account_id: { _eq: $accountId } }) {
-      id
-      __typename
-      user_role
-    }
-  }
-`
 
 const TreeContainer = () => {
   const store = useContext(StoreContext)
-  const { user } = store
+  const { user, userPerson } = store
   const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
 
-  const personResult = useQuery(personQuery, {
-    variables: { accountId: user.uid },
-  })
-  const { user_role: role, id: personId } =
-    get(personResult.data, 'person[0]') || {}
+  const { user_role: role, id: personId } = userPerson
   const isGardener = role === 'gaertner'
 
   // 1. build list depending on path using react-window
@@ -169,7 +154,7 @@ const TreeContainer = () => {
     )
   }
 
-  return <Tree personId={personId} data={data} nodes={nodesSorted} />
+  return <Tree data={data} nodes={nodesSorted} />
 }
 
 export default observer(TreeContainer)

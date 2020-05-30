@@ -5,8 +5,6 @@ import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import get from 'lodash/get'
 
 import ifIsNumericAsNumber from '../../utils/ifIsNumericAsNumber'
 import epsg2056to4326 from '../../utils/epsg2056to4326'
@@ -26,8 +24,7 @@ import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
 } from '../../utils/wgs84LongIsValid'
-import { personOption as personOptionFragment } from '../../utils/fragments'
-import { StoreContext, useQuery } from '../../models/reactUtils'
+import { StoreContext } from '../../models/reactUtils'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -42,25 +39,13 @@ const Row = styled.div`
   display: flex;
 `
 
-const personOptionQuery = gql`
-  query personOptionQueryForCoordinates($accountId: String) {
-    person_option(where: { person: { account_id: { _eq: $accountId } } }) {
-      ...PersonOptionFields
-    }
-  }
-  ${personOptionFragment}
-`
-
 const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
   const store = useContext(StoreContext)
+  const { userPersonOption } = store
 
   const { id, lv95_x, lv95_y, wgs84_lat, wgs84_long } = row
 
-  const personOptionResult = useQuery(personOptionQuery, {
-    variables: { accountId: store.user.uid },
-  })
-  const { ga_lat_lng } =
-    get(personOptionResult.data, 'person_option[0]', {}) || {}
+  const { ga_lat_lng } = userPersonOption
 
   const [lv95XState, setLv95XState] = useState(lv95_x || '')
   const [lv95YState, setLv95YState] = useState(lv95_y || '')

@@ -9,7 +9,7 @@ import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import axios from 'axios'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
@@ -212,7 +212,7 @@ const Row = ({ style, node, nodes }) => {
   const client = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { tree, addNotification, user, firebase } = store
+  const { tree, addNotification, userPerson, firebase } = store
   const { openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -232,10 +232,7 @@ const Row = ({ style, node, nodes }) => {
     useSymbolIcon = false
   }
 
-  const personResult = useQuery(personQuery, {
-    variables: { accountId: user.uid },
-  })
-  const { user_role: role } = get(personResult.data, 'person[0]') || {}
+  const { user_role: role } = userPerson
 
   const onClickNode = useCallback(() => {
     toggleNode({
