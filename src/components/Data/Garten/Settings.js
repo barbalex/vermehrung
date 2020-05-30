@@ -1,7 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -12,7 +10,6 @@ import { FaCog } from 'react-icons/fa'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import { personOption as personOptionFragment } from '../../../utils/fragments'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 

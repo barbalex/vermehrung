@@ -2,11 +2,8 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
-import { useApolloClient } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 import { v1 as uuidv1 } from 'uuid'
 
-import { artQkChoosen as artQkChoosenFragment } from '../../../../../../utils/fragments'
 import { useQuery, StoreContext } from '../../../../../../models/reactUtils'
 
 const Row = styled.div`

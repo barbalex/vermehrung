@@ -4,7 +4,7 @@ import isUuid from 'is-uuid'
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
 import exists from '../../../utils/exists'
 
-export default async ({ node, store, client }) => {
+export default async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
 
