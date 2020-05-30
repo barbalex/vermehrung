@@ -16,6 +16,7 @@ import { MdPrint } from 'react-icons/md'
 import SplitPane from 'react-split-pane'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { selectFromsammel_lieferung } from '../../../models/sammel_lieferungModel.base'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
@@ -23,14 +24,8 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
+import queryFromStore from '../../../utils/queryFromStore'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import {
-  art as artFragment,
-  herkunft as herkunftFragment,
-  lieferung as lieferungFragment,
-  sammelLieferung as sammelLieferungFragment,
-  sammlung as sammlungFragment,
-} from '../../../utils/fragments'
 import exists from '../../../utils/exists'
 import Settings from './Settings'
 import Copy from './Copy'
@@ -158,56 +153,21 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const sammelLieferungQuery = gql`
-  query SammelLieferungQueryForSammelLieferung(
-    $id: uuid!
-    $isFiltered: Boolean!
-    $filter: sammel_lieferung_bool_exp!
-  ) {
-    sammel_lieferung(where: { id: { _eq: $id } }) {
-      ...SammelLieferungFields
-      sammlung {
-        ...SammlungFields
-        herkunft {
-          ...HerkunftFields
-        }
-      }
-      kulturByVonKulturId {
-        id
-        __typename
-        art_id
-        herkunft_id
-        herkunft {
-          ...HerkunftFields
-        }
-      }
-      kulturByNachKulturId {
-        id
-        __typename
-        art_id
-        herkunft_id
-        herkunft {
-          ...HerkunftFields
-        }
-      }
-      lieferungs {
-        ...LieferungFields
-      }
-    }
-    rowsUnfiltered: sammel_lieferung @include(if: $isFiltered) {
-      id
-      __typename
-    }
-    rowsFiltered: sammel_lieferung(where: $filter) @include(if: $isFiltered) {
-      id
-      __typename
-    }
-  }
-  ${herkunftFragment}
-  ${lieferungFragment}
-  ${sammelLieferungFragment}
-  ${sammlungFragment}
-`
+const SL_FRAGMENT = selectFromsammel_lieferung()
+  .id.art_id.person_id.von_sammlung_id.sammlung((s) =>
+    s.id.datum.herkunft((h) => h.id.nr).person((p) => p.id.name),
+  )
+  .von_kultur_id.kulturByVonKulturId((k) =>
+    k.id.garten((g) => g.id.name.person((p) => p.id.name.ort)),
+  )
+  .datum.nach_kultur_id.kulturByNachKulturId((k) =>
+    k.id.garten((g) => g.id.name.person((p) => p.id.name.ort)),
+  )
+  .nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.lieferungs(
+    (l) => l.id,
+  )
+  .changed.changed_by._rev._parent_rev._revisions._depth._deleted._conflicts.toString()
+
 const kulturQuery = gql`
   query kulturQueryForSammelLieferung($filter: kultur_bool_exp!) {
     kultur(
@@ -248,26 +208,14 @@ const SammelLieferung = ({
   const { setWidthInPercentOfScreen } = store.tree
 
   const isFiltered = runIsFiltered()
-  const sammelLieferungFilter = queryFromTable({
-    store,
-    table: 'sammel_lieferung',
-  })
-  const { data, error, loading, query: queryOfSammelLieferung } = useQuery(
-    sammelLieferungQuery,
-    {
-      variables: {
-        id,
-        isFiltered,
-        filter: sammelLieferungFilter,
-      },
-    },
+  const { error, loading, query: queryOfSammelLieferung } = useQuery((store) =>
+    store.querySammel_lieferung(
+      { where: { id: { _eq: id } } },
+      () => SL_FRAGMENT,
+    ),
   )
 
-  const {
-    data: artData,
-    error: artError,
-    loading: artLoading,
-  } = useQuery((store) =>
+  const { error: artError, loading: artLoading } = useQuery((store) =>
     store.queryArt({ order_by: { art_ae_art: { name: 'asc' } } }, (a) =>
       a.id.art_ae_art((ae) => ae.id.name),
     ),
@@ -282,8 +230,27 @@ const SammelLieferung = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = get(data, 'rowsUnfiltered', []).length
-  const filteredNr = get(data, 'rowsFiltered', []).length
+  const { data: dataSammelLieferungAggregate } = useQuery((store) =>
+    store.querySammel_lieferung_aggregate(undefined, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const totalNr =
+    dataSammelLieferungAggregate?.sammel_lieferung_aggregate?.aggregate
+      ?.count ?? 0
+  const sammelLieferungFilter = queryFromTable({
+    store,
+    table: 'sammel_lieferung',
+  })
+  const { data: dataSammelLieferungFilteredAggregate } = useQuery((store) =>
+    store.querySammel_lieferung_aggregate(
+      { where: sammelLieferungFilter },
+      (d) => d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataSammelLieferungFilteredAggregate?.sammel_lieferung_aggregate?.aggregate
+      ?.count ?? 0
   const row = showFilter
     ? filter.sammel_lieferung
     : store.sammel_lieferungs.get(id) || {}
@@ -448,11 +415,11 @@ const SammelLieferung = ({
 
   const artWerte = useMemo(
     () =>
-      get(artData, 'art', []).map((el) => ({
+      [...store.arts.values()].map((el) => ({
         value: el.id,
         label: get(el, 'art_ae_art.name') || '(kein Artname)',
       })),
-    [artData],
+    [store.arts],
   )
 
   const saveToDb = useCallback(

@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { graphql, useStaticQuery } from 'gatsby'
-import { useQuery } from '@apollo/react-hooks'
 import Img from 'gatsby-image'
 import get from 'lodash/get'
 import moment from 'moment'
@@ -15,6 +14,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
 import Lieferung from './Lieferung'
+import { useQuery, StoreContext } from '../../../../models/reactUtils'
 
 const Container = styled.div`
   background-color: #f8f8f8;
@@ -100,20 +100,6 @@ const personQuery = gql`
     }
   }
 `
-const kulturQuery = gql`
-  query kulturQueryForLieferschein($id: uuid!) {
-    kultur(where: { id: { _eq: $id } }) {
-      id
-      __typename
-      garten {
-        id
-      __typename
-        name
-        ort
-      }
-    }
-  }
-`
 const lieferungQuery = gql`
   query lieferungenQueryForLieferschein($id: uuid!) {
     lieferung(
@@ -128,10 +114,10 @@ const lieferungQuery = gql`
       art_id
       art {
         id
-      __typename
+        __typename
         art_ae_art {
           id
-      __typename
+          __typename
           name
         }
       }
@@ -143,11 +129,11 @@ const lieferungQuery = gql`
       von_kultur_id
       kulturByVonKulturId {
         id
-      __typename
+        __typename
         herkunft_id
         herkunft {
           id
-      __typename
+          __typename
           nr
           gemeinde
           lokalname
@@ -159,6 +145,7 @@ const lieferungQuery = gql`
 `
 
 const Lieferschein = ({ row }) => {
+  const store = useContext(StoreContext)
   const imageData = useStaticQuery(graphql`
     query QueryLieferscheinImage {
       file(relativePath: { eq: "toposLogo.png" }) {
@@ -174,20 +161,19 @@ const Lieferschein = ({ row }) => {
   `)
   const image = get(imageData, 'file.childImageSharp.fixed', {})
 
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery(kulturQuery, {
-    variables: { id: row.von_kultur_id },
-  })
+  const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
+    store.queryKultur({ where: { id: { _eq: row.von_kultur_id } } }, (k) =>
+      k.id.garten((g) => g.id.name.ort),
+    ),
+  )
+  const vonKultur = store.kulturs.get(row.von_kultur_id)
   const von = row.von_kultur_id
     ? kulturLoading
       ? '...'
       : kulturError
       ? '(Fehler beim Laden der Daten)'
-      : `${get(kulturData, 'kultur[0].garten.name') || '(kein Name)'} (${
-          get(kulturData, 'kultur[0].garten.ort') || 'kein Ort'
+      : `${vonKultur?.garten?.name ?? '(kein Name)'} (${
+          vonKultur?.garten?.ort ?? 'kein Ort'
         })`
     : '(keine von-Kultur erfasst)'
 
