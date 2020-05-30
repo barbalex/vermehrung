@@ -1,24 +1,23 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const artId = url[1]
   const kulturId = url[3]
-  const arten = get(data, 'art') || []
-  const art = arten.find(a => a.id === artId)
-  const kulturen = get(art, 'kulturs') || []
-  const kultur = kulturen.find(k => k.id === kulturId)
-  const zaehlungen = get(kultur, 'zaehlungs') || []
+  const arten = data?.art ?? []
+  const art = arten.find((a) => a.id === artId)
+  const kulturen = art?.kulturs ?? []
+  const kultur = kulturen.find((k) => k.id === kulturId)
+  const zaehlungen = kultur?.zaehlungs ?? []
 
-  const artNodes = nodes.filter(n => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, n => n.id === `art${artId}`)
+  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
+  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
   const kulturNodes = nodes.filter(
-    n => n.parentId === `art${artId}KulturFolder`,
+    (n) => n.parentId === `art${artId}KulturFolder`,
   )
   const kulturIndex = findIndex(
     kulturNodes,
-    n => n.id === `art${artId}Kultur${kulturId}`,
+    (n) => n.id === `art${artId}Kultur${kulturId}`,
   )
 
   return (
@@ -26,26 +25,21 @@ export default ({ nodes, data, url }) => {
       // only show if parent node exists
       .filter(() =>
         nodes
-          .map(n => n.id)
+          .map((n) => n.id)
           .includes(`art${artId}Kultur${kulturId}ZaehlungFolder`),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
         const anz =
-          get(el, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') ||
-          '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
         const anzAb =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
+          '-'
         const anzMu =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
+          '-'
         const numbers = `${anz
           .toString()
           .padStart(3, '\u00A0')}/${anzAb
