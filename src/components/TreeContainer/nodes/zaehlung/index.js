@@ -1,30 +1,24 @@
-import get from 'lodash/get'
 import moment from 'moment'
 
 export default ({ nodes, data }) => {
-  const zaehlungen = get(data, 'zaehlung') || []
+  const zaehlungen = data?.zaehlung ?? []
 
   return (
     zaehlungen
       // only show if parent node exists
-      .filter(() => nodes.map(n => n.id).includes('zaehlungFolder'))
-      .map(el => {
+      .filter(() => nodes.map((n) => n.id).includes('zaehlungFolder'))
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
         const anz =
-          get(el, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') ||
-          '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
         const anzAb =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
+          '-'
         const anzMu =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
+          '-'
         const numbers = `${anz
           .toString()
           .padStart(3, '\u00A0')}/${anzAb
