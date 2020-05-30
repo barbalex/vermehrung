@@ -90,16 +90,6 @@ const StyledTable = styled(Table)`
   }
 `
 
-const personQuery = gql`
-  query personQueryForLieferschein($id: uuid!) {
-    person(where: { id: { _eq: $id } }) {
-      id
-      __typename
-      name
-      ort
-    }
-  }
-`
 const lieferungQuery = gql`
   query lieferungenQueryForLieferschein($id: uuid!) {
     lieferung(
@@ -166,7 +156,7 @@ const Lieferschein = ({ row }) => {
       k.id.garten((g) => g.id.name.ort),
     ),
   )
-  const vonKultur = store.kulturs.get(row.von_kultur_id)
+  const vonKultur = store.kulturs.get(row.von_kultur_id) ?? {}
   const von = row.von_kultur_id
     ? kulturLoading
       ? '...'
@@ -177,37 +167,34 @@ const Lieferschein = ({ row }) => {
         })`
     : '(keine von-Kultur erfasst)'
 
-  const {
-    data: personData,
-    error: personError,
-    loading: personLoading,
-  } = useQuery(personQuery, {
-    variables: { id: row.person_id },
-  })
+  const { error: personError, loading: personLoading } = useQuery((store) =>
+    store.queryPerson(
+      { where: { id: { _eq: row.person_id } } },
+      (p) => p.id.name.ort,
+    ),
+  )
+  const person = store.persons.get(row.person_id) ?? {}
   const an = row.person_id
     ? personLoading
       ? '...'
       : personError
       ? '(Fehler beim Laden der Daten für die Person)'
-      : `${get(personData, 'person[0].name', '(kein Name)')} (${get(
-          personData,
-          'person[0].ort',
-          'kein Ort',
-        )})`
+      : `${person?.name ?? '(kein Name)'} (${person?.ort ?? 'kein Ort'})`
     : '(keine Person erfasst)'
 
   const am = row.datum
     ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
     : '(Kein Datum erfasst)'
 
-  const {
-    data: lieferungData,
-    error: lieferungError,
-    loading: lieferungLoading,
-  } = useQuery(lieferungQuery, {
-    variables: { id: row.id },
-  })
-  const lieferungen = get(lieferungData, 'lieferung') || []
+  const { error: lieferungError, loading: lieferungLoading } = useQuery(
+    lieferungQuery,
+    {
+      variables: { id: row.id },
+    },
+  )
+  const lieferungen = [...store.lieferungs.values()].filter(
+    (l) => l.sammel_lieferung_id === row.id,
+  )
 
   return (
     <Container>
@@ -246,7 +233,9 @@ const Lieferschein = ({ row }) => {
             </TableHead>
             <TableBody>
               {lieferungLoading ? (
-                <TableRow>...</TableRow>
+                <TableRow>
+                  <TableCell>...</TableCell>
+                </TableRow>
               ) : lieferungError ? (
                 <TableRow>{`Fehler beim Laden der Daten: ${lieferungError.message}`}</TableRow>
               ) : (
