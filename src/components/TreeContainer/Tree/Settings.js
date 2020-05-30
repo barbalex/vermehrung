@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -8,12 +7,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import get from 'lodash/get'
 import styled from 'styled-components'
-import { useApolloClient } from '@apollo/react-hooks'
 
 import { StoreContext } from '../../../models/reactUtils'
-import { personOption as personOptionFragment } from '../../../utils/fragments'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -40,66 +36,25 @@ const Info = styled.div`
   user-select: none;
 `
 
-const SettingsTree = ({ data, personId }) => {
-  const client = useApolloClient()
+const SettingsTree = () => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { userPersonOption } = store
 
-  const personOption = get(data, 'person_option[0]') || {}
   const {
     tree_kultur,
     tree_teilkultur,
     tree_zaehlung,
     tree_lieferung,
     tree_event,
-  } = personOption
+  } = userPersonOption
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
-      const value = event.target.value === 'true'
-      try {
-        await client.mutate({
-          mutation: gql`
-              mutation update_person_option(
-                $personId: uuid!
-              ) {
-                update_person_option(
-                  where: { id: { _eq: $personId } }
-                  _set: {
-                    ${field}: ${!value}
-                  }
-                ) {
-                  affected_rows
-                  returning {
-                    ...PersonOptionFields
-                  }
-                }
-              }
-              ${personOptionFragment}
-            `,
-          variables: {
-            personId,
-          },
-          refetchQueries: ['TreeQueryForTreeContainer'],
-          awaitRefetchQueries: true,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updatePersonOption: {
-              id: personOption.id,
-              __typename: 'PersonOption',
-              content: { ...personOption, [field]: !value },
-            },
-          },
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
-      console.log('hi')
+      const value = event.target.value === 'false'
+      userPersonOption.edit({ field, value })
     },
-    [client, personId, personOption, addNotification],
+    [userPersonOption],
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)

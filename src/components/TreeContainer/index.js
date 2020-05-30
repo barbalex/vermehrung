@@ -40,7 +40,7 @@ const TreeContainer = () => {
   const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
 
-  const { user_role: role, id: personId } = userPerson
+  const { user_role: role } = userPerson
   const isGardener = role === 'gaertner'
 
   // 1. build list depending on path using react-window
@@ -109,8 +109,6 @@ const TreeContainer = () => {
     //),
     //isWerteListe: openNodes.some((n) => n[0] === 'Werte-Listen'),
     isGardener,
-    personId,
-    personExists: !!personId,
   }
   const { data, error, loading, query: theQuery } = useQuery(query, {
     variables,
@@ -154,7 +152,7 @@ const TreeContainer = () => {
     )
   }
 
-  return <Tree data={data} nodes={nodesSorted} />
+  return <Tree nodes={nodesSorted} />
 }
 
 export default observer(TreeContainer)

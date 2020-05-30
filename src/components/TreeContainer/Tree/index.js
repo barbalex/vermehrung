@@ -30,10 +30,8 @@ function sizeReducer(state, action) {
   return action.payload
 }
 
-const Tree = ({ data, nodes }) => {
+const Tree = ({ nodes }) => {
   const store = useContext(StoreContext)
-  const { userPerson } = store
-  const personId = userPerson.id
 
   const { activeNodeArray: aNA } = store.tree
 
@@ -55,7 +53,7 @@ const Tree = ({ data, nodes }) => {
 
   return (
     <ErrorBoundary>
-      <Settings data={data} personId={personId} />
+      <Settings />
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <StyledList
         height={sizeState.height - 5}
