@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { graphql, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
-import get from 'lodash/get'
 import moment from 'moment'
 import gql from 'graphql-tag'
 import Table from '@material-ui/core/Table'
@@ -149,7 +148,7 @@ const Lieferschein = ({ row }) => {
       }
     }
   `)
-  const image = get(imageData, 'file.childImageSharp.fixed', {})
+  const image = imageData?.file?.childImageSharp?.fixed ?? {}
 
   const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
     store.queryKultur({ where: { id: { _eq: row.von_kultur_id } } }, (k) =>
