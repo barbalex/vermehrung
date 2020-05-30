@@ -1,39 +1,36 @@
-import get from 'lodash/get'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, data, url }) => {
   const kulturId = url[1]
-  const kulturen = get(data, 'kultur') || []
-  const kultur = kulturen.find(k => k.id === kulturId)
-  const zaehlungen = get(kultur, 'zaehlungs') || []
+  const kulturen = data?.kultur ?? []
+  const kultur = kulturen.find((k) => k.id === kulturId)
+  const zaehlungen = kultur?.zaehlungs ?? []
 
-  const kulturNodes = nodes.filter(n => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(kulturNodes, n => n.id === `kultur${kulturId}`)
+  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
+  const kulturIndex = findIndex(
+    kulturNodes,
+    (n) => n.id === `kultur${kulturId}`,
+  )
 
   return (
     zaehlungen
       // only show if parent node exists
       .filter(() =>
-        nodes.map(n => n.id).includes(`kultur${kulturId}ZaehlungFolder`),
+        nodes.map((n) => n.id).includes(`kultur${kulturId}ZaehlungFolder`),
       )
-      .map(el => {
+      .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : 'kein Datum'
         const anz =
-          get(el, 'teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen') ||
-          '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
         const anzAb =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_auspflanzbereit',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
+          '-'
         const anzMu =
-          get(
-            el,
-            'teilzaehlungs_aggregate.aggregate.sum.anzahl_mutterpflanzen',
-          ) || '-'
+          el?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
+          '-'
         const numbers = `${anz
           .toString()
           .padStart(3, '\u00A0')}/${anzAb
