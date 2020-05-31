@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -27,13 +26,11 @@ const Title = styled.div`
 `
 
 const GartenDownload = ({ gartenId }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
 
   const onClickData = useCallback(async () => {
     const workbook = new ExcelJs.Workbook()
     await buildExceljsWorksheetsForDaten({
-      client,
       store,
       garten_id: gartenId,
       workbook,
@@ -44,11 +41,10 @@ const GartenDownload = ({ gartenId }) => {
       workbook,
     })
     setAnchorEl(null)
-  }, [client, gartenId, store])
+  }, [gartenId, store])
   const onClickTzSums = useCallback(async () => {
     const workbook = new ExcelJs.Workbook()
     await buildExceljsWorksheetsForTzSums({
-      client,
       store,
       garten_id: gartenId,
       workbook,
@@ -59,7 +55,7 @@ const GartenDownload = ({ gartenId }) => {
       workbook,
     })
     setAnchorEl(null)
-  }, [client, gartenId, store])
+  }, [gartenId, store])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
