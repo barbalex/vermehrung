@@ -150,7 +150,7 @@ export default ({ store, data, loading, role }) => {
       showTeilkulturFolder ? buildTeilkulturFolder({ store, loading }) : [],
     )(),
     ...memoizeOne(() =>
-      showZaehlungFolder ? buildZaehlungFolder({ data, store, loading }) : [],
+      showZaehlungFolder ? buildZaehlungFolder({ store, loading }) : [],
     )(),
     ...memoizeOne(() =>
       showEventFolder ? buildEventFolder({ store, loading }) : [],
@@ -236,7 +236,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildZaehlungZaehlung({
             nodes,
-            data,
             store,
           }),
         )(),
