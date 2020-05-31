@@ -1,5 +1,5 @@
-export default ({ data, loading }) => {
-  const arten = data?.art ?? []
+export default ({ loading, store }) => {
+  const arten = store.artFiltered
   const nr = loading && !arten.length ? '...' : arten.length
 
   return [

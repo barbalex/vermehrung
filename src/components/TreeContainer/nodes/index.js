@@ -136,7 +136,7 @@ export default ({ store, data, loading, role }) => {
 
   let nodes = [
     ...memoizeOne(() =>
-      showArtFolder ? buildArtFolder({ data, store, loading }) : [],
+      showArtFolder ? buildArtFolder({ store, loading }) : [],
     )(),
     ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
     ...memoizeOne(() =>
@@ -183,7 +183,6 @@ export default ({ store, data, loading, role }) => {
       artArtNodes = memoizeOne(() =>
         buildArtArt({
           nodes,
-          data,
           store,
         }),
       )()

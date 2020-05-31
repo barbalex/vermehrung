@@ -11,6 +11,8 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
+import queryFromTable from '../utils/queryFromTable'
+import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
 
@@ -1371,5 +1373,17 @@ export const RootStore = RootStoreBase.props({
         queryPerson_option({ where: { id: { _eq: userPerson.id } } })
       }
       return userPersonOption ?? {}
+    },
+    get artFilter() {
+      return queryFromTable({ store: self, table: 'art' })
+    },
+    get artFiltered() {
+      return queryFromStore({ store: self, table: 'art' })
+    },
+    get eventFilter() {
+      return queryFromTable({ store: self, table: 'event' })
+    },
+    get eventFiltered() {
+      return queryFromStore({ store: self, table: 'event' })
     },
   }))

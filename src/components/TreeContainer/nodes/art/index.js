@@ -1,5 +1,5 @@
-export default ({ nodes, data }) =>
-  (data?.art ?? [])
+export default ({ nodes, store }) =>
+  store.artFiltered
     // only show if parent node exists
     .filter(() => nodes.map((n) => n.id).includes('artFolder'))
     .map((n) => ({
