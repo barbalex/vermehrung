@@ -1392,4 +1392,22 @@ export const RootStore = RootStoreBase.props({
     get gartenFiltered() {
       return queryFromStore({ store: self, table: 'garten' })
     },
+    get herkunftFilter() {
+      return queryFromTable({ store: self, table: 'herkunft' })
+    },
+    get herkunftFiltered() {
+      return queryFromStore({ store: self, table: 'herkunft' })
+    },
+    get kulturFilter() {
+      return queryFromTable({ store: self, table: 'kultur' })
+    },
+    get kulturFiltered() {
+      return queryFromStore({ store: self, table: 'kultur' })
+    },
+    get lieferungFilter() {
+      return queryFromTable({ store: self, table: 'lieferung' })
+    },
+    get lieferungFiltered() {
+      return queryFromStore({ store: self, table: 'lieferung' })
+    },
   }))

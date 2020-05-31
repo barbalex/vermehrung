@@ -1,5 +1,5 @@
-export default ({ nodes, data }) => {
-  const kulturen = data?.kultur ?? []
+export default ({ nodes, store }) => {
+  const kulturen = store.kulturFiltered
 
   return (
     kulturen

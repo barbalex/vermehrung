@@ -36,7 +36,15 @@ const Container = styled.div`
 
 const TreeContainer = () => {
   const store = useContext(StoreContext)
-  const { user, userPerson, artFilter, eventFilter } = store
+  const {
+    user,
+    userPerson,
+    artFilter,
+    eventFilter,
+    gartenFilter,
+    kulturFilter,
+    herkunftFilter,
+  } = store
   const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
 
@@ -48,9 +56,9 @@ const TreeContainer = () => {
   const variables = {
     artFilter,
     eventFilter,
-    gartenFilter: queryFromTable({ store, table: 'garten' }),
-    kulturFilter: queryFromTable({ store, table: 'kultur' }),
-    herkunftFilter: queryFromTable({ store, table: 'herkunft' }),
+    gartenFilter,
+    kulturFilter,
+    herkunftFilter,
     personFilter: queryFromTable({ store, table: 'person' }),
     sammlungFilter: queryFromTable({ store, table: 'sammlung' }),
     lieferungFilter: queryFromTable({ store, table: 'lieferung' }),

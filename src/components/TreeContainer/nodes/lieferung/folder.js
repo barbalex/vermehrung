@@ -1,5 +1,5 @@
-export default ({ data, loading }) => {
-  const lieferungen = data?.lieferung ?? []
+export default ({ store, loading }) => {
+  const lieferungen = store.lieferungFiltered
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   return [

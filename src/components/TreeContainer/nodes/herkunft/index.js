@@ -1,5 +1,5 @@
-export default ({ nodes, data }) => {
-  const herkuenfte = data?.herkunft ?? []
+export default ({ nodes, store }) => {
+  const herkuenfte = store.herkunftFiltered
 
   return (
     herkuenfte

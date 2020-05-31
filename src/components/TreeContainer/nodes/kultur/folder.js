@@ -1,5 +1,5 @@
-export default ({ data, loading }) => {
-  const kulturen = data?.kultur ?? []
+export default ({ store, loading }) => {
+  const kulturen = store.kulturFiltered
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   return [
