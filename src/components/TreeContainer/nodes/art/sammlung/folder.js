@@ -1,13 +1,11 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, store, loading }) => {
   const artId = url[1]
   const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
 
-  const arten = data?.art ?? []
-  const art = arten.find((a) => a.id === artId)
-  const sammlungen = art?.sammlungs ?? []
+  const sammlungen = store.sammlungFiltered.filter((s) => s.art_id === artId)
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   // only return if parent exists

@@ -1,7 +1,7 @@
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, store, url }) => {
   const artId = url[1]
   const sammlungId = url[3]
 
@@ -15,11 +15,9 @@ export default ({ nodes, data, url }) => {
     (n) => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
-  const arten = data?.art ?? []
-  const art = arten.find((a) => a.id === artId)
-  const sammlungen = art?.sammlungs ?? []
-  const sammlung = sammlungen.find((s) => s.id === sammlungId)
-  const lieferungen = sammlung?.lieferungs ?? []
+  const lieferungen = store.lieferungFiltered.filter(
+    (l) => l.von_sammlung_id === sammlungId,
+  )
 
   return (
     lieferungen

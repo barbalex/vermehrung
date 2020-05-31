@@ -304,7 +304,6 @@ export default ({ store, data, loading, role }) => {
           buildArtSammlungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -313,7 +312,6 @@ export default ({ store, data, loading, role }) => {
           buildArtKulturFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -475,7 +473,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtKultur({
             nodes,
-            data,
             store,
             url,
           }),
@@ -488,7 +485,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtSammlung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -700,7 +696,6 @@ export default ({ store, data, loading, role }) => {
           buildArtKulturZaehlungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -709,7 +704,6 @@ export default ({ store, data, loading, role }) => {
           buildArtKulturAusLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -718,7 +712,6 @@ export default ({ store, data, loading, role }) => {
           buildArtKulturAnLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -727,7 +720,6 @@ export default ({ store, data, loading, role }) => {
           buildArtKulturEventFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -736,7 +728,6 @@ export default ({ store, data, loading, role }) => {
           buildArtKulturTeilkulturFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -749,7 +740,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtSammlungAusLieferungFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -869,7 +859,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtKulturZaehlungZaehlung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -905,7 +894,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtKulturLieferungAusLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -923,7 +911,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtKulturLieferungAnLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -941,7 +928,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtKulturEventEvent({
             nodes,
-            data,
             store,
             url,
           }),
@@ -959,7 +945,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtKulturTeilkulturTeilkultur({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1068,7 +1053,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildArtSammlungLieferungAusLieferung({
             nodes,
-            data,
             store,
             url,
           }),
