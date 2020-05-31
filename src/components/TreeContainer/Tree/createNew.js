@@ -64,7 +64,7 @@ export default async ({ node, store }) => {
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
-    additionalValuesToSet.art_id = responce?.data?.kultur?.[0]?.art_id
+    additionalValuesToSet.art_id = responce?.kultur?.[0]?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
@@ -79,7 +79,7 @@ export default async ({ node, store }) => {
     } catch (error) {
       return console.log('Error querying parent kultur', error.message)
     }
-    additionalValuesToSet.art_id = responce?.data?.sammlung?.[0]?.art_id
+    additionalValuesToSet.art_id = responce?.sammlung?.[0]?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
     let responce
@@ -93,7 +93,7 @@ export default async ({ node, store }) => {
         error.message,
       )
     }
-    const sammelLieferung = responce?.data?.sammel_lieferung?.[0]
+    const sammelLieferung = responce?.sammel_lieferung?.[0]
     const entries = Object.entries(sammelLieferung)
       .filter(
         // eslint-disable-next-line no-unused-vars
@@ -108,5 +108,5 @@ export default async ({ node, store }) => {
   }
   if (fkExists) additionalValuesToSet[fkName] = parentId
 
-  store[`insert${upperFirst(table)}Rev`](additionalValuesToSet)
+  store[`insert${upperFirst(table)}Rev`]({ values: additionalValuesToSet })
 }
