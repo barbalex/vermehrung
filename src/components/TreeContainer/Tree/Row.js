@@ -262,7 +262,7 @@ const Row = ({ style, node, nodes }) => {
         message: error.message,
       })
     }
-    const email = result?.data?.person?.[0]?.email
+    const email = result?.person?.[0]?.email
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
         url: 'https://vermehrung.ch/Vermehrung',
@@ -322,7 +322,7 @@ const Row = ({ style, node, nodes }) => {
         message: error.message,
       })
     }
-    const email = result?.data?.person?.[0]?.email
+    const email = result?.person?.[0]?.email
     if (!email) {
       return addNotification({
         message: 'Eine email-Adresse muss erfasst sein',
