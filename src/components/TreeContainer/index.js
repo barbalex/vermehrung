@@ -47,6 +47,8 @@ const TreeContainer = () => {
     personFilter,
     sammelLieferungFilter,
     sammlungFilter,
+    lieferungFilter,
+    teilkulturFilter,
   } = store
   const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
@@ -64,9 +66,9 @@ const TreeContainer = () => {
     herkunftFilter,
     personFilter,
     sammlungFilter,
-    lieferungFilter: queryFromTable({ store, table: 'lieferung' }),
+    lieferungFilter,
     sammelLieferungFilter,
-    teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
+    teilkulturFilter,
     zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
     isArt: openNodes.some((n) => n[0] === 'Arten'),
     //isEvent: openNodes.some((n) => n[0] === 'Events'),
