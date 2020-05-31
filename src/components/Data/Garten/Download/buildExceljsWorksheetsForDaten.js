@@ -69,28 +69,33 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
     })
   }
   const kultursArray = kulturResult?.kultur ?? []
-  console.log('buildExcel', { kultursArray, kulturResult })
-  const kulturs = kultursArray.map((kModel) => {
-    //const k = kModel.toJSON()
-    const k = { ...kModel }
-    console.log(k)
-    k.art_ae_id = kModel?.art.art_ae_art?.id ?? ''
-    k.art_ae_name = kModel?.art.art_ae_art?.name ?? ''
-    delete k.art
-    k.herkunft_id = kModel?.herkunft?.id ?? ''
-    k.herkunft_nr = kModel?.herkunft?.nr ?? ''
-    delete k.herkunft
-    k.garten_id = kModel?.garten?.id ?? ''
-    k.garten_name = kModel?.garten?.name ?? ''
-    delete k.garten
-    delete k.__typename
-    delete k._conflicts
-    delete k._deleted
-    delete k._depth
-    delete k._rev
-    delete k._parent_rev
-    delete k._revisions
-    return k
+  const kulturs = kultursArray.map((kultur) => {
+    const newK = {
+      id: kultur.id,
+      art_id: kultur.art_id,
+      art_ae_id: kultur?.art?.art_ae_art?.id ?? '',
+      art_ae_name: kultur?.art?.art_ae_art?.name ?? '',
+      herkunft_id: kultur.herkunft_id,
+      herkunft_nr: kultur?.herkunft?.nr ?? '',
+      herkunft_rohdaten: removeMetadataFromDataset({
+        dataset: kultur?.herkunft,
+        foreignKeys: ['sammlungs'],
+      }),
+      garten_id: kultur.garten_id,
+      garten_name: kultur?.garten?.name ?? '',
+      garten_rohdaten: removeMetadataFromDataset({
+        dataset: kultur?.garten,
+        foreignKeys: ['kulturs', 'person'],
+      }),
+      zwischenlager: kultur.zwischenlager,
+      erhaltungskultur: kultur.erhaltungskultur,
+      von_anzahl_individuen: kultur.von_anzahl_individuen,
+      bemerkungen: kultur.bemerkungen,
+      aktiv: kultur.aktiv,
+      changed: kultur.changed,
+      changed_by: kultur.changed_by,
+    }
+    return newK
   })
   if (kulturs.length) {
     addWorksheetToExceljsWorkbook({
@@ -100,10 +105,14 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
     })
     // 3. for all kulturen, call Kultur/buildExceljsWorksheets
     const myKulturIds = kulturs.map((k) => k.id)
-    for (const kultur_id of myKulturIds) {
+    // need to pass index
+    // as explained in https://stackoverflow.com/a/34349073/712005
+    // because excel limits length of names and uuid is too long
+    for (const [index, kultur_id] of [myKulturIds].entries()) {
       await buildExceljsWorksheetsForKultur({
         store,
-        kultur_id,
+        kultur_id: kultur_id[0],
+        kultur_name: index + 1,
         workbook,
         calledFromHigherUp: true,
       })

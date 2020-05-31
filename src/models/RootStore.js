@@ -1171,6 +1171,7 @@ export const RootStore = RootStoreBase.props({
           setActiveNodeArray(newActiveNodeArray)
           addOpenNodes([newActiveNodeArray])
         })
+        return id
       },
       deleteZaehlungRevModel(val) {
         self.zaehlung_revs.delete(val.id)
@@ -1365,10 +1366,10 @@ export const RootStore = RootStoreBase.props({
     },
     get userPersonOption() {
       const { userPerson, person_options, queryPerson_option } = self
-      const userPersonOption = person_options.get(userPerson.id) ?? {}
-      if (!userPersonOption) {
+      const userPersonOption = person_options.get(userPerson.id)
+      if (!userPersonOption && userPerson.id) {
         queryPerson_option({ where: { id: { _eq: userPerson.id } } })
       }
-      return userPersonOption
+      return userPersonOption ?? {}
     },
   }))

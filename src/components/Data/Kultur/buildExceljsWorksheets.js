@@ -7,7 +7,13 @@ import removeMetadataFromDataset from '../../../utils/removeMetadataFromDataset'
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
-export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
+export default async ({
+  store,
+  kultur_id,
+  kultur_name,
+  workbook,
+  calledFromHigherUp,
+}) => {
   const { addNotification } = store
 
   // 1. Get Kultur
@@ -61,7 +67,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     }
     const kultur = kulturResult?.kultur[0]
     const newK = {
-      kultur_id: kultur.id,
+      id: kultur.id,
       art_id: kultur.art_id,
       art_ae_id: kultur?.art?.art_ae_art?.id ?? '',
       art_ae_name: kultur?.art?.art_ae_art?.name ?? '',
@@ -175,7 +181,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp
-        ? `Kultur_${kultur_id}_Zaehlungen`
+        ? `Kultur_${kultur_name}_Zaehlungen`
         : 'Zaehlungen',
       data: zaehlungen,
     })
@@ -234,7 +240,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp
-        ? `Kultur_${kultur_id}_Teilzaehlungen`
+        ? `Kultur_${kultur_name}_Teilzaehlungen`
         : 'Teilzaehlungen',
       data: teilzaehlungen,
     })
@@ -447,7 +453,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp
-        ? `Kultur_${kultur_id}_Anlieferungen`
+        ? `Kultur_${kultur_name}_Anlieferungen`
         : 'Anlieferungen',
       data: anlieferungen,
     })
@@ -660,7 +666,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp
-        ? `Kultur_${kultur_id}_Auslieferungen`
+        ? `Kultur_${kultur_name}_Auslieferungen`
         : 'Auslieferungen',
       data: auslieferungen,
     })
@@ -732,7 +738,7 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   if (events.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
-      title: calledFromHigherUp ? `Kultur_${kultur_id}_Events` : 'Events',
+      title: calledFromHigherUp ? `Kultur_${kultur_name}_Events` : 'Events',
       data: events,
     })
   }
