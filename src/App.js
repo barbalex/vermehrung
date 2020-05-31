@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { ApolloProvider } from '@apollo/react-hooks'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
