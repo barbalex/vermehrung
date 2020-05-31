@@ -3,12 +3,11 @@ import moment from 'moment'
 
 import { lieferung as lieferungFragment } from '../../../../utils/fragments'
 import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
-import exists from '../../../../utils/exists'
 import toPgArray from '../../../../utils/toPgArray'
 
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
-export default async ({ lieferungId, sammelLieferung, field, store }) => {
+export default async ({ lieferungId, sammelLieferung, store }) => {
   // pass field to mark which field should be updated
   // even if it has value null
   const lieferung = {
@@ -17,15 +16,14 @@ export default async ({ lieferungId, sammelLieferung, field, store }) => {
     sammel_lieferung_id: sammelLieferung.id,
   }
   const newObject = Object.fromEntries(
-    Object.entries(lieferung)
-      .filter(
-        // only accept lieferung's fields
-        // eslint-disable-next-line no-unused-vars
-        ([key, value]) => lieferungFields.includes(key),
-      )
-      // only update with existing values
+    Object.entries(lieferung).filter(
+      // only accept lieferung's fields
       // eslint-disable-next-line no-unused-vars
-      .filter(([key, val]) => exists(val) || key === field),
+      ([key, value]) => lieferungFields.includes(key),
+    ),
+    // only update with existing values
+    // eslint-disable-next-line no-unused-vars
+    //.filter(([key, val]) => exists(val) || key === field),
   )
   // need to query existing object to get revisions
   let result
