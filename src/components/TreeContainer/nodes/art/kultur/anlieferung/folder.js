@@ -1,10 +1,10 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, store, loading }) => {
   const artId = url[1]
   const kulturId = url[3]
 
-  const arten = data?.art ?? []
+  const arten = store.artFiltered
   const art = arten.find((a) => a.id === artId)
   const kulturen = art?.kulturs ?? []
   const kultur = kulturen.find((k) => k.id === kulturId)

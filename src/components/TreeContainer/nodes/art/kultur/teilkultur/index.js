@@ -1,13 +1,11 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, store, url }) => {
   const artId = url[1]
   const kulturId = url[3]
-  const arten = data?.art ?? []
-  const art = arten.find((a) => a.id === artId)
-  const kulturen = art?.kulturs ?? []
-  const kultur = kulturen.find((k) => k.id === kulturId)
-  const teilkulturen = kultur?.teilkulturs ?? []
+  const teilkulturen = store.teilkulturFiltered.filter(
+    (t) => t.kultur_id === kulturId,
+  )
 
   const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
