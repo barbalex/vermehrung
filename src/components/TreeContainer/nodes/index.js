@@ -138,7 +138,7 @@ export default ({ store, data, loading, role }) => {
     ...memoizeOne(() =>
       showArtFolder ? buildArtFolder({ store, loading }) : [],
     )(),
-    ...memoizeOne(() => buildGartenFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildGartenFolder({ store, loading }))(),
     ...memoizeOne(() =>
       showHerkunftFolder ? buildHerkunftFolder({ data, store, loading }) : [],
     )(),
@@ -155,7 +155,7 @@ export default ({ store, data, loading, role }) => {
       showZaehlungFolder ? buildZaehlungFolder({ data, store, loading }) : [],
     )(),
     ...memoizeOne(() =>
-      showEventFolder ? buildEventFolder({ data, store, loading }) : [],
+      showEventFolder ? buildEventFolder({ store, loading }) : [],
     )(),
     ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
     ...memoizeOne(() =>
@@ -194,7 +194,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildGartenGarten({
             nodes,
-            data,
             store,
           }),
         )(),
@@ -254,7 +253,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildEventEvent({
             nodes,
-            data,
             store,
           }),
         )(),

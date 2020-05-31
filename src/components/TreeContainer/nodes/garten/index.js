@@ -1,5 +1,5 @@
-export default ({ nodes, data }) =>
-  (data?.garten ?? [])
+export default ({ nodes, store }) =>
+  store.gartenFiltered
     // only show if parent node exists
     .filter(() => nodes.map((n) => n.id).includes('gartenFolder'))
     .map((el) => ({

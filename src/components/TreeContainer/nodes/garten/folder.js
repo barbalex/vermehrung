@@ -1,5 +1,5 @@
-export default ({ data, loading }) => {
-  const gaerten = data?.garten ?? []
+export default ({ loading, store }) => {
+  const gaerten = store.gartenFiltered
   const nr = loading && !gaerten.length ? '...' : gaerten.length
 
   return [
