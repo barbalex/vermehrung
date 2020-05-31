@@ -1428,4 +1428,10 @@ export const RootStore = RootStoreBase.props({
     get sammlungFiltered() {
       return queryFromStore({ store: self, table: 'sammlung' })
     },
+    get teilkulturFilter() {
+      return queryFromTable({ store: self, table: 'teilkultur' })
+    },
+    get teilkulturFiltered() {
+      return queryFromStore({ store: self, table: 'teilkultur' })
+    },
   }))
