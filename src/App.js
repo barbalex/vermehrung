@@ -5,8 +5,6 @@ import 'mobx-react-lite/batchingForReactDom'
 import { createHttpClient } from 'mst-gql'
 import { RootStore as DataStore, StoreContext } from './models'
 
-import createGlobalStyle from './utils/createGlobalStyle'
-
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -24,6 +22,7 @@ import materialTheme from './utils/materialTheme'
 import UpdateExists from './components/UpdateExists'
 import setHasuraClaims from './utils/setHasuraClaims'
 
+import createGlobalStyle from './utils/createGlobalStyle'
 const GlobalStyle = createGlobalStyle()
 
 import constants from './utils/constants.json'
