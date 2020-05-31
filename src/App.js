@@ -21,7 +21,6 @@ import { navigate } from '@reach/router'
 import Notifications from './components/Notifications'
 
 import materialTheme from './utils/materialTheme'
-import createApolloClient from '../apolloClient'
 
 import UpdateExists from './components/UpdateExists'
 import setHasuraClaims from './utils/setHasuraClaims'
@@ -59,8 +58,6 @@ const firebaseConfig = {
   projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
   appId: process.env.GATSBY_FIREBASE_APP_ID,
 }
-
-const apolloClient = createApolloClient()
 
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
 const tokenWithRoles =
@@ -129,14 +126,12 @@ const App = ({ element }) => {
   return (
     <MuiThemeProvider theme={materialTheme}>
       <StoreContext.Provider value={store}>
-        <ApolloProvider client={apolloClient}>
-          <>
-            <GlobalStyle />
-            {element}
-            <Notifications />
-            <UpdateExists />
-          </>
-        </ApolloProvider>
+        <>
+          <GlobalStyle />
+          {element}
+          <Notifications />
+          <UpdateExists />
+        </>
       </StoreContext.Provider>
     </MuiThemeProvider>
   )
