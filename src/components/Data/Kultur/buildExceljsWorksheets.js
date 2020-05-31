@@ -141,34 +141,34 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   }
   const zaehlungenArray = zaehlungResult?.zaehlung ?? []
   const zaehlungen = zaehlungenArray.map((z) => {
+    const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
     const newZ = {
       id: z.id,
       kultur_id: z.kultur_id,
       datum: z.datum,
       prognose: z.prognose,
       bemerkungen: z.bemerkungen,
+      teilzaehlungen_anzahl: z?.teilzaehlungs_aggregate?.aggregate?.count ?? '',
+      teilzaehlungen_anzahl_pflanzen:
+        z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '',
+      teilzaehlungen_anzahl_auspflanzbereit:
+        z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ??
+        '',
+      teilzaehlungen_anzahl_mutterpflanzen:
+        z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ?? '',
+      teilzaehlungen_ids: tknodes
+        .filter((tk) => !!tk?.id)
+        .map((tk) => tk?.id)
+        .join(', '),
+      teilzaehlungen_teilkulturen: tknodes
+        .filter((tk) => !!tk?.teilkultur?.name)
+        .map((tk) => tk?.teilkultur?.name)
+        .join(', '),
+      teilzaehlungen_andere_mengen: tknodes
+        .filter((tk) => !!tk?.andere_menge)
+        .map((tk) => tk?.andere_menge)
+        .join(', '),
     }
-    newZ.teilzaehlungen_anzahl =
-      z?.teilzaehlungs_aggregate?.aggregate?.count ?? ''
-    newZ.teilzaehlungen_anzahl_pflanzen =
-      z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? ''
-    newZ.teilzaehlungen_anzahl_auspflanzbereit =
-      z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ?? ''
-    newZ.teilzaehlungen_anzahl_mutterpflanzen =
-      z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ?? ''
-    const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
-    newZ.teilzaehlungen_ids = tknodes
-      .filter((tk) => !!tk?.id)
-      .map((tk) => tk?.id)
-      .join(', ')
-    newZ.teilzaehlungen_teilkulturen = tknodes
-      .filter((tk) => !!tk?.teilkultur?.name)
-      .map((tk) => tk?.teilkultur?.name)
-      .join(', ')
-    newZ.teilzaehlungen_andere_mengen = tknodes
-      .filter((tk) => !!tk?.andere_menge)
-      .map((tk) => tk?.andere_menge)
-      .join(', ')
     return newZ
   })
   if (zaehlungen.length) {
@@ -229,11 +229,6 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
       bemerkungen: z.bemerkungen,
     }
     return newZ
-  })
-  console.log('buildExcel', {
-    teilzaehlungResult,
-    teilzaehlungenArray,
-    teilzaehlungen,
   })
   if (teilzaehlungen.length) {
     addWorksheetToExceljsWorkbook({
@@ -345,35 +340,108 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   }
   const anlieferungenArray = anlieferungResult?.lieferung ?? []
   const anlieferungen = anlieferungenArray.map((z) => {
-    z.art_ae_id = z?.art?.art_ae_art?.id ?? ''
-    z.art_ae_name = z?.art?.art_ae_art?.name ?? ''
-    delete z.art
-    z.person_name = z?.person?.name ?? ''
-    delete z.person
-    z.von_sammlung_datum = z?.von_sammlung?.datum ?? ''
-    z.von_sammlung_herkunft_id = z?.von_sammlung?.herkunft_id ?? ''
-    z.von_sammlung_herkunft_nr = z?.von_sammlung?.herkunft?.nr ?? ''
-    z.von_sammlung_person_id = z?.von_sammlung?.person_id ?? ''
-    z.von_sammlung_person_name = z?.von_sammlung?.person?.name ?? ''
-    delete z.von_sammlung
-    z.von_kultur_garten_id = z?.kulturByVonKulturId?.garten_id ?? ''
-    z.von_kultur_garten_name = z?.kulturByVonKulturId?.garten?.name ?? ''
-    z.von_kultur_herkunft_id = z?.kulturByVonKulturId?.herkunft_id ?? ''
-    z.von_kultur_herkunft_nr = z?.kulturByVonKulturId?.herkunft?.nr ?? ''
-    delete z.kulturByVonKulturId
-    z.nach_kultur_garten_id = z?.kulturByNachKulturId?.garten_id ?? ''
-    z.nach_kultur_garten_name = z?.kulturByNachKulturId?.garten?.name ?? ''
-    z.nach_kultur_herkunft_id = z?.kulturByNachKulturId?.herkunft_id ?? ''
-    z.nach_kultur_herkunft_nr = z?.kulturByNachKulturId?.herkunft?.nr ?? ''
-    delete z.kulturByNachKulturId
-    delete z.__typename
-    delete z._conflicts
-    delete z._deleted
-    delete z._depth
-    delete z._rev
-    delete z._parent_rev
-    delete z._revisions
-    return z
+    const newZ = {
+      id: z.id,
+      sammel_lieferung_id: z.sammel_lieferung_id,
+      sammel_lieferung_rohdaten: removeMetadataFromDataset({
+        dataset: z?.sammel_lieferung,
+        foreignKeys: [
+          'art',
+          'garten',
+          'herkunft',
+          'kultur_option',
+          'lieferungsByNachKulturId',
+          'lieferungsByVonKulturId',
+          'teilkulturs',
+          'zaehlungs',
+          'ausLieferungsDone',
+          'ausLieferungsPlanned',
+          'anLieferungsDone',
+          'anLieferungsPlanned',
+          'zaehlungsDone',
+          'zaehlungsPlanned',
+        ],
+      }),
+      art_id: z.art_id,
+      art_ae_id: z?.art?.art_ae_art?.id ?? '',
+      art_ae_name: z?.art?.art_ae_art?.name ?? '',
+      person_id: z.person_id,
+      person_name: z?.person?.name ?? '',
+      person_rohdaten: removeMetadataFromDataset({
+        dataset: z?.person,
+        foreignKeys: [],
+      }),
+      von_sammlung_id: z.von_sammlung_id,
+      von_sammlung_datum: z?.von_sammlung?.datum ?? '',
+      von_sammlung_herkunft_id: z?.von_sammlung?.herkunft_id ?? '',
+      von_sammlung_herkunft_nr: z?.von_sammlung?.herkunft?.nr ?? '',
+      von_sammlung_person_id: z?.von_sammlung?.person_id ?? '',
+      von_sammlung_person_name: z?.von_sammlung?.person?.name ?? '',
+      von_sammlung_rohdaten: removeMetadataFromDataset({
+        dataset: z?.sammlung,
+        foreignKeys: [],
+      }),
+      von_kultur_id: z.von_kultur_id,
+      von_kultur_garten_id: z?.kulturByVonKulturId?.garten_id ?? '',
+      von_kultur_garten_name: z?.kulturByVonKulturId?.garten?.name ?? '',
+      von_kultur_herkunft_id: z?.kulturByVonKulturId?.herkunft_id ?? '',
+      von_kultur_herkunft_nr: z?.kulturByVonKulturId?.herkunft?.nr ?? '',
+      von_kultur_rohdaten: removeMetadataFromDataset({
+        dataset: z?.kulturByVonKulturId,
+        foreignKeys: [
+          'art',
+          'garten',
+          'herkunft',
+          'kultur_option',
+          'lieferungsByNachKulturId',
+          'lieferungsByVonKulturId',
+          'teilkulturs',
+          'zaehlungs',
+          'ausLieferungsDone',
+          'ausLieferungsPlanned',
+          'anLieferungsDone',
+          'anLieferungsPlanned',
+          'zaehlungsDone',
+          'zaehlungsPlanned',
+        ],
+      }),
+      datum: z.datum,
+      nach_kultur_id: z.nach_kultur_id,
+      nach_kultur_garten_id: z?.kulturByNachKulturId?.garten_id ?? '',
+      nach_kultur_garten_name: z?.kulturByNachKulturId?.garten?.name ?? '',
+      nach_kultur_herkunft_id: z?.kulturByNachKulturId?.herkunft_id ?? '',
+      nach_kultur_herkunft_nr: z?.kulturByNachKulturId?.herkunft?.nr ?? '',
+      nach_kultur_rohdaten: removeMetadataFromDataset({
+        dataset: z?.kulturByNachKulturId,
+        foreignKeys: [
+          'art',
+          'garten',
+          'herkunft',
+          'kultur_option',
+          'lieferungsByNachKulturId',
+          'lieferungsByVonKulturId',
+          'teilkulturs',
+          'zaehlungs',
+          'ausLieferungsDone',
+          'ausLieferungsPlanned',
+          'anLieferungsDone',
+          'anLieferungsPlanned',
+          'zaehlungsDone',
+          'zaehlungsPlanned',
+        ],
+      }),
+      nach_ausgepflanzt: z.nach_ausgepflanzt,
+      von_anzahl_individuen: z.von_anzahl_individuen,
+      anzahl_pflanzen: z.anzahl_pflanzen,
+      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
+      gramm_samen: z.gramm_samen,
+      andere_menge: z.andere_menge,
+      geplant: z.geplant,
+      bemerkungen: z.bemerkungen,
+      changed: z.changed,
+      changed_by: z.changed_by,
+    }
+    return newZ
   })
   if (anlieferungen.length) {
     addWorksheetToExceljsWorkbook({
@@ -485,35 +553,108 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   }
   const auslieferungenArray = auslieferungResult?.lieferung ?? []
   const auslieferungen = auslieferungenArray.map((z) => {
-    z.art_ae_id = z?.art?.art_ae_art?.id ?? ''
-    z.art_ae_name = z?.art?.art_ae_art?.name ?? ''
-    delete z.art
-    z.person_name = z?.person?.name ?? ''
-    delete z.person
-    z.von_sammlung_datum = z?.von_sammlung?.datum ?? ''
-    z.von_sammlung_herkunft_id = z?.von_sammlung?.herkunft_id ?? ''
-    z.von_sammlung_herkunft_nr = z?.von_sammlung?.herkunft?.nr ?? ''
-    z.von_sammlung_person_id = z?.von_sammlung?.person_id ?? ''
-    z.von_sammlung_person_name = z?.von_sammlung?.person?.name ?? ''
-    delete z.von_sammlung
-    z.von_kultur_garten_id = z?.kulturByVonKulturId?.garten_id ?? ''
-    z.von_kultur_garten_name = z?.kulturByVonKulturId?.garten?.name ?? ''
-    z.von_kultur_herkunft_id = z?.kulturByVonKulturId?.herkunft_id ?? ''
-    z.von_kultur_herkunft_nr = z?.kulturByVonKulturId?.herkunft?.nr ?? ''
-    delete z.kulturByVonKulturId
-    z.nach_kultur_garten_id = z?.kulturByNachKulturId?.garten_id ?? ''
-    z.nach_kultur_garten_name = z?.kulturByNachKulturId?.garten?.name ?? ''
-    z.nach_kultur_herkunft_id = z?.kulturByNachKulturId?.herkunft_id ?? ''
-    z.nach_kultur_herkunft_nr = z?.kulturByNachKulturId?.herkunft?.nr ?? ''
-    delete z.kulturByNachKulturId
-    delete z.__typename
-    delete z._conflicts
-    delete z._deleted
-    delete z._depth
-    delete z._rev
-    delete z._parent_rev
-    delete z._revisions
-    return z
+    const newZ = {
+      id: z.id,
+      sammel_lieferung_id: z.sammel_lieferung_id,
+      sammel_lieferung_rohdaten: removeMetadataFromDataset({
+        dataset: z?.sammel_lieferung,
+        foreignKeys: [
+          'art',
+          'garten',
+          'herkunft',
+          'kultur_option',
+          'lieferungsByNachKulturId',
+          'lieferungsByVonKulturId',
+          'teilkulturs',
+          'zaehlungs',
+          'ausLieferungsDone',
+          'ausLieferungsPlanned',
+          'anLieferungsDone',
+          'anLieferungsPlanned',
+          'zaehlungsDone',
+          'zaehlungsPlanned',
+        ],
+      }),
+      art_id: z.art_id,
+      art_ae_id: z?.art?.art_ae_art?.id ?? '',
+      art_ae_name: z?.art?.art_ae_art?.name ?? '',
+      person_id: z.person_id,
+      person_name: z?.person?.name ?? '',
+      person_rohdaten: removeMetadataFromDataset({
+        dataset: z?.person,
+        foreignKeys: [],
+      }),
+      von_sammlung_id: z.von_sammlung_id,
+      von_sammlung_datum: z?.von_sammlung?.datum ?? '',
+      von_sammlung_herkunft_id: z?.von_sammlung?.herkunft_id ?? '',
+      von_sammlung_herkunft_nr: z?.von_sammlung?.herkunft?.nr ?? '',
+      von_sammlung_person_id: z?.von_sammlung?.person_id ?? '',
+      von_sammlung_person_name: z?.von_sammlung?.person?.name ?? '',
+      von_sammlung_rohdaten: removeMetadataFromDataset({
+        dataset: z?.sammlung,
+        foreignKeys: [],
+      }),
+      von_kultur_id: z.von_kultur_id,
+      von_kultur_garten_id: z?.kulturByVonKulturId?.garten_id ?? '',
+      von_kultur_garten_name: z?.kulturByVonKulturId?.garten?.name ?? '',
+      von_kultur_herkunft_id: z?.kulturByVonKulturId?.herkunft_id ?? '',
+      von_kultur_herkunft_nr: z?.kulturByVonKulturId?.herkunft?.nr ?? '',
+      von_kultur_rohdaten: removeMetadataFromDataset({
+        dataset: z?.kulturByVonKulturId,
+        foreignKeys: [
+          'art',
+          'garten',
+          'herkunft',
+          'kultur_option',
+          'lieferungsByNachKulturId',
+          'lieferungsByVonKulturId',
+          'teilkulturs',
+          'zaehlungs',
+          'ausLieferungsDone',
+          'ausLieferungsPlanned',
+          'anLieferungsDone',
+          'anLieferungsPlanned',
+          'zaehlungsDone',
+          'zaehlungsPlanned',
+        ],
+      }),
+      datum: z.datum,
+      nach_kultur_id: z.nach_kultur_id,
+      nach_kultur_garten_id: z?.kulturByNachKulturId?.garten_id ?? '',
+      nach_kultur_garten_name: z?.kulturByNachKulturId?.garten?.name ?? '',
+      nach_kultur_herkunft_id: z?.kulturByNachKulturId?.herkunft_id ?? '',
+      nach_kultur_herkunft_nr: z?.kulturByNachKulturId?.herkunft?.nr ?? '',
+      nach_kultur_rohdaten: removeMetadataFromDataset({
+        dataset: z?.kulturByNachKulturId,
+        foreignKeys: [
+          'art',
+          'garten',
+          'herkunft',
+          'kultur_option',
+          'lieferungsByNachKulturId',
+          'lieferungsByVonKulturId',
+          'teilkulturs',
+          'zaehlungs',
+          'ausLieferungsDone',
+          'ausLieferungsPlanned',
+          'anLieferungsDone',
+          'anLieferungsPlanned',
+          'zaehlungsDone',
+          'zaehlungsPlanned',
+        ],
+      }),
+      nach_ausgepflanzt: z.nach_ausgepflanzt,
+      von_anzahl_individuen: z.von_anzahl_individuen,
+      anzahl_pflanzen: z.anzahl_pflanzen,
+      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
+      gramm_samen: z.gramm_samen,
+      andere_menge: z.andere_menge,
+      geplant: z.geplant,
+      bemerkungen: z.bemerkungen,
+      changed: z.changed,
+      changed_by: z.changed_by,
+    }
+    return newZ
   })
   if (auslieferungen.length) {
     addWorksheetToExceljsWorkbook({
@@ -563,18 +704,30 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   }
   const eventsArray = eventResult?.event ?? []
   const events = eventsArray.map((z) => {
-    z.teilkultur_name = z?.teilkultur?.name ?? ''
+    const newZ = {
+      id: z.id,
+      kultur_id: z.kultur_id,
+      teilkultur_id: z.teilkultur_id,
+      teilkultur_name: z?.teilkultur?.name ?? '',
+      teilkultur_rohdaten: removeMetadataFromDataset({
+        dataset: z?.teilkultur,
+        foreignKeys: [],
+      }),
+      person_id: z.person_id,
+      person_name: z?.person?.name ?? '',
+      person_rohdaten: removeMetadataFromDataset({
+        dataset: z?.person,
+        foreignKeys: [],
+      }),
+      beschreibung: z.beschreibung,
+      geplant: z.geplant,
+      datum: z.datum,
+      changed: z.changed,
+      changed_by: z.changed_by,
+    }
     delete z.teilkultur
-    z.person_name = z?.person?.name ?? ''
     delete z.person
-    delete z.__typename
-    delete z._conflicts
-    delete z._deleted
-    delete z._depth
-    delete z._rev
-    delete z._parent_rev
-    delete z._revisions
-    return z
+    return newZ
   })
   if (events.length) {
     addWorksheetToExceljsWorkbook({

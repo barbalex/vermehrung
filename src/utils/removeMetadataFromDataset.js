@@ -16,15 +16,14 @@ export default ({ dataset: d, foreignKeys }) => {
   if (foreignKeys.length) {
     foreignKeys.forEach((key) => {
       if (!dataset[key]) return null
-      if (dataset[key] && dataset[key].toJSON) {
-        if (dataset[key].toJSON().map) {
-          return (dataset[key] = dataset[key].toJSON().map((val) => {
-            if (!val) return val
-            // somehow val.toJSON() is protected
-            // so need to copy it
-            return removeMetadata({ ...val.toJSON() })
-          }))
-        }
+      if (!dataset[key].toJSON) return null
+      if (dataset[key].toJSON().map) {
+        return (dataset[key] = dataset[key].toJSON().map((val) => {
+          if (!val) return val
+          // somehow val.toJSON() is protected
+          // so need to copy it
+          return removeMetadata({ ...val.toJSON() })
+        }))
       }
       // somehow dataset[key].toJSON() is protected
       // so need to copy it
@@ -32,5 +31,6 @@ export default ({ dataset: d, foreignKeys }) => {
       dataset[key] = removeMetadata(val)
     })
   }
-  return dataset
+  if (Object.keys(dataset).length) return dataset
+  return null
 }
