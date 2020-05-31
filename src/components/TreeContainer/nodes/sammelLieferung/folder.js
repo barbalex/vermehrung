@@ -1,5 +1,5 @@
-export default ({ data, loading }) => {
-  const sammelLieferungen = data?.sammel_lieferung ?? []
+export default ({ store, loading }) => {
+  const sammelLieferungen = store.sammelLieferungFiltered
   const nr =
     loading && !sammelLieferungen.length ? '...' : sammelLieferungen.length
 

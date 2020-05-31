@@ -145,7 +145,7 @@ export default ({ store, data, loading, role }) => {
     ...memoizeOne(() =>
       showLieferungFolder ? buildLieferungFolder({ store, loading }) : [],
     )(),
-    ...memoizeOne(() => buildSammelLieferungFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildSammelLieferungFolder({ store, loading }))(),
     ...memoizeOne(() =>
       showTeilkulturFolder
         ? buildTeilkulturFolder({ data, store, loading })
@@ -157,9 +157,9 @@ export default ({ store, data, loading, role }) => {
     ...memoizeOne(() =>
       showEventFolder ? buildEventFolder({ store, loading }) : [],
     )(),
-    ...memoizeOne(() => buildPersonFolder({ data, store, loading }))(),
+    ...memoizeOne(() => buildPersonFolder({ store, loading }))(),
     ...memoizeOne(() =>
-      showSammlungFolder ? buildSammlungFolder({ data, store, loading }) : [],
+      showSammlungFolder ? buildSammlungFolder({ store, loading }) : [],
     )(),
     ...memoizeOne(() =>
       showKulturFolder ? buildKulturFolder({ store, loading }) : [],
@@ -227,7 +227,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammelLieferungSammelLieferung({
             nodes,
-            data,
             store,
           }),
         )(),
@@ -274,7 +273,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonPerson({
             nodes,
-            data,
             store,
           }),
         )(),
@@ -286,7 +284,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungSammlung({
             nodes,
-            data,
             store,
           }),
         )(),
