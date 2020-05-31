@@ -1,7 +1,5 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
-import { useApolloClient } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import Menu from '@material-ui/core/Menu'
 import IconButton from '@material-ui/core/IconButton'
@@ -10,10 +8,6 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
-import {
-  teilzaehlung as teilzaehlungFragment,
-  zaehlung as zaehlungFragment,
-} from '../../../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import exists from '../../../../../utils/exists'
 import appBaseUrl from '../../../../../utils/appBaseUrl'
@@ -39,17 +33,19 @@ const Buttons = styled.div`
   justify-content: flex-end;
 `
 
-const Teilzaehlung = ({
+const PrognoseMenu = ({
   onClosePrognosis,
   anchorEl,
   setAnchorEl,
   teilzaehlung,
-  zaehlung: zaehlungPassed,
+  zaehlungId,
 }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { addNotification, insertZaehlungRev, insertTeilzaehlungRev } = store
   const { refetch: refetchTree } = store.tree
+
+  const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
+  const kulturId = zaehlung.kultur_id
 
   const [jahr, setJahr] = useState(null)
   const [anz, setAnz] = useState(null)
@@ -85,19 +81,11 @@ const Teilzaehlung = ({
       let existingZaehlungData
       const dateOfZaehlung = `${yearToUse}.09.15`
       try {
-        existingZaehlungData = await client.query({
-          query: gql`
-            query GetExistingPrognoseData($datum: date!) {
-              zaehlung(
-                where: { datum: { _eq: $datum }, prognose: { _eq: true } }
-              ) {
-                ...ZaehlungFields
-              }
-            }
-            ${zaehlungFragment}
-          `,
-          variables: {
-            datum: dateOfZaehlung,
+        existingZaehlungData = await store.queryZaehlung({
+          where: {
+            datum: { _eq: dateOfZaehlung },
+            prognose: { _eq: true },
+            kultur_id: { _eq: kulturId },
           },
         })
       } catch (error) {
@@ -105,136 +93,65 @@ const Teilzaehlung = ({
           message: error.message,
         })
       }
-      const existingZaehlung = existingZaehlungData?.data?.zaehlung?.[0]
+      const existingZaehlung = existingZaehlungData?.zaehlung?.[0]
+      console.log({
+        existingZaehlungData,
+        existingZaehlung,
+        dateOfZaehlung,
+        anz,
+        anzAuspflanzbereit,
+        zaehlung,
+      })
       // if not: create it first
-      let newZaehlung
+      let newZaehlungId
       // if not: create it first
       if (!existingZaehlung) {
-        let zaehlungData
-        try {
-          zaehlungData = await client.mutate({
-            mutation: gql`
-              mutation insertZaehlungForTeilzaehlung(
-                $kulturId: uuid!
-                $datum: date!
-                $prognose: Boolean!
-              ) {
-                insert_zaehlung(
-                  objects: [
-                    { kultur_id: $kulturId, datum: $datum, prognose: $prognose }
-                  ]
-                ) {
-                  returning {
-                    ...ZaehlungFields
-                  }
-                }
-              }
-              ${zaehlungFragment}
-            `,
-            variables: {
-              kulturId: zaehlungPassed.kultur_id,
-              datum: dateOfZaehlung,
-              prognose: true,
-            },
-          })
-        } catch (error) {
-          return addNotification({
-            message: error.message,
-          })
-        }
-        newZaehlung = zaehlungData?.data?.insert_zaehlung?.returning?.[0]
-      }
-      const zaehlung = existingZaehlung || newZaehlung
-      // create new teilzaehlung
-      try {
-        await client.mutate({
-          mutation: gql`
-            mutation insertPrognose(
-              $zaehlId: uuid!
-              $teilkulturId: uuid
-              $anzA: Int!
-            ) {
-              insert_teilzaehlung(
-                objects: [
-                  {
-                    zaehlung_id: $zaehlId
-                    teilkultur_id: $teilkulturId
-                    anzahl_auspflanzbereit: $anzA
-                  }
-                ]
-              ) {
-                returning {
-                  ...TeilzaehlungFields
-                }
-              }
-            }
-            ${teilzaehlungFragment}
-          `,
-          variables: {
-            zaehlId: zaehlung.id,
-            teilkulturId: teilzaehlung.teilkultur_id,
-            anzA: anzAuspflanzbereit,
+        newZaehlungId = insertZaehlungRev({
+          values: {
+            kultur_id: kulturId,
+            datum: dateOfZaehlung,
+            prognose: true,
           },
-          refetchQueries: ['TreeQueryForTreeContainer'],
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
         })
       }
+      const zaehlungId = existingZaehlung?.id ?? newZaehlungId
+      console.log({
+        newZaehlungId,
+        zaehlungId,
+        teilzaehlung,
+      })
+      // create new teilzaehlung
+      insertTeilzaehlungRev({
+        values: {
+          zaehlung_id: zaehlungId,
+          teilkultur_id: teilzaehlung.teilkultur_id,
+          anzahl_auspflanzbereit: anzAuspflanzbereit,
+        },
+      })
       // delete empty teilzaehlung
       let emptyTeilzaehlungenData
       try {
-        emptyTeilzaehlungenData = await client.query({
-          query: gql`
-            query GetTeilzaehlungen($zaehlungId: uuid!) {
-              teilzaehlung(
-                where: {
-                  zaehlung_id: { _eq: $zaehlungId }
-                  teilkultur_id: { _is_null: true }
-                  anzahl_pflanzen: { _is_null: true }
-                  anzahl_auspflanzbereit: { _is_null: true }
-                  anzahl_mutterpflanzen: { _is_null: true }
-                  andere_menge: { _is_null: true }
-                  bemerkungen: { _is_null: true }
-                  auspflanzbereit_beschreibung: { _is_null: true }
-                }
-              ) {
-                ...TeilzaehlungFields
-              }
-            }
-            ${teilzaehlungFragment}
-          `,
-          variables: {
-            zaehlungId: zaehlung.id,
+        emptyTeilzaehlungenData = await store.queryTeilzaehlung({
+          where: {
+            zaehlung_id: { _eq: zaehlungId },
+            teilkultur_id: { _is_null: true },
+            anzahl_pflanzen: { _is_null: true },
+            anzahl_auspflanzbereit: { _is_null: true },
+            anzahl_mutterpflanzen: { _is_null: true },
+            andere_menge: { _is_null: true },
+            bemerkungen: { _is_null: true },
+            auspflanzbereit_beschreibung: { _is_null: true },
           },
-          refetchQueries: ['TreeQueryForTreeContainer'],
         })
       } catch (error) {
         return addNotification({
           message: error.message,
         })
       }
-      const emptyTeilzaehlung = emptyTeilzaehlungenData?.data?.teilzaehlung?.[0]
+      const emptyTeilzaehlung = emptyTeilzaehlungenData?.teilzaehlung?.[0]
       if (emptyTeilzaehlung) {
-        try {
-          await client.mutate({
-            mutation: gql`
-              mutation deleteEmptyTz($id: uuid!) {
-                delete_teilzaehlung(where: { id: { _eq: $id } }) {
-                  affected_rows
-                }
-              }
-            `,
-            variables: {
-              id: emptyTeilzaehlung.id,
-            },
-          })
-        } catch (error) {
-          return addNotification({
-            message: error.message,
-          })
-        }
+        const emptyTzModel = store.teilzaehlungs.get(emptyTeilzaehlung.id)
+        emptyTzModel.delete()
       }
       addNotification({
         message: 'Die Prognose wurde gespeichert',
@@ -246,14 +163,17 @@ const Teilzaehlung = ({
       setErrors({})
     },
     [
-      anz,
-      client,
       addNotification,
+      anz,
+      insertTeilzaehlungRev,
+      insertZaehlungRev,
       jahr,
+      kulturId,
       refetchTree,
       setAnchorEl,
-      teilzaehlung.teilkultur_id,
-      zaehlungPassed.kultur_id,
+      store,
+      teilzaehlung,
+      zaehlung,
     ],
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
@@ -319,4 +239,4 @@ const Teilzaehlung = ({
   )
 }
 
-export default observer(Teilzaehlung)
+export default observer(PrognoseMenu)

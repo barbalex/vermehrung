@@ -60,6 +60,8 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
         <Teilzaehlung
           key={r.id}
           index={index}
+          id={r.id}
+          zaehlungId={zaehlungId}
           kulturId={kulturId}
           teilzaehlung={r}
           teilkulturenWerte={teilkulturenWerte}

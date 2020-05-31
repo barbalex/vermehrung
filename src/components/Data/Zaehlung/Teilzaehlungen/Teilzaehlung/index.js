@@ -55,6 +55,7 @@ const TopLine = styled.div`
 
 const Teilzaehlung = ({
   id,
+  zaehlungId,
   kulturId,
   teilzaehlung: row,
   teilkulturenWerte,
@@ -76,7 +77,6 @@ const Teilzaehlung = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const zaehlung = store.zaehlungs.get(id) ?? {}
   const { query } = useQuery((store) =>
     store.queryTeilzaehlung({ where: { id: { _eq: id } } }),
   )
@@ -248,7 +248,7 @@ const Teilzaehlung = ({
               anchorEl={anchorEl}
               setAnchorEl={setAnchorEl}
               teilzaehlung={row}
-              zaehlung={zaehlung}
+              zaehlungId={zaehlungId}
             />
           )}
         </div>
