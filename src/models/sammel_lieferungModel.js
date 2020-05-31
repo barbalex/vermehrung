@@ -116,8 +116,6 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
           // even if it has value null
           updateAllLieferungen({
             sammelLieferung: newObject,
-            lieferungs: self.lieferungs ? self.lieferungs.toJSON() : [],
-            field,
             store,
           })
         }
