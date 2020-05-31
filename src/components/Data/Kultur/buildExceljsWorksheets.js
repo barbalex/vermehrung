@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 
 import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
+import removeMetadataFromDataset from '../../../utils/removeMetadataFromDataset'
 
 /**
  * this function cann be used from higher up
@@ -58,52 +59,36 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
         message: error.message,
       })
     }
-    const kultur = { ...kulturResult?.kultur[0] }
-    kultur.art_ae_id = kultur?.art?.art_ae_art?.id ?? ''
-    kultur.art_ae_name = kultur?.art?.art_ae_art?.name ?? ''
-    delete kultur.art
-    kultur.herkunft_id = kultur?.herkunft?.id ?? ''
-    kultur.herkunft_nr = kultur?.herkunft?.nr ?? ''
-    delete kultur.herkunft
-    kultur.garten_id = kultur?.garten?.id ?? ''
-    kultur.garten_name = kultur?.garten?.name ?? ''
-    delete kultur.garten
-    delete kultur.__typename
-    delete kultur._conflicts
-    delete kultur._depth
-    delete kultur._parent_rev
-    delete kultur._rev
-    delete kultur._revisions
-    delete kultur.events
-    delete kultur.events_aggregate
-    delete kultur.kultur_files
-    delete kultur.kultur_files_aggregate
-    delete kultur.kultur_option
-    delete kultur.kultur_qk_choosens
-    delete kultur.kultur_qk_choosens_aggregate
-    delete kultur.lieferungsByNachKulturId
-    delete kultur.lieferungsByNachKulturId_aggregate
-    delete kultur.lieferungsByVonKulturId
-    delete kultur.lieferungsByVonKulturId_aggregate
-    delete kultur.sammelLieferungsByNachKulturId
-    delete kultur.sammelLieferungsByNachKulturId_aggregate
-    delete kultur.sammel_lieferungs
-    delete kultur.sammel_lieferungs_aggregate
-    delete kultur.teilkulturs
-    delete kultur.teilkulturs_aggregate
-    delete kultur.tsv
-    delete kultur.zaehlungs
-    delete kultur.zaehlungs_aggregate
-    delete kultur.ausLieferungsDone
-    delete kultur.ausLieferungsPlanned
-    delete kultur.anLieferungsDone
-    delete kultur.anLieferungsPlanned
-    delete kultur.zaehlungsDone
-    delete kultur.zaehlungsPlanned
+    const kultur = kulturResult?.kultur[0]
+    const newK = {
+      kultur_id: kultur.id,
+      art_id: kultur.art_id,
+      art_ae_id: kultur?.art?.art_ae_art?.id ?? '',
+      art_ae_name: kultur?.art?.art_ae_art?.name ?? '',
+      herkunft_id: kultur.herkunft_id,
+      herkunft_nr: kultur?.herkunft?.nr ?? '',
+      herkunft_rohdaten: removeMetadataFromDataset({
+        dataset: kultur?.herkunft,
+        foreignKeys: ['sammlungs'],
+      }),
+      garten_id: kultur.garten_id,
+      garten_name: kultur?.garten?.name ?? '',
+      garten_rohdaten: removeMetadataFromDataset({
+        dataset: kultur?.garten,
+        foreignKeys: ['kulturs', 'person'],
+      }),
+      zwischenlager: kultur.zwischenlager,
+      erhaltungskultur: kultur.erhaltungskultur,
+      von_anzahl_individuen: kultur.von_anzahl_individuen,
+      bemerkungen: kultur.bemerkungen,
+      aktiv: kultur.aktiv,
+      changed: kultur.changed,
+      changed_by: kultur.changed_by,
+    }
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp ? `Kultur_${kultur_id}` : 'Kultur',
-      data: [kultur],
+      data: [newK],
     })
   }
   // 2. Get Zählungen
@@ -156,29 +141,35 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   }
   const zaehlungenArray = zaehlungResult?.zaehlung ?? []
   const zaehlungen = zaehlungenArray.map((z) => {
-    z.teilzaehlungen_anzahl = z?.teilzaehlungs_aggregate?.aggregate?.count ?? ''
-    z.teilzaehlungen_anzahl_pflanzen =
-      z?.teilzaehlungs_aggregate?.aggregate?.anzahl_pflanzen ?? ''
-    z.teilzaehlungen_anzahl_auspflanzbereit =
-      z?.teilzaehlungs_aggregate?.aggregate?.anzahl_auspflanzbereit ?? ''
-    z.teilzaehlungen_anzahl_mutterpflanzen =
-      z?.teilzaehlungs_aggregate?.aggregate?.anzahl_mutterpflanzen ?? ''
+    const newZ = {
+      id: z.id,
+      kultur_id: z.kultur_id,
+      datum: z.datum,
+      prognose: z.prognose,
+      bemerkungen: z.bemerkungen,
+    }
+    newZ.teilzaehlungen_anzahl =
+      z?.teilzaehlungs_aggregate?.aggregate?.count ?? ''
+    newZ.teilzaehlungen_anzahl_pflanzen =
+      z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? ''
+    newZ.teilzaehlungen_anzahl_auspflanzbereit =
+      z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit ?? ''
+    newZ.teilzaehlungen_anzahl_mutterpflanzen =
+      z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ?? ''
     const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
-    z.teilzaehlungen_ids = tknodes
+    newZ.teilzaehlungen_ids = tknodes
       .filter((tk) => !!tk?.id)
       .map((tk) => tk?.id)
       .join(', ')
-    z.teilzaehlungen_teilkulturen = tknodes
+    newZ.teilzaehlungen_teilkulturen = tknodes
       .filter((tk) => !!tk?.teilkultur?.name)
       .map((tk) => tk?.teilkultur?.name)
       .join(', ')
-    z.teilzaehlungen_andere_mengen = tknodes
+    newZ.teilzaehlungen_andere_mengen = tknodes
       .filter((tk) => !!tk?.andere_menge)
       .map((tk) => tk?.andere_menge)
       .join(', ')
-    delete z.teilzaehlungs_aggregate
-    delete z.__typename
-    return z
+    return newZ
   })
   if (zaehlungen.length) {
     addWorksheetToExceljsWorkbook({
@@ -225,12 +216,26 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
   }
   const teilzaehlungenArray = teilzaehlungResult?.teilzaehlung ?? []
   const teilzaehlungen = teilzaehlungenArray.map((z) => {
-    z.teilkultur_name = z?.teilkultur?.name ?? ''
-    delete z.teilkultur
-    delete z.__typename
-    return z
+    const newZ = {
+      id: z.id,
+      zaehlung_id: z.zaehlung_id,
+      teilkultur_id: z.teilkultur_id,
+      teilkultur_name: z?.teilkultur?.name ?? '',
+      anzahl_pflanzen: z.anzahl_pflanzen,
+      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen: z.anzahl_mutterpflanzen,
+      andere_menge: z.andere_menge,
+      auspflanzbereit_beschreibung: z.auspflanzbereit_beschreibung,
+      bemerkungen: z.bemerkungen,
+    }
+    return newZ
   })
-  if (teilzaehlungResult.length) {
+  console.log('buildExcel', {
+    teilzaehlungResult,
+    teilzaehlungenArray,
+    teilzaehlungen,
+  })
+  if (teilzaehlungen.length) {
     addWorksheetToExceljsWorkbook({
       workbook,
       title: calledFromHigherUp
@@ -362,6 +367,12 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     z.nach_kultur_herkunft_nr = z?.kulturByNachKulturId?.herkunft?.nr ?? ''
     delete z.kulturByNachKulturId
     delete z.__typename
+    delete z._conflicts
+    delete z._deleted
+    delete z._depth
+    delete z._rev
+    delete z._parent_rev
+    delete z._revisions
     return z
   })
   if (anlieferungen.length) {
@@ -496,6 +507,12 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     z.nach_kultur_herkunft_nr = z?.kulturByNachKulturId?.herkunft?.nr ?? ''
     delete z.kulturByNachKulturId
     delete z.__typename
+    delete z._conflicts
+    delete z._deleted
+    delete z._depth
+    delete z._rev
+    delete z._parent_rev
+    delete z._revisions
     return z
   })
   if (auslieferungen.length) {
@@ -551,6 +568,12 @@ export default async ({ store, kultur_id, workbook, calledFromHigherUp }) => {
     z.person_name = z?.person?.name ?? ''
     delete z.person
     delete z.__typename
+    delete z._conflicts
+    delete z._deleted
+    delete z._depth
+    delete z._rev
+    delete z._parent_rev
+    delete z._revisions
     return z
   })
   if (events.length) {
