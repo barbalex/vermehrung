@@ -36,7 +36,7 @@ const Container = styled.div`
 
 const TreeContainer = () => {
   const store = useContext(StoreContext)
-  const { user, userPerson } = store
+  const { user, userPerson, artFilter, eventFilter } = store
   const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
 
@@ -46,8 +46,8 @@ const TreeContainer = () => {
   // 1. build list depending on path using react-window
   // 2. every node uses navigate to set url on click
   const variables = {
-    artFilter: queryFromTable({ store, table: 'art' }),
-    eventFilter: queryFromTable({ store, table: 'event' }),
+    artFilter,
+    eventFilter,
     gartenFilter: queryFromTable({ store, table: 'garten' }),
     kulturFilter: queryFromTable({ store, table: 'kultur' }),
     herkunftFilter: queryFromTable({ store, table: 'herkunft' }),
