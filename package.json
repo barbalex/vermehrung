@@ -12,15 +12,9 @@
     "scaffold": "mst-gql https://api.vermehrung.ch/v1/graphql"
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.5",
     "@material-ui/core": "4.10.0",
     "@material-ui/icons": "4.9.1",
     "@reach/router": "1.3.3",
-    "apollo-cache-inmemory": "1.6.6",
-    "apollo-client": "2.6.10",
-    "apollo-link": "1.2.14",
-    "apollo-link-context": "1.0.20",
-    "apollo-link-http": "1.5.17",
     "autosuggest-highlight": "3.1.1",
     "axios": "0.19.2",
     "babel-eslint": "10.1.0",
