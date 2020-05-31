@@ -140,10 +140,10 @@ export default ({ store, data, loading, role }) => {
     )(),
     ...memoizeOne(() => buildGartenFolder({ store, loading }))(),
     ...memoizeOne(() =>
-      showHerkunftFolder ? buildHerkunftFolder({ data, store, loading }) : [],
+      showHerkunftFolder ? buildHerkunftFolder({ store, loading }) : [],
     )(),
     ...memoizeOne(() =>
-      showLieferungFolder ? buildLieferungFolder({ data, store, loading }) : [],
+      showLieferungFolder ? buildLieferungFolder({ store, loading }) : [],
     )(),
     ...memoizeOne(() => buildSammelLieferungFolder({ data, store, loading }))(),
     ...memoizeOne(() =>
@@ -162,7 +162,7 @@ export default ({ store, data, loading, role }) => {
       showSammlungFolder ? buildSammlungFolder({ data, store, loading }) : [],
     )(),
     ...memoizeOne(() =>
-      showKulturFolder ? buildKulturFolder({ data, store, loading }) : [],
+      showKulturFolder ? buildKulturFolder({ store, loading }) : [],
     )(),
   ]
 
@@ -205,7 +205,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildHerkunftHerkunft({
             nodes,
-            data,
             store,
           }),
         )(),
@@ -217,7 +216,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildLieferungLieferung({
             nodes,
-            data,
             store,
           }),
         )(),
@@ -300,7 +298,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildKulturKultur({
             nodes,
-            data,
             store,
           }),
         )(),

@@ -1,7 +1,7 @@
 import moment from 'moment'
 
-export default ({ nodes, data }) => {
-  const lieferungen = data?.lieferung ?? []
+export default ({ nodes, store }) => {
+  const lieferungen = store.lieferungFiltered
 
   return (
     lieferungen
