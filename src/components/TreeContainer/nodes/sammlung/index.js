@@ -1,7 +1,7 @@
 import moment from 'moment'
 
-export default ({ nodes, data }) => {
-  const sammlungen = data?.sammlung ?? []
+export default ({ nodes, store }) => {
+  const sammlungen = store.sammlungFiltered
 
   return (
     sammlungen

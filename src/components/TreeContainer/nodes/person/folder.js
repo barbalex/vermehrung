@@ -1,5 +1,5 @@
-export default ({ data, loading }) => {
-  const personen = data?.person ?? []
+export default ({ store, loading }) => {
+  const personen = store.personFiltered
   const nr = loading && !personen.length ? '...' : personen.length
 
   return [

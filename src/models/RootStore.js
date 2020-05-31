@@ -1410,4 +1410,22 @@ export const RootStore = RootStoreBase.props({
     get lieferungFiltered() {
       return queryFromStore({ store: self, table: 'lieferung' })
     },
+    get personFilter() {
+      return queryFromTable({ store: self, table: 'person' })
+    },
+    get personFiltered() {
+      return queryFromStore({ store: self, table: 'person' })
+    },
+    get sammelLieferungFilter() {
+      return queryFromTable({ store: self, table: 'sammel_lieferung' })
+    },
+    get sammelLieferungFiltered() {
+      return queryFromStore({ store: self, table: 'sammel_lieferung' })
+    },
+    get sammlungFilter() {
+      return queryFromTable({ store: self, table: 'sammlung' })
+    },
+    get sammlungFiltered() {
+      return queryFromStore({ store: self, table: 'sammlung' })
+    },
   }))
