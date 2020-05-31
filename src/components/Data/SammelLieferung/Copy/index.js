@@ -1,6 +1,5 @@
 import React, { useContext, useCallback, useState, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -30,7 +29,6 @@ const Title = styled.div`
 const sammelLieferungFields = fieldsFromFragment(sammelLieferungFragment)
 
 const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
-  const client = useApolloClient()
   const store = useContext(StoreContext)
   const { addNotification } = store
 
@@ -60,7 +58,6 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
       await updateLieferung({
         lieferungId,
         sammelLieferung,
-        client,
         store,
       })
     } catch (error) {
@@ -70,15 +67,14 @@ const CopySammelLieferungMenu = ({ sammelLieferung, lieferungId }) => {
       message: 'Lieferung aktualisiert',
       type: 'info',
     })
-  }, [client, addNotification, lieferungId, sammelLieferung, store])
+  }, [addNotification, lieferungId, sammelLieferung, store])
   const onClickAllLieferung = useCallback(async () => {
     setAnchorEl(null)
     updateAllLieferungen({
       sammelLieferung,
-      client,
       store,
     })
-  }, [client, sammelLieferung, store])
+  }, [sammelLieferung, store])
 
   return (
     <ErrorBoundary>
