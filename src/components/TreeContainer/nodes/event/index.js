@@ -1,7 +1,7 @@
 import moment from 'moment'
 
-export default ({ nodes, data }) => {
-  const events = data?.event ?? []
+export default ({ nodes, store }) => {
+  const events = store.eventFiltered
 
   return (
     events

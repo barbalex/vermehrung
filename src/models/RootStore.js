@@ -1386,4 +1386,10 @@ export const RootStore = RootStoreBase.props({
     get eventFiltered() {
       return queryFromStore({ store: self, table: 'event' })
     },
+    get gartenFilter() {
+      return queryFromTable({ store: self, table: 'garten' })
+    },
+    get gartenFiltered() {
+      return queryFromStore({ store: self, table: 'garten' })
+    },
   }))
