@@ -1,5 +1,6 @@
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import buildExceljsWorksheetsForKultur from '../../Kultur/buildExceljsWorksheets'
+import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
 
 /**
  * this function cann be used from higher up
@@ -23,23 +24,32 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
     })
   }
   const garten = { ...gartenResult?.garten?.[0] }
-  garten.person_name = garten?.person?.name ?? ''
-  delete garten.person
-  delete garten.__typename
-  delete garten._conflicts
-  delete garten._deleted
-  delete garten._depth
-  delete garten._rev
-  delete garten._parent_rev
-  delete garten._revisions
-  delete garten.garten_files_aggregate
-  delete garten.kultur_revs
-  delete garten.kultur_revs_aggregate
-  delete garten.kulturs
+  const newGarten = {
+    id: garten.id,
+    name: garten.name,
+    person_id: garten.person_id,
+    person_name: garten?.person?.name ?? '',
+    person_rohdaten: removeMetadataFromDataset({
+      dataset: garten?.person,
+      foreignKeys: [],
+    }),
+    strasse: garten.strasse,
+    plz: garten.plz,
+    ort: garten.ort,
+    geom_point: garten.geom_point,
+    wgs84_lat: garten.wgs84_lat,
+    wgs84_long: garten.wgs84_long,
+    lv95_x: garten.lv95_x,
+    lv95_y: garten.lv95_y,
+    aktiv: garten.aktiv,
+    bemerkungen: garten.bemerkungen,
+    changed: garten.changed,
+    changed_by: garten.changed_by,
+  }
   addWorksheetToExceljsWorkbook({
     workbook,
     title: calledFromHigherUp ? `Garten_${garten_id}` : 'Garten',
-    data: [garten],
+    data: [newGarten],
   })
   // 2. Get Kulturen
   let kulturResult
