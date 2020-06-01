@@ -78,7 +78,14 @@ const Arten = ({ filter: showFilter }) => {
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
   const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
-  const filteredNr = artsFiltered.length
+
+  const { data: dataArtFilteredAggregate } = useQuery((store) =>
+    store.queryArt_aggregate({ where: artFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataArtFilteredAggregate?.art_aggregate?.aggregate?.count ?? 0
 
   const add = useCallback(() => {
     insertArtRev()

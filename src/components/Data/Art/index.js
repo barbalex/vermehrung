@@ -110,10 +110,6 @@ const Art = ({
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
-  const { data: dataArtAggregate } = useQuery((store) =>
-    store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
-  )
-
   const { error: errorArt, loading: loadingArt, query: queryOfArt } = useQuery(
     (store) => store.queryArt({ where: { id: { _eq: id } } }),
     (a) =>
@@ -123,6 +119,9 @@ const Art = ({
 
   const [errors, setErrors] = useState({})
 
+  const { data: dataArtAggregate } = useQuery((store) =>
+    store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+  )
   const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
 
   const { data: dataArtFilteredAggregate } = useQuery((store) =>
