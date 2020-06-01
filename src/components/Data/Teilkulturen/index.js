@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -63,11 +61,16 @@ function sizeReducer(state, action) {
 
 const Teilkulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertTeilkulturRev, kulturIdInActiveNodeArray } = store
+  const {
+    filter,
+    insertTeilkulturRev,
+    kulturIdInActiveNodeArray,
+    teilkultursFiltered,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const teilkulturFilter = queryFromTable({ store, table: 'teilkultur' })
+  const teilkulturFilter = { ...store.teilkulturFilter }
   if (kulturIdInActiveNodeArray) {
     teilkulturFilter.kultur_id = {
       _eq: kulturIdInActiveNodeArray,
@@ -90,14 +93,11 @@ const Teilkulturen = ({ filter: showFilter }) => {
   const totalNr =
     dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
 
-  const filterForStoreRows =
-    !showFilter && kulturIdInActiveNodeArray
-      ? { kultur_id: kulturIdInActiveNodeArray }
-      : undefined
-  const storeRowsFiltered = queryFromStore({
-    store,
-    table: 'teilkultur',
-    filter: filterForStoreRows,
+  const storeRowsFiltered = teilkultursFiltered.filter((r) => {
+    if (kulturIdInActiveNodeArray) {
+      return r.kultur_id === kulturIdInActiveNodeArray
+    }
+    return true
   })
   const filteredNr = storeRowsFiltered.length
 
