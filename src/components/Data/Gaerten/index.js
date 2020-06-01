@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -63,15 +61,19 @@ function sizeReducer(state, action) {
 
 const Gaerten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertGartenRev } = store
+  const {
+    filter,
+    insertGartenRev,
+    gartenFiltered,
+    personIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const gartenFilter = queryFromTable({ store, table: 'garten' })
-  if (activeNodeArray.includes('Personen')) {
+  const gartenFilter = { ...store.gartenFilter }
+  if (personIdInActiveNodeArray) {
     gartenFilter.person_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
+      _eq: personIdInActiveNodeArray,
     }
   }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery(
@@ -91,7 +93,12 @@ const Gaerten = ({ filter: showFilter }) => {
   )
   const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'garten' })
+  const storeRowsFiltered = gartenFiltered.filter((g) => {
+    if (personIdInActiveNodeArray) {
+      return g.person_id === personIdInActiveNodeArray
+    }
+    return true
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
