@@ -37,7 +37,7 @@ services:
       - db
       - graphql
   graphql:
-    image: 'hasura/graphql-engine:v1.2.1'
+    image: 'hasura/graphql-engine:v1.2.2'
     container_name: v_graphql
     ports:
       - '8080:8080'
@@ -50,7 +50,7 @@ services:
       - graphql-engine
       - serve
   caddy:
-    image: 'caddy/caddy:2.0.0-rc.3-alpine'
+    image: 'caddy/caddy:2.0.0-alpine'
     container_name: v_caddy
     depends_on:
       - db
