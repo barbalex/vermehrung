@@ -201,7 +201,14 @@ const SammelLieferung = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, isPrint, setIsPrint, online, userPersonOption } = store
+  const {
+    filter,
+    isPrint,
+    setIsPrint,
+    online,
+    userPersonOption,
+    sammelLieferungFilter,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const { setWidthInPercentOfScreen } = store.tree
 
@@ -236,10 +243,6 @@ const SammelLieferung = ({
   const totalNr =
     dataSammelLieferungAggregate?.sammel_lieferung_aggregate?.aggregate
       ?.count ?? 0
-  const sammelLieferungFilter = queryFromTable({
-    store,
-    table: 'sammel_lieferung',
-  })
   const { data: dataSammelLieferungFilteredAggregate } = useQuery((store) =>
     store.querySammel_lieferung_aggregate(
       { where: sammelLieferungFilter },

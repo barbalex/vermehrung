@@ -72,25 +72,29 @@ const Sammlungen = ({ filter: showFilter }) => {
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const sammlungFilter = { ...store.sammlungFilter }
+  const hierarchyFilter = {}
   if (artIdInActiveNodeArray) {
-    sammlungFilter.art_id = {
+    hierarchyFilter.art_id = {
       _eq: artIdInActiveNodeArray,
     }
   }
   if (herkunftIdInActiveNodeArray) {
-    sammlungFilter.herkunft_id = {
+    hierarchyFilter.herkunft_id = {
       _eq: herkunftIdInActiveNodeArray,
     }
   }
   if (personIdInActiveNodeArray) {
-    sammlungFilter.person_id = {
+    hierarchyFilter.person_id = {
       _eq: personIdInActiveNodeArray,
     }
   }
+  const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataSammlungAggregate } = useQuery((store) =>
-    store.querySammlung_aggregate(undefined, (d) =>
+    store.querySammlung_aggregate(aggregateVariables, (d) =>
       d.aggregate((d) => d.count),
     ),
   )

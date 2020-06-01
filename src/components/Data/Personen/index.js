@@ -75,7 +75,9 @@ const Personen = ({ filter: showFilter }) => {
   )
 
   const { data: dataPersonAggregate } = useQuery((store) =>
-    store.queryPerson_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+    store.queryPerson_aggregate({ where: personFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
   )
   const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
 
