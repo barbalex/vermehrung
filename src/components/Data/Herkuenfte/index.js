@@ -78,7 +78,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
   )
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
-    store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
+    store.queryHerkunft_aggregate(undefined, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
