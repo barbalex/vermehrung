@@ -8,7 +8,6 @@ import parse from 'autosuggest-highlight/parse'
 import moment from 'moment'
 
 import { StoreContext, useQuery } from '../../../../models/reactUtils'
-import queryFromTable from '../../../../utils/queryFromTable'
 import exists from '../../../../utils/exists'
 import filterSuggestionsQuery from './filterSuggestionsQuery'
 
@@ -73,6 +72,7 @@ const getSectionSuggestions = (section) => section.suggestions
 export default () => {
   if (typeof window === 'undefined') return null
   const store = useContext(StoreContext)
+  const { personFilter, gartenFilter, kulturFilter } = store
   const { setActiveNodeArray, addOpenNodes, widthEnforced } = store.tree
   const [val, setVal] = useState('')
 
@@ -85,9 +85,9 @@ export default () => {
     variables: {
       run: !!val,
       filter: val,
-      personFilter: queryFromTable({ store, table: 'person' }),
-      gartenFilter: queryFromTable({ store, table: 'garten' }),
-      kulturFilter: queryFromTable({ store, table: 'kultur' }),
+      personFilter,
+      gartenFilter,
+      kulturFilter,
     },
   })
 
