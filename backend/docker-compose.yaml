@@ -50,6 +50,7 @@ services:
       - graphql-engine
       - serve
   caddy:
+    # https://hub.docker.com/r/caddy/caddy/tags
     image: 'caddy/caddy:2.0.0-alpine'
     container_name: v_caddy
     depends_on:
