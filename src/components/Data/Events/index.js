@@ -63,7 +63,12 @@ function sizeReducer(state, action) {
 
 const Events = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertEventRev } = store
+  const {
+    filter,
+    insertEventRev,
+    eventFiltered,
+    kulturIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
@@ -91,7 +96,12 @@ const Events = ({ filter: showFilter }) => {
   )
   const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'event' })
+  const storeRowsFiltered = eventFiltered.filter((e) => {
+    if (kulturIdInActiveNodeArray) {
+      return e.kultur_id === kulturIdInActiveNodeArray
+    }
+    return true
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
