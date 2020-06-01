@@ -1,11 +1,12 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ data, loading, url, nodes }) => {
+export default ({ store, loading, url, nodes }) => {
   const sammlungId = url[1]
 
-  const sammlungen = data?.sammlung ?? []
-  const sammlung = sammlungen.find((p) => p.id === sammlungId)
-  const herkunft = sammlung?.herkunft
+  const sammlung = store.sammlungs.get(sammlungId) || {}
+  const herkunft = store.herkunftFiltered.find(
+    (h) => h.id === sammlung.herkunft_id,
+  )
   const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0
 
   const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
