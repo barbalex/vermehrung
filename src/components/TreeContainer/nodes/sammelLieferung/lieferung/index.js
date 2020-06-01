@@ -1,13 +1,12 @@
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, store, url }) => {
   const sammelLieferungId = url[1]
-  const sammelLieferungen = data?.sammel_lieferung ?? []
-  const sammelLieferung = sammelLieferungen.find(
-    (k) => k.id === sammelLieferungId,
+
+  const lieferungen = store.lieferungFiltered.filter(
+    (l) => l.sammel_lieferung_id === sammelLieferungId,
   )
-  const lieferungen = sammelLieferung?.lieferungs ?? []
 
   const sammelLieferungNodes = nodes.filter(
     (n) => n.parentId === `sammelLieferungFolder`,

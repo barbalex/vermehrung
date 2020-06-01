@@ -1,12 +1,11 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, store, loading }) => {
   const sammelLieferungId = url[1]
-  const sammelLieferungen = data?.sammel_lieferung ?? []
-  const sammelLieferung = sammelLieferungen.find(
-    (k) => k.id === sammelLieferungId,
+
+  const lieferungen = store.lieferungFiltered.filter(
+    (l) => l.sammel_lieferung_id === sammelLieferungId,
   )
-  const lieferungen = sammelLieferung?.lieferungs ?? []
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   const sammelLieferungNodes = nodes.filter(
