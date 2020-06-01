@@ -8,8 +8,6 @@ import ReactResizeDetector from 'react-resize-detector'
 
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
@@ -63,13 +61,13 @@ function sizeReducer(state, action) {
 
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { userPerson } = store
+  const { userPerson, personFiltered } = store
 
   const { filter, insertPersonRev } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const personFilter = queryFromTable({ store, table: 'person' })
+  const personFilter = store.personFilter
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryPerson({
       where: personFilter,
@@ -82,7 +80,7 @@ const Personen = ({ filter: showFilter }) => {
   )
   const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'person' })
+  const storeRowsFiltered = personFiltered
   const filteredNr = storeRowsFiltered.length
 
   const { user_role } = userPerson
