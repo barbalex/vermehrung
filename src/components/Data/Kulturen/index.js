@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -63,20 +61,25 @@ function sizeReducer(state, action) {
 
 const Kulturen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertKulturRev } = store
+  const {
+    filter,
+    insertKulturRev,
+    kulturFiltered,
+    gartenIdInActiveNodeArray,
+    artIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const kulturFilter = queryFromTable({ store, table: 'kultur' })
-  if (activeNodeArray.includes('Gaerten')) {
+  const kulturFilter = store.kulturFilter
+  if (gartenIdInActiveNodeArray) {
     kulturFilter.garten_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Gaerten') + 1],
+      _eq: gartenIdInActiveNodeArray,
     }
   }
-  if (activeNodeArray.includes('Arten')) {
+  if (artIdInActiveNodeArray) {
     kulturFilter.art_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Arten') + 1],
+      _eq: artIdInActiveNodeArray,
     }
   }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
@@ -101,7 +104,15 @@ const Kulturen = ({ filter: showFilter }) => {
   )
   const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'kultur' })
+  const storeRowsFiltered = kulturFiltered.filter((r) => {
+    if (gartenIdInActiveNodeArray) {
+      return r.garten_id === gartenIdInActiveNodeArray
+    }
+    if (artIdInActiveNodeArray) {
+      return r.art_id === artIdInActiveNodeArray
+    }
+    return true
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
