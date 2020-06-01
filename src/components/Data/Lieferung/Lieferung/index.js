@@ -21,7 +21,6 @@ import Date from '../../../shared/Date'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
-import queryFromTable from '../../../../utils/queryFromTable'
 import exists from '../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import {
@@ -362,12 +361,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }
   const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
-  const { data, error, loading, query: queryOfLieferung } = useQuery(
-    lieferungQuery,
-    {
-      variables: { id, isFiltered, filter: lieferungFilter },
-    },
-  )
+  const { error, loading, query: queryOfLieferung } = useQuery(lieferungQuery, {
+    variables: { id, isFiltered, filter: lieferungFilter },
+  })
 
   const {
     data: artData,
@@ -401,7 +397,15 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   )
   const totalNr =
     dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
-  const filteredNr = (data?.rowsFiltered ?? []).length
+
+  const { data: dataLieferungFilteredAggregate } = useQuery((store) =>
+    store.queryLieferung_aggregate({ where: lieferungFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataLieferungFilteredAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
+
   const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)

@@ -239,7 +239,15 @@ const Sammlung = ({
   )
   const totalNr =
     dataSammlungAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
-  const filteredNr = (data?.rowsFiltered ?? []).length
+
+  const { data: dataSammlungFilteredAggregate } = useQuery((store) =>
+    store.querySammlung_aggregate({ where: sammlungFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataSammlungFilteredAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
+
   const row = showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
