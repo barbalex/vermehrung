@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -63,25 +61,31 @@ function sizeReducer(state, action) {
 
 const Sammlungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertSammlungRev } = store
+  const {
+    filter,
+    insertSammlungRev,
+    sammlungsFiltered,
+    artIdInActiveNodeArray,
+    herkunftIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
-  if (activeNodeArray.includes('Arten')) {
+  const sammlungFilter = { ...store.sammlungFilter }
+  if (artIdInActiveNodeArray) {
     sammlungFilter.art_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Arten') + 1],
+      _eq: artIdInActiveNodeArray,
     }
   }
-  if (activeNodeArray.includes('Herkuenfte')) {
+  if (herkunftIdInActiveNodeArray) {
     sammlungFilter.herkunft_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Herkuenfte') + 1],
+      _eq: herkunftIdInActiveNodeArray,
     }
   }
-  if (activeNodeArray.includes('Personen')) {
+  if (personIdInActiveNodeArray) {
     sammlungFilter.person_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
+      _eq: personIdInActiveNodeArray,
     }
   }
 
@@ -106,7 +110,18 @@ const Sammlungen = ({ filter: showFilter }) => {
         .herkunft((h) => h.id.nr),
   )
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'sammlung' })
+  const storeRowsFiltered = sammlungsFiltered.filter((r) => {
+    if (artIdInActiveNodeArray) {
+      return r.art_id === artIdInActiveNodeArray
+    }
+    if (herkunftIdInActiveNodeArray) {
+      return r.herkunft_id === herkunftIdInActiveNodeArray
+    }
+    if (personIdInActiveNodeArray) {
+      return r.person_id === personIdInActiveNodeArray
+    }
+    return true
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
