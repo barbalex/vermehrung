@@ -111,11 +111,17 @@ const Garten = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPersonOption } = store
+  const { filter, online, userPersonOption, personIdInActiveNodeArray } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const gartenFilter = queryFromTable({ store, table: 'garten' })
+  const hierarchyFilter = {}
+  if (personIdInActiveNodeArray) {
+    hierarchyFilter.person_id = {
+      _eq: personIdInActiveNodeArray,
+    }
+  }
+  const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
 
   const { error: personError, loading: personLoading } = useQuery(
     (store) =>
@@ -127,8 +133,13 @@ const Garten = ({
 
   const [errors, setErrors] = useState({})
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataGartenAggregate } = useQuery((store) =>
-    store.queryGarten_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+    store.queryGarten_aggregate(aggregateVariables, (d) =>
+      d.aggregate((d) => d.count),
+    ),
   )
   const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
 

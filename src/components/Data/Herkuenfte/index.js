@@ -61,13 +61,12 @@ function sizeReducer(state, action) {
 
 const Herkuenfte = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertHerkunftRev, herkunftsFiltered } = store
+  const { filter, insertHerkunftRev, herkunftsFiltered, herkunftFilter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray: anaRaw } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
-  const herkunftFilter = { ...store.herkunftFilter }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryHerkunft(
       {
@@ -79,7 +78,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
   )
 
   const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
-    store.queryHerkunft_aggregate(undefined, (d) =>
+    store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
