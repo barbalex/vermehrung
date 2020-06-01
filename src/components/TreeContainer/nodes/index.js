@@ -325,7 +325,6 @@ export default ({ store, data, loading, role }) => {
           buildGartenKulturFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -497,7 +496,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildGartenKultur({
             nodes,
-            data,
             store,
             url,
           }),
@@ -754,7 +752,6 @@ export default ({ store, data, loading, role }) => {
           buildGartenKulturZaehlungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -763,7 +760,6 @@ export default ({ store, data, loading, role }) => {
           buildGartenKulturAusLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -772,7 +768,6 @@ export default ({ store, data, loading, role }) => {
           buildGartenKulturAnLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -781,7 +776,6 @@ export default ({ store, data, loading, role }) => {
           buildGartenKulturEventFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -790,7 +784,6 @@ export default ({ store, data, loading, role }) => {
           buildGartenKulturTeilkulturFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -963,7 +956,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildGartenKulturZaehlungZaehlung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -981,7 +973,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildGartenKulturLieferungAusLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -999,7 +990,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildGartenKulturLieferungAnLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1017,7 +1007,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildGartenKulturEventEvent({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1035,7 +1024,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildGartenKulturTeilkulturTeilkultur({
             nodes,
-            data,
             store,
             url,
           }),
