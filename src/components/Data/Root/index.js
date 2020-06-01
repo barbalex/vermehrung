@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 
 import Row from './Row'
 import { StoreContext, useQuery } from '../../../models/reactUtils'
-import queryFromTable from '../../../utils/queryFromTable'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -83,7 +82,20 @@ const query = gql`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { userPerson } = store
+  const {
+    userPerson,
+    artFilter,
+    eventFilter,
+    gartenFilter,
+    kulturFilter,
+    herkunftFilter,
+    personFilter,
+    sammlungFilter,
+    lieferungFilter,
+    sammelLieferungFilter,
+    teilkulturFilter,
+    zaehlungFilter,
+  } = store
 
   // eslint-disable-next-line no-unused-vars
   const { user_role } = userPerson
@@ -115,20 +127,17 @@ const Root = ({ filter: showFilter }) => {
   ]
 
   const variables = {
-    artFilter: queryFromTable({ store, table: 'art' }),
-    eventFilter: queryFromTable({ store, table: 'event' }),
-    gartenFilter: queryFromTable({ store, table: 'garten' }),
-    kulturFilter: queryFromTable({ store, table: 'kultur' }),
-    herkunftFilter: queryFromTable({ store, table: 'herkunft' }),
-    personFilter: queryFromTable({ store, table: 'person' }),
-    sammlungFilter: queryFromTable({ store, table: 'sammlung' }),
-    lieferungFilter: queryFromTable({ store, table: 'lieferung' }),
-    sammelLieferungFilter: queryFromTable({
-      store,
-      table: 'sammel_lieferung',
-    }),
-    teilkulturFilter: queryFromTable({ store, table: 'teilkultur' }),
-    zaehlungFilter: queryFromTable({ store, table: 'zaehlung' }),
+    artFilter,
+    eventFilter,
+    gartenFilter,
+    kulturFilter,
+    herkunftFilter,
+    personFilter,
+    sammlungFilter,
+    lieferungFilter,
+    sammelLieferungFilter,
+    teilkulturFilter,
+    zaehlungFilter,
   }
   const { error, loading } = useQuery(query, {
     variables,
