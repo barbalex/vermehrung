@@ -19,7 +19,6 @@ import { StoreContext, useQuery } from '../../models/reactUtils'
 import query from './query'
 import Tree from './Tree'
 import buildNodes from './nodes'
-import queryFromTable from '../../utils/queryFromTable'
 import setHasuraClaims from '../../utils/setHasuraClaims'
 import sortNodes from '../../utils/sortNodes'
 
@@ -130,13 +129,13 @@ const TreeContainer = () => {
     setRefetch(theQuery.refetch)
     if (!data && loading) {
       // fetch on first load to show loading state
-      setNodes(buildNodes({ store, data, loading, role }))
+      setNodes(buildNodes({ store, loading, role }))
     }
     // do not set nodes when data is empty
     // which happens while query is loading again
     if (!loading && data && Object.keys(data).length > 0) {
       setNodes(
-        buildNodes({ store, data, loading, role }).filter(
+        buildNodes({ store, loading, role }).filter(
           (node) => node.id !== 'loadingNode',
         ),
       )

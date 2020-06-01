@@ -114,7 +114,7 @@ import buildKulturLieferungAusLieferung from './kultur/auslieferung'
 import buildKulturEventFolder from './kultur/event/folder'
 import buildKulturEventEvent from './kultur/event'
 
-export default ({ store, data, loading, role }) => {
+export default ({ store, loading, role }) => {
   const { userPersonOption } = store
   const openNodes = store.tree.openNodes.sort(sort)
 
