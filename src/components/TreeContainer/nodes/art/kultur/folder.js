@@ -5,7 +5,7 @@ export default ({ url, nodes, store, loading }) => {
   const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
 
-  const kulturen = store.kulturFiltered.filter((k) => k.art_id === artId)
+  const kulturen = store.kultursFiltered.filter((k) => k.art_id === artId)
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   // only return if parent exists

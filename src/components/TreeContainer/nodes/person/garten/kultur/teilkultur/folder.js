@@ -5,11 +5,11 @@ export default ({ url, nodes, store, loading }) => {
   const gartenId = url[3]
   const kulturId = url[5]
 
-  const kulturen = store.kulturFiltered.filter((s) => s.garten_id === gartenId)
+  const kulturen = store.kultursFiltered.filter((s) => s.garten_id === gartenId)
   const kultur = kulturen.find((k) => k.id === kulturId)
   const tk = kultur?.kultur_option?.tk
   if (!tk) return []
-  const teilkulturen = store.teilkulturFiltered.filter(
+  const teilkulturen = store.teilkultursFiltered.filter(
     (z) => z.kultur_id === kulturId,
   )
   const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length

@@ -61,7 +61,7 @@ function sizeReducer(state, action) {
 
 const Herkuenfte = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertHerkunftRev, herkunftFiltered } = store
+  const { filter, insertHerkunftRev, herkunftsFiltered } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray: anaRaw } = store.tree
@@ -86,7 +86,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const totalNr =
     dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = herkunftFiltered
+  const storeRowsFiltered = herkunftsFiltered
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(async () => {

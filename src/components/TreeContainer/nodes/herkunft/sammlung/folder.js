@@ -9,7 +9,7 @@ export default ({ url, nodes, store, loading }) => {
     (n) => n.id === `herkunft${herkunftId}`,
   )
 
-  const sammlungen = store.sammlungFiltered.filter(
+  const sammlungen = store.sammlungsFiltered.filter(
     (s) => s.herkunft_id === herkunftId,
   )
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length

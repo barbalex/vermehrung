@@ -1,5 +1,5 @@
 export default ({ store, loading }) => {
-  const teilkulturen = store.teilkulturFiltered
+  const teilkulturen = store.teilkultursFiltered
   /*.filter(t =>
     get(t, 'kultur.kultur_option.tk'),
   )*/

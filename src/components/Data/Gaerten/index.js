@@ -64,7 +64,7 @@ const Gaerten = ({ filter: showFilter }) => {
   const {
     filter,
     insertGartenRev,
-    gartenFiltered,
+    gartensFiltered,
     personIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
@@ -93,7 +93,7 @@ const Gaerten = ({ filter: showFilter }) => {
   )
   const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = gartenFiltered.filter((g) => {
+  const storeRowsFiltered = gartensFiltered.filter((g) => {
     if (personIdInActiveNodeArray) {
       return g.person_id === personIdInActiveNodeArray
     }

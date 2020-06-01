@@ -1,5 +1,5 @@
 export default ({ loading, store }) => {
-  const events = store.eventFiltered
+  const events = store.eventsFiltered
   const nr = loading && !events.length ? '...' : events.length
 
   return [

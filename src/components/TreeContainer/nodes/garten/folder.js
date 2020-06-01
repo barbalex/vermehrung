@@ -1,5 +1,5 @@
 export default ({ loading, store }) => {
-  const gaerten = store.gartenFiltered
+  const gaerten = store.gartensFiltered
   const nr = loading && !gaerten.length ? '...' : gaerten.length
 
   return [

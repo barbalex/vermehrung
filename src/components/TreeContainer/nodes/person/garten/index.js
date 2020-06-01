@@ -3,7 +3,7 @@ import findIndex from 'lodash/findIndex'
 export default ({ nodes, store, url }) => {
   const personId = url[1]
 
-  const gaerten = store.gartenFiltered.filter((s) => s.person_id === personId)
+  const gaerten = store.gartensFiltered.filter((s) => s.person_id === personId)
 
   const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
   const personIndex = findIndex(

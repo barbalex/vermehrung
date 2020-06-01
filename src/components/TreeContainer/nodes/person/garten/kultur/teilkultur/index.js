@@ -5,7 +5,7 @@ export default ({ nodes, store, url }) => {
   const gartenId = url[3]
   const kulturId = url[5]
 
-  const teilkulturen = store.teilkulturFiltered.filter(
+  const teilkulturen = store.teilkultursFiltered.filter(
     (z) => z.kultur_id === kulturId,
   )
 

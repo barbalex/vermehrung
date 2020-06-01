@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export default ({ nodes, store }) => {
-  const events = store.eventFiltered
+  const events = store.eventsFiltered
 
   return (
     events

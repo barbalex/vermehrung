@@ -1,5 +1,5 @@
 export default ({ nodes, store }) =>
-  store.personFiltered
+  store.personsFiltered
     // only show if parent node exists
     .filter(() => nodes.map((n) => n.id).includes('personFolder'))
     .map((el) => ({

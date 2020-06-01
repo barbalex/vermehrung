@@ -5,7 +5,7 @@ export default ({ url, nodes, store, loading }) => {
   const lieferungId = url[3]
   const kulturId = url[5]
 
-  const anlieferungen = store.lieferungFiltered.filter(
+  const anlieferungen = store.lieferungsFiltered.filter(
     (z) => z.nach_kultur_id === kulturId,
   )
   const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length

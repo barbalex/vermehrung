@@ -3,11 +3,11 @@ import findIndex from 'lodash/findIndex'
 export default ({ url, nodes, store, loading }) => {
   const kulturId = url[1]
 
-  const kulturen = store.kulturFiltered
+  const kulturen = store.kultursFiltered
   const kultur = kulturen.find((k) => k.id === kulturId)
   const tk = kultur?.kultur_option?.tk
   if (!tk) return []
-  const teilkulturs = store.teilkulturFiltered.filter(
+  const teilkulturs = store.teilkultursFiltered.filter(
     (z) => z.kultur_id === kulturId,
   )
   const nr = loading && !teilkulturs.length ? '...' : teilkulturs.length

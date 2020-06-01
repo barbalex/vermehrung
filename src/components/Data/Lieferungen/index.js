@@ -64,7 +64,7 @@ const Lieferungen = ({ filter: showFilter }) => {
   const {
     filter,
     insertLieferungRev,
-    lieferungFiltered,
+    lieferungsFiltered,
     kulturIdInActiveNodeArray,
     sammelLieferungIdInActiveNodeArray,
     personIdInActiveNodeArray,
@@ -120,7 +120,7 @@ const Lieferungen = ({ filter: showFilter }) => {
   const totalNr =
     dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = lieferungFiltered.filter((r) => {
+  const storeRowsFiltered = lieferungsFiltered.filter((r) => {
     if (kulturIdInActiveNodeArray) {
       if (activeNodeArray.includes('Aus-Lieferungen')) {
         return r.von_kultur_id === kulturIdInActiveNodeArray

@@ -4,7 +4,7 @@ export default ({ store, loading, url, nodes }) => {
   const sammlungId = url[1]
 
   const sammlung = store.sammlungs.get(sammlungId) || {}
-  const herkunft = store.herkunftFiltered.find(
+  const herkunft = store.herkunftsFiltered.find(
     (h) => h.id === sammlung.herkunft_id,
   )
   const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0

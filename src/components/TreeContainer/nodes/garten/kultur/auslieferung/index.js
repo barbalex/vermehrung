@@ -4,7 +4,7 @@ import moment from 'moment'
 export default ({ nodes, store, url }) => {
   const gartenId = url[1]
   const kulturId = url[3]
-  const auslieferungen = store.lieferungFiltered.filter(
+  const auslieferungen = store.lieferungsFiltered.filter(
     (t) => t.von_kultur_id === kulturId,
   )
 

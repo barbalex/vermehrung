@@ -61,13 +61,12 @@ function sizeReducer(state, action) {
 
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { userPerson, personFiltered } = store
+  const { userPerson, personsFiltered, personFilter } = store
 
   const { filter, insertPersonRev } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const personFilter = store.personFilter
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryPerson({
       where: personFilter,
@@ -80,7 +79,7 @@ const Personen = ({ filter: showFilter }) => {
   )
   const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = personFiltered
+  const storeRowsFiltered = personsFiltered
   const filteredNr = storeRowsFiltered.length
 
   const { user_role } = userPerson

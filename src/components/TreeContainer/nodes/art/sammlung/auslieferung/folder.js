@@ -14,7 +14,7 @@ export default ({ url, nodes, store, loading }) => {
     (n) => n.id === `art${artId}Sammlung${sammlungId}`,
   )
 
-  const lieferungen = store.lieferungFiltered.filter(
+  const lieferungen = store.lieferungsFiltered.filter(
     (l) => l.von_sammlung_id === sammlungId,
   )
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length

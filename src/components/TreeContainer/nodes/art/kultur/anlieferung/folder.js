@@ -4,7 +4,7 @@ export default ({ url, nodes, store, loading }) => {
   const artId = url[1]
   const kulturId = url[3]
 
-  const arten = store.artFiltered
+  const arten = store.artsFiltered
   const art = arten.find((a) => a.id === artId)
   const kulturen = art?.kulturs ?? []
   const kultur = kulturen.find((k) => k.id === kulturId)

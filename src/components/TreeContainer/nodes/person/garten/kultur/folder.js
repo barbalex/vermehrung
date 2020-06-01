@@ -4,7 +4,7 @@ export default ({ url, nodes, store, loading }) => {
   const personId = url[1]
   const gartenId = url[3]
 
-  const kulturen = store.kulturFiltered.filter((s) => s.garten_id === gartenId)
+  const kulturen = store.kultursFiltered.filter((s) => s.garten_id === gartenId)
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
   const personNodes = nodes.filter((n) => n.parentId === 'personFolder')

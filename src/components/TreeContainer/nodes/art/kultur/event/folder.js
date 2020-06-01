@@ -3,7 +3,7 @@ import findIndex from 'lodash/findIndex'
 export default ({ url, nodes, store, loading }) => {
   const artId = url[1]
   const kulturId = url[3]
-  const events = store.eventFiltered.filter((e) => e.kultur_id === kulturId)
+  const events = store.eventsFiltered.filter((e) => e.kultur_id === kulturId)
   const nr = loading && !events.length ? '...' : events.length
 
   const artNodes = nodes.filter((n) => n.parentId === 'artFolder')

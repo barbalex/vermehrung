@@ -6,7 +6,7 @@ export default ({ url, nodes, store, loading }) => {
   const kultur = [...store.kulturs.values()].find((k) => k.id === kulturId)
   const tk = kultur?.kultur_option?.tk
   if (!tk) return []
-  const teilkulturen = store.teilkulturFiltered.filter(
+  const teilkulturen = store.teilkultursFiltered.filter(
     (t) => t.kultur_id === kulturId,
   )
   const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length

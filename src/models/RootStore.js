@@ -1401,67 +1401,67 @@ export const RootStore = RootStoreBase.props({
     get artFilter() {
       return queryFromTable({ store: self, table: 'art' })
     },
-    get artFiltered() {
+    get artsFiltered() {
       return queryFromStore({ store: self, table: 'art' })
     },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
     },
-    get eventFiltered() {
+    get eventsFiltered() {
       return queryFromStore({ store: self, table: 'event' })
     },
     get gartenFilter() {
       return queryFromTable({ store: self, table: 'garten' })
     },
-    get gartenFiltered() {
+    get gartensFiltered() {
       return queryFromStore({ store: self, table: 'garten' })
     },
     get herkunftFilter() {
       return queryFromTable({ store: self, table: 'herkunft' })
     },
-    get herkunftFiltered() {
+    get herkunftsFiltered() {
       return queryFromStore({ store: self, table: 'herkunft' })
     },
     get kulturFilter() {
       return queryFromTable({ store: self, table: 'kultur' })
     },
-    get kulturFiltered() {
+    get kultursFiltered() {
       return queryFromStore({ store: self, table: 'kultur' })
     },
     get lieferungFilter() {
       return queryFromTable({ store: self, table: 'lieferung' })
     },
-    get lieferungFiltered() {
+    get lieferungsFiltered() {
       return queryFromStore({ store: self, table: 'lieferung' })
     },
     get personFilter() {
       return queryFromTable({ store: self, table: 'person' })
     },
-    get personFiltered() {
+    get personsFiltered() {
       return queryFromStore({ store: self, table: 'person' })
     },
     get sammelLieferungFilter() {
       return queryFromTable({ store: self, table: 'sammel_lieferung' })
     },
-    get sammelLieferungFiltered() {
+    get sammelLieferungsFiltered() {
       return queryFromStore({ store: self, table: 'sammel_lieferung' })
     },
     get sammlungFilter() {
       return queryFromTable({ store: self, table: 'sammlung' })
     },
-    get sammlungFiltered() {
+    get sammlungsFiltered() {
       return queryFromStore({ store: self, table: 'sammlung' })
     },
     get teilkulturFilter() {
       return queryFromTable({ store: self, table: 'teilkultur' })
     },
-    get teilkulturFiltered() {
+    get teilkultursFiltered() {
       return queryFromStore({ store: self, table: 'teilkultur' })
     },
     get zaehlungFilter() {
       return queryFromTable({ store: self, table: 'zaehlung' })
     },
-    get zaehlungFiltered() {
+    get zaehlungsFiltered() {
       return queryFromStore({ store: self, table: 'zaehlung' })
     },
   }))

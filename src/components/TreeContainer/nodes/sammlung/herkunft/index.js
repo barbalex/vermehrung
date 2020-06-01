@@ -5,7 +5,7 @@ export default ({ nodes, store, url }) => {
   console.log('nodes, sammlung herkunft, sammlungId:', sammlungId)
 
   const sammlung = store.sammlungs.get(sammlungId) || {}
-  const herkunfts = store.herkunftFiltered.filter(
+  const herkunfts = store.herkunftsFiltered.filter(
     (h) => h.id === sammlung.herkunft_id,
   )
 

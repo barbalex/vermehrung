@@ -3,7 +3,7 @@ import findIndex from 'lodash/findIndex'
 export default ({ url, nodes, store, loading }) => {
   const personId = url[1]
 
-  const sammlungen = store.sammlungFiltered.filter(
+  const sammlungen = store.sammlungsFiltered.filter(
     (s) => s.person_id === personId,
   )
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length

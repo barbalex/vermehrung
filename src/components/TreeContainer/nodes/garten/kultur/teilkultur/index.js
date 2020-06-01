@@ -3,7 +3,7 @@ import findIndex from 'lodash/findIndex'
 export default ({ nodes, store, url }) => {
   const gartenId = url[1]
   const kulturId = url[3]
-  const teilkulturen = store.teilkulturFiltered.filter(
+  const teilkulturen = store.teilkultursFiltered.filter(
     (t) => t.kultur_id === kulturId,
   )
 

@@ -64,7 +64,7 @@ const Events = ({ filter: showFilter }) => {
   const {
     filter,
     insertEventRev,
-    eventFiltered,
+    eventsFiltered,
     kulturIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
@@ -90,7 +90,7 @@ const Events = ({ filter: showFilter }) => {
   )
   const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = eventFiltered.filter((e) => {
+  const storeRowsFiltered = eventsFiltered.filter((e) => {
     if (kulturIdInActiveNodeArray) {
       return e.kultur_id === kulturIdInActiveNodeArray
     }

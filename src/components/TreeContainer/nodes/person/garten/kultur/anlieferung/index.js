@@ -6,7 +6,7 @@ export default ({ nodes, store, url }) => {
   const gartenId = url[3]
   const kulturId = url[5]
 
-  const anlieferungen = store.lieferungFiltered.filter(
+  const anlieferungen = store.lieferungsFiltered.filter(
     (z) => z.nach_kultur_id === kulturId,
   )
 

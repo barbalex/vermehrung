@@ -64,7 +64,7 @@ const Kulturen = ({ filter: showFilter }) => {
   const {
     filter,
     insertKulturRev,
-    kulturFiltered,
+    kultursFiltered,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
   } = store
@@ -104,7 +104,7 @@ const Kulturen = ({ filter: showFilter }) => {
   )
   const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = kulturFiltered.filter((r) => {
+  const storeRowsFiltered = kultursFiltered.filter((r) => {
     if (gartenIdInActiveNodeArray) {
       return r.garten_id === gartenIdInActiveNodeArray
     }
