@@ -3,11 +3,12 @@ import moment from 'moment'
 
 import exists from '../../../../../utils/exists'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, store, url }) => {
   const personId = url[1]
-  const personen = data?.person ?? []
-  const person = personen.find((p) => p.id === personId)
-  const lieferungen = person?.lieferungs ?? []
+
+  const lieferungen = store.lieferungFiltered.filter(
+    (s) => s.person_id === personId,
+  )
 
   const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
   const personIndex = findIndex(
