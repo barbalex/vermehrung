@@ -367,7 +367,6 @@ export default ({ store, data, loading, role }) => {
           buildSammlungHerkunftFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -376,7 +375,6 @@ export default ({ store, data, loading, role }) => {
           buildSammlungAusLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -435,7 +433,6 @@ export default ({ store, data, loading, role }) => {
           buildSammelLieferungLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -555,7 +552,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungHerkunftHerkunft({
             nodes,
-            data,
             store,
             url,
           }),
@@ -572,7 +568,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -633,7 +628,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammelLieferungLieferungLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -812,7 +806,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -849,7 +842,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturKultur({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1118,7 +1110,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturZaehlungFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1127,7 +1118,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturEventFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1136,7 +1126,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturAusLieferungFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1145,7 +1134,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturAnLieferungFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1256,7 +1244,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturZaehlungZaehlung({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1276,7 +1263,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturEventEvent({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1296,7 +1282,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturAusLieferungLieferung({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1316,7 +1301,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildSammlungAusLieferungKulturAnLieferungLieferung({
             nodes,
-            data,
             store,
             url,
             loading,

@@ -374,7 +374,7 @@ const SammelLieferung = ({
   const vonKulturWerte = useMemo(
     () =>
       (vonKulturData?.kultur ?? []).map((el) => ({
-        value: el.id,
+        value: el?.id,
         label: kulturLabelFromKultur(el),
       })),
     [vonKulturData?.kultur],
@@ -382,7 +382,7 @@ const SammelLieferung = ({
   const nachKulturWerte = useMemo(
     () =>
       [nachKulturData, 'kultur', []].map((el) => ({
-        value: el.id,
+        value: el?.id,
         label: kulturLabelFromKultur(el),
       })),
     [nachKulturData],
@@ -396,7 +396,7 @@ const SammelLieferung = ({
           return true
         })
         .map((el) => ({
-          value: el.id,
+          value: el?.id,
           label: sammlungLabelFromSammlung(el),
         })),
     [row.art_id, store.sammlungs],
