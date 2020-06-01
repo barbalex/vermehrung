@@ -1,10 +1,13 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, store, url }) => {
   const sammlungId = url[1]
-  const sammlungen = data?.sammlung ?? []
-  const sammlung = sammlungen.find((p) => p.id === sammlungId)
-  const herkunft = sammlung?.herkunft
+  console.log('nodes, sammlung herkunft, sammlungId:', sammlungId)
+
+  const sammlung = store.sammlungs.get(sammlungId) || {}
+  const herkunfts = store.herkunftFiltered.filter(
+    (h) => h.id === sammlung.herkunft_id,
+  )
 
   const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
   const sammlungIndex = findIndex(
@@ -13,7 +16,7 @@ export default ({ nodes, data, url }) => {
   )
 
   return (
-    [herkunft]
+    herkunfts
       // only show if parent node exists
       .filter(() =>
         nodes.map((n) => n.id).includes(`sammlung${sammlungId}HerkunftFolder`),
