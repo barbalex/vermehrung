@@ -24,7 +24,6 @@ import {
   sammlung as sammlungFragment,
   art as artFragment,
 } from '../../../utils/fragments'
-import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import DeleteButton from './DeleteButton'
