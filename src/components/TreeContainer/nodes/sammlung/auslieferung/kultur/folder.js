@@ -1,14 +1,14 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, store, loading }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
 
-  const sammlungen = data?.sammlung ?? []
-  const sammlung = sammlungen.find((p) => p.id === sammlungId)
-  const lieferungen = sammlung?.lieferungs ?? []
-  const lieferung = lieferungen.find((p) => p.id === lieferungId)
-  const kultur = lieferung?.kulturByNachKulturId
+  const lieferung = store.lieferungs.get(lieferungId)
+  const kultur = store.kulturFiltered.find(
+    (k) => lieferung.nach_kultur_id === k.id,
+  )
+
   const nr = loading || !kultur ? 0 : 1
 
   const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
