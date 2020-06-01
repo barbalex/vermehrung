@@ -8,7 +8,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Timeline from './Timeline'
@@ -106,12 +105,11 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, tree, online } = store
+  const { filter, tree, online, artFilter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
-  const artFilter = queryFromTable({ store, table: 'art' })
   const { data: dataArtAggregate } = useQuery((store) =>
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )

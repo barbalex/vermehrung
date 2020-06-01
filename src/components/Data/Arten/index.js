@@ -9,7 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -61,11 +60,10 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertArtRev, artsFiltered } = store
+  const { filter, insertArtRev, artsFiltered, artFilter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const artFilter = queryFromTable({ store, table: 'art' })
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryArt(
       {
