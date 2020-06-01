@@ -1281,6 +1281,30 @@ export const RootStore = RootStoreBase.props({
       }
       return undefined
     },
+    get anLieferungIdInActiveNodeArray() {
+      const { activeNodeArray: aNaRaw } = self.tree
+      const activeNodeArray = aNaRaw.toJSON()
+      if (activeNodeArray.includes('An-Lieferungen')) {
+        const indexOfId = activeNodeArray.indexOf('An-Lieferungen') + 1
+        if (activeNodeArray.length > indexOfId) {
+          const id = activeNodeArray?.[indexOfId]
+          if (isUuid.v1(id)) return id
+        }
+      }
+      return undefined
+    },
+    get ausLieferungIdInActiveNodeArray() {
+      const { activeNodeArray: aNaRaw } = self.tree
+      const activeNodeArray = aNaRaw.toJSON()
+      if (activeNodeArray.includes('Aus-Lieferungen')) {
+        const indexOfId = activeNodeArray.indexOf('Aus-Lieferungen') + 1
+        if (activeNodeArray.length > indexOfId) {
+          const id = activeNodeArray?.[indexOfId]
+          if (isUuid.v1(id)) return id
+        }
+      }
+      return undefined
+    },
     get teilkulturIdInActiveNodeArray() {
       const { activeNodeArray: aNaRaw } = self.tree
       const activeNodeArray = aNaRaw.toJSON()
