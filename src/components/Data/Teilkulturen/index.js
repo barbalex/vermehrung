@@ -70,12 +70,13 @@ const Teilkulturen = ({ filter: showFilter }) => {
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const teilkulturFilter = { ...store.teilkulturFilter }
+  const hierarchyFilter = {}
   if (kulturIdInActiveNodeArray) {
-    teilkulturFilter.kultur_id = {
+    hierarchyFilter.kultur_id = {
       _eq: kulturIdInActiveNodeArray,
     }
   }
+  const teilkulturFilter = { ...store.teilkulturFilter, ...hierarchyFilter }
   const { error, loading } = useQuery(
     (store) =>
       store.queryTeilkultur({
@@ -85,8 +86,11 @@ const Teilkulturen = ({ filter: showFilter }) => {
     (t) => t.id.name,
   )
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataTeilkulturAggregate } = useQuery((store) =>
-    store.queryTeilkultur_aggregate({ where: teilkulturFilter }, (d) =>
+    store.queryTeilkultur_aggregate(aggregateVariables, (d) =>
       d.aggregate((d) => d.count),
     ),
   )

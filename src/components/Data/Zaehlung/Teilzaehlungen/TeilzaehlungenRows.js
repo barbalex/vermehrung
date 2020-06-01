@@ -13,6 +13,7 @@ const Container = styled.div`
 
 const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
   const store = useContext(StoreContext)
+
   const { loading, error } = useQuery((store) =>
     store.queryTeilzaehlung({
       where: { zaehlung_id: { _eq: zaehlungId } },

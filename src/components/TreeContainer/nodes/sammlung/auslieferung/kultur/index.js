@@ -1,6 +1,6 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ nodes, data, store, url }) => {
+export default ({ nodes, store, url }) => {
   const sammlungId = url[1]
   const lieferungId = url[3]
 
