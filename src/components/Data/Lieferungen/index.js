@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -63,37 +61,45 @@ function sizeReducer(state, action) {
 
 const Lieferungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertLieferungRev } = store
+  const {
+    filter,
+    insertLieferungRev,
+    lieferungFiltered,
+    kulturIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    sammlungIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
-  if (activeNodeArray.includes('Kulturen')) {
+  const lieferungFilter = { ...store.lieferungFilter }
+  if (kulturIdInActiveNodeArray) {
     if (activeNodeArray.includes('Aus-Lieferungen')) {
       lieferungFilter.von_kultur_id = {
-        _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
+        _eq: kulturIdInActiveNodeArray,
       }
     }
     if (activeNodeArray.includes('An-Lieferungen')) {
       lieferungFilter.nach_kultur_id = {
-        _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
+        _eq: kulturIdInActiveNodeArray,
       }
     }
   }
-  if (activeNodeArray.includes('Sammel-Lieferungen')) {
+  if (sammelLieferungIdInActiveNodeArray) {
     lieferungFilter.sammel_lieferung_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Sammel-Lieferungen') + 1],
+      _eq: sammelLieferungIdInActiveNodeArray,
     }
   }
-  if (activeNodeArray.includes('Personen')) {
+  if (personIdInActiveNodeArray) {
     lieferungFilter.person_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Personen') + 1],
+      _eq: personIdInActiveNodeArray,
     }
   }
-  if (activeNodeArray.includes('Sammlungen')) {
+  if (sammlungIdInActiveNodeArray) {
     lieferungFilter.von_sammlung_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Sammlungen') + 1],
+      _eq: sammlungIdInActiveNodeArray,
     }
   }
 
@@ -114,7 +120,26 @@ const Lieferungen = ({ filter: showFilter }) => {
   const totalNr =
     dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'lieferung' })
+  const storeRowsFiltered = lieferungFiltered.filter((r) => {
+    if (kulturIdInActiveNodeArray) {
+      if (activeNodeArray.includes('Aus-Lieferungen')) {
+        return r.von_kultur_id === kulturIdInActiveNodeArray
+      }
+      if (activeNodeArray.includes('An-Lieferungen')) {
+        return r.nach_kultur_id === kulturIdInActiveNodeArray
+      }
+    }
+    if (sammelLieferungIdInActiveNodeArray) {
+      return r.sammel_lieferung_id === sammelLieferungIdInActiveNodeArray
+    }
+    if (personIdInActiveNodeArray) {
+      return r.person_id === personIdInActiveNodeArray
+    }
+    if (sammlungIdInActiveNodeArray) {
+      return r.von_sammlung_id === sammlungIdInActiveNodeArray
+    }
+    return true
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
