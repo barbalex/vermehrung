@@ -457,7 +457,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildHerkunftSammlungFolder({
             nodes,
-            data,
             store,
             loading,
             url,
@@ -512,7 +511,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildHerkunftSammlungSammlung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -800,7 +798,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildHerkunftSammlungAusLieferungFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1058,7 +1055,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildHerkunftSammlungausLieferungLieferung({
             nodes,
-            data,
             store,
             url,
           }),

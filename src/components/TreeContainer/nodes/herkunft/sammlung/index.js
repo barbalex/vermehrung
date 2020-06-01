@@ -1,12 +1,12 @@
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, store, url }) => {
   const herkunftId = url[1]
 
-  const herkuenfte = data?.herkunft ?? []
-  const herkunft = herkuenfte.find((a) => a.id === herkunftId)
-  const sammlungen = herkunft?.sammlungs ?? []
+  const sammlungen = store.sammlungFiltered.filter(
+    (s) => s.herkunft_id === herkunftId,
+  )
 
   const herkunftNodes = nodes.filter((n) => n.parentId === 'herkunftFolder')
   const herkunftIndex =

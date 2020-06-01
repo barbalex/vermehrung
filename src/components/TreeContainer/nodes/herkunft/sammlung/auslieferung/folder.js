@@ -1,6 +1,6 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, store, loading }) => {
   const herkunftId = url[1]
   const sammlungId = url[3]
 
@@ -17,11 +17,9 @@ export default ({ url, nodes, data, loading }) => {
     (n) => n.id === `herkunft${herkunftId}Sammlung${sammlungId}`,
   )
 
-  const herkuenfte = data?.herkunft ?? []
-  const herkunft = herkuenfte.find((a) => a.id === herkunftId)
-  const sammlungen = herkunft?.sammlungs ?? []
-  const sammlung = sammlungen.find((s) => s.id === sammlungId)
-  const lieferungen = sammlung?.lieferungs ?? []
+  const lieferungen = store.lieferungFiltered.filter(
+    (l) => l.von_sammlung_id === sammlungId,
+  )
   const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
   // only return if parent exists
