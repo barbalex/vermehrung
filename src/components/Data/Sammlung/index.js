@@ -193,11 +193,33 @@ const Sammlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const {
+    filter,
+    online,
+    artIdInActiveNodeArray,
+    herkunftIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const sammlungFilter = queryFromTable({ store, table: 'sammlung' })
+  const hierarchyFilter = {}
+  if (artIdInActiveNodeArray) {
+    hierarchyFilter.art_id = {
+      _eq: artIdInActiveNodeArray,
+    }
+  }
+  if (herkunftIdInActiveNodeArray) {
+    hierarchyFilter.herkunft_id = {
+      _eq: herkunftIdInActiveNodeArray,
+    }
+  }
+  if (personIdInActiveNodeArray) {
+    hierarchyFilter.person_id = {
+      _eq: personIdInActiveNodeArray,
+    }
+  }
+  const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
   const { data, error, loading, query: queryOfSammlung } = useQuery(query, {
     variables: { id, isFiltered, filter: sammlungFilter },
   })
@@ -207,8 +229,11 @@ const Sammlung = ({
 
   const [errors, setErrors] = useState({})
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataSammlungAggregate } = useQuery((store) =>
-    store.querySammlung_aggregate(undefined, (d) =>
+    store.querySammlung_aggregate(aggregateVariables, (d) =>
       d.aggregate((d) => d.count),
     ),
   )

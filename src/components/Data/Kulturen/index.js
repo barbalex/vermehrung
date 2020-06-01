@@ -71,17 +71,18 @@ const Kulturen = ({ filter: showFilter }) => {
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const kulturFilter = store.kulturFilter
+  const hierarchyFilter = {}
   if (gartenIdInActiveNodeArray) {
-    kulturFilter.garten_id = {
+    hierarchyFilter.garten_id = {
       _eq: gartenIdInActiveNodeArray,
     }
   }
   if (artIdInActiveNodeArray) {
-    kulturFilter.art_id = {
+    hierarchyFilter.art_id = {
       _eq: artIdInActiveNodeArray,
     }
   }
+  const kulturFilter = { ...store.kulturFilter, ...hierarchyFilter }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryKultur(
       {
@@ -99,8 +100,13 @@ const Kulturen = ({ filter: showFilter }) => {
     ),
   )
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataKulturAggregate } = useQuery((store) =>
-    store.queryKultur_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+    store.queryKultur_aggregate(aggregateVariables, (d) =>
+      d.aggregate((d) => d.count),
+    ),
   )
   const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
 
