@@ -1,14 +1,12 @@
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, data, url }) => {
+export default ({ nodes, store, url }) => {
   const gartenId = url[1]
   const kulturId = url[3]
-  const gaerten = data?.garten ?? []
-  const garten = gaerten.find((a) => a.id === gartenId)
-  const kulturen = garten?.kulturs ?? []
-  const kultur = kulturen.find((k) => k.id === kulturId)
-  const auslieferungen = kultur?.lieferungsByVonKulturId ?? []
+  const auslieferungen = store.lieferungFiltered.filter(
+    (t) => t.von_kultur_id === kulturId,
+  )
 
   const gartenNodes = nodes.filter((n) => n.parentId === 'gartenFolder')
   const gartenIndex = findIndex(

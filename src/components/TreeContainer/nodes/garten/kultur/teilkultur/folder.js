@@ -1,15 +1,15 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ url, nodes, data, loading }) => {
+export default ({ url, nodes, store, loading }) => {
   const gartenId = url[1]
   const kulturId = url[3]
-  const gaerten = data?.garten ?? []
-  const garten = gaerten.find((a) => a.id === gartenId)
-  const kulturen = garten?.kulturs ?? []
+  const kulturen = store.kulturFiltered.filter((k) => k.garten_id === gartenId)
   const kultur = kulturen.find((k) => k.id === kulturId)
   const tk = kultur?.kultur_option?.tk
   if (!tk) return []
-  const teilkulturen = kultur?.teilkulturs ?? []
+  const teilkulturen = store.teilkulturFiltered.filter(
+    (t) => t.kultur_id === kulturId,
+  )
   const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
 
   const gartenNodes = nodes.filter((n) => n.parentId === 'gartenFolder')
