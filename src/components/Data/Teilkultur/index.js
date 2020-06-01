@@ -16,7 +16,6 @@ import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import queryFromStore from '../../../utils/queryFromStore'
 import Settings from './Settings'
@@ -116,15 +115,14 @@ const Teilkultur = ({
 
   const isFiltered = runIsFiltered()
   const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id) || {}
-  const teilkulturFilter = queryFromTable({
-    store,
-    table: 'teilkultur',
-  })
-  if (kulturIdInActiveNodeArray && !showFilter) {
-    teilkulturFilter.kultur_id = {
+
+  const hierarchyFilter = {}
+  if (kulturIdInActiveNodeArray) {
+    hierarchyFilter.kultur_id = {
       _eq: kulturIdInActiveNodeArray,
     }
   }
+  const teilkulturFilter = { ...store.teilkulturFilter, ...hierarchyFilter }
   const { error, loading, query: queryOfTeilkultur } = useQuery((store) =>
     store.queryTeilkultur(
       { where: { id: { _eq: id } } },
@@ -140,24 +138,24 @@ const Teilkultur = ({
 
   const [errors, setErrors] = useState({})
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataTeilkulturAggregate } = useQuery((store) =>
-    store.queryTeilkultur_aggregate({ where: teilkulturFilter }, (d) =>
+    store.queryTeilkultur_aggregate(aggregateVariables, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
   const totalNr =
     dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
 
-  const filterForStoreRows =
-    !showFilter && kulturIdInActiveNodeArray
-      ? { kultur_id: kulturIdInActiveNodeArray }
-      : undefined
-  const storeRowsFiltered = queryFromStore({
-    store,
-    table: 'teilkultur',
-    filter: filterForStoreRows,
-  })
-  const filteredNr = storeRowsFiltered.length
+  const { data: dataTeilkulturFilteredAggregate } = useQuery((store) =>
+    store.queryTeilkultur_aggregate({ where: teilkulturFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataTeilkulturFilteredAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {

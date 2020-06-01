@@ -19,7 +19,6 @@ import Date from '../../shared/Date'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import queryFromStore from '../../../utils/queryFromStore'
 import Teilzaehlungen from './Teilzaehlungen'
 import Settings from './Settings'
 import AddButton from './AddButton'
@@ -120,10 +119,19 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter, online, kulturIdInActiveNodeArray } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
+
+  const hierarchyFilter = {}
+  if (kulturIdInActiveNodeArray) {
+    hierarchyFilter.kultur_id = {
+      _eq: kulturIdInActiveNodeArray,
+    }
+  }
+  const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
+
   const { error, loading, query: queryOfZaehlung } = useQuery((store) =>
     store.queryZaehlung(
       {
@@ -142,15 +150,25 @@ const Zaehlung = ({
 
   const [errors, setErrors] = useState({})
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataZaehlungAggregate } = useQuery((store) =>
-    store.queryZaehlung_aggregate(undefined, (d) =>
+    store.queryZaehlung_aggregate(aggregateVariables, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
   const totalNr =
     dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
-  const storeRowsFiltered = queryFromStore({ store, table: 'zaehlung' })
-  const filteredNr = storeRowsFiltered.length
+
+  const { data: dataZaehlungFilteredAggregate } = useQuery((store) =>
+    store.queryZaehlung_aggregate({ where: zaehlungFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataZaehlungFilteredAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
+
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
