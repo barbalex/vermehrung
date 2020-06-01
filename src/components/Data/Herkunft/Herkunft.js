@@ -11,7 +11,6 @@ import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import DeleteButton from './DeleteButton'
@@ -75,6 +74,7 @@ const Herkunft = ({
     addQueuedQuery,
     online,
     userPersonOption,
+    herkunftFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -94,7 +94,7 @@ const Herkunft = ({
   )
   const totalNr =
     dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
-  const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
+
   const { data: dataHerkunftFilteredAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
       d.aggregate((d) => d.count),
