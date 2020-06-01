@@ -10,7 +10,6 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -62,7 +61,7 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertArtRev } = store
+  const { filter, insertArtRev, artFiltered } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
@@ -81,8 +80,7 @@ const Arten = ({ filter: showFilter }) => {
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
   const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
-  const storeRowsFiltered = queryFromStore({ store, table: 'art' })
-  const filteredNr = storeRowsFiltered.length
+  const filteredNr = artFiltered.length
 
   const add = useCallback(() => {
     insertArtRev()
@@ -143,7 +141,7 @@ const Arten = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={storeRowsFiltered.length}
+            itemCount={artFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -152,8 +150,8 @@ const Arten = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={storeRowsFiltered[index]}
-                last={index === storeRowsFiltered.length - 1}
+                row={artFiltered[index]}
+                last={index === artFiltered.length - 1}
               />
             )}
           </FixedSizeList>
