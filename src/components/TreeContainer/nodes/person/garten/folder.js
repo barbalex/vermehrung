@@ -1,10 +1,9 @@
 import findIndex from 'lodash/findIndex'
 
-export default ({ data, loading, url, nodes }) => {
+export default ({ store, loading, url, nodes }) => {
   const personId = url[1]
-  const personen = data?.person ?? []
-  const person = personen.find((p) => p.id === personId)
-  const gaerten = person?.gartens ?? []
+
+  const gaerten = store.gartenFiltered.filter((s) => s.person_id === personId)
   const nr = loading && !gaerten.length ? '...' : gaerten.length
 
   const personNodes = nodes.filter((n) => n.parentId === 'personFolder')

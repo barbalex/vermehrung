@@ -338,7 +338,6 @@ export default ({ store, data, loading, role }) => {
           buildPersonGartenFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -347,7 +346,6 @@ export default ({ store, data, loading, role }) => {
           buildPersonGartenSammlungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -356,7 +354,6 @@ export default ({ store, data, loading, role }) => {
           buildPersonGartenLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -518,7 +515,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenGarten({
             nodes,
-            data,
             store,
             url,
           }),
@@ -531,7 +527,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenSammlungSammlung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -544,7 +539,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenLieferungLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -801,7 +795,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturFolder({
             nodes,
-            data,
             store,
             url,
             loading,
@@ -1062,7 +1055,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturKultur({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1081,7 +1073,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturZaehlungFolder({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1089,7 +1080,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturEventFolder({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1097,7 +1087,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturTeilkulturFolder({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1105,7 +1094,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturAuslieferungFolder({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1113,7 +1101,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturAnlieferungFolder({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1179,7 +1166,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturZaehlungZaehlung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1198,7 +1184,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturEventEvent({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1217,7 +1202,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturTeilkulturTeilkultur({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1236,7 +1220,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturAuslieferungLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -1255,7 +1238,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildPersonGartenKulturAnlieferungLieferung({
             nodes,
-            data,
             store,
             url,
           }),
