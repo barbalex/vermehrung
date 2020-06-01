@@ -70,12 +70,13 @@ const Events = ({ filter: showFilter }) => {
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const eventFilter = { ...store.eventFilter }
+  const hierarchyFilter = {}
   if (kulturIdInActiveNodeArray) {
-    eventFilter.kultur_id = {
+    hierarchyFilter.kultur_id = {
       _eq: kulturIdInActiveNodeArray,
     }
   }
+  const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery(
     (store) =>
       store.queryEvent({
@@ -85,8 +86,13 @@ const Events = ({ filter: showFilter }) => {
     (e) => e.id.datum.beschreibung,
   )
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataEventAggregate } = useQuery((store) =>
-    store.queryEvent_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+    store.queryEvent_aggregate(aggregateVariables, (d) =>
+      d.aggregate((d) => d.count),
+    ),
   )
   const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
 

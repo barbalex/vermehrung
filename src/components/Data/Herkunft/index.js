@@ -104,7 +104,7 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, userPersonOption } = store
+  const { filter, online, userPersonOption, herkunftFilter } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -144,8 +144,6 @@ const Herkunft = ({
   )
   const totalNr =
     dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
-
-  const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
 
   const { data: dataHerkunftFilteredAggregate } = useQuery((store) =>
     store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
