@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -70,16 +68,12 @@ const Events = ({ filter: showFilter }) => {
     kulturIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const eventFilter = queryFromTable({
-    store,
-    table: 'event',
-  })
-  if (activeNodeArray.includes('Kulturen')) {
+  const eventFilter = { ...store.eventFilter }
+  if (kulturIdInActiveNodeArray) {
     eventFilter.kultur_id = {
-      _eq: activeNodeArray[activeNodeArray.indexOf('Kulturen') + 1],
+      _eq: kulturIdInActiveNodeArray,
     }
   }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery(
