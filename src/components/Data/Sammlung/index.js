@@ -219,7 +219,7 @@ const Sammlung = ({
     }
   }
   const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
-  const { data, error, loading, query: queryOfSammlung } = useQuery(query, {
+  const { error, loading, query: queryOfSammlung } = useQuery(query, {
     variables: { id, isFiltered, filter: sammlungFilter },
   })
   const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
