@@ -393,7 +393,6 @@ export default ({ store, data, loading, role }) => {
           buildKulturTeilkulturFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -402,7 +401,6 @@ export default ({ store, data, loading, role }) => {
           buildKulturZaehlungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -411,7 +409,6 @@ export default ({ store, data, loading, role }) => {
           buildKulturAnLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -420,7 +417,6 @@ export default ({ store, data, loading, role }) => {
           buildKulturAusLieferungFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -429,7 +425,6 @@ export default ({ store, data, loading, role }) => {
           buildKulturEventFolder({
             nodes,
             url,
-            data,
             store,
             loading,
           }),
@@ -596,7 +591,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildKulturZaehlungZaehlung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -613,7 +607,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildKulturTeilkulturTeilkultur({
             nodes,
-            data,
             store,
             url,
           }),
@@ -630,7 +623,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildKulturLieferungAnLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -664,7 +656,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildKulturLieferungAusLieferung({
             nodes,
-            data,
             store,
             url,
           }),
@@ -677,7 +668,6 @@ export default ({ store, data, loading, role }) => {
         ...memoizeOne(() =>
           buildKulturEventEvent({
             nodes,
-            data,
             store,
             url,
           }),
