@@ -316,7 +316,15 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!sammelLieferung?.id
   const store = useContext(StoreContext)
 
-  const { filter, online, userPersonOption } = store
+  const {
+    filter,
+    online,
+    userPersonOption,
+    kulturIdInActiveNodeArray,
+    sammelLieferungIdInActiveNodeArray,
+    personIdInActiveNodeArray,
+    sammlungIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
 
@@ -324,7 +332,36 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
-  const lieferungFilter = queryFromTable({ store, table: 'lieferung' })
+
+  const hierarchyFilter = {}
+  if (kulturIdInActiveNodeArray) {
+    if (activeNodeArray.includes('Aus-Lieferungen')) {
+      hierarchyFilter.von_kultur_id = {
+        _eq: kulturIdInActiveNodeArray,
+      }
+    }
+    if (activeNodeArray.includes('An-Lieferungen')) {
+      hierarchyFilter.nach_kultur_id = {
+        _eq: kulturIdInActiveNodeArray,
+      }
+    }
+  }
+  if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+    hierarchyFilter.sammel_lieferung_id = {
+      _eq: sammelLieferungIdInActiveNodeArray,
+    }
+  }
+  if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+    hierarchyFilter.person_id = {
+      _eq: personIdInActiveNodeArray,
+    }
+  }
+  if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+    hierarchyFilter.von_sammlung_id = {
+      _eq: sammlungIdInActiveNodeArray,
+    }
+  }
+  const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
   const { data, error, loading, query: queryOfLieferung } = useQuery(
     lieferungQuery,
     {
@@ -354,8 +391,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const [errors, setErrors] = useState({})
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataLieferungAggregate } = useQuery((store) =>
-    store.queryLieferung_aggregate(undefined, (d) =>
+    store.queryLieferung_aggregate(aggregateVariables, (d) =>
       d.aggregate((d) => d.count),
     ),
   )

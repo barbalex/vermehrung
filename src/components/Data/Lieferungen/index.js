@@ -74,34 +74,35 @@ const Lieferungen = ({ filter: showFilter }) => {
   const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const lieferungFilter = { ...store.lieferungFilter }
+  const hierarchyFilter = {}
   if (kulturIdInActiveNodeArray) {
     if (activeNodeArray.includes('Aus-Lieferungen')) {
-      lieferungFilter.von_kultur_id = {
+      hierarchyFilter.von_kultur_id = {
         _eq: kulturIdInActiveNodeArray,
       }
     }
     if (activeNodeArray.includes('An-Lieferungen')) {
-      lieferungFilter.nach_kultur_id = {
+      hierarchyFilter.nach_kultur_id = {
         _eq: kulturIdInActiveNodeArray,
       }
     }
   }
-  if (sammelLieferungIdInActiveNodeArray) {
-    lieferungFilter.sammel_lieferung_id = {
+  if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+    hierarchyFilter.sammel_lieferung_id = {
       _eq: sammelLieferungIdInActiveNodeArray,
     }
   }
-  if (personIdInActiveNodeArray) {
-    lieferungFilter.person_id = {
+  if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+    hierarchyFilter.person_id = {
       _eq: personIdInActiveNodeArray,
     }
   }
-  if (sammlungIdInActiveNodeArray) {
-    lieferungFilter.von_sammlung_id = {
+  if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+    hierarchyFilter.von_sammlung_id = {
       _eq: sammlungIdInActiveNodeArray,
     }
   }
+  const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
 
   const { error, loading } = useQuery((store) =>
     store.queryLieferung({
@@ -110,9 +111,13 @@ const Lieferungen = ({ filter: showFilter }) => {
     }),
   )
 
+  console.log('Lieferungen', { hierarchyFilter })
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataLieferungAggregate } = useQuery(
     (store) =>
-      store.queryLieferung_aggregate(undefined, (d) =>
+      store.queryLieferung_aggregate(aggregateVariables, (d) =>
         d.aggregate((d) => d.count),
       ),
     (l) => l.id.datum.anzahl_pflanzen.anzahl_auspflanzbereit.geplant,

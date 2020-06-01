@@ -132,11 +132,27 @@ const Kultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const {
+    filter,
+    online,
+    gartenIdInActiveNodeArray,
+    artIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const kulturFilter = queryFromTable({ store, table: 'kultur' })
+  const hierarchyFilter = {}
+  if (gartenIdInActiveNodeArray) {
+    hierarchyFilter.garten_id = {
+      _eq: gartenIdInActiveNodeArray,
+    }
+  }
+  if (artIdInActiveNodeArray) {
+    hierarchyFilter.art_id = {
+      _eq: artIdInActiveNodeArray,
+    }
+  }
+  const kulturFilter = { ...store.kulturFilter, ...hierarchyFilter }
   const kulturResult = useQuery(kulturQuery, {
     variables: { id, isFiltered, filter: kulturFilter },
   })
@@ -144,8 +160,13 @@ const Kultur = ({
 
   const [errors, setErrors] = useState({})
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataKulturAggregate } = useQuery((store) =>
-    store.queryKultur_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+    store.queryKultur_aggregate(aggregateVariables, (d) =>
+      d.aggregate((d) => d.count),
+    ),
   )
   const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
 
