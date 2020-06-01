@@ -72,12 +72,13 @@ const Zaehlungen = ({ filter: showFilter }) => {
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const zaehlungFilter = { ...store.zaehlungFilter }
+  const hierarchyFilter = {}
   if (kulturIdInActiveNodeArray) {
-    zaehlungFilter.kultur_id = {
+    hierarchyFilter.kultur_id = {
       _eq: kulturIdInActiveNodeArray,
     }
   }
+  const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
 
   const { error, loading } = useQuery((store) =>
     store.queryZaehlung({
@@ -86,9 +87,12 @@ const Zaehlungen = ({ filter: showFilter }) => {
     }),
   )
 
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataZaehlungAggregate } = useQuery(
     (store) =>
-      store.queryZaehlung_aggregate(undefined, (d) =>
+      store.queryZaehlung_aggregate(aggregateVariables, (d) =>
         d.aggregate((d) => d.count),
       ),
     (z) =>

@@ -243,6 +243,7 @@ const SammelLieferung = ({
   const totalNr =
     dataSammelLieferungAggregate?.sammel_lieferung_aggregate?.aggregate
       ?.count ?? 0
+
   const { data: dataSammelLieferungFilteredAggregate } = useQuery((store) =>
     store.querySammel_lieferung_aggregate(
       { where: sammelLieferungFilter },
@@ -252,6 +253,7 @@ const SammelLieferung = ({
   const filteredNr =
     dataSammelLieferungFilteredAggregate?.sammel_lieferung_aggregate?.aggregate
       ?.count ?? 0
+
   const row = showFilter
     ? filter.sammel_lieferung
     : store.sammel_lieferungs.get(id) || {}

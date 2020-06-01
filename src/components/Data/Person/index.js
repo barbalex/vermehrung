@@ -109,7 +109,7 @@ const Person = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPerson, personFilter } = store
+  const { filter, online, userPerson } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -122,7 +122,10 @@ const Person = ({
       where: { id: { _eq: id } },
     }),
   )
-  const { data: dataFiltered } = useQuery((store) =>
+
+  const hierarchyFilter = {}
+  const personFilter = { ...store.personFilter, ...hierarchyFilter }
+  useQuery((store) =>
     store.queryPerson(
       {
         where: personFilter,
@@ -142,14 +145,24 @@ const Person = ({
       })),
     [dataUserRole?.user_role],
   )
-
+  const aggregateVariables = Object.keys(hierarchyFilter).length
+    ? { where: hierarchyFilter }
+    : undefined
   const { data: dataPersonAggregate } = useQuery((store) =>
-    store.queryPerson_aggregate({ where: personFilter }, (d) =>
+    store.queryPerson_aggregate(aggregateVariables, (d) =>
       d.aggregate((d) => d.count),
     ),
   )
   const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
-  const filteredNr = (dataFiltered?.person ?? []).length
+
+  const { data: dataPersonFilteredAggregate } = useQuery((store) =>
+    store.queryPerson_aggregate({ where: personFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
+  )
+  const filteredNr =
+    dataPersonFilteredAggregate?.person_aggregate?.aggregate?.count ?? 0
+
   const row = showFilter ? filter.person : store.persons.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
