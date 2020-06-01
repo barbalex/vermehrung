@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -63,18 +61,13 @@ function sizeReducer(state, action) {
 
 const Herkuenfte = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertHerkunftRev } = store
+  const { filter, insertHerkunftRev, herkunftFiltered } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray: anaRaw } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
-  const herkunftFilter = queryFromTable({ store, table: 'herkunft' })
-  if (activeNodeArray.includes('Sammlungen')) {
-    herkunftFilter.sammlungs = {
-      id: { _eq: activeNodeArray[activeNodeArray.indexOf('Sammlungen') + 1] },
-    }
-  }
+  const herkunftFilter = { ...store.herkunftFilter }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryHerkunft(
       {
@@ -93,7 +86,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const totalNr =
     dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'herkunft' })
+  const storeRowsFiltered = herkunftFiltered
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(async () => {
