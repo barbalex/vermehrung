@@ -63,11 +63,16 @@ function sizeReducer(state, action) {
 
 const Zaehlungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertZaehlungRev, kulturIdInActiveNodeArray } = store
+  const {
+    filter,
+    insertZaehlungRev,
+    zaehlungsFiltered,
+    kulturIdInActiveNodeArray,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const zaehlungFilter = queryFromTable({ store, table: 'zaehlung' })
+  const zaehlungFilter = { ...store.zaehlungFilter }
   if (kulturIdInActiveNodeArray) {
     zaehlungFilter.kultur_id = {
       _eq: kulturIdInActiveNodeArray,
@@ -99,7 +104,12 @@ const Zaehlungen = ({ filter: showFilter }) => {
   const totalNr =
     dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'zaehlung' })
+  const storeRowsFiltered = zaehlungsFiltered.filter((r) => {
+    if (kulturIdInActiveNodeArray) {
+      return r.kultur_id === kulturIdInActiveNodeArray
+    }
+    return true
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
