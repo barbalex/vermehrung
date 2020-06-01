@@ -5,7 +5,7 @@ export default ({ url, nodes, store, loading }) => {
   const lieferungId = url[3]
   const kulturId = url[5]
 
-  const events = store.eventFiltered.filter((z) => z.kultur_id === kulturId)
+  const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
   const nr = loading && !events.length ? '...' : events.length
 
   const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')

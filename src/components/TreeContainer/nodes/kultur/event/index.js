@@ -4,7 +4,7 @@ import moment from 'moment'
 export default ({ nodes, store, url }) => {
   const kulturId = url[1]
 
-  const events = store.eventFiltered.filter((z) => z.kultur_id === kulturId)
+  const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
 
   const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
   const kulturIndex = findIndex(

@@ -18,7 +18,7 @@ export default ({ nodes, store, url }) => {
     (n) => n.id === `herkunft${herkunftId}Sammlung${sammlungId}`,
   )
 
-  const lieferungen = store.lieferungFiltered.filter(
+  const lieferungen = store.lieferungsFiltered.filter(
     (l) => l.von_sammlung_id === sammlungId,
   )
 

@@ -9,8 +9,6 @@ import ReactResizeDetector from 'react-resize-detector'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
-import queryFromTable from '../../../utils/queryFromTable'
-import queryFromStore from '../../../utils/queryFromStore'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -63,14 +61,14 @@ function sizeReducer(state, action) {
 
 const SammelLieferungen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertSammelLieferungRev } = store
+  const {
+    filter,
+    insertSammelLieferungRev,
+    sammelLieferungsFiltered,
+    sammelLieferungFilter,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
-
-  const sammelLieferungFilter = queryFromTable({
-    store,
-    table: 'sammel_lieferung',
-  })
 
   const { error, loading } = useQuery(
     (store) =>
@@ -95,8 +93,7 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     dataSammelLieferungAggregate?.sammel_lieferung_aggregate?.aggregate
       ?.count ?? 0
 
-  const storeRowsFiltered = queryFromStore({ store, table: 'sammel_lieferung' })
-  const filteredNr = storeRowsFiltered.length
+  const filteredNr = sammelLieferungsFiltered.length
 
   const add = useCallback(() => {
     insertSammelLieferungRev()
@@ -161,7 +158,7 @@ const SammelLieferungen = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={storeRowsFiltered.length}
+            itemCount={sammelLieferungsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -170,8 +167,8 @@ const SammelLieferungen = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={storeRowsFiltered[index]}
-                last={index === storeRowsFiltered.length - 1}
+                row={sammelLieferungsFiltered[index]}
+                last={index === sammelLieferungsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

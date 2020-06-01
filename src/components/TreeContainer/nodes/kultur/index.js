@@ -1,5 +1,5 @@
 export default ({ nodes, store }) => {
-  const kulturen = store.kulturFiltered
+  const kulturen = store.kultursFiltered
 
   return (
     kulturen

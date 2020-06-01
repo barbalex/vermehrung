@@ -1,5 +1,5 @@
 export default ({ loading, store }) => {
-  const arten = store.artFiltered
+  const arten = store.artsFiltered
   const nr = loading && !arten.length ? '...' : arten.length
 
   return [

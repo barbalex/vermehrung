@@ -61,7 +61,7 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertArtRev, artFiltered } = store
+  const { filter, insertArtRev, artsFiltered } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
@@ -80,7 +80,7 @@ const Arten = ({ filter: showFilter }) => {
     store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
   )
   const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
-  const filteredNr = artFiltered.length
+  const filteredNr = artsFiltered.length
 
   const add = useCallback(() => {
     insertArtRev()
@@ -141,7 +141,7 @@ const Arten = ({ filter: showFilter }) => {
           <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
           <FixedSizeList
             height={sizeState.height}
-            itemCount={artFiltered.length}
+            itemCount={artsFiltered.length}
             itemSize={singleRowHeight}
             width={sizeState.width}
           >
@@ -150,8 +150,8 @@ const Arten = ({ filter: showFilter }) => {
                 key={index}
                 style={style}
                 index={index}
-                row={artFiltered[index]}
-                last={index === artFiltered.length - 1}
+                row={artsFiltered[index]}
+                last={index === artsFiltered.length - 1}
               />
             )}
           </FixedSizeList>

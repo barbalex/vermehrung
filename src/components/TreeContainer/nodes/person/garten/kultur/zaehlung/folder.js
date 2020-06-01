@@ -5,7 +5,7 @@ export default ({ url, nodes, store, loading }) => {
   const gartenId = url[3]
   const kulturId = url[5]
 
-  const zaehlungen = store.zaehlungFiltered.filter(
+  const zaehlungen = store.zaehlungsFiltered.filter(
     (z) => z.kultur_id === kulturId,
   )
   const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length

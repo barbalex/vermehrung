@@ -1,5 +1,5 @@
 export default ({ store, loading }) => {
-  const sammlungen = store.sammlungFiltered
+  const sammlungen = store.sammlungsFiltered
   const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
   return [

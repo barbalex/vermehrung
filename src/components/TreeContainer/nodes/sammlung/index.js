@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export default ({ nodes, store }) => {
-  const sammlungen = store.sammlungFiltered
+  const sammlungen = store.sammlungsFiltered
 
   return (
     sammlungen

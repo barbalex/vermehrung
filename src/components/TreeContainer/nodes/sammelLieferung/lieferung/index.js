@@ -4,7 +4,7 @@ import moment from 'moment'
 export default ({ nodes, store, url }) => {
   const sammelLieferungId = url[1]
 
-  const lieferungen = store.lieferungFiltered.filter(
+  const lieferungen = store.lieferungsFiltered.filter(
     (l) => l.sammel_lieferung_id === sammelLieferungId,
   )
 

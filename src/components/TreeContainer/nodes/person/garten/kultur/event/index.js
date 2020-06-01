@@ -6,7 +6,7 @@ export default ({ nodes, store, url }) => {
   const gartenId = url[3]
   const kulturId = url[5]
 
-  const events = store.eventFiltered.filter((z) => z.kultur_id === kulturId)
+  const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
 
   const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
   const personIndex = findIndex(

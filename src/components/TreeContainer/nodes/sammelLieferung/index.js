@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export default ({ nodes, store }) => {
-  const sammelLieferungen = store.sammelLieferungFiltered
+  const sammelLieferungen = store.sammelLieferungsFiltered
 
   return (
     sammelLieferungen

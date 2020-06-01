@@ -1,5 +1,5 @@
 export default ({ store, loading }) => {
-  const herkuenfte = store.herkunftFiltered
+  const herkuenfte = store.herkunftsFiltered
   const nr = loading && !herkuenfte.length ? '...' : herkuenfte.length
 
   return [

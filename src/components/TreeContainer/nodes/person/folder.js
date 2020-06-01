@@ -1,5 +1,5 @@
 export default ({ store, loading }) => {
-  const personen = store.personFiltered
+  const personen = store.personsFiltered
   const nr = loading && !personen.length ? '...' : personen.length
 
   return [
