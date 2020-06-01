@@ -109,11 +109,10 @@ const Person = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPerson } = store
+  const { filter, online, userPerson, personFilter } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const personFilter = queryFromTable({ store, table: 'person' })
   const {
     error: errorPerson,
     loading: loadingPerson,
@@ -145,7 +144,9 @@ const Person = ({
   )
 
   const { data: dataPersonAggregate } = useQuery((store) =>
-    store.queryPerson_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
+    store.queryPerson_aggregate({ where: personFilter }, (d) =>
+      d.aggregate((d) => d.count),
+    ),
   )
   const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
   const filteredNr = (dataFiltered?.person ?? []).length

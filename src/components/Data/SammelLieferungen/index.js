@@ -85,8 +85,9 @@ const SammelLieferungen = ({ filter: showFilter }) => {
   )
 
   const { data: dataSammelLieferungAggregate } = useQuery((store) =>
-    store.querySammel_lieferung_aggregate(undefined, (d) =>
-      d.aggregate((d) => d.count),
+    store.querySammel_lieferung_aggregate(
+      { where: sammelLieferungFilter },
+      (d) => d.aggregate((d) => d.count),
     ),
   )
   const totalNr =
