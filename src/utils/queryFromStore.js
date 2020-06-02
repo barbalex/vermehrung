@@ -13,7 +13,11 @@ export default ({ store, table }) => {
   )
   const values = [...store[`${table}s`].values()].filter((v) => {
     if (!showDeleted) {
-      return v._deleted === false && v._conflicts.length === 0
+      // TODO:
+      // seems that sometimes rows do not have _conflicts
+      // which causes v._conflicts.length to error
+      // happened last when loading an art after emtying the cache
+      return v._deleted === false && v?._conflicts?.length === 0
     }
     return true
   })
