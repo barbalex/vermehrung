@@ -140,6 +140,8 @@ const Herkunft = ({
         changed_by: user.email,
         _parent_rev: row._rev,
         _depth: depth,
+        _conflicts: row._conflicts,
+        _deleted: field === '_deleted' ? value : row._deleted,
       }
       const rev = `${depth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
