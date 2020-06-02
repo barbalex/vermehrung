@@ -9,4 +9,5 @@ export default types.model('QueuedQuery', {
   // to refresh the data from the server
   callbackQuery: types.maybeNull(types.string, null),
   callbackQueryVariables: types.maybeNull(types.string, null),
+  refetchTree: types.optional(types.boolean, false),
 })
