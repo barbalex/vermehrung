@@ -32,6 +32,7 @@ export default ({ url, nodes, store, loading }) => {
       url: ['Arten', artId, 'Sammlungen', sammlungId, 'Aus-Lieferungen'],
       sort: [1, artIndex, 1, sammlungIndex, 1],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

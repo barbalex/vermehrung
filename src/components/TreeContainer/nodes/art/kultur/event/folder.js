@@ -29,6 +29,7 @@ export default ({ url, nodes, store, loading }) => {
       url: ['Arten', artId, 'Kulturen', kulturId, 'Events'],
       sort: [1, artIndex, 2, kulturIndex, 5],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

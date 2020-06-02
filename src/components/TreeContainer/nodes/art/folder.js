@@ -11,6 +11,7 @@ export default ({ loading, store }) => {
       url: ['Arten'],
       sort: [1],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

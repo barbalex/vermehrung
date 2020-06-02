@@ -26,6 +26,7 @@ export default ({ store, loading, url, nodes }) => {
       url: ['Sammlungen', sammlungId, 'Aus-Lieferungen'],
       sort: [3, sammlungIndex, 3],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

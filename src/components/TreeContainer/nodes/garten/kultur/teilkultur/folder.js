@@ -38,6 +38,7 @@ export default ({ url, nodes, store, loading }) => {
       url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Teilkulturen'],
       sort: [4, gartenIndex, 1, kulturIndex, 1],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

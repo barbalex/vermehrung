@@ -11,6 +11,7 @@ export default ({ store, loading }) => {
       url: ['Personen'],
       sort: [11],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }
