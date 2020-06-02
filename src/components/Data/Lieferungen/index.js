@@ -111,7 +111,6 @@ const Lieferungen = ({ filter: showFilter }) => {
     }),
   )
 
-  console.log('Lieferungen', { hierarchyFilter })
   const aggregateVariables = Object.keys(hierarchyFilter).length
     ? { where: hierarchyFilter }
     : undefined
