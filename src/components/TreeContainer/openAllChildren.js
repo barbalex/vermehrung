@@ -1,13 +1,11 @@
 import { getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
-export default ({ node: nodeRaw, store }) => {
-  const { nodes: nodesRaw, setOpenNodes, openNodes: openNodesRaw } = store.tree
+export default ({ node, store, nodes }) => {
+  const { setOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
-  const node = getSnapshot(nodeRaw)
-  const nodes = getSnapshot(nodesRaw)
 
-  const childNodes = nodes.filter(n => {
+  const childNodes = nodes.filter((n) => {
     const urlPartWithEqualLength = n.url.slice(0, node.url.length)
     return (
       isEqual(urlPartWithEqualLength, node.url) &&
@@ -15,6 +13,6 @@ export default ({ node: nodeRaw, store }) => {
     )
   })
 
-  const newOpenNodes = [...openNodes, ...childNodes.map(n => n.url)]
+  const newOpenNodes = [...openNodes, ...childNodes.map((n) => n.url)]
   setOpenNodes(newOpenNodes)
 }
