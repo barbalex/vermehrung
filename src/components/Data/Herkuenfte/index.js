@@ -93,7 +93,6 @@ const Herkuenfte = ({ filter: showFilter }) => {
 
   const storeRowsFiltered = herkunftsFiltered
   const filteredNr = storeRowsFiltered.length
-  console.log('Herkuenfte, herkunftFilter:', store.herkunftFilter)
 
   const add = useCallback(async () => {
     insertHerkunftRev()

@@ -185,7 +185,6 @@ const Herkunft = ({
       window.open(url)
     }
   }, [])
-  console.log('Herkunft', { row, deleted: row._deleted })
 
   if (loadingHerkunft) {
     return (
