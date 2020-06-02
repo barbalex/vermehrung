@@ -2,9 +2,12 @@ import isNodeOpen from './isNodeOpen'
 import openNode from './openNode'
 
 export default ({ node, store }) => {
+  const { addNotification } = store
   if (!node.url) {
-    return console.log('passsed node has no url:', node)
-    //throw new Error('passed node has no url')
+    console.log('passsed node has no url:', node)
+    return addNotification({
+      message: 'Fehler: Dem Knoten im Navigationsbaum fehlt eine url',
+    })
   }
   const { openNodes, setActiveNodeArray } = store.tree
 
