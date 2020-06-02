@@ -71,8 +71,9 @@ export const RootStore = RootStoreBase.props({
               variables,
               callbackQuery,
               callbackQueryVariables,
+              refetchTree,
             } = query
-            //console.log('executing query:', name)
+            //console.log('executing query:', { name, refetchTree })
             try {
               if (variables) {
                 yield self[name](JSON.parse(variables))
@@ -109,11 +110,12 @@ export const RootStore = RootStoreBase.props({
               try {
                 // delay to prevent app from requerying BEFORE trigger updated the winner
                 if (callbackQueryVariables) {
-                  setTimeout(
-                    () =>
-                      self[callbackQuery](JSON.parse(callbackQueryVariables)),
-                    500,
-                  )
+                  setTimeout(async () => {
+                    await self[callbackQuery](
+                      JSON.parse(callbackQueryVariables),
+                    )
+                    refetchTree && self.tree.refetch()
+                  }, 500)
                 } else {
                   setTimeout(() => self[callbackQuery](), 500)
                 }
