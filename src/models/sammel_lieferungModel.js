@@ -63,6 +63,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
         changed_by: user.email,
         _parent_rev: self._rev,
         _depth: newDepth,
+        _conflicts: self._conflicts,
         _deleted: field === '_deleted' ? value : self._deleted,
       }
       const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
@@ -75,6 +76,9 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])
+      newObject._conflicts = self._conflicts
+        ? toPgArray(self._conflicts)
+        : toPgArray([])
       addQueuedQuery({
         name: 'mutateInsert_sammel_lieferung_rev_one',
         variables: JSON.stringify({
