@@ -2,7 +2,6 @@ import findIndex from 'lodash/findIndex'
 
 export default ({ nodes, store, url }) => {
   const sammlungId = url[1]
-  console.log('nodes, sammlung herkunft, sammlungId:', sammlungId)
 
   const sammlung = store.sammlungs.get(sammlungId) || {}
   const herkunfts = store.herkunftsFiltered.filter(
