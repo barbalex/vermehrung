@@ -19,7 +19,7 @@ export {
 export const eventModel = eventModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertEventModel, tree } = store
+    const { addQueuedQuery, user, upsertEventModel } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
