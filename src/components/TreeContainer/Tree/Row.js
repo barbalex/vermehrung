@@ -360,11 +360,11 @@ const Row = ({ style, node, nodes }) => {
   }, [addNotification, node.url, store])
 
   const onClickOpenAllChildren = useCallback(() => {
-    openAllChildren({ node, openNodes, store })
-  }, [node, openNodes, store])
+    openAllChildren({ node, store, nodes })
+  }, [node, store, nodes])
   const onClickCloseAllChildren = useCallback(() => {
-    closeAllChildren({ node, openNodes, store })
-  }, [node, openNodes, store])
+    closeAllChildren({ node, store })
+  }, [node, store])
 
   // for unknows reaseon this happens momentarily when new art is created
   if (!node.url) return null
