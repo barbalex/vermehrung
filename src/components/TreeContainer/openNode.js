@@ -13,7 +13,8 @@ export default ({ node, store }) => {
   if (!node.hasChildren) return
   // now add a loading node at the right position
   // to tell the user what is going on
-  const loadingNode = {
+  // turned off 2020.06.02 because prevented new nodes from appearing
+  /*const loadingNode = {
     table: 'none',
     hasChildren: false,
     id: 'loadingNode',
@@ -24,5 +25,5 @@ export default ({ node, store }) => {
     url: [...node.url, 1],
     sort: [...node.sort, 1],
   }
-  addNode(loadingNode)
+  addNode(loadingNode)*/
 }
