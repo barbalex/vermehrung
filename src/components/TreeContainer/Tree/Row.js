@@ -223,10 +223,9 @@ const Row = ({ style, node, nodes }) => {
   const onClickNode = useCallback(() => {
     toggleNode({
       node,
-      activeNodeArray,
       store,
     })
-  }, [node, activeNodeArray, store])
+  }, [node, store])
   const onClickNodeSymbol = useCallback(() => {
     toggleNodeSymbol({ node, store })
   }, [node, store])
