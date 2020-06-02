@@ -50,8 +50,17 @@ const TreeContainer = () => {
     teilkulturFilter,
     zaehlungFilter,
   } = store
-  const { setRefetch, openNodes, nodesToAdd, setNodesToAdd } = store.tree
+  const {
+    setRefetch,
+    openNodes: openNodesRaw,
+    nodesToAdd,
+    setNodesToAdd,
+  } = store.tree
   const nodesToAddRaw = getSnapshot(nodesToAdd)
+  // need to extract pure openNodes
+  // to force node building useEffect to run
+  // when openNodes changes
+  const openNodes = getSnapshot(openNodesRaw)
 
   const { user_role: role } = userPerson
   const isGardener = role === 'gaertner'
@@ -120,27 +129,44 @@ const TreeContainer = () => {
     //isWerteListe: openNodes.some((n) => n[0] === 'Werte-Listen'),
     isGardener,
   }
-  const { data, error, loading, query: theQuery } = useQuery(query, {
+  const { data, error, loading, query: treeQuery } = useQuery(query, {
     variables,
+  })
+
+  console.log('TreeContainer', {
+    openNodes,
+    loading,
+    data,
   })
 
   const [nodes, setNodes] = useState([])
   useEffect(() => {
-    setRefetch(theQuery.refetch)
+    console.log('TreeContainer, useEffect, setting refetch')
+    setRefetch(treeQuery.refetch)
+    // do not add treeQuery.refetch as it changes on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  // TODO:
+  // this does not react to openNodes changing loading node to real node after loading
+  // because openNodes is Array, not Map!
+  useEffect(() => {
+    console.log('TreeContainer, useEffect to build nodes running')
     if (!data && loading) {
+      console.log('TreeContainer, useEffect, building nodes')
       // fetch on first load to show loading state
       setNodes(buildNodes({ store, loading, role }))
     }
     // do not set nodes when data is empty
     // which happens while query is loading again
     if (!loading && data && Object.keys(data).length > 0) {
+      console.log('TreeContainer, useEffect, building nodes')
       setNodes(
         buildNodes({ store, loading, role }).filter(
           (node) => node.id !== 'loadingNode',
         ),
       )
     }
-  }, [data, loading, theQuery.refetch, role, setRefetch, store])
+  }, [data, loading, openNodes, role, store])
   useEffect(() => {
     if (nodesToAddRaw.length) {
       setNodes([...nodes, ...nodesToAddRaw])
