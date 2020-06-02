@@ -54,7 +54,7 @@ const ArtConflict = ({
 
   const dataArray = [
     {
-      valueInRow: row?.art_ae_art.name, // this is key in row
+      valueInRow: row?.art_ae_art?.name, // this is key in row
       valueInRev: revRow?.art_rev_ae_art?.name, // this is key in rev
       label: 'Art',
     },
