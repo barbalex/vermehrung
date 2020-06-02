@@ -10,6 +10,7 @@ export default ({ node, store }) => {
 
   //  console.log('openNode opening:', node.url)
   addOpenNodes([node.url])
+  if (!node.hasChildren) return
   // now add a loading node at the right position
   // to tell the user what is going on
   const loadingNode = {
