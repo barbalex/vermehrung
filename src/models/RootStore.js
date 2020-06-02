@@ -181,7 +181,7 @@ export const RootStore = RootStoreBase.props({
         self.arts.set(val.id, val)
       },
       insertArtRev(args) {
-        const { user, addQueuedQuery, upsertArtModel, tree } = self
+        const { user, addQueuedQuery, upsertArtModel } = self
         const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
         const valuesPassed = args?.values ?? {}
 
@@ -223,7 +223,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertArtModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -265,7 +264,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertEventModel,
-          tree,
           kulturIdInActiveNodeArray,
           teilkulturIdInActiveNodeArray,
         } = self
@@ -322,7 +320,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertEventModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -343,7 +340,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertGartenModel,
-          tree,
           personIdInActiveNodeArray,
         } = self
 
@@ -400,7 +396,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertGartenModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -423,7 +418,7 @@ export const RootStore = RootStoreBase.props({
         self.herkunfts.set(val.id, val)
       },
       insertHerkunftRev(args) {
-        const { user, addQueuedQuery, upsertHerkunftModel, tree } = self
+        const { user, addQueuedQuery, upsertHerkunftModel } = self
 
         const valuesPassed = args?.values ?? {}
         const {
@@ -477,7 +472,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertHerkunftModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -504,7 +498,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertKulturModel,
-          tree,
           artIdInActiveNodeArray,
           herkunftIdInActiveNodeArray,
           gartenIdInActiveNodeArray,
@@ -562,7 +555,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertKulturModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -607,7 +599,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertLieferungModel,
-          tree,
           artIdInActiveNodeArray,
           personIdInActiveNodeArray,
           sammelLieferungIdInActiveNodeArray,
@@ -675,7 +666,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertLieferungModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -698,7 +688,7 @@ export const RootStore = RootStoreBase.props({
         self.persons.set(val.id, val)
       },
       insertPersonRev(args) {
-        const { user, addQueuedQuery, upsertPersonModel, tree } = self
+        const { user, addQueuedQuery, upsertPersonModel } = self
         const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
 
         const valuesPassed = args?.values ?? {}
@@ -756,7 +746,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertPersonModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -789,7 +778,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertSammelLieferungModel,
-          tree,
           artIdInActiveNodeArray,
           personIdInActiveNodeArray,
           sammlungIdInActiveNodeArray,
@@ -855,7 +843,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertSammelLieferungModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -876,7 +863,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertSammlungModel,
-          tree,
           artIdInActiveNodeArray,
           herkunftIdInActiveNodeArray,
           personIdInActiveNodeArray,
@@ -939,7 +925,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertSammlungModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
@@ -966,7 +951,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertTeilkulturModel,
-          tree,
           kulturIdInActiveNodeArray,
         } = self
 
@@ -1024,7 +1008,6 @@ export const RootStore = RootStoreBase.props({
         upsertTeilkulturModel(newObjectForStore)
         if (!noNavigateInTree) {
           setTimeout(() => {
-            tree.refetch() // will be unnecessary once tree consists of mst models
             const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
               ? // slice if last is uuid
                 [...activeNodeArray.slice(0, -1), id]
@@ -1115,7 +1098,6 @@ export const RootStore = RootStoreBase.props({
           user,
           addQueuedQuery,
           upsertZaehlungModel,
-          tree,
           kulturIdInActiveNodeArray,
         } = self
         const valuesPassed = args?.values ?? {}
@@ -1168,7 +1150,6 @@ export const RootStore = RootStoreBase.props({
         // optimistically update store
         upsertZaehlungModel(newObjectForStore)
         setTimeout(() => {
-          tree.refetch() // will be unnecessary once tree consists of mst models
           const newActiveNodeArray = isUuid.v1(last(activeNodeArray))
             ? // slice if last is uuid
               [...activeNodeArray.slice(0, -1), id]
