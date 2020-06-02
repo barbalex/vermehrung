@@ -18,7 +18,7 @@ export {
 export const artModel = artModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertArtModel, tree } = store
+    const { addQueuedQuery, user, upsertArtModel } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1

@@ -19,7 +19,7 @@ export {
 export const kulturModel = kulturModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertKulturModel, tree } = store
+    const { addQueuedQuery, user, upsertKulturModel } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -65,6 +65,7 @@ export const kulturModel = kulturModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      refetchTree: true,
     })
     // do not stringify revisions for store
     // as _that_ is a real array
@@ -77,12 +78,6 @@ export const kulturModel = kulturModelBase.actions((self) => ({
     delete newObjectForStore.kultur_id
     // optimistically update store
     upsertKulturModel(newObjectForStore)
-    setTimeout(() => {
-      // need to refetch data from foreign tables
-      if (['art_id', 'herkunft_id', 'garten_id'].includes(field) && value) {
-        tree.refetch()
-      }
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

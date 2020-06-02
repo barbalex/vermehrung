@@ -20,7 +20,7 @@ export {
 export const person_optionModel = person_optionModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertPersonOptionModel, tree } = store
+    const { addQueuedQuery, user, upsertPersonOptionModel } = store
 
     //console.log('store, person_optionModel:', { self, field, value })
 
