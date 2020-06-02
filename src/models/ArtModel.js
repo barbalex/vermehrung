@@ -54,6 +54,7 @@ export const artModel = artModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      refetchTree: true,
     })
     // do not stringify revisions for store
     // as _that_ is a real array
@@ -66,10 +67,6 @@ export const artModel = artModelBase.actions((self) => ({
     delete newObjectForStore.art_id
     // optimistically update store
     upsertArtModel(newObjectForStore)
-    setTimeout(() => {
-      // need to refetch because data is in foreign table
-      if (['ae_id'].includes(field)) tree.refetch()
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
