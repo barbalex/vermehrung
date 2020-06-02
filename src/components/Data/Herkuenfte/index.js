@@ -65,21 +65,26 @@ const Herkuenfte = ({ filter: showFilter }) => {
     filter,
     insertHerkunftRev,
     herkunftsFiltered,
-    herkunftFilter,
     nonDeletedFilter,
+    sammlungIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray: anaRaw } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
+  const hierarchyFilter = {}
+  if (sammlungIdInActiveNodeArray) {
+    hierarchyFilter.sammlungs = { id: { _eq: sammlungIdInActiveNodeArray } }
+  }
+  const herkunftFilter = { ...store.herkunftFilter, ...hierarchyFilter }
   const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
     store.queryHerkunft(
       {
         where: herkunftFilter,
         order_by: [{ nr: 'asc' }, { gemeinde: 'asc' }, { lokalname: 'asc' }],
       },
-      (d) => d.id.gemeinde.lokalname.nr,
+      (d) => d.id.gemeinde.lokalname.nr.sammlungs((s) => s.id),
     ),
   )
 
@@ -91,7 +96,14 @@ const Herkuenfte = ({ filter: showFilter }) => {
   const totalNr =
     dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
 
-  const storeRowsFiltered = herkunftsFiltered
+  const storeRowsFiltered = herkunftsFiltered.filter((h) => {
+    if (sammlungIdInActiveNodeArray) {
+      return (h?.sammlungs ?? [])
+        .map((s) => s.id)
+        .includes(sammlungIdInActiveNodeArray)
+    }
+    return true
+  })
   const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(async () => {
