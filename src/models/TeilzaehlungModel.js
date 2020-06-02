@@ -19,7 +19,7 @@ export {
 export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertTeilzaehlungModel, tree } = store
+    const { addQueuedQuery, user, upsertTeilzaehlungModel } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -88,9 +88,6 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     delete newObjectForStore.teilzaehlung_id
     // optimistically update store
     upsertTeilzaehlungModel(newObjectForStore)
-    setTimeout(() => {
-      if (['_deleted'].includes(field)) tree.refetch()
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

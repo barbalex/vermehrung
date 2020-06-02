@@ -97,19 +97,6 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
     delete newObjectForStore.person_id
     // optimistically update store
     upsertPersonOptionModel(newObjectForStore)
-    setTimeout(() => {
-      if (
-        [
-          'tree_kultur',
-          'tree_teilkultur',
-          'tree_zaehlung',
-          'tree_lieferung',
-          'tree_event',
-        ].includes(field)
-      ) {
-        tree.refetch()
-      }
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

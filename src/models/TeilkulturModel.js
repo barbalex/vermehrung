@@ -73,9 +73,6 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     delete newObjectForStore.teilkultur_id
     // optimistically update store
     upsertTeilkulturModel(newObjectForStore)
-    setTimeout(() => {
-      if (['_deleted'].includes(field)) tree.refetch()
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

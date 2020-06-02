@@ -10,7 +10,7 @@
  * Which can decide not to update nodes if the query is loading
  * but rather use the previous value
  */
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -50,13 +50,7 @@ const TreeContainer = () => {
     teilkulturFilter,
     zaehlungFilter,
   } = store
-  const {
-    setRefetch,
-    openNodes: openNodesRaw,
-    nodesToAdd,
-    setNodesToAdd,
-  } = store.tree
-  const nodesToAddRaw = getSnapshot(nodesToAdd)
+  const { setRefetch, openNodes: openNodesRaw } = store.tree
   // need to extract pure openNodes
   // to force node building useEffect to run
   // when openNodes changes
@@ -133,12 +127,12 @@ const TreeContainer = () => {
     variables,
   })
 
-  const [nodes, setNodes] = useState([])
   useEffect(() => {
     setRefetch(treeQuery.refetch)
     // do not add treeQuery.refetch as it changes on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  /*const [nodes, setNodes] = useState([])
   useEffect(() => {
     if (!data && loading) {
       // fetch on first load to show loading state
@@ -153,12 +147,14 @@ const TreeContainer = () => {
         ),
       )
     }
-  }, [data, loading, openNodes, role, store])
+  }, [data, loading, openNodes, role, store])*/
+  const nodes = buildNodes({ store, loading, role })
   console.log('TreeContainer rendering', {
     loading,
     openNodes,
     data,
     nodes,
+    treeQuery,
   })
   // 2020.06.02: not in use
   // because it prevented newly loaded nodes to appear

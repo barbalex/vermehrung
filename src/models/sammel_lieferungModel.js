@@ -126,8 +126,8 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
             'von_kultur_id',
             'von_sammlung_id',
             'art_id',
-            '_deleted',
-          ].includes(field)
+          ].includes(field) &&
+          value
         ) {
           tree.refetch()
         }

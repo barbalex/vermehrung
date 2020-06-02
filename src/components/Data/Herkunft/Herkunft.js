@@ -3,11 +3,8 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import md5 from 'blueimp-md5'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import toPgArray from '../../../utils/toPgArray'
-import toStringIfPossible from '../../../utils/toStringIfPossible'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
@@ -67,15 +64,7 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    user,
-    upsertHerkunftModel,
-    addQueuedQuery,
-    online,
-    userPersonOption,
-    herkunftFilter,
-  } = store
+  const { filter, online, userPersonOption, herkunftFilter } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -123,70 +112,9 @@ const Herkunft = ({
       if (showFilter) {
         return filter.setValue({ table: 'herkunft', key: field, value })
       }
-      // first build the part that will be revisioned
-      const depth = row._depth + 1
-      const newObject = {
-        id: row.id,
-        nr: field === 'nr' ? toStringIfPossible(value) : row.nr,
-        lokalname:
-          field === 'lokalname' ? toStringIfPossible(value) : row.lokalname,
-        gemeinde:
-          field === 'gemeinde' ? toStringIfPossible(value) : row.gemeinde,
-        kanton: field === 'kanton' ? toStringIfPossible(value) : row.kanton,
-        land: field === 'land' ? toStringIfPossible(value) : row.land,
-        geom_point: field === 'geom_point' ? value : row.geom_point,
-        bemerkungen:
-          field === 'bemerkungen' ? toStringIfPossible(value) : row.bemerkungen,
-        changed_by: user.email,
-        _parent_rev: row._rev,
-        _depth: depth,
-        _conflicts: row._conflicts,
-        _deleted: field === '_deleted' ? value : row._deleted,
-      }
-      const rev = `${depth}-${md5(JSON.stringify(newObject))}`
-      newObject._rev = rev
-      newObject.changed = new window.Date().toISOString()
-      const newObjectForStore = { ...newObject }
-      // convert to string as hasura does not support arrays yet
-      // https://github.com/hasura/graphql-engine/pull/2243
-      newObject._revisions = row._revisions
-        ? toPgArray([rev, ...row._revisions])
-        : toPgArray([rev])
-      // do not stringify revisions for store
-      // as _that_ is a real array
-      newObjectForStore._revisions = row._revisions
-        ? [rev, ...row._revisions]
-        : [rev]
-      addQueuedQuery({
-        name: 'mutateInsert_herkunft_rev',
-        variables: JSON.stringify({
-          objects: [newObject],
-          on_conflict: {
-            constraint: 'herkunft_rev_pkey',
-            update_columns: ['id'],
-          },
-        }),
-        callbackQuery: 'queryHerkunft',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: id } },
-        }),
-      })
-      setTimeout(() => {
-        // optimistically update store
-        upsertHerkunftModel(newObjectForStore)
-        if (['nr'].includes(field)) store.tree.refetch()
-      }, 50)
+      row.edit({ field, value })
     },
-    [
-      addQueuedQuery,
-      filter,
-      id,
-      row,
-      showFilter,
-      store.tree,
-      upsertHerkunftModel,
-      user.email,
-    ],
+    [filter, row, showFilter],
   )
   const openHerkunftDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Herkuenfte`

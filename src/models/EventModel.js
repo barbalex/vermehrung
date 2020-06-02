@@ -75,9 +75,6 @@ export const eventModel = eventModelBase.actions((self) => ({
     delete newObjectForStore.event_id
     // optimistically update store
     upsertEventModel(newObjectForStore)
-    setTimeout(() => {
-      if (['datum', 'beschreibung', '_deleted'].includes(field)) tree.refetch()
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

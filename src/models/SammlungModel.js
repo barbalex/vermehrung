@@ -85,9 +85,7 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     // optimistically update store
     upsertSammlungModel(newObjectForStore)
     setTimeout(() => {
-      if (
-        ['herkunft_id', 'person_id', 'art_id', 'nr', '_deleted'].includes(field)
-      ) {
+      if (['herkunft_id', 'person_id', 'art_id'].includes(field) && value) {
         tree.refetch()
       }
     }, 50)

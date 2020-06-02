@@ -94,13 +94,10 @@ export const lieferungModel = lieferungModelBase.actions((self) => ({
     // optimistically update store
     upsertLieferungModel(newObjectForStore)
     if (
-      [
-        'nach_kultur_id',
-        'von_kultur_id',
-        'von_sammlung_id',
-        'art_id',
-        '_deleted',
-      ].includes(field)
+      ['nach_kultur_id', 'von_kultur_id', 'von_sammlung_id', 'art_id'].includes(
+        field,
+      ) &&
+      value
     ) {
       tree.refetch()
     }
