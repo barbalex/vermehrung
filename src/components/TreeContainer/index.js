@@ -123,7 +123,7 @@ const TreeContainer = () => {
     //isWerteListe: openNodes.some((n) => n[0] === 'Werte-Listen'),
     isGardener,
   }
-  const { data, error, loading, query: treeQuery } = useQuery(query, {
+  const { error, loading, query: treeQuery } = useQuery(query, {
     variables,
   })
 

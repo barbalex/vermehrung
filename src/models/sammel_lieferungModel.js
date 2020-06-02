@@ -23,7 +23,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
   (self) => ({
     edit({ field, value }) {
       const store = getParent(self, 2)
-      const { addQueuedQuery, user, upsertSammelLieferungModel, tree } = store
+      const { addQueuedQuery, user, upsertSammelLieferungModel } = store
 
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
@@ -88,6 +88,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
         callbackQueryVariables: JSON.stringify({
           where: { id: { _eq: self.id } },
         }),
+        refetchTree: true,
       })
       // do not stringify revisions for store
       // as _that_ is a real array
@@ -119,17 +120,6 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
             sammelLieferung: newObject,
             store,
           })
-        }
-        if (
-          [
-            'nach_kultur_id',
-            'von_kultur_id',
-            'von_sammlung_id',
-            'art_id',
-          ].includes(field) &&
-          value
-        ) {
-          tree.refetch()
         }
       }, 50)
     },

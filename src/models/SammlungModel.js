@@ -19,7 +19,7 @@ export {
 export const sammlungModel = sammlungModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertSammlungModel, tree } = store
+    const { addQueuedQuery, user, upsertSammlungModel } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -72,6 +72,7 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      refetchTree: true,
     })
     // do not stringify revisions for store
     // as _that_ is a real array
@@ -84,11 +85,6 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     delete newObjectForStore.sammlung_id
     // optimistically update store
     upsertSammlungModel(newObjectForStore)
-    setTimeout(() => {
-      if (['herkunft_id', 'person_id', 'art_id'].includes(field) && value) {
-        tree.refetch()
-      }
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
