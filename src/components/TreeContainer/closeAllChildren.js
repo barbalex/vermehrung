@@ -1,12 +1,9 @@
-import { getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
-export default ({ node: nodeRaw, store }) => {
-  const { setOpenNodes, openNodes: openNodesRaw } = store.tree
-  const openNodes = getSnapshot(openNodesRaw)
-  const node = getSnapshot(nodeRaw)
+export default ({ node, store }) => {
+  const { setOpenNodes, openNodes } = store.tree
 
-  const newOpenNodes = openNodes.filter(n => {
+  const newOpenNodes = openNodes.filter((n) => {
     const urlPartWithEqualLength = n.slice(0, node.url.length)
     return !(
       isEqual(urlPartWithEqualLength, node.url) && n.length >= node.url.length
