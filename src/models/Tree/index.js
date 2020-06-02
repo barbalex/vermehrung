@@ -6,22 +6,18 @@ import Node from './Node'
 
 export default types
   .model('Tree', {
-    activeNodeArray: types.optional(
+    activeNodeArray: types.array(types.union(types.string, types.number)),
+    openNodes: types.array(
       types.array(types.union(types.string, types.number)),
-      [],
     ),
-    openNodes: types.optional(
-      types.array(types.array(types.union(types.string, types.number))),
-      [],
-    ),
-    nodesToAdd: types.optional(types.array(Node), []),
+    nodesToAdd: types.array(Node),
     widthInPercentOfScreen: types.optional(types.number, 33),
     widthEnforced: types.maybeNull(types.number, null),
   })
   .volatile(() => ({
     refetch: () => {},
   }))
-  .actions(self => ({
+  .actions((self) => ({
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
     },
@@ -52,9 +48,9 @@ export default types
       self.refetch = func
     },
   }))
-  .views(self => ({
+  .views((self) => ({
     get activeNode() {
-      return self.nodes.find(n => isEqual(n.url, self.activeNodeArray))
+      return self.nodes.find((n) => isEqual(n.url, self.activeNodeArray))
     },
   }))
 
