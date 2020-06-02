@@ -1468,4 +1468,9 @@ export const RootStore = RootStoreBase.props({
     get zaehlungsFiltered() {
       return queryFromStore({ store: self, table: 'zaehlung' })
     },
+    get nonDeletedFilter() {
+      return {
+        _and: [{ _deleted: { _eq: false } }, { _conflicts: { _eq: '{}' } }],
+      }
+    },
   }))
