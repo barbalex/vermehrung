@@ -1,7 +1,7 @@
 import types from '../models/Filter/simpleTypes'
 
 export default ({ store, table, filter: filterPassed = {} }) => {
-  const { filter: storeFilter } = store
+  const { filter: storeFilter, showDeleted } = store
   const filter = { ...{ id: { _is_null: false } }, ...filterPassed }
 
   if (!storeFilter[table]) return filter
@@ -20,6 +20,16 @@ export default ({ store, table, filter: filterPassed = {} }) => {
       filter[key] = { _eq: value }
     }
   })
+
+  if (!showDeleted) {
+    // filtering for empty array, see: https://stackoverflow.com/a/737678/712005
+    filter._and = [{ _deleted: { _eq: false } }, { _conflicts: { _eq: '{}' } }]
+  }
+
+  // remove id: {_is_null: false} if there are more criteria
+  if (Object.keys(filter).length > 1) {
+    delete filter.id
+  }
 
   return filter
 }

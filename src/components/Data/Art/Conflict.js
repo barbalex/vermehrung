@@ -86,6 +86,7 @@ const ArtConflict = ({
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
+      _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -108,6 +109,7 @@ const ArtConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
+    revRow._deleted,
     revRow.ae_id,
     revRow.art_id,
     row._depth,

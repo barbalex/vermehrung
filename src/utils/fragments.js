@@ -17,6 +17,7 @@ export const art = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const artQk = gql`
@@ -82,6 +83,7 @@ export const event = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const garten = gql`
@@ -111,6 +113,7 @@ export const garten = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const garten_rev = gql`
@@ -137,6 +140,7 @@ export const garten_rev = gql`
     _parent_rev
     _revisions
     _depth
+    _conflicts
     _deleted
   }
 `
@@ -234,6 +238,7 @@ export const herkunft = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const herkunftFile = gql`
@@ -266,6 +271,7 @@ export const kultur = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const kulturQk = gql`
@@ -318,6 +324,7 @@ export const kulturOption = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const lieferung = gql`
@@ -346,6 +353,7 @@ export const lieferung = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const lieferungFile = gql`
@@ -387,6 +395,7 @@ export const person = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const personOption = gql`
@@ -419,6 +428,7 @@ export const personOption = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const personFile = gql`
@@ -455,6 +465,7 @@ export const sammelLieferung = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const sammlung = gql`
@@ -483,6 +494,7 @@ export const sammlung = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const sammlungFile = gql`
@@ -513,6 +525,7 @@ export const teilkultur = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const teilzaehlung = gql`
@@ -534,6 +547,7 @@ export const teilzaehlung = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const user_role = gql`
@@ -560,6 +574,7 @@ export const zaehlung = gql`
     _revisions
     _depth
     _conflicts
+    _deleted
   }
 `
 export const artSums = gql`

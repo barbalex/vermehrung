@@ -125,6 +125,7 @@ const GartenConflict = ({
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
+      _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -148,6 +149,7 @@ const GartenConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
+    revRow._deleted,
     revRow.aktiv,
     revRow.bemerkungen,
     revRow.garten_id,

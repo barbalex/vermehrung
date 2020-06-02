@@ -161,6 +161,7 @@ const KulturConflict = ({
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
+      _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -184,6 +185,7 @@ const KulturConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
+    revRow._deleted,
     revRow.aktiv,
     revRow.art_id,
     revRow.bemerkungen,
