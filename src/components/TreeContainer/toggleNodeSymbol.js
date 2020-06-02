@@ -8,7 +8,7 @@ export default ({ node, store }) => {
   if (!node.url) {
     console.log('passsed node has no url:', node)
     return addNotification({
-      message: 'Fehler: Dem Knoten im Navigationsbaum fehlt eine url',
+      message: 'Fehler: Dem Knoten im Navigationsbaum fehlt die url',
     })
   }
   const { setOpenNodes, addOpenNodes, openNodes: openNodesRaw } = store.tree

@@ -78,7 +78,8 @@ export const kulturModel = kulturModelBase.actions((self) => ({
     // optimistically update store
     upsertKulturModel(newObjectForStore)
     setTimeout(() => {
-      if (['art_id', 'herkunft_id', 'garten_id', '_deleted'].includes(field)) {
+      // need to refetch data from foreign tables
+      if (['art_id', 'herkunft_id', 'garten_id'].includes(field) && value) {
         tree.refetch()
       }
     }, 50)

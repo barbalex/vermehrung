@@ -71,9 +71,6 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     upsertZaehlungModel(newObjectForStore)
-    setTimeout(() => {
-      if (['nr', '_deleted'].includes(field)) tree.refetch()
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

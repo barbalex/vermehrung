@@ -67,7 +67,8 @@ export const artModel = artModelBase.actions((self) => ({
     // optimistically update store
     upsertArtModel(newObjectForStore)
     setTimeout(() => {
-      if (['ae_id', '_deleted'].includes(field)) tree.refetch()
+      // need to refetch because data is in foreign table
+      if (['ae_id'].includes(field)) tree.refetch()
     }, 50)
   },
   delete() {

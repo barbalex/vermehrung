@@ -19,7 +19,7 @@ export {
 export const gartenModel = gartenModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertGartenModel, tree } = store
+    const { addQueuedQuery, user, upsertGartenModel } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -75,9 +75,6 @@ export const gartenModel = gartenModelBase.actions((self) => ({
     delete newObjectForStore.garten_id
     // optimistically update store
     upsertGartenModel(newObjectForStore)
-    setTimeout(() => {
-      if (['name', '_deleted'].includes(field)) tree.refetch()
-    }, 50)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
