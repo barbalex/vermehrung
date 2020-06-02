@@ -235,6 +235,8 @@ const SammelLieferungConflict = ({
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
+      _conflicts: [],
+      _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
@@ -258,6 +260,7 @@ const SammelLieferungConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
+    revRow._deleted,
     revRow.andere_menge,
     revRow.anzahl_auspflanzbereit,
     revRow.anzahl_pflanzen,

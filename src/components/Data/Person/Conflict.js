@@ -178,6 +178,7 @@ const PersonConflict = ({
       aktiv: revRow.aktiv,
       _parent_rev: row._rev,
       _depth: newDepth,
+      _conflicts: [],
       _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
@@ -202,6 +203,7 @@ const PersonConflict = ({
   }, [
     addNotification,
     callbackAfterUebernehmen,
+    revRow._deleted,
     revRow.account_id,
     revRow.adresszusatz,
     revRow.aktiv,
