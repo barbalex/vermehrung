@@ -133,33 +133,20 @@ const TreeContainer = () => {
     variables,
   })
 
-  console.log('TreeContainer', {
-    openNodes,
-    loading,
-    data,
-  })
-
   const [nodes, setNodes] = useState([])
   useEffect(() => {
-    console.log('TreeContainer, useEffect, setting refetch')
     setRefetch(treeQuery.refetch)
     // do not add treeQuery.refetch as it changes on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  // TODO:
-  // this does not react to openNodes changing loading node to real node after loading
-  // because openNodes is Array, not Map!
   useEffect(() => {
-    console.log('TreeContainer, useEffect to build nodes running')
     if (!data && loading) {
-      console.log('TreeContainer, useEffect, building nodes')
       // fetch on first load to show loading state
       setNodes(buildNodes({ store, loading, role }))
     }
     // do not set nodes when data is empty
     // which happens while query is loading again
     if (!loading && data && Object.keys(data).length > 0) {
-      console.log('TreeContainer, useEffect, building nodes')
       setNodes(
         buildNodes({ store, loading, role }).filter(
           (node) => node.id !== 'loadingNode',
@@ -167,12 +154,14 @@ const TreeContainer = () => {
       )
     }
   }, [data, loading, openNodes, role, store])
-  useEffect(() => {
+  // 2020.06.02: not in use
+  // because it prevented newly loaded nodes to appear
+  /*useEffect(() => {
     if (nodesToAddRaw.length) {
       setNodes([...nodes, ...nodesToAddRaw])
       setNodesToAdd([])
     }
-  }, [nodes, nodesToAddRaw, setNodesToAdd])
+  }, [nodes, nodesToAddRaw, setNodesToAdd])*/
 
   const nodesSorted = useMemo(() => sortNodes(nodes), [nodes])
 
