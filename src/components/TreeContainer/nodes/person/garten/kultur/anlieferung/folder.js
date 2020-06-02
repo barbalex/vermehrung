@@ -57,6 +57,7 @@ export default ({ url, nodes, store, loading }) => {
       ],
       sort: [11, personIndex, 2, gartenIndex, 1, kulturIndex, 3],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

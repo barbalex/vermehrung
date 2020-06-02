@@ -11,6 +11,7 @@ export default ({ store, loading }) => {
       url: ['Lieferungen'],
       sort: [8],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

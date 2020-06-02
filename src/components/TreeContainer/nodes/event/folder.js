@@ -11,6 +11,7 @@ export default ({ loading, store }) => {
       url: ['Events'],
       sort: [10],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

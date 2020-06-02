@@ -24,6 +24,7 @@ export default ({ url, nodes, store, loading }) => {
       url: ['Kulturen', kulturId, 'Events'],
       sort: [5, kulturIndex, 5],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

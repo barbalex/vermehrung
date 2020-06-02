@@ -207,7 +207,13 @@ const Row = ({ style, node, nodes }) => {
   let useSymbolIcon = true
   let useSymbolSpan = false
   let symbolIcon
-  if (node.hasChildren && nodeIsOpen) {
+  if (
+    node.hasChildren &&
+    nodeIsOpen &&
+    // If is folder: only open if childrenCount is > 0
+    ((node.nodeType === 'folder' && node.childrenCount) ||
+      node.nodeType !== 'folder')
+  ) {
     symbolIcon = 'expandMore'
   } else if (node.hasChildren) {
     symbolIcon = 'chevronRight'

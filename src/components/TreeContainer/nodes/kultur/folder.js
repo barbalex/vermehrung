@@ -11,6 +11,7 @@ export default ({ store, loading }) => {
       url: ['Kulturen'],
       sort: [5],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

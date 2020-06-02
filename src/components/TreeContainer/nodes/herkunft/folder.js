@@ -11,6 +11,7 @@ export default ({ store, loading }) => {
       url: ['Herkuenfte'],
       sort: [2],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

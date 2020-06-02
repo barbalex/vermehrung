@@ -29,6 +29,7 @@ export default ({ url, nodes, store, loading }) => {
       url: ['Sammel-Lieferungen', sammelLieferungId, 'Lieferungen'],
       sort: [9, sammelLieferungIndex, 3],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

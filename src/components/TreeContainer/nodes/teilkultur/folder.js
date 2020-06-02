@@ -15,6 +15,7 @@ export default ({ store, loading }) => {
       url: ['Teilkulturen'],
       sort: [6],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }

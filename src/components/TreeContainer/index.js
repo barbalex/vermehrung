@@ -154,6 +154,12 @@ const TreeContainer = () => {
       )
     }
   }, [data, loading, openNodes, role, store])
+  console.log('TreeContainer rendering', {
+    loading,
+    openNodes,
+    data,
+    nodes,
+  })
   // 2020.06.02: not in use
   // because it prevented newly loaded nodes to appear
   /*useEffect(() => {

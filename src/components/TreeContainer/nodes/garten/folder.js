@@ -11,6 +11,7 @@ export default ({ loading, store }) => {
       url: ['Gaerten'],
       sort: [4],
       hasChildren: true,
+      childrenCount: nr,
     },
   ]
 }
