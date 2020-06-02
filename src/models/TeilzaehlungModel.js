@@ -51,7 +51,6 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
       changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
-      _conflicts: self._conflicts,
       _deleted: field === '_deleted' ? value : self._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
@@ -64,9 +63,6 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-    newObject._conflicts = self._conflicts
-      ? toPgArray(self._conflicts)
-      : toPgArray([])
     addQueuedQuery({
       name: 'mutateInsert_teilzaehlung_rev_one',
       variables: JSON.stringify({
@@ -86,6 +82,7 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     newObjectForStore._revisions = self._revisions
       ? [rev, ...self._revisions]
       : [rev]
+    newObjectForStore._conflicts = self._conflicts
     // for store: convert rev to winner
     newObjectForStore.id = self.id
     delete newObjectForStore.teilzaehlung_id
