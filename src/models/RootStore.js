@@ -36,6 +36,7 @@ export const RootStore = RootStoreBase.props({
   // until hasura claims have been added
   // this is _after_ user is set so need another variable
   authorizing: types.optional(types.boolean, true),
+  showDeleted: types.optional(types.boolean, false),
 })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -136,6 +137,9 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      setShowDeleted(val) {
+        self.showDeleted = val
+      },
       removeQueuedQueryById(id) {
         self.queuedQueries.delete(id)
       },
