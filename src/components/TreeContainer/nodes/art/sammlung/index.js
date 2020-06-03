@@ -2,6 +2,7 @@ import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, store, url }) => {
+  if (!store.tree.showArt) return []
   const artId = url[1]
   const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
   const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
