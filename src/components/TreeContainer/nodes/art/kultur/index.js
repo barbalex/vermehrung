@@ -1,5 +1,3 @@
-import sortBy from 'lodash/sortBy'
-
 export default ({ store }) => {
   const { showArt, visibleOpenNodes, artArt } = store.tree
   if (!showArt) return []
@@ -13,7 +11,8 @@ export default ({ store }) => {
     const artId = node[1]
     const artIndex = artArt.findIndex((a) => a.id === artId)
     const kulturen = store.kultursFiltered.filter((k) => k.art_id === artId)
-    const nodes = kulturen
+
+    return kulturen
       .map((el) => {
         const garten =
           el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`
@@ -35,6 +34,5 @@ export default ({ store }) => {
         el.sort = [1, artIndex, 2, index]
         return el
       })
-    return sortBy(nodes, 'sort')
   })
 }
