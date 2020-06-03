@@ -2,6 +2,7 @@ import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, store, url }) => {
+  if (!store.tree.showArt) return []
   const artId = url[1]
   const kulturId = url[3]
 
