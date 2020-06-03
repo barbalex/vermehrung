@@ -116,6 +116,7 @@ import buildKulturEventEvent from './kultur/event'
 
 export default ({ store, loading, role }) => {
   const { userPersonOption } = store
+  const { artFolderNode } = store.tree
   const openNodes = store.tree.openNodes.sort(sort)
 
   const {
@@ -135,9 +136,7 @@ export default ({ store, loading, role }) => {
   const showEventFolder = tree_event
 
   let nodes = [
-    ...memoizeOne(() =>
-      showArtFolder ? buildArtFolder({ store, loading }) : [],
-    )(),
+    ...(showArtFolder ? artFolderNode : []),
     ...memoizeOne(() => buildGartenFolder({ store, loading }))(),
     ...memoizeOne(() =>
       showHerkunftFolder ? buildHerkunftFolder({ store, loading }) : [],

@@ -1,8 +1,10 @@
-import { types } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import { navigate } from '@reach/router'
 
 import Node from './Node'
+import buildNodes from '../../components/TreeContainer/nodes'
+import buildArtFolderNode from '../../components/TreeContainer/nodes/art/folder'
 
 export default types
   .model('Tree', {
@@ -13,6 +15,7 @@ export default types
     nodesToAdd: types.array(Node),
     widthInPercentOfScreen: types.optional(types.number, 33),
     widthEnforced: types.maybeNull(types.number, null),
+    loading: types.optional(types.boolean, false),
   })
   .volatile(() => ({
     refetch: () => {},
@@ -51,6 +54,19 @@ export default types
   .views((self) => ({
     get activeNode() {
       return self.nodes.find((n) => isEqual(n.url, self.activeNodeArray))
+    },
+    get nodes() {
+      const store = getParent(self, 1)
+      console.log('store tree building nodes')
+      return buildNodes({
+        store: store,
+        loading: self.loading,
+        role: store.userPerson.user_role,
+      })
+    },
+    get artFolderNode() {
+      const store = getParent(self, 1)
+      return buildArtFolderNode({ loading: self.loading, store })
     },
   }))
 
