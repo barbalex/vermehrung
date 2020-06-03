@@ -1,32 +1,42 @@
 import { types } from 'mobx-state-tree'
 
 export default types.model('Node', {
-  idsFiltered: types.array(types.union(types.string, types.number)),
-  nodeType: types.optional(types.string, ''),
-  menuTitle: types.optional(types.string, ''),
-  id: types.optional(types.union(types.string, types.number), ''),
-  parentId: types.optional(types.union(types.string, types.number), ''),
-  label: types.optional(
-    types.maybeNull(types.union(types.string, types.number)),
-    '',
+  nodeType: types.union(
+    types.string,
+    types.number,
+    types.null,
+    types.undefined,
   ),
+  menuTitle: types.union(
+    types.string,
+    types.number,
+    types.null,
+    types.undefined,
+  ),
+  table: types.union(types.string, types.number, types.null, types.undefined),
+  id: types.union(types.string, types.number, types.null, types.undefined),
+  parentId: types.union(
+    types.string,
+    types.number,
+    types.null,
+    types.undefined,
+  ),
+  label: types.union(types.string, types.number, types.null, types.undefined),
   url: types.array(types.union(types.string, types.number)),
   sort: types.array(types.union(types.string, types.number)),
   hasChildren: types.optional(types.boolean, false),
-  accountId: types.optional(types.string, ''),
   mono: types.optional(types.boolean, false),
 })
 
 export const defaultValue = {
-  idsFiltered: [],
   nodeType: '',
   menuTitle: '',
+  table: '',
   id: '',
   parentId: '',
   label: '',
   url: [],
   sort: [],
   hasChildren: false,
-  accountId: false,
   mono: false,
 }
