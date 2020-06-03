@@ -3,8 +3,6 @@ import memoizeOne from 'memoize-one'
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-import buildArtKulturFolder from './art/kultur/folder'
-import buildArtKultur from './art/kultur'
 import buildArtKulturEventFolder from './art/kultur/event/folder'
 import buildArtKulturEventEvent from './art/kultur/event'
 import buildArtKulturTeilkulturFolder from './art/kultur/teilkultur/folder'
@@ -107,6 +105,7 @@ export default ({ store, loading, role }) => {
     artSammlungAusLieferungLieferung,
     artKulturFolder,
     artKultur,
+    artKulturZaehlungFolder,
     eventFolder,
     gartenFolder,
     herkunftFolder,
@@ -143,6 +142,7 @@ export default ({ store, loading, role }) => {
     ...artSammlungAusLieferungFolder,
     ...artSammlungAusLieferungLieferung,
     ...artKulturFolder,
+    ...artKulturZaehlungFolder,
     ...artKultur,
     ...gartenFolder,
     ...(showHerkunftFolder ? herkunftFolder : []),
