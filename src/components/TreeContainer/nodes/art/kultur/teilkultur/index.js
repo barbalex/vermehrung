@@ -1,33 +1,25 @@
-import isEqual from 'lodash/isEqual'
-import findIndex from 'lodash/findIndex'
-
-export default ({ nodes, store, url }) => {
-  const { showArt, openNodes } = store.tree
+export default ({ store }) => {
+  const { showArt, visibleOpenNodes, artArt, artKultur } = store.tree
   if (!showArt) return []
-  const artId = url[1]
-  const kulturId = url[3]
-  const teilkulturen = store.teilkultursFiltered.filter(
-    (t) => t.kultur_id === kulturId,
+
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 5 &&
+      node[0] === 'Arten' &&
+      node[2] === 'Kulturen' &&
+      node[4] === 'Teilkulturen',
   )
 
-  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
-  const kulturNodes = nodes.filter(
-    (n) => n.parentId === `art${artId}KulturFolder`,
-  )
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `art${artId}Kultur${kulturId}`,
-  )
+  return parentNodes.flatMap((node) => {
+    const artId = node[1]
+    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const kulturId = node[3]
+    const kulturIndex = artKultur.findIndex((a) => a.id === kulturId)
+    const teilkulturen = store.teilkultursFiltered.filter(
+      (t) => t.kultur_id === kulturId,
+    )
 
-  return (
-    teilkulturen
-      // only show if parent node exists
-      .filter(() =>
-        openNodes.some((node) =>
-          isEqual(['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen'], node),
-        ),
-      )
+    return teilkulturen
       .map((el) => {
         const label = el.name || '(kein Name)'
 
@@ -35,8 +27,8 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
-          id: `art${artId}Kultur${kulturId}Teilkultur${el.id}`,
-          parentId: `art${artId}Kultur${kulturId}TeilkulturFolder`,
+          id: el.id,
+          parentId: `${artId}Kultur${kulturId}TeilkulturFolder`,
           label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen', el.id],
           hasChildren: false,
@@ -46,5 +38,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [1, artIndex, 2, kulturIndex, 1, index]
         return el
       })
-  )
+  })
 }
