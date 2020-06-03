@@ -1,4 +1,3 @@
-import sortBy from 'lodash/sortBy'
 import moment from 'moment'
 
 export default ({ store }) => {
@@ -23,7 +22,7 @@ export default ({ store }) => {
       (z) => z.kultur_id === kulturId,
     )
 
-    const nodes = zaehlungen
+    return zaehlungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -60,6 +59,5 @@ export default ({ store }) => {
         el.sort = [1, artIndex, 2, kulturIndex, 2, index]
         return el
       })
-    return sortBy(nodes, 'sort')
   })
 }

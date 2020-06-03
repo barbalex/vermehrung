@@ -317,7 +317,51 @@ export default types
       const store = getParent(self, 1)
       return buildArtKulturTeilkulturTeilkultur({ store })
     },
+    get artKulturEventFolder() {
+      const store = getParent(self, 1)
+      return buildArtKulturEventFolder({ store })
+    },
+    get artKulturEventEvent() {
+      const store = getParent(self, 1)
+      return buildArtKulturEventEvent({ store })
+    },
     /*get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },*/
