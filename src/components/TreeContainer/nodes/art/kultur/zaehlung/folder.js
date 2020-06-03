@@ -1,7 +1,9 @@
+import isEqual from 'lodash/isEqual'
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, store, loading }) => {
-  if (!store.tree.showArt) return []
+  const { showArt, openNodes } = store.tree
+  if (!showArt) return []
   const artId = url[1]
   const kulturId = url[3]
   const zaehlungen = store.zaehlungsFiltered.filter(
@@ -20,8 +22,13 @@ export default ({ url, nodes, store, loading }) => {
   )
 
   // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`art${artId}Kultur${kulturId}`))
+  if (
+    !openNodes.some((node) =>
+      isEqual(['Arten', artId, 'Kulturen', kulturId], node),
+    )
+  ) {
     return []
+  }
 
   return [
     {
