@@ -2,6 +2,8 @@ import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import { navigate } from '@reach/router'
 
+import allParentNodesAreOpen from '../../components/TreeContainer/allParentNodesAreOpen'
+
 import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
@@ -178,6 +180,11 @@ export default types
         role: store.userPerson.user_role,
       })
     },
+    get visibleOpenNodes() {
+      return self.openNodes.filter((node) =>
+        allParentNodesAreOpen(self.openNodes, node),
+      )
+    },
     get showArt() {
       const store = getParent(self, 1)
       return store?.userPerson?.user_role !== 'gaertner'
@@ -286,9 +293,33 @@ export default types
         store,
       })
     },
+    get artKulturFolder() {
+      const store = getParent(self, 1)
+      return buildArtKulturFolder({ store })
+    },
     /*get xxFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ loading: self.loading, store })
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
     },*/
   }))
 

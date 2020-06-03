@@ -1,12 +1,11 @@
-import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 import moment from 'moment'
 
 export default ({ store }) => {
-  const { showArt, openNodes, artArt } = store.tree
+  const { showArt, visibleOpenNodes, artArt } = store.tree
   if (!showArt) return []
 
-  const parentNodes = openNodes.filter(
+  const parentNodes = visibleOpenNodes.filter(
     (node) =>
       node.length === 3 && node[0] === 'Arten' && node[2] === 'Sammlungen',
   )
@@ -17,10 +16,6 @@ export default ({ store }) => {
     const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
 
     const nodes = sammlungen
-      // only show if parent node exists
-      .filter(() =>
-        openNodes.some((node) => isEqual(['Arten', artId, 'Sammlungen'], node)),
-      )
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
