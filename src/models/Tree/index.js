@@ -297,11 +297,11 @@ export default types
       const store = getParent(self, 1)
       return buildArtKulturFolder({ store })
     },
-    /*get xxFolder() {
+    get artKultur() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildArtKultur({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
