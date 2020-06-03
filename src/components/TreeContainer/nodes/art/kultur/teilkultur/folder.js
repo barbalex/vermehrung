@@ -1,48 +1,35 @@
-import isEqual from 'lodash/isEqual'
-import findIndex from 'lodash/findIndex'
-
-export default ({ url, nodes, store, loading }) => {
-  const { showArt, openNodes } = store.tree
+export default ({ store }) => {
+  const { showArt, visibleOpenNodes, loading, artArt, artKultur } = store.tree
   if (!showArt) return []
-  const artId = url[1]
-  const kulturId = url[3]
-  const kultur = [...store.kulturs.values()].find((k) => k.id === kulturId)
-  const tk = kultur?.kultur_option?.tk
-  if (!tk) return []
-  const teilkulturen = store.teilkultursFiltered.filter(
-    (t) => t.kultur_id === kulturId,
-  )
-  const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
 
-  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
-  const kulturNodes = nodes.filter(
-    (n) => n.parentId === `art${artId}KulturFolder`,
-  )
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `art${artId}Kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 4 && node[0] === 'Arten' && node[2] === 'Kulturen',
   )
 
-  // only return if parent exists
-  if (
-    !openNodes.some((node) =>
-      isEqual(['Arten', artId, 'Kulturen', kulturId], node),
+  return parentNodes.map((node) => {
+    const artId = node[1]
+    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const kulturId = node[3]
+    const kulturIndex = artKultur.findIndex((a) => a.id === kulturId)
+
+    const kultur = [...store.kulturs.values()].find((k) => k.id === kulturId)
+    const tk = kultur?.kultur_option?.tk
+    if (!tk) return []
+    const teilkulturen = store.teilkultursFiltered.filter(
+      (t) => t.kultur_id === kulturId,
     )
-  ) {
-    return []
-  }
+    const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
 
-  return [
-    {
+    return {
       nodeType: 'folder',
       menuTitle: 'Teilkulturen',
-      id: `art${artId}Kultur${kulturId}TeilkulturFolder`,
+      id: `${artId}Kultur${kulturId}TeilkulturFolder`,
       label: `Teilkulturen (${nr})`,
       url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen'],
       sort: [1, artIndex, 2, kulturIndex, 1],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
