@@ -11,7 +11,6 @@ export default ({ nodes, store }) =>
       label: el?.name ?? '(kein Name)',
       url: ['Personen', el.id],
       hasChildren: true,
-      accountId: el?.account_id ?? '',
     }))
     .map((el, index) => {
       el.sort = [11, index]
