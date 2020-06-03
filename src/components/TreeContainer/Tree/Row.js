@@ -225,33 +225,46 @@ const Row = ({ style, node, nodes }) => {
   }
 
   const { user_role: role } = userPerson
+  const person =
+    node.nodeType === 'table' && node.table === 'person'
+      ? store.persons.get(last(node.url))
+      : null
+  const accountId = person?.account_id ?? null
 
-  const onClickNode = useCallback(() => {
-    toggleNode({
-      node,
-      store,
-    })
-  }, [node, store])
-  const onClickNodeSymbol = useCallback(() => {
-    toggleNodeSymbol({ node, store })
-  }, [node, store])
-  const onClickNeu = useCallback(() => {
-    createNew({ node, store })
-  }, [node, store])
+  const onClickNode = useCallback(
+    () =>
+      toggleNode({
+        node,
+        store,
+      }),
+    [node, store],
+  )
+  const onClickNodeSymbol = useCallback(
+    () => toggleNodeSymbol({ node, store }),
+    [node, store],
+  )
+  const onClickNeu = useCallback(() => createNew({ node, store }), [
+    node,
+    store,
+  ])
   const onClickDelete = useCallback(async () => {
     deleteDataset({ node, store })
     // delete firebase user
-    if (node.accountId) {
+    if (accountId) {
       try {
-        axios.get(`https://auth.vermehrung.ch/delete-user/${node.accountId}`)
+        axios.get(`https://auth.vermehrung.ch/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
         addNotification({
           message: error.response.data,
         })
       }
+      addNotification({
+        message: 'Das Konto wurde auch gelöscht',
+        type: 'info',
+      })
     }
-  }, [addNotification, node, store])
+  }, [accountId, addNotification, node, store])
 
   const onClickSetPassword = useCallback(async () => {
     const personId = last(node.url).toString()
@@ -285,11 +298,9 @@ const Row = ({ style, node, nodes }) => {
   }, [addNotification, firebase, node.url, store])
   const onClickDeleteAccout = useCallback(async () => {
     // delete firebase user
-    if (node.accountId) {
+    if (accountId) {
       try {
-        await axios.get(
-          `https://auth.vermehrung.ch/delete-user/${node.accountId}`,
-        )
+        await axios.get(`https://auth.vermehrung.ch/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
         return addNotification({
@@ -297,7 +308,6 @@ const Row = ({ style, node, nodes }) => {
         })
       }
     }
-    const person = store.persons.get(last(node.url))
     if (!person) {
       return addNotification({
         message: `Keine Person mit id ${last(node.url)} gefunden`,
@@ -312,7 +322,7 @@ const Row = ({ style, node, nodes }) => {
         message: error.message,
       })
     }
-  }, [addNotification, node.accountId, node.url, store.persons])
+  }, [accountId, addNotification, node.url, person])
   const onClickSignup = useCallback(async () => {
     const personId = last(node.url).toString()
     // fetch email of this person
@@ -334,7 +344,7 @@ const Row = ({ style, node, nodes }) => {
         type: 'warning',
       })
     }
-    const userRole = result?.data?.person?.[0]?.user_role
+    const userRole = result?.person?.[0]?.user_role
     if (!userRole) {
       return addNotification({
         message: 'Eine Rolle muss erfasst sein',
@@ -362,15 +372,18 @@ const Row = ({ style, node, nodes }) => {
         message: `Keine Person mit id ${last(node.url)} gefunden`,
       })
     }
+    console.log('res:', res)
     person.edit({ field: 'account_id', value: res.data })
   }, [addNotification, node.url, store])
 
-  const onClickOpenAllChildren = useCallback(() => {
-    openAllChildren({ node, store, nodes })
-  }, [node, store, nodes])
-  const onClickCloseAllChildren = useCallback(() => {
-    closeAllChildren({ node, store })
-  }, [node, store])
+  const onClickOpenAllChildren = useCallback(
+    () => openAllChildren({ node, store, nodes }),
+    [node, store, nodes],
+  )
+  const onClickCloseAllChildren = useCallback(
+    () => closeAllChildren({ node, store }),
+    [node, store],
+  )
 
   // for unknows reaseon this happens momentarily when new art is created
   if (!node.url) return null
@@ -414,7 +427,7 @@ const Row = ({ style, node, nodes }) => {
           >
             {node.label}
           </TextSpan>
-          {node.accountId && <StyledAccountIcon title="hat ein Konto" />}
+          {accountId && <StyledAccountIcon title="hat ein Konto" />}
         </StyledNode>
       </ContextMenuTrigger>
       {['table', 'folder'].includes(node.nodeType) && (
@@ -441,7 +454,7 @@ const Row = ({ style, node, nodes }) => {
           {node.nodeType === 'table' &&
             node.menuTitle === 'Person' &&
             role === 'manager' &&
-            !node.accountId && (
+            !accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">
                   Konto
@@ -452,7 +465,7 @@ const Row = ({ style, node, nodes }) => {
           {node.nodeType === 'table' &&
             node.menuTitle === 'Person' &&
             role === 'manager' &&
-            node.accountId && (
+            accountId && (
               <>
                 <MenuSubtitle className="react-contextmenu-title">
                   Konto
