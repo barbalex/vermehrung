@@ -50,7 +50,7 @@ const TreeContainer = () => {
     teilkulturFilter,
     zaehlungFilter,
   } = store
-  const { setRefetch, openNodes: openNodesRaw } = store.tree
+  const { setRefetch, openNodes: openNodesRaw, setLoading } = store.tree
   // need to extract pure openNodes
   // to force node building useEffect to run
   // when openNodes changes
@@ -132,6 +132,9 @@ const TreeContainer = () => {
     // do not add treeQuery.refetch as it changes on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  useEffect(() => {
+    setLoading(loading)
+  }, [loading, setLoading])
   /*const [nodes, setNodes] = useState([])
   useEffect(() => {
     if (!data && loading) {
