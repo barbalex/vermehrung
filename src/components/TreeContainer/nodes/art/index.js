@@ -2,12 +2,12 @@ import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 
 export default ({ store }) => {
-  const { showArt, openNodes } = store.tree
+  const { showArt, visibleOpenNodes } = store.tree
   if (!showArt) return []
 
   const nodes = store.artsFiltered
     // only show if parent node exists
-    .filter(() => openNodes.some((node) => isEqual(['Arten'], node)))
+    .filter(() => visibleOpenNodes.some((node) => isEqual(['Arten'], node)))
     .map((n) => ({
       nodeType: 'table',
       menuTitle: 'Art',

@@ -1,23 +1,18 @@
-import isEqual from 'lodash/isEqual'
-import findIndex from 'lodash/findIndex'
-
-export default ({ url, nodes, store, loading }) => {
-  const { showArt, openNodes } = store.tree
+export default ({ store }) => {
+  const { showArt, visibleOpenNodes, loading, artArt } = store.tree
   if (!showArt) return []
-  const artId = url[1]
-  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
 
-  const kulturen = store.kultursFiltered.filter((k) => k.art_id === artId)
-  const nr = loading && !kulturen.length ? '...' : kulturen.length
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Arten',
+  )
 
-  // only return if parent exists
-  if (!openNodes.some((node) => isEqual(['Arten', artId], node))) {
-    return []
-  }
+  return parentNodes.map((node) => {
+    const artId = node[1]
+    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const kulturen = store.kultursFiltered.filter((k) => k.art_id === artId)
+    const nr = loading && !kulturen.length ? '...' : kulturen.length
 
-  return [
-    {
+    return {
       nodeType: 'folder',
       menuTitle: 'Kulturen',
       id: `art${artId}KulturFolder`,
@@ -26,6 +21,6 @@ export default ({ url, nodes, store, loading }) => {
       sort: [1, artIndex, 2],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
