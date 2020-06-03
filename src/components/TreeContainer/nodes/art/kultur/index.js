@@ -1,20 +1,19 @@
-import isEqual from 'lodash/isEqual'
-import findIndex from 'lodash/findIndex'
+import sortBy from 'lodash/sortBy'
 
-export default ({ nodes, store, url }) => {
-  const { showArt, openNodes } = store.tree
+export default ({ store }) => {
+  const { showArt, visibleOpenNodes, artArt } = store.tree
   if (!showArt) return []
-  const artId = url[1]
-  const kulturen = store.kultursFiltered.filter((k) => k.art_id === artId)
-  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`) || 0
 
-  return (
-    kulturen
-      // only show if parent node exists
-      .filter(() =>
-        openNodes.some((node) => isEqual(['Arten', artId, 'Kulturen'], node)),
-      )
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 && node[0] === 'Arten' && node[2] === 'Kulturen',
+  )
+
+  return parentNodes.flatMap((node) => {
+    const artId = node[1]
+    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const kulturen = store.kultursFiltered.filter((k) => k.art_id === artId)
+    const nodes = kulturen
       .map((el) => {
         const garten =
           el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`
@@ -36,5 +35,6 @@ export default ({ nodes, store, url }) => {
         el.sort = [1, artIndex, 2, index]
         return el
       })
-  )
+    return sortBy(nodes, 'sort')
+  })
 }

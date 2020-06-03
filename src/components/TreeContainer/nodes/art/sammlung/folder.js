@@ -1,8 +1,8 @@
 export default ({ store }) => {
-  const { showArt, openNodes, loading, artArt } = store.tree
+  const { showArt, visibleOpenNodes, loading, artArt } = store.tree
   if (!showArt) return []
 
-  const parentNodes = openNodes.filter(
+  const parentNodes = visibleOpenNodes.filter(
     (node) => node.length === 2 && node[0] === 'Arten',
   )
 
