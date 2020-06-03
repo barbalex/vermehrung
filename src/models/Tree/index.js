@@ -5,6 +5,7 @@ import { navigate } from '@reach/router'
 import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 import buildArtFolderNode from '../../components/TreeContainer/nodes/art/folder'
+import buildGartenFolderNode from '../../components/TreeContainer/nodes/garten/folder'
 
 export default types
   .model('Tree', {
@@ -67,6 +68,10 @@ export default types
     get artFolderNode() {
       const store = getParent(self, 1)
       return buildArtFolderNode({ loading: self.loading, store })
+    },
+    get gartenFolderNode() {
+      const store = getParent(self, 1)
+      return buildGartenFolderNode({ loading: self.loading, store })
     },
   }))
 
