@@ -274,12 +274,18 @@ export default types
       const store = getParent(self, 1)
       return buildArtSammlung({ store })
     },
-    /*get artSammlungAusLieferungFolder() {
+    get artSammlungAusLieferungFolder() {
       const store = getParent(self, 1)
       return buildArtSammlungAusLieferungFolder({
         store,
       })
-    },*/
+    },
+    get artSammlungAusLieferungLieferung() {
+      const store = getParent(self, 1)
+      return buildArtSammlungLieferungAusLieferung({
+        store,
+      })
+    },
     /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ loading: self.loading, store })

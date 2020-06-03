@@ -11,7 +11,7 @@ export default ({ store }) => {
       node.length === 3 && node[0] === 'Arten' && node[2] === 'Sammlungen',
   )
 
-  return parentNodes.map((node) => {
+  return parentNodes.flatMap((node) => {
     const artId = node[1]
     const artIndex = artArt.findIndex((a) => a.id === artId)
     const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
@@ -46,7 +46,6 @@ export default ({ store }) => {
         }
       })
       .map((el, index) => ({ ...el, sort: [1, artIndex, 1, index] }))
-
     return sortBy(nodes, 'sort')
   })
 }
