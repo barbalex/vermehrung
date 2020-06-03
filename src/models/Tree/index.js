@@ -305,15 +305,15 @@ export default types
       const store = getParent(self, 1)
       return buildArtKulturZaehlungFolder({ store })
     },
+    get artKulturZaehlungZaehlung() {
+      const store = getParent(self, 1)
+      return buildArtKulturZaehlungZaehlung({ store })
+    },
+    get artKulturTeilkulturFolder() {
+      const store = getParent(self, 1)
+      return buildArtKulturTeilkulturFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
