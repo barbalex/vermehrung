@@ -1,27 +1,26 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showArt, openNodes, loading, artArt } = store.tree
+  if (!showArt) return []
 
-export default ({ url, nodes, store, loading }) => {
-  if (!store.tree.showArt) return []
-  const artId = url[1]
-  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)
+  const parentNodes = openNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Arten',
+  )
 
-  const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
-  const nr = loading && !sammlungen.length ? '...' : sammlungen.length
+  return parentNodes.map((node) => {
+    const artId = node[1]
+    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
+    const nr = loading && !sammlungen.length ? '...' : sammlungen.length
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`art${artId}`)) return []
-
-  return [
-    {
+    return {
       nodeType: 'folder',
       menuTitle: 'Sammlungen',
-      id: `art${artId}SammlungFolder`,
+      id: `${artId}SammlungFolder`,
       label: `Sammlungen (${nr})`,
       url: ['Arten', artId, 'Sammlungen'],
       sort: [1, artIndex, 1],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }

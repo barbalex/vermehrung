@@ -132,6 +132,9 @@ export default types
     refetch: () => {},
   }))
   .actions((self) => ({
+    setLoading(val) {
+      self.loading = val
+    },
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
     },
@@ -261,26 +264,23 @@ export default types
       const store = getParent(self, 1)
       return buildArtArt({ store })
     },
-    /*get artSammlungFolder() {
+    get artSammlungFolder() {
       const store = getParent(self, 1)
       return buildArtSammlungFolder({
-        loading: self.loading,
         store,
-        nodes: self.nodes,
       })
     },
     get artSammlung() {
       const store = getParent(self, 1)
-      return buildArtSammlung({ loading: self.loading, store })
+      return buildArtSammlung({ store })
     },
-    get artSammlungAusLieferungFolder() {
+    /*get artSammlungAusLieferungFolder() {
       const store = getParent(self, 1)
       return buildArtSammlungAusLieferungFolder({
-        loading: self.loading,
         store,
       })
-    },
-    get xxFolder() {
+    },*/
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ loading: self.loading, store })
     },*/

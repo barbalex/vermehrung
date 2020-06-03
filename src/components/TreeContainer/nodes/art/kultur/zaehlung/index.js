@@ -1,8 +1,10 @@
+import isEqual from 'lodash/isEqual'
 import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, store, url }) => {
-  if (!store.tree.showArt) return []
+  const { showArt, openNodes } = store.tree
+  if (!showArt) return []
   const artId = url[1]
   const kulturId = url[3]
   const zaehlungen = store.zaehlungsFiltered.filter(
@@ -23,9 +25,9 @@ export default ({ nodes, store, url }) => {
     zaehlungen
       // only show if parent node exists
       .filter(() =>
-        nodes
-          .map((n) => n.id)
-          .includes(`art${artId}Kultur${kulturId}ZaehlungFolder`),
+        openNodes.some((node) =>
+          isEqual(['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen'], node),
+        ),
       )
       .map((el) => {
         const datum = el.datum
