@@ -160,7 +160,7 @@ export const RootStore = RootStoreBase.props({
           // set default values
           id: uuidv1(),
           time: Date.now(),
-          duration: 100000, // standard value: 10000
+          duration: 10000, // standard value: 10000
           dismissable: true,
           allDismissable: true,
           type: 'error',
