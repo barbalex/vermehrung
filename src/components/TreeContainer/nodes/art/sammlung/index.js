@@ -1,18 +1,25 @@
-import findIndex from 'lodash/findIndex'
+import isEqual from 'lodash/isEqual'
+import sortBy from 'lodash/sortBy'
 import moment from 'moment'
 
-export default ({ nodes, store, url }) => {
-  if (!store.tree.showArt) return []
-  const artId = url[1]
-  const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
-  const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
-  const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`) || 0
+export default ({ store }) => {
+  const { showArt, openNodes, artArt } = store.tree
+  if (!showArt) return []
 
-  return (
-    sammlungen
+  const parentNodes = openNodes.filter(
+    (node) =>
+      node.length === 3 && node[0] === 'Arten' && node[2] === 'Sammlungen',
+  )
+
+  return parentNodes.map((node) => {
+    const artId = node[1]
+    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
+
+    const nodes = sammlungen
       // only show if parent node exists
       .filter(() =>
-        nodes.map((n) => n.id).includes(`art${artId}SammlungFolder`),
+        openNodes.some((node) => isEqual(['Arten', artId, 'Sammlungen'], node)),
       )
       .map((el) => {
         const datum = el.datum
@@ -31,13 +38,15 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Sammlung',
           table: 'sammlung',
-          id: `art${artId}Sammlung${el.id}`,
-          parentId: `art${artId}SammlungFolder`,
+          id: el.id,
+          parentId: `${artId}SammlungFolder`,
           label,
           url: ['Arten', artId, 'Sammlungen', el.id],
           hasChildren: true,
         }
       })
       .map((el, index) => ({ ...el, sort: [1, artIndex, 1, index] }))
-  )
+
+    return sortBy(nodes, 'sort')
+  })
 }
