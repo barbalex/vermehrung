@@ -1,6 +1,8 @@
-export default ({ loading, store }) => {
+export default ({ store }) => {
   const arten = store.artsFiltered
-  const nr = loading && !arten.length ? '...' : arten.length
+  const nr = store.tree.loading && !arten.length ? '...' : arten.length
+
+  if (!store.tree.showArt) return []
 
   return [
     {

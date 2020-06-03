@@ -1,6 +1,7 @@
 import findIndex from 'lodash/findIndex'
 
 export default ({ url, nodes, store, loading }) => {
+  if (!store.tree.showArt) return []
   const artId = url[1]
   const artNodes = nodes.filter((n) => n.parentId === 'artFolder')
   const artIndex = findIndex(artNodes, (n) => n.id === `art${artId}`)

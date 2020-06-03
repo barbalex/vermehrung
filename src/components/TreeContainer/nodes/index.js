@@ -3,7 +3,6 @@ import memoizeOne from 'memoize-one'
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-import buildArtFolder from './art/folder'
 import buildArtArt from './art'
 
 import buildArtSammlungFolder from './art/sammlung/folder'
@@ -24,7 +23,6 @@ import buildArtKulturLieferungAusLieferung from './art/kultur/auslieferung'
 import buildArtKulturAnLieferungFolder from './art/kultur/anlieferung/folder'
 import buildArtKulturLieferungAnLieferung from './art/kultur/anlieferung'
 
-import buildGartenFolder from './garten/folder'
 import buildGartenGarten from './garten'
 import buildGartenKulturFolder from './garten/kultur/folder'
 import buildGartenKultur from './garten/kultur'
@@ -39,31 +37,24 @@ import buildGartenKulturLieferungAusLieferung from './garten/kultur/auslieferung
 import buildGartenKulturAnLieferungFolder from './garten/kultur/anlieferung/folder'
 import buildGartenKulturLieferungAnLieferung from './garten/kultur/anlieferung'
 
-import buildHerkunftFolder from './herkunft/folder'
 import buildHerkunftHerkunft from './herkunft'
 import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
 import buildHerkunftSammlungSammlung from './herkunft/sammlung'
 import buildHerkunftSammlungAusLieferungFolder from './herkunft/sammlung/auslieferung/folder'
 import buildHerkunftSammlungausLieferungLieferung from './herkunft/sammlung/auslieferung'
 
-import buildLieferungFolder from './lieferung/folder'
 import buildLieferungLieferung from './lieferung'
 
-import buildSammelLieferungFolder from './sammelLieferung/folder'
 import buildSammelLieferungSammelLieferung from './sammelLieferung'
 import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/folder'
 import buildSammelLieferungLieferungLieferung from './sammelLieferung/lieferung'
 
-import buildTeilkulturFolder from './teilkultur/folder'
 import buildTeilkulturTeilkultur from './teilkultur'
 
-import buildZaehlungFolder from './zaehlung/folder'
 import buildZaehlungZaehlung from './zaehlung'
 
-import buildEventFolder from './event/folder'
 import buildEventEvent from './event'
 
-import buildPersonFolder from './person/folder'
 import buildPersonPerson from './person'
 import buildPersonGartenFolder from './person/garten/folder'
 import buildPersonGartenGarten from './person/garten'
@@ -84,7 +75,6 @@ import buildPersonGartenSammlungSammlung from './person/sammlung'
 import buildPersonGartenLieferungFolder from './person/lieferung/folder'
 import buildPersonGartenLieferungLieferung from './person/lieferung'
 
-import buildSammlungFolder from './sammlung/folder'
 import buildSammlungSammlung from './sammlung'
 import buildSammlungHerkunftFolder from './sammlung/herkunft/folder'
 import buildSammlungHerkunftHerkunft from './sammlung/herkunft'
@@ -101,7 +91,6 @@ import buildSammlungAusLieferungKulturAusLieferungLieferung from './sammlung/aus
 import buildSammlungAusLieferungKulturAnLieferungFolder from './sammlung/auslieferung/kultur/anlieferung/folder'
 import buildSammlungAusLieferungKulturAnLieferungLieferung from './sammlung/auslieferung/kultur/anlieferung'
 
-import buildKulturFolder from './kultur/folder'
 import buildKulturKultur from './kultur'
 import buildKulturTeilkulturFolder from './kultur/teilkultur/folder'
 import buildKulturTeilkulturTeilkultur from './kultur/teilkultur'
@@ -116,7 +105,21 @@ import buildKulturEventEvent from './kultur/event'
 
 export default ({ store, loading, role }) => {
   const { userPersonOption } = store
-  const { artFolderNode, gartenFolderNode } = store.tree
+  const {
+    artFolder,
+    showArt,
+    artArt,
+    eventFolder,
+    gartenFolder,
+    herkunftFolder,
+    kulturFolder,
+    lieferungFolder,
+    personFolder,
+    sammelLieferungFolder,
+    sammlungFolder,
+    teilkulturFolder,
+    zaehlungFolder,
+  } = store.tree
   const openNodes = store.tree.openNodes.sort(sort)
 
   const {
@@ -126,7 +129,6 @@ export default ({ store, loading, role }) => {
     tree_lieferung,
     tree_event,
   } = userPersonOption
-  const showArtFolder = role !== 'gaertner'
   const showHerkunftFolder = role !== 'gaertner'
   const showSammlungFolder = role !== 'gaertner'
   const showKulturFolder = tree_kultur
@@ -136,31 +138,18 @@ export default ({ store, loading, role }) => {
   const showEventFolder = tree_event
 
   let nodes = [
-    ...(showArtFolder ? artFolderNode : []),
-    ...gartenFolderNode,
-    ...memoizeOne(() =>
-      showHerkunftFolder ? buildHerkunftFolder({ store, loading }) : [],
-    )(),
-    ...memoizeOne(() =>
-      showLieferungFolder ? buildLieferungFolder({ store, loading }) : [],
-    )(),
-    ...memoizeOne(() => buildSammelLieferungFolder({ store, loading }))(),
-    ...memoizeOne(() =>
-      showTeilkulturFolder ? buildTeilkulturFolder({ store, loading }) : [],
-    )(),
-    ...memoizeOne(() =>
-      showZaehlungFolder ? buildZaehlungFolder({ store, loading }) : [],
-    )(),
-    ...memoizeOne(() =>
-      showEventFolder ? buildEventFolder({ store, loading }) : [],
-    )(),
-    ...memoizeOne(() => buildPersonFolder({ store, loading }))(),
-    ...memoizeOne(() =>
-      showSammlungFolder ? buildSammlungFolder({ store, loading }) : [],
-    )(),
-    ...memoizeOne(() =>
-      showKulturFolder ? buildKulturFolder({ store, loading }) : [],
-    )(),
+    ...artFolder,
+    ...artArt,
+    ...gartenFolder,
+    ...(showHerkunftFolder ? herkunftFolder : []),
+    ...(showLieferungFolder ? lieferungFolder : []),
+    ...sammelLieferungFolder,
+    ...(showTeilkulturFolder ? teilkulturFolder : []),
+    ...(showZaehlungFolder ? zaehlungFolder : []),
+    ...(showEventFolder ? eventFolder : []),
+    ...personFolder,
+    ...(showSammlungFolder ? sammlungFolder : []),
+    ...(showKulturFolder ? kulturFolder : []),
   ]
 
   /**
@@ -172,19 +161,8 @@ export default ({ store, loading, role }) => {
    * for instance if a parent node is not open
    * or some filter is active
    */
-  let artArtNodes
   openNodes.forEach((url) => {
-    //console.log('nodes, url:', url.slice())
     if (!allParentNodesAreOpen(openNodes, url)) return
-    if (url.length === 1 && url[0] === 'Arten') {
-      artArtNodes = memoizeOne(() =>
-        buildArtArt({
-          nodes,
-          store,
-        }),
-      )()
-      nodes = [...nodes, ...artArtNodes]
-    }
     if (url.length === 1 && url[0] === 'Gaerten') {
       nodes = [
         ...nodes,
