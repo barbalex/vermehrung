@@ -1,4 +1,3 @@
-import sortBy from 'lodash/sortBy'
 import moment from 'moment'
 
 export default ({ store }) => {
@@ -15,7 +14,7 @@ export default ({ store }) => {
     const artIndex = artArt.findIndex((a) => a.id === artId)
     const sammlungen = store.sammlungsFiltered.filter((s) => s.art_id === artId)
 
-    const nodes = sammlungen
+    return sammlungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -41,6 +40,5 @@ export default ({ store }) => {
         }
       })
       .map((el, index) => ({ ...el, sort: [1, artIndex, 1, index] }))
-    return sortBy(nodes, 'sort')
   })
 }
