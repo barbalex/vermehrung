@@ -3,12 +3,6 @@ import memoizeOne from 'memoize-one'
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-import buildHerkunftHerkunft from './herkunft'
-import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
-import buildHerkunftSammlungSammlung from './herkunft/sammlung'
-import buildHerkunftSammlungAusLieferungFolder from './herkunft/sammlung/auslieferung/folder'
-import buildHerkunftSammlungausLieferungLieferung from './herkunft/sammlung/auslieferung'
-
 import buildLieferungLieferung from './lieferung'
 
 import buildSammelLieferungSammelLieferung from './sammelLieferung'
@@ -55,18 +49,6 @@ import buildSammlungAusLieferungKulturAusLieferungLieferung from './sammlung/aus
 import buildSammlungAusLieferungKulturAnLieferungFolder from './sammlung/auslieferung/kultur/anlieferung/folder'
 import buildSammlungAusLieferungKulturAnLieferungLieferung from './sammlung/auslieferung/kultur/anlieferung'
 
-import buildKulturKultur from './kultur'
-import buildKulturTeilkulturFolder from './kultur/teilkultur/folder'
-import buildKulturTeilkulturTeilkultur from './kultur/teilkultur'
-import buildKulturZaehlungFolder from './kultur/zaehlung/folder'
-import buildKulturZaehlungZaehlung from './kultur/zaehlung'
-import buildKulturAnLieferungFolder from './kultur/anlieferung/folder'
-import buildKulturLieferungAnLieferung from './kultur/anlieferung'
-import buildKulturAusLieferungFolder from './kultur/auslieferung/folder'
-import buildKulturLieferungAusLieferung from './kultur/auslieferung'
-import buildKulturEventFolder from './kultur/event/folder'
-import buildKulturEventEvent from './kultur/event'
-
 export default ({ store, loading, role }) => {
   const { userPersonOption } = store
   const {
@@ -109,7 +91,9 @@ export default ({ store, loading, role }) => {
     herkunftSammlungFolder,
     herkunftSammlung,
     herkunftSammlungAusLieferungFolder,
+    herkunftSammlungausLieferungLieferung,
     kulturFolder,
+    kulturKultur,
     lieferungFolder,
     personFolder,
     sammelLieferungFolder,
@@ -119,14 +103,8 @@ export default ({ store, loading, role }) => {
   } = store.tree
   const openNodes = store.tree.openNodes.sort(sort)
 
-  const {
-    tree_kultur,
-    tree_teilkultur,
-    tree_zaehlung,
-    tree_lieferung,
-  } = userPersonOption
+  const { tree_teilkultur, tree_zaehlung, tree_lieferung } = userPersonOption
   const showSammlungFolder = role !== 'gaertner'
-  const showKulturFolder = tree_kultur
   const showTeilkulturFolder = tree_teilkultur
   const showZaehlungFolder = tree_zaehlung
   const showLieferungFolder = tree_lieferung
@@ -169,6 +147,9 @@ export default ({ store, loading, role }) => {
     ...herkunftSammlungFolder,
     ...herkunftSammlung,
     ...herkunftSammlungAusLieferungFolder,
+    ...herkunftSammlungausLieferungLieferung,
+    ...kulturFolder,
+    ...kulturKultur,
     ...(showLieferungFolder ? lieferungFolder : []),
     ...sammelLieferungFolder,
     ...(showTeilkulturFolder ? teilkulturFolder : []),
@@ -177,7 +158,6 @@ export default ({ store, loading, role }) => {
     ...eventEvent,
     ...personFolder,
     ...(showSammlungFolder ? sammlungFolder : []),
-    ...(showKulturFolder ? kulturFolder : []),
   ]
 
   /**
@@ -257,17 +237,6 @@ export default ({ store, loading, role }) => {
         )(),
       ]
     }
-    if (url.length === 1 && url[0] === 'Kulturen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturKultur({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
 
     if (url.length === 2 && url[0] === 'Personen') {
       nodes = [
@@ -311,51 +280,6 @@ export default ({ store, loading, role }) => {
         )(),
         ...memoizeOne(() =>
           buildSammlungAusLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 2 && url[0] === 'Kulturen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturTeilkulturFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildKulturZaehlungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildKulturAnLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildKulturAusLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildKulturEventFolder({
             nodes,
             url,
             store,
@@ -446,50 +370,6 @@ export default ({ store, loading, role }) => {
         )(),
       ]
     }
-    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Zaehlungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturZaehlungZaehlung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 3 &&
-      url[0] === 'Kulturen' &&
-      url[2] === 'Teilkulturen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturTeilkulturTeilkultur({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 3 &&
-      url[0] === 'Kulturen' &&
-      url[2] === 'An-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturLieferungAnLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
     if (
       url.length === 3 &&
       url[0] === 'Sammel-Lieferungen' &&
@@ -499,34 +379,6 @@ export default ({ store, loading, role }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildSammelLieferungLieferungLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 3 &&
-      url[0] === 'Kulturen' &&
-      url[2] === 'Aus-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturLieferungAusLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 3 && url[0] === 'Kulturen' && url[2] === 'Events') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildKulturEventEvent({
             nodes,
             store,
             url,
