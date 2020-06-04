@@ -349,11 +349,11 @@ export default types
       const store = getParent(self, 1)
       return buildGartenGarten({ store })
     },
-    /*get xxFolder() {
+    get gartenKulturFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildGartenKulturFolder({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

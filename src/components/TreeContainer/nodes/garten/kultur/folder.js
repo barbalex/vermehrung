@@ -1,29 +1,28 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showGarten, visibleOpenNodes, loading, gartenGarten } = store.tree
+  if (!showGarten) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const gartenId = url[1]
-  const gartenNodes = nodes.filter((n) => n.parentId === 'gartenFolder')
-  const gartenIndex = findIndex(
-    gartenNodes,
-    (n) => n.id === `garten${gartenId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Gaerten',
   )
 
-  const kulturen = store.kultursFiltered.filter((k) => k.garten_id === gartenId)
-  const nr = loading && !kulturen.length ? '...' : kulturen.length
+  return parentNodes.map((node) => {
+    const gartenId = node[1]
+    const gartenIndex = gartenGarten.findIndex((a) => a.id === gartenId)
+    const kulturen = store.kultursFiltered.filter(
+      (k) => k.garten_id === gartenId,
+    )
+    const nr = loading && !kulturen.length ? '...' : kulturen.length
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`garten${gartenId}`)) return []
-
-  return [
-    {
+    return {
       nodeType: 'folder',
       menuTitle: 'Kulturen',
-      id: `garten${gartenId}KulturFolder`,
+      id: `${gartenId}KulturFolder`,
       label: `Kulturen (${nr})`,
       url: ['Gaerten', gartenId, 'Kulturen'],
       sort: [4, gartenIndex, 1],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
