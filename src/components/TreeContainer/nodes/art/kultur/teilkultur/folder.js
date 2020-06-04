@@ -13,8 +13,8 @@ export default ({ store }) => {
     const kulturId = node[3]
     const kulturIndex = artKultur.findIndex((a) => a.id === kulturId)
 
-    const kultur = [...store.kulturs.values()].find((k) => k.id === kulturId)
-    const tk = kultur?.kultur_option?.tk
+    const kultur_option = store.kultur_options.get(kulturId)
+    const tk = kultur_option?.tk
     if (!tk) return []
     const teilkulturen = store.teilkultursFiltered.filter(
       (t) => t.kultur_id === kulturId,

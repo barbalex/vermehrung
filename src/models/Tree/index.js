@@ -365,11 +365,11 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturZaehlungZaehlung({ store })
     },
-    /*get xxFolder() {
+    get gartenKulturTeilkulturFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildGartenKulturTeilkulturFolder({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
