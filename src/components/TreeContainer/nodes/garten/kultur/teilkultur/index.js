@@ -1,10 +1,5 @@
 export default ({ store }) => {
-  const {
-    showGarten,
-    visibleOpenNodes,
-    gartenGarten,
-    gartenKultur,
-  } = store.tree
+  const { showGarten, visibleOpenNodes, garten, gartenKultur } = store.tree
   if (!showGarten) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -19,7 +14,7 @@ export default ({ store }) => {
 
   return parentNodes.flatMap((node) => {
     const gartenId = node[1]
-    const gartenIndex = gartenGarten.findIndex((a) => a.id === gartenId)
+    const gartenIndex = garten.findIndex((a) => a.id === gartenId)
     const kulturId = node[3]
     const kulturIndex = gartenKultur.findIndex((a) => a.id === kulturId)
 

@@ -3,7 +3,7 @@ export default ({ store }) => {
     showGarten,
     visibleOpenNodes,
     loading,
-    gartenGarten,
+    garten,
     gartenKultur,
   } = store.tree
   if (!showGarten) return []
@@ -15,7 +15,7 @@ export default ({ store }) => {
 
   return parentNodes.map((node) => {
     const gartenId = node[1]
-    const gartenIndex = gartenGarten.findIndex((a) => a.id === gartenId)
+    const gartenIndex = garten.findIndex((a) => a.id === gartenId)
     const kulturId = node[3]
     const kulturIndex = gartenKultur.findIndex((a) => a.id === kulturId)
     const zaehlungen = store.zaehlungsFiltered.filter(
