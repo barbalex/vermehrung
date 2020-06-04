@@ -11,6 +11,10 @@ export default ({ nodes, openNodes, url }) => {
   if (!isNodeOpen(openNodes, url)) return false
 
   const childNodes = nodes.filter((n) => {
+    if (!n.url) {
+      console.log('someChildrenAreOpen:', { n, nodes })
+      return false
+    }
     const urlPartWithEqualLength = n.url.slice(0, url.length)
     return (
       isEqual(urlPartWithEqualLength, url) && n.url.length === url.length + 1

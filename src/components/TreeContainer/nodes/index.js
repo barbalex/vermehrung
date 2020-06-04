@@ -107,6 +107,8 @@ export default ({ store, loading, role }) => {
     artKultur,
     artKulturEventFolder,
     artKulturEventEvent,
+    artKulturAusLieferungFolder,
+    artKulturLieferungAusLieferung,
     artKulturTeilkulturFolder,
     artKulturTeilkulturTeilkultur,
     artKulturZaehlungFolder,
@@ -152,6 +154,8 @@ export default ({ store, loading, role }) => {
     ...artKultur,
     ...artKulturEventFolder,
     ...artKulturEventEvent,
+    ...artKulturAusLieferungFolder,
+    ...artKulturLieferungAusLieferung,
     ...artKulturTeilkulturFolder,
     ...artKulturTeilkulturTeilkultur,
     ...gartenFolder,
@@ -288,19 +292,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    /*if (url.length === 2 && url[0] === 'Arten') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-      ]
-    }*/
     if (url.length === 2 && url[0] === 'Gaerten') {
       nodes = [
         ...nodes,
@@ -437,18 +428,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    /*if (url.length === 3 && url[0] === 'Arten' && url[2] === 'Kulturen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKultur({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }*/
     if (url.length === 3 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
       nodes = [
         ...nodes,
@@ -634,51 +613,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    /*if (url.length === 4 && url[0] === 'Arten' && url[2] === 'Kulturen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturZaehlungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildArtKulturAusLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildArtKulturAnLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildArtKulturEventFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildArtKulturTeilkulturFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-      ]
-    }*/
     if (url.length === 4 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
       nodes = [
         ...nodes,
@@ -772,23 +706,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    /*if (
-      url.length === 5 &&
-      url[0] === 'Arten' &&
-      url[2] === 'Kulturen' &&
-      url[4] === 'Zaehlungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturZaehlungZaehlung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }*/
     if (
       url.length === 5 &&
       url[0] === 'Sammlungen' &&
@@ -806,74 +723,6 @@ export default ({ store, loading, role }) => {
         )(),
       ]
     }
-    /*if (
-      url.length === 5 &&
-      url[0] === 'Arten' &&
-      url[2] === 'Kulturen' &&
-      url[4] === 'Aus-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturLieferungAusLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 5 &&
-      url[0] === 'Arten' &&
-      url[2] === 'Kulturen' &&
-      url[4] === 'An-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturLieferungAnLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 5 &&
-      url[0] === 'Arten' &&
-      url[2] === 'Kulturen' &&
-      url[4] === 'Events'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturEventEvent({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 5 &&
-      url[0] === 'Arten' &&
-      url[2] === 'Kulturen' &&
-      url[4] === 'Teilkulturen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildArtKulturTeilkulturTeilkultur({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }*/
 
     if (
       url.length === 5 &&

@@ -10,11 +10,15 @@ export default ({ nodes, openNodes, url }) => {
   // return false if node itself is closed
   if (!isNodeOpen(openNodes, url)) return true
 
-  const childNodes = nodes.filter(n => {
+  const childNodes = nodes.filter((n) => {
+    if (!n.url) {
+      console.log('someChildrenAreClosed:', { n, nodes })
+      return false
+    }
     const urlPartWithEqualLength = n.url.slice(0, url.length)
     return (
       isEqual(urlPartWithEqualLength, url) && n.url.length === url.length + 1
     )
   })
-  return childNodes.some(n => !isNodeOpen(openNodes, n.url))
+  return childNodes.some((n) => !isNodeOpen(openNodes, n.url))
 }

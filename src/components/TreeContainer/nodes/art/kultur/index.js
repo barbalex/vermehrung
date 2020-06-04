@@ -7,6 +7,8 @@ export default ({ store }) => {
       node.length === 3 && node[0] === 'Arten' && node[2] === 'Kulturen',
   )
 
+  if (!parentNodes.length) return []
+
   return parentNodes.flatMap((node) => {
     const artId = node[1]
     const artIndex = artArt.findIndex((a) => a.id === artId)
