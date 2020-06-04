@@ -1,5 +1,5 @@
 export default ({ store }) => {
-  const { showArt, visibleOpenNodes, loading, artArt, artKultur } = store.tree
+  const { showArt, visibleOpenNodes, loading, art, artKultur } = store.tree
   if (!showArt) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -9,7 +9,7 @@ export default ({ store }) => {
 
   return parentNodes.map((node) => {
     const artId = node[1]
-    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const artIndex = art.findIndex((a) => a.id === artId)
     const kulturId = node[3]
     const kulturIndex = artKultur.findIndex((a) => a.id === kulturId)
     const events = store.eventsFiltered.filter((e) => e.kultur_id === kulturId)
