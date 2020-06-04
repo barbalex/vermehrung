@@ -227,10 +227,6 @@ export default types
       const store = getParent(self, 1)
       return buildArtFolder({ loading: self.loading, store })
     },
-    get eventFolder() {
-      const store = getParent(self, 1)
-      return buildEventFolder({ loading: self.loading, store })
-    },
     get gartenFolder() {
       const store = getParent(self, 1)
       return buildGartenFolder({ loading: self.loading, store })
@@ -341,11 +337,15 @@ export default types
       const store = getParent(self, 1)
       return buildArtKulturLieferungAnLieferung({ store })
     },
-    /*get xxFolder() {
+    get eventFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildEventFolder({ loading: self.loading, store })
     },
-    get xxFolder() {
+    get eventEvent() {
+      const store = getParent(self, 1)
+      return buildEventEvent({ store })
+    },
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

@@ -1,4 +1,6 @@
 export default ({ loading, store }) => {
+  if (!store.tree.showEvent) return []
+
   const events = store.eventsFiltered
   const nr = loading && !events.length ? '...' : events.length
 
