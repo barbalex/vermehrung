@@ -357,7 +357,87 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKultur({ store })
     },
+    get gartenKulturZaehlungFolder() {
+      const store = getParent(self, 1)
+      return buildGartenKulturZaehlungFolder({ store })
+    },
     /*get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
+      const store = getParent(self, 1)
+      return buildXxFolder({ store })
+    },
+    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
