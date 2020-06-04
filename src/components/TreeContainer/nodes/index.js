@@ -33,8 +33,6 @@ import buildTeilkulturTeilkultur from './teilkultur'
 
 import buildZaehlungZaehlung from './zaehlung'
 
-import buildEventEvent from './event'
-
 import buildPersonPerson from './person'
 import buildPersonGartenFolder from './person/garten/folder'
 import buildPersonGartenGarten from './person/garten'
@@ -105,6 +103,7 @@ export default ({ store, loading, role }) => {
     artKulturZaehlungFolder,
     artKulturZaehlungZaehlung,
     eventFolder,
+    eventEvent,
     gartenFolder,
     herkunftFolder,
     kulturFolder,
@@ -122,7 +121,6 @@ export default ({ store, loading, role }) => {
     tree_teilkultur,
     tree_zaehlung,
     tree_lieferung,
-    tree_event,
   } = userPersonOption
   const showHerkunftFolder = role !== 'gaertner'
   const showSammlungFolder = role !== 'gaertner'
@@ -130,7 +128,6 @@ export default ({ store, loading, role }) => {
   const showTeilkulturFolder = tree_teilkultur
   const showZaehlungFolder = tree_zaehlung
   const showLieferungFolder = tree_lieferung
-  const showEventFolder = tree_event
 
   let nodes = [
     ...artFolder,
@@ -157,7 +154,8 @@ export default ({ store, loading, role }) => {
     ...sammelLieferungFolder,
     ...(showTeilkulturFolder ? teilkulturFolder : []),
     ...(showZaehlungFolder ? zaehlungFolder : []),
-    ...(showEventFolder ? eventFolder : []),
+    ...eventFolder,
+    ...eventEvent,
     ...personFolder,
     ...(showSammlungFolder ? sammlungFolder : []),
     ...(showKulturFolder ? kulturFolder : []),
@@ -223,17 +221,6 @@ export default ({ store, loading, role }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildZaehlungZaehlung({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 1 && url[0] === 'Events') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildEventEvent({
             nodes,
             store,
           }),
