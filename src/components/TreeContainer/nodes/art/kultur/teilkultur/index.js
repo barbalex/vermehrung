@@ -10,6 +10,8 @@ export default ({ store }) => {
       node[4] === 'Teilkulturen',
   )
 
+  if (!parentNodes.length) return []
+
   return parentNodes.flatMap((node) => {
     const artId = node[1]
     const artIndex = artArt.findIndex((a) => a.id === artId)
