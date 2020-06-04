@@ -1,4 +1,4 @@
-import { types, getParent } from 'mobx-state-tree'
+import { types, getParent, getSnapshot } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 import { navigate } from '@reach/router'
 
@@ -8,7 +8,6 @@ import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
 import buildGartenFolder from '../../components/TreeContainer/nodes/garten/folder'
-import buildHerkunftFolder from '../../components/TreeContainer/nodes/herkunft/folder'
 import buildKulturFolder from '../../components/TreeContainer/nodes/kultur/folder'
 import buildLieferungFolder from '../../components/TreeContainer/nodes/lieferung/folder'
 import buildPersonFolder from '../../components/TreeContainer/nodes/person/folder'
@@ -52,6 +51,7 @@ import buildGartenKulturLieferungAusLieferung from '../../components/TreeContain
 import buildGartenKulturAnLieferungFolder from '../../components/TreeContainer/nodes/garten/kultur/anlieferung/folder'
 import buildGartenKulturLieferungAnLieferung from '../../components/TreeContainer/nodes/garten/kultur/anlieferung'
 
+import buildHerkunftFolder from '../../components/TreeContainer/nodes/herkunft/folder'
 import buildHerkunftHerkunft from '../../components/TreeContainer/nodes/herkunft'
 import buildHerkunftSammlungFolder from '../../components/TreeContainer/nodes/herkunft/sammlung/folder'
 import buildHerkunftSammlungSammlung from '../../components/TreeContainer/nodes/herkunft/sammlung'
@@ -181,12 +181,11 @@ export default types
       })
     },
     get visibleOpenNodes() {
-      return self.openNodes.filter((node) =>
-        allParentNodesAreOpen(
-          // need to filter out arrays - there tended to be a single empty array
-          self.openNodes.filter((n) => !Array.isArray(n)),
-          node,
-        ),
+      // for unknown reason using self.openNodes directly
+      // suddenly started to cause errors
+      // so need to snapshot
+      return getSnapshot(self.openNodes).filter((node) =>
+        allParentNodesAreOpen(self.openNodes, node),
       )
     },
     get showArt() {
@@ -230,10 +229,6 @@ export default types
     get artFolder() {
       const store = getParent(self, 1)
       return buildArtFolder({ loading: self.loading, store })
-    },
-    get herkunftFolder() {
-      const store = getParent(self, 1)
-      return buildHerkunftFolder({ loading: self.loading, store })
     },
     get kulturFolder() {
       const store = getParent(self, 1)
@@ -401,15 +396,19 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturLieferungAnLieferung({ store })
     },
+    get herkunftFolder() {
+      const store = getParent(self, 1)
+      return buildHerkunftFolder({ loading: self.loading, store })
+    },
+    get herkunftHerkunft() {
+      const store = getParent(self, 1)
+      return buildHerkunftHerkunft({ store })
+    },
+    get herkunftSammlungFolder() {
+      const store = getParent(self, 1)
+      return buildHerkunftSammlungFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

@@ -1,32 +1,44 @@
-import findIndex from 'lodash/findIndex'
+import { getSnapshot } from 'mobx-state-tree'
+export default ({ store }) => {
+  const {
+    showHerkunft,
+    visibleOpenNodes,
+    loading,
+    herkunftHerkunft,
+  } = store.tree
+  if (!showHerkunft) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const herkunftId = url[1]
-
-  const herkunftNodes = nodes.filter((n) => n.parentId === 'herkunftFolder')
-  const herkunftIndex = findIndex(
-    herkunftNodes,
-    (n) => n.id === `herkunft${herkunftId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Herkuenfte',
   )
+  console.log('nodes herkunft sammlung', {
+    parentNodes,
+    visibleOpenNodes,
+  })
 
-  const sammlungen = store.sammlungsFiltered.filter(
-    (s) => s.herkunft_id === herkunftId,
-  )
-  const nr = loading && !sammlungen.length ? '...' : sammlungen.length
+  return parentNodes.map((node) => {
+    const herkunftId = node[1]
+    const herkunftIndex = herkunftHerkunft.findIndex((a) => a.id === herkunftId)
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`herkunft${herkunftId}`)) return []
+    const sammlungen = store.sammlungsFiltered.filter(
+      (s) => s.herkunft_id === herkunftId,
+    )
+    const nr = loading && !sammlungen.length ? '...' : sammlungen.length
+    console.log('nodes herkunft sammlung', {
+      herkunftId,
+      herkunftIndex,
+      sammlungen,
+    })
 
-  return [
-    {
+    return {
       nodeType: 'folder',
       menuTitle: 'Sammlungen',
-      id: `herkunft${herkunftId}SammlungFolder`,
+      id: `${herkunftId}SammlungFolder`,
       label: `Sammlungen (${nr})`,
       url: ['Herkuenfte', herkunftId, 'Sammlungen'],
       sort: [2, herkunftIndex, 2],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
