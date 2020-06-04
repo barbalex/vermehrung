@@ -1,32 +1,29 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showKultur, visibleOpenNodes, loading, kulturKultur } = store.tree
+  if (!showKultur) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const kulturId = url[1]
-
-  const anlieferungen = store.lieferungsFiltered.filter(
-    (z) => z.nach_kultur_id === kulturId,
-  )
-  const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
-
-  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Kulturen',
   )
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`kultur${kulturId}`)) return []
+  return parentNodes.map((node) => {
+    const kulturId = node[1]
+    const kulturIndex = kulturKultur.findIndex((a) => a.id === kulturId)
 
-  return [
-    {
+    const anlieferungen = store.lieferungsFiltered.filter(
+      (z) => z.nach_kultur_id === kulturId,
+    )
+    const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
+
+    return {
       nodeType: 'folder',
       menuTitle: 'An-Lieferungen',
-      id: `kultur${kulturId}AnLieferungFolder`,
+      id: `${kulturId}AnLieferungFolder`,
       label: `An-Lieferungen (${nr})`,
       url: ['Kulturen', kulturId, 'An-Lieferungen'],
       sort: [5, kulturIndex, 3],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
