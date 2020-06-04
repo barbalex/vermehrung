@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
 export default ({ store }) => {
@@ -12,6 +11,8 @@ export default ({ store }) => {
       node[2] === 'Sammlungen' &&
       node[4] === 'Aus-Lieferungen',
   )
+
+  if (!parentNodes.length) return []
 
   return parentNodes.flatMap((node) => {
     const artId = node[1]
