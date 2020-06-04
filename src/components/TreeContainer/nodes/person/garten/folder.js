@@ -1,30 +1,29 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showPerson, visibleOpenNodes, loading, personPerson } = store.tree
+  if (!showPerson) return []
 
-export default ({ store, loading, url, nodes }) => {
-  const personId = url[1]
-
-  const gaerten = store.gartensFiltered.filter((s) => s.person_id === personId)
-  const nr = loading && !gaerten.length ? '...' : gaerten.length
-
-  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
-  const personIndex = findIndex(
-    personNodes,
-    (n) => n.id === `person${personId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Personen',
   )
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`person${personId}`)) return []
+  return parentNodes.map((node) => {
+    const personId = node[1]
+    const personIndex = personPerson.findIndex((a) => a.id === personId)
 
-  return [
-    {
+    const gaerten = store.gartensFiltered.filter(
+      (s) => s.person_id === personId,
+    )
+    const nr = loading && !gaerten.length ? '...' : gaerten.length
+
+    return {
       nodeType: 'folder',
       menuTitle: 'Gärten',
-      id: `person${personId}GartenFolder`,
+      id: `${personId}GartenFolder`,
       label: `Gärten (${nr})`,
       url: ['Personen', personId, 'Gaerten'],
       sort: [11, personIndex, 2],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
