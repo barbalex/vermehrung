@@ -408,15 +408,15 @@ export default types
       const store = getParent(self, 1)
       return buildHerkunftSammlungFolder({ store })
     },
+    get herkunftSammlung() {
+      const store = getParent(self, 1)
+      return buildHerkunftSammlungSammlung({ store })
+    },
+    get herkunftSammlungAusLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildHerkunftSammlungAusLieferungFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
