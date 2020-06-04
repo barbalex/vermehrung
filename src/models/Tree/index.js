@@ -456,11 +456,11 @@ export default types
       const store = getParent(self, 1)
       return buildKulturAusLieferungFolder({ store })
     },
-    /*get xxFolder() {
+    get kulturLieferungAusLieferung() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildKulturLieferungAusLieferung({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
