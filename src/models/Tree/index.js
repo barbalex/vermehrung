@@ -385,15 +385,15 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturAusLieferungFolder({ store })
     },
+    get gartenKulturLieferungAusLieferung() {
+      const store = getParent(self, 1)
+      return buildGartenKulturLieferungAusLieferung({ store })
+    },
+    get gartenKulturAnLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildGartenKulturAnLieferungFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
