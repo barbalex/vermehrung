@@ -1,23 +1,25 @@
-import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, store, url }) => {
-  const herkunftId = url[1]
+export default ({ store }) => {
+  const { showHerkunft, visibleOpenNodes, herkunftHerkunft } = store.tree
+  if (!showHerkunft) return []
 
-  const sammlungen = store.sammlungsFiltered.filter(
-    (s) => s.herkunft_id === herkunftId,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 && node[0] === 'Herkuenfte' && node[2] === 'Sammlungen',
   )
 
-  const herkunftNodes = nodes.filter((n) => n.parentId === 'herkunftFolder')
-  const herkunftIndex =
-    findIndex(herkunftNodes, (n) => n.id === `herkunft${herkunftId}`) || 0
+  if (!parentNodes.length) return []
 
-  return (
-    sammlungen
-      // only show if parent node exists
-      .filter(() =>
-        nodes.map((n) => n.id).includes(`herkunft${herkunftId}SammlungFolder`),
-      )
+  return parentNodes.flatMap((node) => {
+    const herkunftId = node[1]
+    const herkunftIndex = herkunftHerkunft.findIndex((a) => a.id === herkunftId)
+
+    const sammlungen = store.sammlungsFiltered.filter(
+      (s) => s.herkunft_id === herkunftId,
+    )
+
+    return sammlungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -30,8 +32,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Sammlung',
           table: 'sammlung',
-          id: `herkunft${herkunftId}Sammlung${el.id}`,
-          parentId: `herkunft${herkunftId}SammlungFolder`,
+          id: el.id,
           label,
           url: ['Herkuenfte', herkunftId, 'Sammlungen', el.id],
           hasChildren: true,
@@ -41,5 +42,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [2, herkunftIndex, 2, index]
         return el
       })
-  )
+  })
 }

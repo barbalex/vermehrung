@@ -1,40 +1,33 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const {
+    showHerkunft,
+    visibleOpenNodes,
+    loading,
+    herkunftHerkunft,
+    herkunftSammlung,
+  } = store.tree
+  if (!showHerkunft) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const herkunftId = url[1]
-  const sammlungId = url[3]
-
-  const herkunftNodes = nodes.filter((n) => n.parentId === 'herkunftFolder')
-  const herkunftIndex = findIndex(
-    herkunftNodes,
-    (n) => n.id === `herkunft${herkunftId}`,
-  )
-  const sammlungNodes = nodes.filter(
-    (n) => n.parentId === `herkunft${herkunftId}SammlungFolder`,
-  )
-  const sammlungIndex = findIndex(
-    sammlungNodes,
-    (n) => n.id === `herkunft${herkunftId}Sammlung${sammlungId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 4 && node[0] === 'Herkuenfte' && node[2] === 'Sammlungen',
   )
 
-  const lieferungen = store.lieferungsFiltered.filter(
-    (l) => l.von_sammlung_id === sammlungId,
-  )
-  const nr = loading && !lieferungen.length ? '...' : lieferungen.length
+  return parentNodes.map((node) => {
+    const herkunftId = node[1]
+    const herkunftIndex = herkunftHerkunft.findIndex((a) => a.id === herkunftId)
+    const sammlungId = node[3]
+    const sammlungIndex = herkunftSammlung.findIndex((a) => a.id === sammlungId)
 
-  // only return if parent exists
-  if (
-    !nodes
-      .map((n) => n.id)
-      .includes(`herkunft${herkunftId}Sammlung${sammlungId}`)
-  )
-    return []
+    const lieferungen = store.lieferungsFiltered.filter(
+      (l) => l.von_sammlung_id === sammlungId,
+    )
+    const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
-  return [
-    {
+    return {
       nodeType: 'folder',
       menuTitle: 'Aus-Lieferungen',
-      id: `herkunft${herkunftId}Sammlung${sammlungId}SammlungLieferungFolder`,
+      id: `${sammlungId}SammlungLieferungFolder`,
       label: `Aus-Lieferungen (${nr})`,
       url: [
         'Herkuenfte',
@@ -46,6 +39,6 @@ export default ({ url, nodes, store, loading }) => {
       sort: [2, herkunftIndex, 2, sammlungIndex, 1],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
