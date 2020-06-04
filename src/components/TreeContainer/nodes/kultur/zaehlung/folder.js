@@ -1,32 +1,29 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showKultur, visibleOpenNodes, loading, kulturKultur } = store.tree
+  if (!showKultur) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const kulturId = url[1]
-
-  const zaehlungen = store.zaehlungsFiltered.filter(
-    (z) => z.kultur_id === kulturId,
-  )
-  const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
-
-  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Kulturen',
   )
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`kultur${kulturId}`)) return []
+  return parentNodes.map((node) => {
+    const kulturId = node[1]
+    const kulturIndex = kulturKultur.findIndex((a) => a.id === kulturId)
 
-  return [
-    {
+    const zaehlungen = store.zaehlungsFiltered.filter(
+      (z) => z.kultur_id === kulturId,
+    )
+    const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
+
+    return {
       nodeType: 'folder',
       menuTitle: 'Zählungen',
-      id: `kultur${kulturId}ZaehlungFolder`,
+      id: `${kulturId}ZaehlungFolder`,
       label: `Zählungen (${nr})`,
       url: ['Kulturen', kulturId, 'Zaehlungen'],
       sort: [5, kulturIndex, 2],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }

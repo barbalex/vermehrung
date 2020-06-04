@@ -424,19 +424,19 @@ export default types
       const store = getParent(self, 1)
       return buildKulturKultur({ store })
     },
+    get kulturZaehlungFolder() {
+      const store = getParent(self, 1)
+      return buildKulturZaehlungFolder({ store })
+    },
+    get kulturZaehlungZaehlung() {
+      const store = getParent(self, 1)
+      return buildKulturZaehlungZaehlung({ store })
+    },
+    get kulturTeilkulturFolder() {
+      const store = getParent(self, 1)
+      return buildKulturTeilkulturFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

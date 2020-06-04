@@ -1,36 +1,33 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showKultur, visibleOpenNodes, loading, kulturKultur } = store.tree
+  if (!showKultur) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const kulturId = url[1]
-
-  const kulturen = store.kultursFiltered
-  const kultur = kulturen.find((k) => k.id === kulturId)
-  const tk = kultur?.kultur_option?.tk
-  if (!tk) return []
-  const teilkulturs = store.teilkultursFiltered.filter(
-    (z) => z.kultur_id === kulturId,
-  )
-  const nr = loading && !teilkulturs.length ? '...' : teilkulturs.length
-
-  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Kulturen',
   )
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`kultur${kulturId}`)) return []
+  return parentNodes.map((node) => {
+    const kulturId = node[1]
+    const kulturIndex = kulturKultur.findIndex((a) => a.id === kulturId)
 
-  return [
-    {
+    const kultur_option = store.kultur_options.get(kulturId)
+    const tk = kultur_option?.tk
+    if (!tk) return []
+
+    const teilkulturs = store.teilkultursFiltered.filter(
+      (z) => z.kultur_id === kulturId,
+    )
+    const nr = loading && !teilkulturs.length ? '...' : teilkulturs.length
+
+    return {
       nodeType: 'folder',
       menuTitle: 'Teilkulturen',
-      id: `kultur${kulturId}TeilkulturFolder`,
+      id: `${kulturId}TeilkulturFolder`,
       label: `Teilkulturen (${nr})`,
       url: ['Kulturen', kulturId, 'Teilkulturen'],
       sort: [5, kulturIndex, 1],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
