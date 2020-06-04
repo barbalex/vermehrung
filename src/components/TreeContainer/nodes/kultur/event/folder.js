@@ -1,30 +1,27 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showKultur, visibleOpenNodes, loading, kulturKultur } = store.tree
+  if (!showKultur) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const kulturId = url[1]
-
-  const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
-  const nr = loading && !events.length ? '...' : events.length
-
-  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Kulturen',
   )
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`kultur${kulturId}`)) return []
+  return parentNodes.map((node) => {
+    const kulturId = node[1]
+    const kulturIndex = kulturKultur.findIndex((a) => a.id === kulturId)
 
-  return [
-    {
+    const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
+    const nr = loading && !events.length ? '...' : events.length
+
+    return {
       nodeType: 'folder',
       menuTitle: 'Events',
-      id: `kultur${kulturId}EventFolder`,
+      id: `${kulturId}EventFolder`,
       label: `Events (${nr})`,
       url: ['Kulturen', kulturId, 'Events'],
       sort: [5, kulturIndex, 5],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
