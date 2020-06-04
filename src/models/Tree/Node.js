@@ -15,6 +15,7 @@ export default types.model('Node', {
   ),
   table: types.union(types.string, types.number, types.null, types.undefined),
   id: types.union(types.string, types.number, types.null, types.undefined),
+  // TODO: remove when all nodes converted to mst
   parentId: types.union(
     types.string,
     types.number,
