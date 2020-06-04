@@ -407,7 +407,7 @@ export default types
       const store = getParent(self, 1)
       return buildHerkunftSammlungAusLieferungFolder({ store })
     },
-    get herkunftSammlungausLieferungLieferung() {
+    get herkunftSammlungausLieferung() {
       const store = getParent(self, 1)
       return buildHerkunftSammlungausLieferungLieferung({ store })
     },
@@ -415,7 +415,7 @@ export default types
       const store = getParent(self, 1)
       return buildKulturFolder({ loading: self.loading, store })
     },
-    get kulturKultur() {
+    get kultur() {
       const store = getParent(self, 1)
       return buildKulturKultur({ store })
     },
@@ -423,7 +423,7 @@ export default types
       const store = getParent(self, 1)
       return buildKulturZaehlungFolder({ store })
     },
-    get kulturZaehlungZaehlung() {
+    get kulturZaehlung() {
       const store = getParent(self, 1)
       return buildKulturZaehlungZaehlung({ store })
     },
@@ -431,7 +431,7 @@ export default types
       const store = getParent(self, 1)
       return buildKulturTeilkulturFolder({ store })
     },
-    get kulturTeilkulturTeilkultur() {
+    get kulturTeilkultur() {
       const store = getParent(self, 1)
       return buildKulturTeilkulturTeilkultur({ store })
     },
@@ -479,7 +479,7 @@ export default types
       const store = getParent(self, 1)
       return buildPersonLieferungFolder({ store })
     },
-    get personLieferungLieferung() {
+    get personLieferung() {
       const store = getParent(self, 1)
       return buildPersonLieferungLieferung({ store })
     },
@@ -503,11 +503,11 @@ export default types
       const store = getParent(self, 1)
       return buildPersonGartenKulturFolder({ store })
     },
-    /*get xxFolder() {
+    get personGartenKultur() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildPersonGartenKulturKultur({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
