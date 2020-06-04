@@ -1,19 +1,22 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showGarten, visibleOpenNodes, gartenGarten } = store.tree
+  if (!showGarten) return []
 
-export default ({ nodes, store, url }) => {
-  const gartenId = url[1]
-  const kulturen = store.kultursFiltered.filter((k) => k.garten_id === gartenId)
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 && node[0] === 'Gaerten' && node[2] === 'Kulturen',
+  )
 
-  const gartenNodes = nodes.filter((n) => n.parentId === 'gartenFolder')
-  const gartenIndex =
-    findIndex(gartenNodes, (n) => n.id === `garten${gartenId}`) || 0
+  if (!parentNodes.length) return []
 
-  return (
-    kulturen
-      // only show if parent node exists
-      .filter(() =>
-        nodes.map((n) => n.id).includes(`garten${gartenId}KulturFolder`),
-      )
+  return parentNodes.flatMap((node) => {
+    const gartenId = node[1]
+    const gartenIndex = gartenGarten.findIndex((a) => a.id === gartenId)
+    const kulturen = store.kultursFiltered.filter(
+      (k) => k.garten_id === gartenId,
+    )
+
+    return kulturen
       .map((el) => {
         const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
         const herkunft = el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
@@ -23,8 +26,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Kultur',
           table: 'kultur',
-          id: `garten${gartenId}Kultur${el.id}`,
-          parentId: `garten${gartenId}KulturFolder`,
+          id: el.id,
           label,
           url: ['Gaerten', gartenId, 'Kulturen', el.id],
           hasChildren: true,
@@ -34,5 +36,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [4, gartenIndex, 1, index]
         return el
       })
-  )
+  })
 }

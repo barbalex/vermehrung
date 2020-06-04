@@ -3,19 +3,6 @@ import memoizeOne from 'memoize-one'
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-import buildGartenKulturFolder from './garten/kultur/folder'
-import buildGartenKultur from './garten/kultur'
-import buildGartenKulturTeilkulturFolder from './garten/kultur/teilkultur/folder'
-import buildGartenKulturTeilkulturTeilkultur from './garten/kultur/teilkultur'
-import buildGartenKulturEventFolder from './garten/kultur/event/folder'
-import buildGartenKulturEventEvent from './garten/kultur/event'
-import buildGartenKulturZaehlungFolder from './garten/kultur/zaehlung/folder'
-import buildGartenKulturZaehlungZaehlung from './garten/kultur/zaehlung'
-import buildGartenKulturAusLieferungFolder from './garten/kultur/auslieferung/folder'
-import buildGartenKulturLieferungAusLieferung from './garten/kultur/auslieferung'
-import buildGartenKulturAnLieferungFolder from './garten/kultur/anlieferung/folder'
-import buildGartenKulturLieferungAnLieferung from './garten/kultur/anlieferung'
-
 import buildHerkunftHerkunft from './herkunft'
 import buildHerkunftSammlungFolder from './herkunft/sammlung/folder'
 import buildHerkunftSammlungSammlung from './herkunft/sammlung'
@@ -106,6 +93,7 @@ export default ({ store, loading, role }) => {
     gartenFolder,
     gartenGarten,
     gartenKulturFolder,
+    gartenKultur,
     herkunftFolder,
     kulturFolder,
     lieferungFolder,
@@ -152,6 +140,7 @@ export default ({ store, loading, role }) => {
     ...gartenFolder,
     ...gartenGarten,
     ...gartenKulturFolder,
+    ...gartenKultur,
     ...(showHerkunftFolder ? herkunftFolder : []),
     ...(showLieferungFolder ? lieferungFolder : []),
     ...sammelLieferungFolder,
