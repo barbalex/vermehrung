@@ -1,5 +1,5 @@
 export default ({ store }) => {
-  const { showKultur, visibleOpenNodes, loading, kulturKultur } = store.tree
+  const { showKultur, visibleOpenNodes, loading, kultur } = store.tree
   if (!showKultur) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -8,7 +8,7 @@ export default ({ store }) => {
 
   return parentNodes.map((node) => {
     const kulturId = node[1]
-    const kulturIndex = kulturKultur.findIndex((a) => a.id === kulturId)
+    const kulturIndex = kultur.findIndex((a) => a.id === kulturId)
 
     const zaehlungen = store.zaehlungsFiltered.filter(
       (z) => z.kultur_id === kulturId,
