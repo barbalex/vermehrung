@@ -8,7 +8,6 @@ import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
 import buildGartenFolder from '../../components/TreeContainer/nodes/garten/folder'
-import buildPersonFolder from '../../components/TreeContainer/nodes/person/folder'
 import buildSammelLieferungFolder from '../../components/TreeContainer/nodes/sammelLieferung/folder'
 import buildSammlungFolder from '../../components/TreeContainer/nodes/sammlung/folder'
 import buildTeilkulturFolder from '../../components/TreeContainer/nodes/teilkultur/folder'
@@ -70,6 +69,7 @@ import buildZaehlungZaehlung from '../../components/TreeContainer/nodes/zaehlung
 import buildEventFolder from '../../components/TreeContainer/nodes/event/folder'
 import buildEventEvent from '../../components/TreeContainer/nodes/event'
 
+import buildPersonFolder from '../../components/TreeContainer/nodes/person/folder'
 import buildPersonPerson from '../../components/TreeContainer/nodes/person'
 import buildPersonGartenFolder from '../../components/TreeContainer/nodes/person/garten/folder'
 import buildPersonGartenGarten from '../../components/TreeContainer/nodes/person/garten'
@@ -471,11 +471,11 @@ export default types
       const store = getParent(self, 1)
       return buildPersonFolder({ loading: self.loading, store })
     },
-    /*get xxFolder() {
+    get personPerson() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildPersonPerson({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

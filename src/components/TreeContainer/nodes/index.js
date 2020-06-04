@@ -85,6 +85,7 @@ export default ({ store, loading, role }) => {
     lieferungFolder,
     lieferungLieferung,
     personFolder,
+    personPerson,
     sammelLieferungFolder,
     sammlungFolder,
     teilkulturFolder,
@@ -156,6 +157,7 @@ export default ({ store, loading, role }) => {
     ...eventFolder,
     ...eventEvent,
     ...personFolder,
+    ...personPerson,
     ...(showSammlungFolder ? sammlungFolder : []),
   ]
 
