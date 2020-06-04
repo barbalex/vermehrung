@@ -452,6 +452,10 @@ export default types
       const store = getParent(self, 1)
       return buildKulturAnLieferungFolder({ store })
     },
+    get kulturLieferungAnLieferung() {
+      const store = getParent(self, 1)
+      return buildKulturLieferungAnLieferung({ store })
+    },
     get kulturAusLieferungFolder() {
       const store = getParent(self, 1)
       return buildKulturAusLieferungFolder({ store })
@@ -461,10 +465,6 @@ export default types
       return buildKulturLieferungAusLieferung({ store })
     },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
