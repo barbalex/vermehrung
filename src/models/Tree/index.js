@@ -211,6 +211,9 @@ export default types
       const store = getParent(self, 1)
       return store?.userPersonOption?.tree_lieferung
     },
+    get showPerson() {
+      return true
+    },
     get showSammlung() {
       const store = getParent(self, 1)
       return store?.userPerson?.user_role !== 'gaertner'
@@ -229,10 +232,6 @@ export default types
     get artFolder() {
       const store = getParent(self, 1)
       return buildArtFolder({ loading: self.loading, store })
-    },
-    get personFolder() {
-      const store = getParent(self, 1)
-      return buildPersonFolder({ loading: self.loading, store })
     },
     get sammelLieferungFolder() {
       const store = getParent(self, 1)
@@ -467,6 +466,10 @@ export default types
     get lieferungLieferung() {
       const store = getParent(self, 1)
       return buildLieferungLieferung({ store })
+    },
+    get personFolder() {
+      const store = getParent(self, 1)
+      return buildPersonFolder({ loading: self.loading, store })
     },
     /*get xxFolder() {
       const store = getParent(self, 1)

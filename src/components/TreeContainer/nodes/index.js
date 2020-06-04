@@ -11,26 +11,6 @@ import buildTeilkulturTeilkultur from './teilkultur'
 
 import buildZaehlungZaehlung from './zaehlung'
 
-import buildPersonPerson from './person'
-import buildPersonGartenFolder from './person/garten/folder'
-import buildPersonGartenGarten from './person/garten'
-import buildPersonGartenKulturFolder from './person/garten/kultur/folder'
-import buildPersonGartenKulturKultur from './person/garten/kultur'
-import buildPersonGartenKulturZaehlungFolder from './person/garten/kultur/zaehlung/folder'
-import buildPersonGartenKulturZaehlungZaehlung from './person/garten/kultur/zaehlung'
-import buildPersonGartenKulturEventFolder from './person/garten/kultur/event/folder'
-import buildPersonGartenKulturEventEvent from './person/garten/kultur/event'
-import buildPersonGartenKulturTeilkulturFolder from './person/garten/kultur/teilkultur/folder'
-import buildPersonGartenKulturTeilkulturTeilkultur from './person/garten/kultur/teilkultur'
-import buildPersonGartenKulturAuslieferungFolder from './person/garten/kultur/auslieferung/folder'
-import buildPersonGartenKulturAuslieferungLieferung from './person/garten/kultur/auslieferung'
-import buildPersonGartenKulturAnlieferungFolder from './person/garten/kultur/anlieferung/folder'
-import buildPersonGartenKulturAnlieferungLieferung from './person/garten/kultur/anlieferung'
-import buildPersonGartenSammlungFolder from './person/sammlung/folder'
-import buildPersonGartenSammlungSammlung from './person/sammlung'
-import buildPersonGartenLieferungFolder from './person/lieferung/folder'
-import buildPersonGartenLieferungLieferung from './person/lieferung'
-
 import buildSammlungSammlung from './sammlung'
 import buildSammlungHerkunftFolder from './sammlung/herkunft/folder'
 import buildSammlungHerkunftHerkunft from './sammlung/herkunft'
@@ -223,17 +203,6 @@ export default ({ store, loading, role }) => {
         )(),
       ]
     }
-    if (url.length === 1 && url[0] === 'Personen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonPerson({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
     if (url.length === 1 && url[0] === 'Sammlungen') {
       nodes = [
         ...nodes,
@@ -246,35 +215,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    if (url.length === 2 && url[0] === 'Personen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildPersonGartenSammlungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildPersonGartenLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-      ]
-    }
     if (url.length === 2 && url[0] === 'Sammlungen') {
       nodes = [
         ...nodes,
@@ -310,42 +250,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Gaerten') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenGarten({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Sammlungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenSammlungSammlung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 3 && url[0] === 'Personen' && url[2] === 'Lieferungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenLieferungLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
     if (
       url.length === 3 &&
       url[0] === 'Sammlungen' &&
@@ -395,19 +299,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    if (url.length === 4 && url[0] === 'Personen' && url[2] === 'Gaerten') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturFolder({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-      ]
-    }
     if (
       url.length === 4 &&
       url[0] === 'Sammlungen' &&
@@ -444,69 +335,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    if (
-      url.length === 5 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturKultur({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-
-    if (
-      url.length === 6 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturZaehlungFolder({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildPersonGartenKulturEventFolder({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildPersonGartenKulturTeilkulturFolder({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildPersonGartenKulturAuslieferungFolder({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildPersonGartenKulturAnlieferungFolder({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
     if (
       url.length === 6 &&
       url[0] === 'Sammlungen' &&
@@ -550,96 +378,6 @@ export default ({ store, loading, role }) => {
       ]
     }
 
-    if (
-      url.length === 7 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Zaehlungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturZaehlungZaehlung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Events'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturEventEvent({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Teilkulturen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturTeilkulturTeilkultur({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Aus-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturAuslieferungLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Personen' &&
-      url[2] === 'Gaerten' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'An-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildPersonGartenKulturAnlieferungLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
     if (
       url.length === 7 &&
       url[0] === 'Sammlungen' &&
