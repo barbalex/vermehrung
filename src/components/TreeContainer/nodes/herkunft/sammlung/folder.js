@@ -1,4 +1,3 @@
-import { getSnapshot } from 'mobx-state-tree'
 export default ({ store }) => {
   const {
     showHerkunft,
