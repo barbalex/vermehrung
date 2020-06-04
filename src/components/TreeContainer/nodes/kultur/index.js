@@ -1,10 +1,15 @@
-export default ({ nodes, store }) => {
-  const kulturen = store.kultursFiltered
+import isEqual from 'lodash/isEqual'
+
+export default ({ store }) => {
+  const { showKultur, visibleOpenNodes } = store.tree
+  if (!showKultur) return []
 
   return (
-    kulturen
+    store.kultursFiltered
       // only show if parent node exists
-      .filter(() => nodes.map((n) => n.id).includes('kulturFolder'))
+      .filter(() =>
+        visibleOpenNodes.some((node) => isEqual(['Kulturen'], node)),
+      )
       .map((el) => {
         const garten =
           el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`
@@ -16,8 +21,7 @@ export default ({ nodes, store }) => {
           nodeType: 'table',
           menuTitle: 'Kultur',
           table: 'kultur',
-          id: `kultur${el.id}`,
-          parentId: 'kulturFolder',
+          id: el.id,
           label,
           url: ['Kulturen', el.id],
           hasChildren: true,

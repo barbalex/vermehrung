@@ -8,7 +8,6 @@ import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
 import buildGartenFolder from '../../components/TreeContainer/nodes/garten/folder'
-import buildKulturFolder from '../../components/TreeContainer/nodes/kultur/folder'
 import buildLieferungFolder from '../../components/TreeContainer/nodes/lieferung/folder'
 import buildPersonFolder from '../../components/TreeContainer/nodes/person/folder'
 import buildSammelLieferungFolder from '../../components/TreeContainer/nodes/sammelLieferung/folder'
@@ -107,6 +106,7 @@ import buildSammlungAusLieferungKulturAusLieferungLieferung from '../../componen
 import buildSammlungAusLieferungKulturAnLieferungFolder from '../../components/TreeContainer/nodes/sammlung/auslieferung/kultur/anlieferung/folder'
 import buildSammlungAusLieferungKulturAnLieferungLieferung from '../../components/TreeContainer/nodes/sammlung/auslieferung/kultur/anlieferung'
 
+import buildKulturFolder from '../../components/TreeContainer/nodes/kultur/folder'
 import buildKulturKultur from '../../components/TreeContainer/nodes/kultur'
 import buildKulturTeilkulturFolder from '../../components/TreeContainer/nodes/kultur/teilkultur/folder'
 import buildKulturTeilkulturTeilkultur from '../../components/TreeContainer/nodes/kultur/teilkultur'
@@ -229,10 +229,6 @@ export default types
     get artFolder() {
       const store = getParent(self, 1)
       return buildArtFolder({ loading: self.loading, store })
-    },
-    get kulturFolder() {
-      const store = getParent(self, 1)
-      return buildKulturFolder({ loading: self.loading, store })
     },
     get lieferungFolder() {
       const store = getParent(self, 1)
@@ -416,15 +412,19 @@ export default types
       const store = getParent(self, 1)
       return buildHerkunftSammlungAusLieferungFolder({ store })
     },
+    get herkunftSammlungausLieferungLieferung() {
+      const store = getParent(self, 1)
+      return buildHerkunftSammlungausLieferungLieferung({ store })
+    },
+    get kulturFolder() {
+      const store = getParent(self, 1)
+      return buildKulturFolder({ loading: self.loading, store })
+    },
+    get kulturKultur() {
+      const store = getParent(self, 1)
+      return buildKulturKultur({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

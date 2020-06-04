@@ -1,4 +1,8 @@
-export default ({ store, loading }) => {
+export default ({ store }) => {
+  const { loading, showKultur } = store.tree
+
+  if (!showKultur) return []
+
   const kulturen = store.kultursFiltered
   const nr = loading && !kulturen.length ? '...' : kulturen.length
 
