@@ -1,32 +1,29 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const { showPerson, visibleOpenNodes, loading, personPerson } = store.tree
+  if (!showPerson) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const personId = url[1]
-
-  const sammlungen = store.sammlungsFiltered.filter(
-    (s) => s.person_id === personId,
-  )
-  const nr = loading && !sammlungen.length ? '...' : sammlungen.length
-
-  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
-  const personIndex = findIndex(
-    personNodes,
-    (n) => n.id === `person${personId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Personen',
   )
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`person${personId}`)) return []
+  return parentNodes.map((node) => {
+    const personId = node[1]
+    const personIndex = personPerson.findIndex((a) => a.id === personId)
 
-  return [
-    {
+    const sammlungen = store.sammlungsFiltered.filter(
+      (s) => s.person_id === personId,
+    )
+    const nr = loading && !sammlungen.length ? '...' : sammlungen.length
+
+    return {
       nodeType: 'folder',
       menuTitle: 'Sammlungen',
-      id: `person${personId}SammlungFolder`,
+      id: `${personId}SammlungFolder`,
       label: `Sammlungen (${nr})`,
       url: ['Personen', personId, 'Sammlungen'],
       sort: [11, personIndex, 1],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
