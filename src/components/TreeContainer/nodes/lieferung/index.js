@@ -1,12 +1,18 @@
+import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
-export default ({ nodes, store }) => {
+export default ({ store }) => {
+  const { showLieferung, visibleOpenNodes } = store.tree
+
+  if (!showLieferung) return []
   const lieferungen = store.lieferungsFiltered
 
   return (
     lieferungen
       // only show if parent node exists
-      .filter(() => nodes.map((n) => n.id).includes('lieferungFolder'))
+      .filter(() =>
+        visibleOpenNodes.some((node) => isEqual(['Lieferungen'], node)),
+      )
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -23,8 +29,7 @@ export default ({ nodes, store }) => {
           nodeType: 'table',
           menuTitle: 'Lieferung',
           table: 'lieferung',
-          id: `lieferung${el.id}`,
-          parentId: 'lieferungFolder',
+          id: el.id,
           label,
           url: ['Lieferungen', el.id],
           hasChildren: false,

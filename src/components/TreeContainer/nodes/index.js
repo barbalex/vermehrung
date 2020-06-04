@@ -3,8 +3,6 @@ import memoizeOne from 'memoize-one'
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-import buildLieferungLieferung from './lieferung'
-
 import buildSammelLieferungSammelLieferung from './sammelLieferung'
 import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/folder'
 import buildSammelLieferungLieferungLieferung from './sammelLieferung/lieferung'
@@ -105,6 +103,7 @@ export default ({ store, loading, role }) => {
     kulturZaehlungFolder,
     kulturZaehlungZaehlung,
     lieferungFolder,
+    lieferungLieferung,
     personFolder,
     sammelLieferungFolder,
     sammlungFolder,
@@ -113,11 +112,10 @@ export default ({ store, loading, role }) => {
   } = store.tree
   const openNodes = store.tree.openNodes.sort(sort)
 
-  const { tree_teilkultur, tree_zaehlung, tree_lieferung } = userPersonOption
+  const { tree_teilkultur, tree_zaehlung } = userPersonOption
   const showSammlungFolder = role !== 'gaertner'
   const showTeilkulturFolder = tree_teilkultur
   const showZaehlungFolder = tree_zaehlung
-  const showLieferungFolder = tree_lieferung
 
   let nodes = [
     ...artFolder,
@@ -170,7 +168,8 @@ export default ({ store, loading, role }) => {
     ...kulturTeilkulturTeilkultur,
     ...kulturZaehlungFolder,
     ...kulturZaehlungZaehlung,
-    ...(showLieferungFolder ? lieferungFolder : []),
+    ...lieferungFolder,
+    ...lieferungLieferung,
     ...sammelLieferungFolder,
     ...(showTeilkulturFolder ? teilkulturFolder : []),
     ...(showZaehlungFolder ? zaehlungFolder : []),
@@ -191,17 +190,6 @@ export default ({ store, loading, role }) => {
    */
   openNodes.forEach((url) => {
     if (!allParentNodesAreOpen(openNodes, url)) return
-    if (url.length === 1 && url[0] === 'Lieferungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildLieferungLieferung({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
     if (url.length === 1 && url[0] === 'Sammel-Lieferungen') {
       nodes = [
         ...nodes,

@@ -8,7 +8,6 @@ import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
 import buildGartenFolder from '../../components/TreeContainer/nodes/garten/folder'
-import buildLieferungFolder from '../../components/TreeContainer/nodes/lieferung/folder'
 import buildPersonFolder from '../../components/TreeContainer/nodes/person/folder'
 import buildSammelLieferungFolder from '../../components/TreeContainer/nodes/sammelLieferung/folder'
 import buildSammlungFolder from '../../components/TreeContainer/nodes/sammlung/folder'
@@ -57,6 +56,7 @@ import buildHerkunftSammlungSammlung from '../../components/TreeContainer/nodes/
 import buildHerkunftSammlungAusLieferungFolder from '../../components/TreeContainer/nodes/herkunft/sammlung/auslieferung/folder'
 import buildHerkunftSammlungausLieferungLieferung from '../../components/TreeContainer/nodes/herkunft/sammlung/auslieferung'
 
+import buildLieferungFolder from '../../components/TreeContainer/nodes/lieferung/folder'
 import buildLieferungLieferung from '../../components/TreeContainer/nodes/lieferung'
 
 import buildSammelLieferungSammelLieferung from '../../components/TreeContainer/nodes/sammelLieferung'
@@ -229,10 +229,6 @@ export default types
     get artFolder() {
       const store = getParent(self, 1)
       return buildArtFolder({ loading: self.loading, store })
-    },
-    get lieferungFolder() {
-      const store = getParent(self, 1)
-      return buildLieferungFolder({ loading: self.loading, store })
     },
     get personFolder() {
       const store = getParent(self, 1)
@@ -464,11 +460,15 @@ export default types
       const store = getParent(self, 1)
       return buildKulturLieferungAusLieferung({ store })
     },
-    /*get xxFolder() {
+    get lieferungFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildLieferungFolder({ loading: self.loading, store })
     },
-    get xxFolder() {
+    get lieferungLieferung() {
+      const store = getParent(self, 1)
+      return buildLieferungLieferung({ store })
+    },
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
