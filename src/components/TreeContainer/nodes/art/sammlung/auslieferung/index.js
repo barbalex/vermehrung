@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export default ({ store }) => {
-  const { showArt, visibleOpenNodes, artArt, artSammlung } = store.tree
+  const { showArt, visibleOpenNodes, art, artSammlung } = store.tree
   if (!showArt) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -17,7 +17,7 @@ export default ({ store }) => {
   return parentNodes.flatMap((node) => {
     const artId = node[1]
     const sammlungId = node[3]
-    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const artIndex = art.findIndex((a) => a.id === artId)
     const sammlungIndex = artSammlung.findIndex((s) => s.id === sammlungId)
 
     const lieferungen = store.lieferungsFiltered.filter(
