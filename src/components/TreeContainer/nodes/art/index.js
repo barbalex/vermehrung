@@ -13,7 +13,6 @@ export default ({ store }) => {
         menuTitle: 'Art',
         table: 'art',
         id: n.id,
-        parentId: 'artFolder',
         label: n?.art_ae_art?.name ?? '(keine Art gewählt)',
         url: ['Arten', n.id],
         hasChildren: true,
