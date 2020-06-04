@@ -2,6 +2,22 @@ import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 export default ({ nodes, store, url }) => {
+  const { showKultur, visibleOpenNodes, kulturKultur } = store.tree
+  if (!showKultur) return []
+
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 &&
+      node[0] === 'Kulturen' &&
+      node[2] === 'Aus-Lieferungen',
+  )
+
+  if (!parentNodes.length) return []
+
+  return parentNodes.flatMap((node) => {
+    const kulturId = node[1]
+    const kulturIndex = kulturKultur.findIndex((a) => a.id === kulturId)
+  })
   const kulturId = url[1]
 
   const auslieferungen = store.lieferungsFiltered.filter(

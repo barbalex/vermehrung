@@ -444,19 +444,19 @@ export default types
       const store = getParent(self, 1)
       return buildKulturEventFolder({ store })
     },
+    get kulturEventEvent() {
+      const store = getParent(self, 1)
+      return buildKulturEventEvent({ store })
+    },
+    get kulturAnLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildKulturAnLieferungFolder({ store })
+    },
+    get kulturAusLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildKulturAusLieferungFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

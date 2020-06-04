@@ -1,23 +1,23 @@
-import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, store, url }) => {
-  const kulturId = url[1]
+export default ({ store }) => {
+  const { showKultur, visibleOpenNodes, kulturKultur } = store.tree
+  if (!showKultur) return []
 
-  const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
-
-  const kulturNodes = nodes.filter((n) => n.parentId === `kulturFolder`)
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 && node[0] === 'Kulturen' && node[2] === 'Events',
   )
 
-  return (
-    events
-      // only show if parent node exists
-      .filter(() =>
-        nodes.map((n) => n.id).includes(`kultur${kulturId}EventFolder`),
-      )
+  if (!parentNodes.length) return []
+
+  return parentNodes.flatMap((node) => {
+    const kulturId = node[1]
+    const kulturIndex = kulturKultur.findIndex((a) => a.id === kulturId)
+
+    const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
+
+    return events
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -30,8 +30,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Event',
           table: 'event',
-          id: `kultur${kulturId}Event${el.id}`,
-          parentId: `kultur${kulturId}EventFolder`,
+          id: el.id,
           label,
           url: ['Kulturen', kulturId, 'Events', el.id],
           hasChildren: false,
@@ -41,5 +40,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [5, kulturIndex, 5, index]
         return el
       })
-  )
+  })
 }
