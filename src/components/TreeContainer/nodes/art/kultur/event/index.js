@@ -36,7 +36,6 @@ export default ({ store }) => {
           menuTitle: 'Event',
           table: 'event',
           id: `art${artId}Kultur${kulturId}Event${el.id}`,
-          parentId: `art${artId}Kultur${kulturId}EventFolder`,
           label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Events', el.id],
           hasChildren: false,
