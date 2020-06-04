@@ -333,15 +333,15 @@ export default types
       const store = getParent(self, 1)
       return buildArtKulturLieferungAusLieferung({ store })
     },
+    get artKulturAnLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildArtKulturAnLieferungFolder({ store })
+    },
+    get artKulturLieferungAnLieferung() {
+      const store = getParent(self, 1)
+      return buildArtKulturLieferungAnLieferung({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
