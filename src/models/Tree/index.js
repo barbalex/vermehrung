@@ -335,7 +335,7 @@ export default types
       const store = getParent(self, 1)
       return buildGartenFolder({ loading: self.loading, store })
     },
-    get gartenGarten() {
+    get garten() {
       const store = getParent(self, 1)
       return buildGartenGarten({ store })
     },
@@ -351,7 +351,7 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturZaehlungFolder({ store })
     },
-    get gartenKulturZaehlungZaehlung() {
+    get gartenKulturZaehlung() {
       const store = getParent(self, 1)
       return buildGartenKulturZaehlungZaehlung({ store })
     },
@@ -359,7 +359,7 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturTeilkulturFolder({ store })
     },
-    get gartenKulturTeilkulturTeilkultur() {
+    get gartenKulturTeilkultur() {
       const store = getParent(self, 1)
       return buildGartenKulturTeilkulturTeilkultur({ store })
     },
@@ -367,7 +367,7 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturEventFolder({ store })
     },
-    get gartenKulturEventEvent() {
+    get gartenKulturEvent() {
       const store = getParent(self, 1)
       return buildGartenKulturEventEvent({ store })
     },
@@ -375,7 +375,7 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturAusLieferungFolder({ store })
     },
-    get gartenKulturLieferungAusLieferung() {
+    get gartenKulturAusLieferung() {
       const store = getParent(self, 1)
       return buildGartenKulturLieferungAusLieferung({ store })
     },
@@ -383,7 +383,7 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturAnLieferungFolder({ store })
     },
-    get gartenKulturLieferungAnLieferung() {
+    get gartenKulturAnLieferung() {
       const store = getParent(self, 1)
       return buildGartenKulturLieferungAnLieferung({ store })
     },
@@ -391,7 +391,7 @@ export default types
       const store = getParent(self, 1)
       return buildHerkunftFolder({ loading: self.loading, store })
     },
-    get herkunftHerkunft() {
+    get herkunft() {
       const store = getParent(self, 1)
       return buildHerkunftHerkunft({ store })
     },

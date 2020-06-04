@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export default ({ store }) => {
-  const { showHerkunft, visibleOpenNodes, herkunftHerkunft } = store.tree
+  const { showHerkunft, visibleOpenNodes, herkunft } = store.tree
   if (!showHerkunft) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -13,7 +13,7 @@ export default ({ store }) => {
 
   return parentNodes.flatMap((node) => {
     const herkunftId = node[1]
-    const herkunftIndex = herkunftHerkunft.findIndex((a) => a.id === herkunftId)
+    const herkunftIndex = herkunft.findIndex((a) => a.id === herkunftId)
 
     const sammlungen = store.sammlungsFiltered.filter(
       (s) => s.herkunft_id === herkunftId,
