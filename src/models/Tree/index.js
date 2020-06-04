@@ -381,11 +381,11 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturEventEvent({ store })
     },
-    /*get xxFolder() {
+    get gartenKulturAusLieferungFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildGartenKulturAusLieferungFolder({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
