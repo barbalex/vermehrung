@@ -1,25 +1,25 @@
-import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, store, url }) => {
-  const personId = url[1]
+export default ({ store }) => {
+  const { showPerson, visibleOpenNodes, personPerson } = store.tree
+  if (!showPerson) return []
 
-  const sammlungen = store.sammlungsFiltered.filter(
-    (s) => s.person_id === personId,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 && node[0] === 'Personen' && node[2] === 'Sammlungen',
   )
 
-  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
-  const personIndex = findIndex(
-    personNodes,
-    (n) => n.id === `person${personId}`,
-  )
+  if (!parentNodes.length) return []
 
-  return (
-    sammlungen
-      // only show if parent node exists
-      .filter(() =>
-        nodes.map((n) => n.id).includes(`person${personId}SammlungFolder`),
-      )
+  return parentNodes.flatMap((node) => {
+    const personId = node[1]
+    const personIndex = personPerson.findIndex((a) => a.id === personId)
+
+    const sammlungen = store.sammlungsFiltered.filter(
+      (s) => s.person_id === personId,
+    )
+
+    return sammlungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -33,8 +33,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Sammlung',
           table: 'sammlung',
-          id: `person${personId}Sammlung${el.id}`,
-          parentId: `person${personId}SammlungFolder`,
+          id: el.id,
           label,
           url: ['Personen', personId, 'Sammlungen', el.id],
           hasChildren: false,
@@ -44,5 +43,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [11, personIndex, 1, index]
         return el
       })
-  )
+  })
 }

@@ -85,10 +85,10 @@ import buildPersonGartenKulturAuslieferungFolder from '../../components/TreeCont
 import buildPersonGartenKulturAuslieferungLieferung from '../../components/TreeContainer/nodes/person/garten/kultur/auslieferung'
 import buildPersonGartenKulturAnlieferungFolder from '../../components/TreeContainer/nodes/person/garten/kultur/anlieferung/folder'
 import buildPersonGartenKulturAnlieferungLieferung from '../../components/TreeContainer/nodes/person/garten/kultur/anlieferung'
-import buildPersonGartenSammlungFolder from '../../components/TreeContainer/nodes/person/sammlung/folder'
-import buildPersonGartenSammlungSammlung from '../../components/TreeContainer/nodes/person/sammlung'
-import buildPersonGartenLieferungFolder from '../../components/TreeContainer/nodes/person/lieferung/folder'
-import buildPersonGartenLieferungLieferung from '../../components/TreeContainer/nodes/person/lieferung'
+import buildPersonSammlungFolder from '../../components/TreeContainer/nodes/person/sammlung/folder'
+import buildPersonSammlungSammlung from '../../components/TreeContainer/nodes/person/sammlung'
+import buildPersonLieferungFolder from '../../components/TreeContainer/nodes/person/lieferung/folder'
+import buildPersonLieferungLieferung from '../../components/TreeContainer/nodes/person/lieferung'
 
 import buildSammlungSammlung from '../../components/TreeContainer/nodes/sammlung'
 import buildSammlungHerkunftFolder from '../../components/TreeContainer/nodes/sammlung/herkunft/folder'
@@ -475,35 +475,35 @@ export default types
       const store = getParent(self, 1)
       return buildPersonPerson({ store })
     },
+    get personLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildPersonLieferungFolder({ store })
+    },
+    get personLieferungLieferung() {
+      const store = getParent(self, 1)
+      return buildPersonLieferungLieferung({ store })
+    },
+    get personSammlungFolder() {
+      const store = getParent(self, 1)
+      return buildPersonSammlungFolder({ store })
+    },
+    get personSammlungSammlung() {
+      const store = getParent(self, 1)
+      return buildPersonSammlungSammlung({ store })
+    },
+    get personGartenFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenFolder({ store })
+    },
+    get personGarten() {
+      const store = getParent(self, 1)
+      return buildPersonGartenGarten({ store })
+    },
+    get personGartenKulturFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

@@ -1,27 +1,27 @@
-import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
 import exists from '../../../../../utils/exists'
 
-export default ({ nodes, store, url }) => {
-  const personId = url[1]
+export default ({ store }) => {
+  const { showPerson, visibleOpenNodes, personPerson } = store.tree
+  if (!showPerson) return []
 
-  const lieferungen = store.lieferungsFiltered.filter(
-    (s) => s.person_id === personId,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 && node[0] === 'Personen' && node[2] === 'Lieferungen',
   )
 
-  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
-  const personIndex = findIndex(
-    personNodes,
-    (n) => n.id === `person${personId}`,
-  )
+  if (!parentNodes.length) return []
 
-  return (
-    lieferungen
-      // only show if parent node exists
-      .filter(() =>
-        nodes.map((n) => n.id).includes(`person${personId}LieferungFolder`),
-      )
+  return parentNodes.flatMap((node) => {
+    const personId = node[1]
+    const personIndex = personPerson.findIndex((a) => a.id === personId)
+
+    const lieferungen = store.lieferungsFiltered.filter(
+      (s) => s.person_id === personId,
+    )
+
+    return lieferungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -40,8 +40,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Lieferung',
           table: 'lieferung',
-          id: `person${personId}Lieferung${el.id}`,
-          parentId: `person${personId}LieferungFolder`,
+          id: el.id,
           label,
           url: ['Personen', personId, 'Lieferungen', el.id],
           hasChildren: false,
@@ -52,5 +51,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [11, personIndex, 3, index]
         return el
       })
-  )
+  })
 }
