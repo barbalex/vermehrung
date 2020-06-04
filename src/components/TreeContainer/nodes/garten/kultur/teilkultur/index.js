@@ -1,33 +1,33 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const {
+    showGarten,
+    visibleOpenNodes,
+    gartenGarten,
+    gartenKultur,
+  } = store.tree
+  if (!showGarten) return []
 
-export default ({ nodes, store, url }) => {
-  const gartenId = url[1]
-  const kulturId = url[3]
-  const teilkulturen = store.teilkultursFiltered.filter(
-    (t) => t.kultur_id === kulturId,
-  )
-
-  const gartenNodes = nodes.filter((n) => n.parentId === 'gartenFolder')
-  const gartenIndex = findIndex(
-    gartenNodes,
-    (n) => n.id === `garten${gartenId}`,
-  )
-  const kulturNodes = nodes.filter(
-    (n) => n.parentId === `garten${gartenId}KulturFolder`,
-  )
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `garten${gartenId}Kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 5 &&
+      node[0] === 'Gaerten' &&
+      node[2] === 'Kulturen' &&
+      node[4] === 'Teilkulturen',
   )
 
-  return (
-    teilkulturen
-      // only show if parent node exists
-      .filter(() =>
-        nodes
-          .map((n) => n.id)
-          .includes(`garten${gartenId}Kultur${kulturId}TeilkulturFolder`),
-      )
+  if (!parentNodes.length) return []
+
+  return parentNodes.flatMap((node) => {
+    const gartenId = node[1]
+    const gartenIndex = gartenGarten.findIndex((a) => a.id === gartenId)
+    const kulturId = node[3]
+    const kulturIndex = gartenKultur.findIndex((a) => a.id === kulturId)
+
+    const teilkulturen = store.teilkultursFiltered.filter(
+      (t) => t.kultur_id === kulturId,
+    )
+
+    return teilkulturen
       .map((el) => {
         const label = el.name || '(kein Name)'
 
@@ -35,8 +35,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
-          id: `garten${gartenId}Kultur${kulturId}Teilkultur${el.id}`,
-          parentId: `garten${gartenId}Kultur${kulturId}TeilkulturFolder`,
+          id: el.id,
           label,
           url: [
             'Gaerten',
@@ -53,5 +52,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [4, gartenIndex, 1, kulturIndex, 1, index]
         return el
       })
-  )
+  })
 }

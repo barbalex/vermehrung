@@ -369,11 +369,11 @@ export default types
       const store = getParent(self, 1)
       return buildGartenKulturTeilkulturFolder({ store })
     },
-    /*get xxFolder() {
+    get gartenKulturTeilkulturTeilkultur() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildGartenKulturTeilkulturTeilkultur({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
