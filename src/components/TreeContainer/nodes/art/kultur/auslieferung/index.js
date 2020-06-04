@@ -42,7 +42,6 @@ export default ({ store }) => {
           menuTitle: 'Auslieferung',
           table: 'lieferung',
           id: el.id,
-          parentId: `${artId}Kultur${kulturId}AusLieferungFolder`,
           label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Aus-Lieferungen', el.id],
           hasChildren: false,

@@ -24,7 +24,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder',
       menuTitle: 'Teilkulturen',
-      id: `${artId}Kultur${kulturId}TeilkulturFolder`,
+      id: `${kulturId}TeilkulturFolder`,
       label: `Teilkulturen (${nr})`,
       url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen'],
       sort: [1, artIndex, 2, kulturIndex, 1],
