@@ -4,7 +4,7 @@ export default ({ store }) => {
   const {
     showHerkunft,
     visibleOpenNodes,
-    herkunftHerkunft,
+    herkunft,
     herkunftSammlung,
   } = store.tree
   if (!showHerkunft) return []
@@ -21,7 +21,7 @@ export default ({ store }) => {
 
   return parentNodes.flatMap((node) => {
     const herkunftId = node[1]
-    const herkunftIndex = herkunftHerkunft.findIndex((a) => a.id === herkunftId)
+    const herkunftIndex = herkunft.findIndex((a) => a.id === herkunftId)
     const sammlungId = node[3]
     const sammlungIndex = herkunftSammlung.findIndex((a) => a.id === sammlungId)
 

@@ -1,10 +1,5 @@
 export default ({ store }) => {
-  const {
-    showHerkunft,
-    visibleOpenNodes,
-    loading,
-    herkunftHerkunft,
-  } = store.tree
+  const { showHerkunft, visibleOpenNodes, loading, herkunft } = store.tree
   if (!showHerkunft) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -13,7 +8,7 @@ export default ({ store }) => {
 
   return parentNodes.map((node) => {
     const herkunftId = node[1]
-    const herkunftIndex = herkunftHerkunft.findIndex((a) => a.id === herkunftId)
+    const herkunftIndex = herkunft.findIndex((a) => a.id === herkunftId)
 
     const sammlungen = store.sammlungsFiltered.filter(
       (s) => s.herkunft_id === herkunftId,
