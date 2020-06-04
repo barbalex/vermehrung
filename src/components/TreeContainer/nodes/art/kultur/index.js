@@ -1,5 +1,5 @@
 export default ({ store }) => {
-  const { showArt, visibleOpenNodes, artArt } = store.tree
+  const { showArt, visibleOpenNodes, art } = store.tree
   if (!showArt) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -11,7 +11,7 @@ export default ({ store }) => {
 
   return parentNodes.flatMap((node) => {
     const artId = node[1]
-    const artIndex = artArt.findIndex((a) => a.id === artId)
+    const artIndex = art.findIndex((a) => a.id === artId)
     const kulturen = store.kultursFiltered.filter((k) => k.art_id === artId)
 
     return kulturen
