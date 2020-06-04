@@ -11,10 +11,6 @@ export default ({ store }) => {
   const parentNodes = visibleOpenNodes.filter(
     (node) => node.length === 2 && node[0] === 'Herkuenfte',
   )
-  console.log('nodes herkunft sammlung', {
-    parentNodes,
-    visibleOpenNodes,
-  })
 
   return parentNodes.map((node) => {
     const herkunftId = node[1]
@@ -24,11 +20,6 @@ export default ({ store }) => {
       (s) => s.herkunft_id === herkunftId,
     )
     const nr = loading && !sammlungen.length ? '...' : sammlungen.length
-    console.log('nodes herkunft sammlung', {
-      herkunftId,
-      herkunftIndex,
-      sammlungen,
-    })
 
     return {
       nodeType: 'folder',
