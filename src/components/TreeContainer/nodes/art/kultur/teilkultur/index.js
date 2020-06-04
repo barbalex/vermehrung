@@ -30,7 +30,6 @@ export default ({ store }) => {
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
           id: el.id,
-          parentId: `${artId}Kultur${kulturId}TeilkulturFolder`,
           label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen', el.id],
           hasChildren: false,

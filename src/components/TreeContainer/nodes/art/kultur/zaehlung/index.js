@@ -50,7 +50,6 @@ export default ({ store }) => {
           menuTitle: 'Zählung',
           table: 'zaehlung',
           id: el.id,
-          parentId: `${artId}Kultur${kulturId}ZaehlungFolder`,
           label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Zaehlungen', el.id],
           hasChildren: false,

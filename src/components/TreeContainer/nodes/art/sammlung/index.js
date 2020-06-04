@@ -35,7 +35,6 @@ export default ({ store }) => {
           menuTitle: 'Sammlung',
           table: 'sammlung',
           id: el.id,
-          parentId: `${artId}SammlungFolder`,
           label,
           url: ['Arten', artId, 'Sammlungen', el.id],
           hasChildren: true,
