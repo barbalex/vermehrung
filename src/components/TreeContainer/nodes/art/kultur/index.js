@@ -26,7 +26,6 @@ export default ({ store }) => {
           menuTitle: 'Kultur',
           table: 'kultur',
           id: el.id,
-          parentId: `${artId}KulturFolder`,
           label,
           url: ['Arten', artId, 'Kulturen', el.id],
           hasChildren: true,
