@@ -1,10 +1,15 @@
-export default ({ nodes, store }) => {
-  const herkuenfte = store.herkunftsFiltered
+import isEqual from 'lodash/isEqual'
+
+export default ({ store }) => {
+  const { showHerkunft, visibleOpenNodes } = store.tree
+  if (!showHerkunft) return []
 
   return (
-    herkuenfte
+    store.herkunftsFiltered
       // only show if parent node exists
-      .filter(() => nodes.map((n) => n.id).includes('herkunftFolder'))
+      .filter(() =>
+        visibleOpenNodes.some((node) => isEqual(['Herkuenfte'], node)),
+      )
       .map((el) => {
         // only show lokal if exist
         // does not exist if user does not have right to see it
@@ -17,8 +22,7 @@ export default ({ nodes, store }) => {
           nodeType: 'table',
           menuTitle: 'Herkunft',
           table: 'herkunft',
-          id: `herkunft${el.id}`,
-          parentId: 'herkunftFolder',
+          id: el.id,
           label,
           url: ['Herkuenfte', el.id],
           hasChildren: true,
