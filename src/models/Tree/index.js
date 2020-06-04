@@ -182,7 +182,11 @@ export default types
     },
     get visibleOpenNodes() {
       return self.openNodes.filter((node) =>
-        allParentNodesAreOpen(self.openNodes, node),
+        allParentNodesAreOpen(
+          // need to filter out arrays - there tended to be a single empty array
+          self.openNodes.filter((n) => !Array.isArray(n)),
+          node,
+        ),
       )
     },
     get showArt() {
