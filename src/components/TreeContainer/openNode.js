@@ -21,7 +21,6 @@ export default ({ node, store }) => {
     label: 'lade...',
     menuTitle: 'none',
     nodeType: 'table',
-    parentId: 'hm',
     url: [...node.url, 1],
     sort: [...node.sort, 1],
   }
