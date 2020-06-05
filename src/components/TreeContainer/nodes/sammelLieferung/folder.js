@@ -1,4 +1,8 @@
-export default ({ store, loading }) => {
+export default ({ store }) => {
+  const { loading, showSammelLieferung } = store.tree
+
+  if (!showSammelLieferung) return []
+
   const sammelLieferungen = store.sammelLieferungsFiltered
   const nr =
     loading && !sammelLieferungen.length ? '...' : sammelLieferungen.length

@@ -7,7 +7,6 @@ import allParentNodesAreOpen from '../../components/TreeContainer/allParentNodes
 import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
-import buildSammelLieferungFolder from '../../components/TreeContainer/nodes/sammelLieferung/folder'
 import buildSammlungFolder from '../../components/TreeContainer/nodes/sammlung/folder'
 import buildTeilkulturFolder from '../../components/TreeContainer/nodes/teilkultur/folder'
 import buildZaehlungFolder from '../../components/TreeContainer/nodes/zaehlung/folder'
@@ -58,6 +57,7 @@ import buildHerkunftSammlungAusLieferung from '../../components/TreeContainer/no
 import buildLieferungFolder from '../../components/TreeContainer/nodes/lieferung/folder'
 import buildLieferung from '../../components/TreeContainer/nodes/lieferung'
 
+import buildSammelLieferungFolder from '../../components/TreeContainer/nodes/sammelLieferung/folder'
 import buildSammelLieferung from '../../components/TreeContainer/nodes/sammelLieferung'
 import buildSammelLieferungLieferungFolder from '../../components/TreeContainer/nodes/sammelLieferung/lieferung/folder'
 import buildSammelLieferungLieferung from '../../components/TreeContainer/nodes/sammelLieferung/lieferung'
@@ -214,6 +214,11 @@ export default types
     get showPerson() {
       return true
     },
+    get showSammelLieferung() {
+      const store = getParent(self, 1)
+      // TODO: own setting?
+      return store?.userPersonOption?.tree_lieferung
+    },
     get showSammlung() {
       const store = getParent(self, 1)
       return store?.userPerson?.user_role !== 'gaertner'
@@ -232,10 +237,6 @@ export default types
     get artFolder() {
       const store = getParent(self, 1)
       return buildArtFolder({ loading: self.loading, store })
-    },
-    get sammelLieferungFolder() {
-      const store = getParent(self, 1)
-      return buildSammelLieferungFolder({ loading: self.loading, store })
     },
     get sammlungFolder() {
       const store = getParent(self, 1)
@@ -471,7 +472,7 @@ export default types
       const store = getParent(self, 1)
       return buildPersonFolder({ loading: self.loading, store })
     },
-    get personPerson() {
+    get person() {
       const store = getParent(self, 1)
       return buildPerson({ store })
     },
@@ -547,11 +548,15 @@ export default types
       const store = getParent(self, 1)
       return buildPersonGartenKulturZaehlung({ store })
     },
-    /*get xxFolder() {
+    get sammelLieferungFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildSammelLieferungFolder({ loading: self.loading, store })
     },
-    get xxFolder() {
+    get sammelLieferung() {
+      const store = getParent(self, 1)
+      return buildSammelLieferung({ store })
+    },
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
