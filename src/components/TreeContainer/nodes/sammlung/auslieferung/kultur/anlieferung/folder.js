@@ -1,50 +1,39 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const {
+    showSammlung,
+    visibleOpenNodes,
+    loading,
+    sammlung: sammlungNodes,
+    sammlungAusLieferung: lieferungNodes,
+    sammlungAusLieferungKultur: kulturNodes,
+  } = store.tree
+  if (!showSammlung) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const sammlungId = url[1]
-  const lieferungId = url[3]
-  const kulturId = url[5]
-
-  const anlieferungen = store.lieferungsFiltered.filter(
-    (z) => z.nach_kultur_id === kulturId,
-  )
-  const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
-
-  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
-  const sammlungIndex = findIndex(
-    sammlungNodes,
-    (n) => n.id === `sammlung${sammlungId}`,
-  )
-  const lieferungNodes = nodes.filter(
-    (n) => n.parentId === `sammlung${sammlungId}LieferungFolder`,
-  )
-  const lieferungIndex = findIndex(
-    lieferungNodes,
-    (n) => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
-  )
-  const kulturNodes = nodes.filter(
-    (n) =>
-      n.parentId === `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
-  )
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) =>
-      n.id === `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 6 &&
+      node[0] === 'Sammlungen' &&
+      node[2] === 'Aus-Lieferungen' &&
+      node[4] === 'Kulturen',
   )
 
-  // only return if parent exists
-  if (
-    !nodes
-      .map((n) => n.id)
-      .includes(`sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}`)
-  )
-    return []
+  return parentNodes.map((node) => {
+    const sammlungId = node[1]
+    const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
+    const lieferungId = node[3]
+    const lieferungIndex = lieferungNodes.findIndex((a) => a.id === lieferungId)
+    const kulturId = node[5]
+    const kulturIndex = kulturNodes.findIndex((a) => a.id === kulturId)
 
-  return [
-    {
+    const anlieferungen = store.lieferungsFiltered.filter(
+      (z) => z.nach_kultur_id === kulturId,
+    )
+    const nr = loading && !anlieferungen.length ? '...' : anlieferungen.length
+
+    return {
       nodeType: 'folder',
       menuTitle: 'An-Lieferungen',
-      id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${kulturId}AnLieferungFolder`,
+      id: `${kulturId}AnLieferungFolder`,
       label: `An-Lieferungen (${nr})`,
       url: [
         'Sammlungen',
@@ -58,6 +47,6 @@ export default ({ url, nodes, store, loading }) => {
       sort: [3, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 2],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
