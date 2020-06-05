@@ -3,7 +3,7 @@ export default ({ store }) => {
     showPerson,
     visibleOpenNodes,
     loading,
-    personPerson,
+    person,
     personGarten,
     personGartenKultur,
   } = store.tree
@@ -19,7 +19,7 @@ export default ({ store }) => {
 
   return parentNodes.map((node) => {
     const personId = node[1]
-    const personIndex = personPerson.findIndex((a) => a.id === personId)
+    const personIndex = person.findIndex((a) => a.id === personId)
     const gartenId = node[3]
     const gartenIndex = personGarten.findIndex((a) => a.id === gartenId)
     const kulturId = node[5]

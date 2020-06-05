@@ -3,7 +3,7 @@ import moment from 'moment'
 import exists from '../../../../../utils/exists'
 
 export default ({ store }) => {
-  const { showPerson, visibleOpenNodes, personPerson } = store.tree
+  const { showPerson, visibleOpenNodes, person } = store.tree
   if (!showPerson) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -15,7 +15,7 @@ export default ({ store }) => {
 
   return parentNodes.flatMap((node) => {
     const personId = node[1]
-    const personIndex = personPerson.findIndex((a) => a.id === personId)
+    const personIndex = person.findIndex((a) => a.id === personId)
 
     const lieferungen = store.lieferungsFiltered.filter(
       (s) => s.person_id === personId,
