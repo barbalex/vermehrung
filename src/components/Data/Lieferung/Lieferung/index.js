@@ -39,8 +39,6 @@ import ConflictList from '../../../shared/ConflictList'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 import artSort from '../../../../utils/artSort'
-import kulturSort from '../../../../utils/kulturSort'
-import sammlungSort from '../../../../utils/sammlungSort'
 
 const Container = styled.div`
   height: 100%;
@@ -350,6 +348,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     sammelLieferungIdInActiveNodeArray,
     personIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
+    artsSorted,
+    kultursSorted,
+    lieferungsSorted,
+    sammlungsSorted,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -564,9 +566,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     setErrors({})
   }, [id])
 
-  const vonKulturWerteData = [...store.kulturs.values()]
-    .filter((a) => !a._deleted)
-    .sort(kulturSort)
+  const vonKulturWerteData = kultursSorted
     // show only kulturen of art_id
     .filter((k) => {
       if (row?.art_id) return k.art_id === row.art_id
@@ -599,9 +599,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       }),
     [vonKulturWerteData],
   )
-  const nachKulturWerteData = [...store.kulturs.values()]
-    .filter((a) => !a._deleted)
-    .sort(kulturSort)
+  const nachKulturWerteData = kultursSorted
     // show only kulturen of art_id
     .filter((k) => {
       if (row?.art_id) return k.art_id === row.art_id
@@ -630,15 +628,13 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const sammlungWerte = useMemo(
     () =>
-      [...store.sammlungs.values()]
-        .filter((a) => !a._deleted)
-        .sort(sammlungSort)
+      sammlungsSorted
         .filter((s) => s.art_id === row.art_id)
         .map((el) => ({
           value: el.id,
           label: sammlungLabelFromSammlung(el),
         })),
-    [row.art_id, store.sammlungs],
+    [row.art_id, sammlungsSorted],
   )
 
   const personWerte = useMemo(
@@ -652,14 +648,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const artWerte = useMemo(
     () =>
-      [...store.arts.values()]
-        .filter((a) => !a._deleted)
-        .sort(artSort)
-        .map((el) => ({
-          value: el.id,
-          label: el?.art_ae_art?.name ?? '(kein Artname)',
-        })),
-    [store.arts],
+      artsSorted.map((el) => ({
+        value: el.id,
+        label: el?.art_ae_art?.name ?? '(kein Artname)',
+      })),
+    [artsSorted],
   )
 
   const saveToDb = useCallback(
