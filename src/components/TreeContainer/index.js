@@ -152,7 +152,7 @@ const TreeContainer = () => {
     }
   }, [data, loading, openNodes, role, store])*/
   // TODO: move this to store?
-  const nodes = buildNodes({ store, loading, role })
+  const nodes = buildNodes({ store, loading })
   console.log('TreeContainer rendering', {
     loading,
     openNodes,

@@ -23,7 +23,7 @@ import buildSammlungAusLieferungKulturAusLieferungLieferung from './sammlung/aus
 import buildSammlungAusLieferungKulturAnLieferungFolder from './sammlung/auslieferung/kultur/anlieferung/folder'
 import buildSammlungAusLieferungKulturAnLieferungLieferung from './sammlung/auslieferung/kultur/anlieferung'
 
-export default ({ store, loading, role }) => {
+export default ({ store, loading }) => {
   const { userPersonOption } = store
   const {
     artFolder,
@@ -111,7 +111,6 @@ export default ({ store, loading, role }) => {
   const openNodes = store.tree.openNodes.sort(sort)
 
   const { tree_teilkultur, tree_zaehlung } = userPersonOption
-  const showSammlungFolder = role !== 'gaertner'
   const showTeilkulturFolder = tree_teilkultur
   const showZaehlungFolder = tree_zaehlung
 
@@ -168,12 +167,6 @@ export default ({ store, loading, role }) => {
     ...kulturZaehlung,
     ...lieferungFolder,
     ...lieferung,
-    ...sammelLieferungFolder,
-    ...sammelLieferung,
-    ...sammelLieferungLieferungFolder,
-    ...sammelLieferungLieferung,
-    ...(showTeilkulturFolder ? teilkulturFolder : []),
-    ...(showZaehlungFolder ? zaehlungFolder : []),
     ...eventFolder,
     ...event,
     ...personFolder,
@@ -196,7 +189,13 @@ export default ({ store, loading, role }) => {
     ...personLieferung,
     ...personSammlungFolder,
     ...personSammlungSammlung,
-    ...(showSammlungFolder ? sammlungFolder : []),
+    ...sammelLieferungFolder,
+    ...sammelLieferung,
+    ...sammelLieferungLieferungFolder,
+    ...sammelLieferungLieferung,
+    ...sammlungFolder,
+    ...(showTeilkulturFolder ? teilkulturFolder : []),
+    ...(showZaehlungFolder ? zaehlungFolder : []),
   ]
 
   /**
