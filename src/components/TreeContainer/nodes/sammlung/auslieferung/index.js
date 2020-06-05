@@ -1,25 +1,27 @@
-import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, store, url }) => {
-  const sammlungId = url[1]
+export default ({ store }) => {
+  const { showSammlung, visibleOpenNodes, sammlung: sammlungNodes } = store.tree
+  if (!showSammlung) return []
 
-  const lieferungen = store.lieferungsFiltered.filter(
-    (l) => l.von_sammlung_id === sammlungId,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 &&
+      node[0] === 'Sammlungen' &&
+      node[2] === 'Aus-Lieferungen',
   )
 
-  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
-  const sammlungIndex = findIndex(
-    sammlungNodes,
-    (n) => n.id === `sammlung${sammlungId}`,
-  )
+  if (!parentNodes.length) return []
 
-  return (
-    lieferungen
-      // only show if parent node exists
-      .filter(() =>
-        nodes.map((n) => n.id).includes(`sammlung${sammlungId}LieferungFolder`),
-      )
+  return parentNodes.flatMap((node) => {
+    const sammlungId = node[1]
+    const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
+
+    const lieferungen = store.lieferungsFiltered.filter(
+      (l) => l.von_sammlung_id === sammlungId,
+    )
+
+    return lieferungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -36,8 +38,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Aus-Lieferung',
           table: 'lieferung',
-          id: `sammlung${sammlungId}Lieferung${el.id}`,
-          parentId: `sammlung${sammlungId}LieferungFolder`,
+          id: el.id,
           label,
           url: ['Sammlungen', sammlungId, 'Aus-Lieferungen', el.id],
           hasChildren: false,
@@ -48,5 +49,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [3, sammlungIndex, 3, index]
         return el
       })
-  )
+  })
 }

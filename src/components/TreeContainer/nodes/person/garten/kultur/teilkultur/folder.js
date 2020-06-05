@@ -33,25 +33,23 @@ export default ({ store }) => {
     )
     const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
 
-    return [
-      {
-        nodeType: 'folder',
-        menuTitle: 'Teilkulturen',
-        id: `${kulturId}TeilkulturFolder`,
-        label: `Teilkulturen (${nr})`,
-        url: [
-          'Personen',
-          personId,
-          'Gaerten',
-          gartenId,
-          'Kulturen',
-          kulturId,
-          'Teilkulturen',
-        ],
-        sort: [11, personIndex, 2, gartenIndex, 1, kulturIndex, 1],
-        hasChildren: true,
-        childrenCount: nr,
-      },
-    ]
+    return {
+      nodeType: 'folder',
+      menuTitle: 'Teilkulturen',
+      id: `${kulturId}TeilkulturFolder`,
+      label: `Teilkulturen (${nr})`,
+      url: [
+        'Personen',
+        personId,
+        'Gaerten',
+        gartenId,
+        'Kulturen',
+        kulturId,
+        'Teilkulturen',
+      ],
+      sort: [11, personIndex, 2, gartenIndex, 1, kulturIndex, 1],
+      hasChildren: true,
+      childrenCount: nr,
+    }
   })
 }
