@@ -21,16 +21,14 @@ export default ({ store }) => {
     )
     const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0
 
-    return [
-      {
-        nodeType: 'folder_no_menu',
-        menuTitle: 'Herkünfte',
-        id: `sammlung${sammlungId}HerkunftFolder`,
-        label: `Herkünfte (${nr})`,
-        url: ['Sammlungen', sammlungId, 'Herkuenfte'],
-        sort: [3, sammlungIndex, 1],
-        hasChildren: true,
-      },
-    ]
+    return {
+      nodeType: 'folder_no_menu',
+      menuTitle: 'Herkünfte',
+      id: `sammlung${sammlungId}HerkunftFolder`,
+      label: `Herkünfte (${nr})`,
+      url: ['Sammlungen', sammlungId, 'Herkuenfte'],
+      sort: [3, sammlungIndex, 1],
+      hasChildren: true,
+    }
   })
 }

@@ -20,17 +20,15 @@ export default ({ store }) => {
     )
     const nr = loading && !lieferungen.length ? '...' : lieferungen.length
 
-    return [
-      {
-        nodeType: 'folder',
-        menuTitle: 'Aus-Lieferungen',
-        id: `${sammlungId}LieferungFolder`,
-        label: `Aus-Lieferungen (${nr})`,
-        url: ['Sammlungen', sammlungId, 'Aus-Lieferungen'],
-        sort: [3, sammlungIndex, 3],
-        hasChildren: true,
-        childrenCount: nr,
-      },
-    ]
+    return {
+      nodeType: 'folder',
+      menuTitle: 'Aus-Lieferungen',
+      id: `${sammlungId}LieferungFolder`,
+      label: `Aus-Lieferungen (${nr})`,
+      url: ['Sammlungen', sammlungId, 'Aus-Lieferungen'],
+      sort: [3, sammlungIndex, 3],
+      hasChildren: true,
+      childrenCount: nr,
+    }
   })
 }
