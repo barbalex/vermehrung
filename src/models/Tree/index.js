@@ -104,6 +104,8 @@ import buildSammlungAusLieferungKulturAusLieferungFolder from '../../components/
 import buildSammlungAusLieferungKulturAusLieferung from '../../components/TreeContainer/nodes/sammlung/auslieferung/kultur/auslieferung'
 import buildSammlungAusLieferungKulturAnLieferungFolder from '../../components/TreeContainer/nodes/sammlung/auslieferung/kultur/anlieferung/folder'
 import buildSammlungAusLieferungKulturAnLieferung from '../../components/TreeContainer/nodes/sammlung/auslieferung/kultur/anlieferung'
+import buildSammlungAusLieferungKulturTeilkulturFolder from '../../components/TreeContainer/nodes/sammlung/auslieferung/kultur/teilkultur/folder'
+import buildSammlungAusLieferungKulturTeilkultur from '../../components/TreeContainer/nodes/sammlung/auslieferung/kultur/teilkultur'
 
 import buildKulturFolder from '../../components/TreeContainer/nodes/kultur/folder'
 import buildKultur from '../../components/TreeContainer/nodes/kultur'
@@ -609,19 +611,19 @@ export default types
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKulturAusLieferungFolder({ store })
     },
+    get sammlungAusLieferungKulturTeilkulturFolder() {
+      const store = getParent(self, 1)
+      return buildSammlungAusLieferungKulturTeilkulturFolder({ store })
+    },
     get sammlungAusLieferungKulturZaehlungFolder() {
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKulturZaehlungFolder({ store })
     },
+    get sammlungAusLieferungKulturZaehlung() {
+      const store = getParent(self, 1)
+      return buildSammlungAusLieferungKulturZaehlung({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

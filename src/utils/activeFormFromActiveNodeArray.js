@@ -1,4 +1,4 @@
-export default url => {
+export default (url) => {
   //console.log('acitveFormFromActiveNodeArray, url:', url.slice())
   if (url.length === 0) {
     return 'root'
@@ -391,9 +391,37 @@ export default url => {
     url.length === 7 &&
     url[0] === 'Sammlungen' &&
     url[2] === 'Aus-Lieferungen' &&
-    url[4] === 'Kulturen'
+    url[4] === 'Kulturen' &&
+    url[6] === 'Events'
   ) {
-    return 'kultur'
+    return 'events'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Sammlungen' &&
+    url[2] === 'Aus-Lieferungen' &&
+    url[4] === 'Kulturen' &&
+    ['An-Lieferungen', 'Aus-Lieferungen'].includes(url[6])
+  ) {
+    return 'lieferungen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Sammlungen' &&
+    url[2] === 'Aus-Lieferungen' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Teilkulturen'
+  ) {
+    return 'teilkulturen'
+  }
+  if (
+    url.length === 7 &&
+    url[0] === 'Sammlungen' &&
+    url[2] === 'Aus-Lieferungen' &&
+    url[4] === 'Kulturen' &&
+    url[6] === 'Zaehlungen'
+  ) {
+    return 'zaehlungen'
   }
   if (
     url.length === 7 &&

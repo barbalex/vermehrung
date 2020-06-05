@@ -44,7 +44,7 @@ export default ({ store }) => {
         kulturId,
         'Zaehlungen',
       ],
-      sort: [3, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 1],
+      sort: [3, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 2],
       hasChildren: true,
       childrenCount: nr,
     }
