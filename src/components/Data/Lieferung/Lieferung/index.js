@@ -24,6 +24,7 @@ import FilterTitle from '../../../shared/FilterTitle'
 import exists from '../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import {
+  art as artFragment,
   lieferung as lieferungFragment,
   sammelLieferung as sammelLieferungFragment,
 } from '../../../../utils/fragments'
@@ -37,6 +38,9 @@ import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+import artSort from '../../../../utils/artSort'
+import kulturSort from '../../../../utils/kulturSort'
+import sammlungSort from '../../../../utils/sammlungSort'
 
 const Container = styled.div`
   height: 100%;
@@ -152,11 +156,14 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const lieferungQuery = gql`
-  query LieferungQueryForLieferungLieferung(
+const allDataQuery = gql`
+  query AllDataQueryForLieferungLieferung(
     $id: uuid!
     $isFiltered: Boolean!
-    $filter: lieferung_bool_exp!
+    $lieferungFilter: lieferung_bool_exp!
+    $sammlungFilter: sammlung_bool_exp!
+    $nachKulturFilter: kultur_bool_exp!
+    $vonKulturFilter: kultur_bool_exp!
   ) {
     lieferung(where: { id: { _eq: $id } }) {
       ...LieferungFields
@@ -244,18 +251,13 @@ const lieferungQuery = gql`
         }
       }
     }
-    rowsFiltered: lieferung(where: $filter) @include(if: $isFiltered) {
+    lieferungsFiltered: lieferung(where: $lieferungFilter)
+      @include(if: $isFiltered) {
       id
       __typename
     }
-  }
-  ${lieferungFragment}
-  ${sammelLieferungFragment}
-`
-const sammlungQuery = gql`
-  query sammlungQueryForLieferung($filter: sammlung_bool_exp!) {
     sammlung(
-      where: $filter
+      where: $sammlungFilter
       order_by: [
         { datum: asc_nulls_first }
         { herkunft: { nr: asc_nulls_first } }
@@ -281,12 +283,8 @@ const sammlungQuery = gql`
         ort
       }
     }
-  }
-`
-const kulturQuery = gql`
-  query kulturQueryForLieferung($filter: kultur_bool_exp!) {
-    kultur(
-      where: $filter
+    nach_kultur: kultur(
+      where: $nachKulturFilter
       order_by: [
         { garten: { person: { name: asc_nulls_first } } }
         { garten: { person: { ort: asc_nulls_first } } }
@@ -308,7 +306,36 @@ const kulturQuery = gql`
         }
       }
     }
+    von_kultur: kultur(
+      where: $vonKulturFilter
+      order_by: [
+        { garten: { person: { name: asc_nulls_first } } }
+        { garten: { person: { ort: asc_nulls_first } } }
+      ]
+    ) {
+      id
+      __typename
+      art_id
+      herkunft_id
+      garten {
+        id
+        __typename
+        name
+        person {
+          id
+          __typename
+          name
+          ort
+        }
+      }
+    }
+    art(order_by: { art_ae_art: { name: asc } }) {
+      ...ArtFields
+    }
   }
+  ${artFragment}
+  ${lieferungFragment}
+  ${sammelLieferungFragment}
 `
 
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
@@ -360,18 +387,89 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       _eq: sammlungIdInActiveNodeArray,
     }
   }
-  const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
-  const { error, loading, query: queryOfLieferung } = useQuery(lieferungQuery, {
-    variables: { id, isFiltered, filter: lieferungFilter },
-  })
 
-  const {
-    data: artData,
-    error: artError,
-    loading: artLoading,
-  } = useQuery((store) =>
-    store.queryArt({ order_by: { art_ae_art: { name: 'asc' } } }),
-  )
+  const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
+
+  const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
+
+  const sammlungFilter = row?.art_id
+    ? { art_id: { _eq: row.art_id } }
+    : { id: { _is_null: false } }
+
+  // only kulturen of same herkunft!
+  // beware: art_id, herkunft_id and von_kultur_id can be null
+  let nachKulturFilter = { id: { _is_null: false } }
+  // show only kulturen of art_id
+  if (row?.art_id) {
+    nachKulturFilter = {
+      art_id: { _eq: row.art_id },
+    }
+  }
+  // show only kulturen with same herkunft
+  if (row?.art_id && herkunft && herkunft.id) {
+    nachKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+    }
+  }
+  // shall be delivered to same kultur it came from
+  if (
+    row?.art_id &&
+    herkunft &&
+    herkunft.id &&
+    // ensure set value is always shown
+    row?.von_kultur_id &&
+    row?.von_kultur_id !== row.nach_kultur_id
+  ) {
+    nachKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+      id: { _neq: row.von_kultur_id },
+    }
+  }
+
+  // beware: art_id, herkunft_id and nach_kultur_id can be null
+  let vonKulturFilter = { id: { _is_null: false } }
+  // show only kulturen of art_id
+  if (row?.art_id) {
+    vonKulturFilter = {
+      art_id: { _eq: row.art_id },
+    }
+  }
+  // show only kulturen with same herkunft
+  if (row?.art_id && herkunft && herkunft.id) {
+    vonKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+    }
+  }
+  // shall not be delivered to same kultur it came from
+  if (
+    row?.art_id &&
+    herkunft &&
+    herkunft.id &&
+    row?.nach_kultur_id &&
+    // ensure set value is always shown
+    row?.von_kultur_id &&
+    row?.von_kultur_id !== row.nach_kultur_id
+  ) {
+    vonKulturFilter = {
+      art_id: { _eq: row.art_id },
+      herkunft_id: { _eq: herkunft.id },
+      id: { _neq: row.nach_kultur_id },
+    }
+  }
+
+  const { error, loading, query: queryOfLieferung } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      isFiltered,
+      lieferungFilter,
+      sammlungFilter,
+      nachKulturFilter,
+      vonKulturFilter,
+    },
+  })
 
   const {
     data: personData,
@@ -406,8 +504,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const filteredNr =
     dataLieferungFilteredAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
 
-  const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
-
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
     setActiveConflict(null)
@@ -419,17 +515,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }, [queryOfLieferung, row?._rev])
 
   const { li_show_sl_felder } = userPersonOption
-
-  const sammlungFilter = row?.art_id
-    ? { art_id: { _eq: row.art_id } }
-    : { id: { _is_null: false } }
-  const {
-    data: sammlungData,
-    error: sammlungError,
-    loading: sammlungLoading,
-  } = useQuery(sammlungQuery, {
-    variables: { filter: sammlungFilter },
-  })
 
   const urlLastName = activeNodeArray[activeNodeArray.length - 2]
   const isAnlieferung = urlLastName === 'An-Lieferungen'
@@ -475,91 +560,33 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     (existsSammelLieferung &&
       ifAllNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))
 
-  // beware: art_id, herkunft_id and nach_kultur_id can be null
-  let vonKulturFilter = { id: { _is_null: false } }
-  // show only kulturen of art_id
-  if (row?.art_id) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-    }
-  }
-  // show only kulturen with same herkunft
-  if (row?.art_id && herkunft && herkunft.id) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-    }
-  }
-  // shall not be delivered to same kultur it came from
-  if (
-    row?.art_id &&
-    herkunft &&
-    herkunft.id &&
-    row?.nach_kultur_id &&
-    // ensure set value is always shown
-    row?.von_kultur_id &&
-    row?.von_kultur_id !== row.nach_kultur_id
-  ) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-      id: { _neq: row.nach_kultur_id },
-    }
-  }
-  const {
-    data: vonKulturData,
-    error: vonKulturError,
-    loading: vonKulturLoading,
-  } = useQuery(kulturQuery, {
-    variables: { filter: vonKulturFilter },
-  })
-
-  // only kulturen of same herkunft!
-  // beware: art_id, herkunft_id and von_kultur_id can be null
-  let nachKulturFilter = { id: { _is_null: false } }
-  // show only kulturen of art_id
-  if (row?.art_id) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-    }
-  }
-  // show only kulturen with same herkunft
-  if (row?.art_id && herkunft && herkunft.id) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-    }
-  }
-  // shall be delivered to same kultur it came from
-  if (
-    row?.art_id &&
-    herkunft &&
-    herkunft.id &&
-    // ensure set value is always shown
-    row?.von_kultur_id &&
-    row?.von_kultur_id !== row.nach_kultur_id
-  ) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-      id: { _neq: row.von_kultur_id },
-    }
-  }
-  const {
-    data: nachKulturData,
-    error: nachKulturError,
-    loading: nachKulturLoading,
-  } = useQuery(kulturQuery, {
-    variables: { filter: nachKulturFilter },
-  })
-
   useEffect(() => {
     setErrors({})
   }, [id])
 
+  const vonKulturWerteData = [...store.kulturs.values()]
+    .filter((a) => !a._deleted)
+    .sort(kulturSort)
+    // show only kulturen of art_id
+    .filter((k) => {
+      if (row?.art_id) return k.art_id === row.art_id
+      return true
+    })
+    // show only kulturen with same herkunft
+    .filter((k) => {
+      if (herkunft?.id) return k?.herkunft_id === herkunft.id
+      return true
+    })
+    // shall not be delivered to same kultur it came from
+    .filter((k) => {
+      if (row?.nach_kultur_id && row?.von_kultur_id !== row?.nach_kultur_id) {
+        return k.id !== row.nach_kultur_id
+      }
+      return true
+    })
   const vonKulturWerte = useMemo(
     () =>
-      (vonKulturData?.kultur ?? []).map((el) => {
+      vonKulturWerteData.map((el) => {
         const personName = el?.garten?.person?.name ?? '(kein Name)'
         const personOrt = el?.garten?.person?.ort ?? null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
@@ -570,24 +597,48 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
           label,
         }
       }),
-    [vonKulturData?.kultur],
+    [vonKulturWerteData],
   )
+  const nachKulturWerteData = [...store.kulturs.values()]
+    .filter((a) => !a._deleted)
+    .sort(kulturSort)
+    // show only kulturen of art_id
+    .filter((k) => {
+      if (row?.art_id) return k.art_id === row.art_id
+      return true
+    })
+    // show only kulturen with same herkunft
+    .filter((k) => {
+      if (herkunft?.id) return k.herkunft_id === herkunft.id
+      return true
+    })
+    // shall not be delivered to same kultur it came from
+    .filter((k) => {
+      if (row?.von_kultur_id && row?.von_kultur_id !== row?.nach_kultur_id) {
+        return k.id !== row.von_kultur_id
+      }
+      return true
+    })
   const nachKulturWerte = useMemo(
     () =>
-      (nachKulturData?.kultur ?? []).map((el) => ({
+      nachKulturWerteData.map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
-    [nachKulturData?.kultur],
+    [nachKulturWerteData],
   )
 
   const sammlungWerte = useMemo(
     () =>
-      (sammlungData?.sammlung ?? []).map((el) => ({
-        value: el.id,
-        label: sammlungLabelFromSammlung(el),
-      })),
-    [sammlungData?.sammlung],
+      [...store.sammlungs.values()]
+        .filter((a) => !a._deleted)
+        .sort(sammlungSort)
+        .filter((s) => s.art_id === row.art_id)
+        .map((el) => ({
+          value: el.id,
+          label: sammlungLabelFromSammlung(el),
+        })),
+    [row.art_id, store.sammlungs],
   )
 
   const personWerte = useMemo(
@@ -601,11 +652,14 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const artWerte = useMemo(
     () =>
-      (artData?.art ?? []).map((el) => ({
-        value: el.id,
-        label: el?.art_ae_art?.name ?? '(kein Artname)',
-      })),
-    [artData?.art],
+      [...store.arts.values()]
+        .filter((a) => !a._deleted)
+        .sort(artSort)
+        .map((el) => ({
+          value: el.id,
+          label: el?.art_ae_art?.name ?? '(kein Artname)',
+        })),
+    [store.arts],
   )
 
   const saveToDb = useCallback(
@@ -653,6 +707,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }, [])
 
+  console.log('lieferung rendering')
+
   if (loading) {
     return (
       <Container>
@@ -662,13 +718,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     )
   }
 
-  const errorToShow =
-    error ||
-    sammlungError ||
-    vonKulturError ||
-    nachKulturError ||
-    artError ||
-    personError
+  const errorToShow = error || personError
   if (errorToShow) {
     return (
       <Container>
@@ -749,7 +799,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       field="art_id"
                       label="Art"
                       options={artWerte}
-                      loading={artLoading}
+                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.art_id}
                     />
@@ -847,7 +897,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         exists(row.art_id) ? ' (nur solche derselben Art)' : ''
                       }`}
                       options={sammlungWerte}
-                      loading={sammlungLoading}
+                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.von_sammlung_id}
                     />
@@ -862,7 +912,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         exists(row.art_id) ? ' (nur solche derselben Art)' : ''
                       }`}
                       options={vonKulturWerte}
-                      loading={vonKulturLoading}
+                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.von_kultur_id}
                     />
@@ -888,7 +938,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                           : ''
                       }`}
                       options={nachKulturWerte}
-                      loading={nachKulturLoading}
+                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.nach_kultur_id}
                     />

@@ -1,5 +1,31 @@
 import types from '../models/Filter/simpleTypes'
 
+import artSort from './artSort'
+import eventSort from './eventSort'
+import lieferungSort from './lieferungSort'
+import personSort from './personSort'
+import sammlungSort from './sammlungSort'
+import teilkulturSort from './teilkulturSort'
+import zaehlungSort from './zaehlungSort'
+import gartenSort from './gartenSort'
+import herkunftSort from './herkunftSort'
+import kulturSort from './kulturSort'
+
+const sorters = {
+  art: artSort,
+  event: eventSort,
+  lieferung: lieferungSort,
+  sammel_lieferung: lieferungSort,
+  person: personSort,
+  sammlung: sammlungSort,
+  teilkultur: teilkulturSort,
+  zaehlung: zaehlungSort,
+  garten: gartenSort,
+  herkunft: herkunftSort,
+  kultur: kulturSort,
+}
+const nonSorter = () => true
+
 // filter is a passed filter for cases like:
 // list of teilkulturs of a kultur
 // > kultur_id is passed as filter
@@ -36,6 +62,7 @@ export default ({ store, table }) => {
   }
 
   const filteredValues = values.filter((v) => test(v))
+  const sortFunction = sorters[table] ?? nonSorter
 
-  return filteredValues
+  return filteredValues.sort(sortFunction)
 }
