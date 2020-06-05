@@ -30,10 +30,10 @@ function sizeReducer(state, action) {
   return action.payload
 }
 
-const Tree = ({ nodes }) => {
+const Tree = () => {
   const store = useContext(StoreContext)
 
-  const { activeNodeArray: aNA } = store.tree
+  const { activeNodeArray: aNA, nodes } = store.tree
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
     width: 0,
