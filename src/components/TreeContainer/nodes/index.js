@@ -3,10 +3,6 @@ import memoizeOne from 'memoize-one'
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-import buildSammelLieferungSammelLieferung from './sammelLieferung'
-import buildSammelLieferungLieferungFolder from './sammelLieferung/lieferung/folder'
-import buildSammelLieferungLieferungLieferung from './sammelLieferung/lieferung'
-
 import buildTeilkulturTeilkultur from './teilkultur'
 
 import buildZaehlungZaehlung from './zaehlung'
@@ -85,7 +81,7 @@ export default ({ store, loading, role }) => {
     lieferungFolder,
     lieferungLieferung,
     personFolder,
-    personPerson,
+    person,
     personGartenFolder,
     personLieferungFolder,
     personGarten,
@@ -105,6 +101,7 @@ export default ({ store, loading, role }) => {
     personSammlungFolder,
     personSammlungSammlung,
     sammelLieferungFolder,
+    sammelLieferung,
     sammlungFolder,
     teilkulturFolder,
     zaehlungFolder,
@@ -170,12 +167,13 @@ export default ({ store, loading, role }) => {
     ...lieferungFolder,
     ...lieferungLieferung,
     ...sammelLieferungFolder,
+    ...sammelLieferung,
     ...(showTeilkulturFolder ? teilkulturFolder : []),
     ...(showZaehlungFolder ? zaehlungFolder : []),
     ...eventFolder,
     ...event,
     ...personFolder,
-    ...personPerson,
+    ...person,
     ...personGartenFolder,
     ...personGarten,
     ...personGartenKulturFolder,
@@ -208,17 +206,7 @@ export default ({ store, loading, role }) => {
    */
   openNodes.forEach((url) => {
     if (!allParentNodesAreOpen(openNodes, url)) return
-    if (url.length === 1 && url[0] === 'Sammel-Lieferungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammelLieferungSammelLieferung({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
+
     if (url.length === 1 && url[0] === 'Zaehlungen') {
       nodes = [
         ...nodes,
@@ -274,19 +262,6 @@ export default ({ store, loading, role }) => {
         )(),
       ]
     }
-    if (url.length === 2 && url[0] === 'Sammel-Lieferungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammelLieferungLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-      ]
-    }
 
     if (
       url.length === 3 &&
@@ -313,22 +288,6 @@ export default ({ store, loading, role }) => {
         ...nodes,
         ...memoizeOne(() =>
           buildSammlungAusLieferungLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 3 &&
-      url[0] === 'Sammel-Lieferungen' &&
-      url[2] === 'Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammelLieferungLieferungLieferung({
             nodes,
             store,
             url,
