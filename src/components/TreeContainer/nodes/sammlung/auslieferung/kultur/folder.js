@@ -1,42 +1,37 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const {
+    showSammlung,
+    visibleOpenNodes,
+    loading,
+    sammlung: sammlungNodes,
+    sammlungAusLieferung: lieferungNodes,
+  } = store.tree
+  if (!showSammlung) return []
 
-export default ({ url, nodes, store, loading }) => {
-  const sammlungId = url[1]
-  const lieferungId = url[3]
-
-  const lieferung = store.lieferungs.get(lieferungId)
-  const kultur = store.kultursFiltered.find(
-    (k) => lieferung.nach_kultur_id === k.id,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 4 &&
+      node[0] === 'Sammlungen' &&
+      node[2] === 'Aus-Lieferungen',
   )
 
-  const nr = loading || !kultur ? 0 : 1
+  return parentNodes.map((node) => {
+    const sammlungId = node[1]
+    const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
+    const lieferungId = node[3]
+    const lieferungIndex = lieferungNodes.findIndex((a) => a.id === lieferungId)
 
-  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
-  const sammlungIndex = findIndex(
-    sammlungNodes,
-    (n) => n.id === `sammlung${sammlungId}`,
-  )
-  const lieferungNodes = nodes.filter(
-    (n) => n.parentId === `sammlung${sammlungId}LieferungFolder`,
-  )
-  const lieferungIndex = findIndex(
-    lieferungNodes,
-    (n) => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
-  )
+    const lieferung = store.lieferungs.get(lieferungId)
+    const kultur = store.kultursFiltered.find(
+      (k) => lieferung.nach_kultur_id === k.id,
+    )
 
-  // only return if parent exists
-  if (
-    !nodes
-      .map((n) => n.id)
-      .includes(`sammlung${sammlungId}Lieferung${lieferungId}`)
-  )
-    return []
+    const nr = loading || !kultur ? 0 : 1
 
-  return [
-    {
+    return {
       nodeType: 'folder',
       menuTitle: 'Kulturen',
-      id: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
+      id: `${lieferungId}KulturFolder`,
       label: `Kultur (${nr})`,
       url: [
         'Sammlungen',
@@ -48,6 +43,6 @@ export default ({ url, nodes, store, loading }) => {
       sort: [3, sammlungIndex, 3, lieferungIndex, 1],
       hasChildren: true,
       childrenCount: nr,
-    },
-  ]
+    }
+  })
 }
