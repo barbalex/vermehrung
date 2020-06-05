@@ -1,12 +1,17 @@
+import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
-export default ({ nodes, store }) => {
-  const sammelLieferungen = store.sammelLieferungsFiltered
+export default ({ store }) => {
+  const { showSammelLieferung, visibleOpenNodes } = store.tree
+
+  if (!showSammelLieferung) return []
 
   return (
-    sammelLieferungen
+    store.sammelLieferungsFiltered
       // only show if parent node exists
-      .filter(() => nodes.map((n) => n.id).includes('sammelLieferungFolder'))
+      .filter(() =>
+        visibleOpenNodes.some((node) => isEqual(['Sammel-Lieferungen'], node)),
+      )
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -23,8 +28,7 @@ export default ({ nodes, store }) => {
           nodeType: 'table',
           menuTitle: 'Sammel-Lieferung',
           table: 'sammel_lieferung',
-          id: `sammelLieferung${el.id}`,
-          parentId: 'sammelLieferungFolder',
+          id: el.id,
           label,
           url: ['Sammel-Lieferungen', el.id],
           hasChildren: true,
