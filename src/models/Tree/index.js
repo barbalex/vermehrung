@@ -507,27 +507,27 @@ export default types
       const store = getParent(self, 1)
       return buildPersonGartenKultur({ store })
     },
+    get personGartenKulturZaehlungFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturZaehlungFolder({ store })
+    },
+    get personGartenKulturZaehlung() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturZaehlung({ store })
+    },
+    get personGartenKulturTeilkulturFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturTeilkulturFolder({ store })
+    },
+    get personGartenKulturEventFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturEventFolder({ store })
+    },
+    get personGartenKulturAnlieferungFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturAnlieferungFolder({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

@@ -22,7 +22,7 @@ export default ({ store }) => {
     const personIndex = personPerson.findIndex((a) => a.id === personId)
     const gartenId = node[3]
     const gartenIndex = personGarten.findIndex((a) => a.id === gartenId)
-    const kulturId = node[3]
+    const kulturId = node[5]
     const kulturIndex = personGartenKultur.findIndex((a) => a.id === kulturId)
 
     const zaehlungen = store.zaehlungsFiltered.filter(

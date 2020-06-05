@@ -1,45 +1,39 @@
-import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, store, url }) => {
-  const personId = url[1]
-  const gartenId = url[3]
-  const kulturId = url[5]
+export default ({ store }) => {
+  const {
+    showPerson,
+    visibleOpenNodes,
+    personPerson,
+    personGarten,
+    personGartenKultur,
+  } = store.tree
+  if (!showPerson) return []
 
-  const zaehlungen = store.zaehlungsFiltered.filter(
-    (z) => z.kultur_id === kulturId,
-  )
-
-  const personNodes = nodes.filter((n) => n.parentId === 'personFolder')
-  const personIndex = findIndex(
-    personNodes,
-    (n) => n.id === `person${personId}`,
-  )
-  const gartenNodes = nodes.filter(
-    (n) => n.parentId === `person${personId}GartenFolder`,
-  )
-  const gartenIndex = findIndex(
-    gartenNodes,
-    (n) => n.id === `person${personId}Garten${gartenId}`,
-  )
-  const kulturNodes = nodes.filter(
-    (n) => n.parentId === `person${personId}Garten${gartenId}KulturFolder`,
-  )
-  const kulturIndex = findIndex(
-    kulturNodes,
-    (n) => n.id === `person${personId}Garten${gartenId}Kultur${kulturId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 7 &&
+      node[0] === 'Personen' &&
+      node[2] === 'Gaerten' &&
+      node[4] === 'Kulturen' &&
+      node[6] === 'Zaehlungen',
   )
 
-  return (
-    zaehlungen
-      // only show if parent node exists
-      .filter(() =>
-        nodes
-          .map((n) => n.id)
-          .includes(
-            `person${personId}Garten${gartenId}Kultur${kulturId}ZaehlungFolder`,
-          ),
-      )
+  if (!parentNodes.length) return []
+
+  return parentNodes.flatMap((node) => {
+    const personId = node[1]
+    const personIndex = personPerson.findIndex((a) => a.id === personId)
+    const gartenId = node[3]
+    const gartenIndex = personGarten.findIndex((a) => a.id === gartenId)
+    const kulturId = node[5]
+    const kulturIndex = personGartenKultur.findIndex((a) => a.id === kulturId)
+
+    const zaehlungen = store.zaehlungsFiltered.filter(
+      (z) => z.kultur_id === kulturId,
+    )
+
+    return zaehlungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -64,8 +58,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Zählung',
           table: 'zaehlung',
-          id: `zaehlung${el.id}`,
-          parentId: `person${personId}Garten${gartenId}Kultur${kulturId}ZaehlungFolder`,
+          id: el.id,
           label,
           url: [
             'Personen',
@@ -85,5 +78,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [11, personIndex, 2, gartenIndex, 1, kulturIndex, 2, index]
         return el
       })
-  )
+  })
 }
