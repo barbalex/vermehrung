@@ -340,8 +340,8 @@ const allDataQuery = gql`
     }
   }
   ${artFragment}
-  ${personFragment}
   ${lieferungFragment}
+  ${personFragment}
   ${sammelLieferungFragment}
 `
 
@@ -350,17 +350,17 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const store = useContext(StoreContext)
 
   const {
-    filter,
-    online,
-    userPersonOption,
-    kulturIdInActiveNodeArray,
-    sammelLieferungIdInActiveNodeArray,
-    personIdInActiveNodeArray,
-    sammlungIdInActiveNodeArray,
     artsSorted,
+    filter,
+    kulturIdInActiveNodeArray,
     kultursSorted,
+    online,
+    personIdInActiveNodeArray,
     personsSorted,
+    sammelLieferungIdInActiveNodeArray,
+    sammlungIdInActiveNodeArray,
     sammlungsSorted,
+    userPersonOption,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -496,8 +496,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     queryOfLieferung.refetch()
   }, [queryOfLieferung])
   const callbackAfterUebernehmen = useCallback(() => {
-    queryOfLieferung.refetch()
     setActiveConflict(row?._rev ?? null)
+    queryOfLieferung.refetch()
   }, [queryOfLieferung, row?._rev])
 
   const { li_show_sl_felder } = userPersonOption
