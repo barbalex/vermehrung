@@ -16,14 +16,14 @@ export const wrapRootElement = ({ element }) => <App element={element} />
 
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
 export const onServiceWorkerUpdateReady = () => {
-  // ensure this happens _after_ app.js ataches store to window
-  // did not work: Uncaught TypeError: Cannot read property 'setUpdateExists' of undefined
-  setTimeout(() => window.store.setUpdateExists(true))
-  /*if (
+  // turned off becaus updateExits was not reset if user simply restarted
+  // instead of clicking on the button
+  //setTimeout(() => window.store.setUpdateExists(true))
+  if (
     window.confirm(
-      'vermehrung neu laden, um die neuste Version zu installieren?',
+      'vermehrung.ch neu laden, um die neuste Version zu installieren?',
     )
   ) {
     window.location.reload(true)
-  }*/
+  }
 }

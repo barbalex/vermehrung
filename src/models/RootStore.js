@@ -32,7 +32,7 @@ export const RootStore = RootStoreBase.props({
   hideInactive: types.optional(types.maybeNull(types.boolean), true),
   sidebarWidth: types.maybeNull(types.number, null),
   isPrint: types.optional(types.boolean, false),
-  updateExists: types.optional(types.boolean, false),
+  updateExists: types.optional(types.boolean, false), // not in use!
   online: types.optional(types.boolean, true),
   /**
    * This is a queue of all queries
@@ -1191,7 +1191,7 @@ export const RootStore = RootStoreBase.props({
         self.user = val || {}
       },
       setUpdateExists(val) {
-        self.updateExists = val
+        self.updateExists = val // not in use!
       },
       setIsPrint(val) {
         self.isPrint = val
