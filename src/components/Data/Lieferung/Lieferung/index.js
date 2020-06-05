@@ -157,12 +157,22 @@ const Rev = styled.span`
 const allDataQuery = gql`
   query AllDataQueryForLieferungLieferung(
     $id: uuid!
-    $isFiltered: Boolean!
     $lieferungFilter: lieferung_bool_exp!
+    $hierarchyFilter: lieferung_bool_exp!
     $sammlungFilter: sammlung_bool_exp!
     $nachKulturFilter: kultur_bool_exp!
     $vonKulturFilter: kultur_bool_exp!
   ) {
+    lieferung_total_count: lieferung_aggregate(where: $hierarchyFilter) {
+      aggregate {
+        count
+      }
+    }
+    lieferung_filtered_count: lieferung_aggregate(where: $lieferungFilter) {
+      aggregate {
+        count
+      }
+    }
     lieferung(where: { id: { _eq: $id } }) {
       ...LieferungFields
       sammel_lieferung {
@@ -248,11 +258,6 @@ const allDataQuery = gql`
           }
         }
       }
-    }
-    lieferungsFiltered: lieferung(where: $lieferungFilter)
-      @include(if: $isFiltered) {
-      id
-      __typename
     }
     sammlung(
       where: $sammlungFilter
@@ -365,7 +370,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
+  const hierarchyFilter = { _deleted: { _eq: false } }
   if (kulturIdInActiveNodeArray) {
     if (activeNodeArray.includes('Aus-Lieferungen')) {
       hierarchyFilter.von_kultur_id = {
@@ -466,37 +471,24 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }
 
-  const { error, loading, query: queryOfLieferung } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      isFiltered,
-      lieferungFilter,
-      sammlungFilter,
-      nachKulturFilter,
-      vonKulturFilter,
+  const { data, error, loading, query: queryOfLieferung } = useQuery(
+    allDataQuery,
+    {
+      variables: {
+        id,
+        lieferungFilter,
+        hierarchyFilter,
+        sammlungFilter,
+        nachKulturFilter,
+        vonKulturFilter,
+      },
     },
-  })
+  )
 
   const [errors, setErrors] = useState({})
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataLieferungAggregate } = useQuery((store) =>
-    store.queryLieferung_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataLieferungFilteredAggregate } = useQuery((store) =>
-    store.queryLieferung_aggregate({ where: lieferungFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataLieferungFilteredAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.lieferung_total_count?.aggregate?.count
+  const filteredNr = data?.lieferung_filtered_count?.aggregate?.count
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
@@ -718,8 +710,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
-
-  //console.log('Lieferung, row:', row)
 
   return (
     <ErrorBoundary>
