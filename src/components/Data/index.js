@@ -35,8 +35,6 @@ const Data = () => {
 
   const id = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
-  console.log('Data, activeForm:', activeForm)
-
   switch (activeForm) {
     case 'root': {
       return <Root />

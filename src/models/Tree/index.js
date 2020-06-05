@@ -6,6 +6,7 @@ import allParentNodesAreOpen from '../../components/TreeContainer/allParentNodes
 
 import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
+import sortNodes from '../../utils/sortNodes'
 
 import buildArtFolder from '../../components/TreeContainer/nodes/art/folder'
 import buildArt from '../../components/TreeContainer/nodes/art'
@@ -175,9 +176,11 @@ export default types
     get nodes() {
       const store = getParent(self, 1)
       console.log('store tree building nodes')
-      return buildNodes({
-        store,
-      })
+      return sortNodes(
+        buildNodes({
+          store,
+        }),
+      )
     },
     get visibleOpenNodes() {
       // for unknown reason using self.openNodes directly

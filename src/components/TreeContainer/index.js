@@ -10,7 +10,7 @@
  * Which can decide not to update nodes if the query is loading
  * but rather use the previous value
  */
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -18,9 +18,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { StoreContext, useQuery } from '../../models/reactUtils'
 import query from './query'
 import Tree from './Tree'
-import buildNodes from './nodes'
 import setHasuraClaims from '../../utils/setHasuraClaims'
-import sortNodes from '../../utils/sortNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -135,29 +133,7 @@ const TreeContainer = () => {
   useEffect(() => {
     setLoading(loading)
   }, [loading, setLoading])
-  /*const [nodes, setNodes] = useState([])
-  useEffect(() => {
-    if (!data && loading) {
-      // fetch on first load to show loading state
-      setNodes(buildNodes({ store, loading, role }))
-    }
-    // do not set nodes when data is empty
-    // which happens while query is loading again
-    if (!loading && data && Object.keys(data).length > 0) {
-      setNodes(
-        buildNodes({ store, loading, role }).filter(
-          (node) => node.id !== 'loadingNode',
-        ),
-      )
-    }
-  }, [data, loading, openNodes, role, store])*/
-  // TODO: move this to store?
-  const nodes = buildNodes({ store })
-  console.log('TreeContainer rendering', {
-    loading,
-    openNodes,
-    nodes,
-  })
+
   // 2020.06.02: not in use
   // because it prevented newly loaded nodes to appear
   /*useEffect(() => {
@@ -166,8 +142,6 @@ const TreeContainer = () => {
       setNodesToAdd([])
     }
   }, [nodes, nodesToAddRaw, setNodesToAdd])*/
-
-  const nodesSorted = useMemo(() => sortNodes(nodes), [nodes])
 
   if (error) {
     console.log(error)
@@ -181,7 +155,7 @@ const TreeContainer = () => {
     )
   }
 
-  return <Tree nodes={nodesSorted} />
+  return <Tree />
 }
 
 export default observer(TreeContainer)
