@@ -15,6 +15,16 @@ import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
+import artSort from '../utils/artSort'
+import eventSort from '../utils/eventSort'
+import lieferungSort from '../utils/lieferungSort'
+import personSort from '../utils/personSort'
+import sammlungSort from '../utils/sammlungSort'
+import teilkulturSort from '../utils/teilkulturSort'
+import zaehlungSort from '../utils/zaehlungSort'
+import gartenSort from '../utils/gartenSort'
+import herkunftSort from '../utils/herkunftSort'
+import kulturSort from '../utils/kulturSort'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1391,11 +1401,19 @@ export const RootStore = RootStoreBase.props({
     get artsFiltered() {
       return queryFromStore({ store: self, table: 'art' })
     },
+    get artsSorted() {
+      return [...self.arts.values()].filter((v) => !v._deleted).sort(artSort)
+    },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
     },
     get eventsFiltered() {
       return queryFromStore({ store: self, table: 'event' })
+    },
+    get eventsSorted() {
+      return [...self.events.values()]
+        .filter((a) => !a._deleted)
+        .sort(eventSort)
     },
     get gartenFilter() {
       return queryFromTable({ store: self, table: 'garten' })
@@ -1403,11 +1421,21 @@ export const RootStore = RootStoreBase.props({
     get gartensFiltered() {
       return queryFromStore({ store: self, table: 'garten' })
     },
+    get gartensSorted() {
+      return [...self.gartens.values()]
+        .filter((a) => !a._deleted)
+        .sort(gartenSort)
+    },
     get herkunftFilter() {
       return queryFromTable({ store: self, table: 'herkunft' })
     },
     get herkunftsFiltered() {
       return queryFromStore({ store: self, table: 'herkunft' })
+    },
+    get herkunftsSorted() {
+      return [...self.herkunfts.values()]
+        .filter((a) => !a._deleted)
+        .sort(herkunftSort)
     },
     get kulturFilter() {
       return queryFromTable({ store: self, table: 'kultur' })
@@ -1415,11 +1443,21 @@ export const RootStore = RootStoreBase.props({
     get kultursFiltered() {
       return queryFromStore({ store: self, table: 'kultur' })
     },
+    get kultursSorted() {
+      return [...self.kulturs.values()]
+        .filter((a) => !a._deleted)
+        .sort(kulturSort)
+    },
     get lieferungFilter() {
       return queryFromTable({ store: self, table: 'lieferung' })
     },
     get lieferungsFiltered() {
       return queryFromStore({ store: self, table: 'lieferung' })
+    },
+    get lieferungsSorted() {
+      return [...self.lieferungs.values()]
+        .filter((a) => !a._deleted)
+        .sort(lieferungSort)
     },
     get personFilter() {
       return queryFromTable({ store: self, table: 'person' })
@@ -1427,11 +1465,21 @@ export const RootStore = RootStoreBase.props({
     get personsFiltered() {
       return queryFromStore({ store: self, table: 'person' })
     },
+    get personsSorted() {
+      return [...self.persons.values()]
+        .filter((a) => !a._deleted)
+        .sort(personSort)
+    },
     get sammelLieferungFilter() {
       return queryFromTable({ store: self, table: 'sammel_lieferung' })
     },
     get sammelLieferungsFiltered() {
       return queryFromStore({ store: self, table: 'sammel_lieferung' })
+    },
+    get sammelLieferungsSorted() {
+      return [...self.sammel_lieferungs.values()]
+        .filter((a) => !a._deleted)
+        .sort(lieferungSort)
     },
     get sammlungFilter() {
       return queryFromTable({ store: self, table: 'sammlung' })
@@ -1439,17 +1487,32 @@ export const RootStore = RootStoreBase.props({
     get sammlungsFiltered() {
       return queryFromStore({ store: self, table: 'sammlung' })
     },
+    get sammlungsSorted() {
+      return [...self.sammlungs.values()]
+        .filter((a) => !a._deleted)
+        .sort(sammlungSort)
+    },
     get teilkulturFilter() {
       return queryFromTable({ store: self, table: 'teilkultur' })
     },
     get teilkultursFiltered() {
       return queryFromStore({ store: self, table: 'teilkultur' })
     },
+    get teilkultursSorted() {
+      return [...self.teilkulturs.values()]
+        .filter((a) => !a._deleted)
+        .sort(teilkulturSort)
+    },
     get zaehlungFilter() {
       return queryFromTable({ store: self, table: 'zaehlung' })
     },
     get zaehlungsFiltered() {
       return queryFromStore({ store: self, table: 'zaehlung' })
+    },
+    get zaehlungsSorted() {
+      return [...self.zaehlungs.values()]
+        .filter((a) => !a._deleted)
+        .sort(zaehlungSort)
     },
     get nonDeletedFilter() {
       return {
