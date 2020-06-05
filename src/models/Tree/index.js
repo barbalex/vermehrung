@@ -507,47 +507,47 @@ export default types
       const store = getParent(self, 1)
       return buildPersonGartenKultur({ store })
     },
-    get personGartenKulturZaehlungFolder() {
-      const store = getParent(self, 1)
-      return buildPersonGartenKulturZaehlungFolder({ store })
-    },
-    get personGartenKulturZaehlung() {
-      const store = getParent(self, 1)
-      return buildPersonGartenKulturZaehlung({ store })
-    },
-    get personGartenKulturTeilkulturFolder() {
-      const store = getParent(self, 1)
-      return buildPersonGartenKulturTeilkulturFolder({ store })
-    },
     get personGartenKulturEventFolder() {
       const store = getParent(self, 1)
       return buildPersonGartenKulturEventFolder({ store })
+    },
+    get personGartenKulturEvent() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturEvent({ store })
     },
     get personGartenKulturAnlieferungFolder() {
       const store = getParent(self, 1)
       return buildPersonGartenKulturAnlieferungFolder({ store })
     },
+    get personGartenKulturAnlieferung() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturAnlieferung({ store })
+    },
+    get personGartenKulturAuslieferungFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturAuslieferungFolder({ store })
+    },
+    get personGartenKulturAuslieferung() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturAuslieferung({ store })
+    },
+    get personGartenKulturZaehlungFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturZaehlungFolder({ store })
+    },
+    get personGartenKulturTeilkulturFolder() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturTeilkulturFolder({ store })
+    },
+    get personGartenKulturTeilkultur() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturTeilkultur({ store })
+    },
+    get personGartenKulturZaehlung() {
+      const store = getParent(self, 1)
+      return buildPersonGartenKulturZaehlung({ store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
