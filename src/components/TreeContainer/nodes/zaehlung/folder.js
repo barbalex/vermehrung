@@ -1,4 +1,8 @@
-export default ({ store, loading }) => {
+export default ({ store }) => {
+  const { loading, showZaehlung } = store.tree
+
+  if (!showZaehlung) return []
+
   const zaehlungen = store.zaehlungsFiltered
   const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
 

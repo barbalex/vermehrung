@@ -8,7 +8,6 @@ import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
 import buildSammlungFolder from '../../components/TreeContainer/nodes/sammlung/folder'
-import buildTeilkulturFolder from '../../components/TreeContainer/nodes/teilkultur/folder'
 import buildZaehlungFolder from '../../components/TreeContainer/nodes/zaehlung/folder'
 
 import buildArtFolder from '../../components/TreeContainer/nodes/art/folder'
@@ -62,6 +61,7 @@ import buildSammelLieferung from '../../components/TreeContainer/nodes/sammelLie
 import buildSammelLieferungLieferungFolder from '../../components/TreeContainer/nodes/sammelLieferung/lieferung/folder'
 import buildSammelLieferungLieferung from '../../components/TreeContainer/nodes/sammelLieferung/lieferung'
 
+import buildTeilkulturFolder from '../../components/TreeContainer/nodes/teilkultur/folder'
 import buildTeilkultur from '../../components/TreeContainer/nodes/teilkultur'
 
 import buildZaehlung from '../../components/TreeContainer/nodes/zaehlung'
@@ -175,8 +175,7 @@ export default types
       const store = getParent(self, 1)
       console.log('store tree building nodes')
       return buildNodes({
-        store: store,
-        loading: self.loading,
+        store,
       })
     },
     get visibleOpenNodes() {
@@ -559,15 +558,15 @@ export default types
       const store = getParent(self, 1)
       return buildTeilkulturFolder({ loading: self.loading, store })
     },
+    get teilkultur() {
+      const store = getParent(self, 1)
+      return buildTeilkultur({ store })
+    },
     get zaehlungFolder() {
       const store = getParent(self, 1)
       return buildZaehlungFolder({ loading: self.loading, store })
     },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

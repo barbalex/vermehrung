@@ -1,20 +1,22 @@
-export default ({ nodes, store }) => {
-  const teilkulturen = store.teilkultursFiltered
-  /*.filter(t =>
-    get(t, 'kultur.kultur_option.tk'),
-  )*/
+import isEqual from 'lodash/isEqual'
+
+export default ({ store }) => {
+  const { showTeilkultur, visibleOpenNodes } = store.tree
+
+  if (!showTeilkultur) return []
 
   return (
-    teilkulturen
+    store.teilkultursFiltered
       // only show if parent node exists
-      .filter(() => nodes.map((n) => n.id).includes('teilkulturFolder'))
+      .filter(() =>
+        visibleOpenNodes.some((node) => isEqual(['Teilkulturen'], node)),
+      )
       .map((el) => {
         return {
           nodeType: 'table',
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
-          id: `teilkultur${el.id}`,
-          parentId: 'teilkulturFolder',
+          id: el.id,
           label: el.name || '(kein Name)',
           url: ['Teilkulturen', el.id],
           hasChildren: false,
