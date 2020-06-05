@@ -177,7 +177,6 @@ export default types
       return buildNodes({
         store: store,
         loading: self.loading,
-        role: store.userPerson.user_role,
       })
     },
     get visibleOpenNodes() {
