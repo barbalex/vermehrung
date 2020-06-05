@@ -3,28 +3,9 @@ import memoizeOne from 'memoize-one'
 import sort from '../sort'
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
-import buildTeilkulturTeilkultur from './teilkultur'
-
 import buildZaehlungZaehlung from './zaehlung'
 
-import buildSammlungSammlung from './sammlung'
-import buildSammlungHerkunftFolder from './sammlung/herkunft/folder'
-import buildSammlungHerkunftHerkunft from './sammlung/herkunft'
-import buildSammlungAusLieferungFolder from './sammlung/auslieferung/folder'
-import buildSammlungAusLieferungLieferung from './sammlung/auslieferung'
-import buildSammlungAusLieferungKulturFolder from './sammlung/auslieferung/kultur/folder'
-import buildSammlungAusLieferungKulturKultur from './sammlung/auslieferung/kultur'
-import buildSammlungAusLieferungKulturZaehlungFolder from './sammlung/auslieferung/kultur/zaehlung/folder'
-import buildSammlungAusLieferungKulturZaehlungZaehlung from './sammlung/auslieferung/kultur/zaehlung'
-import buildSammlungAusLieferungKulturEventFolder from './sammlung/auslieferung/kultur/event/folder'
-import buildSammlungAusLieferungKulturEventEvent from './sammlung/auslieferung/kultur/event'
-import buildSammlungAusLieferungKulturAusLieferungFolder from './sammlung/auslieferung/kultur/auslieferung/folder'
-import buildSammlungAusLieferungKulturAusLieferungLieferung from './sammlung/auslieferung/kultur/auslieferung'
-import buildSammlungAusLieferungKulturAnLieferungFolder from './sammlung/auslieferung/kultur/anlieferung/folder'
-import buildSammlungAusLieferungKulturAnLieferungLieferung from './sammlung/auslieferung/kultur/anlieferung'
-
-export default ({ store, loading }) => {
-  const { userPersonOption } = store
+export default ({ store }) => {
   const {
     artFolder,
     art,
@@ -106,13 +87,10 @@ export default ({ store, loading }) => {
     sammelLieferungLieferung,
     sammlungFolder,
     teilkulturFolder,
+    teilkultur,
     zaehlungFolder,
   } = store.tree
   const openNodes = store.tree.openNodes.sort(sort)
-
-  const { tree_teilkultur, tree_zaehlung } = userPersonOption
-  const showTeilkulturFolder = tree_teilkultur
-  const showZaehlungFolder = tree_zaehlung
 
   let nodes = [
     ...artFolder,
@@ -194,8 +172,9 @@ export default ({ store, loading }) => {
     ...sammelLieferungLieferungFolder,
     ...sammelLieferungLieferung,
     ...sammlungFolder,
-    ...(showTeilkulturFolder ? teilkulturFolder : []),
-    ...(showZaehlungFolder ? zaehlungFolder : []),
+    ...teilkulturFolder,
+    ...teilkultur,
+    ...zaehlungFolder,
   ]
 
   /**
@@ -217,239 +196,6 @@ export default ({ store, loading }) => {
           buildZaehlungZaehlung({
             nodes,
             store,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 1 && url[0] === 'Teilkulturen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildTeilkulturTeilkultur({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
-    if (url.length === 1 && url[0] === 'Sammlungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungSammlung({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
-
-    if (url.length === 2 && url[0] === 'Sammlungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungHerkunftFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungFolder({
-            nodes,
-            url,
-            store,
-            loading,
-          }),
-        )(),
-      ]
-    }
-
-    if (
-      url.length === 3 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Herkuenfte'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungHerkunftHerkunft({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 3 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungLieferung({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-
-    if (
-      url.length === 4 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturFolder({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-      ]
-    }
-
-    if (
-      url.length === 5 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen' &&
-      url[4] === 'Kulturen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturKultur({
-            nodes,
-            store,
-            url,
-          }),
-        )(),
-      ]
-    }
-
-    if (
-      url.length === 6 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen' &&
-      url[4] === 'Kulturen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturZaehlungFolder({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturEventFolder({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturAusLieferungFolder({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturAnLieferungFolder({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-      ]
-    }
-
-    if (
-      url.length === 7 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Zaehlungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturZaehlungZaehlung({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Events'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturEventEvent({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'Aus-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturAusLieferungLieferung({
-            nodes,
-            store,
-            url,
-            loading,
-          }),
-        )(),
-      ]
-    }
-    if (
-      url.length === 7 &&
-      url[0] === 'Sammlungen' &&
-      url[2] === 'Aus-Lieferungen' &&
-      url[4] === 'Kulturen' &&
-      url[6] === 'An-Lieferungen'
-    ) {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildSammlungAusLieferungKulturAnLieferungLieferung({
-            nodes,
-            store,
-            url,
-            loading,
           }),
         )(),
       ]
