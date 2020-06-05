@@ -1,58 +1,56 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const {
+    showSammlung,
+    visibleOpenNodes,
+    sammlung: sammlungNodes,
+    sammlungAusLieferung: lieferungNodes,
+  } = store.tree
+  if (!showSammlung) return []
 
-export default ({ nodes, store, url }) => {
-  const sammlungId = url[1]
-  const lieferungId = url[3]
-
-  const lieferung = store.lieferungs.get(lieferungId)
-  const kultur = store.kultursFiltered.find(
-    (k) => lieferung.nach_kultur_id === k.id,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 5 &&
+      node[0] === 'Sammlungen' &&
+      node[2] === 'Aus-Lieferungen' &&
+      node[4] === 'Kulturen',
   )
 
-  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
-  const sammlungIndex = findIndex(
-    sammlungNodes,
-    (n) => n.id === `sammlung${sammlungId}`,
-  )
+  if (!parentNodes.length) return []
 
-  const lieferungNodes = nodes.filter(
-    (n) => n.parentId === `sammlung${sammlungId}LieferungFolder`,
-  )
-  const lieferungIndex = findIndex(
-    lieferungNodes,
-    (n) => n.id === `sammlung${sammlungId}Lieferung${lieferungId}`,
-  )
+  return parentNodes.flatMap((node) => {
+    const sammlungId = node[1]
+    const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
+    const lieferungId = node[3]
+    const lieferungIndex = lieferungNodes.findIndex((a) => a.id === lieferungId)
 
-  // only return if parent exists
-  if (
-    !nodes
-      .map((n) => n.id)
-      .includes(`sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`)
-  )
-    return []
+    const lieferung = store.lieferungs.get(lieferungId)
+    const kultur = store.kultursFiltered.find(
+      (k) => lieferung.nach_kultur_id === k.id,
+    )
 
-  if (!kultur) return []
+    if (!kultur) return []
 
-  return [kultur]
-    .map((el) => ({
-      nodeType: 'table',
-      menuTitle: 'Kultur',
-      table: 'kultur',
-      id: `sammlung${sammlungId}Lieferung${lieferungId}Kultur${el.id}`,
-      parentId: `sammlung${sammlungId}Lieferung${lieferungId}KulturFolder`,
-      label: el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`,
-      url: [
-        'Sammlungen',
-        sammlungId,
-        'Aus-Lieferungen',
-        lieferungId,
-        'Kulturen',
-        el.id,
-      ],
-      hasChildren: true,
-    }))
-    .map((el, index) => {
-      el.sort = [3, sammlungIndex, 3, lieferungIndex, 1, index]
-      return el
-    })
+    return [kultur]
+      .map((el) => ({
+        nodeType: 'table',
+        menuTitle: 'Kultur',
+        table: 'kultur',
+        id: el.id,
+        label:
+          el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`,
+        url: [
+          'Sammlungen',
+          sammlungId,
+          'Aus-Lieferungen',
+          lieferungId,
+          'Kulturen',
+          el.id,
+        ],
+        hasChildren: true,
+      }))
+      .map((el, index) => {
+        el.sort = [3, sammlungIndex, 3, lieferungIndex, 1, index]
+        return el
+      })
+  })
 }
