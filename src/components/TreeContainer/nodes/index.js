@@ -1,10 +1,3 @@
-import memoizeOne from 'memoize-one'
-
-import sort from '../sort'
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-
-import buildZaehlungZaehlung from './zaehlung'
-
 export default ({ store }) => {
   const {
     artFolder,
@@ -89,8 +82,8 @@ export default ({ store }) => {
     teilkulturFolder,
     teilkultur,
     zaehlungFolder,
+    zaehlung,
   } = store.tree
-  const openNodes = store.tree.openNodes.sort(sort)
 
   let nodes = [
     ...artFolder,
@@ -175,32 +168,8 @@ export default ({ store }) => {
     ...teilkulturFolder,
     ...teilkultur,
     ...zaehlungFolder,
+    ...zaehlung,
   ]
-
-  /**
-   * We ALWAYS add an array of nodes,
-   * never a single one
-   * not even for folders that are never more than one
-   * because the function adding the nodes
-   * should be able to pass none as well
-   * for instance if a parent node is not open
-   * or some filter is active
-   */
-  openNodes.forEach((url) => {
-    if (!allParentNodesAreOpen(openNodes, url)) return
-
-    if (url.length === 1 && url[0] === 'Zaehlungen') {
-      nodes = [
-        ...nodes,
-        ...memoizeOne(() =>
-          buildZaehlungZaehlung({
-            nodes,
-            store,
-          }),
-        )(),
-      ]
-    }
-  })
 
   return nodes
 }
