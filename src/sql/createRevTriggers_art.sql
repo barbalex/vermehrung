@@ -5,7 +5,7 @@ begin
   -- if is deletion:
   -- do not search for winner
   -- insert deletion as winner but list conflicts
-  if new._deleted = true then
+  if new._deleted is true then
     insert into art (
         id,
         ae_id,
