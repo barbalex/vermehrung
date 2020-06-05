@@ -573,11 +573,11 @@ export default types
       const store = getParent(self, 1)
       return buildSammlung({ store })
     },
-    /*get xxFolder() {
+    get sammlungHerkunftFolder() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildSammlungHerkunftFolder({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
