@@ -26,6 +26,7 @@ import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import {
   art as artFragment,
   lieferung as lieferungFragment,
+  person as personFragment,
   sammelLieferung as sammelLieferungFragment,
 } from '../../../../utils/fragments'
 import Files from '../../Files'
@@ -38,7 +39,6 @@ import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
-import artSort from '../../../../utils/artSort'
 
 const Container = styled.div`
   height: 100%;
@@ -327,11 +327,15 @@ const allDataQuery = gql`
         }
       }
     }
-    art(order_by: { art_ae_art: { name: asc } }) {
+    art {
       ...ArtFields
+    }
+    person {
+      ...PersonFields
     }
   }
   ${artFragment}
+  ${personFragment}
   ${lieferungFragment}
   ${sammelLieferungFragment}
 `
@@ -350,7 +354,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     sammlungIdInActiveNodeArray,
     artsSorted,
     kultursSorted,
-    lieferungsSorted,
+    personsSorted,
     sammlungsSorted,
   } = store
   const { isFiltered: runIsFiltered } = filter
@@ -472,18 +476,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       vonKulturFilter,
     },
   })
-
-  const {
-    data: personData,
-    error: personError,
-    loading: personLoading,
-  } = useQuery(
-    (store) =>
-      store.queryPerson({
-        order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }],
-      }),
-    (p) => p.id.name.ort,
-  )
 
   const [errors, setErrors] = useState({})
 
@@ -639,11 +631,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const personWerte = useMemo(
     () =>
-      (personData?.person ?? []).map((el) => ({
+      personsSorted.map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [personData?.person],
+    [personsSorted],
   )
 
   const artWerte = useMemo(
@@ -711,7 +703,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     )
   }
 
-  const errorToShow = error || personError
+  const errorToShow = error
   if (errorToShow) {
     return (
       <Container>
@@ -999,7 +991,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       field="person_id"
                       label="Person"
                       options={personWerte}
-                      loading={personLoading}
+                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.person_id}
                     />
