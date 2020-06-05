@@ -25,14 +25,20 @@ export default ({ store }) => {
     const kulturId = node[5]
     const kulturIndex = kulturNodes.findIndex((a) => a.id === kulturId)
 
-    const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
-    const nr = loading && !events.length ? '...' : events.length
+    const kultur_option = store.kultur_options.get(kulturId)
+    const tk = kultur_option?.tk
+    if (!tk) return []
+
+    const teilkulturen = store.teilkultursFiltered.filter(
+      (z) => z.kultur_id === kulturId,
+    )
+    const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
 
     return {
       nodeType: 'folder',
-      menuTitle: 'Events',
-      id: `${kulturId}EventFolder`,
-      label: `Events (${nr})`,
+      menuTitle: 'Teilkulturen',
+      id: `${kulturId}TeilkulturFolder`,
+      label: `Teilkulturen (${nr})`,
       url: [
         'Sammlungen',
         sammlungId,
@@ -40,9 +46,9 @@ export default ({ store }) => {
         lieferungId,
         'Kulturen',
         kulturId,
-        'Events',
+        'Teilkulturen',
       ],
-      sort: [3, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 5],
+      sort: [3, sammlungIndex, 3, lieferungIndex, 1, kulturIndex, 1],
       hasChildren: true,
       childrenCount: nr,
     }

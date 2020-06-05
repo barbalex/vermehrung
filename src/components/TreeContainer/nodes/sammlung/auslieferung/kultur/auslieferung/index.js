@@ -83,7 +83,7 @@ export default ({ nodes, store, url }) => {
           lieferungIndex,
           1,
           kulturIndex,
-          3,
+          4,
           index,
         ]
         return el
