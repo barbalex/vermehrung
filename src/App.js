@@ -19,7 +19,6 @@ import Notifications from './components/Notifications'
 
 import materialTheme from './utils/materialTheme'
 
-import UpdateExists from './components/UpdateExists'
 import setHasuraClaims from './utils/setHasuraClaims'
 
 import createGlobalStyle from './utils/createGlobalStyle'
@@ -128,7 +127,6 @@ const App = ({ element }) => {
           <GlobalStyle />
           {element}
           <Notifications />
-          <UpdateExists />
         </>
       </StoreContext.Provider>
     </MuiThemeProvider>
