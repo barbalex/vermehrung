@@ -597,19 +597,19 @@ export default types
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKultur({ store })
     },
+    get sammlungAusLieferungKulturEventFolder() {
+      const store = getParent(self, 1)
+      return buildSammlungAusLieferungKulturEventFolder({ store })
+    },
+    get sammlungAusLieferungKulturAusLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildSammlungAusLieferungKulturAusLieferungFolder({ store })
+    },
     get sammlungAusLieferungKulturZaehlungFolder() {
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKulturZaehlungFolder({ store })
     },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
