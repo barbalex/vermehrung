@@ -8,7 +8,6 @@ import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
 import buildSammlungFolder from '../../components/TreeContainer/nodes/sammlung/folder'
-import buildZaehlungFolder from '../../components/TreeContainer/nodes/zaehlung/folder'
 
 import buildArtFolder from '../../components/TreeContainer/nodes/art/folder'
 import buildArt from '../../components/TreeContainer/nodes/art'
@@ -64,6 +63,7 @@ import buildSammelLieferungLieferung from '../../components/TreeContainer/nodes/
 import buildTeilkulturFolder from '../../components/TreeContainer/nodes/teilkultur/folder'
 import buildTeilkultur from '../../components/TreeContainer/nodes/teilkultur'
 
+import buildZaehlungFolder from '../../components/TreeContainer/nodes/zaehlung/folder'
 import buildZaehlung from '../../components/TreeContainer/nodes/zaehlung'
 
 import buildEventFolder from '../../components/TreeContainer/nodes/event/folder'
@@ -550,10 +550,6 @@ export default types
       const store = getParent(self, 1)
       return buildSammelLieferungLieferung({ store })
     },
-    get sammlungFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungFolder({ loading: self.loading, store })
-    },
     get teilkulturFolder() {
       const store = getParent(self, 1)
       return buildTeilkulturFolder({ loading: self.loading, store })
@@ -566,11 +562,15 @@ export default types
       const store = getParent(self, 1)
       return buildZaehlungFolder({ loading: self.loading, store })
     },
-    /*get xxFolder() {
+    get zaehlung() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildZaehlung({ store })
     },
-    get xxFolder() {
+    get sammlungFolder() {
+      const store = getParent(self, 1)
+      return buildSammlungFolder({ loading: self.loading, store })
+    },
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
