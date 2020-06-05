@@ -97,7 +97,8 @@ export default async ({ node, store }) => {
     const entries = Object.entries(sammelLieferung)
       .filter(
         // eslint-disable-next-line no-unused-vars
-        ([key, value]) => key !== '__typename',
+        ([key, value]) =>
+          !['__typename', '_conflicts', 'lieferungs'].includes(key),
       )
       // eslint-disable-next-line no-unused-vars
       .filter(([key, value]) => exists(value))
