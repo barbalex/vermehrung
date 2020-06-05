@@ -603,13 +603,25 @@ export default types
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKulturEventFolder({ store })
     },
+    get sammlungAusLieferungKulturEvent() {
+      const store = getParent(self, 1)
+      return buildSammlungAusLieferungKulturEvent({ store })
+    },
     get sammlungAusLieferungKulturAnLieferungFolder() {
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKulturAnLieferungFolder({ store })
     },
+    get sammlungAusLieferungKulturAnLieferung() {
+      const store = getParent(self, 1)
+      return buildSammlungAusLieferungKulturAnLieferung({ store })
+    },
     get sammlungAusLieferungKulturAusLieferungFolder() {
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKulturAusLieferungFolder({ store })
+    },
+    get sammlungAusLieferungKulturAusLieferung() {
+      const store = getParent(self, 1)
+      return buildSammlungAusLieferungKulturAusLieferung({ store })
     },
     get sammlungAusLieferungKulturTeilkulturFolder() {
       const store = getParent(self, 1)
@@ -627,30 +639,6 @@ export default types
       const store = getParent(self, 1)
       return buildSammlungAusLieferungKulturZaehlung({ store })
     },
-    /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },*/
   }))
 
 export const defaultValue = {
