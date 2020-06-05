@@ -1,12 +1,17 @@
+import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
-export default ({ nodes, store }) => {
-  const zaehlungen = store.zaehlungsFiltered
+export default ({ store }) => {
+  const { showZaehlung, visibleOpenNodes } = store.tree
+
+  if (!showZaehlung) return []
 
   return (
-    zaehlungen
+    store.zaehlungsFiltered
       // only show if parent node exists
-      .filter(() => nodes.map((n) => n.id).includes('zaehlungFolder'))
+      .filter(() =>
+        visibleOpenNodes.some((node) => isEqual(['Zaehlungen'], node)),
+      )
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -31,8 +36,7 @@ export default ({ nodes, store }) => {
           nodeType: 'table',
           menuTitle: 'Zählung',
           table: 'zaehlung',
-          id: `zaehlung${el.id}`,
-          parentId: 'zaehlungFolder',
+          id: el.id,
           label,
           url: ['Zaehlungen', el.id],
           hasChildren: false,
