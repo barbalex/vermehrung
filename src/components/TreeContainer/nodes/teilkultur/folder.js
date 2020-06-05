@@ -1,4 +1,8 @@
-export default ({ store, loading }) => {
+export default ({ store }) => {
+  const { loading, showTeilkultur } = store.tree
+
+  if (!showTeilkultur) return []
+
   const teilkulturen = store.teilkultursFiltered
   /*.filter(t =>
     get(t, 'kultur.kultur_option.tk'),

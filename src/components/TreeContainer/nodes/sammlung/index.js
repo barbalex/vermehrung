@@ -1,12 +1,17 @@
+import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
-export default ({ nodes, store }) => {
-  const sammlungen = store.sammlungsFiltered
+export default ({ store }) => {
+  const { showSammlung, visibleOpenNodes } = store.tree
+
+  if (!showSammlung) return []
 
   return (
-    sammlungen
+    store.sammlungsFiltered
       // only show if parent node exists
-      .filter(() => nodes.map((n) => n.id).includes('sammlungFolder'))
+      .filter(() =>
+        visibleOpenNodes.some((node) => isEqual(['Sammlungen'], node)),
+      )
       .map((el) => {
         const { datum } = el
         const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
@@ -24,8 +29,7 @@ export default ({ nodes, store }) => {
           nodeType: 'table',
           menuTitle: 'Sammlung',
           table: 'sammlung',
-          id: `sammlung${el.id}`,
-          parentId: 'sammlungFolder',
+          id: el.id,
           label,
           url: ['Sammlungen', el.id],
           hasChildren: true,
