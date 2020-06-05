@@ -238,18 +238,6 @@ export default types
       const store = getParent(self, 1)
       return buildArtFolder({ loading: self.loading, store })
     },
-    get sammlungFolder() {
-      const store = getParent(self, 1)
-      return buildSammlungFolder({ loading: self.loading, store })
-    },
-    get teilkulturFolder() {
-      const store = getParent(self, 1)
-      return buildTeilkulturFolder({ loading: self.loading, store })
-    },
-    get zaehlungFolder() {
-      const store = getParent(self, 1)
-      return buildZaehlungFolder({ loading: self.loading, store })
-    },
     get art() {
       const store = getParent(self, 1)
       return buildArt({ store })
@@ -440,7 +428,7 @@ export default types
       const store = getParent(self, 1)
       return buildKulturEventFolder({ store })
     },
-    get kulturEventEvent() {
+    get kulturEvent() {
       const store = getParent(self, 1)
       return buildKulturEvent({ store })
     },
@@ -464,7 +452,7 @@ export default types
       const store = getParent(self, 1)
       return buildLieferungFolder({ loading: self.loading, store })
     },
-    get lieferungLieferung() {
+    get lieferung() {
       const store = getParent(self, 1)
       return buildLieferung({ store })
     },
@@ -556,15 +544,27 @@ export default types
       const store = getParent(self, 1)
       return buildSammelLieferung({ store })
     },
+    get sammelLieferungLieferungFolder() {
+      const store = getParent(self, 1)
+      return buildSammelLieferungLieferungFolder({ store })
+    },
+    get sammelLieferungLieferung() {
+      const store = getParent(self, 1)
+      return buildSammelLieferungLieferung({ store })
+    },
+    get sammlungFolder() {
+      const store = getParent(self, 1)
+      return buildSammlungFolder({ loading: self.loading, store })
+    },
+    get teilkulturFolder() {
+      const store = getParent(self, 1)
+      return buildTeilkulturFolder({ loading: self.loading, store })
+    },
+    get zaehlungFolder() {
+      const store = getParent(self, 1)
+      return buildZaehlungFolder({ loading: self.loading, store })
+    },
     /*get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
-      const store = getParent(self, 1)
-      return buildXxFolder({ store })
-    },
-    get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },

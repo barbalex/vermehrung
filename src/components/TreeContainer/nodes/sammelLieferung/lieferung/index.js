@@ -1,29 +1,29 @@
-import findIndex from 'lodash/findIndex'
 import moment from 'moment'
 
-export default ({ nodes, store, url }) => {
-  const sammelLieferungId = url[1]
+export default ({ store }) => {
+  const { showSammelLieferung, visibleOpenNodes, sammelLieferung } = store.tree
+  if (!showSammelLieferung) return []
 
-  const lieferungen = store.lieferungsFiltered.filter(
-    (l) => l.sammel_lieferung_id === sammelLieferungId,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) =>
+      node.length === 3 &&
+      node[0] === 'Sammel-Lieferungen' &&
+      node[2] === 'Lieferungen',
   )
 
-  const sammelLieferungNodes = nodes.filter(
-    (n) => n.parentId === `sammelLieferungFolder`,
-  )
-  const sammelLieferungIndex = findIndex(
-    sammelLieferungNodes,
-    (n) => n.id === `sammelLieferung${sammelLieferungId}`,
-  )
+  if (!parentNodes.length) return []
 
-  return (
-    lieferungen
-      // only show if parent node exists
-      .filter(() =>
-        nodes
-          .map((n) => n.id)
-          .includes(`sammelLieferung${sammelLieferungId}LieferungFolder`),
-      )
+  return parentNodes.flatMap((node) => {
+    const sammelLieferungId = node[1]
+    const sammelLieferungIndex = sammelLieferung.findIndex(
+      (a) => a.id === sammelLieferungId,
+    )
+
+    const lieferungen = store.lieferungsFiltered.filter(
+      (l) => l.sammel_lieferung_id === sammelLieferungId,
+    )
+
+    return lieferungen
       .map((el) => {
         const datum = el.datum
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -40,8 +40,7 @@ export default ({ nodes, store, url }) => {
           nodeType: 'table',
           menuTitle: 'Lieferung',
           table: 'lieferung',
-          id: `sammelLieferung${sammelLieferungId}Lieferung${el.id}`,
-          parentId: `sammelLieferung${sammelLieferungId}LieferungFolder`,
+          id: el.id,
           label,
           url: ['Sammel-Lieferungen', sammelLieferungId, 'Lieferungen', el.id],
           hasChildren: false,
@@ -52,5 +51,5 @@ export default ({ nodes, store, url }) => {
         el.sort = [9, sammelLieferungIndex, 3, index]
         return el
       })
-  )
+  })
 }
