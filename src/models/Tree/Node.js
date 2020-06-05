@@ -15,13 +15,6 @@ export default types.model('Node', {
   ),
   table: types.union(types.string, types.number, types.null, types.undefined),
   id: types.union(types.string, types.number, types.null, types.undefined),
-  // TODO: remove when all nodes converted to mst
-  parentId: types.union(
-    types.string,
-    types.number,
-    types.null,
-    types.undefined,
-  ),
   label: types.union(types.string, types.number, types.null, types.undefined),
   url: types.array(types.union(types.string, types.number)),
   sort: types.array(types.union(types.string, types.number)),
@@ -34,7 +27,6 @@ export const defaultValue = {
   menuTitle: '',
   table: '',
   id: '',
-  parentId: '',
   label: '',
   url: [],
   sort: [],
