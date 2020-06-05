@@ -175,7 +175,7 @@ export default types
     },
     get nodes() {
       const store = getParent(self, 1)
-      console.log('store tree building nodes')
+      //console.log('store tree building nodes')
       return sortNodes(
         buildNodes({
           store,
