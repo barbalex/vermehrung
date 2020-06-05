@@ -1,32 +1,36 @@
-import findIndex from 'lodash/findIndex'
+export default ({ store }) => {
+  const {
+    showSammlung,
+    visibleOpenNodes,
+    loading,
+    sammlung: sammlungNodes,
+  } = store.tree
+  if (!showSammlung) return []
 
-export default ({ store, loading, url, nodes }) => {
-  const sammlungId = url[1]
-
-  const sammlung = store.sammlungs.get(sammlungId) || {}
-  const herkunft = store.herkunftsFiltered.find(
-    (h) => h.id === sammlung.herkunft_id,
-  )
-  const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0
-
-  const sammlungNodes = nodes.filter((n) => n.parentId === 'sammlungFolder')
-  const sammlungIndex = findIndex(
-    sammlungNodes,
-    (n) => n.id === `sammlung${sammlungId}`,
+  const parentNodes = visibleOpenNodes.filter(
+    (node) => node.length === 2 && node[0] === 'Sammlungen',
   )
 
-  // only return if parent exists
-  if (!nodes.map((n) => n.id).includes(`sammlung${sammlungId}`)) return []
+  return parentNodes.map((node) => {
+    const sammlungId = node[1]
+    const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
 
-  return [
-    {
-      nodeType: 'folder_no_menu',
-      menuTitle: 'Herkünfte',
-      id: `sammlung${sammlungId}HerkunftFolder`,
-      label: `Herkünfte (${nr})`,
-      url: ['Sammlungen', sammlungId, 'Herkuenfte'],
-      sort: [3, sammlungIndex, 1],
-      hasChildren: true,
-    },
-  ]
+    const sammlung = store.sammlungs.get(sammlungId) || {}
+    const herkunft = store.herkunftsFiltered.find(
+      (h) => h.id === sammlung.herkunft_id,
+    )
+    const nr = loading && !herkunft ? '...' : herkunft ? 1 : 0
+
+    return [
+      {
+        nodeType: 'folder_no_menu',
+        menuTitle: 'Herkünfte',
+        id: `sammlung${sammlungId}HerkunftFolder`,
+        label: `Herkünfte (${nr})`,
+        url: ['Sammlungen', sammlungId, 'Herkuenfte'],
+        sort: [3, sammlungIndex, 1],
+        hasChildren: true,
+      },
+    ]
+  })
 }

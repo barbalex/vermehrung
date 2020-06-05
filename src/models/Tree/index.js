@@ -7,8 +7,6 @@ import allParentNodesAreOpen from '../../components/TreeContainer/allParentNodes
 import Node from './Node'
 import buildNodes from '../../components/TreeContainer/nodes'
 
-import buildSammlungFolder from '../../components/TreeContainer/nodes/sammlung/folder'
-
 import buildArtFolder from '../../components/TreeContainer/nodes/art/folder'
 import buildArt from '../../components/TreeContainer/nodes/art'
 
@@ -90,6 +88,7 @@ import buildPersonSammlung from '../../components/TreeContainer/nodes/person/sam
 import buildPersonLieferungFolder from '../../components/TreeContainer/nodes/person/lieferung/folder'
 import buildPersonLieferung from '../../components/TreeContainer/nodes/person/lieferung'
 
+import buildSammlungFolder from '../../components/TreeContainer/nodes/sammlung/folder'
 import buildSammlung from '../../components/TreeContainer/nodes/sammlung'
 import buildSammlungHerkunftFolder from '../../components/TreeContainer/nodes/sammlung/herkunft/folder'
 import buildSammlungHerkunft from '../../components/TreeContainer/nodes/sammlung/herkunft'
@@ -570,11 +569,11 @@ export default types
       const store = getParent(self, 1)
       return buildSammlungFolder({ loading: self.loading, store })
     },
-    /*get xxFolder() {
+    get sammlung() {
       const store = getParent(self, 1)
-      return buildXxFolder({ store })
+      return buildSammlung({ store })
     },
-    get xxFolder() {
+    /*get xxFolder() {
       const store = getParent(self, 1)
       return buildXxFolder({ store })
     },
