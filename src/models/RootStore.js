@@ -342,11 +342,15 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteEventRevModel(val) {
-        const rev_model = self.event_revs.get(val.id)
+        // 1. update model: remove this conflict
         const model = self.events.get(val.event_id)
-        const newModel = { ...model, _conflicts: [] }
-        console.log('store, deleteEventRevModel', { model, newModel, val })
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
         self.events.set(val.event_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.event_revs.get(val.id)
         destroy(rev_model)
       },
       upsertGartenModel(val) {

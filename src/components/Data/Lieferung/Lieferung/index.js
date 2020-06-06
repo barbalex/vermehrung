@@ -471,19 +471,16 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }
 
-  const { data, error, loading, query: queryOfLieferung } = useQuery(
-    allDataQuery,
-    {
-      variables: {
-        id,
-        lieferungFilter,
-        hierarchyFilter,
-        sammlungFilter,
-        nachKulturFilter,
-        vonKulturFilter,
-      },
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      lieferungFilter,
+      hierarchyFilter,
+      sammlungFilter,
+      nachKulturFilter,
+      vonKulturFilter,
     },
-  )
+  })
 
   const [errors, setErrors] = useState({})
 
@@ -491,14 +488,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const filteredNr = data?.lieferung_filtered_count?.aggregate?.count
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfLieferung.refetch()
-  }, [queryOfLieferung])
-  const callbackAfterUebernehmen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfLieferung.refetch()
-  }, [queryOfLieferung])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   const { li_show_sl_felder } = userPersonOption
 
