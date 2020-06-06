@@ -286,12 +286,8 @@ const Sammlung = ({
         return filter.setValue({ table: 'sammlung', key: field, value })
       }
       row.edit({ field, value })
-      setTimeout(() => {
-        // refetch query because is not a model instance
-        queryOfSammlung.refetch()
-      }, 100)
     },
-    [filter, queryOfSammlung, row, showFilter],
+    [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Planen`
