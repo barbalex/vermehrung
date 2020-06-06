@@ -132,7 +132,7 @@ const Zaehlung = ({
   }
   const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
 
-  const { error, loading, query: queryOfZaehlung } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.queryZaehlung(
       {
         where: { id: { _eq: id } },
@@ -172,14 +172,11 @@ const Zaehlung = ({
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfZaehlung.refetch()
-  }, [queryOfZaehlung])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfZaehlung.refetch()
-    setActiveConflict(null)
-  }, [queryOfZaehlung])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   const artId = row?.kultur?.art_id
   const kulturFilter = artId

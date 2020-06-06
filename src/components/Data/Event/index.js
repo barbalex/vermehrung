@@ -180,12 +180,12 @@ const Event = ({
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => {
     setActiveConflict(null)
-    queryOfEvent.refetch()
-  }, [queryOfEvent])
+    //queryOfEvent.refetch()
+  }, [])
   const callbackAfterUebernehmen = useCallback(() => {
-    queryOfEvent.refetch()
+    //queryOfEvent.refetch()
     setActiveConflict(null)
-  }, [queryOfEvent])
+  }, [])
 
   const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
     store.queryKultur(

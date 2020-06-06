@@ -157,14 +157,11 @@ const Teilkultur = ({
     dataTeilkulturFilteredAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfTeilkultur.refetch()
-  }, [queryOfTeilkultur])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfTeilkultur.refetch()
-    setActiveConflict(null)
-  }, [queryOfTeilkultur])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
     store.queryKultur(
