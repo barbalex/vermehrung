@@ -137,6 +137,7 @@ const Kultur = ({
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     artsSorted,
+    gartensSorted,
     herkunftsSorted,
     sammlungsSorted,
   } = store
@@ -227,17 +228,6 @@ const Kultur = ({
     setErrors({})
   }, [id])
 
-  const {
-    data: dataGarten,
-    error: errorGarten,
-    loading: loadingGarten,
-  } = useQuery((store) =>
-    store.queryGarten(
-      { order_by: { person: { name: 'asc_nulls_first' } } },
-      (g) => g.id.name.person((p) => p.id.name),
-    ),
-  )
-
   const artForArtWerte = artsSorted.filter(
     (a) => !!a.ae_id && artenToChoose.includes(a.id),
   )
@@ -252,11 +242,11 @@ const Kultur = ({
 
   const gartenWerte = useMemo(
     () =>
-      (dataGarten?.garten ?? []).map((el) => ({
+      gartensSorted.map((el) => ({
         value: el.id,
         label: gartenLabelFromGarten(el),
       })),
-    [dataGarten?.garten],
+    [gartensSorted],
   )
 
   const herkunftWerteData = herkunftsSorted.filter((h) =>
@@ -321,12 +311,11 @@ const Kultur = ({
     )
   }
 
-  const errorToShow = error || errorGarten
-  if (errorToShow) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Kultur" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -416,7 +405,7 @@ const Kultur = ({
                 field="garten_id"
                 label="Garten"
                 options={gartenWerte}
-                loading={loadingGarten}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.garten_id}
               />
