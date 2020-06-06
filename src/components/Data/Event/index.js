@@ -176,13 +176,7 @@ const allDataQuery = gql`
         count
       }
     }
-    kultur(
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { garten: { person: { ort: asc_nulls_first } } }
-        { art: { art_ae_art: { name: asc_nulls_first } } }
-      ]
-    ) {
+    kultur {
       id
       __typename
       art {
@@ -209,6 +203,12 @@ const allDataQuery = gql`
         ...TeilkulturFields
       }
     }
+    person {
+      id
+      __typename
+      name
+      ort
+    }
   }
   ${eventFragment}
   ${kulturOptionFragment}
@@ -225,6 +225,9 @@ const Event = ({
     online,
     insertTeilkulturRev,
     kulturIdInActiveNodeArray,
+    kultursSorted,
+    personsSorted,
+    teilkultursSorted,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -237,7 +240,7 @@ const Event = ({
   }
   const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
 
-  const { data, error, loading } = useQuery(allDataQuery, {
+  const { data, error, loading, query } = useQuery(allDataQuery, {
     variables: {
       id,
       eventFilter,
@@ -259,57 +262,39 @@ const Event = ({
     [],
   )
 
-  const {
-    data: personData,
-    error: personError,
-    loading: personLoading,
-  } = useQuery((store) =>
-    store.queryPerson(
-      { order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }] },
-      (p) => p.id.name.ort,
-    ),
-  )
-
   useEffect(() => {
     setErrors({})
   }, [id])
 
-  const kulturs = [...store.kulturs.values()]
   const kulturWerte = useMemo(
     () =>
-      kulturs.map((el) => ({
+      kultursSorted.map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
-    [kulturs],
+    [kultursSorted],
   )
 
-  const { query: teilkulturQuery } = useQuery((store) =>
-    store.queryTeilkultur({ where: { kultur_id: { _eq: row?.kultur_id } } }),
-  )
   const teilkulturWerte = useMemo(
     () =>
-      [...store.teilkulturs.values()]
+      teilkultursSorted
         .filter((t) => t.kultur_id === row?.kultur_id)
         .map((t) => ({
           value: t.id,
           label: t.name || '(kein Name)',
         })),
-    [row?.kultur_id, store.teilkulturs],
+    [row?.kultur_id, teilkultursSorted],
   )
 
   const personWerte = useMemo(
     () =>
-      (personData?.person ?? []).map((el) => ({
+      personsSorted.map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [personData?.person],
+    [personsSorted],
   )
 
-  useQuery((store) =>
-    store.queryKultur_option({ where: { id: { _eq: row?.kultur_id } } }),
-  )
   const kulturOption = store.kultur_options.get(row?.kultur_id) || {}
   const {
     tk,
@@ -365,12 +350,9 @@ const Event = ({
         },
       })
       row.edit({ field: 'teilkultur_id', value: teilkultur_id })
-      setTimeout(() => teilkulturQuery.refetch(), 100)
-      //setTimeout(() => {
-      //  queryOfEvent.refetch()
-      //})
+      setTimeout(() => query.refetch(), 100)
     },
-    [insertTeilkulturRev, row, teilkulturQuery],
+    [insertTeilkulturRev, row, query],
   )
 
   console.log('event, rendering')
@@ -389,14 +371,6 @@ const Event = ({
       <Container>
         <FormTitle title="Event" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-  if (personError) {
-    return (
-      <Container>
-        <FormTitle title="Event" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${personError.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -490,7 +464,7 @@ const Event = ({
                   field="person_id"
                   label="Wer"
                   options={personWerte}
-                  loading={personLoading}
+                  loading={loading}
                   saveToDb={saveToDb}
                   error={errors.person_id}
                 />
