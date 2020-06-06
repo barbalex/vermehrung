@@ -136,6 +136,8 @@ const Kultur = ({
     online,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
+    artsSorted,
+    sammlungsSorted,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -152,32 +154,63 @@ const Kultur = ({
     }
   }
   const kulturFilter = { ...store.kulturFilter, ...hierarchyFilter }
-  const kulturResult = useQuery(kulturQuery, {
-    variables: { id, isFiltered, filter: kulturFilter },
+
+  const row = showFilter ? filter.kultur : store.kulturs.get(id) ?? {}
+
+  // From all collected combinations of art and herkunft show only arten of those not present in this garten
+  // => find all combinations of art and herkunft in sammlungen
+  // => substract the ones existing in this garden
+  // => present arten of the rest
+  const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
+    // only consider kulturen with both art and herkunft chosen
+    .filter((o) => o.art_id && o.herkunft_id)
+  const sammlungs = sammlungsSorted.filter((s) => !!s.art_id && !!s.herkunft_id)
+  const artHerkunftToChoose = sammlungs.filter(
+    (s) =>
+      !artHerkunftInGarten.find(
+        (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+      ),
+  )
+  const artenToChoose = uniq(
+    artHerkunftToChoose
+      .filter((ah) =>
+        row?.herkunft_id ? ah.herkunft_id === row?.herkunft_id : true,
+      )
+      .map((a) => a.art_id),
+  )
+  // do show own art
+  if (row?.art_id && !artenToChoose.includes(row?.art_id)) {
+    artenToChoose.push(row?.art_id)
+  }
+  const herkunftToChoose = uniq(
+    artHerkunftToChoose
+      .filter((ah) => (row?.art_id ? ah.art_id === row?.art_id : true))
+      .map((a) => a.herkunft_id),
+  )
+  // do show own herkunft
+  if (row?.herkunft_id && !herkunftToChoose.includes(row?.herkunft_id)) {
+    herkunftToChoose.push(row?.herkunft_id)
+  }
+
+  const artFilter = { ae_id: { _is_null: false } }
+  if (artenToChoose.length) {
+    artFilter.id = { _in: artenToChoose }
+  }
+
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const { data, error, loading } = useQuery(kulturQuery, {
+    variables: {
+      id,
+      kulturFilter,
+      totalCountFilter,
+      artFilter,
+    },
   })
-  const { error, loading } = kulturResult
 
   const [errors, setErrors] = useState({})
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataKulturAggregate } = useQuery((store) =>
-    store.queryKultur_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataKulturFilteredAggregate } = useQuery((store) =>
-    store.queryKultur_aggregate({ where: kulturFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataKulturFilteredAggregate?.kultur_aggregate?.aggregate?.count ?? 0
-
-  const row = showFilter ? filter.kultur : store.kulturs.get(id) ?? {}
+  const totalNr = data?.kultur_total_count?.aggregate?.count
+  const filteredNr = data?.kultur_filtered_count?.aggregate?.count
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -189,67 +222,6 @@ const Kultur = ({
   useEffect(() => {
     setErrors({})
   }, [id])
-
-  // From all collected combinations of art and herkunft show only arten of those not present in this garten
-  // => find all combinations of art and herkunft in sammlungen
-  // => substract the ones existing in this garden
-  // => present arten of the rest
-  const { data: sammlungData, error: sammlungError } = useQuery((store) =>
-    store.querySammlung(
-      {
-        where: {
-          art_id: { _is_null: false },
-          herkunft_id: { _is_null: false },
-        },
-      },
-      (s) => s.id.art_id.herkunft_id,
-    ),
-  )
-  const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
-    // only consider kulturen with both art and herkunft chosen
-    .filter((o) => o.art_id && o.herkunft_id)
-  const sammlungs = sammlungData?.sammlung ?? []
-  const artHerkunftToChoose = sammlungs.filter(
-    (s) =>
-      !artHerkunftInGarten.find(
-        (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-      ),
-  )
-  const artenToChoose = uniq(
-    artHerkunftToChoose
-      .filter((ah) =>
-        row.herkunft_id ? ah.herkunft_id === row.herkunft_id : true,
-      )
-      .map((a) => a.art_id),
-  )
-  // do show own art
-  if (row.art_id && !artenToChoose.includes(row.art_id)) {
-    artenToChoose.push(row.art_id)
-  }
-  const herkunftToChoose = uniq(
-    artHerkunftToChoose
-      .filter((ah) => (row.art_id ? ah.art_id === row.art_id : true))
-      .map((a) => a.herkunft_id),
-  )
-  // do show own herkunft
-  if (row.herkunft_id && !herkunftToChoose.includes(row.herkunft_id)) {
-    herkunftToChoose.push(row.herkunft_id)
-  }
-
-  const artFilter = { ae_id: { _is_null: false } }
-  if (artenToChoose.length) {
-    artFilter.id = { _in: artenToChoose }
-  }
-  const { data: dataArt, error: errorArt, loading: loadingArt } = useQuery(
-    (store) =>
-      store.queryArt(
-        {
-          where: artFilter,
-          order_by: { art_ae_art: { name: 'asc_nulls_first' } },
-        },
-        (a) => a.id.art_ae_art((ae) => ae.id.name),
-      ),
-  )
 
   const herkunftFilter = { id: { _in: herkunftToChoose } }
   const {
@@ -281,13 +253,16 @@ const Kultur = ({
     ),
   )
 
+  const artForArtWerte = artsSorted.filter(
+    (a) => !!a.ae_id && artenToChoose.includes(a.id),
+  )
   const artWerte = useMemo(
     () =>
-      (dataArt?.art ?? []).map((el) => ({
+      artForArtWerte.map((el) => ({
         value: el.id,
         label: el?.art_ae_art?.name ?? '(keine Art)',
       })),
-    [dataArt?.art],
+    [artForArtWerte],
   )
 
   const gartenWerte = useMemo(
@@ -358,8 +333,7 @@ const Kultur = ({
     )
   }
 
-  const errorToShow =
-    error || errorArt || errorGarten || herkunftError || sammlungError
+  const errorToShow = error || errorGarten || herkunftError
   if (errorToShow) {
     return (
       <Container>
@@ -432,7 +406,7 @@ const Kultur = ({
                 field="art_id"
                 label="Art"
                 options={artWerte}
-                loading={loadingArt}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.art_id}
               />
