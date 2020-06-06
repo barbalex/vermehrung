@@ -21,6 +21,7 @@ import lieferungSort from '../utils/lieferungSort'
 import personSort from '../utils/personSort'
 import sammlungSort from '../utils/sammlungSort'
 import teilkulturSort from '../utils/teilkulturSort'
+import userRoleSort from '../utils/userRoleSort'
 import zaehlungSort from '../utils/zaehlungSort'
 import gartenSort from '../utils/gartenSort'
 import herkunftSort from '../utils/herkunftSort'
@@ -1637,6 +1638,9 @@ export const RootStore = RootStoreBase.props({
       return [...self.teilkulturs.values()]
         .filter((a) => !a._deleted)
         .sort(teilkulturSort)
+    },
+    get userRolesSorted() {
+      return [...self.user_roles.values()].sort(userRoleSort)
     },
     get zaehlungFilter() {
       return queryFromTable({ store: self, table: 'zaehlung' })
