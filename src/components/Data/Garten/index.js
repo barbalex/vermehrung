@@ -150,20 +150,17 @@ const Garten = ({
   const filteredNr =
     dataGartenFilteredAggregate?.garten_aggregate?.aggregate?.count ?? 0
 
-  const { error, loading, query: queryOfGarten } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.queryGarten({ where: { id: { _eq: id } } }),
   )
   const row = showFilter ? filter.garten : store.gartens.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfGarten.refetch()
-  }, [queryOfGarten])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfGarten.refetch()
-    setActiveConflict(null)
-  }, [queryOfGarten])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   const {
     ga_strasse,

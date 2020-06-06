@@ -136,7 +136,7 @@ const Event = ({
   }
   const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
 
-  const { error, loading, query: queryOfEvent } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.queryEvent(
       { where: { id: { _eq: id } } },
       (e) =>
@@ -178,14 +178,11 @@ const Event = ({
   const row = showFilter ? filter.event : store.events.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    //queryOfEvent.refetch()
-  }, [])
-  const callbackAfterUebernehmen = useCallback(() => {
-    //queryOfEvent.refetch()
-    setActiveConflict(null)
-  }, [])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
     store.queryKultur(

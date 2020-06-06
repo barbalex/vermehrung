@@ -107,11 +107,7 @@ const Herkunft = ({
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const {
-    error: errorHerkunft,
-    loading: loadingHerkunft,
-    query: queryOfHerkunft,
-  } = useQuery((store) =>
+  const { error: errorHerkunft, loading: loadingHerkunft } = useQuery((store) =>
     store.queryHerkunft({
       where: { id: { _eq: id } },
     }),
@@ -120,16 +116,11 @@ const Herkunft = ({
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfHerkunft.refetch() // necessary?
-  }, [queryOfHerkunft])
-  const callbackAfterUebernehmen = useCallback(async () => {
-    // need to wait until after refetching
-    // unitl after useEffect sets activeConflict to null
-    queryOfHerkunft.refetch()
-    setActiveConflict(null)
-  }, [queryOfHerkunft])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    async () => setActiveConflict(null),
+    [],
+  )
   // ensure that activeConflict is reset
   // when changing dataset
   useEffect(() => {

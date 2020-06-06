@@ -110,7 +110,7 @@ const Art = ({
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
-  const { error: errorArt, loading: loadingArt, query: queryOfArt } = useQuery(
+  const { error: errorArt, loading: loadingArt } = useQuery(
     (store) => store.queryArt({ where: { id: { _eq: id } } }),
     (a) =>
       a.id.ae_id.art_ae_art((ae) => ae.id.name).changed.changed_by._rev._depth
@@ -135,14 +135,11 @@ const Art = ({
   const row = showFilter ? filter.art : store.arts.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfArt.refetch()
-  }, [queryOfArt])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfArt.refetch()
-    setActiveConflict(null)
-  }, [queryOfArt])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   useEffect(() => {
     setErrors({})
