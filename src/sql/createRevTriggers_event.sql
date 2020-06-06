@@ -2,6 +2,7 @@ create or replace function event_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
+  -- 1. check if non deleted winner exists
   if exists(
     with leaves as (
     select
@@ -39,6 +40,7 @@ begin
     select * from event_rev
     join winning_revisions on event_rev._rev = winning_revisions._rev
   ) then
+    -- 2. insert winner of non deleted datasets
     insert into event (
       id,
       kultur_id,
@@ -130,6 +132,7 @@ begin
       _deleted = excluded._deleted,
       _conflicts = excluded._conflicts;
   else
+    -- 3. insert winner of deleted datasets
     insert into event (
       id,
       kultur_id,
@@ -164,6 +167,7 @@ begin
             t.event_id = new.event_id
             and t._parent_rev = event_rev._rev
         )
+        --and _deleted = false
         and event_id = new.event_id
     ),
     max_depths_deleted as (

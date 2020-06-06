@@ -44,7 +44,6 @@ export const event_revModel = event_revModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
-    console.log('event_revModel', { self, newObject })
 
     addQueuedQuery({
       name: 'mutateInsert_event_rev_one',
