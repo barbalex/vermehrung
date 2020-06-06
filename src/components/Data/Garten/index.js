@@ -8,6 +8,7 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -25,6 +26,7 @@ import Download from './Download'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import { garten as gartenFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -104,13 +106,48 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForGarten(
+    $id: uuid!
+    $gartenFilter: garten_bool_exp!
+    $totalCountFilter: garten_bool_exp!
+  ) {
+    garten(where: { id: { _eq: $id } }) {
+      ...GartenFields
+    }
+    garten_total_count: garten_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    garten_filtered_count: garten_aggregate(where: $gartenFilter) {
+      aggregate {
+        count
+      }
+    }
+    person {
+      id
+      __typename
+      name
+      ort
+    }
+  }
+  ${gartenFragment}
+`
+
 const Garten = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPersonOption, personIdInActiveNodeArray } = store
+  const {
+    filter,
+    online,
+    userPersonOption,
+    personIdInActiveNodeArray,
+    personsSorted,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -122,37 +159,20 @@ const Garten = ({
   }
   const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
 
-  const { error: personError, loading: personLoading } = useQuery(
-    (store) =>
-      store.queryPerson({
-        order_by: [{ name: 'asc_nulls_first' }, { ort: 'asc_nulls_first' }],
-      }),
-    (p) => p.id.name.ort,
-  )
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      gartenFilter,
+      totalCountFilter,
+    },
+  })
 
   const [errors, setErrors] = useState({})
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataGartenAggregate } = useQuery((store) =>
-    store.queryGarten_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.garten_total_count?.aggregate?.count
+  const filteredNr = data?.garten_filtered_count?.aggregate?.count
 
-  const { data: dataGartenFilteredAggregate } = useQuery((store) =>
-    store.queryGarten_aggregate({ where: gartenFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataGartenFilteredAggregate?.garten_aggregate?.aggregate?.count ?? 0
-
-  const { error, loading } = useQuery((store) =>
-    store.queryGarten({ where: { id: { _eq: id } } }),
-  )
   const row = showFilter ? filter.garten : store.gartens.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
@@ -177,11 +197,11 @@ const Garten = ({
 
   const personWerte = useMemo(
     () =>
-      [...store.persons.values()].map((el) => ({
+      personsSorted.map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [store.persons],
+    [personsSorted],
   )
 
   const saveToDb = useCallback(
@@ -216,14 +236,6 @@ const Garten = ({
       <Container>
         <FormTitle title="Garten" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-  if (personError) {
-    return (
-      <Container>
-        <FormTitle title="Garten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${personError.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -286,7 +298,7 @@ const Garten = ({
                 field="person_id"
                 label="Person"
                 options={personWerte}
-                loading={personLoading}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.person_id}
               />
