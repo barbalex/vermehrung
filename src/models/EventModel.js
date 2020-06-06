@@ -50,6 +50,7 @@ export const eventModel = eventModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
+    console.log('EventModel, edit', { newObject, self, field, value })
     addQueuedQuery({
       name: 'mutateInsert_event_rev_one',
       variables: JSON.stringify({
@@ -77,6 +78,7 @@ export const eventModel = eventModelBase.actions((self) => ({
     upsertEventModel(newObjectForStore)
   },
   delete() {
+    console.log('EventModel, delete')
     self.edit({ field: '_deleted', value: true })
   },
 }))

@@ -1,5 +1,5 @@
 import { RootStoreBase } from './RootStore.base'
-import { types } from 'mobx-state-tree'
+import { types, destroy } from 'mobx-state-tree'
 import { reaction, flow } from 'mobx'
 import sortBy from 'lodash/sortBy'
 import { v1 as uuidv1 } from 'uuid'
@@ -342,7 +342,12 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteEventRevModel(val) {
-        self.event_revs.delete(val.id)
+        const rev_model = self.event_revs.get(val.id)
+        const model = self.events.get(val.event_id)
+        const newModel = { ...model, _conflicts: [] }
+        console.log('store, deleteEventRevModel', { model, newModel, val })
+        self.events.set(val.event_id, newModel)
+        destroy(rev_model)
       },
       upsertGartenModel(val) {
         self.gartens.set(val.id, val)
