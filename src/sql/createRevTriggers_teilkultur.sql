@@ -2,27 +2,8 @@ create or replace function teilkultur_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
-  -- if is deletion:
-  -- do not search for winner
-  -- insert deletion as winner but list conflicts
-  if new._deleted is true then
-    insert into teilkultur (
-        id,
-        kultur_id,
-        name,
-        ort1,
-        ort2,
-        ort3,
-        bemerkungen,
-        changed,
-        changed_by,
-        _rev,
-        _revisions,
-        _parent_rev,
-        _depth,
-        _deleted,
-        _conflicts
-    )
+  -- 1. check if non deleted winner exists
+  if exists(
     with leaves as (
       select
         teilkultur_id,
@@ -41,31 +22,97 @@ begin
             and t._parent_rev = teilkultur_rev._rev)
           and _deleted = false
           and teilkultur_id = new.teilkultur_id
+      ),
+      max_depths as (
+        select
+          max(_depth) as max_depth
+        from
+          leaves
+      ),
+      winning_revisions as (
+        select
+          max(leaves._rev) as _rev
+        from
+          leaves
+          join max_depths on leaves._depth = max_depths.max_depth
       )
+      select * from teilkultur_rev
+      join winning_revisions on teilkultur_rev._rev = winning_revisions._rev
+  ) then
+    -- 2. insert winner of non deleted datasets
+    insert into teilkultur (
+      id,
+      kultur_id,
+      name,
+      ort1,
+      ort2,
+      ort3,
+      bemerkungen,
+      changed,
+      changed_by,
+      _rev,
+      _revisions,
+      _parent_rev,
+      _depth,
+      _deleted,
+      _conflicts
+  )
+  with leaves as (
+    select
+      teilkultur_id,
+      _rev,
+      _depth
+    from
+      teilkultur_rev
+    where
+      not exists (
+        select
+          teilkultur_id
+        from
+          teilkultur_rev as t
+        where
+          t.teilkultur_id = new.teilkultur_id
+          and t._parent_rev = teilkultur_rev._rev)
+        and _deleted = false
+        and teilkultur_id = new.teilkultur_id
+    ),
+    max_depths as (
       select
-        teilkultur_rev.teilkultur_id,
-        teilkultur_rev.kultur_id,
-        teilkultur_rev.name,
-        teilkultur_rev.ort1,
-        teilkultur_rev.ort2,
-        teilkultur_rev.ort3,
-        teilkultur_rev.bemerkungen,
-        teilkultur_rev.changed,
-        teilkultur_rev.changed_by,
-        teilkultur_rev._rev,
-        teilkultur_rev._revisions,
-        teilkultur_rev._parent_rev,
-        teilkultur_rev._depth,
-        teilkultur_rev._deleted,
-        (select array(
-          select _rev from leaves
-          where 
-            _rev <> teilkultur_rev._rev
-            and _rev <> ANY(teilkultur_rev._revisions)
-        )) as _conflicts
+        max(_depth) as max_depth
       from
-        teilkultur_rev
-        where id = new.id
+        leaves
+    ),
+    winning_revisions as (
+      select
+        max(leaves._rev) as _rev
+      from
+        leaves
+        join max_depths on leaves._depth = max_depths.max_depth
+    )
+    select
+      teilkultur_rev.teilkultur_id,
+      teilkultur_rev.kultur_id,
+      teilkultur_rev.name,
+      teilkultur_rev.ort1,
+      teilkultur_rev.ort2,
+      teilkultur_rev.ort3,
+      teilkultur_rev.bemerkungen,
+      teilkultur_rev.changed,
+      teilkultur_rev.changed_by,
+      teilkultur_rev._rev,
+      teilkultur_rev._revisions,
+      teilkultur_rev._parent_rev,
+      teilkultur_rev._depth,
+      teilkultur_rev._deleted,
+      (select array(
+        select _rev from leaves
+        where 
+          _rev <> teilkultur_rev._rev
+          and _rev <> ANY(teilkultur_rev._revisions)
+      )) as _conflicts
+    from
+      teilkultur_rev
+      join winning_revisions on teilkultur_rev._rev = winning_revisions._rev
       on conflict on constraint teilkultur_pkey do update set
         -- do not update the id = pkey
         kultur_id = excluded.kultur_id,
@@ -83,6 +130,7 @@ begin
         _deleted = excluded._deleted,
         _conflicts = excluded._conflicts;
   else
+    -- 3. insert winner of deleted datasets
     insert into teilkultur (
         id,
         kultur_id,
@@ -116,7 +164,7 @@ begin
           where
             t.teilkultur_id = new.teilkultur_id
             and t._parent_rev = teilkultur_rev._rev)
-          and _deleted = false
+          --and _deleted = false
           and teilkultur_id = new.teilkultur_id
       ),
       max_depths as (
