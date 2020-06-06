@@ -124,7 +124,7 @@ const allDataQuery = gql`
   query AllDataQueryForEvent(
     $id: uuid!
     $eventFilter: event_bool_exp!
-    $hierarchyFilter: event_bool_exp!
+    $totalCountFilter: event_bool_exp!
   ) {
     event(where: { id: { _eq: $id } }) {
       ...EventFields
@@ -166,7 +166,7 @@ const allDataQuery = gql`
         name
       }
     }
-    event_total_count: event_aggregate(where: $hierarchyFilter) {
+    event_total_count: event_aggregate(where: $totalCountFilter) {
       aggregate {
         count
       }
@@ -240,11 +240,12 @@ const Event = ({
   }
   const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
 
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
   const { data, error, loading, query } = useQuery(allDataQuery, {
     variables: {
       id,
       eventFilter,
-      hierarchyFilter,
+      totalCountFilter,
     },
   })
 
