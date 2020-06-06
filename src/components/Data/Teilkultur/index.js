@@ -163,8 +163,8 @@ const Teilkultur = ({
   }, [queryOfTeilkultur])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfTeilkultur.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfTeilkultur, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfTeilkultur])
 
   const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
     store.queryKultur(
