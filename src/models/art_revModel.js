@@ -54,6 +54,6 @@ export const art_revModel = art_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteArtRevModel({ id: self.id })
+    deleteArtRevModel(self)
   },
 }))

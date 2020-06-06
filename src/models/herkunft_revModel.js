@@ -59,6 +59,6 @@ export const herkunft_revModel = herkunft_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteHerkunftRevModel({ id: self.id })
+    deleteHerkunftRevModel(self)
   },
 }))

@@ -61,6 +61,6 @@ export const garten_revModel = garten_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteGartenRevModel({ id: self.id })
+    deleteGartenRevModel(self)
   },
 }))
