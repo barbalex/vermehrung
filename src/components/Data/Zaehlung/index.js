@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -28,6 +29,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from '../Teilkultur/kulturLabelFromKultur'
+import { zaehlung as zaehlungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -114,12 +116,82 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForZaehlung(
+    $id: uuid!
+    $zaehlungFilter: zaehlung_bool_exp!
+    $totalCountFilter: zaehlung_bool_exp!
+    $kulturFilter: kultur_bool_exp!
+  ) {
+    zaehlung(where: { id: { _eq: $id } }) {
+      ...ZaehlungFields
+      kultur {
+        id
+        __typename
+        kultur_option {
+          id
+          __typename
+          z_bemerkungen
+        }
+        art_id
+        art {
+          id
+          __typename
+          art_ae_art {
+            id
+            __typename
+            name
+          }
+        }
+        garten {
+          id
+          __typename
+          name
+          person {
+            id
+            __typename
+            name
+            ort
+          }
+        }
+      }
+    }
+    zaehlung_total_count: zaehlung_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    zaehlung_filtered_count: zaehlung_aggregate(where: $zaehlungFilter) {
+      aggregate {
+        count
+      }
+    }
+    kultur {
+      id
+      __typename
+      art_id
+      garten {
+        id
+        __typename
+        name
+        person {
+          id
+          __typename
+          name
+          ort
+        }
+      }
+    }
+  }
+  ${zaehlungFragment}
+`
+
 const Zaehlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, kulturIdInActiveNodeArray } = store
+  const { filter, online, kulturIdInActiveNodeArray, kultursSorted } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -132,71 +204,34 @@ const Zaehlung = ({
   }
   const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
 
-  const { error, loading } = useQuery((store) =>
-    store.queryZaehlung(
-      {
-        where: { id: { _eq: id } },
-      },
-      (z) =>
-        z.id.kultur_id.kultur((k) =>
-          k.id
-            .kultur_option((o) => o.id.z_bemerkungen)
-            .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-            .garten((g) => g.id.name.person((p) => p.id.name)),
-        ).datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev
-          ._revisions._depth._conflicts,
-    ),
-  )
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+
+  const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
+
+  const artId = row?.kultur?.art_id
+  const kulturFilter = artId
+    ? { art_id: { _eq: artId } }
+    : { id: { _is_null: false } }
+
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      zaehlungFilter,
+      totalCountFilter,
+      kulturFilter,
+    },
+  })
 
   const [errors, setErrors] = useState({})
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataZaehlungAggregate } = useQuery((store) =>
-    store.queryZaehlung_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataZaehlungFilteredAggregate } = useQuery((store) =>
-    store.queryZaehlung_aggregate({ where: zaehlungFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataZaehlungFilteredAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
-
-  const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
+  const totalNr = data?.zaehlung_total_count?.aggregate?.count
+  const filteredNr = data?.zaehlung_filtered_count?.aggregate?.count
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
   const callbackAfterUebernehmen = useCallback(
     () => setActiveConflict(null),
     [],
-  )
-
-  const artId = row?.kultur?.art_id
-  const kulturFilter = artId
-    ? { art_id: { _eq: artId } }
-    : { id: { _is_null: false } }
-  const {
-    data: kulturData,
-    error: kulturError,
-    loading: kulturLoading,
-  } = useQuery((store) =>
-    store.queryKultur(
-      {
-        where: kulturFilter,
-        order_by: [
-          { garten: { person: { name: 'asc_nulls_first' } } },
-          { garten: { person: { ort: 'asc_nulls_first' } } },
-        ],
-      },
-      (k) => k.id.art_id.garten((g) => g.id.name.person((p) => p.id.name.ort)),
-    ),
   )
 
   const { z_bemerkungen } = row?.kultur?.kultur_option ?? {}
@@ -207,11 +242,16 @@ const Zaehlung = ({
 
   const kulturWerte = useMemo(
     () =>
-      (kulturData?.kultur ?? []).map((el) => ({
-        value: el.id,
-        label: kulturLabelFromKultur(el),
-      })),
-    [kulturData?.kultur],
+      kultursSorted
+        .filter((k) => {
+          if (row.art_id) return k.art_id === row.art_id
+          return true
+        })
+        .map((el) => ({
+          value: el.id,
+          label: kulturLabelFromKultur(el),
+        })),
+    [kultursSorted, row.art_id],
   )
 
   const saveToDb = useCallback(
@@ -259,12 +299,11 @@ const Zaehlung = ({
     )
   }
 
-  const errorToShow = error || kulturError
-  if (errorToShow) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Zaehlung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -328,7 +367,7 @@ const Zaehlung = ({
                   field="kultur_id"
                   label="Kultur"
                   options={kulturWerte}
-                  loading={kulturLoading}
+                  loading={loading}
                   saveToDb={saveToDb}
                   error={errors.kultur_id}
                 />
