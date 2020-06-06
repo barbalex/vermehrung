@@ -2,11 +2,45 @@ create or replace function teilzaehlung_rev_set_winning_revision ()
   returns trigger
   as $body$
 begin
-  -- if is deletion:
-  -- do not search for winner
-  -- insert deletion as winner but list conflicts
-  if new._deleted is true then
-    insert into teilzaehlung (
+  -- 1. check if non deleted winner exists
+  if exists(
+    with leaves as (
+    select
+      teilzaehlung_id,
+      _rev,
+      _depth
+    from
+      teilzaehlung_rev
+    where
+      not exists (
+        select
+          teilzaehlung_id
+        from
+          teilzaehlung_rev as t
+        where
+          t.teilzaehlung_id = new.teilzaehlung_id
+          and t._parent_rev = teilzaehlung_rev._rev)
+        and _deleted = false
+        and teilzaehlung_id = new.teilzaehlung_id
+    ),
+    max_depths as (
+      select
+        max(_depth) as max_depth
+      from
+        leaves
+    ),
+    winning_revisions as (
+      select
+        max(leaves._rev) as _rev
+      from
+        leaves
+        join max_depths on leaves._depth = max_depths.max_depth
+    )
+    select * from teilzaehlung_rev
+    join winning_revisions on teilzaehlung_rev._rev = winning_revisions._rev
+  ) then
+    -- 2. insert winner of non deleted datasets
+      insert into teilzaehlung (
         id,
         zaehlung_id,
         teilkultur_id,
@@ -44,6 +78,19 @@ begin
             and t._parent_rev = teilzaehlung_rev._rev)
           and _deleted = false
           and teilzaehlung_id = new.teilzaehlung_id
+      ),
+      max_depths as (
+        select
+          max(_depth) as max_depth
+        from
+          leaves
+      ),
+      winning_revisions as (
+        select
+          max(leaves._rev) as _rev
+        from
+          leaves
+          join max_depths on leaves._depth = max_depths.max_depth
       )
       select
         teilzaehlung_rev.teilzaehlung_id,
@@ -71,7 +118,7 @@ begin
         )) as _conflicts
       from
         teilzaehlung_rev
-        where id = new.id
+        join winning_revisions on teilzaehlung_rev._rev = winning_revisions._rev
       on conflict on constraint teilzaehlung_pkey do update set
         -- do not update the id = pkey
         zaehlung_id = excluded.zaehlung_id,
@@ -92,6 +139,7 @@ begin
         _deleted = excluded._deleted,
         _conflicts = excluded._conflicts;
   else
+    -- 3. insert winner of deleted datasets
     insert into teilzaehlung (
         id,
         zaehlung_id,
@@ -128,7 +176,7 @@ begin
           where
             t.teilzaehlung_id = new.teilzaehlung_id
             and t._parent_rev = teilzaehlung_rev._rev)
-          and _deleted = false
+          --and _deleted = false
           and teilzaehlung_id = new.teilzaehlung_id
       ),
       max_depths as (
