@@ -356,8 +356,6 @@ const Event = ({
     [insertTeilkulturRev, row, query],
   )
 
-  console.log('event, rendering')
-
   if (loading) {
     return (
       <Container>
