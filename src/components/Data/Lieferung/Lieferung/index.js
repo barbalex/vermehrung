@@ -588,7 +588,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const sammlungWerte = useMemo(
     () =>
       sammlungsSorted
-        .filter((s) => s.art_id === row.art_id)
+        .filter((s) => {
+          if (row.art_id) return s.art_id === row.art_id
+          return true
+        })
         .map((el) => ({
           value: el.id,
           label: sammlungLabelFromSammlung(el),
