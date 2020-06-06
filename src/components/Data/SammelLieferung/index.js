@@ -212,7 +212,7 @@ const SammelLieferung = ({
   const { setWidthInPercentOfScreen } = store.tree
 
   const isFiltered = runIsFiltered()
-  const { error, loading, query: queryOfSammelLieferung } = useQuery((store) =>
+  const { error, loading } = useQuery((store) =>
     store.querySammel_lieferung(
       { where: { id: { _eq: id } } },
       () => SL_FRAGMENT,
@@ -258,14 +258,11 @@ const SammelLieferung = ({
     : store.sammel_lieferungs.get(id) || {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfSammelLieferung.refetch()
-  }, [queryOfSammelLieferung])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfSammelLieferung.refetch()
-    setActiveConflict(null)
-  }, [queryOfSammelLieferung])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } = userPersonOption
 

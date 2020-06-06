@@ -112,11 +112,7 @@ const Person = ({
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const {
-    error: errorPerson,
-    loading: loadingPerson,
-    query: queryOfPerson,
-  } = useQuery((store) =>
+  const { error: errorPerson, loading: loadingPerson } = useQuery((store) =>
     store.queryPerson({
       where: { id: { _eq: id } },
     }),
@@ -165,14 +161,11 @@ const Person = ({
   const row = showFilter ? filter.person : store.persons.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfPerson.refetch()
-  }, [queryOfPerson])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfPerson.refetch()
-    setActiveConflict(null)
-  }, [queryOfPerson])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   const [errors, setErrors] = useState({})
   useEffect(() => {

@@ -155,7 +155,7 @@ const Kultur = ({
   const kulturResult = useQuery(kulturQuery, {
     variables: { id, isFiltered, filter: kulturFilter },
   })
-  const { error, loading, query: queryOfKultur } = kulturResult
+  const { error, loading } = kulturResult
 
   const [errors, setErrors] = useState({})
 
@@ -180,14 +180,11 @@ const Kultur = ({
   const row = showFilter ? filter.kultur : store.kulturs.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfKultur.refetch()
-  }, [queryOfKultur])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfKultur.refetch()
-    setActiveConflict(null)
-  }, [queryOfKultur])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   useEffect(() => {
     setErrors({})
