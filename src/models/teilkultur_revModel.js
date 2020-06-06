@@ -59,6 +59,6 @@ export const teilkultur_revModel = teilkultur_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteTeilkulturRevModel({ id: self.id })
+    deleteTeilkulturRevModel(self)
   },
 }))

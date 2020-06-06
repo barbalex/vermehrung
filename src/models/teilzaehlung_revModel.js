@@ -63,7 +63,7 @@ export const teilzaehlung_revModel = teilzaehlung_revModelBase.actions(
           where: { id: { _eq: self.id } },
         }),
       })
-      deleteTeilzaehlungRevModel({ id: self.id })
+      deleteTeilzaehlungRevModel(self)
     },
   }),
 )
