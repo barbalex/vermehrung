@@ -250,14 +250,11 @@ const Sammlung = ({
   const row = showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => {
-    setActiveConflict(null)
-    queryOfSammlung.refetch()
-  }, [queryOfSammlung])
-  const callbackAfterUebernehmen = useCallback(() => {
-    queryOfSammlung.refetch()
-    setActiveConflict(null)
-  }, [queryOfSammlung])
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
 
   useEffect(() => {
     setErrors({})
