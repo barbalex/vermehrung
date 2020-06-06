@@ -57,6 +57,6 @@ export const zaehlung_revModel = zaehlung_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteZaehlungRevModel({ id: self.id })
+    deleteZaehlungRevModel(self)
   },
 }))

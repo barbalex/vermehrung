@@ -65,6 +65,6 @@ export const sammlung_revModel = sammlung_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteSammlungRevModel({ id: self.id })
+    deleteSammlungRevModel(self)
   },
 }))
