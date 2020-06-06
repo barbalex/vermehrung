@@ -13,8 +13,10 @@ import {
 export default gql`
   query KulturQueryForKultur(
     $id: uuid!
-    $isFiltered: Boolean!
-    $filter: kultur_bool_exp!
+    $kulturFilter: kultur_bool_exp!
+    $totalCountFilter: kultur_bool_exp!
+    $artFilter: art_bool_exp!
+    $herkunftFilter: herkunft_bool_exp!
   ) {
     kultur(where: { id: { _eq: $id } }) {
       ...KulturFields
@@ -120,16 +122,50 @@ export default gql`
         }
       }
     }
-    rowsFiltered: kultur(where: $filter) @include(if: $isFiltered) {
+    kultur_total_count: kultur_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    kultur_filtered_count: kultur_aggregate(where: $kulturFilter) {
+      aggregate {
+        count
+      }
+    }
+    sammlung(
+      where: { art_id: { _is_null: false }, herkunft_id: { _is_null: false } }
+    ) {
       id
       __typename
+      art_id
+      herkunft_id
+    }
+    art(where: $artFilter) {
+      ...ArtFields
+    }
+    herkunft(where: $herkunftFilter) {
+      id
+      __typename
+      nr
+      lokalname
+      gemeinde
+    }
+    garten {
+      id
+      __typename
+      name
+      person {
+        id
+        __typename
+        name
+      }
     }
   }
-  ${kulturFragment}
   ${artFragment}
   ${gartenFragment}
+  ${kulturFragment}
   ${kulturOptionFragment}
   ${lieferungFragment}
-  ${zahlungsFragment}
   ${teilzaehlungFragment}
+  ${zahlungsFragment}
 `
