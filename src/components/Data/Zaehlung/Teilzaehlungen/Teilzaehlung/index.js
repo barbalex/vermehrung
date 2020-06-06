@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
+import gql from 'graphql-tag'
 
 import { StoreContext, useQuery } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
