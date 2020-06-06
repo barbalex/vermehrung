@@ -16,7 +16,6 @@ export default ({ node, store }) => {
 
   store.filter.setShow(false)
   let newOpenNodes = [...openNodes]
-  console.log('toggleNodeSymbol, node:', node)
   // TODO: tell user if childrenCount is 0 he can create
   if (isNodeOpen(openNodes, node.url)) {
     newOpenNodes = newOpenNodes.filter((n) => !isEqual(n, node.url))
