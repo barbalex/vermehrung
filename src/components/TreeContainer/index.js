@@ -55,6 +55,8 @@ const TreeContainer = () => {
     }
   }, [nodes, nodesToAddRaw, setNodesToAdd])*/
 
+  //console.log('TreeContainer rendering')
+
   if (error) {
     console.log(error)
     // if JWT expired, renew
