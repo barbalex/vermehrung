@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -26,6 +27,10 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+import {
+  kulturOption as kulturOptionFragment,
+  teilkultur as teilkulturFragment,
+} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -104,12 +109,91 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForTeilkultur(
+    $id: uuid!
+    $teilkulturFilter: teilkultur_bool_exp!
+    $totalCountFilter: teilkultur_bool_exp!
+  ) {
+    teilkultur(where: { id: { _eq: $id } }) {
+      ...TeilkulturFields
+      kultur {
+        id
+        __typename
+        kultur_option {
+          ...KulturOptionFields
+        }
+        garten {
+          id
+          __typename
+          name
+          person {
+            id
+            __typename
+            name
+          }
+        }
+        art {
+          id
+          __typename
+          art_ae_art {
+            id
+            __typename
+            name
+          }
+        }
+      }
+    }
+    teilkultur_total_count: teilkultur_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    teilkultur_filtered_count: teilkultur_aggregate(where: $teilkulturFilter) {
+      aggregate {
+        count
+      }
+    }
+    kultur {
+      id
+      __typename
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
+      garten {
+        id
+        __typename
+        name
+        person {
+          id
+          __typename
+          name
+        }
+      }
+    }
+    person {
+      id
+      __typename
+      name
+      ort
+    }
+  }
+  ${kulturOptionFragment}
+  ${teilkulturFragment}
+`
+
 const Teilkultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, kulturIdInActiveNodeArray } = store
+  const { filter, online, kulturIdInActiveNodeArray, kultursSorted } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -122,39 +206,20 @@ const Teilkultur = ({
     }
   }
   const teilkulturFilter = { ...store.teilkulturFilter, ...hierarchyFilter }
-  const { error, loading, query: queryOfTeilkultur } = useQuery((store) =>
-    store.queryTeilkultur(
-      { where: { id: { _eq: id } } },
-      (t) =>
-        t.id.kultur((k) =>
-          k.id
-            .garten((g) => g.id.name.person((p) => p.id.name))
-            .art((a) => a.id.art_ae_art((ae) => ae.id.name)),
-        ).name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev
-          ._revisions._depth._conflicts,
-    ),
-  )
+
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      teilkulturFilter,
+      totalCountFilter,
+    },
+  })
 
   const [errors, setErrors] = useState({})
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataTeilkulturAggregate } = useQuery((store) =>
-    store.queryTeilkultur_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataTeilkulturFilteredAggregate } = useQuery((store) =>
-    store.queryTeilkultur_aggregate({ where: teilkulturFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataTeilkulturFilteredAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.teilkultur_total_count?.aggregate?.count
+  const filteredNr = data?.teilkultur_filtered_count?.aggregate?.count
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -163,25 +228,6 @@ const Teilkultur = ({
     [],
   )
 
-  const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
-    store.queryKultur(
-      {
-        order_by: [
-          { garten: { person: { name: 'asc_nulls_first' } } },
-          { garten: { person: { ort: 'asc_nulls_first' } } },
-          { art: { art_ae_art: { name: 'asc_nulls_first' } } },
-        ],
-      },
-      (k) =>
-        k.id
-          .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-          .garten((g) => g.id.name.person((p) => p.id.name.ort)),
-    ),
-  )
-
-  useQuery((store) =>
-    store.queryKultur_option({ where: { id: { _eq: row.kultur_id } } }),
-  )
   const kulturOpion = store.kultur_options.get(row.kultur_id) || {}
   const { tk_bemerkungen } = kulturOpion
 
@@ -191,11 +237,11 @@ const Teilkultur = ({
 
   const kulturWerte = useMemo(
     () =>
-      [...store.kulturs.values()].map((el) => ({
+      kultursSorted.map((el) => ({
         value: el.id,
         label: kulturLabelFromKultur(el),
       })),
-    [store.kulturs],
+    [kultursSorted],
   )
 
   const saveToDb = useCallback(
@@ -212,12 +258,8 @@ const Teilkultur = ({
         return filter.setValue({ table: 'teilkultur', key: field, value })
       }
       row.edit({ field, value })
-      setTimeout(() => {
-        // refetch queryOfTeilkultur because is not a model instance
-        queryOfTeilkultur.refetch()
-      }, 50)
     },
-    [filter, queryOfTeilkultur, row, showFilter],
+    [filter, row, showFilter],
   )
   const openTeilkulturDocs = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Teilkulturen`
@@ -243,14 +285,6 @@ const Teilkultur = ({
       <Container>
         <FormTitle title="Teilkultur" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-  if (kulturError) {
-    return (
-      <Container>
-        <FormTitle title="Teilkultur" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${kulturError.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -311,7 +345,7 @@ const Teilkultur = ({
                 field="kultur_id"
                 label="Kultur"
                 options={kulturWerte}
-                loading={kulturLoading}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.kultur_id}
               />
