@@ -8,6 +8,7 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
@@ -23,6 +24,7 @@ import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import { person as personFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -102,61 +104,69 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForPerson(
+    $id: uuid!
+    $personFilter: person_bool_exp!
+    $totalCountFilter: person_bool_exp!
+  ) {
+    person(where: { id: { _eq: $id } }) {
+      ...PersonFields
+    }
+    person_total_count: person_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    person_filtered_count: person_aggregate(where: $personFilter) {
+      aggregate {
+        count
+      }
+    }
+    user_role {
+      id
+      __typename
+      name
+      comment
+      sort
+    }
+  }
+  ${personFragment}
+`
+
 const Person = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPerson } = store
+  const { filter, online, userPerson, userRolesSorted } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const { error: errorPerson, loading: loadingPerson } = useQuery((store) =>
-    store.queryPerson({
-      where: { id: { _eq: id } },
-    }),
-  )
-
   const hierarchyFilter = {}
   const personFilter = { ...store.personFilter, ...hierarchyFilter }
-  useQuery((store) =>
-    store.queryPerson(
-      {
-        where: personFilter,
-      },
-      (d) => d.id,
-    ),
-  )
 
-  const { data: dataUserRole, loading: loadingUserRole } = useQuery((store) =>
-    store.queryUser_role(),
-  )
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      personFilter,
+      totalCountFilter,
+    },
+  })
+
   const userRoleWerte = useMemo(
     () =>
-      (dataUserRole?.user_role ?? []).map((el) => ({
+      userRolesSorted.map((el) => ({
         value: el.name,
         label: `${el.name} (${el.comment})`,
       })),
-    [dataUserRole?.user_role],
+    [userRolesSorted],
   )
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataPersonAggregate } = useQuery((store) =>
-    store.queryPerson_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
 
-  const { data: dataPersonFilteredAggregate } = useQuery((store) =>
-    store.queryPerson_aggregate({ where: personFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataPersonFilteredAggregate?.person_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.person_total_count?.aggregate?.count
+  const filteredNr = data?.person_filtered_count?.aggregate?.count
 
   const row = showFilter ? filter.person : store.persons.get(id) ?? {}
 
@@ -192,7 +202,7 @@ const Person = ({
     [filter, row, showFilter],
   )
 
-  if (loadingPerson) {
+  if (loading) {
     return (
       <Container>
         <FormTitle title="Person" />
@@ -201,11 +211,11 @@ const Person = ({
     )
   }
 
-  if (errorPerson) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Person" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorPerson.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -262,7 +272,7 @@ const Person = ({
                 field="user_role"
                 label="Rolle"
                 options={userRoleWerte}
-                loading={loadingUserRole}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.user_role}
               />
