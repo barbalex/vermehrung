@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -28,6 +29,11 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+import {
+  event as eventFragment,
+  kulturOption as kulturOptionFragment,
+  teilkultur as teilkulturFragment,
+} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -114,6 +120,101 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForEvent(
+    $id: uuid!
+    $eventFilter: event_bool_exp!
+    $hierarchyFilter: event_bool_exp!
+  ) {
+    event(where: { id: { _eq: $id } }) {
+      ...EventFields
+      kultur {
+        id
+        __typename
+        art {
+          id
+          __typename
+          art_ae_art {
+            id
+            __typename
+            name
+          }
+        }
+        garten {
+          id
+          __typename
+          name
+          person {
+            id
+            __typename
+            name
+            ort
+          }
+        }
+        kultur_option {
+          ...KulturOptionFields
+        }
+      }
+      teilkultur {
+        id
+        __typename
+        name
+      }
+      person {
+        id
+        __typename
+        name
+      }
+    }
+    event_total_count: event_aggregate(where: $hierarchyFilter) {
+      aggregate {
+        count
+      }
+    }
+    event_filtered_count: event_aggregate(where: $eventFilter) {
+      aggregate {
+        count
+      }
+    }
+    kultur(
+      order_by: [
+        { garten: { person: { name: asc_nulls_first } } }
+        { garten: { person: { ort: asc_nulls_first } } }
+        { art: { art_ae_art: { name: asc_nulls_first } } }
+      ]
+    ) {
+      id
+      __typename
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
+      garten {
+        id
+        __typename
+        name
+        person {
+          id
+          __typename
+          name
+          ort
+        }
+      }
+      teilkulturs {
+        ...TeilkulturFields
+      }
+    }
+  }
+  ${eventFragment}
+  ${kulturOptionFragment}
+  ${teilkulturFragment}
+`
+
 const Event = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -136,44 +237,18 @@ const Event = ({
   }
   const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
 
-  const { error, loading } = useQuery((store) =>
-    store.queryEvent(
-      { where: { id: { _eq: id } } },
-      (e) =>
-        e.id.kultur_id
-          .kultur(
-            (k) =>
-              k.id.art_id
-                .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-                .garten_id.garten((g) =>
-                  g.id.name.person_id.person((p) => p.id.name.ort),
-                ).kultur_option,
-          )
-          .teilkultur_id.teilkultur((t) => t.id.name)
-          .person_id.person((p) => p.id.name).beschreibung.geplant.datum.changed
-          .changed_by._rev._parent_rev._revisions._depth._conflicts,
-    ),
-  )
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      eventFilter,
+      hierarchyFilter,
+    },
+  })
 
   const [errors, setErrors] = useState({})
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataEventAggregate } = useQuery((store) =>
-    store.queryEvent_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataEventFilteredAggregate } = useQuery((store) =>
-    store.queryEvent_aggregate({ where: eventFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataEventFilteredAggregate?.event_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.event_total_count?.aggregate?.count
+  const filteredNr = data?.event_filtered_count?.aggregate?.count
 
   const row = showFilter ? filter.event : store.events.get(id) || {}
 
@@ -184,24 +259,6 @@ const Event = ({
     [],
   )
 
-  const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
-    store.queryKultur(
-      {
-        order_by: [
-          { garten: { person: { name: 'asc_nulls_first' } } },
-          { garten: { person: { ort: 'asc_nulls_first' } } },
-          { art: { art_ae_art: { name: 'asc_nulls_first' } } },
-        ],
-      },
-      (k) =>
-        k.id.art_id
-          .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-          .garten_id.garten((g) =>
-            g.id.name.person_id.person((p) => p.id.name.ort),
-          )
-          .teilkulturs({ order_by: { name: 'asc_nulls_last' } }),
-    ),
-  )
   const {
     data: personData,
     error: personError,
@@ -335,14 +392,6 @@ const Event = ({
       </Container>
     )
   }
-  if (kulturError) {
-    return (
-      <Container>
-        <FormTitle title="Event" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${kulturError.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
   if (personError) {
     return (
       <Container>
@@ -408,7 +457,7 @@ const Event = ({
                 field="kultur_id"
                 label="Kultur"
                 options={kulturWerte}
-                loading={kulturLoading}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.kultur_id}
               />
@@ -419,7 +468,7 @@ const Event = ({
                   field="teilkultur_id"
                   label="Teilkultur"
                   options={teilkulturWerte}
-                  loading={kulturLoading}
+                  loading={loading}
                   error={errors.teilkultur_id}
                   onCreateNew={onCreateNewTeilkultur}
                 />
