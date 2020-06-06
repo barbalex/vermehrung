@@ -245,7 +245,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteArtRevModel(val) {
-        self.art_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.arts.get(val.art_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.arts.set(val.art_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.art_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertArtFileModel(val) {
         self.art_files.set(val.id, val)
@@ -266,7 +275,16 @@ export const RootStore = RootStoreBase.props({
         self.av_arts.delete(val.id)
       },
       deleteAvArtRevModel(val) {
-        self.av_art_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.ar_arts.get(val.ar_art_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.ar_arts.set(val.ar_art_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.ar_art_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertEventModel(val) {
         self.events.set(val.id, val)
@@ -427,7 +445,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteGartenRevModel(val) {
-        self.garten_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.gartens.get(val.garten_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.gartens.set(val.garten_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.garten_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertGartenFileModel(val) {
         self.garten_files.set(val.id, val)
@@ -503,7 +530,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteHerkunftRevModel(val) {
-        self.herkunft_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.herkunfts.get(val.herkunft_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.herkunfts.set(val.herkunft_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.herkunft_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertHerkunftFileModel(val) {
         self.herkunft_files.set(val.id, val)
@@ -586,7 +622,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteKulturRevModel(val) {
-        self.kultur_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.kulturs.get(val.kultur_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.kulturs.set(val.kultur_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.kultur_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertKulturFileModel(val) {
         self.kultur_files.set(val.id, val)
@@ -598,7 +643,16 @@ export const RootStore = RootStoreBase.props({
         self.kultur_options.set(val.id, val)
       },
       deleteKulturOptionRevModel(val) {
-        self.kultur_option_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.kultur_options.get(val.kultur_option_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.kultur_options.set(val.kultur_option_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.kultur_option_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertKulturQkModel(val) {
         self.kultur_qks.set(val.id, val)
@@ -697,7 +751,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteLieferungRevModel(val) {
-        self.lieferung_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.lieferungs.get(val.lieferung_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.lieferungs.set(val.lieferung_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.lieferung_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertLieferungFileModel(val) {
         self.lieferung_files.set(val.id, val)
@@ -777,7 +840,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deletePersonRevModel(val) {
-        self.person_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.persons.get(val.person_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.persons.set(val.person_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.person_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertPersonFileModel(val) {
         self.person_files.set(val.id, val)
@@ -789,7 +861,16 @@ export const RootStore = RootStoreBase.props({
         self.person_options.set(val.id, val)
       },
       deletePersonOptionRevModel(val) {
-        self.person_option_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.person_options.get(val.person_option_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.person_options.set(val.person_option_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.person_option_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertSammelLieferungModel(val) {
         self.sammel_lieferungs.set(val.id, val)
@@ -874,7 +955,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteSammelLieferungRevModel(val) {
-        self.sammel_lieferung_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.sammel_lieferungs.get(val.sammel_lieferung_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.sammel_lieferungs.set(val.sammel_lieferung_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.sammel_lieferung_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertSammlungModel(val) {
         self.sammlungs.set(val.id, val)
@@ -956,7 +1046,16 @@ export const RootStore = RootStoreBase.props({
         })
       },
       deleteSammlungRevModel(val) {
-        self.sammlung_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.sammlungs.get(val.sammlung_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.sammlungs.set(val.sammlung_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.sammlung_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertSammlungFileModel(val) {
         self.sammlung_files.set(val.id, val)
@@ -1041,7 +1140,16 @@ export const RootStore = RootStoreBase.props({
         return id
       },
       deleteTeilkulturRevModel(val) {
-        self.teilkultur_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.teilkulturs.get(val.teilkultur_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.teilkulturs.set(val.teilkultur_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.teilkultur_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertTeilzaehlungModel(val) {
         self.teilzaehlungs.set(val.id, val)
@@ -1103,7 +1211,16 @@ export const RootStore = RootStoreBase.props({
         upsertTeilzaehlungModel(newObjectForStore)
       },
       deleteTeilzaehlungRevModel(val) {
-        self.teilzaehlung_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.teilzaehlungs.get(val.teilzaehlung_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.teilzaehlungs.set(val.teilzaehlung_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.teilzaehlung_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertUserRoleModel(val) {
         self.user_roles.set(val.id, val)
@@ -1182,7 +1299,16 @@ export const RootStore = RootStoreBase.props({
         return id
       },
       deleteZaehlungRevModel(val) {
-        self.zaehlung_revs.delete(val.id)
+        // 1. update model: remove this conflict
+        const model = self.zaehlungs.get(val.zaehlung_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.zaehlungs.set(val.zaehlung_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.zaehlung_revs.get(val.id)
+        destroy(rev_model)
       },
       setOnline(val) {
         self.online = val
