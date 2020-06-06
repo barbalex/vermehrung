@@ -68,6 +68,6 @@ export const lieferung_revModel = lieferung_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteLieferungRevModel({ id: self.id })
+    deleteLieferungRevModel(self)
   },
 }))

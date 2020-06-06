@@ -68,7 +68,7 @@ export const sammel_lieferung_revModel = sammel_lieferung_revModelBase.actions(
           where: { id: { _eq: self.id } },
         }),
       })
-      deleteSammelLieferungRevModel({ id: self.id })
+      deleteSammelLieferungRevModel(self)
     },
   }),
 )
