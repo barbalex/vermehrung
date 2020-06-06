@@ -137,6 +137,7 @@ const Kultur = ({
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     artsSorted,
+    herkunftsSorted,
     sammlungsSorted,
   } = store
   const { isFiltered: runIsFiltered } = filter
@@ -197,6 +198,8 @@ const Kultur = ({
     artFilter.id = { _in: artenToChoose }
   }
 
+  const herkunftFilter = { id: { _in: herkunftToChoose } }
+
   const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
   const { data, error, loading } = useQuery(kulturQuery, {
     variables: {
@@ -204,6 +207,7 @@ const Kultur = ({
       kulturFilter,
       totalCountFilter,
       artFilter,
+      herkunftFilter,
     },
   })
 
@@ -222,25 +226,6 @@ const Kultur = ({
   useEffect(() => {
     setErrors({})
   }, [id])
-
-  const herkunftFilter = { id: { _in: herkunftToChoose } }
-  const {
-    data: herkunftData,
-    error: herkunftError,
-    loading: herkunftLoading,
-  } = useQuery((store) =>
-    store.queryHerkunft(
-      {
-        where: herkunftFilter,
-        order_by: [
-          { nr: 'asc_nulls_first' },
-          { gemeinde: 'asc_nulls_first' },
-          { lokalname: 'asc_nulls_first' },
-        ],
-      },
-      (h) => h.id.nr.lokalname.gemeinde,
-    ),
-  )
 
   const {
     data: dataGarten,
@@ -274,13 +259,16 @@ const Kultur = ({
     [dataGarten?.garten],
   )
 
+  const herkunftWerteData = herkunftsSorted.filter((h) =>
+    herkunftToChoose.includes(h.id),
+  )
   const herkunftWerte = useMemo(
     () =>
-      (herkunftData?.herkunft ?? []).map((el) => ({
+      herkunftWerteData.map((el) => ({
         value: el.id,
         label: herkunftLabelFromHerkunft(el),
       })),
-    [herkunftData?.herkunft],
+    [herkunftWerteData],
   )
 
   const saveToDb = useCallback(
@@ -333,7 +321,7 @@ const Kultur = ({
     )
   }
 
-  const errorToShow = error || errorGarten || herkunftError
+  const errorToShow = error || errorGarten
   if (errorToShow) {
     return (
       <Container>
@@ -417,7 +405,7 @@ const Kultur = ({
                 field="herkunft_id"
                 label="Herkunft"
                 options={herkunftWerte}
-                loading={herkunftLoading}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.herkunft_id}
               />
