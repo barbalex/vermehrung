@@ -1,4 +1,4 @@
-import { getParent } from 'mobx-state-tree'
+import { getParent, destroy } from 'mobx-state-tree'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
@@ -44,6 +44,7 @@ export const event_revModel = event_revModelBase.actions((self) => ({
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
+    console.log('event_revModel', { self, newObject })
 
     addQueuedQuery({
       name: 'mutateInsert_event_rev_one',
@@ -59,6 +60,6 @@ export const event_revModel = event_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteEventRevModel({ id: self.id })
+    deleteEventRevModel(self)
   },
 }))
