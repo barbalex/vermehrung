@@ -11,6 +11,10 @@ import Select from '../../../../shared/SelectCreatable'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import {
+  kulturOption as kulturOptionFragment,
+  teilzaehlung as teilzaehlungFragment,
+} from '../../../../../utils/fragments'
 
 const Container = styled.div`
   display: flex;
@@ -54,6 +58,27 @@ const TopLine = styled.div`
   margin-bottom: 10px;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForTeilzaehlung($id: uuid!) {
+    teilzaehlung(where: { id: { _eq: $id } }) {
+      ...TeilzaehlungFields
+      zaehlung {
+        id
+        __typename
+        kultur {
+          id
+          __typename
+          kultur_option {
+            ...KulturOptionFields
+          }
+        }
+      }
+    }
+  }
+  ${kulturOptionFragment}
+  ${teilzaehlungFragment}
+`
+
 const Teilzaehlung = ({
   id,
   zaehlungId,
@@ -78,9 +103,12 @@ const Teilzaehlung = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const { query } = useQuery((store) =>
-    store.queryTeilzaehlung({ where: { id: { _eq: id } } }),
-  )
+  const { error, query } = useQuery(allDataQuery, {
+    variables: {
+      id,
+    },
+  })
+
   useQuery((store) =>
     store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
   )
@@ -124,7 +152,7 @@ const Teilzaehlung = ({
       // only update if value has changed
       if (value === previousValue) return
 
-      console.log('Teilzaehlung, saveToDb', { field, value, row })
+      //console.log('Teilzaehlung, saveToDb', { field, value, row })
 
       row.edit({ field, value })
     },
@@ -133,6 +161,12 @@ const Teilzaehlung = ({
   const onClickDelete = useCallback(() => {
     row.delete()
   }, [row])
+
+  if (error) {
+    return (
+      <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
+    )
+  }
 
   return (
     <ErrorBoundary>
