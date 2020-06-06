@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
@@ -21,6 +22,7 @@ import KuSvg from '../../../svg/to_ku.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import { art as artFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -100,6 +102,29 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForArt(
+    $id: uuid!
+    $artFilter: art_bool_exp!
+    $totalCountFilter: art_bool_exp!
+  ) {
+    art(where: { id: { _eq: $id } }) {
+      ...ArtFields
+    }
+    art_total_count: art_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    art_filtered_count: art_aggregate(where: $artFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${artFragment}
+`
+
 const Art = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -110,27 +135,20 @@ const Art = ({
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
-  const { error: errorArt, loading: loadingArt } = useQuery(
-    (store) => store.queryArt({ where: { id: { _eq: id } } }),
-    (a) =>
-      a.id.ae_id.art_ae_art((ae) => ae.id.name).changed.changed_by._rev._depth
-        ._conflicts,
-  )
+  const hierarchyFilter = {}
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      artFilter,
+      totalCountFilter,
+    },
+  })
 
   const [errors, setErrors] = useState({})
 
-  const { data: dataArtAggregate } = useQuery((store) =>
-    store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
-  )
-  const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataArtFilteredAggregate } = useQuery((store) =>
-    store.queryArt_aggregate({ where: artFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataArtFilteredAggregate?.art_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.art_total_count?.aggregate?.count
+  const filteredNr = data?.art_filtered_count?.aggregate?.count
 
   const row = showFilter ? filter.art : store.arts.get(id) || {}
 
@@ -201,7 +219,7 @@ const Art = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  if (loadingArt) {
+  if (loading) {
     return (
       <Container>
         <FormTitle title="Art" />
@@ -210,12 +228,11 @@ const Art = ({
     )
   }
 
-  const errorToShow = errorArt
-  if (errorToShow) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Art" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
