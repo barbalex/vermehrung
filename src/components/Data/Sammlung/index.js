@@ -122,11 +122,11 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const query = gql`
+const allDataQuery = gql`
   query SammlungQueryForSammlung(
     $id: uuid!
-    $isFiltered: Boolean!
-    $filter: sammlung_bool_exp!
+    $sammlungFilter: sammlung_bool_exp!
+    $totalCountFilter: sammlung_bool_exp!
   ) {
     sammlung(where: { id: { _eq: $id } }) {
       ...SammlungFields
@@ -152,39 +152,35 @@ const query = gql`
         nr
       }
     }
-    rowsFiltered: sammlung(where: $filter) @include(if: $isFiltered) {
-      id
-      __typename
+    sammlung_total_count: sammlung_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
     }
-  }
-  ${sammlungFragment}
-`
-const dataQuery = gql`
-  query dataQuery {
-    person(order_by: [{ name: asc_nulls_first }, { ort: asc_nulls_first }]) {
+    sammlung_filtered_count: sammlung_aggregate(where: $sammlungFilter) {
+      aggregate {
+        count
+      }
+    }
+    person {
       id
       __typename
       name
       ort
     }
-    herkunft(
-      order_by: [
-        { nr: asc_nulls_first }
-        { gemeinde: asc_nulls_first }
-        { lokalname: asc_nulls_first }
-      ]
-    ) {
+    herkunft {
       id
       __typename
       nr
       lokalname
       gemeinde
     }
-    art(order_by: { art_ae_art: { name: asc } }) {
+    art {
       ...ArtFields
     }
   }
   ${artFragment}
+  ${sammlungFragment}
 `
 
 const Sammlung = ({
@@ -198,6 +194,9 @@ const Sammlung = ({
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
+    artsSorted,
+    herkunftsSorted,
+    personsSorted,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -219,33 +218,19 @@ const Sammlung = ({
     }
   }
   const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
-  const { error, loading, query: queryOfSammlung } = useQuery(query, {
-    variables: { id, isFiltered, filter: sammlungFilter },
-  })
-  const { data: dataData, error: dataError, loading: dataLoading } = useQuery(
-    dataQuery,
+
+  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const { data, error, loading, query: queryOfSammlung } = useQuery(
+    allDataQuery,
+    {
+      variables: { id, sammlungFilter, totalCountFilter },
+    },
   )
 
   const [errors, setErrors] = useState({})
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataSammlungAggregate } = useQuery((store) =>
-    store.querySammlung_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataSammlungAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataSammlungFilteredAggregate } = useQuery((store) =>
-    store.querySammlung_aggregate({ where: sammlungFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataSammlungFilteredAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.sammlung_total_count?.aggregate?.count
+  const filteredNr = data?.sammlung_filtered_count?.aggregate?.count
 
   const row = showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}
 
@@ -262,29 +247,29 @@ const Sammlung = ({
 
   const personWerte = useMemo(
     () =>
-      (dataData?.person ?? []).map((el) => ({
+      personsSorted.map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [dataData?.person],
+    [personsSorted],
   )
 
   const herkunftWerte = useMemo(
     () =>
-      (dataData?.herkunft ?? []).map((el) => ({
+      herkunftsSorted.map((el) => ({
         value: el.id,
         label: herkunftLabelFromHerkunft(el),
       })),
-    [dataData?.herkunft],
+    [herkunftsSorted],
   )
 
   const artWerte = useMemo(
     () =>
-      (dataData?.art ?? []).map((el) => ({
+      artsSorted.map((el) => ({
         value: el.id,
         label: el?.art_ae_art?.name ?? '(kein Artname)',
       })),
-    [dataData?.art],
+    [artsSorted],
   )
 
   const saveToDb = useCallback(
@@ -345,12 +330,11 @@ const Sammlung = ({
     )
   }
 
-  const errorToShow = error || dataError
-  if (errorToShow) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Sammlung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
@@ -419,7 +403,7 @@ const Sammlung = ({
                 field="art_id"
                 label="Art"
                 options={artWerte}
-                loading={dataLoading}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.art_id}
               />
@@ -430,7 +414,7 @@ const Sammlung = ({
                 field="herkunft_id"
                 label="Herkunft"
                 options={herkunftWerte}
-                loading={dataLoading}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.herkunft_id}
               />
@@ -441,7 +425,7 @@ const Sammlung = ({
                 field="person_id"
                 label="Person"
                 options={personWerte}
-                loading={dataLoading}
+                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.person_id}
               />
