@@ -1,12 +1,8 @@
 /**
  * This component only loads the data
- * Reason:
- * The query gets lots of variables to enable loading step by step
- * what data is needed while the user navigates the tree
- * Every time the query is re-run with different variables,
- * it returns empty data while loading.
- * This is bad for the tree. Very hard to build a good user experienc.
- * So the data is passed as props to the Tree component.
+ * Reason: apollo used to return no data while refreshing
+ * This was bad for the tree. Very hard to build a good user experience.
+ * So the data was passed as props to the Tree component.
  * Which can decide not to update nodes if the query is loading
  * but rather use the previous value
  */
