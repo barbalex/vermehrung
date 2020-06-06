@@ -70,6 +70,6 @@ export const person_revModel = person_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deletePersonRevModel({ id: self.id })
+    deletePersonRevModel(self)
   },
 }))

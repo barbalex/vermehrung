@@ -61,6 +61,6 @@ export const kultur_revModel = kultur_revModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
     })
-    deleteKulturRevModel({ id: self.id })
+    deleteKulturRevModel(self)
   },
 }))

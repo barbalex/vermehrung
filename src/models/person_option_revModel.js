@@ -75,7 +75,7 @@ export const person_option_revModel = person_option_revModelBase.actions(
           where: { id: { _eq: self.id } },
         }),
       })
-      deletePersonOptionRevModel({ id: self.id })
+      deletePersonOptionRevModel(self)
     },
   }),
 )
