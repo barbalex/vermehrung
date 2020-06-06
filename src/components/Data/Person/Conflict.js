@@ -34,6 +34,7 @@ const personRevQuery = gql`
       _rev
       _parent_rev
       _depth
+      _deleted
     }
   }
 `
@@ -178,7 +179,6 @@ const PersonConflict = ({
       aktiv: revRow.aktiv,
       _parent_rev: row._rev,
       _depth: newDepth,
-      _conflicts: [],
       _deleted: revRow._deleted,
     }
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
