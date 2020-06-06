@@ -259,14 +259,7 @@ const allDataQuery = gql`
         }
       }
     }
-    sammlung(
-      where: $sammlungFilter
-      order_by: [
-        { datum: asc_nulls_first }
-        { herkunft: { nr: asc_nulls_first } }
-        { person: { name: asc_nulls_first } }
-      ]
-    ) {
+    sammlung(where: $sammlungFilter) {
       id
       __typename
       art_id
@@ -286,13 +279,7 @@ const allDataQuery = gql`
         ort
       }
     }
-    nach_kultur: kultur(
-      where: $nachKulturFilter
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { garten: { person: { ort: asc_nulls_first } } }
-      ]
-    ) {
+    nach_kultur: kultur(where: $nachKulturFilter) {
       id
       __typename
       art_id
@@ -309,13 +296,7 @@ const allDataQuery = gql`
         }
       }
     }
-    von_kultur: kultur(
-      where: $vonKulturFilter
-      order_by: [
-        { garten: { person: { name: asc_nulls_first } } }
-        { garten: { person: { ort: asc_nulls_first } } }
-      ]
-    ) {
+    von_kultur: kultur(where: $vonKulturFilter) {
       id
       __typename
       art_id
