@@ -319,6 +319,8 @@ const Event = ({
     [insertTeilkulturRev, row, teilkulturQuery],
   )
 
+  console.log('event, row:', row)
+
   if (loading) {
     return (
       <Container>
