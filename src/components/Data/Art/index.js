@@ -141,8 +141,8 @@ const Art = ({
   }, [queryOfArt])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfArt.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfArt, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfArt])
 
   useEffect(() => {
     setErrors({})

@@ -496,9 +496,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     queryOfLieferung.refetch()
   }, [queryOfLieferung])
   const callbackAfterUebernehmen = useCallback(() => {
-    setActiveConflict(row?._rev ?? null)
+    setActiveConflict(null)
     queryOfLieferung.refetch()
-  }, [queryOfLieferung, row?._rev])
+  }, [queryOfLieferung])
 
   const { li_show_sl_felder } = userPersonOption
 
