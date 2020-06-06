@@ -178,8 +178,8 @@ const Zaehlung = ({
   }, [queryOfZaehlung])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfZaehlung.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfZaehlung, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfZaehlung])
 
   const artId = row?.kultur?.art_id
   const kulturFilter = artId

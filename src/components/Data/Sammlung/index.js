@@ -256,8 +256,8 @@ const Sammlung = ({
   }, [queryOfSammlung])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfSammlung.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfSammlung, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfSammlung])
 
   useEffect(() => {
     setErrors({})

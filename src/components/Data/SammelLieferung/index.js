@@ -264,8 +264,8 @@ const SammelLieferung = ({
   }, [queryOfSammelLieferung])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfSammelLieferung.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfSammelLieferung, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfSammelLieferung])
 
   const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } = userPersonOption
 

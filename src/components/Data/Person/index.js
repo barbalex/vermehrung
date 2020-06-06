@@ -171,8 +171,8 @@ const Person = ({
   }, [queryOfPerson])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfPerson.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfPerson, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfPerson])
 
   const [errors, setErrors] = useState({})
   useEffect(() => {
