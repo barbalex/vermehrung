@@ -186,8 +186,8 @@ const Kultur = ({
   }, [queryOfKultur])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfKultur.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfKultur, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfKultur])
 
   useEffect(() => {
     setErrors({})

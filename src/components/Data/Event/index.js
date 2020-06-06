@@ -184,8 +184,8 @@ const Event = ({
   }, [queryOfEvent])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfEvent.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfEvent, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfEvent])
 
   const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
     store.queryKultur(

@@ -162,8 +162,8 @@ const Garten = ({
   }, [queryOfGarten])
   const callbackAfterUebernehmen = useCallback(() => {
     queryOfGarten.refetch()
-    setActiveConflict(row?._rev ?? null)
-  }, [queryOfGarten, row?._rev])
+    setActiveConflict(null)
+  }, [queryOfGarten])
 
   const {
     ga_strasse,
