@@ -57,7 +57,7 @@ const FieldsContainer = styled.div`
 `
 
 const allDataQuery = gql`
-  query AllDataQueryForGarten(
+  query AllDataQueryForGartens(
     $gartenFilter: garten_bool_exp!
     $totalCountFilter: garten_bool_exp!
   ) {
