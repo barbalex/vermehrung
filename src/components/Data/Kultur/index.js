@@ -140,6 +140,8 @@ const Kultur = ({
     gartensSorted,
     herkunftsSorted,
     sammlungsSorted,
+    hideInactive,
+    showDeleted,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -201,7 +203,13 @@ const Kultur = ({
 
   const herkunftFilter = { id: { _in: herkunftToChoose } }
 
-  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
+  if (hideInactive) {
+    totalCountFilter.aktiv = { _eq: true }
+  }
   const { data, error, loading } = useQuery(kulturQuery, {
     variables: {
       id,

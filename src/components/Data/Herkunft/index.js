@@ -128,13 +128,22 @@ const Herkunft = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, userPersonOption, herkunftFilter } = store
+  const {
+    filter,
+    online,
+    userPersonOption,
+    herkunftFilter,
+    showDeleted,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
 
   const hierarchyFilter = {}
-  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: {
       id,
