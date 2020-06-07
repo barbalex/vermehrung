@@ -62,7 +62,8 @@ begin
     select
       event_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       event_rev
     where
@@ -77,6 +78,32 @@ begin
       )
       and _deleted is false
       and event_id = new.event_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        event_id,
+        _rev,
+        _depth
+      from
+        event_rev
+      where
+        not exists (
+          select
+            event_id
+          from
+            event_rev as t
+          where
+            t.event_id = new.event_id
+            and t._parent_rev = event_rev._rev
+        )
+        and _deleted is true
+        and event_id = new.event_id
+        and exists (
+          select event_id from leaves l
+          where 
+            l._parent_rev = event_rev._parent_rev
+            and l._depth = event_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -111,6 +138,7 @@ begin
         where 
           _rev <> event_rev._rev
           and _rev <> ANY(event_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       event_rev
@@ -150,7 +178,54 @@ begin
       _deleted,
       _conflicts
     )
-    with leaves_deleted as (
+    with leaves as (
+      select
+        event_id,
+        _rev,
+        _depth,
+        _parent_rev
+      from
+        event_rev
+      where
+        not exists (
+          select
+            event_id
+          from
+            event_rev as t
+          where
+            t.event_id = new.event_id
+            and t._parent_rev = event_rev._rev
+        )
+        and _deleted is false
+        and event_id = new.event_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          event_id,
+          _rev,
+          _depth
+        from
+          event_rev
+        where
+          not exists (
+            select
+              event_id
+            from
+              event_rev as t
+            where
+              t.event_id = new.event_id
+              and t._parent_rev = event_rev._rev
+          )
+          and _deleted is true
+          and event_id = new.event_id
+          and exists (
+            select event_id from leaves l
+            where 
+              l._parent_rev = event_rev._parent_rev
+              and l._depth = event_rev._depth
+          )
+      ),
+      leaves_deleted as (
       select
         event_id,
         _rev,
@@ -199,10 +274,11 @@ begin
       event_rev._depth,
       event_rev._deleted,
       (select array(
-        select _rev from leaves_deleted
+        select _rev from leaves
         where 
           _rev <> event_rev._rev
           and _rev <> ANY(event_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       event_rev
