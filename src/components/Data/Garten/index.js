@@ -230,7 +230,7 @@ const Garten = ({
     [filter, row, showFilter],
   )
 
-  if (loading) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Garten" />
@@ -290,6 +290,16 @@ const Garten = ({
                 <CaseConflictTitle>
                   Aktuelle Version<Rev>{row._rev}</Rev>
                 </CaseConflictTitle>
+              )}
+              {showDeleted && (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors._deleted}
+                />
               )}
               <TextField
                 key={`${row.id}name`}
