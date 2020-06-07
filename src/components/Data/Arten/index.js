@@ -56,7 +56,7 @@ const FieldsContainer = styled.div`
 `
 
 const allDataQuery = gql`
-  query AllDataQueryForArt(
+  query AllDataQueryForArts(
     $artFilter: art_bool_exp!
     $totalCountFilter: art_bool_exp!
   ) {
@@ -118,6 +118,8 @@ const Arten = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
+
+  console.log('Arten', { totalCountFilter, hierarchyFilter, data, artFragment })
 
   if (loading) {
     return (
