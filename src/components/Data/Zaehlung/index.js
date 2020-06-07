@@ -369,6 +369,16 @@ const Zaehlung = ({
                     Aktuelle Version<Rev>{row._rev}</Rev>
                   </CaseConflictTitle>
                 )}
+                {showDeleted && (
+                  <Checkbox2States
+                    key={`${row.id}_deleted`}
+                    label="gelöscht"
+                    name="_deleted"
+                    value={row._deleted}
+                    saveToDb={saveToDb}
+                    error={errors._deleted}
+                  />
+                )}
                 <Select
                   key={`${row.id}${row.kultur_id}kultur_id`}
                   name="kultur_id"
