@@ -23,6 +23,7 @@ const Title = styled.div`
 
 const HerkunftDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
+  const { showDeleted } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -30,14 +31,15 @@ const HerkunftDeleteButton = ({ row }) => {
     setAnchorEl(null)
   }, [])
 
-  const onClickDelete = useCallback(
+  const conClickButton = useCallback(
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
   const remove = useCallback(() => {
     row.delete()
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, row, setActiveNodeArray])
+    !showDeleted && setActiveNodeArray(activeNodeArray.slice(0, -1))
+    setAnchorEl(null)
+  }, [activeNodeArray, row, setActiveNodeArray, showDeleted])
 
   return (
     <ErrorBoundary>
@@ -46,7 +48,8 @@ const HerkunftDeleteButton = ({ row }) => {
         aria-haspopup="true"
         aria-label="Herkunft löschen"
         title="Herkunft löschen"
-        onClick={onClickDelete}
+        onClick={conClickButton}
+        disabled={row._deleted}
       >
         <FaMinus />
       </IconButton>
