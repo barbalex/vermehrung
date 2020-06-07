@@ -5,12 +5,14 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { art as artFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -53,6 +55,28 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForArt(
+    $artFilter: art_bool_exp!
+    $totalCountFilter: art_bool_exp!
+  ) {
+    art(where: $artFilter) {
+      ...ArtFields
+    }
+    art_total_count: art_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    art_filtered_count: art_aggregate(where: $artFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${artFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -60,32 +84,27 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertArtRev, artsFiltered, artFilter } = store
+  const { filter, insertArtRev, artsFiltered, showDeleted } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
-    store.queryArt(
-      {
-        where: artFilter,
-        order_by: { art_ae_art: { name: 'asc' } },
-      },
-      (d) => d.id.ae_id.art_ae_art((d) => d.id.name),
-    ),
-  )
+  const hierarchyFilter = {}
+  const artFilter = { ...store.artFilter, ...hierarchyFilter }
 
-  const { data: dataArtAggregate } = useQuery((store) =>
-    store.queryArt_aggregate(undefined, (d) => d.aggregate((d) => d.count)),
-  )
-  const totalNr = dataArtAggregate?.art_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
 
-  const { data: dataArtFilteredAggregate } = useQuery((store) =>
-    store.queryArt_aggregate({ where: artFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataArtFilteredAggregate?.art_aggregate?.aggregate?.count ?? 0
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      artFilter,
+      totalCountFilter,
+    },
+  })
+
+  const totalNr = data?.art_total_count?.aggregate?.count
+  const filteredNr = data?.art_filtered_count?.aggregate?.count
 
   const add = useCallback(() => {
     insertArtRev()
@@ -100,7 +119,7 @@ const Arten = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loadingFiltered) {
+  if (loading) {
     return (
       <Container>
         <FormTitle title="Arten" />
@@ -109,12 +128,11 @@ const Arten = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = errorFiltered
-  if (errorToShow) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Arten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
