@@ -222,8 +222,8 @@ const Kultur = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.kultur_total_count?.aggregate?.count
-  const filteredNr = data?.kultur_filtered_count?.aggregate?.count
+  const totalNr = data?.kultur_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.kultur_filtered_count?.aggregate?.count ?? ''
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
