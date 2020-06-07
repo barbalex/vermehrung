@@ -70,7 +70,8 @@ begin
     select
       lieferung_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       lieferung_rev
     where
@@ -84,6 +85,32 @@ begin
           and t._parent_rev = lieferung_rev._rev)
         and _deleted = false
         and lieferung_id = new.lieferung_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        lieferung_id,
+        _rev,
+        _depth
+      from
+        lieferung_rev
+      where
+        not exists (
+          select
+            lieferung_id
+          from
+            lieferung_rev as t
+          where
+            t.lieferung_id = new.lieferung_id
+            and t._parent_rev = lieferung_rev._rev
+        )
+        and _deleted is true
+        and lieferung_id = new.lieferung_id
+        and exists (
+          select lieferung_id from leaves l
+          where 
+            l._parent_rev = lieferung_rev._parent_rev
+            and l._depth = lieferung_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -127,6 +154,7 @@ begin
         where 
           _rev <> lieferung_rev._rev
           and _rev <> ANY(lieferung_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       lieferung_rev
@@ -184,7 +212,54 @@ begin
       _deleted,
       _conflicts
   )
-  with leaves as (
+    with leaves as (
+      select
+        lieferung_id,
+        _rev,
+        _depth,
+        _parent_rev
+      from
+        lieferung_rev
+      where
+        not exists (
+          select
+            lieferung_id
+          from
+            lieferung_rev as t
+          where
+            t.lieferung_id = new.lieferung_id
+            and t._parent_rev = lieferung_rev._rev
+        )
+        and _deleted is false
+        and lieferung_id = new.lieferung_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          lieferung_id,
+          _rev,
+          _depth
+        from
+          lieferung_rev
+        where
+          not exists (
+            select
+              lieferung_id
+            from
+              lieferung_rev as t
+            where
+              t.lieferung_id = new.lieferung_id
+              and t._parent_rev = lieferung_rev._rev
+          )
+          and _deleted is true
+          and lieferung_id = new.lieferung_id
+          and exists (
+            select lieferung_id from leaves l
+            where 
+              l._parent_rev = lieferung_rev._parent_rev
+              and l._depth = lieferung_rev._depth
+          )
+      ),
+      leaves_deleted as (
     select
       lieferung_id,
       _rev,
@@ -207,14 +282,14 @@ begin
       select
         max(_depth) as max_depth
       from
-        leaves
+        leaves_deleted
     ),
     winning_revisions as (
       select
-        max(leaves._rev) as _rev
+        max(leaves_deleted._rev) as _rev
       from
-        leaves
-        join max_depths on leaves._depth = max_depths.max_depth
+        leaves_deleted
+        join max_depths on leaves_deleted._depth = max_depths.max_depth
     )
     select
       lieferung_rev.lieferung_id,
@@ -245,6 +320,7 @@ begin
         where 
           _rev <> lieferung_rev._rev
           and _rev <> ANY(lieferung_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       lieferung_rev
