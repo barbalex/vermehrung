@@ -318,7 +318,7 @@ const Sammlung = ({
     }
   }, [])
 
-  if (loading) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Sammlung" />

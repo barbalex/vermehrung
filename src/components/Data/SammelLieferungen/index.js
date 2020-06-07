@@ -111,7 +111,7 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loading) {
+  if (loading && !sammelLieferungsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Sammel-Lieferungen" />
