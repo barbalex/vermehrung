@@ -123,8 +123,8 @@ const Gaerten = ({ filter: showFilter }) => {
     return true
   })
 
-  const totalNr = data?.garten_total_count?.aggregate?.count
-  const filteredNr = data?.garten_filtered_count?.aggregate?.count
+  const totalNr = data?.garten_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.garten_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(() => {
     insertGartenRev()
