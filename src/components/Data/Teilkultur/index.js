@@ -280,7 +280,7 @@ const Teilkultur = ({
     }
   }, [])
 
-  if (loading) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Teilkultur" />
