@@ -121,7 +121,7 @@ const Arten = ({ filter: showFilter }) => {
 
   console.log('Arten', { totalCountFilter, hierarchyFilter, data, artFragment })
 
-  if (loading) {
+  if (loading && !artsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Arten" />
