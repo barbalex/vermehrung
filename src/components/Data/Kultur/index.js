@@ -310,7 +310,7 @@ const Kultur = ({
     downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
   }, [row.id, store])
 
-  if (loading) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Kultur" />
@@ -383,6 +383,16 @@ const Kultur = ({
                 <CaseConflictTitle>
                   Aktuelle Version<Rev>{row._rev}</Rev>
                 </CaseConflictTitle>
+              )}
+              {showDeleted && (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors._deleted}
+                />
               )}
               <Select
                 key={`${row.id}${row.art_id}art_id`}
