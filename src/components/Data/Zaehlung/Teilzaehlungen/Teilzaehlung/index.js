@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 
 import { StoreContext, useQuery } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
+import Checkbox2States from '../../../../shared/Checkbox2States'
 import Select from '../../../../shared/SelectCreatable'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import PrognoseMenu from './PrognoseMenu'
@@ -89,7 +90,7 @@ const Teilzaehlung = ({
   index,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev } = store
+  const { insertTeilkulturRev, showDeleted } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -262,14 +263,24 @@ const Teilzaehlung = ({
           </Last>
         )}
         <div>
-          <IconButton
-            aria-label="löschen"
-            title="löschen"
-            onClick={onClickDelete}
-          >
-            <FaRegTrashAlt />
-          </IconButton>
-
+          {showDeleted && row._deleted ? (
+            <Checkbox2States
+              key={`${row.id}_deleted`}
+              label="gelöscht"
+              name="_deleted"
+              value={row._deleted}
+              saveToDb={saveToDb}
+              error={errors._deleted}
+            />
+          ) : (
+            <IconButton
+              aria-label="löschen"
+              title="löschen"
+              onClick={onClickDelete}
+            >
+              <FaRegTrashAlt />
+            </IconButton>
+          )}
           <IconButton
             aria-label="Prognose"
             title="Prognose"
