@@ -299,7 +299,7 @@ const Zaehlung = ({
     }
   }, [])
 
-  if (loading) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Zaehlung" />
