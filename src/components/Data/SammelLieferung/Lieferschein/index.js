@@ -235,7 +235,8 @@ const Lieferschein = ({ row }) => {
                 <TableRow>
                   <TableCell>...</TableCell>
                 </TableRow>
-              ) : lieferungError ? (
+              ) : lieferungError &&
+                !lieferungError.message.includes('Failed to fetch') ? (
                 <TableRow>{`Fehler beim Laden der Daten: ${lieferungError.message}`}</TableRow>
               ) : (
                 lieferungen.map((l) => <Lieferung key={l.id} lieferung={l} />)

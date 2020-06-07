@@ -110,12 +110,11 @@ const Personen = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = errorFiltered
-  if (errorToShow) {
+  if (errorFiltered && !errorFiltered.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Personen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorFiltered.message}`}</FieldsContainer>
       </Container>
     )
   }
