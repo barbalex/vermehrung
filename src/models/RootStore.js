@@ -1539,7 +1539,9 @@ export const RootStore = RootStoreBase.props({
       return queryFromStore({ store: self, table: 'art' })
     },
     get artsSorted() {
-      return [...self.arts.values()].filter((v) => !v._deleted).sort(artSort)
+      return [...self.arts.values()]
+        .filter((v) => !v._deleted || self.showDeleted)
+        .sort(artSort)
     },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
@@ -1549,7 +1551,7 @@ export const RootStore = RootStoreBase.props({
     },
     get eventsSorted() {
       return [...self.events.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(eventSort)
     },
     get gartenFilter() {
@@ -1560,7 +1562,7 @@ export const RootStore = RootStoreBase.props({
     },
     get gartensSorted() {
       return [...self.gartens.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(gartenSort)
     },
     get herkunftFilter() {
@@ -1571,7 +1573,7 @@ export const RootStore = RootStoreBase.props({
     },
     get herkunftsSorted() {
       return [...self.herkunfts.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(herkunftSort)
     },
     get kulturFilter() {
@@ -1582,7 +1584,7 @@ export const RootStore = RootStoreBase.props({
     },
     get kultursSorted() {
       return [...self.kulturs.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(kulturSort)
     },
     get lieferungFilter() {
@@ -1593,7 +1595,7 @@ export const RootStore = RootStoreBase.props({
     },
     get lieferungsSorted() {
       return [...self.lieferungs.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(lieferungSort)
     },
     get personFilter() {
@@ -1604,7 +1606,7 @@ export const RootStore = RootStoreBase.props({
     },
     get personsSorted() {
       return [...self.persons.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(personSort)
     },
     get sammelLieferungFilter() {
@@ -1615,7 +1617,7 @@ export const RootStore = RootStoreBase.props({
     },
     get sammelLieferungsSorted() {
       return [...self.sammel_lieferungs.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(lieferungSort)
     },
     get sammlungFilter() {
@@ -1626,7 +1628,7 @@ export const RootStore = RootStoreBase.props({
     },
     get sammlungsSorted() {
       return [...self.sammlungs.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(sammlungSort)
     },
     get teilkulturFilter() {
@@ -1637,12 +1639,12 @@ export const RootStore = RootStoreBase.props({
     },
     get teilkultursSorted() {
       return [...self.teilkulturs.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(teilkulturSort)
     },
     get teilzaehlungsSorted() {
       return [...self.teilzaehlungs.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(teilzaehlungSort)
     },
     get userRolesSorted() {
@@ -1656,7 +1658,7 @@ export const RootStore = RootStoreBase.props({
     },
     get zaehlungsSorted() {
       return [...self.zaehlungs.values()]
-        .filter((a) => !a._deleted)
+        .filter((a) => !a._deleted || self.showDeleted)
         .sort(zaehlungSort)
     },
     get nonDeletedFilter() {
