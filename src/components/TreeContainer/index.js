@@ -57,7 +57,7 @@ const TreeContainer = () => {
 
   //console.log('TreeContainer rendering')
 
-  if (error) {
+  if (error && !error.message.includes('Failed to fetch')) {
     console.log(error)
     // if JWT expired, renew
     if (error.message.includes('JWTExpired')) {

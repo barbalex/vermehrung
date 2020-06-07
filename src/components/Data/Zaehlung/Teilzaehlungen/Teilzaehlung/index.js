@@ -163,7 +163,7 @@ const Teilzaehlung = ({
     row.delete()
   }, [row])
 
-  if (error) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
     )
