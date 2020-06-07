@@ -327,6 +327,7 @@ const SammelLieferung = ({
     userPersonOption,
     kultursSorted,
     sammlungsSorted,
+    showDeleted,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { setWidthInPercentOfScreen } = store.tree
@@ -690,6 +691,16 @@ const SammelLieferung = ({
                   <CaseConflictTitle>
                     Aktuelle Version<Rev>{row._rev}</Rev>
                   </CaseConflictTitle>
+                )}
+                {showDeleted && (
+                  <Checkbox2States
+                    key={`${row.id}_deleted`}
+                    label="gelöscht"
+                    name="_deleted"
+                    value={row._deleted}
+                    saveToDb={saveToDb}
+                    error={errors._deleted}
+                  />
                 )}
                 {ifSomeNeeded([
                   'art_id',
