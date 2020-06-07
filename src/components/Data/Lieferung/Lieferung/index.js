@@ -672,7 +672,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   console.log('lieferung rendering')
 
-  if (loading) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Lieferung" />

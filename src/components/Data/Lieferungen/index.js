@@ -161,7 +161,7 @@ const Lieferungen = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loading) {
+  if (loading && !storeRowsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Lieferungen" />
