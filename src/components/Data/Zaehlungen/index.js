@@ -129,7 +129,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loading) {
+  if (loading && !storeRowsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Zählungen" />
