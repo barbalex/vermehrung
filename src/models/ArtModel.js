@@ -24,7 +24,7 @@ export const artModel = artModelBase.actions((self) => ({
     const newDepth = self._depth + 1
     const newObject = {
       art_id: self.id,
-      ae_id: field === 'ae_id' ? value : self._deleted,
+      ae_id: field === 'ae_id' ? value : self.ae_id,
       changed: new window.Date().toISOString(),
       changed_by: user.email,
       _parent_rev: self._rev,
