@@ -5,12 +5,14 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { garten as gartenFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;

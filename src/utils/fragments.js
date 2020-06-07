@@ -96,6 +96,7 @@ export const garten = gql`
       id
       __typename
       name
+      ort
     }
     strasse
     plz
