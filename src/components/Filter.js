@@ -45,19 +45,21 @@ const Title = styled.div`
 export default () => {
   const { activeForm } = useContext(StoreContext)
   // ensure list views are directed to correct filter
+  // use exact match or garten will become gart
+  // see: https://stackoverflow.com/a/447258/712005
   const activeTabFromActiveForm = activeForm
     ? activeForm
-        .replace('arten', 'art')
-        .replace('events', 'event')
-        .replace('herkuenfte', 'herkunft')
-        .replace('gaerten', 'garten')
-        .replace('kulturen', 'kultur')
-        .replace('lieferungen', 'lieferung')
-        .replace('sammelLieferungen', 'sammel_lieferung')
-        .replace('personen', 'person')
-        .replace('sammlungen', 'sammlung')
-        .replace('teilkulturen', 'teilkultur')
-        .replace('zaehlungen', 'zaehlung')
+        .replace(/^events$/, 'event')
+        .replace(/^herkuenfte$/, 'herkunft')
+        .replace(/^gaerten$/, 'garten')
+        .replace(/^arten$/, 'art')
+        .replace(/^kulturen$/, 'kultur')
+        .replace(/^lieferungen$/, 'lieferung')
+        .replace(/^sammelLieferungen$/, 'sammel_lieferung')
+        .replace(/^personen$/, 'person')
+        .replace(/^sammlungen$/, 'sammlung')
+        .replace(/^teilkulturen$/, 'teilkultur')
+        .replace(/^zaehlungen$/, 'zaehlung')
     : // fallback if no form is active
       'art'
   const [activeTab, setActiveTab] = useState(activeTabFromActiveForm)
@@ -91,6 +93,8 @@ export default () => {
     teilkultur: 'TeilKultur Filter',
     zaehlung: 'Zählung Filter',
   }
+
+  console.log('Filter:', { activeTab, activeTabFromActiveForm })
 
   return (
     <ErrorBoundary>
