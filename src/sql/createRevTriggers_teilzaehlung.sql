@@ -64,7 +64,8 @@ begin
       select
         teilzaehlung_id,
         _rev,
-        _depth
+        _depth,
+      _parent_rev
       from
         teilzaehlung_rev
       where
@@ -79,6 +80,32 @@ begin
           and _deleted = false
           and teilzaehlung_id = new.teilzaehlung_id
       ),
+    deleted_conflicts_of_leaves as (
+      select
+        teilzaehlung_id,
+        _rev,
+        _depth
+      from
+        teilzaehlung_rev
+      where
+        not exists (
+          select
+            teilzaehlung_id
+          from
+            teilzaehlung_rev as t
+          where
+            t.teilzaehlung_id = new.teilzaehlung_id
+            and t._parent_rev = teilzaehlung_rev._rev
+        )
+        and _deleted is true
+        and teilzaehlung_id = new.teilzaehlung_id
+        and exists (
+          select teilzaehlung_id from leaves l
+          where 
+            l._parent_rev = teilzaehlung_rev._parent_rev
+            and l._depth = teilzaehlung_rev._depth
+        )
+    ),
       max_depths as (
         select
           max(_depth) as max_depth
@@ -115,6 +142,7 @@ begin
           where 
             _rev <> teilzaehlung_rev._rev
             and _rev <> ANY(teilzaehlung_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         teilzaehlung_rev
@@ -164,6 +192,53 @@ begin
       select
         teilzaehlung_id,
         _rev,
+        _depth,
+        _parent_rev
+      from
+        teilzaehlung_rev
+      where
+        not exists (
+          select
+            teilzaehlung_id
+          from
+            teilzaehlung_rev as t
+          where
+            t.teilzaehlung_id = new.teilzaehlung_id
+            and t._parent_rev = teilzaehlung_rev._rev
+        )
+        and _deleted is false
+        and teilzaehlung_id = new.teilzaehlung_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          teilzaehlung_id,
+          _rev,
+          _depth
+        from
+          teilzaehlung_rev
+        where
+          not exists (
+            select
+              teilzaehlung_id
+            from
+              teilzaehlung_rev as t
+            where
+              t.teilzaehlung_id = new.teilzaehlung_id
+              and t._parent_rev = teilzaehlung_rev._rev
+          )
+          and _deleted is true
+          and teilzaehlung_id = new.teilzaehlung_id
+          and exists (
+            select teilzaehlung_id from leaves l
+            where 
+              l._parent_rev = teilzaehlung_rev._parent_rev
+              and l._depth = teilzaehlung_rev._depth
+          )
+      ),
+      leaves_deleted as (
+      select
+        teilzaehlung_id,
+        _rev,
         _depth
       from
         teilzaehlung_rev
@@ -183,14 +258,14 @@ begin
         select
           max(_depth) as max_depth
         from
-          leaves
+          leaves_deleted
       ),
       winning_revisions as (
         select
-          max(leaves._rev) as _rev
+          max(leaves_deleted._rev) as _rev
         from
-          leaves
-          join max_depths on leaves._depth = max_depths.max_depth
+          leaves_deleted
+          join max_depths on leaves_deleted._depth = max_depths.max_depth
       )
       select
         teilzaehlung_rev.teilzaehlung_id,
@@ -215,6 +290,7 @@ begin
           where 
             _rev <> teilzaehlung_rev._rev
             and _rev <> ANY(teilzaehlung_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         teilzaehlung_rev
