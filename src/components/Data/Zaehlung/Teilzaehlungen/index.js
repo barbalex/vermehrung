@@ -37,7 +37,7 @@ const Title = styled.div`
 
 const Teilzaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
-  const { insertTeilzaehlungRev } = store
+  const { insertTeilzaehlungRev, teilzaehlungsSorted } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
@@ -64,8 +64,9 @@ const Teilzaehlungen = ({ zaehlungId }) => {
 
   const showNew = storeRows.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
+  const rows = teilzaehlungsSorted.filter((v) => v.zaehlung_id === zaehlungId)
 
-  if (loading) {
+  if (loading && !rows.length) {
     return <Container>Lade...</Container>
   }
   if (error) {
