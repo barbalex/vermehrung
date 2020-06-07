@@ -146,7 +146,7 @@ const Events = ({ filter: showFilter }) => {
     )
   }
 
-  if (error) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Events" />
