@@ -228,8 +228,8 @@ const Teilkultur = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.teilkultur_total_count?.aggregate?.count
-  const filteredNr = data?.teilkultur_filtered_count?.aggregate?.count
+  const totalNr = data?.teilkultur_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.teilkultur_filtered_count?.aggregate?.count ?? ''
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
