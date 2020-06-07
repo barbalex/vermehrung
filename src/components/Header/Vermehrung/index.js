@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
-import Switch from '@material-ui/core/Switch'
 import IconButton from '@material-ui/core/IconButton'
 import { FaBars, FaHome, FaBook, FaFilter } from 'react-icons/fa'
 import {
@@ -15,6 +14,7 @@ import { observer } from 'mobx-react-lite'
 import ReactResizeDetector from 'react-resize-detector'
 
 import Account from './Account'
+import Settings from './Settings'
 //import More from './More'
 import Search from './Search'
 import { StoreContext } from '../../../models/reactUtils'
@@ -53,35 +53,13 @@ const FilterButton = styled(StyledButton)`
   border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
 `
-const HideActiveDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-right: 14px;
-  padding-left: 9px;
-  margin-top: 5px;
-`
-const StyledSwitch = styled(Switch)`
-  margin-left: -4px;
-  margin-top: -8px;
-`
-const StyledLabel = styled.label`
-  cursor: text;
-  font-size: 12px;
-  margin-bottom: -2px;
-  pointer-events: none;
-  user-select: none;
-`
 
 const HeaderVermehrung = () => {
   const store = useContext(StoreContext)
-  const { setHideInactive, hideInactive, filter, online } = store
+  const { filter, online } = store
   const { show: showFilter, setShow: setShowFilter } = filter
   const { widthEnforced, setWidthEnforced } = store.tree
 
-  const onClickHideActive = useCallback(() => setHideInactive(!hideInactive), [
-    hideInactive,
-    setHideInactive,
-  ])
   const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
     setShowFilter,
     showFilter,
@@ -178,23 +156,6 @@ const HeaderVermehrung = () => {
               Filter
             </FilterButton>
           )}
-          <HideActiveDiv>
-            <StyledLabel
-              title={`Inaktive Personen, Gärten und Kulturen ${
-                hideInactive ? 'anzeigen' : 'verbergen'
-              }`}
-            >
-              nur aktive
-            </StyledLabel>
-            <StyledSwitch
-              checked={hideInactive}
-              onChange={onClickHideActive}
-              color="secondary"
-              title={`Inaktive Personen, Gärten und Kulturen ${
-                hideInactive ? 'anzeigen' : 'verbergen'
-              }`}
-            />
-          </HideActiveDiv>
           {online ? (
             <>
               <Search />
@@ -208,6 +169,7 @@ const HeaderVermehrung = () => {
             </IconButton>
           )}
           <Account />
+          <Settings />
           {/*<More />*/}
         </Toolbar>
       </AppBar>
