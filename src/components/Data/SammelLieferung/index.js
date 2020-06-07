@@ -602,7 +602,7 @@ const SammelLieferung = ({
     [ifNeeded],
   )
 
-  if (loading) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Sammel-Lieferung" />
