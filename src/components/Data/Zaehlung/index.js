@@ -191,7 +191,13 @@ const Zaehlung = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, kulturIdInActiveNodeArray, kultursSorted } = store
+  const {
+    filter,
+    online,
+    kulturIdInActiveNodeArray,
+    kultursSorted,
+    showDeleted,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -204,7 +210,10 @@ const Zaehlung = ({
   }
   const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
 
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
 

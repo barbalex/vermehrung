@@ -3,11 +3,13 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaPlus } from 'react-icons/fa'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { garten as gartenFragment } from '../../../../utils/fragments'
 
 const Container = styled.div`
   display: flex;
