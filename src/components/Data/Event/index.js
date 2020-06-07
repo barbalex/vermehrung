@@ -228,6 +228,7 @@ const Event = ({
     kultursSorted,
     personsSorted,
     teilkultursSorted,
+    showDeleted,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -240,7 +241,10 @@ const Event = ({
   }
   const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
   const { data, error, loading, query } = useQuery(allDataQuery, {
     variables: {
       id,
