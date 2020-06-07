@@ -230,8 +230,8 @@ const Sammlung = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.sammlung_total_count?.aggregate?.count
-  const filteredNr = data?.sammlung_filtered_count?.aggregate?.count
+  const totalNr = data?.sammlung_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.sammlung_filtered_count?.aggregate?.count ?? ''
 
   const row = showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}
 
