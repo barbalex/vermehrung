@@ -369,7 +369,7 @@ const Event = ({
     )
   }
 
-  /*if (error) {
+  if (error && !error.message.includes('Failed to fetch')) {
     console.log(error)
     return (
       <Container>
@@ -377,7 +377,7 @@ const Event = ({
         <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
-  }*/
+  }
 
   if (!row || (!showFilter && filter.show)) return null
 
