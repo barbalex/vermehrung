@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react'
-import Avatar from '@material-ui/core/Avatar'
+import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import { FaUserCircle as UserIcon } from 'react-icons/fa'
@@ -9,23 +9,8 @@ import { observer } from 'mobx-react-lite'
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
-const IconContainer = styled.div`
-  position: relative;
-  padding-left: 10px;
-`
-const StyledAvatar = styled(Avatar)`
-  height: 1.6em !important;
-  width: 1.6em !important;
-  margin-right: 5px;
-  margin-left: 5px;
-  cursor: pointer;
-  img {
-    margin-top: 1.15em;
-  }
-`
 const StyledUserIcon = styled(UserIcon)`
-  height: 1.6em;
-  width: 1.6em;
+  color: white;
 `
 
 const Account = () => {
@@ -46,7 +31,7 @@ const Account = () => {
     // TODO: reset mst-store! How? Action that sets default values?
   }, [firebase])
 
-  const { picture, email } = user || {}
+  const { email } = user || {}
 
   const onClickReset = useCallback(async () => {
     setResetTitle('...')
@@ -72,28 +57,15 @@ const Account = () => {
   return (
     <ErrorBoundary>
       <>
-        <IconContainer>
-          {picture ? (
-            <StyledAvatar
-              aria-haspopup="true"
-              aria-label="Konto"
-              onClick={onClickMenu}
-              title="Konto"
-              alt="Konto"
-              src={picture}
-            />
-          ) : (
-            <StyledAvatar
-              aria-haspopup="true"
-              aria-label="Konto"
-              onClick={onClickMenu}
-              title="Konto"
-              alt="Konto"
-            >
-              <StyledUserIcon />
-            </StyledAvatar>
-          )}
-        </IconContainer>
+        <IconButton
+          aria-label="Konto"
+          aria-owns={anchorEl ? 'long-menu' : null}
+          aria-haspopup="true"
+          title="Konto"
+          onClick={onClickMenu}
+        >
+          <StyledUserIcon />
+        </IconButton>
         <Menu
           id="menu-appbar"
           anchorEl={anchorEl}
