@@ -207,6 +207,11 @@ const SammelLieferungConflict = ({
       valueInRev: revRow?.changed_by,
       label: 'geändert von',
     },
+    {
+      valueInRow: row._deleted,
+      valueInRev: revRow._deleted,
+      label: 'gelöscht',
+    },
   ]
 
   const onClickVerwerfen = useCallback(async () => {
