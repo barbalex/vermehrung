@@ -178,8 +178,8 @@ const Garten = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.garten_total_count?.aggregate?.count
-  const filteredNr = data?.garten_filtered_count?.aggregate?.count
+  const totalNr = data?.garten_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.garten_filtered_count?.aggregate?.count ?? ''
 
   const row = showFilter ? filter.garten : store.gartens.get(id) || {}
 

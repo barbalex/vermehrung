@@ -121,8 +121,8 @@ const Events = ({ filter: showFilter }) => {
     return true
   })
 
-  const totalNr = data?.event_total_count?.aggregate?.count
-  const filteredNr = data?.event_filtered_count?.aggregate?.count
+  const totalNr = data?.event_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.event_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(() => {
     insertEventRev()
