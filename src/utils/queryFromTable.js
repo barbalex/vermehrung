@@ -26,7 +26,13 @@ export default ({ store, table, filter: filterPassed = {} }) => {
 
   if (!showDeleted) {
     // filtering for empty array, see: https://stackoverflow.com/a/737678/712005
-    filter._and = [{ _deleted: { _eq: false } }, { _conflicts: { _eq: '{}' } }]
+    filter._or = [
+      { _deleted: { _eq: false } },
+      { _and: [{ _deleted: { _eq: true } }, { _conflicts: { _neq: '{}' } }] },
+    ]
+  }
+  if (['person', 'garten', 'kultur'].includes(table) && hideInactive) {
+    filter.aktiv = { _eq: true }
   }
 
   // remove id: {_is_null: false} if there are more criteria
