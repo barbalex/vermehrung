@@ -140,14 +140,27 @@ const Person = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, online, userPerson, userRolesSorted } = store
+  const {
+    filter,
+    online,
+    userPerson,
+    userRolesSorted,
+    hideInactive,
+    showDeleted,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
   const hierarchyFilter = {}
   const personFilter = { ...store.personFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
+  if (hideInactive) {
+    totalCountFilter.aktiv = { _eq: true }
+  }
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: {
       id,
