@@ -613,7 +613,7 @@ const SammelLieferung = ({
     )
   }
 
-  if (error) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Sammel-Lieferung" />
