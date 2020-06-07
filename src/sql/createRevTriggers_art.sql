@@ -56,7 +56,8 @@ begin
     select
       art_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       art_rev
     where
@@ -70,6 +71,32 @@ begin
           and t._parent_rev = art_rev._rev)
         and _deleted = false
         and art_id = new.art_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        art_id,
+        _rev,
+        _depth
+      from
+        art_rev
+      where
+        not exists (
+          select
+            art_id
+          from
+            art_rev as t
+          where
+            t.art_id = new.art_id
+            and t._parent_rev = art_rev._rev
+        )
+        and _deleted is true
+        and art_id = new.art_id
+        and exists (
+          select art_id from leaves l
+          where 
+            l._parent_rev = art_rev._parent_rev
+            and l._depth = art_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -99,6 +126,7 @@ begin
         where 
           _rev <> art_rev._rev
           and _rev <> ANY(art_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       art_rev
@@ -132,6 +160,53 @@ begin
       select
         art_id,
         _rev,
+        _depth,
+        _parent_rev
+      from
+        art_rev
+      where
+        not exists (
+          select
+            art_id
+          from
+            art_rev as t
+          where
+            t.art_id = new.art_id
+            and t._parent_rev = art_rev._rev
+        )
+        and _deleted is false
+        and art_id = new.art_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          art_id,
+          _rev,
+          _depth
+        from
+          art_rev
+        where
+          not exists (
+            select
+              art_id
+            from
+              art_rev as t
+            where
+              t.art_id = new.art_id
+              and t._parent_rev = art_rev._rev
+          )
+          and _deleted is true
+          and art_id = new.art_id
+          and exists (
+            select art_id from leaves l
+            where 
+              l._parent_rev = art_rev._parent_rev
+              and l._depth = art_rev._depth
+          )
+      ),
+      leaves_deleted as (
+      select
+        art_id,
+        _rev,
         _depth
       from
         art_rev
@@ -151,14 +226,14 @@ begin
         select
           max(_depth) as max_depth
         from
-          leaves
+          leaves_deleted
       ),
       winning_revisions as (
         select
-          max(leaves._rev) as _rev
+          max(leaves_deleted._rev) as _rev
         from
-          leaves
-          join max_depths on leaves._depth = max_depths.max_depth
+          leaves_deleted
+          join max_depths on leaves_deleted._depth = max_depths.max_depth
       )
       select
         art_rev.art_id,
@@ -175,6 +250,7 @@ begin
           where 
             _rev <> art_rev._rev
             and _rev <> ANY(art_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         art_rev
