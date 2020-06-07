@@ -44,7 +44,12 @@ export default ({ store, table }) => {
         // seems that sometimes rows do not have _conflicts
         // which causes v._conflicts.length to error
         // happened last when loading an art after emtying the cache
-        return v._deleted === false && v?._conflicts?.length === 0
+        return (
+          v._deleted === false ||
+          (v._deleted === true &&
+            v?._conflicts?.length &&
+            v._conflicts.length > 0)
+        )
       }
       return true
     })
