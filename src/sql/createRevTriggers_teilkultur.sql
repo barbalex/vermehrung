@@ -61,7 +61,8 @@ begin
     select
       teilkultur_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       teilkultur_rev
     where
@@ -75,6 +76,32 @@ begin
           and t._parent_rev = teilkultur_rev._rev)
         and _deleted = false
         and teilkultur_id = new.teilkultur_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        teilkultur_id,
+        _rev,
+        _depth
+      from
+        teilkultur_rev
+      where
+        not exists (
+          select
+            teilkultur_id
+          from
+            teilkultur_rev as t
+          where
+            t.teilkultur_id = new.teilkultur_id
+            and t._parent_rev = teilkultur_rev._rev
+        )
+        and _deleted is true
+        and teilkultur_id = new.teilkultur_id
+        and exists (
+          select teilkultur_id from leaves l
+          where 
+            l._parent_rev = teilkultur_rev._parent_rev
+            and l._depth = teilkultur_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -109,6 +136,7 @@ begin
         where 
           _rev <> teilkultur_rev._rev
           and _rev <> ANY(teilkultur_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       teilkultur_rev
@@ -152,6 +180,53 @@ begin
       select
         teilkultur_id,
         _rev,
+        _depth,
+        _parent_rev
+      from
+        teilkultur_rev
+      where
+        not exists (
+          select
+            teilkultur_id
+          from
+            teilkultur_rev as t
+          where
+            t.teilkultur_id = new.teilkultur_id
+            and t._parent_rev = teilkultur_rev._rev
+        )
+        and _deleted is false
+        and teilkultur_id = new.teilkultur_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          teilkultur_id,
+          _rev,
+          _depth
+        from
+          teilkultur_rev
+        where
+          not exists (
+            select
+              teilkultur_id
+            from
+              teilkultur_rev as t
+            where
+              t.teilkultur_id = new.teilkultur_id
+              and t._parent_rev = teilkultur_rev._rev
+          )
+          and _deleted is true
+          and teilkultur_id = new.teilkultur_id
+          and exists (
+            select teilkultur_id from leaves l
+            where 
+              l._parent_rev = teilkultur_rev._parent_rev
+              and l._depth = teilkultur_rev._depth
+          )
+      ),
+      leaves_deleted as (
+      select
+        teilkultur_id,
+        _rev,
         _depth
       from
         teilkultur_rev
@@ -171,14 +246,14 @@ begin
         select
           max(_depth) as max_depth
         from
-          leaves
+          leaves_deleted
       ),
       winning_revisions as (
         select
-          max(leaves._rev) as _rev
+          max(leaves_deleted._rev) as _rev
         from
-          leaves
-          join max_depths on leaves._depth = max_depths.max_depth
+          leaves_deleted
+          join max_depths on leaves_deleted._depth = max_depths.max_depth
       )
       select
         teilkultur_rev.teilkultur_id,
@@ -200,6 +275,7 @@ begin
           where 
             _rev <> teilkultur_rev._rev
             and _rev <> ANY(teilkultur_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         teilkultur_rev
