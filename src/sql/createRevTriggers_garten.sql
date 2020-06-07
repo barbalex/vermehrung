@@ -63,7 +63,8 @@ begin
     select
       garten_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       garten_rev
     where
@@ -77,6 +78,32 @@ begin
           and t._parent_rev = garten_rev._rev)
         and _deleted = false
         and garten_id = new.garten_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        garten_id,
+        _rev,
+        _depth
+      from
+        garten_rev
+      where
+        not exists (
+          select
+            garten_id
+          from
+            garten_rev as t
+          where
+            t.garten_id = new.garten_id
+            and t._parent_rev = garten_rev._rev
+        )
+        and _deleted is true
+        and garten_id = new.garten_id
+        and exists (
+          select garten_id from leaves l
+          where 
+            l._parent_rev = garten_rev._parent_rev
+            and l._depth = garten_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -113,6 +140,7 @@ begin
         where 
           _rev <> garten_rev._rev
           and _rev <> ANY(garten_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       garten_rev
@@ -160,6 +188,53 @@ begin
       select
         garten_id,
         _rev,
+        _depth,
+        _parent_rev
+      from
+        garten_rev
+      where
+        not exists (
+          select
+            garten_id
+          from
+            garten_rev as t
+          where
+            t.garten_id = new.garten_id
+            and t._parent_rev = garten_rev._rev
+        )
+        and _deleted is false
+        and garten_id = new.garten_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          garten_id,
+          _rev,
+          _depth
+        from
+          garten_rev
+        where
+          not exists (
+            select
+              garten_id
+            from
+              garten_rev as t
+            where
+              t.garten_id = new.garten_id
+              and t._parent_rev = garten_rev._rev
+          )
+          and _deleted is true
+          and garten_id = new.garten_id
+          and exists (
+            select garten_id from leaves l
+            where 
+              l._parent_rev = garten_rev._parent_rev
+              and l._depth = garten_rev._depth
+          )
+      ),
+      leaves_deleted as (
+      select
+        garten_id,
+        _rev,
         _depth
       from
         garten_rev
@@ -179,14 +254,14 @@ begin
         select
           max(_depth) as max_depth
         from
-          leaves
+          leaves_deleted
       ),
       winning_revisions as (
         select
-          max(leaves._rev) as _rev
+          max(leaves_deleted._rev) as _rev
         from
-          leaves
-          join max_depths on leaves._depth = max_depths.max_depth
+          leaves_deleted
+          join max_depths on leaves_deleted._depth = max_depths.max_depth
       )
       select
         garten_rev.garten_id,
@@ -210,6 +285,7 @@ begin
           where 
             _rev <> garten_rev._rev
             and _rev <> ANY(garten_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         garten_rev
