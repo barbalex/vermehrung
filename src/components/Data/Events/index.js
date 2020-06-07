@@ -12,7 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { event as eventFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,28 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForEvents(
+    $eventFilter: event_bool_exp!
+    $totalCountFilter: event_bool_exp!
+  ) {
+    event(where: $eventFilter) {
+      ...EventFields
+    }
+    event_total_count: event_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    event_filtered_count: event_aggregate(where: $eventFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${eventFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -68,6 +90,7 @@ const Events = ({ filter: showFilter }) => {
     insertEventRev,
     eventsFiltered,
     kulturIdInActiveNodeArray,
+    showDeleted,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -79,24 +102,17 @@ const Events = ({ filter: showFilter }) => {
     }
   }
   const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
-  const { error: errorFiltered, loading: loadingFiltered } = useQuery(
-    (store) =>
-      store.queryEvent({
-        where: eventFilter,
-        order_by: { beschreibung: 'asc_nulls_first' },
-      }),
-    (e) => e.id.datum.beschreibung,
-  )
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataEventAggregate } = useQuery((store) =>
-    store.queryEvent_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataEventAggregate?.event_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      eventFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = eventsFiltered.filter((e) => {
     if (kulturIdInActiveNodeArray) {
@@ -104,7 +120,9 @@ const Events = ({ filter: showFilter }) => {
     }
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.event_total_count?.aggregate?.count
+  const filteredNr = data?.event_filtered_count?.aggregate?.count
 
   const add = useCallback(() => {
     insertEventRev()
@@ -119,7 +137,9 @@ const Events = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loadingFiltered) {
+  console.log('events', { eventFilter, totalCountFilter })
+
+  if (loading) {
     return (
       <Container>
         <FormTitle title="Events" />
@@ -128,12 +148,11 @@ const Events = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = errorFiltered
-  if (errorToShow) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Events" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
