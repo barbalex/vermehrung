@@ -146,7 +146,7 @@ const Kulturen = ({ filter: showFilter }) => {
   }
 
   const errorToShow = errorFiltered
-  if (errorToShow) {
+  if (errorToShow && !errorToShow.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Kulturen" />
