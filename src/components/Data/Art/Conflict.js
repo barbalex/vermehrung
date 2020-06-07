@@ -69,6 +69,11 @@ const ArtConflict = ({
       valueInRev: revRow?.changed_by,
       label: 'geändert von',
     },
+    {
+      valueInRow: row._deleted,
+      valueInRev: revRow._deleted,
+      label: 'gelöscht',
+    },
   ]
 
   //console.log('Art Conflict', { dataArray, row, revRow, id, rev })
