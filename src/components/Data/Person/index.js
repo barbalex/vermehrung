@@ -178,8 +178,8 @@ const Person = ({
     [userRolesSorted],
   )
 
-  const totalNr = data?.person_total_count?.aggregate?.count
-  const filteredNr = data?.person_filtered_count?.aggregate?.count
+  const totalNr = data?.person_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.person_filtered_count?.aggregate?.count ?? ''
 
   const row = showFilter ? filter.person : store.persons.get(id) ?? {}
 

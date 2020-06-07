@@ -473,8 +473,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.lieferung_total_count?.aggregate?.count
-  const filteredNr = data?.lieferung_filtered_count?.aggregate?.count
+  const totalNr = data?.lieferung_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.lieferung_filtered_count?.aggregate?.count ?? ''
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])

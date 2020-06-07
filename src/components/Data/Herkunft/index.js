@@ -167,8 +167,8 @@ const Herkunft = ({
     setActiveConflict(null)
   }, [id])
 
-  const totalNr = data?.herkunft_total_count?.aggregate?.count
-  const filteredNr = data?.herkunft_filtered_count?.aggregate?.count
+  const totalNr = data?.herkunft_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.herkunft_filtered_count?.aggregate?.count ?? ''
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
 
