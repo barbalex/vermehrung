@@ -255,8 +255,8 @@ const Event = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.event_total_count?.aggregate?.count
-  const filteredNr = data?.event_filtered_count?.aggregate?.count
+  const totalNr = data?.event_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.event_filtered_count?.aggregate?.count ?? ''
 
   const row = showFilter ? filter.event : store.events.get(id) || {}
 
@@ -369,14 +369,15 @@ const Event = ({
     )
   }
 
-  if (error) {
+  /*if (error) {
+    console.log(error)
     return (
       <Container>
         <FormTitle title="Event" />
         <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
-  }
+  }*/
 
   if (!row || (!showFilter && filter.show)) return null
 

@@ -151,8 +151,8 @@ const Art = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.art_total_count?.aggregate?.count
-  const filteredNr = data?.art_filtered_count?.aggregate?.count
+  const totalNr = data?.art_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.art_filtered_count?.aggregate?.count ?? ''
 
   const row = showFilter ? filter.art : store.arts.get(id) || {}
 
