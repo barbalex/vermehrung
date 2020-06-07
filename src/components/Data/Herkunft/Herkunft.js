@@ -135,7 +135,7 @@ const Herkunft = ({
     )
   }
 
-  if (errorHerkunft) {
+  if (errorHerkunft && !errorHerkunft.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
