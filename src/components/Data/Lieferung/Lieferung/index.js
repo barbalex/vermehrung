@@ -681,12 +681,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     )
   }
 
-  const errorToShow = error
-  if (errorToShow) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Lieferung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }

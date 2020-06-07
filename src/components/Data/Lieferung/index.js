@@ -76,7 +76,7 @@ const LieferungContainer = ({
       </Container>
     )
   }
-  if (lieferungError) {
+  if (lieferungError && !lieferungError.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Lieferung" />
