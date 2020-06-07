@@ -74,7 +74,8 @@ begin
     select
       person_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       person_option_rev
     where
@@ -88,6 +89,32 @@ begin
           and t._parent_rev = person_option_rev._rev)
         and _deleted = false
         and person_id = new.person_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        person_option_id,
+        _rev,
+        _depth
+      from
+        person_option_rev
+      where
+        not exists (
+          select
+            person_option_id
+          from
+            person_option_rev as t
+          where
+            t.person_option_id = new.person_option_id
+            and t._parent_rev = person_option_rev._rev
+        )
+        and _deleted is true
+        and person_option_id = new.person_option_id
+        and exists (
+          select person_option_id from leaves l
+          where 
+            l._parent_rev = person_option_rev._parent_rev
+            and l._depth = person_option_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -135,6 +162,7 @@ begin
         where 
           _rev <> person_option_rev._rev
           and _rev <> ANY(person_option_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       person_option_rev
@@ -202,6 +230,53 @@ begin
     )
     with leaves as (
       select
+        person_option_id,
+        _rev,
+        _depth,
+        _parent_rev
+      from
+        person_option_rev
+      where
+        not exists (
+          select
+            person_option_id
+          from
+            person_option_rev as t
+          where
+            t.person_option_id = new.person_option_id
+            and t._parent_rev = person_option_rev._rev
+        )
+        and _deleted is false
+        and person_option_id = new.person_option_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          person_option_id,
+          _rev,
+          _depth
+        from
+          person_option_rev
+        where
+          not exists (
+            select
+              person_option_id
+            from
+              person_option_rev as t
+            where
+              t.person_option_id = new.person_option_id
+              and t._parent_rev = person_option_rev._rev
+          )
+          and _deleted is true
+          and person_option_id = new.person_option_id
+          and exists (
+            select person_option_id from leaves l
+            where 
+              l._parent_rev = person_option_rev._parent_rev
+              and l._depth = person_option_rev._depth
+          )
+      ),
+      leaves_deleted as (
+      select
         person_id,
         _rev,
         _depth
@@ -223,14 +298,14 @@ begin
         select
           max(_depth) as max_depth
         from
-          leaves
+          leaves_deleted
       ),
       winning_revisions as (
         select
-          max(leaves._rev) as _rev
+          max(leaves_deleted._rev) as _rev
         from
-          leaves
-          join max_depths on leaves._depth = max_depths.max_depth
+          leaves_deleted
+          join max_depths on leaves_deleted._depth = max_depths.max_depth
       )
       select
         person_option_rev.person_id,
@@ -265,6 +340,7 @@ begin
           where 
             _rev <> person_option_rev._rev
             and _rev <> ANY(person_option_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         person_option_rev
