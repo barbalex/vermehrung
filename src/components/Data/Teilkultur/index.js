@@ -15,6 +15,7 @@ import gql from 'graphql-tag'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
+import Checkbox2States from '../../shared/Checkbox2States'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
@@ -346,6 +347,16 @@ const Teilkultur = ({
                 <CaseConflictTitle>
                   Aktuelle Version<Rev>{row._rev}</Rev>
                 </CaseConflictTitle>
+              )}
+              {showDeleted && (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors._deleted}
+                />
               )}
               <Select
                 key={`${row.id}${row.kultur_id}kultur_id`}
