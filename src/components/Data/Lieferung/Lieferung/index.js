@@ -158,12 +158,13 @@ const allDataQuery = gql`
   query AllDataQueryForLieferungLieferung(
     $id: uuid!
     $lieferungFilter: lieferung_bool_exp!
+    $totalCountFilter: lieferung_bool_exp!
     $hierarchyFilter: lieferung_bool_exp!
     $sammlungFilter: sammlung_bool_exp!
     $nachKulturFilter: kultur_bool_exp!
     $vonKulturFilter: kultur_bool_exp!
   ) {
-    lieferung_total_count: lieferung_aggregate(where: $hierarchyFilter) {
+    lieferung_total_count: lieferung_aggregate(where: $totalCountFilter) {
       aggregate {
         count
       }
@@ -342,6 +343,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     sammlungIdInActiveNodeArray,
     sammlungsSorted,
     userPersonOption,
+    showDeleted,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -351,7 +353,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = { _deleted: { _eq: false } }
+  const hierarchyFilter = {}
   if (kulturIdInActiveNodeArray) {
     if (activeNodeArray.includes('Aus-Lieferungen')) {
       hierarchyFilter.von_kultur_id = {
@@ -378,6 +380,11 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     hierarchyFilter.von_sammlung_id = {
       _eq: sammlungIdInActiveNodeArray,
     }
+  }
+
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
   }
 
   const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
@@ -460,6 +467,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       sammlungFilter,
       nachKulturFilter,
       vonKulturFilter,
+      totalCountFilter,
     },
   })
 
