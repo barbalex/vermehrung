@@ -137,8 +137,6 @@ const Events = ({ filter: showFilter }) => {
     [],
   )
 
-  console.log('events', { eventFilter, totalCountFilter })
-
   if (loading) {
     return (
       <Container>
