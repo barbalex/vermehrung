@@ -63,7 +63,8 @@ begin
     select
       kultur_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       kultur_rev
     where
@@ -77,6 +78,32 @@ begin
           and t._parent_rev = kultur_rev._rev)
         and _deleted = false
         and kultur_id = new.kultur_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        kultur_id,
+        _rev,
+        _depth
+      from
+        kultur_rev
+      where
+        not exists (
+          select
+            kultur_id
+          from
+            kultur_rev as t
+          where
+            t.kultur_id = new.kultur_id
+            and t._parent_rev = kultur_rev._rev
+        )
+        and _deleted is true
+        and kultur_id = new.kultur_id
+        and exists (
+          select kultur_id from leaves l
+          where 
+            l._parent_rev = kultur_rev._parent_rev
+            and l._depth = kultur_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -113,6 +140,7 @@ begin
         where 
           _rev <> kultur_rev._rev
           and _rev <> ANY(kultur_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       kultur_rev
@@ -160,6 +188,53 @@ begin
       select
         kultur_id,
         _rev,
+        _depth,
+        _parent_rev
+      from
+        kultur_rev
+      where
+        not exists (
+          select
+            kultur_id
+          from
+            kultur_rev as t
+          where
+            t.kultur_id = new.kultur_id
+            and t._parent_rev = kultur_rev._rev
+        )
+        and _deleted is false
+        and kultur_id = new.kultur_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          kultur_id,
+          _rev,
+          _depth
+        from
+          kultur_rev
+        where
+          not exists (
+            select
+              kultur_id
+            from
+              kultur_rev as t
+            where
+              t.kultur_id = new.kultur_id
+              and t._parent_rev = kultur_rev._rev
+          )
+          and _deleted is true
+          and kultur_id = new.kultur_id
+          and exists (
+            select kultur_id from leaves l
+            where 
+              l._parent_rev = kultur_rev._parent_rev
+              and l._depth = kultur_rev._depth
+          )
+      ),
+      leaves_deleted as (
+      select
+        kultur_id,
+        _rev,
         _depth
       from
         kultur_rev
@@ -179,14 +254,14 @@ begin
         select
           max(_depth) as max_depth
         from
-          leaves
+          leaves_deleted
       ),
       winning_revisions as (
         select
-          max(leaves._rev) as _rev
+          max(leaves_deleted._rev) as _rev
         from
-          leaves
-          join max_depths on leaves._depth = max_depths.max_depth
+          leaves_deleted
+          join max_depths on leaves_deleted._depth = max_depths.max_depth
       )
       select
         kultur_rev.kultur_id,
@@ -210,6 +285,7 @@ begin
           where 
             _rev <> kultur_rev._rev
             and _rev <> ANY(kultur_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         kultur_rev
