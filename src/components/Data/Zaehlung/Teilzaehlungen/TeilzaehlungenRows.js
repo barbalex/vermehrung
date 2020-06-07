@@ -13,15 +13,14 @@ const Container = styled.div`
 
 const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
   const store = useContext(StoreContext)
+  const { teilkultursSorted, teilzaehlungsSorted } = store
 
   const { loading, error } = useQuery((store) =>
     store.queryTeilzaehlung({
       where: { zaehlung_id: { _eq: zaehlungId } },
     }),
   )
-  const rows = [...store.teilzaehlungs.values()].filter(
-    (v) => v.zaehlung_id === zaehlungId,
-  )
+  const rows = teilzaehlungsSorted.filter((v) => v.zaehlung_id === zaehlungId)
 
   const { error: teilkulturenError, loading: teilkulturenLoading } = useQuery(
     (store) =>
@@ -32,16 +31,16 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
   )
   const teilkulturenWerte = useMemo(
     () =>
-      [...store.teilkulturs.values()]
+      teilkultursSorted
         .filter((t) => t.kultur_id === kulturId)
         .map((el) => ({
           value: el.id,
           label: el.name,
         })),
-    [kulturId, store.teilkulturs],
+    [kulturId, teilkultursSorted],
   )
 
-  if (loading) return null
+  if (loading && !rows.length) return null
 
   if (error) {
     return (
