@@ -5,12 +5,14 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { garten as gartenFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -54,6 +56,28 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForGarten(
+    $gartenFilter: garten_bool_exp!
+    $totalCountFilter: garten_bool_exp!
+  ) {
+    garten(where: $gartenFilter) {
+      ...GartenFields
+    }
+    garten_total_count: garten_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    garten_filtered_count: garten_aggregate(where: $gartenFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${gartenFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -64,8 +88,10 @@ const Gaerten = ({ filter: showFilter }) => {
   const {
     filter,
     insertGartenRev,
-    gartensFiltered,
     personIdInActiveNodeArray,
+    gartensFiltered,
+    hideInactive,
+    showDeleted,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -77,35 +103,28 @@ const Gaerten = ({ filter: showFilter }) => {
     }
   }
   const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
-  const { error: errorFiltered, loading: loadingFiltered } = useQuery(
-    (store) =>
-      store.queryGarten({
-        where: gartenFilter,
-        order_by: [
-          { name: 'asc_nulls_first' },
-          { person: { name: 'asc_nulls_first' } },
-        ],
-      }),
-    (g) => g.id.name.person((p) => p.id.name),
-  )
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataGartenAggregate } = useQuery((store) =>
-    store.queryGarten_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataGartenAggregate?.garten_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = { ...hierarchyFilter }
+  if (!showDeleted) {
+    totalCountFilter._deleted = { _eq: false }
+  }
+  if (hideInactive) {
+    totalCountFilter.aktiv = { _eq: true }
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      gartenFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = gartensFiltered.filter((g) => {
-    if (personIdInActiveNodeArray) {
-      return g.person_id === personIdInActiveNodeArray
-    }
+    if (personIdInActiveNodeArray) g.person_id === personIdInActiveNodeArray
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.garten_total_count?.aggregate?.count
+  const filteredNr = data?.garten_filtered_count?.aggregate?.count
 
   const add = useCallback(() => {
     insertGartenRev()
@@ -120,7 +139,7 @@ const Gaerten = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loadingFiltered) {
+  if (loading) {
     return (
       <Container>
         <FormTitle title="Gärten" />
@@ -129,12 +148,11 @@ const Gaerten = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = errorFiltered
-  if (errorToShow) {
+  if (error) {
     return (
       <Container>
         <FormTitle title="Gärten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
