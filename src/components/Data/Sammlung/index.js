@@ -220,12 +220,9 @@ const Sammlung = ({
   const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
 
   const totalCountFilter = { ...hierarchyFilter, _deleted: { _eq: false } }
-  const { data, error, loading, query: queryOfSammlung } = useQuery(
-    allDataQuery,
-    {
-      variables: { id, sammlungFilter, totalCountFilter },
-    },
-  )
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: { id, sammlungFilter, totalCountFilter },
+  })
 
   const [errors, setErrors] = useState({})
 
