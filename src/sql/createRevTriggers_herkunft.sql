@@ -63,7 +63,8 @@ begin
     select
       herkunft_id,
       _rev,
-      _depth
+      _depth,
+      _parent_rev
     from
       herkunft_rev
     where
@@ -78,6 +79,32 @@ begin
       )
       and _deleted = false
       and herkunft_id = new.herkunft_id
+    ),
+    deleted_conflicts_of_leaves as (
+      select
+        herkunft_id,
+        _rev,
+        _depth
+      from
+        herkunft_rev
+      where
+        not exists (
+          select
+            herkunft_id
+          from
+            herkunft_rev as t
+          where
+            t.herkunft_id = new.herkunft_id
+            and t._parent_rev = herkunft_rev._rev
+        )
+        and _deleted is true
+        and herkunft_id = new.herkunft_id
+        and exists (
+          select herkunft_id from leaves l
+          where 
+            l._parent_rev = herkunft_rev._parent_rev
+            and l._depth = herkunft_rev._depth
+        )
     ),
     max_depths as (
       select
@@ -113,6 +140,7 @@ begin
         where 
           _rev <> herkunft_rev._rev
           and _rev <> ANY(herkunft_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
       )) as _conflicts
     from
       herkunft_rev
@@ -158,6 +186,53 @@ begin
       select
         herkunft_id,
         _rev,
+        _depth,
+        _parent_rev
+      from
+        herkunft_rev
+      where
+        not exists (
+          select
+            herkunft_id
+          from
+            herkunft_rev as t
+          where
+            t.herkunft_id = new.herkunft_id
+            and t._parent_rev = herkunft_rev._rev
+        )
+        and _deleted is false
+        and herkunft_id = new.herkunft_id
+      ),
+      deleted_conflicts_of_leaves as (
+        select
+          herkunft_id,
+          _rev,
+          _depth
+        from
+          herkunft_rev
+        where
+          not exists (
+            select
+              herkunft_id
+            from
+              herkunft_rev as t
+            where
+              t.herkunft_id = new.herkunft_id
+              and t._parent_rev = herkunft_rev._rev
+          )
+          and _deleted is true
+          and herkunft_id = new.herkunft_id
+          and exists (
+            select herkunft_id from leaves l
+            where 
+              l._parent_rev = herkunft_rev._parent_rev
+              and l._depth = herkunft_rev._depth
+          )
+      ),
+      leaves_deleted as (
+      select
+        herkunft_id,
+        _rev,
         _depth
       from
         herkunft_rev
@@ -178,14 +253,14 @@ begin
         select
           max(_depth) as max_depth
         from
-          leaves
+          leaves_deleted
       ),
       winning_revisions as (
         select
-          max(leaves._rev) as _rev
+          max(leaves_deleted._rev) as _rev
         from
-          leaves
-          join max_depths on leaves._depth = max_depths.max_depth
+          leaves_deleted
+          join max_depths on leaves_deleted._depth = max_depths.max_depth
       )
       select
         herkunft_rev.herkunft_id,
@@ -208,6 +283,7 @@ begin
           where 
             _rev <> herkunft_rev._rev
             and _rev <> ANY(herkunft_rev._revisions)
+        union select _rev from deleted_conflicts_of_leaves
         )) as _conflicts
       from
         herkunft_rev
