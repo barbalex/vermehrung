@@ -140,9 +140,9 @@ const Kultur = ({
     gartensSorted,
     herkunftsSorted,
     sammlungsSorted,
-    hideInactive,
     showDeleted,
     deletedFilter,
+    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -203,11 +203,12 @@ const Kultur = ({
   }
 
   const herkunftFilter = { id: { _in: herkunftToChoose } }
-
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  if (hideInactive) {
-    totalCountFilter.aktiv = { _eq: true }
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+    ...inactiveFilter,
   }
+
   const { data, error, loading } = useQuery(kulturQuery, {
     variables: {
       id,

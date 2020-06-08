@@ -147,9 +147,9 @@ const Garten = ({
     userPersonOption,
     personIdInActiveNodeArray,
     personsSorted,
-    hideInactive,
     showDeleted,
     deletedFilter,
+    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -161,10 +161,10 @@ const Garten = ({
     }
   }
   const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
-
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  if (hideInactive) {
-    totalCountFilter.aktiv = { _eq: true }
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+    ...inactiveFilter,
   }
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: {

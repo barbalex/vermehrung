@@ -145,8 +145,8 @@ const Person = ({
     online,
     userPerson,
     userRolesSorted,
-    hideInactive,
     deletedFilter,
+    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -154,9 +154,10 @@ const Person = ({
   const hierarchyFilter = {}
   const personFilter = { ...store.personFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  if (hideInactive) {
-    totalCountFilter.aktiv = { _eq: true }
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+    ...inactiveFilter,
   }
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: {
