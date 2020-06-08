@@ -1666,10 +1666,17 @@ export const RootStore = RootStoreBase.props({
       return {
         _or: [
           { _deleted: { _eq: false } },
+          // filtering for empty array, see: https://stackoverflow.com/a/737678/712005
           {
             _and: [{ _deleted: { _eq: true } }, { _conflicts: { _neq: '{}' } }],
           },
         ],
       }
+    },
+    get inactiveFilter() {
+      if (self.hideInactive) {
+        return { aktiv: { _eq: true } }
+      }
+      return true
     },
   }))
