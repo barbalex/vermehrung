@@ -26,7 +26,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder',
       menuTitle: 'Zählungen',
-      id: `${kulturId}ZaehlungFolder`,
+      id: `${gartenId}${kulturId}ZaehlungFolder`,
       label: `Zählungen (${nr})`,
       url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Zaehlungen'],
       sort: [4, gartenIndex, 1, kulturIndex, 2],
