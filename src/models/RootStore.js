@@ -16,6 +16,7 @@ import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
 import artSort from '../utils/artSort'
+import avArtSort from '../utils/avArtSort'
 import eventSort from '../utils/eventSort'
 import lieferungSort from '../utils/lieferungSort'
 import personSort from '../utils/personSort'
@@ -1546,6 +1547,9 @@ export const RootStore = RootStoreBase.props({
     },
     get artQksSorted() {
       return [...self.art_qks.values()].sort(qkSort)
+    },
+    get avArtsSorted() {
+      return [...self.av_arts.values()].sort(avArtSort)
     },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
