@@ -344,6 +344,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     sammlungsSorted,
     userPersonOption,
     showDeleted,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -382,10 +383,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }
 
-  const totalCountFilter = { ...hierarchyFilter }
-  if (!showDeleted) {
-    totalCountFilter._deleted = { _eq: false }
-  }
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
 
   const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
 
