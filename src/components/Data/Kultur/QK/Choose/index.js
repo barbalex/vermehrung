@@ -18,6 +18,7 @@ const FieldsContainer = styled.div`
 
 const ChooseQk = ({ refetchTab }) => {
   const store = useContext(StoreContext)
+  const { kulturQksSorted } = store
   const { activeNodeArray } = store.tree
   const kulturId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
@@ -29,8 +30,7 @@ const ChooseQk = ({ refetchTab }) => {
       (q) => q.id.name.titel.beschreibung,
     ),
   )
-  //const rows = data?.kultur_qk ?? []
-  const rows = [...store.kultur_qks.values()]
+  const rows = kulturQksSorted
 
   if (error) return <Container>{`Fehler: ${error.message}`}</Container>
   if (loading) return <Container>Lade Daten...</Container>
