@@ -24,7 +24,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder',
       menuTitle: 'Events',
-      id: `${kulturId}EventFolder`,
+      id: `${gartenId}${kulturId}EventFolder`,
       label: `Events (${nr})`,
       url: ['Gaerten', gartenId, 'Kulturen', kulturId, 'Events'],
       sort: [4, gartenIndex, 1, kulturIndex, 5],
