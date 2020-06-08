@@ -12,7 +12,7 @@ import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { person as personFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,28 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForPersons(
+    $personFilter: person_bool_exp!
+    $totalCountFilter: person_bool_exp!
+  ) {
+    person(where: $personFilter) {
+      ...PersonFields
+    }
+    person_total_count: person_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    person_filtered_count: person_aggregate(where: $personFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${personFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -63,28 +85,35 @@ function sizeReducer(state, action) {
 
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { userPerson, personsFiltered, personFilter } = store
+  const {
+    userPerson,
+    personsFiltered,
+    personFilter,
+    deletedFilter,
+    inactiveFilter,
+  } = store
 
   const { filter, insertPersonRev } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
-    store.queryPerson({
-      where: personFilter,
-      order_by: { name: 'asc_nulls_first' },
-    }),
-  )
-
-  const { data: dataPersonAggregate } = useQuery((store) =>
-    store.queryPerson_aggregate({ where: personFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataPersonAggregate?.person_aggregate?.aggregate?.count ?? 0
+  const hierarchyFilter = {}
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+    ...inactiveFilter,
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      personFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = personsFiltered
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.person_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.person_filtered_count?.aggregate?.count ?? ''
 
   const { user_role } = userPerson
 
@@ -101,7 +130,7 @@ const Personen = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loadingFiltered) {
+  if (loading && !storeRowsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Personen" />
@@ -110,11 +139,11 @@ const Personen = ({ filter: showFilter }) => {
     )
   }
 
-  if (errorFiltered && !errorFiltered.message.includes('Failed to fetch')) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Personen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorFiltered.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
