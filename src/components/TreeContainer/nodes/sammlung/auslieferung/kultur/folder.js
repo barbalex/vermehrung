@@ -31,7 +31,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder',
       menuTitle: 'Kulturen',
-      id: `${lieferungId}KulturFolder`,
+      id: `${sammlungId}${lieferungId}KulturFolder`,
       label: `Kultur (${nr})`,
       url: [
         'Sammlungen',
