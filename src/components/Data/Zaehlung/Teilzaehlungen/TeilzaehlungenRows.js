@@ -1,34 +1,54 @@
 import React, { useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Teilzaehlung from './Teilzaehlung'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import {
+  teilkultur as teilkulturFragment,
+  teilzaehlung as teilzaehlungFragment,
+} from '../../../../utils/fragments'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForTeilzaehlungsRows(
+    $teilzaehlungFilter: teilzaehlung_bool_exp!
+    $teilkulturFilter: teilkultur_bool_exp!
+  ) {
+    teilzaehlung(where: $teilzaehlungFilter) {
+      ...TeilzaehlungFields
+    }
+    teilkultur(where: $teilkulturFilter) {
+      ...TeilkulturFields
+    }
+  }
+  ${teilzaehlungFragment}
+  ${teilkulturFragment}
+`
+
 const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
   const store = useContext(StoreContext)
-  const { teilkultursSorted, teilzaehlungsSorted } = store
+  const { teilkultursSorted, teilzaehlungsSorted, deletedFilter } = store
 
-  const { loading, error } = useQuery((store) =>
-    store.queryTeilzaehlung({
-      where: { zaehlung_id: { _eq: zaehlungId } },
-    }),
-  )
+  const teilzaehlungFilter = {
+    zaehlung_id: { _eq: zaehlungId },
+    ...deletedFilter,
+  }
+  const teilkulturFilter = { kultur_id: { _eq: kulturId }, ...deletedFilter }
+  const { error, loading } = useQuery(allDataQuery, {
+    variables: {
+      teilzaehlungFilter,
+      teilkulturFilter,
+    },
+  })
   const rows = teilzaehlungsSorted.filter((v) => v.zaehlung_id === zaehlungId)
 
-  const { error: teilkulturenError, loading: teilkulturenLoading } = useQuery(
-    (store) =>
-      store.queryTeilkultur({
-        where: { kultur_id: { _eq: kulturId } },
-        order_by: { name: 'asc_nulls_first' },
-      }),
-  )
   const teilkulturenWerte = useMemo(
     () =>
       teilkultursSorted
@@ -42,15 +62,9 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
 
   if (loading && !rows.length) return null
 
-  if (error) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
-      <Container>{`Fehler beim Laden der Teilzaehlungen: ${teilkulturenError.message}`}</Container>
-    )
-  }
-
-  if (teilkulturenError) {
-    return (
-      <Container>{`Fehler beim Laden der Teilkulturen: ${teilkulturenError.message}`}</Container>
+      <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
     )
   }
 
@@ -65,7 +79,7 @@ const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
           kulturId={kulturId}
           teilzaehlung={r}
           teilkulturenWerte={teilkulturenWerte}
-          teilkulturenLoading={teilkulturenLoading}
+          teilkulturenLoading={loading}
         />
       ))}
     </ErrorBoundary>
