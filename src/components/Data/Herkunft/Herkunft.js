@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
@@ -16,6 +17,7 @@ import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import { herkunft as herkunftFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -59,38 +61,63 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForHerkunft(
+    $id: uuid!
+    $herkunftFilter: herkunft_bool_exp!
+    $totalCountFilter: herkunft_bool_exp!
+  ) {
+    herkunft(where: { id: { _eq: $id } }) {
+      ...HerkunftFields
+    }
+    herkunft_total_count: herkunft_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    herkunft_filtered_count: herkunft_aggregate(where: $herkunftFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${herkunftFragment}
+`
+
 const Herkunft = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, userPersonOption, herkunftFilter } = store
+  const {
+    filter,
+    online,
+    userPersonOption,
+    deletedFilter,
+    inactiveFilter,
+  } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const { error: errorHerkunft, loading: loadingHerkunft } = useQuery((store) =>
-    store.queryHerkunft({
-      where: { id: { _eq: id } },
-    }),
-  )
+  const hierarchyFilter = {}
+  const herkunftFilter = { ...store.herkunftFilter, ...hierarchyFilter }
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+    ...inactiveFilter,
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      herkunftFilter,
+      totalCountFilter,
+    },
+  })
 
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id) || {}
 
-  const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
-    store.queryHerkunft_aggregate(undefined, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
-
-  const { data: dataHerkunftFilteredAggregate } = useQuery((store) =>
-    store.queryHerkunft_aggregate({ where: herkunftFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const filteredNr =
-    dataHerkunftFilteredAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
+  const totalNr = data?.herkunft_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.herkunft_filtered_count?.aggregate?.count ?? ''
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
 
@@ -126,7 +153,7 @@ const Herkunft = ({
     }
   }, [])
 
-  if (loadingHerkunft) {
+  if (loading && !Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
@@ -135,11 +162,11 @@ const Herkunft = ({
     )
   }
 
-  if (errorHerkunft && !errorHerkunft.message.includes('Failed to fetch')) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Herkunft" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorHerkunft.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
