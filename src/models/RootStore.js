@@ -1661,9 +1661,15 @@ export const RootStore = RootStoreBase.props({
         .filter((a) => !a._deleted || self.showDeleted)
         .sort(zaehlungSort)
     },
-    get nonDeletedFilter() {
+    get deletedFilter() {
+      if (self.showDeleted) return true
       return {
-        _and: [{ _deleted: { _eq: false } }, { _conflicts: { _eq: '{}' } }],
+        _or: [
+          { _deleted: { _eq: false } },
+          {
+            _and: [{ _deleted: { _eq: true } }, { _conflicts: { _neq: '{}' } }],
+          },
+        ],
       }
     },
   }))
