@@ -45,16 +45,13 @@ const Body = styled.div`
 
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
+  const { kulturQksSorted } = store
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const {
-    data: dataKulturQk,
-    loading: loadingKulturQk,
-    error: errorKulturQk,
-  } = useQuery(
+  const { loading: loadingKulturQk, error: errorKulturQk } = useQuery(
     (store) =>
       store.queryKultur_qk({
         order_by: [{ sort: 'asc_nulls_last' }, { name: 'asc_nulls_first' }],
@@ -81,18 +78,17 @@ const KulturQk = ({ kultur }) => {
   const loading = loadingKulturQk || loadingKulturQkChoosen
   const error = errorKulturQk || errorKulturQkChoosen
 
-  const allQks = dataKulturQk?.kultur_qk ?? []
-  const qks = allQks.filter(
+  const qks = kulturQksSorted.filter(
     (qk) => !!kulturQkChoosen.find((no) => no.qk_name === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
-    allQks.map((n) => [
+    kulturQksSorted.map((n) => [
       n.name,
       !!kulturQkChoosen.find((no) => no.qk_name === n.name),
     ]),
   )
 
-  const qkCount = loading ? '...' : allQks.length
+  const qkCount = loading ? '...' : kulturQksSorted.length
   const kulturQkCount = loading ? '...' : kulturQkChoosen.length
 
   const openDocs = useCallback((e) => {
