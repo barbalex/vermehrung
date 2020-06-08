@@ -154,6 +154,9 @@ export default types
       const set = new Set(val.map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
     },
+    removeOpenNode(val) {
+      self.openNodes = self.openNodes.filter((n) => !isEqual(n, val))
+    },
     addOpenNodes(nodes) {
       // need set to ensure contained arrays are unique
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
