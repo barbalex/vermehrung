@@ -83,7 +83,7 @@ begin
     ),
     deleted_conflicts_of_leaves as (
       select
-        kultur_option_id,
+        kultur_id,
         _rev,
         _depth
       from
@@ -91,17 +91,17 @@ begin
       where
         not exists (
           select
-            kultur_option_id
+            kultur_id
           from
             kultur_option_rev as t
           where
-            t.kultur_option_id = new.kultur_option_id
+            t.kultur_id = new.kultur_id
             and t._parent_rev = kultur_option_rev._rev
         )
         and _deleted is true
-        and kultur_option_id = new.kultur_option_id
+        and kultur_id = new.kultur_id
         and exists (
-          select kultur_option_id from leaves l
+          select kultur_id from leaves l
           where 
             l._parent_rev = kultur_option_rev._parent_rev
             and l._depth = kultur_option_rev._depth
@@ -194,7 +194,7 @@ begin
     )
     with leaves as (
       select
-        kultur_option_id,
+        kultur_id,
         _rev,
         _depth,
         _parent_rev
@@ -203,19 +203,19 @@ begin
       where
         not exists (
           select
-            kultur_option_id
+            kultur_id
           from
             kultur_option_rev as t
           where
-            t.kultur_option_id = new.kultur_option_id
+            t.kultur_id = new.kultur_id
             and t._parent_rev = kultur_option_rev._rev
         )
         and _deleted is false
-        and kultur_option_id = new.kultur_option_id
+        and kultur_id = new.kultur_id
       ),
       deleted_conflicts_of_leaves as (
         select
-          kultur_option_id,
+          kultur_id,
           _rev,
           _depth
         from
@@ -223,17 +223,17 @@ begin
         where
           not exists (
             select
-              kultur_option_id
+              kultur_id
             from
               kultur_option_rev as t
             where
-              t.kultur_option_id = new.kultur_option_id
+              t.kultur_id = new.kultur_id
               and t._parent_rev = kultur_option_rev._rev
           )
           and _deleted is true
-          and kultur_option_id = new.kultur_option_id
+          and kultur_id = new.kultur_id
           and exists (
-            select kultur_option_id from leaves l
+            select kultur_id from leaves l
             where 
               l._parent_rev = kultur_option_rev._parent_rev
               and l._depth = kultur_option_rev._depth
