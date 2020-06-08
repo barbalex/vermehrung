@@ -12,7 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { sammlung as sammlungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,47 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForSammlungs(
+    $sammlungFilter: sammlung_bool_exp!
+    $totalCountFilter: sammlung_bool_exp!
+  ) {
+    sammlung(where: $sammlungFilter) {
+      ...SammlungFields
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
+      person {
+        id
+        __typename
+        name
+      }
+      herkunft {
+        id
+        __typename
+        nr
+      }
+    }
+    sammlung_total_count: sammlung_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    sammlung_filtered_count: sammlung_aggregate(where: $sammlungFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${sammlungFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -70,6 +111,7 @@ const Sammlungen = ({ filter: showFilter }) => {
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -92,29 +134,16 @@ const Sammlungen = ({ filter: showFilter }) => {
   }
   const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
 
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataSammlungAggregate } = useQuery((store) =>
-    store.querySammlung_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataSammlungAggregate?.sammlung_aggregate?.aggregate?.count ?? 0
-
-  const { error, loading } = useQuery(
-    (store) =>
-      store.querySammlung({
-        where: sammlungFilter,
-        order_by: [{ nr: 'asc_nulls_first' }, { datum: 'desc_nulls_first' }],
-      }),
-    (s) =>
-      s.id.nr.geplant
-        .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-        .person((p) => p.id.name)
-        .herkunft((h) => h.id.nr),
-  )
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      sammlungFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = sammlungsFiltered.filter((r) => {
     if (artIdInActiveNodeArray) {
@@ -128,7 +157,9 @@ const Sammlungen = ({ filter: showFilter }) => {
     }
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.sammlung_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.sammlung_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(() => {
     insertSammlungRev()
