@@ -12,7 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { zaehlung as zaehlungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,40 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForZaehlungs(
+    $zaehlungFilter: zaehlung_bool_exp!
+    $totalCountFilter: zaehlung_bool_exp!
+  ) {
+    zaehlung(where: $zaehlungFilter) {
+      ...ZaehlungFields
+      teilzaehlungs_aggregate {
+        __typename
+        aggregate {
+          __typename
+          sum {
+            __typename
+            anzahl_pflanzen
+            anzahl_auspflanzbereit
+            anzahl_mutterpflanzen
+          }
+        }
+      }
+    }
+    zaehlung_total_count: zaehlung_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    zaehlung_filtered_count: zaehlung_aggregate(where: $zaehlungFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${zaehlungFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -68,6 +102,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
     insertZaehlungRev,
     zaehlungsFiltered,
     kulturIdInActiveNodeArray,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -79,34 +114,16 @@ const Zaehlungen = ({ filter: showFilter }) => {
     }
   }
   const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
-
-  const { error, loading } = useQuery((store) =>
-    store.queryZaehlung({
-      where: zaehlungFilter,
-      order_by: { datum: 'desc_nulls_first' },
-    }),
-  )
-
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataZaehlungAggregate } = useQuery(
-    (store) =>
-      store.queryZaehlung_aggregate(aggregateVariables, (d) =>
-        d.aggregate((d) => d.count),
-      ),
-    (z) =>
-      z.id.datum.prognose.teilzaehlungs_aggregate((a) =>
-        a.id.aggregate((ag) =>
-          ag.id.sum(
-            (s) =>
-              s.id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen,
-          ),
-        ),
-      ),
-  )
-  const totalNr =
-    dataZaehlungAggregate?.zaehlung_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      zaehlungFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = zaehlungsFiltered.filter((r) => {
     if (kulturIdInActiveNodeArray) {
@@ -114,7 +131,9 @@ const Zaehlungen = ({ filter: showFilter }) => {
     }
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.zaehlung_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.zaehlung_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(() => {
     insertZaehlungRev()
