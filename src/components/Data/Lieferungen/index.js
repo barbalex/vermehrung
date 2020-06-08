@@ -12,7 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { lieferung as lieferungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,28 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForLieferungs(
+    $lieferungFilter: lieferung_bool_exp!
+    $totalCountFilter: lieferung_bool_exp!
+  ) {
+    lieferung(where: $lieferungFilter) {
+      ...LieferungFields
+    }
+    lieferung_total_count: lieferung_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    lieferung_filtered_count: lieferung_aggregate(where: $lieferungFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${lieferungFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -71,6 +93,7 @@ const Lieferungen = ({ filter: showFilter }) => {
     sammelLieferungIdInActiveNodeArray,
     personIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -106,25 +129,16 @@ const Lieferungen = ({ filter: showFilter }) => {
   }
   const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
 
-  const { error, loading } = useQuery((store) =>
-    store.queryLieferung({
-      where: lieferungFilter,
-      order_by: { datum: 'desc_nulls_first' },
-    }),
-  )
-
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataLieferungAggregate } = useQuery(
-    (store) =>
-      store.queryLieferung_aggregate(aggregateVariables, (d) =>
-        d.aggregate((d) => d.count),
-      ),
-    (l) => l.id.datum.anzahl_pflanzen.anzahl_auspflanzbereit.geplant,
-  )
-  const totalNr =
-    dataLieferungAggregate?.lieferung_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      lieferungFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = lieferungsFiltered.filter((r) => {
     if (kulturIdInActiveNodeArray) {
@@ -146,7 +160,9 @@ const Lieferungen = ({ filter: showFilter }) => {
     }
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.lieferung_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.lieferung_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(() => {
     insertLieferungRev()
