@@ -27,7 +27,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder',
       menuTitle: 'Aus-Lieferungen',
-      id: `${sammlungId}SammlungLieferungFolder`,
+      id: `${herkunftId}${sammlungId}SammlungLieferungFolder`,
       label: `Aus-Lieferungen (${nr})`,
       url: [
         'Herkuenfte',
