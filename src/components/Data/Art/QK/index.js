@@ -46,6 +46,7 @@ const Body = styled.div`
 
 const ApQk = ({ artId }) => {
   const store = useContext(StoreContext)
+  const { artQksSorted } = store
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
@@ -55,19 +56,19 @@ const ApQk = ({ artId }) => {
     variables: { artId },
     fetchPolicy: 'no-cache',
   })
-  const allQks = [...store.art_qks.values()]
+
   const allQkChoosens = [...store.art_qk_choosens.values()]
-  const qks = allQks.filter(
+  const qks = artQksSorted.filter(
     (qk) => !!allQkChoosens.find((no) => no.qk_name === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
-    allQks.map((n) => [
+    artQksSorted.map((n) => [
       n.name,
       !!allQkChoosens.find((no) => no.qk_name === n.name),
     ]),
   )
 
-  const qkCount = loading ? '...' : allQks.length
+  const qkCount = loading ? '...' : artQksSorted.length
   const artQkCount = loading ? '...' : allQkChoosens.length
 
   const openDocs = useCallback((e) => {

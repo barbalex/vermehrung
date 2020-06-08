@@ -18,6 +18,7 @@ const FieldsContainer = styled.div`
 
 const ChooseQk = () => {
   const store = useContext(StoreContext)
+  const { artQksSorted } = store
   const { activeNodeArray } = store.tree
   const artId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
@@ -26,7 +27,6 @@ const ChooseQk = () => {
       order_by: [{ sort: 'asc_nulls_last' }, { name: 'asc_nulls_first' }],
     }),
   )
-  const rows = [...store.art_qks.values()]
 
   if (error) return <Container>{`Fehler: ${error.message}`}</Container>
   if (loading) return <Container>Lade Daten...</Container>
@@ -34,7 +34,7 @@ const ChooseQk = () => {
     <ErrorBoundary>
       <Container>
         <FieldsContainer>
-          {rows.map((row) => (
+          {artQksSorted.map((row) => (
             <RowComponent key={row.name} artId={artId} qk={row} />
           ))}
         </FieldsContainer>
