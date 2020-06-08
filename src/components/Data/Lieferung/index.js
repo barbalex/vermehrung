@@ -76,8 +76,6 @@ const LieferungContainer = ({
     lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
   const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
-  console.log('LieferungContainer', { sammelLieferungId, lieferung, id })
-
   const { error, loading } = useQuery(allDataQuery, {
     variables: {
       id,
