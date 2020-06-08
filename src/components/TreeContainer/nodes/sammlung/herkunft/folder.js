@@ -24,7 +24,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder_no_menu',
       menuTitle: 'Herkünfte',
-      id: `sammlung${sammlungId}HerkunftFolder`,
+      id: `${sammlungId}HerkunftFolder`,
       label: `Herkünfte (${nr})`,
       url: ['Sammlungen', sammlungId, 'Herkuenfte'],
       sort: [3, sammlungIndex, 1],

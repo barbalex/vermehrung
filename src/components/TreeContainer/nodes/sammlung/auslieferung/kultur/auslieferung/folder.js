@@ -33,7 +33,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder',
       menuTitle: 'Aus-Lieferungen',
-      id: `${kulturId}AusLieferungFolder`,
+      id: `${sammlungId}${lieferungId}${kulturId}AusLieferungFolder`,
       label: `Aus-Lieferungen (${nr})`,
       url: [
         'Sammlungen',
