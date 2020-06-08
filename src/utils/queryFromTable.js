@@ -1,10 +1,13 @@
 import types from '../models/Filter/simpleTypes'
 
 export default ({ store, table, filter: filterPassed = {} }) => {
-  const { filter: storeFilter, showDeleted, hideInactive } = store
-  const filter = { ...{ id: { _is_null: false } }, ...filterPassed }
-  if (['person', 'garten', 'kultur'].includes(table) && hideInactive) {
-    filter.aktiv = { _eq: true }
+  const { filter: storeFilter, deletedFilter, inactiveFilter } = store
+  const baseFilter = { id: { _is_null: false } }
+  const filter = {
+    ...baseFilter,
+    ...filterPassed,
+    ...deletedFilter,
+    ...(['person', 'garten', 'kultur'].includes(table) ? inactiveFilter : {}),
   }
 
   if (!storeFilter[table]) return filter
@@ -23,17 +26,6 @@ export default ({ store, table, filter: filterPassed = {} }) => {
       filter[key] = { _eq: value }
     }
   })
-
-  if (!showDeleted) {
-    // filtering for empty array, see: https://stackoverflow.com/a/737678/712005
-    filter._or = [
-      { _deleted: { _eq: false } },
-      { _and: [{ _deleted: { _eq: true } }, { _conflicts: { _neq: '{}' } }] },
-    ]
-  }
-  if (['person', 'garten', 'kultur'].includes(table) && hideInactive) {
-    filter.aktiv = { _eq: true }
-  }
 
   // remove id: {_is_null: false} if there are more criteria
   if (Object.keys(filter).length > 1) {
