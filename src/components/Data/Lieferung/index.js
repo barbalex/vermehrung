@@ -2,11 +2,16 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import gql from 'graphql-tag'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
 import { StoreContext, useQuery } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
+import {
+  lieferung as lieferungFragment,
+  sammelLieferung as sammelLieferungFragment,
+} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -47,28 +52,42 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForLieferungs($id: uuid!, $sammelLieferungId: uuid!) {
+    lieferung(where: { id: { _eq: $id } }) {
+      ...LieferungFields
+    }
+    sammel_lieferung(where: { id: { _eq: $sammelLieferungId } }) {
+      ...SammelLieferungFields
+    }
+  }
+  ${lieferungFragment}
+  ${sammelLieferungFragment}
+`
+
 const LieferungContainer = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
   const { userPersonOption } = store
-
-  const {
-    error: lieferungError,
-    loading: lieferungLoading,
-  } = useQuery((store) => store.queryLieferung({ where: { id: { _eq: id } } }))
   const lieferung = store.lieferungs.get(id) || {}
   const sammelLieferungId =
     lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
-  useQuery((store) =>
-    store.querySammel_lieferung({ where: { id: { _eq: sammelLieferungId } } }),
-  )
   const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
+
+  console.log('LieferungContainer', { sammelLieferungId, lieferung, id })
+
+  const { error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id,
+      sammelLieferungId,
+    },
+  })
 
   const { li_show_sl } = userPersonOption
 
-  if (lieferungLoading) {
+  if (loading) {
     return (
       <Container>
         <FormTitle title="Lieferung" />
@@ -76,16 +95,19 @@ const LieferungContainer = ({
       </Container>
     )
   }
-  if (lieferungError && !lieferungError.message.includes('Failed to fetch')) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Lieferung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${lieferungError.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
 
-  if (sammelLieferungId && li_show_sl) {
+  if (
+    sammelLieferungId !== '99999999-9999-9999-9999-999999999999' &&
+    li_show_sl
+  ) {
     // this lieferung is part of a sammel_lieferung
     // show that too
     return (
