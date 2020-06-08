@@ -50,7 +50,7 @@ const AvArten = styled.div`
 
 const PersonArten = ({ personId }) => {
   const store = useContext(StoreContext)
-  const { upsertAvArtModel, deleteAvArtModel } = store
+  const { upsertAvArtModel, deleteAvArtModel, avArtsSorted } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -67,9 +67,7 @@ const PersonArten = ({ personId }) => {
   const { data, error, loading, query: avArtQuery } = useQuery(query, {
     variables: { personId },
   })
-  const avArten = [...store.av_arts.values()].filter(
-    (a) => a.person_id === personId,
-  )
+  const avArten = avArtsSorted.filter((a) => a.person_id === personId)
   const artenChoosen = data?.art_choosen ?? []
   const artenToChoose = data?.art_to_choose ?? []
 
