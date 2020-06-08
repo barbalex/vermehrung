@@ -12,7 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { herkunft as herkunftFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,32 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForHerkunfts(
+    $herkunftFilter: herkunft_bool_exp!
+    $totalCountFilter: herkunft_bool_exp!
+  ) {
+    herkunft(where: $herkunftFilter) {
+      ...HerkunftFields
+      sammlungs {
+        id
+        __typename
+      }
+    }
+    herkunft_total_count: herkunft_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    herkunft_filtered_count: herkunft_aggregate(where: $herkunftFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${herkunftFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -67,8 +93,8 @@ const Herkuenfte = ({ filter: showFilter }) => {
     filter,
     insertHerkunftRev,
     herkunftsFiltered,
-    nonDeletedFilter,
     sammlungIdInActiveNodeArray,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -80,23 +106,14 @@ const Herkuenfte = ({ filter: showFilter }) => {
     hierarchyFilter.sammlungs = { id: { _eq: sammlungIdInActiveNodeArray } }
   }
   const herkunftFilter = { ...store.herkunftFilter, ...hierarchyFilter }
-  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
-    store.queryHerkunft(
-      {
-        where: herkunftFilter,
-        order_by: [{ nr: 'asc' }, { gemeinde: 'asc' }, { lokalname: 'asc' }],
-      },
-      (d) => d.id.gemeinde.lokalname.nr.sammlungs((s) => s.id),
-    ),
-  )
 
-  const { data: dataHerkunftTotalAggregate } = useQuery((store) =>
-    store.queryHerkunft_aggregate({ where: nonDeletedFilter }, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataHerkunftTotalAggregate?.herkunft_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      herkunftFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = herkunftsFiltered.filter((h) => {
     if (sammlungIdInActiveNodeArray) {
@@ -106,7 +123,9 @@ const Herkuenfte = ({ filter: showFilter }) => {
     }
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.herkunft_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.herkunft_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(async () => {
     insertHerkunftRev()
@@ -124,7 +143,7 @@ const Herkuenfte = ({ filter: showFilter }) => {
   // never enable adding below that
   const showPlus = activeNodeArray.length < 2
 
-  if (loadingFiltered) {
+  if (loading && !storeRowsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Herkünfte" />
@@ -133,12 +152,11 @@ const Herkuenfte = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = errorFiltered
-  if (errorToShow && !errorToShow.message.includes('Failed to fetch')) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Herkünfte" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }

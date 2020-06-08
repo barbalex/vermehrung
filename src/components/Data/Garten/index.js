@@ -149,6 +149,7 @@ const Garten = ({
     personsSorted,
     hideInactive,
     showDeleted,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -161,10 +162,7 @@ const Garten = ({
   }
   const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter }
-  if (!showDeleted) {
-    totalCountFilter._deleted = { _eq: false }
-  }
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
   if (hideInactive) {
     totalCountFilter.aktiv = { _eq: true }
   }
