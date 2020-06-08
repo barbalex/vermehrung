@@ -12,7 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { kultur as kulturFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,52 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForKulturs(
+    $kulturFilter: kultur_bool_exp!
+    $totalCountFilter: kultur_bool_exp!
+  ) {
+    kultur(where: $kulturFilter) {
+      ...KulturFields
+      art {
+        id
+        __typename
+        art_ae_art {
+          id
+          __typename
+          name
+        }
+      }
+      herkunft {
+        id
+        __typename
+        nr
+      }
+      garten {
+        id
+        __typename
+        name
+        person {
+          id
+          __typename
+          name
+        }
+      }
+    }
+    kultur_total_count: kultur_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    kultur_filtered_count: kultur_aggregate(where: $kulturFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${kulturFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -69,6 +115,8 @@ const Kulturen = ({ filter: showFilter }) => {
     kultursFiltered,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
+    deletedFilter,
+    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -85,32 +133,17 @@ const Kulturen = ({ filter: showFilter }) => {
     }
   }
   const kulturFilter = { ...store.kulturFilter, ...hierarchyFilter }
-  const { error: errorFiltered, loading: loadingFiltered } = useQuery((store) =>
-    store.queryKultur(
-      {
-        where: kulturFilter,
-        order_by: [
-          { garten: { person: { name: 'asc_nulls_first' } } },
-          { art: { art_ae_art: { name: 'asc_nulls_first' } } },
-        ],
-      },
-      (d) =>
-        d.id.art_id
-          .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-          .herkunft_id.herkunft((h) => h.id.nr)
-          .garten_id.garten((g) => g.id.name.person((p) => p.id.name)),
-    ),
-  )
-
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataKulturAggregate } = useQuery((store) =>
-    store.queryKultur_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr = dataKulturAggregate?.kultur_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+    ...inactiveFilter,
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      kulturFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = kultursFiltered.filter((r) => {
     if (gartenIdInActiveNodeArray) {
@@ -121,7 +154,9 @@ const Kulturen = ({ filter: showFilter }) => {
     }
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.kultur_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.kultur_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(() => {
     insertKulturRev()
@@ -136,7 +171,7 @@ const Kulturen = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loadingFiltered) {
+  if (loading && !storeRowsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Kulturen" />
@@ -145,12 +180,11 @@ const Kulturen = ({ filter: showFilter }) => {
     )
   }
 
-  const errorToShow = errorFiltered
-  if (errorToShow && !errorToShow.message.includes('Failed to fetch')) {
+  if (error && !error.message.includes('Failed to fetch')) {
     return (
       <Container>
         <FormTitle title="Kulturen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${errorToShow.message}`}</FieldsContainer>
+        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }
