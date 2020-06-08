@@ -19,6 +19,7 @@ import artSort from '../utils/artSort'
 import eventSort from '../utils/eventSort'
 import lieferungSort from '../utils/lieferungSort'
 import personSort from '../utils/personSort'
+import qkSort from '../utils/qkSort'
 import sammlungSort from '../utils/sammlungSort'
 import teilkulturSort from '../utils/teilkulturSort'
 import teilzaehlungSort from '../utils/teilzaehlungSort'
@@ -1543,6 +1544,9 @@ export const RootStore = RootStoreBase.props({
         .filter((v) => !v._deleted || self.showDeleted)
         .sort(artSort)
     },
+    get artQksSorted() {
+      return [...self.art_qk.values()].sort(qkSort)
+    },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
     },
@@ -1608,6 +1612,9 @@ export const RootStore = RootStoreBase.props({
       return [...self.persons.values()]
         .filter((a) => !a._deleted || self.showDeleted)
         .sort(personSort)
+    },
+    get kulturQksSorted() {
+      return [...self.kultur_qk.values()].sort(qkSort)
     },
     get sammelLieferungFilter() {
       return queryFromTable({ store: self, table: 'sammel_lieferung' })
