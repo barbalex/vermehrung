@@ -84,17 +84,14 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertArtRev, artsFiltered, showDeleted } = store
+  const { filter, insertArtRev, artsFiltered, deletedFilter } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
   const hierarchyFilter = {}
   const artFilter = { ...store.artFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter }
-  if (!showDeleted) {
-    totalCountFilter._deleted = { _eq: false }
-  }
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
 
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: {
