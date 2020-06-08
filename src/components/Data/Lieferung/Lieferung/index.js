@@ -343,7 +343,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     sammlungIdInActiveNodeArray,
     sammlungsSorted,
     userPersonOption,
-    showDeleted,
     deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
@@ -667,8 +666,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       window.open(url)
     }
   }, [])
-
-  console.log('lieferung rendering')
 
   if (loading && !Object.keys(row).length) {
     return (
