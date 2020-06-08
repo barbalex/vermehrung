@@ -57,7 +57,7 @@ const LightboxButton = styled(Button)`
 
 const Files = ({ parentId, parent }) => {
   const store = useContext(StoreContext)
-  const { upsertArtFileModel } = store
+  const { upsertArtFileModel, fileSort } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
@@ -69,9 +69,9 @@ const Files = ({ parentId, parent }) => {
     }),
   )
 
-  const files = [...store[`${parent}_files`].values()].filter(
-    (f) => f[`${parent}_id`] === parentId,
-  )
+  const files = [...store[`${parent}_files`].values()]
+    .sort(fileSort)
+    .filter((f) => f[`${parent}_id`] === parentId)
 
   const onChangeUploader = useCallback(
     (file) => {
@@ -115,7 +115,7 @@ const Files = ({ parentId, parent }) => {
     [imageIndex, images.length],
   )
 
-  if (loading) {
+  if (loading && !files.length) {
     return 'Lade...'
   }
 
