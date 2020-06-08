@@ -12,7 +12,8 @@ export default ({ nodes, openNodes, url }) => {
 
   const childNodes = nodes.filter((n) => {
     if (!n.url) {
-      console.log('someChildrenAreClosed:', { n, nodes })
+      //TODO: this happens!
+      //console.log('someChildrenAreClosed:', { n, nodes })
       return false
     }
     const urlPartWithEqualLength = n.url.slice(0, url.length)
