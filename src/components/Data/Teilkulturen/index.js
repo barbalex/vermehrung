@@ -12,7 +12,7 @@ import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
+import { teilkultur as teilkulturFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,6 +56,28 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForTeilkulturs(
+    $teilkulturFilter: teilkultur_bool_exp!
+    $totalCountFilter: teilkultur_bool_exp!
+  ) {
+    teilkultur(where: $teilkulturFilter) {
+      ...TeilkulturFields
+    }
+    teilkultur_total_count: teilkultur_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    teilkultur_filtered_count: teilkultur_aggregate(where: $teilkulturFilter) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${teilkulturFragment}
+`
+
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -68,6 +90,7 @@ const Teilkulturen = ({ filter: showFilter }) => {
     insertTeilkulturRev,
     kulturIdInActiveNodeArray,
     teilkultursFiltered,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -79,25 +102,16 @@ const Teilkulturen = ({ filter: showFilter }) => {
     }
   }
   const teilkulturFilter = { ...store.teilkulturFilter, ...hierarchyFilter }
-  const { error, loading } = useQuery(
-    (store) =>
-      store.queryTeilkultur({
-        where: teilkulturFilter,
-        order_by: { name: 'asc_nulls_first' },
-      }),
-    (t) => t.id.name,
-  )
-
-  const aggregateVariables = Object.keys(hierarchyFilter).length
-    ? { where: hierarchyFilter }
-    : undefined
-  const { data: dataTeilkulturAggregate } = useQuery((store) =>
-    store.queryTeilkultur_aggregate(aggregateVariables, (d) =>
-      d.aggregate((d) => d.count),
-    ),
-  )
-  const totalNr =
-    dataTeilkulturAggregate?.teilkultur_aggregate?.aggregate?.count ?? 0
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+  }
+  const { data, error, loading } = useQuery(allDataQuery, {
+    variables: {
+      teilkulturFilter,
+      totalCountFilter,
+    },
+  })
 
   const storeRowsFiltered = teilkultursFiltered.filter((r) => {
     if (kulturIdInActiveNodeArray) {
@@ -105,7 +119,9 @@ const Teilkulturen = ({ filter: showFilter }) => {
     }
     return true
   })
-  const filteredNr = storeRowsFiltered.length
+
+  const totalNr = data?.teilkultur_total_count?.aggregate?.count ?? ''
+  const filteredNr = data?.teilkultur_filtered_count?.aggregate?.count ?? ''
 
   const add = useCallback(() => {
     insertTeilkulturRev()
