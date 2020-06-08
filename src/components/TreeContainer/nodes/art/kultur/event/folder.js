@@ -18,7 +18,7 @@ export default ({ store }) => {
     return {
       nodeType: 'folder',
       menuTitle: 'Events',
-      id: `${kulturId}EventFolder`,
+      id: `${artId}${kulturId}EventFolder`,
       label: `Events (${nr})`,
       url: ['Arten', artId, 'Kulturen', kulturId, 'Events'],
       sort: [1, artIndex, 2, kulturIndex, 5],
