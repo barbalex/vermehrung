@@ -1545,7 +1545,7 @@ export const RootStore = RootStoreBase.props({
         .sort(artSort)
     },
     get artQksSorted() {
-      return [...self.art_qk.values()].sort(qkSort)
+      return [...self.art_qks.values()].sort(qkSort)
     },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
@@ -1614,7 +1614,7 @@ export const RootStore = RootStoreBase.props({
         .sort(personSort)
     },
     get kulturQksSorted() {
-      return [...self.kultur_qk.values()].sort(qkSort)
+      return [...self.kultur_qks.values()].sort(qkSort)
     },
     get sammelLieferungFilter() {
       return queryFromTable({ store: self, table: 'sammel_lieferung' })
