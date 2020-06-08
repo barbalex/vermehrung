@@ -198,6 +198,7 @@ const Sammlung = ({
     herkunftsSorted,
     personsSorted,
     showDeleted,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -220,10 +221,7 @@ const Sammlung = ({
   }
   const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter }
-  if (!showDeleted) {
-    totalCountFilter._deleted = { _eq: false }
-  }
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: { id, sammlungFilter, totalCountFilter },
   })
