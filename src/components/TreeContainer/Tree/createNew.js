@@ -7,6 +7,7 @@ import exists from '../../../utils/exists'
 export default async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
+  const { setActiveNodeArray, addOpenNodes } = store.tree
 
   // get table and id from url
   let parentTableTitle = null
@@ -109,5 +110,19 @@ export default async ({ node, store }) => {
   }
   if (fkExists) additionalValuesToSet[fkName] = parentId
 
-  store[`insert${upperFirst(table)}Rev`]({ values: additionalValuesToSet })
+  // need to navigate to url
+  // as insertTableRev assumes that either parent or sibling url is active
+  // add parent folder to activeNodeArray and openNodes
+  let newActiveNodeArray = [...url]
+  setActiveNodeArray([...url])
+  let addedOpenNodes = []
+  for (let i = 1; i <= newActiveNodeArray.length; i++) {
+    addedOpenNodes.push(newActiveNodeArray.slice(0, i))
+  }
+  addOpenNodes(addedOpenNodes)
+
+  // delay insert to enable activeNodeArray to catch up
+  setTimeout(() =>
+    store[`insert${upperFirst(table)}Rev`]({ values: additionalValuesToSet }),
+  )
 }
