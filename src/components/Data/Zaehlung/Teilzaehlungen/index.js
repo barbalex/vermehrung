@@ -9,7 +9,7 @@ import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../../utils/fragments'
+import { teilzaehlung as teilzaehlungFragment } from '../../../../utils/fragments'
 
 const Container = styled.div`
   display: flex;
@@ -35,26 +35,64 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForTeilzaehlungs(
+    $teilzaehlungFilter: teilzaehlung_bool_exp!
+    $totalCountFilter: teilzaehlung_bool_exp!
+  ) {
+    teilzaehlung(where: $teilzaehlungFilter) {
+      ...TeilzaehlungFields
+      zaehlung {
+        id
+        __typename
+        kultur {
+          id
+          __typename
+          kultur_option {
+            id
+            __typename
+            tk
+          }
+        }
+      }
+    }
+    teilzaehlung_total_count: teilzaehlung_aggregate(where: $totalCountFilter) {
+      aggregate {
+        count
+      }
+    }
+    teilzaehlung_filtered_count: teilzaehlung_aggregate(
+      where: $teilzaehlungFilter
+    ) {
+      aggregate {
+        count
+      }
+    }
+  }
+  ${teilzaehlungFragment}
+`
+
 const Teilzaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
-  const { insertTeilzaehlungRev, teilzaehlungsSorted } = store
+  const { insertTeilzaehlungRev, teilzaehlungsSorted, deletedFilter } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
 
-  // load data for teilzaehlungen
-  const { error, loading } = useQuery((store) =>
-    store.queryTeilzaehlung({
-      where: { zaehlung_id: { _eq: zaehlungId } },
-      order_by: { teilkultur: { name: 'asc_nulls_first' } },
-    }),
-  )
-  const storeRows = [...store.teilzaehlungs.values()]
+  const hierarchyFilter = { zaehlung_id: { _eq: zaehlungId } }
+  const totalCountFilter = {
+    ...hierarchyFilter,
+    ...deletedFilter,
+  }
+  const { error, loading } = useQuery(allDataQuery, {
+    variables: {
+      teilzaehlungFilter: totalCountFilter,
+      totalCountFilter,
+    },
+  })
 
-  // load data for options
-  useQuery((store) =>
-    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
-  )
+  const storeRows = teilzaehlungsSorted
+
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const { tk } = kulturOption
 
