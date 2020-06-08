@@ -200,6 +200,7 @@ const Teilkultur = ({
     kulturIdInActiveNodeArray,
     kultursSorted,
     showDeleted,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -213,11 +214,7 @@ const Teilkultur = ({
     }
   }
   const teilkulturFilter = { ...store.teilkulturFilter, ...hierarchyFilter }
-
-  const totalCountFilter = { ...hierarchyFilter }
-  if (!showDeleted) {
-    totalCountFilter._deleted = { _eq: false }
-  }
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: {
       id,

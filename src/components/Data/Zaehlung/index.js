@@ -197,6 +197,7 @@ const Zaehlung = ({
     kulturIdInActiveNodeArray,
     kultursSorted,
     showDeleted,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -209,11 +210,7 @@ const Zaehlung = ({
     }
   }
   const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
-
-  const totalCountFilter = { ...hierarchyFilter }
-  if (!showDeleted) {
-    totalCountFilter._deleted = { _eq: false }
-  }
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
 
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
 
