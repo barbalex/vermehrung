@@ -325,7 +325,9 @@ const SammelLieferung = ({
     setIsPrint,
     online,
     userPersonOption,
+    artsSorted,
     kultursSorted,
+    personsSorted,
     sammlungsSorted,
     showDeleted,
   } = store
@@ -511,20 +513,20 @@ const SammelLieferung = ({
 
   const personWerte = useMemo(
     () =>
-      [...store.persons.values()].map((el) => ({
+      personsSorted.map((el) => ({
         value: el.id,
         label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
-    [store.persons],
+    [personsSorted],
   )
 
   const artWerte = useMemo(
     () =>
-      [...store.arts.values()].map((el) => ({
+      artsSorted.map((el) => ({
         value: el.id,
         label: el?.art_ae_art?.name ?? '(kein Artname)',
       })),
-    [store.arts],
+    [artsSorted],
   )
 
   const saveToDb = useCallback(
