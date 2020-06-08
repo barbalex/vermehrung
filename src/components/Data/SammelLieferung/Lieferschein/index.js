@@ -89,7 +89,7 @@ const StyledTable = styled(Table)`
   }
 `
 
-const lieferungQuery = gql`
+const allDataQuery = gql`
   query lieferungenQueryForLieferschein($id: uuid!) {
     lieferung(
       where: { sammel_lieferung_id: { _eq: $id } }
@@ -127,6 +127,18 @@ const lieferungQuery = gql`
           gemeinde
           lokalname
         }
+        garten {
+          id
+          __typename
+          name
+          ort
+        }
+      }
+      person {
+        id
+        __typename
+        name
+        ort
       }
       bemerkungen
     }
@@ -135,6 +147,8 @@ const lieferungQuery = gql`
 
 const Lieferschein = ({ row }) => {
   const store = useContext(StoreContext)
+  const { lieferungsSorted } = store
+
   const imageData = useStaticQuery(graphql`
     query QueryLieferscheinImage {
       file(relativePath: { eq: "toposLogo.png" }) {
@@ -150,33 +164,28 @@ const Lieferschein = ({ row }) => {
   `)
   const image = imageData?.file?.childImageSharp?.fixed ?? {}
 
-  const { error: kulturError, loading: kulturLoading } = useQuery((store) =>
-    store.queryKultur({ where: { id: { _eq: row.von_kultur_id } } }, (k) =>
-      k.id.garten((g) => g.id.name.ort),
-    ),
-  )
+  const { error, loading } = useQuery(allDataQuery, {
+    variables: {
+      id: row.id,
+    },
+  })
+
   const vonKultur = store.kulturs.get(row.von_kultur_id) ?? {}
   const von = row.von_kultur_id
-    ? kulturLoading
+    ? loading
       ? '...'
-      : kulturError
+      : error
       ? '(Fehler beim Laden der Daten)'
       : `${vonKultur?.garten?.name ?? '(kein Name)'} (${
           vonKultur?.garten?.ort ?? 'kein Ort'
         })`
     : '(keine von-Kultur erfasst)'
 
-  const { error: personError, loading: personLoading } = useQuery((store) =>
-    store.queryPerson(
-      { where: { id: { _eq: row.person_id } } },
-      (p) => p.id.name.ort,
-    ),
-  )
   const person = store.persons.get(row.person_id) ?? {}
   const an = row.person_id
-    ? personLoading
+    ? loading
       ? '...'
-      : personError
+      : error
       ? '(Fehler beim Laden der Daten für die Person)'
       : `${person?.name ?? '(kein Name)'} (${person?.ort ?? 'kein Ort'})`
     : '(keine Person erfasst)'
@@ -185,13 +194,7 @@ const Lieferschein = ({ row }) => {
     ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
     : '(Kein Datum erfasst)'
 
-  const { error: lieferungError, loading: lieferungLoading } = useQuery(
-    lieferungQuery,
-    {
-      variables: { id: row.id },
-    },
-  )
-  const lieferungen = [...store.lieferungs.values()].filter(
+  const lieferungen = lieferungsSorted.filter(
     (l) => l.sammel_lieferung_id === row.id,
   )
 
@@ -231,13 +234,12 @@ const Lieferschein = ({ row }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {lieferungLoading ? (
+              {loading ? (
                 <TableRow>
                   <TableCell>...</TableCell>
                 </TableRow>
-              ) : lieferungError &&
-                !lieferungError.message.includes('Failed to fetch') ? (
-                <TableRow>{`Fehler beim Laden der Daten: ${lieferungError.message}`}</TableRow>
+              ) : error && !error.message.includes('Failed to fetch') ? (
+                <TableRow>{`Fehler beim Laden der Daten: ${error.message}`}</TableRow>
               ) : (
                 lieferungen.map((l) => <Lieferung key={l.id} lieferung={l} />)
               )}
