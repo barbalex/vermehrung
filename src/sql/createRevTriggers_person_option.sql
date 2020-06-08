@@ -92,7 +92,7 @@ begin
     ),
     deleted_conflicts_of_leaves as (
       select
-        person_option_id,
+        person_id,
         _rev,
         _depth
       from
@@ -100,17 +100,17 @@ begin
       where
         not exists (
           select
-            person_option_id
+            person_id
           from
             person_option_rev as t
           where
-            t.person_option_id = new.person_option_id
+            t.person_id = new.person_id
             and t._parent_rev = person_option_rev._rev
         )
         and _deleted is true
-        and person_option_id = new.person_option_id
+        and person_id = new.person_id
         and exists (
-          select person_option_id from leaves l
+          select person_id from leaves l
           where 
             l._parent_rev = person_option_rev._parent_rev
             and l._depth = person_option_rev._depth
@@ -230,7 +230,7 @@ begin
     )
     with leaves as (
       select
-        person_option_id,
+        person_id,
         _rev,
         _depth,
         _parent_rev
@@ -239,19 +239,19 @@ begin
       where
         not exists (
           select
-            person_option_id
+            person_id
           from
             person_option_rev as t
           where
-            t.person_option_id = new.person_option_id
+            t.person_id = new.person_id
             and t._parent_rev = person_option_rev._rev
         )
         and _deleted is false
-        and person_option_id = new.person_option_id
+        and person_id = new.person_id
       ),
       deleted_conflicts_of_leaves as (
         select
-          person_option_id,
+          person_id,
           _rev,
           _depth
         from
@@ -259,17 +259,17 @@ begin
         where
           not exists (
             select
-              person_option_id
+              person_id
             from
               person_option_rev as t
             where
-              t.person_option_id = new.person_option_id
+              t.person_id = new.person_id
               and t._parent_rev = person_option_rev._rev
           )
           and _deleted is true
-          and person_option_id = new.person_option_id
+          and person_id = new.person_id
           and exists (
-            select person_option_id from leaves l
+            select person_id from leaves l
             where 
               l._parent_rev = person_option_rev._parent_rev
               and l._depth = person_option_rev._depth
