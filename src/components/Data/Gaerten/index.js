@@ -91,7 +91,7 @@ const Gaerten = ({ filter: showFilter }) => {
     personIdInActiveNodeArray,
     gartensFiltered,
     hideInactive,
-    showDeleted,
+    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -104,10 +104,7 @@ const Gaerten = ({ filter: showFilter }) => {
   }
   const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter }
-  if (!showDeleted) {
-    totalCountFilter._deleted = { _eq: false }
-  }
+  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
   if (hideInactive) {
     totalCountFilter.aktiv = { _eq: true }
   }
