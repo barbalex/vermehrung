@@ -110,9 +110,6 @@ const Teilzaehlung = ({
     },
   })
 
-  useQuery((store) =>
-    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
-  )
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const {
     tk,
@@ -152,8 +149,6 @@ const Teilzaehlung = ({
       const previousValue = row[field]
       // only update if value has changed
       if (value === previousValue) return
-
-      //console.log('Teilzaehlung, saveToDb', { field, value, row })
 
       row.edit({ field, value })
     },
