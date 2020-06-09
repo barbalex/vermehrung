@@ -58,6 +58,10 @@ export const teilkultur_revModel = teilkultur_revModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'teilkultur',
+      revertId: self.teilkultur_id,
+      revertField: '_deleted',
+      revertValue: false,
     })
     deleteTeilkulturRevModel(self)
   },
