@@ -198,7 +198,7 @@ export const RootStore = RootStoreBase.props({
       },
       insertArtRev(args) {
         const { user, addQueuedQuery, upsertArtModel } = self
-        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const { activeNodeArray, setActiveNodeArray,  } = self.tree
         const valuesPassed = args?.values ?? {}
 
         const id = uuidv1()
@@ -245,7 +245,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteArtRevModel(val) {
@@ -306,7 +305,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -360,7 +358,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteEventRevModel(val) {
@@ -390,7 +387,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -445,7 +441,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteGartenRevModel(val) {
@@ -476,7 +471,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -530,7 +524,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteHerkunftRevModel(val) {
@@ -567,7 +560,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -622,7 +614,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteKulturRevModel(val) {
@@ -683,27 +674,34 @@ export const RootStore = RootStoreBase.props({
           sammelLieferungIdInActiveNodeArray,
           sammlungIdInActiveNodeArray,
           kulturIdOfAnLieferungInActiveNodeArray,
+          kulturIdOfAusLieferungInActiveNodeArray,
         } = self
 
         const valuesPassed = args?.values ?? {}
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
+
+        const kultur = kulturIdOfAnLieferungInActiveNodeArray
+          ? self.kulturs.get(kulturIdOfAnLieferungInActiveNodeArray)
+          : kulturIdOfAusLieferungInActiveNodeArray
+          ? self.kulturs.get(kulturIdOfAusLieferungInActiveNodeArray)
+          : undefined
+        const artIdOfKultur = kultur?.artId
 
         const id = uuidv1()
         const _depth = 1
         const newObject = {
           lieferung_id: id,
           sammel_lieferung_id: sammelLieferungIdInActiveNodeArray,
-          art_id: artIdInActiveNodeArray,
+          art_id: artIdInActiveNodeArray ?? artIdOfKultur,
           person_id: personIdInActiveNodeArray,
           von_sammlung_id: sammlungIdInActiveNodeArray,
-          von_kultur_id: kulturIdOfAnLieferungInActiveNodeArray,
+          von_kultur_id: kulturIdOfAusLieferungInActiveNodeArray,
           datum: undefined,
-          nach_kultur_id: undefined,
+          nach_kultur_id: kulturIdOfAnLieferungInActiveNodeArray,
           nach_ausgepflanzt: undefined,
           von_anzahl_individuen: undefined,
           anzahl_pflanzen: undefined,
@@ -751,7 +749,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteLieferungRevModel(val) {
@@ -777,7 +774,7 @@ export const RootStore = RootStoreBase.props({
       },
       insertPersonRev(args) {
         const { user, addQueuedQuery, upsertPersonModel } = self
-        const { activeNodeArray, setActiveNodeArray, addOpenNodes } = self.tree
+        const { activeNodeArray, setActiveNodeArray,  } = self.tree
 
         const valuesPassed = args?.values ?? {}
         const id = uuidv1()
@@ -840,7 +837,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deletePersonRevModel(val) {
@@ -894,7 +890,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -955,7 +950,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteSammelLieferungRevModel(val) {
@@ -987,7 +981,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -1046,7 +1039,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
       },
       deleteSammlungRevModel(val) {
@@ -1084,7 +1076,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -1138,7 +1129,6 @@ export const RootStore = RootStoreBase.props({
               : [...activeNodeArray, id]
             // update tree status
             setActiveNodeArray(newActiveNodeArray)
-            addOpenNodes([newActiveNodeArray])
           })
         }
         return id
@@ -1247,7 +1237,6 @@ export const RootStore = RootStoreBase.props({
         const {
           activeNodeArray: aNaRaw,
           setActiveNodeArray,
-          addOpenNodes,
         } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
@@ -1298,7 +1287,6 @@ export const RootStore = RootStoreBase.props({
             : [...activeNodeArray, id]
           // update tree status
           setActiveNodeArray(newActiveNodeArray)
-          addOpenNodes([newActiveNodeArray])
         })
         return id
       },
@@ -1494,6 +1482,21 @@ export const RootStore = RootStoreBase.props({
       const activeNodeArray = aNaRaw.toJSON()
       if (
         activeNodeArray.includes('An-Lieferungen') &&
+        activeNodeArray.includes('Kulturen')
+      ) {
+        const indexOfId = activeNodeArray.indexOf('Kulturen') + 1
+        if (activeNodeArray.length > indexOfId) {
+          const id = activeNodeArray?.[indexOfId]
+          if (isUuid.v1(id)) return id
+        }
+      }
+      return undefined
+    },
+    get kulturIdOfAusLieferungInActiveNodeArray() {
+      const { activeNodeArray: aNaRaw } = self.tree
+      const activeNodeArray = aNaRaw.toJSON()
+      if (
+        activeNodeArray.includes('Aus-Lieferungen') &&
         activeNodeArray.includes('Kulturen')
       ) {
         const indexOfId = activeNodeArray.indexOf('Kulturen') + 1

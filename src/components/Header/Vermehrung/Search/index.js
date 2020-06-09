@@ -73,7 +73,7 @@ export default () => {
   if (typeof window === 'undefined') return null
   const store = useContext(StoreContext)
   const { personFilter, gartenFilter, kulturFilter } = store
-  const { setActiveNodeArray, addOpenNodes, widthEnforced } = store.tree
+  const { setActiveNodeArray, widthEnforced } = store.tree
   const [val, setVal] = useState('')
 
   const [focused, setFocused] = useState(false)
@@ -246,13 +246,8 @@ export default () => {
       store.filter.setShow(false)
       setActiveNodeArray(newActiveNodeArray)
       setVal('')
-      // build open nodes
-      const newOpenNodes = newActiveNodeArray.map((n, index) =>
-        newActiveNodeArray.slice(0, index + 1),
-      )
-      addOpenNodes(newOpenNodes)
     },
-    [addOpenNodes, setActiveNodeArray, store.filter],
+    [setActiveNodeArray, store.filter],
   )
   const inputProps = {
     value: val,
