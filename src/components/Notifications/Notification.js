@@ -63,6 +63,7 @@ const Notification = ({ notification: n }) => {
     revertId,
     revertField,
     revertValue,
+    revertValues,
     type,
   } = n
 
@@ -81,6 +82,12 @@ const Notification = ({ notification: n }) => {
         field: revertField,
         value: revertValue,
       })
+    } else if (revertTable && revertId && revertValues) {
+      store.updateModelValues({
+        table: revertTable,
+        id: revertId,
+        values: JSON.parse(revertValues),
+      })
     }
     removeNotificationById(n.id)
   }, [
@@ -92,6 +99,7 @@ const Notification = ({ notification: n }) => {
     revertId,
     revertTable,
     revertValue,
+    revertValues,
     store,
   ])
 
