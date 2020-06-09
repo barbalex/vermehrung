@@ -31,7 +31,7 @@ export default ({ store }) => {
             nodeType: 'table_no_menu',
             menuTitle: 'Herkunft',
             table: 'herkunft',
-            id: el.id,
+            id: `${sammlungId}${el.id}`,
             label,
             url: ['Sammlungen', sammlungId, 'Herkuenfte', el.id],
             hasChildren: false,
