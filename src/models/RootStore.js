@@ -961,7 +961,7 @@ export const RootStore = RootStoreBase.props({
               update_columns: ['id'],
             },
           }),
-          callbackQuery: 'querySammel_sammel_lieferung',
+          callbackQuery: 'querySammel_lieferung',
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
