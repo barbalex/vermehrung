@@ -50,7 +50,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'An-Lieferung',
           table: 'lieferung',
-          id: el.id,
+          id: `${personId}${gartenId}${kulturId}${el.id}`,
           label,
           url: [
             'Personen',

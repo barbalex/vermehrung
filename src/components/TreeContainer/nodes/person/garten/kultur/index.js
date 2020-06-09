@@ -32,7 +32,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Kultur',
           table: 'kultur',
-          id: el.id,
+          id: `${personId}${gartenId}${el.id}`,
           label,
           url: ['Personen', personId, 'Gaerten', gartenId, 'Kulturen', el.id],
           hasChildren: true,
