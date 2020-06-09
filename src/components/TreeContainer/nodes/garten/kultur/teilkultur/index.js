@@ -30,7 +30,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
-          id: el.id,
+          id: `${gartenId}${kulturId}${el.id}`,
           label,
           url: [
             'Gaerten',
