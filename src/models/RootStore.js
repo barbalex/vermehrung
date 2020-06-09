@@ -111,6 +111,7 @@ export const RootStore = RootStoreBase.props({
                 // TODO: describe operation better. User should know what is happening
                 // TODO: add button to remove all queued operations
                 // use new notification system for this
+                // TODO: need to revert model
                 return self.addNotification({
                   message: error.message,
                   action1Label: 'Operation löschen',
@@ -198,7 +199,7 @@ export const RootStore = RootStoreBase.props({
       },
       insertArtRev(args) {
         const { user, addQueuedQuery, upsertArtModel } = self
-        const { activeNodeArray, setActiveNodeArray,  } = self.tree
+        const { activeNodeArray, setActiveNodeArray } = self.tree
         const valuesPassed = args?.values ?? {}
 
         const id = uuidv1()
@@ -302,10 +303,7 @@ export const RootStore = RootStoreBase.props({
         } = self
 
         const valuesPassed = args?.values ?? {}
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
@@ -384,10 +382,7 @@ export const RootStore = RootStoreBase.props({
         } = self
 
         const valuesPassed = args?.values ?? {}
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
@@ -468,10 +463,7 @@ export const RootStore = RootStoreBase.props({
         const { user, addQueuedQuery, upsertHerkunftModel } = self
 
         const valuesPassed = args?.values ?? {}
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
@@ -557,10 +549,7 @@ export const RootStore = RootStoreBase.props({
           gartenIdInActiveNodeArray,
         } = self
         const valuesPassed = args?.values ?? {}
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
@@ -678,10 +667,7 @@ export const RootStore = RootStoreBase.props({
         } = self
 
         const valuesPassed = args?.values ?? {}
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const kultur = kulturIdOfAnLieferungInActiveNodeArray
@@ -774,7 +760,7 @@ export const RootStore = RootStoreBase.props({
       },
       insertPersonRev(args) {
         const { user, addQueuedQuery, upsertPersonModel } = self
-        const { activeNodeArray, setActiveNodeArray,  } = self.tree
+        const { activeNodeArray, setActiveNodeArray } = self.tree
 
         const valuesPassed = args?.values ?? {}
         const id = uuidv1()
@@ -887,10 +873,7 @@ export const RootStore = RootStoreBase.props({
         } = self
 
         const valuesPassed = args?.values ?? {}
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
@@ -978,10 +961,7 @@ export const RootStore = RootStoreBase.props({
         } = self
 
         const valuesPassed = args?.values ?? {}
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
@@ -1073,10 +1053,7 @@ export const RootStore = RootStoreBase.props({
         const noNavigateInTree = args?.noNavigateInTree ?? false
         const valuesPassed = args?.values ?? {}
 
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
@@ -1234,10 +1211,7 @@ export const RootStore = RootStoreBase.props({
         } = self
         const valuesPassed = args?.values ?? {}
 
-        const {
-          activeNodeArray: aNaRaw,
-          setActiveNodeArray,
-        } = self.tree
+        const { activeNodeArray: aNaRaw, setActiveNodeArray } = self.tree
         const activeNodeArray = aNaRaw.toJSON()
 
         const id = uuidv1()
