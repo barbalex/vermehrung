@@ -62,5 +62,8 @@ export default async ({ lieferungId, sammelLieferung, store }) => {
     callbackQueryVariables: JSON.stringify({
       where: { id: { _eq: lieferungId } },
     }),
+    revertTable: 'lieferung',
+    revertId: lieferungId,
+    revertValues: JSON.stringify(newObject),
   })
 }
