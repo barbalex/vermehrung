@@ -116,9 +116,9 @@ export const RootStore = RootStoreBase.props({
                   title:
                     'Eine offline durchgeführte Operation kann nicht in die Datenbank geschrieben werden',
                   message: error.message,
-                  action1Label: 'Operation löschen',
-                  action1Name: 'removeQueuedQueryById',
-                  action1Argument: query.id,
+                  actionLabel: 'Operation löschen',
+                  actionName: 'removeQueuedQueryById',
+                  actionArgument: query.id,
                 })
               }
             }
@@ -156,6 +156,12 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      updateModelValue({ table, id, field, value }) {
+        // used to revert offline operations if they error
+        const model = self[`${table}s`].get(id)
+        if (!model) return
+        self[`${table}s`].set(id, { ...model, [field]: value })
+      },
       setShowDeleted(val) {
         self.showDeleted = val
       },

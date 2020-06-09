@@ -8,18 +8,31 @@ export default types.model('Notification', {
   duration: types.union(types.number, types.undefined),
   dismissable: types.union(types.boolean, types.undefined),
   allDismissable: types.optional(types.boolean, true),
-  action1Label: types.union(types.string, types.null, types.undefined),
-  action1Name: types.union(types.string, types.null, types.undefined),
-  action1Argument: types.union(
+  actionLabel: types.union(types.string, types.null, types.undefined),
+  actionName: types.union(types.string, types.null, types.undefined),
+  actionArgument: types.union(
     types.string,
     types.number,
     types.null,
     types.undefined,
   ),
-  action2Name: types.union(types.string, types.null, types.undefined),
-  action2Argument: types.union(
+  revertTable: types.union(types.string, types.null, types.undefined),
+  revertId: types.union(
     types.string,
     types.number,
+    types.null,
+    types.undefined,
+  ),
+  revertField: types.union(
+    types.string,
+    types.number,
+    types.null,
+    types.undefined,
+  ),
+  revertValue: types.union(
+    types.string,
+    types.number,
+    types.boolean,
     types.null,
     types.undefined,
   ),
