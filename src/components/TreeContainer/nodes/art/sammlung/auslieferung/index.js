@@ -41,7 +41,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Lieferung',
           table: 'lieferung',
-          id: el.id,
+          id: `${artId}${sammlungId}${el.id}`,
           label,
           url: [
             'Arten',
