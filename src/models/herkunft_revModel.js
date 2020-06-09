@@ -58,6 +58,10 @@ export const herkunft_revModel = herkunft_revModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'herkunft',
+      revertId: self.herkunft_id,
+      revertField: '_deleted',
+      revertValue: false,
     })
     deleteHerkunftRevModel(self)
   },
