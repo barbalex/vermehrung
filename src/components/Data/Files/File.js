@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
 
 import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
@@ -85,7 +86,7 @@ const File = ({ file, parent }) => {
         store[`${parent}s`].delete(file.id)
       },
     )
-    store[`delete${upperFirst(parent)}FileModel`](file)
+    store[`delete${upperFirst(camelCase(parent))}FileModel`](file)
   }, [file, parent, store])
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
