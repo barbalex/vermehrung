@@ -113,6 +113,8 @@ export const RootStore = RootStoreBase.props({
                 // use new notification system for this
                 // TODO: need to revert model
                 return self.addNotification({
+                  title:
+                    'Eine offline durchgeführte Operation kann nicht in die Datenbank geschrieben werden',
                   message: error.message,
                   action1Label: 'Operation löschen',
                   action1Name: 'removeQueuedQueryById',
