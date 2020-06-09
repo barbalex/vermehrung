@@ -73,6 +73,10 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
         where: { id: { _eq: self.id } },
       }),
       refetchTree: true,
+      revertTable: 'sammlung',
+      revertId: self.id,
+      revertField: field,
+      revertValue: self[field],
     })
     // do not stringify revisions for store
     // as _that_ is a real array
