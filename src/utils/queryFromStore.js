@@ -63,12 +63,22 @@ export default ({ store, table }) => {
   if (!filterValues.length) return values
 
   const test = (val) => {
-    const testArray = filterValues.map(([key, value]) => {
+    const testArray = filterValues.map(([key, filterValue]) => {
       const type = types[table][key] || 'string'
-      if (type === 'string' && val[key]) {
-        return val[key].includes(value)
+      const value = val[key]
+      if (type === 'string' && value) {
+        if (
+          value?.toString()?.toLowerCase() &&
+          filterValue?.toString()?.toLowerCase()
+        ) {
+          return value
+            .toString()
+            .toLowerCase()
+            .includes(filterValue.toString().toLowerCase())
+        }
+        return value.includes(filterValue)
       }
-      return val[key] === value
+      return value === filterValue
     })
     return !testArray.includes(false)
   }
