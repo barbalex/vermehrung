@@ -24,8 +24,12 @@ const Title = styled.div`
 
 const PersonDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { addNotification, showDeleted } = store
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    removeOpenNodeWithChildren,
+  } = store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
@@ -51,8 +55,20 @@ const PersonDeleteButton = ({ row }) => {
       }
     }
     row.delete()
-    setActiveNodeArray(activeNodeArray.slice(0, -1))
-  }, [activeNodeArray, addNotification, row, setActiveNodeArray])
+    setAnchorEl(null)
+    if (!showDeleted) {
+      // need to remove openNode from openNodes
+      removeOpenNodeWithChildren(activeNodeArray)
+      setActiveNodeArray(activeNodeArray.slice(0, -1))
+    }
+  }, [
+    row,
+    showDeleted,
+    addNotification,
+    removeOpenNodeWithChildren,
+    activeNodeArray,
+    setActiveNodeArray,
+  ])
 
   return (
     <ErrorBoundary>
