@@ -30,7 +30,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Event',
           table: 'event',
-          id: el.id,
+          id: `${kulturId}${el.id}`,
           label,
           url: ['Kulturen', kulturId, 'Events', el.id],
           hasChildren: false,
