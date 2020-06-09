@@ -264,8 +264,13 @@ export default (url) => {
   if (url.length === 5 && url[0] === 'Gaerten' && url[2] === 'Kulturen') {
     return 'kultur'
   }
-  if (url.length === 5 && url[0] === 'Arten' && url[2] === 'Sammlungen') {
-    return 'sammlung'
+  if (
+    url.length === 5 &&
+    url[0] === 'Arten' &&
+    url[2] === 'Sammlungen' &&
+    url[4] === 'Aus-Lieferungen'
+  ) {
+    return 'lieferungen'
   }
   if (
     url.length === 5 &&
