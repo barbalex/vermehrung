@@ -25,7 +25,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Kultur',
           table: 'kultur',
-          id: el.id,
+          id: `${artId}${el.id}`,
           label,
           url: ['Arten', artId, 'Kulturen', el.id],
           hasChildren: true,

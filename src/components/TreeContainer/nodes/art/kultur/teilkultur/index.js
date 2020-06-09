@@ -29,7 +29,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
-          id: el.id,
+          id: `${artId}${kulturId}${el.id}`,
           label,
           url: ['Arten', artId, 'Kulturen', kulturId, 'Teilkulturen', el.id],
           hasChildren: false,
