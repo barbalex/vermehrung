@@ -30,4 +30,5 @@ export default types.model('QueuedQuery', {
     types.null,
     types.undefined,
   ),
+  revertValues: types.union(types.string, types.null, types.undefined),
 })
