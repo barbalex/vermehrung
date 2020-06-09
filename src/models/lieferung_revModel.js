@@ -67,6 +67,10 @@ export const lieferung_revModel = lieferung_revModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'lieferung',
+      revertId: self.lieferung_id,
+      revertField: '_deleted',
+      revertValue: false,
     })
     deleteLieferungRevModel(self)
   },
