@@ -147,7 +147,10 @@ export default types
     },
     setActiveNodeArray(val, nonavigate) {
       self.activeNodeArray = val
-      !nonavigate && navigate(`/Vermehrung/${val.join('/')}`)
+      if (!nonavigate) {
+        navigate(`/Vermehrung/${val.join('/')}`)
+        self.addOpenNodes([val, val.slice(0, -1)])
+      }
     },
     setOpenNodes(val) {
       // need set to ensure contained arrays are unique
