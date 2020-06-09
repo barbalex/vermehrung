@@ -61,6 +61,10 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'teilkultur',
+      revertId: self.id,
+      revertField: field,
+      revertValue: self[field],
     })
     // do not stringify revisions for store
     // as _that_ is a real array
