@@ -32,7 +32,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Sammlung',
           table: 'sammlung',
-          id: el.id,
+          id: `${herkunftId}${el.id}`,
           label,
           url: ['Herkuenfte', herkunftId, 'Sammlungen', el.id],
           hasChildren: true,
