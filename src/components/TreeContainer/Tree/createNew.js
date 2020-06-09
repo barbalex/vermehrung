@@ -1,4 +1,5 @@
 import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
 
 import tableFromTitleHash from '../../../utils/tableFromTitleHash'
@@ -126,6 +127,8 @@ export default async ({ node, store }) => {
 
   // delay insert to enable activeNodeArray to catch up
   setTimeout(() =>
-    store[`insert${upperFirst(table)}Rev`]({ values: additionalValuesToSet }),
+    store[`insert${upperFirst(camelCase(table))}Rev`]({
+      values: additionalValuesToSet,
+    }),
   )
 }
