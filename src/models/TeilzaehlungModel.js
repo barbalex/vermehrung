@@ -76,6 +76,10 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'teilzaehlung',
+      revertId: self.id,
+      revertField: field,
+      revertValue: self[field],
     })
     // do not stringify revisions for store
     // as _that_ is a real array
