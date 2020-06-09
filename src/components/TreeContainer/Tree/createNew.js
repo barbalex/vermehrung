@@ -50,6 +50,8 @@ export default async ({ node, store }) => {
   }
   // foreign key to parent should exist if parentTable and it's id exist
   fkExists = !!parentId && !!parentTable
+  // edge case of kultur under sammlung > aus-lieferung where kultur is 1:side of lieferung
+  if (table === 'kultur' && parentTable === 'lieferung') fkExists = false
   if (fkExists) fkName = `${parentTable}_id`
   if (table === 'lieferung' && parentTable === 'kultur') {
     // need to choose von_kultur_id or nach_kultur_id
@@ -109,6 +111,14 @@ export default async ({ node, store }) => {
     }
   }
   if (fkExists) additionalValuesToSet[fkName] = parentId
+
+  console.log('tree createNew', {
+    additionalValuesToSet,
+    table,
+    parentTable,
+    parentId,
+    fkExists,
+  })
 
   // need to navigate to url
   // as insertTableRev assumes that either parent or sibling url is active
