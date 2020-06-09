@@ -58,7 +58,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Zählung',
           table: 'zaehlung',
-          id: el.id,
+          id: `${personId}${gartenId}${kulturId}${el.id}`,
           label,
           url: [
             'Personen',
