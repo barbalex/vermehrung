@@ -58,7 +58,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Zählung',
           table: 'artKulturZaehlung',
-          id: el.id,
+          id: `${sammlungId}${lieferungId}${kulturId}${el.id}`,
           label,
           url: [
             'Sammlungen',
