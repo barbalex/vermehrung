@@ -58,6 +58,10 @@ export const event_revModel = event_revModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'event',
+      revertId: self.event_id,
+      revertField: '_deleted',
+      revertValue: false,
     })
     deleteEventRevModel(self)
   },
