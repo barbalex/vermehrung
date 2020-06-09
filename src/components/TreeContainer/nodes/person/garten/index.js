@@ -22,7 +22,7 @@ export default ({ store }) => {
         nodeType: 'table',
         menuTitle: 'Garten',
         table: 'garten',
-        id: el.id,
+        id: `${personId}${el.id}`,
         label: el.name || `(${el?.person?.name ?? 'kein Name'})`,
         url: ['Personen', personId, 'Gaerten', el.id],
         hasChildren: true,
