@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
+import camelCase from 'lodash/camelCase'
 
 import Row from './Row'
 import { StoreContext, useQuery } from '../../../models/reactUtils'
@@ -159,7 +160,11 @@ const Root = ({ filter: showFilter }) => {
             <Row
               key={row.name}
               row={row}
-              length={loading ? '...' : store[`${row.table}s`].size}
+              length={
+                loading
+                  ? '...'
+                  : store[`${camelCase(row.table)}sFiltered`].length
+              }
             />
           ))}
         </FieldsContainer>
