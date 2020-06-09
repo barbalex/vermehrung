@@ -39,7 +39,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Teilkultur',
           table: 'teilkultur',
-          id: el.id,
+          id: `${personId}${gartenId}${kulturId}${el.id}`,
           label,
           url: [
             'Personen',

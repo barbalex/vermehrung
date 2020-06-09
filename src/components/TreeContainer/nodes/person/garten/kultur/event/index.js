@@ -44,7 +44,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Event',
           table: 'event',
-          id: el.id,
+          id: `${personId}${gartenId}${kulturId}${el.id}`,
           label,
           url: [
             'Personen',

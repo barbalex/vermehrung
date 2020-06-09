@@ -40,7 +40,7 @@ export default ({ store }) => {
           nodeType: 'table',
           menuTitle: 'Lieferung',
           table: 'lieferung',
-          id: el.id,
+          id: `${personId}${el.id}`,
           label,
           url: ['Personen', personId, 'Lieferungen', el.id],
           hasChildren: false,
