@@ -149,7 +149,7 @@ export default types
       self.activeNodeArray = val
       if (!nonavigate) {
         navigate(`/Vermehrung/${val.join('/')}`)
-        self.addOpenNodes([val, val.slice(0, -1)])
+        self.addOpenNode(val)
       }
     },
     setOpenNodes(val) {
@@ -159,6 +159,14 @@ export default types
     },
     removeOpenNode(val) {
       self.openNodes = self.openNodes.filter((n) => !isEqual(n, val))
+    },
+    addOpenNode(url) {
+      // add all parent nodes
+      let addedOpenNodes = []
+      for (let i = 1; i <= url.length; i++) {
+        addedOpenNodes.push(url.slice(0, i))
+      }
+      self.addOpenNodes(addedOpenNodes)
     },
     addOpenNodes(nodes) {
       // need set to ensure contained arrays are unique
