@@ -85,6 +85,10 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'person_option',
+      revertId: self.id,
+      revertField: field,
+      revertValue: self[field],
     })
     // do not stringify revisions for store
     // as _that_ is a real array
