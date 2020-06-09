@@ -94,8 +94,6 @@ export default () => {
     zaehlung: 'Zählung Filter',
   }
 
-  console.log('Filter:', { activeTab, activeTabFromActiveForm })
-
   return (
     <ErrorBoundary>
       <Container>
