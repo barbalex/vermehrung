@@ -53,25 +53,55 @@ const colorMap = {
 const Notification = ({ notification: n }) => {
   const store = useContext(StoreContext)
   const { removeNotificationById } = store
+  const {
+    title,
+    message,
+    actionLabel,
+    actionName,
+    actionArgument,
+    revertTable,
+    revertId,
+    revertField,
+    revertValue,
+    type,
+  } = n
 
-  const color = colorMap[n.type] ?? 'error'
+  const color = colorMap[type] ?? 'error'
 
   const onClickClose = useCallback(() => removeNotificationById(n.id), [
     n.id,
     removeNotificationById,
   ])
-  const onClickAction1 = useCallback(() => {
-    store?.[n.action1Name]?.(n.action1Argument ?? undefined)
+  const onClickAction = useCallback(() => {
+    store?.[actionName]?.(actionArgument ?? undefined)
+    if (revertTable && revertId && revertField) {
+      store.updateModelValue({
+        table: revertTable,
+        id: revertId,
+        field: revertField,
+        value: revertValue,
+      })
+    }
     removeNotificationById(n.id)
-  }, [n, removeNotificationById, store])
+  }, [
+    actionArgument,
+    actionName,
+    n.id,
+    removeNotificationById,
+    revertField,
+    revertId,
+    revertTable,
+    revertValue,
+    store,
+  ])
 
   return (
     <Container data-color={color}>
-      {!!n.title && <Title>{`${n.title}. Fehler-Meldung:`}</Title>}
-      <Message>{n.message}</Message>
-      {!!n.action1Name && !!n.action1Label && (
-        <StyledButton onClick={onClickAction1} variant="outlined">
-          {n.action1Label}
+      {!!title && <Title>{`${title}. Fehler-Meldung:`}</Title>}
+      <Message>{message}</Message>
+      {!!actionName && !!actionLabel && (
+        <StyledButton onClick={onClickAction} variant="outlined">
+          {actionLabel}
         </StyledButton>
       )}
       <StyledIconButton

@@ -10,4 +10,24 @@ export default types.model('QueuedQuery', {
   callbackQuery: types.maybeNull(types.string, null),
   callbackQueryVariables: types.maybeNull(types.string, null),
   refetchTree: types.optional(types.boolean, false),
+  revertTable: types.union(types.string, types.null, types.undefined),
+  revertId: types.union(
+    types.string,
+    types.number,
+    types.null,
+    types.undefined,
+  ),
+  revertField: types.union(
+    types.string,
+    types.number,
+    types.null,
+    types.undefined,
+  ),
+  revertValue: types.union(
+    types.string,
+    types.number,
+    types.boolean,
+    types.null,
+    types.undefined,
+  ),
 })
