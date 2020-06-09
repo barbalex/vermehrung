@@ -69,6 +69,10 @@ export const person_revModel = person_revModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
+      revertTable: 'person',
+      revertId: self.person_id,
+      revertField: '_deleted',
+      revertValue: false,
     })
     deletePersonRevModel(self)
   },
