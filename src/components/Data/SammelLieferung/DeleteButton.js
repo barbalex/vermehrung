@@ -24,22 +24,36 @@ const Title = styled.div`
 const SammelLieferungDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
   const { showDeleted } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    removeOpenNodeWithChildren,
+  } = store.tree
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
     setAnchorEl(null)
   }, [])
 
-  const conClickButton = useCallback(
+  const onClickButton = useCallback(
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
   const remove = useCallback(() => {
     row.delete()
-    !showDeleted && setActiveNodeArray(activeNodeArray.slice(0, -1))
     setAnchorEl(null)
-  }, [activeNodeArray, row, setActiveNodeArray, showDeleted])
+    if (!showDeleted) {
+      // need to remove openNode from openNodes
+      removeOpenNodeWithChildren(activeNodeArray)
+      setActiveNodeArray(activeNodeArray.slice(0, -1))
+    }
+  }, [
+    activeNodeArray,
+    row,
+    removeOpenNodeWithChildren,
+    setActiveNodeArray,
+    showDeleted,
+  ])
 
   return (
     <ErrorBoundary>
@@ -48,7 +62,7 @@ const SammelLieferungDeleteButton = ({ row }) => {
         aria-haspopup="true"
         aria-label="Sammel-Lieferung löschen"
         title="Sammel-Lieferung löschen"
-        onClick={conClickButton}
+        onClick={onClickButton}
         disabled={row._deleted}
       >
         <FaMinus />
