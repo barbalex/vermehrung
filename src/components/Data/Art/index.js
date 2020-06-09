@@ -17,13 +17,17 @@ import Herkunft from './Herkunft'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import QK from './QK'
+import AV from './AV'
 import ArUpSvg from '../../../svg/to_ar_up.inline.svg'
 import SaSvg from '../../../svg/to_sa.inline.svg'
 import KuSvg from '../../../svg/to_ku.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import { art as artFragment } from '../../../utils/fragments'
+import {
+  art as artFragment,
+  person as personFragment,
+} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -122,8 +126,12 @@ const allDataQuery = gql`
         count
       }
     }
+    person {
+      ...PersonFields
+    }
   }
   ${artFragment}
+  ${personFragment}
 `
 
 const Art = ({
@@ -138,7 +146,7 @@ const Art = ({
 
   const hierarchyFilter = {}
   const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading } = useQuery(allDataQuery, {
+  const { data, error, loading, query } = useQuery(allDataQuery, {
     variables: {
       id,
       artFilter,
@@ -318,6 +326,7 @@ const Art = ({
                 resultNodesName="ae_art"
                 resultNodesLabelName="name"
               />
+              <AV refetch={query.refetch} artId={id} />
               {online &&
                 !showFilter &&
                 row._conflicts &&

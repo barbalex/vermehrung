@@ -112,6 +112,10 @@ const allDataQuery = gql`
   ) {
     person(where: { id: { _eq: $id } }) {
       ...PersonFields
+      av_art {
+        id
+        __typename
+      }
     }
     person_total_count: person_aggregate(where: $totalCountFilter) {
       aggregate {

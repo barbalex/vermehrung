@@ -50,7 +50,7 @@ const AvArten = styled.div`
 
 const PersonArten = ({ personId }) => {
   const store = useContext(StoreContext)
-  const { upsertAvArtModel, deleteAvArtModel, avArtsSorted } = store
+  const { upsertAvArtModel, deleteAvArtModel, avArtsSorted, artsSorted } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -64,20 +64,20 @@ const PersonArten = ({ personId }) => {
     [open],
   )
 
-  const { data, error, loading, query: avArtQuery } = useQuery(query, {
+  const { error, loading, query: avArtQuery } = useQuery(query, {
     variables: { personId },
   })
   const avArten = avArtsSorted.filter((a) => a.person_id === personId)
-  const artenChoosen = data?.art_choosen ?? []
-  const artenToChoose = data?.art_to_choose ?? []
 
   const artWerte = useMemo(
     () =>
-      artenToChoose.map((el) => ({
-        value: el.id,
-        label: el?.art_ae_art?.name ?? '(kein Artname)',
-      })),
-    [artenToChoose],
+      artsSorted
+        .filter((a) => !a?.av_art?.id)
+        .map((el) => ({
+          value: el.id,
+          label: el?.art_ae_art?.name ?? '(kein Artname)',
+        })),
+    [artsSorted],
   )
 
   const saveToDb = useCallback(
@@ -112,7 +112,7 @@ const PersonArten = ({ personId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`Arten (${loading ? '...' : artenChoosen.length})`}</Title>
+        <Title>{`Arten (${loading ? '...' : avArten.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -136,17 +136,19 @@ const PersonArten = ({ personId }) => {
               ))}
             </AvArten>
           )}
-          <Select
-            name="art_id"
-            value={''}
-            field="art_id"
-            label="Art hinzufügen"
-            options={artWerte}
-            loading={loading}
-            saveToDb={saveToDb}
-            isClearable={false}
-            error={errors.art_id}
-          />
+          {!!artWerte.length && (
+            <Select
+              name="art_id"
+              value={''}
+              field="art_id"
+              label="Art hinzufügen"
+              options={artWerte}
+              loading={loading}
+              saveToDb={saveToDb}
+              isClearable={false}
+              error={errors.art_id}
+            />
+          )}
         </Content>
       )}
     </ErrorBoundary>
