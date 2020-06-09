@@ -39,6 +39,9 @@ const Message = styled.div`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 `
+const Title = styled.div`
+  font-weight: 500;
+`
 
 const colorMap = {
   error: '#D84315',
@@ -64,6 +67,7 @@ const Notification = ({ notification: n }) => {
 
   return (
     <Container data-color={color}>
+      {!!n.title && <Title>{`${n.title}. Fehler-Meldung:`}</Title>}
       <Message>{n.message}</Message>
       {!!n.action1Name && !!n.action1Label && (
         <StyledButton onClick={onClickAction1} variant="outlined">
