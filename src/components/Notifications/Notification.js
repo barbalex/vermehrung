@@ -32,6 +32,13 @@ const StyledButton = styled(Button)`
     text-transform: none;
   }
 `
+// http://hackingui.com/front-end/a-pure-css-solution-for-multiline-text-truncation/
+const Message = styled.div`
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`
 
 const colorMap = {
   error: '#D84315',
@@ -51,14 +58,14 @@ const Notification = ({ notification: n }) => {
     removeNotificationById,
   ])
   const onClickAction1 = useCallback(() => {
-    store[n.action1Name](n.action1Argument)
+    store?.[n.action1Name]?.(n.action1Argument ?? undefined)
     removeNotificationById(n.id)
   }, [n, removeNotificationById, store])
 
   return (
     <Container data-color={color}>
-      <div>{n.message}</div>
-      {!!n.action1Name && (
+      <Message>{n.message}</Message>
+      {!!n.action1Name && !!n.action1Label && (
         <StyledButton onClick={onClickAction1} variant="outlined">
           {n.action1Label}
         </StyledButton>
