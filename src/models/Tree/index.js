@@ -160,6 +160,12 @@ export default types
     removeOpenNode(val) {
       self.openNodes = self.openNodes.filter((n) => !isEqual(n, val))
     },
+    removeOpenNodeWithChildren(url) {
+      self.openNodes = self.openNodes.filter((n) => {
+        const urlPartWithEqualLength = n.slice(0, url.length)
+        return !isEqual(urlPartWithEqualLength, url)
+      })
+    },
     addOpenNode(url) {
       // add all parent nodes
       let addedOpenNodes = []
