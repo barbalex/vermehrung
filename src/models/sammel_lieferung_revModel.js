@@ -67,6 +67,10 @@ export const sammel_lieferung_revModel = sammel_lieferung_revModelBase.actions(
         callbackQueryVariables: JSON.stringify({
           where: { id: { _eq: self.id } },
         }),
+        revertTable: 'sammel_lieferung',
+        revertId: self.sammel_lieferung_id,
+        revertField: '_deleted',
+        revertValue: false,
       })
       deleteSammelLieferungRevModel(self)
     },

@@ -162,6 +162,12 @@ export const RootStore = RootStoreBase.props({
         if (!model) return
         self[`${table}s`].set(id, { ...model, [field]: value })
       },
+      updateModelValues({ table, id, values }) {
+        // used to revert offline operations if they error
+        const model = self[`${table}s`].get(id)
+        if (!model) return
+        self[`${table}s`].set(id, { ...model, ...values })
+      },
       setShowDeleted(val) {
         self.showDeleted = val
       },
@@ -244,6 +250,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'art',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertArtModel(newObjectForStore)
@@ -354,6 +364,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'event',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertEventModel(newObjectForStore)
@@ -434,6 +448,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'garten',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertGartenModel(newObjectForStore)
@@ -514,6 +532,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'herkunft',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertHerkunftModel(newObjectForStore)
@@ -601,6 +623,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'kultur',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertKulturModel(newObjectForStore)
@@ -733,6 +759,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'lieferung',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertLieferungModel(newObjectForStore)
@@ -821,6 +851,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'person',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertPersonModel(newObjectForStore)
@@ -931,6 +965,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'sammel_lieferung',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertSammelLieferungModel(newObjectForStore)
@@ -1017,6 +1055,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'sammlung',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertSammlungModel(newObjectForStore)
@@ -1103,6 +1145,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'teilkultur',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertTeilkulturModel(newObjectForStore)
@@ -1185,6 +1231,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'teilzaehlung',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertTeilzaehlungModel(newObjectForStore)
@@ -1259,6 +1309,10 @@ export const RootStore = RootStoreBase.props({
           callbackQueryVariables: JSON.stringify({
             where: { id: { _eq: id } },
           }),
+          revertTable: 'zaehlung',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
         })
         // optimistically update store
         upsertZaehlungModel(newObjectForStore)
