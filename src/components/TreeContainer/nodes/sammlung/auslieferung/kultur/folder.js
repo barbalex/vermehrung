@@ -15,34 +15,56 @@ export default ({ store }) => {
       node[2] === 'Aus-Lieferungen',
   )
 
-  return parentNodes.map((node) => {
-    const sammlungId = node[1]
-    const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
-    const lieferungId = node[3]
-    const lieferungIndex = lieferungNodes.findIndex((a) => a.id === lieferungId)
+  return (
+    parentNodes
+      .map((node) => {
+        const sammlungId = node[1]
+        const sammlungIndex = sammlungNodes.findIndex(
+          (a) => a.id === sammlungId,
+        )
+        const lieferungId = node[3]
+        const lieferungIndex = lieferungNodes.findIndex(
+          (a) => a.id === lieferungId,
+        )
 
-    const lieferung = store.lieferungs.get(lieferungId)
-    const kultur = store.kultursFiltered.find(
-      (k) => lieferung.nach_kultur_id === k.id,
-    )
+        const lieferung = store.lieferungs.get(lieferungId) || {}
+        const kultur = store.kultursFiltered.find(
+          (k) => k.id === lieferung.nach_kultur_id,
+        )
 
-    const nr = loading || !kultur ? 0 : 1
+        if (!kultur) return {}
 
-    return {
-      nodeType: 'folder',
-      menuTitle: 'Kulturen',
-      id: `${sammlungId}${lieferungId}KulturFolder`,
-      label: `Kultur (${nr})`,
-      url: [
-        'Sammlungen',
-        sammlungId,
-        'Aus-Lieferungen',
-        lieferungId,
-        'Kulturen',
-      ],
-      sort: [3, sammlungIndex, 3, lieferungIndex, 1],
-      hasChildren: true,
-      childrenCount: nr,
-    }
-  })
+        const nr = loading ? 0 : 1
+
+        console.log('nodes sammlung auslieferung kultur', {
+          sammlungId,
+          sammlungIndex,
+          lieferungId,
+          lieferungIndex,
+          sammlungNodes,
+          lieferungNodes,
+          lieferung,
+          kultur,
+        })
+
+        return {
+          nodeType: 'folder_without_menu',
+          menuTitle: 'Kulturen',
+          id: `${sammlungId}${lieferungId}KulturFolder`,
+          label: `Kultur (${nr})`,
+          url: [
+            'Sammlungen',
+            sammlungId,
+            'Aus-Lieferungen',
+            lieferungId,
+            'Kulturen',
+          ],
+          sort: [3, sammlungIndex, 3, lieferungIndex, 1],
+          hasChildren: true,
+          childrenCount: nr,
+        }
+      })
+      // remove lieferungs without kulturs
+      .filter((n) => !!n.id)
+  )
 }

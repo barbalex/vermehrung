@@ -23,16 +23,16 @@ export default ({ store }) => {
     const lieferungId = node[3]
     const lieferungIndex = lieferungNodes.findIndex((a) => a.id === lieferungId)
 
-    const lieferung = store.lieferungs.get(lieferungId)
+    const lieferung = store.lieferungs.get(lieferungId) || {}
     const kultur = store.kultursFiltered.find(
-      (k) => lieferung.nach_kultur_id === k.id,
+      (k) => lieferung?.nach_kultur_id === k.id,
     )
 
     if (!kultur) return []
 
     return [kultur]
       .map((el) => ({
-        nodeType: 'table',
+        nodeType: 'table_without_menu',
         menuTitle: 'Kultur',
         table: 'kultur',
         id: el.id,
