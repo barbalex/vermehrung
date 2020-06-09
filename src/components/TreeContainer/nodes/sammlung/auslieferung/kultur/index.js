@@ -35,7 +35,7 @@ export default ({ store }) => {
         nodeType: 'table_without_menu',
         menuTitle: 'Kultur',
         table: 'kultur',
-        id: el.id,
+        id: `${sammlungId}${lieferungId}${el.id}`,
         label:
           el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`,
         url: [
