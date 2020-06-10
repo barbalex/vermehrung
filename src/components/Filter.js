@@ -35,6 +35,7 @@ const StyledTab = styled(Tab)`
 `
 const TitleRow = styled.div`
   background-color: #e65100;
+  user-select: none;
 `
 const Title = styled.div`
   padding: 10px 10px 0 10px;
