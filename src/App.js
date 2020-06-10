@@ -3,7 +3,8 @@ import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
 import { createHttpClient } from 'mst-gql'
-import { RootStore as DataStore, StoreContext } from './models'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { RootStore, StoreContext } from './models'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
@@ -66,8 +67,18 @@ const tokenWithRoles =
 // is this the place to use the last snapshot of the store instead of undefined?
 // to that instead of mst-persist?
 gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
-const store = DataStore.create(undefined, {
+
+// https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
+const gqlWsClient = new SubscriptionClient(constants.graphQlWsUri, {
+  reconnect: true,
+  connectionParams: {
+    headers: { authorization: `Bearer ${tokenWithRoles}` },
+  },
+})
+// https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
+const store = RootStore.create(undefined, {
   gqlHttpClient,
+  gqlWsClient,
 })
 
 const App = ({ element }) => {
