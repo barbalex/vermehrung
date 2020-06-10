@@ -2712,10 +2712,10 @@ input av_bool_exp {
 # unique or primary key constraints on table "av"
 enum av_constraint {
   # unique or primary key constraint
-  av_art_person_id_art_id_key
+  av_person_id_art_id_key
 
   # unique or primary key constraint
-  av_art_pkey
+  av_pkey
 }
 
 # input type for inserting data into table "av"
