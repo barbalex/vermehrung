@@ -16,7 +16,8 @@ import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
 import artSort from '../utils/artSort'
-import avArtSort from '../utils/avArtSort'
+import avSort from '../utils/avSort'
+import gvSort from '../utils/gvSort'
 import eventSort from '../utils/eventSort'
 import lieferungSort from '../utils/lieferungSort'
 import personSort from '../utils/personSort'
@@ -291,10 +292,10 @@ export const RootStore = RootStoreBase.props({
         self.art_qks.delete(val.id)
       },
       upsertAvArtModel(val) {
-        self.av_arts.set(val.id, val)
+        self.avs.set(val.id, val)
       },
       deleteAvArtModel(val) {
-        self.av_arts.delete(val.id)
+        self.avs.delete(val.id)
       },
       deleteAvArtRevModel(val) {
         // 1. update model: remove this conflict
@@ -1587,8 +1588,11 @@ export const RootStore = RootStoreBase.props({
     get artQksSorted() {
       return [...self.art_qks.values()].sort(qkSort)
     },
-    get avArtsSorted() {
-      return [...self.av_arts.values()].sort(avArtSort)
+    get avsSorted() {
+      return [...self.avs.values()].sort(avSort)
+    },
+    get gvsSorted() {
+      return [...self.gvs.values()].sort(gvSort)
     },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })

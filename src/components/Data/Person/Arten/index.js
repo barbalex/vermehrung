@@ -50,7 +50,7 @@ const AvArten = styled.div`
 
 const PersonArten = ({ personId }) => {
   const store = useContext(StoreContext)
-  const { upsertAvArtModel, deleteAvArtModel, avArtsSorted, artsSorted } = store
+  const { upsertAvArtModel, deleteAvArtModel, avsSorted, artsSorted } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -64,15 +64,15 @@ const PersonArten = ({ personId }) => {
     [open],
   )
 
-  const { error, loading, query: avArtQuery } = useQuery(query, {
+  const { error, loading, query: avQuery } = useQuery(query, {
     variables: { personId },
   })
-  const avArten = avArtsSorted.filter((a) => a.person_id === personId)
+  const avs = avsSorted.filter((a) => a.person_id === personId)
 
   const artWerte = useMemo(
     () =>
       artsSorted
-        .filter((a) => !a?.av_arts?.id)
+        .filter((a) => !a?.avs?.id)
         .map((el) => ({
           value: el.id,
           label: el?.art_ae_art?.name ?? '(kein Artname)',
@@ -99,10 +99,10 @@ const PersonArten = ({ personId }) => {
         deleteAvArtModel(newObject)
         return setErrors({ [field]: error.message })
       }
-      avArtQuery.refetch()
+      avQuery.refetch()
       setErrors({})
     },
-    [avArtQuery, deleteAvArtModel, personId, store, upsertAvArtModel],
+    [avQuery, deleteAvArtModel, personId, store, upsertAvArtModel],
   )
 
   return (
@@ -112,7 +112,7 @@ const PersonArten = ({ personId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`Arten (${loading ? '...' : avArten.length})`}</Title>
+        <Title>{`Arten (${loading ? '...' : avs.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -125,13 +125,13 @@ const PersonArten = ({ personId }) => {
       </TitleRow>
       {open && (
         <Content>
-          {loading && !avArten.length ? (
+          {loading && !avs.length ? (
             <AvArten>Lade Daten...</AvArten>
           ) : error ? (
             <AvArten>{`Fehler: ${error.message}`}</AvArten>
           ) : (
             <AvArten>
-              {avArten.map((av) => (
+              {avs.map((av) => (
                 <Art key={`${av.person_id}/${av.art_id}`} av={av} />
               ))}
             </AvArten>
