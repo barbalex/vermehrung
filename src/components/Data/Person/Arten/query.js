@@ -4,10 +4,7 @@ import { art, av } from '../../../../utils/fragments'
 
 export default gql`
   query ArtenForPersonQuery($personId: uuid!) {
-    av(
-      where: { person_id: { _eq: $personId } }
-      order_by: { art: { art_ae_art: { name: asc } } }
-    ) {
+    av(where: { person_id: { _eq: $personId } }) {
       id
       __typename
       art_id
