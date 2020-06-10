@@ -112,22 +112,20 @@ drop function if exists garten_person_has_gv() cascade;
 create function garten_person_has_gv() returns trigger as $garten_person_has_gv$
 begin
   if new.person_id <> old.person_id then
+    delete from gv 
+    where 
+      person_id = old.person_id 
+      and garten_id = old.garten_id;
     if new.person_id is not null then
       insert into gv (person_id, garten_id)
       values (new.person_id, new.garten_id);
-    end if;
-    if old.person_id is not null then
-      delete from gv 
-      where 
-        person_id = old.person_id 
-        and garten_id = old.garten_id;
     end if;
   end if;
   return new;
 end;
 $garten_person_has_gv$ language plpgsql;
 
-create trigger person_has_felder after update on garten
+create trigger garten_person_has_gv after update on garten
   for each row execute procedure garten_person_has_gv();
 
 --insert into gv (person_id, garten_id)
