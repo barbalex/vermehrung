@@ -4,10 +4,10 @@
 import { types } from "mobx-state-tree"
 import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { av_artModel } from "./av_artModel"
-import { av_artModelSelector } from "./av_artModel.base"
-import { av_art_aggregateModel } from "./av_art_aggregateModel"
-import { av_art_aggregateModelSelector } from "./av_art_aggregateModel.base"
+import { avModel } from "./avModel"
+import { avModelSelector } from "./avModel.base"
+import { av_aggregateModel } from "./av_aggregateModel"
+import { av_aggregateModelSelector } from "./av_aggregateModel.base"
 import { eventModel } from "./eventModel"
 import { eventModelSelector } from "./eventModel.base"
 import { event_aggregateModel } from "./event_aggregateModel"
@@ -24,6 +24,10 @@ import { garten_revModel } from "./garten_revModel"
 import { garten_revModelSelector } from "./garten_revModel.base"
 import { garten_rev_aggregateModel } from "./garten_rev_aggregateModel"
 import { garten_rev_aggregateModelSelector } from "./garten_rev_aggregateModel.base"
+import { gvModel } from "./gvModel"
+import { gvModelSelector } from "./gvModel.base"
+import { gv_aggregateModel } from "./gv_aggregateModel"
+import { gv_aggregateModelSelector } from "./gv_aggregateModel.base"
 import { lieferungModel } from "./lieferungModel"
 import { lieferungModelSelector } from "./lieferungModel.base"
 import { lieferung_aggregateModel } from "./lieferung_aggregateModel"
@@ -79,8 +83,8 @@ export const personModelBase = ModelBase
     account_id: types.union(types.undefined, types.null, types.string),
     adresszusatz: types.union(types.undefined, types.null, types.string),
     aktiv: types.union(types.undefined, types.null, types.boolean),
-    av_arts: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
-    av_arts_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
+    avs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
+    avs_aggregate: types.union(types.undefined, types.late(() => av_aggregateModel)),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -93,6 +97,8 @@ export const personModelBase = ModelBase
     garten_revs_aggregate: types.union(types.undefined, types.late(() => garten_rev_aggregateModel)),
     gartens: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
     gartens_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
+    gvs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gvModel)))),
+    gvs_aggregate: types.union(types.undefined, types.late(() => gv_aggregateModel)),
     id: types.identifier,
     info: types.union(types.undefined, types.null, types.boolean),
     kein_email: types.union(types.undefined, types.null, types.boolean),
@@ -160,8 +166,8 @@ export class personModelSelector extends QueryBuilder {
   get telefon_privat() { return this.__attr(`telefon_privat`) }
   get tsv() { return this.__attr(`tsv`) }
   get user_role() { return this.__attr(`user_role`) }
-  av_arts(builder) { return this.__child(`av_arts`, av_artModelSelector, builder) }
-  av_arts_aggregate(builder) { return this.__child(`av_arts_aggregate`, av_art_aggregateModelSelector, builder) }
+  avs(builder) { return this.__child(`avs`, avModelSelector, builder) }
+  avs_aggregate(builder) { return this.__child(`avs_aggregate`, av_aggregateModelSelector, builder) }
   event_revs(builder) { return this.__child(`event_revs`, event_revModelSelector, builder) }
   event_revs_aggregate(builder) { return this.__child(`event_revs_aggregate`, event_rev_aggregateModelSelector, builder) }
   events(builder) { return this.__child(`events`, eventModelSelector, builder) }
@@ -170,6 +176,8 @@ export class personModelSelector extends QueryBuilder {
   garten_revs_aggregate(builder) { return this.__child(`garten_revs_aggregate`, garten_rev_aggregateModelSelector, builder) }
   gartens(builder) { return this.__child(`gartens`, gartenModelSelector, builder) }
   gartens_aggregate(builder) { return this.__child(`gartens_aggregate`, garten_aggregateModelSelector, builder) }
+  gvs(builder) { return this.__child(`gvs`, gvModelSelector, builder) }
+  gvs_aggregate(builder) { return this.__child(`gvs_aggregate`, gv_aggregateModelSelector, builder) }
   lieferung_revs(builder) { return this.__child(`lieferung_revs`, lieferung_revModelSelector, builder) }
   lieferung_revs_aggregate(builder) { return this.__child(`lieferung_revs_aggregate`, lieferung_rev_aggregateModelSelector, builder) }
   lieferungs(builder) { return this.__child(`lieferungs`, lieferungModelSelector, builder) }

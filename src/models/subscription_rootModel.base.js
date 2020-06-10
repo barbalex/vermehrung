@@ -32,10 +32,10 @@ import { art_sumsModel } from "./art_sumsModel"
 import { art_sumsModelSelector } from "./art_sumsModel.base"
 import { art_sums_aggregateModel } from "./art_sums_aggregateModel"
 import { art_sums_aggregateModelSelector } from "./art_sums_aggregateModel.base"
-import { av_artModel } from "./av_artModel"
-import { av_artModelSelector } from "./av_artModel.base"
-import { av_art_aggregateModel } from "./av_art_aggregateModel"
-import { av_art_aggregateModelSelector } from "./av_art_aggregateModel.base"
+import { avModel } from "./avModel"
+import { avModelSelector } from "./avModel.base"
+import { av_aggregateModel } from "./av_aggregateModel"
+import { av_aggregateModelSelector } from "./av_aggregateModel.base"
 import { eventModel } from "./eventModel"
 import { eventModelSelector } from "./eventModel.base"
 import { event_aggregateModel } from "./event_aggregateModel"
@@ -60,6 +60,10 @@ import { garten_teilzaehlung_sumsModel } from "./garten_teilzaehlung_sumsModel"
 import { garten_teilzaehlung_sumsModelSelector } from "./garten_teilzaehlung_sumsModel.base"
 import { garten_teilzaehlung_sums_aggregateModel } from "./garten_teilzaehlung_sums_aggregateModel"
 import { garten_teilzaehlung_sums_aggregateModelSelector } from "./garten_teilzaehlung_sums_aggregateModel.base"
+import { gvModel } from "./gvModel"
+import { gvModelSelector } from "./gvModel.base"
+import { gv_aggregateModel } from "./gv_aggregateModel"
+import { gv_aggregateModelSelector } from "./gv_aggregateModel.base"
 import { herkunftModel } from "./herkunftModel"
 import { herkunftModelSelector } from "./herkunftModel.base"
 import { herkunft_aggregateModel } from "./herkunft_aggregateModel"
@@ -219,9 +223,9 @@ export const subscription_rootModelBase = ModelBase
     art_search_aggregate: types.union(types.undefined, types.late(() => art_aggregateModel)),
     art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
-    av_art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
-    av_art_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
-    av_art_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
+    av: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
+    av_aggregate: types.union(types.undefined, types.late(() => av_aggregateModel)),
+    av_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
     event: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
     event_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     event_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => eventModel))),
@@ -243,6 +247,9 @@ export const subscription_rootModelBase = ModelBase
     garten_search_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
     garten_teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
     garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
+    gv: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gvModel)))),
+    gv_aggregate: types.union(types.undefined, types.late(() => gv_aggregateModel)),
+    gv_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gvModel))),
     herkunft: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunftModel)))),
     herkunft_aggregate: types.union(types.undefined, types.late(() => herkunft_aggregateModel)),
     herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
@@ -379,9 +386,9 @@ export class subscription_rootModelSelector extends QueryBuilder {
   art_search_aggregate(builder) { return this.__child(`art_search_aggregate`, art_aggregateModelSelector, builder) }
   art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
   art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
-  av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
-  av_art_aggregate(builder) { return this.__child(`av_art_aggregate`, av_art_aggregateModelSelector, builder) }
-  av_art_by_pk(builder) { return this.__child(`av_art_by_pk`, av_artModelSelector, builder) }
+  av(builder) { return this.__child(`av`, avModelSelector, builder) }
+  av_aggregate(builder) { return this.__child(`av_aggregate`, av_aggregateModelSelector, builder) }
+  av_by_pk(builder) { return this.__child(`av_by_pk`, avModelSelector, builder) }
   event(builder) { return this.__child(`event`, eventModelSelector, builder) }
   event_aggregate(builder) { return this.__child(`event_aggregate`, event_aggregateModelSelector, builder) }
   event_by_pk(builder) { return this.__child(`event_by_pk`, eventModelSelector, builder) }
@@ -403,6 +410,9 @@ export class subscription_rootModelSelector extends QueryBuilder {
   garten_search_aggregate(builder) { return this.__child(`garten_search_aggregate`, garten_aggregateModelSelector, builder) }
   garten_teilzaehlung_sums(builder) { return this.__child(`garten_teilzaehlung_sums`, garten_teilzaehlung_sumsModelSelector, builder) }
   garten_teilzaehlung_sums_aggregate(builder) { return this.__child(`garten_teilzaehlung_sums_aggregate`, garten_teilzaehlung_sums_aggregateModelSelector, builder) }
+  gv(builder) { return this.__child(`gv`, gvModelSelector, builder) }
+  gv_aggregate(builder) { return this.__child(`gv_aggregate`, gv_aggregateModelSelector, builder) }
+  gv_by_pk(builder) { return this.__child(`gv_by_pk`, gvModelSelector, builder) }
   herkunft(builder) { return this.__child(`herkunft`, herkunftModelSelector, builder) }
   herkunft_aggregate(builder) { return this.__child(`herkunft_aggregate`, herkunft_aggregateModelSelector, builder) }
   herkunft_by_pk(builder) { return this.__child(`herkunft_by_pk`, herkunftModelSelector, builder) }

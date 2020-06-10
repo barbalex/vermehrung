@@ -275,9 +275,9 @@ type art {
   ): art_sums_aggregate!
 
   # An array relationship
-  av_arts(
+  avs(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -286,16 +286,16 @@ type art {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): [av_art!]!
+    where: av_bool_exp
+  ): [av!]!
 
   # An aggregated array relationship
-  av_arts_aggregate(
+  avs_aggregate(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -304,11 +304,11 @@ type art {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): av_art_aggregate!
+    where: av_bool_exp
+  ): av_aggregate!
   changed: timestamp
   changed_by: String
   id: ID!
@@ -671,7 +671,7 @@ input art_bool_exp {
   art_files: art_file_bool_exp
   art_qk_choosens: art_qk_choosen_bool_exp
   art_sums: art_sums_bool_exp
-  av_arts: av_art_bool_exp
+  avs: av_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   id: uuid_comparison_exp
@@ -908,7 +908,7 @@ input art_insert_input {
   art_ae_art: ae_art_obj_rel_insert_input
   art_files: art_file_arr_rel_insert_input
   art_qk_choosens: art_qk_choosen_arr_rel_insert_input
-  av_arts: av_art_arr_rel_insert_input
+  avs: av_arr_rel_insert_input
   changed: timestamp
   changed_by: String
   id: ID
@@ -1002,7 +1002,7 @@ input art_order_by {
   art_files_aggregate: art_file_aggregate_order_by
   art_qk_choosens_aggregate: art_qk_choosen_aggregate_order_by
   art_sums_aggregate: art_sums_aggregate_order_by
-  av_arts_aggregate: av_art_aggregate_order_by
+  avs_aggregate: av_aggregate_order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -1478,12 +1478,12 @@ type art_rev {
   art_rev_ae_art: ae_art
 
   # An object relationship
-  av_art: av_art
+  av: av
 
   # An array relationship
-  av_arts(
+  avs(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -1492,16 +1492,16 @@ type art_rev {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): [av_art!]!
+    where: av_bool_exp
+  ): [av!]!
 
   # An aggregated array relationship
-  av_arts_aggregate(
+  avs_aggregate(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -1510,11 +1510,11 @@ type art_rev {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): av_art_aggregate!
+    where: av_bool_exp
+  ): av_aggregate!
   changed: timestamp
   changed_by: String
   id: ID!
@@ -1729,8 +1729,8 @@ input art_rev_bool_exp {
   ae_id: uuid_comparison_exp
   art_id: uuid_comparison_exp
   art_rev_ae_art: ae_art_bool_exp
-  av_art: av_art_bool_exp
-  av_arts: av_art_bool_exp
+  av: av_bool_exp
+  avs: av_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   id: uuid_comparison_exp
@@ -1764,8 +1764,8 @@ input art_rev_insert_input {
   ae_id: uuid
   art_id: uuid
   art_rev_ae_art: ae_art_obj_rel_insert_input
-  av_art: av_art_obj_rel_insert_input
-  av_arts: av_art_arr_rel_insert_input
+  av: av_obj_rel_insert_input
+  avs: av_arr_rel_insert_input
   changed: timestamp
   changed_by: String
   id: ID
@@ -1855,8 +1855,8 @@ input art_rev_order_by {
   ae_id: order_by
   art_id: order_by
   art_rev_ae_art: ae_art_order_by
-  av_art: av_art_order_by
-  av_arts_aggregate: av_art_aggregate_order_by
+  av: av_order_by
+  avs_aggregate: av_aggregate_order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -2130,12 +2130,12 @@ type art_sums {
   auspflanzbereit_beschreibung: String
 
   # An object relationship
-  av_art: av_art
+  av: av
 
   # An array relationship
-  av_arts(
+  avs(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -2144,16 +2144,16 @@ type art_sums {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): [av_art!]!
+    where: av_bool_exp
+  ): [av!]!
 
   # An aggregated array relationship
-  av_arts_aggregate(
+  avs_aggregate(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -2162,11 +2162,11 @@ type art_sums {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): av_art_aggregate!
+    where: av_bool_exp
+  ): av_aggregate!
   bemerkungen: String
   datum: date
   gramm_samen: bigint
@@ -2248,8 +2248,8 @@ input art_sums_bool_exp {
   art: art_bool_exp
   art_id: uuid_comparison_exp
   auspflanzbereit_beschreibung: String_comparison_exp
-  av_art: av_art_bool_exp
-  av_arts: av_art_bool_exp
+  av: av_bool_exp
+  avs: av_bool_exp
   bemerkungen: String_comparison_exp
   datum: date_comparison_exp
   gramm_samen: bigint_comparison_exp
@@ -2342,8 +2342,8 @@ input art_sums_order_by {
   art: art_order_by
   art_id: order_by
   auspflanzbereit_beschreibung: order_by
-  av_art: av_art_order_by
-  av_arts_aggregate: av_art_aggregate_order_by
+  av: av_order_by
+  avs_aggregate: av_aggregate_order_by
   bemerkungen: order_by
   datum: order_by
   gramm_samen: order_by
@@ -2622,8 +2622,8 @@ input art_variance_order_by {
   _depth: order_by
 }
 
-# columns and relationships of "av_art"
-type av_art {
+# columns and relationships of "av"
+type av {
   # An object relationship
   art: art!
   art_id: uuid!
@@ -2670,37 +2670,37 @@ type av_art {
   person_id: uuid!
 }
 
-# aggregated selection of "av_art"
-type av_art_aggregate {
-  aggregate: av_art_aggregate_fields
-  nodes: [av_art!]!
+# aggregated selection of "av"
+type av_aggregate {
+  aggregate: av_aggregate_fields
+  nodes: [av!]!
 }
 
-# aggregate fields of "av_art"
-type av_art_aggregate_fields {
-  count(columns: [av_art_select_column!], distinct: Boolean): Int
-  max: av_art_max_fields
-  min: av_art_min_fields
+# aggregate fields of "av"
+type av_aggregate_fields {
+  count(columns: [av_select_column!], distinct: Boolean): Int
+  max: av_max_fields
+  min: av_min_fields
 }
 
-# order by aggregate values of table "av_art"
-input av_art_aggregate_order_by {
+# order by aggregate values of table "av"
+input av_aggregate_order_by {
   count: order_by
-  max: av_art_max_order_by
-  min: av_art_min_order_by
+  max: av_max_order_by
+  min: av_min_order_by
 }
 
-# input type for inserting array relation for remote table "av_art"
-input av_art_arr_rel_insert_input {
-  data: [av_art_insert_input!]!
-  on_conflict: av_art_on_conflict
+# input type for inserting array relation for remote table "av"
+input av_arr_rel_insert_input {
+  data: [av_insert_input!]!
+  on_conflict: av_on_conflict
 }
 
-# Boolean expression to filter rows from the table "av_art". All fields are combined with a logical 'AND'.
-input av_art_bool_exp {
-  _and: [av_art_bool_exp]
-  _not: av_art_bool_exp
-  _or: [av_art_bool_exp]
+# Boolean expression to filter rows from the table "av". All fields are combined with a logical 'AND'.
+input av_bool_exp {
+  _and: [av_bool_exp]
+  _not: av_bool_exp
+  _or: [av_bool_exp]
   art: art_bool_exp
   art_id: uuid_comparison_exp
   art_sums: art_sums_bool_exp
@@ -2709,8 +2709,8 @@ input av_art_bool_exp {
   person_id: uuid_comparison_exp
 }
 
-# unique or primary key constraints on table "av_art"
-enum av_art_constraint {
+# unique or primary key constraints on table "av"
+enum av_constraint {
   # unique or primary key constraint
   av_art_person_id_art_id_key
 
@@ -2718,8 +2718,8 @@ enum av_art_constraint {
   av_art_pkey
 }
 
-# input type for inserting data into table "av_art"
-input av_art_insert_input {
+# input type for inserting data into table "av"
+input av_insert_input {
   art: art_obj_rel_insert_input
   art_id: uuid
   id: ID
@@ -2728,57 +2728,57 @@ input av_art_insert_input {
 }
 
 # aggregate max on columns
-type av_art_max_fields {
+type av_max_fields {
   art_id: uuid
   id: ID
   person_id: uuid
 }
 
-# order by max() on columns of table "av_art"
-input av_art_max_order_by {
+# order by max() on columns of table "av"
+input av_max_order_by {
   art_id: order_by
   id: order_by
   person_id: order_by
 }
 
 # aggregate min on columns
-type av_art_min_fields {
+type av_min_fields {
   art_id: uuid
   id: ID
   person_id: uuid
 }
 
-# order by min() on columns of table "av_art"
-input av_art_min_order_by {
+# order by min() on columns of table "av"
+input av_min_order_by {
   art_id: order_by
   id: order_by
   person_id: order_by
 }
 
-# response of any mutation on the table "av_art"
-type av_art_mutation_response {
+# response of any mutation on the table "av"
+type av_mutation_response {
   # number of affected rows by the mutation
   affected_rows: Int!
 
   # data of the affected rows by the mutation
-  returning: [av_art!]!
+  returning: [av!]!
 }
 
-# input type for inserting object relation for remote table "av_art"
-input av_art_obj_rel_insert_input {
-  data: av_art_insert_input!
-  on_conflict: av_art_on_conflict
+# input type for inserting object relation for remote table "av"
+input av_obj_rel_insert_input {
+  data: av_insert_input!
+  on_conflict: av_on_conflict
 }
 
-# on conflict condition type for table "av_art"
-input av_art_on_conflict {
-  constraint: av_art_constraint!
-  update_columns: [av_art_update_column!]!
-  where: av_art_bool_exp
+# on conflict condition type for table "av"
+input av_on_conflict {
+  constraint: av_constraint!
+  update_columns: [av_update_column!]!
+  where: av_bool_exp
 }
 
-# ordering options when selecting data from "av_art"
-input av_art_order_by {
+# ordering options when selecting data from "av"
+input av_order_by {
   art: art_order_by
   art_id: order_by
   art_sums_aggregate: art_sums_aggregate_order_by
@@ -2787,13 +2787,13 @@ input av_art_order_by {
   person_id: order_by
 }
 
-# primary key columns input for table: "av_art"
-input av_art_pk_columns_input {
+# primary key columns input for table: "av"
+input av_pk_columns_input {
   id: ID!
 }
 
-# select columns of table "av_art"
-enum av_art_select_column {
+# select columns of table "av"
+enum av_select_column {
   # column name
   art_id
 
@@ -2804,15 +2804,15 @@ enum av_art_select_column {
   person_id
 }
 
-# input type for updating data in table "av_art"
-input av_art_set_input {
+# input type for updating data in table "av"
+input av_set_input {
   art_id: uuid
   id: ID
   person_id: uuid
 }
 
-# update columns of table "av_art"
-enum av_art_update_column {
+# update columns of table "av"
+enum av_update_column {
   # column name
   art_id
 
@@ -3801,6 +3801,42 @@ type garten {
     where: garten_file_bool_exp
   ): garten_file_aggregate!
   geom_point: geometry
+
+  # An array relationship
+  gvs(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): [gv!]!
+
+  # An aggregated array relationship
+  gvs_aggregate(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): gv_aggregate!
   id: ID!
 
   # An array relationship
@@ -3968,6 +4004,7 @@ input garten_bool_exp {
   changed_by: String_comparison_exp
   garten_files: garten_file_bool_exp
   geom_point: geometry_comparison_exp
+  gvs: gv_bool_exp
   id: uuid_comparison_exp
   kultur_revs: kultur_rev_bool_exp
   kulturs: kultur_bool_exp
@@ -4214,6 +4251,7 @@ input garten_insert_input {
   changed_by: String
   garten_files: garten_file_arr_rel_insert_input
   geom_point: geometry
+  gvs: gv_arr_rel_insert_input
   id: ID
   kultur_revs: kultur_rev_arr_rel_insert_input
   kulturs: kultur_arr_rel_insert_input
@@ -4346,6 +4384,7 @@ input garten_order_by {
   changed_by: order_by
   garten_files_aggregate: garten_file_aggregate_order_by
   geom_point: order_by
+  gvs_aggregate: gv_aggregate_order_by
   id: order_by
   kultur_revs_aggregate: kultur_rev_aggregate_order_by
   kulturs_aggregate: kultur_aggregate_order_by
@@ -6238,6 +6277,169 @@ input geometry_comparison_exp {
 
   # is the column contained in the given geometry value
   _st_within: geometry
+}
+
+# columns and relationships of "gv"
+type gv {
+  # An object relationship
+  garten: garten
+  garten_id: uuid
+  id: ID!
+
+  # An object relationship
+  person: person
+  person_id: uuid
+}
+
+# aggregated selection of "gv"
+type gv_aggregate {
+  aggregate: gv_aggregate_fields
+  nodes: [gv!]!
+}
+
+# aggregate fields of "gv"
+type gv_aggregate_fields {
+  count(columns: [gv_select_column!], distinct: Boolean): Int
+  max: gv_max_fields
+  min: gv_min_fields
+}
+
+# order by aggregate values of table "gv"
+input gv_aggregate_order_by {
+  count: order_by
+  max: gv_max_order_by
+  min: gv_min_order_by
+}
+
+# input type for inserting array relation for remote table "gv"
+input gv_arr_rel_insert_input {
+  data: [gv_insert_input!]!
+  on_conflict: gv_on_conflict
+}
+
+# Boolean expression to filter rows from the table "gv". All fields are combined with a logical 'AND'.
+input gv_bool_exp {
+  _and: [gv_bool_exp]
+  _not: gv_bool_exp
+  _or: [gv_bool_exp]
+  garten: garten_bool_exp
+  garten_id: uuid_comparison_exp
+  id: uuid_comparison_exp
+  person: person_bool_exp
+  person_id: uuid_comparison_exp
+}
+
+# unique or primary key constraints on table "gv"
+enum gv_constraint {
+  # unique or primary key constraint
+  gv_person_id_garten_id_key
+
+  # unique or primary key constraint
+  gv_pkey
+}
+
+# input type for inserting data into table "gv"
+input gv_insert_input {
+  garten: garten_obj_rel_insert_input
+  garten_id: uuid
+  id: ID
+  person: person_obj_rel_insert_input
+  person_id: uuid
+}
+
+# aggregate max on columns
+type gv_max_fields {
+  garten_id: uuid
+  id: ID
+  person_id: uuid
+}
+
+# order by max() on columns of table "gv"
+input gv_max_order_by {
+  garten_id: order_by
+  id: order_by
+  person_id: order_by
+}
+
+# aggregate min on columns
+type gv_min_fields {
+  garten_id: uuid
+  id: ID
+  person_id: uuid
+}
+
+# order by min() on columns of table "gv"
+input gv_min_order_by {
+  garten_id: order_by
+  id: order_by
+  person_id: order_by
+}
+
+# response of any mutation on the table "gv"
+type gv_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [gv!]!
+}
+
+# input type for inserting object relation for remote table "gv"
+input gv_obj_rel_insert_input {
+  data: gv_insert_input!
+  on_conflict: gv_on_conflict
+}
+
+# on conflict condition type for table "gv"
+input gv_on_conflict {
+  constraint: gv_constraint!
+  update_columns: [gv_update_column!]!
+  where: gv_bool_exp
+}
+
+# ordering options when selecting data from "gv"
+input gv_order_by {
+  garten: garten_order_by
+  garten_id: order_by
+  id: order_by
+  person: person_order_by
+  person_id: order_by
+}
+
+# primary key columns input for table: "gv"
+input gv_pk_columns_input {
+  id: ID!
+}
+
+# select columns of table "gv"
+enum gv_select_column {
+  # column name
+  garten_id
+
+  # column name
+  id
+
+  # column name
+  person_id
+}
+
+# input type for updating data in table "gv"
+input gv_set_input {
+  garten_id: uuid
+  id: ID
+  person_id: uuid
+}
+
+# update columns of table "gv"
+enum gv_update_column {
+  # column name
+  garten_id
+
+  # column name
+  id
+
+  # column name
+  person_id
 }
 
 # columns and relationships of "herkunft"
@@ -13281,14 +13483,14 @@ type mutation_root {
   # delete single row from the table: "art_rev"
   delete_art_rev_by_pk(id: ID!): art_rev
 
-  # delete data from the table: "av_art"
-  delete_av_art(
+  # delete data from the table: "av"
+  delete_av(
     # filter the rows which have to be deleted
-    where: av_art_bool_exp!
-  ): av_art_mutation_response
+    where: av_bool_exp!
+  ): av_mutation_response
 
-  # delete single row from the table: "av_art"
-  delete_av_art_by_pk(id: ID!): av_art
+  # delete single row from the table: "av"
+  delete_av_by_pk(id: ID!): av
 
   # delete data from the table: "event"
   delete_event(
@@ -13334,6 +13536,15 @@ type mutation_root {
 
   # delete single row from the table: "garten_rev"
   delete_garten_rev_by_pk(id: ID!): garten_rev
+
+  # delete data from the table: "gv"
+  delete_gv(
+    # filter the rows which have to be deleted
+    where: gv_bool_exp!
+  ): gv_mutation_response
+
+  # delete single row from the table: "gv"
+  delete_gv_by_pk(id: ID!): gv
 
   # delete data from the table: "herkunft"
   delete_herkunft(
@@ -13713,23 +13924,23 @@ type mutation_root {
     on_conflict: art_rev_on_conflict
   ): art_rev
 
-  # insert data into the table: "av_art"
-  insert_av_art(
+  # insert data into the table: "av"
+  insert_av(
     # the rows to be inserted
-    objects: [av_art_insert_input!]!
+    objects: [av_insert_input!]!
 
     # on conflict condition
-    on_conflict: av_art_on_conflict
-  ): av_art_mutation_response
+    on_conflict: av_on_conflict
+  ): av_mutation_response
 
-  # insert a single row into the table: "av_art"
-  insert_av_art_one(
+  # insert a single row into the table: "av"
+  insert_av_one(
     # the row to be inserted
-    object: av_art_insert_input!
+    object: av_insert_input!
 
     # on conflict condition
-    on_conflict: av_art_on_conflict
-  ): av_art
+    on_conflict: av_on_conflict
+  ): av
 
   # insert data into the table: "event"
   insert_event(
@@ -13820,6 +14031,24 @@ type mutation_root {
     # on conflict condition
     on_conflict: garten_rev_on_conflict
   ): garten_rev
+
+  # insert data into the table: "gv"
+  insert_gv(
+    # the rows to be inserted
+    objects: [gv_insert_input!]!
+
+    # on conflict condition
+    on_conflict: gv_on_conflict
+  ): gv_mutation_response
+
+  # insert a single row into the table: "gv"
+  insert_gv_one(
+    # the row to be inserted
+    object: gv_insert_input!
+
+    # on conflict condition
+    on_conflict: gv_on_conflict
+  ): gv
 
   # insert data into the table: "herkunft"
   insert_herkunft(
@@ -14486,21 +14715,21 @@ type mutation_root {
     pk_columns: art_rev_pk_columns_input!
   ): art_rev
 
-  # update data of the table: "av_art"
-  update_av_art(
+  # update data of the table: "av"
+  update_av(
     # sets the columns of the filtered rows to the given values
-    _set: av_art_set_input
+    _set: av_set_input
 
     # filter the rows which have to be updated
-    where: av_art_bool_exp!
-  ): av_art_mutation_response
+    where: av_bool_exp!
+  ): av_mutation_response
 
-  # update single row of the table: "av_art"
-  update_av_art_by_pk(
+  # update single row of the table: "av"
+  update_av_by_pk(
     # sets the columns of the filtered rows to the given values
-    _set: av_art_set_input
-    pk_columns: av_art_pk_columns_input!
-  ): av_art
+    _set: av_set_input
+    pk_columns: av_pk_columns_input!
+  ): av
 
   # update data of the table: "event"
   update_event(
@@ -14605,6 +14834,22 @@ type mutation_root {
     _set: garten_rev_set_input
     pk_columns: garten_rev_pk_columns_input!
   ): garten_rev
+
+  # update data of the table: "gv"
+  update_gv(
+    # sets the columns of the filtered rows to the given values
+    _set: gv_set_input
+
+    # filter the rows which have to be updated
+    where: gv_bool_exp!
+  ): gv_mutation_response
+
+  # update single row of the table: "gv"
+  update_gv_by_pk(
+    # sets the columns of the filtered rows to the given values
+    _set: gv_set_input
+    pk_columns: gv_pk_columns_input!
+  ): gv
 
   # update data of the table: "herkunft"
   update_herkunft(
@@ -15289,9 +15534,9 @@ type person {
   aktiv: Boolean
 
   # An array relationship
-  av_arts(
+  avs(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -15300,16 +15545,16 @@ type person {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): [av_art!]!
+    where: av_bool_exp
+  ): [av!]!
 
   # An aggregated array relationship
-  av_arts_aggregate(
+  avs_aggregate(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -15318,11 +15563,11 @@ type person {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): av_art_aggregate!
+    where: av_bool_exp
+  ): av_aggregate!
   bemerkungen: String
   changed: timestamp
   changed_by: String
@@ -15471,6 +15716,42 @@ type person {
     # filter the rows returned
     where: garten_bool_exp
   ): garten_aggregate!
+
+  # An array relationship
+  gvs(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): [gv!]!
+
+  # An aggregated array relationship
+  gvs_aggregate(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): gv_aggregate!
   id: ID!
   info: Boolean
   kein_email: Boolean
@@ -15849,7 +16130,7 @@ input person_bool_exp {
   account_id: String_comparison_exp
   adresszusatz: String_comparison_exp
   aktiv: Boolean_comparison_exp
-  av_arts: av_art_bool_exp
+  avs: av_bool_exp
   bemerkungen: String_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -15858,6 +16139,7 @@ input person_bool_exp {
   events: event_bool_exp
   garten_revs: garten_rev_bool_exp
   gartens: garten_bool_exp
+  gvs: gv_bool_exp
   id: uuid_comparison_exp
   info: Boolean_comparison_exp
   kein_email: Boolean_comparison_exp
@@ -16107,7 +16389,7 @@ input person_insert_input {
   account_id: String
   adresszusatz: String
   aktiv: Boolean
-  av_arts: av_art_arr_rel_insert_input
+  avs: av_arr_rel_insert_input
   bemerkungen: String
   changed: timestamp
   changed_by: String
@@ -16116,6 +16398,7 @@ input person_insert_input {
   events: event_arr_rel_insert_input
   garten_revs: garten_rev_arr_rel_insert_input
   gartens: garten_arr_rel_insert_input
+  gvs: gv_arr_rel_insert_input
   id: ID
   info: Boolean
   kein_email: Boolean
@@ -17408,7 +17691,7 @@ input person_order_by {
   account_id: order_by
   adresszusatz: order_by
   aktiv: order_by
-  av_arts_aggregate: av_art_aggregate_order_by
+  avs_aggregate: av_aggregate_order_by
   bemerkungen: order_by
   changed: order_by
   changed_by: order_by
@@ -17417,6 +17700,7 @@ input person_order_by {
   events_aggregate: event_aggregate_order_by
   garten_revs_aggregate: garten_rev_aggregate_order_by
   gartens_aggregate: garten_aggregate_order_by
+  gvs_aggregate: gv_aggregate_order_by
   id: order_by
   info: order_by
   kein_email: order_by
@@ -17460,9 +17744,9 @@ type person_rev {
   aktiv: Boolean
 
   # An array relationship
-  av_art(
+  av(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -17471,16 +17755,16 @@ type person_rev {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): [av_art!]!
+    where: av_bool_exp
+  ): [av!]!
 
   # An aggregated array relationship
-  av_art_aggregate(
+  av_aggregate(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -17489,11 +17773,11 @@ type person_rev {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): av_art_aggregate!
+    where: av_bool_exp
+  ): av_aggregate!
   bemerkungen: String
   changed: timestamp
   changed_by: String
@@ -17767,7 +18051,7 @@ input person_rev_bool_exp {
   account_id: String_comparison_exp
   adresszusatz: String_comparison_exp
   aktiv: Boolean_comparison_exp
-  av_art: av_art_bool_exp
+  av: av_bool_exp
   bemerkungen: String_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -17820,7 +18104,7 @@ input person_rev_insert_input {
   account_id: String
   adresszusatz: String
   aktiv: Boolean
-  av_art: av_art_arr_rel_insert_input
+  av: av_arr_rel_insert_input
   bemerkungen: String
   changed: timestamp
   changed_by: String
@@ -17976,7 +18260,7 @@ input person_rev_order_by {
   account_id: order_by
   adresszusatz: order_by
   aktiv: order_by
-  av_art_aggregate: av_art_aggregate_order_by
+  av_aggregate: av_aggregate_order_by
   bemerkungen: order_by
   changed: order_by
   changed_by: order_by
@@ -18883,10 +19167,10 @@ type query_root {
     where: art_sums_bool_exp
   ): art_sums_aggregate!
 
-  # fetch data from the table: "av_art"
-  av_art(
+  # fetch data from the table: "av"
+  av(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -18895,16 +19179,16 @@ type query_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): [av_art!]!
+    where: av_bool_exp
+  ): [av!]!
 
-  # fetch aggregated fields from the table: "av_art"
-  av_art_aggregate(
+  # fetch aggregated fields from the table: "av"
+  av_aggregate(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -18913,14 +19197,14 @@ type query_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): av_art_aggregate!
+    where: av_bool_exp
+  ): av_aggregate!
 
-  # fetch data from the table: "av_art" using primary key columns
-  av_art_by_pk(id: ID!): av_art
+  # fetch data from the table: "av" using primary key columns
+  av_by_pk(id: ID!): av
 
   # fetch data from the table: "event"
   event(
@@ -19236,6 +19520,45 @@ type query_root {
     # filter the rows returned
     where: garten_teilzaehlung_sums_bool_exp
   ): garten_teilzaehlung_sums_aggregate!
+
+  # fetch data from the table: "gv"
+  gv(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): [gv!]!
+
+  # fetch aggregated fields from the table: "gv"
+  gv_aggregate(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): gv_aggregate!
+
+  # fetch data from the table: "gv" using primary key columns
+  gv_by_pk(id: ID!): gv
 
   # fetch data from the table: "herkunft"
   herkunft(
@@ -24529,10 +24852,10 @@ type subscription_root {
     where: art_sums_bool_exp
   ): art_sums_aggregate!
 
-  # fetch data from the table: "av_art"
-  av_art(
+  # fetch data from the table: "av"
+  av(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -24541,16 +24864,16 @@ type subscription_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): [av_art!]!
+    where: av_bool_exp
+  ): [av!]!
 
-  # fetch aggregated fields from the table: "av_art"
-  av_art_aggregate(
+  # fetch aggregated fields from the table: "av"
+  av_aggregate(
     # distinct select on columns
-    distinct_on: [av_art_select_column!]
+    distinct_on: [av_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -24559,14 +24882,14 @@ type subscription_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [av_art_order_by!]
+    order_by: [av_order_by!]
 
     # filter the rows returned
-    where: av_art_bool_exp
-  ): av_art_aggregate!
+    where: av_bool_exp
+  ): av_aggregate!
 
-  # fetch data from the table: "av_art" using primary key columns
-  av_art_by_pk(id: ID!): av_art
+  # fetch data from the table: "av" using primary key columns
+  av_by_pk(id: ID!): av
 
   # fetch data from the table: "event"
   event(
@@ -24882,6 +25205,45 @@ type subscription_root {
     # filter the rows returned
     where: garten_teilzaehlung_sums_bool_exp
   ): garten_teilzaehlung_sums_aggregate!
+
+  # fetch data from the table: "gv"
+  gv(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): [gv!]!
+
+  # fetch aggregated fields from the table: "gv"
+  gv_aggregate(
+    # distinct select on columns
+    distinct_on: [gv_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_order_by!]
+
+    # filter the rows returned
+    where: gv_bool_exp
+  ): gv_aggregate!
+
+  # fetch data from the table: "gv" using primary key columns
+  gv_by_pk(id: ID!): gv
 
   # fetch data from the table: "herkunft"
   herkunft(

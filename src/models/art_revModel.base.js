@@ -6,10 +6,10 @@ import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { ae_artModel } from "./ae_artModel"
 import { ae_artModelSelector } from "./ae_artModel.base"
-import { av_artModel } from "./av_artModel"
-import { av_artModelSelector } from "./av_artModel.base"
-import { av_art_aggregateModel } from "./av_art_aggregateModel"
-import { av_art_aggregateModelSelector } from "./av_art_aggregateModel.base"
+import { avModel } from "./avModel"
+import { avModelSelector } from "./avModel.base"
+import { av_aggregateModel } from "./av_aggregateModel"
+import { av_aggregateModelSelector } from "./av_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
@@ -44,9 +44,9 @@ export const art_revModelBase = ModelBase
     ae_id: types.union(types.undefined, types.null, types.frozen()),
     art_id: types.union(types.undefined, types.frozen()),
     art_rev_ae_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => ae_artModel))),
-    av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
-    av_arts: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
-    av_arts_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
+    av: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
+    avs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
+    avs_aggregate: types.union(types.undefined, types.late(() => av_aggregateModel)),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -77,9 +77,9 @@ export class art_revModelSelector extends QueryBuilder {
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
   art_rev_ae_art(builder) { return this.__child(`art_rev_ae_art`, ae_artModelSelector, builder) }
-  av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
-  av_arts(builder) { return this.__child(`av_arts`, av_artModelSelector, builder) }
-  av_arts_aggregate(builder) { return this.__child(`av_arts_aggregate`, av_art_aggregateModelSelector, builder) }
+  av(builder) { return this.__child(`av`, avModelSelector, builder) }
+  avs(builder) { return this.__child(`avs`, avModelSelector, builder) }
+  avs_aggregate(builder) { return this.__child(`avs_aggregate`, av_aggregateModelSelector, builder) }
   kulturs(builder) { return this.__child(`kulturs`, kulturModelSelector, builder) }
   kulturs_aggregate(builder) { return this.__child(`kulturs_aggregate`, kultur_aggregateModelSelector, builder) }
   lieferungs(builder) { return this.__child(`lieferungs`, lieferungModelSelector, builder) }

@@ -1052,7 +1052,7 @@ create index on lieferung_file using btree (file_mime_type);
 drop table if exists av cascade;
 create table av (
   id uuid primary key default uuid_generate_v1mc(),
-  art_id uuid REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  art_id uuid default null REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id uuid references person (id) on delete cascade on update cascade,
   unique (person_id, art_id)
 );
@@ -1060,4 +1060,13 @@ create index on av using btree (id);
 create index on av using btree (art_id);
 create index on av using btree (person_id);
 
-ALTER TABLE ONLY av ALTER COLUMN art_id SET DEFAULT null;
+drop table if exists gv cascade;
+create table gv (
+  id uuid primary key default uuid_generate_v1mc(),
+  garten_id uuid default null REFERENCES garten (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  person_id uuid references person (id) on delete cascade on update cascade,
+  unique (person_id, garten_id)
+);
+create index on gv using btree (id);
+create index on gv using btree (garten_id);
+create index on gv using btree (person_id);
