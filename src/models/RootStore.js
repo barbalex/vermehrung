@@ -291,13 +291,13 @@ export const RootStore = RootStoreBase.props({
       deleteArtQkModel(val) {
         self.art_qks.delete(val.id)
       },
-      upsertAvArtModel(val) {
+      upsertAvModel(val) {
         self.avs.set(val.id, val)
       },
-      deleteAvArtModel(val) {
+      deleteAvModel(val) {
         self.avs.delete(val.id)
       },
-      deleteAvArtRevModel(val) {
+      deleteAvRevModel(val) {
         // 1. update model: remove this conflict
         const model = self.ar_arts.get(val.ar_art_id)
         const newModel = {

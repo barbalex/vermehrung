@@ -43,7 +43,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const AvArt = ({ av }) => {
+const Av = ({ av }) => {
   const store = useContext(StoreContext)
   const { addNotification } = store
 
@@ -51,13 +51,13 @@ const AvArt = ({ av }) => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(async () => {
-    store.deleteAvArtModel(av)
+    store.deleteAvModel(av)
     try {
-      store.mutateDelete_av_art({
+      store.mutateDelete_av({
         where: { id: { _eq: av.id } },
       })
     } catch (error) {
-      store.insertAvArtModel(av)
+      store.insertAvModel(av)
       addNotification({
         message: error.message,
       })
@@ -104,4 +104,4 @@ const AvArt = ({ av }) => {
   )
 }
 
-export default observer(AvArt)
+export default observer(Av)

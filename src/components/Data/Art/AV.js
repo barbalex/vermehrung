@@ -69,8 +69,8 @@ const ArtAv = ({ refetch, artId }) => {
   const {
     addNotification,
     personsSorted,
-    upsertAvArtModel,
-    deleteAvArtModel,
+    upsertAvModel,
+    deleteAvModel,
     avsSorted,
   } = store
 
@@ -86,13 +86,13 @@ const ArtAv = ({ refetch, artId }) => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(async () => {
-    store.deleteAvArtModel(av)
+    store.deleteAvModel(av)
     try {
-      store.mutateDelete_av_art({
+      store.mutateDelete_av({
         where: { id: { _eq: av.id } },
       })
     } catch (error) {
-      store.insertAvArtModel(av)
+      store.insertAvModel(av)
       addNotification({
         message: error.message,
       })
@@ -116,18 +116,18 @@ const ArtAv = ({ refetch, artId }) => {
         art_id: artId,
         person_id: event.target.value,
       }
-      upsertAvArtModel(newObject)
+      upsertAvModel(newObject)
       try {
-        await store.mutateInsert_av_art_one({
+        await store.mutateInsert_av_one({
           object: newObject,
           on_conflict: {
-            constraint: 'av_art_pkey',
+            constraint: 'av_pkey',
             update_columns: ['id'],
           },
         })
       } catch (error) {
         console.log({ error })
-        deleteAvArtModel(newObject)
+        deleteAvModel(newObject)
 
         addNotification({
           message: error.message,
@@ -135,14 +135,7 @@ const ArtAv = ({ refetch, artId }) => {
       }
       refetch()
     },
-    [
-      addNotification,
-      artId,
-      deleteAvArtModel,
-      refetch,
-      store,
-      upsertAvArtModel,
-    ],
+    [addNotification, artId, deleteAvModel, refetch, store, upsertAvModel],
   )
 
   if (av.person_id) {

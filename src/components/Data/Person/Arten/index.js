@@ -44,13 +44,13 @@ const Title = styled.div`
 const Content = styled.div`
   padding-bottom: 10px;
 `
-const AvArten = styled.div`
+const Aven = styled.div`
   padding-bottom: 8px;
 `
 
 const PersonArten = ({ personId }) => {
   const store = useContext(StoreContext)
-  const { upsertAvArtModel, deleteAvArtModel, avsSorted, artsSorted } = store
+  const { upsertAvModel, deleteAvModel, avsSorted, artsSorted } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -85,24 +85,24 @@ const PersonArten = ({ personId }) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
       const newObject = { id: uuidv1(), art_id: value, person_id: personId }
-      upsertAvArtModel(newObject)
+      upsertAvModel(newObject)
       try {
-        await store.mutateInsert_av_art_one({
+        await store.mutateInsert_av_one({
           object: newObject,
           on_conflict: {
-            constraint: 'av_art_pkey',
+            constraint: 'av_pkey',
             update_columns: ['id'],
           },
         })
       } catch (error) {
         console.log({ error })
-        deleteAvArtModel(newObject)
+        deleteAvModel(newObject)
         return setErrors({ [field]: error.message })
       }
       avQuery.refetch()
       setErrors({})
     },
-    [avQuery, deleteAvArtModel, personId, store, upsertAvArtModel],
+    [avQuery, deleteAvModel, personId, store, upsertAvModel],
   )
 
   return (
@@ -126,15 +126,15 @@ const PersonArten = ({ personId }) => {
       {open && (
         <Content>
           {loading && !avs.length ? (
-            <AvArten>Lade Daten...</AvArten>
+            <Aven>Lade Daten...</Aven>
           ) : error ? (
-            <AvArten>{`Fehler: ${error.message}`}</AvArten>
+            <Aven>{`Fehler: ${error.message}`}</Aven>
           ) : (
-            <AvArten>
+            <Aven>
               {avs.map((av) => (
                 <Art key={`${av.person_id}/${av.art_id}`} av={av} />
               ))}
-            </AvArten>
+            </Aven>
           )}
           {!!artWerte.length && (
             <Select
