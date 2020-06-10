@@ -51,7 +51,7 @@ const Gvs = styled.div`
 
 const PersonArten = ({ personId }) => {
   const store = useContext(StoreContext)
-  const { upsertAvModel, deleteAvModel, gvsSorted, gartensSorted } = store
+  const { upsertGvModel, deleteGvModel, gvsSorted, gartensSorted } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -87,7 +87,7 @@ const PersonArten = ({ personId }) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
       const newObject = { id: uuidv1(), garten_id: value, person_id: personId }
-      upsertAvModel(newObject)
+      upsertGvModel(newObject)
       try {
         await store.mutateInsert_gv_one({
           object: newObject,
@@ -98,13 +98,13 @@ const PersonArten = ({ personId }) => {
         })
       } catch (error) {
         console.log({ error })
-        deleteAvModel(newObject)
+        deleteGvModel(newObject)
         return setErrors({ [field]: error.message })
       }
       gvQuery.refetch()
       setErrors({})
     },
-    [gvQuery, deleteAvModel, personId, store, upsertAvModel],
+    [gvQuery, deleteGvModel, personId, store, upsertGvModel],
   )
 
   return (

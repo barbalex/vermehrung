@@ -9,6 +9,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import gql from 'graphql-tag'
+import { v1 as uuidv1 } from 'uuid'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -151,6 +152,8 @@ const Garten = ({
     showDeleted,
     deletedFilter,
     inactiveFilter,
+    upsertGvModel,
+    deleteGvModel,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -212,7 +215,7 @@ const Garten = ({
   )
 
   const saveToDb = useCallback(
-    (event) => {
+    async (event) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
@@ -225,8 +228,25 @@ const Garten = ({
         return filter.setValue({ table: 'garten', key: field, value })
       }
       row.edit({ field, value })
+      if (field === 'person_id') {
+        const newObject = { id: uuidv1(), person_id: value, garten_id: row.id }
+        upsertGvModel(newObject)
+        try {
+          await store.mutateInsert_gv_one({
+            object: newObject,
+            on_conflict: {
+              constraint: 'gv_pkey',
+              update_columns: ['id'],
+            },
+          })
+        } catch (error) {
+          console.log({ error })
+          deleteGvModel(newObject)
+          return setErrors({ [field]: error.message })
+        }
+      }
     },
-    [filter, row, showFilter],
+    [deleteGvModel, filter, row, showFilter, store, upsertGvModel],
   )
 
   if (loading && !Object.keys(row).length) {
