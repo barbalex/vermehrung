@@ -1052,7 +1052,7 @@ create index on lieferung_file using btree (file_mime_type);
 drop table if exists av_art cascade;
 create table av_art (
   id uuid primary key default uuid_generate_v1mc(),
-  art_id uuid unique REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  art_id uuid REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id uuid references person (id) on delete cascade on update cascade,
   unique (person_id, art_id)
 );
