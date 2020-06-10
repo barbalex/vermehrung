@@ -113,7 +113,9 @@ const PersonArten = ({ personId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`Arten (${loading ? '...' : avs.length})`}</Title>
+        <Title>{`verantwortlich für Arten (${
+          loading ? '...' : avs.length
+        })`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
