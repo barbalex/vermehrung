@@ -20,6 +20,7 @@ const TitleRow = styled.div`
   position: sticky;
   top: -10px;
   z-index: 1;
+  user-select: none;
 `
 const Title = styled.div`
   font-weight: bold;
