@@ -92,6 +92,7 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   position: sticky;
+  user-select: none;
   top: -10px;
   z-index: 1;
   &:first-of-type {
