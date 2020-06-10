@@ -4,10 +4,10 @@
 import { types } from "mobx-state-tree"
 import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
-import { av_artModel } from "./av_artModel"
-import { av_artModelSelector } from "./av_artModel.base"
-import { av_art_aggregateModel } from "./av_art_aggregateModel"
-import { av_art_aggregateModelSelector } from "./av_art_aggregateModel.base"
+import { avModel } from "./avModel"
+import { avModelSelector } from "./avModel.base"
+import { av_aggregateModel } from "./av_aggregateModel"
+import { av_aggregateModelSelector } from "./av_aggregateModel.base"
 import { eventModel } from "./eventModel"
 import { eventModelSelector } from "./eventModel.base"
 import { event_aggregateModel } from "./event_aggregateModel"
@@ -50,8 +50,8 @@ export const person_revModelBase = ModelBase
     account_id: types.union(types.undefined, types.null, types.string),
     adresszusatz: types.union(types.undefined, types.null, types.string),
     aktiv: types.union(types.undefined, types.null, types.boolean),
-    av_art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
-    av_art_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
+    av: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
+    av_aggregate: types.union(types.undefined, types.late(() => av_aggregateModel)),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -116,8 +116,8 @@ export class person_revModelSelector extends QueryBuilder {
   get telefon_mobile() { return this.__attr(`telefon_mobile`) }
   get telefon_privat() { return this.__attr(`telefon_privat`) }
   get user_role() { return this.__attr(`user_role`) }
-  av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
-  av_art_aggregate(builder) { return this.__child(`av_art_aggregate`, av_art_aggregateModelSelector, builder) }
+  av(builder) { return this.__child(`av`, avModelSelector, builder) }
+  av_aggregate(builder) { return this.__child(`av_aggregate`, av_aggregateModelSelector, builder) }
   events(builder) { return this.__child(`events`, eventModelSelector, builder) }
   events_aggregate(builder) { return this.__child(`events_aggregate`, event_aggregateModelSelector, builder) }
   gartens(builder) { return this.__child(`gartens`, gartenModelSelector, builder) }
