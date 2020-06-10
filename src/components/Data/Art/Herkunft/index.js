@@ -21,6 +21,7 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   cursor: pointer;
+  user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;

@@ -17,7 +17,7 @@ import Herkunft from './Herkunft'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import QK from './QK'
-import AV from './AV'
+import Personen from './Personen'
 import ArUpSvg from '../../../svg/to_ar_up.inline.svg'
 import SaSvg from '../../../svg/to_sa.inline.svg'
 import KuSvg from '../../../svg/to_ku.inline.svg'
@@ -326,7 +326,6 @@ const Art = ({
                 resultNodesName="ae_art"
                 resultNodesLabelName="name"
               />
-              <AV refetch={query.refetch} artId={id} />
               {online &&
                 !showFilter &&
                 row._conflicts &&
@@ -339,6 +338,7 @@ const Art = ({
                 )}
               {!showFilter && (
                 <>
+                  <Personen artId={row.id} />
                   <Timeline artId={row.id} />
                   <Herkunft artId={row.id} />
                   <QK artId={row.id} />
