@@ -218,6 +218,14 @@ export const gartenFile = gql`
     beschreibung
   }
 `
+export const gv = gql`
+  fragment GvFields on gv {
+    id
+    __typename
+    garten_id
+    person_id
+  }
+`
 export const herkunft = gql`
   fragment HerkunftFields on herkunft {
     id

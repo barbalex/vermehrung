@@ -483,6 +483,12 @@ export const RootStore = RootStoreBase.props({
       deleteGartenFileModel(val) {
         self.garten_files.delete(val.id)
       },
+      upsertGvModel(val) {
+        self.gvs.set(val.id, val)
+      },
+      deleteGvModel(val) {
+        self.gvs.delete(val.id)
+      },
       upsertHerkunftModel(val) {
         self.herkunfts.set(val.id, val)
       },

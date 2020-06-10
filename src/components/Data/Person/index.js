@@ -19,6 +19,7 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Arten from './Arten'
+import Gaerten from './Gaerten'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -241,6 +242,8 @@ const Person = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
+  console.log('Person, row:', row)
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -426,6 +429,7 @@ const Person = ({
               {row.user_role === 'artverantwortlich' && (
                 <Arten personId={row.id} />
               )}
+              {row.user_role === 'gaertner' && <Gaerten personId={row.id} />}
               {!showFilter && row.id && (
                 <Files parentId={row.id} parent="person" />
               )}
