@@ -20,6 +20,7 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
+import Personen from './Personen'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Download from './Download'
@@ -383,6 +384,7 @@ const Garten = ({
                     setActiveConflict={setActiveConflict}
                   />
                 )}
+              <Personen gartenId={row.id} />
               {!showFilter && <Files parentId={row.id} parent="garten" />}
             </FieldsContainer>
             <>
