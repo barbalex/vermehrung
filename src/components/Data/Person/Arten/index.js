@@ -28,6 +28,7 @@ const TitleRow = styled.div`
   margin-right: -10px;
   padding: 0 10px;
   cursor: pointer;
+  user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
   top: -10px;
   z-index: 1;
@@ -113,9 +114,9 @@ const PersonArten = ({ personId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`verantwortlich für Arten (${
+        <Title>{`Mitarbeitend bei ${
           loading ? '...' : avs.length
-        })`}</Title>
+        } Arten`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
