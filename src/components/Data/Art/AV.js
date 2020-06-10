@@ -14,7 +14,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Label from '../../shared/Label'
 import Select from '../../shared/Select'
 import {
-  avArt as avArtFragment,
+  av as avArtFragment,
   person as personFragment,
 } from '../../../utils/fragments'
 
@@ -50,8 +50,8 @@ const MenuTitle = styled.h3`
 
 const allDataQuery = gql`
   query AllDataQueryForArt($artId: uuid!) {
-    av_art(where: { art_id: { _eq: $artId } }) {
-      ...AvArtFields
+    av(where: { art_id: { _eq: $artId } }) {
+      ...AvFields
       person {
         ...PersonFields
       }
@@ -80,26 +80,26 @@ const ArtAv = ({ refetch, artId }) => {
     },
   })
 
-  const avArt = avArtsSorted.find((a) => a.art_id === artId)
+  const av = avArtsSorted.find((a) => a.art_id === artId)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(async () => {
-    store.deleteAvArtModel(avArt)
+    store.deleteAvArtModel(av)
     try {
       store.mutateDelete_av_art({
-        where: { id: { _eq: avArt.id } },
+        where: { id: { _eq: av.id } },
       })
     } catch (error) {
-      store.insertAvArtModel(avArt)
+      store.insertAvArtModel(av)
       addNotification({
         message: error.message,
       })
     }
-  }, [addNotification, avArt, store])
+  }, [addNotification, av, store])
 
-  const person = avArt?.person?.name
+  const person = av?.person?.name
   const persons = personsSorted
     .filter((p) => p.user_role === 'artverantwortlich')
     .map((el) => ({
@@ -107,7 +107,7 @@ const ArtAv = ({ refetch, artId }) => {
       label: el?.name ?? '(kein Name)',
     }))
 
-  console.log('AV', { person, avArt })
+  console.log('AV', { person, av })
 
   const saveToDb = useCallback(
     async (event) => {
@@ -145,7 +145,7 @@ const ArtAv = ({ refetch, artId }) => {
     ],
   )
 
-  if (avArt.person_id) {
+  if (av.person_id) {
     return (
       <ErrorBoundary>
         <Container>

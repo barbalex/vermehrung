@@ -1049,15 +1049,15 @@ create index on lieferung_file using btree (lieferung_id);
 create index on lieferung_file using btree (file_id);
 create index on lieferung_file using btree (file_mime_type);
 
-drop table if exists av_art cascade;
-create table av_art (
+drop table if exists av cascade;
+create table av (
   id uuid primary key default uuid_generate_v1mc(),
   art_id uuid REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id uuid references person (id) on delete cascade on update cascade,
   unique (person_id, art_id)
 );
-create index on av_art using btree (id);
-create index on av_art using btree (art_id);
-create index on av_art using btree (person_id);
+create index on av using btree (id);
+create index on av using btree (art_id);
+create index on av using btree (person_id);
 
-ALTER TABLE ONLY av_art ALTER COLUMN art_id SET DEFAULT null;
+ALTER TABLE ONLY av ALTER COLUMN art_id SET DEFAULT null;

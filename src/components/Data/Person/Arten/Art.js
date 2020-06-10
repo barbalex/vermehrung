@@ -43,7 +43,7 @@ const MenuTitle = styled.h3`
   }
 `
 
-const AvArt = ({ avArt }) => {
+const AvArt = ({ av }) => {
   const store = useContext(StoreContext)
   const { addNotification } = store
 
@@ -51,22 +51,22 @@ const AvArt = ({ avArt }) => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = useCallback(async () => {
-    store.deleteAvArtModel(avArt)
+    store.deleteAvArtModel(av)
     try {
       store.mutateDelete_av_art({
-        where: { id: { _eq: avArt.id } },
+        where: { id: { _eq: av.id } },
       })
     } catch (error) {
-      store.insertAvArtModel(avArt)
+      store.insertAvArtModel(av)
       addNotification({
         message: error.message,
       })
     }
-  }, [addNotification, avArt, store])
+  }, [addNotification, av, store])
 
-  const artname = avArt?.art?.art_ae_art?.name
+  const artname = av?.art?.art_ae_art?.name
 
-  if (!avArt) return null
+  if (!av) return null
 
   return (
     <ErrorBoundary>

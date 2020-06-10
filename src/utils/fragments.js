@@ -58,8 +58,8 @@ export const aeArt = gql`
     # name_latein
   }
 `
-export const avArt = gql`
-  fragment AvArtFields on av_art {
+export const av = gql`
+  fragment AvFields on av {
     id
     __typename
     art_id
