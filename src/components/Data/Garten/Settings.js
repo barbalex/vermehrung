@@ -16,6 +16,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 const TitleRow = styled.div`
   display: flex;
   justify-content: space-between;
+  user-select: none;
 `
 const Title = styled.div`
   padding: 12px 16px;
