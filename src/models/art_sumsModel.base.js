@@ -8,6 +8,8 @@ import { artModel } from "./artModel"
 import { artModelSelector } from "./artModel.base"
 import { av_artModel } from "./av_artModel"
 import { av_artModelSelector } from "./av_artModel.base"
+import { av_art_aggregateModel } from "./av_art_aggregateModel"
+import { av_art_aggregateModelSelector } from "./av_art_aggregateModel.base"
 
 
 /**
@@ -27,6 +29,8 @@ export const art_sumsModelBase = ModelBase
     art_id: types.union(types.undefined, types.null, types.frozen()),
     auspflanzbereit_beschreibung: types.union(types.undefined, types.null, types.string),
     av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
+    av_arts: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
+    av_arts_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
@@ -60,6 +64,8 @@ export class art_sumsModelSelector extends QueryBuilder {
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
   av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
+  av_arts(builder) { return this.__child(`av_arts`, av_artModelSelector, builder) }
+  av_arts_aggregate(builder) { return this.__child(`av_arts_aggregate`, av_art_aggregateModelSelector, builder) }
 }
 export function selectFromart_sums() {
   return new art_sumsModelSelector()

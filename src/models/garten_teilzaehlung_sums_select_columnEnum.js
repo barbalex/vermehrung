@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * garten_teilzaehlung_sums_select_column
 */
-export const garten_teilzaehlung_sums_select_columnEnum = types.enumeration("garten_teilzaehlung_sums_select_column", [
+export const garten_teilzaehlung_sums_select_columnEnumType = types.enumeration("garten_teilzaehlung_sums_select_column", [
         "garten_aktiv",
   "garten_anzahl_kulturen",
   "garten_bemerkungen",

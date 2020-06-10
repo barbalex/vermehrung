@@ -79,8 +79,8 @@ export const personModelBase = ModelBase
     account_id: types.union(types.undefined, types.null, types.string),
     adresszusatz: types.union(types.undefined, types.null, types.string),
     aktiv: types.union(types.undefined, types.null, types.boolean),
-    av_art: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
-    av_art_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
+    av_arts: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
+    av_arts_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
     bemerkungen: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -160,8 +160,8 @@ export class personModelSelector extends QueryBuilder {
   get telefon_privat() { return this.__attr(`telefon_privat`) }
   get tsv() { return this.__attr(`tsv`) }
   get user_role() { return this.__attr(`user_role`) }
-  av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
-  av_art_aggregate(builder) { return this.__child(`av_art_aggregate`, av_art_aggregateModelSelector, builder) }
+  av_arts(builder) { return this.__child(`av_arts`, av_artModelSelector, builder) }
+  av_arts_aggregate(builder) { return this.__child(`av_arts_aggregate`, av_art_aggregateModelSelector, builder) }
   event_revs(builder) { return this.__child(`event_revs`, event_revModelSelector, builder) }
   event_revs_aggregate(builder) { return this.__child(`event_revs_aggregate`, event_rev_aggregateModelSelector, builder) }
   events(builder) { return this.__child(`events`, eventModelSelector, builder) }

@@ -7,6 +7,6 @@ import { types } from "mobx-state-tree"
 /**
 * person_option_constraint
 */
-export const person_option_constraintEnum = types.enumeration("person_option_constraint", [
+export const person_option_constraintEnumType = types.enumeration("person_option_constraint", [
         "person_option_person_id_key",
       ])

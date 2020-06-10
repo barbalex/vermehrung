@@ -7,6 +7,6 @@ import { types } from "mobx-state-tree"
 /**
 * kultur_option_constraint
 */
-export const kultur_option_constraintEnum = types.enumeration("kultur_option_constraint", [
+export const kultur_option_constraintEnumType = types.enumeration("kultur_option_constraint", [
         "kultur_option_kultur_id_key",
       ])

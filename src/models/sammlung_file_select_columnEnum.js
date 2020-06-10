@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * sammlung_file_select_column
 */
-export const sammlung_file_select_columnEnum = types.enumeration("sammlung_file_select_column", [
+export const sammlung_file_select_columnEnumType = types.enumeration("sammlung_file_select_column", [
         "beschreibung",
   "file_id",
   "file_mime_type",

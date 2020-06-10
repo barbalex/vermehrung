@@ -7,6 +7,6 @@ import { types } from "mobx-state-tree"
 /**
 * kultur_file_constraint
 */
-export const kultur_file_constraintEnum = types.enumeration("kultur_file_constraint", [
+export const kultur_file_constraintEnumType = types.enumeration("kultur_file_constraint", [
         "kultur_file_pkey",
       ])

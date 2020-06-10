@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * kultur_select_column
 */
-export const kultur_select_columnEnum = types.enumeration("kultur_select_column", [
+export const kultur_select_columnEnumType = types.enumeration("kultur_select_column", [
         "_conflicts",
   "_deleted",
   "_depth",

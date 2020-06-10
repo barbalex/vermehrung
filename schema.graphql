@@ -274,9 +274,6 @@ type art {
     where: art_sums_bool_exp
   ): art_sums_aggregate!
 
-  # An object relationship
-  av_art: av_art
-
   # An array relationship
   av_arts(
     # distinct select on columns
@@ -674,7 +671,6 @@ input art_bool_exp {
   art_files: art_file_bool_exp
   art_qk_choosens: art_qk_choosen_bool_exp
   art_sums: art_sums_bool_exp
-  av_art: av_art_bool_exp
   av_arts: av_art_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -912,7 +908,6 @@ input art_insert_input {
   art_ae_art: ae_art_obj_rel_insert_input
   art_files: art_file_arr_rel_insert_input
   art_qk_choosens: art_qk_choosen_arr_rel_insert_input
-  av_art: av_art_obj_rel_insert_input
   av_arts: av_art_arr_rel_insert_input
   changed: timestamp
   changed_by: String
@@ -1007,7 +1002,6 @@ input art_order_by {
   art_files_aggregate: art_file_aggregate_order_by
   art_qk_choosens_aggregate: art_qk_choosen_aggregate_order_by
   art_sums_aggregate: art_sums_aggregate_order_by
-  av_art: av_art_order_by
   av_arts_aggregate: av_art_aggregate_order_by
   changed: order_by
   changed_by: order_by
@@ -1485,6 +1479,42 @@ type art_rev {
 
   # An object relationship
   av_art: av_art
+
+  # An array relationship
+  av_arts(
+    # distinct select on columns
+    distinct_on: [av_art_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_art_order_by!]
+
+    # filter the rows returned
+    where: av_art_bool_exp
+  ): [av_art!]!
+
+  # An aggregated array relationship
+  av_arts_aggregate(
+    # distinct select on columns
+    distinct_on: [av_art_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_art_order_by!]
+
+    # filter the rows returned
+    where: av_art_bool_exp
+  ): av_art_aggregate!
   changed: timestamp
   changed_by: String
   id: ID!
@@ -1700,6 +1730,7 @@ input art_rev_bool_exp {
   art_id: uuid_comparison_exp
   art_rev_ae_art: ae_art_bool_exp
   av_art: av_art_bool_exp
+  av_arts: av_art_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   id: uuid_comparison_exp
@@ -1734,6 +1765,7 @@ input art_rev_insert_input {
   art_id: uuid
   art_rev_ae_art: ae_art_obj_rel_insert_input
   av_art: av_art_obj_rel_insert_input
+  av_arts: av_art_arr_rel_insert_input
   changed: timestamp
   changed_by: String
   id: ID
@@ -1824,6 +1856,7 @@ input art_rev_order_by {
   art_id: order_by
   art_rev_ae_art: ae_art_order_by
   av_art: av_art_order_by
+  av_arts_aggregate: av_art_aggregate_order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -2098,6 +2131,42 @@ type art_sums {
 
   # An object relationship
   av_art: av_art
+
+  # An array relationship
+  av_arts(
+    # distinct select on columns
+    distinct_on: [av_art_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_art_order_by!]
+
+    # filter the rows returned
+    where: av_art_bool_exp
+  ): [av_art!]!
+
+  # An aggregated array relationship
+  av_arts_aggregate(
+    # distinct select on columns
+    distinct_on: [av_art_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_art_order_by!]
+
+    # filter the rows returned
+    where: av_art_bool_exp
+  ): av_art_aggregate!
   bemerkungen: String
   datum: date
   gramm_samen: bigint
@@ -2180,6 +2249,7 @@ input art_sums_bool_exp {
   art_id: uuid_comparison_exp
   auspflanzbereit_beschreibung: String_comparison_exp
   av_art: av_art_bool_exp
+  av_arts: av_art_bool_exp
   bemerkungen: String_comparison_exp
   datum: date_comparison_exp
   gramm_samen: bigint_comparison_exp
@@ -2273,6 +2343,7 @@ input art_sums_order_by {
   art_id: order_by
   auspflanzbereit_beschreibung: order_by
   av_art: av_art_order_by
+  av_arts_aggregate: av_art_aggregate_order_by
   bemerkungen: order_by
   datum: order_by
   gramm_samen: order_by
@@ -15198,6 +15269,13 @@ enum order_by {
   desc_nulls_last
 }
 
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
+}
+
 # columns and relationships of "person"
 type person {
   _conflicts: _text
@@ -15211,7 +15289,7 @@ type person {
   aktiv: Boolean
 
   # An array relationship
-  av_art(
+  av_arts(
     # distinct select on columns
     distinct_on: [av_art_select_column!]
 
@@ -15229,7 +15307,7 @@ type person {
   ): [av_art!]!
 
   # An aggregated array relationship
-  av_art_aggregate(
+  av_arts_aggregate(
     # distinct select on columns
     distinct_on: [av_art_select_column!]
 
@@ -15771,7 +15849,7 @@ input person_bool_exp {
   account_id: String_comparison_exp
   adresszusatz: String_comparison_exp
   aktiv: Boolean_comparison_exp
-  av_art: av_art_bool_exp
+  av_arts: av_art_bool_exp
   bemerkungen: String_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -16029,7 +16107,7 @@ input person_insert_input {
   account_id: String
   adresszusatz: String
   aktiv: Boolean
-  av_art: av_art_arr_rel_insert_input
+  av_arts: av_art_arr_rel_insert_input
   bemerkungen: String
   changed: timestamp
   changed_by: String
@@ -17330,7 +17408,7 @@ input person_order_by {
   account_id: order_by
   adresszusatz: order_by
   aktiv: order_by
-  av_art_aggregate: av_art_aggregate_order_by
+  av_arts_aggregate: av_art_aggregate_order_by
   bemerkungen: order_by
   changed: order_by
   changed_by: order_by

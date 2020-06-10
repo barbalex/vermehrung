@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * order_by
 */
-export const order_byEnum = types.enumeration("order_by", [
+export const order_byEnumType = types.enumeration("order_by", [
         "asc",
   "asc_nulls_first",
   "asc_nulls_last",

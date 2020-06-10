@@ -78,7 +78,6 @@ export const artModelBase = ModelBase
     art_qk_choosens_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
     art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
-    av_art: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_artModel))),
     av_arts: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_artModel)))),
     av_arts_aggregate: types.union(types.undefined, types.late(() => av_art_aggregateModel)),
     changed: types.union(types.undefined, types.null, types.frozen()),
@@ -127,7 +126,6 @@ export class artModelSelector extends QueryBuilder {
   art_qk_choosens_aggregate(builder) { return this.__child(`art_qk_choosens_aggregate`, art_qk_choosen_aggregateModelSelector, builder) }
   art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
   art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
-  av_art(builder) { return this.__child(`av_art`, av_artModelSelector, builder) }
   av_arts(builder) { return this.__child(`av_arts`, av_artModelSelector, builder) }
   av_arts_aggregate(builder) { return this.__child(`av_arts_aggregate`, av_art_aggregateModelSelector, builder) }
   kultur_revs(builder) { return this.__child(`kultur_revs`, kultur_revModelSelector, builder) }

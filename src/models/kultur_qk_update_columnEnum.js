@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * kultur_qk_update_column
 */
-export const kultur_qk_update_columnEnum = types.enumeration("kultur_qk_update_column", [
+export const kultur_qk_update_columnEnumType = types.enumeration("kultur_qk_update_column", [
         "beschreibung",
   "id",
   "name",

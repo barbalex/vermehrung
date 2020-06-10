@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * art_sums_select_column
 */
-export const art_sums_select_columnEnum = types.enumeration("art_sums_select_column", [
+export const art_sums_select_columnEnumType = types.enumeration("art_sums_select_column", [
         "action",
   "andere_menge",
   "anzahl_auspflanzbereit",

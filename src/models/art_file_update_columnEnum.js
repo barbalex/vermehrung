@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * art_file_update_column
 */
-export const art_file_update_columnEnum = types.enumeration("art_file_update_column", [
+export const art_file_update_columnEnumType = types.enumeration("art_file_update_column", [
         "art_id",
   "beschreibung",
   "file_id",

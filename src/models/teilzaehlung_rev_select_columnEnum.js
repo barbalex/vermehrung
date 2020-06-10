@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * teilzaehlung_rev_select_column
 */
-export const teilzaehlung_rev_select_columnEnum = types.enumeration("teilzaehlung_rev_select_column", [
+export const teilzaehlung_rev_select_columnEnumType = types.enumeration("teilzaehlung_rev_select_column", [
         "_deleted",
   "_depth",
   "_parent_rev",

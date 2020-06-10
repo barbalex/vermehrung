@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * sammlung_update_column
 */
-export const sammlung_update_columnEnum = types.enumeration("sammlung_update_column", [
+export const sammlung_update_columnEnumType = types.enumeration("sammlung_update_column", [
         "_conflicts",
   "_deleted",
   "_depth",
