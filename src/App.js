@@ -56,6 +56,8 @@ const firebaseConfig = {
   appId: process.env.GATSBY_FIREBASE_APP_ID,
 }
 
+// TODO: how to set up gqlWsClient?
+// https://github.com/mobxjs/mst-gql/issues/247
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
 const tokenWithRoles =
   typeof window !== 'undefined'
