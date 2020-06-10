@@ -131,8 +131,8 @@ const PersonArten = ({ personId }) => {
             <AvArten>{`Fehler: ${error.message}`}</AvArten>
           ) : (
             <AvArten>
-              {avArten.map((avArt) => (
-                <Art key={`${avArt.person_id}/${avArt.art_id}`} avArt={avArt} />
+              {avArten.map((av) => (
+                <Art key={`${av.person_id}/${av.art_id}`} av={av} />
               ))}
             </AvArten>
           )}

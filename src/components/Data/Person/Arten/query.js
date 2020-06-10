@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
 
-import { art, avArt } from '../../../../utils/fragments'
+import { art, av } from '../../../../utils/fragments'
 
 export default gql`
   query ArtenForPersonQuery($personId: uuid!) {
-    av_art(
+    av(
       where: { person_id: { _eq: $personId } }
       order_by: { art: { art_ae_art: { name: asc } } }
     ) {
@@ -24,11 +24,11 @@ export default gql`
     }
     art {
       ...ArtFields
-      av_arts {
-        ...AvArtFields
+      avs {
+        ...AvFields
       }
     }
   }
   ${art}
-  ${avArt}
+  ${av}
 `
