@@ -65,7 +65,7 @@ const Gv = ({ gv }) => {
   }, [addNotification, gv, store])
 
   const person = personsSorted.find((p) => p.id === gv.person_id)
-  const personname = person?.name
+  const personname = person?.name ?? '(kein Name)'
 
   if (!gv) return null
 
