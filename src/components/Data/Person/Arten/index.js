@@ -68,16 +68,17 @@ const PersonArten = ({ personId }) => {
     variables: { personId },
   })
   const avs = avsSorted.filter((a) => a.person_id === personId)
+  const avArtIds = avs.map((v) => v.art_id)
 
   const artWerte = useMemo(
     () =>
       artsSorted
-        .filter((a) => !a?.avs?.id)
+        .filter((a) => !avArtIds.includes(a.id))
         .map((el) => ({
           value: el.id,
           label: el?.art_ae_art?.name ?? '(kein Artname)',
         })),
-    [artsSorted],
+    [artsSorted, avArtIds],
   )
 
   const saveToDb = useCallback(
