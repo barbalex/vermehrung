@@ -29,6 +29,7 @@ const TitleRow = styled.div`
   margin-bottom: 15px;
   padding: 0 10px;
   position: sticky;
+  user-select: none;
   top: -10px;
   z-index: 1;
 `
