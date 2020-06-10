@@ -26,20 +26,45 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "id",
-              "name",
-              "name_deutsch",
-              "name_latein"
-            ],
+            "columns": ["id", "name", "name_deutsch", "name_latein"],
             "filter": {
-              "ae_art_art": {
-                "av_arts": {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
+              "_or": [
+                {
+                  "ae_art_art": {
+                    "avs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                },
+                {
+                  "ae_art_art": {
+                    "kulturs": {
+                      "garten": {
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "ae_art_art": {
+                    "kulturs": {
+                      "garten": {
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
-              }
+              ]
             },
             "allow_aggregations": true
           }
@@ -47,18 +72,15 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": [
-              "id",
-              "name",
-              "name_deutsch",
-              "name_latein"
-            ],
+            "columns": ["id", "name", "name_deutsch", "name_latein"],
             "filter": {
               "ae_art_art": {
                 "kulturs": {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -70,12 +92,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "name",
-              "name_deutsch",
-              "name_latein",
-              "id"
-            ],
+            "columns": ["name", "name_deutsch", "name_latein", "id"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -143,13 +160,13 @@
           }
         },
         {
-          "name": "av_arts",
+          "name": "avs",
           "using": {
             "foreign_key_constraint_on": {
               "column": "art_id",
               "table": {
                 "schema": "public",
-                "name": "av_art"
+                "name": "av"
               }
             }
           }
@@ -256,7 +273,7 @@
           "role": "artverantwortlich",
           "permission": {
             "check": {
-              "av_arts": {
+              "avs": {
                 "person_id": {
                   "_eq": "X-Hasura-User-Id"
                 }
@@ -316,7 +333,7 @@
               "id"
             ],
             "filter": {
-              "av_arts": {
+              "avs": {
                 "person_id": {
                   "_eq": "X-Hasura-User-Id"
                 }
@@ -342,13 +359,30 @@
               "id"
             ],
             "filter": {
-              "kulturs": {
-                "garten": {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
+              "_or": [
+                {
+                  "kulturs": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "kulturs": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
                   }
                 }
-              }
+              ]
             },
             "allow_aggregations": true
           }
@@ -392,7 +426,7 @@
               "id"
             ],
             "filter": {
-              "av_arts": {
+              "avs": {
                 "person_id": {
                   "_eq": "X-Hasura-User-Id"
                 }
@@ -450,7 +484,7 @@
           "permission": {
             "check": {
               "art": {
-                "av_arts": {
+                "avs": {
                   "person_id": {
                     "_eq": "X-Hasura-User-Id"
                   }
@@ -510,7 +544,7 @@
             ],
             "filter": {
               "art": {
-                "av_arts": {
+                "avs": {
                   "person_id": {
                     "_eq": "X-Hasura-User-Id"
                   }
@@ -539,8 +573,10 @@
                       "_where": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -589,7 +625,7 @@
             ],
             "filter": {
               "art": {
-                "av_arts": {
+                "avs": {
                   "person_id": {
                     "_eq": "X-Hasura-User-Id"
                   }
@@ -618,8 +654,10 @@
                       "_where": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -662,7 +700,7 @@
           "permission": {
             "filter": {
               "art": {
-                "av_arts": {
+                "avs": {
                   "person_id": {
                     "_eq": "X-Hasura-User-Id"
                   }
@@ -682,8 +720,10 @@
                       "_where": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -721,26 +761,14 @@
           "role": "gardener",
           "permission": {
             "check": {},
-            "columns": [
-              "name",
-              "titel",
-              "beschreibung",
-              "sort",
-              "id"
-            ]
+            "columns": ["name", "titel", "beschreibung", "sort", "id"]
           }
         },
         {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ]
+            "columns": ["sort", "beschreibung", "titel", "id", "name"]
           }
         }
       ],
@@ -748,13 +776,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ],
+            "columns": ["sort", "beschreibung", "titel", "id", "name"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -762,13 +784,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ],
+            "columns": ["sort", "beschreibung", "titel", "id", "name"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -778,13 +794,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ],
+            "columns": ["sort", "beschreibung", "titel", "id", "name"],
             "filter": {},
             "check": null
           }
@@ -825,7 +835,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -834,33 +844,21 @@
                 }
               ]
             },
-            "columns": [
-              "art_id",
-              "qk_name",
-              "id"
-            ]
+            "columns": ["art_id", "qk_name", "id"]
           }
         },
         {
           "role": "gardener",
           "permission": {
             "check": {},
-            "columns": [
-              "qk_name",
-              "art_id",
-              "id"
-            ]
+            "columns": ["qk_name", "art_id", "id"]
           }
         },
         {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": [
-              "qk_name",
-              "art_id",
-              "id"
-            ]
+            "columns": ["qk_name", "art_id", "id"]
           }
         }
       ],
@@ -868,11 +866,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "qk_name",
-              "art_id",
-              "id"
-            ],
+            "columns": ["qk_name", "art_id", "id"],
             "filter": {
               "_or": [
                 {
@@ -882,7 +876,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -897,11 +891,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "qk_name",
-              "art_id",
-              "id"
-            ],
+            "columns": ["qk_name", "art_id", "id"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -911,11 +901,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "qk_name",
-              "art_id",
-              "id"
-            ],
+            "columns": ["qk_name", "art_id", "id"],
             "filter": {
               "_or": [
                 {
@@ -925,7 +911,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -940,11 +926,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "qk_name",
-              "art_id",
-              "id"
-            ],
+            "columns": ["qk_name", "art_id", "id"],
             "filter": {},
             "check": null
           }
@@ -963,7 +945,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -1003,12 +985,12 @@
           }
         },
         {
-          "name": "av_art",
+          "name": "av",
           "using": {
             "manual_configuration": {
               "remote_table": {
                 "schema": "public",
-                "name": "av_art"
+                "name": "av"
               },
               "column_mapping": {
                 "art_id": "art_id"
@@ -1019,12 +1001,12 @@
       ],
       "array_relationships": [
         {
-          "name": "av_arts",
+          "name": "avs",
           "using": {
             "manual_configuration": {
               "remote_table": {
                 "schema": "public",
-                "name": "av_art"
+                "name": "av"
               },
               "column_mapping": {
                 "art_id": "art_id"
@@ -1094,7 +1076,7 @@
           "role": "artverantwortlich",
           "permission": {
             "check": {
-              "av_arts": {
+              "avs": {
                 "person_id": {
                   "_eq": "X-Hasura-User-Id"
                 }
@@ -1152,7 +1134,7 @@
               "id"
             ],
             "filter": {
-              "av_arts": {
+              "avs": {
                 "person_id": {
                   "_eq": "X-Hasura-User-Id"
                 }
@@ -1179,8 +1161,10 @@
             "filter": {
               "kulturs": {
                 "garten": {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
+                  "gvs": {
+                    "person_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
                   }
                 }
               }
@@ -1224,7 +1208,7 @@
               "id"
             ],
             "filter": {
-              "av_arts": {
+              "avs": {
                 "person_id": {
                   "_eq": "X-Hasura-User-Id"
                 }
@@ -1251,8 +1235,10 @@
             "filter": {
               "kulturs": {
                 "garten": {
-                  "person_id": {
-                    "_eq": "X-Hasura-User-Id"
+                  "gvs": {
+                    "person_id": {
+                      "_eq": "X-Hasura-User-Id"
+                    }
                   }
                 }
               }
@@ -1302,12 +1288,12 @@
           }
         },
         {
-          "name": "av_art",
+          "name": "av",
           "using": {
             "manual_configuration": {
               "remote_table": {
                 "schema": "public",
-                "name": "av_art"
+                "name": "av"
               },
               "column_mapping": {
                 "art_id": "art_id"
@@ -1318,12 +1304,12 @@
       ],
       "array_relationships": [
         {
-          "name": "av_arts",
+          "name": "avs",
           "using": {
             "manual_configuration": {
               "remote_table": {
                 "schema": "public",
-                "name": "av_art"
+                "name": "av"
               },
               "column_mapping": {
                 "art_id": "art_id"
@@ -1354,7 +1340,7 @@
               "bemerkungen"
             ],
             "filter": {
-              "av_arts": {
+              "avs": {
                 "person_id": {
                   "_eq": "X-Hasura-User-Id"
                 }
@@ -1392,7 +1378,7 @@
     {
       "table": {
         "schema": "public",
-        "name": "av_art"
+        "name": "av"
       },
       "object_relationships": [
         {
@@ -1429,11 +1415,7 @@
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": [
-              "art_id",
-              "person_id",
-              "id"
-            ]
+            "columns": ["art_id", "person_id", "id"]
           }
         }
       ],
@@ -1441,11 +1423,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "art_id",
-              "id",
-              "person_id"
-            ],
+            "columns": ["art_id", "id", "person_id"],
             "filter": {
               "person_id": {
                 "_eq": "X-Hasura-User-Id"
@@ -1457,11 +1435,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "art_id",
-              "id",
-              "person_id"
-            ],
+            "columns": ["art_id", "id", "person_id"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -1471,11 +1445,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "art_id",
-              "id",
-              "person_id"
-            ],
+            "columns": ["art_id", "id", "person_id"],
             "filter": {},
             "check": null
           }
@@ -1524,8 +1494,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1533,7 +1505,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -1581,8 +1553,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1661,8 +1635,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1670,7 +1646,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -1719,8 +1695,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1783,8 +1761,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1792,7 +1772,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -1841,8 +1821,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1887,8 +1869,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1896,7 +1880,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -1926,8 +1910,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1978,8 +1964,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -1987,7 +1975,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -2035,8 +2023,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -2114,8 +2104,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -2123,7 +2115,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -2171,8 +2163,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -2233,8 +2227,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -2242,7 +2238,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -2290,8 +2286,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -2349,6 +2347,18 @@
               "table": {
                 "schema": "public",
                 "name": "garten_file"
+              }
+            }
+          }
+        },
+        {
+          "name": "gvs",
+          "using": {
+            "foreign_key_constraint_on": {
+              "column": "garten_id",
+              "table": {
+                "schema": "public",
+                "name": "gv"
               }
             }
           }
@@ -2448,7 +2458,7 @@
                 {
                   "kulturs": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -2566,7 +2576,7 @@
                 {
                   "kulturs": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -2676,8 +2686,10 @@
               "_or": [
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 },
@@ -2685,7 +2697,7 @@
                   "garten": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -2756,8 +2768,10 @@
               "_or": [
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 },
@@ -2765,7 +2779,7 @@
                   "garten": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -2804,8 +2818,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -2844,8 +2860,10 @@
               "_or": [
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 },
@@ -2853,7 +2871,7 @@
                   "garten": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -2892,8 +2910,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -2926,8 +2946,10 @@
               "_or": [
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 },
@@ -2935,7 +2957,7 @@
                   "garten": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -2965,8 +2987,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -3025,7 +3049,7 @@
                 {
                   "kulturs": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -3147,7 +3171,7 @@
                 {
                   "kulturs": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -3250,7 +3274,7 @@
                 {
                   "kulturs": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -3431,7 +3455,7 @@
                 {
                   "kulturs": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -3578,6 +3602,86 @@
             ],
             "filter": {},
             "allow_aggregations": true
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "gv"
+      },
+      "object_relationships": [
+        {
+          "name": "garten",
+          "using": {
+            "foreign_key_constraint_on": "garten_id"
+          }
+        },
+        {
+          "name": "person",
+          "using": {
+            "foreign_key_constraint_on": "person_id"
+          }
+        }
+      ],
+      "insert_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "check": {},
+            "columns": ["garten_id", "id", "person_id"],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": ["garten_id", "id", "person_id"],
+            "filter": {
+              "person_id": {
+                "_eq": "X-Hasura-User-Id"
+              }
+            }
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "columns": ["garten_id", "id", "person_id"],
+            "filter": {
+              "person_id": {
+                "_eq": "X-Hasura-User-Id"
+              }
+            }
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": ["garten_id", "id", "person_id"],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ],
+      "update_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "columns": ["garten_id", "id", "person_id"],
+            "filter": {},
+            "check": null
+          }
+        }
+      ],
+      "delete_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "filter": {}
           }
         }
       ]
@@ -3773,8 +3877,10 @@
                     "_where": {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -4179,8 +4285,10 @@
                     "_where": {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -4639,8 +4747,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -4728,7 +4838,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -4737,8 +4847,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -4779,8 +4891,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -4850,7 +4964,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -4859,8 +4973,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -4901,8 +5017,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -4952,7 +5070,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -4961,8 +5079,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -4982,8 +5102,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -5026,8 +5148,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5035,7 +5159,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5106,8 +5230,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5115,7 +5241,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5149,8 +5275,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5197,8 +5325,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5206,7 +5336,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5240,8 +5370,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5281,8 +5413,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5290,7 +5424,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5315,8 +5449,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5360,8 +5496,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5369,7 +5507,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5417,8 +5555,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5517,8 +5657,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5526,7 +5668,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5575,8 +5717,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5652,8 +5796,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5661,7 +5807,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5710,8 +5856,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5766,8 +5914,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5775,7 +5925,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5800,8 +5950,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5845,8 +5997,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -5854,7 +6008,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -5903,8 +6057,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6005,8 +6161,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6014,7 +6172,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -6063,8 +6221,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6141,8 +6301,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6150,7 +6312,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -6199,8 +6361,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6266,26 +6430,14 @@
           "role": "gardener",
           "permission": {
             "check": {},
-            "columns": [
-              "name",
-              "titel",
-              "beschreibung",
-              "sort",
-              "id"
-            ]
+            "columns": ["name", "titel", "beschreibung", "sort", "id"]
           }
         },
         {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ]
+            "columns": ["sort", "beschreibung", "titel", "id", "name"]
           }
         }
       ],
@@ -6293,13 +6445,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ],
+            "columns": ["sort", "beschreibung", "titel", "id", "name"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6307,13 +6453,7 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ],
+            "columns": ["sort", "beschreibung", "titel", "id", "name"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6321,13 +6461,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ],
+            "columns": ["sort", "beschreibung", "titel", "id", "name"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6337,13 +6471,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "sort",
-              "beschreibung",
-              "titel",
-              "id",
-              "name"
-            ],
+            "columns": ["sort", "beschreibung", "titel", "id", "name"],
             "filter": {},
             "check": null
           }
@@ -6391,8 +6519,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6400,7 +6530,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -6410,33 +6540,21 @@
                 }
               ]
             },
-            "columns": [
-              "kultur_id",
-              "qk_name",
-              "id"
-            ]
+            "columns": ["kultur_id", "qk_name", "id"]
           }
         },
         {
           "role": "gardener",
           "permission": {
             "check": {},
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ]
+            "columns": ["qk_name", "id", "kultur_id"]
           }
         },
         {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ]
+            "columns": ["qk_name", "id", "kultur_id"]
           }
         }
       ],
@@ -6444,11 +6562,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ],
+            "columns": ["qk_name", "id", "kultur_id"],
             "filter": {
               "_or": [
                 {
@@ -6459,8 +6573,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6468,7 +6584,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -6484,11 +6600,7 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ],
+            "columns": ["qk_name", "id", "kultur_id"],
             "filter": {
               "_or": [
                 {
@@ -6499,8 +6611,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6513,11 +6627,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ],
+            "columns": ["qk_name", "id", "kultur_id"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6527,11 +6637,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ],
+            "columns": ["qk_name", "id", "kultur_id"],
             "filter": {
               "_or": [
                 {
@@ -6542,8 +6648,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6551,7 +6659,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -6567,11 +6675,7 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ],
+            "columns": ["qk_name", "id", "kultur_id"],
             "filter": {
               "_or": [
                 {
@@ -6582,8 +6686,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6596,11 +6702,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "qk_name",
-              "id",
-              "kultur_id"
-            ],
+            "columns": ["qk_name", "id", "kultur_id"],
             "filter": {},
             "check": null
           }
@@ -6620,8 +6722,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6629,7 +6733,7 @@
                 {
                   "kultur": {
                     "art": {
-                      "av_arts": {
+                      "avs": {
                         "person_id": {
                           "_eq": "X-Hasura-User-Id"
                         }
@@ -6654,8 +6758,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -6810,7 +6916,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -6819,8 +6925,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -6860,8 +6968,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -6948,7 +7058,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -6957,8 +7067,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -6998,8 +7110,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -7067,7 +7181,7 @@
                 },
                 {
                   "art": {
-                    "av_arts": {
+                    "avs": {
                       "person_id": {
                         "_eq": "X-Hasura-User-Id"
                       }
@@ -7076,8 +7190,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -7117,8 +7233,10 @@
                 },
                 {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -7235,7 +7353,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -7263,8 +7381,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7272,8 +7392,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7319,8 +7441,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7328,8 +7452,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7455,7 +7581,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -7483,8 +7609,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7492,8 +7620,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7540,8 +7670,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7549,8 +7681,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7651,7 +7785,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -7679,8 +7813,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7688,8 +7824,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7736,8 +7874,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7745,8 +7885,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7820,7 +7962,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -7848,8 +7990,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7857,8 +8001,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -7877,8 +8023,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7886,8 +8034,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -7954,7 +8104,7 @@
                     {
                       "lieferung": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -7988,8 +8138,10 @@
                       "lieferung": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -7999,8 +8151,10 @@
                       "lieferung": {
                         "kulturByVonKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -8080,7 +8234,7 @@
                     {
                       "lieferung": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -8114,8 +8268,10 @@
                       "lieferung": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -8125,8 +8281,10 @@
                       "lieferung": {
                         "kulturByVonKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -8179,8 +8337,10 @@
                   "lieferung": {
                     "kulturByNachKulturId": {
                       "garten": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -8190,8 +8350,10 @@
                   "lieferung": {
                     "kulturByVonKulturId": {
                       "garten": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -8247,7 +8409,7 @@
                     {
                       "lieferung": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -8281,8 +8443,10 @@
                       "lieferung": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -8292,8 +8456,10 @@
                       "lieferung": {
                         "kulturByVonKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -8346,8 +8512,10 @@
                   "lieferung": {
                     "kulturByNachKulturId": {
                       "garten": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -8357,8 +8525,10 @@
                   "lieferung": {
                     "kulturByVonKulturId": {
                       "garten": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -8408,7 +8578,7 @@
                     {
                       "lieferung": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -8442,8 +8612,10 @@
                       "lieferung": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -8453,8 +8625,10 @@
                       "lieferung": {
                         "kulturByVonKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -8498,8 +8672,10 @@
                   "lieferung": {
                     "kulturByNachKulturId": {
                       "garten": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -8509,8 +8685,10 @@
                   "lieferung": {
                     "kulturByVonKulturId": {
                       "garten": {
-                        "person_id": {
-                          "_eq": "X-Hasura-User-Id"
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -8594,7 +8772,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -8622,8 +8800,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -8631,8 +8811,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -8678,8 +8860,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -8687,8 +8871,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -8813,7 +8999,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -8841,8 +9027,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -8850,8 +9038,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -8897,8 +9087,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -8906,8 +9098,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -9006,7 +9200,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -9034,8 +9228,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -9043,8 +9239,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -9090,8 +9288,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -9099,8 +9299,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -9188,13 +9390,13 @@
       ],
       "array_relationships": [
         {
-          "name": "av_arts",
+          "name": "avs",
           "using": {
             "foreign_key_constraint_on": {
               "column": "person_id",
               "table": {
                 "schema": "public",
-                "name": "av_art"
+                "name": "av"
               }
             }
           }
@@ -9243,6 +9445,18 @@
               "table": {
                 "schema": "public",
                 "name": "garten"
+              }
+            }
+          }
+        },
+        {
+          "name": "gvs",
+          "using": {
+            "foreign_key_constraint_on": {
+              "column": "person_id",
+              "table": {
+                "schema": "public",
+                "name": "gv"
               }
             }
           }
@@ -9359,7 +9573,7 @@
                   "gartens": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -9521,7 +9735,7 @@
                   "gartens": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -9655,7 +9869,7 @@
                   "gartens": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -9784,7 +9998,7 @@
                     "gartens": {
                       "kulturs": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -9863,7 +10077,7 @@
                     "gartens": {
                       "kulturs": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -9935,7 +10149,7 @@
                     "gartens": {
                       "kulturs": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -10001,7 +10215,7 @@
                     "gartens": {
                       "kulturs": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -10877,12 +11091,12 @@
       ],
       "array_relationships": [
         {
-          "name": "av_art",
+          "name": "av",
           "using": {
             "manual_configuration": {
               "remote_table": {
                 "schema": "public",
-                "name": "av_art"
+                "name": "av"
               },
               "column_mapping": {
                 "person_id": "person_id"
@@ -10976,7 +11190,7 @@
                   "gartens": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -11136,7 +11350,7 @@
                   "gartens": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -11267,7 +11481,7 @@
                   "gartens": {
                     "kulturs": {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -11431,7 +11645,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -11459,8 +11673,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -11468,8 +11684,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -11513,8 +11731,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -11522,8 +11742,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -11643,7 +11865,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -11671,8 +11893,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -11680,8 +11904,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -11726,8 +11952,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -11735,8 +11963,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -11833,7 +12063,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -11861,8 +12091,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -11870,8 +12102,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -11916,8 +12150,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -11925,8 +12161,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -11998,7 +12236,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -12026,8 +12264,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12035,8 +12275,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12055,8 +12297,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12064,8 +12308,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12164,7 +12410,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -12192,8 +12438,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12201,8 +12449,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12247,8 +12497,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12256,8 +12508,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12379,7 +12633,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -12407,8 +12661,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12416,8 +12672,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12462,8 +12720,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12471,8 +12731,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12569,7 +12831,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -12597,8 +12859,10 @@
                     {
                       "kulturByNachKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12606,8 +12870,10 @@
                     {
                       "kulturByVonKulturId": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -12652,8 +12918,10 @@
                 {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12661,8 +12929,10 @@
                 {
                   "kulturByVonKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -12822,7 +13092,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -12855,8 +13125,10 @@
                       "lieferungs": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -12974,7 +13246,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -13007,8 +13279,10 @@
                       "lieferungs": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -13056,8 +13330,10 @@
               "lieferungs": {
                 "kulturByNachKulturId": {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -13144,7 +13420,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -13177,8 +13453,10 @@
                       "lieferungs": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -13242,7 +13520,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -13275,8 +13553,10 @@
                       "lieferungs": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -13356,8 +13636,10 @@
                 "lieferungs": {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -13398,8 +13680,10 @@
                 "lieferungs": {
                   "kulturByNachKulturId": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -13504,7 +13788,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -13537,8 +13821,10 @@
                       "lieferungs": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -13643,7 +13929,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -13676,8 +13962,10 @@
                       "lieferungs": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -13720,8 +14008,10 @@
               "lieferungs": {
                 "kulturByNachKulturId": {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -13798,7 +14088,7 @@
                     },
                     {
                       "art": {
-                        "av_arts": {
+                        "avs": {
                           "person_id": {
                             "_eq": "X-Hasura-User-Id"
                           }
@@ -13831,8 +14121,10 @@
                       "lieferungs": {
                         "kulturByNachKulturId": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -13875,8 +14167,10 @@
               "lieferungs": {
                 "kulturByNachKulturId": {
                   "garten": {
-                    "person_id": {
-                      "_eq": "X-Hasura-User-Id"
+                    "gvs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
                     }
                   }
                 }
@@ -14002,7 +14296,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -14013,8 +14307,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -14126,7 +14422,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -14137,8 +14433,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -14181,8 +14479,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -14252,7 +14552,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -14263,8 +14563,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -14307,8 +14609,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -14360,7 +14664,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -14371,8 +14675,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -14396,8 +14702,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -14473,7 +14781,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -14484,8 +14792,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -14527,8 +14837,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -14613,7 +14925,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -14624,8 +14936,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -14667,8 +14981,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -14736,7 +15052,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -14747,8 +15063,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -14790,8 +15108,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -14895,7 +15215,7 @@
                       "zaehlung": {
                         "kultur": {
                           "art": {
-                            "av_arts": {
+                            "avs": {
                               "person_id": {
                                 "_eq": "X-Hasura-User-Id"
                               }
@@ -14908,8 +15228,10 @@
                       "zaehlung": {
                         "kultur": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -14956,8 +15278,10 @@
                   "teilkultur": {
                     "kultur": {
                       "garten": {
-                        "person_id": {
-                          "_eq": ""
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -15054,7 +15378,7 @@
                       "zaehlung": {
                         "kultur": {
                           "art": {
-                            "av_arts": {
+                            "avs": {
                               "person_id": {
                                 "_eq": "X-Hasura-User-Id"
                               }
@@ -15067,8 +15391,10 @@
                       "zaehlung": {
                         "kultur": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -15116,8 +15442,10 @@
                   "teilkultur": {
                     "kultur": {
                       "garten": {
-                        "person_id": {
-                          "_eq": ""
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -15194,7 +15522,7 @@
                       "zaehlung": {
                         "kultur": {
                           "art": {
-                            "av_arts": {
+                            "avs": {
                               "person_id": {
                                 "_eq": "X-Hasura-User-Id"
                               }
@@ -15207,8 +15535,10 @@
                       "zaehlung": {
                         "kultur": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -15255,8 +15585,10 @@
                   "teilkultur": {
                     "kultur": {
                       "garten": {
-                        "person_id": {
-                          "_eq": ""
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -15312,7 +15644,7 @@
                       "zaehlung": {
                         "kultur": {
                           "art": {
-                            "av_arts": {
+                            "avs": {
                               "person_id": {
                                 "_eq": "X-Hasura-User-Id"
                               }
@@ -15325,8 +15657,10 @@
                       "zaehlung": {
                         "kultur": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -15352,8 +15686,10 @@
                   "teilkultur": {
                     "kultur": {
                       "garten": {
-                        "person_id": {
-                          "_eq": ""
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -15429,7 +15765,7 @@
                       "zaehlung": {
                         "kultur": {
                           "art": {
-                            "av_arts": {
+                            "avs": {
                               "person_id": {
                                 "_eq": "X-Hasura-User-Id"
                               }
@@ -15442,8 +15778,10 @@
                       "zaehlung": {
                         "kultur": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -15490,8 +15828,10 @@
                   "teilkultur": {
                     "kultur": {
                       "garten": {
-                        "person_id": {
-                          "_eq": ""
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -15587,7 +15927,7 @@
                       "zaehlung": {
                         "kultur": {
                           "art": {
-                            "av_arts": {
+                            "avs": {
                               "person_id": {
                                 "_eq": "X-Hasura-User-Id"
                               }
@@ -15600,8 +15940,10 @@
                       "zaehlung": {
                         "kultur": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -15648,8 +15990,10 @@
                   "teilkultur": {
                     "kultur": {
                       "garten": {
-                        "person_id": {
-                          "_eq": ""
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -15725,7 +16069,7 @@
                       "zaehlung": {
                         "kultur": {
                           "art": {
-                            "av_arts": {
+                            "avs": {
                               "person_id": {
                                 "_eq": "X-Hasura-User-Id"
                               }
@@ -15738,8 +16082,10 @@
                       "zaehlung": {
                         "kultur": {
                           "garten": {
-                            "person_id": {
-                              "_eq": "X-Hasura-User-Id"
+                            "gvs": {
+                              "person_id": {
+                                "_eq": "X-Hasura-User-Id"
+                              }
                             }
                           }
                         }
@@ -15786,8 +16132,10 @@
                   "teilkultur": {
                     "kultur": {
                       "garten": {
-                        "person_id": {
-                          "_eq": ""
+                        "gvs": {
+                          "person_id": {
+                            "_eq": "X-Hasura-User-Id"
+                          }
                         }
                       }
                     }
@@ -15862,12 +16210,7 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": [
-              "name",
-              "sort",
-              "comment",
-              "id"
-            ],
+            "columns": ["name", "sort", "comment", "id"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -15875,12 +16218,7 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": [
-              "sort",
-              "comment",
-              "name",
-              "id"
-            ],
+            "columns": ["sort", "comment", "name", "id"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -15888,12 +16226,7 @@
         {
           "role": "manager",
           "permission": {
-            "columns": [
-              "sort",
-              "comment",
-              "name",
-              "id"
-            ],
+            "columns": ["sort", "comment", "name", "id"],
             "filter": {},
             "allow_aggregations": true
           }
@@ -15955,7 +16288,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -15966,8 +16299,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -16007,8 +16342,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -16088,7 +16425,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -16099,8 +16436,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -16141,8 +16480,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -16208,7 +16549,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -16219,8 +16560,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -16261,8 +16604,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -16312,7 +16657,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -16323,8 +16668,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -16348,8 +16695,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -16411,7 +16760,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -16422,8 +16771,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -16463,8 +16814,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -16543,7 +16896,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -16554,8 +16907,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -16595,8 +16950,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
@@ -16660,7 +17017,7 @@
                     {
                       "kultur": {
                         "art": {
-                          "av_arts": {
+                          "avs": {
                             "person_id": {
                               "_eq": "X-Hasura-User-Id"
                             }
@@ -16671,8 +17028,10 @@
                     {
                       "kultur": {
                         "garten": {
-                          "person_id": {
-                            "_eq": "X-Hasura-User-Id"
+                          "gvs": {
+                            "person_id": {
+                              "_eq": "X-Hasura-User-Id"
+                            }
                           }
                         }
                       }
@@ -16712,8 +17071,10 @@
                 {
                   "kultur": {
                     "garten": {
-                      "person_id": {
-                        "_eq": "X-Hasura-User-Id"
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
                       }
                     }
                   }
