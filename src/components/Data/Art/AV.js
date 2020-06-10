@@ -14,7 +14,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Label from '../../shared/Label'
 import Select from '../../shared/Select'
 import {
-  av as avArtFragment,
+  av as avFragment,
   person as personFragment,
 } from '../../../utils/fragments'
 
@@ -60,7 +60,7 @@ const allDataQuery = gql`
       ...PersonFields
     }
   }
-  ${avArtFragment}
+  ${avFragment}
   ${personFragment}
 `
 
@@ -71,7 +71,7 @@ const ArtAv = ({ refetch, artId }) => {
     personsSorted,
     upsertAvArtModel,
     deleteAvArtModel,
-    avArtsSorted,
+    avsSorted,
   } = store
 
   const { data, error, loading, query } = useQuery(allDataQuery, {
@@ -80,7 +80,7 @@ const ArtAv = ({ refetch, artId }) => {
     },
   })
 
-  const av = avArtsSorted.find((a) => a.art_id === artId)
+  const av = avsSorted.find((a) => a.art_id === artId)
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
