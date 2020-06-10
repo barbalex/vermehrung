@@ -146,7 +146,7 @@ const Art = ({
 
   const hierarchyFilter = {}
   const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading, query } = useQuery(allDataQuery, {
+  const { data, error, loading } = useQuery(allDataQuery, {
     variables: {
       id,
       artFilter,
