@@ -20,6 +20,7 @@ const Container = styled.div`
 const TitleRow = styled.div`
   display: flex;
   justify-content: center;
+  user-select: none;
 `
 const FilterNumbers = styled.div`
   padding-top: 11px;

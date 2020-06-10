@@ -17,6 +17,7 @@ const TitleRow = styled.div`
   display: flex;
   justify-content: space-between;
   padding-right: 16px;
+  user-select: none;
 `
 const Title = styled.div`
   padding: 12px 16px;
