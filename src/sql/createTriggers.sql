@@ -66,6 +66,14 @@ left join person_option
 on person_option.id = person.id
 where person_option.id is null;
 
+-- in case this trigger was not working
+-- add person where they are missing
+insert into person_option (id)
+select person.id from person
+left join person_option
+on person_option.id = person.id
+where person_option.id is null;
+
 DROP TRIGGER IF EXISTS kultur_has_qk_choosen ON kultur_qk_choosen cascade;
 DROP FUNCTION IF EXISTS kultur_has_qk_choosen() cascade;
 CREATE FUNCTION kultur_has_qk_choosen() RETURNS trigger AS $kultur_has_qk_choosen$
@@ -98,3 +106,31 @@ $art_has_qk_choosen$ LANGUAGE plpgsql;
 
 CREATE TRIGGER art_has_qk_choosen AFTER INSERT ON art
   FOR EACH ROW EXECUTE PROCEDURE art_has_qk_choosen();
+
+drop trigger if exists garten_person_has_gv on garten cascade;
+drop function if exists garten_person_has_gv() cascade;
+create function garten_person_has_gv() returns trigger as $garten_person_has_gv$
+begin
+  if new.person_id <> old.person_id then
+    if new.person_id is not null then
+      insert into gv (person_id, garten_id)
+      values (new.person_id, new.garten_id);
+    end if;
+    if old.person_id is not null then
+      delete from gv 
+      where 
+        person_id = old.person_id 
+        and garten_id = old.garten_id;
+    end if;
+  end if;
+  return new;
+end;
+$garten_person_has_gv$ language plpgsql;
+
+create trigger person_has_felder after update on garten
+  for each row execute procedure garten_person_has_gv();
+
+--insert into gv (person_id, garten_id)
+--select person_id, id from garten
+--where person_id is not null;
+
