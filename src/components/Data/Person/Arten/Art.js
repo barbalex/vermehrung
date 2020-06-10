@@ -45,7 +45,7 @@ const MenuTitle = styled.h3`
 
 const Av = ({ av }) => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
+  const { addNotification, artsSorted } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -64,7 +64,8 @@ const Av = ({ av }) => {
     }
   }, [addNotification, av, store])
 
-  const artname = av?.art?.art_ae_art?.name
+  const art = artsSorted.find((a) => a.id === av.art_id)
+  const artname = art?.art_ae_art?.name
 
   if (!av) return null
 
