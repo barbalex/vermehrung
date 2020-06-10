@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { v1 as uuidv1 } from 'uuid'
 
 import { StoreContext, useQuery } from '../../../../models/reactUtils'
-import Art from './Art'
+import Garten from './Garten'
 import query from './query'
 import Select from '../../../shared/Select'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
@@ -45,13 +45,13 @@ const Title = styled.div`
 const Content = styled.div`
   padding-bottom: 10px;
 `
-const Avs = styled.div`
+const Gvs = styled.div`
   padding-bottom: 8px;
 `
 
 const PersonArten = ({ personId }) => {
   const store = useContext(StoreContext)
-  const { upsertAvModel, deleteAvModel, avsSorted, artsSorted } = store
+  const { upsertAvModel, deleteAvModel, gvsSorted, gartensSorted } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -65,34 +65,34 @@ const PersonArten = ({ personId }) => {
     [open],
   )
 
-  const { error, loading, query: avQuery } = useQuery(query, {
+  const { error, loading, query: gvQuery } = useQuery(query, {
     variables: { personId },
   })
-  const avs = avsSorted.filter((a) => a.person_id === personId)
-  const avArtIds = avs.map((v) => v.art_id)
+  const gvs = gvsSorted.filter((a) => a.person_id === personId)
+  const gvArtIds = gvs.map((v) => v.garten_id)
 
-  const artWerte = useMemo(
+  const gartenWerte = useMemo(
     () =>
-      artsSorted
-        .filter((a) => !avArtIds.includes(a.id))
+      gartensSorted
+        .filter((a) => !gvArtIds.includes(a.id))
         .map((el) => ({
           value: el.id,
-          label: el?.art_ae_art?.name ?? '(kein Artname)',
+          label: el?.name ?? `(${el?.person?.name})`,
         })),
-    [artsSorted, avArtIds],
+    [gartensSorted, gvArtIds],
   )
 
   const saveToDb = useCallback(
     async (event) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
-      const newObject = { id: uuidv1(), art_id: value, person_id: personId }
+      const newObject = { id: uuidv1(), garten_id: value, person_id: personId }
       upsertAvModel(newObject)
       try {
-        await store.mutateInsert_av_one({
+        await store.mutateInsert_gv_one({
           object: newObject,
           on_conflict: {
-            constraint: 'av_pkey',
+            constraint: 'gv_pkey',
             update_columns: ['id'],
           },
         })
@@ -101,10 +101,10 @@ const PersonArten = ({ personId }) => {
         deleteAvModel(newObject)
         return setErrors({ [field]: error.message })
       }
-      avQuery.refetch()
+      gvQuery.refetch()
       setErrors({})
     },
-    [avQuery, deleteAvModel, personId, store, upsertAvModel],
+    [gvQuery, deleteAvModel, personId, store, upsertAvModel],
   )
 
   return (
@@ -115,8 +115,8 @@ const PersonArten = ({ personId }) => {
         data-open={open}
       >
         <Title>{`Mitarbeitend bei ${
-          loading ? '...' : avs.length
-        } Arten`}</Title>
+          loading ? '...' : gvs.length
+        } Gärten`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -129,28 +129,28 @@ const PersonArten = ({ personId }) => {
       </TitleRow>
       {open && (
         <Content>
-          {loading && !avs.length ? (
-            <Avs>Lade Daten...</Avs>
+          {loading && !gvs.length ? (
+            <Gvs>Lade Daten...</Gvs>
           ) : error ? (
-            <Avs>{`Fehler: ${error.message}`}</Avs>
+            <Gvs>{`Fehler: ${error.message}`}</Gvs>
           ) : (
-            <Avs>
-              {avs.map((av) => (
-                <Art key={`${av.person_id}/${av.art_id}`} av={av} />
+            <Gvs>
+              {gvs.map((gv) => (
+                <Garten key={`${gv.person_id}/${gv.garten_id}`} gv={gv} />
               ))}
-            </Avs>
+            </Gvs>
           )}
-          {!!artWerte.length && (
+          {!!gartenWerte.length && (
             <Select
-              name="art_id"
+              name="garten_id"
               value={''}
-              field="art_id"
-              label="Art hinzufügen"
-              options={artWerte}
+              field="garten_id"
+              label="Garten hinzufügen"
+              options={gartenWerte}
               loading={loading}
               saveToDb={saveToDb}
               isClearable={false}
-              error={errors.art_id}
+              error={errors.garten_id}
             />
           )}
         </Content>
