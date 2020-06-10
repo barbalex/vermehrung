@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * event_update_column
 */
-export const event_update_columnEnum = types.enumeration("event_update_column", [
+export const event_update_columnEnumType = types.enumeration("event_update_column", [
         "_conflicts",
   "_deleted",
   "_depth",

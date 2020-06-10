@@ -7,6 +7,6 @@ import { types } from "mobx-state-tree"
 /**
 * garten_constraint
 */
-export const garten_constraintEnum = types.enumeration("garten_constraint", [
+export const garten_constraintEnumType = types.enumeration("garten_constraint", [
         "garten_pkey",
       ])

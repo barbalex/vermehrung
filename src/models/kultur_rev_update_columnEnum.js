@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * kultur_rev_update_column
 */
-export const kultur_rev_update_columnEnum = types.enumeration("kultur_rev_update_column", [
+export const kultur_rev_update_columnEnumType = types.enumeration("kultur_rev_update_column", [
         "_deleted",
   "_depth",
   "_parent_rev",

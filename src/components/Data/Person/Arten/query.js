@@ -24,7 +24,7 @@ export default gql`
     }
     art {
       ...ArtFields
-      av_art {
+      av_arts {
         ...AvArtFields
       }
     }

@@ -112,7 +112,7 @@ const allDataQuery = gql`
   ) {
     person(where: { id: { _eq: $id } }) {
       ...PersonFields
-      av_art {
+      av_arts {
         id
         __typename
       }

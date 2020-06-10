@@ -7,6 +7,6 @@ import { types } from "mobx-state-tree"
 /**
 * herkunft_constraint
 */
-export const herkunft_constraintEnum = types.enumeration("herkunft_constraint", [
+export const herkunft_constraintEnumType = types.enumeration("herkunft_constraint", [
         "herkunft_pkey",
       ])

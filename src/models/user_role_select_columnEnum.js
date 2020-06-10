@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * user_role_select_column
 */
-export const user_role_select_columnEnum = types.enumeration("user_role_select_column", [
+export const user_role_select_columnEnumType = types.enumeration("user_role_select_column", [
         "comment",
   "id",
   "name",

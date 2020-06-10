@@ -72,7 +72,7 @@ const PersonArten = ({ personId }) => {
   const artWerte = useMemo(
     () =>
       artsSorted
-        .filter((a) => !a?.av_art?.id)
+        .filter((a) => !a?.av_arts?.id)
         .map((el) => ({
           value: el.id,
           label: el?.art_ae_art?.name ?? '(kein Artname)',

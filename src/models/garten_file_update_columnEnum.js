@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * garten_file_update_column
 */
-export const garten_file_update_columnEnum = types.enumeration("garten_file_update_column", [
+export const garten_file_update_columnEnumType = types.enumeration("garten_file_update_column", [
         "beschreibung",
   "file_id",
   "file_mime_type",

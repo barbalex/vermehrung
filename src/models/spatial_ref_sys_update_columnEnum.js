@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * spatial_ref_sys_update_column
 */
-export const spatial_ref_sys_update_columnEnum = types.enumeration("spatial_ref_sys_update_column", [
+export const spatial_ref_sys_update_columnEnumType = types.enumeration("spatial_ref_sys_update_column", [
         "auth_name",
   "auth_srid",
   "proj4text",

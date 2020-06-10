@@ -7,6 +7,6 @@ import { types } from "mobx-state-tree"
 /**
 * event_constraint
 */
-export const event_constraintEnum = types.enumeration("event_constraint", [
+export const event_constraintEnumType = types.enumeration("event_constraint", [
         "event_pkey",
       ])

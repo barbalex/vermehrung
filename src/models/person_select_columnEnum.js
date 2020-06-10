@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * person_select_column
 */
-export const person_select_columnEnum = types.enumeration("person_select_column", [
+export const person_select_columnEnumType = types.enumeration("person_select_column", [
         "_conflicts",
   "_deleted",
   "_depth",

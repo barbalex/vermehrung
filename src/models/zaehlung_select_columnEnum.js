@@ -7,7 +7,7 @@ import { types } from "mobx-state-tree"
 /**
 * zaehlung_select_column
 */
-export const zaehlung_select_columnEnum = types.enumeration("zaehlung_select_column", [
+export const zaehlung_select_columnEnumType = types.enumeration("zaehlung_select_column", [
         "_conflicts",
   "_deleted",
   "_depth",
