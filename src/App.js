@@ -57,7 +57,6 @@ const firebaseConfig = {
   appId: process.env.GATSBY_FIREBASE_APP_ID,
 }
 
-// TODO: how to set up gqlWsClient?
 // https://github.com/mobxjs/mst-gql/issues/247
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
 const tokenWithRoles =
@@ -68,18 +67,29 @@ const tokenWithRoles =
 // to that instead of mst-persist?
 gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
 
-// https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
-const gqlWsClient = new SubscriptionClient(constants.graphQlWsUri, {
-  reconnect: true,
-  connectionParams: {
-    headers: { authorization: `Bearer ${tokenWithRoles}` },
-  },
-})
-// https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
-const store = RootStore.create(undefined, {
+// ws client only works in the browser
+// need to prevent gatsby from executing it server side
+// see: https://github.com/apollographql/subscriptions-transport-ws/issues/333#issuecomment-359261024
+let gqlWsClient
+let storeOptions = {
   gqlHttpClient,
-  gqlWsClient,
-})
+}
+if (typeof window !== 'undefined') {
+  // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
+  gqlWsClient = new SubscriptionClient(constants.graphQlWsUri, {
+    reconnect: true,
+    connectionParams: {
+      headers: { authorization: `Bearer ${tokenWithRoles}` },
+    },
+  })
+  storeOptions = {
+    gqlHttpClient,
+    gqlWsClient,
+  }
+}
+
+// https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
+const store = RootStore.create(undefined, storeOptions)
 
 const App = ({ element }) => {
   useEffect(() => {

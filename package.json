@@ -88,6 +88,7 @@
     "react-window": "1.8.5",
     "recharts": "1.8.5",
     "styled-components": "5.1.1",
+    "subscriptions-transport-ws": "0.9.16",
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
     "typography": "0.16.19",
