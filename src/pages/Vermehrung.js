@@ -72,12 +72,7 @@ const Vermehrung = ({ location }) => {
     initalizeSubscriptions,
   } = store
   const existsUser = !!user.uid
-  const {
-    setOpenNodes,
-    setActiveNodeArray,
-    widthInPercentOfScreen,
-    widthEnforced,
-  } = store.tree
+  const { setOpenNodes, widthInPercentOfScreen, widthEnforced } = store.tree
   const showFilter = store.filter.show
   let treeWidth = exists(widthEnforced)
     ? activeForm || showFilter
@@ -99,12 +94,14 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   // when pathname changes, update activeNodeArray
   // seems no more needed?
-  useEffect(() => {
+  /*useEffect(() => {
     // need not to navigate or app is blocked
     setActiveNodeArray(activeNodeArray, 'nonavigate')
-  }, [activeNodeArray, pathname, setActiveNodeArray])
+  }, [activeNodeArray, pathname, setActiveNodeArray])*/
+
   useEffect(() => {
     let unsubscribe
     if (existsUser) {
