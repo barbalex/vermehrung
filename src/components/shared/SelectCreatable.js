@@ -82,7 +82,7 @@ const SharedSelect = ({
   row,
   error,
   options,
-  loading,
+  loading = false,
   maxHeight = null,
   noCaret = false,
   onCreateNew,
