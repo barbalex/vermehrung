@@ -34,13 +34,16 @@ const allDataQuery = gql`
 
 const TeilzaehlungenRows = ({ kulturId, zaehlungId }) => {
   const store = useContext(StoreContext)
-  const { teilkultursSorted, teilzaehlungsSorted, deletedFilter } = store
+  const { teilkultursSorted, teilzaehlungsSorted, deletedTableFilter } = store
 
   const teilzaehlungFilter = {
     zaehlung_id: { _eq: zaehlungId },
-    ...deletedFilter,
+    ...deletedTableFilter,
   }
-  const teilkulturFilter = { kultur_id: { _eq: kulturId }, ...deletedFilter }
+  const teilkulturFilter = {
+    kultur_id: { _eq: kulturId },
+    ...deletedTableFilter,
+  }
   const { error, loading } = useQuery(allDataQuery, {
     variables: {
       teilzaehlungFilter,
