@@ -79,7 +79,7 @@ const Gaerten = ({ filter: showFilter }) => {
   const storeRowsFiltered = gartensFiltered.filter(hierarchyFilter)
 
   const totalNr = gartensSorted.filter(hierarchyFilter).length
-  const filteredNr = gartensFiltered.filter(hierarchyFilter).length
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertGartenRev()
