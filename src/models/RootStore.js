@@ -192,10 +192,7 @@ export const RootStore = RootStoreBase.props({
         self.subscribeAe_art(
           undefined,
           (a) => a.id.name,
-          (onData) => {
-            console.log('aeArt loaded, onData:', onData)
-            !self.aeArtLoaded && self.setAeArtLoaded(true)
-          },
+          () => !self.aeArtLoaded && self.setAeArtLoaded(true),
         )
         self.subscribeArt(
           { where: self.artFilter },
