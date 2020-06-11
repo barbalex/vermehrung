@@ -35,7 +35,9 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const HerkunftTimelineArea = ({ artId }) => {
+const HerkunftTimelineArea = ({
+  artId = '99999999-9999-9999-9999-999999999999',
+}) => {
   const [open, setOpen] = useState(false)
 
   const onClickToggle = useCallback(
@@ -47,7 +49,7 @@ const HerkunftTimelineArea = ({ artId }) => {
   )
 
   const { data, error, loading } = useQuery(query, {
-    variables: { id: artId },
+    variables: { id: artId ?? '99999999-9999-9999-9999-999999999999' },
   })
   const herkunftSums = data?.herkunft_sums ?? []
   const herkunftSumsGrouped = groupBy(herkunftSums, 'herkunft_id')

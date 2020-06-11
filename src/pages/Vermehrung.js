@@ -107,6 +107,7 @@ const Vermehrung = ({ location }) => {
   }, [activeNodeArray, pathname, setActiveNodeArray])
   useEffect(() => {
     if (existsUser) {
+      console.log('Vermehrung initializing subscriptions')
       initalizeSubscriptions()
     }
   }, [existsUser, initalizeSubscriptions])
