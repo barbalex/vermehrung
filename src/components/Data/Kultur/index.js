@@ -15,16 +15,14 @@ import IconButton from '@material-ui/core/IconButton'
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import SplitPane from 'react-split-pane'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Settings from './Settings'
-import kulturQuery from './kulturQuery'
 import Timeline from './Timeline'
 import QK from './QK'
 import DeleteButton from './DeleteButton'
@@ -137,28 +135,26 @@ const Kultur = ({
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     artsSorted,
+    kultursSorted,
+    kultursFiltered,
     gartensSorted,
     herkunftsSorted,
     sammlungsSorted,
     showDeleted,
-    deletedFilter,
-    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const hierarchyFilter = {}
-  if (gartenIdInActiveNodeArray) {
-    hierarchyFilter.garten_id = {
-      _eq: gartenIdInActiveNodeArray,
+
+  const hierarchyFilter = (e) => {
+    if (gartenIdInActiveNodeArray) {
+      return e.garten_id === gartenIdInActiveNodeArray
     }
-  }
-  if (artIdInActiveNodeArray) {
-    hierarchyFilter.art_id = {
-      _eq: artIdInActiveNodeArray,
+    if (artIdInActiveNodeArray) {
+      return e.art_id === artIdInActiveNodeArray
     }
+    return true
   }
-  const kulturFilter = { ...store.kulturFilter, ...hierarchyFilter }
 
   const row = showFilter ? filter.kultur : store.kulturs.get(id) ?? {}
 
@@ -197,32 +193,10 @@ const Kultur = ({
     herkunftToChoose.push(row?.herkunft_id)
   }
 
-  const artFilter = { ae_id: { _is_null: false } }
-  if (artenToChoose.length) {
-    artFilter.id = { _in: artenToChoose }
-  }
-
-  const herkunftFilter = { id: { _in: herkunftToChoose } }
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-    ...inactiveFilter,
-  }
-
-  const { data, error, loading } = useQuery(kulturQuery, {
-    variables: {
-      id,
-      kulturFilter,
-      totalCountFilter,
-      artFilter,
-      herkunftFilter,
-    },
-  })
-
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.kultur_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.kultur_filtered_count?.aggregate?.count ?? ''
+  const totalNr = kultursSorted.filter(hierarchyFilter).length
+  const filteredNr = kultursFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -309,24 +283,6 @@ const Kultur = ({
     downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
   }, [row.id, store])
 
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Kultur" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Kultur" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -400,7 +356,7 @@ const Kultur = ({
                 field="art_id"
                 label="Art"
                 options={artWerte}
-                loading={loading}
+                loading={false}
                 saveToDb={saveToDb}
                 error={errors.art_id}
               />
@@ -411,7 +367,7 @@ const Kultur = ({
                 field="herkunft_id"
                 label="Herkunft"
                 options={herkunftWerte}
-                loading={loading}
+                loading={false}
                 saveToDb={saveToDb}
                 error={errors.herkunft_id}
               />
@@ -422,7 +378,7 @@ const Kultur = ({
                 field="garten_id"
                 label="Garten"
                 options={gartenWerte}
-                loading={loading}
+                loading={false}
                 saveToDb={saveToDb}
                 error={errors.garten_id}
               />
