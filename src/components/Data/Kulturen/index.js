@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
+import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { kultur as kulturFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,52 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForKulturs(
-    $kulturFilter: kultur_bool_exp!
-    $totalCountFilter: kultur_bool_exp!
-  ) {
-    kultur(where: $kulturFilter) {
-      ...KulturFields
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      herkunft {
-        id
-        __typename
-        nr
-      }
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-        }
-      }
-    }
-    kultur_total_count: kultur_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    kultur_filtered_count: kultur_aggregate(where: $kulturFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${kulturFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -112,51 +63,28 @@ const Kulturen = ({ filter: showFilter }) => {
   const {
     filter,
     insertKulturRev,
+    kultursSorted,
     kultursFiltered,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
-    deletedFilter,
-    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (gartenIdInActiveNodeArray) {
-    hierarchyFilter.garten_id = {
-      _eq: gartenIdInActiveNodeArray,
-    }
-  }
-  if (artIdInActiveNodeArray) {
-    hierarchyFilter.art_id = {
-      _eq: artIdInActiveNodeArray,
-    }
-  }
-  const kulturFilter = { ...store.kulturFilter, ...hierarchyFilter }
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-    ...inactiveFilter,
-  }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      kulturFilter,
-      totalCountFilter,
-    },
-  })
-
-  const storeRowsFiltered = kultursFiltered.filter((r) => {
+  const hierarchyFilter = (e) => {
     if (gartenIdInActiveNodeArray) {
-      return r.garten_id === gartenIdInActiveNodeArray
+      return e.garten_id === gartenIdInActiveNodeArray
     }
     if (artIdInActiveNodeArray) {
-      return r.art_id === artIdInActiveNodeArray
+      return e.art_id === artIdInActiveNodeArray
     }
     return true
-  })
+  }
 
-  const totalNr = data?.kultur_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.kultur_filtered_count?.aggregate?.count ?? ''
+  const storeRowsFiltered = kultursFiltered.filter(hierarchyFilter)
+
+  const totalNr = kultursSorted.filter(hierarchyFilter).length
+  const filteredNr = storeRowsFiltered.length
 
   const add = useCallback(() => {
     insertKulturRev()
@@ -170,24 +98,6 @@ const Kulturen = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !storeRowsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Kulturen" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Kulturen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
