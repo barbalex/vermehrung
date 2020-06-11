@@ -134,7 +134,6 @@ const ArtPersonen = ({ artId }) => {
               field="person_id"
               label="Person hinzufügen"
               options={personWerte}
-              loading={false}
               saveToDb={saveToDb}
               isClearable={false}
               error={errors.person_id}
