@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
+import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { event as eventFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,28 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForEvents(
-    $eventFilter: event_bool_exp!
-    $totalCountFilter: event_bool_exp!
-  ) {
-    event(where: $eventFilter) {
-      ...EventFields
-    }
-    event_total_count: event_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    event_filtered_count: event_aggregate(where: $eventFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${eventFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -88,27 +63,18 @@ const Events = ({ filter: showFilter }) => {
   const {
     filter,
     insertEventRev,
+    eventsSorted,
     eventsFiltered,
     kulturIdInActiveNodeArray,
-    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (kulturIdInActiveNodeArray) {
-    hierarchyFilter.kultur_id = {
-      _eq: kulturIdInActiveNodeArray,
-    }
+  const hierarchyFilter = (e) => {
+    if (kulturIdInActiveNodeArray)
+      return e.kultur_id === kulturIdInActiveNodeArray
+    return true
   }
-  const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      eventFilter,
-      totalCountFilter,
-    },
-  })
 
   const storeRowsFiltered = eventsFiltered.filter((e) => {
     if (kulturIdInActiveNodeArray) {
@@ -116,9 +82,8 @@ const Events = ({ filter: showFilter }) => {
     }
     return true
   })
-
-  const totalNr = data?.event_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.event_filtered_count?.aggregate?.count ?? ''
+  const totalNr = eventsSorted.filter(hierarchyFilter).length
+  const filteredNr = eventsFiltered.filter(hierarchyFilter).length
 
   const add = useCallback(() => {
     insertEventRev()
@@ -132,24 +97,6 @@ const Events = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !storeRowsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Events" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Events" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
