@@ -7,68 +7,207 @@
  * but rather use the previous value
  */
 import React, { useContext, useEffect } from 'react'
-import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import gql from 'graphql-tag'
+import styled from 'styled-components'
 
-import { StoreContext, useQuery } from '../../models/reactUtils'
-import query from './query'
 import Tree from './Tree'
-import setHasuraClaims from '../../utils/setHasuraClaims'
+import { StoreContext, useQuery } from '../../models/reactUtils'
+import checkHasuraClaimsOnError from '../../utils/checkHasuraClaimsOnError'
+import {
+  aeArt,
+  art,
+  artFile,
+  artQk,
+  artQkChoosen,
+  av,
+  event,
+  garten,
+  gartenFile,
+  gv,
+  herkunft,
+  herkunftFile,
+  kultur,
+  kulturFile,
+  kulturOption,
+  kulturQk,
+  kulturQkChoosen,
+  lieferung,
+  lieferungFile,
+  person,
+  personFile,
+  personOption,
+  sammelLieferung,
+  sammlung,
+  sammlungFile,
+  teilkultur,
+  teilzaehlung,
+  userRole,
+  zaehlung,
+} from '../../utils/fragments'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  overflow: hidden;
-  @media print {
-    display: none !important;
+const ErrorContainer = styled.div`
+  min-height: calc(100vh - 64px);
+  padding: 15px;
+`
+
+const allDataQuery = gql`
+  query AllDataQueryForTreeContainer($run: Boolean!) {
+    ae_art @include(if: $run) {
+      ...AeArtFields
+    }
+    art @include(if: $run) {
+      ...ArtFields
+    }
+    art_file @include(if: $run) {
+      ...ArtFileFields
+    }
+    art_qk @include(if: $run) {
+      ...ArtQkFields
+    }
+    art_qk_choosen @include(if: $run) {
+      ...ArtQkChoosenFields
+    }
+    av @include(if: $run) {
+      ...AvFields
+    }
+    event @include(if: $run) {
+      ...EventFields
+    }
+    garten @include(if: $run) {
+      ...GartenFields
+    }
+    garten_file @include(if: $run) {
+      ...GartenFileFields
+    }
+    gv @include(if: $run) {
+      ...GvFields
+    }
+    herkunft @include(if: $run) {
+      ...HerkunftFields
+    }
+    herkunft_file @include(if: $run) {
+      ...HerkunftFileFields
+    }
+    kultur @include(if: $run) {
+      ...KulturFields
+    }
+    kultur_file @include(if: $run) {
+      ...KulturFileFields
+    }
+    kultur_option @include(if: $run) {
+      ...KulturOptionFields
+    }
+    kultur_qk @include(if: $run) {
+      ...KulturQkFields
+    }
+    kultur_qk_choosen @include(if: $run) {
+      ...KulturQkChoosenFields
+    }
+    lieferung @include(if: $run) {
+      ...LieferungFields
+    }
+    lieferung_file @include(if: $run) {
+      ...LieferungFileFields
+    }
+    person @include(if: $run) {
+      ...PersonFields
+    }
+    person_file @include(if: $run) {
+      ...PersonFileFields
+    }
+    person_option @include(if: $run) {
+      ...PersonOptionFields
+    }
+    sammel_lieferung @include(if: $run) {
+      ...SammelLieferungFields
+    }
+    sammlung @include(if: $run) {
+      ...SammlungFields
+    }
+    sammlung_file @include(if: $run) {
+      ...SammlungFileFields
+    }
+    teilkultur @include(if: $run) {
+      ...TeilkulturFields
+    }
+    teilzaehlung @include(if: $run) {
+      ...TeilzaehlungFields
+    }
+    user_role @include(if: $run) {
+      ...UserRoleFields
+    }
+    zaehlung @include(if: $run) {
+      ...ZaehlungFields
+    }
   }
+  ${aeArt}
+  ${art}
+  ${artFile}
+  ${artQk}
+  ${artQkChoosen}
+  ${av}
+  ${event}
+  ${garten}
+  ${gartenFile}
+  ${gv}
+  ${herkunft}
+  ${herkunftFile}
+  ${kultur}
+  ${kulturFile}
+  ${kulturOption}
+  ${kulturQk}
+  ${kulturQkChoosen}
+  ${lieferung}
+  ${lieferungFile}
+  ${person}
+  ${personFile}
+  ${personOption}
+  ${sammelLieferung}
+  ${sammlung}
+  ${sammlungFile}
+  ${teilkultur}
+  ${teilzaehlung}
+  ${userRole}
+  ${zaehlung}
 `
 
 const TreeContainer = () => {
   const store = useContext(StoreContext)
-  const { user } = store
-  const { setRefetch, setLoading, queryVariables } = store.tree
+  const { setLoading, user } = store
 
-  // 1. build list depending on path using react-window
-  // 2. every node uses navigate to set url on click
-  const { error, loading, query: treeQuery } = useQuery(query, {
-    variables: queryVariables,
+  //const [meLoading, setMeLoading] = useState(false)
+  useEffect(() => {}, [])
+  const run = !store.arts.size && !!user?.uid
+  const { loading, error } = useQuery(
+    allDataQuery,
+    {
+      variables: {
+        run,
+      },
+    },
+    { fetchPolicy: 'network-only' },
+  )
+  console.log('TreeContainer', {
+    loading,
+    error,
+    run,
   })
 
   useEffect(() => {
-    setRefetch(treeQuery.refetch)
-    // do not add treeQuery.refetch as it changes on every render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  useEffect(() => {
-    setLoading(loading)
-  }, [loading, setLoading])
+    if (loading !== store.loading) setLoading(loading)
+  }, [loading, setLoading, store.loading])
 
-  // 2020.06.02: not in use
-  // because it prevented newly loaded nodes to appear
-  /*useEffect(() => {
-    if (nodesToAddRaw.length) {
-      setNodes([...nodes, ...nodesToAddRaw])
-      setNodesToAdd([])
-    }
-  }, [nodes, nodesToAddRaw, setNodesToAdd])*/
-
-  //console.log('TreeContainer rendering')
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    console.log(error)
-    // if JWT expired, renew
-    if (error.message.includes('JWTExpired')) {
-      console.log('TreeContainer, JWT expired, will set hasura claims anew')
-      setHasuraClaims({ store, user })
-    }
-    return (
-      <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
-    )
+  if (
+    error &&
+    !error.message.includes('Failed to fetch') &&
+    !error.message.includes('JWT')
+  ) {
+    return <ErrorContainer>{error.message}</ErrorContainer>
   }
-
+  if (error && error.message.includes('JWT')) {
+    checkHasuraClaimsOnError({ error, store })
+  }
   return <Tree />
 }
 

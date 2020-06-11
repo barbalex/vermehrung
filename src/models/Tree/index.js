@@ -130,15 +130,8 @@ export default types
     nodesToAdd: types.array(Node),
     widthInPercentOfScreen: types.optional(types.number, 33),
     widthEnforced: types.maybeNull(types.number, null),
-    loading: types.optional(types.boolean, false),
   })
-  .volatile(() => ({
-    refetch: () => {},
-  }))
   .actions((self) => ({
-    setLoading(val) {
-      self.loading = val
-    },
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
     },
@@ -185,97 +178,8 @@ export default types
     setNodesToAdd(val) {
       self.nodesToAdd = val
     },
-    setRefetch(func) {
-      self.refetch = func
-    },
   }))
   .views((self) => ({
-    get queryVariables() {
-      const store = getParent(self, 1)
-      const {
-        userPerson,
-        artFilter,
-        eventFilter,
-        gartenFilter,
-        kulturFilter,
-        herkunftFilter,
-        personFilter,
-        sammelLieferungFilter,
-        sammlungFilter,
-        lieferungFilter,
-        teilkulturFilter,
-        zaehlungFilter,
-      } = store
-      const openNodes = self.openNodes
-      const { user_role: role } = userPerson
-      const isGardener = role === 'gaertner'
-      const variables = {
-        artFilter,
-        eventFilter,
-        gartenFilter,
-        kulturFilter,
-        herkunftFilter,
-        personFilter,
-        sammlungFilter,
-        lieferungFilter,
-        sammelLieferungFilter,
-        teilkulturFilter,
-        zaehlungFilter,
-        isArt: openNodes.some((n) => n[0] === 'Arten'),
-        //isEvent: openNodes.some((n) => n[0] === 'Events'),
-        isArtKultur: openNodes.some(
-          (n) => n[0] === 'Arten' && n[2] === 'Kulturen',
-        ),
-        isArtSammlung: openNodes.some(
-          (n) => n[0] === 'Arten' && n[2] === 'Sammlungen',
-        ),
-        isGarten: openNodes.some((n) => n[0] === 'Gaerten'),
-        isGartenKultur: openNodes.some(
-          (n) => n[0] === 'Gaerten' && n[2] === 'Kulturen',
-        ),
-        isHerkunft: openNodes.some((n) => n[0] === 'Herkuenfte'),
-        isHerkunftSammlung: openNodes.some(
-          (n) => n[0] === 'Herkuenfte' && n[2] === 'Sammlungen',
-        ),
-        isLieferung: openNodes.some((n) => n[0] === 'Lieferungen'),
-        isSammelLieferung: openNodes.some((n) => n[0] === 'Sammel-Lieferungen'),
-        isPerson: openNodes.some((n) => n[0] === 'Personen'),
-        isPersonGarten: openNodes.some(
-          (n) => n[0] === 'Personen' && n[2] === 'Gaerten',
-        ),
-        isPersonGartenKultur: openNodes.some(
-          (n) =>
-            n[0] === 'Personen' && n[2] === 'Gaerten' && n[4] === 'Kulturen',
-        ),
-        isPersonSammlung: openNodes.some(
-          (n) => n[0] === 'Personen' && n[2] === 'Sammlungen',
-        ),
-        isPersonLieferung: openNodes.some(
-          (n) => n[0] === 'Personen' && n[2] === 'Lieferungen',
-        ),
-        isSammlung: openNodes.some((n) => n[0] === 'Sammlungen'),
-        isSammlungLieferung: openNodes.some(
-          (n) => n[0] === 'Sammlungen' && n[2] === 'Aus-Lieferungen',
-        ),
-        isSammlungLieferungKultur: openNodes.some(
-          (n) =>
-            n[0] === 'Sammlungen' &&
-            n[2] === 'Aus-Lieferungen' &&
-            n[4] === 'Kulturen',
-        ),
-        //isTeilkultur: openNodes.some((n) => n[0] === 'Teilkulturen'),
-        isKultur: openNodes.some((n) => n[0] === 'Kulturen'),
-        //isKulturAnLieferung: openNodes.some(
-        //  (n) => n[0] === 'Kulturen' && n[2] === 'An-Lieferungen',
-        //),
-        //isKulturAusLieferung: openNodes.some(
-        //  (n) => n[0] === 'Kulturen' && n[2] === 'Aus-Lieferungen',
-        //),
-        //isWerteListe: openNodes.some((n) => n[0] === 'Werte-Listen'),
-        isGardener,
-      }
-      return variables
-    },
     get activeNode() {
       return self.nodes.find((n) => isEqual(n.url, self.activeNodeArray))
     },

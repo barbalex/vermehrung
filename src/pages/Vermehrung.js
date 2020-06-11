@@ -3,18 +3,22 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import gql from 'graphql-tag'
 
+import { StoreContext, useQuery } from '../models/reactUtils'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
+import initializeSubscriptions from '../utils/initializeSubscriptions'
 import exists from '../utils/exists'
+import checkHasuraClaimsOnError from '../utils/checkHasuraClaimsOnError'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
-import { StoreContext } from '../models/reactUtils'
 import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import OnlineDetector from '../components/OnlineDetector'
+import { art } from '../utils/fragments'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -28,6 +32,10 @@ const SpinnerContainer = styled.div`
 `
 const LoginContainer = styled.div`
   margin: 20px;
+`
+const ErrorContainer = styled.div`
+  min-height: calc(100vh - 64px);
+  padding: 15px;
 `
 const SpinnerText = styled.div`
   padding: 10px;
@@ -60,17 +68,19 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
+const allDataQuery = gql`
+  query AllDataQueryForVermehrung($run: Boolean!) {
+    art @include(if: $run) {
+      ...ArtFields
+    }
+  }
+  ${art}
+`
+
 const Vermehrung = ({ location }) => {
   const store = useContext(StoreContext)
-  //console.log('Vermehrung rendering')
+  const { activeForm, isPrint, user, authorizing, artsSorted } = store
 
-  const {
-    activeForm,
-    isPrint,
-    user,
-    authorizing,
-    initalizeSubscriptions,
-  } = store
   const existsUser = !!user.uid
   const { setOpenNodes, widthInPercentOfScreen, widthEnforced } = store.tree
   const showFilter = store.filter.show
@@ -86,6 +96,21 @@ const Vermehrung = ({ location }) => {
 
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
+
+  /**
+   * FOR UNKNOWN REASON THIS QUERY NEEDS TO BE HERE
+   * or else data will not be loaded on first render after emptying store
+   */
+  const run = !authorizing && !artsSorted.length
+  const { error } = useQuery(
+    allDataQuery,
+    {
+      variables: {
+        run,
+      },
+    },
+    { fetchPolicy: 'network-only' },
+  )
 
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
@@ -105,14 +130,16 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     let unsubscribe
     if (existsUser) {
-      unsubscribe = initalizeSubscriptions()
+      console.log('Vermehrung initializing subsctiptions')
+      unsubscribe = initializeSubscriptions({ store })
     }
     return function cleanup() {
       if (unsubscribe && Object.keys(unsubscribe)) {
         Object.keys(unsubscribe).forEach((table) => unsubscribe[table]())
       }
     }
-  }, [existsUser, initalizeSubscriptions])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [existsUser])
 
   if (authorizing) {
     return (
@@ -144,8 +171,9 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  // unfortunately did not work :-(
-  /*if (loadingInitialData) {
+  // unfortunately this results in permanent loading
+  // on first load after emptying cache
+  /*if (loading && !artsSorted.length) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -162,6 +190,23 @@ const Vermehrung = ({ location }) => {
       </ErrorBoundary>
     )
   }*/
+
+  if (
+    error &&
+    !error.message.includes('Failed to fetch') &&
+    !error.message.includes('JWT')
+  ) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <ErrorContainer>{error.message}</ErrorContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
+  if (error && error.message.includes('JWT')) {
+    checkHasuraClaimsOnError({ error, store })
+  }
   // hide resizer when tree is hidden
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
 
