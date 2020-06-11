@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -14,12 +13,11 @@ import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
 import { MdPrint } from 'react-icons/md'
 import SplitPane from 'react-split-pane'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import exists from '../../../utils/exists'
@@ -34,11 +32,6 @@ import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../Lieferung/Lieferung/kulturLabelFromKultur'
-import {
-  art as artFragment,
-  person as personFragment,
-  sammelLieferung as sammelLieferungFragment,
-} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -155,164 +148,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForSammelLieferung(
-    $id: uuid!
-    $nachKulturFilter: kultur_bool_exp!
-    $vonKulturFilter: kultur_bool_exp!
-    $sammlungFilter: sammlung_bool_exp!
-  ) {
-    sammel_lieferung(where: { id: { _eq: $id } }) {
-      ...SammelLieferungFields
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      person {
-        id
-        __typename
-        name
-      }
-      sammlung {
-        id
-        __typename
-        datum
-        herkunft {
-          id
-          __typename
-          nr
-          lokalname
-          gemeinde
-        }
-        person {
-          id
-          __typename
-          name
-        }
-      }
-      kulturByVonKulturId {
-        id
-        __typename
-        art_id
-        herkunft_id
-        herkunft {
-          id
-          __typename
-          nr
-          lokalname
-          gemeinde
-        }
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
-      kulturByNachKulturId {
-        id
-        __typename
-        art_id
-        herkunft_id
-        herkunft {
-          id
-          __typename
-          nr
-          lokalname
-          gemeinde
-        }
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
-    }
-    sammel_lieferung_total_count: sammel_lieferung_aggregate {
-      aggregate {
-        count
-      }
-    }
-    sammlung(where: $sammlungFilter) {
-      id
-      __typename
-      art_id
-      datum
-      herkunft_id
-      herkunft {
-        id
-        __typename
-        nr
-        lokalname
-        gemeinde
-      }
-      person {
-        id
-        __typename
-        name
-        ort
-      }
-    }
-    nach_kultur: kultur(where: $nachKulturFilter) {
-      id
-      __typename
-      art_id
-      herkunft_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-    von_kultur: kultur(where: $vonKulturFilter) {
-      id
-      __typename
-      art_id
-      herkunft_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-    art {
-      ...ArtFields
-    }
-    person {
-      ...PersonFields
-    }
-  }
-  ${artFragment}
-  ${personFragment}
-  ${sammelLieferungFragment}
-`
-
 const SammelLieferung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -329,6 +164,8 @@ const SammelLieferung = ({
     artsSorted,
     kultursSorted,
     personsSorted,
+    sammelLieferungsFiltered,
+    sammelLieferungsSorted,
     sammlungsSorted,
     showDeleted,
   } = store
@@ -336,78 +173,18 @@ const SammelLieferung = ({
   const { setWidthInPercentOfScreen } = store.tree
 
   const isFiltered = runIsFiltered()
+  const hierarchyFilter = () => {
+    return true
+  }
 
   const row = showFilter
     ? filter.sammel_lieferung
     : store.sammel_lieferungs.get(id) || {}
 
-  // only kulturen of same herkunft!
-  // beware: art_id, herkunft_id and von_kultur_id can be null
-  let nachKulturFilter = { id: { _is_null: false } }
-  // show only kulturen of art_id
-  if (row.art_id) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-    }
-  }
-  // show only kulturen with same herkunft
-  if (row.art_id && herkunft && herkunft.id) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-    }
-  }
-  // can't be delivered to same kultur it came from
-  if (row.art_id && herkunft && herkunft.id && row.von_kultur_id) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-      id: { _neq: row.von_kultur_id },
-    }
-  }
-
-  // beware: art_id, herkunft_id and nach_kultur_id can be null
-  let vonKulturFilter = { id: { _is_null: false } }
-  // show only kulturen of art_id
-  if (row.art_id) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-    }
-  }
-  // show only kulturen with same herkunft
-  if (row.art_id && herkunft && herkunft.id) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-    }
-  }
-  // can't be delivered to same kultur it came from
-  if (row.art_id && herkunft && herkunft.id && row.nach_kultur_id) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-      id: { _neq: row.nach_kultur_id },
-    }
-  }
-
-  const sammlungFilter = row?.art_id
-    ? { art_id: { _eq: row.art_id } }
-    : { id: { _is_null: false } }
-
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      nachKulturFilter,
-      vonKulturFilter,
-      sammlungFilter,
-    },
-  })
-
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.sammel_lieferung_total_count?.aggregate?.count ?? ''
-  const filteredNr =
-    data?.sammel_lieferung_filtered_count?.aggregate?.count ?? ''
+  const totalNr = sammelLieferungsSorted.filter(hierarchyFilter).length
+  const filteredNr = sammelLieferungsFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -607,24 +384,6 @@ const SammelLieferung = ({
     [ifNeeded],
   )
 
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Sammel-Lieferung" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Sammel-Lieferung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -726,7 +485,6 @@ const SammelLieferung = ({
                         field="art_id"
                         label="Art"
                         options={artWerte}
-                        loading={loading}
                         saveToDb={saveToDb}
                         error={errors.art_id}
                       />
@@ -826,7 +584,6 @@ const SammelLieferung = ({
                             : ''
                         }`}
                         options={sammlungWerte}
-                        loading={loading}
                         saveToDb={saveToDb}
                         error={errors.von_sammlung_id}
                       />
@@ -843,7 +600,6 @@ const SammelLieferung = ({
                             : ''
                         }`}
                         options={vonKulturWerte}
-                        loading={loading}
                         saveToDb={saveToDb}
                         error={errors.von_kultur_id}
                       />
@@ -869,7 +625,6 @@ const SammelLieferung = ({
                             : ''
                         }`}
                         options={nachKulturWerte}
-                        loading={loading}
                         saveToDb={saveToDb}
                         error={errors.nach_kultur_id}
                       />
@@ -937,7 +692,6 @@ const SammelLieferung = ({
                         field="person_id"
                         label="Person"
                         options={personWerte}
-                        loading={loading}
                         saveToDb={saveToDb}
                         error={errors.person_id}
                       />
