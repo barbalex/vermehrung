@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
+import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { sammelLieferung as sammelLieferungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,51 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForSammelLieferungs(
-    $sammelLieferungFilter: sammel_lieferung_bool_exp!
-    $totalCountFilter: sammel_lieferung_bool_exp!
-  ) {
-    sammel_lieferung(where: $sammelLieferungFilter) {
-      ...SammelLieferungFields
-      person {
-        id
-        __typename
-        name
-      }
-      kulturByVonKulturId {
-        id
-        __typename
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-          }
-        }
-      }
-    }
-    sammel_lieferung_total_count: sammel_lieferung_aggregate(
-      where: $totalCountFilter
-    ) {
-      aggregate {
-        count
-      }
-    }
-    sammel_lieferung_filtered_count: sammel_lieferung_aggregate(
-      where: $sammelLieferungFilter
-    ) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${sammelLieferungFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -112,27 +64,17 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     filter,
     insertSammelLieferungRev,
     sammelLieferungsFiltered,
-    sammelLieferungFilter,
-    deletedFilter,
+    sammelLieferungsSorted,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
+  const hierarchyFilter = () => {
+    return true
   }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      sammelLieferungFilter,
-      totalCountFilter,
-    },
-  })
 
-  const totalNr = data?.sammel_lieferung_total_count?.aggregate?.count ?? ''
-  const filteredNr =
-    data?.sammel_lieferung_filtered_count?.aggregate?.count ?? ''
+  const totalNr = sammelLieferungsSorted.filter(hierarchyFilter).length
+  const filteredNr = sammelLieferungsFiltered.filter(hierarchyFilter).length
 
   const add = useCallback(() => {
     insertSammelLieferungRev()
@@ -146,24 +88,6 @@ const SammelLieferungen = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !sammelLieferungsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Sammel-Lieferungen" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Sammel-Lieferungen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
