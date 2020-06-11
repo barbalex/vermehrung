@@ -10,13 +10,11 @@ import styled from 'styled-components'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
@@ -28,10 +26,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
-import {
-  kulturOption as kulturOptionFragment,
-  teilkultur as teilkulturFragment,
-} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -110,85 +104,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForTeilkultur(
-    $id: uuid!
-    $teilkulturFilter: teilkultur_bool_exp!
-    $totalCountFilter: teilkultur_bool_exp!
-  ) {
-    teilkultur(where: { id: { _eq: $id } }) {
-      ...TeilkulturFields
-      kultur {
-        id
-        __typename
-        kultur_option {
-          ...KulturOptionFields
-        }
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-          }
-        }
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-      }
-    }
-    teilkultur_total_count: teilkultur_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    teilkultur_filtered_count: teilkultur_aggregate(where: $teilkulturFilter) {
-      aggregate {
-        count
-      }
-    }
-    kultur {
-      id
-      __typename
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-        }
-      }
-    }
-    person {
-      id
-      __typename
-      name
-      ort
-    }
-  }
-  ${kulturOptionFragment}
-  ${teilkulturFragment}
-`
-
 const Teilkultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -200,33 +115,25 @@ const Teilkultur = ({
     kulturIdInActiveNodeArray,
     kultursSorted,
     showDeleted,
-    deletedFilter,
+    teilkultursSorted,
+    teilkultursFiltered,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
   const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id) || {}
 
-  const hierarchyFilter = {}
-  if (kulturIdInActiveNodeArray) {
-    hierarchyFilter.kultur_id = {
-      _eq: kulturIdInActiveNodeArray,
+  const hierarchyFilter = (r) => {
+    if (kulturIdInActiveNodeArray) {
+      return r.kultur_id === kulturIdInActiveNodeArray
     }
+    return true
   }
-  const teilkulturFilter = { ...store.teilkulturFilter, ...hierarchyFilter }
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      teilkulturFilter,
-      totalCountFilter,
-    },
-  })
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.teilkultur_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.teilkultur_filtered_count?.aggregate?.count ?? ''
+  const totalNr = teilkultursSorted.filter(hierarchyFilter).length
+  const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -277,24 +184,6 @@ const Teilkultur = ({
       window.open(url)
     }
   }, [])
-
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Teilkultur" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Teilkultur" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -362,7 +251,6 @@ const Teilkultur = ({
                 field="kultur_id"
                 label="Kultur"
                 options={kulturWerte}
-                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.kultur_id}
               />
