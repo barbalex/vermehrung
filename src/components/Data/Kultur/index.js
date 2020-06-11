@@ -356,7 +356,6 @@ const Kultur = ({
                 field="art_id"
                 label="Art"
                 options={artWerte}
-                loading={false}
                 saveToDb={saveToDb}
                 error={errors.art_id}
               />
@@ -367,7 +366,6 @@ const Kultur = ({
                 field="herkunft_id"
                 label="Herkunft"
                 options={herkunftWerte}
-                loading={false}
                 saveToDb={saveToDb}
                 error={errors.herkunft_id}
               />
@@ -378,7 +376,6 @@ const Kultur = ({
                 field="garten_id"
                 label="Garten"
                 options={gartenWerte}
-                loading={false}
                 saveToDb={saveToDb}
                 error={errors.garten_id}
               />
