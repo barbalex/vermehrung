@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import { person as personFragment } from '../../../utils/fragments'
+import { StoreContext } from '../../../models/reactUtils'
 
 const Container = styled.div`
   height: 100%;
@@ -56,28 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForPersons(
-    $personFilter: person_bool_exp!
-    $totalCountFilter: person_bool_exp!
-  ) {
-    person(where: $personFilter) {
-      ...PersonFields
-    }
-    person_total_count: person_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    person_filtered_count: person_aggregate(where: $personFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${personFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -85,35 +60,20 @@ function sizeReducer(state, action) {
 
 const Personen = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const {
-    userPerson,
-    personsFiltered,
-    personFilter,
-    deletedFilter,
-    inactiveFilter,
-  } = store
+  const { userPerson, personsSorted, personsFiltered } = store
 
   const { filter, insertPersonRev } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-    ...inactiveFilter,
+  const hierarchyFilter = () => {
+    return true
   }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      personFilter,
-      totalCountFilter,
-    },
-  })
 
   const storeRowsFiltered = personsFiltered
 
-  const totalNr = data?.person_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.person_filtered_count?.aggregate?.count ?? ''
+  const totalNr = personsSorted.filter(hierarchyFilter).length
+  const filteredNr = personsFiltered.filter(hierarchyFilter).length
 
   const { user_role } = userPerson
 
@@ -129,24 +89,6 @@ const Personen = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !storeRowsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Personen" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Personen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
