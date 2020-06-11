@@ -41,6 +41,36 @@ export const RootStore = RootStoreBase.props({
   isPrint: types.optional(types.boolean, false),
   updateExists: types.optional(types.boolean, false), // not in use!
   online: types.optional(types.boolean, true),
+  // register initial loading
+  aeArtLoaded: types.optional(types.boolean, false),
+  artLoaded: types.optional(types.boolean, false),
+  artFileLoaded: types.optional(types.boolean, false),
+  artQkLoaded: types.optional(types.boolean, false),
+  artQkChoosenLoaded: types.optional(types.boolean, false),
+  avLoaded: types.optional(types.boolean, false),
+  eventLoaded: types.optional(types.boolean, false),
+  gartenLoaded: types.optional(types.boolean, false),
+  gartenFileLoaded: types.optional(types.boolean, false),
+  gvLoaded: types.optional(types.boolean, false),
+  herkunftLoaded: types.optional(types.boolean, false),
+  herkunftFileLoaded: types.optional(types.boolean, false),
+  kulturLoaded: types.optional(types.boolean, false),
+  kulturFileLoaded: types.optional(types.boolean, false),
+  kulturOptionLoaded: types.optional(types.boolean, false),
+  kulturQkLoaded: types.optional(types.boolean, false),
+  kulturQkChoosenLoaded: types.optional(types.boolean, false),
+  lieferungLoaded: types.optional(types.boolean, false),
+  lieferungFileLoaded: types.optional(types.boolean, false),
+  personLoaded: types.optional(types.boolean, false),
+  personFileLoaded: types.optional(types.boolean, false),
+  personOptionLoaded: types.optional(types.boolean, false),
+  sammelLieferungLoaded: types.optional(types.boolean, false),
+  sammlungLoaded: types.optional(types.boolean, false),
+  sammlungFileLoaded: types.optional(types.boolean, false),
+  teilkulturLoaded: types.optional(types.boolean, false),
+  teilzaehlungLoaded: types.optional(types.boolean, false),
+  userRoleLoaded: types.optional(types.boolean, false),
+  zaehlungLoaded: types.optional(types.boolean, false),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -159,35 +189,243 @@ export const RootStore = RootStoreBase.props({
     )
     return {
       initalizeSubscriptions() {
-        self.subscribeAe_art(undefined, (a) => a.id.name)
-        self.subscribeArt({ where: self.artFilter })
-        self.subscribeArt_file()
-        self.subscribeArt_qk()
-        self.subscribeArt_qk_choosen()
-        self.subscribeAv()
-        self.subscribeEvent({ where: self.eventFilter })
-        self.subscribeGarten({ where: self.gartenFilter })
-        self.subscribeGarten_file()
-        self.subscribeGv()
-        self.subscribeHerkunft({ where: self.herkunftFilter })
-        self.subscribeHerkunft_file()
-        self.subscribeKultur({ where: self.kulturFilter })
-        self.subscribeKultur_file()
-        self.subscribeKultur_option()
-        self.subscribeKultur_qk()
-        self.subscribeKultur_qk_choosen()
-        self.subscribeLieferung({ where: self.lieferungFilter })
-        self.subscribeLieferung_file()
-        self.subscribePerson({ where: self.personFilter })
-        self.subscribePerson_file()
-        self.subscribePerson_option()
-        self.subscribeSammel_lieferung({ where: self.sammelLieferungFilter })
-        self.subscribeSammlung({ where: self.sammlungFilter })
-        self.subscribeSammlung_file()
-        self.subscribeTeilkultur()
-        self.subscribeTeilzaehlung()
-        self.subscribeUser_role()
-        self.subscribeZaehlung({ where: self.zaehlungFilter })
+        self.subscribeAe_art(
+          undefined,
+          (a) => a.id.name,
+          (onData) => {
+            console.log('aeArt loaded, onData:', onData)
+            !self.aeArtLoaded && self.setAeArtLoaded(true)
+          },
+        )
+        self.subscribeArt(
+          { where: self.artFilter },
+          undefined,
+          () => !self.artLoaded && self.setArtLoaded(true),
+        )
+        self.subscribeArt_file(
+          undefined,
+          undefined,
+          () => !self.artFileLoaded && self.setArtFileLoaded(true),
+        )
+        self.subscribeArt_qk(
+          undefined,
+          undefined,
+          () => !self.artQkLoaded && self.setArtQkLoaded(true),
+        )
+        self.subscribeArt_qk_choosen(
+          undefined,
+          undefined,
+          () => !self.artQkChoosenLoaded && self.setArtQkChoosenLoaded(true),
+        )
+        self.subscribeAv(
+          undefined,
+          undefined,
+          () => !self.avLoaded && self.setAvLoaded(true),
+        )
+        self.subscribeEvent(
+          { where: self.eventFilter },
+          undefined,
+          () => !self.eventLoaded && self.setEventLoaded(true),
+        )
+        self.subscribeGarten(
+          { where: self.gartenFilter },
+          undefined,
+          () => !self.gartenLoaded && self.setGartenLoaded(true),
+        )
+        self.subscribeGarten_file(
+          undefined,
+          undefined,
+          () => !self.gartenFileLoaded && self.setGartenFileLoaded(true),
+        )
+        self.subscribeGv(
+          undefined,
+          undefined,
+          () => !self.gvLoaded && self.setGvLoaded(true),
+        )
+        self.subscribeHerkunft(
+          { where: self.herkunftFilter },
+          undefined,
+          () => !self.herkunftLoaded && self.setHerkunftLoaded(true),
+        )
+        self.subscribeHerkunft_file(
+          undefined,
+          undefined,
+          () => !self.herkunftFileLoaded && self.setHerkunftFileLoaded(true),
+        )
+        self.subscribeKultur(
+          { where: self.kulturFilter },
+          undefined,
+          () => !self.kulturLoaded && self.setKulturLoaded(true),
+        )
+        self.subscribeKultur_file(
+          undefined,
+          undefined,
+          () => !self.kulturFileLoaded && self.setKulturFileLoaded(true),
+        )
+        self.subscribeKultur_option(
+          undefined,
+          undefined,
+          () => !self.kulturOptionLoaded && self.setKulturOptionLoaded(true),
+        )
+        self.subscribeKultur_qk(
+          undefined,
+          undefined,
+          () => !self.kulturQkLoaded && self.setKulturQkLoaded(true),
+        )
+        self.subscribeKultur_qk_choosen(
+          undefined,
+          undefined,
+          () =>
+            !self.kulturQkChoosenLoaded && self.setKulturQkChoosenLoaded(true),
+        )
+        self.subscribeLieferung(
+          { where: self.lieferungFilter },
+          undefined,
+          () => !self.lieferungLoaded && self.setLieferungLoaded(true),
+        )
+        self.subscribeLieferung_file(
+          undefined,
+          undefined,
+          () => !self.lieferungFileLoaded && self.setLieferungFileLoaded(true),
+        )
+        self.subscribePerson(
+          { where: self.personFilter },
+          undefined,
+          () => !self.personLoaded && self.setPersonLoaded(true),
+        )
+        self.subscribePerson_file(
+          undefined,
+          undefined,
+          () => !self.personFileLoaded && self.setPersonFileLoaded(true),
+        )
+        self.subscribePerson_option(
+          undefined,
+          undefined,
+          () => !self.personOptionLoaded && self.setPersonOptionLoaded(true),
+        )
+        self.subscribeSammel_lieferung(
+          { where: self.sammelLieferungFilter },
+          undefined,
+          () =>
+            !self.sammelLieferungLoaded && self.setSammelLieferungLoaded(true),
+        )
+        self.subscribeSammlung(
+          { where: self.sammlungFilter },
+          undefined,
+          () => !self.sammlungLoaded && self.setSammlungLoaded(true),
+        )
+        self.subscribeSammlung_file(
+          undefined,
+          undefined,
+          () => !self.sammlungFileLoaded && self.setSammlungFileLoaded(true),
+        )
+        self.subscribeTeilkultur(
+          undefined,
+          undefined,
+          () => !self.teilkulturLoaded && self.setTeilkulturLoaded(true),
+        )
+        self.subscribeTeilzaehlung(
+          undefined,
+          undefined,
+          () => !self.teilzaehlungLoaded && self.setTeilzaehlungLoaded(true),
+        )
+        self.subscribeUser_role(
+          undefined,
+          undefined,
+          () => !self.userRoleLoaded && self.setUserRoleLoaded(true),
+        )
+        self.subscribeZaehlung(
+          { where: self.zaehlungFilter },
+          undefined,
+          () => !self.zaehlungLoaded && self.setZaehlungLoaded(true),
+        )
+      },
+      setAeArtLoaded(val) {
+        self.aeArtLoaded = val
+      },
+      setArtLoaded(val) {
+        self.artLoaded = val
+      },
+      setArtFileLoaded(val) {
+        self.artFileLoaded = val
+      },
+      setArtQkLoaded(val) {
+        self.artQkLoaded = val
+      },
+      setArtQkChoosenLoaded(val) {
+        self.artQkChoosenLoaded = val
+      },
+      setAvLoaded(val) {
+        self.avLoaded = val
+      },
+      setEventLoaded(val) {
+        self.eventLoaded = val
+      },
+      setGartenLoaded(val) {
+        self.gartenLoaded = val
+      },
+      setGartenFileLoaded(val) {
+        self.gartenFileLoaded = val
+      },
+      setGvLoaded(val) {
+        self.gvLoaded = val
+      },
+      setHerkunftLoaded(val) {
+        self.herkunftLoaded = val
+      },
+      setHerkunftFileLoaded(val) {
+        self.herkunftFileLoaded = val
+      },
+      setKulturLoaded(val) {
+        self.kulturLoaded = val
+      },
+      setKulturFileLoaded(val) {
+        self.kulturFileLoaded = val
+      },
+      setKulturOptionLoaded(val) {
+        self.kulturOptionLoaded = val
+      },
+      setKulturQkLoaded(val) {
+        self.kulturQkLoaded = val
+      },
+      setKulturQkChoosenLoaded(val) {
+        self.kulturQkChoosenLoaded = val
+      },
+      setLieferungLoaded(val) {
+        self.lieferungLoaded = val
+      },
+      setLieferungFileLoaded(val) {
+        self.lieferungFileLoaded = val
+      },
+      setPersonLoaded(val) {
+        self.personLoaded = val
+      },
+      setPersonFileLoaded(val) {
+        self.personFileLoaded = val
+      },
+      setPersonOptionLoaded(val) {
+        self.personOptionLoaded = val
+      },
+      setSammelLieferungLoaded(val) {
+        self.sammelLieferungLoaded = val
+      },
+      setSammlungLoaded(val) {
+        self.sammlungLoaded = val
+      },
+      setSammlungFileLoaded(val) {
+        self.sammlungFileLoaded = val
+      },
+      setTeilkulturLoaded(val) {
+        self.teilkulturLoaded = val
+      },
+      setTeilzaehlungLoaded(val) {
+        self.teilzaehlungLoaded = val
+      },
+      setUserRoleLoaded(val) {
+        self.userRoleLoaded = val
+      },
+      setZaehlungLoaded(val) {
+        self.zaehlungLoaded = val
       },
       updateModelValue({ table, id, field, value }) {
         // used to revert offline operations if they error
@@ -1773,5 +2011,38 @@ export const RootStore = RootStoreBase.props({
         return { aktiv: { _eq: true } }
       }
       return true
+    },
+    get loadingInitialData() {
+      return [
+        self.aeArtLoaded,
+        self.artLoaded,
+        self.artFileLoaded,
+        self.artQkLoaded,
+        self.artQkChoosenLoaded,
+        self.avLoaded,
+        self.eventLoaded,
+        self.gartenLoaded,
+        self.gartenFileLoaded,
+        self.gvLoaded,
+        self.herkunftLoaded,
+        self.herkunftFileLoaded,
+        self.kulturLoaded,
+        self.kulturFileLoaded,
+        self.kulturOptionLoaded,
+        self.kulturQkLoaded,
+        self.kulturQkChoosenLoaded,
+        self.lieferungLoaded,
+        self.lieferungFileLoaded,
+        self.personLoaded,
+        self.personFileLoaded,
+        self.personOptionLoaded,
+        self.sammelLieferungLoaded,
+        self.sammlungLoaded,
+        self.sammlungFileLoaded,
+        self.teilkulturLoaded,
+        self.teilzaehlungLoaded,
+        self.userRoleLoaded,
+        self.zaehlungLoaded,
+      ].includes(false)
     },
   }))

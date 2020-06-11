@@ -64,7 +64,13 @@ const Vermehrung = ({ location }) => {
   const store = useContext(StoreContext)
   //console.log('Vermehrung rendering')
 
-  const { activeForm, isPrint, user, authorizing } = store
+  const {
+    activeForm,
+    isPrint,
+    user,
+    authorizing,
+    initalizeSubscriptions,
+  } = store
   const existsUser = !!user.uid
   const {
     setOpenNodes,
@@ -99,6 +105,11 @@ const Vermehrung = ({ location }) => {
     // need not to navigate or app is blocked
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
+  useEffect(() => {
+    if (existsUser) {
+      initalizeSubscriptions()
+    }
+  }, [existsUser, initalizeSubscriptions])
 
   if (authorizing) {
     return (
@@ -129,6 +140,25 @@ const Vermehrung = ({ location }) => {
       </ErrorBoundary>
     )
   }
+
+  // unfortunately did not work :-(
+  /*if (loadingInitialData) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <SpinnerContainer>
+            <Spinner
+              size={50}
+              frontColor="#4a148c"
+              backColor="#4a148c1a"
+              loading={true}
+            />
+            <SpinnerText>lade Daten</SpinnerText>
+          </SpinnerContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }*/
   // hide resizer when tree is hidden
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
 

@@ -5,14 +5,12 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { art as artFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -55,33 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForArts(
-    $artFilter: art_bool_exp!
-    $totalCountFilter: art_bool_exp!
-  ) {
-    art(where: $artFilter) {
-      ...ArtFields
-    }
-    ae_art {
-      id
-      __typename
-      name
-    }
-    art_total_count: art_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    art_filtered_count: art_aggregate(where: $artFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${artFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -89,27 +60,18 @@ function sizeReducer(state, action) {
 
 const Arten = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { filter, insertArtRev, artsFiltered, deletedFilter } = store
+  const {
+    filter,
+    insertArtRev,
+    artsFiltered,
+    artsSorted,
+    loadingInitialData,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  const artFilter = { ...store.artFilter, ...hierarchyFilter }
-
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-
-  const { error, loading } = useQuery((store) =>
-    store.subscribeArt({ where: artFilter }),
-  )
-  const { data } = useQuery(allDataQuery, {
-    variables: {
-      artFilter,
-      totalCountFilter,
-    },
-  })
-
-  const totalNr = data?.art_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.art_filtered_count?.aggregate?.count ?? ''
+  const totalNr = artsSorted.length
+  const filteredNr = artsFiltered.length
 
   const add = useCallback(() => {
     insertArtRev()
@@ -124,20 +86,11 @@ const Arten = ({ filter: showFilter }) => {
     [],
   )
 
-  if (loading && !artsFiltered.length) {
+  if (loadingInitialData && !artsFiltered.length) {
     return (
       <Container>
         <FormTitle title="Arten" />
         <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Arten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
       </Container>
     )
   }

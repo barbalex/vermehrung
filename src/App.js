@@ -142,8 +142,6 @@ const App = ({ element }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  store.initalizeSubscriptions()
-
   if (!store) return null
   return (
     <MuiThemeProvider theme={materialTheme}>
