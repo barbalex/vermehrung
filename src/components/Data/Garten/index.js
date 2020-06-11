@@ -271,7 +271,6 @@ const Garten = ({
                 field="person_id"
                 label="Person"
                 options={personWerte}
-                loading={false}
                 saveToDb={saveToDb}
                 error={errors.person_id}
               />
