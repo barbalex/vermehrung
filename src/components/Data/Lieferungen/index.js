@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
+import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { lieferung as lieferungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,28 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForLieferungs(
-    $lieferungFilter: lieferung_bool_exp!
-    $totalCountFilter: lieferung_bool_exp!
-  ) {
-    lieferung(where: $lieferungFilter) {
-      ...LieferungFields
-    }
-    lieferung_total_count: lieferung_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    lieferung_filtered_count: lieferung_aggregate(where: $lieferungFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${lieferungFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -88,81 +63,42 @@ const Lieferungen = ({ filter: showFilter }) => {
   const {
     filter,
     insertLieferungRev,
+    lieferungsSorted,
     lieferungsFiltered,
     kulturIdInActiveNodeArray,
     sammelLieferungIdInActiveNodeArray,
     personIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
-    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (kulturIdInActiveNodeArray) {
-    if (activeNodeArray.includes('Aus-Lieferungen')) {
-      hierarchyFilter.von_kultur_id = {
-        _eq: kulturIdInActiveNodeArray,
-      }
-    }
-    if (activeNodeArray.includes('An-Lieferungen')) {
-      hierarchyFilter.nach_kultur_id = {
-        _eq: kulturIdInActiveNodeArray,
-      }
-    }
-  }
-  if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-    hierarchyFilter.sammel_lieferung_id = {
-      _eq: sammelLieferungIdInActiveNodeArray,
-    }
-  }
-  if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-    hierarchyFilter.person_id = {
-      _eq: personIdInActiveNodeArray,
-    }
-  }
-  if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-    hierarchyFilter.von_sammlung_id = {
-      _eq: sammlungIdInActiveNodeArray,
-    }
-  }
-  const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
-
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-  }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      lieferungFilter,
-      totalCountFilter,
-    },
-  })
-
-  const storeRowsFiltered = lieferungsFiltered.filter((r) => {
+  const hierarchyFilter = (e) => {
     if (kulturIdInActiveNodeArray) {
       if (activeNodeArray.includes('Aus-Lieferungen')) {
-        return r.von_kultur_id === kulturIdInActiveNodeArray
+        return (e.von_kultur_id = kulturIdInActiveNodeArray)
       }
       if (activeNodeArray.includes('An-Lieferungen')) {
-        return r.nach_kultur_id === kulturIdInActiveNodeArray
+        return (e.nach_kultur_id = kulturIdInActiveNodeArray)
       }
     }
-    if (sammelLieferungIdInActiveNodeArray) {
-      return r.sammel_lieferung_id === sammelLieferungIdInActiveNodeArray
+    if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+      return (e.sammel_lieferung_id = sammelLieferungIdInActiveNodeArray)
     }
-    if (personIdInActiveNodeArray) {
-      return r.person_id === personIdInActiveNodeArray
+    if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+      return (e.person_id = personIdInActiveNodeArray)
     }
-    if (sammlungIdInActiveNodeArray) {
-      return r.von_sammlung_id === sammlungIdInActiveNodeArray
+    if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+      return (e.von_sammlung_id = sammlungIdInActiveNodeArray)
     }
     return true
-  })
+  }
 
-  const totalNr = data?.lieferung_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.lieferung_filtered_count?.aggregate?.count ?? ''
+  const storeRowsFiltered = lieferungsFiltered.filter(hierarchyFilter)
+
+  const totalNr = lieferungsSorted.filter(hierarchyFilter).length
+  const filteredNr = lieferungsFiltered.filter(hierarchyFilter).length
 
   const add = useCallback(() => {
     insertLieferungRev()
@@ -176,24 +112,6 @@ const Lieferungen = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !storeRowsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Lieferungen" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Lieferungen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
