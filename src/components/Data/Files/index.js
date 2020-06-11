@@ -1,12 +1,11 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 import { v1 as uuidv1 } from 'uuid'
 
-import { StoreContext, useQuery } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Uploader from '../../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'
@@ -63,13 +62,6 @@ const Files = ({ parentId, parent }) => {
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const { error, loading } = useQuery((store) =>
-    store[`query${upperFirst(parent)}_file`]({
-      where: { [`${parent}_id`]: { _eq: parentId } },
-      order_by: { name: 'asc' },
-    }),
-  )
-
   const files = [...store[`${parent}_files`].values()]
     .sort(fileSort)
     .filter((f) => f[`${parent}_id`] === parentId)
@@ -115,16 +107,6 @@ const Files = ({ parentId, parent }) => {
     () => setImageIndex((imageIndex + 1) % images.length),
     [imageIndex, images.length],
   )
-
-  if (loading && !files.length) {
-    return 'Lade...'
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
