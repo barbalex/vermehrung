@@ -559,7 +559,7 @@ export const teilzaehlung = gql`
     _deleted
   }
 `
-export const user_role = gql`
+export const userRole = gql`
   fragment UserRoleFields on user_role {
     id
     __typename
