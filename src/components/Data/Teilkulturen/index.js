@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
+import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { teilkultur as teilkulturFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,28 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForTeilkulturs(
-    $teilkulturFilter: teilkultur_bool_exp!
-    $totalCountFilter: teilkultur_bool_exp!
-  ) {
-    teilkultur(where: $teilkulturFilter) {
-      ...TeilkulturFields
-    }
-    teilkultur_total_count: teilkultur_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    teilkultur_filtered_count: teilkultur_aggregate(where: $teilkulturFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${teilkulturFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -89,29 +64,18 @@ const Teilkulturen = ({ filter: showFilter }) => {
     filter,
     insertTeilkulturRev,
     kulturIdInActiveNodeArray,
+    teilkultursSorted,
     teilkultursFiltered,
-    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (kulturIdInActiveNodeArray) {
-    hierarchyFilter.kultur_id = {
-      _eq: kulturIdInActiveNodeArray,
+  const hierarchyFilter = (r) => {
+    if (kulturIdInActiveNodeArray) {
+      return r.kultur_id === kulturIdInActiveNodeArray
     }
+    return true
   }
-  const teilkulturFilter = { ...store.teilkulturFilter, ...hierarchyFilter }
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-  }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      teilkulturFilter,
-      totalCountFilter,
-    },
-  })
 
   const storeRowsFiltered = teilkultursFiltered.filter((r) => {
     if (kulturIdInActiveNodeArray) {
@@ -120,8 +84,15 @@ const Teilkulturen = ({ filter: showFilter }) => {
     return true
   })
 
-  const totalNr = data?.teilkultur_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.teilkultur_filtered_count?.aggregate?.count ?? ''
+  const totalNr = teilkultursSorted.filter(hierarchyFilter).length
+  const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
+  console.log('Teilkulturen', {
+    teilkultursFiltered,
+    teilkultursSorted,
+    totalNr,
+    filteredNr,
+    kulturIdInActiveNodeArray,
+  })
 
   const add = useCallback(() => {
     insertTeilkulturRev()
@@ -135,24 +106,6 @@ const Teilkulturen = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !storeRowsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Teilkulturen" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Teilkulturen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
