@@ -189,149 +189,150 @@ export const RootStore = RootStoreBase.props({
     )
     return {
       initalizeSubscriptions() {
-        self.subscribeAe_art(
+        const unsubscribe = {}
+        unsubscribe.ae_art = self.subscribeAe_art(
           undefined,
           (a) => a.id.name,
           () => !self.aeArtLoaded && self.setAeArtLoaded(true),
         )
-        self.subscribeArt(
+        unsubscribe.art = self.subscribeArt(
           { where: self.artFilter },
           undefined,
           () => !self.artLoaded && self.setArtLoaded(true),
         )
-        self.subscribeArt_file(
+        unsubscribe.art_file = self.subscribeArt_file(
           undefined,
           undefined,
           () => !self.artFileLoaded && self.setArtFileLoaded(true),
         )
-        self.subscribeArt_qk(
+        unsubscribe.art_qk = self.subscribeArt_qk(
           undefined,
           undefined,
           () => !self.artQkLoaded && self.setArtQkLoaded(true),
         )
-        self.subscribeArt_qk_choosen(
+        unsubscribe.art_qk_choosen = self.subscribeArt_qk_choosen(
           undefined,
           undefined,
           () => !self.artQkChoosenLoaded && self.setArtQkChoosenLoaded(true),
         )
-        self.subscribeAv(
+        unsubscribe.av = self.subscribeAv(
           undefined,
           undefined,
           () => !self.avLoaded && self.setAvLoaded(true),
         )
-        self.subscribeEvent(
+        unsubscribe.event = self.subscribeEvent(
           { where: self.eventFilter },
           undefined,
           () => !self.eventLoaded && self.setEventLoaded(true),
         )
-        self.subscribeGarten(
+        unsubscribe.garten = self.subscribeGarten(
           { where: self.gartenFilter },
           undefined,
           () => !self.gartenLoaded && self.setGartenLoaded(true),
         )
-        self.subscribeGarten_file(
+        unsubscribe.garten_file = self.subscribeGarten_file(
           undefined,
           undefined,
           () => !self.gartenFileLoaded && self.setGartenFileLoaded(true),
         )
-        self.subscribeGv(
+        unsubscribe.gv = self.subscribeGv(
           undefined,
           undefined,
           () => !self.gvLoaded && self.setGvLoaded(true),
         )
-        self.subscribeHerkunft(
+        unsubscribe.herkunft = self.subscribeHerkunft(
           { where: self.herkunftFilter },
           undefined,
           () => !self.herkunftLoaded && self.setHerkunftLoaded(true),
         )
-        self.subscribeHerkunft_file(
+        unsubscribe.herkunft_file = self.subscribeHerkunft_file(
           undefined,
           undefined,
           () => !self.herkunftFileLoaded && self.setHerkunftFileLoaded(true),
         )
-        self.subscribeKultur(
+        unsubscribe.kultur = self.subscribeKultur(
           { where: self.kulturFilter },
           undefined,
           () => !self.kulturLoaded && self.setKulturLoaded(true),
         )
-        self.subscribeKultur_file(
+        unsubscribe.kultur_file = self.subscribeKultur_file(
           undefined,
           undefined,
           () => !self.kulturFileLoaded && self.setKulturFileLoaded(true),
         )
-        self.subscribeKultur_option(
+        unsubscribe.kultur_option = self.subscribeKultur_option(
           undefined,
           undefined,
           () => !self.kulturOptionLoaded && self.setKulturOptionLoaded(true),
         )
-        self.subscribeKultur_qk(
+        unsubscribe.kultur_qk = self.subscribeKultur_qk(
           undefined,
           undefined,
           () => !self.kulturQkLoaded && self.setKulturQkLoaded(true),
         )
-        self.subscribeKultur_qk_choosen(
+        unsubscribe.kultur_qk_choosen = self.subscribeKultur_qk_choosen(
           undefined,
           undefined,
           () =>
             !self.kulturQkChoosenLoaded && self.setKulturQkChoosenLoaded(true),
         )
-        self.subscribeLieferung(
+        unsubscribe.lieferung = self.subscribeLieferung(
           { where: self.lieferungFilter },
           undefined,
           () => !self.lieferungLoaded && self.setLieferungLoaded(true),
         )
-        self.subscribeLieferung_file(
+        unsubscribe.lieferung_file = self.subscribeLieferung_file(
           undefined,
           undefined,
           () => !self.lieferungFileLoaded && self.setLieferungFileLoaded(true),
         )
-        self.subscribePerson(
+        unsubscribe.person = self.subscribePerson(
           { where: self.personFilter },
           undefined,
           () => !self.personLoaded && self.setPersonLoaded(true),
         )
-        self.subscribePerson_file(
+        unsubscribe.person_file = self.subscribePerson_file(
           undefined,
           undefined,
           () => !self.personFileLoaded && self.setPersonFileLoaded(true),
         )
-        self.subscribePerson_option(
+        unsubscribe.person_option = self.subscribePerson_option(
           undefined,
           undefined,
           () => !self.personOptionLoaded && self.setPersonOptionLoaded(true),
         )
-        self.subscribeSammel_lieferung(
+        unsubscribe.sammel_lieferung = self.subscribeSammel_lieferung(
           { where: self.sammelLieferungFilter },
           undefined,
           () =>
             !self.sammelLieferungLoaded && self.setSammelLieferungLoaded(true),
         )
-        self.subscribeSammlung(
+        unsubscribe.sammlung = self.subscribeSammlung(
           { where: self.sammlungFilter },
           undefined,
           () => !self.sammlungLoaded && self.setSammlungLoaded(true),
         )
-        self.subscribeSammlung_file(
+        unsubscribe.sammlung_file = self.subscribeSammlung_file(
           undefined,
           undefined,
           () => !self.sammlungFileLoaded && self.setSammlungFileLoaded(true),
         )
-        self.subscribeTeilkultur(
+        unsubscribe.teilkultur = self.subscribeTeilkultur(
           undefined,
           undefined,
           () => !self.teilkulturLoaded && self.setTeilkulturLoaded(true),
         )
-        self.subscribeTeilzaehlung(
+        unsubscribe.teilzaehlung = self.subscribeTeilzaehlung(
           undefined,
           undefined,
           () => !self.teilzaehlungLoaded && self.setTeilzaehlungLoaded(true),
         )
-        self.subscribeUser_role(
+        unsubscribe.user_role = self.subscribeUser_role(
           undefined,
           undefined,
           () => !self.userRoleLoaded && self.setUserRoleLoaded(true),
         )
-        self.subscribeZaehlung(
+        unsubscribe.zaehlung = self.subscribeZaehlung(
           { where: self.zaehlungFilter },
           (z) =>
             z.id.kultur_id.datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs_aggregate(
@@ -346,6 +347,7 @@ export const RootStore = RootStoreBase.props({
             ),
           () => !self.zaehlungLoaded && self.setZaehlungLoaded(true),
         )
+        return unsubscribe
       },
       logInitialLoading() {
         console.log({

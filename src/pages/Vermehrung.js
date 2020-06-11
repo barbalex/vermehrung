@@ -106,9 +106,14 @@ const Vermehrung = ({ location }) => {
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
   useEffect(() => {
+    let unsubscribe
     if (existsUser) {
-      console.log('Vermehrung initializing subscriptions')
-      initalizeSubscriptions()
+      unsubscribe = initalizeSubscriptions()
+    }
+    return function cleanup() {
+      if (unsubscribe && Object.keys(unsubscribe)) {
+        Object.keys(unsubscribe).forEach((table) => unsubscribe[table]())
+      }
     }
   }, [existsUser, initalizeSubscriptions])
 
