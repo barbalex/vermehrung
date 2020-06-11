@@ -144,14 +144,23 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, tree, online, artFilter, showDeleted, deletedFilter } = store
+  const {
+    filter,
+    tree,
+    online,
+    artFilter,
+    artsFiltered,
+    artsSorted,
+    showDeleted,
+    deletedFilter,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
   const hierarchyFilter = {}
   const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading } = useQuery(allDataQuery, {
+  const { error } = useQuery(allDataQuery, {
     variables: {
       id,
       artFilter,
@@ -161,8 +170,8 @@ const Art = ({
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.art_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.art_filtered_count?.aggregate?.count ?? ''
+  const totalNr = artsSorted.length
+  const filteredNr = artsFiltered.length
 
   const row = showFilter ? filter.art : store.arts.get(id) || {}
 
@@ -208,14 +217,14 @@ const Art = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  if (loading && !Object.keys(row).length) {
+  /*if (!Object.keys(row).length) {
     return (
       <Container>
         <FormTitle title="Art" />
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
-  }
+  }*/
 
   if (error && !error.message.includes('Failed to fetch')) {
     return (

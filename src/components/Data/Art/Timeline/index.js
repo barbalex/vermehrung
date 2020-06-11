@@ -36,7 +36,7 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 
-const TimelineArea = ({ artId }) => {
+const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const [open, setOpen] = useState(false)
 
   const openDocs = useCallback(() => {
@@ -57,7 +57,7 @@ const TimelineArea = ({ artId }) => {
   )
 
   const { data, error, loading } = useQuery(query, {
-    variables: { id: artId },
+    variables: { id: artId ?? '99999999-9999-9999-9999-999999999999' },
   })
   const artSums = data?.art_sums ?? []
 
