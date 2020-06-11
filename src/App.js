@@ -82,13 +82,13 @@ if (typeof window !== 'undefined') {
       headers: { authorization: `Bearer ${tokenWithRoles}` },
     },
   })
+  // https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
   storeOptions = {
     gqlHttpClient,
     gqlWsClient,
   }
 }
 
-// https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
 const store = RootStore.create(undefined, storeOptions)
 
 const App = ({ element }) => {
