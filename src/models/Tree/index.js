@@ -292,6 +292,11 @@ export default types
       // for unknown reason using self.openNodes directly
       // suddenly started to cause errors
       // so need to snapshot
+      // TODO: also check if parent nodes were not filtered away
+      // 1. get uuids
+      // 2. get their table from parent
+      // 3. check that id is included in tablesFiltered
+      // 4. return false if is not included
       return getSnapshot(self.openNodes).filter((node) =>
         allParentNodesAreOpen(self.openNodes, node),
       )
