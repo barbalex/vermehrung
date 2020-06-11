@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
+import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { sammlung as sammlungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,47 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForSammlungs(
-    $sammlungFilter: sammlung_bool_exp!
-    $totalCountFilter: sammlung_bool_exp!
-  ) {
-    sammlung(where: $sammlungFilter) {
-      ...SammlungFields
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      person {
-        id
-        __typename
-        name
-      }
-      herkunft {
-        id
-        __typename
-        nr
-      }
-    }
-    sammlung_total_count: sammlung_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    sammlung_filtered_count: sammlung_aggregate(where: $sammlungFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${sammlungFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -108,58 +64,31 @@ const Sammlungen = ({ filter: showFilter }) => {
     filter,
     insertSammlungRev,
     sammlungsFiltered,
+    sammlungsSorted,
     artIdInActiveNodeArray,
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
-    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (artIdInActiveNodeArray) {
-    hierarchyFilter.art_id = {
-      _eq: artIdInActiveNodeArray,
-    }
-  }
-  if (herkunftIdInActiveNodeArray) {
-    hierarchyFilter.herkunft_id = {
-      _eq: herkunftIdInActiveNodeArray,
-    }
-  }
-  if (personIdInActiveNodeArray) {
-    hierarchyFilter.person_id = {
-      _eq: personIdInActiveNodeArray,
-    }
-  }
-  const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
-
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-  }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      sammlungFilter,
-      totalCountFilter,
-    },
-  })
-
-  const storeRowsFiltered = sammlungsFiltered.filter((r) => {
+  const hierarchyFilter = (s) => {
     if (artIdInActiveNodeArray) {
-      return r.art_id === artIdInActiveNodeArray
+      return s.art_id === artIdInActiveNodeArray
     }
     if (herkunftIdInActiveNodeArray) {
-      return r.herkunft_id === herkunftIdInActiveNodeArray
+      return s.herkunft_id === herkunftIdInActiveNodeArray
     }
     if (personIdInActiveNodeArray) {
-      return r.person_id === personIdInActiveNodeArray
+      return s.person_id === personIdInActiveNodeArray
     }
     return true
-  })
+  }
 
-  const totalNr = data?.sammlung_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.sammlung_filtered_count?.aggregate?.count ?? ''
+  const storeRowsFiltered = sammlungsFiltered.filter(hierarchyFilter)
+
+  const totalNr = sammlungsSorted.filter(hierarchyFilter).length
+  const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
 
   const add = useCallback(() => {
     insertSammlungRev()
@@ -173,24 +102,6 @@ const Sammlungen = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !storeRowsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Sammlungen" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Sammlungen" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>

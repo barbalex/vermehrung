@@ -6,24 +6,18 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Coordinates from '../../shared/Coordinates'
-import {
-  sammlung as sammlungFragment,
-  art as artFragment,
-} from '../../../utils/fragments'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import DeleteButton from './DeleteButton'
@@ -122,67 +116,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query SammlungQueryForSammlung(
-    $id: uuid!
-    $sammlungFilter: sammlung_bool_exp!
-    $totalCountFilter: sammlung_bool_exp!
-  ) {
-    sammlung(where: { id: { _eq: $id } }) {
-      ...SammlungFields
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      person {
-        id
-        __typename
-        name
-      }
-      herkunft {
-        id
-        __typename
-        gemeinde
-        lokalname
-        nr
-      }
-    }
-    sammlung_total_count: sammlung_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    sammlung_filtered_count: sammlung_aggregate(where: $sammlungFilter) {
-      aggregate {
-        count
-      }
-    }
-    person {
-      id
-      __typename
-      name
-      ort
-    }
-    herkunft {
-      id
-      __typename
-      nr
-      lokalname
-      gemeinde
-    }
-    art {
-      ...ArtFields
-    }
-  }
-  ${artFragment}
-  ${sammlungFragment}
-`
-
 const Sammlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -197,39 +130,31 @@ const Sammlung = ({
     artsSorted,
     herkunftsSorted,
     personsSorted,
+    sammlungsFiltered,
+    sammlungsSorted,
     showDeleted,
-    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const hierarchyFilter = {}
-  if (artIdInActiveNodeArray) {
-    hierarchyFilter.art_id = {
-      _eq: artIdInActiveNodeArray,
-    }
-  }
-  if (herkunftIdInActiveNodeArray) {
-    hierarchyFilter.herkunft_id = {
-      _eq: herkunftIdInActiveNodeArray,
-    }
-  }
-  if (personIdInActiveNodeArray) {
-    hierarchyFilter.person_id = {
-      _eq: personIdInActiveNodeArray,
-    }
-  }
-  const sammlungFilter = { ...store.sammlungFilter, ...hierarchyFilter }
 
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: { id, sammlungFilter, totalCountFilter },
-  })
+  const hierarchyFilter = (s) => {
+    if (artIdInActiveNodeArray) {
+      return s.art_id === artIdInActiveNodeArray
+    }
+    if (herkunftIdInActiveNodeArray) {
+      return s.herkunft_id === herkunftIdInActiveNodeArray
+    }
+    if (personIdInActiveNodeArray) {
+      return s.person_id === personIdInActiveNodeArray
+    }
+    return true
+  }
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.sammlung_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.sammlung_filtered_count?.aggregate?.count ?? ''
+  const totalNr = sammlungsSorted.filter(hierarchyFilter).length
+  const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
 
   const row = showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}
 
@@ -316,24 +241,6 @@ const Sammlung = ({
     }
   }, [])
 
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Sammlung" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Sammlung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -408,7 +315,6 @@ const Sammlung = ({
                 field="art_id"
                 label="Art"
                 options={artWerte}
-                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.art_id}
               />
@@ -419,7 +325,6 @@ const Sammlung = ({
                 field="herkunft_id"
                 label="Herkunft"
                 options={herkunftWerte}
-                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.herkunft_id}
               />
@@ -430,7 +335,6 @@ const Sammlung = ({
                 field="person_id"
                 label="Person"
                 options={personWerte}
-                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.person_id}
               />
