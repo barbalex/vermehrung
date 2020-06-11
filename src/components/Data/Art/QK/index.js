@@ -58,7 +58,9 @@ const ApQk = ({ artId }) => {
     fetchPolicy: 'no-cache',
   })
 
-  const allQkChoosens = [...store.art_qk_choosens.values()]
+  const allQkChoosens = [...store.art_qk_choosens.values()].filter(
+    (q) => q.art_id === artId,
+  )
   const qks = artQksSorted.filter(
     (qk) => !!allQkChoosens.find((no) => no.qk_name === qk.name),
   )

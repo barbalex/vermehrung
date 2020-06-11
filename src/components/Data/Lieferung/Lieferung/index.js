@@ -516,7 +516,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
   const herkunftValue = herkunft
     ? `${herkunft.nr || '(keine Nr)'}: ${
-        herkunft.gemeinde || '(keine Gemeinde)'
+        herkunft?.gemeinde || '(keine Gemeinde)'
       }, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
   const showVon =

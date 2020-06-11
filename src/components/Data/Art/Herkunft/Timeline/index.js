@@ -41,7 +41,7 @@ const HerkunftTimeline = ({
   )
   const herkunft = store.herkunfts.get(herkunftId) ?? {}
   const herkunftLabel = `${herkunft.nr || '(keine Nr)'}: ${
-    herkunft.gemeinde || '(keine Gemeinde)'
+    herkunft?.gemeinde || '(keine Gemeinde)'
   }, ${herkunft.lokalname || '(kein Lokalname)'}`
 
   // zaehlungen data is special because it is
