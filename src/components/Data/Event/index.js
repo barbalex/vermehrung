@@ -10,15 +10,13 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
@@ -29,11 +27,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
-import {
-  event as eventFragment,
-  kulturOption as kulturOptionFragment,
-  teilkultur as teilkulturFragment,
-} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -120,101 +113,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForEvent(
-    $id: uuid!
-    $eventFilter: event_bool_exp!
-    $totalCountFilter: event_bool_exp!
-  ) {
-    event(where: { id: { _eq: $id } }) {
-      ...EventFields
-      kultur {
-        id
-        __typename
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-        kultur_option {
-          ...KulturOptionFields
-        }
-      }
-      teilkultur {
-        id
-        __typename
-        name
-      }
-      person {
-        id
-        __typename
-        name
-      }
-    }
-    event_total_count: event_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    event_filtered_count: event_aggregate(where: $eventFilter) {
-      aggregate {
-        count
-      }
-    }
-    kultur {
-      id
-      __typename
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-      teilkulturs {
-        ...TeilkulturFields
-      }
-    }
-    person {
-      id
-      __typename
-      name
-      ort
-    }
-  }
-  ${eventFragment}
-  ${kulturOptionFragment}
-  ${teilkulturFragment}
-`
-
 const Event = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -225,36 +123,26 @@ const Event = ({
     online,
     insertTeilkulturRev,
     kulturIdInActiveNodeArray,
+    eventsSorted,
+    eventsFiltered,
     kultursSorted,
     personsSorted,
     teilkultursSorted,
     showDeleted,
-    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const hierarchyFilter = {}
-  if (kulturIdInActiveNodeArray) {
-    hierarchyFilter.kultur_id = {
-      _eq: kulturIdInActiveNodeArray,
-    }
-  }
-  const eventFilter = { ...store.eventFilter, ...hierarchyFilter }
-
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading, query } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      eventFilter,
-      totalCountFilter,
-    },
-  })
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.event_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.event_filtered_count?.aggregate?.count ?? ''
+  const hierarchyFilter = (e) => {
+    if (kulturIdInActiveNodeArray)
+      return e.kultur_id === kulturIdInActiveNodeArray
+    return true
+  }
+  const totalNr = eventsSorted.filter(hierarchyFilter).length
+  const filteredNr = eventsFiltered.filter(hierarchyFilter).length
 
   const row = showFilter ? filter.event : store.events.get(id) || {}
 
@@ -353,29 +241,9 @@ const Event = ({
         },
       })
       row.edit({ field: 'teilkultur_id', value: teilkultur_id })
-      setTimeout(() => query.refetch(), 100)
     },
-    [insertTeilkulturRev, row, query],
+    [insertTeilkulturRev, row],
   )
-
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Event" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    console.log(error)
-    return (
-      <Container>
-        <FormTitle title="Event" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -443,7 +311,7 @@ const Event = ({
                 field="kultur_id"
                 label="Kultur"
                 options={kulturWerte}
-                loading={loading}
+                loading={false}
                 saveToDb={saveToDb}
                 error={errors.kultur_id}
               />
@@ -454,7 +322,7 @@ const Event = ({
                   field="teilkultur_id"
                   label="Teilkultur"
                   options={teilkulturWerte}
-                  loading={loading}
+                  loading={false}
                   error={errors.teilkultur_id}
                   onCreateNew={onCreateNewTeilkultur}
                 />
@@ -476,7 +344,7 @@ const Event = ({
                   field="person_id"
                   label="Wer"
                   options={personWerte}
-                  loading={loading}
+                  loading={false}
                   saveToDb={saveToDb}
                   error={errors.person_id}
                 />

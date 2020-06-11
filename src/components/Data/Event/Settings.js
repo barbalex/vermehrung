@@ -5,11 +5,11 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
+import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext, useQuery } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -33,11 +33,7 @@ const Info = styled.div`
 
 const SettingsEvents = ({ kulturId }) => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
 
-  const { error, loading } = useQuery((store) =>
-    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
-  )
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const { ev_datum, ev_teilkultur_id, ev_geplant, ev_person_id } = kulturOption
 
@@ -49,11 +45,6 @@ const SettingsEvents = ({ kulturId }) => {
     },
     [kulturOption],
   )
-  const onClickFrown = useCallback(() => {
-    addNotification({
-      message: error.message,
-    })
-  }, [addNotification, error])
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${appBaseUrl()}Dokumentation/Felder-blenden`
@@ -72,19 +63,6 @@ const SettingsEvents = ({ kulturId }) => {
     [],
   )
 
-  if (error) {
-    return (
-      <IconButton
-        aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title={error.message}
-        onClick={onClickFrown}
-      >
-        <FaFrown />
-      </IconButton>
-    )
-  }
   return (
     <ErrorBoundary>
       <IconButton
@@ -96,7 +74,7 @@ const SettingsEvents = ({ kulturId }) => {
       >
         <FaCog />
       </IconButton>
-      {!loading && (
+      {
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -181,7 +159,7 @@ const SettingsEvents = ({ kulturId }) => {
             Die Wahl gilt (nur) für diese Kultur.
           </Info>
         </Menu>
-      )}
+      }
     </ErrorBoundary>
   )
 }
