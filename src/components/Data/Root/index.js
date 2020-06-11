@@ -83,20 +83,7 @@ const query = gql`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const {
-    userPerson,
-    artFilter,
-    eventFilter,
-    gartenFilter,
-    kulturFilter,
-    herkunftFilter,
-    personFilter,
-    sammlungFilter,
-    lieferungFilter,
-    sammelLieferungFilter,
-    teilkulturFilter,
-    zaehlungFilter,
-  } = store
+  const { userPerson, loading } = store
 
   // eslint-disable-next-line no-unused-vars
   const { user_role } = userPerson
@@ -126,31 +113,6 @@ const Root = ({ filter: showFilter }) => {
     { name: 'Events', url: ['Events'], table: 'event', sort: 10 },
     { name: 'Personen', url: ['Personen'], table: 'person', sort: 11 },
   ]
-
-  const variables = {
-    artFilter,
-    eventFilter,
-    gartenFilter,
-    kulturFilter,
-    herkunftFilter,
-    personFilter,
-    sammlungFilter,
-    lieferungFilter,
-    sammelLieferungFilter,
-    teilkulturFilter,
-    zaehlungFilter,
-  }
-  const { error, loading } = useQuery(query, {
-    variables,
-  })
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
