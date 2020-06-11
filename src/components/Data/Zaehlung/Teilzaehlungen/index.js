@@ -75,7 +75,11 @@ const allDataQuery = gql`
 
 const Teilzaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
-  const { insertTeilzaehlungRev, teilzaehlungsSorted, deletedFilter } = store
+  const {
+    insertTeilzaehlungRev,
+    teilzaehlungsSorted,
+    deletedTableFilter,
+  } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
@@ -83,7 +87,7 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   const hierarchyFilter = { zaehlung_id: { _eq: zaehlungId } }
   const totalCountFilter = {
     ...hierarchyFilter,
-    ...deletedFilter,
+    ...deletedTableFilter,
   }
   const { error, loading } = useQuery(allDataQuery, {
     variables: {
