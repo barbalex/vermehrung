@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
 import { v1 as uuidv1 } from 'uuid'
 
-import { useQuery, StoreContext } from '../../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 
 const Row = styled.div`
   display: flex;
@@ -29,17 +29,12 @@ const Beschreibung = styled.div`
 const ChooseArtQkRow = ({ artId, qk }) => {
   const store = useContext(StoreContext)
 
-  const { loading, error } = useQuery((store) =>
-    store.queryArt_qk_choosen({
-      where: { art_id: { _eq: artId }, qk_name: { _eq: qk.name } },
-    }),
-  )
   const artQkChoosen = [...store.art_qk_choosens.values()].find(
     (v) => v.art_id === artId && v.qk_name === qk.name,
   )
 
   const artQkChoosenId = artQkChoosen?.id
-  const checked = !loading && !!artQkChoosenId
+  const checked = !!artQkChoosenId
 
   const onChange = useCallback(async () => {
     // 1. if checked, delete artQkChoosen
@@ -53,7 +48,7 @@ const ChooseArtQkRow = ({ artId, qk }) => {
           },
         },
         undefined,
-        () => store.deleteKulturQkChoosenModel({ id: artQkChoosenId }),
+        () => store.deleteArtQkChoosenModel({ id: artQkChoosenId }),
       )
     }
     store.mutateInsert_art_qk_choosen_one({
@@ -65,14 +60,6 @@ const ChooseArtQkRow = ({ artId, qk }) => {
     })
   }, [artId, artQkChoosenId, checked, qk.name, store])
 
-  if (error) {
-    return (
-      <Row>
-        <Titel>{`${qk?.titel}, Fehler:`}</Titel>
-        <Beschreibung>{error.message}</Beschreibung>
-      </Row>
-    )
-  }
   return (
     <Row>
       <Check>

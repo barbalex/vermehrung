@@ -7,8 +7,8 @@ export default ({ data, artId }) => ({
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
       const geplant = s.geplant ? ' (geplant)' : ''
-      const text = `${datum}: ${s?.herkunft.gemeinde ?? '(keine Gemeinde)'}, ${
-        s?.herkunft.nr ?? '(keine Nr.)'
+      const text = `${datum}: ${s?.herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
+        s?.herkunft?.nr ?? '(keine Nr.)'
       }${geplant}`
 
       return {
@@ -22,8 +22,8 @@ export default ({ data, artId }) => ({
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
       const geplant = s.geplant ? ' (geplant)' : ''
-      const text = `${datum}: ${s?.herkunft.gemeinde ?? '(keine Gemeinde)'}, ${
-        s?.herkunft.nr ?? '(keine Nr.)'
+      const text = `${datum}: ${s?.herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
+        s?.herkunft?.nr ?? '(keine Nr.)'
       }${geplant}`
 
       return {
@@ -37,8 +37,8 @@ export default ({ data, artId }) => ({
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
       const geplant = s.geplant ? ' (geplant)' : ''
-      const text = `${datum}: ${s?.herkunft.gemeinde ?? '(keine Gemeinde)'}, ${
-        s?.herkunft.nr ?? '(keine Nr.)'
+      const text = `${datum}: ${s?.herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
+        s?.herkunft?.nr ?? '(keine Nr.)'
       }${geplant}`
 
       return {
@@ -52,8 +52,8 @@ export default ({ data, artId }) => ({
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
       const geplant = s.geplant ? ' (geplant)' : ''
-      const text = `${datum}: ${s?.herkunft.gemeinde ?? '(keine Gemeinde)'}, ${
-        s?.herkunft.nr ?? '(keine Nr.)'
+      const text = `${datum}: ${s?.herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
+        s?.herkunft?.nr ?? '(keine Nr.)'
       }${geplant}`
 
       return {
@@ -67,8 +67,8 @@ export default ({ data, artId }) => ({
         ? format(new Date(s.datum), 'yyyy.MM.dd')
         : 'kein Datum'
       const geplant = s.geplant ? ' (geplant)' : ''
-      const text = `${datum}: ${s?.herkunft.gemeinde ?? '(keine Gemeinde)'}, ${
-        s?.herkunft.nr ?? '(keine Nr.)'
+      const text = `${datum}: ${s?.herkunft?.gemeinde ?? '(keine Gemeinde)'}, ${
+        s?.herkunft?.nr ?? '(keine Nr.)'
       }${geplant}`
 
       return {

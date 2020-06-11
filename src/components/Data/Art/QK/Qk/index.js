@@ -78,12 +78,6 @@ const ApQkQk = ({ artId, qkNameQueries, qks }) => {
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}.01.01`
   const startNextYear = `${year + 1}.01.01`
-  /*console.log('ApQkQk', {
-    qkNameQueries,
-    artId,
-    startYear,
-    startNextYear,
-  })*/
   const { data, error, loading, refetch } = useQuery(query, {
     variables: {
       ...qkNameQueries,
