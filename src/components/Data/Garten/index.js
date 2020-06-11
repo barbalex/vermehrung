@@ -8,14 +8,12 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 import { v1 as uuidv1 } from 'uuid'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -28,7 +26,6 @@ import Download from './Download'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import { garten as gartenFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -108,35 +105,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForGarten(
-    $id: uuid!
-    $gartenFilter: garten_bool_exp!
-    $totalCountFilter: garten_bool_exp!
-  ) {
-    garten(where: { id: { _eq: $id } }) {
-      ...GartenFields
-    }
-    garten_total_count: garten_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    garten_filtered_count: garten_aggregate(where: $gartenFilter) {
-      aggregate {
-        count
-      }
-    }
-    person {
-      id
-      __typename
-      name
-      ort
-    }
-  }
-  ${gartenFragment}
-`
-
 const Garten = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -146,42 +114,28 @@ const Garten = ({
   const {
     filter,
     online,
+    gartensSorted,
+    gartensFiltered,
     userPersonOption,
     personIdInActiveNodeArray,
     personsSorted,
     showDeleted,
-    deletedFilter,
-    inactiveFilter,
     upsertGvModel,
     deleteGvModel,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const hierarchyFilter = {}
-  if (personIdInActiveNodeArray) {
-    hierarchyFilter.person_id = {
-      _eq: personIdInActiveNodeArray,
-    }
+  const hierarchyFilter = (e) => {
+    if (personIdInActiveNodeArray)
+      return e.person_id === personIdInActiveNodeArray
+    return true
   }
-  const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-    ...inactiveFilter,
-  }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      gartenFilter,
-      totalCountFilter,
-    },
-  })
 
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.garten_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.garten_filtered_count?.aggregate?.count ?? ''
+  const totalNr = gartensSorted.filter(hierarchyFilter).length
+  const filteredNr = gartensFiltered.filter(hierarchyFilter).length
 
   const row = showFilter ? filter.garten : store.gartens.get(id) || {}
 
@@ -248,24 +202,6 @@ const Garten = ({
     },
     [deleteGvModel, filter, row, showFilter, store, upsertGvModel],
   )
-
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Garten" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Garten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -335,7 +271,7 @@ const Garten = ({
                 field="person_id"
                 label="Person"
                 options={personWerte}
-                loading={loading}
+                loading={false}
                 saveToDb={saveToDb}
                 error={errors.person_id}
               />
