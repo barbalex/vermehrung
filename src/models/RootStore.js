@@ -1939,6 +1939,7 @@ export const RootStore = RootStoreBase.props({
     get gartensSorted() {
       return [...self.gartens.values()]
         .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => (self.hideInactive ? a.aktiv === true : true))
         .sort(gartenSort)
     },
     get herkunftFilter() {
@@ -1961,6 +1962,7 @@ export const RootStore = RootStoreBase.props({
     get kultursSorted() {
       return [...self.kulturs.values()]
         .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => (self.hideInactive ? a.aktiv === true : true))
         .sort(kulturSort)
     },
     get lieferungFilter() {
@@ -1983,6 +1985,7 @@ export const RootStore = RootStoreBase.props({
     get personsSorted() {
       return [...self.persons.values()]
         .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => (self.hideInactive ? a.aktiv === true : true))
         .sort(personSort)
     },
     get kulturQksSorted() {
