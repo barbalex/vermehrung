@@ -311,7 +311,6 @@ const Event = ({
                 field="kultur_id"
                 label="Kultur"
                 options={kulturWerte}
-                loading={false}
                 saveToDb={saveToDb}
                 error={errors.kultur_id}
               />
@@ -322,7 +321,6 @@ const Event = ({
                   field="teilkultur_id"
                   label="Teilkultur"
                   options={teilkulturWerte}
-                  loading={false}
                   error={errors.teilkultur_id}
                   onCreateNew={onCreateNewTeilkultur}
                 />
@@ -344,7 +342,6 @@ const Event = ({
                   field="person_id"
                   label="Wer"
                   options={personWerte}
-                  loading={false}
                   saveToDb={saveToDb}
                   error={errors.person_id}
                 />
