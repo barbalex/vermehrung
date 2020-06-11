@@ -2,28 +2,11 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
 import Lieferung from './Lieferung'
 import SammelLieferung from '../SammelLieferung'
-import { StoreContext, useQuery } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
-import {
-  lieferung as lieferungFragment,
-  sammelLieferung as sammelLieferungFragment,
-} from '../../../utils/fragments'
+import { StoreContext } from '../../../models/reactUtils'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const FieldsContainer = styled.div`
-  padding: 10px;
-  overflow: auto !important;
-  height: 100%;
-`
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px) !important;
   .Resizer {
@@ -52,19 +35,6 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForLieferungs($id: uuid!, $sammelLieferungId: uuid!) {
-    lieferung(where: { id: { _eq: $id } }) {
-      ...LieferungFields
-    }
-    sammel_lieferung(where: { id: { _eq: $sammelLieferungId } }) {
-      ...SammelLieferungFields
-    }
-  }
-  ${lieferungFragment}
-  ${sammelLieferungFragment}
-`
-
 const LieferungContainer = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -76,31 +46,7 @@ const LieferungContainer = ({
     lieferung?.sammel_lieferung_id ?? '99999999-9999-9999-9999-999999999999'
   const sammelLieferung = store.sammel_lieferungs.get(sammelLieferungId) || {}
 
-  const { error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      sammelLieferungId,
-    },
-  })
-
   const { li_show_sl } = userPersonOption
-
-  if (loading) {
-    return (
-      <Container>
-        <FormTitle title="Lieferung" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Lieferung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   if (
     sammelLieferungId !== '99999999-9999-9999-9999-999999999999' &&
