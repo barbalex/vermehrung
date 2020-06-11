@@ -8,12 +8,10 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
@@ -25,7 +23,6 @@ import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import { person as personFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -105,40 +102,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForPerson(
-    $id: uuid!
-    $personFilter: person_bool_exp!
-    $totalCountFilter: person_bool_exp!
-  ) {
-    person(where: { id: { _eq: $id } }) {
-      ...PersonFields
-      avs {
-        id
-        __typename
-      }
-    }
-    person_total_count: person_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    person_filtered_count: person_aggregate(where: $personFilter) {
-      aggregate {
-        count
-      }
-    }
-    user_role {
-      id
-      __typename
-      name
-      comment
-      sort
-    }
-  }
-  ${personFragment}
-`
-
 const Person = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -148,29 +111,18 @@ const Person = ({
   const {
     filter,
     online,
+    personsSorted,
+    personsFiltered,
     userPerson,
     userRolesSorted,
-    deletedFilter,
-    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-  const hierarchyFilter = {}
-  const personFilter = { ...store.personFilter, ...hierarchyFilter }
 
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-    ...inactiveFilter,
+  const hierarchyFilter = () => {
+    return true
   }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      personFilter,
-      totalCountFilter,
-    },
-  })
 
   const userRoleWerte = useMemo(
     () =>
@@ -181,8 +133,8 @@ const Person = ({
     [userRolesSorted],
   )
 
-  const totalNr = data?.person_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.person_filtered_count?.aggregate?.count ?? ''
+  const totalNr = personsSorted.filter(hierarchyFilter).length
+  const filteredNr = personsFiltered.filter(hierarchyFilter).length
 
   const row = showFilter ? filter.person : store.persons.get(id) ?? {}
 
@@ -218,31 +170,11 @@ const Person = ({
     [filter, row, showFilter],
   )
 
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Person" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Person" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
-
-  console.log('Person, row:', row)
 
   return (
     <ErrorBoundary>
@@ -290,7 +222,6 @@ const Person = ({
                 field="user_role"
                 label="Rolle"
                 options={userRoleWerte}
-                loading={loading}
                 saveToDb={saveToDb}
                 error={errors.user_role}
               />
