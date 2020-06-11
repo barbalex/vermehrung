@@ -63,14 +63,6 @@ export default ({ store, table }) => {
 
   const sortFunction = sorters[table] ?? nonSorter
 
-  console.log('queryFromStore', {
-    table,
-    filterValues,
-    values,
-    hideInactive,
-    sortFunction,
-  })
-
   if (!filterValues.length) return values.sort(sortFunction)
 
   const test = (val) => {
