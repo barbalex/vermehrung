@@ -5,7 +5,7 @@ import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
 import RowComponent from './Row'
-import { StoreContext, useQuery } from '../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -22,18 +22,8 @@ const ChooseQk = ({ refetchTab }) => {
   const { activeNodeArray } = store.tree
   const kulturId = last(activeNodeArray.filter((e) => isUuid.v1(e)))
 
-  const { error, loading } = useQuery((store) =>
-    store.queryKultur_qk(
-      {
-        order_by: [{ sort: 'asc_nulls_last' }, { name: 'asc_nulls_first' }],
-      },
-      (q) => q.id.name.titel.beschreibung,
-    ),
-  )
   const rows = kulturQksSorted
 
-  if (error) return <Container>{`Fehler: ${error.message}`}</Container>
-  if (loading) return <Container>Lade Daten...</Container>
   return (
     <ErrorBoundary>
       <Container>
