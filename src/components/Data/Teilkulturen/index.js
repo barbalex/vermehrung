@@ -86,13 +86,6 @@ const Teilkulturen = ({ filter: showFilter }) => {
 
   const totalNr = teilkultursSorted.filter(hierarchyFilter).length
   const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
-  console.log('Teilkulturen', {
-    teilkultursFiltered,
-    teilkultursSorted,
-    totalNr,
-    filteredNr,
-    kulturIdInActiveNodeArray,
-  })
 
   const add = useCallback(() => {
     insertTeilkulturRev()
