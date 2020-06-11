@@ -102,7 +102,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
     insertZaehlungRev,
     zaehlungsFiltered,
     kulturIdInActiveNodeArray,
-    deletedFilter,
+    deletedTableFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
@@ -116,7 +116,7 @@ const Zaehlungen = ({ filter: showFilter }) => {
   const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
   const totalCountFilter = {
     ...hierarchyFilter,
-    ...deletedFilter,
+    ...deletedTableFilter,
   }
   const { data, error, loading } = useQuery(allDataQuery, {
     variables: {

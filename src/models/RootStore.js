@@ -31,6 +31,7 @@ import zaehlungSort from '../utils/zaehlungSort'
 import gartenSort from '../utils/gartenSort'
 import herkunftSort from '../utils/herkunftSort'
 import kulturSort from '../utils/kulturSort'
+import notDeletedOrHasConflict from '../utils/notDeletedOrHasConflict'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1906,7 +1907,7 @@ export const RootStore = RootStoreBase.props({
     },
     get artsSorted() {
       return [...self.arts.values()]
-        .filter((v) => !v._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(artSort)
     },
     get artQksSorted() {
@@ -1926,7 +1927,7 @@ export const RootStore = RootStoreBase.props({
     },
     get eventsSorted() {
       return [...self.events.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(eventSort)
     },
     get gartenFilter() {
@@ -1937,7 +1938,7 @@ export const RootStore = RootStoreBase.props({
     },
     get gartensSorted() {
       return [...self.gartens.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(gartenSort)
     },
     get herkunftFilter() {
@@ -1948,7 +1949,7 @@ export const RootStore = RootStoreBase.props({
     },
     get herkunftsSorted() {
       return [...self.herkunfts.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(herkunftSort)
     },
     get kulturFilter() {
@@ -1959,7 +1960,7 @@ export const RootStore = RootStoreBase.props({
     },
     get kultursSorted() {
       return [...self.kulturs.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(kulturSort)
     },
     get lieferungFilter() {
@@ -1970,7 +1971,7 @@ export const RootStore = RootStoreBase.props({
     },
     get lieferungsSorted() {
       return [...self.lieferungs.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(lieferungSort)
     },
     get personFilter() {
@@ -1981,7 +1982,7 @@ export const RootStore = RootStoreBase.props({
     },
     get personsSorted() {
       return [...self.persons.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(personSort)
     },
     get kulturQksSorted() {
@@ -1995,7 +1996,7 @@ export const RootStore = RootStoreBase.props({
     },
     get sammelLieferungsSorted() {
       return [...self.sammel_lieferungs.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(lieferungSort)
     },
     get sammlungFilter() {
@@ -2006,7 +2007,7 @@ export const RootStore = RootStoreBase.props({
     },
     get sammlungsSorted() {
       return [...self.sammlungs.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(sammlungSort)
     },
     get teilkulturFilter() {
@@ -2017,12 +2018,12 @@ export const RootStore = RootStoreBase.props({
     },
     get teilkultursSorted() {
       return [...self.teilkulturs.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(teilkulturSort)
     },
     get teilzaehlungsSorted() {
       return [...self.teilzaehlungs.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(teilzaehlungSort)
     },
     get userRolesSorted() {
@@ -2036,10 +2037,10 @@ export const RootStore = RootStoreBase.props({
     },
     get zaehlungsSorted() {
       return [...self.zaehlungs.values()]
-        .filter((a) => !a._deleted || self.showDeleted)
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
         .sort(zaehlungSort)
     },
-    get deletedFilter() {
+    get deletedTableFilter() {
       if (self.showDeleted) return true
       return {
         _or: [
