@@ -4,12 +4,10 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -21,7 +19,6 @@ import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import { herkunft as herkunftFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -101,29 +98,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForHerkunft(
-    $id: uuid!
-    $herkunftFilter: herkunft_bool_exp!
-    $totalCountFilter: herkunft_bool_exp!
-  ) {
-    herkunft(where: { id: { _eq: $id } }) {
-      ...HerkunftFields
-    }
-    herkunft_total_count: herkunft_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    herkunft_filtered_count: herkunft_aggregate(where: $herkunftFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${herkunftFragment}
-`
-
 const Herkunft = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -133,23 +107,23 @@ const Herkunft = ({
     filter,
     online,
     userPersonOption,
-    herkunftFilter,
+    herkunftsSorted,
+    herkunftsFiltered,
     showDeleted,
-    deletedFilter,
+    sammlungIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      herkunftFilter,
-      totalCountFilter,
-    },
-  })
+  const hierarchyFilter = (e) => {
+    if (sammlungIdInActiveNodeArray) {
+      return (e?.sammlungs ?? [])
+        .map((s) => s.id)
+        .includes(sammlungIdInActiveNodeArray)
+    }
+    return true
+  }
 
   const row = showFilter ? filter.herkunft : store.herkunfts.get(id) || {}
 
@@ -165,8 +139,8 @@ const Herkunft = ({
     setActiveConflict(null)
   }, [id])
 
-  const totalNr = data?.herkunft_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.herkunft_filtered_count?.aggregate?.count ?? ''
+  const totalNr = herkunftsSorted.filter(hierarchyFilter).length
+  const filteredNr = herkunftsFiltered.filter(hierarchyFilter).length
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
 
@@ -201,24 +175,6 @@ const Herkunft = ({
       window.open(url)
     }
   }, [])
-
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Herkunft" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Herkunft" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   if (!row || (!showFilter && filter.show)) return null
 
