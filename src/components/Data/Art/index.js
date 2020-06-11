@@ -116,6 +116,11 @@ const allDataQuery = gql`
     art(where: { id: { _eq: $id } }) {
       ...ArtFields
     }
+    ae_art {
+      id
+      __typename
+      name
+    }
     art_total_count: art_aggregate(where: $totalCountFilter) {
       aggregate {
         count
@@ -190,31 +195,6 @@ const Art = ({
     [filter, row, showFilter],
   )
 
-  const artSelectFilter = useCallback(
-    (val) => {
-      if (showFilter) {
-        return {
-          ae_art_art: { id: { _is_null: false } },
-          name: { _ilike: `%${val}%` },
-        }
-      }
-      return val
-        ? {
-            _or: [
-              { _not: { ae_art_art: { id: { _is_null: false } } } },
-              { ae_art_art: { id: { _eq: id } } },
-            ],
-            name: { _ilike: `%${val}%` },
-          }
-        : {
-            _or: [
-              { _not: { ae_art_art: { id: { _is_null: false } } } },
-              { ae_art_art: { id: { _eq: id } } },
-            ],
-          }
-    },
-    [id, showFilter],
-  )
   const onClickToArten = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
     [activeNodeArray, setActiveNodeArray],
@@ -320,11 +300,8 @@ const Art = ({
                 row={row}
                 saveToDb={saveToDb}
                 error={errors.ae_id}
-                queryName={'queryAe_art'}
-                where={artSelectFilter}
-                order_by={{ name: 'asc_nulls_first' }}
-                resultNodesName="ae_art"
-                resultNodesLabelName="name"
+                modelName="aeArtsSorted"
+                modelKey="name"
               />
               {online &&
                 !showFilter &&

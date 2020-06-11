@@ -55,22 +55,19 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const artSubscription = gql`
-  subscription ArtSubscriptionForArts($artFilter: art_bool_exp!) {
-    art(where: $artFilter) {
-      ...ArtFields
-    }
-  }
-  ${artFragment}
-`
 const allDataQuery = gql`
   query AllDataQueryForArts(
     $artFilter: art_bool_exp!
     $totalCountFilter: art_bool_exp!
   ) {
-    #art(where: $artFilter) {
-    #  ...ArtFields
-    #}
+    art(where: $artFilter) {
+      ...ArtFields
+    }
+    ae_art {
+      id
+      __typename
+      name
+    }
     art_total_count: art_aggregate(where: $totalCountFilter) {
       aggregate {
         count
@@ -82,7 +79,7 @@ const allDataQuery = gql`
       }
     }
   }
-  #${artFragment}
+  ${artFragment}
 `
 
 const singleRowHeight = 48
