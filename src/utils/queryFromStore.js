@@ -1,28 +1,43 @@
 import types from '../models/Filter/simpleTypes'
 
+import aeArtSort from './aeArtSort'
 import artSort from './artSort'
+import avSort from './avSort'
 import eventSort from './eventSort'
+import fileSort from './fileSort'
+import gartenSort from './gartenSort'
+import gvSort from './gvSort'
+import herkunftSort from './herkunftSort'
+import kulturSort from './kulturSort'
 import lieferungSort from './lieferungSort'
 import personSort from './personSort'
+import qkSort from './qkSort'
 import sammlungSort from './sammlungSort'
 import teilkulturSort from './teilkulturSort'
 import zaehlungSort from './zaehlungSort'
-import gartenSort from './gartenSort'
-import herkunftSort from './herkunftSort'
-import kulturSort from './kulturSort'
+import notDeletedOrHasConflict from './notDeletedOrHasConflict'
 
 const sorters = {
+  ae_art: aeArtSort,
   art: artSort,
+  art_file: fileSort,
+  av: avSort,
   event: eventSort,
-  lieferung: lieferungSort,
-  sammel_lieferung: lieferungSort,
-  person: personSort,
-  sammlung: sammlungSort,
-  teilkultur: teilkulturSort,
-  zaehlung: zaehlungSort,
   garten: gartenSort,
+  garten_file: fileSort,
+  gv: gvSort,
   herkunft: herkunftSort,
   kultur: kulturSort,
+  lieferung: lieferungSort,
+  lieferung_file: fileSort,
+  person: personSort,
+  person_file: fileSort,
+  qk: qkSort,
+  sammel_lieferung: lieferungSort,
+  sammlung: sammlungSort,
+  sammlung_file: fileSort,
+  teilkultur: teilkulturSort,
+  zaehlung: zaehlungSort,
 }
 const nonSorter = () => true
 
@@ -38,21 +53,7 @@ export default ({ store, table }) => {
     (e) => !!e?.[1],
   )
   const values = [...store[`${table}s`].values()]
-    .filter((v) => {
-      if (!showDeleted) {
-        // TODO:
-        // seems that sometimes rows do not have _conflicts
-        // which causes v._conflicts.length to error
-        // happened last when loading an art after emtying the cache
-        return (
-          v._deleted === false ||
-          (v._deleted === true &&
-            v?._conflicts?.length &&
-            v._conflicts.length > 0)
-        )
-      }
-      return true
-    })
+    .filter((v) => showDeleted || notDeletedOrHasConflict(v))
     .filter((v) => {
       if (['person', 'garten', 'kultur'].includes(table) && hideInactive) {
         return v.aktiv === true
@@ -60,7 +61,17 @@ export default ({ store, table }) => {
       return true
     })
 
-  if (!filterValues.length) return values
+  const sortFunction = sorters[table] ?? nonSorter
+
+  console.log('queryFromStore', {
+    table,
+    filterValues,
+    values,
+    hideInactive,
+    sortFunction,
+  })
+
+  if (!filterValues.length) return values.sort(sortFunction)
 
   const test = (val) => {
     const testArray = filterValues.map(([key, filterValue]) => {
@@ -83,8 +94,7 @@ export default ({ store, table }) => {
     return !testArray.includes(false)
   }
 
-  const filteredValues = values.filter((v) => test(v))
-  const sortFunction = sorters[table] ?? nonSorter
+  const filteredValues = values.filter(test)
 
   return filteredValues.sort(sortFunction)
 }
