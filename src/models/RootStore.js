@@ -15,6 +15,7 @@ import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
 import NotificationType from './Notification'
+import aeArtSort from '../utils/aeArtSort'
 import artSort from '../utils/artSort'
 import avSort from '../utils/avSort'
 import gvSort from '../utils/gvSort'
@@ -157,6 +158,11 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      initalizeSubscriptions() {
+        self.subscribeAe_art(undefined, (a) => a.id.name)
+        self.subscribeArt({ where: self.artFilter })
+        self.subscribeEvent({ where: self.eventFilter })
+      },
       updateModelValue({ table, id, field, value }) {
         // used to revert offline operations if they error
         const model = self[`${table}s`].get(id)
@@ -1579,6 +1585,9 @@ export const RootStore = RootStoreBase.props({
         queryPerson_option({ where: { id: { _eq: userPerson.id } } })
       }
       return userPersonOption ?? {}
+    },
+    get aeArtsSorted() {
+      return [...self.ae_arts.values()].sort(aeArtSort)
     },
     get artFilter() {
       return queryFromTable({ store: self, table: 'art' })

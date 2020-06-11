@@ -78,7 +78,7 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-const SelectTypable = ({
+const SelectLoadingOptions = ({
   row,
   valueLabelPath,
   field = '',
@@ -86,35 +86,24 @@ const SelectTypable = ({
   labelSize = 12,
   error: saveToDbError,
   saveToDb,
-  queryName,
-  where,
-  order_by,
-  resultNodesName,
-  resultNodesLabelName,
+  modelName,
+  modelKey,
 }) => {
   const store = useContext(StoreContext)
 
   const loadOptions = useCallback(
-    async (inputValue, cb) => {
-      let result
-      try {
-        result = await store[queryName]({
-          where: where(inputValue),
-          order_by,
-          limit: 7,
-        })
-      } catch (error) {
-        store.addNotification({
-          message: error.message,
-        })
-      }
-      const options = get(result, resultNodesName, []).map((o) => ({
+    (inputValue, cb) => {
+      const data =
+        store?.[modelName]
+          ?.filter((v) => v?.[modelKey]?.includes(inputValue) ?? false)
+          ?.slice(0, 7) ?? []
+      const options = data.map((o) => ({
         value: o.id,
-        label: o[resultNodesLabelName],
+        label: o?.[modelKey] ?? '(kein Name)',
       }))
       cb(options)
     },
-    [order_by, queryName, resultNodesLabelName, resultNodesName, store, where],
+    [modelName, modelKey, store],
   )
 
   const onChange = useCallback(
@@ -166,4 +155,4 @@ const SelectTypable = ({
   )
 }
 
-export default observer(SelectTypable)
+export default observer(SelectLoadingOptions)

@@ -109,7 +109,6 @@ const Events = ({ filter: showFilter }) => {
       totalCountFilter,
     },
   })
-  useQuery((store) => store.subscribeEvent({ where: eventFilter }))
 
   const storeRowsFiltered = eventsFiltered.filter((e) => {
     if (kulturIdInActiveNodeArray) {
