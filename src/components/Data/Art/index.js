@@ -3,12 +3,10 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import SelectLoadingOptions from '../../shared/SelectLoadingOptions'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -24,10 +22,6 @@ import KuSvg from '../../../svg/to_ku.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import {
-  art as artFragment,
-  person as personFragment,
-} from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -107,66 +101,15 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForArt(
-    $id: uuid!
-    $artFilter: art_bool_exp!
-    $totalCountFilter: art_bool_exp!
-  ) {
-    art(where: { id: { _eq: $id } }) {
-      ...ArtFields
-    }
-    ae_art {
-      id
-      __typename
-      name
-    }
-    art_total_count: art_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    art_filtered_count: art_aggregate(where: $artFilter) {
-      aggregate {
-        count
-      }
-    }
-    person {
-      ...PersonFields
-    }
-  }
-  ${artFragment}
-  ${personFragment}
-`
-
 const Art = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    tree,
-    online,
-    artFilter,
-    artsFiltered,
-    artsSorted,
-    showDeleted,
-    deletedFilter,
-  } = store
+  const { filter, tree, online, artsFiltered, artsSorted, showDeleted } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
-
-  const hierarchyFilter = {}
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
-  const { error } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      artFilter,
-      totalCountFilter,
-    },
-  })
 
   const [errors, setErrors] = useState({})
 
@@ -225,15 +168,6 @@ const Art = ({
       </Container>
     )
   }*/
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Art" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   if (!row || (!showFilter && filter.show)) return null
 
