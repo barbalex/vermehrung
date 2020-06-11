@@ -5,14 +5,11 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import ReactResizeDetector from 'react-resize-detector'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
+import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import { garten as gartenFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -56,28 +53,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForGartens(
-    $gartenFilter: garten_bool_exp!
-    $totalCountFilter: garten_bool_exp!
-  ) {
-    garten(where: $gartenFilter) {
-      ...GartenFields
-    }
-    garten_total_count: garten_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    garten_filtered_count: garten_aggregate(where: $gartenFilter) {
-      aggregate {
-        count
-      }
-    }
-  }
-  ${gartenFragment}
-`
-
 const singleRowHeight = 48
 function sizeReducer(state, action) {
   return action.payload
@@ -89,39 +64,22 @@ const Gaerten = ({ filter: showFilter }) => {
     filter,
     insertGartenRev,
     personIdInActiveNodeArray,
+    gartensSorted,
     gartensFiltered,
-    deletedFilter,
-    inactiveFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (personIdInActiveNodeArray) {
-    hierarchyFilter.person_id = {
-      _eq: personIdInActiveNodeArray,
-    }
-  }
-  const gartenFilter = { ...store.gartenFilter, ...hierarchyFilter }
-  const totalCountFilter = {
-    ...hierarchyFilter,
-    ...deletedFilter,
-    ...inactiveFilter,
-  }
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      gartenFilter,
-      totalCountFilter,
-    },
-  })
-
-  const storeRowsFiltered = gartensFiltered.filter((g) => {
-    if (personIdInActiveNodeArray) g.person_id === personIdInActiveNodeArray
+  const hierarchyFilter = (e) => {
+    if (personIdInActiveNodeArray)
+      return e.person_id === personIdInActiveNodeArray
     return true
-  })
+  }
 
-  const totalNr = data?.garten_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.garten_filtered_count?.aggregate?.count ?? ''
+  const storeRowsFiltered = gartensFiltered.filter(hierarchyFilter)
+
+  const totalNr = gartensSorted.filter(hierarchyFilter).length
+  const filteredNr = gartensFiltered.filter(hierarchyFilter).length
 
   const add = useCallback(() => {
     insertGartenRev()
@@ -135,24 +93,6 @@ const Gaerten = ({ filter: showFilter }) => {
     (width, height) => sizeDispatch({ payload: { width, height } }),
     [],
   )
-
-  if (loading && !storeRowsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Gärten" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Gärten" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
