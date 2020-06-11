@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from 'react'
 import { observer } from 'mobx-react-lite'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 import last from 'lodash/last'
 import IconButton from '@material-ui/core/IconButton'
@@ -14,21 +13,14 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import isUuid from 'is-uuid'
 import SplitPane from 'react-split-pane'
 
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
 import Date from '../../../shared/Date'
 import Checkbox2States from '../../../shared/Checkbox2States'
-import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import exists from '../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
-import {
-  art as artFragment,
-  lieferung as lieferungFragment,
-  person as personFragment,
-  sammelLieferung as sammelLieferungFragment,
-} from '../../../../utils/fragments'
 import Files from '../../Files'
 import Settings from './Settings'
 import AddButton from './AddButton'
@@ -155,179 +147,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForLieferungLieferung(
-    $id: uuid!
-    $lieferungFilter: lieferung_bool_exp!
-    $totalCountFilter: lieferung_bool_exp!
-    $hierarchyFilter: lieferung_bool_exp!
-    $sammlungFilter: sammlung_bool_exp!
-    $nachKulturFilter: kultur_bool_exp!
-    $vonKulturFilter: kultur_bool_exp!
-  ) {
-    lieferung_total_count: lieferung_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    lieferung_filtered_count: lieferung_aggregate(where: $lieferungFilter) {
-      aggregate {
-        count
-      }
-    }
-    lieferung(where: { id: { _eq: $id } }) {
-      ...LieferungFields
-      sammel_lieferung {
-        ...SammelLieferungFields
-        lieferungs {
-          ...LieferungFields
-        }
-      }
-      art {
-        id
-        __typename
-        art_ae_art {
-          id
-          __typename
-          name
-        }
-      }
-      person {
-        id
-        __typename
-        name
-      }
-      sammlung {
-        id
-        __typename
-        datum
-        herkunft {
-          id
-          __typename
-          nr
-          lokalname
-          gemeinde
-        }
-        person {
-          id
-          __typename
-          name
-        }
-      }
-      kulturByVonKulturId {
-        id
-        __typename
-        art_id
-        herkunft_id
-        herkunft {
-          id
-          __typename
-          nr
-          lokalname
-          gemeinde
-        }
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
-      kulturByNachKulturId {
-        id
-        __typename
-        art_id
-        herkunft_id
-        herkunft {
-          id
-          __typename
-          nr
-          lokalname
-          gemeinde
-        }
-        garten {
-          id
-          __typename
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
-    }
-    sammlung(where: $sammlungFilter) {
-      id
-      __typename
-      art_id
-      datum
-      herkunft_id
-      herkunft {
-        id
-        __typename
-        nr
-        lokalname
-        gemeinde
-      }
-      person {
-        id
-        __typename
-        name
-        ort
-      }
-    }
-    nach_kultur: kultur(where: $nachKulturFilter) {
-      id
-      __typename
-      art_id
-      herkunft_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-    von_kultur: kultur(where: $vonKulturFilter) {
-      id
-      __typename
-      art_id
-      herkunft_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-    art {
-      ...ArtFields
-    }
-    person {
-      ...PersonFields
-    }
-  }
-  ${artFragment}
-  ${lieferungFragment}
-  ${personFragment}
-  ${sammelLieferungFragment}
-`
-
 const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const existsSammelLieferung = !!sammelLieferung?.id
   const store = useContext(StoreContext)
@@ -337,6 +156,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     filter,
     kulturIdInActiveNodeArray,
     kultursSorted,
+    lieferungsSorted,
+    lieferungsFiltered,
     online,
     personIdInActiveNodeArray,
     personsSorted,
@@ -344,7 +165,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     sammlungIdInActiveNodeArray,
     sammlungsSorted,
     userPersonOption,
-    deletedFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -354,125 +174,33 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (kulturIdInActiveNodeArray) {
-    if (activeNodeArray.includes('Aus-Lieferungen')) {
-      hierarchyFilter.von_kultur_id = {
-        _eq: kulturIdInActiveNodeArray,
+  const hierarchyFilter = (e) => {
+    if (kulturIdInActiveNodeArray) {
+      if (activeNodeArray.includes('Aus-Lieferungen')) {
+        return (e.von_kultur_id = kulturIdInActiveNodeArray)
+      }
+      if (activeNodeArray.includes('An-Lieferungen')) {
+        return (e.nach_kultur_id = kulturIdInActiveNodeArray)
       }
     }
-    if (activeNodeArray.includes('An-Lieferungen')) {
-      hierarchyFilter.nach_kultur_id = {
-        _eq: kulturIdInActiveNodeArray,
-      }
+    if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+      return (e.sammel_lieferung_id = sammelLieferungIdInActiveNodeArray)
     }
-  }
-  if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-    hierarchyFilter.sammel_lieferung_id = {
-      _eq: sammelLieferungIdInActiveNodeArray,
+    if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+      return (e.person_id = personIdInActiveNodeArray)
     }
-  }
-  if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-    hierarchyFilter.person_id = {
-      _eq: personIdInActiveNodeArray,
+    if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
+      return (e.von_sammlung_id = sammlungIdInActiveNodeArray)
     }
+    return true
   }
-  if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-    hierarchyFilter.von_sammlung_id = {
-      _eq: sammlungIdInActiveNodeArray,
-    }
-  }
-
-  const totalCountFilter = { ...hierarchyFilter, ...deletedFilter }
 
   const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
 
-  const lieferungFilter = { ...store.lieferungFilter, ...hierarchyFilter }
-
-  const sammlungFilter = row?.art_id
-    ? { art_id: { _eq: row.art_id } }
-    : { id: { _is_null: false } }
-
-  // only kulturen of same herkunft!
-  // beware: art_id, herkunft_id and von_kultur_id can be null
-  let nachKulturFilter = { id: { _is_null: false } }
-  // show only kulturen of art_id
-  if (row?.art_id) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-    }
-  }
-  // show only kulturen with same herkunft
-  if (row?.art_id && herkunft && herkunft.id) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-    }
-  }
-  // shall be delivered to same kultur it came from
-  if (
-    row?.art_id &&
-    herkunft &&
-    herkunft.id &&
-    // ensure set value is always shown
-    row?.von_kultur_id &&
-    row?.von_kultur_id !== row.nach_kultur_id
-  ) {
-    nachKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-      id: { _neq: row.von_kultur_id },
-    }
-  }
-
-  // beware: art_id, herkunft_id and nach_kultur_id can be null
-  let vonKulturFilter = { id: { _is_null: false } }
-  // show only kulturen of art_id
-  if (row?.art_id) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-    }
-  }
-  // show only kulturen with same herkunft
-  if (row?.art_id && herkunft && herkunft.id) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-    }
-  }
-  // shall not be delivered to same kultur it came from
-  if (
-    row?.art_id &&
-    herkunft &&
-    herkunft.id &&
-    row?.nach_kultur_id &&
-    // ensure set value is always shown
-    row?.von_kultur_id &&
-    row?.von_kultur_id !== row.nach_kultur_id
-  ) {
-    vonKulturFilter = {
-      art_id: { _eq: row.art_id },
-      herkunft_id: { _eq: herkunft.id },
-      id: { _neq: row.nach_kultur_id },
-    }
-  }
-
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      lieferungFilter,
-      hierarchyFilter,
-      sammlungFilter,
-      nachKulturFilter,
-      vonKulturFilter,
-      totalCountFilter,
-    },
-  })
-
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.lieferung_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.lieferung_filtered_count?.aggregate?.count ?? ''
+  const totalNr = lieferungsSorted.filter(hierarchyFilter).length
+  const filteredNr = lieferungsFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -668,24 +396,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }, [])
 
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Lieferung" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Lieferung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
-
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -755,7 +465,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       field="art_id"
                       label="Art"
                       options={artWerte}
-                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.art_id}
                     />
@@ -853,7 +562,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         exists(row.art_id) ? ' (nur solche derselben Art)' : ''
                       }`}
                       options={sammlungWerte}
-                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.von_sammlung_id}
                     />
@@ -868,7 +576,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         exists(row.art_id) ? ' (nur solche derselben Art)' : ''
                       }`}
                       options={vonKulturWerte}
-                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.von_kultur_id}
                     />
@@ -894,7 +601,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                           : ''
                       }`}
                       options={nachKulturWerte}
-                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.nach_kultur_id}
                     />
@@ -962,7 +668,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       field="person_id"
                       label="Person"
                       options={personWerte}
-                      loading={loading}
                       saveToDb={saveToDb}
                       error={errors.person_id}
                     />
