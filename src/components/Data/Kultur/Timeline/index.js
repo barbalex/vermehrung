@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useContext } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
@@ -27,6 +27,7 @@ import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../models/reactUtils'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -53,13 +54,20 @@ const Title = styled.div`
 `
 
 const KulturTimeline = ({ row }) => {
+  const store = useContext(StoreContext)
+  const { lieferungsSorted, zaehlungsSorted } = store
   const [narrow, setNarrow] = useState(false)
 
-  const zaehlungenDone = (row?.zaehlungsDone ?? []).filter(
-    (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
-  )
+  const zaehlungenDone = zaehlungsSorted
+    .filter((z) => z.kultur_id === row.id)
+    .filter((z) => z.prognose === false)
+    .filter((z) => !!z.datum)
+    .filter((z) => z.datum <= format(new Date(), 'yyyy-mm-dd'))
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0] ?? {}
-  const zaehlungenPlanned = row?.zaehlungsPlanned ?? []
+  const zaehlungenPlanned = zaehlungsSorted
+    .filter((z) => z.kultur_id === row.id)
+    .filter((z) => z.prognose === true)
+    .filter((z) => !!z.datum)
   const zaehlungenPlannedIgnored = zaehlungenPlanned.filter((zg) =>
     // check if more recent zaehlungenDone exists
     zaehlungenDone.some((z) => z.datum >= zg.datum),
@@ -183,10 +191,15 @@ const KulturTimeline = ({ row }) => {
     [zaehlungenDataGroupedByDatum],
   )
 
-  const anLieferungenDone = (row?.anLieferungsDone ?? []).filter(
-    (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
-  )
-  const anLieferungenPlanned = row?.anLieferungsPlanned ?? []
+  const anLieferungenDone = lieferungsSorted
+    .filter((l) => l.nach_kultur_id === row.id)
+    .filter((l) => l.geplant === false)
+    .filter((l) => !!l.datum)
+    .filter((l) => l.datum <= format(new Date(), 'yyyy-mm-dd'))
+  const anLieferungenPlanned = lieferungsSorted
+    .filter((l) => l.nach_kultur_id === row.id)
+    .filter((l) => l.geplant === true)
+    .filter((l) => !!l.datum)
   const anLieferungenPlannedIgnored = useMemo(
     () =>
       anLieferungenPlanned.filter((lg) =>
@@ -206,10 +219,15 @@ const KulturTimeline = ({ row }) => {
     [...anLieferungenDone, ...anLieferungenPlannedIncluded],
     'datum',
   )
-  const ausLieferungenDone = (row?.ausLieferungsDone ?? []).filter(
-    (l) => l.datum <= format(new Date(), 'yyyy-mm-dd'),
-  )
-  const ausLieferungenPlanned = row?.ausLieferungsPlanned ?? []
+  const ausLieferungenDone = lieferungsSorted
+    .filter((l) => l.von_kultur_id === row.id)
+    .filter((l) => l.geplant === false)
+    .filter((l) => !!l.datum)
+    .filter((l) => l.datum <= format(new Date(), 'yyyy-mm-dd'))
+  const ausLieferungenPlanned = lieferungsSorted
+    .filter((l) => l.von_kultur_id === row.id)
+    .filter((l) => l.geplant === true)
+    .filter((l) => !!l.datum)
   const ausLieferungenPlannedIgnored = useMemo(
     () =>
       ausLieferungenPlanned.filter((lg) =>
