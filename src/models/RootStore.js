@@ -333,7 +333,17 @@ export const RootStore = RootStoreBase.props({
         )
         self.subscribeZaehlung(
           { where: self.zaehlungFilter },
-          undefined,
+          (z) =>
+            z.id.kultur_id.datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs_aggregate(
+              (ta) =>
+                ta.aggregate((ag) =>
+                  ag.sum(
+                    (s) =>
+                      s.anzahl_pflanzen.anzahl_auspflanzbereit
+                        .anzahl_mutterpflanzen,
+                  ),
+                ),
+            ),
           () => !self.zaehlungLoaded && self.setZaehlungLoaded(true),
         )
       },
