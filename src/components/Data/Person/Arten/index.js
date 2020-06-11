@@ -11,9 +11,8 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { v1 as uuidv1 } from 'uuid'
 
-import { StoreContext, useQuery } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
 import Art from './Art'
-import query from './query'
 import Select from '../../../shared/Select'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -65,9 +64,6 @@ const PersonArten = ({ personId }) => {
     [open],
   )
 
-  const { error, loading, query: avQuery } = useQuery(query, {
-    variables: { personId },
-  })
   const avs = avsSorted.filter((a) => a.person_id === personId)
   const avArtIds = avs.map((v) => v.art_id)
 
@@ -101,10 +97,9 @@ const PersonArten = ({ personId }) => {
         deleteAvModel(newObject)
         return setErrors({ [field]: error.message })
       }
-      avQuery.refetch()
       setErrors({})
     },
-    [avQuery, deleteAvModel, personId, store, upsertAvModel],
+    [deleteAvModel, personId, store, upsertAvModel],
   )
 
   return (
@@ -114,9 +109,7 @@ const PersonArten = ({ personId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`Mitarbeitend bei ${
-          loading ? '...' : avs.length
-        } Arten`}</Title>
+        <Title>{`Mitarbeitend bei ${avs.length} Arten`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -129,17 +122,11 @@ const PersonArten = ({ personId }) => {
       </TitleRow>
       {open && (
         <Content>
-          {loading && !avs.length ? (
-            <Avs>Lade Daten...</Avs>
-          ) : error ? (
-            <Avs>{`Fehler: ${error.message}`}</Avs>
-          ) : (
-            <Avs>
-              {avs.map((av) => (
-                <Art key={`${av.person_id}/${av.art_id}`} av={av} />
-              ))}
-            </Avs>
-          )}
+          <Avs>
+            {avs.map((av) => (
+              <Art key={`${av.person_id}/${av.art_id}`} av={av} />
+            ))}
+          </Avs>
           {!!artWerte.length && (
             <Select
               name="art_id"
@@ -147,7 +134,6 @@ const PersonArten = ({ personId }) => {
               field="art_id"
               label="Art hinzufügen"
               options={artWerte}
-              loading={loading}
               saveToDb={saveToDb}
               isClearable={false}
               error={errors.art_id}
