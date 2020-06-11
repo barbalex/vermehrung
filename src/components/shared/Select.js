@@ -44,15 +44,15 @@ const StyledSelect = styled(Select)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
   input {
     @media print {
@@ -63,7 +63,7 @@ const StyledSelect = styled(Select)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
     /* make it open over titlerow (which needs to have z-index 1 to hide text scolling below it)*/
     z-index: 2;
   }
@@ -81,14 +81,14 @@ const SharedSelect = ({
   name,
   error,
   options,
-  loading,
+  loading = false,
   maxHeight = null,
   isClearable = true,
   noCaret = false,
   saveToDb,
 }) => {
   const onChange = useCallback(
-    option => {
+    (option) => {
       const fakeEvent = {
         target: {
           name,
@@ -103,7 +103,7 @@ const SharedSelect = ({
   // show ... whyle options are loading
   const loadingOptions = [{ value, label: '...' }]
   const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find(o => o.value === value) || emptyValue
+  const selectValue = optionsToUse.find((o) => o.value === value) || emptyValue
 
   return (
     <Container>
