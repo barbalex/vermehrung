@@ -156,14 +156,12 @@ const allDataQuery = gql`
 
 const query = async ({ store }) => {
   const { setInitialDataQueried, setQueryingAllData } = store
-  let result
   try {
-    result = await store.query(allDataQuery, undefined, {
+    await store.query(allDataQuery, undefined, {
       fetchPolicy: 'network-only',
     })
   } catch (error) {
     if (error && error.message.includes('JWT')) {
-      //console.log('queryAllData, not getting AuthToken after error:', error)
       await getAuthToken({ store })
     }
     setQueryingAllData(false)
@@ -171,8 +169,6 @@ const query = async ({ store }) => {
   }
   setInitialDataQueried(true)
   setQueryingAllData(false)
-  console.log('queryAllData, queried all data:', result)
-  return result
 }
 
 export default async ({ store }) => {

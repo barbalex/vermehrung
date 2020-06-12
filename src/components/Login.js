@@ -97,7 +97,6 @@ const Login = () => {
 
   const [resetTitle, setResetTitle] = useState('neues Passwort setzen')
   const reset = useCallback(async () => {
-    console.log('reset, email:', email)
     if (!email) setEmailErrorText('Bitte Email-Adresse eingeben')
     setResetTitle('...')
     try {
