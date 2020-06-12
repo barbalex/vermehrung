@@ -1,10 +1,11 @@
 export default ({ store }) => {
-  const { loading, showKultur } = store.tree
+  const { initialDataQueried } = store
+  const { showKultur } = store.tree
 
   if (!showKultur) return []
 
   const kulturen = store.kultursFiltered
-  const nr = loading && !kulturen.length ? '...' : kulturen.length
+  const nr = !initialDataQueried && !kulturen.length ? '...' : kulturen.length
 
   return [
     {
