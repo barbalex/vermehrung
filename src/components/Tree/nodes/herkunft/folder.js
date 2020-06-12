@@ -1,7 +1,9 @@
 export default ({ store }) => {
-  const { loading, showHerkunft } = store.tree
+  const { initialDataQueried } = store
+  const { showHerkunft } = store.tree
   const herkuenfte = store.herkunftsFiltered
-  const nr = loading && !herkuenfte.length ? '...' : herkuenfte.length
+  const nr =
+    !initialDataQueried && !herkuenfte.length ? '...' : herkuenfte.length
 
   if (!showHerkunft) return []
 
