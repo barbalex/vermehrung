@@ -56,6 +56,7 @@ export const RootStore = RootStoreBase.props({
   // this is _after_ user is set so need another variable
   authorizing: types.optional(types.boolean, true),
   showDeleted: types.optional(types.boolean, false),
+  authToken: types.union(types.null, types.undefined, types.string),
 })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -66,6 +67,8 @@ export const RootStore = RootStoreBase.props({
     // but that probably had other reasons
     // so could move this back to context if necessary
     firebase: null,
+    gqlHttpClient: null,
+    gqlWsClient: null,
   }))
   .actions((self) => {
     reaction(
@@ -161,6 +164,15 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      setAuthToken(val) {
+        self.authToken = val
+      },
+      setGqlHttpClient(val) {
+        self.gqlHttpClient = val
+      },
+      setGqlWsClient(val) {
+        self.gqlWsClient = val
+      },
       setLoading(val) {
         self.loading = val
       },
