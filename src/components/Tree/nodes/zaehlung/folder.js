@@ -1,10 +1,12 @@
 export default ({ store }) => {
-  const { loading, showZaehlung } = store.tree
+  const { initialDataQueried } = store
+  const { showZaehlung } = store.tree
 
   if (!showZaehlung) return []
 
   const zaehlungen = store.zaehlungsFiltered
-  const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
+  const nr =
+    !initialDataQueried && !zaehlungen.length ? '...' : zaehlungen.length
 
   return [
     {

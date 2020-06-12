@@ -1,5 +1,6 @@
 export default ({ store }) => {
-  const { loading, showTeilkultur } = store.tree
+  const { initialDataQueried } = store
+  const { showTeilkultur } = store.tree
 
   if (!showTeilkultur) return []
 
@@ -8,7 +9,8 @@ export default ({ store }) => {
     get(t, 'kultur.kultur_option.tk'),
   )*/
   if (!teilkulturen.length) return []
-  const nr = loading && !teilkulturen.length ? '...' : teilkulturen.length
+  const nr =
+    !initialDataQueried && !teilkulturen.length ? '...' : teilkulturen.length
 
   return [
     {
