@@ -34,7 +34,6 @@ export default async ({ store }) => {
   fb.initializeApp(firebaseConfig)
   setFirebase(fb)
   unregisterAuthObserver = fb.auth().onAuthStateChanged((user) => {
-    console.log('recreatePersistedStore, user from firebase:', user)
     setUser(user)
     // set last activeNodeArray
     // only if top domain was visited

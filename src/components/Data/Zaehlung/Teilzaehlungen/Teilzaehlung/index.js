@@ -104,7 +104,7 @@ const Teilzaehlung = ({
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const { error, query } = useQuery(allDataQuery, {
+  const { error } = useQuery(allDataQuery, {
     variables: {
       id,
     },
