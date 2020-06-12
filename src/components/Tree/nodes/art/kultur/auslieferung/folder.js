@@ -1,5 +1,6 @@
 export default ({ store }) => {
-  const { showArt, visibleOpenNodes, loading, art, artKultur } = store.tree
+  const { initialDataQueried } = store
+  const { showArt, visibleOpenNodes, art, artKultur } = store.tree
   if (!showArt) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -16,7 +17,10 @@ export default ({ store }) => {
     const auslieferungen = store.lieferungsFiltered.filter(
       (e) => e.von_kultur_id === kulturId,
     )
-    const nr = loading && !auslieferungen.length ? '...' : auslieferungen.length
+    const nr =
+      !initialDataQueried && !auslieferungen.length
+        ? '...'
+        : auslieferungen.length
 
     return {
       nodeType: 'folder',

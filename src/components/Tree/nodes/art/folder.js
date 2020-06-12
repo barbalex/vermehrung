@@ -1,7 +1,8 @@
 export default ({ store }) => {
-  const { loading, showArt } = store.tree
-  const arten = store.artsFiltered
-  const nr = loading && !arten.length ? '...' : arten.length
+  const { initialDataQueried, artsFiltered } = store
+  const { showArt } = store.tree
+  const arten = artsFiltered
+  const nr = !initialDataQueried && !arten.length ? '...' : arten.length
 
   if (!showArt) return []
 
