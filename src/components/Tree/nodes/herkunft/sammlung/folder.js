@@ -1,5 +1,6 @@
 export default ({ store }) => {
-  const { showHerkunft, visibleOpenNodes, loading, herkunft } = store.tree
+  const { initialDataQueried } = store
+  const { showHerkunft, visibleOpenNodes, herkunft } = store.tree
   if (!showHerkunft) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -13,7 +14,8 @@ export default ({ store }) => {
     const sammlungen = store.sammlungsFiltered.filter(
       (s) => s.herkunft_id === herkunftId,
     )
-    const nr = loading && !sammlungen.length ? '...' : sammlungen.length
+    const nr =
+      !initialDataQueried && !sammlungen.length ? '...' : sammlungen.length
 
     return {
       nodeType: 'folder',
