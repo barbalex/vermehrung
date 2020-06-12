@@ -1,8 +1,8 @@
 export default ({ store }) => {
+  const { initialDataQueried } = store
   const {
     showSammlung,
     visibleOpenNodes,
-    loading,
     sammlung: sammlungNodes,
     sammlungAusLieferung: lieferungNodes,
     sammlungAusLieferungKultur: kulturNodes,
@@ -28,7 +28,8 @@ export default ({ store }) => {
     const zaehlungen = store.zaehlungsFiltered.filter(
       (z) => z.kultur_id === kulturId,
     )
-    const nr = loading && !zaehlungen.length ? '...' : zaehlungen.length
+    const nr =
+      !initialDataQueried && !zaehlungen.length ? '...' : zaehlungen.length
 
     return {
       nodeType: 'folder',
