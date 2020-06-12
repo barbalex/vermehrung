@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 export default async ({ store }) => {
+  if (typeof window === 'undefined') return 'none'
   const {
     addNotification,
     setAuthorizing,
@@ -10,17 +11,20 @@ export default async ({ store }) => {
     setAuthToken,
   } = store
   setAuthorizing(true)
+  if (!user?.uid) return 'none'
   let res
   try {
     res = await axios.get(
       `https://auth.vermehrung.ch/add-hasura-claims/${user.uid}`,
     )
   } catch (error) {
+    // TODO: catch no network error and return token from localStorage
     console.log('error from getting claims from auth.vermehrung.ch:', error)
     setAuthorizing(false)
-    return addNotification({
+    addNotification({
       message: error?.response?.data,
     })
+    return window.localStorage.getItem('token') || 'none'
   }
   if (res.status === 200) {
     let tokenWithRoles
@@ -48,7 +52,5 @@ export default async ({ store }) => {
   }
   setAuthorizing(false)
   console.log('getAuthToken, returning old tokenWithRoles')
-  return typeof window !== 'undefined'
-    ? window.localStorage.getItem('token') || 'none'
-    : 'none'
+  return window.localStorage.getItem('token') || 'none'
 }
