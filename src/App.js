@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
@@ -77,11 +77,10 @@ let storeOptions = {
 if (typeof window !== 'undefined') {
   // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
   gqlWsClient = (() => {
-    const authToken =
+    let authToken =
       typeof window !== 'undefined'
         ? window.localStorage.getItem('token') || 'none'
         : 'none'
-    let authorization = `Bearer ${authToken}`
     console.log('App, authToken:', authToken)
     return new SubscriptionClient(constants.graphQlWsUri, {
       reconnect: true,
@@ -89,15 +88,17 @@ if (typeof window !== 'undefined') {
       connectionCallback: (error) => {
         console.log('gqlWsClient connectionCallback, error:', error)
         if (error && error.includes('JWT')) {
-          getAuthToken({ store }).then((token) => {
+          getAuthToken({ store }).then(() => {
+            const token = window.localStorage.getItem('token') || 'none'
             console.log('gqlWsClient connectionCallback, token:', token)
-            authorization = `Bearer ${token}`
+            //authToken = token
+            authToken = window.localStorage.getItem('token') || 'none'
           })
         }
       },
       connectionParams: {
         headers: {
-          authorization,
+          authorization: `Bearer ${authToken}`,
         },
       },
     })
@@ -118,6 +119,12 @@ store.setGqlHttpClient(gqlHttpClient)
 store.setGqlWsClient(gqlWsClient)
 
 const App = ({ element }) => {
+  const [auth, setAuth] = useState(null)
+  useEffect(() => {
+    getAuthToken({ store }).then(() =>
+      setAuth(window.localStorage.getItem('token') || 'none'),
+    )
+  }, [])
   useEffect(() => {
     let unregisterAuthObserver = () => {}
     Promise.all([import('firebase'), import('mst-persist')]).then(
@@ -175,6 +182,7 @@ const App = ({ element }) => {
   }, [])
 
   if (!store) return null
+  ///if (auth === 'none') return null
   return (
     <MuiThemeProvider theme={materialTheme}>
       <StoreContext.Provider value={store}>
