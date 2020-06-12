@@ -155,6 +155,7 @@ const allDataQuery = gql`
 `
 
 const query = async ({ store }) => {
+  const { authorizing } = store
   let result
   try {
     result = await store.query(allDataQuery, undefined, {
@@ -164,7 +165,10 @@ const query = async ({ store }) => {
     console.log('queryAllData, query, error:', error)
     if (error && error.message.includes('JWT')) {
       console.log('queryAllData, query, getAuthToken')
-      getAuthToken({ store })
+      if (!authorizing) {
+        await getAuthToken({ store })
+        //typeof window !== 'undefined' && window.location.reload(false)
+      }
     }
   }
   console.log('queryAllData, query, result:', result)
