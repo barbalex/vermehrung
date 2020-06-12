@@ -42,7 +42,7 @@ const TreeContainer = () => {
     return <ErrorContainer>{error.message}</ErrorContainer>
   }
   if (error && error.message.includes('JWT')) {
-    checkHasuraClaimsOnError({ error, store })
+    checkAuthOnError({ error, store })
   }*/
   return <Tree />
 }
