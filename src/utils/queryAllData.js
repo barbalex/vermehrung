@@ -1,0 +1,177 @@
+import gql from 'graphql-tag'
+
+import {
+  aeArt,
+  art,
+  artFile,
+  artQk,
+  artQkChoosen,
+  av,
+  event,
+  garten,
+  gartenFile,
+  gv,
+  herkunft,
+  herkunftFile,
+  kultur,
+  kulturFile,
+  kulturOption,
+  kulturQk,
+  kulturQkChoosen,
+  lieferung,
+  lieferungFile,
+  person,
+  personFile,
+  personOption,
+  sammelLieferung,
+  sammlung,
+  sammlungFile,
+  teilkultur,
+  teilzaehlung,
+  userRole,
+  zaehlung,
+} from './fragments'
+import getAuthToken from './getAuthToken'
+
+const allDataQuery = gql`
+  query AllDataQueryForTreeContainer {
+    ae_art {
+      ...AeArtFields
+    }
+    art {
+      ...ArtFields
+    }
+    art_file {
+      ...ArtFileFields
+    }
+    art_qk {
+      ...ArtQkFields
+    }
+    art_qk_choosen {
+      ...ArtQkChoosenFields
+    }
+    av {
+      ...AvFields
+    }
+    event {
+      ...EventFields
+    }
+    garten {
+      ...GartenFields
+    }
+    garten_file {
+      ...GartenFileFields
+    }
+    gv {
+      ...GvFields
+    }
+    herkunft {
+      ...HerkunftFields
+    }
+    herkunft_file {
+      ...HerkunftFileFields
+    }
+    kultur {
+      ...KulturFields
+    }
+    kultur_file {
+      ...KulturFileFields
+    }
+    kultur_option {
+      ...KulturOptionFields
+    }
+    kultur_qk {
+      ...KulturQkFields
+    }
+    kultur_qk_choosen {
+      ...KulturQkChoosenFields
+    }
+    lieferung {
+      ...LieferungFields
+    }
+    lieferung_file {
+      ...LieferungFileFields
+    }
+    person {
+      ...PersonFields
+    }
+    person_file {
+      ...PersonFileFields
+    }
+    person_option {
+      ...PersonOptionFields
+    }
+    sammel_lieferung {
+      ...SammelLieferungFields
+    }
+    sammlung {
+      ...SammlungFields
+    }
+    sammlung_file {
+      ...SammlungFileFields
+    }
+    teilkultur {
+      ...TeilkulturFields
+    }
+    teilzaehlung {
+      ...TeilzaehlungFields
+    }
+    user_role {
+      ...UserRoleFields
+    }
+    zaehlung {
+      ...ZaehlungFields
+    }
+  }
+  ${aeArt}
+  ${art}
+  ${artFile}
+  ${artQk}
+  ${artQkChoosen}
+  ${av}
+  ${event}
+  ${garten}
+  ${gartenFile}
+  ${gv}
+  ${herkunft}
+  ${herkunftFile}
+  ${kultur}
+  ${kulturFile}
+  ${kulturOption}
+  ${kulturQk}
+  ${kulturQkChoosen}
+  ${lieferung}
+  ${lieferungFile}
+  ${person}
+  ${personFile}
+  ${personOption}
+  ${sammelLieferung}
+  ${sammlung}
+  ${sammlungFile}
+  ${teilkultur}
+  ${teilzaehlung}
+  ${userRole}
+  ${zaehlung}
+`
+
+const query = async ({ store }) => {
+  let result
+  try {
+    result = await store.query(allDataQuery, undefined, {
+      fetchPolicy: 'network-only',
+    })
+  } catch (error) {
+    console.log('queryAllData, query, error:', error)
+    if (error && error.message.includes('JWT')) {
+      console.log('queryAllData, query, getAuthToken')
+      getAuthToken({ store })
+    }
+  }
+  console.log('queryAllData, query, result:', result)
+  return result
+}
+
+export default async ({ store }) => {
+  let result = await query({ store })
+  console.log('queryAllData, result:', result)
+}
