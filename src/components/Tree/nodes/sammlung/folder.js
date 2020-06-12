@@ -1,10 +1,12 @@
 export default ({ store }) => {
-  const { loading, showSammlung } = store.tree
+  const { initialDataQueried } = store
+  const { showSammlung } = store.tree
 
   if (!showSammlung) return []
 
   const sammlungen = store.sammlungsFiltered
-  const nr = loading && !sammlungen.length ? '...' : sammlungen.length
+  const nr =
+    !initialDataQueried && !sammlungen.length ? '...' : sammlungen.length
 
   return [
     {
