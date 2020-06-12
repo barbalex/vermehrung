@@ -54,10 +54,11 @@ export const RootStore = RootStoreBase.props({
   // on startup need to wait with showing data
   // until hasura claims have been added
   // this is _after_ user is set so need another variable
-  initiallyAuthorizing: types.optional(types.boolean, true),
+  gettingAuthUser: types.optional(types.boolean, true),
   authorizing: types.optional(types.boolean, true),
   showDeleted: types.optional(types.boolean, false),
   initialDataQueried: types.optional(types.boolean, false),
+  queryingAllData: types.optional(types.boolean, false),
 })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -165,6 +166,9 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      setQueryingAllData(val) {
+        self.queryingAllData = val
+      },
       setInitialDataQueried(val) {
         self.initialDataQueried = val
       },
@@ -1381,9 +1385,9 @@ export const RootStore = RootStoreBase.props({
           self.authorizing = val
         }
       },
-      setInitiallyAuthorizing(val) {
-        if (val !== self.initiallyAuthorizing) {
-          self.initiallyAuthorizing = val
+      setGettingAuthUser(val) {
+        if (val !== self.gettingAuthUser) {
+          self.gettingAuthUser = val
         }
       },
       setUser(val) {

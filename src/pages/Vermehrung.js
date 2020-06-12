@@ -68,8 +68,11 @@ const Vermehrung = ({ location }) => {
     activeForm,
     isPrint,
     user,
-    initiallyAuthorizing,
+    gettingAuthUser,
     initialDataQueried,
+    authorizing,
+    setQueryingAllData,
+    queryingAllData,
   } = store
 
   const existsUser = !!user?.uid
@@ -97,21 +100,35 @@ const Vermehrung = ({ location }) => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!initialDataQueried && !!user?.uid) {
+    if (existsUser && !initialDataQueried && !queryingAllData) {
       console.log('Vermehrung querying all data')
+      setQueryingAllData(true)
       queryAllData({ store })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.uid, initialDataQueried])
+  }, [
+    existsUser,
+    initialDataQueried,
+    queryingAllData,
+    setQueryingAllData,
+    store,
+  ])
+  /*const doQuery = !gettingAuthUser && !initialDataQueried && !!existsUser
+  if (doQuery) {
+    console.log('Vermehrung querying all data')
+    queryAllData({ store })
+  }*/
 
   console.log('Vermehrung rendering', {
     initialDataQueried,
-    userUid: user?.uid,
+    existsUser,
+    authorizing,
+    gettingAuthUser,
+    queryingAllData,
   })
 
   useEffect(() => {
     let unsubscribe
-    if (existsUser) {
+    if (existsUser && initialDataQueried) {
       console.log('Vermehrung initializing subsctiptions')
       unsubscribe = initializeSubscriptions({ store })
     }
@@ -121,9 +138,9 @@ const Vermehrung = ({ location }) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existsUser])
+  }, [existsUser, initialDataQueried])
 
-  if (initiallyAuthorizing && !initialDataQueried) {
+  if (gettingAuthUser && !initialDataQueried) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -135,7 +152,7 @@ const Vermehrung = ({ location }) => {
               loading={true}
             />
             <SpinnerText>
-              {initiallyAuthorizing ? 'autorisiere' : 'lade Daten'}
+              {gettingAuthUser ? 'autorisiere' : 'lade Daten'}
             </SpinnerText>
           </SpinnerContainer>
         </Layout>
