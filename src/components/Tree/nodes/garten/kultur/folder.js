@@ -1,5 +1,6 @@
 export default ({ store }) => {
-  const { showGarten, visibleOpenNodes, loading, garten } = store.tree
+  const { initialDataQueried } = store
+  const { showGarten, visibleOpenNodes, garten } = store.tree
   if (!showGarten) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -12,7 +13,7 @@ export default ({ store }) => {
     const kulturen = store.kultursFiltered.filter(
       (k) => k.garten_id === gartenId,
     )
-    const nr = loading && !kulturen.length ? '...' : kulturen.length
+    const nr = !initialDataQueried && !kulturen.length ? '...' : kulturen.length
 
     return {
       nodeType: 'folder',
