@@ -1,10 +1,11 @@
 export default ({ store }) => {
-  const { loading, showPerson } = store.tree
+  const { initialDataQueried } = store
+  const { showPerson } = store.tree
 
   if (!showPerson) return []
 
   const personen = store.personsFiltered
-  const nr = loading && !personen.length ? '...' : personen.length
+  const nr = !initialDataQueried && !personen.length ? '...' : personen.length
 
   return [
     {
