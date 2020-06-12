@@ -1,8 +1,8 @@
 export default ({ store }) => {
+  const { initialDataQueried } = store
   const {
     showPerson,
     visibleOpenNodes,
-    loading,
     person,
     personGarten,
     personGartenKultur,
@@ -26,7 +26,7 @@ export default ({ store }) => {
     const kulturIndex = personGartenKultur.findIndex((a) => a.id === kulturId)
 
     const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
-    const nr = loading && !events.length ? '...' : events.length
+    const nr = !initialDataQueried && !events.length ? '...' : events.length
 
     return {
       nodeType: 'folder',
