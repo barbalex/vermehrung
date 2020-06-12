@@ -3,22 +3,20 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
-import gql from 'graphql-tag'
 
-import { StoreContext, useQuery } from '../models/reactUtils'
+import { StoreContext } from '../models/reactUtils'
 import Layout from '../components/Layout'
 import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
 import initializeSubscriptions from '../utils/initializeSubscriptions'
 import exists from '../utils/exists'
-import checkHasuraClaimsOnError from '../utils/checkHasuraClaimsOnError'
 import Tree from '../components/TreeContainer'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
 import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import OnlineDetector from '../components/OnlineDetector'
-import { art } from '../utils/fragments'
+import queryAllData from '../utils/queryAllData'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -32,10 +30,6 @@ const SpinnerContainer = styled.div`
 `
 const LoginContainer = styled.div`
   margin: 20px;
-`
-const ErrorContainer = styled.div`
-  min-height: calc(100vh - 64px);
-  padding: 15px;
 `
 const SpinnerText = styled.div`
   padding: 10px;
@@ -68,18 +62,9 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForVermehrung($run: Boolean!) {
-    art @include(if: $run) {
-      ...ArtFields
-    }
-  }
-  ${art}
-`
-
 const Vermehrung = ({ location }) => {
   const store = useContext(StoreContext)
-  const { activeForm, isPrint, user, authorizing, artsSorted } = store
+  const { activeForm, isPrint, user, authorizing } = store
 
   const existsUser = !!user.uid
   const { setOpenNodes, widthInPercentOfScreen, widthEnforced } = store.tree
@@ -101,7 +86,7 @@ const Vermehrung = ({ location }) => {
    * FOR UNKNOWN REASON THIS QUERY NEEDS TO BE HERE
    * or else data will not be loaded on first render after emptying store
    */
-  const run = !authorizing && !artsSorted.length
+  /*const run = !authorizing && !artsSorted.length
   const { error } = useQuery(
     allDataQuery,
     {
@@ -110,7 +95,7 @@ const Vermehrung = ({ location }) => {
       },
     },
     { fetchPolicy: 'network-only' },
-  )
+  )*/
 
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
@@ -126,6 +111,14 @@ const Vermehrung = ({ location }) => {
     // need not to navigate or app is blocked
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])*/
+
+  useEffect(() => {
+    if (!store.arts.size && !!user?.uid) {
+      console.log('Vermehrung querying all data')
+      queryAllData({ store })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.uid])
 
   useEffect(() => {
     let unsubscribe
@@ -191,7 +184,7 @@ const Vermehrung = ({ location }) => {
     )
   }*/
 
-  if (
+  /*if (
     error &&
     !error.message.includes('Failed to fetch') &&
     !error.message.includes('JWT')
@@ -206,7 +199,7 @@ const Vermehrung = ({ location }) => {
   }
   if (error && error.message.includes('JWT')) {
     checkHasuraClaimsOnError({ error, store })
-  }
+  }*/
   // hide resizer when tree is hidden
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
 
