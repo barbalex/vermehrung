@@ -198,7 +198,7 @@ const Vermehrung = ({ location }) => {
     )
   }
   if (error && error.message.includes('JWT')) {
-    checkHasuraClaimsOnError({ error, store })
+    checkAuthOnError({ error, store })
   }*/
   // hide resizer when tree is hidden
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
