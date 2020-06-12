@@ -13,7 +13,7 @@ const firebaseConfig = {
 
 export default async ({ store }) => {
   let unregisterAuthObserver = () => {}
-  const { setUser, setInitiallyAuthorizing, setFirebase } = store
+  const { setUser, setGettingAuthUser, setFirebase } = store
   window.store = store
   // need to blacklist authorizing or mst-persist will set it to false
   // and login form appears for a short moment until auth state changed
@@ -24,6 +24,7 @@ export default async ({ store }) => {
     'gqlHttpClient',
     'gqlWsClient',
     'initialDataQueried',
+    'gettingAuthUser',
   ]
   await persist('store', store, {
     storage: localForage,
@@ -45,7 +46,7 @@ export default async ({ store }) => {
         navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
-    setInitiallyAuthorizing(false)
+    setGettingAuthUser(false)
   })
   return unregisterAuthObserver
 }

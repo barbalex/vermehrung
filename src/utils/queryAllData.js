@@ -155,7 +155,7 @@ const allDataQuery = gql`
 `
 
 const query = async ({ store }) => {
-  const { authorizing, setInitialDataQueried } = store
+  const { setInitialDataQueried, setQueryingAllData } = store
   let result
   try {
     result = await store.query(allDataQuery, undefined, {
@@ -170,9 +170,11 @@ const query = async ({ store }) => {
       //typeof window !== 'undefined' && window.location.reload(false)
       //}
     }
+    setQueryingAllData(false)
     return
   }
   setInitialDataQueried(true)
+  setQueryingAllData(false)
   console.log('queryAllData, query, got result:', result)
   return result
 }

@@ -69,7 +69,7 @@ export default async () => {
   store = RootStore.create(undefined, storeOptions)
   store.setGqlHttpClient(gqlHttpClient)
   store.setGqlWsClient(gqlWsClient)
-  store.setInitiallyAuthorizing(true)
+  store.setGettingAuthUser(true)
 
   console.log('initiateApp just created a store')
 

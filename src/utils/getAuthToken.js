@@ -59,8 +59,10 @@ export default async ({ store }) => {
       )
     })*/
     console.log('getAuthToken, just got and set new token')
+    setAuthorizing(false)
   } else {
     console.log('getAuthToken, got no new token')
+    setAuthorizing(false)
   }
   setAuthorizing(false)
 }
