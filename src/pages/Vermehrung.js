@@ -105,13 +105,6 @@ const Vermehrung = ({ location }) => {
     setOpenNodes(openNodesFromActiveNodeArray(activeNodeArray))
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // when pathname changes, update activeNodeArray
-  // seems no more needed?
-  /*useEffect(() => {
-    // need not to navigate or app is blocked
-    setActiveNodeArray(activeNodeArray, 'nonavigate')
-  }, [activeNodeArray, pathname, setActiveNodeArray])*/
-
   useEffect(() => {
     if (!store.arts.size && !!user?.uid) {
       console.log('Vermehrung querying all data')
