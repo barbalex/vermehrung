@@ -1,8 +1,8 @@
 export default ({ store }) => {
+  const { initialDataQueried } = store
   const {
     showSammlung,
     visibleOpenNodes,
-    loading,
     sammlung: sammlungNodes,
     sammlungAusLieferung: lieferungNodes,
   } = store.tree
@@ -34,7 +34,7 @@ export default ({ store }) => {
 
         if (!kultur) return {}
 
-        const nr = loading ? 0 : 1
+        const nr = !initialDataQueried ? 0 : 1
 
         console.log('nodes sammlung auslieferung kultur', {
           sammlungId,
