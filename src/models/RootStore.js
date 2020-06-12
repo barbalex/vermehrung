@@ -68,6 +68,7 @@ export const RootStore = RootStoreBase.props({
     firebase: null,
     gqlHttpClient: null,
     gqlWsClient: null,
+    unregisterAuthObserver: null,
   }))
   .actions((self) => {
     reaction(
@@ -163,6 +164,9 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      setUnregisterAuthObserver(val) {
+        self.unregisterAuthObserver = val
+      },
       setGqlHttpClient(val) {
         self.gqlHttpClient = val
       },

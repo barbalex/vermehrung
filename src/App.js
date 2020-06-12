@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
+import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from './models'
 
@@ -43,15 +44,25 @@ if (typeof window !== 'undefined') {
 }
 
 const App = ({ element }) => {
-  const { store, unregisterAuthObserver } = initiateApp()
+  const [store, setStore] = useState(null)
 
   useEffect(() => {
+    console.log('app initiating app')
+    initiateApp().then((newlyCreatedStore) => {
+      console.log('App, newlyCreatedStore:', newlyCreatedStore)
+      setStore(newlyCreatedStore)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!store) return
+    const currentStore = store
     return () => {
       console.log('App, unregistering auth observer')
-      unregisterAuthObserver()
+      currentStore.unregisterAuthObserver()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [store])
 
   console.log('App rendering, store:', store)
   // necessary?
@@ -69,4 +80,4 @@ const App = ({ element }) => {
   )
 }
 
-export default App
+export default observer(App)

@@ -40,6 +40,7 @@ export default async ({ store }) => {
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
     window.localStorage.setItem('token', token)
+    //initiateApp()
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     gqlWsClient.close(false, false)
     //gqlWsClient.close(true)

@@ -66,7 +66,7 @@ const Vermehrung = ({ location }) => {
   const store = useContext(StoreContext)
   const { activeForm, isPrint, user, authorizing } = store
 
-  const existsUser = !!user.uid
+  const existsUser = !!user?.uid
   const { setOpenNodes, widthInPercentOfScreen, widthEnforced } = store.tree
   const showFilter = store.filter.show
   let treeWidth = exists(widthEnforced)
