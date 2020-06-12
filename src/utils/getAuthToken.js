@@ -1,7 +1,14 @@
 import axios from 'axios'
 
-export default async ({ store, user, gqlHttpClient }) => {
-  const { addNotification, setAuthorizing } = store
+export default async ({ store }) => {
+  const {
+    addNotification,
+    setAuthorizing,
+    user,
+    gqlHttpClient,
+    gqlWsClient,
+    setAuthToken,
+  } = store
   setAuthorizing(true)
   let res
   try {
@@ -29,10 +36,19 @@ export default async ({ store, user, gqlHttpClient }) => {
     //console.log('tokenWithRoles:', tokenWithRoles)
     // set token to localStorage so authLink picks it up on next db call
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
+    // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
+    // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
     window.localStorage.setItem('token', tokenWithRoles)
+    setAuthToken(tokenWithRoles)
     gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
+    gqlWsClient.close(false, false)
     setAuthorizing(false)
-  } else {
-    setAuthorizing(false)
+    console.log('getAuthToken, got new tokenWithRoles:', tokenWithRoles)
+    return tokenWithRoles
   }
+  setAuthorizing(false)
+  console.log('getAuthToken, returning old tokenWithRoles')
+  return typeof window !== 'undefined'
+    ? window.localStorage.getItem('token') || 'none'
+    : 'none'
 }
