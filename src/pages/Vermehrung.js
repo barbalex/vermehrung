@@ -64,7 +64,13 @@ const StyledSplitPane = styled(SplitPane)`
 
 const Vermehrung = ({ location }) => {
   const store = useContext(StoreContext)
-  const { activeForm, isPrint, user, authorizing } = store
+  const {
+    activeForm,
+    isPrint,
+    user,
+    initiallyAuthorizing,
+    initialDataQueried,
+  } = store
 
   const existsUser = !!user?.uid
   const { setOpenNodes, widthInPercentOfScreen, widthEnforced } = store.tree
@@ -82,21 +88,6 @@ const Vermehrung = ({ location }) => {
   const { pathname } = location
   const activeNodeArray = activeNodeArrayFromPathname(pathname)
 
-  /**
-   * FOR UNKNOWN REASON THIS QUERY NEEDS TO BE HERE
-   * or else data will not be loaded on first render after emptying store
-   */
-  /*const run = !authorizing && !artsSorted.length
-  const { error } = useQuery(
-    allDataQuery,
-    {
-      variables: {
-        run,
-      },
-    },
-    { fetchPolicy: 'network-only' },
-  )*/
-
   // on first render set openNodes
   // DO NOT add activeNodeArray to useEffet's dependency array or
   // it will not be possible to open multiple branches in tree
@@ -106,12 +97,17 @@ const Vermehrung = ({ location }) => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!store.arts.size && !!user?.uid) {
+    if (!initialDataQueried && !!user?.uid) {
       console.log('Vermehrung querying all data')
       queryAllData({ store })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.uid])
+  }, [user?.uid, initialDataQueried])
+
+  console.log('Vermehrung rendering', {
+    initialDataQueried,
+    userUid: user?.uid,
+  })
 
   useEffect(() => {
     let unsubscribe
@@ -127,7 +123,7 @@ const Vermehrung = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existsUser])
 
-  if (authorizing) {
+  if (initiallyAuthorizing && !initialDataQueried) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -138,7 +134,9 @@ const Vermehrung = ({ location }) => {
               backColor="#4a148c1a"
               loading={true}
             />
-            <SpinnerText>autorisiere</SpinnerText>
+            <SpinnerText>
+              {initiallyAuthorizing ? 'autorisiere' : 'lade Daten'}
+            </SpinnerText>
           </SpinnerContainer>
         </Layout>
       </ErrorBoundary>

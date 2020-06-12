@@ -54,8 +54,10 @@ export const RootStore = RootStoreBase.props({
   // on startup need to wait with showing data
   // until hasura claims have been added
   // this is _after_ user is set so need another variable
+  initiallyAuthorizing: types.optional(types.boolean, true),
   authorizing: types.optional(types.boolean, true),
   showDeleted: types.optional(types.boolean, false),
+  initialDataQueried: types.optional(types.boolean, false),
 })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -68,7 +70,6 @@ export const RootStore = RootStoreBase.props({
     firebase: null,
     gqlHttpClient: null,
     gqlWsClient: null,
-    unregisterAuthObserver: null,
   }))
   .actions((self) => {
     reaction(
@@ -164,8 +165,8 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
-      setUnregisterAuthObserver(val) {
-        self.unregisterAuthObserver = val
+      setInitialDataQueried(val) {
+        self.initialDataQueried = val
       },
       setGqlHttpClient(val) {
         self.gqlHttpClient = val
@@ -1378,6 +1379,11 @@ export const RootStore = RootStoreBase.props({
       setAuthorizing(val) {
         if (val !== self.authorizing) {
           self.authorizing = val
+        }
+      },
+      setInitiallyAuthorizing(val) {
+        if (val !== self.initiallyAuthorizing) {
+          self.initiallyAuthorizing = val
         }
       },
       setUser(val) {

@@ -155,27 +155,28 @@ const allDataQuery = gql`
 `
 
 const query = async ({ store }) => {
-  const { authorizing } = store
+  const { authorizing, setInitialDataQueried } = store
   let result
   try {
     result = await store.query(allDataQuery, undefined, {
       fetchPolicy: 'network-only',
     })
   } catch (error) {
-    console.log('queryAllData, query, error:', error)
+    //console.log('queryAllData, query, error:', error)
     if (error && error.message.includes('JWT')) {
-      console.log('queryAllData, query, getAuthToken')
-      if (!authorizing) {
-        await getAuthToken({ store })
-        //typeof window !== 'undefined' && window.location.reload(false)
-      }
+      //if (!authorizing) {
+      console.log('queryAllData, not getting AuthToken after error:', error)
+      await getAuthToken({ store })
+      //typeof window !== 'undefined' && window.location.reload(false)
+      //}
     }
+    return
   }
-  console.log('queryAllData, query, result:', result)
+  setInitialDataQueried(true)
+  console.log('queryAllData, query, got result:', result)
   return result
 }
 
 export default async ({ store }) => {
-  let result = await query({ store })
-  console.log('queryAllData, result:', result)
+  await query({ store })
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 import { observer } from 'mobx-react-lite'
@@ -48,24 +48,20 @@ const App = ({ element }) => {
 
   useEffect(() => {
     console.log('app initiating app')
-    initiateApp().then((newlyCreatedStore) => {
-      console.log('App, newlyCreatedStore:', newlyCreatedStore)
-      setStore(newlyCreatedStore)
-    })
+    let unregister
+    initiateApp().then(
+      ({ store: storeReturned, unregister: unregisterReturned }) => {
+        setStore(storeReturned)
+        unregister = unregisterReturned
+      },
+    )
+    return () => {
+      unregister()
+    }
   }, [])
 
-  useEffect(() => {
-    if (!store) return
-    const currentStore = store
-    return () => {
-      console.log('App, unregistering auth observer')
-      currentStore.unregisterAuthObserver()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store])
-
-  console.log('App rendering, store:', store)
-  // necessary?
+  //console.log('App rendering, store:', store)
+  // without store bad things happen
   if (!store) return null
   return (
     <MuiThemeProvider theme={materialTheme}>

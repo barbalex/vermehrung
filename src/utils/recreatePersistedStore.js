@@ -13,12 +13,7 @@ const firebaseConfig = {
 
 export default async ({ store }) => {
   let unregisterAuthObserver = () => {}
-  const {
-    setUser,
-    setAuthorizing,
-    setFirebase,
-    setUnregisterAuthObserver,
-  } = store
+  const { setUser, setInitiallyAuthorizing, setFirebase } = store
   window.store = store
   // need to blacklist authorizing or mst-persist will set it to false
   // and login form appears for a short moment until auth state changed
@@ -28,6 +23,7 @@ export default async ({ store }) => {
     'loading',
     'gqlHttpClient',
     'gqlWsClient',
+    'initialDataQueried',
   ]
   await persist('store', store, {
     storage: localForage,
@@ -37,6 +33,7 @@ export default async ({ store }) => {
   fb.initializeApp(firebaseConfig)
   setFirebase(fb)
   unregisterAuthObserver = fb.auth().onAuthStateChanged((user) => {
+    console.log('recreatePersistedStore, user from firebase:', user)
     setUser(user)
     // set last activeNodeArray
     // only if top domain was visited
@@ -48,8 +45,7 @@ export default async ({ store }) => {
         navigate(`/Vermehrung/${store.tree.activeNodeArray.join('/')}`)
       }, 200)
     }
-    setAuthorizing(false)
+    setInitiallyAuthorizing(false)
   })
-  setUnregisterAuthObserver(unregisterAuthObserver)
   return unregisterAuthObserver
 }
