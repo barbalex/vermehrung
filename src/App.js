@@ -20,12 +20,11 @@ import Notifications from './components/Notifications'
 
 import materialTheme from './utils/materialTheme'
 
-import setHasuraClaims from './utils/setHasuraClaims'
-
 import createGlobalStyle from './utils/createGlobalStyle'
 const GlobalStyle = createGlobalStyle()
 
 import constants from './utils/constants.json'
+import getAuthToken from './utils/getAuthToken'
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -59,6 +58,7 @@ const firebaseConfig = {
 
 // https://github.com/mobxjs/mst-gql/issues/247
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
+
 const tokenWithRoles =
   typeof window !== 'undefined'
     ? window.localStorage.getItem('token') || 'none'
@@ -76,20 +76,46 @@ let storeOptions = {
 }
 if (typeof window !== 'undefined') {
   // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
-  gqlWsClient = new SubscriptionClient(constants.graphQlWsUri, {
-    reconnect: true,
-    connectionParams: {
-      headers: { authorization: `Bearer ${tokenWithRoles}` },
-    },
-  })
+  gqlWsClient = (() => {
+    const authToken =
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem('token') || 'none'
+        : 'none'
+    let authorization = `Bearer ${authToken}`
+    console.log('App, authToken:', authToken)
+    return new SubscriptionClient(constants.graphQlWsUri, {
+      reconnect: true,
+      lazy: true,
+      connectionCallback: (error) => {
+        console.log('gqlWsClient connectionCallback, error:', error)
+        if (error && error.includes('JWT')) {
+          getAuthToken({ store }).then((token) => {
+            console.log('gqlWsClient connectionCallback, token:', token)
+            authorization = `Bearer ${token}`
+          })
+        }
+      },
+      connectionParams: {
+        headers: {
+          authorization,
+        },
+      },
+    })
+  })()
+
   // https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
   storeOptions = {
     gqlHttpClient,
     gqlWsClient,
   }
 }
+// need to renew header any time
+// solutions:
+// https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
 
 const store = RootStore.create(undefined, storeOptions)
+store.setGqlHttpClient(gqlHttpClient)
+store.setGqlWsClient(gqlWsClient)
 
 const App = ({ element }) => {
   useEffect(() => {
@@ -100,7 +126,13 @@ const App = ({ element }) => {
         window.store = store
         // need to blacklist authorizing or mst-persist will set it to false
         // and login form appears for a short moment until auth state changed
-        const blacklist = ['authorizing', 'user', 'loading']
+        const blacklist = [
+          'authorizing',
+          'user',
+          'loading',
+          'gqlHttpClient',
+          'gqlWsClient',
+        ]
         const persist = pModule.default
         persist('store', store, {
           storage: localForage,
@@ -115,7 +147,7 @@ const App = ({ element }) => {
             .onAuthStateChanged(async (user) => {
               setUser(user)
               if (user && user.uid) {
-                setHasuraClaims({ store, user, gqlHttpClient })
+                getAuthToken({ store })
               } else {
                 setAuthorizing(false)
               }
