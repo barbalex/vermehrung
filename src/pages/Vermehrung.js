@@ -10,7 +10,7 @@ import activeNodeArrayFromPathname from '../utils/activeNodeArrayFromPathname'
 import openNodesFromActiveNodeArray from '../utils/openNodesFromActiveNodeArray'
 import initializeSubscriptions from '../utils/initializeSubscriptions'
 import exists from '../utils/exists'
-import Tree from '../components/TreeContainer'
+import Tree from '../components/Tree'
 import Data from '../components/Data'
 import Filter from '../components/Filter'
 import Login from '../components/Login'
@@ -70,7 +70,6 @@ const Vermehrung = ({ location }) => {
     user,
     gettingAuthUser,
     initialDataQueried,
-    authorizing,
     setQueryingAllData,
     queryingAllData,
   } = store
@@ -116,7 +115,7 @@ const Vermehrung = ({ location }) => {
   useEffect(() => {
     let unsubscribe
     if (existsUser && initialDataQueried) {
-      console.log('Vermehrung initializing subsctiptions')
+      //console.log('Vermehrung initializing subsctiptions')
       unsubscribe = initializeSubscriptions({ store })
     }
     return function cleanup() {

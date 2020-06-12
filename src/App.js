@@ -47,7 +47,6 @@ const App = ({ element }) => {
   const [store, setStore] = useState(null)
 
   useEffect(() => {
-    console.log('app initiating app')
     let unregister
     initiateApp().then(
       ({ store: storeReturned, unregister: unregisterReturned }) => {
@@ -60,9 +59,9 @@ const App = ({ element }) => {
     }
   }, [])
 
-  //console.log('App rendering, store:', store)
   // without store bad things happen
   if (!store) return null
+
   return (
     <MuiThemeProvider theme={materialTheme}>
       <StoreContext.Provider value={store}>

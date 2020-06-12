@@ -3,11 +3,10 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { RootStore } from '../models'
 import constants from './constants'
-import getAuthToken from './getAuthToken'
+//import getAuthToken from './getAuthToken'
 
 // TODO: this never runs. Why?
 const getToken = () => {
-  console.log('initiateApp, getting token')
   const none =
     'eyJhbGciOiJIUzUxMiIsImtpZCI6IjRlMjdmNWIwNjllYWQ4ZjliZWYxZDE0Y2M2Mjc5YmRmYWYzNGM1MWIiLCJ0eXAiOiJKV1QifQ.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6Im1hbmFnZXIiLCJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbIm1hbmFnZXIiXSwieC1oYXN1cmEtdXNlci1pZCI6ImFhYWFhYWFhLWFhYWEtMTFlYS1hYWFhLWFhYWFhYWFhYWFhYSJ9LCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmVybWVocnVuZy1hYWFhYSIsImF1ZCI6InZlcm1laHJ1bmctZjQ4YzQiLCJhdXRoX3RpbWUiOjE1OTE5Njg3MzQsInVzZXJfaWQiOiJYUnV6eHAxWDJ3YWFhYWF5ek9hV1Y2emdhYWFhIiwic3ViIjoiWFJ1enhwMVhhYWFhb3l6T2FXVjZ6Z0NDTDIiLCJpYXQiOjE1OTE5NjkzNDksImV4cCI6MTU5MTk3Mjk0OSwiZW1haWwiOiJ0ZXN0QHRlc3QuY2giLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdEB0ZXN0LmNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.AuCb49h4qCkT-bi-v31BtnkdYnCfzgy7KbVSMBNYmwrLx2KAhzvlSNl51QS5cy6MDzCe7hGGx2xb_EFbTZQwgA'
   if (typeof window === 'undefined') return none
@@ -45,6 +44,7 @@ export default async () => {
               error,
               authorizing: store.authorizing,
             })
+            // TODO: make this active?
             //getAuthToken({ store })
           }
         },
@@ -71,14 +71,11 @@ export default async () => {
   store.setGqlWsClient(gqlWsClient)
   store.setGettingAuthUser(true)
 
-  console.log('initiateApp just created a store')
-
   if (typeof window === 'undefined') return store
 
   const module = await import('./recreatePersistedStore')
   const recreatePersistedStore = module.default
   const unregister = await recreatePersistedStore({ store })
 
-  console.log('initiateApp just will return store')
   return { store, unregister }
 }
