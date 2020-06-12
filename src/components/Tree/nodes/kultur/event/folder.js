@@ -1,5 +1,6 @@
 export default ({ store }) => {
-  const { showKultur, visibleOpenNodes, loading, kultur } = store.tree
+  const { initialDataQueried } = store
+  const { showKultur, visibleOpenNodes, kultur } = store.tree
   if (!showKultur) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -11,7 +12,7 @@ export default ({ store }) => {
     const kulturIndex = kultur.findIndex((a) => a.id === kulturId)
 
     const events = store.eventsFiltered.filter((z) => z.kultur_id === kulturId)
-    const nr = loading && !events.length ? '...' : events.length
+    const nr = !initialDataQueried && !events.length ? '...' : events.length
 
     return {
       nodeType: 'folder',
