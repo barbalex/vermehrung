@@ -1,17 +1,16 @@
 import axios from 'axios'
+//import { MessageTypes } from 'subscriptions-transport-ws'
 
 export default async ({ store }) => {
-  if (typeof window === 'undefined') return 'none'
   const {
     addNotification,
     setAuthorizing,
     user,
     gqlHttpClient,
     gqlWsClient,
-    setAuthToken,
   } = store
   setAuthorizing(true)
-  if (!user?.uid) return 'none'
+  if (!user?.uid) return
   let res
   try {
     res = await axios.get(
@@ -20,16 +19,14 @@ export default async ({ store }) => {
   } catch (error) {
     // TODO: catch no network error and return token from localStorage
     console.log('error from getting claims from auth.vermehrung.ch:', error)
-    setAuthorizing(false)
     addNotification({
       message: error?.response?.data,
     })
-    return window.localStorage.getItem('token') || 'none'
   }
   if (res.status === 200) {
-    let tokenWithRoles
+    let token
     try {
-      tokenWithRoles = await user.getIdToken(true)
+      token = await user.getIdToken(true)
     } catch (error) {
       console.log('error from calling getting id token:', error)
       setAuthorizing(false)
@@ -37,20 +34,29 @@ export default async ({ store }) => {
         message: error.message,
       })
     }
-    //console.log('tokenWithRoles:', tokenWithRoles)
+    //console.log('token:', token)
     // set token to localStorage so authLink picks it up on next db call
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
-    window.localStorage.setItem('token', tokenWithRoles)
-    setAuthToken(tokenWithRoles)
-    gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
+    window.localStorage.setItem('token', token)
+    gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     gqlWsClient.close(false, false)
-    setAuthorizing(false)
-    console.log('getAuthToken, got new tokenWithRoles:', tokenWithRoles)
-    return tokenWithRoles
+    // Close socket connection which will also unregister subscriptions on the server-side
+    /*gqlWsClient.close()
+    // Reconnect to the server
+    gqlWsClient.connect()
+    // Reregister all subscriptions.
+    Object.keys(gqlWsClient.operations).forEach((id) => {
+      gqlWsClient.sendMessage(
+        id,
+        MessageTypes.GQL_START,
+        gqlWsClient.operations[id].options,
+      )
+    })*/
+    console.log('getAuthToken, got new token:', token)
+  } else {
+    console.log('getAuthToken, got no new token')
   }
   setAuthorizing(false)
-  console.log('getAuthToken, returning old tokenWithRoles')
-  return window.localStorage.getItem('token') || 'none'
 }
