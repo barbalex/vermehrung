@@ -1,5 +1,6 @@
 export default ({ store }) => {
-  const { showKultur, visibleOpenNodes, loading, kultur } = store.tree
+  const { initialDataQueried } = store
+  const { showKultur, visibleOpenNodes, kultur } = store.tree
   if (!showKultur) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -17,7 +18,8 @@ export default ({ store }) => {
     const teilkulturs = store.teilkultursFiltered.filter(
       (z) => z.kultur_id === kulturId,
     )
-    const nr = loading && !teilkulturs.length ? '...' : teilkulturs.length
+    const nr =
+      !initialDataQueried && !teilkulturs.length ? '...' : teilkulturs.length
 
     return {
       nodeType: 'folder',
