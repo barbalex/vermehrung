@@ -130,9 +130,8 @@ const Teilzaehlung = ({
         },
       })
       row.edit({ field: 'teilkultur_id', value: teilkultur_id })
-      query.refetch()
     },
-    [insertTeilkulturRev, kulturId, query, row],
+    [insertTeilkulturRev, kulturId, row],
   )
 
   const [errors, setErrors] = useState({})
@@ -179,7 +178,6 @@ const Teilzaehlung = ({
               loading={teilkulturenLoading}
               error={errors.teilkultur_id}
               onCreateNew={onCreateNewTeilkultur}
-              callback={query.refetch}
             />
           </Teilkultur>
         )}

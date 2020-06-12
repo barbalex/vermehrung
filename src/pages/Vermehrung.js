@@ -101,7 +101,7 @@ const Vermehrung = ({ location }) => {
 
   useEffect(() => {
     if (existsUser && !initialDataQueried && !queryingAllData) {
-      console.log('Vermehrung querying all data')
+      //console.log('Vermehrung querying all data')
       setQueryingAllData(true)
       queryAllData({ store })
     }
@@ -112,19 +112,6 @@ const Vermehrung = ({ location }) => {
     setQueryingAllData,
     store,
   ])
-  /*const doQuery = !gettingAuthUser && !initialDataQueried && !!existsUser
-  if (doQuery) {
-    console.log('Vermehrung querying all data')
-    queryAllData({ store })
-  }*/
-
-  console.log('Vermehrung rendering', {
-    initialDataQueried,
-    existsUser,
-    authorizing,
-    gettingAuthUser,
-    queryingAllData,
-  })
 
   useEffect(() => {
     let unsubscribe

@@ -72,7 +72,6 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
-      refetchTree: true,
       revertTable: 'sammlung',
       revertId: self.id,
       revertField: field,
