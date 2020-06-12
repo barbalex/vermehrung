@@ -42,12 +42,13 @@ export default async ({ store }) => {
     window.localStorage.setItem('token', token)
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     gqlWsClient.close(false, false)
+    //gqlWsClient.close(true)
     // Close socket connection which will also unregister subscriptions on the server-side
     /*gqlWsClient.close()
     // Reconnect to the server
     gqlWsClient.connect()
     // Reregister all subscriptions.
-    Object.keys(gqlWsClient.operations).forEach((id) => {
+    /*Object.keys(gqlWsClient.operations).forEach((id) => {
       gqlWsClient.sendMessage(
         id,
         MessageTypes.GQL_START,
