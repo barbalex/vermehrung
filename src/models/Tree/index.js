@@ -253,7 +253,7 @@ export default types
     },
     get artFolder() {
       const store = getParent(self, 1)
-      return buildArtFolder({ loading: self.loading, store })
+      return buildArtFolder({ store })
     },
     get art() {
       const store = getParent(self, 1)
@@ -331,7 +331,7 @@ export default types
     },
     get eventFolder() {
       const store = getParent(self, 1)
-      return buildEventFolder({ loading: self.loading, store })
+      return buildEventFolder({ store })
     },
     get event() {
       const store = getParent(self, 1)
@@ -339,7 +339,7 @@ export default types
     },
     get gartenFolder() {
       const store = getParent(self, 1)
-      return buildGartenFolder({ loading: self.loading, store })
+      return buildGartenFolder({ store })
     },
     get garten() {
       const store = getParent(self, 1)
@@ -395,7 +395,7 @@ export default types
     },
     get herkunftFolder() {
       const store = getParent(self, 1)
-      return buildHerkunftFolder({ loading: self.loading, store })
+      return buildHerkunftFolder({ store })
     },
     get herkunft() {
       const store = getParent(self, 1)
@@ -419,7 +419,7 @@ export default types
     },
     get kulturFolder() {
       const store = getParent(self, 1)
-      return buildKulturFolder({ loading: self.loading, store })
+      return buildKulturFolder({ store })
     },
     get kultur() {
       const store = getParent(self, 1)
@@ -467,7 +467,7 @@ export default types
     },
     get lieferungFolder() {
       const store = getParent(self, 1)
-      return buildLieferungFolder({ loading: self.loading, store })
+      return buildLieferungFolder({ store })
     },
     get lieferung() {
       const store = getParent(self, 1)
@@ -475,7 +475,7 @@ export default types
     },
     get personFolder() {
       const store = getParent(self, 1)
-      return buildPersonFolder({ loading: self.loading, store })
+      return buildPersonFolder({ store })
     },
     get person() {
       const store = getParent(self, 1)
@@ -555,7 +555,7 @@ export default types
     },
     get sammelLieferungFolder() {
       const store = getParent(self, 1)
-      return buildSammelLieferungFolder({ loading: self.loading, store })
+      return buildSammelLieferungFolder({ store })
     },
     get sammelLieferung() {
       const store = getParent(self, 1)
@@ -571,7 +571,7 @@ export default types
     },
     get teilkulturFolder() {
       const store = getParent(self, 1)
-      return buildTeilkulturFolder({ loading: self.loading, store })
+      return buildTeilkulturFolder({ store })
     },
     get teilkultur() {
       const store = getParent(self, 1)
@@ -579,7 +579,7 @@ export default types
     },
     get zaehlungFolder() {
       const store = getParent(self, 1)
-      return buildZaehlungFolder({ loading: self.loading, store })
+      return buildZaehlungFolder({ store })
     },
     get zaehlung() {
       const store = getParent(self, 1)
@@ -587,7 +587,7 @@ export default types
     },
     get sammlungFolder() {
       const store = getParent(self, 1)
-      return buildSammlungFolder({ loading: self.loading, store })
+      return buildSammlungFolder({ store })
     },
     get sammlung() {
       const store = getParent(self, 1)
