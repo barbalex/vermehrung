@@ -1,8 +1,8 @@
 export default ({ store }) => {
+  const { initialDataQueried } = store
   const {
     showHerkunft,
     visibleOpenNodes,
-    loading,
     herkunft,
     herkunftSammlung,
   } = store.tree
@@ -22,7 +22,8 @@ export default ({ store }) => {
     const lieferungen = store.lieferungsFiltered.filter(
       (l) => l.von_sammlung_id === sammlungId,
     )
-    const nr = loading && !lieferungen.length ? '...' : lieferungen.length
+    const nr =
+      !initialDataQueried && !lieferungen.length ? '...' : lieferungen.length
 
     return {
       nodeType: 'folder',
