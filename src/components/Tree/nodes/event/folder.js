@@ -1,8 +1,9 @@
-export default ({ loading, store }) => {
+export default ({ store }) => {
+  const { initialDataQueried } = store
   if (!store.tree.showEvent) return []
 
   const events = store.eventsFiltered
-  const nr = loading && !events.length ? '...' : events.length
+  const nr = !initialDataQueried && !events.length ? '...' : events.length
 
   return [
     {
