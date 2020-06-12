@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { graphql, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
 import moment from 'moment'
-import gql from 'graphql-tag'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -13,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
 import Lieferung from './Lieferung'
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
 
 const Container = styled.div`
   background-color: #f8f8f8;
