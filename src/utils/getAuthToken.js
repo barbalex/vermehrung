@@ -1,5 +1,4 @@
 import axios from 'axios'
-//import { MessageTypes } from 'subscriptions-transport-ws'
 
 export default async ({ store }) => {
   const {
@@ -10,7 +9,6 @@ export default async ({ store }) => {
     gqlWsClient,
   } = store
   setAuthorizing(true)
-  console.log('getAuthToken, user:', user)
   if (!user?.uid) return
   let res
   try {
@@ -35,33 +33,16 @@ export default async ({ store }) => {
         message: error.message,
       })
     }
-    //console.log('token:', token)
     // set token to localStorage so authLink picks it up on next db call
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
     window.localStorage.setItem('token', token)
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
-    setTimeout(() => gqlWsClient.close(false, false), 1000)
-    console.log('getAuthToken, just got and set new token, will reload')
-    //window.location.reload(true)
-    //gqlWsClient.close(true)
-    /*// Close socket connection which will also unregister subscriptions on the server-side
-    gqlWsClient.close()
-    // Reconnect to the server
-    gqlWsClient.connect()
-    // Reregister all subscriptions.
-    Object.keys(gqlWsClient.operations).forEach((id) => {
-      gqlWsClient.sendMessage(
-        id,
-        MessageTypes.GQL_START,
-        gqlWsClient.operations[id].options,
-      )
-    })*/
-    console.log('getAuthToken, just got and set new token')
+    gqlWsClient.close(false, false)
     setAuthorizing(false)
   } else {
-    console.log('getAuthToken, got no new token')
+    //console.log('getAuthToken, got no new token')
     setAuthorizing(false)
   }
   setAuthorizing(false)
