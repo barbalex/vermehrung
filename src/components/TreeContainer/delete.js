@@ -1,4 +1,4 @@
-import tableFromTitleHash from '../../../utils/tableFromTitleHash'
+import tableFromTitleHash from '../../utils/tableFromTitleHash'
 
 export default async ({ node, store }) => {
   const {

@@ -2,8 +2,8 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
 
-import tableFromTitleHash from '../../../utils/tableFromTitleHash'
-import exists from '../../../utils/exists'
+import tableFromTitleHash from '../../utils/tableFromTitleHash'
+import exists from '../../utils/exists'
 
 export default async ({ node, store }) => {
   // get parent table, parent table id and table from url
