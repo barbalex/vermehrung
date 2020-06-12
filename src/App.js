@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import 'isomorphic-fetch'
 import 'mobx-react-lite/batchingForReactDom'
 
@@ -59,10 +59,15 @@ const firebaseConfig = {
 // https://github.com/mobxjs/mst-gql/issues/247
 const gqlHttpClient = createHttpClient(constants.graphQlUri)
 
-const tokenWithRoles =
-  typeof window !== 'undefined'
-    ? window.localStorage.getItem('token') || 'none'
-    : 'none'
+const getToken = () => {
+  console.log('App, getToken running')
+  return (
+    window.localStorage.getItem('token') ??
+    'eyJhbGciOiJIUzUxMiIsImtpZCI6IjRlMjdmNWIwNjllYWQ4ZjliZWYxZDE0Y2M2Mjc5YmRmYWYzNGM1MWIiLCJ0eXAiOiJKV1QifQ.eyJodHRwczovL2hhc3VyYS5pby9qd3QvY2xhaW1zIjp7IngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6Im1hbmFnZXIiLCJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbIm1hbmFnZXIiXSwieC1oYXN1cmEtdXNlci1pZCI6ImFhYWFhYWFhLWFhYWEtMTFlYS1hYWFhLWFhYWFhYWFhYWFhYSJ9LCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdmVybWVocnVuZy1hYWFhYSIsImF1ZCI6InZlcm1laHJ1bmctZjQ4YzQiLCJhdXRoX3RpbWUiOjE1OTE5Njg3MzQsInVzZXJfaWQiOiJYUnV6eHAxWDJ3YWFhYWF5ek9hV1Y2emdhYWFhIiwic3ViIjoiWFJ1enhwMVhhYWFhb3l6T2FXVjZ6Z0NDTDIiLCJpYXQiOjE1OTE5NjkzNDksImV4cCI6MTU5MTk3Mjk0OSwiZW1haWwiOiJ0ZXN0QHRlc3QuY2giLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdEB0ZXN0LmNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.AuCb49h4qCkT-bi-v31BtnkdYnCfzgy7KbVSMBNYmwrLx2KAhzvlSNl51QS5cy6MDzCe7hGGx2xb_EFbTZQwgA'
+  )
+}
+
+const tokenWithRoles = getToken()
 // is this the place to use the last snapshot of the store instead of undefined?
 // to that instead of mst-persist?
 gqlHttpClient.setHeaders({ authorization: `Bearer ${tokenWithRoles}` })
@@ -74,31 +79,22 @@ let gqlWsClient
 let storeOptions = {
   gqlHttpClient,
 }
+let store
 if (typeof window !== 'undefined') {
   // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
   gqlWsClient = (() => {
-    let authToken =
-      typeof window !== 'undefined'
-        ? window.localStorage.getItem('token') || 'none'
-        : 'none'
-    console.log('App, authToken:', authToken)
     return new SubscriptionClient(constants.graphQlWsUri, {
       reconnect: true,
       lazy: true,
       connectionCallback: (error) => {
-        console.log('gqlWsClient connectionCallback, error:', error)
-        if (error && error.includes('JWT')) {
-          getAuthToken({ store }).then(() => {
-            const token = window.localStorage.getItem('token') || 'none'
-            console.log('gqlWsClient connectionCallback, token:', token)
-            //authToken = token
-            authToken = window.localStorage.getItem('token') || 'none'
-          })
+        if (error) {
+          console.log('gqlWsClient connectionCallback, error:', error)
+          getAuthToken({ store })
         }
       },
       connectionParams: {
         headers: {
-          authorization: `Bearer ${authToken}`,
+          authorization: `Bearer ${getToken()}`,
         },
       },
     })
@@ -114,17 +110,11 @@ if (typeof window !== 'undefined') {
 // solutions:
 // https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-307793837
 
-const store = RootStore.create(undefined, storeOptions)
+store = RootStore.create(undefined, storeOptions)
 store.setGqlHttpClient(gqlHttpClient)
 store.setGqlWsClient(gqlWsClient)
 
 const App = ({ element }) => {
-  const [auth, setAuth] = useState(null)
-  useEffect(() => {
-    getAuthToken({ store }).then(() =>
-      setAuth(window.localStorage.getItem('token') || 'none'),
-    )
-  }, [])
   useEffect(() => {
     let unregisterAuthObserver = () => {}
     Promise.all([import('firebase'), import('mst-persist')]).then(
@@ -182,7 +172,6 @@ const App = ({ element }) => {
   }, [])
 
   if (!store) return null
-  ///if (auth === 'none') return null
   return (
     <MuiThemeProvider theme={materialTheme}>
       <StoreContext.Provider value={store}>
