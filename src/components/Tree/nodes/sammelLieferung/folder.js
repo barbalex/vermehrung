@@ -1,11 +1,14 @@
 export default ({ store }) => {
-  const { loading, showSammelLieferung } = store.tree
+  const { initialDataQueried } = store
+  const { showSammelLieferung } = store.tree
 
   if (!showSammelLieferung) return []
 
   const sammelLieferungen = store.sammelLieferungsFiltered
   const nr =
-    loading && !sammelLieferungen.length ? '...' : sammelLieferungen.length
+    !initialDataQueried && !sammelLieferungen.length
+      ? '...'
+      : sammelLieferungen.length
 
   return [
     {

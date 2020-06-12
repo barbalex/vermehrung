@@ -1,5 +1,6 @@
 export default ({ store }) => {
-  const { showPerson, visibleOpenNodes, loading, person } = store.tree
+  const { initialDataQueried } = store
+  const { showPerson, visibleOpenNodes, person } = store.tree
   if (!showPerson) return []
 
   const parentNodes = visibleOpenNodes.filter(
@@ -13,7 +14,8 @@ export default ({ store }) => {
     const sammlungen = store.sammlungsFiltered.filter(
       (s) => s.person_id === personId,
     )
-    const nr = loading && !sammlungen.length ? '...' : sammlungen.length
+    const nr =
+      !initialDataQueried && !sammlungen.length ? '...' : sammlungen.length
 
     return {
       nodeType: 'folder',
