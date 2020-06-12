@@ -95,9 +95,7 @@ export const RootStore = RootStoreBase.props({
               variables,
               callbackQuery,
               callbackQueryVariables,
-              refetchTree,
             } = query
-            //console.log('executing query:', { name, refetchTree })
             try {
               if (variables) {
                 yield self[name](JSON.parse(variables))
@@ -141,7 +139,6 @@ export const RootStore = RootStoreBase.props({
                     await self[callbackQuery](
                       JSON.parse(callbackQueryVariables),
                     )
-                    refetchTree && self.tree.refetch()
                   }, 500)
                 } else {
                   setTimeout(() => self[callbackQuery](), 500)

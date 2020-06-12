@@ -65,7 +65,6 @@ export const kulturModel = kulturModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
-      refetchTree: true,
       revertTable: 'kultur',
       revertId: self.id,
       revertField: field,

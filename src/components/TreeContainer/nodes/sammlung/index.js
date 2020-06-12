@@ -2,6 +2,7 @@ import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 
 export default ({ store }) => {
+  const { personsSorted } = store
   const { showSammlung, visibleOpenNodes } = store.tree
 
   if (!showSammlung) return []
@@ -15,7 +16,10 @@ export default ({ store }) => {
       .map((el) => {
         const { datum } = el
         const art = el?.art?.art_ae_art?.name ?? '(keine Art)'
-        const person = el?.person?.name ?? '(keine Person)'
+        const person = personsSorted.find((p) => p.id === el.person_id)
+        const personName = person
+          ? person?.name ?? '(Person ohne Name)'
+          : '(keine Person)'
         const herkunft = el?.herkunft?.nr ?? '(keine Herkunft-Nr)'
         const date = datum
           ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
@@ -23,7 +27,7 @@ export default ({ store }) => {
         const geplant = el.geplant ? ' (geplant)' : ''
         const label = `${
           el.nr ?? '(keine Nr)'
-        }, ${date}: Herkunft ${herkunft}, ${person}; ${art}${geplant}`
+        }, ${date}: Herkunft ${herkunft}, ${personName}; ${art}${geplant}`
 
         return {
           nodeType: 'table',

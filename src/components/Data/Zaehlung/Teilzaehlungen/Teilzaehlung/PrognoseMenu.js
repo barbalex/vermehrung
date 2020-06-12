@@ -43,7 +43,6 @@ const PrognoseMenu = ({
 }) => {
   const store = useContext(StoreContext)
   const { addNotification, insertZaehlungRev, insertTeilzaehlungRev } = store
-  const { refetch: refetchTree } = store.tree
 
   const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
@@ -159,8 +158,6 @@ const PrognoseMenu = ({
         type: 'info',
       })
       setAnchorEl(null)
-      // update tree
-      refetchTree()
       setErrors({})
     },
     [
@@ -170,7 +167,6 @@ const PrognoseMenu = ({
       insertZaehlungRev,
       jahr,
       kulturId,
-      refetchTree,
       setAnchorEl,
       store,
       teilzaehlung,

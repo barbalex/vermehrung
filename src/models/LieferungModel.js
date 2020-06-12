@@ -97,14 +97,6 @@ export const lieferungModel = lieferungModelBase.actions((self) => ({
     delete newObjectForStore.lieferung_id
     // optimistically update store
     upsertLieferungModel(newObjectForStore)
-    if (
-      ['nach_kultur_id', 'von_kultur_id', 'von_sammlung_id', 'art_id'].includes(
-        field,
-      ) &&
-      value
-    ) {
-      tree.refetch()
-    }
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

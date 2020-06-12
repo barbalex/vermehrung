@@ -162,20 +162,16 @@ const query = async ({ store }) => {
       fetchPolicy: 'network-only',
     })
   } catch (error) {
-    //console.log('queryAllData, query, error:', error)
     if (error && error.message.includes('JWT')) {
-      //if (!authorizing) {
-      console.log('queryAllData, not getting AuthToken after error:', error)
+      //console.log('queryAllData, not getting AuthToken after error:', error)
       await getAuthToken({ store })
-      //typeof window !== 'undefined' && window.location.reload(false)
-      //}
     }
     setQueryingAllData(false)
     return
   }
   setInitialDataQueried(true)
   setQueryingAllData(false)
-  console.log('queryAllData, query, got result:', result)
+  console.log('queryAllData, queried all data:', result)
   return result
 }
 

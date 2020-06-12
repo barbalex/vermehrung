@@ -54,7 +54,6 @@ export const artModel = artModelBase.actions((self) => ({
       callbackQueryVariables: JSON.stringify({
         where: { id: { _eq: self.id } },
       }),
-      refetchTree: true,
       revertTable: 'art',
       revertId: self.id,
       revertField: field,
