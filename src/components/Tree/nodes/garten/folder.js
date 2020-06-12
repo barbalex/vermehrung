@@ -1,7 +1,8 @@
 export default ({ store }) => {
-  const { loading, showGarten } = store.tree
+  const { initialDataQueried } = store
+  const { showGarten } = store.tree
   const gaerten = store.gartensFiltered
-  const nr = loading && !gaerten.length ? '...' : gaerten.length
+  const nr = !initialDataQueried && !gaerten.length ? '...' : gaerten.length
 
   if (!showGarten) return []
 
