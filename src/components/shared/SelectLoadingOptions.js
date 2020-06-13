@@ -1,8 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
+
+import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -70,6 +72,7 @@ const StyledSelect = styled(AsyncSelect)`
 
 const SelectLoadingOptions = ({
   valueLabelPath,
+  valueLabel,
   field = '',
   label,
   labelSize = 12,
@@ -78,7 +81,11 @@ const SelectLoadingOptions = ({
   error: saveToDbError,
   modelKey,
   modelFilter = () => true,
+  showFilterModel,
 }) => {
+  const store = useContext(StoreContext)
+  const showFilter = store.filter.show
+
   const loadOptions = useCallback(
     (inputValue, cb) => {
       const data = modelFilter(inputValue).slice(0, 7)
@@ -107,7 +114,9 @@ const SelectLoadingOptions = ({
 
   const value = {
     value: row[field] || '',
-    label: get(row, valueLabelPath) || '',
+    label: showFilter
+      ? showFilterModel.find((m) => m.id === row[field])?.[valueLabel]
+      : get(row, valueLabelPath) || '',
   }
 
   return (
