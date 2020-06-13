@@ -3,7 +3,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { RootStore } from '../models'
 import constants from './constants'
-//import getAuthToken from './getAuthToken'
+import getAuthToken from './getAuthToken'
 
 // TODO: this never runs. Why?
 const getToken = () => {
@@ -44,8 +44,8 @@ export default async () => {
               error,
               authorizing: store.authorizing,
             })
-            // TODO: make this active?
-            //getAuthToken({ store })
+            // TODO: keeps having jwt trouble when this runs
+            //store.initialDataQueried && getAuthToken({ store })
           }
         },
         connectionParams: {
