@@ -72,6 +72,7 @@ const Vermehrung = ({ location }) => {
     initialDataQueried,
     setQueryingAllData,
     queryingAllData,
+    queuedQueries,
   } = store
 
   const existsUser = !!user?.uid
@@ -99,7 +100,15 @@ const Vermehrung = ({ location }) => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (existsUser && !initialDataQueried && !queryingAllData) {
+    // wait with querying all data until all queued queries have been applied
+    // otherwise app-side the optimistically applied changes would be replaced
+    // with stale data from the server
+    if (
+      existsUser &&
+      !initialDataQueried &&
+      !queryingAllData &&
+      !queuedQueries.length
+    ) {
       //console.log('Vermehrung querying all data')
       setQueryingAllData(true)
       queryAllData({ store })
@@ -108,6 +117,7 @@ const Vermehrung = ({ location }) => {
     existsUser,
     initialDataQueried,
     queryingAllData,
+    queuedQueries.length,
     setQueryingAllData,
     store,
   ])
