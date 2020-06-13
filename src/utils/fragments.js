@@ -443,9 +443,9 @@ export const personOption = gql`
 export const personFile = gql`
   fragment PersonFileFields on person_file {
     id
+    __typename
     person_id
     file_id
-    __typename
     file_mime_type
     name
     beschreibung
