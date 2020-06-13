@@ -1,10 +1,19 @@
+import {
+  ART_FRAGMENT,
+  ART_QK_FRAGMENT,
+  ART_QK_CHOOSEN_FRAGMENT,
+} from './mstFragments'
+
 export default ({ store }) => {
   const unsubscribe = {}
   unsubscribe.ae_art = store.subscribeAe_art(undefined, (a) => a.id.name)
-  unsubscribe.art = store.subscribeArt()
+  unsubscribe.art = store.subscribeArt(undefined, ART_FRAGMENT)
   unsubscribe.art_file = store.subscribeArt_file()
-  unsubscribe.art_qk = store.subscribeArt_qk()
-  unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen()
+  unsubscribe.art_qk = store.subscribeArt_qk(undefined, ART_QK_FRAGMENT)
+  unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen(
+    undefined,
+    ART_QK_CHOOSEN_FRAGMENT,
+  )
   unsubscribe.av = store.subscribeAv()
   unsubscribe.event = store.subscribeEvent()
   unsubscribe.garten = store.subscribeGarten()
