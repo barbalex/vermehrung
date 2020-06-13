@@ -106,7 +106,7 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, tree, online, artsFiltered, artsSorted, showDeleted } = store
+  const { artsFiltered, artsSorted, filter, online, showDeleted, tree } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
@@ -160,22 +160,54 @@ const Art = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  /*if (!Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Art" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }*/
+  // TODO:
+  // this filter is WAY to ressource hogging
+  /*const aeArtsFilter = useCallback(
+    (val) => {
+      if (showFilter) {
+        return aeArtsSorted.filter((a) => a.name.toLowerCase().includes(val))
+      }
+      if (val) {
+        return aeArtsSorted.filter(
+          (a) => a.name.toLowerCase().includes(val) || a.ae_art_art.id === id,
+        )
+      }
+      return true
+    },
+    [aeArtsSorted, id, showFilter],
+  )*/
+
+  const artSelectFilter = useCallback(
+    (val) => {
+      if (showFilter) {
+        return {
+          ae_art_art: { id: { _is_null: false } },
+          name: { _ilike: `%${val}%` },
+        }
+      }
+      return val
+        ? {
+            _or: [
+              { _not: { ae_art_art: { id: { _is_null: false } } } },
+              { ae_art_art: { id: { _eq: id } } },
+            ],
+            name: { _ilike: `%${val}%` },
+          }
+        : {
+            _or: [
+              { _not: { ae_art_art: { id: { _is_null: false } } } },
+              { ae_art_art: { id: { _eq: id } } },
+            ],
+          }
+    },
+    [id, showFilter],
+  )
 
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
-
-  console.log('Art, row:', row)
 
   return (
     <ErrorBoundary>
@@ -238,15 +270,25 @@ const Art = ({
                 />
               )}
               <SelectLoadingOptions
-                key={`${row.id}ae_id2`}
+                key={`${row.id}ae_id`}
                 field="ae_id"
                 valueLabelPath="art_ae_art.name"
                 label="Art"
                 row={row}
-                saveToDb={saveToDb}
-                error={errors.ae_id}
-                modelName="aeArtsSorted"
-                modelKey="name"
+                saveToDb={online ? saveToDb : () => {}}
+                error={
+                  online
+                    ? errors.ae_id
+                    : 'Sorry, offline kann keine neue Art gewählt werden. Die Artliste ist dafür zu gross 😢'
+                }
+                //modelName="aeArtsSorted"
+                //modelKey="name"
+                queryName={'queryAe_art'}
+                where={artSelectFilter}
+                order_by={{ name: 'asc_nulls_first' }}
+                resultNodesName="ae_art"
+                resultNodesLabelName="name"
+                disabled={!online}
               />
               {online &&
                 !showFilter &&
