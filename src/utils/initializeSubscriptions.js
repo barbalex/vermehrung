@@ -2,22 +2,31 @@ import {
   ART_FRAGMENT,
   ART_QK_FRAGMENT,
   ART_QK_CHOOSEN_FRAGMENT,
+  ART_FILE_FRAGMENT,
+  AE_ART_FRAGMENT,
+  AV_FRAGMENT,
+  EVENT_FRAGMENT,
+  GARTEN_FRAGMENT,
+  GARTEN_FILE_FRAGMENT,
 } from './mstFragments'
 
 export default ({ store }) => {
   const unsubscribe = {}
-  unsubscribe.ae_art = store.subscribeAe_art(undefined, (a) => a.id.name)
+  unsubscribe.ae_art = store.subscribeAe_art(undefined, AE_ART_FRAGMENT)
   unsubscribe.art = store.subscribeArt(undefined, ART_FRAGMENT)
-  unsubscribe.art_file = store.subscribeArt_file()
+  unsubscribe.art_file = store.subscribeArt_file(undefined, ART_FILE_FRAGMENT)
   unsubscribe.art_qk = store.subscribeArt_qk(undefined, ART_QK_FRAGMENT)
   unsubscribe.art_qk_choosen = store.subscribeArt_qk_choosen(
     undefined,
     ART_QK_CHOOSEN_FRAGMENT,
   )
-  unsubscribe.av = store.subscribeAv()
-  unsubscribe.event = store.subscribeEvent()
-  unsubscribe.garten = store.subscribeGarten()
-  unsubscribe.garten_file = store.subscribeGarten_file()
+  unsubscribe.av = store.subscribeAv(undefined, AV_FRAGMENT)
+  unsubscribe.event = store.subscribeEvent(undefined, EVENT_FRAGMENT)
+  unsubscribe.garten = store.subscribeGarten(undefined, GARTEN_FRAGMENT)
+  unsubscribe.garten_file = store.subscribeGarten_file(
+    undefined,
+    GARTEN_FILE_FRAGMENT,
+  )
   unsubscribe.gv = store.subscribeGv()
   unsubscribe.herkunft = store.subscribeHerkunft()
   unsubscribe.herkunft_file = store.subscribeHerkunft_file()
