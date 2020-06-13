@@ -86,24 +86,53 @@ const SelectLoadingOptions = ({
   labelSize = 12,
   error: saveToDbError,
   saveToDb,
-  modelName,
-  modelKey,
+  //modelName,
+  //modelFilter = () => true,
+  //modelKey,
+  queryName,
+  where,
+  order_by,
+  resultNodesName,
+  resultNodesLabelName,
+  disabled = false,
 }) => {
   const store = useContext(StoreContext)
+  const { online } = store
 
-  const loadOptions = useCallback(
+  // TODO:
+  // this filter is WAY to ressource hogging
+  /*const loadOptions = useCallback(
     (inputValue, cb) => {
-      const data =
-        store?.[modelName]
-          ?.filter((v) => v?.[modelKey]?.includes(inputValue) ?? false)
-          ?.slice(0, 7) ?? []
+      const data = store?.[modelName]?.filter(modelFilter)?.slice(0, 7) ?? []
       const options = data.map((o) => ({
         value: o.id,
-        label: o?.[modelKey] ?? '(kein Name)',
+        label: o?.[modelKey] ?? `(kein ${label})`,
       }))
       cb(options)
     },
-    [modelName, modelKey, store],
+    [store, modelName, modelFilter, modelKey, label],
+  )*/
+  const loadOptions = useCallback(
+    async (inputValue, cb) => {
+      let result
+      try {
+        result = await store[queryName]({
+          where: where(inputValue),
+          order_by,
+          limit: 7,
+        })
+      } catch (error) {
+        store.addNotification({
+          message: error.message,
+        })
+      }
+      const options = get(result, resultNodesName, []).map((o) => ({
+        value: o.id,
+        label: o[resultNodesLabelName],
+      }))
+      cb(options)
+    },
+    [order_by, queryName, resultNodesLabelName, resultNodesName, store, where],
   )
 
   const onChange = useCallback(
@@ -149,6 +178,7 @@ const SelectLoadingOptions = ({
         classNamePrefix="react-select"
         loadOptions={loadOptions}
         openMenuOnFocus
+        disabled={disabled}
       />
       {saveToDbError && <Error>{saveToDbError}</Error>}
     </Container>

@@ -21,7 +21,7 @@ const FieldsContainer = styled.div`
 
 const Root = ({ filter: showFilter }) => {
   const store = useContext(StoreContext)
-  const { userPerson, loading } = store
+  const { userPerson, initialDataQueried } = store
 
   // eslint-disable-next-line no-unused-vars
   const { user_role } = userPerson
@@ -61,7 +61,7 @@ const Root = ({ filter: showFilter }) => {
               key={row.name}
               row={row}
               length={
-                loading
+                !initialDataQueried
                   ? '...'
                   : store[`${camelCase(row.table)}sFiltered`].length
               }

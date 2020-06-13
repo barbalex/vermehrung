@@ -48,7 +48,9 @@ export const ART_FILE_FRAGMENT = selectFromart_file()
   .id.art_id.file_id.file_mime_type.name.beschreibung.art()
   .toString()
 
-export const AE_ART_FRAGMENT = selectFromae_art().id.name.toString()
+export const AE_ART_FRAGMENT = selectFromae_art()
+  .id.name.ae_art_art()
+  .toString()
 
 export const AV_FRAGMENT = selectFromav()
   .id.art_id.person_id.art()
