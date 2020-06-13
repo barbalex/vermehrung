@@ -21,6 +21,12 @@ import {
   PERSON_OPTION_FRAGMENT,
   PERSON_FILE_FRAGMENT,
   SAMMEL_LIEFERUNG_FRAGMENT,
+  SAMMLUNG_FRAGMENT,
+  SAMMLUNG_FILE_FRAGMENT,
+  TEILKULTUR_FRAGMENT,
+  TEILZAEHLUNG_FRAGMENT,
+  USER_ROLE_FRAGMENT,
+  ZAEHLUNG_FRAGMENT,
 } from './mstFragments'
 
 export default ({ store }) => {
@@ -81,21 +87,23 @@ export default ({ store }) => {
     undefined,
     SAMMEL_LIEFERUNG_FRAGMENT,
   )
-  unsubscribe.sammlung = store.subscribeSammlung()
-  unsubscribe.sammlung_file = store.subscribeSammlung_file()
-  unsubscribe.teilkultur = store.subscribeTeilkultur()
-  unsubscribe.teilzaehlung = store.subscribeTeilzaehlung()
-  unsubscribe.user_role = store.subscribeUser_role()
-  unsubscribe.zaehlung = store.subscribeZaehlung(undefined, (z) =>
-    z.id.kultur_id.datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs_aggregate(
-      (ta) =>
-        ta.aggregate((ag) =>
-          ag.sum(
-            (s) =>
-              s.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen,
-          ),
-        ),
-    ),
+  unsubscribe.sammlung = store.subscribeSammlung(undefined, SAMMLUNG_FRAGMENT)
+  unsubscribe.sammlung_file = store.subscribeSammlung_file(
+    undefined,
+    SAMMLUNG_FILE_FRAGMENT,
   )
+  unsubscribe.teilkultur = store.subscribeTeilkultur(
+    undefined,
+    TEILKULTUR_FRAGMENT,
+  )
+  unsubscribe.teilzaehlung = store.subscribeTeilzaehlung(
+    undefined,
+    TEILZAEHLUNG_FRAGMENT,
+  )
+  unsubscribe.user_role = store.subscribeUser_role(
+    undefined,
+    USER_ROLE_FRAGMENT,
+  )
+  unsubscribe.zaehlung = store.subscribeZaehlung(undefined, ZAEHLUNG_FRAGMENT)
   return unsubscribe
 }
