@@ -13,6 +13,9 @@ import {
   HERKUNFT_FILE_FRAGMENT,
   KULTUR_FRAGMENT,
   KULTUR_QK_FRAGMENT,
+  KULTUR_QK_CHOOSEN_FRAGMENT,
+  KULTUR_OPTION_FRAGMENT,
+  LIEFERUNG_FRAGMENT,
 } from './mstFragments'
 
 export default ({ store }) => {
@@ -39,14 +42,23 @@ export default ({ store }) => {
     HERKUNFT_FILE_FRAGMENT,
   )
   unsubscribe.kultur = store.subscribeKultur(undefined, KULTUR_FRAGMENT)
-  unsubscribe.kultur_file = store.subscribeKultur_file()
+  unsubscribe.kultur_file = store.subscribeKultur_file(
+    undefined,
+    KULTUR_OPTION_FRAGMENT,
+  )
   unsubscribe.kultur_option = store.subscribeKultur_option()
   unsubscribe.kultur_qk = store.subscribeKultur_qk(
     undefined,
     KULTUR_QK_FRAGMENT,
   )
-  unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen()
-  unsubscribe.lieferung = store.subscribeLieferung()
+  unsubscribe.kultur_qk_choosen = store.subscribeKultur_qk_choosen(
+    undefined,
+    KULTUR_QK_CHOOSEN_FRAGMENT,
+  )
+  unsubscribe.lieferung = store.subscribeLieferung(
+    undefined,
+    LIEFERUNG_FRAGMENT,
+  )
   unsubscribe.lieferung_file = store.subscribeLieferung_file()
   unsubscribe.person = store.subscribePerson()
   unsubscribe.person_file = store.subscribePerson_file()
