@@ -42,7 +42,6 @@ export default async () => {
           if (error) {
             console.log('gqlWsClient connectionCallback:', {
               error,
-              authorizing: store.authorizing,
             })
             // TODO: keeps having jwt trouble when this runs
             // Also: On first load after emtying cache ws does not sync!!!!
