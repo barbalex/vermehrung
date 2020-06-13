@@ -402,8 +402,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('Lieferung, row:', row)
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
