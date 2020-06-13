@@ -21,6 +21,12 @@ import { selectFromperson } from '../models/personModel.base'
 import { selectFromperson_option } from '../models/person_optionModel.base'
 import { selectFromperson_file } from '../models/person_fileModel.base'
 import { selectFromsammel_lieferung } from '../models/sammel_lieferungModel.base'
+import { selectFromsammlung } from '../models/sammlungModel.base'
+import { selectFromsammlung_file } from '../models/sammlung_fileModel.base'
+import { selectFromteilkultur } from '../models/teilkulturModel.base'
+import { selectFromteilzaehlung } from '../models/teilzaehlungModel.base'
+import { selectFromuser_role } from '../models/user_roleModel.base'
+import { selectFromzaehlung } from '../models/zaehlungModel.base'
 
 export const ART_FRAGMENT = selectFromart()
   .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_ae_art()
@@ -38,7 +44,9 @@ export const ART_QK_FRAGMENT = selectFromart_qk().id.name.titel.beschreibung.sor
 
 export const ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen().id.art_id.qk_name.toString()
 
-export const ART_FILE_FRAGMENT = selectFromart_file().id.art_id.file_id.file_mime_type.name.beschreibung.toString()
+export const ART_FILE_FRAGMENT = selectFromart_file()
+  .id.art_id.file_id.file_mime_type.name.beschreibung.art()
+  .toString()
 
 export const AE_ART_FRAGMENT = selectFromae_art().id.name.toString()
 
@@ -56,25 +64,41 @@ export const EVENT_FRAGMENT = selectFromevent()
 export const GARTEN_FRAGMENT = selectFromgarten()
   .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.person()
   .garten_files()
+  .gvs()
+  .kulturs()
   .toString()
 
-export const GARTEN_FILE_FRAGMENT = selectFromgarten_file().id.garten_id.file_id.file_mime_type.name.beschreibung.toString()
+export const GARTEN_FILE_FRAGMENT = selectFromgarten_file()
+  .id.garten_id.file_id.file_mime_type.name.beschreibung.garten()
+  .toString()
 
 export const GV_FRAGMENT = selectFromgv()
   .id.garten_id.person_id.garten()
   .person()
   .toString()
 
-export const HERKUNFT_FRAGMENT = selectFromherkunft().id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
+export const HERKUNFT_FRAGMENT = selectFromherkunft()
+  .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.herkunft_files()
+  .kulturs()
+  .sammlungs()
+  .toString()
 
 export const HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
 
 export const KULTUR_FRAGMENT = selectFromkultur()
   .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art()
-  .herkunft()
   .garten()
+  .herkunft()
   .kultur_files()
   .kultur_option()
+  .events()
+  .kultur_qk_choosens()
+  .lieferungsByNachKulturId()
+  .lieferungsByVonKulturId()
+  .sammelLieferungsByNachKulturId()
+  .sammel_lieferungs()
+  .teilkulturs()
+  .zaehlungs()
   .toString()
 
 export const KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.toString()
@@ -94,11 +118,12 @@ export const KULTUR_OPTION_FRAGMENT = selectFromkultur_option()
 export const LIEFERUNG_FRAGMENT = selectFromlieferung()
   .id.sammel_lieferung_id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.sammel_lieferung()
   .art()
-  .person()
-  .sammlung()
-  .kulturByVonKulturId()
   .kulturByNachKulturId()
+  .kulturByVonKulturId()
   .lieferung_files()
+  .person()
+  .sammel_lieferung()
+  .sammlung()
   .toString()
 
 export const LIEFERUNG_FILE_FRAGMENT = selectFromlieferung_file()
@@ -132,4 +157,43 @@ export const SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung()
   .sammlung()
   .kulturByVonKulturId()
   .kulturByNachKulturId()
+  .toString()
+
+export const SAMMLUNG_FRAGMENT = selectFromsammlung()
+  .id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art()
+  .person()
+  .herkunft()
+  .lieferungs()
+  .sammel_lieferungs()
+  .sammlung_files()
+  .toString()
+
+export const SAMMLUNG_FILE_FRAGMENT = selectFromsammlung_file()
+  .id.sammlung_id.file_id.file_mime_type.name.beschreibung.sammlung()
+  .toString()
+
+export const TEILKULTUR_FRAGMENT = selectFromteilkultur()
+  .id.kultur_id.name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur()
+  .events()
+  .teilzaehlungs()
+  .toString()
+
+export const TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
+  .id.zaehlung_id.teilkultur_id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.zaehlung()
+  .teilkultur()
+  .toString()
+
+export const USER_ROLE_FRAGMENT = selectFromuser_role().id.name.sort.comment.toString()
+
+export const ZAEHLUNG_FRAGMENT = selectFromzaehlung()
+  .id.kultur_id.datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs_aggregate(
+    (t) =>
+      t.aggregate((ag) =>
+        ag.sum(
+          (s) => s.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen,
+        ),
+      ),
+  )
+  .kultur()
+  .teilzaehlungs()
   .toString()
