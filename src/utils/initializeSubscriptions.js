@@ -17,6 +17,7 @@ import {
   KULTUR_OPTION_FRAGMENT,
   LIEFERUNG_FRAGMENT,
   LIEFERUNG_FILE_FRAGMENT,
+  PERSON_FRAGMENT,
 } from './mstFragments'
 
 export default ({ store }) => {
@@ -64,7 +65,7 @@ export default ({ store }) => {
     undefined,
     LIEFERUNG_FILE_FRAGMENT,
   )
-  unsubscribe.person = store.subscribePerson()
+  unsubscribe.person = store.subscribePerson(undefined, PERSON_FRAGMENT)
   unsubscribe.person_file = store.subscribePerson_file()
   unsubscribe.person_option = store.subscribePerson_option()
   unsubscribe.sammel_lieferung = store.subscribeSammel_lieferung()
