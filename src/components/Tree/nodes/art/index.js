@@ -8,15 +8,20 @@ export default ({ store }) => {
     store.artsFiltered
       // only show if parent node exists
       .filter(() => visibleOpenNodes.some((node) => isEqual(['Arten'], node)))
-      .map((n) => ({
-        nodeType: 'table',
-        menuTitle: 'Art',
-        table: 'art',
-        id: n.id,
-        label: n?.art_ae_art?.name ?? '(keine Art gewählt)',
-        url: ['Arten', n.id],
-        hasChildren: true,
-      }))
+      .map((n) => {
+        const aeArt = store.aeArtsSorted.find((a) => a.id === n.ae_id)
+        const label = aeArt?.name ?? '(keine Art gewählt)'
+
+        return {
+          nodeType: 'table',
+          menuTitle: 'Art',
+          table: 'art',
+          id: n.id,
+          label,
+          url: ['Arten', n.id],
+          hasChildren: true,
+        }
+      })
       .map((n, index) => {
         n.sort = [1, index]
         return n
