@@ -175,6 +175,8 @@ const Art = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
+  console.log('Art, row:', row)
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
