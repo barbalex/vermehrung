@@ -7,8 +7,8 @@ export const art = gql`
     ae_id
     art_ae_art {
       id
-      name
       __typename
+      name
     }
     changed
     changed_by
