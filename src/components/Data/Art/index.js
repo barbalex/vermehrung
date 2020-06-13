@@ -172,7 +172,9 @@ const Art = ({
   // this filter is WAY to ressource hogging
   const aeArtsFilter = (val) => {
     if (showFilter) {
-      return aeArtsSorted.filter((a) => a.name.toLowerCase().includes(val))
+      return aeArtsSorted.filter(
+        (a) => a.name.toLowerCase().includes(val) || a?.id === row.ae_id,
+      )
     }
     if (val) {
       return aeArtsSorted.filter(
@@ -252,12 +254,14 @@ const Art = ({
                 key={`${row.id}ae_id`}
                 field="ae_id"
                 valueLabelPath="art_ae_art.name"
+                valueLabel="name"
                 label="Art"
                 row={row}
-                saveToDb={online ? saveToDb : () => {}}
+                saveToDb={saveToDb}
                 error={errors.ae_id}
                 modelKey="name"
                 modelFilter={aeArtsFilter}
+                showFilterModel={aeArtsSorted}
               />
               {online &&
                 !showFilter &&
