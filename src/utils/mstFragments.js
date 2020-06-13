@@ -7,6 +7,11 @@ import { selectFromav } from '../models/avModel.base'
 import { selectFromevent } from '../models/eventModel.base'
 import { selectFromgarten } from '../models/gartenModel.base'
 import { selectFromgarten_file } from '../models/garten_fileModel.base'
+import { selectFromgv } from '../models/gvModel.base'
+import { selectFromherkunft } from '../models/herkunftModel.base'
+import { selectFromherkunft_file } from '../models/herkunft_fileModel.base'
+import { selectFromkultur } from '../models/kulturModel.base'
+import { selectFromkultur_qk } from '../models/kultur_qkModel.base'
 
 export const ART_FRAGMENT = selectFromart()
   .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_ae_art()
@@ -28,7 +33,10 @@ export const ART_FILE_FRAGMENT = selectFromart_file().id.art_id.file_id.file_mim
 
 export const AE_ART_FRAGMENT = selectFromae_art().id.name.toString()
 
-export const AV_FRAGMENT = selectFromav().id.art_id.person_id.art().toString()
+export const AV_FRAGMENT = selectFromav()
+  .id.art_id.person_id.art()
+  .person()
+  .toString()
 
 export const EVENT_FRAGMENT = selectFromevent()
   .id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur()
@@ -41,3 +49,20 @@ export const GARTEN_FRAGMENT = selectFromgarten()
   .toString()
 
 export const GARTEN_FILE_FRAGMENT = selectFromgarten_file().id.garten_id.file_id.file_mime_type.name.beschreibung.toString()
+
+export const GV_FRAGMENT = selectFromgv()
+  .id.garten_id.person_id.garten()
+  .person()
+  .toString()
+
+export const HERKUNFT_FRAGMENT = selectFromherkunft().id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
+
+export const HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
+
+export const KULTUR_FRAGMENT = selectFromkultur()
+  .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art()
+  .herkunft()
+  .garten()
+  .toString()
+
+export const KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.toString()
