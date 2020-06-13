@@ -304,9 +304,9 @@ export const kulturQkChoosen = gql`
 export const kulturFile = gql`
   fragment KulturFileFields on kultur_file {
     id
+    __typename
     kultur_id
     file_id
-    __typename
     file_mime_type
     name
     beschreibung
