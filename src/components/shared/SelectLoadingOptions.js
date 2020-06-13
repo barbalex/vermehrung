@@ -1,18 +1,8 @@
-// @flow
-
-/**
- * This does not work as planned:
- * It loads 8 options at mount
- * BUT DOES NOT SHOW THEM WHEN USER ENTERS FIELD
- */
-
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import AsyncSelect from 'react-select/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
-
-import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -79,60 +69,26 @@ const StyledSelect = styled(AsyncSelect)`
 `
 
 const SelectLoadingOptions = ({
-  row,
   valueLabelPath,
   field = '',
   label,
   labelSize = 12,
-  error: saveToDbError,
+  row,
   saveToDb,
-  //modelName,
-  //modelFilter = () => true,
-  //modelKey,
-  queryName,
-  where,
-  order_by,
-  resultNodesName,
-  resultNodesLabelName,
-  disabled = false,
+  error: saveToDbError,
+  modelKey,
+  modelFilter = () => true,
 }) => {
-  const store = useContext(StoreContext)
-  const { online } = store
-
-  // TODO:
-  // this filter is WAY to ressource hogging
-  /*const loadOptions = useCallback(
+  const loadOptions = useCallback(
     (inputValue, cb) => {
-      const data = store?.[modelName]?.filter(modelFilter)?.slice(0, 7) ?? []
+      const data = modelFilter(inputValue).slice(0, 7)
       const options = data.map((o) => ({
         value: o.id,
         label: o?.[modelKey] ?? `(kein ${label})`,
       }))
       cb(options)
     },
-    [store, modelName, modelFilter, modelKey, label],
-  )*/
-  const loadOptions = useCallback(
-    async (inputValue, cb) => {
-      let result
-      try {
-        result = await store[queryName]({
-          where: where(inputValue),
-          order_by,
-          limit: 7,
-        })
-      } catch (error) {
-        store.addNotification({
-          message: error.message,
-        })
-      }
-      const options = get(result, resultNodesName, []).map((o) => ({
-        value: o.id,
-        label: o[resultNodesLabelName],
-      }))
-      cb(options)
-    },
-    [order_by, queryName, resultNodesLabelName, resultNodesName, store, where],
+    [label, modelFilter, modelKey],
   )
 
   const onChange = useCallback(
@@ -178,7 +134,6 @@ const SelectLoadingOptions = ({
         classNamePrefix="react-select"
         loadOptions={loadOptions}
         openMenuOnFocus
-        disabled={disabled}
       />
       {saveToDbError && <Error>{saveToDbError}</Error>}
     </Container>

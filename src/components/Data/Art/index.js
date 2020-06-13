@@ -106,7 +106,15 @@ const Art = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { artsFiltered, artsSorted, filter, online, showDeleted, tree } = store
+  const {
+    artsFiltered,
+    artsSorted,
+    filter,
+    online,
+    showDeleted,
+    tree,
+    aeArtsSorted,
+  } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
@@ -162,46 +170,17 @@ const Art = ({
 
   // TODO:
   // this filter is WAY to ressource hogging
-  /*const aeArtsFilter = useCallback(
-    (val) => {
-      if (showFilter) {
-        return aeArtsSorted.filter((a) => a.name.toLowerCase().includes(val))
-      }
-      if (val) {
-        return aeArtsSorted.filter(
-          (a) => a.name.toLowerCase().includes(val) || a.ae_art_art.id === id,
-        )
-      }
-      return true
-    },
-    [aeArtsSorted, id, showFilter],
-  )*/
-
-  const artSelectFilter = useCallback(
-    (val) => {
-      if (showFilter) {
-        return {
-          ae_art_art: { id: { _is_null: false } },
-          name: { _ilike: `%${val}%` },
-        }
-      }
-      return val
-        ? {
-            _or: [
-              { _not: { ae_art_art: { id: { _is_null: false } } } },
-              { ae_art_art: { id: { _eq: id } } },
-            ],
-            name: { _ilike: `%${val}%` },
-          }
-        : {
-            _or: [
-              { _not: { ae_art_art: { id: { _is_null: false } } } },
-              { ae_art_art: { id: { _eq: id } } },
-            ],
-          }
-    },
-    [id, showFilter],
-  )
+  const aeArtsFilter = (val) => {
+    if (showFilter) {
+      return aeArtsSorted.filter((a) => a.name.toLowerCase().includes(val))
+    }
+    if (val) {
+      return aeArtsSorted.filter(
+        (a) => a.name.toLowerCase().includes(val) || a?.ae_art_art?.id === id,
+      )
+    }
+    return aeArtsSorted
+  }
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -276,19 +255,9 @@ const Art = ({
                 label="Art"
                 row={row}
                 saveToDb={online ? saveToDb : () => {}}
-                error={
-                  online
-                    ? errors.ae_id
-                    : 'Sorry, offline kann keine neue Art gewählt werden. Die Artliste ist dafür zu gross 😢'
-                }
-                //modelName="aeArtsSorted"
-                //modelKey="name"
-                queryName={'queryAe_art'}
-                where={artSelectFilter}
-                order_by={{ name: 'asc_nulls_first' }}
-                resultNodesName="ae_art"
-                resultNodesLabelName="name"
-                disabled={!online}
+                error={errors.ae_id}
+                modelKey="name"
+                modelFilter={aeArtsFilter}
               />
               {online &&
                 !showFilter &&
