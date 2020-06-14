@@ -77,20 +77,20 @@ const Lieferungen = ({ filter: showFilter }) => {
   const hierarchyFilter = (e) => {
     if (kulturIdInActiveNodeArray) {
       if (activeNodeArray.includes('Aus-Lieferungen')) {
-        return (e.von_kultur_id = kulturIdInActiveNodeArray)
+        return e.von_kultur_id === kulturIdInActiveNodeArray
       }
       if (activeNodeArray.includes('An-Lieferungen')) {
-        return (e.nach_kultur_id = kulturIdInActiveNodeArray)
+        return e.nach_kultur_id === kulturIdInActiveNodeArray
       }
     }
     if (sammelLieferungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-      return (e.sammel_lieferung_id = sammelLieferungIdInActiveNodeArray)
+      return e.sammel_lieferung_id === sammelLieferungIdInActiveNodeArray
     }
     if (personIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-      return (e.person_id = personIdInActiveNodeArray)
+      return e.person_id === personIdInActiveNodeArray
     }
     if (sammlungIdInActiveNodeArray && !kulturIdInActiveNodeArray) {
-      return (e.von_sammlung_id = sammlungIdInActiveNodeArray)
+      return e.von_sammlung_id === sammlungIdInActiveNodeArray
     }
     return true
   }
