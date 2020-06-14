@@ -32,6 +32,11 @@ import gartenSort from '../utils/gartenSort'
 import herkunftSort from '../utils/herkunftSort'
 import kulturSort from '../utils/kulturSort'
 import notDeletedOrHasConflict from '../utils/notDeletedOrHasConflict'
+import artIdInUrl from '../utils/artIdInUrl'
+import herkunftIdInUrl from '../utils/herkunftIdInUrl'
+import gartenIdInUrl from '../utils/gartenIdInUrl'
+import kulturIdInUrl from '../utils/kulturIdInUrl'
+import anLieferungIdInUrl from '../utils/anLieferungIdInUrl'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1430,64 +1435,19 @@ export const RootStore = RootStoreBase.props({
       return sortBy([...self.queuedQueries.values()], 'time')
     },
     get artIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Arten')) {
-        const indexOfId = activeNodeArray.indexOf('Arten') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return artIdInUrl(self.tree.activeNodeArray)
     },
     get herkunftIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Herkuenfte')) {
-        const indexOfId = activeNodeArray.indexOf('Herkuenfte') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return herkunftIdInUrl(self.tree.activeNodeArray)
     },
     get gartenIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Gaerten')) {
-        const indexOfId = activeNodeArray.indexOf('Gaerten') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return gartenIdInUrl(self.tree.activeNodeArray)
     },
     get kulturIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Kulturen')) {
-        const indexOfId = activeNodeArray.indexOf('Kulturen') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return kulturIdInUrl(self.tree.activeNodeArray)
     },
     get anLieferungIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('An-Lieferungen')) {
-        const indexOfId = activeNodeArray.indexOf('An-Lieferungen') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return anLieferungIdInUrl(self.tree.activeNodeArray)
     },
     get ausLieferungIdInActiveNodeArray() {
       const { activeNodeArray: aNaRaw } = self.tree
