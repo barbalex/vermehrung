@@ -51,8 +51,6 @@ const Tree = () => {
     if (index > -1 && listRef.current) listRef.current.scrollToItem(index)
   }, [aNA, listRef, nodes])
 
-  //console.log('Tree rendering')
-
   return (
     <ErrorBoundary>
       <Settings />
