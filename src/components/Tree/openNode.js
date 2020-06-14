@@ -1,12 +1,10 @@
-import { getSnapshot } from 'mobx-state-tree'
 import isNodeOpen from './isNodeOpen'
 
 export default ({ node, store }) => {
-  const { addOpenNodes, openNodes: openNodesRaw } = store.tree
-  const openNodes = getSnapshot(openNodesRaw)
+  const { addOpenNodes } = store.tree
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
-  if (isNodeOpen(openNodes, node.url)) return
+  if (isNodeOpen({ store, url: node.url })) return
 
   //  console.log('openNode opening:', node.url)
   addOpenNodes([node.url])

@@ -19,8 +19,6 @@ import zaehlungIdInUrl from '../../utils/zaehlungIdInUrl'
 export default ({ store, url }) => {
   const { openNodes } = store.tree
   if (!url) return false
-  if (!openNodes) return false
-  if (!openNodes.some) return false
   //console.log('isNodeOpen', { openNodes: getSnapshot(openNodes), url })
 
   return openNodes.some((n) => isEqual(n, url))

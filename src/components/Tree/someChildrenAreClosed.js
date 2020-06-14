@@ -4,8 +4,6 @@ import isNodeOpen from './isNodeOpen'
 
 export default ({ store, nodes, url }) => {
   if (!url) return false
-  //if (!openNodes) return false
-  //if (!openNodes.some) return false
 
   // return false if node itself is closed
   if (!isNodeOpen({ store, url })) return true
