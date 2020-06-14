@@ -10,7 +10,6 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
 import 'react-datepicker/dist/react-datepicker.css'
-import 'isomorphic-fetch'
 
 import Notifications from './components/Notifications'
 
