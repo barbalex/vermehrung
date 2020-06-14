@@ -199,7 +199,7 @@ const Row = ({ style, node, nodes }) => {
   const store = useContext(StoreContext)
 
   const { tree, addNotification, userPerson, firebase } = store
-  const { openNodes, activeNodeArray } = tree
+  const { activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen({ store, url: node.url })
