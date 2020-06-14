@@ -10,7 +10,6 @@ import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import logout from '../../../utils/logout'
 
 const TitleRow = styled.div`
   display: flex;
@@ -29,13 +28,7 @@ const Icon = styled(FaCog)`
 
 const SettingsOverall = () => {
   const store = useContext(StoreContext)
-  const {
-    showDeleted,
-    setShowDeleted,
-    setHideInactive,
-    hideInactive,
-    userPerson,
-  } = store
+  const { showDeleted, setShowDeleted, setHideInactive, hideInactive } = store
 
   const onClickShowDeleted = useCallback(
     async (event) => {
@@ -58,9 +51,6 @@ const SettingsOverall = () => {
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
-  const onClickLogut = useCallback(() => {
-    logout({ store })
-  }, [store])
 
   return (
     <ErrorBoundary>
@@ -111,10 +101,6 @@ const SettingsOverall = () => {
               labelPlacement="end"
             />
           </MenuItem>
-          <MenuItem
-            onClick={onClickLogut}
-            data-id="appbar-more-logout"
-          >{`${userPerson.name} abmelden (und Cache leeren)`}</MenuItem>
         </Menu>
       }
     </ErrorBoundary>

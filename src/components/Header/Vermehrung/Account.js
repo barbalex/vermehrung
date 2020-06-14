@@ -8,15 +8,21 @@ import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import logout from '../../../utils/logout'
+import queryAllData from '../../../utils/queryAllData'
 
 const StyledUserIcon = styled(UserIcon)`
   color: white;
+`
+const Line = styled.hr`
+  background: rgba(74, 20, 140, 0.3) !important;
+  margin: 5px 0;
 `
 
 const Account = () => {
   const store = useContext(StoreContext)
 
-  const { user, firebase } = store
+  const { user, firebase, userPerson, flushData } = store
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
@@ -28,12 +34,12 @@ const Account = () => {
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
     firebase.auth().signOut()
-    // TODO: reset mst-store! How? Action that sets default values?
-  }, [firebase])
+    flushData()
+  }, [firebase, flushData])
 
   const { email } = user || {}
 
-  const onClickReset = useCallback(async () => {
+  const onClickResetPassword = useCallback(async () => {
     setResetTitle('...')
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
@@ -53,6 +59,13 @@ const Account = () => {
       setAnchorEl(null)
     }, 5000)
   }, [email, firebase])
+  const onClickLogoutAndClear = useCallback(() => {
+    logout({ store })
+  }, [store])
+  const onClickRefresh = useCallback(() => {
+    flushData()
+    queryAllData({ store })
+  }, [flushData, store])
 
   return (
     <ErrorBoundary>
@@ -61,7 +74,7 @@ const Account = () => {
           aria-label="Konto"
           aria-owns={anchorEl ? 'long-menu' : null}
           aria-haspopup="true"
-          title="Konto"
+          title={`Konto und Daten verwalten`}
           onClick={onClickMenu}
         >
           <StyledUserIcon />
@@ -80,8 +93,20 @@ const Account = () => {
           open={!!anchorEl}
           onClose={onCloseMenu}
         >
-          <MenuItem onClick={onClickLogout}>Abmelden</MenuItem>
-          <MenuItem onClick={onClickReset}>{resetTitle}</MenuItem>
+          <MenuItem
+            onClick={onClickLogout}
+          >{`${userPerson?.name} abmelden`}</MenuItem>
+          <MenuItem onClick={onClickResetPassword}>{resetTitle}</MenuItem>
+          <Line />
+          <MenuItem onClick={onClickRefresh} data-id="appbar-more-logout">
+            Daten neu laden
+          </MenuItem>
+          <MenuItem
+            onClick={onClickLogoutAndClear}
+            data-id="appbar-more-logout"
+          >
+            Daten, Einstellungen und Anmeldung zurücksetzen
+          </MenuItem>
         </Menu>
       </>
     </ErrorBoundary>

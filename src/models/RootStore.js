@@ -1427,6 +1427,36 @@ export const RootStore = RootStoreBase.props({
       setDocFilter(val) {
         self.docFilter = val
       },
+      flushData() {
+        self.ae_arts.clear()
+        self.arts.clear()
+        self.art_files.clear()
+        self.art_qks.clear()
+        self.art_qk_choosens.clear()
+        self.avs.clear()
+        self.events.clear()
+        self.gartens.clear()
+        self.garten_files.clear()
+        self.gvs.clear()
+        self.herkunfts.clear()
+        self.herkunft_files.clear()
+        self.kulturs.clear()
+        self.kultur_files.clear()
+        self.kultur_options.clear()
+        self.kultur_qks.clear()
+        self.lieferungs.clear()
+        self.lieferung_files.clear()
+        self.persons.clear()
+        self.person_files.clear()
+        self.person_options.clear()
+        self.sammel_lieferungs.clear()
+        self.sammlungs.clear()
+        self.sammlung_files.clear()
+        self.teilkulturs.clear()
+        self.teilzaehlungs.clear()
+        self.user_roles.clear()
+        self.zaehlungs.clear()
+      },
     }
   })
   .views((self) => ({
@@ -1490,21 +1520,15 @@ export const RootStore = RootStoreBase.props({
       return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
     get userPerson() {
-      const { user, queryPerson, persons } = self
+      const { user, persons } = self
       const userPerson = [...persons.values()].find(
         (p) => p.account_id === user.uid,
       )
-      if (!userPerson) {
-        queryPerson({ where: { account_id: { _eq: user.uid } } })
-      }
       return userPerson ?? {}
     },
     get userPersonOption() {
-      const { userPerson, person_options, queryPerson_option } = self
+      const { userPerson, person_options } = self
       const userPersonOption = person_options.get(userPerson.id)
-      if (!userPersonOption && userPerson.id) {
-        queryPerson_option({ where: { id: { _eq: userPerson.id } } })
-      }
       return userPersonOption ?? {}
     },
     get aeArtsSorted() {
