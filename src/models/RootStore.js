@@ -41,6 +41,7 @@ import ausLieferungIdInUrl from '../utils/ausLieferungIdInUrl'
 import teilkulturIdInUrl from '../utils/teilkulturIdInUrl'
 import personIdInUrl from '../utils/personIdInUrl'
 import sammelLieferungIdInUrl from '../utils/sammelLieferungIdInUrl'
+import sammlungIdInUrl from '../utils/sammlungIdInUrl'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1466,16 +1467,7 @@ export const RootStore = RootStoreBase.props({
       return sammelLieferungIdInUrl(self.tree.activeNodeArray)
     },
     get sammlungIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Sammlungen')) {
-        const indexOfId = activeNodeArray.indexOf('Sammlungen') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return sammlungIdInUrl(self.tree.activeNodeArray)
     },
     get kulturIdOfAnLieferungInActiveNodeArray() {
       const { activeNodeArray: aNaRaw } = self.tree
