@@ -54,7 +54,7 @@ const ApQk = ({ artId }) => {
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
   const { loading, error } = useQuery(queryQk, {
-    variables: { artId },
+    variables: { artId: artId ?? '99999999-9999-9999-9999-999999999999' },
     fetchPolicy: 'no-cache',
   })
 
