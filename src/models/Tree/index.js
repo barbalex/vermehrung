@@ -121,6 +121,20 @@ import buildKulturAusLieferung from '../../components/Tree/nodes/kultur/ausliefe
 import buildKulturEventFolder from '../../components/Tree/nodes/kultur/event/folder'
 import buildKulturEvent from '../../components/Tree/nodes/kultur/event'
 
+import artIdInUrl from '../../utils/artIdInUrl'
+import herkunftIdInUrl from '../../utils/herkunftIdInUrl'
+import gartenIdInUrl from '../../utils/gartenIdInUrl'
+import kulturIdInUrl from '../../utils/kulturIdInUrl'
+import anLieferungIdInUrl from '../../utils/anLieferungIdInUrl'
+import ausLieferungIdInUrl from '../../utils/ausLieferungIdInUrl'
+import teilkulturIdInUrl from '../../utils/teilkulturIdInUrl'
+import personIdInUrl from '../../utils/personIdInUrl'
+import sammelLieferungIdInUrl from '../../utils/sammelLieferungIdInUrl'
+import sammlungIdInUrl from '../../utils/sammlungIdInUrl'
+import kulturIdOfAnLieferungInUrl from '../../utils/kulturIdOfAnLieferungInUrl'
+import kulturIdOfAusLieferungInUrl from '../../utils/kulturIdOfAusLieferungInUrl'
+import zaehlungIdInUrl from '../../utils/zaehlungIdInUrl'
+
 export default types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
@@ -191,6 +205,27 @@ export default types
           store,
         }),
       )
+    },
+    get openNodesNotFiltered() {
+      // artIdInUrl
+      // herkunftIdInUrl
+      // gartenIdInUrl
+      // kulturIdInUrl
+      // anLieferungIdInUrl
+      // ausLieferungIdInUrl
+      // teilkulturIdInUrl
+      // personIdInUrl
+      // sammelLieferungIdInUrl
+      // sammlungIdInUrl
+      // kulturIdOfAnLieferungInUrl
+      // kulturIdOfAusLieferungInUrl
+      // zaehlungIdInUrl
+
+      // TODO:
+      // if id is in url check if it is also in tablesFiltered
+      return self.openNodes.filter((n) => {
+        return true
+      })
     },
     get visibleOpenNodes() {
       const store = getParent(self, 1)
