@@ -202,7 +202,7 @@ const Row = ({ style, node, nodes }) => {
   const { openNodes, activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
-  const nodeIsOpen = isNodeOpen(openNodes, node.url)
+  const nodeIsOpen = isNodeOpen({ store, url: node.url })
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
@@ -437,14 +437,14 @@ const Row = ({ style, node, nodes }) => {
           {node.nodeType === 'table' && (
             <MenuItem onClick={onClickDelete}>löschen</MenuItem>
           )}
-          {node.nodeType === 'folder' && isNodeOpen(openNodes, node.url) && (
+          {node.nodeType === 'folder' && isNodeOpen({ store, url: node.url }) && (
             <>
-              {someChildrenAreOpen({ nodes, openNodes, url: node.url }) && (
+              {someChildrenAreOpen({ store, nodes, url: node.url }) && (
                 <MenuItem onClick={onClickCloseAllChildren}>
                   alle schliessen
                 </MenuItem>
               )}
-              {someChildrenAreClosed({ nodes, openNodes, url: node.url }) && (
+              {someChildrenAreClosed({ store, nodes, url: node.url }) && (
                 <MenuItem onClick={onClickOpenAllChildren}>
                   alle öffnen
                 </MenuItem>
