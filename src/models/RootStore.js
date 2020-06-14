@@ -44,6 +44,7 @@ import sammelLieferungIdInUrl from '../utils/sammelLieferungIdInUrl'
 import sammlungIdInUrl from '../utils/sammlungIdInUrl'
 import kulturIdOfAnLieferungInUrl from '../utils/kulturIdOfAnLieferungInUrl'
 import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
+import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1478,16 +1479,7 @@ export const RootStore = RootStoreBase.props({
       return kulturIdOfAusLieferungInUrl(self.tree.activeNodeArray)
     },
     get zaehlungIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Zaehlungen')) {
-        const indexOfId = activeNodeArray.indexOf('Zaehlungen') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return zaehlungIdInUrl(self.tree.activeNodeArray)
     },
     get userPerson() {
       const { user, queryPerson, persons } = self
