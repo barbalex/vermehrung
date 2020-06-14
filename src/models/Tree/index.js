@@ -193,6 +193,7 @@ export default types
       )
     },
     get visibleOpenNodes() {
+      const store = getParent(self, 1)
       // for unknown reason using self.openNodes directly
       // suddenly started to cause errors
       // so need to snapshot
@@ -201,8 +202,8 @@ export default types
       // 2. get their table from parent
       // 3. check that id is included in tablesFiltered
       // 4. return false if is not included
-      return getSnapshot(self.openNodes).filter((node) =>
-        allParentNodesAreOpen(self.openNodes, node),
+      return getSnapshot(self.openNodes).filter((url) =>
+        allParentNodesAreOpen({ store, url }),
       )
     },
     get showArt() {
