@@ -37,6 +37,8 @@ import herkunftIdInUrl from '../utils/herkunftIdInUrl'
 import gartenIdInUrl from '../utils/gartenIdInUrl'
 import kulturIdInUrl from '../utils/kulturIdInUrl'
 import anLieferungIdInUrl from '../utils/anLieferungIdInUrl'
+import ausLieferungIdInUrl from '../utils/ausLieferungIdInUrl'
+import teilkulturIdInUrl from '../utils/teilkulturIdInUrl'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1450,28 +1452,10 @@ export const RootStore = RootStoreBase.props({
       return anLieferungIdInUrl(self.tree.activeNodeArray)
     },
     get ausLieferungIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Aus-Lieferungen')) {
-        const indexOfId = activeNodeArray.indexOf('Aus-Lieferungen') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return ausLieferungIdInUrl(self.tree.activeNodeArray)
     },
     get teilkulturIdInActiveNodeArray() {
-      const { activeNodeArray: aNaRaw } = self.tree
-      const activeNodeArray = aNaRaw.toJSON()
-      if (activeNodeArray.includes('Teilkulturen')) {
-        const indexOfId = activeNodeArray.indexOf('Teilkulturen') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.v1(id)) return id
-        }
-      }
-      return undefined
+      return teilkulturIdInUrl(self.tree.activeNodeArray)
     },
     get personIdInActiveNodeArray() {
       const { activeNodeArray: aNaRaw } = self.tree
