@@ -49,6 +49,9 @@ const StyledButton = styled(Button)`
     border-width: 1px !important;
   }
 `
+const OnlineButton = styled(IconButton)`
+  cursor: default !important;
+`
 const FilterButton = styled(StyledButton)`
   border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
@@ -159,14 +162,22 @@ const HeaderVermehrung = () => {
           {online ? (
             <>
               <Search />
-              <IconButton color="inherit" aria-label="online" title="online">
+              <OnlineButton
+                color="inherit"
+                aria-label="online"
+                title="Sie sind online"
+              >
                 <NetworkOn />
-              </IconButton>
+              </OnlineButton>
             </>
           ) : (
-            <IconButton color="inherit" aria-label="offline" title="offline">
+            <OnlineButton
+              color="inherit"
+              aria-label="offline"
+              title="Sie sind offline"
+            >
               <NetworkOff />
-            </IconButton>
+            </OnlineButton>
           )}
           <Account />
           <Settings />
