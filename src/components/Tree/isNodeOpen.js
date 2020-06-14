@@ -15,7 +15,9 @@ import kulturIdOfAnLieferungInUrl from '../../utils/kulturIdOfAnLieferungInUrl'
 import kulturIdOfAusLieferungInUrl from '../../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../../utils/zaehlungIdInUrl'
 
-export default (openNodes, url) => {
+//export default (openNodes, url) => {
+export default ({ store, url }) => {
+  const { openNodes } = store.tree
   if (!url) return false
   if (!openNodes) return false
   if (!openNodes.some) return false
