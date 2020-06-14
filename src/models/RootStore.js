@@ -1437,7 +1437,7 @@ export const RootStore = RootStoreBase.props({
       return (
         sortBy([...self.notifications.values()], 'time')
           .reverse()
-          // limit number to 4
+          // limit to 4
           .slice(0, 4)
       )
     },
