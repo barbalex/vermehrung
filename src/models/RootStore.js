@@ -37,7 +37,9 @@ import herkunftIdInUrl from '../utils/herkunftIdInUrl'
 import gartenIdInUrl from '../utils/gartenIdInUrl'
 import kulturIdInUrl from '../utils/kulturIdInUrl'
 import anLieferungIdInUrl from '../utils/anLieferungIdInUrl'
+import eventIdInUrl from '../utils/eventIdInUrl'
 import ausLieferungIdInUrl from '../utils/ausLieferungIdInUrl'
+import lieferungIdInUrl from '../utils/lieferungIdInUrl'
 import teilkulturIdInUrl from '../utils/teilkulturIdInUrl'
 import personIdInUrl from '../utils/personIdInUrl'
 import sammelLieferungIdInUrl from '../utils/sammelLieferungIdInUrl'
@@ -1459,6 +1461,12 @@ export const RootStore = RootStoreBase.props({
     },
     get ausLieferungIdInActiveNodeArray() {
       return ausLieferungIdInUrl(self.tree.activeNodeArray)
+    },
+    get lieferungIdInActiveNodeArray() {
+      return lieferungIdInUrl(self.tree.activeNodeArray)
+    },
+    get eventIdInActiveNodeArray() {
+      return eventIdInUrl(self.tree.activeNodeArray)
     },
     get teilkulturIdInActiveNodeArray() {
       return teilkulturIdInUrl(self.tree.activeNodeArray)

@@ -122,11 +122,13 @@ import buildKulturEventFolder from '../../components/Tree/nodes/kultur/event/fol
 import buildKulturEvent from '../../components/Tree/nodes/kultur/event'
 
 import artIdInUrl from '../../utils/artIdInUrl'
+import eventIdInUrl from '../../utils/eventIdInUrl'
 import herkunftIdInUrl from '../../utils/herkunftIdInUrl'
 import gartenIdInUrl from '../../utils/gartenIdInUrl'
 import kulturIdInUrl from '../../utils/kulturIdInUrl'
 import anLieferungIdInUrl from '../../utils/anLieferungIdInUrl'
 import ausLieferungIdInUrl from '../../utils/ausLieferungIdInUrl'
+import lieferungIdInUrl from '../../utils/lieferungIdInUrl'
 import teilkulturIdInUrl from '../../utils/teilkulturIdInUrl'
 import personIdInUrl from '../../utils/personIdInUrl'
 import sammelLieferungIdInUrl from '../../utils/sammelLieferungIdInUrl'
@@ -207,24 +209,66 @@ export default types
       )
     },
     get openNodesNotFiltered() {
-      // artIdInUrl
-      // herkunftIdInUrl
-      // gartenIdInUrl
-      // kulturIdInUrl
-      // anLieferungIdInUrl
-      // ausLieferungIdInUrl
-      // teilkulturIdInUrl
-      // personIdInUrl
-      // sammelLieferungIdInUrl
-      // sammlungIdInUrl
-      // kulturIdOfAnLieferungInUrl
-      // kulturIdOfAusLieferungInUrl
-      // zaehlungIdInUrl
+      const store = getParent(self, 1)
+      const {
+        artsFiltered,
+        eventsFiltered,
+        gartensFiltered,
+        herkunftsFiltered,
+        kultursFiltered,
+        lieferungsFiltered,
+        personsFiltered,
+        sammelLieferungsFiltered,
+        sammlungsFiltered,
+        teilkultursFiltered,
+        zaehlungsFiltered,
+      } = store
 
       // TODO:
       // if id is in url check if it is also in tablesFiltered
       return self.openNodes.filter((n) => {
-        return true
+        const criteria = []
+        const anLieferungId = anLieferungIdInUrl(n)
+        if (anLieferungId) {
+          criteria.push(
+            lieferungsFiltered.map((l) => l.id).includes(anLieferungId),
+          )
+        }
+        const ausLieferungId = ausLieferungIdInUrl(n)
+        if (ausLieferungId) {
+          criteria.push(
+            lieferungsFiltered.map((l) => l.id).includes(ausLieferungId),
+          )
+        }
+        const lieferungId = lieferungIdInUrl(n)
+        if (lieferungId) {
+          criteria.push(
+            lieferungsFiltered.map((l) => l.id).includes(lieferungId),
+          )
+        }
+        const artId = artIdInUrl(n)
+        if (artId) {
+          criteria.push(artsFiltered.map((l) => l.id).includes(artId))
+        }
+        const eventId = eventIdInUrl(n)
+        if (eventId) {
+          criteria.push(eventsFiltered.map((l) => l.id).includes(eventId))
+        }
+        const gartenId = gartenIdInUrl(n)
+        if (gartenId) {
+          criteria.push(gartensFiltered.map((l) => l.id).includes(gartenId))
+        }
+        //herkunftIdInUrl,
+        //kulturIdInUrl,
+        //kulturIdOfAnLieferungInUrl,
+        //kulturIdOfAusLieferungInUrl,
+        //personIdInUrl,
+        //sammelLieferungIdInUrl,
+        //sammlungIdInUrl,
+        //teilkulturIdInUrl,
+        //zaehlungIdInUrl,
+        console.log('store', { criteria, n: getSnapshot(n), artId })
+        return !criteria.includes(false)
       })
     },
     get visibleOpenNodes() {
