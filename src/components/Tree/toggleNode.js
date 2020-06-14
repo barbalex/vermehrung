@@ -9,12 +9,12 @@ export default ({ node, store }) => {
       message: 'Fehler: Dem Knoten im Navigationsbaum fehlt die url',
     })
   }
-  const { openNodes, setActiveNodeArray } = store.tree
+  const { setActiveNodeArray } = store.tree
 
   //console.log('toggleNode')
 
   const newActiveNodeArray = [...node.url]
-  const nodeIsOpen = isNodeOpen(openNodes, node.url)
+  const nodeIsOpen = isNodeOpen({ store, url: node.url })
   if (!nodeIsOpen) {
     openNode({ node, store })
   }
