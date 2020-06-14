@@ -1416,8 +1416,6 @@ export const RootStore = RootStoreBase.props({
       },
       setHideInactive(val) {
         self.hideInactive = val
-        // TODO:
-        // set filters for person,garten,sammlung
         const key = 'aktiv'
         const value = val
         self.filter.setValue({ table: 'person', key, value })
