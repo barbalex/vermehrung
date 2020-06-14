@@ -17,7 +17,7 @@ export default ({ node, store }) => {
   store.filter.setShow(false)
   let newOpenNodes = [...openNodes]
   // TODO: tell user if childrenCount is 0 he can create
-  if (isNodeOpen(openNodes, node.url)) {
+  if (isNodeOpen({ store, url: node.url })) {
     newOpenNodes = newOpenNodes.filter((n) => !isEqual(n, node.url))
     setOpenNodes(newOpenNodes)
   } else {
