@@ -255,7 +255,7 @@ export default () => {
           left: inputCoords.left - 29 + window.scrollX, // adding scrollX and scrollY to get the coords wrt document instead of viewport
           top: inputCoords.top + 34 + window.scrollY,
           overflowY: 'auto',
-          zIndex: 3,
+          zIndex: 1200,
           boxShadow: '3px 3px 3px rgba(74, 20, 140, 0.1)',
           width: inputCoords.width + 57,
           border: '1px solid #4a148c',
