@@ -17,6 +17,7 @@ import {
 } from 'recharts'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import ReactResizeDetector from 'react-resize-detector'
 import format from 'date-fns/format'
@@ -39,6 +40,7 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
+  ${(props) => props['data-online'] && 'cursor: pointer;'}
   position: sticky;
   user-select: none;
   top: -10px;
@@ -52,10 +54,15 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
 
 const KulturTimeline = ({ row }) => {
   const store = useContext(StoreContext)
-  const { lieferungsSorted, zaehlungsSorted } = store
+  const { lieferungsSorted, zaehlungsSorted, online } = store
   const [narrow, setNarrow] = useState(false)
 
   const zaehlungenDone = zaehlungsSorted
@@ -544,6 +551,26 @@ const KulturTimeline = ({ row }) => {
     [narrow],
   )
 
+  const [open, setOpen] = useState(false)
+  const onClickToggle = useCallback(
+    (e) => {
+      e.stopPropagation()
+      setOpen(!open)
+    },
+    [open],
+  )
+
+  if (!online) {
+    return (
+      <ErrorBoundary>
+        <TitleRow data-online={online}>
+          <Title>Zeit-Achse</Title>
+          <Content>Sorry, nur online verfügbar</Content>
+        </TitleRow>
+      </ErrorBoundary>
+    )
+  }
+
   if (!row) return null
   if (!allData.length) return null
 
@@ -553,7 +580,12 @@ const KulturTimeline = ({ row }) => {
   return (
     <ErrorBoundary>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <TitleRow>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+        data-open={open}
+        data-online={online}
+      >
         <Title>Zeit-Achse</Title>
         <div>
           <IconButton
@@ -563,159 +595,168 @@ const KulturTimeline = ({ row }) => {
           >
             <IoMdInformationCircleOutline />
           </IconButton>
+          <IconButton
+            aria-label={open ? 'schliessen' : 'öffnen'}
+            title={open ? 'schliessen' : 'öffnen'}
+            onClick={onClickToggle}
+          >
+            {open ? <FaChevronUp /> : <FaChevronDown />}
+          </IconButton>
         </div>
       </TitleRow>
-      <ResponsiveContainer width="99%" height={450}>
-        <ComposedChart
-          data={allData}
-          margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-          <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
-          <YAxis
-            label={{
-              value: 'Anzahl',
-              angle: -90,
-              position: 'insideLeft',
-              offset: 25,
-              fontSize: 12,
-            }}
-            fontSize={12}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          {narrow ? (
-            <Legend
-              layout="horizontal"
-              align="center"
-              wrapperStyle={{ bottom: 0, fontSize: 12 }}
+      {open && (
+        <ResponsiveContainer width="99%" height={450}>
+          <ComposedChart
+            data={allData}
+            margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+            <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
+            <YAxis
+              label={{
+                value: 'Anzahl',
+                angle: -90,
+                position: 'insideLeft',
+                offset: 25,
+                fontSize: 12,
+              }}
+              fontSize={12}
             />
-          ) : (
-            <Legend
-              layout="vertical"
-              align="right"
-              wrapperStyle={{ right: -10, bottom: 12, fontSize: 12 }}
+            <Tooltip content={<CustomTooltip />} />
+            {narrow ? (
+              <Legend
+                layout="horizontal"
+                align="center"
+                wrapperStyle={{ bottom: 0, fontSize: 12 }}
+              />
+            ) : (
+              <Legend
+                layout="vertical"
+                align="right"
+                wrapperStyle={{ right: -10, bottom: 12, fontSize: 12 }}
+              />
+            )}
+            <ReferenceLine y={0} stroke="#000" />
+            <Bar
+              dataKey="Lieferung Pflanzen"
+              fill="#4a148c"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
             />
-          )}
-          <ReferenceLine y={0} stroke="#000" />
-          <Bar
-            dataKey="Lieferung Pflanzen"
-            fill="#4a148c"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Bar
-            dataKey="Lieferung Pflanzen geplant"
-            fill="#ceceeb"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Bar
-            dataKey="Lieferung Pflanzen geplant, ignoriert"
-            fill="#ebebf9"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Bar
-            dataKey="Lieferung Pflanzen auspflanzbereit"
-            fill="#016526"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Bar
-            dataKey="Lieferung Pflanzen auspflanzbereit geplant"
-            fill="#9cffc0"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Bar
-            dataKey="Lieferung Pflanzen auspflanzbereit geplant, ignoriert"
-            fill="#e6ffef"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen"
-            stroke="#4a148c"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen Prognose"
-            stroke="#e0e0ff"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="basis"
-            dataKey="Zählung Pflanzen Prognose, ignoriert"
-            legendType="circle"
-            stroke="#ebebf9"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit"
-            stroke="#016526"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit Prognose"
-            stroke="#9cffc0"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="basis"
-            dataKey="Zählung Pflanzen auspflanzbereit Prognose, ignoriert"
-            legendType="circle"
-            stroke="#e6ffef"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Mutterpflanzen"
-            stroke="#cc0000"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Mutterpflanzen Prognose"
-            stroke="#ffb3b3"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="basis"
-            dataKey="Zählung Mutterpflanzen Prognose, ignoriert"
-            legendType="circle"
-            stroke="#ffe6e6"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
+            <Bar
+              dataKey="Lieferung Pflanzen geplant"
+              fill="#ceceeb"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="Lieferung Pflanzen geplant, ignoriert"
+              fill="#ebebf9"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="Lieferung Pflanzen auspflanzbereit"
+              fill="#016526"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="Lieferung Pflanzen auspflanzbereit geplant"
+              fill="#9cffc0"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Bar
+              dataKey="Lieferung Pflanzen auspflanzbereit geplant, ignoriert"
+              fill="#e6ffef"
+              label={<LabelLieferung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              connectNulls={true}
+              dataKey="Zählung Pflanzen"
+              stroke="#4a148c"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              connectNulls={true}
+              dataKey="Zählung Pflanzen Prognose"
+              stroke="#e0e0ff"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="basis"
+              dataKey="Zählung Pflanzen Prognose, ignoriert"
+              legendType="circle"
+              stroke="#ebebf9"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              connectNulls={true}
+              dataKey="Zählung Pflanzen auspflanzbereit"
+              stroke="#016526"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              connectNulls={true}
+              dataKey="Zählung Pflanzen auspflanzbereit Prognose"
+              stroke="#9cffc0"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="basis"
+              dataKey="Zählung Pflanzen auspflanzbereit Prognose, ignoriert"
+              legendType="circle"
+              stroke="#e6ffef"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              connectNulls={true}
+              dataKey="Zählung Mutterpflanzen"
+              stroke="#cc0000"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="monotone"
+              connectNulls={true}
+              dataKey="Zählung Mutterpflanzen Prognose"
+              stroke="#ffb3b3"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+            <Line
+              type="basis"
+              dataKey="Zählung Mutterpflanzen Prognose, ignoriert"
+              legendType="circle"
+              stroke="#ffe6e6"
+              strokeWidth={3}
+              label={<LabelZaehlung />}
+              isAnimationActive={false}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      )}
     </ErrorBoundary>
   )
 }
