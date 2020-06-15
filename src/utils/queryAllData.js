@@ -32,6 +32,7 @@ import {
   zaehlung,
 } from './fragments'
 import getAuthToken from './getAuthToken'
+import removeSuplusNotRevModels from './removeSuplusNotRevModels'
 
 const allDataQuery = gql`
   query AllDataQueryForTreeContainer {
@@ -156,8 +157,9 @@ const allDataQuery = gql`
 
 const query = async ({ store }) => {
   const { setInitialDataQueried, setQueryingAllData } = store
+  let data
   try {
-    await store.query(allDataQuery, undefined, {
+    data = await store.query(allDataQuery, undefined, {
       fetchPolicy: 'network-only',
     })
   } catch (error) {
@@ -167,6 +169,7 @@ const query = async ({ store }) => {
     setQueryingAllData(false)
     return
   }
+  removeSuplusNotRevModels({ store, data })
   setInitialDataQueried(true)
   setQueryingAllData(false)
 }
