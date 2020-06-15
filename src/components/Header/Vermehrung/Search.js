@@ -7,8 +7,8 @@ import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
 import Fuse from 'fuse.js'
 
-import { StoreContext } from '../../../../models/reactUtils'
-import exists from '../../../../utils/exists'
+import { StoreContext } from '../../../models/reactUtils'
+import exists from '../../../utils/exists'
 
 const Container = styled.div`
   border-radius: 3px;
