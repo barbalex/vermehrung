@@ -5,14 +5,10 @@ import styled from 'styled-components'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
-import moment from 'moment'
+import Fuse from 'fuse.js'
 
-import { StoreContext, useQuery } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
 import exists from '../../../../utils/exists'
-import filterSuggestionsQuery from './filterSuggestionsQuery'
-
-const formatDatum = (datum) =>
-  datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : '(kein Datum)'
 
 const Container = styled.div`
   border-radius: 3px;
@@ -25,6 +21,7 @@ const Container = styled.div`
   }
   .react-autosuggest__container {
     width: 100%;
+    z-index: 1200;
   }
   .react-autosuggest__input {
     width: 100%;
@@ -51,18 +48,6 @@ const DelIcon = styled(FaTimes)`
   cursor: ${(props) => (props['data-active'] ? 'pointer' : 'default')};
 `
 
-const loadingSuggestions = [
-  {
-    title: 'Lade Daten...',
-    suggestions: [
-      {
-        id: 'none',
-        name: '',
-        type: 'Arten',
-      },
-    ],
-  },
-]
 const getSuggestionValue = (suggestion) => suggestion && suggestion.name
 const shouldRenderSuggestions = (value) =>
   value && value.trim && value.trim().length > 1
@@ -72,7 +57,17 @@ const getSectionSuggestions = (section) => section.suggestions
 export default () => {
   if (typeof window === 'undefined') return null
   const store = useContext(StoreContext)
-  const { personFilter, gartenFilter, kulturFilter } = store
+  const {
+    searchArtSuggestions,
+    searchGartenSuggestions,
+    searchHerkunftSuggestions,
+    searchKulturSuggestions,
+    searchEventSuggestions,
+    searchLieferungSuggestions,
+    searchPersonSuggestions,
+    searchSammlungSuggestions,
+    searchZaehlungSuggestions,
+  } = store
   const { setActiveNodeArray, widthEnforced } = store.tree
   const [val, setVal] = useState('')
 
@@ -81,143 +76,111 @@ export default () => {
   const onBlur = useCallback(() => setFocused(false), [])
   const asRef = useRef(null)
 
-  const { data } = useQuery(filterSuggestionsQuery, {
-    variables: {
-      run: !!val,
-      filter: val,
-      personFilter,
-      gartenFilter,
-      kulturFilter,
-    },
+  const suggestions = []
+  const artSuggestionsFuse = new Fuse(searchArtSuggestions, { keys: ['name'] })
+  const artSuggestions = artSuggestionsFuse.search(val).map((o) => o.item)
+  if (artSuggestions.length) {
+    suggestions.push({
+      title: `Arten (${artSuggestions.length})`,
+      suggestions: artSuggestions,
+    })
+  }
+  const gartenSuggestionsFuse = new Fuse(searchGartenSuggestions, {
+    keys: ['name'],
   })
+  const gartenSuggestions = gartenSuggestionsFuse.search(val).map((o) => o.item)
+  if (gartenSuggestions.length) {
+    suggestions.push({
+      title: `Gärten (${gartenSuggestions.length})`,
+      suggestions: gartenSuggestions,
+    })
+  }
+  const herkunftSuggestionsFuse = new Fuse(searchHerkunftSuggestions, {
+    keys: ['name'],
+  })
+  const herkunftSuggestions = herkunftSuggestionsFuse
+    .search(val)
+    .map((o) => o.item)
+  if (herkunftSuggestions.length) {
+    suggestions.push({
+      title: `Herkünfte (${herkunftSuggestions.length})`,
+      suggestions: herkunftSuggestions,
+    })
+  }
+  const kulturSuggestionsFuse = new Fuse(searchKulturSuggestions, {
+    keys: ['name'],
+  })
+  const kulturSuggestions = kulturSuggestionsFuse.search(val).map((o) => o.item)
+  if (kulturSuggestions.length) {
+    suggestions.push({
+      title: `Kulturen (${kulturSuggestions.length})`,
+      suggestions: kulturSuggestions,
+    })
+  }
+  const eventSuggestionsFuse = new Fuse(searchEventSuggestions, {
+    keys: ['name'],
+  })
+  const eventSuggestions = eventSuggestionsFuse.search(val).map((o) => o.item)
+  if (eventSuggestions.length) {
+    suggestions.push({
+      title: `Events (${eventSuggestions.length})`,
+      suggestions: eventSuggestions,
+    })
+  }
+  const lieferungSuggestionsFuse = new Fuse(searchLieferungSuggestions, {
+    keys: ['name'],
+  })
+  const lieferungSuggestions = lieferungSuggestionsFuse
+    .search(val)
+    .map((o) => o.item)
+  if (lieferungSuggestions.length) {
+    suggestions.push({
+      title: `Lieferungen (${lieferungSuggestions.length})`,
+      suggestions: lieferungSuggestions,
+    })
+  }
+  const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
+    keys: ['name'],
+  })
+  const personSuggestions = personSuggestionsFuse.search(val).map((o) => o.item)
+  if (personSuggestions.length) {
+    suggestions.push({
+      title: `Personen (${personSuggestions.length})`,
+      suggestions: personSuggestions,
+    })
+  }
+  const sammlungSuggestionsFuse = new Fuse(searchSammlungSuggestions, {
+    keys: ['name'],
+  })
+  const sammlungSuggestions = sammlungSuggestionsFuse
+    .search(val)
+    .map((o) => o.item)
+  if (sammlungSuggestions.length) {
+    suggestions.push({
+      title: `Sammlungen (${sammlungSuggestions.length})`,
+      suggestions: sammlungSuggestions,
+    })
+  }
+  const zaehlungSuggestionsFuse = new Fuse(searchZaehlungSuggestions, {
+    keys: ['name'],
+  })
+  const zaehlungSuggestions = zaehlungSuggestionsFuse
+    .search(val)
+    .map((o) => o.item)
+  if (zaehlungSuggestions.length) {
+    suggestions.push({
+      title: `Zählungen (${zaehlungSuggestions.length})`,
+      suggestions: zaehlungSuggestions,
+    })
+  }
 
-  const suggestionsArt = (data?.art ?? []).map((o) => ({
-    id: o.id,
-    name: o?.art_ae_art?.name ?? '(kein Artname)',
-    type: 'Arten',
-  }))
-  const suggestionsGarten = (data?.garten ?? []).map((o) => ({
-    id: o.id,
-    name: o.name || `(${o?.person?.name ?? 'kein Name'})`,
-    type: 'Gaerten',
-  }))
-  const suggestionsHerkunft = (data?.herkunft ?? []).map((o) => ({
-    id: o.id,
-    name: `${o?.nr ?? '(keine Nr)'}: ${o?.gemeinde ?? '(keine Gemeinde)'}, ${
-      o?.lokalname ?? '(kein Lokalname)'
-    }`,
-    type: 'Herkuenfte',
-  }))
-  const suggestionsKultur = (data?.kultur ?? []).map((o) => ({
-    id: o.id,
-    name: o?.garten?.person?.name ?? '(kein Name)',
-    type: 'Kulturen',
-  }))
-  const suggestionsEvent = (data?.event ?? []).map((o) => ({
-    id: o.id,
-    name: `${formatDatum(o.datum)}: ${
-      o?.beschreibung ?? '(nicht beschrieben)'
-    }`,
-    type: 'Events',
-    parent: o.kultur_id,
-  }))
-  const suggestionsLieferung = (data?.lieferung ?? []).map((o) => ({
-    id: o.id,
-    name: o.datum
-      ? moment(o.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-      : '(kein Datum)',
-    type: 'Lieferungen',
-  }))
-  const suggestionsPerson = (data?.person ?? []).map((o) => ({
-    id: o.id,
-    name: o?.name ?? '(kein Name)',
-    type: 'Personen',
-  }))
-  const suggestionsSammlung = (data?.sammlung ?? []).map((o) => ({
-    id: o.id,
-    name: `${o?.nr ?? '(keine Nr)'}: ${formatDatum(o.datum)}`,
-    type: 'Sammlungen',
-  }))
-  const suggestionsZaehlung = (data?.zaehlung ?? []).map((o) => ({
-    id: o.id,
-    name: formatDatum(o.datum),
-    type: 'Zaehlungen',
-    parent: o.kultur_id,
-  }))
-  const rawSuggestions = [
-    ...suggestionsArt,
-    ...suggestionsGarten,
-    ...suggestionsHerkunft,
-    ...suggestionsKultur,
-    ...suggestionsEvent,
-    ...suggestionsLieferung,
-    ...suggestionsPerson,
-    ...suggestionsSammlung,
-    ...suggestionsZaehlung,
-  ]
-  const titledSuggestions = []
-  if (suggestionsArt.length) {
-    titledSuggestions.push({
-      title: `Arten (${suggestionsArt.length})`,
-      suggestions: suggestionsArt,
-    })
-  }
-  if (suggestionsGarten.length) {
-    titledSuggestions.push({
-      title: `Gärten (${suggestionsGarten.length})`,
-      suggestions: suggestionsGarten,
-    })
-  }
-  if (suggestionsHerkunft.length) {
-    titledSuggestions.push({
-      title: `Herkünfte (${suggestionsHerkunft.length})`,
-      suggestions: suggestionsHerkunft,
-    })
-  }
-  if (suggestionsKultur.length) {
-    titledSuggestions.push({
-      title: `Kulturen (${suggestionsKultur.length})`,
-      suggestions: suggestionsKultur,
-    })
-  }
-  if (suggestionsEvent.length) {
-    titledSuggestions.push({
-      title: `Events (${suggestionsEvent.length})`,
-      suggestions: suggestionsEvent,
-    })
-  }
-  if (suggestionsLieferung.length) {
-    titledSuggestions.push({
-      title: `Lieferungen (${suggestionsLieferung.length})`,
-      suggestions: suggestionsLieferung,
-    })
-  }
-  if (suggestionsPerson.length) {
-    titledSuggestions.push({
-      title: `Personen (${suggestionsPerson.length})`,
-      suggestions: suggestionsPerson,
-    })
-  }
-  if (suggestionsSammlung.length) {
-    titledSuggestions.push({
-      title: `Sammlungen (${suggestionsSammlung.length})`,
-      suggestions: suggestionsSammlung,
-    })
-  }
-  if (suggestionsZaehlung.length) {
-    titledSuggestions.push({
-      title: `Zählungen (${suggestionsZaehlung.length})`,
-      suggestions: suggestionsZaehlung,
-    })
-  }
-  const suggestions = rawSuggestions.length
-    ? titledSuggestions
-    : loadingSuggestions
+  console.log('Search', { suggestions, val })
 
   const onChange = useCallback((event) => setVal(event.target.value), [])
   const onClickDel = useCallback(() => setVal(''), [])
   const onSuggestionSelected = useCallback(
     (event, { suggestion }) => {
+      console.log('Search, onSuggestionSelected', { suggestion })
       let newActiveNodeArray
       // use suggestion.id to set url
       switch (suggestion.type) {
