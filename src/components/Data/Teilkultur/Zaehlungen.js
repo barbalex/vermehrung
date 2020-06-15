@@ -75,6 +75,8 @@ const Other = styled.div`
 const TkZaehlungen = ({ kulturId, teilkulturId }) => {
   const store = useContext(StoreContext)
   const { teilzaehlungsSorted } = store
+
+  // there should only be one tz per teilkultur_id
   const teilzaehlungs = teilzaehlungsSorted.filter(
     (tz) =>
       tz?.zaehlung?.kultur_id === kulturId && tz.teilkultur_id === teilkulturId,
