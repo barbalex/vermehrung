@@ -3,19 +3,14 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
-import gql from 'graphql-tag'
 
-import { StoreContext, useQuery } from '../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
 import Checkbox2States from '../../../../shared/Checkbox2States'
 import Select from '../../../../shared/SelectCreatable'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import {
-  kulturOption as kulturOptionFragment,
-  teilzaehlung as teilzaehlungFragment,
-} from '../../../../../utils/fragments'
 
 const Container = styled.div`
   display: flex;
@@ -59,27 +54,6 @@ const TopLine = styled.div`
   margin-bottom: 10px;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForTeilzaehlung($id: uuid!) {
-    teilzaehlung(where: { id: { _eq: $id } }) {
-      ...TeilzaehlungFields
-      zaehlung {
-        id
-        __typename
-        kultur {
-          id
-          __typename
-          kultur_option {
-            ...KulturOptionFields
-          }
-        }
-      }
-    }
-  }
-  ${kulturOptionFragment}
-  ${teilzaehlungFragment}
-`
-
 const Teilzaehlung = ({
   id,
   zaehlungId,
@@ -103,12 +77,6 @@ const Teilzaehlung = ({
     setOpenPrognosis(true)
     setAnchorEl(event.currentTarget)
   }, [])
-
-  const { error } = useQuery(allDataQuery, {
-    variables: {
-      id,
-    },
-  })
 
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const {
@@ -156,12 +124,6 @@ const Teilzaehlung = ({
   const onClickDelete = useCallback(() => {
     row.delete()
   }, [row])
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>{`Fehler beim Laden der Daten: ${error.message}`}</Container>
-    )
-  }
 
   return (
     <ErrorBoundary>
