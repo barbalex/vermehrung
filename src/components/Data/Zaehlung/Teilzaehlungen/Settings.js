@@ -5,11 +5,11 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
-import { FaCog, FaFrown } from 'react-icons/fa'
+import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
-import { StoreContext, useQuery } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -33,11 +33,7 @@ const Info = styled.div`
 
 const SettingsTeilzaehlungen = ({ kulturId }) => {
   const store = useContext(StoreContext)
-  const { addNotification } = store
 
-  const { error, loading } = useQuery((store) =>
-    store.queryKultur_option({ where: { id: { _eq: kulturId } } }),
-  )
   const kulturOption = store.kultur_options.get(kulturId) ?? {}
   const {
     tz_teilkultur_id,
@@ -65,11 +61,6 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
       window.open(url)
     }
   }, [])
-  const onClickFrown = useCallback(() => {
-    addNotification({
-      message: error.message,
-    })
-  }, [addNotification, error])
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClose = useCallback(() => setAnchorEl(null), [])
@@ -77,20 +68,6 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
-
-  if (error) {
-    return (
-      <IconButton
-        aria-label="Felder wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
-        aria-haspopup="true"
-        title={error.message}
-        onClick={onClickFrown}
-      >
-        <FaFrown />
-      </IconButton>
-    )
-  }
 
   return (
     <ErrorBoundary>
@@ -103,7 +80,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
       >
         <FaCog />
       </IconButton>
-      {!loading && (
+      {
         <Menu
           id="long-menu"
           anchorEl={anchorEl}
@@ -205,7 +182,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
             Die Wahl gilt (nur) für diese Kultur.
           </Info>
         </Menu>
-      )}
+      }
     </ErrorBoundary>
   )
 }
