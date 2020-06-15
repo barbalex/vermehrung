@@ -60,7 +60,6 @@ const Teilzaehlung = ({
   kulturId,
   teilzaehlung: row,
   teilkulturenWerte,
-  teilkulturenLoading,
   index,
 }) => {
   const store = useContext(StoreContext)
@@ -137,7 +136,6 @@ const Teilzaehlung = ({
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturenWerte}
-              loading={teilkulturenLoading}
               error={errors.teilkultur_id}
               onCreateNew={onCreateNewTeilkultur}
             />
