@@ -21,7 +21,6 @@ const Container = styled.div`
   }
   .react-autosuggest__container {
     width: 100%;
-    z-index: 1200;
   }
   .react-autosuggest__input {
     width: 100%;
@@ -30,6 +29,9 @@ const Container = styled.div`
     padding: 5px;
     background-color: rgba(0, 0, 0, 0);
     color: white;
+  }
+  .react-autosuggest__input:hover {
+    background-color: #640dce;
   }
   .react-autosuggest__input--focused {
     outline: none;
@@ -193,15 +195,32 @@ export default () => {
         case 'Kulturen':
           newActiveNodeArray = [suggestion.type, suggestion.id]
           break
-        case 'Events':
-        case 'Zaehlungen':
-          newActiveNodeArray = [
-            'Kulturen',
-            suggestion.parent,
-            suggestion.type,
-            suggestion.id,
-          ]
+        case 'Events': {
+          if (suggestion.parent) {
+            newActiveNodeArray = [
+              'Kulturen',
+              suggestion.parent,
+              suggestion.type,
+              suggestion.id,
+            ]
+          } else if (!suggestion.parent) {
+            newActiveNodeArray = ['Events', suggestion.id]
+          }
           break
+        }
+        case 'Zaehlungen': {
+          if (suggestion.parent) {
+            newActiveNodeArray = [
+              'Kulturen',
+              suggestion.parent,
+              suggestion.type,
+              suggestion.id,
+            ]
+          } else if (!suggestion.parent) {
+            newActiveNodeArray = ['Zaehlungen', suggestion.id]
+          }
+          break
+        }
         default: {
           // do nothing
         }
@@ -252,12 +271,12 @@ export default () => {
           : {}
         const style = {
           position: 'absolute',
-          left: inputCoords.left - 29 + window.scrollX, // adding scrollX and scrollY to get the coords wrt document instead of viewport
+          left: inputCoords.left - 30 + window.scrollX, // adding scrollX and scrollY to get the coords wrt document instead of viewport
           top: inputCoords.top + 34 + window.scrollY,
           overflowY: 'auto',
           zIndex: 1200,
           boxShadow: '3px 3px 3px rgba(74, 20, 140, 0.1)',
-          width: inputCoords.width + 57,
+          width: inputCoords.width + 60,
           border: '1px solid #4a148c',
           backgroundColor: '#fff',
           fontFamily: 'Helvetica, sans-serif',
