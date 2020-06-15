@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
 import { v1 as uuidv1 } from 'uuid'
 
-import { useQuery, StoreContext } from '../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 
 const Row = styled.div`
   display: flex;
@@ -29,17 +29,12 @@ const Beschreibung = styled.div`
 const ChooseKulturQkRow = ({ kulturId, qk }) => {
   const store = useContext(StoreContext)
 
-  const { loading, error } = useQuery((store) =>
-    store.queryKultur_qk_choosen({
-      where: { kultur_id: { _eq: kulturId }, qk_name: { _eq: qk.name } },
-    }),
-  )
   const kulturQkChoosen = [...store.kultur_qk_choosens.values()].find(
     (v) => v.kultur_id === kulturId && v.qk_name === qk.name,
   )
 
   const kulturQkChoosenId = kulturQkChoosen?.id
-  const checked = !loading && !!kulturQkChoosenId
+  const checked = !!kulturQkChoosenId
 
   const onChange = useCallback(() => {
     // 1. if checked, delete kulturQkChoosen
@@ -65,14 +60,6 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
     })
   }, [checked, kulturId, kulturQkChoosenId, qk.name, store])
 
-  if (error) {
-    return (
-      <Row>
-        <Titel>{`${qk?.titel}, Fehler:`}</Titel>
-        <Beschreibung>{error.message}</Beschreibung>
-      </Row>
-    )
-  }
   return (
     <Row>
       <Check>
