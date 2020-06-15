@@ -6,6 +6,7 @@ import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
+import moment from 'moment'
 
 import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
@@ -47,6 +48,9 @@ import sammlungIdInUrl from '../utils/sammlungIdInUrl'
 import kulturIdOfAnLieferungInUrl from '../utils/kulturIdOfAnLieferungInUrl'
 import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
+
+const formatDatumForSearch = (datum) =>
+  datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : '(kein Datum)'
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1726,5 +1730,76 @@ export const RootStore = RootStoreBase.props({
         self.userRoleLoaded,
         self.zaehlungLoaded,
       ].includes(false)
+    },
+    get searchArtSuggestions() {
+      return self.artsFiltered.map((o) => ({
+        id: o.id,
+        name: o?.art_ae_art?.name ?? '(kein Artname)',
+        type: 'Arten',
+      }))
+    },
+    get searchGartenSuggestions() {
+      return self.gartensFiltered.map((o) => ({
+        id: o.id,
+        name: o.name || `(${o?.person?.name ?? 'kein Name'})`,
+        type: 'Gaerten',
+      }))
+    },
+    get searchHerkunftSuggestions() {
+      return self.herkunftsFiltered.map((o) => ({
+        id: o.id,
+        name: `${o?.nr ?? '(keine Nr)'}: ${
+          o?.gemeinde ?? '(keine Gemeinde)'
+        }, ${o?.lokalname ?? '(kein Lokalname)'}`,
+        type: 'Herkuenfte',
+      }))
+    },
+    get searchKulturSuggestions() {
+      return self.kultursFiltered.map((o) => ({
+        id: o.id,
+        name: o?.garten?.person?.name ?? '(kein Name)',
+        type: 'Kulturen',
+      }))
+    },
+    get searchEventSuggestions() {
+      return self.eventsFiltered.map((o) => ({
+        id: o.id,
+        name: `${formatDatumForSearch(o.datum)}: ${
+          o?.beschreibung ?? '(nicht beschrieben)'
+        }`,
+        type: 'Events',
+        parent: o.kultur_id,
+      }))
+    },
+    get searchLieferungSuggestions() {
+      return self.lieferungsFiltered.map((o) => ({
+        id: o.id,
+        name: o.datum
+          ? moment(o.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+          : '(kein Datum)',
+        type: 'Lieferungen',
+      }))
+    },
+    get searchPersonSuggestions() {
+      return self.personsFiltered.map((o) => ({
+        id: o.id,
+        name: o?.name ?? '(kein Name)',
+        type: 'Personen',
+      }))
+    },
+    get searchSammlungSuggestions() {
+      return self.sammlungsFiltered.map((o) => ({
+        id: o.id,
+        name: `${o?.nr ?? '(keine Nr)'}: ${formatDatumForSearch(o.datum)}`,
+        type: 'Sammlungen',
+      }))
+    },
+    get searchZaehlungSuggestions() {
+      return self.zaehlungsFiltered.map((o) => ({
+        id: o.id,
+        name: formatDatumForSearch(o.datum),
+        type: 'Zaehlungen',
+        parent: o.kultur_id,
+      }))
     },
   }))
