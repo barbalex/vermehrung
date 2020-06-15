@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import groupBy from 'lodash/groupBy'
 
-import { useQuery } from '../../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Timeline from './Timeline'
 import query from './query'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -20,7 +20,7 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
-  cursor: pointer;
+  ${(props) => props['data-online'] && 'cursor: pointer;'}
   user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
   top: -10px;
@@ -34,10 +34,17 @@ const Title = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
 
 const HerkunftTimelineArea = ({
   artId = '99999999-9999-9999-9999-999999999999',
 }) => {
+  const store = useContext(StoreContext)
+  const { online } = store
   const [open, setOpen] = useState(false)
 
   const onClickToggle = useCallback(
@@ -54,12 +61,24 @@ const HerkunftTimelineArea = ({
   const herkunftSums = data?.herkunft_sums ?? []
   const herkunftSumsGrouped = groupBy(herkunftSums, 'herkunft_id')
 
+  if (!online) {
+    return (
+      <ErrorBoundary>
+        <TitleRow data-online={online}>
+          <Title>Zeit-Achsen Herkünfte</Title>
+          <Content>Sorry, nur online verfügbar</Content>
+        </TitleRow>
+      </ErrorBoundary>
+    )
+  }
+
   return (
     <ErrorBoundary>
       <TitleRow
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
+        data-online={online}
       >
         <Title>Zeit-Achsen Herkünfte</Title>
         <div>
