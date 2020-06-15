@@ -11,9 +11,8 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { v1 as uuidv1 } from 'uuid'
 
-import { StoreContext, useQuery } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
 import Person from './Person'
-import query from './query'
 import Select from '../../../shared/Select'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -65,9 +64,6 @@ const GartenPersonen = ({ gartenId }) => {
     [open],
   )
 
-  const { error, loading, query: gvQuery } = useQuery(query, {
-    variables: { gartenId },
-  })
   const gvs = gvsSorted.filter((a) => a.garten_id === gartenId)
   const gvPersonIds = gvs.map((v) => v.person_id)
 
@@ -101,10 +97,9 @@ const GartenPersonen = ({ gartenId }) => {
         deleteGvModel(newObject)
         return setErrors({ [field]: error.message })
       }
-      gvQuery.refetch()
       setErrors({})
     },
-    [gartenId, gvQuery, deleteGvModel, store, upsertGvModel],
+    [gartenId, deleteGvModel, store, upsertGvModel],
   )
 
   return (
@@ -114,9 +109,7 @@ const GartenPersonen = ({ gartenId }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>{`Mitarbeitende Personen (${
-          loading ? '...' : gvs.length
-        })`}</Title>
+        <Title>{`Mitarbeitende Personen (${gvs.length})`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
@@ -129,17 +122,11 @@ const GartenPersonen = ({ gartenId }) => {
       </TitleRow>
       {open && (
         <Content>
-          {loading && !gvs.length ? (
-            <Aven>Lade Daten...</Aven>
-          ) : error ? (
-            <Aven>{`Fehler: ${error.message}`}</Aven>
-          ) : (
-            <Aven>
-              {gvs.map((gv) => (
-                <Person key={`${gv.garten_id}/${gv.person_id}`} gv={gv} />
-              ))}
-            </Aven>
-          )}
+          <Aven>
+            {gvs.map((gv) => (
+              <Person key={`${gv.garten_id}/${gv.person_id}`} gv={gv} />
+            ))}
+          </Aven>
           {!!personWerte.length && (
             <Select
               name="person_id"
@@ -147,7 +134,6 @@ const GartenPersonen = ({ gartenId }) => {
               field="person_id"
               label="Person hinzufügen"
               options={personWerte}
-              loading={loading}
               saveToDb={saveToDb}
               isClearable={false}
               error={errors.person_id}
