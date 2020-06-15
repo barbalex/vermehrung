@@ -10,14 +10,12 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
-import gql from 'graphql-tag'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Date from '../../shared/Date'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Teilzaehlungen from './Teilzaehlungen'
@@ -29,7 +27,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from '../Teilkultur/kulturLabelFromKultur'
-import { zaehlung as zaehlungFragment } from '../../../utils/fragments'
 
 const Container = styled.div`
   height: 100%;
@@ -116,76 +113,6 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const allDataQuery = gql`
-  query AllDataQueryForZaehlung(
-    $id: uuid!
-    $zaehlungFilter: zaehlung_bool_exp!
-    $totalCountFilter: zaehlung_bool_exp!
-    $kulturFilter: kultur_bool_exp!
-  ) {
-    zaehlung(where: { id: { _eq: $id } }) {
-      ...ZaehlungFields
-      kultur {
-        id
-        __typename
-        kultur_option {
-          id
-          __typename
-          z_bemerkungen
-        }
-        art_id
-        art {
-          id
-          __typename
-          art_ae_art {
-            id
-            __typename
-            name
-          }
-        }
-        garten {
-          id
-          __typename
-          name
-          person {
-            id
-            __typename
-            name
-            ort
-          }
-        }
-      }
-    }
-    zaehlung_total_count: zaehlung_aggregate(where: $totalCountFilter) {
-      aggregate {
-        count
-      }
-    }
-    zaehlung_filtered_count: zaehlung_aggregate(where: $zaehlungFilter) {
-      aggregate {
-        count
-      }
-    }
-    kultur {
-      id
-      __typename
-      art_id
-      garten {
-        id
-        __typename
-        name
-        person {
-          id
-          __typename
-          name
-          ort
-        }
-      }
-    }
-  }
-  ${zaehlungFragment}
-`
-
 const Zaehlung = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
@@ -196,42 +123,27 @@ const Zaehlung = ({
     online,
     kulturIdInActiveNodeArray,
     kultursSorted,
+    zaehlungsFiltered,
+    zaehlungsSorted,
     showDeleted,
-    deletedTableFilter,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
 
-  const hierarchyFilter = {}
-  if (kulturIdInActiveNodeArray) {
-    hierarchyFilter.kultur_id = {
-      _eq: kulturIdInActiveNodeArray,
+  const hierarchyFilter = (r) => {
+    if (kulturIdInActiveNodeArray) {
+      return r.kultur_id === kulturIdInActiveNodeArray
     }
+    return true
   }
-  const zaehlungFilter = { ...store.zaehlungFilter, ...hierarchyFilter }
-  const totalCountFilter = { ...hierarchyFilter, ...deletedTableFilter }
 
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
 
-  const artId = row?.kultur?.art_id
-  const kulturFilter = artId
-    ? { art_id: { _eq: artId } }
-    : { id: { _is_null: false } }
-
-  const { data, error, loading } = useQuery(allDataQuery, {
-    variables: {
-      id,
-      zaehlungFilter,
-      totalCountFilter,
-      kulturFilter,
-    },
-  })
-
   const [errors, setErrors] = useState({})
 
-  const totalNr = data?.zaehlung_total_count?.aggregate?.count ?? ''
-  const filteredNr = data?.zaehlung_filtered_count?.aggregate?.count ?? ''
+  const totalNr = zaehlungsSorted.filter(hierarchyFilter).length
+  const filteredNr = zaehlungsFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -295,24 +207,6 @@ const Zaehlung = ({
       window.open(url)
     }
   }, [])
-
-  if (loading && !Object.keys(row).length) {
-    return (
-      <Container>
-        <FormTitle title="Zaehlung" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-
-  if (error && !error.message.includes('Failed to fetch')) {
-    return (
-      <Container>
-        <FormTitle title="Zaehlung" />
-        <FieldsContainer>{`Fehler beim Laden der Daten: ${error.message}`}</FieldsContainer>
-      </Container>
-    )
-  }
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -383,7 +277,7 @@ const Zaehlung = ({
                   field="kultur_id"
                   label="Kultur"
                   options={kulturWerte}
-                  loading={loading}
+                  loading={false}
                   saveToDb={saveToDb}
                   error={errors.kultur_id}
                 />
