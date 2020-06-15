@@ -131,7 +131,7 @@ export default () => createGlobalStyle`
     color: rgba(0, 0, 0, 0.8);
   }
   .react-autosuggest__suggestion--highlighted {
-    background-color: #ddd;
+    background-color: rgba(74, 20, 140, 0.1);
   }
   .react-autosuggest__section-container {
     border-top: 1px dashed #ccc;

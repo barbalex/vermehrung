@@ -225,9 +225,9 @@ export default () => {
           // do nothing
         }
       }
+      setVal('')
       store.filter.setShow(false)
       setActiveNodeArray(newActiveNodeArray)
-      setVal('')
     },
     [setActiveNodeArray, store.filter],
   )
@@ -308,10 +308,7 @@ export default () => {
             // Autosuggest wants this function
             // could maybe be used to indicate loading?
           }}
-          onSuggestionsClearRequested={() => {
-            // need this?
-            //console.log('clear requested')
-          }}
+          onSuggestionsClearRequested={() => {}}
           getSuggestionValue={getSuggestionValue}
           shouldRenderSuggestions={shouldRenderSuggestions}
           onSuggestionSelected={onSuggestionSelected}
