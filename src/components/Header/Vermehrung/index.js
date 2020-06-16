@@ -155,7 +155,7 @@ const HeaderVermehrung = ({ width }) => {
               Filter
             </FilterButton>
           )}
-          <Search width={width} />
+          <Search />
           {online ? (
             <OnlineButton
               color="inherit"
