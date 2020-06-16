@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import AsyncSelect from 'react-select/Async'
 import Fuse from 'fuse.js'
 import { observer } from 'mobx-react-lite'
+import Highlighter from 'react-highlight-words'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import exists from '../../../../utils/exists'
@@ -36,7 +37,13 @@ const SearchIcon = styled(FaSearch)`
 `
 const threshold = 0.4
 
-const Search = ({ width }) => {
+const formatOptionLabel = ({ label }, { inputValue }) => (
+  <Highlighter searchWords={[inputValue]} textToHighlight={label} />
+)
+const formatGroupLabel = (data) => <div>{data.label}</div>
+const noOptionsMessage = () => null
+
+const Search = () => {
   const store = useContext(StoreContext)
   const {
     searchArtSuggestions,
@@ -291,7 +298,6 @@ const Search = ({ width }) => {
       menu: (provided) => ({
         ...provided,
         maxHeight: 'calc(100vh - 60px)',
-        // TODO: max-width = left(control) - window.width
         width: 'auto',
         maxWidth,
         marginTop: 0,
@@ -322,9 +328,10 @@ const Search = ({ width }) => {
       <StyledSelect
         styles={customStyles}
         onChange={onChange}
-        formatGroupLabel={(data) => <div>{data.label}</div>}
+        formatGroupLabel={formatGroupLabel}
+        formatOptionLabel={formatOptionLabel}
         placeholder="suchen"
-        noOptionsMessage={() => null}
+        noOptionsMessage={noOptionsMessage}
         classNamePrefix="react-select"
         loadOptions={loadOptions}
         isClearable
