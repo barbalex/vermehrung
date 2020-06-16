@@ -85,7 +85,7 @@ Umsetzungstand: zu prüfen.<br/><br/>
 
 ### 5. Suche
 
-Suche ist offline nicht möglich und wird daher ausgeblendet.<br/><br/>
+Suche muss neu aufgebaut werden, damit sie online funktioniert.<br/><br/>
 
 Umsetzungstand: umgesetzt.<br/><br/>
 
