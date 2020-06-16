@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import {
@@ -15,7 +15,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
@@ -23,7 +23,7 @@ import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
-const ArtTimeline = ({ artSums }) => {
+const ArtTimeline = ({ artSums, width }) => {
   const [narrow, setNarrow] = useState(false)
 
   // zaehlungen data is special because it is
@@ -129,17 +129,14 @@ const ArtTimeline = ({ artSums }) => {
     [sammlungenData, auspflanzungenData, zaehlungenData],
   )
 
-  const onResize = useCallback(
-    (width) => {
-      if (width < 1100 && !narrow) {
-        setNarrow(true)
-      }
-      if (width > 1100 && narrow) {
-        setNarrow(false)
-      }
-    },
-    [narrow],
-  )
+  useEffect(() => {
+    if (width < 1100 && !narrow) {
+      setNarrow(true)
+    }
+    if (width > 1100 && narrow) {
+      setNarrow(false)
+    }
+  }, [narrow, width])
 
   if (!allData.length) return null
 
@@ -148,7 +145,6 @@ const ArtTimeline = ({ artSums }) => {
 
   return (
     <ErrorBoundary>
-      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
           data={allData}
@@ -259,4 +255,4 @@ const ArtTimeline = ({ artSums }) => {
   )
 }
 
-export default observer(ArtTimeline)
+export default withResizeDetector(observer(ArtTimeline))
