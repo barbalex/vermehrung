@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState, useContext } from 'react'
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  useContext,
+  useEffect,
+} from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
@@ -19,7 +25,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 import format from 'date-fns/format'
 
 import CustomTooltip from './Tooltip'
@@ -60,7 +66,7 @@ const Content = styled.div`
   justify-content: center;
 `
 
-const KulturTimeline = ({ row }) => {
+const KulturTimeline = ({ row, width }) => {
   const store = useContext(StoreContext)
   const { lieferungsSorted, zaehlungsSorted, online } = store
   const [narrow, setNarrow] = useState(false)
@@ -539,17 +545,14 @@ const KulturTimeline = ({ row }) => {
       window.open(url)
     }
   }, [])
-  const onResize = useCallback(
-    (width) => {
-      if (width < 1100 && !narrow) {
-        setNarrow(true)
-      }
-      if (width > 1100 && narrow) {
-        setNarrow(false)
-      }
-    },
-    [narrow],
-  )
+  useEffect(() => {
+    if (width < 1100 && !narrow) {
+      setNarrow(true)
+    }
+    if (width > 1100 && narrow) {
+      setNarrow(false)
+    }
+  }, [narrow, width])
 
   const [open, setOpen] = useState(false)
   const onClickToggle = useCallback(
@@ -579,7 +582,6 @@ const KulturTimeline = ({ row }) => {
 
   return (
     <ErrorBoundary>
-      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <TitleRow
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
@@ -761,4 +763,4 @@ const KulturTimeline = ({ row }) => {
   )
 }
 
-export default observer(KulturTimeline)
+export default withResizeDetector(observer(KulturTimeline))
