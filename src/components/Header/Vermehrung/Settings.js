@@ -56,53 +56,51 @@ const SettingsOverall = () => {
     <ErrorBoundary>
       <IconButton
         aria-label="Optionen wählen"
-        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         title="Optionen wählen"
         onClick={onClickConfig}
       >
         <Icon />
       </IconButton>
-      {
-        <Menu
-          id="long-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={onClose}
-        >
-          <TitleRow>
-            <Title>Optionen wählen:</Title>
-          </TitleRow>
-          <MenuItem>
-            <FormControlLabel
-              value={showDeleted === true ? 'true' : 'false'}
-              control={
-                <Radio
-                  color="primary"
-                  checked={!showDeleted}
-                  onClick={onClickShowDeleted}
-                />
-              }
-              label="Gelöschte Datensätze verbergen"
-              labelPlacement="end"
-            />
-          </MenuItem>
-          <MenuItem>
-            <FormControlLabel
-              value={hideInactive === true ? 'true' : 'false'}
-              control={
-                <Radio
-                  color="primary"
-                  checked={hideInactive}
-                  onClick={onClickShowActive}
-                />
-              }
-              label="Inaktive Gärten, Kulturen und Personen verbergen"
-              labelPlacement="end"
-            />
-          </MenuItem>
-        </Menu>
-      }
+      <Menu
+        id="menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={onClose}
+      >
+        <TitleRow>
+          <Title>Optionen wählen:</Title>
+        </TitleRow>
+        <MenuItem>
+          <FormControlLabel
+            value={showDeleted === true ? 'true' : 'false'}
+            control={
+              <Radio
+                color="primary"
+                checked={!showDeleted}
+                onClick={onClickShowDeleted}
+              />
+            }
+            label="Gelöschte Datensätze verbergen"
+            labelPlacement="end"
+          />
+        </MenuItem>
+        <MenuItem>
+          <FormControlLabel
+            value={hideInactive === true ? 'true' : 'false'}
+            control={
+              <Radio
+                color="primary"
+                checked={hideInactive}
+                onClick={onClickShowActive}
+              />
+            }
+            label="Inaktive Gärten, Kulturen und Personen verbergen"
+            labelPlacement="end"
+          />
+        </MenuItem>
+      </Menu>
     </ErrorBoundary>
   )
 }

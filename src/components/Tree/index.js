@@ -11,6 +11,10 @@ import Row from './Row'
 import Settings from './Settings'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+`
 const StyledList = styled(List)`
   margin-top: 5px;
   @media print {
@@ -34,26 +38,28 @@ const Tree = ({ width, height }) => {
 
   return (
     <ErrorBoundary>
-      <Settings />
-      {!!width && (
-        <StyledList
-          height={height - 5}
-          itemCount={nodes.length}
-          itemSize={singleRowHeight}
-          width={width}
-          ref={listRef}
-        >
-          {({ index, style }) => (
-            <Row
-              key={index}
-              style={style}
-              index={index}
-              node={nodes[index]}
-              nodes={nodes}
-            />
-          )}
-        </StyledList>
-      )}
+      <Container>
+        <Settings />
+        {!!width && (
+          <StyledList
+            height={height - 5}
+            itemCount={nodes.length}
+            itemSize={singleRowHeight}
+            width={width}
+            ref={listRef}
+          >
+            {({ index, style }) => (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                node={nodes[index]}
+                nodes={nodes}
+              />
+            )}
+          </StyledList>
+        )}
+      </Container>
     </ErrorBoundary>
   )
 }
