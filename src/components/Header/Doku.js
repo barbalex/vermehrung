@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { FaBars, FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../models/reactUtils'
@@ -43,9 +43,9 @@ const NavButton = styled(Button)`
   }
 `
 
-const HeaderDoku = () => {
+const HeaderDoku = ({ width }) => {
   const { sidebarWidth, setSidebarWidth } = useContext(StoreContext)
-  const onResize = useCallback(
+  useEffect(
     (width) => {
       if (
         width > constants.sidebar.minimalWindowWidth &&
@@ -60,7 +60,7 @@ const HeaderDoku = () => {
         setSidebarWidth(0)
       }
     },
-    [setSidebarWidth, sidebarWidth],
+    [setSidebarWidth, sidebarWidth, width],
   )
   const onClickMenu = useCallback(() => {
     if (sidebarWidth === 0) {
@@ -73,7 +73,6 @@ const HeaderDoku = () => {
 
   return (
     <ErrorBoundary>
-      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <AppBar position="fixed">
         <Toolbar>
           {exists(sidebarWidth) ? (
@@ -111,4 +110,4 @@ const HeaderDoku = () => {
   )
 }
 
-export default observer(HeaderDoku)
+export default withResizeDetector(observer(HeaderDoku))
