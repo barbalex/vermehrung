@@ -1,13 +1,12 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo, useRef } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import styled from 'styled-components'
 import AsyncSelect from 'react-select/Async'
 import Fuse from 'fuse.js'
+import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import exists from '../../../../utils/exists'
-
-// TODO: use https://material-ui.com/components/autocomplete/#grouped
 
 const Container = styled.div`
   border-radius: 3px;
@@ -37,8 +36,7 @@ const SearchIcon = styled(FaSearch)`
 `
 const threshold = 0.4
 
-export default () => {
-  if (typeof window === 'undefined') return null
+const Search = ({ width }) => {
   const store = useContext(StoreContext)
   const {
     searchArtSuggestions,
@@ -99,7 +97,6 @@ export default () => {
         }
       }
       store.filter.setShow(false)
-      //console.log('Search', { newActiveNodeArray, option })
       setActiveNodeArray(newActiveNodeArray)
     },
     [setActiveNodeArray, store.filter],
@@ -238,6 +235,10 @@ export default () => {
     ],
   )
 
+  const ref = useRef(null)
+  const ownWidth = ref?.current?.getBoundingClientRect()?.width
+  const maxWidth = (ownWidth ?? 250) + 48 + 48 + 48
+
   const customStyles = useMemo(
     () => ({
       control: (provided) => ({
@@ -264,7 +265,8 @@ export default () => {
         paddingTop: '3px',
         paddingBottom: '3px',
         whiteSpace: 'nowrap',
-        overflow: 'ellipsis',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
       }),
       groupHeading: (provided) => ({
         ...provided,
@@ -281,16 +283,18 @@ export default () => {
         ...provided,
         color: 'white',
       }),
+      menuList: (provided) => ({
+        ...provided,
+        overflow: 'hidden',
+        maxHeight: 'calc(100vh - 60px)',
+      }),
       menu: (provided) => ({
         ...provided,
         maxHeight: 'calc(100vh - 60px)',
         // TODO: max-width = left(control) - window.width
-        width: '250px',
+        width: 'auto',
+        maxWidth,
         marginTop: 0,
-      }),
-      menuList: (provided) => ({
-        ...provided,
-        maxHeight: 'calc(100vh - 60px)',
       }),
       placeholder: (provided) => ({
         ...provided,
@@ -309,11 +313,11 @@ export default () => {
         color: '#ac87d0',
       }),
     }),
-    [widthEnforced],
+    [maxWidth, widthEnforced],
   )
 
   return (
-    <Container>
+    <Container ref={ref}>
       {!exists(widthEnforced) && <SearchIcon />}
       <StyledSelect
         styles={customStyles}
@@ -329,3 +333,5 @@ export default () => {
     </Container>
   )
 }
+
+export default observer(Search)
