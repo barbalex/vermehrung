@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import styled from 'styled-components'
 import AsyncSelect from 'react-select/Async'
@@ -18,82 +18,22 @@ const Container = styled.div`
 `
 const StyledSelect = styled(AsyncSelect)`
   width: 100%;
-  .react-select__control {
-    background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-    /*min-height: 36px !important;
-    height: 36px !important;*/
-  }
   .react-select__control:hover {
-    border-bottom-width: 2px;
-    background-color: #4a148c !important;
+    background-color: #6625b5 !important;
   }
   .react-select__control:focus-within {
-    border-bottom-color: #4a148c !important;
+    background-color: #6625b5 !important;
     box-shadow: none;
-  }
-  .react-select__value-container {
-    padding-left: 0;
   }
   .react-select__option--is-focused {
     background-color: rgba(74, 20, 140, 0.1) !important;
   }
-  .react-select__dropdown-indicator {
-    display: none;
-  }
-  .react-select__indicator-separator {
-    display: none;
-  }
-`
-const OldUpSelect = styled(AsyncSelect)`
-  width: 100%;
-  .react-select__clear-indicator {
-    /* ability to hide caret when not enough space */
-    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
-  }
 `
 
-const customStyles = {
-  option: (provided) => ({
-    ...provided,
-    color: 'rgba(0,0,0,0.8)',
-    fontSize: '0.8em',
-    paddingTop: '3px',
-    paddingBottom: '3px',
-  }),
-  groupHeading: (provided) => ({
-    ...provided,
-    lineHeight: '1em',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    color: 'rgba(0, 0, 0, 0.8)',
-    fontWeight: '800',
-    userSelect: 'none',
-    textTransform: 'none',
-  }),
-  input: (provided) => ({
-    ...provided,
-    color: 'white',
-  }),
-  menu: (provided) => ({
-    ...provided,
-    maxHeight: 'calc(100vh - 60px)',
-    left: '-30px',
-    width: '250px',
-    marginTop: 0,
-  }),
-  menuList: (provided) => ({
-    ...provided,
-    maxHeight: 'calc(100vh - 60px)',
-  }),
-}
 const SearchIcon = styled(FaSearch)`
   margin: auto 5px;
+  margin-right: -25px;
+  z-index: 1;
 `
 const threshold = 0.4
 
@@ -173,7 +113,6 @@ export default () => {
         threshold,
       })
       const artSuggestions = artSuggestionsFuse.search(val).map((o) => o.item)
-      console.log('Search, artSuggestions:', artSuggestions)
       if (artSuggestions.length) {
         options.push({
           label: `Arten (${artSuggestions.length})`,
@@ -299,6 +238,80 @@ export default () => {
     ],
   )
 
+  const customStyles = useMemo(
+    () => ({
+      control: (provided) => ({
+        ...provided,
+        border: 'none',
+        borderRadius: '3px',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        marginLeft: 0,
+        paddingLeft: exists(widthEnforced) ? '2px' : '25px',
+      }),
+      valueContainer: (provided) => ({
+        ...provided,
+        borderRadius: '3px',
+        paddingLeft: 0,
+      }),
+      singleValue: (provided) => ({
+        ...provided,
+        color: '#ac87d0',
+      }),
+      option: (provided) => ({
+        ...provided,
+        color: 'rgba(0,0,0,0.8)',
+        fontSize: '0.8em',
+        paddingTop: '3px',
+        paddingBottom: '3px',
+        whiteSpace: 'nowrap',
+        overflow: 'ellipsis',
+      }),
+      groupHeading: (provided) => ({
+        ...provided,
+        lineHeight: '1em',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        color: 'rgba(0, 0, 0, 0.8)',
+        fontWeight: '800',
+        userSelect: 'none',
+        textTransform: 'none',
+      }),
+      input: (provided) => ({
+        ...provided,
+        color: 'white',
+      }),
+      menu: (provided) => ({
+        ...provided,
+        maxHeight: 'calc(100vh - 60px)',
+        // TODO: max-width = left(control) - window.width
+        width: '250px',
+        marginTop: 0,
+      }),
+      menuList: (provided) => ({
+        ...provided,
+        maxHeight: 'calc(100vh - 60px)',
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        color: '#ac87d0',
+      }),
+      indicatorSeparator: (provided) => ({
+        ...provided,
+        display: 'none',
+      }),
+      dropdownIndicator: (provided) => ({
+        ...provided,
+        display: 'none',
+      }),
+      clearIndicator: (provided) => ({
+        ...provided,
+        color: '#ac87d0',
+      }),
+    }),
+    [widthEnforced],
+  )
+
   return (
     <Container>
       {!exists(widthEnforced) && <SearchIcon />}
@@ -307,11 +320,11 @@ export default () => {
         onChange={onChange}
         formatGroupLabel={(data) => <div>{data.label}</div>}
         placeholder="suchen"
-        spellCheck={false}
         noOptionsMessage={() => null}
         classNamePrefix="react-select"
         loadOptions={loadOptions}
         isClearable
+        spellCheck={false}
       />
     </Container>
   )
