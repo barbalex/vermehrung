@@ -155,17 +155,15 @@ const HeaderVermehrung = ({ width }) => {
               Filter
             </FilterButton>
           )}
+          <Search width={width} />
           {online ? (
-            <>
-              <Search />
-              <OnlineButton
-                color="inherit"
-                aria-label="online"
-                title="Sie sind online"
-              >
-                <NetworkOn />
-              </OnlineButton>
-            </>
+            <OnlineButton
+              color="inherit"
+              aria-label="online"
+              title="Sie sind online"
+            >
+              <NetworkOn />
+            </OnlineButton>
           ) : (
             <OnlineButton
               color="inherit"
@@ -177,7 +175,6 @@ const HeaderVermehrung = ({ width }) => {
           )}
           <Account />
           <Settings />
-          {/*<More />*/}
         </Toolbar>
       </AppBar>
     </ErrorBoundary>
