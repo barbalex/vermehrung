@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
@@ -11,7 +11,7 @@ import {
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 
 import Account from './Account'
 import Settings from './Settings'
@@ -57,7 +57,7 @@ const FilterButton = styled(StyledButton)`
     props['data-active'] ? '1px !important' : '0 !important'};
 `
 
-const HeaderVermehrung = () => {
+const HeaderVermehrung = ({ width }) => {
   const store = useContext(StoreContext)
   const { filter, online } = store
   const { show: showFilter, setShow: setShowFilter } = filter
@@ -67,17 +67,14 @@ const HeaderVermehrung = () => {
     setShowFilter,
     showFilter,
   ])
-  const onResize = useCallback(
-    (width) => {
-      if (width > constants.tree.minimalWindowWidth && exists(widthEnforced)) {
-        setWidthEnforced(null)
-      }
-      if (width < constants.tree.minimalWindowWidth && widthEnforced === null) {
-        setWidthEnforced(0)
-      }
-    },
-    [setWidthEnforced, widthEnforced],
-  )
+  useEffect(() => {
+    if (width > constants.tree.minimalWindowWidth && exists(widthEnforced)) {
+      setWidthEnforced(null)
+    }
+    if (width < constants.tree.minimalWindowWidth && widthEnforced === null) {
+      setWidthEnforced(0)
+    }
+  }, [setWidthEnforced, widthEnforced, width])
   const onClickTreeMenu = useCallback(() => {
     if (widthEnforced === 0) {
       setWidthEnforced(constants.tree.minimalWidth)
@@ -90,7 +87,6 @@ const HeaderVermehrung = () => {
   return (
     <ErrorBoundary>
       <AppBar position="fixed">
-        <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <Toolbar>
           {exists(widthEnforced) ? (
             <>
@@ -188,4 +184,4 @@ const HeaderVermehrung = () => {
   )
 }
 
-export default observer(HeaderVermehrung)
+export default withResizeDetector(observer(HeaderVermehrung))
