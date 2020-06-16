@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/offline"
-date: "2020-05-26"
+date: "2020-06-16"
 title: "Offline arbeiten"
 sort1: 23
 ---
@@ -45,13 +45,13 @@ Nun gibt es schlaue Abfragen, welche immer wenn eine Version eintrifft:
 - Die Datenbank führt jede Tabelle doppelt:
   - Eine Tabelle mit allen "Versionen"
   - Eine Tabelle mit den "Siegern"
+- Wird eine Version geschrieben, berechnet und aktualisiert die Datenbank den Sieger
 - Löscht die Benutzerin einen Datensatz
   - Wird eine neue Version geschrieben, welche die Löschung dokumentiert
   - Wird ein Sieger erstellt, der als gelöscht gekennzeichnet ist
-- Immer, wenn eine Version geschrieben wird, berechnet und aktualisiert die Datenbank den Sieger
 - Findet die Datenbank Konflikte, listet sie sie beim Sieger auf
 - Die App muss sich somit nicht selber um Versionen kümmern. Sie liest Sieger und schreibt Versionen
-- Die App fragt entweder nach jeder erfolgreichen Operation bei der Datenbank nach dem neuen Sieger. Oder lässt sich gleich generell über alle Änderungen laufend informieren ("live")
+- Die App fragt nach jeder erfolgreichen Operation bei der Datenbank nach dem neuen Sieger. Und lässt sich generell über alle Änderungen laufend informieren ("live")
 - Entstehen Konflikte, zeigt die App sie der Benutzerin. Und gibt ihr die Möglichkeit:
   - Den richtigen Sieger zu bestimmen
   - Informationen aller Konflikte zu vereinigen
@@ -62,26 +62,23 @@ Umsetzungstand: weitgehend umgesetzt.<br/><br/>
 
 Die App verpackt alle Daten-Änderungen (Operationen) in "Päckli". Die Päckli werden online sofort verarbeitet bzw. der Datenbank übermittelt. Offline werden sie zwischen-gespeichert. Und verarbeitet, sobald die App wieder online ist.<br/><br/>
 
-Dazu muss für die lokale Datenhaltung eine neue Architektur gewählt werden. Mit anderen Worten: App-seitig ändert sich sehr viel. Im Prinzip wird die App neu aufgebaut - wobei recht viel wiederverwendet werden kann.<br/><br/>
+Dazu muss für die lokale Datenhaltung eine neue Architektur gewählt werden. Mit anderen Worten: Die App wird neu aufgebaut - wobei recht viel wiederverwendet werden kann.<br/><br/>
 
-Umsetzungstand: in Umsetzung.<br/><br/>
+Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 3. Daten gezielt voraus laden
 
 Bevor die App offline ist, muss sie die für die Feld- bzw. Garten-Arbeit gewünschten Daten geladen haben:
-- Grundsätzlich sind alle Daten verfügbar, welche zuvor geladen wurden
-- Art-Verantwortliche sollen alle Daten für ihre Arten voraus laden können
-- Gärtner sollen alle Daten für ihren Garten voraus laden können
-- Um Konflikte zu minimieren werden diese Daten vor einer geplanten Offline-Benutzung am besten nochmals aktualisiert.<br/>
-  Oder die App aktualisiert laufend alle geladenen Daten ("live")
+- Die App lädt bei jedem Start alle Daten, welche der jeweilige Benutzer lesen darf
+- Daten werden live aktualisiert
 
-Umsetzungstand: pendent.<br/><br/>
+Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 4. Authentifikation
 
 Offline ist Authentifikation nicht möglich. Die App muss mit den vorhandenen Daten auch dann weiter funktionieren, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie online ist, muss die Authentifikation erneuert werden.<br/><br/>
 
-Umsetzungstand: zu prüfen.<br/><br/>
+Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 5. Suche
 
