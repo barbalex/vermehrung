@@ -1,10 +1,10 @@
-import React, { useContext, useCallback, useReducer } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
@@ -54,11 +54,8 @@ const FieldsContainer = styled.div`
 `
 
 const singleRowHeight = 48
-function sizeReducer(state, action) {
-  return action.payload
-}
 
-const Zaehlungen = ({ filter: showFilter }) => {
+const Zaehlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
     filter,
@@ -91,15 +88,6 @@ const Zaehlungen = ({ filter: showFilter }) => {
     insertZaehlungRev()
   }, [insertZaehlungRev])
 
-  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
-    width: 0,
-    height: 0,
-  })
-  const onResize = useCallback(
-    (width, height) => sizeDispatch({ payload: { width, height } }),
-    [],
-  )
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -128,27 +116,28 @@ const Zaehlungen = ({ filter: showFilter }) => {
           </TitleContainer>
         )}
         <FieldsContainer>
-          <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-          <FixedSizeList
-            height={sizeState.height}
-            itemCount={storeRowsFiltered.length}
-            itemSize={singleRowHeight}
-            width={sizeState.width}
-          >
-            {({ index, style }) => (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                row={storeRowsFiltered[index]}
-                last={index === storeRowsFiltered.length - 1}
-              />
-            )}
-          </FixedSizeList>
+          {!!width && (
+            <FixedSizeList
+              height={height - 48}
+              itemCount={storeRowsFiltered.length}
+              itemSize={singleRowHeight}
+              width={width}
+            >
+              {({ index, style }) => (
+                <Row
+                  key={index}
+                  style={style}
+                  index={index}
+                  row={storeRowsFiltered[index]}
+                  last={index === storeRowsFiltered.length - 1}
+                />
+              )}
+            </FixedSizeList>
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
 }
 
-export default observer(Zaehlungen)
+export default withResizeDetector(observer(Zaehlungen))
