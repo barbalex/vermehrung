@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useMemo, useState, useContext } from 'react'
+import React, { useEffect, useMemo, useState, useContext } from 'react'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import {
@@ -15,7 +15,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
@@ -27,6 +27,7 @@ import { useQuery, StoreContext } from '../../../../../models/reactUtils'
 const HerkunftTimeline = ({
   herkunftId = '99999999-9999-9999-9999-999999999999',
   herkunftSums,
+  width,
 }) => {
   const store = useContext(StoreContext)
   // TODO: get label for herkunft and render it
@@ -146,17 +147,14 @@ const HerkunftTimeline = ({
     [sammlungenData, auspflanzungenData, zaehlungenData],
   )
 
-  const onResize = useCallback(
-    (width) => {
-      if (width < 1100 && !narrow) {
-        setNarrow(true)
-      }
-      if (width > 1100 && narrow) {
-        setNarrow(false)
-      }
-    },
-    [narrow],
-  )
+  useEffect(() => {
+    if (width < 1100 && !narrow) {
+      setNarrow(true)
+    }
+    if (width > 1100 && narrow) {
+      setNarrow(false)
+    }
+  }, [narrow, width])
 
   if (!allData.length) return null
 
@@ -165,7 +163,6 @@ const HerkunftTimeline = ({
 
   return (
     <ErrorBoundary>
-      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <h4>{herkunftLabel}</h4>
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
@@ -277,4 +274,4 @@ const HerkunftTimeline = ({
   )
 }
 
-export default observer(HerkunftTimeline)
+export default withResizeDetector(observer(HerkunftTimeline))
