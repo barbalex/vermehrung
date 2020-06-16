@@ -50,7 +50,7 @@ import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 
 const formatDatumForSearch = (datum) =>
-  datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : '(kein Datum)'
+  datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : ''
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -1733,73 +1733,67 @@ export const RootStore = RootStoreBase.props({
     },
     get searchArtSuggestions() {
       return self.artsFiltered.map((o) => ({
-        id: o.id,
-        name: o?.art_ae_art?.name ?? '(kein Artname)',
+        value: o.id,
+        label: o?.art_ae_art?.name ?? '',
         type: 'Arten',
       }))
     },
     get searchGartenSuggestions() {
       return self.gartensFiltered.map((o) => ({
-        id: o.id,
-        name: o.name || `(${o?.person?.name ?? 'kein Name'})`,
+        value: o.id,
+        label: o.name || `(${o?.person?.name ?? ''})`,
         type: 'Gaerten',
       }))
     },
     get searchHerkunftSuggestions() {
       return self.herkunftsFiltered.map((o) => ({
-        id: o.id,
-        name: `${o?.nr ?? '(keine Nr)'}: ${
-          o?.gemeinde ?? '(keine Gemeinde)'
-        }, ${o?.lokalname ?? '(kein Lokalname)'}`,
+        value: o.id,
+        label: `${o?.nr ?? ''}: ${o?.gemeinde ?? ''}, ${o?.lokalname ?? ''}`,
         type: 'Herkuenfte',
       }))
     },
     get searchKulturSuggestions() {
       return self.kultursFiltered.map((o) => ({
-        id: o.id,
-        name: o?.garten?.person?.name ?? '(kein Name)',
+        value: o.id,
+        label: o?.garten?.person?.name ?? '',
         type: 'Kulturen',
       }))
     },
     get searchEventSuggestions() {
       return self.eventsFiltered.map((o) => ({
-        id: o.id,
-        name: `${formatDatumForSearch(o.datum)}: ${
-          o?.beschreibung ?? '(nicht beschrieben)'
-        }`,
-        type: 'Events',
+        value: o.id,
+        label: `${formatDatumForSearch(o.datum)}: ${o?.beschreibung ?? ''}`,
         parent: o.kultur_id,
+        type: 'Events',
       }))
     },
     get searchLieferungSuggestions() {
       return self.lieferungsFiltered.map((o) => ({
-        id: o.id,
-        name: o.datum
-          ? moment(o.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
-          : '(kein Datum)',
+        value: o.id,
+        label: formatDatumForSearch(o.datum),
         type: 'Lieferungen',
       }))
     },
     get searchPersonSuggestions() {
       return self.personsFiltered.map((o) => ({
-        id: o.id,
-        name: o?.name ?? '(kein Name)',
+        value: o.id,
+        label: o?.name ?? '',
         type: 'Personen',
       }))
     },
     get searchSammlungSuggestions() {
       return self.sammlungsFiltered.map((o) => ({
-        id: o.id,
-        name: `${o?.nr ?? '(keine Nr)'}: ${formatDatumForSearch(o.datum)}`,
+        value: o.id,
+        label: `${o?.nr ?? ''}: ${formatDatumForSearch(o.datum)}`,
         type: 'Sammlungen',
       }))
     },
     get searchZaehlungSuggestions() {
       return self.zaehlungsFiltered.map((o) => ({
-        id: o.id,
-        name: formatDatumForSearch(o.datum),
-        type: 'Zaehlungen',
+        value: o.id,
+        label: formatDatumForSearch(o.datum),
         parent: o.kultur_id,
+        type: 'Zaehlungen',
       }))
     },
   }))
