@@ -1,16 +1,10 @@
-import React, {
-  useContext,
-  useEffect,
-  useReducer,
-  useCallback,
-  useRef,
-} from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { FixedSizeList as List } from 'react-window'
-import ReactResizeDetector from 'react-resize-detector'
+import { withResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../models/reactUtils'
 import Row from './Row'
@@ -26,23 +20,10 @@ const StyledList = styled(List)`
 
 const singleRowHeight = 23
 
-function sizeReducer(state, action) {
-  return action.payload
-}
-
-const Tree = () => {
+const Tree = ({ width, height }) => {
   const store = useContext(StoreContext)
 
   const { activeNodeArray: aNA, nodes } = store.tree
-
-  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
-    width: 0,
-    height: 0,
-  })
-  const onResize = useCallback(
-    (width, height) => sizeDispatch({ payload: { width, height } }),
-    [],
-  )
 
   const listRef = useRef(null)
 
@@ -54,26 +35,27 @@ const Tree = () => {
   return (
     <ErrorBoundary>
       <Settings />
-      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <StyledList
-        height={sizeState.height - 5}
-        itemCount={nodes.length}
-        itemSize={singleRowHeight}
-        width={sizeState.width}
-        ref={listRef}
-      >
-        {({ index, style }) => (
-          <Row
-            key={index}
-            style={style}
-            index={index}
-            node={nodes[index]}
-            nodes={nodes}
-          />
-        )}
-      </StyledList>
+      {!!width && (
+        <StyledList
+          height={height - 5}
+          itemCount={nodes.length}
+          itemSize={singleRowHeight}
+          width={width}
+          ref={listRef}
+        >
+          {({ index, style }) => (
+            <Row
+              key={index}
+              style={style}
+              index={index}
+              node={nodes[index]}
+              nodes={nodes}
+            />
+          )}
+        </StyledList>
+      )}
     </ErrorBoundary>
   )
 }
 
-export default observer(Tree)
+export default withResizeDetector(observer(Tree))
