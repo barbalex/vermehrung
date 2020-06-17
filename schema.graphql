@@ -1030,6 +1030,42 @@ type art_qk {
   _parent_rev: String
   _rev: String
   _revisions: _text
+
+  # An array relationship
+  art_qk_choosen_revs(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_rev_bool_exp
+  ): [art_qk_choosen_rev!]!
+
+  # An aggregated array relationship
+  art_qk_choosen_revs_aggregate(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_rev_bool_exp
+  ): art_qk_choosen_rev_aggregate!
   beschreibung: String
   changed: timestamp
   changed_by: String
@@ -1106,6 +1142,7 @@ input art_qk_bool_exp {
   _parent_rev: String_comparison_exp
   _rev: String_comparison_exp
   _revisions: _text_comparison_exp
+  art_qk_choosen_revs: art_qk_choosen_rev_bool_exp
   beschreibung: String_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
@@ -1325,6 +1362,391 @@ input art_qk_choosen_pk_columns_input {
   id: ID!
 }
 
+# columns and relationships of "art_qk_choosen_rev"
+type art_qk_choosen_rev {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+
+  # An object relationship
+  art: art!
+  art_id: uuid!
+
+  # An object relationship
+  art_qk: art_qk!
+  art_qk_choosen_id: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID!
+  qk_name: String!
+}
+
+# aggregated selection of "art_qk_choosen_rev"
+type art_qk_choosen_rev_aggregate {
+  aggregate: art_qk_choosen_rev_aggregate_fields
+  nodes: [art_qk_choosen_rev!]!
+}
+
+# aggregate fields of "art_qk_choosen_rev"
+type art_qk_choosen_rev_aggregate_fields {
+  avg: art_qk_choosen_rev_avg_fields
+  count(columns: [art_qk_choosen_rev_select_column!], distinct: Boolean): Int
+  max: art_qk_choosen_rev_max_fields
+  min: art_qk_choosen_rev_min_fields
+  stddev: art_qk_choosen_rev_stddev_fields
+  stddev_pop: art_qk_choosen_rev_stddev_pop_fields
+  stddev_samp: art_qk_choosen_rev_stddev_samp_fields
+  sum: art_qk_choosen_rev_sum_fields
+  var_pop: art_qk_choosen_rev_var_pop_fields
+  var_samp: art_qk_choosen_rev_var_samp_fields
+  variance: art_qk_choosen_rev_variance_fields
+}
+
+# order by aggregate values of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_aggregate_order_by {
+  avg: art_qk_choosen_rev_avg_order_by
+  count: order_by
+  max: art_qk_choosen_rev_max_order_by
+  min: art_qk_choosen_rev_min_order_by
+  stddev: art_qk_choosen_rev_stddev_order_by
+  stddev_pop: art_qk_choosen_rev_stddev_pop_order_by
+  stddev_samp: art_qk_choosen_rev_stddev_samp_order_by
+  sum: art_qk_choosen_rev_sum_order_by
+  var_pop: art_qk_choosen_rev_var_pop_order_by
+  var_samp: art_qk_choosen_rev_var_samp_order_by
+  variance: art_qk_choosen_rev_variance_order_by
+}
+
+# input type for inserting array relation for remote table "art_qk_choosen_rev"
+input art_qk_choosen_rev_arr_rel_insert_input {
+  data: [art_qk_choosen_rev_insert_input!]!
+  on_conflict: art_qk_choosen_rev_on_conflict
+}
+
+# aggregate avg on columns
+type art_qk_choosen_rev_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_avg_order_by {
+  _depth: order_by
+}
+
+# Boolean expression to filter rows from the table "art_qk_choosen_rev". All fields are combined with a logical 'AND'.
+input art_qk_choosen_rev_bool_exp {
+  _and: [art_qk_choosen_rev_bool_exp]
+  _conflicts: _text_comparison_exp
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
+  _not: art_qk_choosen_rev_bool_exp
+  _or: [art_qk_choosen_rev_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  art: art_bool_exp
+  art_id: uuid_comparison_exp
+  art_qk: art_qk_bool_exp
+  art_qk_choosen_id: uuid_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
+  id: uuid_comparison_exp
+  qk_name: String_comparison_exp
+}
+
+# unique or primary key constraints on table "art_qk_choosen_rev"
+enum art_qk_choosen_rev_constraint {
+  # unique or primary key constraint
+  art_qk_choosen_rev_pkey
+}
+
+# input type for incrementing integer column in table "art_qk_choosen_rev"
+input art_qk_choosen_rev_inc_input {
+  _depth: Int
+}
+
+# input type for inserting data into table "art_qk_choosen_rev"
+input art_qk_choosen_rev_insert_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  art: art_obj_rel_insert_input
+  art_id: uuid
+  art_qk: art_qk_obj_rel_insert_input
+  art_qk_choosen_id: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  qk_name: String
+}
+
+# aggregate max on columns
+type art_qk_choosen_rev_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  art_id: uuid
+  art_qk_choosen_id: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  qk_name: String
+}
+
+# order by max() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  art_id: order_by
+  art_qk_choosen_id: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  qk_name: order_by
+}
+
+# aggregate min on columns
+type art_qk_choosen_rev_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  art_id: uuid
+  art_qk_choosen_id: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  qk_name: String
+}
+
+# order by min() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  art_id: order_by
+  art_qk_choosen_id: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  qk_name: order_by
+}
+
+# response of any mutation on the table "art_qk_choosen_rev"
+type art_qk_choosen_rev_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [art_qk_choosen_rev!]!
+}
+
+# input type for inserting object relation for remote table "art_qk_choosen_rev"
+input art_qk_choosen_rev_obj_rel_insert_input {
+  data: art_qk_choosen_rev_insert_input!
+  on_conflict: art_qk_choosen_rev_on_conflict
+}
+
+# on conflict condition type for table "art_qk_choosen_rev"
+input art_qk_choosen_rev_on_conflict {
+  constraint: art_qk_choosen_rev_constraint!
+  update_columns: [art_qk_choosen_rev_update_column!]!
+  where: art_qk_choosen_rev_bool_exp
+}
+
+# ordering options when selecting data from "art_qk_choosen_rev"
+input art_qk_choosen_rev_order_by {
+  _conflicts: order_by
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  art: art_order_by
+  art_id: order_by
+  art_qk: art_qk_order_by
+  art_qk_choosen_id: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  qk_name: order_by
+}
+
+# primary key columns input for table: "art_qk_choosen_rev"
+input art_qk_choosen_rev_pk_columns_input {
+  id: ID!
+}
+
+# select columns of table "art_qk_choosen_rev"
+enum art_qk_choosen_rev_select_column {
+  # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  art_id
+
+  # column name
+  art_qk_choosen_id
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  qk_name
+}
+
+# input type for updating data in table "art_qk_choosen_rev"
+input art_qk_choosen_rev_set_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  art_id: uuid
+  art_qk_choosen_id: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  qk_name: String
+}
+
+# aggregate stddev on columns
+type art_qk_choosen_rev_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type art_qk_choosen_rev_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type art_qk_choosen_rev_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type art_qk_choosen_rev_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_sum_order_by {
+  _depth: order_by
+}
+
+# update columns of table "art_qk_choosen_rev"
+enum art_qk_choosen_rev_update_column {
+  # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  art_id
+
+  # column name
+  art_qk_choosen_id
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  qk_name
+}
+
+# aggregate var_pop on columns
+type art_qk_choosen_rev_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type art_qk_choosen_rev_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type art_qk_choosen_rev_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "art_qk_choosen_rev"
+input art_qk_choosen_rev_variance_order_by {
+  _depth: order_by
+}
+
 # select columns of table "art_qk_choosen"
 enum art_qk_choosen_select_column {
   # column name
@@ -1505,6 +1927,7 @@ input art_qk_insert_input {
   _parent_rev: String
   _rev: String
   _revisions: _text
+  art_qk_choosen_revs: art_qk_choosen_rev_arr_rel_insert_input
   beschreibung: String
   changed: timestamp
   changed_by: String
@@ -1600,6 +2023,7 @@ input art_qk_order_by {
   _parent_rev: order_by
   _rev: order_by
   _revisions: order_by
+  art_qk_choosen_revs_aggregate: art_qk_choosen_rev_aggregate_order_by
   beschreibung: order_by
   changed: order_by
   changed_by: order_by
@@ -1612,6 +2036,415 @@ input art_qk_order_by {
 # primary key columns input for table: "art_qk"
 input art_qk_pk_columns_input {
   id: ID!
+}
+
+# columns and relationships of "art_qk_rev"
+type art_qk_rev {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  art_qk_id: uuid
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID!
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# aggregated selection of "art_qk_rev"
+type art_qk_rev_aggregate {
+  aggregate: art_qk_rev_aggregate_fields
+  nodes: [art_qk_rev!]!
+}
+
+# aggregate fields of "art_qk_rev"
+type art_qk_rev_aggregate_fields {
+  avg: art_qk_rev_avg_fields
+  count(columns: [art_qk_rev_select_column!], distinct: Boolean): Int
+  max: art_qk_rev_max_fields
+  min: art_qk_rev_min_fields
+  stddev: art_qk_rev_stddev_fields
+  stddev_pop: art_qk_rev_stddev_pop_fields
+  stddev_samp: art_qk_rev_stddev_samp_fields
+  sum: art_qk_rev_sum_fields
+  var_pop: art_qk_rev_var_pop_fields
+  var_samp: art_qk_rev_var_samp_fields
+  variance: art_qk_rev_variance_fields
+}
+
+# order by aggregate values of table "art_qk_rev"
+input art_qk_rev_aggregate_order_by {
+  avg: art_qk_rev_avg_order_by
+  count: order_by
+  max: art_qk_rev_max_order_by
+  min: art_qk_rev_min_order_by
+  stddev: art_qk_rev_stddev_order_by
+  stddev_pop: art_qk_rev_stddev_pop_order_by
+  stddev_samp: art_qk_rev_stddev_samp_order_by
+  sum: art_qk_rev_sum_order_by
+  var_pop: art_qk_rev_var_pop_order_by
+  var_samp: art_qk_rev_var_samp_order_by
+  variance: art_qk_rev_variance_order_by
+}
+
+# input type for inserting array relation for remote table "art_qk_rev"
+input art_qk_rev_arr_rel_insert_input {
+  data: [art_qk_rev_insert_input!]!
+  on_conflict: art_qk_rev_on_conflict
+}
+
+# aggregate avg on columns
+type art_qk_rev_avg_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by avg() on columns of table "art_qk_rev"
+input art_qk_rev_avg_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# Boolean expression to filter rows from the table "art_qk_rev". All fields are combined with a logical 'AND'.
+input art_qk_rev_bool_exp {
+  _and: [art_qk_rev_bool_exp]
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
+  _not: art_qk_rev_bool_exp
+  _or: [art_qk_rev_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  art_qk_id: uuid_comparison_exp
+  beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
+  id: uuid_comparison_exp
+  name: String_comparison_exp
+  sort: smallint_comparison_exp
+  titel: String_comparison_exp
+}
+
+# unique or primary key constraints on table "art_qk_rev"
+enum art_qk_rev_constraint {
+  # unique or primary key constraint
+  art_qk_rev_pkey
+}
+
+# input type for incrementing integer column in table "art_qk_rev"
+input art_qk_rev_inc_input {
+  _depth: Int
+  sort: smallint
+}
+
+# input type for inserting data into table "art_qk_rev"
+input art_qk_rev_insert_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  art_qk_id: uuid
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# aggregate max on columns
+type art_qk_rev_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  art_qk_id: uuid
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# order by max() on columns of table "art_qk_rev"
+input art_qk_rev_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  art_qk_id: order_by
+  beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  name: order_by
+  sort: order_by
+  titel: order_by
+}
+
+# aggregate min on columns
+type art_qk_rev_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  art_qk_id: uuid
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# order by min() on columns of table "art_qk_rev"
+input art_qk_rev_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  art_qk_id: order_by
+  beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  name: order_by
+  sort: order_by
+  titel: order_by
+}
+
+# response of any mutation on the table "art_qk_rev"
+type art_qk_rev_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [art_qk_rev!]!
+}
+
+# input type for inserting object relation for remote table "art_qk_rev"
+input art_qk_rev_obj_rel_insert_input {
+  data: art_qk_rev_insert_input!
+  on_conflict: art_qk_rev_on_conflict
+}
+
+# on conflict condition type for table "art_qk_rev"
+input art_qk_rev_on_conflict {
+  constraint: art_qk_rev_constraint!
+  update_columns: [art_qk_rev_update_column!]!
+  where: art_qk_rev_bool_exp
+}
+
+# ordering options when selecting data from "art_qk_rev"
+input art_qk_rev_order_by {
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  art_qk_id: order_by
+  beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  name: order_by
+  sort: order_by
+  titel: order_by
+}
+
+# primary key columns input for table: "art_qk_rev"
+input art_qk_rev_pk_columns_input {
+  id: ID!
+}
+
+# select columns of table "art_qk_rev"
+enum art_qk_rev_select_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  art_qk_id
+
+  # column name
+  beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  name
+
+  # column name
+  sort
+
+  # column name
+  titel
+}
+
+# input type for updating data in table "art_qk_rev"
+input art_qk_rev_set_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  art_qk_id: uuid
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# aggregate stddev on columns
+type art_qk_rev_stddev_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by stddev() on columns of table "art_qk_rev"
+input art_qk_rev_stddev_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate stddev_pop on columns
+type art_qk_rev_stddev_pop_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by stddev_pop() on columns of table "art_qk_rev"
+input art_qk_rev_stddev_pop_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate stddev_samp on columns
+type art_qk_rev_stddev_samp_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by stddev_samp() on columns of table "art_qk_rev"
+input art_qk_rev_stddev_samp_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate sum on columns
+type art_qk_rev_sum_fields {
+  _depth: Int
+  sort: smallint
+}
+
+# order by sum() on columns of table "art_qk_rev"
+input art_qk_rev_sum_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# update columns of table "art_qk_rev"
+enum art_qk_rev_update_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  art_qk_id
+
+  # column name
+  beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  name
+
+  # column name
+  sort
+
+  # column name
+  titel
+}
+
+# aggregate var_pop on columns
+type art_qk_rev_var_pop_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by var_pop() on columns of table "art_qk_rev"
+input art_qk_rev_var_pop_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate var_samp on columns
+type art_qk_rev_var_samp_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by var_samp() on columns of table "art_qk_rev"
+input art_qk_rev_var_samp_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate variance on columns
+type art_qk_rev_variance_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by variance() on columns of table "art_qk_rev"
+input art_qk_rev_variance_order_by {
+  _depth: order_by
+  sort: order_by
 }
 
 # select columns of table "art_qk"
@@ -3209,6 +4042,380 @@ input av_order_by {
 # primary key columns input for table: "av"
 input av_pk_columns_input {
   id: ID!
+}
+
+# columns and relationships of "av_rev"
+type av_rev {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+
+  # An object relationship
+  art: art
+  art_id: uuid
+  av_rev: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID!
+
+  # An object relationship
+  person: person
+  person_id: uuid
+}
+
+# aggregated selection of "av_rev"
+type av_rev_aggregate {
+  aggregate: av_rev_aggregate_fields
+  nodes: [av_rev!]!
+}
+
+# aggregate fields of "av_rev"
+type av_rev_aggregate_fields {
+  avg: av_rev_avg_fields
+  count(columns: [av_rev_select_column!], distinct: Boolean): Int
+  max: av_rev_max_fields
+  min: av_rev_min_fields
+  stddev: av_rev_stddev_fields
+  stddev_pop: av_rev_stddev_pop_fields
+  stddev_samp: av_rev_stddev_samp_fields
+  sum: av_rev_sum_fields
+  var_pop: av_rev_var_pop_fields
+  var_samp: av_rev_var_samp_fields
+  variance: av_rev_variance_fields
+}
+
+# order by aggregate values of table "av_rev"
+input av_rev_aggregate_order_by {
+  avg: av_rev_avg_order_by
+  count: order_by
+  max: av_rev_max_order_by
+  min: av_rev_min_order_by
+  stddev: av_rev_stddev_order_by
+  stddev_pop: av_rev_stddev_pop_order_by
+  stddev_samp: av_rev_stddev_samp_order_by
+  sum: av_rev_sum_order_by
+  var_pop: av_rev_var_pop_order_by
+  var_samp: av_rev_var_samp_order_by
+  variance: av_rev_variance_order_by
+}
+
+# input type for inserting array relation for remote table "av_rev"
+input av_rev_arr_rel_insert_input {
+  data: [av_rev_insert_input!]!
+  on_conflict: av_rev_on_conflict
+}
+
+# aggregate avg on columns
+type av_rev_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "av_rev"
+input av_rev_avg_order_by {
+  _depth: order_by
+}
+
+# Boolean expression to filter rows from the table "av_rev". All fields are combined with a logical 'AND'.
+input av_rev_bool_exp {
+  _and: [av_rev_bool_exp]
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
+  _not: av_rev_bool_exp
+  _or: [av_rev_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  art: art_bool_exp
+  art_id: uuid_comparison_exp
+  av_rev: uuid_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
+  id: uuid_comparison_exp
+  person: person_bool_exp
+  person_id: uuid_comparison_exp
+}
+
+# unique or primary key constraints on table "av_rev"
+enum av_rev_constraint {
+  # unique or primary key constraint
+  av_rev_pkey
+}
+
+# input type for incrementing integer column in table "av_rev"
+input av_rev_inc_input {
+  _depth: Int
+}
+
+# input type for inserting data into table "av_rev"
+input av_rev_insert_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  art: art_obj_rel_insert_input
+  art_id: uuid
+  av_rev: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  person: person_obj_rel_insert_input
+  person_id: uuid
+}
+
+# aggregate max on columns
+type av_rev_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  art_id: uuid
+  av_rev: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  person_id: uuid
+}
+
+# order by max() on columns of table "av_rev"
+input av_rev_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  art_id: order_by
+  av_rev: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  person_id: order_by
+}
+
+# aggregate min on columns
+type av_rev_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  art_id: uuid
+  av_rev: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  person_id: uuid
+}
+
+# order by min() on columns of table "av_rev"
+input av_rev_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  art_id: order_by
+  av_rev: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  person_id: order_by
+}
+
+# response of any mutation on the table "av_rev"
+type av_rev_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [av_rev!]!
+}
+
+# input type for inserting object relation for remote table "av_rev"
+input av_rev_obj_rel_insert_input {
+  data: av_rev_insert_input!
+  on_conflict: av_rev_on_conflict
+}
+
+# on conflict condition type for table "av_rev"
+input av_rev_on_conflict {
+  constraint: av_rev_constraint!
+  update_columns: [av_rev_update_column!]!
+  where: av_rev_bool_exp
+}
+
+# ordering options when selecting data from "av_rev"
+input av_rev_order_by {
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  art: art_order_by
+  art_id: order_by
+  av_rev: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  person: person_order_by
+  person_id: order_by
+}
+
+# primary key columns input for table: "av_rev"
+input av_rev_pk_columns_input {
+  id: ID!
+}
+
+# select columns of table "av_rev"
+enum av_rev_select_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  art_id
+
+  # column name
+  av_rev
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  person_id
+}
+
+# input type for updating data in table "av_rev"
+input av_rev_set_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  art_id: uuid
+  av_rev: uuid
+  changed: timestamp
+  changed_by: String
+  id: ID
+  person_id: uuid
+}
+
+# aggregate stddev on columns
+type av_rev_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "av_rev"
+input av_rev_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type av_rev_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "av_rev"
+input av_rev_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type av_rev_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "av_rev"
+input av_rev_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type av_rev_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "av_rev"
+input av_rev_sum_order_by {
+  _depth: order_by
+}
+
+# update columns of table "av_rev"
+enum av_rev_update_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  art_id
+
+  # column name
+  av_rev
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  person_id
+}
+
+# aggregate var_pop on columns
+type av_rev_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "av_rev"
+input av_rev_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type av_rev_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "av_rev"
+input av_rev_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type av_rev_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "av_rev"
+input av_rev_variance_order_by {
+  _depth: order_by
 }
 
 # select columns of table "av"
@@ -7038,6 +8245,380 @@ input gv_order_by {
 # primary key columns input for table: "gv"
 input gv_pk_columns_input {
   id: ID!
+}
+
+# columns and relationships of "gv_rev"
+type gv_rev {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
+
+  # An object relationship
+  garten: garten
+  garten_id: uuid
+  gv_id: uuid
+  id: ID!
+
+  # An object relationship
+  person: person
+  person_id: uuid
+}
+
+# aggregated selection of "gv_rev"
+type gv_rev_aggregate {
+  aggregate: gv_rev_aggregate_fields
+  nodes: [gv_rev!]!
+}
+
+# aggregate fields of "gv_rev"
+type gv_rev_aggregate_fields {
+  avg: gv_rev_avg_fields
+  count(columns: [gv_rev_select_column!], distinct: Boolean): Int
+  max: gv_rev_max_fields
+  min: gv_rev_min_fields
+  stddev: gv_rev_stddev_fields
+  stddev_pop: gv_rev_stddev_pop_fields
+  stddev_samp: gv_rev_stddev_samp_fields
+  sum: gv_rev_sum_fields
+  var_pop: gv_rev_var_pop_fields
+  var_samp: gv_rev_var_samp_fields
+  variance: gv_rev_variance_fields
+}
+
+# order by aggregate values of table "gv_rev"
+input gv_rev_aggregate_order_by {
+  avg: gv_rev_avg_order_by
+  count: order_by
+  max: gv_rev_max_order_by
+  min: gv_rev_min_order_by
+  stddev: gv_rev_stddev_order_by
+  stddev_pop: gv_rev_stddev_pop_order_by
+  stddev_samp: gv_rev_stddev_samp_order_by
+  sum: gv_rev_sum_order_by
+  var_pop: gv_rev_var_pop_order_by
+  var_samp: gv_rev_var_samp_order_by
+  variance: gv_rev_variance_order_by
+}
+
+# input type for inserting array relation for remote table "gv_rev"
+input gv_rev_arr_rel_insert_input {
+  data: [gv_rev_insert_input!]!
+  on_conflict: gv_rev_on_conflict
+}
+
+# aggregate avg on columns
+type gv_rev_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "gv_rev"
+input gv_rev_avg_order_by {
+  _depth: order_by
+}
+
+# Boolean expression to filter rows from the table "gv_rev". All fields are combined with a logical 'AND'.
+input gv_rev_bool_exp {
+  _and: [gv_rev_bool_exp]
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
+  _not: gv_rev_bool_exp
+  _or: [gv_rev_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
+  garten: garten_bool_exp
+  garten_id: uuid_comparison_exp
+  gv_id: uuid_comparison_exp
+  id: uuid_comparison_exp
+  person: person_bool_exp
+  person_id: uuid_comparison_exp
+}
+
+# unique or primary key constraints on table "gv_rev"
+enum gv_rev_constraint {
+  # unique or primary key constraint
+  gv_rev_pkey
+}
+
+# input type for incrementing integer column in table "gv_rev"
+input gv_rev_inc_input {
+  _depth: Int
+}
+
+# input type for inserting data into table "gv_rev"
+input gv_rev_insert_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
+  garten: garten_obj_rel_insert_input
+  garten_id: uuid
+  gv_id: uuid
+  id: ID
+  person: person_obj_rel_insert_input
+  person_id: uuid
+}
+
+# aggregate max on columns
+type gv_rev_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
+  garten_id: uuid
+  gv_id: uuid
+  id: ID
+  person_id: uuid
+}
+
+# order by max() on columns of table "gv_rev"
+input gv_rev_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
+  garten_id: order_by
+  gv_id: order_by
+  id: order_by
+  person_id: order_by
+}
+
+# aggregate min on columns
+type gv_rev_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
+  garten_id: uuid
+  gv_id: uuid
+  id: ID
+  person_id: uuid
+}
+
+# order by min() on columns of table "gv_rev"
+input gv_rev_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
+  garten_id: order_by
+  gv_id: order_by
+  id: order_by
+  person_id: order_by
+}
+
+# response of any mutation on the table "gv_rev"
+type gv_rev_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [gv_rev!]!
+}
+
+# input type for inserting object relation for remote table "gv_rev"
+input gv_rev_obj_rel_insert_input {
+  data: gv_rev_insert_input!
+  on_conflict: gv_rev_on_conflict
+}
+
+# on conflict condition type for table "gv_rev"
+input gv_rev_on_conflict {
+  constraint: gv_rev_constraint!
+  update_columns: [gv_rev_update_column!]!
+  where: gv_rev_bool_exp
+}
+
+# ordering options when selecting data from "gv_rev"
+input gv_rev_order_by {
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  changed: order_by
+  changed_by: order_by
+  garten: garten_order_by
+  garten_id: order_by
+  gv_id: order_by
+  id: order_by
+  person: person_order_by
+  person_id: order_by
+}
+
+# primary key columns input for table: "gv_rev"
+input gv_rev_pk_columns_input {
+  id: ID!
+}
+
+# select columns of table "gv_rev"
+enum gv_rev_select_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  garten_id
+
+  # column name
+  gv_id
+
+  # column name
+  id
+
+  # column name
+  person_id
+}
+
+# input type for updating data in table "gv_rev"
+input gv_rev_set_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
+  garten_id: uuid
+  gv_id: uuid
+  id: ID
+  person_id: uuid
+}
+
+# aggregate stddev on columns
+type gv_rev_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "gv_rev"
+input gv_rev_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type gv_rev_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "gv_rev"
+input gv_rev_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type gv_rev_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "gv_rev"
+input gv_rev_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type gv_rev_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "gv_rev"
+input gv_rev_sum_order_by {
+  _depth: order_by
+}
+
+# update columns of table "gv_rev"
+enum gv_rev_update_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  garten_id
+
+  # column name
+  gv_id
+
+  # column name
+  id
+
+  # column name
+  person_id
+}
+
+# aggregate var_pop on columns
+type gv_rev_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "gv_rev"
+input gv_rev_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type gv_rev_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "gv_rev"
+input gv_rev_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type gv_rev_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "gv_rev"
+input gv_rev_variance_order_by {
+  _depth: order_by
 }
 
 # select columns of table "gv"
@@ -11549,6 +13130,380 @@ input kultur_qk_choosen_pk_columns_input {
   id: ID!
 }
 
+# columns and relationships of "kultur_qk_choosen_rev"
+type kultur_qk_choosen_rev {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
+  id: ID!
+
+  # An object relationship
+  kultur: kultur!
+  kultur_id: uuid!
+
+  # An object relationship
+  kultur_qk: kultur_qk!
+  kultur_qk_choosen_id: uuid
+  qk_name: String!
+}
+
+# aggregated selection of "kultur_qk_choosen_rev"
+type kultur_qk_choosen_rev_aggregate {
+  aggregate: kultur_qk_choosen_rev_aggregate_fields
+  nodes: [kultur_qk_choosen_rev!]!
+}
+
+# aggregate fields of "kultur_qk_choosen_rev"
+type kultur_qk_choosen_rev_aggregate_fields {
+  avg: kultur_qk_choosen_rev_avg_fields
+  count(columns: [kultur_qk_choosen_rev_select_column!], distinct: Boolean): Int
+  max: kultur_qk_choosen_rev_max_fields
+  min: kultur_qk_choosen_rev_min_fields
+  stddev: kultur_qk_choosen_rev_stddev_fields
+  stddev_pop: kultur_qk_choosen_rev_stddev_pop_fields
+  stddev_samp: kultur_qk_choosen_rev_stddev_samp_fields
+  sum: kultur_qk_choosen_rev_sum_fields
+  var_pop: kultur_qk_choosen_rev_var_pop_fields
+  var_samp: kultur_qk_choosen_rev_var_samp_fields
+  variance: kultur_qk_choosen_rev_variance_fields
+}
+
+# order by aggregate values of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_aggregate_order_by {
+  avg: kultur_qk_choosen_rev_avg_order_by
+  count: order_by
+  max: kultur_qk_choosen_rev_max_order_by
+  min: kultur_qk_choosen_rev_min_order_by
+  stddev: kultur_qk_choosen_rev_stddev_order_by
+  stddev_pop: kultur_qk_choosen_rev_stddev_pop_order_by
+  stddev_samp: kultur_qk_choosen_rev_stddev_samp_order_by
+  sum: kultur_qk_choosen_rev_sum_order_by
+  var_pop: kultur_qk_choosen_rev_var_pop_order_by
+  var_samp: kultur_qk_choosen_rev_var_samp_order_by
+  variance: kultur_qk_choosen_rev_variance_order_by
+}
+
+# input type for inserting array relation for remote table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_arr_rel_insert_input {
+  data: [kultur_qk_choosen_rev_insert_input!]!
+  on_conflict: kultur_qk_choosen_rev_on_conflict
+}
+
+# aggregate avg on columns
+type kultur_qk_choosen_rev_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_avg_order_by {
+  _depth: order_by
+}
+
+# Boolean expression to filter rows from the table "kultur_qk_choosen_rev". All fields are combined with a logical 'AND'.
+input kultur_qk_choosen_rev_bool_exp {
+  _and: [kultur_qk_choosen_rev_bool_exp]
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
+  _not: kultur_qk_choosen_rev_bool_exp
+  _or: [kultur_qk_choosen_rev_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
+  id: uuid_comparison_exp
+  kultur: kultur_bool_exp
+  kultur_id: uuid_comparison_exp
+  kultur_qk: kultur_qk_bool_exp
+  kultur_qk_choosen_id: uuid_comparison_exp
+  qk_name: String_comparison_exp
+}
+
+# unique or primary key constraints on table "kultur_qk_choosen_rev"
+enum kultur_qk_choosen_rev_constraint {
+  # unique or primary key constraint
+  kultur_qk_choosen_rev_pkey
+}
+
+# input type for incrementing integer column in table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_inc_input {
+  _depth: Int
+}
+
+# input type for inserting data into table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_insert_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur: kultur_obj_rel_insert_input
+  kultur_id: uuid
+  kultur_qk: kultur_qk_obj_rel_insert_input
+  kultur_qk_choosen_id: uuid
+  qk_name: String
+}
+
+# aggregate max on columns
+type kultur_qk_choosen_rev_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_id: uuid
+  kultur_qk_choosen_id: uuid
+  qk_name: String
+}
+
+# order by max() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  kultur_id: order_by
+  kultur_qk_choosen_id: order_by
+  qk_name: order_by
+}
+
+# aggregate min on columns
+type kultur_qk_choosen_rev_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_id: uuid
+  kultur_qk_choosen_id: uuid
+  qk_name: String
+}
+
+# order by min() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  kultur_id: order_by
+  kultur_qk_choosen_id: order_by
+  qk_name: order_by
+}
+
+# response of any mutation on the table "kultur_qk_choosen_rev"
+type kultur_qk_choosen_rev_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [kultur_qk_choosen_rev!]!
+}
+
+# input type for inserting object relation for remote table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_obj_rel_insert_input {
+  data: kultur_qk_choosen_rev_insert_input!
+  on_conflict: kultur_qk_choosen_rev_on_conflict
+}
+
+# on conflict condition type for table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_on_conflict {
+  constraint: kultur_qk_choosen_rev_constraint!
+  update_columns: [kultur_qk_choosen_rev_update_column!]!
+  where: kultur_qk_choosen_rev_bool_exp
+}
+
+# ordering options when selecting data from "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_order_by {
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  kultur: kultur_order_by
+  kultur_id: order_by
+  kultur_qk: kultur_qk_order_by
+  kultur_qk_choosen_id: order_by
+  qk_name: order_by
+}
+
+# primary key columns input for table: "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_pk_columns_input {
+  id: ID!
+}
+
+# select columns of table "kultur_qk_choosen_rev"
+enum kultur_qk_choosen_rev_select_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  kultur_id
+
+  # column name
+  kultur_qk_choosen_id
+
+  # column name
+  qk_name
+}
+
+# input type for updating data in table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_set_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_id: uuid
+  kultur_qk_choosen_id: uuid
+  qk_name: String
+}
+
+# aggregate stddev on columns
+type kultur_qk_choosen_rev_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type kultur_qk_choosen_rev_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type kultur_qk_choosen_rev_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type kultur_qk_choosen_rev_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_sum_order_by {
+  _depth: order_by
+}
+
+# update columns of table "kultur_qk_choosen_rev"
+enum kultur_qk_choosen_rev_update_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  kultur_id
+
+  # column name
+  kultur_qk_choosen_id
+
+  # column name
+  qk_name
+}
+
+# aggregate var_pop on columns
+type kultur_qk_choosen_rev_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type kultur_qk_choosen_rev_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type kultur_qk_choosen_rev_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "kultur_qk_choosen_rev"
+input kultur_qk_choosen_rev_variance_order_by {
+  _depth: order_by
+}
+
 # select columns of table "kultur_qk_choosen"
 enum kultur_qk_choosen_select_column {
   # column name
@@ -11836,6 +13791,415 @@ input kultur_qk_order_by {
 input kultur_qk_pk_columns_input {
   # Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt
   name: String!
+}
+
+# columns and relationships of "kultur_qk_rev"
+type kultur_qk_rev {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_qk_id: uuid
+  name: String!
+  sort: smallint
+  titel: String
+}
+
+# aggregated selection of "kultur_qk_rev"
+type kultur_qk_rev_aggregate {
+  aggregate: kultur_qk_rev_aggregate_fields
+  nodes: [kultur_qk_rev!]!
+}
+
+# aggregate fields of "kultur_qk_rev"
+type kultur_qk_rev_aggregate_fields {
+  avg: kultur_qk_rev_avg_fields
+  count(columns: [kultur_qk_rev_select_column!], distinct: Boolean): Int
+  max: kultur_qk_rev_max_fields
+  min: kultur_qk_rev_min_fields
+  stddev: kultur_qk_rev_stddev_fields
+  stddev_pop: kultur_qk_rev_stddev_pop_fields
+  stddev_samp: kultur_qk_rev_stddev_samp_fields
+  sum: kultur_qk_rev_sum_fields
+  var_pop: kultur_qk_rev_var_pop_fields
+  var_samp: kultur_qk_rev_var_samp_fields
+  variance: kultur_qk_rev_variance_fields
+}
+
+# order by aggregate values of table "kultur_qk_rev"
+input kultur_qk_rev_aggregate_order_by {
+  avg: kultur_qk_rev_avg_order_by
+  count: order_by
+  max: kultur_qk_rev_max_order_by
+  min: kultur_qk_rev_min_order_by
+  stddev: kultur_qk_rev_stddev_order_by
+  stddev_pop: kultur_qk_rev_stddev_pop_order_by
+  stddev_samp: kultur_qk_rev_stddev_samp_order_by
+  sum: kultur_qk_rev_sum_order_by
+  var_pop: kultur_qk_rev_var_pop_order_by
+  var_samp: kultur_qk_rev_var_samp_order_by
+  variance: kultur_qk_rev_variance_order_by
+}
+
+# input type for inserting array relation for remote table "kultur_qk_rev"
+input kultur_qk_rev_arr_rel_insert_input {
+  data: [kultur_qk_rev_insert_input!]!
+  on_conflict: kultur_qk_rev_on_conflict
+}
+
+# aggregate avg on columns
+type kultur_qk_rev_avg_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by avg() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_avg_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# Boolean expression to filter rows from the table "kultur_qk_rev". All fields are combined with a logical 'AND'.
+input kultur_qk_rev_bool_exp {
+  _and: [kultur_qk_rev_bool_exp]
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
+  _not: kultur_qk_rev_bool_exp
+  _or: [kultur_qk_rev_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
+  id: uuid_comparison_exp
+  kultur_qk_id: uuid_comparison_exp
+  name: String_comparison_exp
+  sort: smallint_comparison_exp
+  titel: String_comparison_exp
+}
+
+# unique or primary key constraints on table "kultur_qk_rev"
+enum kultur_qk_rev_constraint {
+  # unique or primary key constraint
+  kultur_qk_rev_pkey
+}
+
+# input type for incrementing integer column in table "kultur_qk_rev"
+input kultur_qk_rev_inc_input {
+  _depth: Int
+  sort: smallint
+}
+
+# input type for inserting data into table "kultur_qk_rev"
+input kultur_qk_rev_insert_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_qk_id: uuid
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# aggregate max on columns
+type kultur_qk_rev_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_qk_id: uuid
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# order by max() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  kultur_qk_id: order_by
+  name: order_by
+  sort: order_by
+  titel: order_by
+}
+
+# aggregate min on columns
+type kultur_qk_rev_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_qk_id: uuid
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# order by min() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  kultur_qk_id: order_by
+  name: order_by
+  sort: order_by
+  titel: order_by
+}
+
+# response of any mutation on the table "kultur_qk_rev"
+type kultur_qk_rev_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [kultur_qk_rev!]!
+}
+
+# input type for inserting object relation for remote table "kultur_qk_rev"
+input kultur_qk_rev_obj_rel_insert_input {
+  data: kultur_qk_rev_insert_input!
+  on_conflict: kultur_qk_rev_on_conflict
+}
+
+# on conflict condition type for table "kultur_qk_rev"
+input kultur_qk_rev_on_conflict {
+  constraint: kultur_qk_rev_constraint!
+  update_columns: [kultur_qk_rev_update_column!]!
+  where: kultur_qk_rev_bool_exp
+}
+
+# ordering options when selecting data from "kultur_qk_rev"
+input kultur_qk_rev_order_by {
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
+  id: order_by
+  kultur_qk_id: order_by
+  name: order_by
+  sort: order_by
+  titel: order_by
+}
+
+# primary key columns input for table: "kultur_qk_rev"
+input kultur_qk_rev_pk_columns_input {
+  name: String!
+}
+
+# select columns of table "kultur_qk_rev"
+enum kultur_qk_rev_select_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  kultur_qk_id
+
+  # column name
+  name
+
+  # column name
+  sort
+
+  # column name
+  titel
+}
+
+# input type for updating data in table "kultur_qk_rev"
+input kultur_qk_rev_set_input {
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  beschreibung: String
+  changed: timestamp
+  changed_by: String
+  id: ID
+  kultur_qk_id: uuid
+  name: String
+  sort: smallint
+  titel: String
+}
+
+# aggregate stddev on columns
+type kultur_qk_rev_stddev_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by stddev() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_stddev_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate stddev_pop on columns
+type kultur_qk_rev_stddev_pop_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by stddev_pop() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_stddev_pop_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate stddev_samp on columns
+type kultur_qk_rev_stddev_samp_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by stddev_samp() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_stddev_samp_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate sum on columns
+type kultur_qk_rev_sum_fields {
+  _depth: Int
+  sort: smallint
+}
+
+# order by sum() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_sum_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# update columns of table "kultur_qk_rev"
+enum kultur_qk_rev_update_column {
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
+  id
+
+  # column name
+  kultur_qk_id
+
+  # column name
+  name
+
+  # column name
+  sort
+
+  # column name
+  titel
+}
+
+# aggregate var_pop on columns
+type kultur_qk_rev_var_pop_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by var_pop() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_var_pop_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate var_samp on columns
+type kultur_qk_rev_var_samp_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by var_samp() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_var_samp_order_by {
+  _depth: order_by
+  sort: order_by
+}
+
+# aggregate variance on columns
+type kultur_qk_rev_variance_fields {
+  _depth: Float
+  sort: Float
+}
+
+# order by variance() on columns of table "kultur_qk_rev"
+input kultur_qk_rev_variance_order_by {
+  _depth: order_by
+  sort: order_by
 }
 
 # select columns of table "kultur_qk"
@@ -14601,6 +16965,24 @@ type mutation_root {
   # delete single row from the table: "art_qk_choosen"
   delete_art_qk_choosen_by_pk(id: ID!): art_qk_choosen
 
+  # delete data from the table: "art_qk_choosen_rev"
+  delete_art_qk_choosen_rev(
+    # filter the rows which have to be deleted
+    where: art_qk_choosen_rev_bool_exp!
+  ): art_qk_choosen_rev_mutation_response
+
+  # delete single row from the table: "art_qk_choosen_rev"
+  delete_art_qk_choosen_rev_by_pk(id: ID!): art_qk_choosen_rev
+
+  # delete data from the table: "art_qk_rev"
+  delete_art_qk_rev(
+    # filter the rows which have to be deleted
+    where: art_qk_rev_bool_exp!
+  ): art_qk_rev_mutation_response
+
+  # delete single row from the table: "art_qk_rev"
+  delete_art_qk_rev_by_pk(id: ID!): art_qk_rev
+
   # delete data from the table: "art_rev"
   delete_art_rev(
     # filter the rows which have to be deleted
@@ -14618,6 +17000,15 @@ type mutation_root {
 
   # delete single row from the table: "av"
   delete_av_by_pk(id: ID!): av
+
+  # delete data from the table: "av_rev"
+  delete_av_rev(
+    # filter the rows which have to be deleted
+    where: av_rev_bool_exp!
+  ): av_rev_mutation_response
+
+  # delete single row from the table: "av_rev"
+  delete_av_rev_by_pk(id: ID!): av_rev
 
   # delete data from the table: "event"
   delete_event(
@@ -14672,6 +17063,15 @@ type mutation_root {
 
   # delete single row from the table: "gv"
   delete_gv_by_pk(id: ID!): gv
+
+  # delete data from the table: "gv_rev"
+  delete_gv_rev(
+    # filter the rows which have to be deleted
+    where: gv_rev_bool_exp!
+  ): gv_rev_mutation_response
+
+  # delete single row from the table: "gv_rev"
+  delete_gv_rev_by_pk(id: ID!): gv_rev
 
   # delete data from the table: "herkunft"
   delete_herkunft(
@@ -14753,6 +17153,24 @@ type mutation_root {
 
   # delete single row from the table: "kultur_qk_choosen"
   delete_kultur_qk_choosen_by_pk(id: ID!): kultur_qk_choosen
+
+  # delete data from the table: "kultur_qk_choosen_rev"
+  delete_kultur_qk_choosen_rev(
+    # filter the rows which have to be deleted
+    where: kultur_qk_choosen_rev_bool_exp!
+  ): kultur_qk_choosen_rev_mutation_response
+
+  # delete single row from the table: "kultur_qk_choosen_rev"
+  delete_kultur_qk_choosen_rev_by_pk(id: ID!): kultur_qk_choosen_rev
+
+  # delete data from the table: "kultur_qk_rev"
+  delete_kultur_qk_rev(
+    # filter the rows which have to be deleted
+    where: kultur_qk_rev_bool_exp!
+  ): kultur_qk_rev_mutation_response
+
+  # delete single row from the table: "kultur_qk_rev"
+  delete_kultur_qk_rev_by_pk(name: String!): kultur_qk_rev
 
   # delete data from the table: "kultur_rev"
   delete_kultur_rev(
@@ -15024,6 +17442,24 @@ type mutation_root {
     on_conflict: art_qk_choosen_on_conflict
   ): art_qk_choosen
 
+  # insert data into the table: "art_qk_choosen_rev"
+  insert_art_qk_choosen_rev(
+    # the rows to be inserted
+    objects: [art_qk_choosen_rev_insert_input!]!
+
+    # on conflict condition
+    on_conflict: art_qk_choosen_rev_on_conflict
+  ): art_qk_choosen_rev_mutation_response
+
+  # insert a single row into the table: "art_qk_choosen_rev"
+  insert_art_qk_choosen_rev_one(
+    # the row to be inserted
+    object: art_qk_choosen_rev_insert_input!
+
+    # on conflict condition
+    on_conflict: art_qk_choosen_rev_on_conflict
+  ): art_qk_choosen_rev
+
   # insert a single row into the table: "art_qk"
   insert_art_qk_one(
     # the row to be inserted
@@ -15032,6 +17468,24 @@ type mutation_root {
     # on conflict condition
     on_conflict: art_qk_on_conflict
   ): art_qk
+
+  # insert data into the table: "art_qk_rev"
+  insert_art_qk_rev(
+    # the rows to be inserted
+    objects: [art_qk_rev_insert_input!]!
+
+    # on conflict condition
+    on_conflict: art_qk_rev_on_conflict
+  ): art_qk_rev_mutation_response
+
+  # insert a single row into the table: "art_qk_rev"
+  insert_art_qk_rev_one(
+    # the row to be inserted
+    object: art_qk_rev_insert_input!
+
+    # on conflict condition
+    on_conflict: art_qk_rev_on_conflict
+  ): art_qk_rev
 
   # insert data into the table: "art_rev"
   insert_art_rev(
@@ -15068,6 +17522,24 @@ type mutation_root {
     # on conflict condition
     on_conflict: av_on_conflict
   ): av
+
+  # insert data into the table: "av_rev"
+  insert_av_rev(
+    # the rows to be inserted
+    objects: [av_rev_insert_input!]!
+
+    # on conflict condition
+    on_conflict: av_rev_on_conflict
+  ): av_rev_mutation_response
+
+  # insert a single row into the table: "av_rev"
+  insert_av_rev_one(
+    # the row to be inserted
+    object: av_rev_insert_input!
+
+    # on conflict condition
+    on_conflict: av_rev_on_conflict
+  ): av_rev
 
   # insert data into the table: "event"
   insert_event(
@@ -15176,6 +17648,24 @@ type mutation_root {
     # on conflict condition
     on_conflict: gv_on_conflict
   ): gv
+
+  # insert data into the table: "gv_rev"
+  insert_gv_rev(
+    # the rows to be inserted
+    objects: [gv_rev_insert_input!]!
+
+    # on conflict condition
+    on_conflict: gv_rev_on_conflict
+  ): gv_rev_mutation_response
+
+  # insert a single row into the table: "gv_rev"
+  insert_gv_rev_one(
+    # the row to be inserted
+    object: gv_rev_insert_input!
+
+    # on conflict condition
+    on_conflict: gv_rev_on_conflict
+  ): gv_rev
 
   # insert data into the table: "herkunft"
   insert_herkunft(
@@ -15330,6 +17820,24 @@ type mutation_root {
     on_conflict: kultur_qk_choosen_on_conflict
   ): kultur_qk_choosen
 
+  # insert data into the table: "kultur_qk_choosen_rev"
+  insert_kultur_qk_choosen_rev(
+    # the rows to be inserted
+    objects: [kultur_qk_choosen_rev_insert_input!]!
+
+    # on conflict condition
+    on_conflict: kultur_qk_choosen_rev_on_conflict
+  ): kultur_qk_choosen_rev_mutation_response
+
+  # insert a single row into the table: "kultur_qk_choosen_rev"
+  insert_kultur_qk_choosen_rev_one(
+    # the row to be inserted
+    object: kultur_qk_choosen_rev_insert_input!
+
+    # on conflict condition
+    on_conflict: kultur_qk_choosen_rev_on_conflict
+  ): kultur_qk_choosen_rev
+
   # insert a single row into the table: "kultur_qk"
   insert_kultur_qk_one(
     # the row to be inserted
@@ -15338,6 +17846,24 @@ type mutation_root {
     # on conflict condition
     on_conflict: kultur_qk_on_conflict
   ): kultur_qk
+
+  # insert data into the table: "kultur_qk_rev"
+  insert_kultur_qk_rev(
+    # the rows to be inserted
+    objects: [kultur_qk_rev_insert_input!]!
+
+    # on conflict condition
+    on_conflict: kultur_qk_rev_on_conflict
+  ): kultur_qk_rev_mutation_response
+
+  # insert a single row into the table: "kultur_qk_rev"
+  insert_kultur_qk_rev_one(
+    # the row to be inserted
+    object: kultur_qk_rev_insert_input!
+
+    # on conflict condition
+    on_conflict: kultur_qk_rev_on_conflict
+  ): kultur_qk_rev
 
   # insert data into the table: "kultur_rev"
   insert_kultur_rev(
@@ -15826,6 +18352,50 @@ type mutation_root {
     pk_columns: art_qk_choosen_pk_columns_input!
   ): art_qk_choosen
 
+  # update data of the table: "art_qk_choosen_rev"
+  update_art_qk_choosen_rev(
+    # increments the integer columns with given value of the filtered values
+    _inc: art_qk_choosen_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: art_qk_choosen_rev_set_input
+
+    # filter the rows which have to be updated
+    where: art_qk_choosen_rev_bool_exp!
+  ): art_qk_choosen_rev_mutation_response
+
+  # update single row of the table: "art_qk_choosen_rev"
+  update_art_qk_choosen_rev_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: art_qk_choosen_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: art_qk_choosen_rev_set_input
+    pk_columns: art_qk_choosen_rev_pk_columns_input!
+  ): art_qk_choosen_rev
+
+  # update data of the table: "art_qk_rev"
+  update_art_qk_rev(
+    # increments the integer columns with given value of the filtered values
+    _inc: art_qk_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: art_qk_rev_set_input
+
+    # filter the rows which have to be updated
+    where: art_qk_rev_bool_exp!
+  ): art_qk_rev_mutation_response
+
+  # update single row of the table: "art_qk_rev"
+  update_art_qk_rev_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: art_qk_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: art_qk_rev_set_input
+    pk_columns: art_qk_rev_pk_columns_input!
+  ): art_qk_rev
+
   # update data of the table: "art_rev"
   update_art_rev(
     # increments the integer columns with given value of the filtered values
@@ -15869,6 +18439,28 @@ type mutation_root {
     _set: av_set_input
     pk_columns: av_pk_columns_input!
   ): av
+
+  # update data of the table: "av_rev"
+  update_av_rev(
+    # increments the integer columns with given value of the filtered values
+    _inc: av_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: av_rev_set_input
+
+    # filter the rows which have to be updated
+    where: av_rev_bool_exp!
+  ): av_rev_mutation_response
+
+  # update single row of the table: "av_rev"
+  update_av_rev_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: av_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: av_rev_set_input
+    pk_columns: av_rev_pk_columns_input!
+  ): av_rev
 
   # update data of the table: "event"
   update_event(
@@ -15995,6 +18587,28 @@ type mutation_root {
     _set: gv_set_input
     pk_columns: gv_pk_columns_input!
   ): gv
+
+  # update data of the table: "gv_rev"
+  update_gv_rev(
+    # increments the integer columns with given value of the filtered values
+    _inc: gv_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: gv_rev_set_input
+
+    # filter the rows which have to be updated
+    where: gv_rev_bool_exp!
+  ): gv_rev_mutation_response
+
+  # update single row of the table: "gv_rev"
+  update_gv_rev_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: gv_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: gv_rev_set_input
+    pk_columns: gv_rev_pk_columns_input!
+  ): gv_rev
 
   # update data of the table: "herkunft"
   update_herkunft(
@@ -16171,6 +18785,50 @@ type mutation_root {
     _set: kultur_qk_choosen_set_input
     pk_columns: kultur_qk_choosen_pk_columns_input!
   ): kultur_qk_choosen
+
+  # update data of the table: "kultur_qk_choosen_rev"
+  update_kultur_qk_choosen_rev(
+    # increments the integer columns with given value of the filtered values
+    _inc: kultur_qk_choosen_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: kultur_qk_choosen_rev_set_input
+
+    # filter the rows which have to be updated
+    where: kultur_qk_choosen_rev_bool_exp!
+  ): kultur_qk_choosen_rev_mutation_response
+
+  # update single row of the table: "kultur_qk_choosen_rev"
+  update_kultur_qk_choosen_rev_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: kultur_qk_choosen_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: kultur_qk_choosen_rev_set_input
+    pk_columns: kultur_qk_choosen_rev_pk_columns_input!
+  ): kultur_qk_choosen_rev
+
+  # update data of the table: "kultur_qk_rev"
+  update_kultur_qk_rev(
+    # increments the integer columns with given value of the filtered values
+    _inc: kultur_qk_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: kultur_qk_rev_set_input
+
+    # filter the rows which have to be updated
+    where: kultur_qk_rev_bool_exp!
+  ): kultur_qk_rev_mutation_response
+
+  # update single row of the table: "kultur_qk_rev"
+  update_kultur_qk_rev_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: kultur_qk_rev_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: kultur_qk_rev_set_input
+    pk_columns: kultur_qk_rev_pk_columns_input!
+  ): kultur_qk_rev
 
   # update data of the table: "kultur_rev"
   update_kultur_rev(
@@ -16663,13 +19321,6 @@ enum order_by {
 
   # in the descending order, nulls last
   desc_nulls_last
-}
-
-type PageInfo {
-  endCursor: String!
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String!
 }
 
 # columns and relationships of "person"
@@ -20201,6 +22852,84 @@ type query_root {
   # fetch data from the table: "art_qk_choosen" using primary key columns
   art_qk_choosen_by_pk(id: ID!): art_qk_choosen
 
+  # fetch data from the table: "art_qk_choosen_rev"
+  art_qk_choosen_rev(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_rev_bool_exp
+  ): [art_qk_choosen_rev!]!
+
+  # fetch aggregated fields from the table: "art_qk_choosen_rev"
+  art_qk_choosen_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_rev_bool_exp
+  ): art_qk_choosen_rev_aggregate!
+
+  # fetch data from the table: "art_qk_choosen_rev" using primary key columns
+  art_qk_choosen_rev_by_pk(id: ID!): art_qk_choosen_rev
+
+  # fetch data from the table: "art_qk_rev"
+  art_qk_rev(
+    # distinct select on columns
+    distinct_on: [art_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_rev_bool_exp
+  ): [art_qk_rev!]!
+
+  # fetch aggregated fields from the table: "art_qk_rev"
+  art_qk_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [art_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_rev_bool_exp
+  ): art_qk_rev_aggregate!
+
+  # fetch data from the table: "art_qk_rev" using primary key columns
+  art_qk_rev_by_pk(id: ID!): art_qk_rev
+
   # fetch data from the table: "art_rev"
   art_rev(
     # distinct select on columns
@@ -20356,6 +23085,45 @@ type query_root {
 
   # fetch data from the table: "av" using primary key columns
   av_by_pk(id: ID!): av
+
+  # fetch data from the table: "av_rev"
+  av_rev(
+    # distinct select on columns
+    distinct_on: [av_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_rev_order_by!]
+
+    # filter the rows returned
+    where: av_rev_bool_exp
+  ): [av_rev!]!
+
+  # fetch aggregated fields from the table: "av_rev"
+  av_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [av_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_rev_order_by!]
+
+    # filter the rows returned
+    where: av_rev_bool_exp
+  ): av_rev_aggregate!
+
+  # fetch data from the table: "av_rev" using primary key columns
+  av_rev_by_pk(id: ID!): av_rev
 
   # fetch data from the table: "event"
   event(
@@ -20710,6 +23478,45 @@ type query_root {
 
   # fetch data from the table: "gv" using primary key columns
   gv_by_pk(id: ID!): gv
+
+  # fetch data from the table: "gv_rev"
+  gv_rev(
+    # distinct select on columns
+    distinct_on: [gv_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_rev_order_by!]
+
+    # filter the rows returned
+    where: gv_rev_bool_exp
+  ): [gv_rev!]!
+
+  # fetch aggregated fields from the table: "gv_rev"
+  gv_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [gv_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_rev_order_by!]
+
+    # filter the rows returned
+    where: gv_rev_bool_exp
+  ): gv_rev_aggregate!
+
+  # fetch data from the table: "gv_rev" using primary key columns
+  gv_rev_by_pk(id: ID!): gv_rev
 
   # fetch data from the table: "herkunft"
   herkunft(
@@ -21139,6 +23946,84 @@ type query_root {
 
   # fetch data from the table: "kultur_qk_choosen" using primary key columns
   kultur_qk_choosen_by_pk(id: ID!): kultur_qk_choosen
+
+  # fetch data from the table: "kultur_qk_choosen_rev"
+  kultur_qk_choosen_rev(
+    # distinct select on columns
+    distinct_on: [kultur_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_choosen_rev_bool_exp
+  ): [kultur_qk_choosen_rev!]!
+
+  # fetch aggregated fields from the table: "kultur_qk_choosen_rev"
+  kultur_qk_choosen_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_choosen_rev_bool_exp
+  ): kultur_qk_choosen_rev_aggregate!
+
+  # fetch data from the table: "kultur_qk_choosen_rev" using primary key columns
+  kultur_qk_choosen_rev_by_pk(id: ID!): kultur_qk_choosen_rev
+
+  # fetch data from the table: "kultur_qk_rev"
+  kultur_qk_rev(
+    # distinct select on columns
+    distinct_on: [kultur_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_rev_bool_exp
+  ): [kultur_qk_rev!]!
+
+  # fetch aggregated fields from the table: "kultur_qk_rev"
+  kultur_qk_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_rev_bool_exp
+  ): kultur_qk_rev_aggregate!
+
+  # fetch data from the table: "kultur_qk_rev" using primary key columns
+  kultur_qk_rev_by_pk(name: String!): kultur_qk_rev
 
   # fetch data from the table: "kultur_rev"
   kultur_rev(
@@ -25886,6 +28771,84 @@ type subscription_root {
   # fetch data from the table: "art_qk_choosen" using primary key columns
   art_qk_choosen_by_pk(id: ID!): art_qk_choosen
 
+  # fetch data from the table: "art_qk_choosen_rev"
+  art_qk_choosen_rev(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_rev_bool_exp
+  ): [art_qk_choosen_rev!]!
+
+  # fetch aggregated fields from the table: "art_qk_choosen_rev"
+  art_qk_choosen_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_rev_bool_exp
+  ): art_qk_choosen_rev_aggregate!
+
+  # fetch data from the table: "art_qk_choosen_rev" using primary key columns
+  art_qk_choosen_rev_by_pk(id: ID!): art_qk_choosen_rev
+
+  # fetch data from the table: "art_qk_rev"
+  art_qk_rev(
+    # distinct select on columns
+    distinct_on: [art_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_rev_bool_exp
+  ): [art_qk_rev!]!
+
+  # fetch aggregated fields from the table: "art_qk_rev"
+  art_qk_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [art_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: art_qk_rev_bool_exp
+  ): art_qk_rev_aggregate!
+
+  # fetch data from the table: "art_qk_rev" using primary key columns
+  art_qk_rev_by_pk(id: ID!): art_qk_rev
+
   # fetch data from the table: "art_rev"
   art_rev(
     # distinct select on columns
@@ -26041,6 +29004,45 @@ type subscription_root {
 
   # fetch data from the table: "av" using primary key columns
   av_by_pk(id: ID!): av
+
+  # fetch data from the table: "av_rev"
+  av_rev(
+    # distinct select on columns
+    distinct_on: [av_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_rev_order_by!]
+
+    # filter the rows returned
+    where: av_rev_bool_exp
+  ): [av_rev!]!
+
+  # fetch aggregated fields from the table: "av_rev"
+  av_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [av_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [av_rev_order_by!]
+
+    # filter the rows returned
+    where: av_rev_bool_exp
+  ): av_rev_aggregate!
+
+  # fetch data from the table: "av_rev" using primary key columns
+  av_rev_by_pk(id: ID!): av_rev
 
   # fetch data from the table: "event"
   event(
@@ -26395,6 +29397,45 @@ type subscription_root {
 
   # fetch data from the table: "gv" using primary key columns
   gv_by_pk(id: ID!): gv
+
+  # fetch data from the table: "gv_rev"
+  gv_rev(
+    # distinct select on columns
+    distinct_on: [gv_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_rev_order_by!]
+
+    # filter the rows returned
+    where: gv_rev_bool_exp
+  ): [gv_rev!]!
+
+  # fetch aggregated fields from the table: "gv_rev"
+  gv_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [gv_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [gv_rev_order_by!]
+
+    # filter the rows returned
+    where: gv_rev_bool_exp
+  ): gv_rev_aggregate!
+
+  # fetch data from the table: "gv_rev" using primary key columns
+  gv_rev_by_pk(id: ID!): gv_rev
 
   # fetch data from the table: "herkunft"
   herkunft(
@@ -26824,6 +29865,84 @@ type subscription_root {
 
   # fetch data from the table: "kultur_qk_choosen" using primary key columns
   kultur_qk_choosen_by_pk(id: ID!): kultur_qk_choosen
+
+  # fetch data from the table: "kultur_qk_choosen_rev"
+  kultur_qk_choosen_rev(
+    # distinct select on columns
+    distinct_on: [kultur_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_choosen_rev_bool_exp
+  ): [kultur_qk_choosen_rev!]!
+
+  # fetch aggregated fields from the table: "kultur_qk_choosen_rev"
+  kultur_qk_choosen_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_qk_choosen_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_choosen_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_choosen_rev_bool_exp
+  ): kultur_qk_choosen_rev_aggregate!
+
+  # fetch data from the table: "kultur_qk_choosen_rev" using primary key columns
+  kultur_qk_choosen_rev_by_pk(id: ID!): kultur_qk_choosen_rev
+
+  # fetch data from the table: "kultur_qk_rev"
+  kultur_qk_rev(
+    # distinct select on columns
+    distinct_on: [kultur_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_rev_bool_exp
+  ): [kultur_qk_rev!]!
+
+  # fetch aggregated fields from the table: "kultur_qk_rev"
+  kultur_qk_rev_aggregate(
+    # distinct select on columns
+    distinct_on: [kultur_qk_rev_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [kultur_qk_rev_order_by!]
+
+    # filter the rows returned
+    where: kultur_qk_rev_bool_exp
+  ): kultur_qk_rev_aggregate!
+
+  # fetch data from the table: "kultur_qk_rev" using primary key columns
+  kultur_qk_rev_by_pk(name: String!): kultur_qk_rev
 
   # fetch data from the table: "kultur_rev"
   kultur_rev(
