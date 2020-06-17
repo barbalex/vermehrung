@@ -66,7 +66,7 @@ Dazu muss für die lokale Datenhaltung eine neue Architektur gewählt werden. Mi
 
 Umsetzungstand: umgesetzt.<br/><br/>
 
-### 3. Daten gezielt voraus laden
+### 3. Daten voraus laden
 
 Bevor die App offline ist, muss sie die für die Feld- bzw. Garten-Arbeit gewünschten Daten geladen haben:
 - Die App lädt bei jedem Start alle Daten, welche der jeweilige Benutzer lesen darf
@@ -82,13 +82,13 @@ Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 5. Suche
 
-Suche muss neu aufgebaut werden, damit sie online funktioniert.<br/><br/>
+Die Suche muss neu aufgebaut werden, damit sie online funktioniert.<br/><br/>
 
 Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 6. Dateien
 
-Dateien können offline nicht verwaltet werden. Sie werden daher ausgeblendet.<br/><br/>
+Dateien können offline nicht verwaltet werden, da keine Verbindung zum Speicherdienst besteht. Sie werden daher ausgeblendet.<br/><br/>
 
 Umsetzungstand: umgesetzt.<br/><br/>
 
@@ -101,7 +101,9 @@ Es gibt viel Arbeit. Sehr viel. Beispiele:
 - Das Management der Operationen (App), Konflikte und Daten (Datenbank) werden künftig mehr Ressourcen (Leistung und Speicher) beanspruchen
 - Während die neue App aufgebaut wird, muss die bisherige weiter betrieben werden (sobald der Import erfolgt ist)
 
-Weil apflora.ch viel komplexer ist, werde ich das zuerst in vermehrung.ch einführen. Je nach vorhandenen Kapazitäten kann es eine Weile dauern, bis es umgesetzt ist. Wenn möglich noch 2020.<br/><br/>
+Weil apflora.ch viel komplexer ist (ca. Faktor 2), werde ich das zuerst in vermehrung.ch einführen. Je nach vorhandenen Kapazitäten kann es eine Weile dauern, bis es umgesetzt ist. Wenn möglich noch 2020.<br/><br/>
+
+Vorläufige Zwischenbilanz: Die Implementation war ca. 6 Wochen Aufwand.<br/><br/>
 
 Wenn:
 - es sich in vermehrung.ch bewährt,
