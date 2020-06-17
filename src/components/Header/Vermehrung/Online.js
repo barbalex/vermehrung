@@ -13,6 +13,11 @@ import { StoreContext } from '../../../models/reactUtils'
 const OnlineButton = styled(IconButton)`
   cursor: default !important;
 `
+const StyledBadge = styled(Badge)`
+  .MuiBadge-badge {
+    background-color: rgba(0, 0, 0, 0);
+  }
+`
 
 const Online = () => {
   const store = useContext(StoreContext)
@@ -25,9 +30,9 @@ const Online = () => {
 
   return (
     <OnlineButton color="inherit" aria-label={title} title={title}>
-      <Badge color="primary" badgeContent={queuedQueries.size}>
+      <StyledBadge color="primary" badgeContent={900} max={999}>
         {online ? <NetworkOn /> : <NetworkOff />}
-      </Badge>
+      </StyledBadge>
     </OnlineButton>
   )
 }
