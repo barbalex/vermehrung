@@ -619,10 +619,6 @@ create index on kultur_qk_choosen using btree (_deleted);
 --select kultur.id, kultur_qk.name
 --from kultur_qk, kultur
 
-
-
-
-
 drop table if exists kultur_qk_choosen_rev cascade;
 create table kultur_qk_choosen_rev (
   id uuid primary key default uuid_generate_v1mc(),
@@ -642,15 +638,6 @@ create index on kultur_qk_choosen_rev using btree (_rev);
 create index on kultur_qk_choosen_rev using btree (_parent_rev);
 create index on kultur_qk_choosen_rev using btree (_depth);
 create index on kultur_qk_choosen_rev using btree (_deleted);
-
-
-
-
-
-
-
-
-
 
 drop table if exists kultur_file cascade;
 create table kultur_file (
@@ -1206,6 +1193,26 @@ create index on av using btree (art_id);
 create index on av using btree (person_id);
 create index on av using btree (_deleted);
 
+drop table if exists av_rev cascade;
+create table av_rev (
+  id uuid primary key default uuid_generate_v1mc(),
+  av_rev uuid default null,
+  art_id uuid default null REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  person_id uuid references person (id) on delete cascade on update cascade,
+  changed timestamp default now(),
+  changed_by text default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false
+);
+create index on av_rev using btree (id);
+create index on av_rev using btree (_rev);
+create index on av_rev using btree (_parent_rev);
+create index on av_rev using btree (_depth);
+create index on av_rev using btree (_deleted);
+
 drop table if exists gv cascade;
 create table gv (
   id uuid primary key default uuid_generate_v1mc(),
@@ -1225,3 +1232,23 @@ create index on gv using btree (id);
 create index on gv using btree (garten_id);
 create index on gv using btree (person_id);
 create index on gv using btree (_deleted);
+
+drop table if exists gv_rev cascade;
+create table gv_rev (
+  id uuid primary key default uuid_generate_v1mc(),
+  gv_id uuid default null,
+  garten_id uuid default null REFERENCES garten (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  person_id uuid references person (id) on delete cascade on update cascade,
+  changed timestamp default now(),
+  changed_by text default null,
+  _rev text default null,
+  _parent_rev text default null,
+  _revisions text[] default null,
+  _depth integer default 1,
+  _deleted boolean default false
+);
+create index on gv_rev using btree (id);
+create index on gv_rev using btree (_rev);
+create index on gv_rev using btree (_parent_rev);
+create index on gv_rev using btree (_depth);
+create index on gv_rev using btree (_deleted);
