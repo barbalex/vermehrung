@@ -70,9 +70,9 @@ ART_FRAGMENT = selectFromart()
   .sammlungs(() => SAMMLUNG_FRAGMENT)
   .toString()
 
-ART_QK_FRAGMENT = selectFromart_qk().id.name.titel.beschreibung.sort.toString()
+ART_QK_FRAGMENT = selectFromart_qk().id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
-ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen().id.art_id.qk_name.toString()
+ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen().id.art_id.qk_name.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 ART_FILE_FRAGMENT = selectFromart_file()
   .id.art_id.file_id.file_mime_type.name.beschreibung.art()
@@ -81,7 +81,9 @@ ART_FILE_FRAGMENT = selectFromart_file()
 AE_ART_FRAGMENT = selectFromae_art().id.name.ae_art_art().toString()
 
 AV_FRAGMENT = selectFromav()
-  .id.art_id.person_id.art(() => ART_FRAGMENT)
+  .id.art_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
+    () => ART_FRAGMENT,
+  )
   .person(() => PERSON_FRAGMENT)
   .toString()
 
@@ -107,7 +109,9 @@ GARTEN_FILE_FRAGMENT = selectFromgarten_file()
   .toString()
 
 GV_FRAGMENT = selectFromgv()
-  .id.garten_id.person_id.garten(() => GARTEN_FRAGMENT)
+  .id.garten_id.person_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.garten(
+    () => GARTEN_FRAGMENT,
+  )
   .person(() => PERSON_FRAGMENT)
   .toString()
 
@@ -137,10 +141,12 @@ KULTUR_FRAGMENT = selectFromkultur()
   .zaehlungs(() => ZAEHLUNG_FRAGMENT)
   .toString()
 
-KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.toString()
+KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 KULTUR_QK_CHOOSEN_FRAGMENT = selectFromkultur_qk_choosen()
-  .id.kultur_id.qk_name.kultur(() => KULTUR_FRAGMENT)
+  .id.kultur_id.qk_name.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
+    () => KULTUR_FRAGMENT,
+  )
   .toString()
 
 KULTUR_FILE_FRAGMENT = selectFromkultur_file()
