@@ -28,36 +28,64 @@ import { selectFromteilzaehlung } from '../models/teilzaehlungModel.base'
 import { selectFromuser_role } from '../models/user_roleModel.base'
 import { selectFromzaehlung } from '../models/zaehlungModel.base'
 
-export const ART_FRAGMENT = selectFromart()
+let ART_FRAGMENT
+let ART_QK_FRAGMENT
+let ART_QK_CHOOSEN_FRAGMENT
+let ART_FILE_FRAGMENT
+let AE_ART_FRAGMENT
+let AV_FRAGMENT
+let EVENT_FRAGMENT
+let GARTEN_FRAGMENT
+let GARTEN_FILE_FRAGMENT
+let GV_FRAGMENT
+let HERKUNFT_FRAGMENT
+let HERKUNFT_FILE_FRAGMENT
+let KULTUR_FRAGMENT
+let KULTUR_QK_FRAGMENT
+let KULTUR_QK_CHOOSEN_FRAGMENT
+let KULTUR_FILE_FRAGMENT
+let KULTUR_OPTION_FRAGMENT
+let LIEFERUNG_FRAGMENT
+let LIEFERUNG_FILE_FRAGMENT
+let PERSON_FRAGMENT
+let PERSON_OPTION_FRAGMENT
+let PERSON_FILE_FRAGMENT
+let SAMMEL_LIEFERUNG_FRAGMENT
+let SAMMLUNG_FRAGMENT
+let SAMMLUNG_FILE_FRAGMENT
+let TEILKULTUR_FRAGMENT
+let TEILZAEHLUNG_FRAGMENT
+let USER_ROLE_FRAGMENT
+let ZAEHLUNG_FRAGMENT
+
+ART_FRAGMENT = selectFromart()
   .id.ae_id.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art_ae_art()
   .art_files()
   .art_qk_choosens()
   .art_sums()
-  .avs()
+  .avs(() => AV_FRAGMENT)
   .kulturs(() => KULTUR_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammlungs(() => SAMMLUNG_FRAGMENT)
   .toString()
 
-export const ART_QK_FRAGMENT = selectFromart_qk().id.name.titel.beschreibung.sort.toString()
+ART_QK_FRAGMENT = selectFromart_qk().id.name.titel.beschreibung.sort.toString()
 
-export const ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen().id.art_id.qk_name.toString()
+ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen().id.art_id.qk_name.toString()
 
-export const ART_FILE_FRAGMENT = selectFromart_file()
+ART_FILE_FRAGMENT = selectFromart_file()
   .id.art_id.file_id.file_mime_type.name.beschreibung.art()
   .toString()
 
-export const AE_ART_FRAGMENT = selectFromae_art()
-  .id.name.ae_art_art()
-  .toString()
+AE_ART_FRAGMENT = selectFromae_art().id.name.ae_art_art().toString()
 
-export const AV_FRAGMENT = selectFromav()
+AV_FRAGMENT = selectFromav()
   .id.art_id.person_id.art(() => ART_FRAGMENT)
   .person(() => PERSON_FRAGMENT)
   .toString()
 
-export const EVENT_FRAGMENT = selectFromevent()
+EVENT_FRAGMENT = selectFromevent()
   .id.kultur_id.teilkultur_id.person_id.beschreibung.geplant.datum.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
     () => KULTUR_FRAGMENT,
   )
@@ -65,33 +93,33 @@ export const EVENT_FRAGMENT = selectFromevent()
   .person(() => PERSON_FRAGMENT)
   .toString()
 
-export const GARTEN_FRAGMENT = selectFromgarten()
+GARTEN_FRAGMENT = selectFromgarten()
   .id.name.person_id.strasse.plz.ort.aktiv.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.person(
     () => PERSON_FRAGMENT,
   )
   .garten_files()
-  .gvs()
+  .gvs(() => GV_FRAGMENT)
   .kulturs(() => KULTUR_FRAGMENT)
   .toString()
 
-export const GARTEN_FILE_FRAGMENT = selectFromgarten_file()
+GARTEN_FILE_FRAGMENT = selectFromgarten_file()
   .id.garten_id.file_id.file_mime_type.name.beschreibung.garten()
   .toString()
 
-export const GV_FRAGMENT = selectFromgv()
+GV_FRAGMENT = selectFromgv()
   .id.garten_id.person_id.garten(() => GARTEN_FRAGMENT)
   .person(() => PERSON_FRAGMENT)
   .toString()
 
-export const HERKUNFT_FRAGMENT = selectFromherkunft()
+HERKUNFT_FRAGMENT = selectFromherkunft()
   .id.nr.lokalname.gemeinde.kanton.land.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.herkunft_files()
   .kulturs(() => KULTUR_FRAGMENT)
   .sammlungs(() => SAMMLUNG_FRAGMENT)
   .toString()
 
-export const HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
+HERKUNFT_FILE_FRAGMENT = selectFromherkunft_file().id.herkunft_id.file_id.file_mime_type.name.beschreibung.toString()
 
-export const KULTUR_FRAGMENT = selectFromkultur()
+KULTUR_FRAGMENT = selectFromkultur()
   .id.art_id.herkunft_id.garten_id.zwischenlager.erhaltungskultur.von_anzahl_individuen.aktiv.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
@@ -103,29 +131,29 @@ export const KULTUR_FRAGMENT = selectFromkultur()
   .kultur_qk_choosens()
   .lieferungsByNachKulturId(() => LIEFERUNG_FRAGMENT)
   .lieferungsByVonKulturId(() => LIEFERUNG_FRAGMENT)
-  .sammelLieferungsByNachKulturId()
+  .sammelLieferungsByNachKulturId(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .sammel_lieferungs(() => SAMMEL_LIEFERUNG_FRAGMENT)
   .teilkulturs(() => TEILKULTUR_FRAGMENT)
   .zaehlungs(() => ZAEHLUNG_FRAGMENT)
   .toString()
 
-export const KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.toString()
+KULTUR_QK_FRAGMENT = selectFromkultur_qk().id.name.titel.beschreibung.sort.toString()
 
-export const KULTUR_QK_CHOOSEN_FRAGMENT = selectFromkultur_qk_choosen()
+KULTUR_QK_CHOOSEN_FRAGMENT = selectFromkultur_qk_choosen()
   .id.kultur_id.qk_name.kultur(() => KULTUR_FRAGMENT)
   .toString()
 
-export const KULTUR_FILE_FRAGMENT = selectFromkultur_file()
+KULTUR_FILE_FRAGMENT = selectFromkultur_file()
   .id.kultur_id.file_id.file_mime_type.name.beschreibung.kultur(
     () => KULTUR_FRAGMENT,
   )
   .toString()
 
-export const KULTUR_OPTION_FRAGMENT = selectFromkultur_option()
+KULTUR_OPTION_FRAGMENT = selectFromkultur_option()
   .id.ev_datum.ev_geplant.ev_person_id.ev_teilkultur_id.tk.tk_bemerkungen.tz_andere_menge.tz_anzahl_mutterpflanzen.tz_auspflanzbereit_beschreibung.tz_teilkultur_id.tz_bemerkungen.z_bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.kultur()
   .toString()
 
-export const LIEFERUNG_FRAGMENT = selectFromlieferung()
+LIEFERUNG_FRAGMENT = selectFromlieferung()
   .id.sammel_lieferung_id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
@@ -137,16 +165,16 @@ export const LIEFERUNG_FRAGMENT = selectFromlieferung()
   .sammlung(() => SAMMLUNG_FRAGMENT)
   .toString()
 
-export const LIEFERUNG_FILE_FRAGMENT = selectFromlieferung_file()
+LIEFERUNG_FILE_FRAGMENT = selectFromlieferung_file()
   .id.lieferung_id.file_id.file_mime_type.name.beschreibung.lieferung()
   .toString()
 
-export const PERSON_FRAGMENT = selectFromperson()
+PERSON_FRAGMENT = selectFromperson()
   .id.nr.name.adresszusatz.strasse.plz.ort.telefon_privat.telefon_geschaeft.telefon_mobile.email.kein_email.bemerkungen.account_id.user_role.kommerziell.info.aktiv.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.avs()
   .events(() => EVENT_FRAGMENT)
   .gartens(() => GARTEN_FRAGMENT)
-  .avs()
-  .gvs()
+  .avs(() => AV_FRAGMENT)
+  .gvs(() => GV_FRAGMENT)
   .lieferungs(() => LIEFERUNG_FRAGMENT)
   .person_files()
   .person_option()
@@ -155,13 +183,13 @@ export const PERSON_FRAGMENT = selectFromperson()
   .userRoleByUserRole()
   .toString()
 
-export const PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse.ga_plz.ga_ort.ga_geom_point.ga_lat_lng.ga_aktiv.ga_bemerkungen.hk_kanton.hk_land.hk_bemerkungen.hk_geom_point.li_show_sl_felder.li_show_sl.sl_show_empty_when_next_to_li.sl_auto_copy_edits.tree_kultur.tree_teilkultur.tree_zaehlung.tree_lieferung.tree_event._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
+PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse.ga_plz.ga_ort.ga_geom_point.ga_lat_lng.ga_aktiv.ga_bemerkungen.hk_kanton.hk_land.hk_bemerkungen.hk_geom_point.li_show_sl_felder.li_show_sl.sl_show_empty_when_next_to_li.sl_auto_copy_edits.tree_kultur.tree_teilkultur.tree_zaehlung.tree_lieferung.tree_event._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
-export const PERSON_FILE_FRAGMENT = selectFromperson_file()
+PERSON_FILE_FRAGMENT = selectFromperson_file()
   .id.person_id.file_id.file_mime_type.name.beschreibung.person()
   .toString()
 
-export const SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung()
+SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung()
   .id.art_id.person_id.von_sammlung_id.von_kultur_id.datum.nach_kultur_id.nach_ausgepflanzt.von_anzahl_individuen.anzahl_pflanzen.anzahl_auspflanzbereit.gramm_samen.andere_menge.geplant.bemerkungen._rev._parent_rev._revisions._depth._conflicts._deleted.lieferungs(
     () => LIEFERUNG_FRAGMENT,
   )
@@ -172,7 +200,7 @@ export const SAMMEL_LIEFERUNG_FRAGMENT = selectFromsammel_lieferung()
   .kulturByNachKulturId(() => KULTUR_FRAGMENT)
   .toString()
 
-export const SAMMLUNG_FRAGMENT = selectFromsammlung()
+SAMMLUNG_FRAGMENT = selectFromsammlung()
   .id.art_id.person_id.herkunft_id.nr.datum.von_anzahl_individuen.anzahl_pflanzen.gramm_samen.andere_menge.geplant.bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.art(
     () => ART_FRAGMENT,
   )
@@ -183,11 +211,11 @@ export const SAMMLUNG_FRAGMENT = selectFromsammlung()
   .sammlung_files()
   .toString()
 
-export const SAMMLUNG_FILE_FRAGMENT = selectFromsammlung_file()
+SAMMLUNG_FILE_FRAGMENT = selectFromsammlung_file()
   .id.sammlung_id.file_id.file_mime_type.name.beschreibung.sammlung()
   .toString()
 
-export const TEILKULTUR_FRAGMENT = selectFromteilkultur()
+TEILKULTUR_FRAGMENT = selectFromteilkultur()
   .id.kultur_id.name.ort1.ort2.ort3.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.kultur(
     () => KULTUR_FRAGMENT,
   )
@@ -195,16 +223,16 @@ export const TEILKULTUR_FRAGMENT = selectFromteilkultur()
   .teilzaehlungs(() => TEILZAEHLUNG_FRAGMENT)
   .toString()
 
-export const TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
+TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
   .id.zaehlung_id.teilkultur_id.anzahl_pflanzen.anzahl_auspflanzbereit.anzahl_mutterpflanzen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.zaehlung(
     () => ZAEHLUNG_FRAGMENT,
   )
   .teilkultur(() => TEILKULTUR_FRAGMENT)
   .toString()
 
-export const USER_ROLE_FRAGMENT = selectFromuser_role().id.name.sort.comment.toString()
+USER_ROLE_FRAGMENT = selectFromuser_role().id.name.sort.comment.toString()
 
-export const ZAEHLUNG_FRAGMENT = selectFromzaehlung()
+ZAEHLUNG_FRAGMENT = selectFromzaehlung()
   .id.kultur_id.datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs_aggregate(
     (t) =>
       t.aggregate((ag) =>
@@ -216,3 +244,35 @@ export const ZAEHLUNG_FRAGMENT = selectFromzaehlung()
   .kultur(() => KULTUR_FRAGMENT)
   .teilzaehlungs(() => TEILZAEHLUNG_FRAGMENT)
   .toString()
+
+export {
+  ART_FRAGMENT,
+  ART_QK_FRAGMENT,
+  ART_QK_CHOOSEN_FRAGMENT,
+  ART_FILE_FRAGMENT,
+  AE_ART_FRAGMENT,
+  AV_FRAGMENT,
+  EVENT_FRAGMENT,
+  GARTEN_FRAGMENT,
+  GARTEN_FILE_FRAGMENT,
+  GV_FRAGMENT,
+  HERKUNFT_FRAGMENT,
+  HERKUNFT_FILE_FRAGMENT,
+  KULTUR_FRAGMENT,
+  KULTUR_QK_FRAGMENT,
+  KULTUR_QK_CHOOSEN_FRAGMENT,
+  KULTUR_FILE_FRAGMENT,
+  KULTUR_OPTION_FRAGMENT,
+  LIEFERUNG_FRAGMENT,
+  LIEFERUNG_FILE_FRAGMENT,
+  PERSON_FRAGMENT,
+  PERSON_OPTION_FRAGMENT,
+  PERSON_FILE_FRAGMENT,
+  SAMMEL_LIEFERUNG_FRAGMENT,
+  SAMMLUNG_FRAGMENT,
+  SAMMLUNG_FILE_FRAGMENT,
+  TEILKULTUR_FRAGMENT,
+  TEILZAEHLUNG_FRAGMENT,
+  USER_ROLE_FRAGMENT,
+  ZAEHLUNG_FRAGMENT,
+}
