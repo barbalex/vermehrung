@@ -63,7 +63,7 @@ const Teilzaehlung = ({
   index,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, showDeleted } = store
+  const { insertTeilkulturRev, showDeleted, errors, unsetError } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -101,10 +101,9 @@ const Teilzaehlung = ({
     [insertTeilkulturRev, kulturId, row],
   )
 
-  const [errors, setErrors] = useState({})
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('teilzaehlung')
+  }, [id, unsetError])
 
   const saveToDb = useCallback(
     async (event) => {
@@ -136,7 +135,7 @@ const Teilzaehlung = ({
               field="teilkultur_id"
               label="Teilkultur"
               options={teilkulturenWerte}
-              error={errors.teilkultur_id}
+              error={errors?.teilzaehlung?.teilkultur_id}
               onCreateNew={onCreateNewTeilkultur}
             />
           </Teilkultur>
@@ -148,7 +147,7 @@ const Teilzaehlung = ({
             label="Anzahl Pflanzen"
             value={row.anzahl_pflanzen}
             saveToDb={saveToDb}
-            error={errors.anzahl_pflanzen}
+            error={errors?.teilzaehlung?.anzahl_pflanzen}
             type="number"
           />
         </Anzahl>
@@ -159,7 +158,7 @@ const Teilzaehlung = ({
             label="Anzahl auspflanz-bereit"
             value={row.anzahl_auspflanzbereit}
             saveToDb={saveToDb}
-            error={errors.anzahl_auspflanzbereit}
+            error={errors?.teilzaehlung?.anzahl_auspflanzbereit}
             type="number"
           />
         </Anzahl>
@@ -171,7 +170,7 @@ const Teilzaehlung = ({
               label="Anzahl Mutter-Pflanzen"
               value={row.anzahl_mutterpflanzen}
               saveToDb={saveToDb}
-              error={errors.anzahl_mutterpflanzen}
+              error={errors?.teilzaehlung?.anzahl_mutterpflanzen}
               type="number"
             />
           </Anzahl>
@@ -184,7 +183,7 @@ const Teilzaehlung = ({
               label={`Andere Menge (z.B. "3 Zwiebeln")`}
               value={row.andere_menge}
               saveToDb={saveToDb}
-              error={errors.andere_menge}
+              error={errors?.teilzaehlung?.andere_menge}
               type="text"
             />
           </Other>
@@ -197,7 +196,7 @@ const Teilzaehlung = ({
               label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
               value={row.auspflanzbereit_beschreibung}
               saveToDb={saveToDb}
-              error={errors.auspflanzbereit_beschreibung}
+              error={errors?.teilzaehlung?.auspflanzbereit_beschreibung}
               type="text"
             />
           </Auspflanzbereit>
@@ -210,7 +209,7 @@ const Teilzaehlung = ({
               label="Bemerkungen"
               value={row.bemerkungen}
               saveToDb={saveToDb}
-              error={errors.bemerkungen}
+              error={errors?.teilzaehlung?.bemerkungen}
               multiLine
             />
           </Last>
@@ -223,7 +222,7 @@ const Teilzaehlung = ({
               name="_deleted"
               value={row._deleted}
               saveToDb={saveToDb}
-              error={errors._deleted}
+              error={errors?.teilzaehlung?._deleted}
             />
           ) : (
             <IconButton
