@@ -28,6 +28,10 @@ const Online = () => {
     ? `Sie sind offline. ${queuedQueries.size} wartende Operationen`
     : `Sie sind offline`
 
+  // TODO:
+  // 1. add menu to link to info
+  // 2. add menu to list and edit pending queries
+
   return (
     <OnlineButton color="inherit" aria-label={title} title={title}>
       <StyledBadge color="primary" badgeContent={queuedQueries.size} max={999}>
