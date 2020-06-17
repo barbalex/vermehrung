@@ -141,6 +141,8 @@ const Kultur = ({
     herkunftsSorted,
     sammlungsSorted,
     showDeleted,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -193,8 +195,6 @@ const Kultur = ({
     herkunftToChoose.push(row?.herkunft_id)
   }
 
-  const [errors, setErrors] = useState({})
-
   const totalNr = kultursSorted.filter(hierarchyFilter).length
   const filteredNr = kultursFiltered.filter(hierarchyFilter).length
 
@@ -206,8 +206,8 @@ const Kultur = ({
   )
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('kultur')
+  }, [id, unsetError])
 
   const artForArtWerte = artsSorted.filter(
     (a) => !!a.ae_id && artenToChoose.includes(a.id),
@@ -346,7 +346,7 @@ const Kultur = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors._deleted}
+                  error={errors?.kultur?._deleted}
                 />
               )}
               <Select
@@ -357,7 +357,7 @@ const Kultur = ({
                 label="Art"
                 options={artWerte}
                 saveToDb={saveToDb}
-                error={errors.art_id}
+                error={errors?.kultur?.art_id}
               />
               <Select
                 key={`${row.id}${row.herkunft_id}herkunft_id`}
@@ -367,7 +367,7 @@ const Kultur = ({
                 label="Herkunft"
                 options={herkunftWerte}
                 saveToDb={saveToDb}
-                error={errors.herkunft_id}
+                error={errors?.kultur?.herkunft_id}
               />
               <Select
                 key={`${row.id}${row.garten_id}garten_id`}
@@ -377,7 +377,7 @@ const Kultur = ({
                 label="Garten"
                 options={gartenWerte}
                 saveToDb={saveToDb}
-                error={errors.garten_id}
+                error={errors?.kultur?.garten_id}
               />
               <Checkbox2States
                 key={`${row.id}zwischenlager`}
@@ -385,7 +385,7 @@ const Kultur = ({
                 name="zwischenlager"
                 value={row.zwischenlager}
                 saveToDb={saveToDb}
-                error={errors.zwischenlager}
+                error={errors?.kultur?.zwischenlager}
               />
               <Checkbox2States
                 key={`${row.id}erhaltungskultur`}
@@ -393,7 +393,7 @@ const Kultur = ({
                 name="erhaltungskultur"
                 value={row.erhaltungskultur}
                 saveToDb={saveToDb}
-                error={errors.erhaltungskultur}
+                error={errors?.kultur?.erhaltungskultur}
               />
               <FieldRow>
                 <TextField
@@ -402,7 +402,7 @@ const Kultur = ({
                   label="von Anzahl Individuen"
                   value={row.von_anzahl_individuen}
                   saveToDb={saveToDb}
-                  error={errors.von_anzahl_individuen}
+                  error={errors?.kultur?.von_anzahl_individuen}
                   type="number"
                 />
                 <div>
@@ -421,7 +421,7 @@ const Kultur = ({
                 name="aktiv"
                 value={row.aktiv}
                 saveToDb={saveToDb}
-                error={errors.aktiv}
+                error={errors?.kultur?.aktiv}
               />
               <TextField
                 key={`${row.id}bemerkungen`}
@@ -429,7 +429,7 @@ const Kultur = ({
                 label="Bemerkungen"
                 value={row.bemerkungen}
                 saveToDb={saveToDb}
-                error={errors.bemerkungen}
+                error={errors?.kultur?.bemerkungen}
                 multiLine
               />
               {online &&

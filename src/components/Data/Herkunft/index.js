@@ -111,6 +111,8 @@ const Herkunft = ({
     herkunftsFiltered,
     showDeleted,
     sammlungIdInActiveNodeArray,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -144,10 +146,9 @@ const Herkunft = ({
 
   const { hk_kanton, hk_land, hk_bemerkungen, hk_geom_point } = userPersonOption
 
-  const [errors, setErrors] = useState({})
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('herkunft')
+  }, [id, unsetError])
 
   const saveToDb = useCallback(
     async (event) => {
@@ -234,7 +235,7 @@ const Herkunft = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors._deleted}
+                  error={errors?.herkunft?._deleted}
                 />
               )}
               <TextField
@@ -243,7 +244,7 @@ const Herkunft = ({
                 label="Nr"
                 value={row.nr}
                 saveToDb={saveToDb}
-                error={errors.nr}
+                error={errors?.herkunft?.nr}
               />
               <TextField
                 key={`${row.id}lokalname`}
@@ -251,7 +252,7 @@ const Herkunft = ({
                 label="Lokalname"
                 value={row.lokalname}
                 saveToDb={saveToDb}
-                error={errors.lokalname}
+                error={errors?.herkunft?.lokalname}
               />
               <TextField
                 key={`${row.id}gemeinde`}
@@ -259,7 +260,7 @@ const Herkunft = ({
                 label="Gemeinde"
                 value={row.gemeinde}
                 saveToDb={saveToDb}
-                error={errors.gemeinde}
+                error={errors?.herkunft?.gemeinde}
               />
               {hk_kanton && (
                 <TextField
@@ -268,7 +269,7 @@ const Herkunft = ({
                   label="Kanton"
                   value={row.kanton}
                   saveToDb={saveToDb}
-                  error={errors.kanton}
+                  error={errors?.herkunft?.kanton}
                 />
               )}
               {hk_land && (
@@ -278,7 +279,7 @@ const Herkunft = ({
                   label="Land"
                   value={row.land}
                   saveToDb={saveToDb}
-                  error={errors.land}
+                  error={errors?.herkunft?.land}
                 />
               )}
               {!showFilter && hk_geom_point && (
@@ -291,7 +292,7 @@ const Herkunft = ({
                   label="Bemerkungen"
                   value={row.bemerkungen}
                   saveToDb={saveToDb}
-                  error={errors.bemerkungen}
+                  error={errors?.herkunft?.bemerkungen}
                   multiLine
                 />
               )}

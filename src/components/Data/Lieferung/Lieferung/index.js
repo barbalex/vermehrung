@@ -165,6 +165,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     sammlungIdInActiveNodeArray,
     sammlungsSorted,
     userPersonOption,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -196,8 +198,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   }
 
   const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
-
-  const [errors, setErrors] = useState({})
 
   const totalNr = lieferungsSorted.filter(hierarchyFilter).length
   const filteredNr = lieferungsFiltered.filter(hierarchyFilter).length
@@ -256,8 +256,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
       ifAllNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('lieferung')
+  }, [id, unsetError])
 
   const vonKulturWerteData = kultursSorted
     // show only kulturen of art_id
@@ -466,7 +466,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       label="Art"
                       options={artWerte}
                       saveToDb={saveToDb}
-                      error={errors.art_id}
+                      error={errors?.lieferung?.art_id}
                     />
                   )}
                   {herkunftValue && (
@@ -483,7 +483,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         label="Anzahl Pflanzen"
                         value={row.anzahl_pflanzen}
                         saveToDb={saveToDb}
-                        error={errors.anzahl_pflanzen}
+                        error={errors?.lieferung?.anzahl_pflanzen}
                         type="number"
                       />
                     )}
@@ -494,7 +494,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         label="Anzahl auspflanzbereit"
                         value={row.anzahl_auspflanzbereit}
                         saveToDb={saveToDb}
-                        error={errors.anzahl_auspflanzbereit}
+                        error={errors?.lieferung?.anzahl_auspflanzbereit}
                         type="number"
                       />
                     )}
@@ -507,7 +507,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         label="Gramm Samen"
                         value={row.gramm_samen}
                         saveToDb={saveToDb}
-                        error={errors.gramm_samen}
+                        error={errors?.lieferung?.gramm_samen}
                         type="number"
                       />
                     )}
@@ -518,7 +518,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         label={`Andere Menge (z.B. "3 Zwiebeln")`}
                         value={row.andere_menge}
                         saveToDb={saveToDb}
-                        error={errors.andere_menge}
+                        error={errors?.lieferung?.andere_menge}
                         type="text"
                       />
                     )}
@@ -531,7 +531,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         label="von Anzahl Individuen"
                         value={row.von_anzahl_individuen}
                         saveToDb={saveToDb}
-                        error={errors.von_anzahl_individuen}
+                        error={errors?.lieferung?.von_anzahl_individuen}
                         type="number"
                       />
                       <div>
@@ -563,7 +563,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       }`}
                       options={sammlungWerte}
                       saveToDb={saveToDb}
-                      error={errors.von_sammlung_id}
+                      error={errors?.lieferung?.von_sammlung_id}
                     />
                   )}
                   {ifNeeded('von_kultur_id') && (
@@ -577,7 +577,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       }`}
                       options={vonKulturWerte}
                       saveToDb={saveToDb}
-                      error={errors.von_kultur_id}
+                      error={errors?.lieferung?.von_kultur_id}
                     />
                   )}
                 </>
@@ -602,7 +602,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       }`}
                       options={nachKulturWerte}
                       saveToDb={saveToDb}
-                      error={errors.nach_kultur_id}
+                      error={errors?.lieferung?.nach_kultur_id}
                     />
                   )}
                   {ifNeeded('nach_ausgepflanzt') && (
@@ -612,7 +612,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       name="nach_ausgepflanzt"
                       value={row.nach_ausgepflanzt}
                       saveToDb={saveToDb}
-                      error={errors.nach_ausgepflanzt}
+                      error={errors?.lieferung?.nach_ausgepflanzt}
                     />
                   )}
                 </>
@@ -629,7 +629,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       label="Datum"
                       value={row.datum}
                       saveToDb={saveToDb}
-                      error={errors.datum}
+                      error={errors?.lieferung?.datum}
                     />
                   )}
                   {ifNeeded('geplant') && (
@@ -640,7 +640,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                         name="geplant"
                         value={row.geplant}
                         saveToDb={saveToDb}
-                        error={errors.geplant}
+                        error={errors?.lieferung?.geplant}
                       />
                       <div>
                         <IconButton
@@ -669,7 +669,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       label="Person"
                       options={personWerte}
                       saveToDb={saveToDb}
-                      error={errors.person_id}
+                      error={errors?.lieferung?.person_id}
                     />
                   )}
                   {ifNeeded('bemerkungen') && (
@@ -679,7 +679,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                       label="Bemerkungen"
                       value={row.bemerkungen}
                       saveToDb={saveToDb}
-                      error={errors.bemerkungen}
+                      error={errors?.lieferung?.bemerkungen}
                       multiLine
                     />
                   )}
