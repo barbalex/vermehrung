@@ -1024,7 +1024,15 @@ input art_pk_columns_input {
 
 # columns and relationships of "art_qk"
 type art_qk {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID!
 
   # Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt
@@ -1077,20 +1085,30 @@ input art_qk_arr_rel_insert_input {
 
 # aggregate avg on columns
 type art_qk_avg_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by avg() on columns of table "art_qk"
 input art_qk_avg_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # Boolean expression to filter rows from the table "art_qk". All fields are combined with a logical 'AND'.
 input art_qk_bool_exp {
   _and: [art_qk_bool_exp]
+  _conflicts: _text_comparison_exp
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
   _not: art_qk_bool_exp
   _or: [art_qk_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
   id: uuid_comparison_exp
   name: String_comparison_exp
   sort: smallint_comparison_exp
@@ -1099,9 +1117,18 @@ input art_qk_bool_exp {
 
 # columns and relationships of "art_qk_choosen"
 type art_qk_choosen {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+
   # An object relationship
   art: art!
   art_id: uuid!
+  changed: timestamp
+  changed_by: String
   id: ID!
   qk_name: String!
 }
@@ -1114,16 +1141,32 @@ type art_qk_choosen_aggregate {
 
 # aggregate fields of "art_qk_choosen"
 type art_qk_choosen_aggregate_fields {
+  avg: art_qk_choosen_avg_fields
   count(columns: [art_qk_choosen_select_column!], distinct: Boolean): Int
   max: art_qk_choosen_max_fields
   min: art_qk_choosen_min_fields
+  stddev: art_qk_choosen_stddev_fields
+  stddev_pop: art_qk_choosen_stddev_pop_fields
+  stddev_samp: art_qk_choosen_stddev_samp_fields
+  sum: art_qk_choosen_sum_fields
+  var_pop: art_qk_choosen_var_pop_fields
+  var_samp: art_qk_choosen_var_samp_fields
+  variance: art_qk_choosen_variance_fields
 }
 
 # order by aggregate values of table "art_qk_choosen"
 input art_qk_choosen_aggregate_order_by {
+  avg: art_qk_choosen_avg_order_by
   count: order_by
   max: art_qk_choosen_max_order_by
   min: art_qk_choosen_min_order_by
+  stddev: art_qk_choosen_stddev_order_by
+  stddev_pop: art_qk_choosen_stddev_pop_order_by
+  stddev_samp: art_qk_choosen_stddev_samp_order_by
+  sum: art_qk_choosen_sum_order_by
+  var_pop: art_qk_choosen_var_pop_order_by
+  var_samp: art_qk_choosen_var_samp_order_by
+  variance: art_qk_choosen_variance_order_by
 }
 
 # input type for inserting array relation for remote table "art_qk_choosen"
@@ -1132,13 +1175,31 @@ input art_qk_choosen_arr_rel_insert_input {
   on_conflict: art_qk_choosen_on_conflict
 }
 
+# aggregate avg on columns
+type art_qk_choosen_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "art_qk_choosen"
+input art_qk_choosen_avg_order_by {
+  _depth: order_by
+}
+
 # Boolean expression to filter rows from the table "art_qk_choosen". All fields are combined with a logical 'AND'.
 input art_qk_choosen_bool_exp {
   _and: [art_qk_choosen_bool_exp]
+  _conflicts: _text_comparison_exp
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
   _not: art_qk_choosen_bool_exp
   _or: [art_qk_choosen_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
   art: art_bool_exp
   art_id: uuid_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
   id: uuid_comparison_exp
   qk_name: String_comparison_exp
 }
@@ -1152,38 +1213,71 @@ enum art_qk_choosen_constraint {
   art_qk_choosen_pkey
 }
 
+# input type for incrementing integer column in table "art_qk_choosen"
+input art_qk_choosen_inc_input {
+  _depth: Int
+}
+
 # input type for inserting data into table "art_qk_choosen"
 input art_qk_choosen_insert_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   art: art_obj_rel_insert_input
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   qk_name: String
 }
 
 # aggregate max on columns
 type art_qk_choosen_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   qk_name: String
 }
 
 # order by max() on columns of table "art_qk_choosen"
 input art_qk_choosen_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   art_id: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   qk_name: order_by
 }
 
 # aggregate min on columns
 type art_qk_choosen_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   qk_name: String
 }
 
 # order by min() on columns of table "art_qk_choosen"
 input art_qk_choosen_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   art_id: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   qk_name: order_by
 }
@@ -1212,8 +1306,16 @@ input art_qk_choosen_on_conflict {
 
 # ordering options when selecting data from "art_qk_choosen"
 input art_qk_choosen_order_by {
+  _conflicts: order_by
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
   art: art_order_by
   art_id: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   qk_name: order_by
 }
@@ -1226,7 +1328,31 @@ input art_qk_choosen_pk_columns_input {
 # select columns of table "art_qk_choosen"
 enum art_qk_choosen_select_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   art_id
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
@@ -1237,21 +1363,123 @@ enum art_qk_choosen_select_column {
 
 # input type for updating data in table "art_qk_choosen"
 input art_qk_choosen_set_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   qk_name: String
+}
+
+# aggregate stddev on columns
+type art_qk_choosen_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "art_qk_choosen"
+input art_qk_choosen_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type art_qk_choosen_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "art_qk_choosen"
+input art_qk_choosen_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type art_qk_choosen_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "art_qk_choosen"
+input art_qk_choosen_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type art_qk_choosen_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "art_qk_choosen"
+input art_qk_choosen_sum_order_by {
+  _depth: order_by
 }
 
 # update columns of table "art_qk_choosen"
 enum art_qk_choosen_update_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   art_id
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
 
   # column name
   qk_name
+}
+
+# aggregate var_pop on columns
+type art_qk_choosen_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "art_qk_choosen"
+input art_qk_choosen_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type art_qk_choosen_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "art_qk_choosen"
+input art_qk_choosen_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type art_qk_choosen_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "art_qk_choosen"
+input art_qk_choosen_variance_order_by {
+  _depth: order_by
 }
 
 # unique or primary key constraints on table "art_qk"
@@ -1265,12 +1493,21 @@ enum art_qk_constraint {
 
 # input type for incrementing integer column in table "art_qk"
 input art_qk_inc_input {
+  _depth: Int
   sort: smallint
 }
 
 # input type for inserting data into table "art_qk"
 input art_qk_insert_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   name: String
   sort: smallint
@@ -1279,7 +1516,12 @@ input art_qk_insert_input {
 
 # aggregate max on columns
 type art_qk_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   name: String
   sort: smallint
@@ -1288,7 +1530,12 @@ type art_qk_max_fields {
 
 # order by max() on columns of table "art_qk"
 input art_qk_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   name: order_by
   sort: order_by
@@ -1297,7 +1544,12 @@ input art_qk_max_order_by {
 
 # aggregate min on columns
 type art_qk_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   name: String
   sort: smallint
@@ -1306,7 +1558,12 @@ type art_qk_min_fields {
 
 # order by min() on columns of table "art_qk"
 input art_qk_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   name: order_by
   sort: order_by
@@ -1337,7 +1594,15 @@ input art_qk_on_conflict {
 
 # ordering options when selecting data from "art_qk"
 input art_qk_order_by {
+  _conflicts: order_by
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
   beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   name: order_by
   sort: order_by
@@ -1352,7 +1617,31 @@ input art_qk_pk_columns_input {
 # select columns of table "art_qk"
 enum art_qk_select_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
@@ -1369,7 +1658,15 @@ enum art_qk_select_column {
 
 # input type for updating data in table "art_qk"
 input art_qk_set_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   name: String
   sort: smallint
@@ -1378,48 +1675,80 @@ input art_qk_set_input {
 
 # aggregate stddev on columns
 type art_qk_stddev_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by stddev() on columns of table "art_qk"
 input art_qk_stddev_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate stddev_pop on columns
 type art_qk_stddev_pop_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by stddev_pop() on columns of table "art_qk"
 input art_qk_stddev_pop_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate stddev_samp on columns
 type art_qk_stddev_samp_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by stddev_samp() on columns of table "art_qk"
 input art_qk_stddev_samp_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate sum on columns
 type art_qk_sum_fields {
+  _depth: Int
   sort: smallint
 }
 
 # order by sum() on columns of table "art_qk"
 input art_qk_sum_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # update columns of table "art_qk"
 enum art_qk_update_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
@@ -1436,31 +1765,37 @@ enum art_qk_update_column {
 
 # aggregate var_pop on columns
 type art_qk_var_pop_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by var_pop() on columns of table "art_qk"
 input art_qk_var_pop_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate var_samp on columns
 type art_qk_var_samp_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by var_samp() on columns of table "art_qk"
 input art_qk_var_samp_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate variance on columns
 type art_qk_variance_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by variance() on columns of table "art_qk"
 input art_qk_variance_order_by {
+  _depth: order_by
   sort: order_by
 }
 
@@ -2624,6 +2959,13 @@ input art_variance_order_by {
 
 # columns and relationships of "av"
 type av {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+
   # An object relationship
   art: art!
   art_id: uuid!
@@ -2663,6 +3005,8 @@ type av {
     # filter the rows returned
     where: art_sums_bool_exp
   ): art_sums_aggregate!
+  changed: timestamp
+  changed_by: String
   id: ID!
 
   # An object relationship
@@ -2678,16 +3022,32 @@ type av_aggregate {
 
 # aggregate fields of "av"
 type av_aggregate_fields {
+  avg: av_avg_fields
   count(columns: [av_select_column!], distinct: Boolean): Int
   max: av_max_fields
   min: av_min_fields
+  stddev: av_stddev_fields
+  stddev_pop: av_stddev_pop_fields
+  stddev_samp: av_stddev_samp_fields
+  sum: av_sum_fields
+  var_pop: av_var_pop_fields
+  var_samp: av_var_samp_fields
+  variance: av_variance_fields
 }
 
 # order by aggregate values of table "av"
 input av_aggregate_order_by {
+  avg: av_avg_order_by
   count: order_by
   max: av_max_order_by
   min: av_min_order_by
+  stddev: av_stddev_order_by
+  stddev_pop: av_stddev_pop_order_by
+  stddev_samp: av_stddev_samp_order_by
+  sum: av_sum_order_by
+  var_pop: av_var_pop_order_by
+  var_samp: av_var_samp_order_by
+  variance: av_variance_order_by
 }
 
 # input type for inserting array relation for remote table "av"
@@ -2696,14 +3056,32 @@ input av_arr_rel_insert_input {
   on_conflict: av_on_conflict
 }
 
+# aggregate avg on columns
+type av_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "av"
+input av_avg_order_by {
+  _depth: order_by
+}
+
 # Boolean expression to filter rows from the table "av". All fields are combined with a logical 'AND'.
 input av_bool_exp {
   _and: [av_bool_exp]
+  _conflicts: _text_comparison_exp
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
   _not: av_bool_exp
   _or: [av_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
   art: art_bool_exp
   art_id: uuid_comparison_exp
   art_sums: art_sums_bool_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
   id: uuid_comparison_exp
   person: person_bool_exp
   person_id: uuid_comparison_exp
@@ -2718,10 +3096,23 @@ enum av_constraint {
   av_pkey
 }
 
+# input type for incrementing integer column in table "av"
+input av_inc_input {
+  _depth: Int
+}
+
 # input type for inserting data into table "av"
 input av_insert_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   art: art_obj_rel_insert_input
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   person: person_obj_rel_insert_input
   person_id: uuid
@@ -2729,28 +3120,48 @@ input av_insert_input {
 
 # aggregate max on columns
 type av_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   person_id: uuid
 }
 
 # order by max() on columns of table "av"
 input av_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   art_id: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   person_id: order_by
 }
 
 # aggregate min on columns
 type av_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   person_id: uuid
 }
 
 # order by min() on columns of table "av"
 input av_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   art_id: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   person_id: order_by
 }
@@ -2779,9 +3190,17 @@ input av_on_conflict {
 
 # ordering options when selecting data from "av"
 input av_order_by {
+  _conflicts: order_by
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
   art: art_order_by
   art_id: order_by
   art_sums_aggregate: art_sums_aggregate_order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   person: person_order_by
   person_id: order_by
@@ -2795,7 +3214,31 @@ input av_pk_columns_input {
 # select columns of table "av"
 enum av_select_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   art_id
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
@@ -2806,21 +3249,123 @@ enum av_select_column {
 
 # input type for updating data in table "av"
 input av_set_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   art_id: uuid
+  changed: timestamp
+  changed_by: String
   id: ID
   person_id: uuid
+}
+
+# aggregate stddev on columns
+type av_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "av"
+input av_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type av_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "av"
+input av_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type av_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "av"
+input av_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type av_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "av"
+input av_sum_order_by {
+  _depth: order_by
 }
 
 # update columns of table "av"
 enum av_update_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   art_id
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
 
   # column name
   person_id
+}
+
+# aggregate var_pop on columns
+type av_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "av"
+input av_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type av_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "av"
+input av_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type av_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "av"
+input av_variance_order_by {
+  _depth: order_by
 }
 
 scalar bigint
@@ -6281,6 +6826,15 @@ input geometry_comparison_exp {
 
 # columns and relationships of "gv"
 type gv {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
+
   # An object relationship
   garten: garten
   garten_id: uuid
@@ -6299,16 +6853,32 @@ type gv_aggregate {
 
 # aggregate fields of "gv"
 type gv_aggregate_fields {
+  avg: gv_avg_fields
   count(columns: [gv_select_column!], distinct: Boolean): Int
   max: gv_max_fields
   min: gv_min_fields
+  stddev: gv_stddev_fields
+  stddev_pop: gv_stddev_pop_fields
+  stddev_samp: gv_stddev_samp_fields
+  sum: gv_sum_fields
+  var_pop: gv_var_pop_fields
+  var_samp: gv_var_samp_fields
+  variance: gv_variance_fields
 }
 
 # order by aggregate values of table "gv"
 input gv_aggregate_order_by {
+  avg: gv_avg_order_by
   count: order_by
   max: gv_max_order_by
   min: gv_min_order_by
+  stddev: gv_stddev_order_by
+  stddev_pop: gv_stddev_pop_order_by
+  stddev_samp: gv_stddev_samp_order_by
+  sum: gv_sum_order_by
+  var_pop: gv_var_pop_order_by
+  var_samp: gv_var_samp_order_by
+  variance: gv_variance_order_by
 }
 
 # input type for inserting array relation for remote table "gv"
@@ -6317,11 +6887,29 @@ input gv_arr_rel_insert_input {
   on_conflict: gv_on_conflict
 }
 
+# aggregate avg on columns
+type gv_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "gv"
+input gv_avg_order_by {
+  _depth: order_by
+}
+
 # Boolean expression to filter rows from the table "gv". All fields are combined with a logical 'AND'.
 input gv_bool_exp {
   _and: [gv_bool_exp]
+  _conflicts: _text_comparison_exp
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
   _not: gv_bool_exp
   _or: [gv_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
   garten: garten_bool_exp
   garten_id: uuid_comparison_exp
   id: uuid_comparison_exp
@@ -6338,8 +6926,21 @@ enum gv_constraint {
   gv_pkey
 }
 
+# input type for incrementing integer column in table "gv"
+input gv_inc_input {
+  _depth: Int
+}
+
 # input type for inserting data into table "gv"
 input gv_insert_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
   garten: garten_obj_rel_insert_input
   garten_id: uuid
   id: ID
@@ -6349,6 +6950,11 @@ input gv_insert_input {
 
 # aggregate max on columns
 type gv_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
   garten_id: uuid
   id: ID
   person_id: uuid
@@ -6356,6 +6962,11 @@ type gv_max_fields {
 
 # order by max() on columns of table "gv"
 input gv_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
   garten_id: order_by
   id: order_by
   person_id: order_by
@@ -6363,6 +6974,11 @@ input gv_max_order_by {
 
 # aggregate min on columns
 type gv_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
   garten_id: uuid
   id: ID
   person_id: uuid
@@ -6370,6 +6986,11 @@ type gv_min_fields {
 
 # order by min() on columns of table "gv"
 input gv_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
   garten_id: order_by
   id: order_by
   person_id: order_by
@@ -6399,6 +7020,14 @@ input gv_on_conflict {
 
 # ordering options when selecting data from "gv"
 input gv_order_by {
+  _conflicts: order_by
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  changed: order_by
+  changed_by: order_by
   garten: garten_order_by
   garten_id: order_by
   id: order_by
@@ -6414,6 +7043,30 @@ input gv_pk_columns_input {
 # select columns of table "gv"
 enum gv_select_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
   garten_id
 
   # column name
@@ -6425,13 +7078,85 @@ enum gv_select_column {
 
 # input type for updating data in table "gv"
 input gv_set_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
   garten_id: uuid
   id: ID
   person_id: uuid
 }
 
+# aggregate stddev on columns
+type gv_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "gv"
+input gv_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type gv_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "gv"
+input gv_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type gv_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "gv"
+input gv_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type gv_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "gv"
+input gv_sum_order_by {
+  _depth: order_by
+}
+
 # update columns of table "gv"
 enum gv_update_column {
+  # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
   # column name
   garten_id
 
@@ -6440,6 +7165,36 @@ enum gv_update_column {
 
   # column name
   person_id
+}
+
+# aggregate var_pop on columns
+type gv_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "gv"
+input gv_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type gv_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "gv"
+input gv_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type gv_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "gv"
+input gv_variance_order_by {
+  _depth: order_by
 }
 
 # columns and relationships of "herkunft"
@@ -6491,6 +7246,42 @@ type herkunft {
     # filter the rows returned
     where: herkunft_file_bool_exp
   ): herkunft_file_aggregate!
+
+  # An array relationship
+  herkunft_sums(
+    # distinct select on columns
+    distinct_on: [herkunft_sums_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [herkunft_sums_order_by!]
+
+    # filter the rows returned
+    where: herkunft_sums_bool_exp
+  ): [herkunft_sums!]!
+
+  # An aggregated array relationship
+  herkunft_sums_aggregate(
+    # distinct select on columns
+    distinct_on: [herkunft_sums_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [herkunft_sums_order_by!]
+
+    # filter the rows returned
+    where: herkunft_sums_bool_exp
+  ): herkunft_sums_aggregate!
   id: ID!
   kanton: String
 
@@ -6724,6 +7515,7 @@ input herkunft_bool_exp {
   gemeinde: String_comparison_exp
   geom_point: geometry_comparison_exp
   herkunft_files: herkunft_file_bool_exp
+  herkunft_sums: herkunft_sums_bool_exp
   id: uuid_comparison_exp
   kanton: String_comparison_exp
   kultur_revs: kultur_rev_bool_exp
@@ -7101,6 +7893,7 @@ input herkunft_order_by {
   gemeinde: order_by
   geom_point: order_by
   herkunft_files_aggregate: herkunft_file_aggregate_order_by
+  herkunft_sums_aggregate: herkunft_sums_aggregate_order_by
   id: order_by
   kanton: order_by
   kultur_revs_aggregate: kultur_rev_aggregate_order_by
@@ -10412,7 +11205,15 @@ input kultur_pk_columns_input {
 
 # columns and relationships of "kultur_qk"
 type kultur_qk {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
 
   # An array relationship
@@ -10501,20 +11302,30 @@ input kultur_qk_arr_rel_insert_input {
 
 # aggregate avg on columns
 type kultur_qk_avg_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by avg() on columns of table "kultur_qk"
 input kultur_qk_avg_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # Boolean expression to filter rows from the table "kultur_qk". All fields are combined with a logical 'AND'.
 input kultur_qk_bool_exp {
   _and: [kultur_qk_bool_exp]
+  _conflicts: _text_comparison_exp
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
   _not: kultur_qk_bool_exp
   _or: [kultur_qk_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
   beschreibung: String_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
   id: uuid_comparison_exp
   kultur_qk_choosens: kultur_qk_choosen_bool_exp
   name: String_comparison_exp
@@ -10524,6 +11335,14 @@ input kultur_qk_bool_exp {
 
 # columns and relationships of "kultur_qk_choosen"
 type kultur_qk_choosen {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
   id: ID!
 
   # An object relationship
@@ -10543,16 +11362,32 @@ type kultur_qk_choosen_aggregate {
 
 # aggregate fields of "kultur_qk_choosen"
 type kultur_qk_choosen_aggregate_fields {
+  avg: kultur_qk_choosen_avg_fields
   count(columns: [kultur_qk_choosen_select_column!], distinct: Boolean): Int
   max: kultur_qk_choosen_max_fields
   min: kultur_qk_choosen_min_fields
+  stddev: kultur_qk_choosen_stddev_fields
+  stddev_pop: kultur_qk_choosen_stddev_pop_fields
+  stddev_samp: kultur_qk_choosen_stddev_samp_fields
+  sum: kultur_qk_choosen_sum_fields
+  var_pop: kultur_qk_choosen_var_pop_fields
+  var_samp: kultur_qk_choosen_var_samp_fields
+  variance: kultur_qk_choosen_variance_fields
 }
 
 # order by aggregate values of table "kultur_qk_choosen"
 input kultur_qk_choosen_aggregate_order_by {
+  avg: kultur_qk_choosen_avg_order_by
   count: order_by
   max: kultur_qk_choosen_max_order_by
   min: kultur_qk_choosen_min_order_by
+  stddev: kultur_qk_choosen_stddev_order_by
+  stddev_pop: kultur_qk_choosen_stddev_pop_order_by
+  stddev_samp: kultur_qk_choosen_stddev_samp_order_by
+  sum: kultur_qk_choosen_sum_order_by
+  var_pop: kultur_qk_choosen_var_pop_order_by
+  var_samp: kultur_qk_choosen_var_samp_order_by
+  variance: kultur_qk_choosen_variance_order_by
 }
 
 # input type for inserting array relation for remote table "kultur_qk_choosen"
@@ -10561,11 +11396,29 @@ input kultur_qk_choosen_arr_rel_insert_input {
   on_conflict: kultur_qk_choosen_on_conflict
 }
 
+# aggregate avg on columns
+type kultur_qk_choosen_avg_fields {
+  _depth: Float
+}
+
+# order by avg() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_avg_order_by {
+  _depth: order_by
+}
+
 # Boolean expression to filter rows from the table "kultur_qk_choosen". All fields are combined with a logical 'AND'.
 input kultur_qk_choosen_bool_exp {
   _and: [kultur_qk_choosen_bool_exp]
+  _conflicts: _text_comparison_exp
+  _deleted: Boolean_comparison_exp
+  _depth: Int_comparison_exp
   _not: kultur_qk_choosen_bool_exp
   _or: [kultur_qk_choosen_bool_exp]
+  _parent_rev: String_comparison_exp
+  _rev: String_comparison_exp
+  _revisions: _text_comparison_exp
+  changed: timestamp_comparison_exp
+  changed_by: String_comparison_exp
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
@@ -10582,8 +11435,21 @@ enum kultur_qk_choosen_constraint {
   kultur_qk_choosen_pkey
 }
 
+# input type for incrementing integer column in table "kultur_qk_choosen"
+input kultur_qk_choosen_inc_input {
+  _depth: Int
+}
+
 # input type for inserting data into table "kultur_qk_choosen"
 input kultur_qk_choosen_insert_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
   id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
@@ -10593,6 +11459,11 @@ input kultur_qk_choosen_insert_input {
 
 # aggregate max on columns
 type kultur_qk_choosen_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
   id: ID
   kultur_id: uuid
   qk_name: String
@@ -10600,6 +11471,11 @@ type kultur_qk_choosen_max_fields {
 
 # order by max() on columns of table "kultur_qk_choosen"
 input kultur_qk_choosen_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   kultur_id: order_by
   qk_name: order_by
@@ -10607,6 +11483,11 @@ input kultur_qk_choosen_max_order_by {
 
 # aggregate min on columns
 type kultur_qk_choosen_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  changed: timestamp
+  changed_by: String
   id: ID
   kultur_id: uuid
   qk_name: String
@@ -10614,6 +11495,11 @@ type kultur_qk_choosen_min_fields {
 
 # order by min() on columns of table "kultur_qk_choosen"
 input kultur_qk_choosen_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   kultur_id: order_by
   qk_name: order_by
@@ -10643,6 +11529,14 @@ input kultur_qk_choosen_on_conflict {
 
 # ordering options when selecting data from "kultur_qk_choosen"
 input kultur_qk_choosen_order_by {
+  _conflicts: order_by
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   kultur: kultur_order_by
   kultur_id: order_by
@@ -10658,6 +11552,30 @@ input kultur_qk_choosen_pk_columns_input {
 # select columns of table "kultur_qk_choosen"
 enum kultur_qk_choosen_select_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
+  # column name
   id
 
   # column name
@@ -10669,13 +11587,85 @@ enum kultur_qk_choosen_select_column {
 
 # input type for updating data in table "kultur_qk_choosen"
 input kultur_qk_choosen_set_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
+  changed: timestamp
+  changed_by: String
   id: ID
   kultur_id: uuid
   qk_name: String
 }
 
+# aggregate stddev on columns
+type kultur_qk_choosen_stddev_fields {
+  _depth: Float
+}
+
+# order by stddev() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_stddev_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_pop on columns
+type kultur_qk_choosen_stddev_pop_fields {
+  _depth: Float
+}
+
+# order by stddev_pop() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_stddev_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate stddev_samp on columns
+type kultur_qk_choosen_stddev_samp_fields {
+  _depth: Float
+}
+
+# order by stddev_samp() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_stddev_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate sum on columns
+type kultur_qk_choosen_sum_fields {
+  _depth: Int
+}
+
+# order by sum() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_sum_order_by {
+  _depth: order_by
+}
+
 # update columns of table "kultur_qk_choosen"
 enum kultur_qk_choosen_update_column {
+  # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
+  changed
+
+  # column name
+  changed_by
+
   # column name
   id
 
@@ -10686,6 +11676,36 @@ enum kultur_qk_choosen_update_column {
   qk_name
 }
 
+# aggregate var_pop on columns
+type kultur_qk_choosen_var_pop_fields {
+  _depth: Float
+}
+
+# order by var_pop() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_var_pop_order_by {
+  _depth: order_by
+}
+
+# aggregate var_samp on columns
+type kultur_qk_choosen_var_samp_fields {
+  _depth: Float
+}
+
+# order by var_samp() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_var_samp_order_by {
+  _depth: order_by
+}
+
+# aggregate variance on columns
+type kultur_qk_choosen_variance_fields {
+  _depth: Float
+}
+
+# order by variance() on columns of table "kultur_qk_choosen"
+input kultur_qk_choosen_variance_order_by {
+  _depth: order_by
+}
+
 # unique or primary key constraints on table "kultur_qk"
 enum kultur_qk_constraint {
   # unique or primary key constraint
@@ -10694,12 +11714,21 @@ enum kultur_qk_constraint {
 
 # input type for incrementing integer column in table "kultur_qk"
 input kultur_qk_inc_input {
+  _depth: Int
   sort: smallint
 }
 
 # input type for inserting data into table "kultur_qk"
 input kultur_qk_insert_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   kultur_qk_choosens: kultur_qk_choosen_arr_rel_insert_input
   name: String
@@ -10709,7 +11738,12 @@ input kultur_qk_insert_input {
 
 # aggregate max on columns
 type kultur_qk_max_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   name: String
   sort: smallint
@@ -10718,7 +11752,12 @@ type kultur_qk_max_fields {
 
 # order by max() on columns of table "kultur_qk"
 input kultur_qk_max_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   name: order_by
   sort: order_by
@@ -10727,7 +11766,12 @@ input kultur_qk_max_order_by {
 
 # aggregate min on columns
 type kultur_qk_min_fields {
+  _depth: Int
+  _parent_rev: String
+  _rev: String
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   name: String
   sort: smallint
@@ -10736,7 +11780,12 @@ type kultur_qk_min_fields {
 
 # order by min() on columns of table "kultur_qk"
 input kultur_qk_min_order_by {
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
   beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   name: order_by
   sort: order_by
@@ -10767,7 +11816,15 @@ input kultur_qk_on_conflict {
 
 # ordering options when selecting data from "kultur_qk"
 input kultur_qk_order_by {
+  _conflicts: order_by
+  _deleted: order_by
+  _depth: order_by
+  _parent_rev: order_by
+  _rev: order_by
+  _revisions: order_by
   beschreibung: order_by
+  changed: order_by
+  changed_by: order_by
   id: order_by
   kultur_qk_choosens_aggregate: kultur_qk_choosen_aggregate_order_by
   name: order_by
@@ -10784,7 +11841,31 @@ input kultur_qk_pk_columns_input {
 # select columns of table "kultur_qk"
 enum kultur_qk_select_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
@@ -10801,7 +11882,15 @@ enum kultur_qk_select_column {
 
 # input type for updating data in table "kultur_qk"
 input kultur_qk_set_input {
+  _conflicts: _text
+  _deleted: Boolean
+  _depth: Int
+  _parent_rev: String
+  _rev: String
+  _revisions: _text
   beschreibung: String
+  changed: timestamp
+  changed_by: String
   id: ID
   name: String
   sort: smallint
@@ -10810,48 +11899,80 @@ input kultur_qk_set_input {
 
 # aggregate stddev on columns
 type kultur_qk_stddev_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by stddev() on columns of table "kultur_qk"
 input kultur_qk_stddev_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate stddev_pop on columns
 type kultur_qk_stddev_pop_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by stddev_pop() on columns of table "kultur_qk"
 input kultur_qk_stddev_pop_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate stddev_samp on columns
 type kultur_qk_stddev_samp_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by stddev_samp() on columns of table "kultur_qk"
 input kultur_qk_stddev_samp_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate sum on columns
 type kultur_qk_sum_fields {
+  _depth: Int
   sort: smallint
 }
 
 # order by sum() on columns of table "kultur_qk"
 input kultur_qk_sum_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # update columns of table "kultur_qk"
 enum kultur_qk_update_column {
   # column name
+  _conflicts
+
+  # column name
+  _deleted
+
+  # column name
+  _depth
+
+  # column name
+  _parent_rev
+
+  # column name
+  _rev
+
+  # column name
+  _revisions
+
+  # column name
   beschreibung
+
+  # column name
+  changed
+
+  # column name
+  changed_by
 
   # column name
   id
@@ -10868,31 +11989,37 @@ enum kultur_qk_update_column {
 
 # aggregate var_pop on columns
 type kultur_qk_var_pop_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by var_pop() on columns of table "kultur_qk"
 input kultur_qk_var_pop_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate var_samp on columns
 type kultur_qk_var_samp_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by var_samp() on columns of table "kultur_qk"
 input kultur_qk_var_samp_order_by {
+  _depth: order_by
   sort: order_by
 }
 
 # aggregate variance on columns
 type kultur_qk_variance_fields {
+  _depth: Float
   sort: Float
 }
 
 # order by variance() on columns of table "kultur_qk"
 input kultur_qk_variance_order_by {
+  _depth: order_by
   sort: order_by
 }
 
@@ -14679,6 +15806,9 @@ type mutation_root {
 
   # update data of the table: "art_qk_choosen"
   update_art_qk_choosen(
+    # increments the integer columns with given value of the filtered values
+    _inc: art_qk_choosen_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: art_qk_choosen_set_input
 
@@ -14688,6 +15818,9 @@ type mutation_root {
 
   # update single row of the table: "art_qk_choosen"
   update_art_qk_choosen_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: art_qk_choosen_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: art_qk_choosen_set_input
     pk_columns: art_qk_choosen_pk_columns_input!
@@ -14717,6 +15850,9 @@ type mutation_root {
 
   # update data of the table: "av"
   update_av(
+    # increments the integer columns with given value of the filtered values
+    _inc: av_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: av_set_input
 
@@ -14726,6 +15862,9 @@ type mutation_root {
 
   # update single row of the table: "av"
   update_av_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: av_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: av_set_input
     pk_columns: av_pk_columns_input!
@@ -14837,6 +15976,9 @@ type mutation_root {
 
   # update data of the table: "gv"
   update_gv(
+    # increments the integer columns with given value of the filtered values
+    _inc: gv_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: gv_set_input
 
@@ -14846,6 +15988,9 @@ type mutation_root {
 
   # update single row of the table: "gv"
   update_gv_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: gv_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: gv_set_input
     pk_columns: gv_pk_columns_input!
@@ -15007,6 +16152,9 @@ type mutation_root {
 
   # update data of the table: "kultur_qk_choosen"
   update_kultur_qk_choosen(
+    # increments the integer columns with given value of the filtered values
+    _inc: kultur_qk_choosen_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: kultur_qk_choosen_set_input
 
@@ -15016,6 +16164,9 @@ type mutation_root {
 
   # update single row of the table: "kultur_qk_choosen"
   update_kultur_qk_choosen_by_pk(
+    # increments the integer columns with given value of the filtered values
+    _inc: kultur_qk_choosen_inc_input
+
     # sets the columns of the filtered rows to the given values
     _set: kultur_qk_choosen_set_input
     pk_columns: kultur_qk_choosen_pk_columns_input!
