@@ -30,7 +30,7 @@ const Online = () => {
 
   return (
     <OnlineButton color="inherit" aria-label={title} title={title}>
-      <StyledBadge color="primary" badgeContent={900} max={999}>
+      <StyledBadge color="primary" badgeContent={queuedQueries.size} max={999}>
         {online ? <NetworkOn /> : <NetworkOff />}
       </StyledBadge>
     </OnlineButton>
