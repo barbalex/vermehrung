@@ -11,7 +11,7 @@ Nicht jeder Garten verfügt über WLAN. Nicht jedes Eingabegerät verfügt über
 
 ### Kann eine Web-App offline funktionieren?
 
-Ja. Zumindest ist dies für vermehrung.ch das Ziel. Aktuell sind die meisten dafür nötigen Anpassungen erfolgt. Ausgiebig getestet ist es noch nicht. Mit Fehlern und Nachbesserungen ist daher zu rechnen.<br/><br/>
+Ja. Aktuell sind die meisten dafür nötigen Anpassungen erfolgt. Ausgiebig getestet ist es noch nicht. Mit Fehlern und Nachbesserungen ist daher zu rechnen.<br/><br/>
 
 ### Verbindungs-Status
 
@@ -51,12 +51,12 @@ Der Server von vermehrung.ch wählt automatisch Sieger. Leider ist er nicht allw
 Klickt man auf den Konflikt, öffnet sich das Formular mit der widersprüchlichen Version:<br/>
 ![widersprüchliche Version](006.png)<br/>
 
-Hier sehen Sie, welche Unterschiede bestehen. Sie haben drei Optionen:
+Hier sehen Sie die Unterschiede. Sie haben drei Optionen:
 
 1. widersprüchliche Version verwerfen
 2. widersprüchliche Version übernehmen
 3. aktuelle Version anpassen und danach die wiedersprüchliche verwerfen
 
-Im Gegensatz zum Server sind sie hoffentlich allwissend genug, um den Konflikt zu bereinigen 😁<br/><br/>
+Im Gegensatz zum Server sind sie hoffentlich allwissend genug, um den Konflikt abschliessend zu bereinigen 😁<br/><br/>
 
 Es steckt mehr hinter der Offline-Fähigkeit von vermehrung.ch. Aber das ist alles, was für Sie direkt nützlich ist. Neugierige [lesen hier weiter](../offline-wie).
