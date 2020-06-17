@@ -129,12 +129,12 @@ const Event = ({
     personsSorted,
     teilkultursSorted,
     showDeleted,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
-
-  const [errors, setErrors] = useState({})
 
   const hierarchyFilter = (e) => {
     if (kulturIdInActiveNodeArray)
@@ -154,8 +154,8 @@ const Event = ({
   )
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('event')
+  }, [id, unsetError])
 
   const kulturWerte = useMemo(
     () =>
@@ -301,7 +301,7 @@ const Event = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors._deleted}
+                  error={errors?.event?._deleted}
                 />
               )}
               <Select
@@ -312,7 +312,7 @@ const Event = ({
                 label="Kultur"
                 options={kulturWerte}
                 saveToDb={saveToDb}
-                error={errors.kultur_id}
+                error={errors?.event?.kultur_id}
               />
               {((tk && ev_teilkultur_id) || showFilter) && (
                 <SelectCreatable
@@ -321,7 +321,7 @@ const Event = ({
                   field="teilkultur_id"
                   label="Teilkultur"
                   options={teilkulturWerte}
-                  error={errors.teilkultur_id}
+                  error={errors?.event?.teilkultur_id}
                   onCreateNew={onCreateNewTeilkultur}
                 />
               )}
@@ -331,7 +331,7 @@ const Event = ({
                 label="Beschreibung"
                 value={row.beschreibung}
                 saveToDb={saveToDb}
-                error={errors.beschreibung}
+                error={errors?.event?.beschreibung}
                 multiline
               />
               {(ev_person_id || showFilter) && (
@@ -343,7 +343,7 @@ const Event = ({
                   label="Wer"
                   options={personWerte}
                   saveToDb={saveToDb}
-                  error={errors.person_id}
+                  error={errors?.event?.person_id}
                 />
               )}
               {(ev_datum || showFilter) && (
@@ -353,7 +353,7 @@ const Event = ({
                   label="Datum"
                   value={row.datum}
                   saveToDb={saveToDb}
-                  error={errors.datum}
+                  error={errors?.event?.datum}
                 />
               )}
               {(ev_geplant || showFilter) && (
@@ -364,7 +364,7 @@ const Event = ({
                     name="geplant"
                     value={row.geplant}
                     saveToDb={saveToDb}
-                    error={errors.geplant}
+                    error={errors?.event?.geplant}
                   />
                   <div>
                     <IconButton

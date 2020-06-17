@@ -114,12 +114,12 @@ const Art = ({
     showDeleted,
     tree,
     aeArtsSorted,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
-
-  const [errors, setErrors] = useState({})
 
   const totalNr = artsSorted.length
   const filteredNr = artsFiltered.length
@@ -134,8 +134,8 @@ const Art = ({
   )
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('art')
+  }, [id, unsetError])
 
   const saveToDb = useCallback(
     async (event) => {
@@ -247,7 +247,7 @@ const Art = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors._deleted}
+                  error={errors?.art?._deleted}
                 />
               )}
               <SelectLoadingOptions
@@ -258,7 +258,7 @@ const Art = ({
                 label="Art"
                 row={row}
                 saveToDb={saveToDb}
-                error={errors.ae_id}
+                error={errors?.art?.ae_id}
                 modelKey="name"
                 modelFilter={aeArtsFilter}
                 showFilterModel={aeArtsSorted}
