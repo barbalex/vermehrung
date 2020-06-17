@@ -1,11 +1,11 @@
 ---
 path: "/Dokumentation/Roadmap"
-date: "2020-05-12"
+date: "2020-06-17"
 title: "Roadmap"
-sort1: 26
+sort1: 27
 ---
 
-vermehrung.ch ist in Entwicklung. Ziel ist, dass ab 2020 damit gearbeitet wird.<br/><br/>
+vermehrung.ch ist in Entwicklung. Ziel ist, dass ab Sommer 2020 damit gearbeitet wird.<br/><br/>
 
 Symbole:
 * :white_check_mark:: erledigt
@@ -48,5 +48,5 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Gärtner, Artverantwortliche und Manager haben passende Rechte und Funktionalitäten
 - :white_check_mark: Funktionalitäten mit Topos für v1 bereinigt
 - :white_medium_square: Vorhandene Daten importiert (verzögert sich etwas)
-- :white_medium_square: Produktive Version 1 ist live (geplant: Juni 2020)
+- :white_medium_square: Produktive Version 1 ist live (geplant: Juli 2020)
 - :ballot_box_with_check: Es kann ohne Netzwerk-Verbindung gearbeitet werden
