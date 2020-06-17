@@ -122,6 +122,9 @@ const Garten = ({
     showDeleted,
     upsertGvModel,
     deleteGvModel,
+    errors,
+    setError,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -131,8 +134,6 @@ const Garten = ({
       return e.person_id === personIdInActiveNodeArray
     return true
   }
-
-  const [errors, setErrors] = useState({})
 
   const totalNr = gartensSorted.filter(hierarchyFilter).length
   const filteredNr = gartensFiltered.filter(hierarchyFilter).length
@@ -156,8 +157,8 @@ const Garten = ({
   } = userPersonOption
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('garten')
+  }, [id, unsetError])
 
   const personWerte = useMemo(
     () =>
@@ -196,11 +197,11 @@ const Garten = ({
         } catch (error) {
           console.log({ error })
           deleteGvModel(newObject)
-          return setErrors({ [field]: error.message })
+          return setError({ path: `garten.${field}`, value: error.message })
         }
       }
     },
-    [deleteGvModel, filter, row, showFilter, store, upsertGvModel],
+    [deleteGvModel, filter, row, setError, showFilter, store, upsertGvModel],
   )
 
   if (!row || (!showFilter && filter.show)) return null
@@ -253,7 +254,7 @@ const Garten = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors._deleted}
+                  error={errors?.garten?._deleted}
                 />
               )}
               <TextField
@@ -262,7 +263,7 @@ const Garten = ({
                 label="Name"
                 value={row.name}
                 saveToDb={saveToDb}
-                error={errors.name}
+                error={errors?.garten?.name}
               />
               <Select
                 key={`${row.id}${row.person_id}person_id`}
@@ -272,7 +273,7 @@ const Garten = ({
                 label="Person"
                 options={personWerte}
                 saveToDb={saveToDb}
-                error={errors.person_id}
+                error={errors?.garten?.person_id}
               />
               {ga_strasse && (
                 <TextField
@@ -281,7 +282,7 @@ const Garten = ({
                   label="Strasse"
                   value={row.strasse}
                   saveToDb={saveToDb}
-                  error={errors.strasse}
+                  error={errors?.garten?.strasse}
                 />
               )}
               {ga_plz && (
@@ -291,7 +292,7 @@ const Garten = ({
                   label="PLZ"
                   value={row.plz}
                   saveToDb={saveToDb}
-                  error={errors.plz}
+                  error={errors?.garten?.plz}
                   type="number"
                 />
               )}
@@ -302,7 +303,7 @@ const Garten = ({
                   label="Ort"
                   value={row.ort}
                   saveToDb={saveToDb}
-                  error={errors.ort}
+                  error={errors?.garten?.ort}
                 />
               )}
               {!showFilter && ga_geom_point && (
@@ -315,7 +316,7 @@ const Garten = ({
                   name="aktiv"
                   value={row.aktiv}
                   saveToDb={saveToDb}
-                  error={errors.aktiv}
+                  error={errors?.garten?.aktiv}
                 />
               )}
               {ga_bemerkungen && (
@@ -325,7 +326,7 @@ const Garten = ({
                   label="Bemerkungen"
                   value={row.bemerkungen}
                   saveToDb={saveToDb}
-                  error={errors.bemerkungen}
+                  error={errors?.garten?.bemerkungen}
                   multiLine
                 />
               )}
