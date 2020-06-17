@@ -168,6 +168,8 @@ const SammelLieferung = ({
     sammelLieferungsSorted,
     sammlungsSorted,
     showDeleted,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { setWidthInPercentOfScreen } = store.tree
@@ -180,8 +182,6 @@ const SammelLieferung = ({
   const row = showFilter
     ? filter.sammel_lieferung
     : store.sammel_lieferungs.get(id) || {}
-
-  const [errors, setErrors] = useState({})
 
   const totalNr = sammelLieferungsSorted.filter(hierarchyFilter).length
   const filteredNr = sammelLieferungsFiltered.filter(hierarchyFilter).length
@@ -212,8 +212,9 @@ const SammelLieferung = ({
     : ''
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('sammel_lieferung')
+  }, [id, unsetError])
+
   useEffect(() => {
     if (id) setWidthInPercentOfScreen(25)
     return () => {
@@ -462,7 +463,7 @@ const SammelLieferung = ({
                     name="_deleted"
                     value={row._deleted}
                     saveToDb={saveToDb}
-                    error={errors._deleted}
+                    error={errors?.sammel_lieferung?._deleted}
                   />
                 )}
                 {ifSomeNeeded([
@@ -486,7 +487,7 @@ const SammelLieferung = ({
                         label="Art"
                         options={artWerte}
                         saveToDb={saveToDb}
-                        error={errors.art_id}
+                        error={errors?.sammel_lieferung?.art_id}
                       />
                     )}
                     {herkunftValue && (
@@ -503,7 +504,7 @@ const SammelLieferung = ({
                           label="Anzahl Pflanzen"
                           value={row.anzahl_pflanzen}
                           saveToDb={saveToDb}
-                          error={errors.anzahl_pflanzen}
+                          error={errors?.sammel_lieferung?.anzahl_pflanzen}
                           type="number"
                         />
                       )}
@@ -514,7 +515,9 @@ const SammelLieferung = ({
                           label="Anzahl auspflanzbereit"
                           value={row.anzahl_auspflanzbereit}
                           saveToDb={saveToDb}
-                          error={errors.anzahl_auspflanzbereit}
+                          error={
+                            errors?.sammel_lieferung?.anzahl_auspflanzbereit
+                          }
                           type="number"
                         />
                       )}
@@ -527,7 +530,7 @@ const SammelLieferung = ({
                           label="Gramm Samen"
                           value={row.gramm_samen}
                           saveToDb={saveToDb}
-                          error={errors.gramm_samen}
+                          error={errors?.sammel_lieferung?.gramm_samen}
                           type="number"
                         />
                       )}
@@ -538,7 +541,7 @@ const SammelLieferung = ({
                           label={`Andere Menge (z.B. "3 Zwiebeln")`}
                           value={row.andere_menge}
                           saveToDb={saveToDb}
-                          error={errors.andere_menge}
+                          error={errors?.sammel_lieferung?.andere_menge}
                           type="text"
                         />
                       )}
@@ -551,7 +554,9 @@ const SammelLieferung = ({
                           label="von Anzahl Individuen"
                           value={row.von_anzahl_individuen}
                           saveToDb={saveToDb}
-                          error={errors.von_anzahl_individuen}
+                          error={
+                            errors?.sammel_lieferung?.von_anzahl_individuen
+                          }
                           type="number"
                         />
                         <div>
@@ -585,7 +590,7 @@ const SammelLieferung = ({
                         }`}
                         options={sammlungWerte}
                         saveToDb={saveToDb}
-                        error={errors.von_sammlung_id}
+                        error={errors?.sammel_lieferung?.von_sammlung_id}
                       />
                     )}
                     {ifNeeded('von_kultur_id') && (
@@ -601,7 +606,7 @@ const SammelLieferung = ({
                         }`}
                         options={vonKulturWerte}
                         saveToDb={saveToDb}
-                        error={errors.von_kultur_id}
+                        error={errors?.sammel_lieferung?.von_kultur_id}
                       />
                     )}
                   </>
@@ -626,7 +631,7 @@ const SammelLieferung = ({
                         }`}
                         options={nachKulturWerte}
                         saveToDb={saveToDb}
-                        error={errors.nach_kultur_id}
+                        error={errors?.sammel_lieferung?.nach_kultur_id}
                       />
                     )}
                     {ifNeeded('nach_ausgepflanzt') && (
@@ -636,7 +641,7 @@ const SammelLieferung = ({
                         name="nach_ausgepflanzt"
                         value={row.nach_ausgepflanzt}
                         saveToDb={saveToDb}
-                        error={errors.nach_ausgepflanzt}
+                        error={errors?.sammel_lieferung?.nach_ausgepflanzt}
                       />
                     )}
                   </>
@@ -653,7 +658,7 @@ const SammelLieferung = ({
                         label="Datum"
                         value={row.datum}
                         saveToDb={saveToDb}
-                        error={errors.datum}
+                        error={errors?.sammel_lieferung?.datum}
                       />
                     )}
                     {ifNeeded('geplant') && (
@@ -664,7 +669,7 @@ const SammelLieferung = ({
                           name="geplant"
                           value={row.geplant}
                           saveToDb={saveToDb}
-                          error={errors.geplant}
+                          error={errors?.sammel_lieferung?.geplant}
                         />
                         <div>
                           <IconButton
@@ -693,7 +698,7 @@ const SammelLieferung = ({
                         label="Person"
                         options={personWerte}
                         saveToDb={saveToDb}
-                        error={errors.person_id}
+                        error={errors?.sammel_lieferung?.person_id}
                       />
                     )}
                     {ifNeeded('bemerkungen') && (
@@ -703,7 +708,7 @@ const SammelLieferung = ({
                         label="Bemerkungen"
                         value={row.bemerkungen}
                         saveToDb={saveToDb}
-                        error={errors.bemerkungen}
+                        error={errors?.sammel_lieferung?.bemerkungen}
                         multiLine
                       />
                     )}
