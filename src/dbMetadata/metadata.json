@@ -26,7 +26,12 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["id", "name", "name_deutsch", "name_latein"],
+            "columns": [
+              "id",
+              "name",
+              "name_deutsch",
+              "name_latein"
+            ],
             "filter": {
               "_or": [
                 {
@@ -72,7 +77,12 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": ["id", "name", "name_deutsch", "name_latein"],
+            "columns": [
+              "id",
+              "name",
+              "name_deutsch",
+              "name_latein"
+            ],
             "filter": {
               "ae_art_art": {
                 "kulturs": {
@@ -92,7 +102,12 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["name", "name_deutsch", "name_latein", "id"],
+            "columns": [
+              "name",
+              "name_deutsch",
+              "name_latein",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -756,19 +771,40 @@
         "schema": "public",
         "name": "art_qk"
       },
-      "insert_permissions": [
+      "array_relationships": [
         {
-          "role": "gardener",
-          "permission": {
-            "check": {},
-            "columns": ["name", "titel", "beschreibung", "sort", "id"]
+          "name": "art_qk_choosen_revs",
+          "using": {
+            "foreign_key_constraint_on": {
+              "column": "qk_name",
+              "table": {
+                "schema": "public",
+                "name": "art_qk_choosen_rev"
+              }
+            }
           }
-        },
+        }
+      ],
+      "insert_permissions": [
         {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": ["sort", "beschreibung", "titel", "id", "name"]
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ]
           }
         }
       ],
@@ -776,7 +812,43 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["sort", "beschreibung", "titel", "id", "name"],
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "columns": [
+              "name",
+              "titel",
+              "beschreibung",
+              "sort",
+              "id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -784,7 +856,21 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["sort", "beschreibung", "titel", "id", "name"],
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -794,7 +880,21 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["sort", "beschreibung", "titel", "id", "name"],
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ],
             "filter": {},
             "check": null
           }
@@ -844,21 +944,38 @@
                 }
               ]
             },
-            "columns": ["art_id", "qk_name", "id"]
-          }
-        },
-        {
-          "role": "gardener",
-          "permission": {
-            "check": {},
-            "columns": ["qk_name", "art_id", "id"]
+            "columns": [
+              "art_id",
+              "qk_name",
+              "id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts"
+            ]
           }
         },
         {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": ["qk_name", "art_id", "id"]
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "id"
+            ]
           }
         }
       ],
@@ -866,7 +983,19 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["qk_name", "art_id", "id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "id"
+            ],
             "filter": {
               "_or": [
                 {
@@ -891,7 +1020,19 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["qk_name", "art_id", "id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -901,7 +1042,19 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["qk_name", "art_id", "id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "id"
+            ],
             "filter": {
               "_or": [
                 {
@@ -926,7 +1079,19 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["qk_name", "art_id", "id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "id"
+            ],
             "filter": {},
             "check": null
           }
@@ -956,6 +1121,367 @@
             }
           }
         },
+        {
+          "role": "manager",
+          "permission": {
+            "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "art_qk_choosen_rev"
+      },
+      "object_relationships": [
+        {
+          "name": "art",
+          "using": {
+            "foreign_key_constraint_on": "art_id"
+          }
+        },
+        {
+          "name": "art_qk",
+          "using": {
+            "foreign_key_constraint_on": "qk_name"
+          }
+        }
+      ],
+      "insert_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "check": {
+              "_or": [
+                {
+                  "art_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "art": {
+                    "avs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "columns": [
+              "id",
+              "art_qk_choosen_id",
+              "art_id",
+              "qk_name",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts"
+            ],
+            "backend_only": false
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "check": {},
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "art_qk_choosen_id",
+              "id"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "art_qk_choosen_id",
+              "id"
+            ],
+            "filter": {
+              "_or": [
+                {
+                  "art_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "art": {
+                    "avs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "art_qk_choosen_id",
+              "id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ],
+      "update_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "art_qk_choosen_id",
+              "id"
+            ],
+            "filter": {
+              "_or": [
+                {
+                  "art_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "art": {
+                    "avs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "check": null
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "art_id",
+              "art_qk_choosen_id",
+              "id"
+            ],
+            "filter": {},
+            "check": null
+          }
+        }
+      ],
+      "delete_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "filter": {
+              "_or": [
+                {
+                  "art_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "art": {
+                    "avs": {
+                      "person_id": {
+                        "_eq": "X-Hasura-User-Id"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "art_qk_rev"
+      },
+      "insert_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "check": {},
+            "columns": [
+              "id",
+              "art_qk_id",
+              "name",
+              "titel",
+              "beschreibung",
+              "sort",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "changed",
+              "changed_by"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "name",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "art_qk_id",
+              "id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "columns": [
+              "id",
+              "art_qk_id",
+              "name",
+              "titel",
+              "beschreibung",
+              "sort",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "changed",
+              "changed_by"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "name",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "art_qk_id",
+              "id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ],
+      "update_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_revisions",
+              "beschreibung",
+              "name",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "art_qk_id",
+              "id"
+            ],
+            "filter": {},
+            "check": null
+          }
+        }
+      ],
+      "delete_permissions": [
         {
           "role": "manager",
           "permission": {
@@ -1415,7 +1941,19 @@
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": ["art_id", "person_id", "id"]
+            "columns": [
+              "art_id",
+              "person_id",
+              "id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts"
+            ]
           }
         }
       ],
@@ -1423,7 +1961,19 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["art_id", "id", "person_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "id",
+              "person_id"
+            ],
             "filter": {
               "person_id": {
                 "_eq": "X-Hasura-User-Id"
@@ -1435,7 +1985,19 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["art_id", "id", "person_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "id",
+              "person_id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -1445,7 +2007,137 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["art_id", "id", "person_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "id",
+              "person_id"
+            ],
+            "filter": {},
+            "check": null
+          }
+        }
+      ],
+      "delete_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "av_rev"
+      },
+      "object_relationships": [
+        {
+          "name": "art",
+          "using": {
+            "foreign_key_constraint_on": "art_id"
+          }
+        },
+        {
+          "name": "person",
+          "using": {
+            "foreign_key_constraint_on": "person_id"
+          }
+        }
+      ],
+      "insert_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "check": {},
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "av_rev",
+              "id",
+              "person_id"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "id",
+              "av_rev",
+              "art_id",
+              "person_id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted"
+            ],
+            "filter": {
+              "person_id": {
+                "_eq": "X-Hasura-User-Id"
+              }
+            },
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "av_rev",
+              "id",
+              "person_id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ],
+      "update_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "art_id",
+              "av_rev",
+              "id",
+              "person_id"
+            ],
             "filter": {},
             "check": null
           }
@@ -3630,7 +4322,19 @@
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": ["garten_id", "id", "person_id"],
+            "columns": [
+              "id",
+              "garten_id",
+              "person_id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts"
+            ],
             "backend_only": false
           }
         }
@@ -3639,7 +4343,19 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["garten_id", "id", "person_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "id",
+              "person_id"
+            ],
             "filter": {
               "person_id": {
                 "_eq": "X-Hasura-User-Id"
@@ -3650,7 +4366,19 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": ["garten_id", "id", "person_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "id",
+              "person_id"
+            ],
             "filter": {
               "person_id": {
                 "_eq": "X-Hasura-User-Id"
@@ -3661,7 +4389,19 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["garten_id", "id", "person_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "id",
+              "person_id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -3671,7 +4411,161 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["garten_id", "id", "person_id"],
+            "columns": [
+              "id",
+              "garten_id",
+              "person_id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts"
+            ],
+            "filter": {},
+            "check": null
+          }
+        }
+      ],
+      "delete_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "gv_rev"
+      },
+      "object_relationships": [
+        {
+          "name": "garten",
+          "using": {
+            "foreign_key_constraint_on": "garten_id"
+          }
+        },
+        {
+          "name": "person",
+          "using": {
+            "foreign_key_constraint_on": "person_id"
+          }
+        }
+      ],
+      "insert_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "check": {},
+            "columns": [
+              "id",
+              "gv_id",
+              "garten_id",
+              "person_id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "id",
+              "gv_id",
+              "garten_id",
+              "person_id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted"
+            ],
+            "filter": {
+              "person_id": {
+                "_eq": "X-Hasura-User-Id"
+              }
+            },
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "gv_id",
+              "id",
+              "person_id"
+            ],
+            "filter": {
+              "person_id": {
+                "_eq": "X-Hasura-User-Id"
+              }
+            },
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "gv_id",
+              "id",
+              "person_id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ],
+      "update_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "gv_id",
+              "id",
+              "person_id"
+            ],
             "filter": {},
             "check": null
           }
@@ -3700,6 +4594,20 @@
               "table": {
                 "schema": "public",
                 "name": "herkunft_file"
+              }
+            }
+          }
+        },
+        {
+          "name": "herkunft_sums",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "herkunft_sums"
+              },
+              "column_mapping": {
+                "id": "herkunft_id"
               }
             }
           }
@@ -6427,17 +7335,24 @@
       ],
       "insert_permissions": [
         {
-          "role": "gardener",
-          "permission": {
-            "check": {},
-            "columns": ["name", "titel", "beschreibung", "sort", "id"]
-          }
-        },
-        {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": ["sort", "beschreibung", "titel", "id", "name"]
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ]
           }
         }
       ],
@@ -6445,7 +7360,21 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["sort", "beschreibung", "titel", "id", "name"],
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6453,7 +7382,21 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": ["sort", "beschreibung", "titel", "id", "name"],
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6461,7 +7404,21 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["sort", "beschreibung", "titel", "id", "name"],
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6471,7 +7428,21 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["sort", "beschreibung", "titel", "id", "name"],
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "name"
+            ],
             "filter": {},
             "check": null
           }
@@ -6540,21 +7511,76 @@
                 }
               ]
             },
-            "columns": ["kultur_id", "qk_name", "id"]
+            "columns": [
+              "kultur_id",
+              "qk_name",
+              "id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts"
+            ]
           }
         },
         {
           "role": "gardener",
           "permission": {
-            "check": {},
-            "columns": ["qk_name", "id", "kultur_id"]
+            "check": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ]
           }
         },
         {
           "role": "manager",
           "permission": {
             "check": {},
-            "columns": ["qk_name", "id", "kultur_id"]
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ]
           }
         }
       ],
@@ -6562,7 +7588,19 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["qk_name", "id", "kultur_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ],
             "filter": {
               "_or": [
                 {
@@ -6600,7 +7638,19 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": ["qk_name", "id", "kultur_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ],
             "filter": {
               "_or": [
                 {
@@ -6627,7 +7677,19 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["qk_name", "id", "kultur_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -6637,7 +7699,19 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["qk_name", "id", "kultur_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ],
             "filter": {
               "_or": [
                 {
@@ -6675,7 +7749,19 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": ["qk_name", "id", "kultur_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ],
             "filter": {
               "_or": [
                 {
@@ -6702,7 +7788,19 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["qk_name", "id", "kultur_id"],
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_conflicts",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id"
+            ],
             "filter": {},
             "check": null
           }
@@ -6774,6 +7872,550 @@
           "role": "manager",
           "permission": {
             "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "kultur_qk_choosen_rev"
+      },
+      "object_relationships": [
+        {
+          "name": "kultur",
+          "using": {
+            "foreign_key_constraint_on": "kultur_id"
+          }
+        },
+        {
+          "name": "kultur_qk",
+          "using": {
+            "foreign_key_constraint_on": "qk_name"
+          }
+        }
+      ],
+      "insert_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "check": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "kultur": {
+                    "art": {
+                      "avs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "columns": [
+              "id",
+              "kultur_qk_choosen_id",
+              "kultur_id",
+              "qk_name",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted"
+            ],
+            "backend_only": false
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "check": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
+            ],
+            "backend_only": false
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "check": {},
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
+            ],
+            "filter": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "kultur": {
+                    "art": {
+                      "avs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
+            ],
+            "filter": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ],
+      "update_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
+            ],
+            "filter": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "kultur": {
+                    "art": {
+                      "avs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "check": null
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "columns": [
+              "id",
+              "kultur_qk_choosen_id",
+              "kultur_id",
+              "qk_name",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted"
+            ],
+            "filter": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "check": null
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "_depth",
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
+            ],
+            "filter": {},
+            "check": null
+          }
+        }
+      ],
+      "delete_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "filter": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "kultur": {
+                    "art": {
+                      "avs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "filter": {
+              "_or": [
+                {
+                  "kultur_id": {
+                    "_is_null": true
+                  }
+                },
+                {
+                  "kultur": {
+                    "garten": {
+                      "gvs": {
+                        "person_id": {
+                          "_eq": "X-Hasura-User-Id"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "kultur_qk_rev"
+      },
+      "insert_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "check": {},
+            "columns": [
+              "id",
+              "kultur_qk_id",
+              "name",
+              "titel",
+              "beschreibung",
+              "sort",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted"
+            ],
+            "backend_only": false
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "artverantwortlich",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "name",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "kultur_qk_id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "gardener",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "name",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "kultur_qk_id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        },
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "name",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "kultur_qk_id"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ],
+      "update_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "columns": [
+              "_deleted",
+              "sort",
+              "_depth",
+              "_revisions",
+              "beschreibung",
+              "changed_by",
+              "name",
+              "_parent_rev",
+              "_rev",
+              "titel",
+              "changed",
+              "id",
+              "kultur_qk_id"
+            ],
+            "filter": {},
+            "check": null
           }
         }
       ]
@@ -16210,7 +17852,12 @@
         {
           "role": "artverantwortlich",
           "permission": {
-            "columns": ["name", "sort", "comment", "id"],
+            "columns": [
+              "name",
+              "sort",
+              "comment",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -16218,7 +17865,12 @@
         {
           "role": "gardener",
           "permission": {
-            "columns": ["sort", "comment", "name", "id"],
+            "columns": [
+              "sort",
+              "comment",
+              "name",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
@@ -16226,7 +17878,12 @@
         {
           "role": "manager",
           "permission": {
-            "columns": ["sort", "comment", "name", "id"],
+            "columns": [
+              "sort",
+              "comment",
+              "name",
+              "id"
+            ],
             "filter": {},
             "allow_aggregations": true
           }
