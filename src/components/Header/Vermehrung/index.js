@@ -4,10 +4,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import { FaBars, FaHome, FaBook, FaFilter } from 'react-icons/fa'
-import {
-  MdCloudDone as NetworkOn,
-  MdCloudOff as NetworkOff,
-} from 'react-icons/md'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
@@ -15,6 +11,7 @@ import { withResizeDetector } from 'react-resize-detector'
 
 import Account from './Account'
 import Settings from './Settings'
+import Online from './Online'
 //import More from './More'
 import Search from './Search'
 import { StoreContext } from '../../../models/reactUtils'
@@ -49,9 +46,6 @@ const StyledButton = styled(Button)`
     border-width: 1px !important;
   }
 `
-const OnlineButton = styled(IconButton)`
-  cursor: default !important;
-`
 const FilterButton = styled(StyledButton)`
   border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
@@ -59,7 +53,7 @@ const FilterButton = styled(StyledButton)`
 
 const HeaderVermehrung = ({ width }) => {
   const store = useContext(StoreContext)
-  const { filter, online } = store
+  const { filter } = store
   const { show: showFilter, setShow: setShowFilter } = filter
   const { widthEnforced, setWidthEnforced } = store.tree
 
@@ -156,23 +150,7 @@ const HeaderVermehrung = ({ width }) => {
             </FilterButton>
           )}
           <Search />
-          {online ? (
-            <OnlineButton
-              color="inherit"
-              aria-label="online"
-              title="Sie sind online"
-            >
-              <NetworkOn />
-            </OnlineButton>
-          ) : (
-            <OnlineButton
-              color="inherit"
-              aria-label="offline"
-              title="Sie sind offline"
-            >
-              <NetworkOff />
-            </OnlineButton>
-          )}
+          <Online />
           <Account />
           <Settings />
         </Toolbar>
