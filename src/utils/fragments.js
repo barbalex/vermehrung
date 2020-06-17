@@ -28,6 +28,14 @@ export const artQk = gql`
     titel
     beschreibung
     sort
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
+    _deleted
   }
 `
 export const artQkChoosen = gql`
@@ -36,6 +44,14 @@ export const artQkChoosen = gql`
     __typename
     art_id
     qk_name
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
+    _deleted
   }
 `
 export const artFile = gql`
@@ -64,6 +80,14 @@ export const av = gql`
     __typename
     art_id
     person_id
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
+    _deleted
   }
 `
 export const event = gql`
@@ -224,6 +248,14 @@ export const gv = gql`
     __typename
     garten_id
     person_id
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
+    _deleted
   }
 `
 export const herkunft = gql`
@@ -291,6 +323,14 @@ export const kulturQk = gql`
     titel
     beschreibung
     sort
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
+    _deleted
   }
 `
 export const kulturQkChoosen = gql`
@@ -299,6 +339,14 @@ export const kulturQkChoosen = gql`
     __typename
     kultur_id
     qk_name
+    changed
+    changed_by
+    _rev
+    _parent_rev
+    _revisions
+    _depth
+    _conflicts
+    _deleted
   }
 `
 export const kulturFile = gql`
