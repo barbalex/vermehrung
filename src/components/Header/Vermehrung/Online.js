@@ -20,7 +20,7 @@ const Online = () => {
   const title = online
     ? 'Sie sind online'
     : queuedQueries.size
-    ? `Sie sind offline. ${queuedQueries.size} ausstehende Operationen`
+    ? `Sie sind offline. ${queuedQueries.size} wartende Operationen`
     : `Sie sind offline`
 
   return (
