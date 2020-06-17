@@ -161,17 +161,10 @@ create table art_qk (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table art_qk add column changed timestamp default now();
-alter table art_qk add column changed_by text default null;
-alter table art_qk add column _rev text default null;
-alter table art_qk add column _parent_rev text default null;
-alter table art_qk add column _revisions text[] default null;
-alter table art_qk add column _depth integer default 1;
-alter table art_qk add column _deleted boolean default false;
-alter table art_qk add column _conflicts text[] default null;
 create index on art_qk using btree (name);
 create index on art_qk using btree (titel);
 create index on art_qk using btree (sort);
+create index on art_qk using btree (_deleted);
 comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
 drop table if exists art_qk_choosen cascade;
@@ -187,17 +180,10 @@ create table art_qk_choosen (
   _conflicts text[] default null
   unique(art_id, qk_name)
 );
-alter table art_qk_choosen add column changed timestamp default now();
-alter table art_qk_choosen add column changed_by text default null;
-alter table art_qk_choosen add column _rev text default null;
-alter table art_qk_choosen add column _parent_rev text default null;
-alter table art_qk_choosen add column _revisions text[] default null;
-alter table art_qk_choosen add column _depth integer default 1;
-alter table art_qk_choosen add column _deleted boolean default false;
-alter table art_qk_choosen add column _conflicts text[] default null;
 create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
+create index on art_qk_choosen using btree (_deleted);
 
 --insert into art_qk_choosen (art_id, qk_name)
 --select art.id, art_qk.name
@@ -528,18 +514,11 @@ create table kultur_qk (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-alter table kultur_qk add column changed timestamp default now();
-alter table kultur_qk add column changed_by text default null;
-alter table kultur_qk add column _rev text default null;
-alter table kultur_qk add column _parent_rev text default null;
-alter table kultur_qk add column _revisions text[] default null;
-alter table kultur_qk add column _depth integer default 1;
-alter table kultur_qk add column _deleted boolean default false;
-alter table kultur_qk add column _conflicts text[] default null;
 create index on kultur_qk using btree (id);
 create index on kultur_qk using btree (name);
 create index on kultur_qk using btree (titel);
 create index on kultur_qk using btree (sort);
+create index on kultur_qk using btree (_deleted);
 comment on column kultur_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
 drop table if exists kultur_qk_choosen cascade;
@@ -555,17 +534,10 @@ create table kultur_qk_choosen (
   _conflicts text[] default null
   unique(id, qk_name)
 );
-alter table kultur_qk_choosen add column changed timestamp default now();
-alter table kultur_qk_choosen add column changed_by text default null;
-alter table kultur_qk_choosen add column _rev text default null;
-alter table kultur_qk_choosen add column _parent_rev text default null;
-alter table kultur_qk_choosen add column _revisions text[] default null;
-alter table kultur_qk_choosen add column _depth integer default 1;
-alter table kultur_qk_choosen add column _deleted boolean default false;
-alter table kultur_qk_choosen add column _conflicts text[] default null;
 create index on kultur_qk_choosen using btree (id);
 create index on kultur_qk using btree (kultur_id);
 create index on kultur_qk_choosen using btree (qk_name);
+create index on kultur_qk_choosen using btree (_deleted);
 
 --insert into kultur_qk_choosen (kultur_id, qk_name)
 --select kultur.id, kultur_qk.name
@@ -1120,17 +1092,10 @@ create table av (
   _conflicts text[] default null
   unique (person_id, art_id)
 );
-alter table av add column changed timestamp default now();
-alter table av add column changed_by text default null;
-alter table av add column _rev text default null;
-alter table av add column _parent_rev text default null;
-alter table av add column _revisions text[] default null;
-alter table av add column _depth integer default 1;
-alter table av add column _deleted boolean default false;
-alter table av add column _conflicts text[] default null;
 create index on av using btree (id);
 create index on av using btree (art_id);
 create index on av using btree (person_id);
+create index on av using btree (_deleted);
 
 drop table if exists gv cascade;
 create table gv (
@@ -1147,14 +1112,7 @@ create table gv (
   _conflicts text[] default null
   unique (person_id, garten_id)
 );
-alter table gv add column changed timestamp default now();
-alter table gv add column changed_by text default null;
-alter table gv add column _rev text default null;
-alter table gv add column _parent_rev text default null;
-alter table gv add column _revisions text[] default null;
-alter table gv add column _depth integer default 1;
-alter table gv add column _deleted boolean default false;
-alter table gv add column _conflicts text[] default null;
 create index on gv using btree (id);
 create index on gv using btree (garten_id);
 create index on gv using btree (person_id);
+create index on gv using btree (_deleted);
