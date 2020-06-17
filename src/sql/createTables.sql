@@ -167,13 +167,10 @@ create index on art_qk using btree (sort);
 create index on art_qk using btree (_deleted);
 comment on column art_qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
-
-
-
 drop table if exists art_qk_rev cascade;
 create table art_qk_rev (
   id uuid primary key default uuid_generate_v1mc(),
-  art_qk_id uuid default null,,
+  art_qk_id uuid default null,
   name text,
   titel text,
   beschreibung text,
@@ -189,9 +186,6 @@ create index on art_qk_rev using btree (_rev);
 create index on art_qk_rev using btree (_parent_rev);
 create index on art_qk_rev using btree (_depth);
 create index on art_qk_rev using btree (_deleted);
-
-
-
 
 drop table if exists art_qk_choosen cascade;
 create table art_qk_choosen (
