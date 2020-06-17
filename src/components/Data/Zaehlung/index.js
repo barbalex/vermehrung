@@ -126,6 +126,8 @@ const Zaehlung = ({
     zaehlungsFiltered,
     zaehlungsSorted,
     showDeleted,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -140,8 +142,6 @@ const Zaehlung = ({
 
   const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
 
-  const [errors, setErrors] = useState({})
-
   const totalNr = zaehlungsSorted.filter(hierarchyFilter).length
   const filteredNr = zaehlungsFiltered.filter(hierarchyFilter).length
 
@@ -155,8 +155,8 @@ const Zaehlung = ({
   const { z_bemerkungen } = row?.kultur?.kultur_option ?? {}
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('zaehlung')
+  }, [id, unsetError])
 
   const kulturWerte = useMemo(
     () =>
@@ -267,7 +267,7 @@ const Zaehlung = ({
                     name="_deleted"
                     value={row._deleted}
                     saveToDb={saveToDb}
-                    error={errors._deleted}
+                    error={errors?.zaehlung?._deleted}
                   />
                 )}
                 <Select
@@ -279,7 +279,7 @@ const Zaehlung = ({
                   options={kulturWerte}
                   loading={false}
                   saveToDb={saveToDb}
-                  error={errors.kultur_id}
+                  error={errors?.zaehlung?.kultur_id}
                 />
                 <Date
                   key={`${row.id}datum`}
@@ -287,7 +287,7 @@ const Zaehlung = ({
                   label="Datum"
                   value={row.datum}
                   saveToDb={saveToDb}
-                  error={errors.datum}
+                  error={errors?.zaehlung?.datum}
                 />
                 <FieldRow>
                   <Checkbox2States
@@ -296,7 +296,7 @@ const Zaehlung = ({
                     name="prognose"
                     value={row.prognose}
                     saveToDb={saveToDb}
-                    error={errors.prognose}
+                    error={errors?.zaehlung?.prognose}
                   />
                   <div>
                     <IconButton
@@ -315,7 +315,7 @@ const Zaehlung = ({
                     label="Bemerkungen"
                     value={row.bemerkungen}
                     saveToDb={saveToDb}
-                    error={errors.bemerkungen}
+                    error={errors?.zaehlung?.bemerkungen}
                     multiLine
                   />
                 )}

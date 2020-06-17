@@ -117,6 +117,8 @@ const Teilkultur = ({
     showDeleted,
     teilkultursSorted,
     teilkultursFiltered,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -129,8 +131,6 @@ const Teilkultur = ({
     }
     return true
   }
-
-  const [errors, setErrors] = useState({})
 
   const totalNr = teilkultursSorted.filter(hierarchyFilter).length
   const filteredNr = teilkultursFiltered.filter(hierarchyFilter).length
@@ -146,8 +146,8 @@ const Teilkultur = ({
   const { tk_bemerkungen } = kulturOpion
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('teilkultur')
+  }, [id, unsetError])
 
   const kulturWerte = useMemo(
     () =>
@@ -241,7 +241,7 @@ const Teilkultur = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors._deleted}
+                  error={errors?.teilkultur?._deleted}
                 />
               )}
               <Select
@@ -252,7 +252,7 @@ const Teilkultur = ({
                 label="Kultur"
                 options={kulturWerte}
                 saveToDb={saveToDb}
-                error={errors.kultur_id}
+                error={errors?.teilkultur?.kultur_id}
               />
               <TextField
                 key={`${row.id}name`}
@@ -260,7 +260,7 @@ const Teilkultur = ({
                 label="Name"
                 value={row.name}
                 saveToDb={saveToDb}
-                error={errors.name}
+                error={errors?.teilkultur?.name}
               />
               <TextField
                 key={`${row.id}ort1`}
@@ -268,7 +268,7 @@ const Teilkultur = ({
                 label="Ort 1"
                 value={row.ort1}
                 saveToDb={saveToDb}
-                error={errors.ort1}
+                error={errors?.teilkultur?.ort1}
               />
               <TextField
                 key={`${row.id}ort2`}
@@ -276,7 +276,7 @@ const Teilkultur = ({
                 label="Ort 2"
                 value={row.ort2}
                 saveToDb={saveToDb}
-                error={errors.ort2}
+                error={errors?.teilkultur?.ort2}
               />
               <TextField
                 key={`${row.id}ort3`}
@@ -284,7 +284,7 @@ const Teilkultur = ({
                 label="Ort 3"
                 value={row.ort3}
                 saveToDb={saveToDb}
-                error={errors.ort3}
+                error={errors?.teilkultur?.ort3}
               />
               {(tk_bemerkungen || showFilter) && (
                 <TextField
@@ -293,7 +293,7 @@ const Teilkultur = ({
                   label="Bemerkungen"
                   value={row.bemerkungen}
                   saveToDb={saveToDb}
-                  error={errors.bemerkungen}
+                  error={errors?.teilkultur?.bemerkungen}
                   multiline
                 />
               )}
