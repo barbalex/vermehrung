@@ -133,6 +133,8 @@ const Sammlung = ({
     sammlungsFiltered,
     sammlungsSorted,
     showDeleted,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -151,8 +153,6 @@ const Sammlung = ({
     return true
   }
 
-  const [errors, setErrors] = useState({})
-
   const totalNr = sammlungsSorted.filter(hierarchyFilter).length
   const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
 
@@ -166,8 +166,8 @@ const Sammlung = ({
   )
 
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('sammlung')
+  }, [id, unsetError])
 
   const personWerte = useMemo(
     () =>
@@ -296,7 +296,7 @@ const Sammlung = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors._deleted}
+                  error={errors?.sammlung?._deleted}
                 />
               )}
               <TextField
@@ -305,7 +305,7 @@ const Sammlung = ({
                 label="Nr."
                 value={row.nr}
                 saveToDb={saveToDb}
-                error={errors.nr}
+                error={errors?.sammlung?.nr}
                 type="text"
               />
               <Select
@@ -316,7 +316,7 @@ const Sammlung = ({
                 label="Art"
                 options={artWerte}
                 saveToDb={saveToDb}
-                error={errors.art_id}
+                error={errors?.sammlung?.art_id}
               />
               <Select
                 key={`${row.id}${row.herkunft_id}herkunft_id`}
@@ -326,7 +326,7 @@ const Sammlung = ({
                 label="Herkunft"
                 options={herkunftWerte}
                 saveToDb={saveToDb}
-                error={errors.herkunft_id}
+                error={errors?.sammlung?.herkunft_id}
               />
               <Select
                 key={`${row.id}${row.person_id}person_id`}
@@ -336,7 +336,7 @@ const Sammlung = ({
                 label="Person"
                 options={personWerte}
                 saveToDb={saveToDb}
-                error={errors.person_id}
+                error={errors?.sammlung?.person_id}
               />
               <Date
                 key={`${row.id}datum`}
@@ -344,7 +344,7 @@ const Sammlung = ({
                 label="Datum"
                 value={row.datum}
                 saveToDb={saveToDb}
-                error={errors.datum}
+                error={errors?.sammlung?.datum}
               />
               <TextField
                 key={`${row.id}anzahl_pflanzen`}
@@ -352,7 +352,7 @@ const Sammlung = ({
                 label="Anzahl Pflanzen"
                 value={row.anzahl_pflanzen}
                 saveToDb={saveToDb}
-                error={errors.anzahl_pflanzen}
+                error={errors?.sammlung?.anzahl_pflanzen}
                 type="number"
               />
               <FieldRow>
@@ -362,7 +362,7 @@ const Sammlung = ({
                   label="Gramm Samen"
                   value={row.gramm_samen}
                   saveToDb={saveToDb}
-                  error={errors.gramm_samen}
+                  error={errors?.sammlung?.gramm_samen}
                   type="number"
                 />
                 <TextField
@@ -371,7 +371,7 @@ const Sammlung = ({
                   label={`Andere Menge (z.B. "3 Zwiebeln")`}
                   value={row.andere_menge}
                   saveToDb={saveToDb}
-                  error={errors.andere_menge}
+                  error={errors?.sammlung?.andere_menge}
                   type="text"
                 />
               </FieldRow>
@@ -382,7 +382,7 @@ const Sammlung = ({
                   label="von Anzahl Individuen"
                   value={row.von_anzahl_individuen}
                   saveToDb={saveToDb}
-                  error={errors.von_anzahl_individuen}
+                  error={errors?.sammlung?.von_anzahl_individuen}
                   type="number"
                 />
                 <div>
@@ -403,7 +403,7 @@ const Sammlung = ({
                   name="geplant"
                   value={row.geplant}
                   saveToDb={saveToDb}
-                  error={errors.geplant}
+                  error={errors?.sammlung?.geplant}
                 />
                 <div>
                   <IconButton
@@ -421,7 +421,7 @@ const Sammlung = ({
                 label="Bemerkungen"
                 value={row.bemerkungen}
                 saveToDb={saveToDb}
-                error={errors.bemerkungen}
+                error={errors?.sammlung?.bemerkungen}
                 multiLine
               />
               {online &&

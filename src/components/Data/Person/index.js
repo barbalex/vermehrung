@@ -115,6 +115,8 @@ const Person = ({
     personsFiltered,
     userPerson,
     userRolesSorted,
+    errors,
+    unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -145,10 +147,9 @@ const Person = ({
     [],
   )
 
-  const [errors, setErrors] = useState({})
   useEffect(() => {
-    setErrors({})
-  }, [id])
+    unsetError('person')
+  }, [id, unsetError])
 
   const { user_role } = userPerson
 
@@ -223,7 +224,7 @@ const Person = ({
                 label="Rolle"
                 options={userRoleWerte}
                 saveToDb={saveToDb}
-                error={errors.user_role}
+                error={errors?.person?.user_role}
               />
               <TextField
                 key={`${row.id}nr`}
@@ -231,7 +232,7 @@ const Person = ({
                 label="Nr"
                 value={row.nr}
                 saveToDb={saveToDb}
-                error={errors.nr}
+                error={errors?.person?.nr}
               />
               <TextField
                 key={`${row.id}name`}
@@ -239,7 +240,7 @@ const Person = ({
                 label="Name"
                 value={row.name}
                 saveToDb={saveToDb}
-                error={errors.name}
+                error={errors?.person?.name}
               />
               <TextField
                 key={`${row.id}adresszusatz`}
@@ -247,7 +248,7 @@ const Person = ({
                 label="Adress-Zusatz"
                 value={row.adresszusatz}
                 saveToDb={saveToDb}
-                error={errors.adresszusatz}
+                error={errors?.person?.adresszusatz}
               />
               <TextField
                 key={`${row.id}strasse`}
@@ -255,7 +256,7 @@ const Person = ({
                 label="Strasse"
                 value={row.strasse}
                 saveToDb={saveToDb}
-                error={errors.strasse}
+                error={errors?.person?.strasse}
               />
               <TextField
                 key={`${row.id}plz`}
@@ -263,7 +264,7 @@ const Person = ({
                 label="PLZ"
                 value={row.plz}
                 saveToDb={saveToDb}
-                error={errors.plz}
+                error={errors?.person?.plz}
                 type="number"
               />
               <TextField
@@ -272,7 +273,7 @@ const Person = ({
                 label="Ort"
                 value={row.ort}
                 saveToDb={saveToDb}
-                error={errors.ort}
+                error={errors?.person?.ort}
               />
               <TextField
                 key={`${row.id}telefon_privat`}
@@ -280,7 +281,7 @@ const Person = ({
                 label="Telefon privat"
                 value={row.telefon_privat}
                 saveToDb={saveToDb}
-                error={errors.telefon_privat}
+                error={errors?.person?.telefon_privat}
               />
               <TextField
                 key={`${row.id}telefon_geschaeft`}
@@ -288,7 +289,7 @@ const Person = ({
                 label="Telefon Geschäft"
                 value={row.telefon_geschaeft}
                 saveToDb={saveToDb}
-                error={errors.telefon_geschaeft}
+                error={errors?.person?.telefon_geschaeft}
               />
               <TextField
                 key={`${row.id}telefon_mobile`}
@@ -296,7 +297,7 @@ const Person = ({
                 label="Telefon mobile"
                 value={row.telefon_mobile}
                 saveToDb={saveToDb}
-                error={errors.telefon_mobile}
+                error={errors?.person?.telefon_mobile}
               />
               <TextField
                 key={`${row.id}email`}
@@ -304,7 +305,7 @@ const Person = ({
                 label="Email"
                 value={row.email}
                 saveToDb={saveToDb}
-                error={errors.email}
+                error={errors?.person?.email}
               />
               <Checkbox2States
                 key={`${row.id}kein_email`}
@@ -312,7 +313,7 @@ const Person = ({
                 name="kein_email"
                 value={row.kein_email}
                 saveToDb={saveToDb}
-                error={errors.kein_email}
+                error={errors?.person?.kein_email}
               />
               <Checkbox2States
                 key={`${row.id}kommerziell`}
@@ -320,7 +321,7 @@ const Person = ({
                 name="kommerziell"
                 value={row.kommerziell}
                 saveToDb={saveToDb}
-                error={errors.kommerziell}
+                error={errors?.person?.kommerziell}
               />
               <Checkbox2States
                 key={`${row.id}info`}
@@ -328,7 +329,7 @@ const Person = ({
                 name="info"
                 value={row.info}
                 saveToDb={saveToDb}
-                error={errors.info}
+                error={errors?.person?.info}
               />
               <Checkbox2States
                 key={`${row.id}aktiv`}
@@ -336,7 +337,7 @@ const Person = ({
                 name="aktiv"
                 value={row.aktiv}
                 saveToDb={saveToDb}
-                error={errors.aktiv}
+                error={errors?.person?.aktiv}
               />
               <TextField
                 key={`${row.id}bemerkungen`}
@@ -344,7 +345,7 @@ const Person = ({
                 label="Bemerkungen"
                 value={row.bemerkungen}
                 saveToDb={saveToDb}
-                error={errors.bemerkungen}
+                error={errors?.person?.bemerkungen}
                 multiLine
               />
               {online &&
