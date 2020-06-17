@@ -14,6 +14,7 @@ export const art_qk_sum_fieldsModelBase = ModelBase
   .named('art_qk_sum_fields')
   .props({
     __typename: types.optional(types.literal("art_qk_sum_fields"), "art_qk_sum_fields"),
+    _depth: types.union(types.undefined, types.null, types.integer),
     sort: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
@@ -23,10 +24,11 @@ export const art_qk_sum_fieldsModelBase = ModelBase
   }))
 
 export class art_qk_sum_fieldsModelSelector extends QueryBuilder {
+  get _depth() { return this.__attr(`_depth`) }
   get sort() { return this.__attr(`sort`) }
 }
 export function selectFromart_qk_sum_fields() {
   return new art_qk_sum_fieldsModelSelector()
 }
 
-export const art_qk_sum_fieldsModelPrimitives = selectFromart_qk_sum_fields().sort
+export const art_qk_sum_fieldsModelPrimitives = selectFromart_qk_sum_fields()._depth.sort
