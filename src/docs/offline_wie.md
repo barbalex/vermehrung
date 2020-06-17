@@ -1,8 +1,8 @@
 ---
-path: "/Dokumentation/offline"
-date: "2020-06-16"
-title: "Offline arbeiten"
-sort1: 23
+path: "/Dokumentation/offline-wie"
+date: "2020-06-17"
+title: "Offline: Wie es funktioniert"
+sort1: 24
 ---
 
 Schon lange würden wir in apflora.ch gerne offline arbeiten können. In vermehrung.ch wäre es ebenso nützlich. Weil die Umsetzung sehr anspruchsvoll und aufwändig ist, gab es bisher kein Konzept dafür. Nachfolgend das in Umsetzung befindliche Konzept für vermehrung.ch:<br/><br/>
@@ -101,9 +101,7 @@ Es gibt viel Arbeit. Sehr viel. Beispiele:
 - Das Management der Operationen (App), Konflikte und Daten (Datenbank) werden künftig mehr Ressourcen (Leistung und Speicher) beanspruchen
 - Während die neue App aufgebaut wird, muss die bisherige weiter betrieben werden (sobald der Import erfolgt ist)
 
-Das lässt sich nicht einfach nebenbei machen.<br/><br/>
-
-Weil apflora.ch viel komplexer ist, werde ich das zuerst in vermehrung.ch schrittweise einführen. Je nach vorhandenen Kapazitäten kann es eine Weile dauern, bis es umgesetzt ist. Wenn möglich noch dieses Jahr.<br/><br/>
+Weil apflora.ch viel komplexer ist, werde ich das zuerst in vermehrung.ch einführen. Je nach vorhandenen Kapazitäten kann es eine Weile dauern, bis es umgesetzt ist. Wenn möglich noch 2020.<br/><br/>
 
 Wenn:
 - es sich in vermehrung.ch bewährt,
