@@ -14,7 +14,12 @@ export const av_min_fieldsModelBase = ModelBase
   .named('av_min_fields')
   .props({
     __typename: types.optional(types.literal("av_min_fields"), "av_min_fields"),
+    _depth: types.union(types.undefined, types.null, types.integer),
+    _parent_rev: types.union(types.undefined, types.null, types.string),
+    _rev: types.union(types.undefined, types.null, types.string),
     art_id: types.union(types.undefined, types.null, types.frozen()),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
     person_id: types.union(types.undefined, types.null, types.frozen()),
   })
@@ -25,7 +30,12 @@ export const av_min_fieldsModelBase = ModelBase
   }))
 
 export class av_min_fieldsModelSelector extends QueryBuilder {
+  get _depth() { return this.__attr(`_depth`) }
+  get _parent_rev() { return this.__attr(`_parent_rev`) }
+  get _rev() { return this.__attr(`_rev`) }
   get art_id() { return this.__attr(`art_id`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
   get person_id() { return this.__attr(`person_id`) }
 }
@@ -33,4 +43,4 @@ export function selectFromav_min_fields() {
   return new av_min_fieldsModelSelector()
 }
 
-export const av_min_fieldsModelPrimitives = selectFromav_min_fields().art_id.person_id
+export const av_min_fieldsModelPrimitives = selectFromav_min_fields()._depth._parent_rev._rev.art_id.changed.changed_by.person_id

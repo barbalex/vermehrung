@@ -18,6 +18,14 @@ export const gvModelBase = ModelBase
   .named('gv')
   .props({
     __typename: types.optional(types.literal("gv"), "gv"),
+    _conflicts: types.union(types.undefined, types.null, types.frozen()),
+    _deleted: types.union(types.undefined, types.null, types.boolean),
+    _depth: types.union(types.undefined, types.null, types.integer),
+    _parent_rev: types.union(types.undefined, types.null, types.string),
+    _rev: types.union(types.undefined, types.null, types.string),
+    _revisions: types.union(types.undefined, types.null, types.frozen()),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     garten: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
     garten_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
@@ -31,6 +39,14 @@ export const gvModelBase = ModelBase
   }))
 
 export class gvModelSelector extends QueryBuilder {
+  get _conflicts() { return this.__attr(`_conflicts`) }
+  get _deleted() { return this.__attr(`_deleted`) }
+  get _depth() { return this.__attr(`_depth`) }
+  get _parent_rev() { return this.__attr(`_parent_rev`) }
+  get _rev() { return this.__attr(`_rev`) }
+  get _revisions() { return this.__attr(`_revisions`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get garten_id() { return this.__attr(`garten_id`) }
   get id() { return this.__attr(`id`) }
   get person_id() { return this.__attr(`person_id`) }
@@ -41,4 +57,4 @@ export function selectFromgv() {
   return new gvModelSelector()
 }
 
-export const gvModelPrimitives = selectFromgv().garten_id.person_id
+export const gvModelPrimitives = selectFromgv()._conflicts._deleted._depth._parent_rev._rev._revisions.changed.changed_by.garten_id.person_id

@@ -8,7 +8,15 @@ import { types } from "mobx-state-tree"
 * gv_select_column
 */
 export const gv_select_columnEnumType = types.enumeration("gv_select_column", [
-        "garten_id",
+        "_conflicts",
+  "_deleted",
+  "_depth",
+  "_parent_rev",
+  "_rev",
+  "_revisions",
+  "changed",
+  "changed_by",
+  "garten_id",
   "id",
   "person_id",
       ])

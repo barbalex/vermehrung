@@ -14,6 +14,7 @@ export const art_qk_stddev_fieldsModelBase = ModelBase
   .named('art_qk_stddev_fields')
   .props({
     __typename: types.optional(types.literal("art_qk_stddev_fields"), "art_qk_stddev_fields"),
+    _depth: types.union(types.undefined, types.null, types.number),
     sort: types.union(types.undefined, types.null, types.number),
   })
   .views(self => ({
@@ -23,10 +24,11 @@ export const art_qk_stddev_fieldsModelBase = ModelBase
   }))
 
 export class art_qk_stddev_fieldsModelSelector extends QueryBuilder {
+  get _depth() { return this.__attr(`_depth`) }
   get sort() { return this.__attr(`sort`) }
 }
 export function selectFromart_qk_stddev_fields() {
   return new art_qk_stddev_fieldsModelSelector()
 }
 
-export const art_qk_stddev_fieldsModelPrimitives = selectFromart_qk_stddev_fields().sort
+export const art_qk_stddev_fieldsModelPrimitives = selectFromart_qk_stddev_fields()._depth.sort

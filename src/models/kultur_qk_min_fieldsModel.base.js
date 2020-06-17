@@ -14,7 +14,12 @@ export const kultur_qk_min_fieldsModelBase = ModelBase
   .named('kultur_qk_min_fields')
   .props({
     __typename: types.optional(types.literal("kultur_qk_min_fields"), "kultur_qk_min_fields"),
+    _depth: types.union(types.undefined, types.null, types.integer),
+    _parent_rev: types.union(types.undefined, types.null, types.string),
+    _rev: types.union(types.undefined, types.null, types.string),
     beschreibung: types.union(types.undefined, types.null, types.string),
+    changed: types.union(types.undefined, types.null, types.frozen()),
+    changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
     name: types.union(types.undefined, types.null, types.string),
     sort: types.union(types.undefined, types.null, types.frozen()),
@@ -27,7 +32,12 @@ export const kultur_qk_min_fieldsModelBase = ModelBase
   }))
 
 export class kultur_qk_min_fieldsModelSelector extends QueryBuilder {
+  get _depth() { return this.__attr(`_depth`) }
+  get _parent_rev() { return this.__attr(`_parent_rev`) }
+  get _rev() { return this.__attr(`_rev`) }
   get beschreibung() { return this.__attr(`beschreibung`) }
+  get changed() { return this.__attr(`changed`) }
+  get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
@@ -37,4 +47,4 @@ export function selectFromkultur_qk_min_fields() {
   return new kultur_qk_min_fieldsModelSelector()
 }
 
-export const kultur_qk_min_fieldsModelPrimitives = selectFromkultur_qk_min_fields().beschreibung.name.sort.titel
+export const kultur_qk_min_fieldsModelPrimitives = selectFromkultur_qk_min_fields()._depth._parent_rev._rev.beschreibung.changed.changed_by.name.sort.titel
