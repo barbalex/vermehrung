@@ -196,7 +196,7 @@ const Index = ({ data }) => (
                 Sie brauchen ein Werkzeug, um Vermehrungen zu verwalten? Fragen
                 Sie&nbsp;
                 <a
-                  href="https://gabriel-software.ch/Kontakt/"
+                  href="https://gabriel-software.ch"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
