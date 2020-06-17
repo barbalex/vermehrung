@@ -22,8 +22,16 @@ import { art_qk_choosenModel } from "./art_qk_choosenModel"
 import { art_qk_choosenModelSelector } from "./art_qk_choosenModel.base"
 import { art_qk_choosen_mutation_responseModel } from "./art_qk_choosen_mutation_responseModel"
 import { art_qk_choosen_mutation_responseModelSelector } from "./art_qk_choosen_mutation_responseModel.base"
+import { art_qk_choosen_revModel } from "./art_qk_choosen_revModel"
+import { art_qk_choosen_revModelSelector } from "./art_qk_choosen_revModel.base"
+import { art_qk_choosen_rev_mutation_responseModel } from "./art_qk_choosen_rev_mutation_responseModel"
+import { art_qk_choosen_rev_mutation_responseModelSelector } from "./art_qk_choosen_rev_mutation_responseModel.base"
 import { art_qk_mutation_responseModel } from "./art_qk_mutation_responseModel"
 import { art_qk_mutation_responseModelSelector } from "./art_qk_mutation_responseModel.base"
+import { art_qk_revModel } from "./art_qk_revModel"
+import { art_qk_revModelSelector } from "./art_qk_revModel.base"
+import { art_qk_rev_mutation_responseModel } from "./art_qk_rev_mutation_responseModel"
+import { art_qk_rev_mutation_responseModelSelector } from "./art_qk_rev_mutation_responseModel.base"
 import { art_revModel } from "./art_revModel"
 import { art_revModelSelector } from "./art_revModel.base"
 import { art_rev_mutation_responseModel } from "./art_rev_mutation_responseModel"
@@ -32,6 +40,10 @@ import { avModel } from "./avModel"
 import { avModelSelector } from "./avModel.base"
 import { av_mutation_responseModel } from "./av_mutation_responseModel"
 import { av_mutation_responseModelSelector } from "./av_mutation_responseModel.base"
+import { av_revModel } from "./av_revModel"
+import { av_revModelSelector } from "./av_revModel.base"
+import { av_rev_mutation_responseModel } from "./av_rev_mutation_responseModel"
+import { av_rev_mutation_responseModelSelector } from "./av_rev_mutation_responseModel.base"
 import { eventModel } from "./eventModel"
 import { eventModelSelector } from "./eventModel.base"
 import { event_mutation_responseModel } from "./event_mutation_responseModel"
@@ -56,6 +68,10 @@ import { gvModel } from "./gvModel"
 import { gvModelSelector } from "./gvModel.base"
 import { gv_mutation_responseModel } from "./gv_mutation_responseModel"
 import { gv_mutation_responseModelSelector } from "./gv_mutation_responseModel.base"
+import { gv_revModel } from "./gv_revModel"
+import { gv_revModelSelector } from "./gv_revModel.base"
+import { gv_rev_mutation_responseModel } from "./gv_rev_mutation_responseModel"
+import { gv_rev_mutation_responseModelSelector } from "./gv_rev_mutation_responseModel.base"
 import { herkunftModel } from "./herkunftModel"
 import { herkunftModelSelector } from "./herkunftModel.base"
 import { herkunft_fileModel } from "./herkunft_fileModel"
@@ -90,8 +106,16 @@ import { kultur_qk_choosenModel } from "./kultur_qk_choosenModel"
 import { kultur_qk_choosenModelSelector } from "./kultur_qk_choosenModel.base"
 import { kultur_qk_choosen_mutation_responseModel } from "./kultur_qk_choosen_mutation_responseModel"
 import { kultur_qk_choosen_mutation_responseModelSelector } from "./kultur_qk_choosen_mutation_responseModel.base"
+import { kultur_qk_choosen_revModel } from "./kultur_qk_choosen_revModel"
+import { kultur_qk_choosen_revModelSelector } from "./kultur_qk_choosen_revModel.base"
+import { kultur_qk_choosen_rev_mutation_responseModel } from "./kultur_qk_choosen_rev_mutation_responseModel"
+import { kultur_qk_choosen_rev_mutation_responseModelSelector } from "./kultur_qk_choosen_rev_mutation_responseModel.base"
 import { kultur_qk_mutation_responseModel } from "./kultur_qk_mutation_responseModel"
 import { kultur_qk_mutation_responseModelSelector } from "./kultur_qk_mutation_responseModel.base"
+import { kultur_qk_revModel } from "./kultur_qk_revModel"
+import { kultur_qk_revModelSelector } from "./kultur_qk_revModel.base"
+import { kultur_qk_rev_mutation_responseModel } from "./kultur_qk_rev_mutation_responseModel"
+import { kultur_qk_rev_mutation_responseModelSelector } from "./kultur_qk_rev_mutation_responseModel.base"
 import { kultur_revModel } from "./kultur_revModel"
 import { kultur_revModelSelector } from "./kultur_revModel.base"
 import { kultur_rev_mutation_responseModel } from "./kultur_rev_mutation_responseModel"
@@ -199,10 +223,16 @@ export const mutation_rootModelBase = ModelBase
     delete_art_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
     delete_art_qk_choosen: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_mutation_responseModel)),
     delete_art_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
+    delete_art_qk_choosen_rev: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_rev_mutation_responseModel)),
+    delete_art_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosen_revModel))),
+    delete_art_qk_rev: types.union(types.undefined, types.null, types.late(() => art_qk_rev_mutation_responseModel)),
+    delete_art_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_revModel))),
     delete_art_rev: types.union(types.undefined, types.null, types.late(() => art_rev_mutation_responseModel)),
     delete_art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
     delete_av: types.union(types.undefined, types.null, types.late(() => av_mutation_responseModel)),
     delete_av_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
+    delete_av_rev: types.union(types.undefined, types.null, types.late(() => av_rev_mutation_responseModel)),
+    delete_av_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_revModel))),
     delete_event: types.union(types.undefined, types.null, types.late(() => event_mutation_responseModel)),
     delete_event_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => eventModel))),
     delete_event_rev: types.union(types.undefined, types.null, types.late(() => event_rev_mutation_responseModel)),
@@ -215,6 +245,8 @@ export const mutation_rootModelBase = ModelBase
     delete_garten_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => garten_revModel))),
     delete_gv: types.union(types.undefined, types.null, types.late(() => gv_mutation_responseModel)),
     delete_gv_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gvModel))),
+    delete_gv_rev: types.union(types.undefined, types.null, types.late(() => gv_rev_mutation_responseModel)),
+    delete_gv_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gv_revModel))),
     delete_herkunft: types.union(types.undefined, types.null, types.late(() => herkunft_mutation_responseModel)),
     delete_herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     delete_herkunft_file: types.union(types.undefined, types.null, types.late(() => herkunft_file_mutation_responseModel)),
@@ -232,6 +264,10 @@ export const mutation_rootModelBase = ModelBase
     delete_kultur_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qkModel))),
     delete_kultur_qk_choosen: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_mutation_responseModel)),
     delete_kultur_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
+    delete_kultur_qk_choosen_rev: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_rev_mutation_responseModel)),
+    delete_kultur_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosen_revModel))),
+    delete_kultur_qk_rev: types.union(types.undefined, types.null, types.late(() => kultur_qk_rev_mutation_responseModel)),
+    delete_kultur_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_revModel))),
     delete_kultur_rev: types.union(types.undefined, types.null, types.late(() => kultur_rev_mutation_responseModel)),
     delete_kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
     delete_lieferung: types.union(types.undefined, types.null, types.late(() => lieferung_mutation_responseModel)),
@@ -284,11 +320,17 @@ export const mutation_rootModelBase = ModelBase
     insert_art_qk: types.union(types.undefined, types.null, types.late(() => art_qk_mutation_responseModel)),
     insert_art_qk_choosen: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_mutation_responseModel)),
     insert_art_qk_choosen_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
+    insert_art_qk_choosen_rev: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_rev_mutation_responseModel)),
+    insert_art_qk_choosen_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosen_revModel))),
     insert_art_qk_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
+    insert_art_qk_rev: types.union(types.undefined, types.null, types.late(() => art_qk_rev_mutation_responseModel)),
+    insert_art_qk_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_revModel))),
     insert_art_rev: types.union(types.undefined, types.null, types.late(() => art_rev_mutation_responseModel)),
     insert_art_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
     insert_av: types.union(types.undefined, types.null, types.late(() => av_mutation_responseModel)),
     insert_av_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
+    insert_av_rev: types.union(types.undefined, types.null, types.late(() => av_rev_mutation_responseModel)),
+    insert_av_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_revModel))),
     insert_event: types.union(types.undefined, types.null, types.late(() => event_mutation_responseModel)),
     insert_event_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => eventModel))),
     insert_event_rev: types.union(types.undefined, types.null, types.late(() => event_rev_mutation_responseModel)),
@@ -301,6 +343,8 @@ export const mutation_rootModelBase = ModelBase
     insert_garten_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => garten_revModel))),
     insert_gv: types.union(types.undefined, types.null, types.late(() => gv_mutation_responseModel)),
     insert_gv_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gvModel))),
+    insert_gv_rev: types.union(types.undefined, types.null, types.late(() => gv_rev_mutation_responseModel)),
+    insert_gv_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gv_revModel))),
     insert_herkunft: types.union(types.undefined, types.null, types.late(() => herkunft_mutation_responseModel)),
     insert_herkunft_file: types.union(types.undefined, types.null, types.late(() => herkunft_file_mutation_responseModel)),
     insert_herkunft_file_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunft_fileModel))),
@@ -318,7 +362,11 @@ export const mutation_rootModelBase = ModelBase
     insert_kultur_qk: types.union(types.undefined, types.null, types.late(() => kultur_qk_mutation_responseModel)),
     insert_kultur_qk_choosen: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_mutation_responseModel)),
     insert_kultur_qk_choosen_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
+    insert_kultur_qk_choosen_rev: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_rev_mutation_responseModel)),
+    insert_kultur_qk_choosen_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosen_revModel))),
     insert_kultur_qk_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qkModel))),
+    insert_kultur_qk_rev: types.union(types.undefined, types.null, types.late(() => kultur_qk_rev_mutation_responseModel)),
+    insert_kultur_qk_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_revModel))),
     insert_kultur_rev: types.union(types.undefined, types.null, types.late(() => kultur_rev_mutation_responseModel)),
     insert_kultur_rev_one: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
     insert_lieferung: types.union(types.undefined, types.null, types.late(() => lieferung_mutation_responseModel)),
@@ -372,10 +420,16 @@ export const mutation_rootModelBase = ModelBase
     update_art_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
     update_art_qk_choosen: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_mutation_responseModel)),
     update_art_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
+    update_art_qk_choosen_rev: types.union(types.undefined, types.null, types.late(() => art_qk_choosen_rev_mutation_responseModel)),
+    update_art_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosen_revModel))),
+    update_art_qk_rev: types.union(types.undefined, types.null, types.late(() => art_qk_rev_mutation_responseModel)),
+    update_art_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_revModel))),
     update_art_rev: types.union(types.undefined, types.null, types.late(() => art_rev_mutation_responseModel)),
     update_art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
     update_av: types.union(types.undefined, types.null, types.late(() => av_mutation_responseModel)),
     update_av_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
+    update_av_rev: types.union(types.undefined, types.null, types.late(() => av_rev_mutation_responseModel)),
+    update_av_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_revModel))),
     update_event: types.union(types.undefined, types.null, types.late(() => event_mutation_responseModel)),
     update_event_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => eventModel))),
     update_event_rev: types.union(types.undefined, types.null, types.late(() => event_rev_mutation_responseModel)),
@@ -388,6 +442,8 @@ export const mutation_rootModelBase = ModelBase
     update_garten_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => garten_revModel))),
     update_gv: types.union(types.undefined, types.null, types.late(() => gv_mutation_responseModel)),
     update_gv_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gvModel))),
+    update_gv_rev: types.union(types.undefined, types.null, types.late(() => gv_rev_mutation_responseModel)),
+    update_gv_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gv_revModel))),
     update_herkunft: types.union(types.undefined, types.null, types.late(() => herkunft_mutation_responseModel)),
     update_herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     update_herkunft_file: types.union(types.undefined, types.null, types.late(() => herkunft_file_mutation_responseModel)),
@@ -405,6 +461,10 @@ export const mutation_rootModelBase = ModelBase
     update_kultur_qk_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qkModel))),
     update_kultur_qk_choosen: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_mutation_responseModel)),
     update_kultur_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
+    update_kultur_qk_choosen_rev: types.union(types.undefined, types.null, types.late(() => kultur_qk_choosen_rev_mutation_responseModel)),
+    update_kultur_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosen_revModel))),
+    update_kultur_qk_rev: types.union(types.undefined, types.null, types.late(() => kultur_qk_rev_mutation_responseModel)),
+    update_kultur_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_revModel))),
     update_kultur_rev: types.union(types.undefined, types.null, types.late(() => kultur_rev_mutation_responseModel)),
     update_kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
     update_lieferung: types.union(types.undefined, types.null, types.late(() => lieferung_mutation_responseModel)),
@@ -465,10 +525,16 @@ export class mutation_rootModelSelector extends QueryBuilder {
   delete_art_qk_by_pk(builder) { return this.__child(`delete_art_qk_by_pk`, art_qkModelSelector, builder) }
   delete_art_qk_choosen(builder) { return this.__child(`delete_art_qk_choosen`, art_qk_choosen_mutation_responseModelSelector, builder) }
   delete_art_qk_choosen_by_pk(builder) { return this.__child(`delete_art_qk_choosen_by_pk`, art_qk_choosenModelSelector, builder) }
+  delete_art_qk_choosen_rev(builder) { return this.__child(`delete_art_qk_choosen_rev`, art_qk_choosen_rev_mutation_responseModelSelector, builder) }
+  delete_art_qk_choosen_rev_by_pk(builder) { return this.__child(`delete_art_qk_choosen_rev_by_pk`, art_qk_choosen_revModelSelector, builder) }
+  delete_art_qk_rev(builder) { return this.__child(`delete_art_qk_rev`, art_qk_rev_mutation_responseModelSelector, builder) }
+  delete_art_qk_rev_by_pk(builder) { return this.__child(`delete_art_qk_rev_by_pk`, art_qk_revModelSelector, builder) }
   delete_art_rev(builder) { return this.__child(`delete_art_rev`, art_rev_mutation_responseModelSelector, builder) }
   delete_art_rev_by_pk(builder) { return this.__child(`delete_art_rev_by_pk`, art_revModelSelector, builder) }
   delete_av(builder) { return this.__child(`delete_av`, av_mutation_responseModelSelector, builder) }
   delete_av_by_pk(builder) { return this.__child(`delete_av_by_pk`, avModelSelector, builder) }
+  delete_av_rev(builder) { return this.__child(`delete_av_rev`, av_rev_mutation_responseModelSelector, builder) }
+  delete_av_rev_by_pk(builder) { return this.__child(`delete_av_rev_by_pk`, av_revModelSelector, builder) }
   delete_event(builder) { return this.__child(`delete_event`, event_mutation_responseModelSelector, builder) }
   delete_event_by_pk(builder) { return this.__child(`delete_event_by_pk`, eventModelSelector, builder) }
   delete_event_rev(builder) { return this.__child(`delete_event_rev`, event_rev_mutation_responseModelSelector, builder) }
@@ -481,6 +547,8 @@ export class mutation_rootModelSelector extends QueryBuilder {
   delete_garten_rev_by_pk(builder) { return this.__child(`delete_garten_rev_by_pk`, garten_revModelSelector, builder) }
   delete_gv(builder) { return this.__child(`delete_gv`, gv_mutation_responseModelSelector, builder) }
   delete_gv_by_pk(builder) { return this.__child(`delete_gv_by_pk`, gvModelSelector, builder) }
+  delete_gv_rev(builder) { return this.__child(`delete_gv_rev`, gv_rev_mutation_responseModelSelector, builder) }
+  delete_gv_rev_by_pk(builder) { return this.__child(`delete_gv_rev_by_pk`, gv_revModelSelector, builder) }
   delete_herkunft(builder) { return this.__child(`delete_herkunft`, herkunft_mutation_responseModelSelector, builder) }
   delete_herkunft_by_pk(builder) { return this.__child(`delete_herkunft_by_pk`, herkunftModelSelector, builder) }
   delete_herkunft_file(builder) { return this.__child(`delete_herkunft_file`, herkunft_file_mutation_responseModelSelector, builder) }
@@ -498,6 +566,10 @@ export class mutation_rootModelSelector extends QueryBuilder {
   delete_kultur_qk_by_pk(builder) { return this.__child(`delete_kultur_qk_by_pk`, kultur_qkModelSelector, builder) }
   delete_kultur_qk_choosen(builder) { return this.__child(`delete_kultur_qk_choosen`, kultur_qk_choosen_mutation_responseModelSelector, builder) }
   delete_kultur_qk_choosen_by_pk(builder) { return this.__child(`delete_kultur_qk_choosen_by_pk`, kultur_qk_choosenModelSelector, builder) }
+  delete_kultur_qk_choosen_rev(builder) { return this.__child(`delete_kultur_qk_choosen_rev`, kultur_qk_choosen_rev_mutation_responseModelSelector, builder) }
+  delete_kultur_qk_choosen_rev_by_pk(builder) { return this.__child(`delete_kultur_qk_choosen_rev_by_pk`, kultur_qk_choosen_revModelSelector, builder) }
+  delete_kultur_qk_rev(builder) { return this.__child(`delete_kultur_qk_rev`, kultur_qk_rev_mutation_responseModelSelector, builder) }
+  delete_kultur_qk_rev_by_pk(builder) { return this.__child(`delete_kultur_qk_rev_by_pk`, kultur_qk_revModelSelector, builder) }
   delete_kultur_rev(builder) { return this.__child(`delete_kultur_rev`, kultur_rev_mutation_responseModelSelector, builder) }
   delete_kultur_rev_by_pk(builder) { return this.__child(`delete_kultur_rev_by_pk`, kultur_revModelSelector, builder) }
   delete_lieferung(builder) { return this.__child(`delete_lieferung`, lieferung_mutation_responseModelSelector, builder) }
@@ -550,11 +622,17 @@ export class mutation_rootModelSelector extends QueryBuilder {
   insert_art_qk(builder) { return this.__child(`insert_art_qk`, art_qk_mutation_responseModelSelector, builder) }
   insert_art_qk_choosen(builder) { return this.__child(`insert_art_qk_choosen`, art_qk_choosen_mutation_responseModelSelector, builder) }
   insert_art_qk_choosen_one(builder) { return this.__child(`insert_art_qk_choosen_one`, art_qk_choosenModelSelector, builder) }
+  insert_art_qk_choosen_rev(builder) { return this.__child(`insert_art_qk_choosen_rev`, art_qk_choosen_rev_mutation_responseModelSelector, builder) }
+  insert_art_qk_choosen_rev_one(builder) { return this.__child(`insert_art_qk_choosen_rev_one`, art_qk_choosen_revModelSelector, builder) }
   insert_art_qk_one(builder) { return this.__child(`insert_art_qk_one`, art_qkModelSelector, builder) }
+  insert_art_qk_rev(builder) { return this.__child(`insert_art_qk_rev`, art_qk_rev_mutation_responseModelSelector, builder) }
+  insert_art_qk_rev_one(builder) { return this.__child(`insert_art_qk_rev_one`, art_qk_revModelSelector, builder) }
   insert_art_rev(builder) { return this.__child(`insert_art_rev`, art_rev_mutation_responseModelSelector, builder) }
   insert_art_rev_one(builder) { return this.__child(`insert_art_rev_one`, art_revModelSelector, builder) }
   insert_av(builder) { return this.__child(`insert_av`, av_mutation_responseModelSelector, builder) }
   insert_av_one(builder) { return this.__child(`insert_av_one`, avModelSelector, builder) }
+  insert_av_rev(builder) { return this.__child(`insert_av_rev`, av_rev_mutation_responseModelSelector, builder) }
+  insert_av_rev_one(builder) { return this.__child(`insert_av_rev_one`, av_revModelSelector, builder) }
   insert_event(builder) { return this.__child(`insert_event`, event_mutation_responseModelSelector, builder) }
   insert_event_one(builder) { return this.__child(`insert_event_one`, eventModelSelector, builder) }
   insert_event_rev(builder) { return this.__child(`insert_event_rev`, event_rev_mutation_responseModelSelector, builder) }
@@ -567,6 +645,8 @@ export class mutation_rootModelSelector extends QueryBuilder {
   insert_garten_rev_one(builder) { return this.__child(`insert_garten_rev_one`, garten_revModelSelector, builder) }
   insert_gv(builder) { return this.__child(`insert_gv`, gv_mutation_responseModelSelector, builder) }
   insert_gv_one(builder) { return this.__child(`insert_gv_one`, gvModelSelector, builder) }
+  insert_gv_rev(builder) { return this.__child(`insert_gv_rev`, gv_rev_mutation_responseModelSelector, builder) }
+  insert_gv_rev_one(builder) { return this.__child(`insert_gv_rev_one`, gv_revModelSelector, builder) }
   insert_herkunft(builder) { return this.__child(`insert_herkunft`, herkunft_mutation_responseModelSelector, builder) }
   insert_herkunft_file(builder) { return this.__child(`insert_herkunft_file`, herkunft_file_mutation_responseModelSelector, builder) }
   insert_herkunft_file_one(builder) { return this.__child(`insert_herkunft_file_one`, herkunft_fileModelSelector, builder) }
@@ -584,7 +664,11 @@ export class mutation_rootModelSelector extends QueryBuilder {
   insert_kultur_qk(builder) { return this.__child(`insert_kultur_qk`, kultur_qk_mutation_responseModelSelector, builder) }
   insert_kultur_qk_choosen(builder) { return this.__child(`insert_kultur_qk_choosen`, kultur_qk_choosen_mutation_responseModelSelector, builder) }
   insert_kultur_qk_choosen_one(builder) { return this.__child(`insert_kultur_qk_choosen_one`, kultur_qk_choosenModelSelector, builder) }
+  insert_kultur_qk_choosen_rev(builder) { return this.__child(`insert_kultur_qk_choosen_rev`, kultur_qk_choosen_rev_mutation_responseModelSelector, builder) }
+  insert_kultur_qk_choosen_rev_one(builder) { return this.__child(`insert_kultur_qk_choosen_rev_one`, kultur_qk_choosen_revModelSelector, builder) }
   insert_kultur_qk_one(builder) { return this.__child(`insert_kultur_qk_one`, kultur_qkModelSelector, builder) }
+  insert_kultur_qk_rev(builder) { return this.__child(`insert_kultur_qk_rev`, kultur_qk_rev_mutation_responseModelSelector, builder) }
+  insert_kultur_qk_rev_one(builder) { return this.__child(`insert_kultur_qk_rev_one`, kultur_qk_revModelSelector, builder) }
   insert_kultur_rev(builder) { return this.__child(`insert_kultur_rev`, kultur_rev_mutation_responseModelSelector, builder) }
   insert_kultur_rev_one(builder) { return this.__child(`insert_kultur_rev_one`, kultur_revModelSelector, builder) }
   insert_lieferung(builder) { return this.__child(`insert_lieferung`, lieferung_mutation_responseModelSelector, builder) }
@@ -638,10 +722,16 @@ export class mutation_rootModelSelector extends QueryBuilder {
   update_art_qk_by_pk(builder) { return this.__child(`update_art_qk_by_pk`, art_qkModelSelector, builder) }
   update_art_qk_choosen(builder) { return this.__child(`update_art_qk_choosen`, art_qk_choosen_mutation_responseModelSelector, builder) }
   update_art_qk_choosen_by_pk(builder) { return this.__child(`update_art_qk_choosen_by_pk`, art_qk_choosenModelSelector, builder) }
+  update_art_qk_choosen_rev(builder) { return this.__child(`update_art_qk_choosen_rev`, art_qk_choosen_rev_mutation_responseModelSelector, builder) }
+  update_art_qk_choosen_rev_by_pk(builder) { return this.__child(`update_art_qk_choosen_rev_by_pk`, art_qk_choosen_revModelSelector, builder) }
+  update_art_qk_rev(builder) { return this.__child(`update_art_qk_rev`, art_qk_rev_mutation_responseModelSelector, builder) }
+  update_art_qk_rev_by_pk(builder) { return this.__child(`update_art_qk_rev_by_pk`, art_qk_revModelSelector, builder) }
   update_art_rev(builder) { return this.__child(`update_art_rev`, art_rev_mutation_responseModelSelector, builder) }
   update_art_rev_by_pk(builder) { return this.__child(`update_art_rev_by_pk`, art_revModelSelector, builder) }
   update_av(builder) { return this.__child(`update_av`, av_mutation_responseModelSelector, builder) }
   update_av_by_pk(builder) { return this.__child(`update_av_by_pk`, avModelSelector, builder) }
+  update_av_rev(builder) { return this.__child(`update_av_rev`, av_rev_mutation_responseModelSelector, builder) }
+  update_av_rev_by_pk(builder) { return this.__child(`update_av_rev_by_pk`, av_revModelSelector, builder) }
   update_event(builder) { return this.__child(`update_event`, event_mutation_responseModelSelector, builder) }
   update_event_by_pk(builder) { return this.__child(`update_event_by_pk`, eventModelSelector, builder) }
   update_event_rev(builder) { return this.__child(`update_event_rev`, event_rev_mutation_responseModelSelector, builder) }
@@ -654,6 +744,8 @@ export class mutation_rootModelSelector extends QueryBuilder {
   update_garten_rev_by_pk(builder) { return this.__child(`update_garten_rev_by_pk`, garten_revModelSelector, builder) }
   update_gv(builder) { return this.__child(`update_gv`, gv_mutation_responseModelSelector, builder) }
   update_gv_by_pk(builder) { return this.__child(`update_gv_by_pk`, gvModelSelector, builder) }
+  update_gv_rev(builder) { return this.__child(`update_gv_rev`, gv_rev_mutation_responseModelSelector, builder) }
+  update_gv_rev_by_pk(builder) { return this.__child(`update_gv_rev_by_pk`, gv_revModelSelector, builder) }
   update_herkunft(builder) { return this.__child(`update_herkunft`, herkunft_mutation_responseModelSelector, builder) }
   update_herkunft_by_pk(builder) { return this.__child(`update_herkunft_by_pk`, herkunftModelSelector, builder) }
   update_herkunft_file(builder) { return this.__child(`update_herkunft_file`, herkunft_file_mutation_responseModelSelector, builder) }
@@ -671,6 +763,10 @@ export class mutation_rootModelSelector extends QueryBuilder {
   update_kultur_qk_by_pk(builder) { return this.__child(`update_kultur_qk_by_pk`, kultur_qkModelSelector, builder) }
   update_kultur_qk_choosen(builder) { return this.__child(`update_kultur_qk_choosen`, kultur_qk_choosen_mutation_responseModelSelector, builder) }
   update_kultur_qk_choosen_by_pk(builder) { return this.__child(`update_kultur_qk_choosen_by_pk`, kultur_qk_choosenModelSelector, builder) }
+  update_kultur_qk_choosen_rev(builder) { return this.__child(`update_kultur_qk_choosen_rev`, kultur_qk_choosen_rev_mutation_responseModelSelector, builder) }
+  update_kultur_qk_choosen_rev_by_pk(builder) { return this.__child(`update_kultur_qk_choosen_rev_by_pk`, kultur_qk_choosen_revModelSelector, builder) }
+  update_kultur_qk_rev(builder) { return this.__child(`update_kultur_qk_rev`, kultur_qk_rev_mutation_responseModelSelector, builder) }
+  update_kultur_qk_rev_by_pk(builder) { return this.__child(`update_kultur_qk_rev_by_pk`, kultur_qk_revModelSelector, builder) }
   update_kultur_rev(builder) { return this.__child(`update_kultur_rev`, kultur_rev_mutation_responseModelSelector, builder) }
   update_kultur_rev_by_pk(builder) { return this.__child(`update_kultur_rev_by_pk`, kultur_revModelSelector, builder) }
   update_lieferung(builder) { return this.__child(`update_lieferung`, lieferung_mutation_responseModelSelector, builder) }

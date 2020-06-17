@@ -24,6 +24,14 @@ import { art_qk_choosenModel } from "./art_qk_choosenModel"
 import { art_qk_choosenModelSelector } from "./art_qk_choosenModel.base"
 import { art_qk_choosen_aggregateModel } from "./art_qk_choosen_aggregateModel"
 import { art_qk_choosen_aggregateModelSelector } from "./art_qk_choosen_aggregateModel.base"
+import { art_qk_choosen_revModel } from "./art_qk_choosen_revModel"
+import { art_qk_choosen_revModelSelector } from "./art_qk_choosen_revModel.base"
+import { art_qk_choosen_rev_aggregateModel } from "./art_qk_choosen_rev_aggregateModel"
+import { art_qk_choosen_rev_aggregateModelSelector } from "./art_qk_choosen_rev_aggregateModel.base"
+import { art_qk_revModel } from "./art_qk_revModel"
+import { art_qk_revModelSelector } from "./art_qk_revModel.base"
+import { art_qk_rev_aggregateModel } from "./art_qk_rev_aggregateModel"
+import { art_qk_rev_aggregateModelSelector } from "./art_qk_rev_aggregateModel.base"
 import { art_revModel } from "./art_revModel"
 import { art_revModelSelector } from "./art_revModel.base"
 import { art_rev_aggregateModel } from "./art_rev_aggregateModel"
@@ -36,6 +44,10 @@ import { avModel } from "./avModel"
 import { avModelSelector } from "./avModel.base"
 import { av_aggregateModel } from "./av_aggregateModel"
 import { av_aggregateModelSelector } from "./av_aggregateModel.base"
+import { av_revModel } from "./av_revModel"
+import { av_revModelSelector } from "./av_revModel.base"
+import { av_rev_aggregateModel } from "./av_rev_aggregateModel"
+import { av_rev_aggregateModelSelector } from "./av_rev_aggregateModel.base"
 import { eventModel } from "./eventModel"
 import { eventModelSelector } from "./eventModel.base"
 import { event_aggregateModel } from "./event_aggregateModel"
@@ -64,6 +76,10 @@ import { gvModel } from "./gvModel"
 import { gvModelSelector } from "./gvModel.base"
 import { gv_aggregateModel } from "./gv_aggregateModel"
 import { gv_aggregateModelSelector } from "./gv_aggregateModel.base"
+import { gv_revModel } from "./gv_revModel"
+import { gv_revModelSelector } from "./gv_revModel.base"
+import { gv_rev_aggregateModel } from "./gv_rev_aggregateModel"
+import { gv_rev_aggregateModelSelector } from "./gv_rev_aggregateModel.base"
 import { herkunftModel } from "./herkunftModel"
 import { herkunftModelSelector } from "./herkunftModel.base"
 import { herkunft_aggregateModel } from "./herkunft_aggregateModel"
@@ -104,6 +120,14 @@ import { kultur_qk_choosenModel } from "./kultur_qk_choosenModel"
 import { kultur_qk_choosenModelSelector } from "./kultur_qk_choosenModel.base"
 import { kultur_qk_choosen_aggregateModel } from "./kultur_qk_choosen_aggregateModel"
 import { kultur_qk_choosen_aggregateModelSelector } from "./kultur_qk_choosen_aggregateModel.base"
+import { kultur_qk_choosen_revModel } from "./kultur_qk_choosen_revModel"
+import { kultur_qk_choosen_revModelSelector } from "./kultur_qk_choosen_revModel.base"
+import { kultur_qk_choosen_rev_aggregateModel } from "./kultur_qk_choosen_rev_aggregateModel"
+import { kultur_qk_choosen_rev_aggregateModelSelector } from "./kultur_qk_choosen_rev_aggregateModel.base"
+import { kultur_qk_revModel } from "./kultur_qk_revModel"
+import { kultur_qk_revModelSelector } from "./kultur_qk_revModel.base"
+import { kultur_qk_rev_aggregateModel } from "./kultur_qk_rev_aggregateModel"
+import { kultur_qk_rev_aggregateModelSelector } from "./kultur_qk_rev_aggregateModel.base"
 import { kultur_revModel } from "./kultur_revModel"
 import { kultur_revModelSelector } from "./kultur_revModel.base"
 import { kultur_rev_aggregateModel } from "./kultur_rev_aggregateModel"
@@ -216,6 +240,12 @@ export const query_rootModelBase = ModelBase
     art_qk_choosen: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosenModel)))),
     art_qk_choosen_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_aggregateModel)),
     art_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosenModel))),
+    art_qk_choosen_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosen_revModel)))),
+    art_qk_choosen_rev_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_rev_aggregateModel)),
+    art_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_choosen_revModel))),
+    art_qk_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_revModel)))),
+    art_qk_rev_aggregate: types.union(types.undefined, types.late(() => art_qk_rev_aggregateModel)),
+    art_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qk_revModel))),
     art_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_revModel)))),
     art_rev_aggregate: types.union(types.undefined, types.late(() => art_rev_aggregateModel)),
     art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
@@ -226,6 +256,9 @@ export const query_rootModelBase = ModelBase
     av: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
     av_aggregate: types.union(types.undefined, types.late(() => av_aggregateModel)),
     av_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
+    av_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => av_revModel)))),
+    av_rev_aggregate: types.union(types.undefined, types.late(() => av_rev_aggregateModel)),
+    av_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => av_revModel))),
     event: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
     event_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     event_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => eventModel))),
@@ -250,6 +283,9 @@ export const query_rootModelBase = ModelBase
     gv: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gvModel)))),
     gv_aggregate: types.union(types.undefined, types.late(() => gv_aggregateModel)),
     gv_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gvModel))),
+    gv_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gv_revModel)))),
+    gv_rev_aggregate: types.union(types.undefined, types.late(() => gv_rev_aggregateModel)),
+    gv_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gv_revModel))),
     herkunft: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunftModel)))),
     herkunft_aggregate: types.union(types.undefined, types.late(() => herkunft_aggregateModel)),
     herkunft_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
@@ -280,6 +316,12 @@ export const query_rootModelBase = ModelBase
     kultur_qk_choosen: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosenModel)))),
     kultur_qk_choosen_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_aggregateModel)),
     kultur_qk_choosen_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosenModel))),
+    kultur_qk_choosen_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_choosen_revModel)))),
+    kultur_qk_choosen_rev_aggregate: types.union(types.undefined, types.late(() => kultur_qk_choosen_rev_aggregateModel)),
+    kultur_qk_choosen_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_choosen_revModel))),
+    kultur_qk_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_qk_revModel)))),
+    kultur_qk_rev_aggregate: types.union(types.undefined, types.late(() => kultur_qk_rev_aggregateModel)),
+    kultur_qk_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_qk_revModel))),
     kultur_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_revModel)))),
     kultur_rev_aggregate: types.union(types.undefined, types.late(() => kultur_rev_aggregateModel)),
     kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
@@ -379,6 +421,12 @@ export class query_rootModelSelector extends QueryBuilder {
   art_qk_choosen(builder) { return this.__child(`art_qk_choosen`, art_qk_choosenModelSelector, builder) }
   art_qk_choosen_aggregate(builder) { return this.__child(`art_qk_choosen_aggregate`, art_qk_choosen_aggregateModelSelector, builder) }
   art_qk_choosen_by_pk(builder) { return this.__child(`art_qk_choosen_by_pk`, art_qk_choosenModelSelector, builder) }
+  art_qk_choosen_rev(builder) { return this.__child(`art_qk_choosen_rev`, art_qk_choosen_revModelSelector, builder) }
+  art_qk_choosen_rev_aggregate(builder) { return this.__child(`art_qk_choosen_rev_aggregate`, art_qk_choosen_rev_aggregateModelSelector, builder) }
+  art_qk_choosen_rev_by_pk(builder) { return this.__child(`art_qk_choosen_rev_by_pk`, art_qk_choosen_revModelSelector, builder) }
+  art_qk_rev(builder) { return this.__child(`art_qk_rev`, art_qk_revModelSelector, builder) }
+  art_qk_rev_aggregate(builder) { return this.__child(`art_qk_rev_aggregate`, art_qk_rev_aggregateModelSelector, builder) }
+  art_qk_rev_by_pk(builder) { return this.__child(`art_qk_rev_by_pk`, art_qk_revModelSelector, builder) }
   art_rev(builder) { return this.__child(`art_rev`, art_revModelSelector, builder) }
   art_rev_aggregate(builder) { return this.__child(`art_rev_aggregate`, art_rev_aggregateModelSelector, builder) }
   art_rev_by_pk(builder) { return this.__child(`art_rev_by_pk`, art_revModelSelector, builder) }
@@ -389,6 +437,9 @@ export class query_rootModelSelector extends QueryBuilder {
   av(builder) { return this.__child(`av`, avModelSelector, builder) }
   av_aggregate(builder) { return this.__child(`av_aggregate`, av_aggregateModelSelector, builder) }
   av_by_pk(builder) { return this.__child(`av_by_pk`, avModelSelector, builder) }
+  av_rev(builder) { return this.__child(`av_rev`, av_revModelSelector, builder) }
+  av_rev_aggregate(builder) { return this.__child(`av_rev_aggregate`, av_rev_aggregateModelSelector, builder) }
+  av_rev_by_pk(builder) { return this.__child(`av_rev_by_pk`, av_revModelSelector, builder) }
   event(builder) { return this.__child(`event`, eventModelSelector, builder) }
   event_aggregate(builder) { return this.__child(`event_aggregate`, event_aggregateModelSelector, builder) }
   event_by_pk(builder) { return this.__child(`event_by_pk`, eventModelSelector, builder) }
@@ -413,6 +464,9 @@ export class query_rootModelSelector extends QueryBuilder {
   gv(builder) { return this.__child(`gv`, gvModelSelector, builder) }
   gv_aggregate(builder) { return this.__child(`gv_aggregate`, gv_aggregateModelSelector, builder) }
   gv_by_pk(builder) { return this.__child(`gv_by_pk`, gvModelSelector, builder) }
+  gv_rev(builder) { return this.__child(`gv_rev`, gv_revModelSelector, builder) }
+  gv_rev_aggregate(builder) { return this.__child(`gv_rev_aggregate`, gv_rev_aggregateModelSelector, builder) }
+  gv_rev_by_pk(builder) { return this.__child(`gv_rev_by_pk`, gv_revModelSelector, builder) }
   herkunft(builder) { return this.__child(`herkunft`, herkunftModelSelector, builder) }
   herkunft_aggregate(builder) { return this.__child(`herkunft_aggregate`, herkunft_aggregateModelSelector, builder) }
   herkunft_by_pk(builder) { return this.__child(`herkunft_by_pk`, herkunftModelSelector, builder) }
@@ -443,6 +497,12 @@ export class query_rootModelSelector extends QueryBuilder {
   kultur_qk_choosen(builder) { return this.__child(`kultur_qk_choosen`, kultur_qk_choosenModelSelector, builder) }
   kultur_qk_choosen_aggregate(builder) { return this.__child(`kultur_qk_choosen_aggregate`, kultur_qk_choosen_aggregateModelSelector, builder) }
   kultur_qk_choosen_by_pk(builder) { return this.__child(`kultur_qk_choosen_by_pk`, kultur_qk_choosenModelSelector, builder) }
+  kultur_qk_choosen_rev(builder) { return this.__child(`kultur_qk_choosen_rev`, kultur_qk_choosen_revModelSelector, builder) }
+  kultur_qk_choosen_rev_aggregate(builder) { return this.__child(`kultur_qk_choosen_rev_aggregate`, kultur_qk_choosen_rev_aggregateModelSelector, builder) }
+  kultur_qk_choosen_rev_by_pk(builder) { return this.__child(`kultur_qk_choosen_rev_by_pk`, kultur_qk_choosen_revModelSelector, builder) }
+  kultur_qk_rev(builder) { return this.__child(`kultur_qk_rev`, kultur_qk_revModelSelector, builder) }
+  kultur_qk_rev_aggregate(builder) { return this.__child(`kultur_qk_rev_aggregate`, kultur_qk_rev_aggregateModelSelector, builder) }
+  kultur_qk_rev_by_pk(builder) { return this.__child(`kultur_qk_rev_by_pk`, kultur_qk_revModelSelector, builder) }
   kultur_rev(builder) { return this.__child(`kultur_rev`, kultur_revModelSelector, builder) }
   kultur_rev_aggregate(builder) { return this.__child(`kultur_rev_aggregate`, kultur_rev_aggregateModelSelector, builder) }
   kultur_rev_by_pk(builder) { return this.__child(`kultur_rev_by_pk`, kultur_revModelSelector, builder) }

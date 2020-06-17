@@ -2,8 +2,12 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
+import { art_qk_choosen_revModel } from "./art_qk_choosen_revModel"
+import { art_qk_choosen_revModelSelector } from "./art_qk_choosen_revModel.base"
+import { art_qk_choosen_rev_aggregateModel } from "./art_qk_choosen_rev_aggregateModel"
+import { art_qk_choosen_rev_aggregateModelSelector } from "./art_qk_choosen_rev_aggregateModel.base"
 
 
 /**
@@ -20,6 +24,8 @@ export const art_qkModelBase = ModelBase
     _parent_rev: types.union(types.undefined, types.null, types.string),
     _rev: types.union(types.undefined, types.null, types.string),
     _revisions: types.union(types.undefined, types.null, types.frozen()),
+    art_qk_choosen_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_qk_choosen_revModel)))),
+    art_qk_choosen_revs_aggregate: types.union(types.undefined, types.late(() => art_qk_choosen_rev_aggregateModel)),
     beschreibung: types.union(types.undefined, types.null, types.string),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
@@ -48,6 +54,8 @@ export class art_qkModelSelector extends QueryBuilder {
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
   get titel() { return this.__attr(`titel`) }
+  art_qk_choosen_revs(builder) { return this.__child(`art_qk_choosen_revs`, art_qk_choosen_revModelSelector, builder) }
+  art_qk_choosen_revs_aggregate(builder) { return this.__child(`art_qk_choosen_revs_aggregate`, art_qk_choosen_rev_aggregateModelSelector, builder) }
 }
 export function selectFromart_qk() {
   return new art_qkModelSelector()
