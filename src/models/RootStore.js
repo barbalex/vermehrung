@@ -5,6 +5,8 @@ import sortBy from 'lodash/sortBy'
 import { v1 as uuidv1 } from 'uuid'
 import md5 from 'blueimp-md5'
 import last from 'lodash/last'
+import set from 'lodash/set'
+import unset from 'lodash/unset'
 import isUuid from 'is-uuid'
 import moment from 'moment'
 
@@ -48,6 +50,7 @@ import sammlungIdInUrl from '../utils/sammlungIdInUrl'
 import kulturIdOfAnLieferungInUrl from '../utils/kulturIdOfAnLieferungInUrl'
 import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
+import Errors, { defaultValue as defaultErrors } from './Errors'
 
 const formatDatumForSearch = (datum) =>
   datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : ''
@@ -78,18 +81,19 @@ export const RootStore = RootStoreBase.props({
   showDeleted: types.optional(types.boolean, false),
   initialDataQueried: types.optional(types.boolean, false),
   queryingAllData: types.optional(types.boolean, false),
+  errors: types.optional(Errors, defaultErrors),
 })
-  // structure of these variables is not controlled
-  // so need to define this as volatile
   .volatile(() => ({
     user: {},
-    // started out using context for firebase
-    // refactored here because of some weird stuff
-    // but that probably had other reasons
-    // so could move this back to context if necessary
     firebase: null,
     gqlHttpClient: null,
     gqlWsClient: null,
+    /**
+     * structure: error.table.field
+     * need this because operations work on top level
+     * so errors need to be managed there too
+     */
+    //errors: {},
   }))
   .actions((self) => {
     reaction(
@@ -114,6 +118,8 @@ export const RootStore = RootStoreBase.props({
               variables,
               callbackQuery,
               callbackQueryVariables,
+              revertTable,
+              revertField,
             } = query
             try {
               if (variables) {
@@ -133,6 +139,10 @@ export const RootStore = RootStoreBase.props({
                   'There is a conflict with exact same changes - ingoring the error thrown',
                 )
               } else {
+                self.setError({
+                  path: `${revertTable}.${revertField}`,
+                  value: error.message,
+                })
                 // Maybe do it like superhuman and check if network error
                 // then retry and set online without using tool?
                 // TODO: describe operation better. User should know what is happening
@@ -150,6 +160,8 @@ export const RootStore = RootStoreBase.props({
               }
             }
             // query to refresh the data updated in all used views (tree...)
+            // could remove if live updates work
+            // but keep it until auth problems solved
             if (callbackQuery) {
               try {
                 // delay to prevent app from requerying BEFORE trigger updated the winner
@@ -182,6 +194,12 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      setError({ path, value }) {
+        set(self.errors, path, value)
+      },
+      unsetError({ path }) {
+        unset(self.errors, path)
+      },
       setQueryingAllData(val) {
         self.queryingAllData = val
       },
