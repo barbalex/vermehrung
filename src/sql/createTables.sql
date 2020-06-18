@@ -196,6 +196,7 @@ create table art_qk_choosen (
   id uuid primary key default uuid_generate_v1mc(),
   art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
@@ -206,12 +207,10 @@ create table art_qk_choosen (
   _conflicts text[] default null
   unique(art_id, qk_name)
 );
-alter table art_qk_choosen add column changed timestamp default now();
-alter table art_qk_choosen add column changed_by text default null;
-
 create index on art_qk_choosen using btree (id);
 create index on art_qk_choosen using btree (art_id);
 create index on art_qk_choosen using btree (qk_name);
+create index on art_qk_choosen using btree (choosen);
 create index on art_qk_choosen using btree (_deleted);
 
 --insert into art_qk_choosen (art_id, qk_name)
@@ -224,14 +223,14 @@ create table art_qk_choosen_rev (
   art_qk_choosen_id uuid default null,
   art_id uuid NOT NULL REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES art_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  _conflicts text[] default null
+  _deleted boolean default false
 );
 create index on art_qk_choosen_rev using btree (id);
 create index on art_qk_choosen_rev using btree (_rev);
@@ -600,6 +599,7 @@ create table kultur_qk_choosen (
   id uuid primary key default uuid_generate_v1mc(),
   kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
@@ -625,6 +625,7 @@ create table kultur_qk_choosen_rev (
   kultur_qk_choosen_id uuid default null,
   kultur_id uuid NOT NULL REFERENCES kultur (id) ON DELETE CASCADE ON UPDATE CASCADE,
   qk_name text NOT NULL REFERENCES kultur_qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  choosen boolean default true,
   changed timestamp default now(),
   changed_by text default null,
   _rev text default null,
