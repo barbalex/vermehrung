@@ -14,7 +14,7 @@ export const av_rev_select_columnEnumType = types.enumeration("av_rev_select_col
   "_rev",
   "_revisions",
   "art_id",
-  "av_rev",
+  "av_id",
   "changed",
   "changed_by",
   "id",

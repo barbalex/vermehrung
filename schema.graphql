@@ -4066,7 +4066,7 @@ type av_rev {
   # An object relationship
   art: art
   art_id: uuid
-  av_rev: uuid
+  av_id: uuid
   changed: timestamp
   changed_by: String
   id: ID!
@@ -4140,7 +4140,7 @@ input av_rev_bool_exp {
   _revisions: _text_comparison_exp
   art: art_bool_exp
   art_id: uuid_comparison_exp
-  av_rev: uuid_comparison_exp
+  av_id: uuid_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   id: uuid_comparison_exp
@@ -4168,7 +4168,7 @@ input av_rev_insert_input {
   _revisions: _text
   art: art_obj_rel_insert_input
   art_id: uuid
-  av_rev: uuid
+  av_id: uuid
   changed: timestamp
   changed_by: String
   id: ID
@@ -4182,7 +4182,7 @@ type av_rev_max_fields {
   _parent_rev: String
   _rev: String
   art_id: uuid
-  av_rev: uuid
+  av_id: uuid
   changed: timestamp
   changed_by: String
   id: ID
@@ -4195,7 +4195,7 @@ input av_rev_max_order_by {
   _parent_rev: order_by
   _rev: order_by
   art_id: order_by
-  av_rev: order_by
+  av_id: order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -4208,7 +4208,7 @@ type av_rev_min_fields {
   _parent_rev: String
   _rev: String
   art_id: uuid
-  av_rev: uuid
+  av_id: uuid
   changed: timestamp
   changed_by: String
   id: ID
@@ -4221,7 +4221,7 @@ input av_rev_min_order_by {
   _parent_rev: order_by
   _rev: order_by
   art_id: order_by
-  av_rev: order_by
+  av_id: order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -4259,7 +4259,7 @@ input av_rev_order_by {
   _revisions: order_by
   art: art_order_by
   art_id: order_by
-  av_rev: order_by
+  av_id: order_by
   changed: order_by
   changed_by: order_by
   id: order_by
@@ -4293,7 +4293,7 @@ enum av_rev_select_column {
   art_id
 
   # column name
-  av_rev
+  av_id
 
   # column name
   changed
@@ -4316,7 +4316,7 @@ input av_rev_set_input {
   _rev: String
   _revisions: _text
   art_id: uuid
-  av_rev: uuid
+  av_id: uuid
   changed: timestamp
   changed_by: String
   id: ID
@@ -4384,7 +4384,7 @@ enum av_rev_update_column {
   art_id
 
   # column name
-  av_rev
+  av_id
 
   # column name
   changed
