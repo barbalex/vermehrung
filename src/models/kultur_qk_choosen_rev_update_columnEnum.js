@@ -15,6 +15,7 @@ export const kultur_qk_choosen_rev_update_columnEnumType = types.enumeration("ku
   "_revisions",
   "changed",
   "changed_by",
+  "choosen",
   "id",
   "kultur_id",
   "kultur_qk_choosen_id",

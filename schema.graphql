@@ -1166,6 +1166,7 @@ type art_qk_choosen {
   art_id: uuid!
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID!
   qk_name: String!
 }
@@ -1237,6 +1238,7 @@ input art_qk_choosen_bool_exp {
   art_id: uuid_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
+  choosen: Boolean_comparison_exp
   id: uuid_comparison_exp
   qk_name: String_comparison_exp
 }
@@ -1267,6 +1269,7 @@ input art_qk_choosen_insert_input {
   art_id: uuid
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   qk_name: String
 }
@@ -1353,6 +1356,7 @@ input art_qk_choosen_order_by {
   art_id: order_by
   changed: order_by
   changed_by: order_by
+  choosen: order_by
   id: order_by
   qk_name: order_by
 }
@@ -1364,7 +1368,6 @@ input art_qk_choosen_pk_columns_input {
 
 # columns and relationships of "art_qk_choosen_rev"
 type art_qk_choosen_rev {
-  _conflicts: _text
   _deleted: Boolean
   _depth: Int
   _parent_rev: String
@@ -1380,6 +1383,7 @@ type art_qk_choosen_rev {
   art_qk_choosen_id: uuid
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID!
   qk_name: String!
 }
@@ -1439,7 +1443,6 @@ input art_qk_choosen_rev_avg_order_by {
 # Boolean expression to filter rows from the table "art_qk_choosen_rev". All fields are combined with a logical 'AND'.
 input art_qk_choosen_rev_bool_exp {
   _and: [art_qk_choosen_rev_bool_exp]
-  _conflicts: _text_comparison_exp
   _deleted: Boolean_comparison_exp
   _depth: Int_comparison_exp
   _not: art_qk_choosen_rev_bool_exp
@@ -1453,6 +1456,7 @@ input art_qk_choosen_rev_bool_exp {
   art_qk_choosen_id: uuid_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
+  choosen: Boolean_comparison_exp
   id: uuid_comparison_exp
   qk_name: String_comparison_exp
 }
@@ -1470,7 +1474,6 @@ input art_qk_choosen_rev_inc_input {
 
 # input type for inserting data into table "art_qk_choosen_rev"
 input art_qk_choosen_rev_insert_input {
-  _conflicts: _text
   _deleted: Boolean
   _depth: Int
   _parent_rev: String
@@ -1482,6 +1485,7 @@ input art_qk_choosen_rev_insert_input {
   art_qk_choosen_id: uuid
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   qk_name: String
 }
@@ -1562,7 +1566,6 @@ input art_qk_choosen_rev_on_conflict {
 
 # ordering options when selecting data from "art_qk_choosen_rev"
 input art_qk_choosen_rev_order_by {
-  _conflicts: order_by
   _deleted: order_by
   _depth: order_by
   _parent_rev: order_by
@@ -1574,6 +1577,7 @@ input art_qk_choosen_rev_order_by {
   art_qk_choosen_id: order_by
   changed: order_by
   changed_by: order_by
+  choosen: order_by
   id: order_by
   qk_name: order_by
 }
@@ -1585,9 +1589,6 @@ input art_qk_choosen_rev_pk_columns_input {
 
 # select columns of table "art_qk_choosen_rev"
 enum art_qk_choosen_rev_select_column {
-  # column name
-  _conflicts
-
   # column name
   _deleted
 
@@ -1616,6 +1617,9 @@ enum art_qk_choosen_rev_select_column {
   changed_by
 
   # column name
+  choosen
+
+  # column name
   id
 
   # column name
@@ -1624,7 +1628,6 @@ enum art_qk_choosen_rev_select_column {
 
 # input type for updating data in table "art_qk_choosen_rev"
 input art_qk_choosen_rev_set_input {
-  _conflicts: _text
   _deleted: Boolean
   _depth: Int
   _parent_rev: String
@@ -1634,6 +1637,7 @@ input art_qk_choosen_rev_set_input {
   art_qk_choosen_id: uuid
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   qk_name: String
 }
@@ -1681,9 +1685,6 @@ input art_qk_choosen_rev_sum_order_by {
 # update columns of table "art_qk_choosen_rev"
 enum art_qk_choosen_rev_update_column {
   # column name
-  _conflicts
-
-  # column name
   _deleted
 
   # column name
@@ -1709,6 +1710,9 @@ enum art_qk_choosen_rev_update_column {
 
   # column name
   changed_by
+
+  # column name
+  choosen
 
   # column name
   id
@@ -1777,6 +1781,9 @@ enum art_qk_choosen_select_column {
   changed_by
 
   # column name
+  choosen
+
+  # column name
   id
 
   # column name
@@ -1794,6 +1801,7 @@ input art_qk_choosen_set_input {
   art_id: uuid
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   qk_name: String
 }
@@ -1866,6 +1874,9 @@ enum art_qk_choosen_update_column {
 
   # column name
   changed_by
+
+  # column name
+  choosen
 
   # column name
   id
@@ -12924,6 +12935,7 @@ type kultur_qk_choosen {
   _revisions: _text
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID!
 
   # An object relationship
@@ -13000,6 +13012,7 @@ input kultur_qk_choosen_bool_exp {
   _revisions: _text_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
+  choosen: Boolean_comparison_exp
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
@@ -13031,6 +13044,7 @@ input kultur_qk_choosen_insert_input {
   _revisions: _text
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
@@ -13118,6 +13132,7 @@ input kultur_qk_choosen_order_by {
   _revisions: order_by
   changed: order_by
   changed_by: order_by
+  choosen: order_by
   id: order_by
   kultur: kultur_order_by
   kultur_id: order_by
@@ -13139,6 +13154,7 @@ type kultur_qk_choosen_rev {
   _revisions: _text
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID!
 
   # An object relationship
@@ -13215,6 +13231,7 @@ input kultur_qk_choosen_rev_bool_exp {
   _revisions: _text_comparison_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
+  choosen: Boolean_comparison_exp
   id: uuid_comparison_exp
   kultur: kultur_bool_exp
   kultur_id: uuid_comparison_exp
@@ -13243,6 +13260,7 @@ input kultur_qk_choosen_rev_insert_input {
   _revisions: _text
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   kultur: kultur_obj_rel_insert_input
   kultur_id: uuid
@@ -13334,6 +13352,7 @@ input kultur_qk_choosen_rev_order_by {
   _revisions: order_by
   changed: order_by
   changed_by: order_by
+  choosen: order_by
   id: order_by
   kultur: kultur_order_by
   kultur_id: order_by
@@ -13371,6 +13390,9 @@ enum kultur_qk_choosen_rev_select_column {
   changed_by
 
   # column name
+  choosen
+
+  # column name
   id
 
   # column name
@@ -13392,6 +13414,7 @@ input kultur_qk_choosen_rev_set_input {
   _revisions: _text
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   kultur_id: uuid
   kultur_qk_choosen_id: uuid
@@ -13460,6 +13483,9 @@ enum kultur_qk_choosen_rev_update_column {
 
   # column name
   changed_by
+
+  # column name
+  choosen
 
   # column name
   id
@@ -13531,6 +13557,9 @@ enum kultur_qk_choosen_select_column {
   changed_by
 
   # column name
+  choosen
+
+  # column name
   id
 
   # column name
@@ -13550,6 +13579,7 @@ input kultur_qk_choosen_set_input {
   _revisions: _text
   changed: timestamp
   changed_by: String
+  choosen: Boolean
   id: ID
   kultur_id: uuid
   qk_name: String
@@ -13620,6 +13650,9 @@ enum kultur_qk_choosen_update_column {
 
   # column name
   changed_by
+
+  # column name
+  choosen
 
   # column name
   id
