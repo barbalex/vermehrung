@@ -1,7 +1,15 @@
 import format from 'date-fns/format'
 
+import exists from '../../../../../utils/exists'
+
 export default ({ data, kulturId, store }) => {
-  const { lieferungsSorted, kultursSorted, teilkultursSorted } = store
+  const {
+    lieferungsSorted,
+    kultursSorted,
+    teilkultursSorted,
+    teilzaehlungsSorted,
+    zaehlungsSorted,
+  } = store
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
@@ -10,7 +18,7 @@ export default ({ data, kulturId, store }) => {
     kultursWithoutVonAnzahlIndividuen: () =>
       kultursSorted
         .filter((k) => k.id === kulturId)
-        .filter((k) => k.von_anzahl_individuen === null)
+        .filter((k) => !exists(k.von_anzahl_individuen))
         .map((k) => {
           const garten =
             k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
@@ -86,11 +94,14 @@ export default ({ data, kulturId, store }) => {
           }
         }),
     zaehlungsWithoutDatum: () =>
-      (data?.zaehlungsWithoutDatum ?? []).flatMap((k) =>
-        (k?.zaehlungs ?? []).map((z) => {
+      zaehlungsSorted
+        .filter((z) => z.kultur_id === kulturId)
+        .filter((z) => !z.datum)
+        .map((z) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+            z?.kultur?.garten?.name ??
+            `(${z?.kultur?.garten?.person?.name ?? 'kein Name'})`
+          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
 
           return {
@@ -98,17 +109,25 @@ export default ({ data, kulturId, store }) => {
             text,
           }
         }),
-      ),
     zaehlungsWithoutAnzahlPflanzen: () =>
-      (data?.zaehlungsWithoutAnzahlPflanzen ?? []).flatMap((k) =>
-        (k?.zaehlungs ?? []).map((z) => {
+      zaehlungsSorted
+        .filter((z) => z.kultur_id === kulturId)
+        .filter(
+          (z) =>
+            (z?.teilzaehlungs ?? [])
+              .filter((tz) => !tz._deleted)
+              .filter((tz) => !exists(tz.anzahl_pflanzen)).length,
+        )
+        .map((z) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+            z.kultur?.garten?.name ??
+            `(${z.kultur?.garten?.person?.name ?? 'kein Name'})`
+          const herkunft = z.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
             : `Zählung-ID: ${z.id}`
-          const anzTz = (z?.teilzaehlungs ?? []).length
+          const anzTz = (z?.teilzaehlungs ?? []).filter((tz) => !tz._deleted)
+            .length
           const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
           const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
@@ -117,7 +136,6 @@ export default ({ data, kulturId, store }) => {
             text,
           }
         }),
-      ),
     zaehlungsWithoutAnzahlAuspflanzbereit: () =>
       (data?.zaehlungsWithoutAnzahlAuspflanzbereit ?? []).flatMap((k) =>
         (k?.zaehlungs ?? []).map((z) => {
