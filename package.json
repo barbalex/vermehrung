@@ -8,8 +8,7 @@
     "clean": "gatsby clean",
     "build": "gatsby clean && gatsby build",
     "postbuild": "copyfiles .now/* public && copyfiles now.json public",
-    "serve": "gatsby serve",
-    "scaffold": "mst-gql https://api.vermehrung.ch/v1/graphql"
+    "serve": "gatsby serve"
   },
   "dependencies": {
     "@material-ui/core": "4.10.2",
