@@ -2,12 +2,12 @@ import format from 'date-fns/format'
 
 import exists from '../../../../../utils/exists'
 
-export default ({ data, kulturId, store }) => {
+export default ({ kulturId, store }) => {
   const {
     lieferungsSorted,
     kultursSorted,
     teilkultursSorted,
-    teilzaehlungsSorted,
+    eventsSorted,
     zaehlungsSorted,
   } = store
   const year = +format(new Date(), 'yyyy')
@@ -271,70 +271,87 @@ export default ({ data, kulturId, store }) => {
           }
         }),
     ausLieferungsWithoutVonAnzahlIndividuen: () =>
-      (data?.ausLieferungsWithoutVonAnzahlIndividuen ?? []).map((l) => {
-        const datum = l.datum
-          ? format(new Date(l.datum), 'yyyy.MM.dd')
-          : `kein Datum`
-        const geplant = l.geplant ? ', (geplant)' : ''
-        const text = `${datum}, ID: ${l.id}${geplant}`
+      lieferungsSorted
+        .filter((l) => l.von_kultur_id === kulturId)
+        .filter((l) => !exists(l.von_anzahl_individuen))
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
 
-        return {
-          url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-          text,
-        }
-      }),
+          return {
+            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+            text,
+          }
+        }),
     anLieferungsWithoutVon: () =>
-      (data?.anLieferungsWithoutVon ?? []).map((l) => {
-        const datum = l.datum
-          ? format(new Date(l.datum), 'yyyy.MM.dd')
-          : `kein Datum`
-        const geplant = l.geplant ? ', (geplant)' : ''
-        const text = `${datum}, ID: ${l.id}${geplant}`
+      lieferungsSorted
+        .filter((l) => l.nach_kultur_id === kulturId)
+        .filter((l) => !l.von_kultur_id)
+        .filter((l) => !l.von_sammlung_id)
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
 
-        return {
-          url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-          text,
-        }
-      }),
+          return {
+            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+            text,
+          }
+        }),
     ausLieferungsWithoutNach: () =>
-      (data?.ausLieferungsWithoutNach ?? []).map((l) => {
-        const datum = l.datum
-          ? format(new Date(l.datum), 'yyyy.MM.dd')
-          : `kein Datum`
-        const geplant = l.geplant ? ', (geplant)' : ''
-        const text = `${datum}, ID: ${l.id}${geplant}`
+      lieferungsSorted
+        .filter((l) => l.von_kultur_id === kulturId)
+        .filter((l) => !l.nach_kultur_id)
+        .filter((l) => !l.nach_ausgepflanzt)
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
 
-        return {
-          url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-          text,
-        }
-      }),
+          return {
+            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+            text,
+          }
+        }),
     anLieferungsWithoutDatum: () =>
-      (data?.anLieferungsWithoutDatum ?? []).map((l) => {
-        const datum = l.datum
-          ? format(new Date(l.datum), 'yyyy.MM.dd')
-          : `kein Datum`
-        const geplant = l.geplant ? ', (geplant)' : ''
-        const text = `${datum}, ID: ${l.id}${geplant}`
+      lieferungsSorted
+        .filter((l) => l.von_kultur_id === kulturId)
+        .filter((l) => !l.datum)
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
 
-        return {
-          url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
-          text,
-        }
-      }),
+          return {
+            url: ['Kulturen', kulturId, 'An-Lieferungen', l.id],
+            text,
+          }
+        }),
     ausLieferungsWithoutDatum: () =>
-      (data?.ausLieferungsWithoutDatum ?? []).map((l) => {
-        const datum = l.datum
-          ? format(new Date(l.datum), 'yyyy.MM.dd')
-          : `kein Datum`
-        const geplant = l.geplant ? ', (geplant)' : ''
-        const text = `${datum}, ID: ${l.id}${geplant}`
+      lieferungsSorted
+        .filter((l) => l.von_kultur_id === kulturId)
+        .filter((l) => !l.datum)
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
 
-        return {
-          url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
-          text,
-        }
-      }),
+          return {
+            url: ['Kulturen', kulturId, 'Aus-Lieferungen', l.id],
+            text,
+          }
+        }),
     anLieferungsWithoutPerson: () =>
       lieferungsSorted
         .filter((l) => l.nach_kultur_id === kulturId)
@@ -368,11 +385,14 @@ export default ({ data, kulturId, store }) => {
           }
         }),
     eventsWithoutBeschreibung: () =>
-      (data?.eventsWithoutBeschreibung ?? []).flatMap((k) =>
-        (k?.events ?? []).map((ev) => {
+      eventsSorted
+        .filter((e) => e.kultur_id === kulturId)
+        .filter((e) => !e.beschreibung)
+        .map((ev) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+            ev.kultur?.garten?.name ??
+            `(${ev.kultur?.garten?.person?.name ?? 'kein Name'})`
+          const herkunft = ev.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
 
           return {
@@ -380,13 +400,15 @@ export default ({ data, kulturId, store }) => {
             text,
           }
         }),
-      ),
     eventsWithoutDatum: () =>
-      (data?.eventsWithoutDatum ?? []).flatMap((k) =>
-        (k?.events ?? []).map((ev) => {
+      eventsSorted
+        .filter((e) => e.kultur_id === kulturId)
+        .filter((e) => !e.datum)
+        .map((ev) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+            ev.kultur?.garten?.name ??
+            `(${ev.kultur?.garten?.person?.name ?? 'kein Name'})`
+          const herkunft = ev.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
 
           return {
@@ -394,6 +416,5 @@ export default ({ data, kulturId, store }) => {
             text,
           }
         }),
-      ),
   }
 }

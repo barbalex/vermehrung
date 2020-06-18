@@ -1,18 +1,14 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import format from 'date-fns/format'
-import Badge from '@material-ui/core/Badge'
-import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 
-import query from './query'
 import createMessageFunctions from './createMessageFunctions'
 import getAppBaseUrl from '../../../../../utils/appBaseUrl'
-import { useQuery, StoreContext } from '../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 
 const appBaseUrl = getAppBaseUrl()
 
@@ -48,18 +44,6 @@ const ButtonContainer = styled.div`
     width: 167px;
   }
 `
-const StyledButton = styled(Button)`
-  margin-bottom: 15px !important;
-  margin-top: -5px !important;
-  color: ${(props) =>
-    props.loading === 'true'
-      ? '#D84315 !important'
-      : 'rgb(46, 125, 50) !important'};
-  height: 34px !important;
-  > span {
-    text-transform: none;
-  }
-`
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
   margin-left: 35px !important;
@@ -68,7 +52,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
+const KulturQkQk = ({ kultur, qks }) => {
   const store = useContext(StoreContext)
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
@@ -76,19 +60,7 @@ const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
     [],
   )
 
-  const year = +format(new Date(), 'yyyy')
-  const startYear = `${year}.01.01`
-  const startNextYear = `${year + 1}.01.01`
-  const { data, error, loading, query: queryOfQuery } = useQuery(query, {
-    variables: {
-      ...qkNameQueries,
-      kulturId: kultur.id,
-      startYear,
-      startNextYear,
-    },
-  })
   const messageFunctions = createMessageFunctions({
-    data,
     kulturId: kultur.id,
     store,
   })
@@ -105,31 +77,9 @@ const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
     return true
   })
 
-  if (loading) return 'Lade Daten...'
-  if (error) return `Fehler: ${error.message}`
   return (
     <Container>
       <Row>
-        <ButtonContainer>
-          <Badge
-            badgeContent={
-              loading
-                ? '...'
-                : filter
-                ? `${messageGroupsFiltered.length}/${messageGroups.length}`
-                : messageGroups.length
-            }
-            color="primary"
-          >
-            <StyledButton
-              onClick={() => queryOfQuery.refetch()}
-              variant="outlined"
-              loading={loading.toString()}
-            >
-              {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
-            </StyledButton>
-          </Badge>
-        </ButtonContainer>
         <StyledFormControl fullWidth>
           <InputLabel htmlFor="filter" shrink>
             nach Abschnitts-Titel filtern
@@ -142,6 +92,7 @@ const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
           />
         </StyledFormControl>
       </Row>
+      <ButtonContainer>{`${messageGroups.length} Gruppen`}</ButtonContainer>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{messageGroup.title}</Title>
@@ -160,7 +111,7 @@ const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
           ))}
         </StyledPaper>
       ))}
-      {!loading && messageGroups.length === 0 && (
+      {messageGroups.length === 0 && (
         <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
       )}
     </Container>
