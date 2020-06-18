@@ -64,12 +64,6 @@ const KulturQk = ({ kultur }) => {
   const qks = kulturQksSorted.filter(
     (qk) => !!kulturQkChoosen.find((no) => no.qk_name === qk.name),
   )
-  const qkNameQueries = Object.fromEntries(
-    kulturQksSorted.map((n) => [
-      n.name,
-      !!kulturQkChoosen.find((no) => no.qk_name === n.name),
-    ]),
-  )
 
   const qkCount = kulturQksSorted.length
   const kulturQkCount = kulturQkChoosen.length
@@ -143,11 +137,7 @@ const KulturQk = ({ kultur }) => {
             />
           </StyledTabs>
           <Body>
-            {tab === 'qk' ? (
-              <Qk kultur={kultur} qkNameQueries={qkNameQueries} qks={qks} />
-            ) : (
-              <Choose />
-            )}
+            {tab === 'qk' ? <Qk kultur={kultur} qks={qks} /> : <Choose />}
           </Body>
         </>
       )}
