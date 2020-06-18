@@ -88,12 +88,6 @@ export const RootStore = RootStoreBase.props({
     firebase: null,
     gqlHttpClient: null,
     gqlWsClient: null,
-    /**
-     * structure: error.table.field
-     * need this because operations work on top level
-     * so errors need to be managed there too
-     */
-    //errors: {},
   }))
   .actions((self) => {
     reaction(
@@ -337,8 +331,68 @@ export const RootStore = RootStoreBase.props({
         const rev_model = self.art_revs.get(val.id)
         destroy(rev_model)
       },
-      deleteArtQkChoosenModel(val) {
-        self.art_qk_choosens.delete(val.id)
+      upsertArtQkChoosenModel(val) {
+        self.art_qk_choosens.set(val.id, val)
+      },
+      insertArtQkChoosenRev(args) {
+        const { user, addQueuedQuery, upsertArtQkChoosenModel } = self
+        const valuesPassed = args?.values ?? {}
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          art_qk_choosen_id: id,
+          art_id: undefined,
+          qk_name: undefined,
+          choosen: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+          ...valuesPassed,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.art_qk_choosen_id
+        delete newObjectForStore.art_qk_choosen_id
+        addQueuedQuery({
+          name: 'mutateInsert_art_qk_choosen_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'art_qk_choosen_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryArt_qk_choosen',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+          revertTable: 'art_qk_choosen',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
+        })
+        // optimistically update store
+        upsertArtQkChoosenModel(newObjectForStore)
+      },
+      deleteArtQkChoosenRevModel(val) {
+        // 1. update model: remove this conflict
+        const model = self.art_qk_choosens.get(val.art_qk_choosen_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.art_qk_choosens.set(val.art_qk_choosen_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.art_qk_choosen_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertArtFileModel(val) {
         self.art_files.set(val.id, val)
@@ -749,8 +803,65 @@ export const RootStore = RootStoreBase.props({
       upsertKulturQkChoosenModel(val) {
         self.kultur_qk_choosens.set(val.id, val)
       },
-      deleteKulturQkChoosenModel(val) {
-        self.kultur_qk_choosens.delete(val.id)
+      insertKulturQkChoosenRev(args) {
+        const { user, addQueuedQuery, upsertKulturQkChoosenModel } = self
+        const valuesPassed = args?.values ?? {}
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          kultur_qk_choosen_id: id,
+          kultur_id: undefined,
+          qk_name: undefined,
+          choosen: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+          ...valuesPassed,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.kultur_qk_choosen_id
+        delete newObjectForStore.kultur_qk_choosen_id
+        addQueuedQuery({
+          name: 'mutateInsert_kultur_qk_choosen_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'kultur_qk_choosen_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryKultur_qk_choosen',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+          revertTable: 'kultur_qk_choosen',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
+        })
+        // optimistically update store
+        upsertKulturQkChoosenModel(newObjectForStore)
+      },
+      deleteKulturQkChoosenRevModel(val) {
+        // 1. update model: remove this conflict
+        const model = self.kultur_qk_choosens.get(val.kultur_qk_choosen_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.kultur_qk_choosens.set(val.kultur_qk_choosen_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.kultur_qk_choosen_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertLieferungModel(val) {
         self.lieferungs.set(val.id, val)
