@@ -128,7 +128,7 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <TitleRow>
+        <TitleRow data-online={online}>
           <Title>Dateien</Title>
           <Buttons>
             <Uploader
