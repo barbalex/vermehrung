@@ -409,19 +409,63 @@ export const RootStore = RootStoreBase.props({
       upsertAvModel(val) {
         self.avs.set(val.id, val)
       },
-      deleteAvModel(val) {
-        self.avs.delete(val.id)
+      insertAvRev(args) {
+        const { user, addQueuedQuery, upsertAvModel } = self
+        const valuesPassed = args?.values ?? {}
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          av_id: id,
+          art_id: undefined,
+          person_id: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+          ...valuesPassed,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.av_id
+        delete newObjectForStore.av_id
+        addQueuedQuery({
+          name: 'mutateInsert_av_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'av_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryAv',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+          revertTable: 'av',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
+        })
+        // optimistically update store
+        upsertAvModel(newObjectForStore)
       },
       deleteAvRevModel(val) {
         // 1. update model: remove this conflict
-        const model = self.ar_arts.get(val.ar_art_id)
+        const model = self.avs.get(val.av_id)
         const newModel = {
           ...model,
           _conflicts: model._conflicts.filter((c) => c !== val._rev),
         }
-        self.ar_arts.set(val.ar_art_id, newModel)
+        self.avs.set(val.av_id, newModel)
         // 2. delete rev model
-        const rev_model = self.ar_art_revs.get(val.id)
+        const rev_model = self.av_revs.get(val.id)
         destroy(rev_model)
       },
       upsertEventModel(val) {
@@ -601,8 +645,64 @@ export const RootStore = RootStoreBase.props({
       upsertGvModel(val) {
         self.gvs.set(val.id, val)
       },
-      deleteGvModel(val) {
-        self.gvs.delete(val.id)
+      insertGvRev(args) {
+        const { user, addQueuedQuery, upsertGvModel } = self
+        const valuesPassed = args?.values ?? {}
+
+        const id = uuidv1()
+        const _depth = 1
+        const newObject = {
+          gv_id: id,
+          garten_id: undefined,
+          person_id: undefined,
+          changed: new window.Date().toISOString(),
+          changed_by: user.email,
+          _depth,
+          _parent_rev: undefined,
+          _deleted: false,
+          ...valuesPassed,
+        }
+        const rev = `${_depth}-${md5(JSON.stringify(newObject))}`
+        newObject._rev = rev
+        newObject.id = uuidv1()
+        const newObjectForStore = { ...newObject }
+        newObject._revisions = `{"${rev}"}`
+        newObjectForStore._revisions = [rev]
+        // for store: convert rev to winner
+        newObjectForStore.id = newObjectForStore.gv_id
+        delete newObjectForStore.gv_id
+        addQueuedQuery({
+          name: 'mutateInsert_gv_rev_one',
+          variables: JSON.stringify({
+            object: newObject,
+            on_conflict: {
+              constraint: 'gv_rev_pkey',
+              update_columns: ['id'],
+            },
+          }),
+          callbackQuery: 'queryGv',
+          callbackQueryVariables: JSON.stringify({
+            where: { id: { _eq: id } },
+          }),
+          revertTable: 'gv',
+          revertId: id,
+          revertField: '_deleted',
+          revertValue: true,
+        })
+        // optimistically update store
+        upsertGvModel(newObjectForStore)
+      },
+      deleteGvRevModel(val) {
+        // 1. update model: remove this conflict
+        const model = self.gvs.get(val.gv_id)
+        const newModel = {
+          ...model,
+          _conflicts: model._conflicts.filter((c) => c !== val._rev),
+        }
+        self.gvs.set(val.gv_id, newModel)
+        // 2. delete rev model
+        const rev_model = self.gv_revs.get(val.id)
+        destroy(rev_model)
       },
       upsertHerkunftModel(val) {
         self.herkunfts.set(val.id, val)
