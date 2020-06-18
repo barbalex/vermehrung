@@ -2,7 +2,6 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
-import { v1 as uuidv1 } from 'uuid'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 
@@ -32,33 +31,11 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
   const kulturQkChoosen = [...store.kultur_qk_choosens.values()].find(
     (v) => v.kultur_id === kulturId && v.qk_name === qk.name,
   )
-
-  const kulturQkChoosenId = kulturQkChoosen?.id
-  const checked = !!kulturQkChoosenId
+  const checked = kulturQkChoosen.choosen
 
   const onChange = useCallback(() => {
-    // 1. if checked, delete kulturQkChoosen
-    // 2. else create kulturQkChoosen
-    if (checked) {
-      return store.mutateDelete_kultur_qk_choosen(
-        {
-          where: {
-            kultur_id: { _eq: kulturId },
-            qk_name: { _eq: qk.name },
-          },
-        },
-        undefined,
-        () => store.deleteKulturQkChoosenModel({ id: kulturQkChoosenId }),
-      )
-    }
-    store.mutateInsert_kultur_qk_choosen_one({
-      object: { kultur_id: kulturId, qk_name: qk.name, id: uuidv1() },
-      on_conflict: {
-        constraint: 'kultur_qk_choosen_pkey',
-        update_columns: ['id'],
-      },
-    })
-  }, [checked, kulturId, kulturQkChoosenId, qk.name, store])
+    qk.edit({ field: 'choosen', value: !checked })
+  }, [checked, qk])
 
   return (
     <Row>
