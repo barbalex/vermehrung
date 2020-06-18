@@ -9,12 +9,10 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import { v1 as uuidv1 } from 'uuid'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Person from './Person'
 import Select from '../../../shared/Select'
-import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -50,7 +48,7 @@ const Aven = styled.div`
 
 const GartenPersonen = ({ gartenId }) => {
   const store = useContext(StoreContext)
-  const { upsertGvModel, deleteGvModel, gvsSorted, personsSorted } = store
+  const { gvsSorted, personsSorted, insertGvRev } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -80,26 +78,12 @@ const GartenPersonen = ({ gartenId }) => {
 
   const saveToDb = useCallback(
     async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-      const newObject = { id: uuidv1(), person_id: value, garten_id: gartenId }
-      upsertGvModel(newObject)
-      try {
-        await store.mutateInsert_gv_one({
-          object: newObject,
-          on_conflict: {
-            constraint: 'gv_pkey',
-            update_columns: ['id'],
-          },
-        })
-      } catch (error) {
-        console.log({ error })
-        deleteGvModel(newObject)
-        return setErrors({ [field]: error.message })
-      }
+      insertGvRev({
+        values: { person_id: event.target.value, garten_id: gartenId },
+      })
       setErrors({})
     },
-    [gartenId, deleteGvModel, store, upsertGvModel],
+    [gartenId, insertGvRev],
   )
 
   return (
