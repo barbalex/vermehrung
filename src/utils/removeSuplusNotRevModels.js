@@ -7,18 +7,12 @@ import upperFirst from 'lodash/upperFirst'
 const tablesNotRevisioned = [
   'user_role',
   'person_file',
-  'art_qk',
-  'art_qk_choosen',
   'art_file',
   'herkunft_file',
   'sammlung_file',
   'garten_file',
-  'kultur_qk',
-  'kultur_qk_choosen',
   'kultur_file',
   'lieferung_file',
-  'av',
-  'gv',
 ]
 export default ({ store, data }) => {
   tablesNotRevisioned.forEach((table) => {
