@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import format from 'date-fns/format'
@@ -12,7 +12,7 @@ import FormControl from '@material-ui/core/FormControl'
 import query from './query'
 import createMessageFunctions from './createMessageFunctions'
 import getAppBaseUrl from '../../../../../utils/appBaseUrl'
-import { useQuery } from '../../../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../../../models/reactUtils'
 
 const appBaseUrl = getAppBaseUrl()
 
@@ -69,6 +69,7 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
+  const store = useContext(StoreContext)
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
     (event) => setFilter(event.target.value),
@@ -89,6 +90,7 @@ const KulturQkQk = ({ kultur, qkNameQueries, qks }) => {
   const messageFunctions = createMessageFunctions({
     data,
     kulturId: kultur.id,
+    store,
   })
   const messageGroups = qks
     .map((qk) => ({
