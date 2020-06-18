@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import format from 'date-fns/format'
@@ -9,7 +9,7 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 
-import { useQuery } from '../../../../../models/reactUtils'
+import { useQuery, StoreContext } from '../../../../../models/reactUtils'
 import query from './query'
 import createMessageFunctions from './createMessageFunctions'
 import getAppBaseUrl from '../../../../../utils/appBaseUrl'
@@ -69,6 +69,7 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const ApQkQk = ({ artId, qkNameQueries, qks }) => {
+  const store = useContext(StoreContext)
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
     (event) => setFilter(event.target.value),
@@ -89,6 +90,7 @@ const ApQkQk = ({ artId, qkNameQueries, qks }) => {
   const messageFunctions = createMessageFunctions({
     data,
     artId,
+    store,
   })
   const messageGroups = qks
     .map((qk) => ({
