@@ -9,12 +9,10 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-import { v1 as uuidv1 } from 'uuid'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Art from './Art'
 import Select from '../../../shared/Select'
-import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -50,7 +48,7 @@ const Avs = styled.div`
 
 const PersonArten = ({ personId }) => {
   const store = useContext(StoreContext)
-  const { upsertAvModel, deleteAvModel, avsSorted, artsSorted } = store
+  const { avsSorted, artsSorted, insertAvRev } = store
   const [open, setOpen] = useState(false)
 
   const [errors, setErrors] = useState({})
@@ -80,26 +78,12 @@ const PersonArten = ({ personId }) => {
 
   const saveToDb = useCallback(
     async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-      const newObject = { id: uuidv1(), art_id: value, person_id: personId }
-      upsertAvModel(newObject)
-      try {
-        await store.mutateInsert_av_one({
-          object: newObject,
-          on_conflict: {
-            constraint: 'av_pkey',
-            update_columns: ['id'],
-          },
-        })
-      } catch (error) {
-        console.log({ error })
-        deleteAvModel(newObject)
-        return setErrors({ [field]: error.message })
-      }
+      insertAvRev({
+        values: { person_id: personId, art_id: event.target.value },
+      })
       setErrors({})
     },
-    [deleteAvModel, personId, store, upsertAvModel],
+    [insertAvRev, personId],
   )
 
   return (
