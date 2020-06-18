@@ -1197,7 +1197,7 @@ create index on av using btree (_deleted);
 drop table if exists av_rev cascade;
 create table av_rev (
   id uuid primary key default uuid_generate_v1mc(),
-  av_rev uuid default null,
+  av_id uuid default null,
   art_id uuid default null REFERENCES art (id) ON DELETE CASCADE ON UPDATE CASCADE,
   person_id uuid references person (id) on delete cascade on update cascade,
   changed timestamp default now(),
