@@ -27,6 +27,7 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 15px;
   padding: 0 10px;
+  ${(props) => props['data-online'] && 'cursor: pointer;'}
   position: sticky;
   user-select: none;
   top: -10px;
@@ -54,10 +55,15 @@ const LightboxButton = styled(Button)`
     border: 1px solid rgba(74, 20, 140, 0.5) !important;
   }*/
 `
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
 
 const Files = ({ parentId, parent }) => {
   const store = useContext(StoreContext)
-  const { upsertArtFileModel, fileSort } = store
+  const { upsertArtFileModel, fileSort, online } = store
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
@@ -107,6 +113,17 @@ const Files = ({ parentId, parent }) => {
     () => setImageIndex((imageIndex + 1) % images.length),
     [imageIndex, images.length],
   )
+
+  if (!online) {
+    return (
+      <ErrorBoundary>
+        <TitleRow data-online={online}>
+          <Title>Dateien</Title>
+          <Content>Sorry, nur online verfügbar</Content>
+        </TitleRow>
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <ErrorBoundary>
