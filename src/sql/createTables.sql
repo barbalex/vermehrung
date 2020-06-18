@@ -618,6 +618,7 @@ create index on kultur_qk_choosen using btree (_deleted);
 --insert into kultur_qk_choosen (kultur_id, qk_name)
 --select kultur.id, kultur_qk.name
 --from kultur_qk, kultur
+--on conflict do nothing;
 
 drop table if exists kultur_qk_choosen_rev cascade;
 create table kultur_qk_choosen_rev (
