@@ -36,17 +36,12 @@ const StyledA = styled.p`
 const Row = styled.div`
   display: flex;
 `
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  button {
-    width: 167px;
-  }
+const ResultTitle = styled.div`
+  padding-left: 10px;
+  margin-bottom: 7px;
 `
 const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  margin-left: 35px !important;
+  padding-bottom: 10px !important;
   > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
@@ -79,20 +74,20 @@ const KulturQkQk = ({ kultur, qks }) => {
 
   return (
     <Container>
-      <Row>
-        <StyledFormControl fullWidth>
-          <InputLabel htmlFor="filter" shrink>
-            nach Abschnitts-Titel filtern
-          </InputLabel>
-          <Input
-            id="filter"
-            value={filter}
-            onChange={onChangeFilter}
-            spellCheck={false}
-          />
-        </StyledFormControl>
-      </Row>
-      <ButtonContainer>{`${messageGroups.length} Gruppen`}</ButtonContainer>
+      <StyledFormControl fullWidth>
+        <InputLabel htmlFor="filter" shrink>
+          nach Abschnitts-Titel filtern
+        </InputLabel>
+        <Input
+          id="filter"
+          value={filter}
+          onChange={onChangeFilter}
+          spellCheck={false}
+        />
+      </StyledFormControl>
+      <ResultTitle>{`${messageGroups.length} ${
+        messageGroups.length === 1 ? 'Gruppe' : 'Gruppen'
+      }:`}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{messageGroup.title}</Title>
