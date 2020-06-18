@@ -45,24 +45,12 @@ const MenuTitle = styled.h3`
 
 const Garten = ({ gv }) => {
   const store = useContext(StoreContext)
-  const { addNotification, gartensSorted } = store
+  const { gartensSorted } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = useCallback(async () => {
-    store.deleteGvModel(gv)
-    try {
-      store.mutateDelete_gv({
-        where: { id: { _eq: gv.id } },
-      })
-    } catch (error) {
-      store.insertGvModel(gv)
-      addNotification({
-        message: error.message,
-      })
-    }
-  }, [addNotification, gv, store])
+  const onClickDelete = useCallback(() => gv.delete(), [gv])
 
   const garten = gartensSorted.find((a) => a.id === gv.garten_id)
   const gartenname = garten?.name ?? `(${garten?.person?.name ?? 'kein Name'})`
