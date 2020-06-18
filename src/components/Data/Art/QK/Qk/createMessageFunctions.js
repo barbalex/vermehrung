@@ -1,7 +1,7 @@
 import format from 'date-fns/format'
 import exists from '../../../../../utils/exists'
 
-export default ({ data, artId, store }) => {
+export default ({ artId, store }) => {
   const {
     lieferungsSorted,
     kultursSorted,
@@ -412,45 +412,52 @@ export default ({ data, artId, store }) => {
           }
         }),
     lieferungsWithoutPerson: () =>
-      (data?.lieferungsWithoutPerson ?? []).map((l) => {
-        const datum = l.datum
-          ? format(new Date(l.datum), 'yyyy.MM.dd')
-          : `kein Datum`
-        const geplant = l.geplant ? ', (geplant)' : ''
-        const text = `${datum}, ID: ${l.id}${geplant}`
+      lieferungsSorted
+        .filter((l) => l.art_id === artId)
+        .filter((l) => !l.person_id)
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
 
-        return {
-          url: ['Lieferungen', l.id],
-          text,
-        }
-      }),
+          return {
+            url: ['Lieferungen', l.id],
+            text,
+          }
+        }),
     eventsWithoutBeschreibung: () =>
-      (data?.eventsWithoutBeschreibung ?? []).flatMap((k) =>
-        (k?.events ?? []).map((ev) => {
+      eventsSorted
+        .filter((e) => e?.kultur?.art_id === artId)
+        .filter((e) => !e.beschreibung)
+        .map((e) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
+            e?.kultur?.garten?.name ??
+            `(${e?.kultur?.garten?.person?.name ?? 'kein Name'})`
+          const herkunft = e?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${e.id}`
 
           return {
-            url: ['Arten', artId, 'Kulturen', k.id, 'Events', ev.id],
+            url: ['Arten', artId, 'Kulturen', e?.kultur?.id, 'Events', e.id],
             text,
           }
         }),
-      ),
     eventsWithoutDatum: () =>
-      (data?.eventsWithoutDatum ?? []).flatMap((k) =>
-        (k?.events ?? []).map((ev) => {
+      eventsSorted
+        .filter((e) => e?.kultur?.art_id === artId)
+        .filter((e) => !e.datum)
+        .map((e) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
-          const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-          const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
+            e?.kultur?.garten?.name ??
+            `(${e?.kultur?.garten?.person?.name ?? 'kein Name'})`
+          const herkunft = e?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${e.id}`
 
           return {
-            url: ['Arten', artId, 'Kulturen', k.id, 'Events', ev.id],
+            url: ['Arten', artId, 'Kulturen', e?.kultur.id, 'Events', e.id],
             text,
           }
         }),
-      ),
   }
 }

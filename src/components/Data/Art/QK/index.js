@@ -69,12 +69,6 @@ const ApQk = ({ artId }) => {
   const qks = artQksSorted.filter(
     (qk) => !!allQkChoosens.find((no) => no.qk_name === qk.name),
   )
-  const qkNameQueries = Object.fromEntries(
-    artQksSorted.map((n) => [
-      n.name,
-      !!allQkChoosens.find((no) => no.qk_name === n.name),
-    ]),
-  )
 
   const qkCount = loading ? '...' : artQksSorted.length
   const artQkCount = loading ? '...' : allQkChoosens.length
@@ -151,11 +145,7 @@ const ApQk = ({ artId }) => {
             />
           </StyledTabs>
           <Body>
-            {tab === 'qk' ? (
-              <Qk artId={artId} qkNameQueries={qkNameQueries} qks={qks} />
-            ) : (
-              <Choose />
-            )}
+            {tab === 'qk' ? <Qk artId={artId} qks={qks} /> : <Choose />}
           </Body>
         </>
       )}
