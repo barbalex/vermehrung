@@ -1777,13 +1777,19 @@ export const RootStore = RootStoreBase.props({
         .sort(artSort)
     },
     get artQksSorted() {
-      return [...self.art_qks.values()].sort(qkSort)
+      return [...self.art_qks.values()]
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .sort(qkSort)
     },
     get avsSorted() {
-      return [...self.avs.values()].sort(avSort)
+      return [...self.avs.values()]
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .sort(avSort)
     },
     get gvsSorted() {
-      return [...self.gvs.values()].sort(gvSort)
+      return [...self.gvs.values()]
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .sort(gvSort)
     },
     get eventFilter() {
       return queryFromTable({ store: self, table: 'event' })
@@ -1855,7 +1861,9 @@ export const RootStore = RootStoreBase.props({
         .sort(personSort)
     },
     get kulturQksSorted() {
-      return [...self.kultur_qks.values()].sort(qkSort)
+      return [...self.kultur_qks.values()]
+        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .sort(qkSort)
     },
     get sammelLieferungFilter() {
       return queryFromTable({ store: self, table: 'sammel_lieferung' })
