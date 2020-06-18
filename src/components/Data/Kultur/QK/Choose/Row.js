@@ -31,11 +31,23 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
   const kulturQkChoosen = [...store.kultur_qk_choosens.values()].find(
     (v) => v.kultur_id === kulturId && v.qk_name === qk.name,
   )
-  const checked = kulturQkChoosen.choosen
+  const checked = kulturQkChoosen?.choosen
+  qk.name === 'kultursWithoutVonAnzahlIndividuen' &&
+    console.log('ChooseKulturQkRow', {
+      checked,
+    })
 
   const onChange = useCallback(() => {
-    qk.edit({ field: 'choosen', value: !checked })
-  }, [checked, qk])
+    console.log('ChooseKulturQkRow', {
+      kulturQkChoosen,
+      checked,
+      kulturId,
+      qk,
+      qkName: qk.name,
+      value: event.target.checked,
+    })
+    kulturQkChoosen.edit({ field: 'choosen', value: event.target.checked })
+  }, [checked, kulturId, kulturQkChoosen, qk])
 
   return (
     <Row>
