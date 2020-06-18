@@ -8,7 +8,6 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-import { v1 as uuidv1 } from 'uuid'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
@@ -120,11 +119,9 @@ const Garten = ({
     personIdInActiveNodeArray,
     personsSorted,
     showDeleted,
-    upsertGvModel,
-    deleteGvModel,
     errors,
-    setError,
     unsetError,
+    insertGvRev,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -184,24 +181,10 @@ const Garten = ({
       }
       row.edit({ field, value })
       if (field === 'person_id') {
-        const newObject = { id: uuidv1(), person_id: value, garten_id: row.id }
-        upsertGvModel(newObject)
-        try {
-          await store.mutateInsert_gv_one({
-            object: newObject,
-            on_conflict: {
-              constraint: 'gv_pkey',
-              update_columns: ['id'],
-            },
-          })
-        } catch (error) {
-          console.log({ error })
-          deleteGvModel(newObject)
-          return setError({ path: `garten.${field}`, value: error.message })
-        }
+        insertGvRev({ values: { garten_id: row.id, person_id: value } })
       }
     },
-    [deleteGvModel, filter, row, setError, showFilter, store, upsertGvModel],
+    [filter, insertGvRev, row, showFilter],
   )
 
   if (!row || (!showFilter && filter.show)) return null
