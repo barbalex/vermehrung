@@ -1,16 +1,12 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import format from 'date-fns/format'
-import Badge from '@material-ui/core/Badge'
-import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 
-import { useQuery, StoreContext } from '../../../../../models/reactUtils'
-import query from './query'
+import { StoreContext } from '../../../../../models/reactUtils'
 import createMessageFunctions from './createMessageFunctions'
 import getAppBaseUrl from '../../../../../utils/appBaseUrl'
 
@@ -40,55 +36,27 @@ const StyledA = styled.p`
 const Row = styled.div`
   display: flex;
 `
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  button {
-    width: 167px;
-  }
-`
-const StyledButton = styled(Button)`
-  margin-bottom: 15px !important;
-  margin-top: -5px !important;
-  color: ${(props) =>
-    props.loading === 'true'
-      ? '#D84315 !important'
-      : 'rgb(46, 125, 50) !important'};
-  height: 34px !important;
-  > span {
-    text-transform: none;
-  }
+const ResultTitle = styled.div`
+  padding-left: 10px;
+  margin-bottom: 7px;
 `
 const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  margin-left: 35px !important;
+  padding-bottom: 10px !important;
   > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
 
-const ApQkQk = ({ artId, qkNameQueries, qks }) => {
+const ApQkQk = ({ artId, qks }) => {
   const store = useContext(StoreContext)
+
   const [filter, setFilter] = useState('')
   const onChangeFilter = useCallback(
     (event) => setFilter(event.target.value),
     [],
   )
 
-  const year = +format(new Date(), 'yyyy')
-  const startYear = `${year}.01.01`
-  const startNextYear = `${year + 1}.01.01`
-  const { data, error, loading, refetch } = useQuery(query, {
-    variables: {
-      ...qkNameQueries,
-      artId,
-      startYear,
-      startNextYear,
-    },
-  })
   const messageFunctions = createMessageFunctions({
-    data,
     artId,
     store,
   })
@@ -105,43 +73,22 @@ const ApQkQk = ({ artId, qkNameQueries, qks }) => {
     return true
   })
 
-  if (loading) return 'Lade Daten...'
-  if (error) return `Fehler: ${error.message}`
   return (
     <Container>
-      <Row>
-        <ButtonContainer>
-          <Badge
-            badgeContent={
-              loading
-                ? '...'
-                : filter
-                ? `${messageGroupsFiltered.length}/${messageGroups.length}`
-                : messageGroups.length
-            }
-            color="primary"
-          >
-            <StyledButton
-              onClick={() => refetch()}
-              variant="outlined"
-              loading={loading.toString()}
-            >
-              {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
-            </StyledButton>
-          </Badge>
-        </ButtonContainer>
-        <StyledFormControl fullWidth>
-          <InputLabel htmlFor="filter" shrink>
-            nach Abschnitts-Titel filtern
-          </InputLabel>
-          <Input
-            id="filter"
-            value={filter}
-            onChange={onChangeFilter}
-            spellCheck={false}
-          />
-        </StyledFormControl>
-      </Row>
+      <StyledFormControl fullWidth>
+        <InputLabel htmlFor="filter" shrink>
+          nach Abschnitts-Titel filtern
+        </InputLabel>
+        <Input
+          id="filter"
+          value={filter}
+          onChange={onChangeFilter}
+          spellCheck={false}
+        />
+      </StyledFormControl>
+      <ResultTitle>{`${messageGroups.length} ${
+        messageGroups.length === 1 ? 'Gruppe' : 'Gruppen'
+      }:`}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
           <Title>{messageGroup.title}</Title>
@@ -160,7 +107,7 @@ const ApQkQk = ({ artId, qkNameQueries, qks }) => {
           ))}
         </StyledPaper>
       ))}
-      {!loading && messageGroups.length === 0 && (
+      {messageGroups.length === 0 && (
         <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
       )}
     </Container>
