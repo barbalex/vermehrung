@@ -955,7 +955,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "_conflicts"
+              "_conflicts",
+              "choosen"
             ]
           }
         },
@@ -964,6 +965,7 @@
           "permission": {
             "check": {},
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -984,17 +986,18 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "_deleted",
-              "_depth",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
-              "changed",
               "art_id",
-              "id"
+              "qk_name",
+              "id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts",
+              "choosen"
             ],
             "filter": {
               "_or": [
@@ -1021,6 +1024,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -1043,17 +1047,18 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "_deleted",
-              "_depth",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
-              "_parent_rev",
-              "qk_name",
-              "_rev",
-              "changed",
               "art_id",
-              "id"
+              "qk_name",
+              "id",
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts",
+              "choosen"
             ],
             "filter": {
               "_or": [
@@ -1080,6 +1085,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -1182,7 +1188,7 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "_conflicts"
+              "choosen"
             ],
             "backend_only": false
           }
@@ -1192,9 +1198,9 @@
           "permission": {
             "check": {},
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
-              "_conflicts",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -1214,9 +1220,9 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
-              "_conflicts",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -1244,16 +1250,17 @@
                   }
                 }
               ]
-            }
+            },
+            "allow_aggregations": true
           }
         },
         {
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
-              "_conflicts",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -1274,9 +1281,9 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
-              "_conflicts",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -1312,9 +1319,9 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
-              "_conflicts",
               "_revisions",
               "changed_by",
               "_parent_rev",
@@ -2067,7 +2074,7 @@
               "_rev",
               "changed",
               "art_id",
-              "av_rev",
+              "av_id",
               "id",
               "person_id"
             ],
@@ -2081,7 +2088,7 @@
           "permission": {
             "columns": [
               "id",
-              "av_rev",
+              "av_id",
               "art_id",
               "person_id",
               "changed",
@@ -2112,7 +2119,7 @@
               "_rev",
               "changed",
               "art_id",
-              "av_rev",
+              "av_id",
               "id",
               "person_id"
             ],
@@ -2134,7 +2141,7 @@
               "_rev",
               "changed",
               "art_id",
-              "av_rev",
+              "av_id",
               "id",
               "person_id"
             ],
@@ -4463,17 +4470,17 @@
           "permission": {
             "check": {},
             "columns": [
-              "id",
-              "gv_id",
-              "garten_id",
-              "person_id",
-              "changed",
-              "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
+              "_deleted",
               "_depth",
-              "_deleted"
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "_rev",
+              "changed",
+              "garten_id",
+              "gv_id",
+              "id",
+              "person_id"
             ],
             "backend_only": false
           }
@@ -7522,7 +7529,8 @@
               "_revisions",
               "_depth",
               "_deleted",
-              "_conflicts"
+              "_conflicts",
+              "choosen"
             ]
           }
         },
@@ -7550,6 +7558,7 @@
               ]
             },
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -7569,6 +7578,7 @@
           "permission": {
             "check": {},
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -7589,17 +7599,18 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "_deleted",
-              "_depth",
-              "_conflicts",
-              "_revisions",
-              "changed_by",
-              "_parent_rev",
+              "kultur_id",
               "qk_name",
-              "_rev",
-              "changed",
               "id",
-              "kultur_id"
+              "changed",
+              "changed_by",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_deleted",
+              "_conflicts",
+              "choosen"
             ],
             "filter": {
               "_or": [
@@ -7639,6 +7650,7 @@
           "role": "gardener",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -7678,6 +7690,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -7700,6 +7713,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -7750,6 +7764,7 @@
           "role": "gardener",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -7789,6 +7804,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_conflicts",
@@ -7941,7 +7957,8 @@
               "_parent_rev",
               "_revisions",
               "_depth",
-              "_deleted"
+              "_deleted",
+              "choosen"
             ],
             "backend_only": false
           }
@@ -7970,6 +7987,7 @@
               ]
             },
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_revisions",
@@ -7990,6 +8008,7 @@
           "permission": {
             "check": {},
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_revisions",
@@ -8011,6 +8030,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_revisions",
@@ -8061,6 +8081,7 @@
           "role": "gardener",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_revisions",
@@ -8100,6 +8121,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_revisions",
@@ -8122,6 +8144,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_revisions",
@@ -8172,17 +8195,18 @@
           "role": "gardener",
           "permission": {
             "columns": [
-              "id",
-              "kultur_qk_choosen_id",
-              "kultur_id",
-              "qk_name",
-              "changed",
-              "changed_by",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
+              "choosen",
+              "_deleted",
               "_depth",
-              "_deleted"
+              "_revisions",
+              "changed_by",
+              "_parent_rev",
+              "qk_name",
+              "_rev",
+              "changed",
+              "id",
+              "kultur_id",
+              "kultur_qk_choosen_id"
             ],
             "filter": {
               "_or": [
@@ -8211,6 +8235,7 @@
           "role": "manager",
           "permission": {
             "columns": [
+              "choosen",
               "_deleted",
               "_depth",
               "_revisions",
