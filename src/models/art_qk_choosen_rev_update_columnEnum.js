@@ -8,8 +8,7 @@ import { types } from "mobx-state-tree"
 * art_qk_choosen_rev_update_column
 */
 export const art_qk_choosen_rev_update_columnEnumType = types.enumeration("art_qk_choosen_rev_update_column", [
-        "_conflicts",
-  "_deleted",
+        "_deleted",
   "_depth",
   "_parent_rev",
   "_rev",
@@ -18,6 +17,7 @@ export const art_qk_choosen_rev_update_columnEnumType = types.enumeration("art_q
   "art_qk_choosen_id",
   "changed",
   "changed_by",
+  "choosen",
   "id",
   "qk_name",
       ])

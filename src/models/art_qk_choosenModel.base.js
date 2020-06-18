@@ -26,6 +26,7 @@ export const art_qk_choosenModelBase = ModelBase
     art_id: types.union(types.undefined, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
+    choosen: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
     qk_name: types.union(types.undefined, types.string),
   })
@@ -45,6 +46,7 @@ export class art_qk_choosenModelSelector extends QueryBuilder {
   get art_id() { return this.__attr(`art_id`) }
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
+  get choosen() { return this.__attr(`choosen`) }
   get id() { return this.__attr(`id`) }
   get qk_name() { return this.__attr(`qk_name`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
@@ -53,4 +55,4 @@ export function selectFromart_qk_choosen() {
   return new art_qk_choosenModelSelector()
 }
 
-export const art_qk_choosenModelPrimitives = selectFromart_qk_choosen()._conflicts._deleted._depth._parent_rev._rev._revisions.art_id.changed.changed_by.qk_name
+export const art_qk_choosenModelPrimitives = selectFromart_qk_choosen()._conflicts._deleted._depth._parent_rev._rev._revisions.art_id.changed.changed_by.choosen.qk_name

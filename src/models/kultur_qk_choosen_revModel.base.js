@@ -25,6 +25,7 @@ export const kultur_qk_choosen_revModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
+    choosen: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
     kultur: types.union(types.undefined, MSTGQLRef(types.late(() => kulturModel))),
     kultur_id: types.union(types.undefined, types.frozen()),
@@ -46,6 +47,7 @@ export class kultur_qk_choosen_revModelSelector extends QueryBuilder {
   get _revisions() { return this.__attr(`_revisions`) }
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
+  get choosen() { return this.__attr(`choosen`) }
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
   get kultur_qk_choosen_id() { return this.__attr(`kultur_qk_choosen_id`) }
@@ -57,4 +59,4 @@ export function selectFromkultur_qk_choosen_rev() {
   return new kultur_qk_choosen_revModelSelector()
 }
 
-export const kultur_qk_choosen_revModelPrimitives = selectFromkultur_qk_choosen_rev()._deleted._depth._parent_rev._rev._revisions.changed.changed_by.kultur_id.kultur_qk_choosen_id.qk_name
+export const kultur_qk_choosen_revModelPrimitives = selectFromkultur_qk_choosen_rev()._deleted._depth._parent_rev._rev._revisions.changed.changed_by.choosen.kultur_id.kultur_qk_choosen_id.qk_name
