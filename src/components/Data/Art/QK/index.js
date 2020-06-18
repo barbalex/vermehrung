@@ -111,7 +111,11 @@ const ApQk = ({ artId }) => {
   if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+        data-online={online}
+      >
         <Title>Qualitäts-Kontrollen</Title>
         <div>
           <IconButton
