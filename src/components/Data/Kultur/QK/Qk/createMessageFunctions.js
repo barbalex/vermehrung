@@ -1,7 +1,11 @@
 import format from 'date-fns/format'
 
 export default ({ data, kulturId, store }) => {
-  const { lieferungsSorted, kultursSorted } = store
+  const { lieferungsSorted, kultursSorted, teilkultursSorted } = store
+  const year = +format(new Date(), 'yyyy')
+  const startYear = `${year}-01-01`
+  const startNextYear = `${year + 1}-01-01`
+
   return {
     kultursWithoutVonAnzahlIndividuen: () =>
       kultursSorted
@@ -46,23 +50,34 @@ export default ({ data, kulturId, store }) => {
           }
         }),
     kultursWithoutZaehlungThisYear: () =>
-      (data?.kultursWithoutZaehlungThisYear ?? []).map((k) => {
-        const garten =
-          k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
-        const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-        const text = `von: ${herkunft}, in: ${garten}`
-
-        return {
-          url: ['Kulturen', kulturId],
-          text,
-        }
-      }),
-    teilkultursWithoutName: () =>
-      (data?.teilkultursWithoutName ?? []).flatMap((k) =>
-        (k?.teilkulturs ?? []).map((tk) => {
+      kultursSorted
+        .filter((k) => k.id === kulturId)
+        .filter(
+          (k) =>
+            k.zaehlungs.filter(
+              (z) => z.datum && z.datum > startYear && z.datum < startNextYear,
+            ).length === 0,
+        )
+        .map((k) => {
           const garten =
             k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
           const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const text = `von: ${herkunft}, in: ${garten}`
+
+          return {
+            url: ['Kulturen', kulturId],
+            text,
+          }
+        }),
+    teilkultursWithoutName: () =>
+      teilkultursSorted
+        .filter((tk) => tk.kultur_id === kulturId)
+        .filter((tk) => !tk.name)
+        .map((tk) => {
+          const garten =
+            tk.kultur?.garten?.name ??
+            `(${tk.kultur?.garten?.person?.name ?? 'kein Name'})`
+          const herkunft = tk.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Teilkultur-ID: ${tk.id}`
 
           return {
@@ -70,7 +85,6 @@ export default ({ data, kulturId, store }) => {
             text,
           }
         }),
-      ),
     zaehlungsWithoutDatum: () =>
       (data?.zaehlungsWithoutDatum ?? []).flatMap((k) =>
         (k?.zaehlungs ?? []).map((z) => {
