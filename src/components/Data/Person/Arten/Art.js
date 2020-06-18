@@ -45,24 +45,12 @@ const MenuTitle = styled.h3`
 
 const Av = ({ av }) => {
   const store = useContext(StoreContext)
-  const { addNotification, artsSorted } = store
+  const { artsSorted } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = useCallback(async () => {
-    store.deleteAvModel(av)
-    try {
-      store.mutateDelete_av({
-        where: { id: { _eq: av.id } },
-      })
-    } catch (error) {
-      store.insertAvModel(av)
-      addNotification({
-        message: error.message,
-      })
-    }
-  }, [addNotification, av, store])
+  const onClickDelete = useCallback(() => av.delete(), [av])
 
   const art = artsSorted.find((a) => a.id === av.art_id)
   const artname = art?.art_ae_art?.name
