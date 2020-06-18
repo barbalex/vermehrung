@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
-import RowComponent from './Row'
+import Row from './Row'
 import { StoreContext } from '../../../../../models/reactUtils'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
@@ -16,7 +16,7 @@ const FieldsContainer = styled.div`
   padding: 10px 0;
 `
 
-const ChooseQk = ({ refetchTab }) => {
+const ChooseQk = () => {
   const store = useContext(StoreContext)
   const { kulturQksSorted } = store
   const { activeNodeArray } = store.tree
@@ -29,12 +29,7 @@ const ChooseQk = ({ refetchTab }) => {
       <Container>
         <FieldsContainer>
           {rows.map((row) => (
-            <RowComponent
-              key={row.name}
-              kulturId={kulturId}
-              qk={row}
-              refetchTab={refetchTab}
-            />
+            <Row key={row.name} kulturId={kulturId} qk={row} />
           ))}
         </FieldsContainer>
       </Container>
