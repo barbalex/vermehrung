@@ -24,6 +24,7 @@ export default async ({ store }) => {
     'gqlHttpClient',
     'gqlWsClient',
     'initialDataQueried',
+    'queryingAllData',
     'gettingAuthUser',
   ]
   await persist('store', store, {
