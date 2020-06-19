@@ -35,7 +35,8 @@ export default async () => {
   if (typeof window !== 'undefined') {
     // https://www.npmjs.com/package/subscriptions-transport-ws#hybrid-websocket-transport
     gqlWsClient = (() => {
-      console.log('gqlWsClient creating new client')
+      let token = getToken()
+
       return new SubscriptionClient(constants.graphQlWsUri, {
         reconnect: true,
         lazy: true,
@@ -44,16 +45,14 @@ export default async () => {
             console.log('gqlWsClient connectionCallback:', {
               error,
             })
-            // TODO: keeps having jwt trouble when this runs
-            // Also: On first load after emtying cache ws does not sync!!!!
-            //store.initialDataQueried && getAuthToken({ store })
+            token = getToken()
           } else {
             console.log('gqlWsClient connectionCallback worked')
           }
         },
         connectionParams: {
           headers: {
-            authorization: `Bearer ${getToken()}`,
+            authorization: `Bearer ${token}`,
           },
         },
       })
