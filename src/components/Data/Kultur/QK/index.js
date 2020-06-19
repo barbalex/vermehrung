@@ -46,7 +46,6 @@ const Body = styled.div`
 
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
-  const { kulturQksSorted } = store
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
@@ -56,11 +55,6 @@ const KulturQk = ({ kultur }) => {
     (q) => q.kultur_id === kultur.id,
   )
   const qkChoosens = kulturQkChoosen.filter((qk) => qk.choosen)
-  const qks = kulturQksSorted.filter(
-    (kulturQk) =>
-      !!kulturQk.kultur_qk_choosens.filter((qk) => qk.kultur_id === kultur.id)
-        .length,
-  )
 
   const qkCount = kulturQkChoosen.length
   const kulturQkCount = qkChoosens.length
