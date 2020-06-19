@@ -1980,7 +1980,9 @@ export const RootStore = RootStoreBase.props({
       return self.gartensFiltered.map((o) => ({
         value: o.id,
         label: o.name || `(${o?.person?.name ?? ''})`,
-        ...o,
+        name: o.name,
+        personname: o?.person?.name,
+        bemerkungen: o.bemerkungen,
         type: 'Gaerten',
       }))
     },
@@ -1996,7 +1998,13 @@ export const RootStore = RootStoreBase.props({
       return self.kultursFiltered.map((o) => ({
         value: o.id,
         label: o?.garten?.person?.name ?? '',
-        ...o,
+        artname: o?.art?.art_ae_art?.name,
+        gartenname: o?.garten?.name,
+        personname: o?.garten?.person?.name,
+        herkunftnr: o?.herkunft?.nr,
+        herkunftlokalname: o?.herkunft?.lokalname,
+        herkunftgemeinde: o?.herkunft?.gemeinde,
+        bemerkungen: o.bemerkungen,
         type: 'Kulturen',
       }))
     },

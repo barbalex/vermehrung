@@ -29,71 +29,9 @@ DROP FUNCTION IF EXISTS herkunft_trigger();
 
 DROP TRIGGER IF EXISTS tsvupdate_sammlung ON sammlung;
 DROP FUNCTION IF EXISTS sammlung_trigger();
-create function sammlung_trigger() returns trigger as $$
-  declare
-    artname text;
-    personname text;
-    herkunftnr text;
-    herkunftlokalname text;
-    herkunftgemeinde text;
-  begin
-    select ae_art.name into artname
-    from sammlung
-      inner join art 
-        inner join ae_art on art.ae_id = ae_art.id
-      on sammlung.art_id = art.id
-    where art.id = new.art_id;
-    select person.name into personname
-    from sammlung left join person on sammlung.person_id = person.id
-    where person.id = new.person_id;
-    select herkunft.nr, herkunft.lokalname, herkunft.gemeinde into herkunftnr, herkunftlokalname, herkunftgemeinde
-    from sammlung left join herkunft on sammlung.herkunft_id = herkunft.id
-    where herkunft.id = new.herkunft_id;
-    new.tsv :=
-      setweight(to_tsvector('simple', coalesce(artname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(herkunftnr, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(herkunftlokalname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(herkunftgemeinde, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.von_anzahl_individuen::text, '')), 'D') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY.MM.DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'YYYY'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'MM'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(to_char(new.datum, 'DD'), '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.andere_menge, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.gramm_samen::text, '')), 'A') || ' ' ||
-      case
-        when new.geplant='true' then setweight(to_tsvector('simple', 'ausgeführt'), 'A')
-        else setweight(to_tsvector('simple', 'geplant'), 'A')
-      end || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
-    return new;
-  end
-$$ language plpgsql;
-
-create trigger tsvupdate_sammlung before insert or update
-  on sammlung for each row execute procedure sammlung_trigger();
 
 DROP TRIGGER IF EXISTS tsvupdate_garten ON garten;
 DROP FUNCTION IF EXISTS garten_trigger();
-create function garten_trigger() returns trigger as $$
-  declare
-    personname text;
-  begin
-    select person.name into personname
-    from garten left join person on garten.person_id = person.id
-    where person.id = new.person_id;
-    new.tsv :=
-      setweight(to_tsvector('simple', coalesce(new.name, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(personname, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
-    return new;
-  end
-$$ language plpgsql;
-
-create trigger tsvupdate_garten before insert or update
-  on garten for each row execute procedure garten_trigger();
 
 DROP TRIGGER IF EXISTS tsvupdate_kultur ON kultur;
 DROP FUNCTION IF EXISTS kultur_trigger();

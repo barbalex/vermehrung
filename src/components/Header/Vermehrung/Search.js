@@ -125,7 +125,11 @@ const Search = () => {
         })
       }
       const gartenSuggestionsFuse = new Fuse(searchGartenSuggestions, {
-        keys: ['label'],
+        keys: [
+          { name: 'name', weight: 1 },
+          { name: 'personname', weight: 0.7 },
+          { name: 'bemerkungen', weight: 0.5 },
+        ],
         threshold,
       })
       const gartenSuggestions = gartenSuggestionsFuse
@@ -158,7 +162,15 @@ const Search = () => {
         })
       }
       const kulturSuggestionsFuse = new Fuse(searchKulturSuggestions, {
-        keys: ['label'],
+        keys: [
+          { name: 'artname', weight: 1 },
+          { name: 'gartenname', weight: 1 },
+          { name: 'personname', weight: 0.7 },
+          { name: 'herkunftnr', weight: 0.7 },
+          { name: 'herkunftlokalname', weight: 0.7 },
+          { name: 'herkunftgemeinde', weight: 0.7 },
+          { name: 'bemerkungen', weight: 0.5 },
+        ],
         threshold,
       })
       const kulturSuggestions = kulturSuggestionsFuse
