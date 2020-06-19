@@ -23,7 +23,7 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
-  ${(props) => props['data-online'] && 'cursor: pointer;'}
+  cursor: pointer;
   user-select: none;
   position: sticky;
   top: -10px;
@@ -43,15 +43,10 @@ const StyledTabs = styled(Tabs)`
 const Body = styled.div`
   padding: 10px 0;
 `
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
 
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
-  const { kulturQksSorted, online } = store
+  const { kulturQksSorted } = store
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
@@ -86,24 +81,9 @@ const KulturQk = ({ kultur }) => {
     [open],
   )
 
-  if (!online) {
-    return (
-      <ErrorBoundary>
-        <TitleRow data-online={online}>
-          <Title>Qualitäts-Kontrollen</Title>
-          <Content>Sorry, nur online verfügbar</Content>
-        </TitleRow>
-      </ErrorBoundary>
-    )
-  }
-
   return (
     <ErrorBoundary>
-      <TitleRow
-        onClick={onClickToggle}
-        title={open ? 'schliessen' : 'öffnen'}
-        data-online={online}
-      >
+      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
         <Title>Qualitäts-Kontrollen</Title>
         <div>
           <IconButton
