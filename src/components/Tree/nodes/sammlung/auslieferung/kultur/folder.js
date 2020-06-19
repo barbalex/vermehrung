@@ -24,7 +24,7 @@ export default ({ store }) => {
         )
         const lieferungId = node[3]
         const lieferungIndex = lieferungNodes.findIndex(
-          (a) => a.id === lieferungId,
+          (a) => a.id === `${sammlungId}${lieferungId}`,
         )
 
         const lieferung = store.lieferungs.get(lieferungId) || {}
@@ -35,17 +35,6 @@ export default ({ store }) => {
         if (!kultur) return {}
 
         const nr = !initialDataQueried ? 0 : 1
-
-        console.log('nodes sammlung auslieferung kultur', {
-          sammlungId,
-          sammlungIndex,
-          lieferungId,
-          lieferungIndex,
-          sammlungNodes,
-          lieferungNodes,
-          lieferung,
-          kultur,
-        })
 
         return {
           nodeType: 'folder_without_menu',
