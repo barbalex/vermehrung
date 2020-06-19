@@ -23,7 +23,9 @@ export default ({ store }) => {
     const herkunftId = node[1]
     const herkunftIndex = herkunft.findIndex((a) => a.id === herkunftId)
     const sammlungId = node[3]
-    const sammlungIndex = herkunftSammlung.findIndex((a) => a.id === sammlungId)
+    const sammlungIndex = herkunftSammlung.findIndex(
+      (a) => a.id === `${herkunftId}${sammlungId}`,
+    )
 
     const lieferungen = store.lieferungsFiltered.filter(
       (l) => l.von_sammlung_id === sammlungId,
