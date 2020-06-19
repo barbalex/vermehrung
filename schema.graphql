@@ -1032,6 +1032,42 @@ type art_qk {
   _revisions: _text
 
   # An array relationship
+  art_qk_choosen(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_bool_exp
+  ): [art_qk_choosen!]!
+
+  # An aggregated array relationship
+  art_qk_choosen_aggregate(
+    # distinct select on columns
+    distinct_on: [art_qk_choosen_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [art_qk_choosen_order_by!]
+
+    # filter the rows returned
+    where: art_qk_choosen_bool_exp
+  ): art_qk_choosen_aggregate!
+
+  # An array relationship
   art_qk_choosen_revs(
     # distinct select on columns
     distinct_on: [art_qk_choosen_rev_select_column!]
@@ -1142,6 +1178,7 @@ input art_qk_bool_exp {
   _parent_rev: String_comparison_exp
   _rev: String_comparison_exp
   _revisions: _text_comparison_exp
+  art_qk_choosen: art_qk_choosen_bool_exp
   art_qk_choosen_revs: art_qk_choosen_rev_bool_exp
   beschreibung: String_comparison_exp
   changed: timestamp_comparison_exp
@@ -1944,6 +1981,7 @@ input art_qk_insert_input {
   _parent_rev: String
   _rev: String
   _revisions: _text
+  art_qk_choosen: art_qk_choosen_arr_rel_insert_input
   art_qk_choosen_revs: art_qk_choosen_rev_arr_rel_insert_input
   beschreibung: String
   changed: timestamp
@@ -2040,6 +2078,7 @@ input art_qk_order_by {
   _parent_rev: order_by
   _rev: order_by
   _revisions: order_by
+  art_qk_choosen_aggregate: art_qk_choosen_aggregate_order_by
   art_qk_choosen_revs_aggregate: art_qk_choosen_rev_aggregate_order_by
   beschreibung: order_by
   changed: order_by

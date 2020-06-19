@@ -62,8 +62,8 @@ const ApQkQk = ({ artId, qks }) => {
   })
   const messageGroups = qks
     .map((qk) => ({
-      title: qk.titel,
-      messages: messageFunctions[qk.name](),
+      title: qk?.art_qk?.titel,
+      messages: messageFunctions[qk?.art_qk?.name](),
     }))
     .filter((q) => q.messages.length)
   const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
@@ -86,8 +86,8 @@ const ApQkQk = ({ artId, qks }) => {
           spellCheck={false}
         />
       </StyledFormControl>
-      <ResultTitle>{`${messageGroups.length} ${
-        messageGroups.length === 1 ? 'Gruppe' : 'Gruppen'
+      <ResultTitle>{`${messageGroupsFiltered.length} ${
+        messageGroupsFiltered.length === 1 ? 'Gruppe' : 'Gruppen'
       }:`}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>

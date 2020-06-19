@@ -6,6 +6,8 @@ import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { artModel } from "./artModel"
 import { artModelSelector } from "./artModel.base"
+import { art_qkModel } from "./art_qkModel"
+import { art_qkModelSelector } from "./art_qkModel.base"
 
 
 /**
@@ -24,6 +26,7 @@ export const art_qk_choosenModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
+    art_qk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_qkModel))),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     choosen: types.union(types.undefined, types.null, types.boolean),
@@ -50,6 +53,7 @@ export class art_qk_choosenModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get qk_name() { return this.__attr(`qk_name`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
+  art_qk(builder) { return this.__child(`art_qk`, art_qkModelSelector, builder) }
 }
 export function selectFromart_qk_choosen() {
   return new art_qk_choosenModelSelector()
