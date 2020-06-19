@@ -21,9 +21,13 @@ export default ({ store }) => {
     const sammlungId = node[1]
     const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
     const lieferungId = node[3]
-    const lieferungIndex = lieferungNodes.findIndex((a) => a.id === lieferungId)
+    const lieferungIndex = lieferungNodes.findIndex(
+      (a) => a.id === `${sammlungId}${lieferungId}`,
+    )
     const kulturId = node[5]
-    const kulturIndex = kulturNodes.findIndex((a) => a.id === kulturId)
+    const kulturIndex = kulturNodes.findIndex(
+      (a) => a.id === `${sammlungId}${lieferungId}${kulturId}`,
+    )
 
     const zaehlungen = store.zaehlungsFiltered.filter(
       (z) => z.kultur_id === kulturId,
