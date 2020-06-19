@@ -157,6 +157,7 @@ const allDataQuery = gql`
 
 export default async ({ store }) => {
   const { setInitialDataQueried, setQueryingAllData } = store
+  setQueryingAllData(true)
   let data
   try {
     data = await store.query(allDataQuery, undefined, {
