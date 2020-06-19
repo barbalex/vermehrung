@@ -57,13 +57,14 @@ const ApQk = ({ artId }) => {
   )
   const qkChoosens = allQkChoosens.filter((qk) => qk.choosen)
   const qks = artQksSorted.filter(
-    (qk) => !!allQkChoosens.find((no) => no.qk_name === qk.name),
+    (artQk) =>
+      !!artQk.art_qk_choosen.filter((qk) => qk.art_id === artId).length,
   )
 
   const qkCount = allQkChoosens.length
   const artQkCount = qkChoosens.length
 
-  console.log('Art QK', { allQkChoosens, artQksSorted })
+  console.log('Art QK', { allQkChoosens, artQksSorted, qks, qkChoosens })
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -121,7 +122,7 @@ const ApQk = ({ artId }) => {
             />
           </StyledTabs>
           <Body>
-            {tab === 'qk' ? <Qk artId={artId} qks={qks} /> : <Choose />}
+            {tab === 'qk' ? <Qk artId={artId} qks={qkChoosens} /> : <Choose />}
           </Body>
         </>
       )}

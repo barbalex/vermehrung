@@ -55,13 +55,15 @@ const KulturQk = ({ kultur }) => {
   const kulturQkChoosen = [...store.kultur_qk_choosens.values()].filter(
     (q) => q.kultur_id === kultur.id,
   )
-
+  const qkChoosens = kulturQkChoosen.filter((qk) => qk.choosen)
   const qks = kulturQksSorted.filter(
-    (qk) => !!kulturQkChoosen.find((no) => no.qk_name === qk.name),
+    (kulturQk) =>
+      !!kulturQk.kultur_qk_choosens.filter((qk) => qk.kultur_id === kultur.id)
+        .length,
   )
 
-  const qkCount = kulturQksSorted.length
-  const kulturQkCount = kulturQkChoosen.length
+  const qkCount = kulturQkChoosen.length
+  const kulturQkCount = qkChoosens.length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -121,7 +123,11 @@ const KulturQk = ({ kultur }) => {
             />
           </StyledTabs>
           <Body>
-            {tab === 'qk' ? <Qk kultur={kultur} qks={qks} /> : <Choose />}
+            {tab === 'qk' ? (
+              <Qk kultur={kultur} qks={qkChoosens} />
+            ) : (
+              <Choose />
+            )}
           </Body>
         </>
       )}
