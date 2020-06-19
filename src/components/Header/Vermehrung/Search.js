@@ -6,8 +6,8 @@ import Fuse from 'fuse.js'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 
-import { StoreContext } from '../../../../models/reactUtils'
-import exists from '../../../../utils/exists'
+import { StoreContext } from '../../../models/reactUtils'
+import exists from '../../../utils/exists'
 
 const Container = styled.div`
   border-radius: 3px;
@@ -61,6 +61,7 @@ const Search = () => {
   const onChange = useCallback(
     (option) => {
       if (!option) return
+      if (option?.val === 'none') return
       let newActiveNodeArray
       // use option.value to set url
       switch (option?.type) {
@@ -226,6 +227,9 @@ const Search = () => {
           label: `Zählungen (${zaehlungSuggestions.length})`,
           options: zaehlungSuggestions,
         })
+      }
+      if (!options.length && val) {
+        options.push({ val: 'none', label: '(keine Resultate)' })
       }
       cb(options)
     },
