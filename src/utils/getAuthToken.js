@@ -51,6 +51,10 @@ export default async ({ store }) => {
     setTimeout(() => {
       console.log('getAuthToken closing gqlWsClient')
       gqlWsClient.close(false, false)
+      /**
+       * ws client only works if app is reloaded after closing it
+       * otherwise keeps getting jwt errors
+       */
       console.log('getAuthToken reloading')
       window.location.reload(true)
     }, 1000)
