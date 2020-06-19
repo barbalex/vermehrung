@@ -16,7 +16,9 @@ export default ({ store }) => {
     const artId = node[1]
     const artIndex = art.findIndex((a) => a.id === artId)
     const kulturId = node[3]
-    const kulturIndex = artKultur.findIndex((a) => a.id === kulturId)
+    const kulturIndex = artKultur.findIndex(
+      (a) => a.id === `${artId}${kulturId}`,
+    )
     const teilkulturen = store.teilkultursFiltered.filter(
       (t) => t.kultur_id === kulturId,
     )
