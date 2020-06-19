@@ -68,7 +68,7 @@ const Content = styled.div`
 
 const KulturTimeline = ({ row, width }) => {
   const store = useContext(StoreContext)
-  const { lieferungsSorted, zaehlungsSorted, online } = store
+  const { lieferungsSorted, zaehlungsSorted } = store
   const [narrow, setNarrow] = useState(false)
 
   const zaehlungenDone = zaehlungsSorted
@@ -563,19 +563,6 @@ const KulturTimeline = ({ row, width }) => {
     [open],
   )
 
-  if (!online) {
-    return (
-      <ErrorBoundary>
-        <TitleRow data-active={online}>
-          <Title>Zeit-Achse</Title>
-          <Content>Sorry, nur online verfügbar</Content>
-        </TitleRow>
-      </ErrorBoundary>
-    )
-  }
-
-  console.log('Kultur Timeline', { row, allData })
-
   if (!row || !allData.length) {
     return (
       <ErrorBoundary>
@@ -596,7 +583,7 @@ const KulturTimeline = ({ row, width }) => {
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
-        data-active={online}
+        data-active={true}
       >
         <Title>Zeit-Achse</Title>
         <div>
