@@ -4,10 +4,11 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import groupBy from 'lodash/groupBy'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Timeline from './Timeline'
-import query from './query'
+import { herkunftSums as herkunftSumsFragment } from '../../../../utils/fragments'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
@@ -38,6 +39,15 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`
+
+const query = gql`
+  query HerkunftSumsQueryForArt($id: uuid!) {
+    herkunft_sums(where: { art_id: { _eq: $id } }) {
+      ...HerkunftSumsFields
+    }
+  }
+  ${herkunftSumsFragment}
 `
 
 const HerkunftTimelineArea = ({
