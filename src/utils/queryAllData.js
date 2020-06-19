@@ -163,10 +163,10 @@ const query = async ({ store }) => {
       fetchPolicy: 'network-only',
     })
   } catch (error) {
+    setQueryingAllData(false)
     if (error && error.message.includes('JWT')) {
       await getAuthToken({ store })
     }
-    setQueryingAllData(false)
     return
   }
   removeSuplusNotRevModels({ store, data })
@@ -176,4 +176,5 @@ const query = async ({ store }) => {
 
 export default async ({ store }) => {
   await query({ store })
+  return
 }
