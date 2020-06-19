@@ -159,6 +159,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     lieferungsSorted,
     lieferungsFiltered,
     online,
+    herkunftsSorted,
     personIdInActiveNodeArray,
     personsSorted,
     sammelLieferungIdInActiveNodeArray,
@@ -239,7 +240,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const herkunftByKultur = isAnlieferung
     ? row?.kulturByNachKulturId?.herkunft
     : row?.kulturByVonKulturId?.herkunft
-  const herkunftBySammlung = row?.sammlung?.herkunft
+  const vonSammlung = row?.sammlung //sammlungsSorted.find((s) => s.id === row.von_sammlung_id)
+  const herkunftBySammlung = vonSammlung
+    ? herkunftsSorted.find((s) => s.id === vonSammlung.herkunft_id)
+    : null
   const herkunft = herkunftByKultur || herkunftBySammlung
   const herkunftQuelle = herkunftByKultur ? 'Kultur' : 'Sammlung'
   const herkunftValue = herkunft
@@ -471,7 +475,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                   )}
                   {herkunftValue && (
                     <Herkunft>
-                      <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
+                      <HerkunftLabel>{`Herkunft (aus ${herkunftQuelle})`}</HerkunftLabel>
                       {herkunftValue}
                     </Herkunft>
                   )}
