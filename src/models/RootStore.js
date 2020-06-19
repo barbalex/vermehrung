@@ -1972,6 +1972,7 @@ export const RootStore = RootStoreBase.props({
       return self.artsFiltered.map((o) => ({
         value: o.id,
         label: o?.art_ae_art?.name ?? '',
+        ...o,
         type: 'Arten',
       }))
     },
@@ -1979,6 +1980,7 @@ export const RootStore = RootStoreBase.props({
       return self.gartensFiltered.map((o) => ({
         value: o.id,
         label: o.name || `(${o?.person?.name ?? ''})`,
+        ...o,
         type: 'Gaerten',
       }))
     },
@@ -1986,6 +1988,7 @@ export const RootStore = RootStoreBase.props({
       return self.herkunftsFiltered.map((o) => ({
         value: o.id,
         label: `${o?.nr ?? ''}: ${o?.gemeinde ?? ''}, ${o?.lokalname ?? ''}`,
+        ...o,
         type: 'Herkuenfte',
       }))
     },
@@ -1993,6 +1996,7 @@ export const RootStore = RootStoreBase.props({
       return self.kultursFiltered.map((o) => ({
         value: o.id,
         label: o?.garten?.person?.name ?? '',
+        ...o,
         type: 'Kulturen',
       }))
     },
@@ -2000,6 +2004,7 @@ export const RootStore = RootStoreBase.props({
       return self.eventsFiltered.map((o) => ({
         value: o.id,
         label: `${formatDatumForSearch(o.datum)}: ${o?.beschreibung ?? ''}`,
+        ...o,
         parent: o.kultur_id,
         type: 'Events',
       }))
@@ -2008,6 +2013,7 @@ export const RootStore = RootStoreBase.props({
       return self.lieferungsFiltered.map((o) => ({
         value: o.id,
         label: formatDatumForSearch(o.datum),
+        ...o,
         type: 'Lieferungen',
       }))
     },
@@ -2015,6 +2021,7 @@ export const RootStore = RootStoreBase.props({
       return self.personsFiltered.map((o) => ({
         value: o.id,
         label: o?.name ?? '',
+        ...o,
         type: 'Personen',
       }))
     },
@@ -2022,6 +2029,7 @@ export const RootStore = RootStoreBase.props({
       return self.sammlungsFiltered.map((o) => ({
         value: o.id,
         label: `${o?.nr ?? ''}: ${formatDatumForSearch(o.datum)}`,
+        ...o,
         type: 'Sammlungen',
       }))
     },
@@ -2029,6 +2037,7 @@ export const RootStore = RootStoreBase.props({
       return self.zaehlungsFiltered.map((o) => ({
         value: o.id,
         label: formatDatumForSearch(o.datum),
+        ...o,
         parent: o.kultur_id,
         type: 'Zaehlungen',
       }))

@@ -23,39 +23,9 @@ create trigger tsvupdate_person before insert or update
 
 DROP TRIGGER IF EXISTS tsvupdate_art ON art;
 DROP FUNCTION IF EXISTS art_trigger();
-create function art_trigger() returns trigger as $$
-  declare
-    artname text;
-  begin
-    select ae_art.name into artname
-    from ae_art inner join art on art.ae_id = ae_art.id
-    where ae_art.id = new.ae_id;
-    new.tsv :=
-      to_tsvector('simple', coalesce(artname, ''));
-    return new;
-  end
-$$ language plpgsql;
-
-create trigger tsvupdate_art before insert or update
-  on art for each row execute procedure art_trigger();
 
 DROP TRIGGER IF EXISTS tsvupdate_herkunft ON herkunft;
 DROP FUNCTION IF EXISTS herkunft_trigger();
-create function herkunft_trigger() returns trigger as $$
-  begin
-    new.tsv :=
-      setweight(to_tsvector('simple', coalesce(new.nr, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.lokalname, '')), 'A') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.gemeinde, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.kanton, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.land, '')), 'B') || ' ' ||
-      setweight(to_tsvector('simple', coalesce(new.bemerkungen, '')), 'C');
-    return new;
-  end
-$$ language plpgsql;
-
-create trigger tsvupdate_herkunft before insert or update
-  on herkunft for each row execute procedure herkunft_trigger();
 
 DROP TRIGGER IF EXISTS tsvupdate_sammlung ON sammlung;
 DROP FUNCTION IF EXISTS sammlung_trigger();

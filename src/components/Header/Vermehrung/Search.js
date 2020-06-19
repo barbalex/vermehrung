@@ -138,7 +138,15 @@ const Search = () => {
         })
       }
       const herkunftSuggestionsFuse = new Fuse(searchHerkunftSuggestions, {
-        keys: ['label'],
+        keys: [
+          { name: 'label', weight: 1 },
+          { name: 'nr', weight: 1 },
+          { name: 'lokalname', weight: 1 },
+          { name: 'gemeinde', weight: 0.7 },
+          { name: 'kanton', weight: 0.5 },
+          { name: 'land', weight: 0.5 },
+          { name: 'bemerkungen', weight: 0.5 },
+        ],
         threshold,
       })
       const herkunftSuggestions = herkunftSuggestionsFuse
@@ -190,7 +198,19 @@ const Search = () => {
         })
       }
       const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
-        keys: ['label'],
+        keys: [
+          { name: 'label', weight: 1 },
+          { name: 'nr', weight: 1 },
+          { name: 'ort', weight: 0.5 },
+          { name: 'email', weight: 0.5 },
+          { name: 'bemerkungen', weight: 0.5 },
+          { name: 'adresszusatz', weight: 0.5 },
+          { name: 'strasse', weight: 0.5 },
+          { name: 'plz', weight: 0.5 },
+          { name: 'telefon_privat', weight: 0.5 },
+          { name: 'telefon_geschaeft', weight: 0.5 },
+          { name: 'telefon_mobile', weight: 0.5 },
+        ],
         threshold,
       })
       const personSuggestions = personSuggestionsFuse
