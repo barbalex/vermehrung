@@ -12,7 +12,9 @@ export default ({ store }) => {
     const artId = node[1]
     const sammlungId = node[3]
     const artIndex = art.findIndex((a) => a.id === artId)
-    const sammlungIndex = artSammlung.findIndex((s) => s.id === sammlungId)
+    const sammlungIndex = artSammlung.findIndex(
+      (s) => s.id === `${artId}${sammlungId}`,
+    )
     const lieferungen = store.lieferungsFiltered.filter(
       (l) => l.von_sammlung_id === sammlungId,
     )
