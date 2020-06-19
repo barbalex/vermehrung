@@ -256,7 +256,7 @@ const Search = () => {
         })
       }
       const zaehlungSuggestionsFuse = new Fuse(searchZaehlungSuggestions, {
-        keys: ['label'],
+        keys: [{ name: 'datum', weight: 1 }],
         threshold,
       })
       const zaehlungSuggestions = zaehlungSuggestionsFuse

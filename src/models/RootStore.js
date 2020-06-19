@@ -2052,7 +2052,7 @@ export const RootStore = RootStoreBase.props({
       return self.zaehlungsFiltered.map((o) => ({
         value: o.id,
         label: formatDatumForSearch(o.datum),
-        ...o,
+        datum: formatDatumForSearch(o.datum),
         parent: o.kultur_id,
         type: 'Zaehlungen',
       }))
