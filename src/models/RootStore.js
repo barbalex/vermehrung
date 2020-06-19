@@ -53,7 +53,7 @@ import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
 const formatDatumForSearch = (datum) =>
-  datum ? moment(datum, 'YYYY-MM-DD').format('YYYY.MM.DD') : ''
+  datum ? moment(datum, 'YYYY-MM-DD').format('DD.MM.YYYY') : ''
 
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
@@ -2029,7 +2029,14 @@ export const RootStore = RootStoreBase.props({
       return self.sammlungsFiltered.map((o) => ({
         value: o.id,
         label: `${o?.nr ?? ''}: ${formatDatumForSearch(o.datum)}`,
-        ...o,
+        artname: o?.art?.art_ae_art?.name,
+        personname: o?.person?.name,
+        herkunftnr: o?.herkunft?.nr,
+        herkunftlokalname: o?.herkunft?.lokalname,
+        herkunftgemeinde: o?.herkunft?.gemeinde,
+        nr: o.nr,
+        bemerkungen: o.bemerkungen,
+        datum: formatDatumForSearch(o.datum),
         type: 'Sammlungen',
       }))
     },

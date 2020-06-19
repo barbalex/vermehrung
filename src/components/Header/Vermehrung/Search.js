@@ -139,7 +139,6 @@ const Search = () => {
       }
       const herkunftSuggestionsFuse = new Fuse(searchHerkunftSuggestions, {
         keys: [
-          { name: 'label', weight: 1 },
           { name: 'nr', weight: 1 },
           { name: 'lokalname', weight: 1 },
           { name: 'gemeinde', weight: 0.7 },
@@ -199,8 +198,8 @@ const Search = () => {
       }
       const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
         keys: [
-          { name: 'label', weight: 1 },
           { name: 'nr', weight: 1 },
+          { name: 'name', weight: 1 },
           { name: 'ort', weight: 0.5 },
           { name: 'email', weight: 0.5 },
           { name: 'bemerkungen', weight: 0.5 },
@@ -223,7 +222,16 @@ const Search = () => {
         })
       }
       const sammlungSuggestionsFuse = new Fuse(searchSammlungSuggestions, {
-        keys: ['label'],
+        keys: [
+          { name: 'artname', weight: 0.7 },
+          { name: 'personname', weight: 0.7 },
+          { name: 'herkunftnr', weight: 0.7 },
+          { name: 'herkunftlokalname', weight: 0.7 },
+          { name: 'herkunftgemeinde', weight: 0.7 },
+          { name: 'nr', weight: 1 },
+          { name: 'datum', weight: 1 },
+          { name: 'bemerkungen', weight: 0.5 },
+        ],
         threshold,
       })
       const sammlungSuggestions = sammlungSuggestionsFuse
