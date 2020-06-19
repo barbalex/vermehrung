@@ -46,7 +46,7 @@ const TitleRow = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
   padding: 0 10px;
-  ${(props) => props['data-online'] && 'cursor: pointer;'}
+  ${(props) => props['data-active'] && 'cursor: pointer;'}
   position: sticky;
   user-select: none;
   top: -10px;
@@ -566,7 +566,7 @@ const KulturTimeline = ({ row, width }) => {
   if (!online) {
     return (
       <ErrorBoundary>
-        <TitleRow data-online={online}>
+        <TitleRow data-active={online}>
           <Title>Zeit-Achse</Title>
           <Content>Sorry, nur online verfügbar</Content>
         </TitleRow>
@@ -574,8 +574,18 @@ const KulturTimeline = ({ row, width }) => {
     )
   }
 
-  if (!row) return null
-  if (!allData.length) return null
+  console.log('Kultur Timeline', { row, allData })
+
+  if (!row || !allData.length) {
+    return (
+      <ErrorBoundary>
+        <TitleRow data-active={false}>
+          <Title>Zeit-Achse</Title>
+          <Content>Sorry, keine Daten verfügbar</Content>
+        </TitleRow>
+      </ErrorBoundary>
+    )
+  }
 
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
@@ -586,7 +596,7 @@ const KulturTimeline = ({ row, width }) => {
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
-        data-online={online}
+        data-active={online}
       >
         <Title>Zeit-Achse</Title>
         <div>
