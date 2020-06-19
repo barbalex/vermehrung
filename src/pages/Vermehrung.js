@@ -70,7 +70,6 @@ const Vermehrung = ({ location }) => {
     user,
     gettingAuthUser,
     initialDataQueried,
-    setQueryingAllData,
     queryingAllData,
     queuedQueries,
   } = store
@@ -122,7 +121,6 @@ const Vermehrung = ({ location }) => {
       !queuedQueries.length
     ) {
       //console.log('Vermehrung querying all data')
-      setQueryingAllData(true)
       queryAllData({ store })
     }
   }, [
@@ -130,7 +128,6 @@ const Vermehrung = ({ location }) => {
     initialDataQueried,
     queryingAllData,
     queuedQueries.length,
-    setQueryingAllData,
     store,
   ])
 
