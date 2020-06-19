@@ -155,7 +155,7 @@ const allDataQuery = gql`
   ${zaehlung}
 `
 
-const query = async ({ store }) => {
+export default async ({ store }) => {
   const { setInitialDataQueried, setQueryingAllData } = store
   let data
   try {
@@ -163,18 +163,13 @@ const query = async ({ store }) => {
       fetchPolicy: 'network-only',
     })
   } catch (error) {
-    setQueryingAllData(false)
     if (error && error.message.includes('JWT')) {
       await getAuthToken({ store })
     }
+    setQueryingAllData(false)
     return
   }
   removeSuplusNotRevModels({ store, data })
   setInitialDataQueried(true)
   setQueryingAllData(false)
-}
-
-export default async ({ store }) => {
-  await query({ store })
-  return
 }
