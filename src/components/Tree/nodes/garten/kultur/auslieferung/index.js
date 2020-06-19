@@ -18,7 +18,9 @@ export default ({ store }) => {
     const gartenId = node[1]
     const gartenIndex = garten.findIndex((a) => a.id === gartenId)
     const kulturId = node[3]
-    const kulturIndex = gartenKultur.findIndex((a) => a.id === kulturId)
+    const kulturIndex = gartenKultur.findIndex(
+      (a) => a.id === `${gartenId}${kulturId}`,
+    )
 
     const auslieferungen = store.lieferungsFiltered.filter(
       (t) => t.von_kultur_id === kulturId,
