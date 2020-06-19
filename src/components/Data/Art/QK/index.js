@@ -46,7 +46,6 @@ const Body = styled.div`
 
 const ApQk = ({ artId }) => {
   const store = useContext(StoreContext)
-  const { artQksSorted } = store
   const [open, setOpen] = useState(false)
 
   const [tab, setTab] = useState('qk')
@@ -56,15 +55,9 @@ const ApQk = ({ artId }) => {
     (q) => q.art_id === artId,
   )
   const qkChoosens = allQkChoosens.filter((qk) => qk.choosen)
-  const qks = artQksSorted.filter(
-    (artQk) =>
-      !!artQk.art_qk_choosen.filter((qk) => qk.art_id === artId).length,
-  )
 
   const qkCount = allQkChoosens.length
   const artQkCount = qkChoosens.length
-
-  console.log('Art QK', { allQkChoosens, artQksSorted, qks, qkChoosens })
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
