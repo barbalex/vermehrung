@@ -9,10 +9,9 @@ import Tab from '@material-ui/core/Tab'
 
 import Qk from './Qk'
 import Choose from './Choose'
-import queryQk from './queryQk'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import { useQuery, StoreContext } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -53,11 +52,6 @@ const ApQk = ({ artId }) => {
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
 
-  const { loading, error } = useQuery(queryQk, {
-    variables: { artId: artId ?? '99999999-9999-9999-9999-999999999999' },
-    fetchPolicy: 'no-cache',
-  })
-
   const allQkChoosens = [...store.art_qk_choosens.values()].filter(
     (q) => q.art_id === artId,
   )
@@ -65,8 +59,8 @@ const ApQk = ({ artId }) => {
     (qk) => !!allQkChoosens.find((no) => no.qk_name === qk.name),
   )
 
-  const qkCount = loading ? '...' : artQksSorted.length
-  const artQkCount = loading ? '...' : allQkChoosens.length
+  const qkCount = artQksSorted.length
+  const artQkCount = allQkChoosens.length
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
@@ -86,7 +80,6 @@ const ApQk = ({ artId }) => {
     [open],
   )
 
-  if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
       <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
