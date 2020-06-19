@@ -4,6 +4,7 @@ export default async ({ store }) => {
   const {
     addNotification,
     setAuthorizing,
+    setQueryingAllData,
     user,
     gqlHttpClient,
     gqlWsClient,
@@ -48,6 +49,7 @@ export default async ({ store }) => {
     window.localStorage.setItem('token', token)
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     setAuthorizing(false)
+    setQueryingAllData(false)
     setTimeout(() => {
       console.log('getAuthToken closing gqlWsClient')
       gqlWsClient.close(false, false)
@@ -55,6 +57,7 @@ export default async ({ store }) => {
        * ws client only works if app is reloaded after closing it :-(
        * otherwise keeps getting jwt errors
        */
+
       console.log('getAuthToken reloading')
       window.location.reload(true)
     }, 1000)
