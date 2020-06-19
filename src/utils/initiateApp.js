@@ -3,7 +3,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { RootStore } from '../models'
 import constants from './constants'
-//import getAuthToken from './getAuthToken'
 
 // TODO: this never runs. Why?
 const getToken = () => {
