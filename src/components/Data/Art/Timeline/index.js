@@ -4,12 +4,13 @@ import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import Timeline from './Timeline'
-import query from './query'
 import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { artSums as artSumsFragment } from '../../../../utils/fragments'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -39,6 +40,15 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`
+
+const query = gql`
+  query ArtSumsQuery($id: uuid!) {
+    art_sums(where: { art_id: { _eq: $id } }) {
+      ...ArtSumsFields
+    }
+  }
+  ${artSumsFragment}
 `
 
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
