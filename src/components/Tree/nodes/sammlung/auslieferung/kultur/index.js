@@ -21,7 +21,9 @@ export default ({ store }) => {
     const sammlungId = node[1]
     const sammlungIndex = sammlungNodes.findIndex((a) => a.id === sammlungId)
     const lieferungId = node[3]
-    const lieferungIndex = lieferungNodes.findIndex((a) => a.id === lieferungId)
+    const lieferungIndex = lieferungNodes.findIndex(
+      (a) => a.id === `${sammlungId}${lieferungId}`,
+    )
 
     const lieferung = store.lieferungs.get(lieferungId) || {}
     const kultur = store.kultursFiltered.find(
