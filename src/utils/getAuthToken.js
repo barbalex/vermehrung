@@ -3,7 +3,6 @@ import axios from 'axios'
 export default async ({ store }) => {
   const {
     addNotification,
-    authorizing,
     setAuthorizing,
     user,
     gqlHttpClient,
@@ -13,10 +12,10 @@ export default async ({ store }) => {
     console.log('getAuthToken returning because of missing user.uid')
     return
   }
-  if (authorizing) {
+  /*if (authorizing) {
     console.log('getAuthToken returning because authorizing is true')
     return
-  }
+  }*/
   setAuthorizing(true)
   let res
   try {
@@ -45,10 +44,16 @@ export default async ({ store }) => {
     // see: https://www.apollographql.com/docs/react/networking/authentication/#header
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-348492358
     // see: https://github.com/apollographql/subscriptions-transport-ws/issues/171#issuecomment-406859244
+    console.log('getAuthToken got new token')
     window.localStorage.setItem('token', token)
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
-    gqlWsClient.close(false, false)
     setAuthorizing(false)
+    setTimeout(() => {
+      console.log('getAuthToken closing gqlWsClient')
+      gqlWsClient.close(false, false)
+      console.log('getAuthToken reloading')
+      window.location.reload(true)
+    }, 1000)
   } else {
     //console.log('getAuthToken, got no new token')
     setAuthorizing(false)
