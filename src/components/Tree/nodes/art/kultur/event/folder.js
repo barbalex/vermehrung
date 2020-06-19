@@ -12,8 +12,12 @@ export default ({ store }) => {
     const artId = node[1]
     const artIndex = art.findIndex((a) => a.id === artId)
     const kulturId = node[3]
-    const kulturIndex = artKultur.findIndex((a) => a.id === kulturId)
-    const events = store.eventsFiltered.filter((e) => e.kultur_id === kulturId)
+    const kulturIndex = artKultur.findIndex(
+      (a) => a.id === `${artId}${kulturId}`,
+    )
+    const events = store.eventsFiltered.filter(
+      (e) => e.kultur_id === `${artId}${kulturId}`,
+    )
     const nr = !initialDataQueried && !events.length ? '...' : events.length
 
     return {
