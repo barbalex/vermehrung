@@ -3,13 +3,21 @@ import axios from 'axios'
 export default async ({ store }) => {
   const {
     addNotification,
+    authorizing,
     setAuthorizing,
     user,
     gqlHttpClient,
     gqlWsClient,
   } = store
+  if (!user?.uid) {
+    console.log('getAuthToken returning because of missing user.uid')
+    return
+  }
+  if (authorizing) {
+    console.log('getAuthToken returning because authorizing is true')
+    return
+  }
   setAuthorizing(true)
-  if (!user?.uid) return
   let res
   try {
     res = await axios.get(
