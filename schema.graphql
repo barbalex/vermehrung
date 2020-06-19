@@ -1164,6 +1164,9 @@ type art_qk_choosen {
   # An object relationship
   art: art!
   art_id: uuid!
+
+  # An object relationship
+  art_qk: art_qk
   changed: timestamp
   changed_by: String
   choosen: Boolean
@@ -1236,6 +1239,7 @@ input art_qk_choosen_bool_exp {
   _revisions: _text_comparison_exp
   art: art_bool_exp
   art_id: uuid_comparison_exp
+  art_qk: art_qk_bool_exp
   changed: timestamp_comparison_exp
   changed_by: String_comparison_exp
   choosen: Boolean_comparison_exp
@@ -1267,6 +1271,7 @@ input art_qk_choosen_insert_input {
   _revisions: _text
   art: art_obj_rel_insert_input
   art_id: uuid
+  art_qk: art_qk_obj_rel_insert_input
   changed: timestamp
   changed_by: String
   choosen: Boolean
@@ -1354,6 +1359,7 @@ input art_qk_choosen_order_by {
   _revisions: order_by
   art: art_order_by
   art_id: order_by
+  art_qk: art_qk_order_by
   changed: order_by
   changed_by: order_by
   choosen: order_by
