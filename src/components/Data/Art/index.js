@@ -168,20 +168,22 @@ const Art = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  // TODO:
-  // this filter is WAY to ressource hogging
+  const aeArtIdsNotToShow = artsSorted
+    .map((a) => a.ae_id)
+    .filter((ae_id) => ae_id !== row.ae_id)
+
   const aeArtsFilter = (val) => {
     if (showFilter) {
-      return aeArtsSorted.filter(
-        (a) => a.name.toLowerCase().includes(val) || a?.id === row.ae_id,
-      )
+      return aeArtsSorted
+        .filter((a) => artsSorted.map((ar) => ar.ae_id).includes(a.id))
+        .filter((a) => a.name.toLowerCase().includes(val))
     }
     if (val) {
-      return aeArtsSorted.filter(
-        (a) => a.name.toLowerCase().includes(val) || a?.ae_art_art?.id === id,
-      )
+      return aeArtsSorted
+        .filter((a) => !aeArtIdsNotToShow.includes(a.id))
+        .filter((a) => a.name.toLowerCase().includes(val))
     }
-    return aeArtsSorted
+    return aeArtsSorted.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }
 
   if (!row || (!showFilter && filter.show)) return null
@@ -263,6 +265,16 @@ const Art = ({
                 modelFilter={aeArtsFilter}
                 showFilterModel={aeArtsSorted}
               />
+              {/*<Select
+                key={`${row.id}ae_id2`}
+                name="ae_id"
+                value={row.ae_id}
+                field="ae_id"
+                label="Person"
+                options={aeWerte}
+                saveToDb={saveToDb}
+                error={errors?.art?.ae_id}
+              />*/}
               {online &&
                 !showFilter &&
                 row._conflicts &&
