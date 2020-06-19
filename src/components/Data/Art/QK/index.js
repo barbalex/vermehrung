@@ -55,12 +55,15 @@ const ApQk = ({ artId }) => {
   const allQkChoosens = [...store.art_qk_choosens.values()].filter(
     (q) => q.art_id === artId,
   )
+  const qkChoosens = allQkChoosens.filter((qk) => qk.choosen)
   const qks = artQksSorted.filter(
     (qk) => !!allQkChoosens.find((no) => no.qk_name === qk.name),
   )
 
-  const qkCount = artQksSorted.length
-  const artQkCount = allQkChoosens.length
+  const qkCount = allQkChoosens.length
+  const artQkCount = qkChoosens.length
+
+  console.log('Art QK', { allQkChoosens, artQksSorted })
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
