@@ -41,7 +41,7 @@ export default ({ store }) => {
           id: `${sammlungId}${el.id}`,
           label,
           url: ['Sammlungen', sammlungId, 'Aus-Lieferungen', el.id],
-          hasChildren: false,
+          hasChildren: true,
           mono: true,
         }
       })
