@@ -23,7 +23,6 @@ export const kultur_update_columnEnumType = types.enumeration("kultur_update_col
   "garten_id",
   "herkunft_id",
   "id",
-  "tsv",
   "von_anzahl_individuen",
   "zwischenlager",
       ])

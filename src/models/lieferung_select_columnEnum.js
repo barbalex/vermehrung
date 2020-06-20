@@ -29,7 +29,6 @@ export const lieferung_select_columnEnumType = types.enumeration("lieferung_sele
   "nach_kultur_id",
   "person_id",
   "sammel_lieferung_id",
-  "tsv",
   "von_anzahl_individuen",
   "von_kultur_id",
   "von_sammlung_id",

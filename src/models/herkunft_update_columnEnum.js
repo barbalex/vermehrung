@@ -26,7 +26,6 @@ export const herkunft_update_columnEnumType = types.enumeration("herkunft_update
   "lv95_x",
   "lv95_y",
   "nr",
-  "tsv",
   "wgs84_lat",
   "wgs84_long",
       ])

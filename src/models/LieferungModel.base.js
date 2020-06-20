@@ -57,7 +57,6 @@ export const lieferungModelBase = ModelBase
     sammel_lieferung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferungModel))),
     sammel_lieferung_id: types.union(types.undefined, types.null, types.frozen()),
     sammlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlungModel))),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     von_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     von_sammlung_id: types.union(types.undefined, types.null, types.frozen()),
@@ -90,7 +89,6 @@ export class lieferungModelSelector extends QueryBuilder {
   get nach_kultur_id() { return this.__attr(`nach_kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
   get sammel_lieferung_id() { return this.__attr(`sammel_lieferung_id`) }
-  get tsv() { return this.__attr(`tsv`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get von_kultur_id() { return this.__attr(`von_kultur_id`) }
   get von_sammlung_id() { return this.__attr(`von_sammlung_id`) }
@@ -107,4 +105,4 @@ export function selectFromlieferung() {
   return new lieferungModelSelector()
 }
 
-export const lieferungModelPrimitives = selectFromlieferung()._conflicts._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geplant.gramm_samen.nach_ausgepflanzt.nach_kultur_id.person_id.sammel_lieferung_id.tsv.von_anzahl_individuen.von_kultur_id.von_sammlung_id
+export const lieferungModelPrimitives = selectFromlieferung()._conflicts._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geplant.gramm_samen.nach_ausgepflanzt.nach_kultur_id.person_id.sammel_lieferung_id.von_anzahl_individuen.von_kultur_id.von_sammlung_id

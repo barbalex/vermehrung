@@ -600,7 +600,6 @@ type art {
     # filter the rows returned
     where: sammlung_bool_exp
   ): sammlung_aggregate!
-  tsv: tsvector
 }
 
 # aggregated selection of "art"
@@ -683,7 +682,6 @@ input art_bool_exp {
   sammel_lieferungs: sammel_lieferung_bool_exp
   sammlung_revs: sammlung_rev_bool_exp
   sammlungs: sammlung_bool_exp
-  tsv: tsvector_comparison_exp
 }
 
 # unique or primary key constraints on table "art"
@@ -920,7 +918,6 @@ input art_insert_input {
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
   sammlung_revs: sammlung_rev_arr_rel_insert_input
   sammlungs: sammlung_arr_rel_insert_input
-  tsv: tsvector
 }
 
 # aggregate max on columns
@@ -1014,7 +1011,6 @@ input art_order_by {
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
   sammlung_revs_aggregate: sammlung_rev_aggregate_order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
-  tsv: order_by
 }
 
 # primary key columns input for table: "art"
@@ -3280,9 +3276,6 @@ enum art_select_column {
 
   # column name
   id
-
-  # column name
-  tsv
 }
 
 # input type for updating data in table "art"
@@ -3297,7 +3290,6 @@ input art_set_input {
   changed: timestamp
   changed_by: String
   id: ID
-  tsv: tsvector
 }
 
 # aggregate stddev on columns
@@ -3811,9 +3803,6 @@ enum art_update_column {
 
   # column name
   id
-
-  # column name
-  tsv
 }
 
 # aggregate var_pop on columns
@@ -4700,7 +4689,6 @@ type event {
   # An object relationship
   teilkultur: teilkultur
   teilkultur_id: uuid
-  tsv: tsvector
 }
 
 # aggregated selection of "event"
@@ -4778,7 +4766,6 @@ input event_bool_exp {
   person_id: uuid_comparison_exp
   teilkultur: teilkultur_bool_exp
   teilkultur_id: uuid_comparison_exp
-  tsv: tsvector_comparison_exp
 }
 
 # unique or primary key constraints on table "event"
@@ -4812,7 +4799,6 @@ input event_insert_input {
   person_id: uuid
   teilkultur: teilkultur_obj_rel_insert_input
   teilkultur_id: uuid
-  tsv: tsvector
 }
 
 # aggregate max on columns
@@ -4917,7 +4903,6 @@ input event_order_by {
   person_id: order_by
   teilkultur: teilkultur_order_by
   teilkultur_id: order_by
-  tsv: order_by
 }
 
 # primary key columns input for table: "event"
@@ -5414,9 +5399,6 @@ enum event_select_column {
 
   # column name
   teilkultur_id
-
-  # column name
-  tsv
 }
 
 # input type for updating data in table "event"
@@ -5436,7 +5418,6 @@ input event_set_input {
   kultur_id: uuid
   person_id: uuid
   teilkultur_id: uuid
-  tsv: tsvector
 }
 
 # aggregate stddev on columns
@@ -5525,9 +5506,6 @@ enum event_update_column {
 
   # column name
   teilkultur_id
-
-  # column name
-  tsv
 }
 
 # aggregate var_pop on columns
@@ -5728,7 +5706,6 @@ type garten {
   person_id: uuid
   plz: Int
   strasse: String
-  tsv: tsvector
   wgs84_lat: numeric
   wgs84_long: numeric
 }
@@ -5824,7 +5801,6 @@ input garten_bool_exp {
   person_id: uuid_comparison_exp
   plz: Int_comparison_exp
   strasse: String_comparison_exp
-  tsv: tsvector_comparison_exp
   wgs84_lat: numeric_comparison_exp
   wgs84_long: numeric_comparison_exp
 }
@@ -6071,7 +6047,6 @@ input garten_insert_input {
   person_id: uuid
   plz: Int
   strasse: String
-  tsv: tsvector
   wgs84_lat: numeric
   wgs84_long: numeric
 }
@@ -6204,7 +6179,6 @@ input garten_order_by {
   person_id: order_by
   plz: order_by
   strasse: order_by
-  tsv: order_by
   wgs84_lat: order_by
   wgs84_long: order_by
 }
@@ -6787,9 +6761,6 @@ enum garten_select_column {
   strasse
 
   # column name
-  tsv
-
-  # column name
   wgs84_lat
 
   # column name
@@ -6817,7 +6788,6 @@ input garten_set_input {
   person_id: uuid
   plz: Int
   strasse: String
-  tsv: tsvector
   wgs84_lat: numeric
   wgs84_long: numeric
 }
@@ -7944,9 +7914,6 @@ enum garten_update_column {
   strasse
 
   # column name
-  tsv
-
-  # column name
   wgs84_lat
 
   # column name
@@ -9070,7 +9037,6 @@ type herkunft {
     # filter the rows returned
     where: sammlung_bool_exp
   ): sammlung_aggregate!
-  tsv: tsvector
   wgs84_lat: numeric
   wgs84_long: numeric
 }
@@ -9164,7 +9130,6 @@ input herkunft_bool_exp {
   nr: String_comparison_exp
   sammlung_revs: sammlung_rev_bool_exp
   sammlungs: sammlung_bool_exp
-  tsv: tsvector_comparison_exp
   wgs84_lat: numeric_comparison_exp
   wgs84_long: numeric_comparison_exp
 }
@@ -9409,7 +9374,6 @@ input herkunft_insert_input {
   nr: String
   sammlung_revs: sammlung_rev_arr_rel_insert_input
   sammlungs: sammlung_arr_rel_insert_input
-  tsv: tsvector
   wgs84_lat: numeric
   wgs84_long: numeric
 }
@@ -9542,7 +9506,6 @@ input herkunft_order_by {
   nr: order_by
   sammlung_revs_aggregate: sammlung_rev_aggregate_order_by
   sammlungs_aggregate: sammlung_aggregate_order_by
-  tsv: order_by
   wgs84_lat: order_by
   wgs84_long: order_by
 }
@@ -10127,9 +10090,6 @@ enum herkunft_select_column {
   nr
 
   # column name
-  tsv
-
-  # column name
   wgs84_lat
 
   # column name
@@ -10156,7 +10116,6 @@ input herkunft_set_input {
   lv95_x: numeric
   lv95_y: numeric
   nr: String
-  tsv: tsvector
   wgs84_lat: numeric
   wgs84_long: numeric
 }
@@ -10695,9 +10654,6 @@ enum herkunft_update_column {
 
   # column name
   nr
-
-  # column name
-  tsv
 
   # column name
   wgs84_lat
@@ -11342,7 +11298,6 @@ type kultur {
     # filter the rows returned
     where: teilkultur_bool_exp
   ): teilkultur_aggregate!
-  tsv: tsvector
   von_anzahl_individuen: Int
 
   # An array relationship
@@ -11512,7 +11467,6 @@ input kultur_bool_exp {
   sammel_lieferungs: sammel_lieferung_bool_exp
   teilkultur_revs: teilkultur_rev_bool_exp
   teilkulturs: teilkultur_bool_exp
-  tsv: tsvector_comparison_exp
   von_anzahl_individuen: Int_comparison_exp
   zaehlung_revs: zaehlung_rev_bool_exp
   zaehlungs: zaehlung_bool_exp
@@ -11767,7 +11721,6 @@ input kultur_insert_input {
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
   teilkultur_revs: teilkultur_rev_arr_rel_insert_input
   teilkulturs: teilkultur_arr_rel_insert_input
-  tsv: tsvector
   von_anzahl_individuen: Int
   zaehlung_revs: zaehlung_rev_arr_rel_insert_input
   zaehlungs: zaehlung_arr_rel_insert_input
@@ -12828,7 +12781,6 @@ input kultur_order_by {
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
   teilkultur_revs_aggregate: teilkultur_rev_aggregate_order_by
   teilkulturs_aggregate: teilkultur_aggregate_order_by
-  tsv: order_by
   von_anzahl_individuen: order_by
   zaehlung_revs_aggregate: zaehlung_rev_aggregate_order_by
   zaehlungs_aggregate: zaehlung_aggregate_order_by
@@ -15268,9 +15220,6 @@ enum kultur_select_column {
   id
 
   # column name
-  tsv
-
-  # column name
   von_anzahl_individuen
 
   # column name
@@ -15294,7 +15243,6 @@ input kultur_set_input {
   garten_id: uuid
   herkunft_id: uuid
   id: ID
-  tsv: tsvector
   von_anzahl_individuen: Int
   zwischenlager: Boolean
 }
@@ -15393,9 +15341,6 @@ enum kultur_update_column {
 
   # column name
   id
-
-  # column name
-  tsv
 
   # column name
   von_anzahl_individuen
@@ -15517,7 +15462,6 @@ type lieferung {
 
   # An object relationship
   sammlung: sammlung
-  tsv: tsvector
   von_anzahl_individuen: Int
   von_kultur_id: uuid
   von_sammlung_id: uuid
@@ -15616,7 +15560,6 @@ input lieferung_bool_exp {
   sammel_lieferung: sammel_lieferung_bool_exp
   sammel_lieferung_id: uuid_comparison_exp
   sammlung: sammlung_bool_exp
-  tsv: tsvector_comparison_exp
   von_anzahl_individuen: Int_comparison_exp
   von_kultur_id: uuid_comparison_exp
   von_sammlung_id: uuid_comparison_exp
@@ -15867,7 +15810,6 @@ input lieferung_insert_input {
   sammel_lieferung: sammel_lieferung_obj_rel_insert_input
   sammel_lieferung_id: uuid
   sammlung: sammlung_obj_rel_insert_input
-  tsv: tsvector
   von_anzahl_individuen: Int
   von_kultur_id: uuid
   von_sammlung_id: uuid
@@ -16017,7 +15959,6 @@ input lieferung_order_by {
   sammel_lieferung: sammel_lieferung_order_by
   sammel_lieferung_id: order_by
   sammlung: sammlung_order_by
-  tsv: order_by
   von_anzahl_individuen: order_by
   von_kultur_id: order_by
   von_sammlung_id: order_by
@@ -16754,9 +16695,6 @@ enum lieferung_select_column {
   sammel_lieferung_id
 
   # column name
-  tsv
-
-  # column name
   von_anzahl_individuen
 
   # column name
@@ -16789,7 +16727,6 @@ input lieferung_set_input {
   nach_kultur_id: uuid
   person_id: uuid
   sammel_lieferung_id: uuid
-  tsv: tsvector
   von_anzahl_individuen: Int
   von_kultur_id: uuid
   von_sammlung_id: uuid
@@ -16931,9 +16868,6 @@ enum lieferung_update_column {
 
   # column name
   sammel_lieferung_id
-
-  # column name
-  tsv
 
   # column name
   von_anzahl_individuen
@@ -19935,7 +19869,6 @@ type person {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  tsv: tsvector
 
   # An object relationship
   userRoleByUserRole: user_role
@@ -20041,7 +19974,6 @@ input person_bool_exp {
   telefon_geschaeft: String_comparison_exp
   telefon_mobile: String_comparison_exp
   telefon_privat: String_comparison_exp
-  tsv: tsvector_comparison_exp
   userRoleByUserRole: user_role_bool_exp
   user_role: String_comparison_exp
 }
@@ -20300,7 +20232,6 @@ input person_insert_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  tsv: tsvector
   userRoleByUserRole: user_role_obj_rel_insert_input
   user_role: String
 }
@@ -21602,7 +21533,6 @@ input person_order_by {
   telefon_geschaeft: order_by
   telefon_mobile: order_by
   telefon_privat: order_by
-  tsv: order_by
   userRoleByUserRole: user_role_order_by
   user_role: order_by
 }
@@ -22531,9 +22461,6 @@ enum person_select_column {
   telefon_privat
 
   # column name
-  tsv
-
-  # column name
   user_role
 }
 
@@ -22564,7 +22491,6 @@ input person_set_input {
   telefon_geschaeft: String
   telefon_mobile: String
   telefon_privat: String
-  tsv: tsvector
   user_role: String
 }
 
@@ -22692,9 +22618,6 @@ enum person_update_column {
 
   # column name
   telefon_privat
-
-  # column name
-  tsv
 
   # column name
   user_role
@@ -26765,7 +26688,6 @@ type sammlung {
     # filter the rows returned
     where: sammlung_file_bool_exp
   ): sammlung_file_aggregate!
-  tsv: tsvector
   von_anzahl_individuen: Int
   wgs84_lat: numeric
   wgs84_long: numeric
@@ -26872,7 +26794,6 @@ input sammlung_bool_exp {
   sammel_lieferung_revs: sammel_lieferung_rev_bool_exp
   sammel_lieferungs: sammel_lieferung_bool_exp
   sammlung_files: sammlung_file_bool_exp
-  tsv: tsvector_comparison_exp
   von_anzahl_individuen: Int_comparison_exp
   wgs84_lat: numeric_comparison_exp
   wgs84_long: numeric_comparison_exp
@@ -27128,7 +27049,6 @@ input sammlung_insert_input {
   sammel_lieferung_revs: sammel_lieferung_rev_arr_rel_insert_input
   sammel_lieferungs: sammel_lieferung_arr_rel_insert_input
   sammlung_files: sammlung_file_arr_rel_insert_input
-  tsv: tsvector
   von_anzahl_individuen: Int
   wgs84_lat: numeric
   wgs84_long: numeric
@@ -27284,7 +27204,6 @@ input sammlung_order_by {
   sammel_lieferung_revs_aggregate: sammel_lieferung_rev_aggregate_order_by
   sammel_lieferungs_aggregate: sammel_lieferung_aggregate_order_by
   sammlung_files_aggregate: sammlung_file_aggregate_order_by
-  tsv: order_by
   von_anzahl_individuen: order_by
   wgs84_lat: order_by
   wgs84_long: order_by
@@ -28022,9 +27941,6 @@ enum sammlung_select_column {
   person_id
 
   # column name
-  tsv
-
-  # column name
   von_anzahl_individuen
 
   # column name
@@ -28058,7 +27974,6 @@ input sammlung_set_input {
   lv95_y: numeric
   nr: String
   person_id: uuid
-  tsv: tsvector
   von_anzahl_individuen: Int
   wgs84_lat: numeric
   wgs84_long: numeric
@@ -28227,9 +28142,6 @@ enum sammlung_update_column {
 
   # column name
   person_id
-
-  # column name
-  tsv
 
   # column name
   von_anzahl_individuen
@@ -31294,7 +31206,6 @@ type teilkultur {
     # filter the rows returned
     where: teilzaehlung_bool_exp
   ): teilzaehlung_aggregate!
-  tsv: tsvector
 }
 
 # aggregated selection of "teilkultur"
@@ -31374,7 +31285,6 @@ input teilkultur_bool_exp {
   ort3: String_comparison_exp
   teilzaehlung_revs: teilzaehlung_rev_bool_exp
   teilzaehlungs: teilzaehlung_bool_exp
-  tsv: tsvector_comparison_exp
 }
 
 # unique or primary key constraints on table "teilkultur"
@@ -31410,7 +31320,6 @@ input teilkultur_insert_input {
   ort3: String
   teilzaehlung_revs: teilzaehlung_rev_arr_rel_insert_input
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
-  tsv: tsvector
 }
 
 # aggregate max on columns
@@ -31521,7 +31430,6 @@ input teilkultur_order_by {
   ort3: order_by
   teilzaehlung_revs_aggregate: teilzaehlung_rev_aggregate_order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
-  tsv: order_by
 }
 
 # primary key columns input for table: "teilkultur"
@@ -32088,9 +31996,6 @@ enum teilkultur_select_column {
 
   # column name
   ort3
-
-  # column name
-  tsv
 }
 
 # input type for updating data in table "teilkultur"
@@ -32110,7 +32015,6 @@ input teilkultur_set_input {
   ort1: String
   ort2: String
   ort3: String
-  tsv: tsvector
 }
 
 # aggregate stddev on columns
@@ -32199,9 +32103,6 @@ enum teilkultur_update_column {
 
   # column name
   ort3
-
-  # column name
-  tsv
 }
 
 # aggregate var_pop on columns
@@ -32331,7 +32232,6 @@ type teilzaehlung {
     # filter the rows returned
     where: teilzaehlung_bool_exp
   ): teilzaehlung_aggregate!
-  tsv: tsvector
 
   # An object relationship
   zaehlung: zaehlung
@@ -32422,7 +32322,6 @@ input teilzaehlung_bool_exp {
   teilzaehlung: teilzaehlung_bool_exp
   teilzaehlung_revs: teilzaehlung_rev_bool_exp
   teilzaehlungs: teilzaehlung_bool_exp
-  tsv: tsvector_comparison_exp
   zaehlung: zaehlung_bool_exp
   zaehlung_id: uuid_comparison_exp
 }
@@ -32464,7 +32363,6 @@ input teilzaehlung_insert_input {
   teilzaehlung: teilzaehlung_obj_rel_insert_input
   teilzaehlung_revs: teilzaehlung_rev_arr_rel_insert_input
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
-  tsv: tsvector
   zaehlung: zaehlung_obj_rel_insert_input
   zaehlung_id: uuid
 }
@@ -32590,7 +32488,6 @@ input teilzaehlung_order_by {
   teilzaehlung: teilzaehlung_order_by
   teilzaehlung_revs_aggregate: teilzaehlung_rev_aggregate_order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
-  tsv: order_by
   zaehlung: zaehlung_order_by
   zaehlung_id: order_by
 }
@@ -33232,9 +33129,6 @@ enum teilzaehlung_select_column {
   teilkultur_id
 
   # column name
-  tsv
-
-  # column name
   zaehlung_id
 }
 
@@ -33257,7 +33151,6 @@ input teilzaehlung_set_input {
   id: ID
   prognose_von_tz: uuid
   teilkultur_id: uuid
-  tsv: tsvector
   zaehlung_id: uuid
 }
 
@@ -33379,9 +33272,6 @@ enum teilzaehlung_update_column {
   teilkultur_id
 
   # column name
-  tsv
-
-  # column name
   zaehlung_id
 }
 
@@ -33446,21 +33336,6 @@ input timestamp_comparison_exp {
   _lte: timestamp
   _neq: timestamp
   _nin: [timestamp!]
-}
-
-scalar tsvector
-
-# expression to compare columns of type tsvector. All fields are combined with logical 'AND'.
-input tsvector_comparison_exp {
-  _eq: tsvector
-  _gt: tsvector
-  _gte: tsvector
-  _in: [tsvector!]
-  _is_null: Boolean
-  _lt: tsvector
-  _lte: tsvector
-  _neq: tsvector
-  _nin: [tsvector!]
 }
 
 # columns and relationships of "user_role"
@@ -33914,7 +33789,6 @@ type zaehlung {
     # filter the rows returned
     where: teilzaehlung_bool_exp
   ): teilzaehlung_aggregate!
-  tsv: tsvector
 }
 
 # aggregated selection of "zaehlung"
@@ -33990,7 +33864,6 @@ input zaehlung_bool_exp {
   prognose: Boolean_comparison_exp
   teilzaehlung_revs: teilzaehlung_rev_bool_exp
   teilzaehlungs: teilzaehlung_bool_exp
-  tsv: tsvector_comparison_exp
 }
 
 # unique or primary key constraints on table "zaehlung"
@@ -34022,7 +33895,6 @@ input zaehlung_insert_input {
   prognose: Boolean
   teilzaehlung_revs: teilzaehlung_rev_arr_rel_insert_input
   teilzaehlungs: teilzaehlung_arr_rel_insert_input
-  tsv: tsvector
 }
 
 # aggregate max on columns
@@ -34117,7 +33989,6 @@ input zaehlung_order_by {
   prognose: order_by
   teilzaehlung_revs_aggregate: teilzaehlung_rev_aggregate_order_by
   teilzaehlungs_aggregate: teilzaehlung_aggregate_order_by
-  tsv: order_by
 }
 
 # primary key columns input for table: "zaehlung"
@@ -34605,9 +34476,6 @@ enum zaehlung_select_column {
 
   # column name
   prognose
-
-  # column name
-  tsv
 }
 
 # input type for updating data in table "zaehlung"
@@ -34625,7 +34493,6 @@ input zaehlung_set_input {
   id: ID
   kultur_id: uuid
   prognose: Boolean
-  tsv: tsvector
 }
 
 # aggregate stddev on columns
@@ -34708,9 +34575,6 @@ enum zaehlung_update_column {
 
   # column name
   prognose
-
-  # column name
-  tsv
 }
 
 # aggregate var_pop on columns

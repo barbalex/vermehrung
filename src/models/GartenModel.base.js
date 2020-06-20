@@ -60,7 +60,6 @@ export const gartenModelBase = ModelBase
     person_id: types.union(types.undefined, types.null, types.frozen()),
     plz: types.union(types.undefined, types.null, types.integer),
     strasse: types.union(types.undefined, types.null, types.string),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
     wgs84_long: types.union(types.undefined, types.null, types.frozen()),
   })
@@ -90,7 +89,6 @@ export class gartenModelSelector extends QueryBuilder {
   get person_id() { return this.__attr(`person_id`) }
   get plz() { return this.__attr(`plz`) }
   get strasse() { return this.__attr(`strasse`) }
-  get tsv() { return this.__attr(`tsv`) }
   get wgs84_lat() { return this.__attr(`wgs84_lat`) }
   get wgs84_long() { return this.__attr(`wgs84_long`) }
   garten_files(builder) { return this.__child(`garten_files`, garten_fileModelSelector, builder) }
@@ -107,4 +105,4 @@ export function selectFromgarten() {
   return new gartenModelSelector()
 }
 
-export const gartenModelPrimitives = selectFromgarten()._conflicts._deleted._depth._parent_rev._rev._revisions.aktiv.bemerkungen.changed.changed_by.geom_point.lv95_x.lv95_y.name.ort.person_id.plz.strasse.tsv.wgs84_lat.wgs84_long
+export const gartenModelPrimitives = selectFromgarten()._conflicts._deleted._depth._parent_rev._rev._revisions.aktiv.bemerkungen.changed.changed_by.geom_point.lv95_x.lv95_y.name.ort.person_id.plz.strasse.wgs84_lat.wgs84_long

@@ -75,7 +75,6 @@ export const sammlungModelBase = ModelBase
     sammel_lieferungs_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     sammlung_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_fileModel)))),
     sammlung_files_aggregate: types.union(types.undefined, types.late(() => sammlung_file_aggregateModel)),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
     wgs84_long: types.union(types.undefined, types.null, types.frozen()),
@@ -109,7 +108,6 @@ export class sammlungModelSelector extends QueryBuilder {
   get lv95_y() { return this.__attr(`lv95_y`) }
   get nr() { return this.__attr(`nr`) }
   get person_id() { return this.__attr(`person_id`) }
-  get tsv() { return this.__attr(`tsv`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get wgs84_lat() { return this.__attr(`wgs84_lat`) }
   get wgs84_long() { return this.__attr(`wgs84_long`) }
@@ -131,4 +129,4 @@ export function selectFromsammlung() {
   return new sammlungModelSelector()
 }
 
-export const sammlungModelPrimitives = selectFromsammlung()._conflicts._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.lv95_x.lv95_y.nr.person_id.tsv.von_anzahl_individuen.wgs84_lat.wgs84_long
+export const sammlungModelPrimitives = selectFromsammlung()._conflicts._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_pflanzen.art_id.bemerkungen.changed.changed_by.datum.geom_point.geplant.gramm_samen.herkunft_id.lv95_x.lv95_y.nr.person_id.von_anzahl_individuen.wgs84_lat.wgs84_long

@@ -21,5 +21,4 @@ export const zaehlung_update_columnEnumType = types.enumeration("zaehlung_update
   "id",
   "kultur_id",
   "prognose",
-  "tsv",
       ])

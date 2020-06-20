@@ -27,7 +27,6 @@ export const garten_select_columnEnumType = types.enumeration("garten_select_col
   "person_id",
   "plz",
   "strasse",
-  "tsv",
   "wgs84_lat",
   "wgs84_long",
       ])

@@ -25,6 +25,5 @@ export const teilzaehlung_update_columnEnumType = types.enumeration("teilzaehlun
   "id",
   "prognose_von_tz",
   "teilkultur_id",
-  "tsv",
   "zaehlung_id",
       ])

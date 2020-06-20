@@ -38,7 +38,6 @@ export const eventModelBase = ModelBase
     person_id: types.union(types.undefined, types.null, types.frozen()),
     teilkultur: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkulturModel))),
     teilkultur_id: types.union(types.undefined, types.null, types.frozen()),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -62,7 +61,6 @@ export class eventModelSelector extends QueryBuilder {
   get kultur_id() { return this.__attr(`kultur_id`) }
   get person_id() { return this.__attr(`person_id`) }
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
-  get tsv() { return this.__attr(`tsv`) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }
   teilkultur(builder) { return this.__child(`teilkultur`, teilkulturModelSelector, builder) }
@@ -71,4 +69,4 @@ export function selectFromevent() {
   return new eventModelSelector()
 }
 
-export const eventModelPrimitives = selectFromevent()._conflicts._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.geplant.kultur_id.person_id.teilkultur_id.tsv
+export const eventModelPrimitives = selectFromevent()._conflicts._deleted._depth._parent_rev._rev._revisions.beschreibung.changed.changed_by.datum.geplant.kultur_id.person_id.teilkultur_id
