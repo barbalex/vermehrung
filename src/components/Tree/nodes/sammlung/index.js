@@ -23,7 +23,7 @@ export default ({ store }) => {
           ? person?.name ?? '(Person ohne Name)'
           : '(keine Person)'
         const herkunft = herkunftsSorted.find((h) => h.id === el.herkunft_id)
-        const herkunftNr = herkunft
+        const herkunftNr = el.herkunft
           ? herkunft?.nr ?? '(Herkunft ohne Nr)'
           : '(keine Herkunft)'
         const date = datum
