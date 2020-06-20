@@ -1,5 +1,4 @@
 import isEqual from 'lodash/isEqual'
-import moment from 'moment'
 
 import treeLabelSammlung from '../../../../utils/treeLabelSammlung'
 
