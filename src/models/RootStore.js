@@ -15,6 +15,7 @@ import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
 import treeLabelKultur from '../utils/treeLabelKultur'
+import treeLabelSammlung from '../utils/treeLabelSammlung'
 import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
@@ -2070,26 +2071,51 @@ export const RootStore = RootStoreBase.props({
       }))
     },
     get searchSammlungSuggestions() {
-      return self.sammlungsFiltered.map((o) => ({
-        value: o.id,
-        label: `${o?.nr ?? ''}: ${formatDatumForSearch(o.datum)}`,
-        artname: o?.art?.art_ae_art?.name,
-        personname: o?.person?.name,
-        herkunftnr: o?.herkunft?.nr,
-        herkunftlokalname: o?.herkunft?.lokalname,
-        herkunftgemeinde: o?.herkunft?.gemeinde,
-        nr: o.nr,
-        bemerkungen: o.bemerkungen,
-        datum: formatDatumForSearch(o.datum),
-        geplant: o.geplant ? 'geplant' : 'ausgeführt',
-        type: 'Sammlungen',
-      }))
+      return self.sammlungsFiltered.map((o) => {
+        const nr = o.nr
+        const date = formatDatumForSearch(o.datum)
+        const nrDate =
+          nr && date
+            ? `${nr}, ${date}: `
+            : nr
+            ? `${nr}: `
+            : date
+            ? `${date}: `
+            : ''
+        const herkunft = o.herkunft?.nr ? `von ${o.herkunft?.nr}` : ''
+        const person = o.person?.name
+        const herkunftPerson =
+          herkunft && person
+            ? `${herkunft}, ${person}; `
+            : herkunft
+            ? `${herkunft}; `
+            : person
+            ? `${person}; `
+            : ''
+        const art = o.art.art_ae_art?.name ? `${o.art.art_ae_art?.name} ` : ''
+        const geplant = o.geplant ? ' (geplant)' : ''
+        const label = `${nrDate}${herkunftPerson}${art}${geplant}`
+
+        return {
+          value: o.id,
+          label,
+          artname: o?.art?.art_ae_art?.name,
+          personname: o?.person?.name,
+          herkunftnr: o?.herkunft?.nr,
+          herkunftlokalname: o?.herkunft?.lokalname,
+          herkunftgemeinde: o?.herkunft?.gemeinde,
+          nr: o.nr,
+          bemerkungen: o.bemerkungen,
+          datum: formatDatumForSearch(o.datum),
+          geplant: o.geplant ? 'geplant' : 'ausgeführt',
+          type: 'Sammlungen',
+        }
+      })
     },
     get searchZaehlungSuggestions() {
       return self.zaehlungsFiltered.map((o) => ({
         value: o.id,
         label: formatDatumForSearch(o.datum),
-        datum: formatDatumForSearch(o.datum),
         parent: o.kultur_id,
         type: 'Zaehlungen',
       }))
