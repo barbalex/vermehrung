@@ -183,7 +183,14 @@ const Search = () => {
         })
       }
       const eventSuggestionsFuse = new Fuse(searchEventSuggestions, {
-        keys: ['label'],
+        keys: [
+          { name: 'artname', weight: 0.7 },
+          { name: 'gartenname', weight: 0.7 },
+          { name: 'personname', weight: 0.7 },
+          { name: 'datum', weight: 1 },
+          { name: 'geplant', weight: 1 },
+          { name: 'beschreibung', weight: 1 },
+        ],
         threshold,
       })
       const eventSuggestions = eventSuggestionsFuse
@@ -223,20 +230,19 @@ const Search = () => {
           options: lieferungSuggestions,
         })
       }
-      console.log('Search', { lieferungSuggestions })
       const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
         keys: [
           { name: 'nr', weight: 1 },
           { name: 'name', weight: 1 },
           { name: 'ort', weight: 0.5 },
-          { name: 'email', weight: 0.5 },
-          { name: 'bemerkungen', weight: 0.5 },
           { name: 'adresszusatz', weight: 0.5 },
           { name: 'strasse', weight: 0.5 },
           { name: 'plz', weight: 0.5 },
           { name: 'telefon_privat', weight: 0.5 },
           { name: 'telefon_geschaeft', weight: 0.5 },
           { name: 'telefon_mobile', weight: 0.5 },
+          { name: 'email', weight: 0.5 },
+          { name: 'bemerkungen', weight: 0.5 },
         ],
         threshold,
       })
@@ -259,6 +265,7 @@ const Search = () => {
           { name: 'nr', weight: 1 },
           { name: 'datum', weight: 1 },
           { name: 'bemerkungen', weight: 0.5 },
+          { name: 'geplant', weight: 1 },
         ],
         threshold,
       })
