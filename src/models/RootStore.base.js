@@ -1538,16 +1538,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryArt_search(variables, resultSelector = artModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_search($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryArt_search_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query art_search_aggregate($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryArt_sums(variables, resultSelector = art_sumsModelPrimitives.toString(), options = {}) {
       return self.query(`query art_sums($distinct_on: [art_sums_select_column!], $limit: Int, $offset: Int, $order_by: [art_sums_order_by!], $where: art_sums_bool_exp) { art_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_sumsModelSelector()).toString() : resultSelector}
@@ -1618,16 +1608,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryEvent_search(variables, resultSelector = eventModelPrimitives.toString(), options = {}) {
-      return self.query(`query event_search($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryEvent_search_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query event_search_aggregate($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryGarten(variables, resultSelector = gartenModelPrimitives.toString(), options = {}) {
       return self.query(`query garten($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
@@ -1671,16 +1651,6 @@ export const RootStoreBase = MSTGQLStore
     queryGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), options = {}) {
       return self.query(`query garten_rev_by_pk($id: ID!) { garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryGarten_search(variables, resultSelector = gartenModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_search($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryGarten_search_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query garten_search_aggregate($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryGarten_teilzaehlung_sums(variables, resultSelector = garten_teilzaehlung_sumsModelPrimitives.toString(), options = {}) {
@@ -1766,16 +1736,6 @@ export const RootStoreBase = MSTGQLStore
     queryHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), options = {}) {
       return self.query(`query herkunft_rev_by_pk($id: ID!) { herkunft_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryHerkunft_search(variables, resultSelector = herkunftModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_search($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryHerkunft_search_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query herkunft_search_aggregate($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryHerkunft_sums(variables, resultSelector = herkunft_sumsModelPrimitives.toString(), options = {}) {
@@ -1918,16 +1878,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    queryKultur_search(variables, resultSelector = kulturModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_search($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryKultur_search_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query kultur_search_aggregate($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     queryLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
@@ -1971,16 +1921,6 @@ export const RootStoreBase = MSTGQLStore
     queryLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query lieferung_rev_by_pk($id: ID!) { lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryLieferung_search(variables, resultSelector = lieferungModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_search($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryLieferung_search_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query lieferung_search_aggregate($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryPerson(variables, resultSelector = personModelPrimitives.toString(), options = {}) {
@@ -2051,16 +1991,6 @@ export const RootStoreBase = MSTGQLStore
     queryPerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), options = {}) {
       return self.query(`query person_rev_by_pk($id: ID!) { person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryPerson_search(variables, resultSelector = personModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_search($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryPerson_search_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query person_search_aggregate($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     querySammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), options = {}) {
@@ -2138,16 +2068,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
-    querySammlung_search(variables, resultSelector = sammlungModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_search($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    querySammlung_search_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query sammlung_search_aggregate($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
     querySpatial_ref_sys(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), options = {}) {
       return self.query(`query spatial_ref_sys($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
@@ -2191,16 +2111,6 @@ export const RootStoreBase = MSTGQLStore
     queryTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), options = {}) {
       return self.query(`query teilkultur_rev_by_pk($id: ID!) { teilkultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryTeilkultur_search(variables, resultSelector = teilkulturModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilkultur_search($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryTeilkultur_search_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query teilkultur_search_aggregate($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     queryTeilzaehlung(variables, resultSelector = teilzaehlungModelPrimitives.toString(), options = {}) {
@@ -2276,16 +2186,6 @@ export const RootStoreBase = MSTGQLStore
     queryZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), options = {}) {
       return self.query(`query zaehlung_rev_by_pk($id: ID!) { zaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryZaehlung_search(variables, resultSelector = zaehlungModelPrimitives.toString(), options = {}) {
-      return self.query(`query zaehlung_search($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
-      } }`, variables, options)
-    },
-    queryZaehlung_search_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), options = {}) {
-      return self.query(`query zaehlung_search_aggregate($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, options)
     },
     mutateDelete_ae_art(variables, resultSelector = ae_art_mutation_responseModelPrimitives.toString(), optimisticUpdate) {
@@ -3873,16 +3773,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new art_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    subscribeArt_search(variables, resultSelector = artModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription art_search($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new artModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeArt_search_aggregate(variables, resultSelector = art_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription art_search_aggregate($args: art_search_args!, $distinct_on: [art_select_column!], $limit: Int, $offset: Int, $order_by: [art_order_by!], $where: art_bool_exp) { art_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new art_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
     subscribeArt_sums(variables, resultSelector = art_sumsModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription art_sums($distinct_on: [art_sums_select_column!], $limit: Int, $offset: Int, $order_by: [art_sums_order_by!], $where: art_sums_bool_exp) { art_sums(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new art_sumsModelSelector()).toString() : resultSelector}
@@ -3953,16 +3843,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new event_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    subscribeEvent_search(variables, resultSelector = eventModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription event_search($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new eventModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeEvent_search_aggregate(variables, resultSelector = event_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription event_search_aggregate($args: event_search_args!, $distinct_on: [event_select_column!], $limit: Int, $offset: Int, $order_by: [event_order_by!], $where: event_bool_exp) { event_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new event_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
     subscribeGarten(variables, resultSelector = gartenModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten($distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
@@ -4006,16 +3886,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeGarten_rev_by_pk(variables, resultSelector = garten_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription garten_rev_by_pk($id: ID!) { garten_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new garten_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeGarten_search(variables, resultSelector = gartenModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription garten_search($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new gartenModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeGarten_search_aggregate(variables, resultSelector = garten_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription garten_search_aggregate($args: garten_search_args!, $distinct_on: [garten_select_column!], $limit: Int, $offset: Int, $order_by: [garten_order_by!], $where: garten_bool_exp) { garten_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new garten_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
     subscribeGarten_teilzaehlung_sums(variables, resultSelector = garten_teilzaehlung_sumsModelPrimitives.toString(), onData) {
@@ -4101,16 +3971,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeHerkunft_rev_by_pk(variables, resultSelector = herkunft_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription herkunft_rev_by_pk($id: ID!) { herkunft_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new herkunft_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeHerkunft_search(variables, resultSelector = herkunftModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription herkunft_search($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunftModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeHerkunft_search_aggregate(variables, resultSelector = herkunft_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription herkunft_search_aggregate($args: herkunft_search_args!, $distinct_on: [herkunft_select_column!], $limit: Int, $offset: Int, $order_by: [herkunft_order_by!], $where: herkunft_bool_exp) { herkunft_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new herkunft_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
     subscribeHerkunft_sums(variables, resultSelector = herkunft_sumsModelPrimitives.toString(), onData) {
@@ -4253,16 +4113,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new kultur_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    subscribeKultur_search(variables, resultSelector = kulturModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription kultur_search($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kulturModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeKultur_search_aggregate(variables, resultSelector = kultur_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription kultur_search_aggregate($args: kultur_search_args!, $distinct_on: [kultur_select_column!], $limit: Int, $offset: Int, $order_by: [kultur_order_by!], $where: kultur_bool_exp) { kultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new kultur_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
     subscribeLieferung(variables, resultSelector = lieferungModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung($distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
@@ -4306,16 +4156,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeLieferung_rev_by_pk(variables, resultSelector = lieferung_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription lieferung_rev_by_pk($id: ID!) { lieferung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new lieferung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeLieferung_search(variables, resultSelector = lieferungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription lieferung_search($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeLieferung_search_aggregate(variables, resultSelector = lieferung_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription lieferung_search_aggregate($args: lieferung_search_args!, $distinct_on: [lieferung_select_column!], $limit: Int, $offset: Int, $order_by: [lieferung_order_by!], $where: lieferung_bool_exp) { lieferung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new lieferung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
     subscribePerson(variables, resultSelector = personModelPrimitives.toString(), onData) {
@@ -4386,16 +4226,6 @@ export const RootStoreBase = MSTGQLStore
     subscribePerson_rev_by_pk(variables, resultSelector = person_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription person_rev_by_pk($id: ID!) { person_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new person_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribePerson_search(variables, resultSelector = personModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription person_search($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new personModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribePerson_search_aggregate(variables, resultSelector = person_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription person_search_aggregate($args: person_search_args!, $distinct_on: [person_select_column!], $limit: Int, $offset: Int, $order_by: [person_order_by!], $where: person_bool_exp) { person_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new person_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
     subscribeSammel_lieferung(variables, resultSelector = sammel_lieferungModelPrimitives.toString(), onData) {
@@ -4473,16 +4303,6 @@ export const RootStoreBase = MSTGQLStore
         ${typeof resultSelector === "function" ? resultSelector(new sammlung_revModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
-    subscribeSammlung_search(variables, resultSelector = sammlungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammlung_search($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeSammlung_search_aggregate(variables, resultSelector = sammlung_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription sammlung_search_aggregate($args: sammlung_search_args!, $distinct_on: [sammlung_select_column!], $limit: Int, $offset: Int, $order_by: [sammlung_order_by!], $where: sammlung_bool_exp) { sammlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new sammlung_aggregateModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
     subscribeSpatial_ref_sys(variables, resultSelector = spatial_ref_sysModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription spatial_ref_sys($distinct_on: [spatial_ref_sys_select_column!], $limit: Int, $offset: Int, $order_by: [spatial_ref_sys_order_by!], $where: spatial_ref_sys_bool_exp) { spatial_ref_sys(distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
         ${typeof resultSelector === "function" ? resultSelector(new spatial_ref_sysModelSelector()).toString() : resultSelector}
@@ -4526,16 +4346,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeTeilkultur_rev_by_pk(variables, resultSelector = teilkultur_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription teilkultur_rev_by_pk($id: ID!) { teilkultur_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new teilkultur_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeTeilkultur_search(variables, resultSelector = teilkulturModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilkultur_search($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkulturModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeTeilkultur_search_aggregate(variables, resultSelector = teilkultur_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription teilkultur_search_aggregate($args: teilkultur_search_args!, $distinct_on: [teilkultur_select_column!], $limit: Int, $offset: Int, $order_by: [teilkultur_order_by!], $where: teilkultur_bool_exp) { teilkultur_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new teilkultur_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
     subscribeTeilzaehlung(variables, resultSelector = teilzaehlungModelPrimitives.toString(), onData) {
@@ -4611,16 +4421,6 @@ export const RootStoreBase = MSTGQLStore
     subscribeZaehlung_rev_by_pk(variables, resultSelector = zaehlung_revModelPrimitives.toString(), onData) {
       return self.subscribe(`subscription zaehlung_rev_by_pk($id: ID!) { zaehlung_rev_by_pk(id: $id) {
         ${typeof resultSelector === "function" ? resultSelector(new zaehlung_revModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeZaehlung_search(variables, resultSelector = zaehlungModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription zaehlung_search($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlungModelSelector()).toString() : resultSelector}
-      } }`, variables, onData)
-    },
-    subscribeZaehlung_search_aggregate(variables, resultSelector = zaehlung_aggregateModelPrimitives.toString(), onData) {
-      return self.subscribe(`subscription zaehlung_search_aggregate($args: zaehlung_search_args!, $distinct_on: [zaehlung_select_column!], $limit: Int, $offset: Int, $order_by: [zaehlung_order_by!], $where: zaehlung_bool_exp) { zaehlung_search_aggregate(args: $args, distinct_on: $distinct_on, limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
-        ${typeof resultSelector === "function" ? resultSelector(new zaehlung_aggregateModelSelector()).toString() : resultSelector}
       } }`, variables, onData)
     },
   }))
