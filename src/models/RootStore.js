@@ -1984,7 +1984,11 @@ export const RootStore = RootStoreBase.props({
         }`,
         name: o.name,
         personname: o?.person?.name,
+        strasse: o.strasse,
+        plz: o.plz,
+        ort: o.ort,
         bemerkungen: o.bemerkungen,
+        aktiv: o.aktiv ? 'aktiv' : 'historisch',
         type: 'Gaerten',
       }))
     },
@@ -2048,7 +2052,9 @@ export const RootStore = RootStoreBase.props({
     get searchPersonSuggestions() {
       return self.personsFiltered.map((o) => ({
         value: o.id,
-        label: o?.name ?? '',
+        label: `${o.nr ? `${o.nr}: ` : ''}${o?.name ?? ''}${
+          o.ort ? `, ${o.ort}` : ''
+        }`,
         nr: o.nr,
         name: o.name,
         ort: o.ort,
