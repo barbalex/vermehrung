@@ -34,7 +34,6 @@ create table person (
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   account_id text default null,
   user_role text default null references user_role (name) on delete set null on update cascade,
   kommerziell boolean default false,
@@ -53,7 +52,6 @@ create index on person using btree (account_id);
 create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
 create index on person using btree (info);
-create index on person using gin (tsv);
 create index on person using btree (_deleted);
 
 drop table if exists person_rev cascade;
@@ -113,7 +111,6 @@ create table art (
   ae_id uuid default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -123,7 +120,6 @@ create table art (
 );
 create index on art using btree (id);
 create index on art using btree (ae_id);
-create index on art using gin (tsv);
 create index on art using btree (_deleted);
 
 drop table if exists art_rev cascade;
@@ -268,7 +264,6 @@ create table herkunft (
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -280,7 +275,6 @@ create index on herkunft using btree (id);
 create index on herkunft using btree (nr);
 create index on herkunft using btree (gemeinde);
 create index on herkunft using btree (lokalname);
-create index on herkunft using gin (tsv);
 create index on herkunft using btree (_deleted);
 
 drop table if exists herkunft_rev cascade;
@@ -345,7 +339,6 @@ create table sammlung (
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -362,7 +355,6 @@ create index on sammlung using btree (datum);
 create index on sammlung using btree (anzahl_pflanzen);
 create index on sammlung using btree (gramm_samen);
 create index on sammlung using btree (geplant);
-create index on sammlung using gin (tsv);
 create index on sammlung using btree (_deleted);
 
 drop table if exists sammlung_rev cascade;
@@ -428,7 +420,6 @@ create table garten (
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -443,7 +434,6 @@ create index on garten using btree (strasse);
 create index on garten using btree (plz);
 create index on garten using btree (ort);
 create index on garten using btree (aktiv);
-create index on garten using gin (tsv);
 create index on garten using btree (_deleted);
 
 drop table if exists garten_rev cascade;
@@ -501,7 +491,6 @@ create table kultur (
   aktiv boolean default true,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -518,7 +507,6 @@ create index on kultur using btree (zwischenlager);
 create index on kultur using btree (erhaltungskultur);
 create index on kultur using btree (von_anzahl_individuen);
 create index on kultur using btree (aktiv);
-create index on kultur using gin (tsv);
 create index on kultur using btree (_deleted);
 
 drop table if exists kultur_rev cascade;
@@ -666,7 +654,6 @@ create table teilkultur (
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -677,7 +664,6 @@ create table teilkultur (
 create index on teilkultur using btree (id);
 create index on teilkultur using btree (kultur_id);
 create index on teilkultur using btree (name);
-create index on teilkultur using gin (tsv);
 create index on teilkultur using btree (_deleted);
 
 drop table if exists teilkultur_rev cascade;
@@ -717,7 +703,6 @@ create table event (
   datum date default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -732,7 +717,6 @@ create index on event using btree (person_id);
 create index on event using btree (beschreibung);
 create index on event using btree (geplant);
 create index on event using btree (datum);
-create index on event using gin (tsv);
 create index on event using btree (_deleted);
 
 drop table if exists event_rev cascade;
@@ -770,7 +754,6 @@ create table zaehlung (
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -782,7 +765,6 @@ create index on zaehlung using btree (id);
 create index on zaehlung using btree (kultur_id);
 create index on zaehlung using btree (datum);
 create index on zaehlung using btree (prognose);
-create index on zaehlung using gin (tsv);
 create index on zaehlung using btree (_deleted);
 
 drop table if exists zaehlung_rev cascade;
@@ -823,7 +805,6 @@ create table teilzaehlung (
   prognose_von_tz uuid default null references teilzaehlung (id) on delete set null on update cascade,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -839,7 +820,6 @@ create index on teilzaehlung using btree (anzahl_pflanzen);
 create index on teilzaehlung using btree (anzahl_auspflanzbereit);
 create index on teilzaehlung using btree (anzahl_mutterpflanzen);
 create index on teilzaehlung using btree (andere_menge);
-create index on teilzaehlung using gin (tsv);
 create index on teilzaehlung using btree (_deleted);
 
 drop table if exists teilzaehlung_rev cascade;
@@ -1032,7 +1012,6 @@ create table lieferung (
   bemerkungen text default null,
   changed timestamp default now(),
   changed_by text default null,
-  tsv tsvector,
   _rev text default null,
   _parent_rev text default null,
   _revisions text[] default null,
@@ -1055,7 +1034,6 @@ create index on lieferung using btree (anzahl_auspflanzbereit);
 create index on lieferung using btree (gramm_samen);
 create index on lieferung using btree (andere_menge);
 create index on lieferung using btree (geplant);
-create index on lieferung using gin (tsv);
 create index on lieferung using btree (_deleted);
 
 drop table if exists lieferung_rev cascade;
