@@ -30,7 +30,7 @@ export default async ({ store }) => {
       message: error?.response?.data,
     })
   }
-  if (res.status === 200) {
+  if (res?.status === 200) {
     let token
     try {
       token = await user.getIdToken(true)
