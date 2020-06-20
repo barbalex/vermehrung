@@ -2012,7 +2012,12 @@ export const RootStore = RootStoreBase.props({
       return self.eventsFiltered.map((o) => ({
         value: o.id,
         label: `${formatDatumForSearch(o.datum)}: ${o?.beschreibung ?? ''}`,
-        ...o,
+        datum: formatDatumForSearch(o.datum),
+        artname: o?.kultur?.art?.art_ae_art?.name,
+        gartenname: o?.kultur?.garten?.name,
+        personname: o?.kultur?.garten?.person?.name,
+        geplant: o.geplant ? 'geplant' : 'ausgeführt',
+        beschreibung: o.beschreibung,
         parent: o.kultur_id,
         type: 'Events',
       }))
@@ -2042,7 +2047,17 @@ export const RootStore = RootStoreBase.props({
       return self.personsFiltered.map((o) => ({
         value: o.id,
         label: o?.name ?? '',
-        ...o,
+        nr: o.nr,
+        name: o.name,
+        ort: o.ort,
+        adresszusatz: o.adresszusatz,
+        strasse: o.strasse,
+        plz: o.plz,
+        telefon_privat: o.telefon_privat,
+        telefon_geschaeft: o.telefon_geschaeft,
+        telefon_mobile: o.telefon_mobile,
+        email: o.email,
+        bemerkungen: o.bemerkungen,
         type: 'Personen',
       }))
     },
@@ -2058,6 +2073,7 @@ export const RootStore = RootStoreBase.props({
         nr: o.nr,
         bemerkungen: o.bemerkungen,
         datum: formatDatumForSearch(o.datum),
+        geplant: o.geplant ? 'geplant' : 'ausgeführt',
         type: 'Sammlungen',
       }))
     },
