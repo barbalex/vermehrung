@@ -299,7 +299,6 @@
               "ae_id",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
@@ -323,7 +322,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "ae_id",
               "id"
             ]
@@ -343,7 +341,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "ae_id",
               "id"
             ],
@@ -369,7 +366,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "ae_id",
               "id"
             ],
@@ -414,7 +410,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "ae_id",
               "id"
             ],
@@ -436,7 +431,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "ae_id",
               "id"
             ],
@@ -462,7 +456,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "ae_id",
               "id"
             ],
@@ -773,6 +766,20 @@
       },
       "array_relationships": [
         {
+          "name": "art_qk_choosen",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "art_qk_choosen"
+              },
+              "column_mapping": {
+                "name": "qk_name"
+              }
+            }
+          }
+        },
+        {
           "name": "art_qk_choosen_revs",
           "using": {
             "foreign_key_constraint_on": {
@@ -919,6 +926,20 @@
           "name": "art",
           "using": {
             "foreign_key_constraint_on": "art_id"
+          }
+        },
+        {
+          "name": "art_qk",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "art_qk"
+              },
+              "column_mapping": {
+                "qk_name": "name"
+              }
+            }
           }
         }
       ],
@@ -2229,7 +2250,6 @@
               "datum",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
@@ -2274,7 +2294,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -2298,7 +2317,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -2323,7 +2341,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -2378,7 +2395,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -2422,7 +2438,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -2449,7 +2464,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -2504,7 +2518,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -2548,7 +2561,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id",
               "person_id",
@@ -3104,7 +3116,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "wgs84_lat",
               "wgs84_long",
               "lv95_x",
@@ -3143,7 +3154,6 @@
               "_rev",
               "strasse",
               "changed",
-              "tsv",
               "id",
               "person_id"
             ],
@@ -3193,7 +3203,6 @@
               "_rev",
               "strasse",
               "changed",
-              "tsv",
               "id",
               "person_id"
             ],
@@ -3228,7 +3237,6 @@
               "_rev",
               "strasse",
               "changed",
-              "tsv",
               "id",
               "person_id"
             ],
@@ -3261,7 +3269,6 @@
               "_rev",
               "strasse",
               "changed",
-              "tsv",
               "id",
               "person_id"
             ],
@@ -3311,7 +3318,6 @@
               "_rev",
               "strasse",
               "changed",
-              "tsv",
               "id",
               "person_id"
             ],
@@ -3346,7 +3352,6 @@
               "_rev",
               "strasse",
               "changed",
-              "tsv",
               "id",
               "person_id"
             ],
@@ -4684,7 +4689,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "wgs84_lat",
               "wgs84_long",
               "lv95_x",
@@ -4722,7 +4726,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id"
             ]
           }
@@ -4752,7 +4755,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {},
@@ -4782,7 +4784,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {
@@ -4838,7 +4839,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {},
@@ -4870,7 +4870,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {},
@@ -4900,7 +4899,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {},
@@ -5640,7 +5638,6 @@
               "aktiv",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
@@ -5685,7 +5682,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -5711,7 +5707,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -5738,7 +5733,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -5791,7 +5785,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -5835,7 +5828,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -5864,7 +5856,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -5917,7 +5908,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -5961,7 +5951,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "garten_id",
               "herkunft_id",
@@ -9090,7 +9079,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
@@ -9162,7 +9150,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
@@ -9194,7 +9181,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "id",
               "nach_kultur_id",
@@ -9228,7 +9214,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "id",
               "nach_kultur_id",
@@ -9323,7 +9308,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "id",
               "nach_kultur_id",
@@ -9396,7 +9380,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "id",
               "nach_kultur_id",
@@ -9432,7 +9415,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "id",
               "nach_kultur_id",
@@ -9527,7 +9509,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "id",
               "nach_kultur_id",
@@ -9600,7 +9581,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "id",
               "nach_kultur_id",
@@ -11267,7 +11247,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "account_id",
               "user_role",
               "kommerziell",
@@ -11316,7 +11295,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ],
             "backend_only": false
@@ -11352,7 +11330,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ]
           }
@@ -11388,7 +11365,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {
@@ -11445,7 +11421,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {
@@ -11484,7 +11459,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {},
@@ -11522,7 +11496,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {
@@ -11579,7 +11552,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {
@@ -11619,7 +11591,6 @@
               "telefon_privat",
               "user_role",
               "changed",
-              "tsv",
               "id"
             ],
             "filter": {},
@@ -14821,7 +14792,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "wgs84_lat",
               "wgs84_long",
               "lv95_x",
@@ -14861,7 +14831,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "herkunft_id",
               "id",
@@ -14896,7 +14865,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "herkunft_id",
               "id",
@@ -14987,7 +14955,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "herkunft_id",
               "id",
@@ -15033,7 +15000,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "herkunft_id",
               "id",
@@ -15070,7 +15036,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "herkunft_id",
               "id",
@@ -15161,7 +15126,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "art_id",
               "herkunft_id",
               "id",
@@ -15996,7 +15960,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
@@ -16024,7 +15987,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ]
@@ -16048,7 +16010,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ]
@@ -16073,7 +16034,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -16132,7 +16092,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -16176,7 +16135,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -16203,7 +16161,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -16262,7 +16219,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -16306,7 +16262,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -16909,26 +16864,26 @@
               ]
             },
             "columns": [
-              "id",
-              "zaehlung_id",
-              "teilkultur_id",
-              "anzahl_pflanzen",
+              "_deleted",
               "anzahl_auspflanzbereit",
               "anzahl_mutterpflanzen",
+              "anzahl_pflanzen",
+              "_depth",
+              "_conflicts",
+              "_revisions",
               "andere_menge",
               "auspflanzbereit_beschreibung",
               "bemerkungen",
-              "prognose_von_tz",
-              "changed",
               "changed_by",
-              "tsv",
-              "_rev",
               "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_conflicts",
-              "_deleted"
-            ]
+              "_rev",
+              "changed",
+              "id",
+              "prognose_von_tz",
+              "teilkultur_id",
+              "zaehlung_id"
+            ],
+            "backend_only": false
           }
         },
         {
@@ -16971,12 +16926,12 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "prognose_von_tz",
               "teilkultur_id",
               "zaehlung_id"
-            ]
+            ],
+            "backend_only": false
           }
         },
         {
@@ -16998,12 +16953,12 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "prognose_von_tz",
               "teilkultur_id",
               "zaehlung_id"
-            ]
+            ],
+            "backend_only": false
           }
         }
       ],
@@ -17026,7 +16981,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "prognose_von_tz",
               "teilkultur_id",
@@ -17092,7 +17046,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "prognose_von_tz",
               "teilkultur_id",
@@ -17141,7 +17094,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "prognose_von_tz",
               "teilkultur_id",
@@ -17169,12 +17121,12 @@
               "prognose_von_tz",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
               "_depth",
-              "_conflicts"
+              "_conflicts",
+              "_deleted"
             ],
             "filter": {
               "_or": [
@@ -17222,7 +17174,7 @@
           "role": "gardener",
           "permission": {
             "columns": [
-              "changed",
+              "_deleted",
               "anzahl_auspflanzbereit",
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
@@ -17232,14 +17184,14 @@
               "andere_menge",
               "auspflanzbereit_beschreibung",
               "bemerkungen",
+              "changed_by",
               "_parent_rev",
               "_rev",
-              "tsv",
+              "changed",
               "id",
               "prognose_von_tz",
               "teilkultur_id",
-              "zaehlung_id",
-              "changed_by"
+              "zaehlung_id"
             ],
             "filter": {
               "_or": [
@@ -17270,7 +17222,7 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "changed",
+              "_deleted",
               "anzahl_auspflanzbereit",
               "anzahl_mutterpflanzen",
               "anzahl_pflanzen",
@@ -17280,14 +17232,14 @@
               "andere_menge",
               "auspflanzbereit_beschreibung",
               "bemerkungen",
+              "changed_by",
               "_parent_rev",
               "_rev",
-              "tsv",
+              "changed",
               "id",
               "prognose_von_tz",
               "teilkultur_id",
-              "zaehlung_id",
-              "changed_by"
+              "zaehlung_id"
             ],
             "filter": {},
             "check": null
@@ -18001,7 +17953,6 @@
               "bemerkungen",
               "changed",
               "changed_by",
-              "tsv",
               "_rev",
               "_parent_rev",
               "_revisions",
@@ -18046,7 +17997,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ]
@@ -18068,7 +18018,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ]
@@ -18091,7 +18040,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -18148,7 +18096,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -18190,7 +18137,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -18215,7 +18161,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -18272,7 +18217,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -18314,7 +18258,6 @@
               "_parent_rev",
               "_rev",
               "changed",
-              "tsv",
               "id",
               "kultur_id"
             ],
@@ -18789,68 +18732,6 @@
           }
         }
       ]
-    }
-  ],
-  "functions": [
-    {
-      "function": {
-        "schema": "public",
-        "name": "art_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "event_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "garten_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "herkunft_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "kultur_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "lieferung_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "person_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "sammlung_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "teilkultur_search"
-      }
-    },
-    {
-      "function": {
-        "schema": "public",
-        "name": "zaehlung_search"
-      }
     }
   ]
 }
