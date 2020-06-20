@@ -14,6 +14,7 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
+import treeLabelFromKultur from '../utils/treeLabelFromKultur'
 import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
@@ -1972,14 +1973,15 @@ export const RootStore = RootStoreBase.props({
       return self.artsFiltered.map((o) => ({
         value: o.id,
         label: o?.art_ae_art?.name ?? '',
-        ...o,
         type: 'Arten',
       }))
     },
     get searchGartenSuggestions() {
       return self.gartensFiltered.map((o) => ({
         value: o.id,
-        label: o.name || `(${o?.person?.name ?? ''})`,
+        label: `${o.name || `(${o?.person?.name ?? ''})`}${
+          o.ort ? `, ${o.ort}` : ''
+        }`,
         name: o.name,
         personname: o?.person?.name,
         bemerkungen: o.bemerkungen,
@@ -1997,7 +1999,7 @@ export const RootStore = RootStoreBase.props({
     get searchKulturSuggestions() {
       return self.kultursFiltered.map((o) => ({
         value: o.id,
-        label: o?.garten?.person?.name ?? '',
+        label: treeLabelFromKultur(o),
         artname: o?.art?.art_ae_art?.name,
         gartenname: o?.garten?.name,
         personname: o?.garten?.person?.name,
