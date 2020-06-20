@@ -22,7 +22,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import { useQuery, StoreContext } from '../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 
 const HerkunftTimeline = ({
   herkunftId = '99999999-9999-9999-9999-999999999999',
@@ -33,13 +33,6 @@ const HerkunftTimeline = ({
   // TODO: get label for herkunft and render it
   const [narrow, setNarrow] = useState(false)
 
-  useQuery((store) =>
-    store.queryHerkunft({
-      where: {
-        id: { _eq: herkunftId ?? '99999999-9999-9999-9999-999999999999' },
-      },
-    }),
-  )
   const herkunft = store.herkunfts.get(herkunftId) ?? {}
   const herkunftLabel = `${herkunft.nr || '(keine Nr)'}: ${
     herkunft?.gemeinde || '(keine Gemeinde)'
