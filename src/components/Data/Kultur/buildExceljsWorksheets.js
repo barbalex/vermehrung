@@ -1,7 +1,4 @@
-import gql from 'graphql-tag'
-
 import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
-import checkForOnlineError from '../../../utils/checkForOnlineError'
 import removeMetadataFromDataset from '../../../utils/removeMetadataFromDataset'
 
 /**
@@ -15,59 +12,16 @@ export default async ({
   workbook,
   calledFromHigherUp,
 }) => {
-  const { addNotification } = store
+  const {
+    eventsSorted,
+    zaehlungsSorted,
+    teilzaehlungsSorted,
+    lieferungsSorted,
+  } = store
 
   // 1. Get Kultur
   if (!calledFromHigherUp) {
-    let kulturResult
-    try {
-      kulturResult = await store.query(
-        gql`
-          query GetKulturForKulturDownload($id: uuid!) {
-            kultur(where: { id: { _eq: $id } }) {
-              id
-              __typename
-              art_id
-              art {
-                id
-                __typename
-                art_ae_art {
-                  id
-                  __typename
-                  name
-                }
-              }
-              herkunft_id
-              herkunft {
-                id
-                __typename
-                nr
-              }
-              garten_id
-              garten {
-                id
-                __typename
-                name
-              }
-              zwischenlager
-              erhaltungskultur
-              von_anzahl_individuen
-              aktiv
-              bemerkungen
-            }
-          }
-        `,
-        {
-          id: kultur_id,
-        },
-      )
-    } catch (error) {
-      checkForOnlineError(error)
-      return addNotification({
-        message: error.message,
-      })
-    }
-    const kultur = kulturResult?.kultur[0]
+    const kultur = store.kulturs.get(kultur_id)
     const newK = {
       id: kultur.id,
       art_id: kultur.art_id,
@@ -100,56 +54,8 @@ export default async ({
     })
   }
   // 2. Get Zählungen
-  let zaehlungResult
-  try {
-    zaehlungResult = await store.query(
-      gql`
-        query GetZaehlungForKulturDownload($id: uuid!) {
-          zaehlung(where: { kultur_id: { _eq: $id } }) {
-            id
-            __typename
-            kultur_id
-            datum
-            prognose
-            bemerkungen
-            teilzaehlungs_aggregate {
-              aggregate {
-                count
-                sum {
-                  anzahl_pflanzen
-                  anzahl_auspflanzbereit
-                  anzahl_mutterpflanzen
-                }
-              }
-              nodes {
-                id
-                __typename
-                teilkultur {
-                  id
-                  __typename
-                  name
-                  ort1
-                  ort2
-                  ort3
-                }
-                andere_menge
-              }
-            }
-          }
-        }
-      `,
-      {
-        id: kultur_id,
-      },
-    )
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const zaehlungenArray = zaehlungResult?.zaehlung ?? []
-  const zaehlungen = zaehlungenArray.map((z) => {
+  const zaehlungs = zaehlungsSorted.filter((z) => z.kultur_id === kultur_id)
+  const zaehlungen = zaehlungs.map((z) => {
     const tknodes = z?.teilzaehlungs_aggregate?.nodes ?? []
     const newZ = {
       id: z.id,
@@ -190,41 +96,9 @@ export default async ({
     })
   }
   // 3. Get Teil-Zählungen
-  let teilzaehlungResult
-  try {
-    teilzaehlungResult = await store.query(
-      gql`
-        query GetTeilzaehlungForKulturDownload($id: uuid!) {
-          teilzaehlung(where: { zaehlung: { kultur_id: { _eq: $id } } }) {
-            id
-            __typename
-            zaehlung_id
-            teilkultur_id
-            teilkultur {
-              id
-              __typename
-              name
-            }
-            anzahl_pflanzen
-            anzahl_auspflanzbereit
-            anzahl_mutterpflanzen
-            andere_menge
-            auspflanzbereit_beschreibung
-            bemerkungen
-          }
-        }
-      `,
-      {
-        id: kultur_id,
-      },
-    )
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const teilzaehlungenArray = teilzaehlungResult?.teilzaehlung ?? []
+  const teilzaehlungenArray = teilzaehlungsSorted.filter(
+    (t) => t?.zaehlung?.kultur_id === kultur_id,
+  )
   const teilzaehlungen = teilzaehlungenArray.map((z) => {
     const newZ = {
       id: z.id,
@@ -250,106 +124,9 @@ export default async ({
     })
   }
   // 4. Get An-Lieferungen
-  let anlieferungResult
-  try {
-    anlieferungResult = await store.query(
-      gql`
-        query GetAnlieferungForKulturDownload($id: uuid!) {
-          lieferung(where: { nach_kultur_id: { _eq: $id } }) {
-            id
-            __typename
-            sammel_lieferung_id
-            art_id
-            art {
-              id
-              __typename
-              art_ae_art {
-                id
-                __typename
-                name
-              }
-            }
-            person_id
-            person {
-              id
-              __typename
-              name
-            }
-            von_sammlung_id
-            von_sammlung: sammlung {
-              id
-              __typename
-              datum
-              herkunft_id
-              herkunft {
-                id
-                __typename
-                nr
-              }
-              person_id
-              person {
-                id
-                __typename
-                name
-              }
-            }
-            von_kultur_id
-            kulturByVonKulturId {
-              id
-              __typename
-              garten_id
-              garten {
-                id
-                __typename
-                name
-              }
-              herkunft_id
-              herkunft {
-                id
-                __typename
-                nr
-              }
-            }
-            datum
-            nach_kultur_id
-            kulturByNachKulturId {
-              id
-              __typename
-              garten_id
-              garten {
-                id
-                __typename
-                name
-              }
-              herkunft_id
-              herkunft {
-                id
-                __typename
-                nr
-              }
-            }
-            nach_ausgepflanzt
-            von_anzahl_individuen
-            anzahl_pflanzen
-            anzahl_auspflanzbereit
-            gramm_samen
-            andere_menge
-            geplant
-            bemerkungen
-          }
-        }
-      `,
-      {
-        id: kultur_id,
-      },
-    )
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const anlieferungenArray = anlieferungResult?.lieferung ?? []
+  const anlieferungenArray = lieferungsSorted.filter(
+    (l) => l.nach_kultur_id === kultur_id,
+  )
   const anlieferungen = anlieferungenArray.map((z) => {
     const newZ = {
       id: z.id,
@@ -377,11 +154,11 @@ export default async ({
         foreignKeys: [],
       }),
       von_sammlung_id: z.von_sammlung_id,
-      von_sammlung_datum: z?.von_sammlung?.datum ?? '',
-      von_sammlung_herkunft_id: z?.von_sammlung?.herkunft_id ?? '',
-      von_sammlung_herkunft_nr: z?.von_sammlung?.herkunft?.nr ?? '',
-      von_sammlung_person_id: z?.von_sammlung?.person_id ?? '',
-      von_sammlung_person_name: z?.von_sammlung?.person?.name ?? '',
+      von_sammlung_datum: z?.sammlung?.datum ?? '',
+      von_sammlung_herkunft_id: z?.sammlung?.herkunft_id ?? '',
+      von_sammlung_herkunft_nr: z?.sammlung?.herkunft?.nr ?? '',
+      von_sammlung_person_id: z?.sammlung?.person_id ?? '',
+      von_sammlung_person_name: z?.sammlung?.person?.name ?? '',
       von_sammlung_rohdaten: removeMetadataFromDataset({
         dataset: z?.sammlung,
         foreignKeys: [],
@@ -452,106 +229,9 @@ export default async ({
     })
   }
   // 5. Get Aus-Lieferungen
-  let auslieferungResult
-  try {
-    auslieferungResult = await store.query(
-      gql`
-        query GetAuslieferungForKulturDownload($id: uuid!) {
-          lieferung(where: { von_kultur_id: { _eq: $id } }) {
-            id
-            __typename
-            sammel_lieferung_id
-            art_id
-            art {
-              id
-              __typename
-              art_ae_art {
-                id
-                __typename
-                name
-              }
-            }
-            person_id
-            person {
-              id
-              __typename
-              name
-            }
-            von_sammlung_id
-            von_sammlung: sammlung {
-              id
-              __typename
-              datum
-              herkunft_id
-              herkunft {
-                id
-                __typename
-                nr
-              }
-              person_id
-              person {
-                id
-                __typename
-                name
-              }
-            }
-            von_kultur_id
-            kulturByVonKulturId {
-              id
-              __typename
-              garten_id
-              garten {
-                id
-                __typename
-                name
-              }
-              herkunft_id
-              herkunft {
-                id
-                __typename
-                nr
-              }
-            }
-            datum
-            nach_kultur_id
-            kulturByNachKulturId {
-              id
-              __typename
-              garten_id
-              garten {
-                id
-                __typename
-                name
-              }
-              herkunft_id
-              herkunft {
-                id
-                __typename
-                nr
-              }
-            }
-            nach_ausgepflanzt
-            von_anzahl_individuen
-            anzahl_pflanzen
-            anzahl_auspflanzbereit
-            gramm_samen
-            andere_menge
-            geplant
-            bemerkungen
-          }
-        }
-      `,
-      {
-        id: kultur_id,
-      },
-    )
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const auslieferungenArray = auslieferungResult?.lieferung ?? []
+  const auslieferungenArray = lieferungsSorted.filter(
+    (l) => l.von_kultur_id === kultur_id,
+  )
   const auslieferungen = auslieferungenArray.map((z) => {
     const newZ = {
       id: z.id,
@@ -579,11 +259,11 @@ export default async ({
         foreignKeys: [],
       }),
       von_sammlung_id: z.von_sammlung_id,
-      von_sammlung_datum: z?.von_sammlung?.datum ?? '',
-      von_sammlung_herkunft_id: z?.von_sammlung?.herkunft_id ?? '',
-      von_sammlung_herkunft_nr: z?.von_sammlung?.herkunft?.nr ?? '',
-      von_sammlung_person_id: z?.von_sammlung?.person_id ?? '',
-      von_sammlung_person_name: z?.von_sammlung?.person?.name ?? '',
+      von_sammlung_datum: z?.sammlung?.datum ?? '',
+      von_sammlung_herkunft_id: z?.sammlung?.herkunft_id ?? '',
+      von_sammlung_herkunft_nr: z?.sammlung?.herkunft?.nr ?? '',
+      von_sammlung_person_id: z?.sammlung?.person_id ?? '',
+      von_sammlung_person_name: z?.sammlung?.person?.name ?? '',
       von_sammlung_rohdaten: removeMetadataFromDataset({
         dataset: z?.sammlung,
         foreignKeys: [],
@@ -648,44 +328,7 @@ export default async ({
     })
   }
   // 6. Get Events
-  let eventResult
-  try {
-    eventResult = await store.query(
-      gql`
-        query GetEventsForKulturDownload($id: uuid!) {
-          event(where: { kultur_id: { _eq: $id } }) {
-            id
-            __typename
-            kultur_id
-            teilkultur_id
-            teilkultur {
-              id
-              __typename
-              name
-            }
-            person_id
-            person {
-              id
-              __typename
-              name
-            }
-            beschreibung
-            geplant
-            datum
-          }
-        }
-      `,
-      {
-        id: kultur_id,
-      },
-    )
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const eventsArray = eventResult?.event ?? []
+  const eventsArray = eventsSorted.filter((e) => e.kultur_id === kultur_id)
   const events = eventsArray.map((z) => {
     const newZ = {
       id: z.id,

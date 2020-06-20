@@ -3,9 +3,6 @@ import updateLieferung from './updateLieferung'
 export default async ({ sammelLieferung, store }) => {
   // pass field to mark which field should be updated
   // even if it has value null
-  await store.queryLieferung({
-    where: { sammel_lieferung_id: { _eq: sammelLieferung.id } },
-  })
   const lieferungs = [...store.lieferungs.values()].filter(
     (l) => l.sammel_lieferung_id === sammelLieferung.id,
   )

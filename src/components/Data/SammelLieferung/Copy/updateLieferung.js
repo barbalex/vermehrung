@@ -4,7 +4,6 @@ import moment from 'moment'
 import { lieferung as lieferungFragment } from '../../../../utils/fragments'
 import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
 import toPgArray from '../../../../utils/toPgArray'
-import checkForOnlineError from '../../../../utils/checkForOnlineError'
 
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
@@ -27,18 +26,7 @@ export default async ({ lieferungId, sammelLieferung, store }) => {
     //.filter(([key, val]) => exists(val) || key === field),
   )
   // need to query existing object to get revisions
-  let result
-  try {
-    result = store.queryLieferung({
-      where: { id: { _eq: lieferungId } },
-    })
-  } catch (error) {
-    checkForOnlineError(error)
-    return store.addNotification({
-      message: `Eine der Lieferungen konnte nicht aktualisert werden. Fehlermeldung: ${error.message}`,
-    })
-  }
-  const lfLastVersion = result.data.lieferung
+  const lfLastVersion = store.lieferungs.get(lieferungId)
   const depth = lfLastVersion._depth + 1
   newObject.changed = moment().format('YYYY-MM-DD')
   newObject.changed_by = store.user.email
