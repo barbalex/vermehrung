@@ -249,8 +249,6 @@ export const subscription_rootModelBase = ModelBase
     art_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_revModel)))),
     art_rev_aggregate: types.union(types.undefined, types.late(() => art_rev_aggregateModel)),
     art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
-    art_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => artModel)))),
-    art_search_aggregate: types.union(types.undefined, types.late(() => art_aggregateModel)),
     art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
     av: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
@@ -265,8 +263,6 @@ export const subscription_rootModelBase = ModelBase
     event_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => event_revModel)))),
     event_rev_aggregate: types.union(types.undefined, types.late(() => event_rev_aggregateModel)),
     event_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => event_revModel))),
-    event_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => eventModel)))),
-    event_search_aggregate: types.union(types.undefined, types.late(() => event_aggregateModel)),
     garten: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
     garten_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
     garten_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gartenModel))),
@@ -276,8 +272,6 @@ export const subscription_rootModelBase = ModelBase
     garten_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_revModel)))),
     garten_rev_aggregate: types.union(types.undefined, types.late(() => garten_rev_aggregateModel)),
     garten_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => garten_revModel))),
-    garten_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gartenModel)))),
-    garten_search_aggregate: types.union(types.undefined, types.late(() => garten_aggregateModel)),
     garten_teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
     garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
     gv: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gvModel)))),
@@ -295,8 +289,6 @@ export const subscription_rootModelBase = ModelBase
     herkunft_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_revModel)))),
     herkunft_rev_aggregate: types.union(types.undefined, types.late(() => herkunft_rev_aggregateModel)),
     herkunft_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunft_revModel))),
-    herkunft_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunftModel)))),
-    herkunft_search_aggregate: types.union(types.undefined, types.late(() => herkunft_aggregateModel)),
     herkunft_sums: types.union(types.undefined, types.array(types.late(() => herkunft_sumsModel))),
     herkunft_sums_aggregate: types.union(types.undefined, types.late(() => herkunft_sums_aggregateModel)),
     kultur: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
@@ -325,8 +317,6 @@ export const subscription_rootModelBase = ModelBase
     kultur_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kultur_revModel)))),
     kultur_rev_aggregate: types.union(types.undefined, types.late(() => kultur_rev_aggregateModel)),
     kultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kultur_revModel))),
-    kultur_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
-    kultur_search_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     lieferung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
     lieferung_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferungModel))),
@@ -336,8 +326,6 @@ export const subscription_rootModelBase = ModelBase
     lieferung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferung_revModel)))),
     lieferung_rev_aggregate: types.union(types.undefined, types.late(() => lieferung_rev_aggregateModel)),
     lieferung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => lieferung_revModel))),
-    lieferung_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => lieferungModel)))),
-    lieferung_search_aggregate: types.union(types.undefined, types.late(() => lieferung_aggregateModel)),
     person: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => personModel)))),
     person_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
     person_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => personModel))),
@@ -352,8 +340,6 @@ export const subscription_rootModelBase = ModelBase
     person_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_revModel)))),
     person_rev_aggregate: types.union(types.undefined, types.late(() => person_rev_aggregateModel)),
     person_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => person_revModel))),
-    person_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => personModel)))),
-    person_search_aggregate: types.union(types.undefined, types.late(() => person_aggregateModel)),
     sammel_lieferung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammel_lieferungModel)))),
     sammel_lieferung_aggregate: types.union(types.undefined, types.late(() => sammel_lieferung_aggregateModel)),
     sammel_lieferung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammel_lieferungModel))),
@@ -369,8 +355,6 @@ export const subscription_rootModelBase = ModelBase
     sammlung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlung_revModel)))),
     sammlung_rev_aggregate: types.union(types.undefined, types.late(() => sammlung_rev_aggregateModel)),
     sammlung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => sammlung_revModel))),
-    sammlung_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
-    sammlung_search_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
     spatial_ref_sys: types.union(types.undefined, types.array(types.late(() => spatial_ref_sysModel))),
     spatial_ref_sys_aggregate: types.union(types.undefined, types.late(() => spatial_ref_sys_aggregateModel)),
     spatial_ref_sys_by_pk: types.union(types.undefined, types.null, types.late(() => spatial_ref_sysModel)),
@@ -380,8 +364,6 @@ export const subscription_rootModelBase = ModelBase
     teilkultur_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkultur_revModel)))),
     teilkultur_rev_aggregate: types.union(types.undefined, types.late(() => teilkultur_rev_aggregateModel)),
     teilkultur_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilkultur_revModel))),
-    teilkultur_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkulturModel)))),
-    teilkultur_search_aggregate: types.union(types.undefined, types.late(() => teilkultur_aggregateModel)),
     teilzaehlung: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlung_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
     teilzaehlung_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => teilzaehlungModel))),
@@ -397,8 +379,6 @@ export const subscription_rootModelBase = ModelBase
     zaehlung_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlung_revModel)))),
     zaehlung_rev_aggregate: types.union(types.undefined, types.late(() => zaehlung_rev_aggregateModel)),
     zaehlung_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlung_revModel))),
-    zaehlung_search: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlungModel)))),
-    zaehlung_search_aggregate: types.union(types.undefined, types.late(() => zaehlung_aggregateModel)),
   })
   .views(self => ({
     get store() {
@@ -430,8 +410,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   art_rev(builder) { return this.__child(`art_rev`, art_revModelSelector, builder) }
   art_rev_aggregate(builder) { return this.__child(`art_rev_aggregate`, art_rev_aggregateModelSelector, builder) }
   art_rev_by_pk(builder) { return this.__child(`art_rev_by_pk`, art_revModelSelector, builder) }
-  art_search(builder) { return this.__child(`art_search`, artModelSelector, builder) }
-  art_search_aggregate(builder) { return this.__child(`art_search_aggregate`, art_aggregateModelSelector, builder) }
   art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
   art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
   av(builder) { return this.__child(`av`, avModelSelector, builder) }
@@ -446,8 +424,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   event_rev(builder) { return this.__child(`event_rev`, event_revModelSelector, builder) }
   event_rev_aggregate(builder) { return this.__child(`event_rev_aggregate`, event_rev_aggregateModelSelector, builder) }
   event_rev_by_pk(builder) { return this.__child(`event_rev_by_pk`, event_revModelSelector, builder) }
-  event_search(builder) { return this.__child(`event_search`, eventModelSelector, builder) }
-  event_search_aggregate(builder) { return this.__child(`event_search_aggregate`, event_aggregateModelSelector, builder) }
   garten(builder) { return this.__child(`garten`, gartenModelSelector, builder) }
   garten_aggregate(builder) { return this.__child(`garten_aggregate`, garten_aggregateModelSelector, builder) }
   garten_by_pk(builder) { return this.__child(`garten_by_pk`, gartenModelSelector, builder) }
@@ -457,8 +433,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   garten_rev(builder) { return this.__child(`garten_rev`, garten_revModelSelector, builder) }
   garten_rev_aggregate(builder) { return this.__child(`garten_rev_aggregate`, garten_rev_aggregateModelSelector, builder) }
   garten_rev_by_pk(builder) { return this.__child(`garten_rev_by_pk`, garten_revModelSelector, builder) }
-  garten_search(builder) { return this.__child(`garten_search`, gartenModelSelector, builder) }
-  garten_search_aggregate(builder) { return this.__child(`garten_search_aggregate`, garten_aggregateModelSelector, builder) }
   garten_teilzaehlung_sums(builder) { return this.__child(`garten_teilzaehlung_sums`, garten_teilzaehlung_sumsModelSelector, builder) }
   garten_teilzaehlung_sums_aggregate(builder) { return this.__child(`garten_teilzaehlung_sums_aggregate`, garten_teilzaehlung_sums_aggregateModelSelector, builder) }
   gv(builder) { return this.__child(`gv`, gvModelSelector, builder) }
@@ -476,8 +450,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   herkunft_rev(builder) { return this.__child(`herkunft_rev`, herkunft_revModelSelector, builder) }
   herkunft_rev_aggregate(builder) { return this.__child(`herkunft_rev_aggregate`, herkunft_rev_aggregateModelSelector, builder) }
   herkunft_rev_by_pk(builder) { return this.__child(`herkunft_rev_by_pk`, herkunft_revModelSelector, builder) }
-  herkunft_search(builder) { return this.__child(`herkunft_search`, herkunftModelSelector, builder) }
-  herkunft_search_aggregate(builder) { return this.__child(`herkunft_search_aggregate`, herkunft_aggregateModelSelector, builder) }
   herkunft_sums(builder) { return this.__child(`herkunft_sums`, herkunft_sumsModelSelector, builder) }
   herkunft_sums_aggregate(builder) { return this.__child(`herkunft_sums_aggregate`, herkunft_sums_aggregateModelSelector, builder) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
@@ -506,8 +478,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   kultur_rev(builder) { return this.__child(`kultur_rev`, kultur_revModelSelector, builder) }
   kultur_rev_aggregate(builder) { return this.__child(`kultur_rev_aggregate`, kultur_rev_aggregateModelSelector, builder) }
   kultur_rev_by_pk(builder) { return this.__child(`kultur_rev_by_pk`, kultur_revModelSelector, builder) }
-  kultur_search(builder) { return this.__child(`kultur_search`, kulturModelSelector, builder) }
-  kultur_search_aggregate(builder) { return this.__child(`kultur_search_aggregate`, kultur_aggregateModelSelector, builder) }
   lieferung(builder) { return this.__child(`lieferung`, lieferungModelSelector, builder) }
   lieferung_aggregate(builder) { return this.__child(`lieferung_aggregate`, lieferung_aggregateModelSelector, builder) }
   lieferung_by_pk(builder) { return this.__child(`lieferung_by_pk`, lieferungModelSelector, builder) }
@@ -517,8 +487,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   lieferung_rev(builder) { return this.__child(`lieferung_rev`, lieferung_revModelSelector, builder) }
   lieferung_rev_aggregate(builder) { return this.__child(`lieferung_rev_aggregate`, lieferung_rev_aggregateModelSelector, builder) }
   lieferung_rev_by_pk(builder) { return this.__child(`lieferung_rev_by_pk`, lieferung_revModelSelector, builder) }
-  lieferung_search(builder) { return this.__child(`lieferung_search`, lieferungModelSelector, builder) }
-  lieferung_search_aggregate(builder) { return this.__child(`lieferung_search_aggregate`, lieferung_aggregateModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }
   person_aggregate(builder) { return this.__child(`person_aggregate`, person_aggregateModelSelector, builder) }
   person_by_pk(builder) { return this.__child(`person_by_pk`, personModelSelector, builder) }
@@ -533,8 +501,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   person_rev(builder) { return this.__child(`person_rev`, person_revModelSelector, builder) }
   person_rev_aggregate(builder) { return this.__child(`person_rev_aggregate`, person_rev_aggregateModelSelector, builder) }
   person_rev_by_pk(builder) { return this.__child(`person_rev_by_pk`, person_revModelSelector, builder) }
-  person_search(builder) { return this.__child(`person_search`, personModelSelector, builder) }
-  person_search_aggregate(builder) { return this.__child(`person_search_aggregate`, person_aggregateModelSelector, builder) }
   sammel_lieferung(builder) { return this.__child(`sammel_lieferung`, sammel_lieferungModelSelector, builder) }
   sammel_lieferung_aggregate(builder) { return this.__child(`sammel_lieferung_aggregate`, sammel_lieferung_aggregateModelSelector, builder) }
   sammel_lieferung_by_pk(builder) { return this.__child(`sammel_lieferung_by_pk`, sammel_lieferungModelSelector, builder) }
@@ -550,8 +516,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   sammlung_rev(builder) { return this.__child(`sammlung_rev`, sammlung_revModelSelector, builder) }
   sammlung_rev_aggregate(builder) { return this.__child(`sammlung_rev_aggregate`, sammlung_rev_aggregateModelSelector, builder) }
   sammlung_rev_by_pk(builder) { return this.__child(`sammlung_rev_by_pk`, sammlung_revModelSelector, builder) }
-  sammlung_search(builder) { return this.__child(`sammlung_search`, sammlungModelSelector, builder) }
-  sammlung_search_aggregate(builder) { return this.__child(`sammlung_search_aggregate`, sammlung_aggregateModelSelector, builder) }
   spatial_ref_sys(builder) { return this.__child(`spatial_ref_sys`, spatial_ref_sysModelSelector, builder) }
   spatial_ref_sys_aggregate(builder) { return this.__child(`spatial_ref_sys_aggregate`, spatial_ref_sys_aggregateModelSelector, builder) }
   spatial_ref_sys_by_pk(builder) { return this.__child(`spatial_ref_sys_by_pk`, spatial_ref_sysModelSelector, builder) }
@@ -561,8 +525,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   teilkultur_rev(builder) { return this.__child(`teilkultur_rev`, teilkultur_revModelSelector, builder) }
   teilkultur_rev_aggregate(builder) { return this.__child(`teilkultur_rev_aggregate`, teilkultur_rev_aggregateModelSelector, builder) }
   teilkultur_rev_by_pk(builder) { return this.__child(`teilkultur_rev_by_pk`, teilkultur_revModelSelector, builder) }
-  teilkultur_search(builder) { return this.__child(`teilkultur_search`, teilkulturModelSelector, builder) }
-  teilkultur_search_aggregate(builder) { return this.__child(`teilkultur_search_aggregate`, teilkultur_aggregateModelSelector, builder) }
   teilzaehlung(builder) { return this.__child(`teilzaehlung`, teilzaehlungModelSelector, builder) }
   teilzaehlung_aggregate(builder) { return this.__child(`teilzaehlung_aggregate`, teilzaehlung_aggregateModelSelector, builder) }
   teilzaehlung_by_pk(builder) { return this.__child(`teilzaehlung_by_pk`, teilzaehlungModelSelector, builder) }
@@ -578,8 +540,6 @@ export class subscription_rootModelSelector extends QueryBuilder {
   zaehlung_rev(builder) { return this.__child(`zaehlung_rev`, zaehlung_revModelSelector, builder) }
   zaehlung_rev_aggregate(builder) { return this.__child(`zaehlung_rev_aggregate`, zaehlung_rev_aggregateModelSelector, builder) }
   zaehlung_rev_by_pk(builder) { return this.__child(`zaehlung_rev_by_pk`, zaehlung_revModelSelector, builder) }
-  zaehlung_search(builder) { return this.__child(`zaehlung_search`, zaehlungModelSelector, builder) }
-  zaehlung_search_aggregate(builder) { return this.__child(`zaehlung_search_aggregate`, zaehlung_aggregateModelSelector, builder) }
 }
 export function selectFromsubscription_root() {
   return new subscription_rootModelSelector()

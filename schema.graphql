@@ -3241,10 +3241,6 @@ input art_rev_variance_order_by {
   _depth: order_by
 }
 
-input art_search_args {
-  filter: String
-}
-
 # select columns of table "art"
 enum art_select_column {
   # column name
@@ -5349,10 +5345,6 @@ input event_rev_variance_order_by {
   _depth: order_by
 }
 
-input event_search_args {
-  filter: String
-}
-
 # select columns of table "event"
 enum event_select_column {
   # column name
@@ -6695,10 +6687,6 @@ type garten_rev_variance_fields {
 input garten_rev_variance_order_by {
   _depth: order_by
   plz: order_by
-}
-
-input garten_search_args {
-  filter: String
 }
 
 # select columns of table "garten"
@@ -10027,10 +10015,6 @@ type herkunft_rev_variance_fields {
 # order by variance() on columns of table "herkunft_rev"
 input herkunft_rev_variance_order_by {
   _depth: order_by
-}
-
-input herkunft_search_args {
-  filter: String
 }
 
 # select columns of table "herkunft"
@@ -15168,10 +15152,6 @@ input kultur_rev_variance_order_by {
   von_anzahl_individuen: order_by
 }
 
-input kultur_search_args {
-  filter: String
-}
-
 # select columns of table "kultur"
 enum kultur_select_column {
   # column name
@@ -16623,10 +16603,6 @@ input lieferung_rev_variance_order_by {
   anzahl_pflanzen: order_by
   gramm_samen: order_by
   von_anzahl_individuen: order_by
-}
-
-input lieferung_search_args {
-  filter: String
 }
 
 # select columns of table "lieferung"
@@ -22379,10 +22355,6 @@ input person_rev_variance_order_by {
   plz: order_by
 }
 
-input person_search_args {
-  filter: String
-}
-
 # select columns of table "person"
 enum person_select_column {
   # column name
@@ -22970,48 +22942,6 @@ type query_root {
   # fetch data from the table: "art_rev" using primary key columns
   art_rev_by_pk(id: ID!): art_rev
 
-  # execute function "art_search" which returns "art"
-  art_search(
-    # input parameters for function "art_search"
-    args: art_search_args!
-
-    # distinct select on columns
-    distinct_on: [art_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_order_by!]
-
-    # filter the rows returned
-    where: art_bool_exp
-  ): [art!]!
-
-  # execute function "art_search" and query aggregates on result of table type "art"
-  art_search_aggregate(
-    # input parameters for function "art_search"
-    args: art_search_args!
-
-    # distinct select on columns
-    distinct_on: [art_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_order_by!]
-
-    # filter the rows returned
-    where: art_bool_exp
-  ): art_aggregate!
-
   # fetch data from the table: "art_sums"
   art_sums(
     # distinct select on columns
@@ -23204,48 +23134,6 @@ type query_root {
   # fetch data from the table: "event_rev" using primary key columns
   event_rev_by_pk(id: ID!): event_rev
 
-  # execute function "event_search" which returns "event"
-  event_search(
-    # input parameters for function "event_search"
-    args: event_search_args!
-
-    # distinct select on columns
-    distinct_on: [event_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [event_order_by!]
-
-    # filter the rows returned
-    where: event_bool_exp
-  ): [event!]!
-
-  # execute function "event_search" and query aggregates on result of table type "event"
-  event_search_aggregate(
-    # input parameters for function "event_search"
-    args: event_search_args!
-
-    # distinct select on columns
-    distinct_on: [event_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [event_order_by!]
-
-    # filter the rows returned
-    where: event_bool_exp
-  ): event_aggregate!
-
   # fetch data from the table: "garten"
   garten(
     # distinct select on columns
@@ -23362,48 +23250,6 @@ type query_root {
 
   # fetch data from the table: "garten_rev" using primary key columns
   garten_rev_by_pk(id: ID!): garten_rev
-
-  # execute function "garten_search" which returns "garten"
-  garten_search(
-    # input parameters for function "garten_search"
-    args: garten_search_args!
-
-    # distinct select on columns
-    distinct_on: [garten_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_order_by!]
-
-    # filter the rows returned
-    where: garten_bool_exp
-  ): [garten!]!
-
-  # execute function "garten_search" and query aggregates on result of table type "garten"
-  garten_search_aggregate(
-    # input parameters for function "garten_search"
-    args: garten_search_args!
-
-    # distinct select on columns
-    distinct_on: [garten_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_order_by!]
-
-    # filter the rows returned
-    where: garten_bool_exp
-  ): garten_aggregate!
 
   # fetch data from the table: "garten_teilzaehlung_sums"
   garten_teilzaehlung_sums(
@@ -23635,48 +23481,6 @@ type query_root {
 
   # fetch data from the table: "herkunft_rev" using primary key columns
   herkunft_rev_by_pk(id: ID!): herkunft_rev
-
-  # execute function "herkunft_search" which returns "herkunft"
-  herkunft_search(
-    # input parameters for function "herkunft_search"
-    args: herkunft_search_args!
-
-    # distinct select on columns
-    distinct_on: [herkunft_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [herkunft_order_by!]
-
-    # filter the rows returned
-    where: herkunft_bool_exp
-  ): [herkunft!]!
-
-  # execute function "herkunft_search" and query aggregates on result of table type "herkunft"
-  herkunft_search_aggregate(
-    # input parameters for function "herkunft_search"
-    args: herkunft_search_args!
-
-    # distinct select on columns
-    distinct_on: [herkunft_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [herkunft_order_by!]
-
-    # filter the rows returned
-    where: herkunft_bool_exp
-  ): herkunft_aggregate!
 
   # fetch data from the table: "herkunft_sums"
   herkunft_sums(
@@ -24065,48 +23869,6 @@ type query_root {
   # fetch data from the table: "kultur_rev" using primary key columns
   kultur_rev_by_pk(id: ID!): kultur_rev
 
-  # execute function "kultur_search" which returns "kultur"
-  kultur_search(
-    # input parameters for function "kultur_search"
-    args: kultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [kultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [kultur_order_by!]
-
-    # filter the rows returned
-    where: kultur_bool_exp
-  ): [kultur!]!
-
-  # execute function "kultur_search" and query aggregates on result of table type "kultur"
-  kultur_search_aggregate(
-    # input parameters for function "kultur_search"
-    args: kultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [kultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [kultur_order_by!]
-
-    # filter the rows returned
-    where: kultur_bool_exp
-  ): kultur_aggregate!
-
   # fetch data from the table: "lieferung"
   lieferung(
     # distinct select on columns
@@ -24223,48 +23985,6 @@ type query_root {
 
   # fetch data from the table: "lieferung_rev" using primary key columns
   lieferung_rev_by_pk(id: ID!): lieferung_rev
-
-  # execute function "lieferung_search" which returns "lieferung"
-  lieferung_search(
-    # input parameters for function "lieferung_search"
-    args: lieferung_search_args!
-
-    # distinct select on columns
-    distinct_on: [lieferung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [lieferung_order_by!]
-
-    # filter the rows returned
-    where: lieferung_bool_exp
-  ): [lieferung!]!
-
-  # execute function "lieferung_search" and query aggregates on result of table type "lieferung"
-  lieferung_search_aggregate(
-    # input parameters for function "lieferung_search"
-    args: lieferung_search_args!
-
-    # distinct select on columns
-    distinct_on: [lieferung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [lieferung_order_by!]
-
-    # filter the rows returned
-    where: lieferung_bool_exp
-  ): lieferung_aggregate!
 
   # fetch data from the table: "person"
   person(
@@ -24457,48 +24177,6 @@ type query_root {
 
   # fetch data from the table: "person_rev" using primary key columns
   person_rev_by_pk(id: ID!): person_rev
-
-  # execute function "person_search" which returns "person"
-  person_search(
-    # input parameters for function "person_search"
-    args: person_search_args!
-
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): [person!]!
-
-  # execute function "person_search" and query aggregates on result of table type "person"
-  person_search_aggregate(
-    # input parameters for function "person_search"
-    args: person_search_args!
-
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): person_aggregate!
 
   # fetch data from the table: "sammel_lieferung"
   sammel_lieferung(
@@ -24695,48 +24373,6 @@ type query_root {
   # fetch data from the table: "sammlung_rev" using primary key columns
   sammlung_rev_by_pk(id: ID!): sammlung_rev
 
-  # execute function "sammlung_search" which returns "sammlung"
-  sammlung_search(
-    # input parameters for function "sammlung_search"
-    args: sammlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [sammlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [sammlung_order_by!]
-
-    # filter the rows returned
-    where: sammlung_bool_exp
-  ): [sammlung!]!
-
-  # execute function "sammlung_search" and query aggregates on result of table type "sammlung"
-  sammlung_search_aggregate(
-    # input parameters for function "sammlung_search"
-    args: sammlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [sammlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [sammlung_order_by!]
-
-    # filter the rows returned
-    where: sammlung_bool_exp
-  ): sammlung_aggregate!
-
   # fetch data from the table: "spatial_ref_sys"
   spatial_ref_sys(
     # distinct select on columns
@@ -24853,48 +24489,6 @@ type query_root {
 
   # fetch data from the table: "teilkultur_rev" using primary key columns
   teilkultur_rev_by_pk(id: ID!): teilkultur_rev
-
-  # execute function "teilkultur_search" which returns "teilkultur"
-  teilkultur_search(
-    # input parameters for function "teilkultur_search"
-    args: teilkultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [teilkultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [teilkultur_order_by!]
-
-    # filter the rows returned
-    where: teilkultur_bool_exp
-  ): [teilkultur!]!
-
-  # execute function "teilkultur_search" and query aggregates on result of table type "teilkultur"
-  teilkultur_search_aggregate(
-    # input parameters for function "teilkultur_search"
-    args: teilkultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [teilkultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [teilkultur_order_by!]
-
-    # filter the rows returned
-    where: teilkultur_bool_exp
-  ): teilkultur_aggregate!
 
   # fetch data from the table: "teilzaehlung"
   teilzaehlung(
@@ -25090,48 +24684,6 @@ type query_root {
 
   # fetch data from the table: "zaehlung_rev" using primary key columns
   zaehlung_rev_by_pk(id: ID!): zaehlung_rev
-
-  # execute function "zaehlung_search" which returns "zaehlung"
-  zaehlung_search(
-    # input parameters for function "zaehlung_search"
-    args: zaehlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [zaehlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [zaehlung_order_by!]
-
-    # filter the rows returned
-    where: zaehlung_bool_exp
-  ): [zaehlung!]!
-
-  # execute function "zaehlung_search" and query aggregates on result of table type "zaehlung"
-  zaehlung_search_aggregate(
-    # input parameters for function "zaehlung_search"
-    args: zaehlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [zaehlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [zaehlung_order_by!]
-
-    # filter the rows returned
-    where: zaehlung_bool_exp
-  ): zaehlung_aggregate!
 }
 
 # columns and relationships of "sammel_lieferung"
@@ -27868,10 +27420,6 @@ input sammlung_rev_variance_order_by {
   von_anzahl_individuen: order_by
 }
 
-input sammlung_search_args {
-  filter: String
-}
-
 # select columns of table "sammlung"
 enum sammlung_select_column {
   # column name
@@ -28878,48 +28426,6 @@ type subscription_root {
   # fetch data from the table: "art_rev" using primary key columns
   art_rev_by_pk(id: ID!): art_rev
 
-  # execute function "art_search" which returns "art"
-  art_search(
-    # input parameters for function "art_search"
-    args: art_search_args!
-
-    # distinct select on columns
-    distinct_on: [art_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_order_by!]
-
-    # filter the rows returned
-    where: art_bool_exp
-  ): [art!]!
-
-  # execute function "art_search" and query aggregates on result of table type "art"
-  art_search_aggregate(
-    # input parameters for function "art_search"
-    args: art_search_args!
-
-    # distinct select on columns
-    distinct_on: [art_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [art_order_by!]
-
-    # filter the rows returned
-    where: art_bool_exp
-  ): art_aggregate!
-
   # fetch data from the table: "art_sums"
   art_sums(
     # distinct select on columns
@@ -29112,48 +28618,6 @@ type subscription_root {
   # fetch data from the table: "event_rev" using primary key columns
   event_rev_by_pk(id: ID!): event_rev
 
-  # execute function "event_search" which returns "event"
-  event_search(
-    # input parameters for function "event_search"
-    args: event_search_args!
-
-    # distinct select on columns
-    distinct_on: [event_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [event_order_by!]
-
-    # filter the rows returned
-    where: event_bool_exp
-  ): [event!]!
-
-  # execute function "event_search" and query aggregates on result of table type "event"
-  event_search_aggregate(
-    # input parameters for function "event_search"
-    args: event_search_args!
-
-    # distinct select on columns
-    distinct_on: [event_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [event_order_by!]
-
-    # filter the rows returned
-    where: event_bool_exp
-  ): event_aggregate!
-
   # fetch data from the table: "garten"
   garten(
     # distinct select on columns
@@ -29270,48 +28734,6 @@ type subscription_root {
 
   # fetch data from the table: "garten_rev" using primary key columns
   garten_rev_by_pk(id: ID!): garten_rev
-
-  # execute function "garten_search" which returns "garten"
-  garten_search(
-    # input parameters for function "garten_search"
-    args: garten_search_args!
-
-    # distinct select on columns
-    distinct_on: [garten_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_order_by!]
-
-    # filter the rows returned
-    where: garten_bool_exp
-  ): [garten!]!
-
-  # execute function "garten_search" and query aggregates on result of table type "garten"
-  garten_search_aggregate(
-    # input parameters for function "garten_search"
-    args: garten_search_args!
-
-    # distinct select on columns
-    distinct_on: [garten_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [garten_order_by!]
-
-    # filter the rows returned
-    where: garten_bool_exp
-  ): garten_aggregate!
 
   # fetch data from the table: "garten_teilzaehlung_sums"
   garten_teilzaehlung_sums(
@@ -29543,48 +28965,6 @@ type subscription_root {
 
   # fetch data from the table: "herkunft_rev" using primary key columns
   herkunft_rev_by_pk(id: ID!): herkunft_rev
-
-  # execute function "herkunft_search" which returns "herkunft"
-  herkunft_search(
-    # input parameters for function "herkunft_search"
-    args: herkunft_search_args!
-
-    # distinct select on columns
-    distinct_on: [herkunft_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [herkunft_order_by!]
-
-    # filter the rows returned
-    where: herkunft_bool_exp
-  ): [herkunft!]!
-
-  # execute function "herkunft_search" and query aggregates on result of table type "herkunft"
-  herkunft_search_aggregate(
-    # input parameters for function "herkunft_search"
-    args: herkunft_search_args!
-
-    # distinct select on columns
-    distinct_on: [herkunft_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [herkunft_order_by!]
-
-    # filter the rows returned
-    where: herkunft_bool_exp
-  ): herkunft_aggregate!
 
   # fetch data from the table: "herkunft_sums"
   herkunft_sums(
@@ -29973,48 +29353,6 @@ type subscription_root {
   # fetch data from the table: "kultur_rev" using primary key columns
   kultur_rev_by_pk(id: ID!): kultur_rev
 
-  # execute function "kultur_search" which returns "kultur"
-  kultur_search(
-    # input parameters for function "kultur_search"
-    args: kultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [kultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [kultur_order_by!]
-
-    # filter the rows returned
-    where: kultur_bool_exp
-  ): [kultur!]!
-
-  # execute function "kultur_search" and query aggregates on result of table type "kultur"
-  kultur_search_aggregate(
-    # input parameters for function "kultur_search"
-    args: kultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [kultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [kultur_order_by!]
-
-    # filter the rows returned
-    where: kultur_bool_exp
-  ): kultur_aggregate!
-
   # fetch data from the table: "lieferung"
   lieferung(
     # distinct select on columns
@@ -30131,48 +29469,6 @@ type subscription_root {
 
   # fetch data from the table: "lieferung_rev" using primary key columns
   lieferung_rev_by_pk(id: ID!): lieferung_rev
-
-  # execute function "lieferung_search" which returns "lieferung"
-  lieferung_search(
-    # input parameters for function "lieferung_search"
-    args: lieferung_search_args!
-
-    # distinct select on columns
-    distinct_on: [lieferung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [lieferung_order_by!]
-
-    # filter the rows returned
-    where: lieferung_bool_exp
-  ): [lieferung!]!
-
-  # execute function "lieferung_search" and query aggregates on result of table type "lieferung"
-  lieferung_search_aggregate(
-    # input parameters for function "lieferung_search"
-    args: lieferung_search_args!
-
-    # distinct select on columns
-    distinct_on: [lieferung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [lieferung_order_by!]
-
-    # filter the rows returned
-    where: lieferung_bool_exp
-  ): lieferung_aggregate!
 
   # fetch data from the table: "person"
   person(
@@ -30365,48 +29661,6 @@ type subscription_root {
 
   # fetch data from the table: "person_rev" using primary key columns
   person_rev_by_pk(id: ID!): person_rev
-
-  # execute function "person_search" which returns "person"
-  person_search(
-    # input parameters for function "person_search"
-    args: person_search_args!
-
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): [person!]!
-
-  # execute function "person_search" and query aggregates on result of table type "person"
-  person_search_aggregate(
-    # input parameters for function "person_search"
-    args: person_search_args!
-
-    # distinct select on columns
-    distinct_on: [person_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [person_order_by!]
-
-    # filter the rows returned
-    where: person_bool_exp
-  ): person_aggregate!
 
   # fetch data from the table: "sammel_lieferung"
   sammel_lieferung(
@@ -30603,48 +29857,6 @@ type subscription_root {
   # fetch data from the table: "sammlung_rev" using primary key columns
   sammlung_rev_by_pk(id: ID!): sammlung_rev
 
-  # execute function "sammlung_search" which returns "sammlung"
-  sammlung_search(
-    # input parameters for function "sammlung_search"
-    args: sammlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [sammlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [sammlung_order_by!]
-
-    # filter the rows returned
-    where: sammlung_bool_exp
-  ): [sammlung!]!
-
-  # execute function "sammlung_search" and query aggregates on result of table type "sammlung"
-  sammlung_search_aggregate(
-    # input parameters for function "sammlung_search"
-    args: sammlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [sammlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [sammlung_order_by!]
-
-    # filter the rows returned
-    where: sammlung_bool_exp
-  ): sammlung_aggregate!
-
   # fetch data from the table: "spatial_ref_sys"
   spatial_ref_sys(
     # distinct select on columns
@@ -30761,48 +29973,6 @@ type subscription_root {
 
   # fetch data from the table: "teilkultur_rev" using primary key columns
   teilkultur_rev_by_pk(id: ID!): teilkultur_rev
-
-  # execute function "teilkultur_search" which returns "teilkultur"
-  teilkultur_search(
-    # input parameters for function "teilkultur_search"
-    args: teilkultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [teilkultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [teilkultur_order_by!]
-
-    # filter the rows returned
-    where: teilkultur_bool_exp
-  ): [teilkultur!]!
-
-  # execute function "teilkultur_search" and query aggregates on result of table type "teilkultur"
-  teilkultur_search_aggregate(
-    # input parameters for function "teilkultur_search"
-    args: teilkultur_search_args!
-
-    # distinct select on columns
-    distinct_on: [teilkultur_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [teilkultur_order_by!]
-
-    # filter the rows returned
-    where: teilkultur_bool_exp
-  ): teilkultur_aggregate!
 
   # fetch data from the table: "teilzaehlung"
   teilzaehlung(
@@ -30998,48 +30168,6 @@ type subscription_root {
 
   # fetch data from the table: "zaehlung_rev" using primary key columns
   zaehlung_rev_by_pk(id: ID!): zaehlung_rev
-
-  # execute function "zaehlung_search" which returns "zaehlung"
-  zaehlung_search(
-    # input parameters for function "zaehlung_search"
-    args: zaehlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [zaehlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [zaehlung_order_by!]
-
-    # filter the rows returned
-    where: zaehlung_bool_exp
-  ): [zaehlung!]!
-
-  # execute function "zaehlung_search" and query aggregates on result of table type "zaehlung"
-  zaehlung_search_aggregate(
-    # input parameters for function "zaehlung_search"
-    args: zaehlung_search_args!
-
-    # distinct select on columns
-    distinct_on: [zaehlung_select_column!]
-
-    # limit the number of rows returned
-    limit: Int
-
-    # skip the first n rows. Use only with order_by
-    offset: Int
-
-    # sort the rows by one or more columns
-    order_by: [zaehlung_order_by!]
-
-    # filter the rows returned
-    where: zaehlung_bool_exp
-  ): zaehlung_aggregate!
 }
 
 # columns and relationships of "teilkultur"
@@ -31944,10 +31072,6 @@ type teilkultur_rev_variance_fields {
 # order by variance() on columns of table "teilkultur_rev"
 input teilkultur_rev_variance_order_by {
   _depth: order_by
-}
-
-input teilkultur_search_args {
-  filter: String
 }
 
 # select columns of table "teilkultur"
@@ -34430,10 +33554,6 @@ type zaehlung_rev_variance_fields {
 # order by variance() on columns of table "zaehlung_rev"
 input zaehlung_rev_variance_order_by {
   _depth: order_by
-}
-
-input zaehlung_search_args {
-  filter: String
 }
 
 # select columns of table "zaehlung"
