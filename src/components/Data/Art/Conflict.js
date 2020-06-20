@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
+import checkForOnlineError from '../../../utils/checkForOnlineError'
 
 const artRevQuery = gql`
   query artRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -46,6 +47,7 @@ const ArtConflict = ({
       id,
     },
   })
+  error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
   const revRow =
@@ -107,6 +109,7 @@ const ArtConflict = ({
         },
       })
     } catch (error) {
+      checkForOnlineError(error)
       addNotification({
         message: error.message,
       })

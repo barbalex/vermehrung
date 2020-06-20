@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+import checkForOnlineError from '../../../utils/checkForOnlineError'
 
 const eventRevQuery = gql`
   query eventRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -82,6 +83,7 @@ const EventConflict = ({
       id,
     },
   })
+  error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
   const revRow =
@@ -171,6 +173,7 @@ const EventConflict = ({
         },
       })
     } catch (error) {
+      checkForOnlineError(error)
       addNotification({
         message: error.message,
       })

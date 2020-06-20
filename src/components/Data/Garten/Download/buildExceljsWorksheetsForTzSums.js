@@ -1,4 +1,5 @@
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
 
 /**
  * this function cann be used from higher up
@@ -13,6 +14,7 @@ export default async ({ store, garten_id, workbook }) => {
       where: { garten_id: { _eq: garten_id } },
     })
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
