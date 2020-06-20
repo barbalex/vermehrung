@@ -8,6 +8,8 @@ export default async ({ store }) => {
     user,
     gqlHttpClient,
     gqlWsClient,
+    online,
+    setOnline,
   } = store
   if (!user?.uid) {
     console.log('getAuthToken returning because of missing user.uid')
@@ -26,11 +28,17 @@ export default async ({ store }) => {
   } catch (error) {
     // TODO: catch no network error and return token from localStorage
     console.log('error from getting claims from auth.vermehrung.ch:', error)
+    if (online) {
+      setOnline(false)
+    }
     addNotification({
       message: error?.response?.data,
     })
   }
   if (res?.status === 200) {
+    if (!online) {
+      setOnline(true)
+    }
     let token
     try {
       token = await user.getIdToken(true)

@@ -33,6 +33,7 @@ import {
 } from './fragments'
 import getAuthToken from './getAuthToken'
 import removeSuplusNotRevModels from './removeSuplusNotRevModels'
+import checkForOnlineError from './checkForOnlineError'
 
 const allDataQuery = gql`
   query AllDataQueryForTreeContainer {
@@ -166,6 +167,8 @@ export default async ({ store }) => {
   } catch (error) {
     if (error && error.message.includes('JWT')) {
       await getAuthToken({ store })
+    } else {
+      checkForOnlineError(error)
     }
     setQueryingAllData(false)
     return

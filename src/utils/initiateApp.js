@@ -56,6 +56,9 @@ export default async () => {
         },
       })
     })()
+    gqlWsClient.onConnected(() => console.log('ws client connected'))
+    gqlWsClient.onDisconnected(() => console.log('ws client disconnected'))
+    gqlWsClient.onReconnected(() => console.log('ws client re-connected'))
 
     // https://github.com/mobxjs/mst-gql/blob/master/src/MSTGQLStore.ts#L42-L43
     storeOptions = {
