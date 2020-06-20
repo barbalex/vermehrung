@@ -198,7 +198,15 @@ const MenuSubtitle = styled.div`
 const Row = ({ style, node, nodes }) => {
   const store = useContext(StoreContext)
 
-  const { tree, addNotification, userPerson, firebase } = store
+  const {
+    tree,
+    addNotification,
+    userPerson,
+    firebase,
+    online,
+    setOnline,
+    personsSorted,
+  } = store
   const { activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -255,32 +263,26 @@ const Row = ({ style, node, nodes }) => {
         axios.get(`https://auth.vermehrung.ch/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
+        if (online) {
+          setOnline(false)
+        }
         addNotification({
           message: error.response.data,
         })
+      }
+      if (!online) {
+        setOnline(true)
       }
       addNotification({
         message: 'Das Konto wurde auch gelöscht',
         type: 'info',
       })
     }
-  }, [accountId, addNotification, node, store])
+  }, [accountId, addNotification, node, online, setOnline, store])
 
   const onClickSetPassword = useCallback(async () => {
-    const personId = last(node.url).toString()
     // fetch email of this person
-    let result
-    try {
-      result = await store.queryPerson(
-        { where: { id: { _eq: personId } } },
-        (p) => p.id.email.user_role,
-      )
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
-    const email = result?.person?.[0]?.email
+    const email = person?.email
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
         url: 'https://vermehrung.ch/Vermehrung',
@@ -295,7 +297,7 @@ const Row = ({ style, node, nodes }) => {
       message: `${email} erhält einen Link, um ein Passwort zu setzen`,
       type: 'success',
     })
-  }, [addNotification, firebase, node.url, store])
+  }, [addNotification, firebase, person?.email, store])
   const onClickDeleteAccout = useCallback(async () => {
     // delete firebase user
     if (accountId) {
@@ -303,9 +305,15 @@ const Row = ({ style, node, nodes }) => {
         await axios.get(`https://auth.vermehrung.ch/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
+        if (online) {
+          setOnline(false)
+        }
         return addNotification({
           message: error.response.data,
         })
+      }
+      if (!online) {
+        setOnline(true)
       }
     }
     if (!person) {
@@ -313,38 +321,19 @@ const Row = ({ style, node, nodes }) => {
         message: `Keine Person mit id ${last(node.url)} gefunden`,
       })
     }
-    try {
-      // remove users account_id
-      person.edit({ field: 'account_id', value: null })
-    } catch (error) {
-      console.log(error)
-      return addNotification({
-        message: error.message,
-      })
-    }
-  }, [accountId, addNotification, node.url, person])
+    // remove users account_id
+    person.edit({ field: 'account_id', value: null })
+  }, [accountId, addNotification, node.url, online, person, setOnline])
   const onClickSignup = useCallback(async () => {
-    const personId = last(node.url).toString()
     // fetch email of this person
-    let result
-    try {
-      result = await store.queryPerson(
-        { where: { id: { _eq: personId } } },
-        (p) => p.id.email.user_role,
-      )
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
-    const email = result?.person?.[0]?.email
+    const email = person?.email
     if (!email) {
       return addNotification({
         message: 'Eine email-Adresse muss erfasst sein',
         type: 'warning',
       })
     }
-    const userRole = result?.person?.[0]?.user_role
+    const userRole = person?.user_role
     if (!userRole) {
       return addNotification({
         message: 'Eine Rolle muss erfasst sein',
@@ -356,17 +345,20 @@ const Row = ({ style, node, nodes }) => {
       res = await axios.get(`https://auth.vermehrung.ch/create-user/${email}`)
     } catch (error) {
       console.log(error)
+      if (online) {
+        setOnline(false)
+      }
       return addNotification({
         message: error.response.data,
       })
+    }
+    if (!online) {
+      setOnline(true)
     }
     store.addNotification({
       message: `Für ${email} wurde ein Konto erstellt. Schicken Sie ein Email, um das Passwort zu setzen.`,
       type: 'success',
     })
-
-    // save resp.Id to mark users with account
-    const person = store.persons.get(last(node.url))
     if (!person) {
       return addNotification({
         message: `Keine Person mit id ${last(node.url)} gefunden`,
@@ -374,7 +366,7 @@ const Row = ({ style, node, nodes }) => {
     }
     console.log('res:', res)
     person.edit({ field: 'account_id', value: res.data })
-  }, [addNotification, node.url, store])
+  }, [addNotification, node.url, online, personsSorted, setOnline, store])
 
   const onClickOpenAllChildren = useCallback(
     () => openAllChildren({ node, store, nodes }),
