@@ -25,7 +25,7 @@ const Title = styled.div`
 
 const PersonDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
-  const { addNotification, showDeleted } = store
+  const { addNotification, showDeleted, online, setOnline } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -49,10 +49,12 @@ const PersonDeleteButton = ({ row }) => {
           `https://auth.vermehrung.ch/delete-user/${row.account_id}`,
         )
       } catch (error) {
-        console.log(error)
         addNotification({
           message: error.response.data,
         })
+        if (online) {
+          setOnline(false)
+        }
       }
     }
     row.delete()
@@ -63,12 +65,14 @@ const PersonDeleteButton = ({ row }) => {
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
   }, [
-    row,
-    showDeleted,
-    addNotification,
-    removeOpenNodeWithChildren,
     activeNodeArray,
+    addNotification,
+    online,
+    removeOpenNodeWithChildren,
+    row,
     setActiveNodeArray,
+    setOnline,
+    showDeleted,
   ])
 
   return (

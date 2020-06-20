@@ -4,6 +4,7 @@ import moment from 'moment'
 import { lieferung as lieferungFragment } from '../../../../utils/fragments'
 import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
 import toPgArray from '../../../../utils/toPgArray'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
 
 const lieferungFields = fieldsFromFragment(lieferungFragment)
 
@@ -32,6 +33,7 @@ export default async ({ lieferungId, sammelLieferung, store }) => {
       where: { id: { _eq: lieferungId } },
     })
   } catch (error) {
+    checkForOnlineError(error)
     return store.addNotification({
       message: `Eine der Lieferungen konnte nicht aktualisert werden. Fehlermeldung: ${error.message}`,
     })

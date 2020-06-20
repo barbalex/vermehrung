@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
+import checkForOnlineError from '../../../utils/checkForOnlineError'
 import Conflict from '../../shared/Conflict'
 import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../Lieferung/Lieferung/kulturLabelFromKultur'
@@ -117,6 +118,7 @@ const SammelLieferungConflict = ({
       id,
     },
   })
+  error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
   const revRow =
@@ -257,6 +259,7 @@ const SammelLieferungConflict = ({
         },
       })
     } catch (error) {
+      checkForOnlineError(error)
       addNotification({
         message: error.message,
       })
