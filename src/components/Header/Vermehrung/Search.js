@@ -114,7 +114,7 @@ const Search = () => {
     (val, cb) => {
       const options = []
       const artSuggestionsFuse = new Fuse(searchArtSuggestions, {
-        keys: ['label'],
+        keys: [{ name: 'label', weight: 1 }],
         threshold,
       })
       const artSuggestions = artSuggestionsFuse.search(val).map((o) => o.item)
