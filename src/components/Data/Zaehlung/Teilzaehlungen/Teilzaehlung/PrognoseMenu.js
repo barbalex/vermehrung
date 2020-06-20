@@ -42,7 +42,13 @@ const PrognoseMenu = ({
   zaehlungId,
 }) => {
   const store = useContext(StoreContext)
-  const { addNotification, insertZaehlungRev, insertTeilzaehlungRev } = store
+  const {
+    addNotification,
+    insertZaehlungRev,
+    insertTeilzaehlungRev,
+    teilzaehlungsSorted,
+    zaehlungsSorted,
+  } = store
 
   const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
@@ -78,30 +84,12 @@ const PrognoseMenu = ({
       if (!exists(anzAuspflanzbereit)) return
       // we have both values. Let's go on
       // check if zaehlung with date of 15.09. of year exist
-      let existingZaehlungData
-      const dateOfZaehlung = `${yearToUse}.09.15`
-      try {
-        existingZaehlungData = await store.queryZaehlung({
-          where: {
-            datum: { _eq: dateOfZaehlung },
-            prognose: { _eq: true },
-            kultur_id: { _eq: kulturId },
-          },
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      const dateOfZaehlung = `${yearToUse}-09-15`
+      const existingZaehlungData = zaehlungsSorted
+        .filter((z) => z.datum === dateOfZaehlung)
+        .filter((z) => z.prognose)
+        .filter((z) => z.kultur_id === kulturId)
       const existingZaehlung = existingZaehlungData?.zaehlung?.[0]
-      console.log({
-        existingZaehlungData,
-        existingZaehlung,
-        dateOfZaehlung,
-        anz,
-        anzAuspflanzbereit,
-        zaehlung,
-      })
       // if not: create it first
       let newZaehlungId
       // if not: create it first
@@ -129,25 +117,15 @@ const PrognoseMenu = ({
         },
       })
       // delete empty teilzaehlung
-      let emptyTeilzaehlungenData
-      try {
-        emptyTeilzaehlungenData = await store.queryTeilzaehlung({
-          where: {
-            zaehlung_id: { _eq: zaehlungId },
-            teilkultur_id: { _is_null: true },
-            anzahl_pflanzen: { _is_null: true },
-            anzahl_auspflanzbereit: { _is_null: true },
-            anzahl_mutterpflanzen: { _is_null: true },
-            andere_menge: { _is_null: true },
-            bemerkungen: { _is_null: true },
-            auspflanzbereit_beschreibung: { _is_null: true },
-          },
-        })
-      } catch (error) {
-        return addNotification({
-          message: error.message,
-        })
-      }
+      let emptyTeilzaehlungenData = teilzaehlungsSorted
+        .filter((t) => t.zaehlung_id === zaehlungId)
+        .filter((t) => !t.teilkultur_id)
+        .filter((t) => !exists(t.anzahl_pflanzen))
+        .filter((t) => !exists(t.anzahl_auspflanzbereit))
+        .filter((t) => !exists(t.anzahl_mutterpflanzen))
+        .filter((t) => !exists(t.andere_menge))
+        .filter((t) => !exists(t.bemerkungen))
+        .filter((t) => !exists(t.auspflanzbereit_beschreibung))
       const emptyTeilzaehlung = emptyTeilzaehlungenData?.teilzaehlung?.[0]
       if (emptyTeilzaehlung) {
         const emptyTzModel = store.teilzaehlungs.get(emptyTeilzaehlung.id)
@@ -168,9 +146,10 @@ const PrognoseMenu = ({
       jahr,
       kulturId,
       setAnchorEl,
-      store,
+      store.teilzaehlungs,
       teilzaehlung,
-      zaehlung,
+      teilzaehlungsSorted,
+      zaehlungsSorted,
     ],
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])

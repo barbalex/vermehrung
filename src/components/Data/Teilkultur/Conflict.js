@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
+import checkForOnlineError from '../../../utils/checkForOnlineError'
 import Conflict from '../../shared/Conflict'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 
@@ -73,6 +74,7 @@ const TeilkulturConflict = ({
       id,
     },
   })
+  error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
   const revRow =
@@ -155,6 +157,7 @@ const TeilkulturConflict = ({
         },
       })
     } catch (error) {
+      checkForOnlineError(error)
       addNotification({
         message: error.message,
       })
