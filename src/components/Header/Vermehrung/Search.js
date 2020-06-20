@@ -35,7 +35,7 @@ const SearchIcon = styled(FaSearch)`
   margin-right: -25px;
   z-index: 1;
 `
-const threshold = 0.4
+const threshold = 0.2
 
 const formatOptionLabel = ({ label }, { inputValue }) => (
   <Highlighter searchWords={[inputValue]} textToHighlight={label} />
@@ -283,7 +283,7 @@ const Search = () => {
         })
       }
       const zaehlungSuggestionsFuse = new Fuse(searchZaehlungSuggestions, {
-        keys: [{ name: 'datum', weight: 1 }],
+        keys: [{ name: 'label', weight: 1 }],
         threshold,
       })
       const zaehlungSuggestions = zaehlungSuggestionsFuse
