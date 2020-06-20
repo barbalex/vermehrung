@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 
 import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
+import checkForOnlineError from '../../../utils/checkForOnlineError'
 import removeMetadataFromDataset from '../../../utils/removeMetadataFromDataset'
 
 /**
@@ -61,6 +62,7 @@ export default async ({
         },
       )
     } catch (error) {
+      checkForOnlineError(error)
       return addNotification({
         message: error.message,
       })
@@ -141,6 +143,7 @@ export default async ({
       },
     )
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
@@ -216,6 +219,7 @@ export default async ({
       },
     )
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
@@ -340,6 +344,7 @@ export default async ({
       },
     )
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
@@ -541,6 +546,7 @@ export default async ({
       },
     )
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
@@ -674,6 +680,7 @@ export default async ({
       },
     )
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
