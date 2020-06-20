@@ -196,7 +196,22 @@ const Search = () => {
         })
       }
       const lieferungSuggestionsFuse = new Fuse(searchLieferungSuggestions, {
-        keys: ['label'],
+        keys: [
+          { name: 'artname', weight: 1 },
+          { name: 'personname', weight: 1 },
+          { name: 'datum', weight: 1 },
+          { name: 'sammlungNr', weight: 1 },
+          { name: 'sammlungDatum', weight: 0.7 },
+          { name: 'sammlungPerson', weight: 0.7 },
+          { name: 'sammlungHerkunftNr', weight: 0.7 },
+          { name: 'sammlungHerkunftLokalname', weight: 0.7 },
+          { name: 'sammlungHerkunftGemeinde', weight: 0.7 },
+          { name: 'vonKulturPersonName', weight: 0.7 },
+          { name: 'nachKulturPersonName', weight: 0.7 },
+          { name: 'ausgepflanzt', weight: 1 },
+          { name: 'geplant', weight: 1 },
+          { name: 'bemerkungen', weight: 0.5 },
+        ],
         threshold,
       })
       const lieferungSuggestions = lieferungSuggestionsFuse
@@ -208,6 +223,7 @@ const Search = () => {
           options: lieferungSuggestions,
         })
       }
+      console.log('Search', { lieferungSuggestions })
       const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
         keys: [
           { name: 'nr', weight: 1 },
