@@ -1,31 +1,16 @@
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import buildExceljsWorksheetsForKultur from '../../Kultur/buildExceljsWorksheets'
 import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
-import checkForOnlineError from '../../../../utils/checkForOnlineError'
 
 /**
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
 export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
-  const { addNotification } = store
+  const { kultursSorted } = store
 
   // 1. Get Garten
-  let gartenResult
-  try {
-    gartenResult = await store.queryGarten(
-      { where: { id: { _eq: garten_id } } },
-      (g) =>
-        g.id.name.person_id.person((p) => p.id.name).strasse.plz.ort.aktiv
-          .bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long,
-    )
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const garten = { ...gartenResult?.garten?.[0] }
+  const garten = store.gartens.get(garten_id)
   const newGarten = {
     id: garten.id,
     name: garten.name,
@@ -54,24 +39,7 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
     data: [newGarten],
   })
   // 2. Get Kulturen
-  let kulturResult
-  try {
-    kulturResult = await store.queryKultur(
-      { where: { garten_id: { _eq: garten_id } }, order_by: { id: 'asc' } },
-      (k) =>
-        k.id.art_id
-          .art((a) => a.id.art_ae_art((ae) => ae.id.name))
-          .herkunft_id.herkunft((h) => h.id.nr)
-          .garten_id.garten((g) => g.id.name).zwischenlager.erhaltungskultur
-          .von_anzahl_individuen.aktiv.bemerkungen,
-    )
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const kultursArray = kulturResult?.kultur ?? []
+  const kultursArray = kultursSorted.filter((k) => k.garten_id === garten_id)
   const kulturs = kultursArray.map((kultur) => {
     const newK = {
       id: kultur.id,
