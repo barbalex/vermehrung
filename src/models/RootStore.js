@@ -14,6 +14,7 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
+import checkForOnlineError from '../utils/checkForOnlineError'
 import treeLabelKultur from '../utils/treeLabelKultur'
 import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
@@ -158,19 +159,25 @@ export const RootStore = RootStoreBase.props({
             // could remove if live updates work
             // but keep it until auth problems solved
             if (callbackQuery) {
-              try {
-                // delay to prevent app from requerying BEFORE trigger updated the winner
-                if (callbackQueryVariables) {
-                  setTimeout(async () => {
+              // delay to prevent app from requerying BEFORE trigger updated the winner
+              if (callbackQueryVariables) {
+                setTimeout(async () => {
+                  try {
                     await self[callbackQuery](
                       JSON.parse(callbackQueryVariables),
                     )
-                  }, 500)
-                } else {
-                  setTimeout(() => self[callbackQuery](), 500)
-                }
-              } catch (error) {
-                // do nothing
+                  } catch (error) {
+                    checkForOnlineError(error)
+                  }
+                }, 500)
+              } else {
+                setTimeout(async () => {
+                  try {
+                    await self[callbackQuery]()
+                  } catch (error) {
+                    checkForOnlineError(error)
+                  }
+                }, 500)
               }
             }
           }

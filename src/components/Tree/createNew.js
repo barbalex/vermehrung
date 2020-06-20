@@ -8,6 +8,7 @@ import exists from '../../utils/exists'
 export default async ({ node, store }) => {
   // get parent table, parent table id and table from url
   const { nodeType, url } = node
+  const { kultursSorted, sammlungsSorted, sammelLieferungsSorted } = store
   const { setActiveNodeArray } = store.tree
 
   // get table and id from url
@@ -59,45 +60,20 @@ export default async ({ node, store }) => {
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     if (tableTitle === 'An-Lieferungen') fkName = `nach_${parentTable}_id`
     // need to get art_id from kultur and set it
-    let responce
-    try {
-      responce = await store.queryKultur(
-        { where: { id: { _eq: parentId } } },
-        (k) => k.id.art_id,
-      )
-    } catch (error) {
-      return console.log('Error querying parent kultur', error.message)
-    }
-    additionalValuesToSet.art_id = responce?.kultur?.[0]?.art_id
+    const kultur = kultursSorted.find((k) => k.id === parentId)
+    additionalValuesToSet.art_id = kultur?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammlung') {
     // need to choose von_kultur_id or nach_kultur_id
     if (tableTitle === 'Aus-Lieferungen') fkName = `von_${parentTable}_id`
     // need to get art_id from sammlung and set it
-    let responce
-    try {
-      responce = await store.querySammlung(
-        { where: { id: { _eq: parentId } } },
-        (s) => s.id.art_id,
-      )
-    } catch (error) {
-      return console.log('Error querying parent kultur', error.message)
-    }
-    additionalValuesToSet.art_id = responce?.sammlung?.[0]?.art_id
+    const sammlung = sammlungsSorted.find((s) => s.id === parentId)
+    additionalValuesToSet.art_id = sammlung?.art_id
   }
   if (table === 'lieferung' && parentTable === 'sammel_lieferung') {
-    let responce
-    try {
-      responce = await store.querySammel_lieferung({
-        where: { id: { _eq: parentId } },
-      })
-    } catch (error) {
-      return console.log(
-        'Error querying parent sammel_lieferung',
-        error.message,
-      )
-    }
-    const sammelLieferung = responce?.sammel_lieferung?.[0]
+    const sammelLieferung = sammelLieferungsSorted.find(
+      (s) => s.id === parentId,
+    )
     const entries = Object.entries(sammelLieferung)
       .filter(
         // eslint-disable-next-line no-unused-vars
