@@ -42,7 +42,6 @@ export const zaehlungModelBase = ModelBase
     teilzaehlung_revs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_rev_aggregateModel)),
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -64,7 +63,6 @@ export class zaehlungModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get kultur_id() { return this.__attr(`kultur_id`) }
   get prognose() { return this.__attr(`prognose`) }
-  get tsv() { return this.__attr(`tsv`) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
   teilzaehlung_revs(builder) { return this.__child(`teilzaehlung_revs`, teilzaehlung_revModelSelector, builder) }
   teilzaehlung_revs_aggregate(builder) { return this.__child(`teilzaehlung_revs_aggregate`, teilzaehlung_rev_aggregateModelSelector, builder) }
@@ -75,4 +73,4 @@ export function selectFromzaehlung() {
   return new zaehlungModelSelector()
 }
 
-export const zaehlungModelPrimitives = selectFromzaehlung()._conflicts._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.datum.kultur_id.prognose.tsv
+export const zaehlungModelPrimitives = selectFromzaehlung()._conflicts._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.datum.kultur_id.prognose

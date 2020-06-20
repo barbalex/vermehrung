@@ -68,7 +68,6 @@ export const herkunftModelBase = ModelBase
     sammlung_revs_aggregate: types.union(types.undefined, types.late(() => sammlung_rev_aggregateModel)),
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
     wgs84_lat: types.union(types.undefined, types.null, types.frozen()),
     wgs84_long: types.union(types.undefined, types.null, types.frozen()),
   })
@@ -97,7 +96,6 @@ export class herkunftModelSelector extends QueryBuilder {
   get lv95_x() { return this.__attr(`lv95_x`) }
   get lv95_y() { return this.__attr(`lv95_y`) }
   get nr() { return this.__attr(`nr`) }
-  get tsv() { return this.__attr(`tsv`) }
   get wgs84_lat() { return this.__attr(`wgs84_lat`) }
   get wgs84_long() { return this.__attr(`wgs84_long`) }
   herkunft_files(builder) { return this.__child(`herkunft_files`, herkunft_fileModelSelector, builder) }
@@ -117,4 +115,4 @@ export function selectFromherkunft() {
   return new herkunftModelSelector()
 }
 
-export const herkunftModelPrimitives = selectFromherkunft()._conflicts._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.gemeinde.geom_point.kanton.land.lokalname.lv95_x.lv95_y.nr.tsv.wgs84_lat.wgs84_long
+export const herkunftModelPrimitives = selectFromherkunft()._conflicts._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.gemeinde.geom_point.kanton.land.lokalname.lv95_x.lv95_y.nr.wgs84_lat.wgs84_long

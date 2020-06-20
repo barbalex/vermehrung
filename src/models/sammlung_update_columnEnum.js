@@ -30,7 +30,6 @@ export const sammlung_update_columnEnumType = types.enumeration("sammlung_update
   "lv95_y",
   "nr",
   "person_id",
-  "tsv",
   "von_anzahl_individuen",
   "wgs84_lat",
   "wgs84_long",

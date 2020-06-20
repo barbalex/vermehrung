@@ -56,7 +56,6 @@ export const teilkulturModelBase = ModelBase
     teilzaehlung_revs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_rev_aggregateModel)),
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -80,7 +79,6 @@ export class teilkulturModelSelector extends QueryBuilder {
   get ort1() { return this.__attr(`ort1`) }
   get ort2() { return this.__attr(`ort2`) }
   get ort3() { return this.__attr(`ort3`) }
-  get tsv() { return this.__attr(`tsv`) }
   event_revs(builder) { return this.__child(`event_revs`, event_revModelSelector, builder) }
   event_revs_aggregate(builder) { return this.__child(`event_revs_aggregate`, event_rev_aggregateModelSelector, builder) }
   events(builder) { return this.__child(`events`, eventModelSelector, builder) }
@@ -95,4 +93,4 @@ export function selectFromteilkultur() {
   return new teilkulturModelSelector()
 }
 
-export const teilkulturModelPrimitives = selectFromteilkultur()._conflicts._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3.tsv
+export const teilkulturModelPrimitives = selectFromteilkultur()._conflicts._deleted._depth._parent_rev._rev._revisions.bemerkungen.changed.changed_by.kultur_id.name.ort1.ort2.ort3

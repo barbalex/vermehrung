@@ -23,5 +23,4 @@ export const teilkultur_select_columnEnumType = types.enumeration("teilkultur_se
   "ort1",
   "ort2",
   "ort3",
-  "tsv",
       ])

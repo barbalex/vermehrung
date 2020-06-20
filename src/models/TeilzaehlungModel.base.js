@@ -48,7 +48,6 @@ export const teilzaehlungModelBase = ModelBase
     teilzaehlung_revs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_rev_aggregateModel)),
     teilzaehlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilzaehlungModel)))),
     teilzaehlungs_aggregate: types.union(types.undefined, types.late(() => teilzaehlung_aggregateModel)),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
     zaehlung: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => zaehlungModel))),
     zaehlung_id: types.union(types.undefined, types.null, types.frozen()),
   })
@@ -76,7 +75,6 @@ export class teilzaehlungModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get prognose_von_tz() { return this.__attr(`prognose_von_tz`) }
   get teilkultur_id() { return this.__attr(`teilkultur_id`) }
-  get tsv() { return this.__attr(`tsv`) }
   get zaehlung_id() { return this.__attr(`zaehlung_id`) }
   teilkultur(builder) { return this.__child(`teilkultur`, teilkulturModelSelector, builder) }
   teilzaehlung(builder) { return this.__child(`teilzaehlung`, teilzaehlungModelSelector, builder) }
@@ -90,4 +88,4 @@ export function selectFromteilzaehlung() {
   return new teilzaehlungModelSelector()
 }
 
-export const teilzaehlungModelPrimitives = selectFromteilzaehlung()._conflicts._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.teilkultur_id.tsv.zaehlung_id
+export const teilzaehlungModelPrimitives = selectFromteilzaehlung()._conflicts._deleted._depth._parent_rev._rev._revisions.andere_menge.anzahl_auspflanzbereit.anzahl_mutterpflanzen.anzahl_pflanzen.auspflanzbereit_beschreibung.bemerkungen.changed.changed_by.prognose_von_tz.teilkultur_id.zaehlung_id

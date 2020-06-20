@@ -23,5 +23,4 @@ export const event_update_columnEnumType = types.enumeration("event_update_colum
   "kultur_id",
   "person_id",
   "teilkultur_id",
-  "tsv",
       ])

@@ -18,5 +18,4 @@ export const art_select_columnEnumType = types.enumeration("art_select_column", 
   "changed",
   "changed_by",
   "id",
-  "tsv",
       ])

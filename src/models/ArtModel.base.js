@@ -99,7 +99,6 @@ export const artModelBase = ModelBase
     sammlung_revs_aggregate: types.union(types.undefined, types.late(() => sammlung_rev_aggregateModel)),
     sammlungs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => sammlungModel)))),
     sammlungs_aggregate: types.union(types.undefined, types.late(() => sammlung_aggregateModel)),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
   })
   .views(self => ({
     get store() {
@@ -118,7 +117,6 @@ export class artModelSelector extends QueryBuilder {
   get changed() { return this.__attr(`changed`) }
   get changed_by() { return this.__attr(`changed_by`) }
   get id() { return this.__attr(`id`) }
-  get tsv() { return this.__attr(`tsv`) }
   art_ae_art(builder) { return this.__child(`art_ae_art`, ae_artModelSelector, builder) }
   art_files(builder) { return this.__child(`art_files`, art_fileModelSelector, builder) }
   art_files_aggregate(builder) { return this.__child(`art_files_aggregate`, art_file_aggregateModelSelector, builder) }
@@ -149,4 +147,4 @@ export function selectFromart() {
   return new artModelSelector()
 }
 
-export const artModelPrimitives = selectFromart()._conflicts._deleted._depth._parent_rev._rev._revisions.ae_id.changed.changed_by.tsv
+export const artModelPrimitives = selectFromart()._conflicts._deleted._depth._parent_rev._rev._revisions.ae_id.changed.changed_by

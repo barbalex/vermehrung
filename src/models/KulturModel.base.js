@@ -123,7 +123,6 @@ export const kulturModelBase = ModelBase
     teilkultur_revs_aggregate: types.union(types.undefined, types.late(() => teilkultur_rev_aggregateModel)),
     teilkulturs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => teilkulturModel)))),
     teilkulturs_aggregate: types.union(types.undefined, types.late(() => teilkultur_aggregateModel)),
-    tsv: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
     zaehlung_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => zaehlung_revModel)))),
     zaehlung_revs_aggregate: types.union(types.undefined, types.late(() => zaehlung_rev_aggregateModel)),
@@ -153,7 +152,6 @@ export class kulturModelSelector extends QueryBuilder {
   get garten_id() { return this.__attr(`garten_id`) }
   get herkunft_id() { return this.__attr(`herkunft_id`) }
   get id() { return this.__attr(`id`) }
-  get tsv() { return this.__attr(`tsv`) }
   get von_anzahl_individuen() { return this.__attr(`von_anzahl_individuen`) }
   get zwischenlager() { return this.__attr(`zwischenlager`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
@@ -199,4 +197,4 @@ export function selectFromkultur() {
   return new kulturModelSelector()
 }
 
-export const kulturModelPrimitives = selectFromkultur()._conflicts._deleted._depth._parent_rev._rev._revisions.aktiv.art_id.bemerkungen.changed.changed_by.erhaltungskultur.garten_id.herkunft_id.tsv.von_anzahl_individuen.zwischenlager
+export const kulturModelPrimitives = selectFromkultur()._conflicts._deleted._depth._parent_rev._rev._revisions.aktiv.art_id.bemerkungen.changed.changed_by.erhaltungskultur.garten_id.herkunft_id.von_anzahl_individuen.zwischenlager
