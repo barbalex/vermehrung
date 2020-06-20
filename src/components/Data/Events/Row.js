@@ -37,7 +37,7 @@ const EventsRows = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const datum = row.datum
-    ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+    ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
     : null
   const geplant = row.geplant ? ' (geplant)' : ''
   const event = `${row?.beschreibung ?? '(nicht beschrieben)'}${geplant}`
