@@ -15,7 +15,7 @@ import Data from '../components/Data'
 import Filter from '../components/Filter'
 import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
-import OnlineDetector from '../components/OnlineDetector'
+import ApiDetector from '../components/ApiDetector'
 import queryAllData from '../utils/queryAllData'
 
 const Container = styled.div`
@@ -231,7 +231,7 @@ const Vermehrung = ({ location }) => {
           </StyledSplitPane>
         </Container>
       </Layout>
-      <OnlineDetector />
+      <ApiDetector />
     </ErrorBoundary>
   )
 }
