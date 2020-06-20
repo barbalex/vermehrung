@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual'
 
-import treeLabelFromKultur from '../../../../utils/treeLabelFromKultur'
+import treeLabelKultur from '../../../../utils/treeLabelKultur'
 
 export default ({ store }) => {
   const { showKultur, visibleOpenNodes } = store.tree
@@ -13,7 +13,7 @@ export default ({ store }) => {
         visibleOpenNodes.some((node) => isEqual(['Kulturen'], node)),
       )
       .map((el) => {
-        const label = treeLabelFromKultur(el)
+        const label = treeLabelKultur(el)
 
         return {
           nodeType: 'table',

@@ -14,7 +14,7 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
-import treeLabelFromKultur from '../utils/treeLabelFromKultur'
+import treeLabelKultur from '../utils/treeLabelKultur'
 import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
 import QueuedQueryType from './QueuedQuery'
@@ -2003,7 +2003,7 @@ export const RootStore = RootStoreBase.props({
     get searchKulturSuggestions() {
       return self.kultursFiltered.map((o) => ({
         value: o.id,
-        label: treeLabelFromKultur(o),
+        label: treeLabelKultur(o),
         artname: o?.art?.art_ae_art?.name,
         gartenname: o?.garten?.name,
         personname: o?.garten?.person?.name,
