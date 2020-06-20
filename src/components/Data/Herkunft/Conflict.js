@@ -4,6 +4,7 @@ import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
+import checkForOnlineError from '../../../utils/checkForOnlineError'
 import Conflict from '../../shared/Conflict'
 
 const HerkunftConflict = ({
@@ -21,6 +22,7 @@ const HerkunftConflict = ({
       where: { _rev: { _eq: rev }, herkunft_id: { _eq: row.id } },
     }),
   )
+  error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
   const revRow =
@@ -104,6 +106,7 @@ const HerkunftConflict = ({
         },
       })
     } catch (error) {
+      checkForOnlineError(error)
       addNotification({
         message: error.message,
       })
