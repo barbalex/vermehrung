@@ -1,6 +1,7 @@
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
 import buildExceljsWorksheetsForKultur from '../../Kultur/buildExceljsWorksheets'
 import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
 
 /**
  * this function cann be used from higher up
@@ -19,6 +20,7 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
           .bemerkungen.lv95_x.lv95_y.wgs84_lat.wgs84_long,
     )
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
@@ -64,6 +66,7 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
           .von_anzahl_individuen.aktiv.bemerkungen,
     )
   } catch (error) {
+    checkForOnlineError(error)
     return addNotification({
       message: error.message,
     })
