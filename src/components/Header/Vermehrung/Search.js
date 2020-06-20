@@ -128,6 +128,10 @@ const Search = () => {
         keys: [
           { name: 'name', weight: 1 },
           { name: 'personname', weight: 0.7 },
+          { name: 'strasse', weight: 0.5 },
+          { name: 'plz', weight: 0.5 },
+          { name: 'ort', weight: 0.5 },
+          { name: 'aktiv', weight: 0.5 },
           { name: 'bemerkungen', weight: 0.5 },
         ],
         threshold,
