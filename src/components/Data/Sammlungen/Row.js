@@ -40,7 +40,7 @@ const Arten = ({ row, style, last }) => {
   const person = row?.person?.name ?? '(keine Person)'
   const herkunft = row?.herkunft?.nr ?? '(keine Herkunft-Nr)'
   const date = row?.datum
-    ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+    ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
     : 'kein Datum'
   const geplant = row.geplant ? ' (geplant)' : ''
   const label = `${

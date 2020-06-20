@@ -37,7 +37,7 @@ const Arten = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const datum = row.datum
-    ? moment(row.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
+    ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
     : 'kein Datum'
   const anz =
     row?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ?? '-'
