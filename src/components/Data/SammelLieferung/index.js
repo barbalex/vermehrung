@@ -112,7 +112,7 @@ const HerkunftLabel = styled.div`
   padding-bottom: 2px;
 `
 const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px) !important;
+  height: calc(100vh - 64px - 48px) !important;
   .Resizer {
     background: rgba(74, 20, 140, 0.1);
     opacity: 1;
