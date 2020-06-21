@@ -40,9 +40,9 @@ const EventsRows = ({ row, style, last }) => {
     ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
     : `Kein Datum. ID: ${row.id}`
   const garten = row?.kulturByVonKulturId?.garten?.name
-  const gartenPerson = row?.kulturByVonKulturId?.garten?.person?.name
+  const gartenPerson = row?.kulturByVonKulturId?.garten?.person?.fullname
   const von = garten || gartenPerson ? `, von: ${garten || gartenPerson}` : ''
-  const werPerson = row?.person?.name
+  const werPerson = row?.person?.fullname
   const wer = werPerson ? `, wer: ${werPerson}` : ''
   const label = `${datum}${von}${wer}`
 

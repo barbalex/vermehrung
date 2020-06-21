@@ -116,7 +116,7 @@ const Lieferschein = ({ row }) => {
 
   const person = store.persons.get(row.person_id) ?? {}
   const an = row.person_id
-    ? `${person?.name ?? '(kein Name)'} (${person?.ort ?? 'kein Ort'})`
+    ? `${person?.fullname ?? '(kein Name)'} (${person?.ort ?? 'kein Ort'})`
     : '(keine Person erfasst)'
 
   const am = row.datum
