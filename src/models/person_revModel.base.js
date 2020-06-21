@@ -82,6 +82,7 @@ export const person_revModelBase = ModelBase
     telefon_privat: types.union(types.undefined, types.null, types.string),
     userRoleByUserRole: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => user_roleModel))),
     user_role: types.union(types.undefined, types.null, types.string),
+    vorname: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
     get store() {
@@ -116,6 +117,7 @@ export class person_revModelSelector extends QueryBuilder {
   get telefon_mobile() { return this.__attr(`telefon_mobile`) }
   get telefon_privat() { return this.__attr(`telefon_privat`) }
   get user_role() { return this.__attr(`user_role`) }
+  get vorname() { return this.__attr(`vorname`) }
   av(builder) { return this.__child(`av`, avModelSelector, builder) }
   av_aggregate(builder) { return this.__child(`av_aggregate`, av_aggregateModelSelector, builder) }
   events(builder) { return this.__child(`events`, eventModelSelector, builder) }
@@ -135,4 +137,4 @@ export function selectFromperson_rev() {
   return new person_revModelSelector()
 }
 
-export const person_revModelPrimitives = selectFromperson_rev()._deleted._depth._parent_rev._rev._revisions.account_id.adresszusatz.aktiv.bemerkungen.changed.changed_by.email.info.kein_email.kommerziell.name.nr.ort.person_id.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role
+export const person_revModelPrimitives = selectFromperson_rev()._deleted._depth._parent_rev._rev._revisions.account_id.adresszusatz.aktiv.bemerkungen.changed.changed_by.email.info.kein_email.kommerziell.name.nr.ort.person_id.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role.vorname

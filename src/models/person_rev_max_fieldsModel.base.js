@@ -34,6 +34,7 @@ export const person_rev_max_fieldsModelBase = ModelBase
     telefon_mobile: types.union(types.undefined, types.null, types.string),
     telefon_privat: types.union(types.undefined, types.null, types.string),
     user_role: types.union(types.undefined, types.null, types.string),
+    vorname: types.union(types.undefined, types.null, types.string),
   })
   .views(self => ({
     get store() {
@@ -62,9 +63,10 @@ export class person_rev_max_fieldsModelSelector extends QueryBuilder {
   get telefon_mobile() { return this.__attr(`telefon_mobile`) }
   get telefon_privat() { return this.__attr(`telefon_privat`) }
   get user_role() { return this.__attr(`user_role`) }
+  get vorname() { return this.__attr(`vorname`) }
 }
 export function selectFromperson_rev_max_fields() {
   return new person_rev_max_fieldsModelSelector()
 }
 
-export const person_rev_max_fieldsModelPrimitives = selectFromperson_rev_max_fields()._depth._parent_rev._rev.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.person_id.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role
+export const person_rev_max_fieldsModelPrimitives = selectFromperson_rev_max_fields()._depth._parent_rev._rev.account_id.adresszusatz.bemerkungen.changed.changed_by.email.name.nr.ort.person_id.plz.strasse.telefon_geschaeft.telefon_mobile.telefon_privat.user_role.vorname
