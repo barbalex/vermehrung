@@ -27,6 +27,7 @@ export default async ({ store }) => {
     'queryingAllData',
     'gettingAuthUser',
     'online',
+    'errors',
   ]
   await persist('store', store, {
     storage: localForage,
