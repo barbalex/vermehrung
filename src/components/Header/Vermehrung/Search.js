@@ -237,6 +237,7 @@ const Search = () => {
       const personSuggestionsFuse = new Fuse(searchPersonSuggestions, {
         keys: [
           { name: 'nr', weight: 1 },
+          { name: 'vorname', weight: 1 },
           { name: 'name', weight: 1 },
           { name: 'ort', weight: 0.5 },
           { name: 'adresszusatz', weight: 0.5 },
