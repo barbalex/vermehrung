@@ -52,6 +52,7 @@ import sammlungIdInUrl from '../utils/sammlungIdInUrl'
 import kulturIdOfAnLieferungInUrl from '../utils/kulturIdOfAnLieferungInUrl'
 import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
+import getAuthToken from '../utils/getAuthToken'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
 const formatDatumForSearch = (datum) =>
@@ -127,7 +128,9 @@ export const RootStore = RootStoreBase.props({
               console.log({ error })
               // In case a conflict was caused by two EXACT SAME changes,
               // this will bounce because of the same rev. We want to ignore this:
-              if (
+              if (error.message.includes('JWT')) {
+                return getAuthToken({ store: self })
+              } else if (
                 error.message.includes('Uniqueness violation') &&
                 error.message.includes('_rev_id__rev_key')
               ) {
