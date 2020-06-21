@@ -48,11 +48,10 @@ const Aven = styled.div`
 
 const ArtPersonen = ({ artId }) => {
   const store = useContext(StoreContext)
-  const { avsSorted, personsSorted, insertAvRev } = store
+  const { avsSorted, personsSorted, insertAvRev, errors, unsetError } = store
   const [open, setOpen] = useState(false)
 
-  const [errors, setErrors] = useState({})
-  useEffect(() => setErrors({}), [artId])
+  useEffect(() => unsetError('av'), [artId, unsetError])
 
   const onClickToggle = useCallback(
     (e) => {
@@ -79,7 +78,6 @@ const ArtPersonen = ({ artId }) => {
   const saveToDb = useCallback(
     async (event) => {
       insertAvRev({ values: { art_id: artId, person_id: event.target.value } })
-      setErrors({})
     },
     [artId, insertAvRev],
   )
@@ -118,7 +116,7 @@ const ArtPersonen = ({ artId }) => {
               options={personWerte}
               saveToDb={saveToDb}
               isClearable={false}
-              error={errors.person_id}
+              error={errors?.av?.person_id}
             />
           )}
         </Content>
