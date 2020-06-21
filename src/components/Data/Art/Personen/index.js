@@ -70,7 +70,7 @@ const ArtPersonen = ({ artId }) => {
         .filter((a) => !avPersonIds.includes(a.id))
         .map((el) => ({
           value: el.id,
-          label: el?.name ?? '(kein Name)',
+          label: el?.fullname ?? '(kein Name)',
         })),
     [personsSorted, avPersonIds],
   )
