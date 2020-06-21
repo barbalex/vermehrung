@@ -4,6 +4,7 @@
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
 import React from 'react'
+import localForage from 'localforage'
 
 import App from './src/App'
 
@@ -16,7 +17,7 @@ export const wrapRootElement = ({ element }) => <App element={element} />
 
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
 export const onServiceWorkerUpdateReady = () => {
-  // turned off becaus updateExits was not reset if user simply restarted
+  // turned off because updateExits was not reset if user simply restarted
   // instead of clicking on the button
   //setTimeout(() => window.store.setUpdateExists(true))
   if (
@@ -24,6 +25,7 @@ export const onServiceWorkerUpdateReady = () => {
       'vermehrung.ch neu laden, um die neuste Version zu installieren?',
     )
   ) {
+    localForage.clear()
     window.location.reload(true)
   }
 }
