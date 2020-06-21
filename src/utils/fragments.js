@@ -431,6 +431,7 @@ export const person = gql`
     id
     __typename
     nr
+    vorname
     name
     adresszusatz
     strasse
