@@ -25,7 +25,7 @@ const TitleRow = styled.div`
   justify-content: space-between;
   margin-left: -10px;
   margin-right: -10px;
-  margin-bottom: 15px;
+  ${(props) => props['data-margin-bottom'] && 'margin-bottom: 15px;'}
   padding: 0 10px;
   ${(props) => props['data-online'] && 'cursor: pointer;'}
   position: sticky;
@@ -128,7 +128,7 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <TitleRow data-online={online}>
+        <TitleRow data-online={online} data-margin-bottom={!!files.length}>
           <Title>Dateien</Title>
           <Buttons>
             <Uploader
@@ -165,10 +165,14 @@ const Files = ({ parentId, parent }) => {
             prevLabel="Voriges Bild"
           />
         )}
-        <Spacer />
-        {files.map((file) => (
-          <File key={file.file_id} file={file} parent={parent} />
-        ))}
+        {!!files.length && (
+          <>
+            <Spacer />
+            {files.map((file) => (
+              <File key={file.file_id} file={file} parent={parent} />
+            ))}
+          </>
+        )}
       </Container>
     </ErrorBoundary>
   )

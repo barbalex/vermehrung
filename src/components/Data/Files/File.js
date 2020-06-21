@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { FaTimes, FaDownload } from 'react-icons/fa'
@@ -68,13 +68,12 @@ const MenuTitle = styled.h3`
 
 const File = ({ file, parent }) => {
   const store = useContext(StoreContext)
-
-  const [errors, setErrors] = useState({})
+  const { errors, unsetError } = store
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  useEffect(() => setErrors({}), [file])
+  useEffect(() => unsetError(`${parent}_file`), [file, parent, unsetError])
 
   const onClickDelete = useCallback(() => {
     store[`mutateDelete_${parent}_file`](
@@ -103,9 +102,9 @@ const File = ({ file, parent }) => {
         _set: newObject,
         where: { id: { _eq: file.id } },
       })
-      setErrors({})
+      unsetError(`${parent}_file`)
     },
-    [file, parent, store],
+    [file, parent, store, unsetError],
   )
 
   if (!file) return null
@@ -129,7 +128,7 @@ const File = ({ file, parent }) => {
             label="Datei-Typ"
             value={file.file_mime_type}
             saveToDb={saveToDb}
-            error={errors.file_mime_type}
+            error={errors[`${parent}_file`]?.file_mime_type}
             disabled
             schrinkLabel
           />
@@ -142,7 +141,7 @@ const File = ({ file, parent }) => {
             label="Datei-Name"
             value={file.name}
             saveToDb={saveToDb}
-            error={errors.name}
+            error={errors[`${parent}_file`]?.name}
             disabled
             schrinkLabel
           />
@@ -155,7 +154,7 @@ const File = ({ file, parent }) => {
             label="Beschreibung"
             value={file.beschreibung}
             saveToDb={saveToDb}
-            error={errors.beschreibung}
+            error={errors[`${parent}_file`]?.beschreibung}
             multiLine
             schrinkLabel
           />
