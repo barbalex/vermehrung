@@ -2088,7 +2088,7 @@ export const RootStore = RootStoreBase.props({
             : date
             ? `${date}: `
             : ''
-        const herkunft = o.herkunft?.nr ? `von ${o.herkunft?.nr}` : ''
+        const herkunft = o?.herkunft?.nr ? `von ${o?.herkunft?.nr}` : ''
         const person = o.person?.name
         const herkunftPerson =
           herkunft && person
@@ -2098,7 +2098,9 @@ export const RootStore = RootStoreBase.props({
             : person
             ? `${person}; `
             : ''
-        const art = o.art.art_ae_art?.name ? `${o.art.art_ae_art?.name} ` : ''
+        const art = o?.art?.art_ae_art?.name
+          ? `${o?.art?.art_ae_art?.name} `
+          : ''
         const geplant = o.geplant ? ' (geplant)' : ''
         const label = `${nrDate}${herkunftPerson}${art}${geplant}`
 
