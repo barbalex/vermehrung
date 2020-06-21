@@ -24,8 +24,12 @@ export default (a, b) => {
   if (gartenNameA < gartenNameB) return -1
   if (gartenNameA > gartenNameB) return 1
 
-  const gartenPersonNameA = a?.garten?.person?.name?.toString()?.toLowerCase()
-  const gartenPersonNameB = b?.garten?.person?.name?.toString()?.toLowerCase()
+  const gartenPersonNameA = a?.garten?.person?.fullname
+    ?.toString()
+    ?.toLowerCase()
+  const gartenPersonNameB = b?.garten?.person?.fullname
+    ?.toString()
+    ?.toLowerCase()
   if (gartenPersonNameA < gartenPersonNameB) return -1
   if (gartenPersonNameA > gartenPersonNameB) return 1
 
