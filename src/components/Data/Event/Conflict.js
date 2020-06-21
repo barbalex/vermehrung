@@ -103,8 +103,8 @@ const EventConflict = ({
       label: 'Teilkultur',
     },
     {
-      valueInRow: row?.person?.name,
-      valueInRev: revRow?.person?.name,
+      valueInRow: row?.person?.fullname,
+      valueInRev: revRow?.person?.fullname,
       label: 'Person',
     },
     {

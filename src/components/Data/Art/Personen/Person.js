@@ -53,7 +53,7 @@ const Av = ({ av }) => {
   const onClickDelete = useCallback(() => av.delete(), [av])
 
   const person = personsSorted.find((p) => p.id === av.person_id)
-  const personname = person?.name
+  const personname = person?.fullname
 
   if (!av) return null
 
