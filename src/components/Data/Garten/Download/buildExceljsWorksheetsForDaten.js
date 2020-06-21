@@ -15,7 +15,7 @@ export default async ({ store, garten_id, workbook, calledFromHigherUp }) => {
     id: garten.id,
     name: garten.name,
     person_id: garten.person_id,
-    person_name: garten?.person?.name ?? '',
+    person_name: garten?.person?.fullname ?? '',
     person_rohdaten: removeMetadataFromDataset({
       dataset: garten?.person,
       foreignKeys: [],

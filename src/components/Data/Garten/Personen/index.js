@@ -71,7 +71,7 @@ const GartenPersonen = ({ gartenId }) => {
         .filter((a) => !gvPersonIds.includes(a.id))
         .map((el) => ({
           value: el.id,
-          label: el?.name || '(kein Name)',
+          label: el?.fullname || '(kein Name)',
         })),
     [personsSorted, gvPersonIds],
   )
