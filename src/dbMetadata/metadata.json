@@ -11232,32 +11232,33 @@
               ]
             },
             "columns": [
-              "id",
-              "nr",
-              "name",
-              "adresszusatz",
-              "strasse",
+              "aktiv",
+              "_deleted",
+              "info",
+              "kein_email",
+              "kommerziell",
+              "_depth",
               "plz",
+              "_conflicts",
+              "_revisions",
+              "account_id",
+              "adresszusatz",
+              "bemerkungen",
+              "changed_by",
+              "email",
+              "name",
+              "nr",
               "ort",
-              "telefon_privat",
+              "_parent_rev",
+              "_rev",
+              "strasse",
               "telefon_geschaeft",
               "telefon_mobile",
-              "email",
-              "kein_email",
-              "bemerkungen",
-              "changed",
-              "changed_by",
-              "account_id",
+              "telefon_privat",
               "user_role",
-              "kommerziell",
-              "info",
-              "aktiv",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_conflicts",
-              "_deleted"
+              "vorname",
+              "changed",
+              "id"
             ]
           }
         },
@@ -11294,6 +11295,7 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
               "id"
             ],
@@ -11305,32 +11307,33 @@
           "permission": {
             "check": {},
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_conflicts",
-              "_revisions",
-              "account_id",
-              "adresszusatz",
-              "bemerkungen",
-              "changed_by",
-              "email",
-              "name",
+              "id",
               "nr",
-              "ort",
-              "_parent_rev",
-              "_rev",
+              "name",
+              "adresszusatz",
               "strasse",
+              "plz",
+              "ort",
+              "telefon_privat",
               "telefon_geschaeft",
               "telefon_mobile",
-              "telefon_privat",
-              "user_role",
+              "email",
+              "kein_email",
+              "bemerkungen",
               "changed",
-              "id"
+              "changed_by",
+              "account_id",
+              "user_role",
+              "kommerziell",
+              "info",
+              "aktiv",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_conflicts",
+              "_deleted",
+              "vorname"
             ]
           }
         }
@@ -11364,6 +11367,7 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
               "id"
             ],
@@ -11420,6 +11424,7 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
               "id"
             ],
@@ -11434,32 +11439,33 @@
           "role": "manager",
           "permission": {
             "columns": [
-              "aktiv",
-              "_deleted",
-              "info",
-              "kein_email",
-              "kommerziell",
-              "_depth",
-              "plz",
-              "_conflicts",
-              "_revisions",
-              "account_id",
-              "adresszusatz",
-              "bemerkungen",
-              "changed_by",
-              "email",
-              "name",
+              "id",
               "nr",
-              "ort",
-              "_parent_rev",
-              "_rev",
+              "name",
+              "adresszusatz",
               "strasse",
+              "plz",
+              "ort",
+              "telefon_privat",
               "telefon_geschaeft",
               "telefon_mobile",
-              "telefon_privat",
-              "user_role",
+              "email",
+              "kein_email",
+              "bemerkungen",
               "changed",
-              "id"
+              "changed_by",
+              "account_id",
+              "user_role",
+              "kommerziell",
+              "info",
+              "aktiv",
+              "_rev",
+              "_parent_rev",
+              "_revisions",
+              "_depth",
+              "_conflicts",
+              "_deleted",
+              "vorname"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -11495,6 +11501,7 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
               "id"
             ],
@@ -11551,6 +11558,7 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
               "id"
             ],
@@ -11590,6 +11598,7 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
               "id"
             ],
@@ -12840,32 +12849,33 @@
               ]
             },
             "columns": [
-              "person_id",
-              "nr",
-              "name",
+              "_deleted",
+              "_depth",
+              "_parent_rev",
+              "_rev",
+              "_revisions",
+              "account_id",
               "adresszusatz",
-              "strasse",
-              "plz",
-              "ort",
-              "telefon_privat",
-              "telefon_geschaeft",
-              "telefon_mobile",
-              "email",
-              "kein_email",
+              "aktiv",
               "bemerkungen",
               "changed",
               "changed_by",
-              "account_id",
-              "user_role",
-              "kommerziell",
+              "email",
+              "id",
               "info",
-              "aktiv",
-              "_rev",
-              "_parent_rev",
-              "_revisions",
-              "_depth",
-              "_deleted",
-              "id"
+              "kein_email",
+              "kommerziell",
+              "name",
+              "nr",
+              "ort",
+              "person_id",
+              "plz",
+              "strasse",
+              "telefon_geschaeft",
+              "telefon_mobile",
+              "telefon_privat",
+              "user_role",
+              "vorname"
             ],
             "backend_only": false
           }
@@ -12902,9 +12912,10 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "backend_only": false
           }
@@ -12937,9 +12948,10 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "backend_only": false
           }
@@ -12973,9 +12985,10 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "filter": {
               "_or": [
@@ -13029,9 +13042,10 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "filter": {
               "person_id": {
@@ -13067,9 +13081,10 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -13104,9 +13119,10 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "filter": {
               "_or": [
@@ -13160,9 +13176,10 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "filter": {
               "person_id": {
@@ -13199,12 +13216,21 @@
               "telefon_mobile",
               "telefon_privat",
               "user_role",
+              "vorname",
               "changed",
-              "person_id",
-              "id"
+              "id",
+              "person_id"
             ],
             "filter": {},
             "check": null
+          }
+        }
+      ],
+      "delete_permissions": [
+        {
+          "role": "manager",
+          "permission": {
+            "filter": {}
           }
         }
       ]
