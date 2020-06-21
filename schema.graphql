@@ -19849,6 +19849,7 @@ type person {
   # An object relationship
   userRoleByUserRole: user_role
   user_role: String
+  vorname: String
 }
 
 # aggregated selection of "person"
@@ -19952,6 +19953,7 @@ input person_bool_exp {
   telefon_privat: String_comparison_exp
   userRoleByUserRole: user_role_bool_exp
   user_role: String_comparison_exp
+  vorname: String_comparison_exp
 }
 
 # unique or primary key constraints on table "person"
@@ -20210,6 +20212,7 @@ input person_insert_input {
   telefon_privat: String
   userRoleByUserRole: user_role_obj_rel_insert_input
   user_role: String
+  vorname: String
 }
 
 # aggregate max on columns
@@ -20233,6 +20236,7 @@ type person_max_fields {
   telefon_mobile: String
   telefon_privat: String
   user_role: String
+  vorname: String
 }
 
 # order by max() on columns of table "person"
@@ -20256,6 +20260,7 @@ input person_max_order_by {
   telefon_mobile: order_by
   telefon_privat: order_by
   user_role: order_by
+  vorname: order_by
 }
 
 # aggregate min on columns
@@ -20279,6 +20284,7 @@ type person_min_fields {
   telefon_mobile: String
   telefon_privat: String
   user_role: String
+  vorname: String
 }
 
 # order by min() on columns of table "person"
@@ -20302,6 +20308,7 @@ input person_min_order_by {
   telefon_mobile: order_by
   telefon_privat: order_by
   user_role: order_by
+  vorname: order_by
 }
 
 # response of any mutation on the table "person"
@@ -21511,6 +21518,7 @@ input person_order_by {
   telefon_privat: order_by
   userRoleByUserRole: user_role_order_by
   user_role: order_by
+  vorname: order_by
 }
 
 # primary key columns input for table: "person"
@@ -21768,6 +21776,7 @@ type person_rev {
   # An object relationship
   userRoleByUserRole: user_role
   user_role: String
+  vorname: String
 }
 
 # aggregated selection of "person_rev"
@@ -21863,6 +21872,7 @@ input person_rev_bool_exp {
   telefon_privat: String_comparison_exp
   userRoleByUserRole: user_role_bool_exp
   user_role: String_comparison_exp
+  vorname: String_comparison_exp
 }
 
 # unique or primary key constraints on table "person_rev"
@@ -21916,6 +21926,7 @@ input person_rev_insert_input {
   telefon_privat: String
   userRoleByUserRole: user_role_obj_rel_insert_input
   user_role: String
+  vorname: String
 }
 
 # aggregate max on columns
@@ -21940,6 +21951,7 @@ type person_rev_max_fields {
   telefon_mobile: String
   telefon_privat: String
   user_role: String
+  vorname: String
 }
 
 # order by max() on columns of table "person_rev"
@@ -21964,6 +21976,7 @@ input person_rev_max_order_by {
   telefon_mobile: order_by
   telefon_privat: order_by
   user_role: order_by
+  vorname: order_by
 }
 
 # aggregate min on columns
@@ -21988,6 +22001,7 @@ type person_rev_min_fields {
   telefon_mobile: String
   telefon_privat: String
   user_role: String
+  vorname: String
 }
 
 # order by min() on columns of table "person_rev"
@@ -22012,6 +22026,7 @@ input person_rev_min_order_by {
   telefon_mobile: order_by
   telefon_privat: order_by
   user_role: order_by
+  vorname: order_by
 }
 
 # response of any mutation on the table "person_rev"
@@ -22072,6 +22087,7 @@ input person_rev_order_by {
   telefon_privat: order_by
   userRoleByUserRole: user_role_order_by
   user_role: order_by
+  vorname: order_by
 }
 
 # primary key columns input for table: "person_rev"
@@ -22158,6 +22174,9 @@ enum person_rev_select_column {
 
   # column name
   user_role
+
+  # column name
+  vorname
 }
 
 # input type for updating data in table "person_rev"
@@ -22188,6 +22207,7 @@ input person_rev_set_input {
   telefon_mobile: String
   telefon_privat: String
   user_role: String
+  vorname: String
 }
 
 # aggregate stddev on columns
@@ -22317,6 +22337,9 @@ enum person_rev_update_column {
 
   # column name
   user_role
+
+  # column name
+  vorname
 }
 
 # aggregate var_pop on columns
@@ -22434,6 +22457,9 @@ enum person_select_column {
 
   # column name
   user_role
+
+  # column name
+  vorname
 }
 
 # input type for updating data in table "person"
@@ -22464,6 +22490,7 @@ input person_set_input {
   telefon_mobile: String
   telefon_privat: String
   user_role: String
+  vorname: String
 }
 
 # aggregate stddev on columns
@@ -22593,6 +22620,9 @@ enum person_update_column {
 
   # column name
   user_role
+
+  # column name
+  vorname
 }
 
 # aggregate var_pop on columns
