@@ -284,7 +284,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const vonKulturWerte = useMemo(
     () =>
       vonKulturWerteData.map((el) => {
-        const personName = el?.garten?.person?.name ?? '(kein Name)'
+        const personName = el?.garten?.person?.fullname ?? '(kein Name)'
         const personOrt = el?.garten?.person?.ort ?? null
         const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
         const label = el?.garten?.name ?? personLabel
@@ -341,7 +341,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     () =>
       personsSorted.map((el) => ({
         value: el.id,
-        label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
     [personsSorted],
   )
