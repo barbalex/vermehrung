@@ -17,10 +17,10 @@ export default ({ store }) => {
           ? moment(el.datum, 'YYYY-MM-DD').format('YYYY.MM.DD')
           : `Kein Datum. ID: ${el.id}`
         const garten = el?.kulturByVonKulturId?.garten?.name
-        const gartenPerson = el?.kulturByVonKulturId?.garten?.person?.name
+        const gartenPerson = el?.kulturByVonKulturId?.garten?.person?.fullname
         const von =
           garten ?? gartenPerson ? `, von: ${garten || gartenPerson}` : ''
-        const werPerson = el?.person?.name
+        const werPerson = el?.person?.fullname
         const wer = werPerson ? `, wer: ${werPerson}` : ''
         const label = `${datum}${von}${wer}`
 

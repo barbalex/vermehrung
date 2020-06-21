@@ -39,7 +39,7 @@ export default ({ store }) => {
         table: 'kultur',
         id: `${sammlungId}${lieferungId}${el.id}`,
         label:
-          el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`,
+          el?.garten?.name ?? `${el?.garten?.person?.fullname ?? 'kein Name'}`,
         url: [
           'Sammlungen',
           sammlungId,
