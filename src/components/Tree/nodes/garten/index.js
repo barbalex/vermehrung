@@ -13,7 +13,7 @@ export default ({ store }) => {
         menuTitle: 'Garten',
         table: 'garten',
         id: el.id,
-        label: el.name ?? `(${el?.person?.name ?? 'keine Person gewählt'})`,
+        label: el.name ?? `${el?.person?.fullname ?? 'keine Person gewählt'}`,
         url: ['Gaerten', el.id],
         hasChildren: true,
       }))

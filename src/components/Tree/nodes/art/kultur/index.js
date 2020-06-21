@@ -17,7 +17,7 @@ export default ({ store }) => {
     return kulturen
       .map((el) => {
         const garten =
-          el?.garten?.name ?? `(${el?.garten?.person?.name ?? 'kein Name'})`
+          el?.garten?.name ?? `${el?.garten?.person?.fullname ?? 'kein Name'}`
         const herkunft = el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
         const label = `von: ${herkunft}, in: ${garten}`
 

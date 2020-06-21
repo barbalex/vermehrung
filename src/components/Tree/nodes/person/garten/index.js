@@ -23,7 +23,7 @@ export default ({ store }) => {
         menuTitle: 'Garten',
         table: 'garten',
         id: `${personId}${el.id}`,
-        label: el.name || `(${el?.person?.name ?? 'kein Name'})`,
+        label: el.name || `${el?.person?.fullname ?? 'kein Name'}`,
         url: ['Personen', personId, 'Gaerten', el.id],
         hasChildren: true,
       }))
