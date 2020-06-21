@@ -16,7 +16,7 @@ export default ({ store }) => {
         menuTitle: 'Person',
         table: 'person',
         id: el.id,
-        label: el?.name ?? '(kein Name)',
+        label: el?.fullname ?? '(kein Name)',
         url: ['Personen', el.id],
         hasChildren: true,
       }))

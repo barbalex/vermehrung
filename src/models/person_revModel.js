@@ -28,6 +28,7 @@ export const person_revModel = person_revModelBase
       const newObject = {
         person_id: self.person_id,
         nr: self.nr,
+        vorname: self.vorname,
         name: self.name,
         adresszusatz: self.adresszusatz,
         strasse: self.strasse,

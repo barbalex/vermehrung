@@ -15,6 +15,7 @@ const personRevQuery = gql`
       __typename
       person_id
       nr
+      vorname
       name
       adresszusatz
       strasse
@@ -78,8 +79,8 @@ const PersonConflict = ({
       label: 'Nr',
     },
     {
-      valueInRow: row?.name,
-      valueInRev: revRow?.name,
+      valueInRow: row?.fullname,
+      valueInRev: revRow?.fullname,
       label: 'Name',
     },
     {
@@ -167,6 +168,7 @@ const PersonConflict = ({
     const newObject = {
       person_id: revRow.person_id,
       nr: revRow.nr,
+      vorname: revRow.vorname,
       name: revRow.name,
       adresszusatz: revRow.adresszusatz,
       strasse: revRow.strasse,
@@ -230,6 +232,7 @@ const PersonConflict = ({
     revRow.telefon_mobile,
     revRow.telefon_privat,
     revRow.user_role,
+    revRow.vorname,
     row._depth,
     row._rev,
     store,
