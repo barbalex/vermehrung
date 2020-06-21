@@ -361,7 +361,9 @@ const Person = ({
               {row.user_role === 'artverantwortlich' && (
                 <Arten personId={row.id} />
               )}
-              {row.user_role === 'gaertner' && <Gaerten personId={row.id} />}
+              {['gaertner', 'artverantwortlich'].includes(row.user_role) && (
+                <Gaerten personId={row.id} />
+              )}
               {!showFilter && row.id && (
                 <Files parentId={row.id} parent="person" />
               )}
