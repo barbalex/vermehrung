@@ -21,6 +21,7 @@ drop table if exists person cascade;
 create table person (
   id uuid primary key default uuid_generate_v1mc(),
   nr text default null, -- DO NOT set unique - does not work for offline
+  vorname text default null,
   name text default null,
   adresszusatz text default null,
   strasse text default null,
@@ -48,6 +49,7 @@ create table person (
 );
 create index on person using btree (id);
 create index on person using btree (name);
+create index on person using btree (vorname);
 create index on person using btree (account_id);
 create index on person using btree (aktiv);
 create index on person using btree (kommerziell);
