@@ -37,7 +37,7 @@ const Arten = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const art = row?.art?.art_ae_art?.name ?? '(keine Art)'
-  const person = row?.person?.name ?? '(keine Person)'
+  const person = row?.person?.fullname ?? '(keine Person)'
   const herkunft = row?.herkunft?.nr ?? '(keine Herkunft-Nr)'
   const date = row?.datum
     ? moment(row.datum, 'YYYY-MM-DD').format('DD.MM.YYYY')
