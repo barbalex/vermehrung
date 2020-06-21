@@ -21,7 +21,7 @@ export default ({ kulturId, store }) => {
         .filter((k) => !exists(k.von_anzahl_individuen))
         .map((k) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}`
 
@@ -49,7 +49,7 @@ export default ({ kulturId, store }) => {
         .filter((k) => !k.herkunft_id)
         .map((k) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
           const text = `ID: ${k.id}, in: ${garten}`
 
           return {
@@ -71,7 +71,7 @@ export default ({ kulturId, store }) => {
         )
         .map((k) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.name ?? 'kein Name'})`
+            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}`
 
@@ -87,7 +87,7 @@ export default ({ kulturId, store }) => {
         .map((tk) => {
           const garten =
             tk.kultur?.garten?.name ??
-            `(${tk.kultur?.garten?.person?.name ?? 'kein Name'})`
+            `${tk.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = tk.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Teilkultur-ID: ${tk.id}`
 
@@ -103,7 +103,7 @@ export default ({ kulturId, store }) => {
         .map((z) => {
           const garten =
             z?.kultur?.garten?.name ??
-            `(${z?.kultur?.garten?.person?.name ?? 'kein Name'})`
+            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
 
@@ -124,7 +124,7 @@ export default ({ kulturId, store }) => {
         .map((z) => {
           const garten =
             z.kultur?.garten?.name ??
-            `(${z.kultur?.garten?.person?.name ?? 'kein Name'})`
+            `${z.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
@@ -151,7 +151,7 @@ export default ({ kulturId, store }) => {
         .map((z) => {
           const garten =
             z.kultur?.garten?.name ??
-            `(${z.kultur?.garten?.person?.name ?? 'kein Name'})`
+            `${z.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
@@ -178,7 +178,7 @@ export default ({ kulturId, store }) => {
         .map((z) => {
           const garten =
             z.kultur?.garten?.name ??
-            `(${z.kultur?.garten?.person?.name ?? 'kein Name'})`
+            `${z.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
@@ -394,7 +394,7 @@ export default ({ kulturId, store }) => {
         .map((ev) => {
           const garten =
             ev.kultur?.garten?.name ??
-            `(${ev.kultur?.garten?.person?.name ?? 'kein Name'})`
+            `${ev.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = ev.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
 
@@ -410,7 +410,7 @@ export default ({ kulturId, store }) => {
         .map((ev) => {
           const garten =
             ev.kultur?.garten?.name ??
-            `(${ev.kultur?.garten?.person?.name ?? 'kein Name'})`
+            `${ev.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = ev.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${ev.id}`
 

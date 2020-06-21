@@ -148,7 +148,7 @@ export default async ({
       art_ae_id: z?.art?.art_ae_art?.id ?? '',
       art_ae_name: z?.art?.art_ae_art?.name ?? '',
       person_id: z.person_id,
-      person_name: z?.person?.name ?? '',
+      person_name: z?.person?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
         dataset: z?.person,
         foreignKeys: [],
@@ -158,7 +158,7 @@ export default async ({
       von_sammlung_herkunft_id: z?.sammlung?.herkunft_id ?? '',
       von_sammlung_herkunft_nr: z?.sammlung?.herkunft?.nr ?? '',
       von_sammlung_person_id: z?.sammlung?.person_id ?? '',
-      von_sammlung_person_name: z?.sammlung?.person?.name ?? '',
+      von_sammlung_person_name: z?.sammlung?.person?.fullname ?? '',
       von_sammlung_rohdaten: removeMetadataFromDataset({
         dataset: z?.sammlung,
         foreignKeys: [],
@@ -253,7 +253,7 @@ export default async ({
       art_ae_id: z?.art?.art_ae_art?.id ?? '',
       art_ae_name: z?.art?.art_ae_art?.name ?? '',
       person_id: z.person_id,
-      person_name: z?.person?.name ?? '',
+      person_name: z?.person?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
         dataset: z?.person,
         foreignKeys: [],
@@ -263,7 +263,7 @@ export default async ({
       von_sammlung_herkunft_id: z?.sammlung?.herkunft_id ?? '',
       von_sammlung_herkunft_nr: z?.sammlung?.herkunft?.nr ?? '',
       von_sammlung_person_id: z?.sammlung?.person_id ?? '',
-      von_sammlung_person_name: z?.sammlung?.person?.name ?? '',
+      von_sammlung_person_name: z?.sammlung?.person?.fullname ?? '',
       von_sammlung_rohdaten: removeMetadataFromDataset({
         dataset: z?.sammlung,
         foreignKeys: [],
@@ -340,7 +340,7 @@ export default async ({
         foreignKeys: [],
       }),
       person_id: z.person_id,
-      person_name: z?.person?.name ?? '',
+      person_name: z?.person?.fullname ?? '',
       person_rohdaten: removeMetadataFromDataset({
         dataset: z?.person,
         foreignKeys: [],
