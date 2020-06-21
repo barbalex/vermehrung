@@ -48,7 +48,7 @@ create table person (
   _conflicts text[] default null
 );
 create index on person using btree (id);
-create index on person using btree (name);
+create index on person using btree (nachname);
 create index on person using btree (vorname);
 create index on person using btree (account_id);
 create index on person using btree (aktiv);
@@ -61,6 +61,7 @@ create table person_rev (
   id uuid primary key default uuid_generate_v1mc(),
   person_id uuid default null,
   nr text default null, -- DO NOT set unique - does not work for offline
+  vorname text default null,
   name text default null,
   adresszusatz text default null,
   strasse text default null,
