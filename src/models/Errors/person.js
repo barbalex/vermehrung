@@ -2,6 +2,7 @@ import { types } from 'mobx-state-tree'
 
 export const type = types.model({
   nr: types.union(types.string, types.undefined, types.null),
+  vorname: types.union(types.string, types.undefined, types.null),
   name: types.union(types.string, types.undefined, types.null),
   adresszusatz: types.union(types.string, types.undefined, types.null),
   strasse: types.union(types.string, types.undefined, types.null),

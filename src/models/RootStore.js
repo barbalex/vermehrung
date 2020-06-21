@@ -1096,6 +1096,7 @@ export const RootStore = RootStoreBase.props({
         const newObject = {
           person_id: id,
           nr: undefined,
+          vorname: undefined,
           name: undefined,
           adresszusatz: undefined,
           strasse: undefined,
@@ -2066,6 +2067,7 @@ export const RootStore = RootStoreBase.props({
           o.ort ? `, ${o.ort}` : ''
         }`,
         nr: o.nr,
+        vorname: o.vorname,
         name: o.name,
         ort: o.ort,
         adresszusatz: o.adresszusatz,
