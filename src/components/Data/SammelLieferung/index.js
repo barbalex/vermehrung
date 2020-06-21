@@ -294,7 +294,7 @@ const SammelLieferung = ({
     () =>
       personsSorted.map((el) => ({
         value: el.id,
-        label: `${el.name || '(kein Name)'} (${el.ort || 'kein Ort'})`,
+        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
     [personsSorted],
   )
