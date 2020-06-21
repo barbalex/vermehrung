@@ -95,7 +95,7 @@ const Account = () => {
         >
           <MenuItem
             onClick={onClickLogout}
-          >{`${userPerson?.name} abmelden`}</MenuItem>
+          >{`${userPerson?.fullname} abmelden`}</MenuItem>
           <MenuItem onClick={onClickResetPassword}>{resetTitle}</MenuItem>
           <Line />
           <MenuItem onClick={onClickRefresh} data-id="appbar-more-logout">
