@@ -1989,11 +1989,11 @@ export const RootStore = RootStoreBase.props({
     get searchGartenSuggestions() {
       return self.gartensFiltered.map((o) => ({
         value: o.id,
-        label: `${o.name || `(${o?.person?.name ?? ''})`}${
+        label: `${o.name || `${o?.person?.fullname ?? ''}`}${
           o.ort ? `, ${o.ort}` : ''
         }`,
         name: o.name,
-        personname: o?.person?.name,
+        personname: o?.person?.fullname,
         strasse: o.strasse,
         plz: o.plz,
         ort: o.ort,
@@ -2016,7 +2016,7 @@ export const RootStore = RootStoreBase.props({
         label: treeLabelKultur(o),
         artname: o?.art?.art_ae_art?.name,
         gartenname: o?.garten?.name,
-        personname: o?.garten?.person?.name,
+        personname: o?.garten?.person?.fullname,
         herkunftnr: o?.herkunft?.nr,
         herkunftlokalname: o?.herkunft?.lokalname,
         herkunftgemeinde: o?.herkunft?.gemeinde,
@@ -2031,7 +2031,7 @@ export const RootStore = RootStoreBase.props({
         datum: formatDatumForSearch(o.datum),
         artname: o?.kultur?.art?.art_ae_art?.name,
         gartenname: o?.kultur?.garten?.name,
-        personname: o?.kultur?.garten?.person?.name,
+        personname: o?.kultur?.garten?.person?.fullname,
         geplant: o.geplant ? 'geplant' : 'ausgeführt',
         beschreibung: o.beschreibung,
         parent: o.kultur_id,
@@ -2043,16 +2043,16 @@ export const RootStore = RootStoreBase.props({
         value: o.id,
         label: formatDatumForSearch(o.datum),
         artname: o?.art?.art_ae_art?.name,
-        personname: o?.person?.name,
+        personname: o?.person?.fullname,
         datum: formatDatumForSearch(o.datum),
         sammlungNr: o?.sammlung?.nr,
         sammlungDatum: formatDatumForSearch(o?.sammlung?.datum),
-        sammlungPerson: o?.sammlung?.person?.name,
+        sammlungPerson: o?.sammlung?.person?.fullname,
         sammlungHerkunftNr: o?.sammlung?.herkunft?.nr,
         sammlungHerkunftLokalname: o?.sammlung?.herkunft?.lokalname,
         sammlungHerkunftGemeinde: o?.sammlung?.herkunft?.gemeinde,
-        vonKulturPersonName: o?.kulturByVonKulturId?.garten?.person?.name,
-        nachKulturPersonName: o?.kulturByNachKulturId?.garten?.person?.name,
+        vonKulturPersonName: o?.kulturByVonKulturId?.garten?.person?.fullname,
+        nachKulturPersonName: o?.kulturByNachKulturId?.garten?.person?.fullname,
         ausgepflanzt: o.nach_ausgepflanzt ? 'ausgepflanzt' : '',
         geplant: o.geplant ? 'geplant' : 'ausgeführt',
         bemerkungen: o.bemerkungen,
@@ -2092,7 +2092,7 @@ export const RootStore = RootStoreBase.props({
             ? `${date}: `
             : ''
         const herkunft = o?.herkunft?.nr ? `von ${o?.herkunft?.nr}` : ''
-        const person = o.person?.name
+        const person = o.person?.fullname
         const herkunftPerson =
           herkunft && person
             ? `${herkunft}, ${person}; `
@@ -2111,7 +2111,7 @@ export const RootStore = RootStoreBase.props({
           value: o.id,
           label,
           artname: o?.art?.art_ae_art?.name,
-          personname: o?.person?.name,
+          personname: o?.person?.fullname,
           herkunftnr: o?.herkunft?.nr,
           herkunftlokalname: o?.herkunft?.lokalname,
           herkunftgemeinde: o?.herkunft?.gemeinde,
