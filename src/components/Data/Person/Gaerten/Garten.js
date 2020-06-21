@@ -53,7 +53,8 @@ const Garten = ({ gv }) => {
   const onClickDelete = useCallback(() => gv.delete(), [gv])
 
   const garten = gartensSorted.find((a) => a.id === gv.garten_id)
-  const gartenname = garten?.name ?? `(${garten?.person?.name ?? 'kein Name'})`
+  const gartenname =
+    garten?.name ?? `${garten?.person?.fullname ?? 'kein Name'}`
 
   if (!gv) return null
 
