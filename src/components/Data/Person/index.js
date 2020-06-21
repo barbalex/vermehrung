@@ -235,9 +235,17 @@ const Person = ({
                 error={errors?.person?.nr}
               />
               <TextField
+                key={`${row.id}vorname`}
+                name="vorname"
+                label="Vorname"
+                value={row.vorname}
+                saveToDb={saveToDb}
+                error={errors?.person?.vorname}
+              />
+              <TextField
                 key={`${row.id}name`}
                 name="name"
-                label="Name"
+                label="Nachname"
                 value={row.name}
                 saveToDb={saveToDb}
                 error={errors?.person?.name}
