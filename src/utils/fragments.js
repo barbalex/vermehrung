@@ -5,11 +5,11 @@ export const art = gql`
     id
     __typename
     ae_id
-    art_ae_art {
-      id
-      __typename
-      name
-    }
+    #art_ae_art {
+    #  id
+    #  __typename
+    #  name
+    #}
     changed
     changed_by
     _rev
@@ -117,12 +117,12 @@ export const garten = gql`
     __typename
     name
     person_id
-    person {
-      id
-      __typename
-      name
-      ort
-    }
+    #person {
+    #  id
+    #  __typename
+    #  name
+    #  ort
+    #}
     strasse
     plz
     ort
@@ -149,11 +149,11 @@ export const garten_rev = gql`
     garten_id
     name
     person_id
-    person {
-      id
-      __typename
-      name
-    }
+    #person {
+    #  id
+    #  __typename
+    #  name
+    #}
     strasse
     plz
     ort
