@@ -92,8 +92,8 @@ const SammlungConflict = ({
       label: 'Art',
     },
     {
-      valueInRow: row?.person?.name,
-      valueInRev: revRow?.person?.name,
+      valueInRow: row?.person?.fullname,
+      valueInRev: revRow?.person?.fullname,
       label: 'Person',
     },
     {
