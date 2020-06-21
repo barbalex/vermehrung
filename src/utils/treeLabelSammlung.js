@@ -5,7 +5,7 @@ export default (el) => {
     ? el?.art?.art_ae_art?.name ?? '(Art ohne Name)'
     : '(keine Art)'
   const personName = el?.person
-    ? el?.person?.name ?? '(Person ohne Name)'
+    ? el?.person?.fullname ?? '(Person ohne Name)'
     : '(keine Person)'
   const herkunftNr = el?.herkunft
     ? el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
