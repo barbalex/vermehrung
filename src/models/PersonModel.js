@@ -27,6 +27,7 @@ export const personModel = personModelBase
       const newObject = {
         person_id: self.id,
         nr: field === 'nr' ? toStringIfPossible(value) : self.nr,
+        vorname: field === 'vorname' ? toStringIfPossible(value) : self.vorname,
         name: field === 'name' ? toStringIfPossible(value) : self.name,
         adresszusatz:
           field === 'adresszusatz'
