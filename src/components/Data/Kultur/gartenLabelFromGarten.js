@@ -1,1 +1,1 @@
-export default (g) => g?.name ?? g?.person?.name ?? '(kein Name)'
+export default (g) => g?.name ?? g?.person?.fullname ?? '(kein Name)'
