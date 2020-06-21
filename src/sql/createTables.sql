@@ -48,7 +48,7 @@ create table person (
   _conflicts text[] default null
 );
 create index on person using btree (id);
-create index on person using btree (nachname);
+create index on person using btree (name);
 create index on person using btree (vorname);
 create index on person using btree (account_id);
 create index on person using btree (aktiv);
