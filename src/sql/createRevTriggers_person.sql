@@ -43,6 +43,7 @@ begin
     insert into person (
       id,
       nr,
+      vorname,
       name,
       adresszusatz,
       strasse,
@@ -130,6 +131,7 @@ begin
     select
       person_rev.person_id,
       person_rev.nr,
+      person_rev.vorname,
       person_rev.name,
       person_rev.adresszusatz,
       person_rev.strasse,
@@ -166,6 +168,7 @@ begin
     on conflict on constraint person_pkey do update set
       -- do not update the id = pkey
       nr = excluded.nr,
+      vorname = excluded.vorname,
       name = excluded.name,
       adresszusatz = excluded.adresszusatz,
       strasse = excluded.strasse,
@@ -195,6 +198,7 @@ begin
     insert into person (
         id,
         nr,
+        vorname,
         name,
         adresszusatz,
         strasse,
@@ -302,6 +306,7 @@ begin
       select
         person_rev.person_id,
         person_rev.nr,
+        person_rev.vorname,
         person_rev.name,
         person_rev.adresszusatz,
         person_rev.strasse,
@@ -338,6 +343,7 @@ begin
       on conflict on constraint person_pkey do update set
         -- do not update the id = pkey
         nr = excluded.nr,
+        vorname = excluded.vorname,
         name = excluded.name,
         adresszusatz = excluded.adresszusatz,
         strasse = excluded.strasse,
