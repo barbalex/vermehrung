@@ -36,7 +36,7 @@ const Arten = ({ row, style, last }) => {
     [activeNodeArray, row.id, setActiveNodeArray],
   )
   const garten =
-    row?.garten?.name ?? `(${row?.garten?.person?.name ?? 'kein Name'})`
+    row?.garten?.name ?? `${row?.garten?.person?.fullname ?? 'kein Name'}`
   const art = row?.art?.art_ae_art?.name ?? '(keine Art)'
   const herkunft = row?.herkunft?.nr ?? '(Herkunft ohne Nr)'
   const label = `${art}, von: ${herkunft}, in: ${garten}`
