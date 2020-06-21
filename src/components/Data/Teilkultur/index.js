@@ -65,6 +65,7 @@ const TitleFilterNumbers = styled.div`
 `
 const FieldsContainer = styled.div`
   padding: 10px;
+  height: 100%;
   overflow: auto !important;
 `
 const StyledSplitPane = styled(SplitPane)`
