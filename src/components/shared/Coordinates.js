@@ -225,12 +225,17 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
 
   const onClickMapsZhCh = useCallback(() => {
     if (lv95_x && lv95_y) {
-      typeof window !== 'undefined' &&
+      // BEWARE: maps.zh.ch seems to work only with lv03!!!!!!!
+      /*const x = lv95_x - 2000000
+      const y = lv95_y - 1000000
+      Nope. It is simply rolling dices*/
+      lv95_y - typeof window !== 'undefined' &&
         window.open(
-          `https://maps.zh.ch/?x=${lv95_x}&y=${lv95_y}&scale=3000&markers=ring`,
-          //`https://maps.zh.ch/?x=${lv95_y}&y=${lv95_x}&scale=3000&markers=ring`,
-          //`https://maps.zh.ch/?y=${lv95_x}&x=${lv95_y}&scale=3000&markers=ring`,
-          //`https://maps.zh.ch/?y=${lv95_y}&x=${lv95_x}&scale=3000&markers=ring`,
+          //`https://maps.zh.ch/?scale=3000&markers=ring&x=${x}&y=${y}`,
+          `https://maps.zh.ch/?scale=3000&markers=ring&x=${lv95_x}&y=${lv95_y}`,
+          //`https://maps.zh.ch/?scale=3000&markers=rinG&x=${lv95_x}&y=${lv95_y}`,
+          //`https://maps.zh.ch/?scale=3000&x=${lv95_x}&y=${lv95_y}&markers=ring,${lv95_x},${lv95_y},5,{"strokeColor":"%231122e2"$"strokeWidth":%2012$"fillColor":"%23a00000"$"strokeOpacity":0.6}`,
+          //`https://maps.zh.ch/?markers=ring,${lv95_x},${lv95_y},5,{"strokeColor":"%231122e2"$"strokeWidth":%2012$"fillColor":"%23a00000"$"strokeOpacity":0.6}`,
           'target="_blank"',
         )
     }
