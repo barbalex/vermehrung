@@ -228,6 +228,9 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
       typeof window !== 'undefined' &&
         window.open(
           `https://maps.zh.ch/?x=${lv95_x}&y=${lv95_y}&scale=3000&markers=ring`,
+          //`https://maps.zh.ch/?x=${lv95_y}&y=${lv95_x}&scale=3000&markers=ring`,
+          //`https://maps.zh.ch/?y=${lv95_x}&x=${lv95_y}&scale=3000&markers=ring`,
+          //`https://maps.zh.ch/?y=${lv95_y}&x=${lv95_x}&scale=3000&markers=ring`,
           'target="_blank"',
         )
     }
