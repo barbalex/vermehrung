@@ -365,9 +365,10 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
       </FieldContainer>
       <ButtonContainer>
         <MapButton
-          aria-label="Öffnen in..."
-          title="Öffnen in..."
-          onClick={(event) => setMapMenuAnchorEl(event.currentTarget)}
+          aria-label="Öffnen in map.geo.admin.ch"
+          title="Öffnen in map.geo.admin.ch"
+          //onClick={(event) => setMapMenuAnchorEl(event.currentTarget)}
+          onClick={onClickGeoAdmin}
           aria-owns={mapMenuOpen ? 'mapMenu' : undefined}
           aria-haspopup="true"
         >
