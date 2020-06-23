@@ -3,6 +3,10 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import IconButton from '@material-ui/core/IconButton'
+import { FaGlobeEurope } from 'react-icons/fa'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -32,11 +36,34 @@ const StyledFormControl = styled(FormControl)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const FieldContainer = styled.div`
+  flex-grow: 4;
+`
 const LeftFormControl = styled(StyledFormControl)`
   padding-right: 8px !important;
 `
 const Row = styled.div`
   display: flex;
+`
+const Container = styled.div`
+  display: flex;
+`
+const ButtonContainer = styled.div`
+  align-self: center;
+  flex-shrink: 2;
+`
+const MapButton = styled(IconButton)``
+const MenuTitle = styled.div`
+  padding-top: 6px;
+  padding-left: 15px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  font-size: 0.8em;
+  font-weight: 500;
+  &:focus {
+    outline: none;
+  }
 `
 
 const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
@@ -182,125 +209,179 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
     [originalSaveToDb],
   )
 
+  const [mapMenuAnchorEl, setMapMenuAnchorEl] = React.useState(null)
+  const mapMenuOpen = Boolean(mapMenuAnchorEl)
+
+  const onClickGeoAdmin = useCallback(() => {
+    if (lv95_x && lv95_y) {
+      typeof window !== 'undefined' &&
+        window.open(
+          `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95_x}&X=${lv95_y}&zoom=10&crosshair=circle`,
+          'target="_blank"',
+        )
+    }
+    setMapMenuAnchorEl(null)
+  }, [lv95_x, lv95_y])
+
+  const onClickMapsZhCh = useCallback(() => {
+    if (lv95_x && lv95_y) {
+      typeof window !== 'undefined' &&
+        window.open(
+          `https://maps.zh.ch/?x=${lv95_x}&y=${lv95_y}&scale=3000&markers=ring`,
+          'target="_blank"',
+        )
+    }
+    setMapMenuAnchorEl(null)
+  }, [lv95_x, lv95_y])
+
   return (
-    <>
-      {ga_lat_lng && (
+    <Container>
+      <FieldContainer>
+        {ga_lat_lng && (
+          <Row>
+            <LeftFormControl
+              fullWidth
+              error={!!wgs84LatError}
+              aria-describedby={`${id}wgs84LatErrorText`}
+            >
+              <InputLabel htmlFor={`${id}wgs84_long`} shrink>
+                Längengrad
+              </InputLabel>
+              <Input
+                id={`${id}wgs84_long`}
+                data-id="wgs84_long"
+                name="wgs84_long"
+                value={wgs84LongState}
+                type="number"
+                onChange={onChangeWgs84Long}
+                onBlur={onBlurWgs84Long}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+              />
+            </LeftFormControl>
+            <StyledFormControl
+              fullWidth
+              error={!!wgs84LongError}
+              aria-describedby={`${id}wgs84LongErrorText`}
+            >
+              <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
+                Breitengrad
+              </InputLabel>
+              <Input
+                id={`${id}wgs84_lat`}
+                data-id="wgs84_lat"
+                name="wgs84_lat"
+                value={wgs84LatState}
+                type="number"
+                onChange={onChangeWgs84Lat}
+                onBlur={onBlurWgs84Lat}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+              />
+              {!!wgs84LatError && (
+                <FormHelperText
+                  id={`${id}wgs84LatErrorText`}
+                  data-id="wgs84LatErrorText"
+                >
+                  {wgs84LatError}
+                </FormHelperText>
+              )}
+              {!!wgs84LongError && (
+                <FormHelperText
+                  id={`${id}wgs84LongErrorText`}
+                  data-id="wgs84LongErrorText"
+                >
+                  {wgs84LongError}
+                </FormHelperText>
+              )}
+            </StyledFormControl>
+          </Row>
+        )}
         <Row>
           <LeftFormControl
             fullWidth
-            error={!!wgs84LatError}
-            aria-describedby={`${id}wgs84LatErrorText`}
+            error={!!xError}
+            aria-describedby={`${id}lv95XErrorText`}
           >
-            <InputLabel htmlFor={`${id}wgs84_long`} shrink>
-              Längengrad
+            <InputLabel htmlFor={`${id}lv95_x`} shrink>
+              X-Koordinate
             </InputLabel>
             <Input
-              id={`${id}wgs84_long`}
-              data-id="wgs84_long"
-              name="wgs84_long"
-              value={wgs84LongState}
+              id={`${id}lv95_x`}
+              data-id="lv95_x"
+              name="lv95_x"
+              value={lv95XState}
               type="number"
-              onChange={onChangeWgs84Long}
-              onBlur={onBlurWgs84Long}
+              onChange={onChangeX}
+              onBlur={onBlurX}
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
             />
+            {!!xError && (
+              <FormHelperText
+                id={`${id}lv95XErrorText`}
+                data-id="lv95XErrorText"
+              >
+                {xError}
+              </FormHelperText>
+            )}
           </LeftFormControl>
           <StyledFormControl
             fullWidth
-            error={!!wgs84LongError}
-            aria-describedby={`${id}wgs84LongErrorText`}
+            error={!!yError}
+            aria-describedby={`${id}lv95YErrorText`}
           >
-            <InputLabel htmlFor={`${id}wgs84_lat`} shrink>
-              Breitengrad
+            <InputLabel htmlFor={`${id}lv95_y`} shrink>
+              Y-Koordinate
             </InputLabel>
             <Input
-              id={`${id}wgs84_lat`}
-              data-id="wgs84_lat"
-              name="wgs84_lat"
-              value={wgs84LatState}
+              id={`${id}lv95_y`}
+              data-id="lv95_y"
+              name="lv95_y"
+              value={lv95YState}
               type="number"
-              onChange={onChangeWgs84Lat}
-              onBlur={onBlurWgs84Lat}
+              onChange={onChangeY}
+              onBlur={onBlurY}
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
             />
-            {!!wgs84LatError && (
+            {!!yError && (
               <FormHelperText
-                id={`${id}wgs84LatErrorText`}
-                data-id="wgs84LatErrorText"
+                id={`${id}lv95YErrorText`}
+                data-id="lv95YErrorText"
               >
-                {wgs84LatError}
-              </FormHelperText>
-            )}
-            {!!wgs84LongError && (
-              <FormHelperText
-                id={`${id}wgs84LongErrorText`}
-                data-id="wgs84LongErrorText"
-              >
-                {wgs84LongError}
+                {yError}
               </FormHelperText>
             )}
           </StyledFormControl>
         </Row>
-      )}
-      <Row>
-        <LeftFormControl
-          fullWidth
-          error={!!xError}
-          aria-describedby={`${id}lv95XErrorText`}
+      </FieldContainer>
+      <ButtonContainer>
+        <MapButton
+          aria-label="Öffnen in..."
+          title="Öffnen in..."
+          onClick={(event) => setMapMenuAnchorEl(event.currentTarget)}
+          aria-owns={mapMenuOpen ? 'mapMenu' : undefined}
+          aria-haspopup="true"
         >
-          <InputLabel htmlFor={`${id}lv95_x`} shrink>
-            X-Koordinate
-          </InputLabel>
-          <Input
-            id={`${id}lv95_x`}
-            data-id="lv95_x"
-            name="lv95_x"
-            value={lv95XState}
-            type="number"
-            onChange={onChangeX}
-            onBlur={onBlurX}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-          />
-          {!!xError && (
-            <FormHelperText id={`${id}lv95XErrorText`} data-id="lv95XErrorText">
-              {xError}
-            </FormHelperText>
-          )}
-        </LeftFormControl>
-        <StyledFormControl
-          fullWidth
-          error={!!yError}
-          aria-describedby={`${id}lv95YErrorText`}
+          <FaGlobeEurope />
+        </MapButton>
+        <Menu
+          id="mapMenu"
+          anchorEl={mapMenuAnchorEl}
+          open={mapMenuOpen}
+          onClose={() => setMapMenuAnchorEl(null)}
         >
-          <InputLabel htmlFor={`${id}lv95_y`} shrink>
-            Y-Koordinate
-          </InputLabel>
-          <Input
-            id={`${id}lv95_y`}
-            data-id="lv95_y"
-            name="lv95_y"
-            value={lv95YState}
-            type="number"
-            onChange={onChangeY}
-            onBlur={onBlurY}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-          />
-          {!!yError && (
-            <FormHelperText id={`${id}lv95YErrorText`} data-id="lv95YErrorText">
-              {yError}
-            </FormHelperText>
-          )}
-        </StyledFormControl>
-      </Row>
-    </>
+          <MenuTitle>Öffnen in:</MenuTitle>
+          <MenuItem onClick={onClickGeoAdmin}>map.geo.admin.ch</MenuItem>
+          <MenuItem onClick={onClickMapsZhCh}>maps.zh.ch</MenuItem>
+        </Menu>
+      </ButtonContainer>
+    </Container>
   )
 }
 
