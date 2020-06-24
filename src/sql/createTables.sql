@@ -1132,9 +1132,6 @@ create table sammel_lieferung_rev (
   _deleted boolean default false,
   unique (sammel_lieferung_id, _rev)
 );
-alter table sammel_lieferung_rev rename id to sammel_lieferung_id;
-alter table sammel_lieferung_rev rename rev_id to id;
-
 create index on sammel_lieferung_rev using btree (rev_id);
 create index on sammel_lieferung_rev using btree (id);
 create index on sammel_lieferung_rev using btree (_rev);
