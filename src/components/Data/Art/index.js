@@ -192,6 +192,8 @@ const Art = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
+  console.log('Art', { row, artId: row.id })
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -265,16 +267,6 @@ const Art = ({
                 modelFilter={aeArtsFilter}
                 showFilterModel={aeArtsSorted}
               />
-              {/*<Select
-                key={`${row.id}ae_id2`}
-                name="ae_id"
-                value={row.ae_id}
-                field="ae_id"
-                label="Person"
-                options={aeWerte}
-                saveToDb={saveToDb}
-                error={errors?.art?.ae_id}
-              />*/}
               {online &&
                 !showFilter &&
                 row._conflicts &&
@@ -287,11 +279,11 @@ const Art = ({
                 )}
               {!showFilter && (
                 <>
-                  <Personen artId={row.id} />
-                  <Timeline artId={row.id} />
-                  <Herkunft artId={row.id} />
-                  <QK artId={row.id} />
-                  <Files parentId={row.id} parent="art" />
+                  <Personen artId={id} />
+                  <Timeline artId={id} />
+                  <Herkunft artId={id} />
+                  <QK artId={id} />
+                  <Files parentId={id} parent="art" />
                 </>
               )}
             </FieldsContainer>
