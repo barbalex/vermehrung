@@ -25,6 +25,7 @@ export const herkunft_sums_max_fieldsModelBase = ModelBase
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.union(types.undefined, types.null, types.string),
     partitioner: types.union(types.undefined, types.null, types.frozen()),
     sum_anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.frozen()),
     sum_anzahl_pflanzen: types.union(types.undefined, types.null, types.frozen()),
@@ -48,6 +49,7 @@ export class herkunft_sums_max_fieldsModelSelector extends QueryBuilder {
   get datum() { return this.__attr(`datum`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
   get herkunft_id() { return this.__attr(`herkunft_id`) }
+  get id() { return this.__attr(`id`) }
   get partitioner() { return this.__attr(`partitioner`) }
   get sum_anzahl_auspflanzbereit() { return this.__attr(`sum_anzahl_auspflanzbereit`) }
   get sum_anzahl_pflanzen() { return this.__attr(`sum_anzahl_pflanzen`) }

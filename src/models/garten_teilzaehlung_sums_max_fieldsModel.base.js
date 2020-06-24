@@ -23,6 +23,7 @@ export const garten_teilzaehlung_sums_max_fieldsModelBase = ModelBase
     garten_person_name: types.union(types.undefined, types.null, types.string),
     garten_plz: types.union(types.undefined, types.null, types.integer),
     garten_strasse: types.union(types.undefined, types.null, types.string),
+    id: types.identifier,
     kultur_anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.frozen()),
     kultur_anzahl_mutterpflanzen: types.union(types.undefined, types.null, types.frozen()),
     kultur_anzahl_pflanzen: types.union(types.undefined, types.null, types.frozen()),
@@ -82,6 +83,7 @@ export class garten_teilzaehlung_sums_max_fieldsModelSelector extends QueryBuild
   get garten_person_name() { return this.__attr(`garten_person_name`) }
   get garten_plz() { return this.__attr(`garten_plz`) }
   get garten_strasse() { return this.__attr(`garten_strasse`) }
+  get id() { return this.__attr(`id`) }
   get kultur_anzahl_auspflanzbereit() { return this.__attr(`kultur_anzahl_auspflanzbereit`) }
   get kultur_anzahl_mutterpflanzen() { return this.__attr(`kultur_anzahl_mutterpflanzen`) }
   get kultur_anzahl_pflanzen() { return this.__attr(`kultur_anzahl_pflanzen`) }

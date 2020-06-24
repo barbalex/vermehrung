@@ -18,6 +18,7 @@ export const garten_teilzaehlung_sums_select_columnEnumType = types.enumeration(
   "garten_person_name",
   "garten_plz",
   "garten_strasse",
+  "id",
   "kultur_aktiv",
   "kultur_anzahl_auspflanzbereit",
   "kultur_anzahl_mutterpflanzen",

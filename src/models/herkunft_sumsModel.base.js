@@ -28,6 +28,7 @@ export const herkunft_sumsModelBase = ModelBase
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
+    id: types.union(types.undefined, types.null, types.string),
     partitioner: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
     sum_anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.frozen()),
@@ -52,6 +53,7 @@ export class herkunft_sumsModelSelector extends QueryBuilder {
   get datum() { return this.__attr(`datum`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
   get herkunft_id() { return this.__attr(`herkunft_id`) }
+  get id() { return this.__attr(`id`) }
   get partitioner() { return this.__attr(`partitioner`) }
   get prognose() { return this.__attr(`prognose`) }
   get sum_anzahl_auspflanzbereit() { return this.__attr(`sum_anzahl_auspflanzbereit`) }

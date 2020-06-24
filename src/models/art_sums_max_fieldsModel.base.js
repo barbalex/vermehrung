@@ -24,6 +24,7 @@ export const art_sums_max_fieldsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     partitioner: types.union(types.undefined, types.null, types.frozen()),
     sum_anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.frozen()),
     sum_anzahl_pflanzen: types.union(types.undefined, types.null, types.frozen()),
@@ -46,6 +47,7 @@ export class art_sums_max_fieldsModelSelector extends QueryBuilder {
   get bemerkungen() { return this.__attr(`bemerkungen`) }
   get datum() { return this.__attr(`datum`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
+  get id() { return this.__attr(`id`) }
   get partitioner() { return this.__attr(`partitioner`) }
   get sum_anzahl_auspflanzbereit() { return this.__attr(`sum_anzahl_auspflanzbereit`) }
   get sum_anzahl_pflanzen() { return this.__attr(`sum_anzahl_pflanzen`) }

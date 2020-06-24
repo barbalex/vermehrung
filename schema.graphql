@@ -3382,6 +3382,7 @@ type art_sums {
   bemerkungen: String
   datum: date
   gramm_samen: numeric
+  id: ID
   partitioner: uuid
   prognose: Boolean
   sum_anzahl_auspflanzbereit: numeric
@@ -3465,6 +3466,7 @@ input art_sums_bool_exp {
   bemerkungen: String_comparison_exp
   datum: date_comparison_exp
   gramm_samen: numeric_comparison_exp
+  id: uuid_comparison_exp
   partitioner: uuid_comparison_exp
   prognose: Boolean_comparison_exp
   sum_anzahl_auspflanzbereit: numeric_comparison_exp
@@ -3484,6 +3486,7 @@ type art_sums_max_fields {
   bemerkungen: String
   datum: date
   gramm_samen: numeric
+  id: ID
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
@@ -3502,6 +3505,7 @@ input art_sums_max_order_by {
   bemerkungen: order_by
   datum: order_by
   gramm_samen: order_by
+  id: order_by
   partitioner: order_by
   sum_anzahl_auspflanzbereit: order_by
   sum_anzahl_pflanzen: order_by
@@ -3520,6 +3524,7 @@ type art_sums_min_fields {
   bemerkungen: String
   datum: date
   gramm_samen: numeric
+  id: ID
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
@@ -3538,6 +3543,7 @@ input art_sums_min_order_by {
   bemerkungen: order_by
   datum: order_by
   gramm_samen: order_by
+  id: order_by
   partitioner: order_by
   sum_anzahl_auspflanzbereit: order_by
   sum_anzahl_pflanzen: order_by
@@ -3559,6 +3565,7 @@ input art_sums_order_by {
   bemerkungen: order_by
   datum: order_by
   gramm_samen: order_by
+  id: order_by
   partitioner: order_by
   prognose: order_by
   sum_anzahl_auspflanzbereit: order_by
@@ -3597,6 +3604,9 @@ enum art_sums_select_column {
 
   # column name
   gramm_samen
+
+  # column name
+  id
 
   # column name
   partitioner
@@ -6872,6 +6882,7 @@ type garten_teilzaehlung_sums {
   garten_person_name: String
   garten_plz: Int
   garten_strasse: String
+  id: ID
   kultur_aktiv: Boolean
   kultur_anzahl_auspflanzbereit: bigint
   kultur_anzahl_mutterpflanzen: bigint
@@ -7054,6 +7065,7 @@ input garten_teilzaehlung_sums_bool_exp {
   garten_person_name: String_comparison_exp
   garten_plz: Int_comparison_exp
   garten_strasse: String_comparison_exp
+  id: uuid_comparison_exp
   kultur_aktiv: Boolean_comparison_exp
   kultur_anzahl_auspflanzbereit: bigint_comparison_exp
   kultur_anzahl_mutterpflanzen: bigint_comparison_exp
@@ -7116,6 +7128,7 @@ type garten_teilzaehlung_sums_max_fields {
   garten_person_name: String
   garten_plz: Int
   garten_strasse: String
+  id: ID
   kultur_anzahl_auspflanzbereit: bigint
   kultur_anzahl_mutterpflanzen: bigint
   kultur_anzahl_pflanzen: bigint
@@ -7171,6 +7184,7 @@ input garten_teilzaehlung_sums_max_order_by {
   garten_person_name: order_by
   garten_plz: order_by
   garten_strasse: order_by
+  id: order_by
   kultur_anzahl_auspflanzbereit: order_by
   kultur_anzahl_mutterpflanzen: order_by
   kultur_anzahl_pflanzen: order_by
@@ -7226,6 +7240,7 @@ type garten_teilzaehlung_sums_min_fields {
   garten_person_name: String
   garten_plz: Int
   garten_strasse: String
+  id: ID
   kultur_anzahl_auspflanzbereit: bigint
   kultur_anzahl_mutterpflanzen: bigint
   kultur_anzahl_pflanzen: bigint
@@ -7281,6 +7296,7 @@ input garten_teilzaehlung_sums_min_order_by {
   garten_person_name: order_by
   garten_plz: order_by
   garten_strasse: order_by
+  id: order_by
   kultur_anzahl_auspflanzbereit: order_by
   kultur_anzahl_mutterpflanzen: order_by
   kultur_anzahl_pflanzen: order_by
@@ -7337,6 +7353,7 @@ input garten_teilzaehlung_sums_order_by {
   garten_person_name: order_by
   garten_plz: order_by
   garten_strasse: order_by
+  id: order_by
   kultur_aktiv: order_by
   kultur_anzahl_auspflanzbereit: order_by
   kultur_anzahl_mutterpflanzen: order_by
@@ -7419,6 +7436,9 @@ enum garten_teilzaehlung_sums_select_column {
 
   # column name
   garten_strasse
+
+  # column name
+  id
 
   # column name
   kultur_aktiv
@@ -10192,6 +10212,7 @@ type herkunft_sums {
   # An object relationship
   herkunft: herkunft
   herkunft_id: uuid
+  id: String
   partitioner: uuid
   prognose: Boolean
   sum_anzahl_auspflanzbereit: numeric
@@ -10274,6 +10295,7 @@ input herkunft_sums_bool_exp {
   gramm_samen: numeric_comparison_exp
   herkunft: herkunft_bool_exp
   herkunft_id: uuid_comparison_exp
+  id: String_comparison_exp
   partitioner: uuid_comparison_exp
   prognose: Boolean_comparison_exp
   sum_anzahl_auspflanzbereit: numeric_comparison_exp
@@ -10294,6 +10316,7 @@ type herkunft_sums_max_fields {
   datum: date
   gramm_samen: numeric
   herkunft_id: uuid
+  id: String
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
@@ -10313,6 +10336,7 @@ input herkunft_sums_max_order_by {
   datum: order_by
   gramm_samen: order_by
   herkunft_id: order_by
+  id: order_by
   partitioner: order_by
   sum_anzahl_auspflanzbereit: order_by
   sum_anzahl_pflanzen: order_by
@@ -10332,6 +10356,7 @@ type herkunft_sums_min_fields {
   datum: date
   gramm_samen: numeric
   herkunft_id: uuid
+  id: String
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
@@ -10351,6 +10376,7 @@ input herkunft_sums_min_order_by {
   datum: order_by
   gramm_samen: order_by
   herkunft_id: order_by
+  id: order_by
   partitioner: order_by
   sum_anzahl_auspflanzbereit: order_by
   sum_anzahl_pflanzen: order_by
@@ -10371,6 +10397,7 @@ input herkunft_sums_order_by {
   gramm_samen: order_by
   herkunft: herkunft_order_by
   herkunft_id: order_by
+  id: order_by
   partitioner: order_by
   prognose: order_by
   sum_anzahl_auspflanzbereit: order_by
@@ -10412,6 +10439,9 @@ enum herkunft_sums_select_column {
 
   # column name
   herkunft_id
+
+  # column name
+  id
 
   # column name
   partitioner

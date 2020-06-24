@@ -18,6 +18,7 @@ export const art_sums_select_columnEnumType = types.enumeration("art_sums_select
   "bemerkungen",
   "datum",
   "gramm_samen",
+  "id",
   "partitioner",
   "prognose",
   "sum_anzahl_auspflanzbereit",
