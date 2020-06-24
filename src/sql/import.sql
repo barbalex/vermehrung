@@ -480,3 +480,87 @@ select
   geplant,
   changed_by
 from event_import_gaw;
+
+create table zaehlung_import_1 (
+  id uuid primary key,
+  kultur_id uuid default null,
+  datum text default null,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into zaehlung (
+  id,
+  kultur_id,
+  datum,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  kultur_id,
+  to_date(datum, 'DD.MM.YYYY'),
+  bemerkungen,
+  changed_by
+from zaehlung_import_1;
+
+create table teilzaehlung_import_1 (
+  id uuid primary key,
+  zaehlung_id uuid default null references zaehlung (id) on delete cascade on update cascade,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  anzahl_mutterpflanzen integer default null,
+  andere_menge text default null,
+  changed_by text default null
+);
+
+insert into teilzaehlung (
+  id,
+  zaehlung_id,
+  anzahl_pflanzen,
+  anzahl_auspflanzbereit,
+  anzahl_mutterpflanzen,
+  andere_menge,
+  changed_by
+)
+select 
+  id,
+  zaehlung_id,
+  anzahl_pflanzen,
+  anzahl_auspflanzbereit,
+  anzahl_mutterpflanzen,
+  andere_menge,
+  changed_by
+from teilzaehlung_import_1;
+
+create table teilzaehlung_import_gaw (
+  id uuid primary key,
+  zaehlung_id uuid default null,
+  teilkultur_id uuid default null,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  anzahl_mutterpflanzen integer default null,
+  auspflanzbereit_beschreibung text default null,
+  changed_by text default null
+);
+
+insert into teilzaehlung (
+  id,
+  zaehlung_id,
+  teilkultur_id,
+  anzahl_pflanzen,
+  anzahl_auspflanzbereit,
+  anzahl_mutterpflanzen,
+  auspflanzbereit_beschreibung,
+  changed_by
+)
+select 
+  id,
+  zaehlung_id,
+  teilkultur_id,
+  anzahl_pflanzen,
+  anzahl_auspflanzbereit,
+  anzahl_mutterpflanzen,
+  auspflanzbereit_beschreibung,
+  changed_by
+from teilzaehlung_import_gaw;
