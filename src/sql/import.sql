@@ -62,3 +62,12 @@ select
   info,
   aktiv
 from person_import;
+
+create table art_import (
+  id uuid primary key,
+  ae_id uuid default null,
+  changed_by text default null
+);
+
+insert into art (id, ae_id, changed_by)
+select id, ae_id, changed_by from art_import;
