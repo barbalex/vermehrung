@@ -206,6 +206,7 @@ with
       datum
   )
 select
+  art_id as id,
   art_id,
   action,
   prognose,
@@ -431,6 +432,7 @@ with
       datum
   )
 select
+  concat(art_id, herkunft_id) as id,
   art_id,
   herkunft_id,
   action,
@@ -548,6 +550,7 @@ with kultur_last_event as (
   group by garten.id
 )
 select
+  g.id,
   g.id as garten_id,
   g.name as garten_name,
   g.person_id as garten_person_id,
