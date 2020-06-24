@@ -252,3 +252,120 @@ select
   bemerkungen,
   changed_by
 from kultur_import_gaw;
+
+create table lieferung_import_an_1 (
+  id uuid primary key,
+  art_id uuid default null,
+  person_id uuid default null,
+  von_sammlung_id uuid default null,
+  datum text default null,
+  nach_kultur_id uuid default null,
+  von_anzahl_individuen integer default null,
+  anzahl_pflanzen integer default null,
+  anzahl_auspflanzbereit integer default null,
+  gramm_samen integer default null,
+  andere_menge text default null,
+  changed_by text default null
+);
+
+insert into lieferung (
+  id,
+  art_id,
+  person_id,
+  von_sammlung_id,
+  datum,
+  nach_kultur_id,
+  von_anzahl_individuen,
+  anzahl_pflanzen,
+  anzahl_auspflanzbereit,
+  gramm_samen,
+  andere_menge,
+  changed_by
+)
+select 
+  id,
+  art_id,
+  person_id,
+  von_sammlung_id,
+  to_date(datum, 'DD.MM.YYYY'),
+  nach_kultur_id,
+  von_anzahl_individuen,
+  anzahl_pflanzen,
+  anzahl_auspflanzbereit,
+  gramm_samen,
+  andere_menge,
+  changed_by
+from lieferung_import_an_1;
+
+create table lieferung_import_aus_1_samen (
+  id uuid primary key,
+  art_id uuid default null,
+  person_id uuid default null,
+  von_kultur_id uuid default null,
+  datum text default null,
+  nach_ausgepflanzt boolean default false,
+  von_anzahl_individuen integer default null,
+  gramm_samen decimal default null,
+  andere_menge text default null,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into lieferung (
+  id,
+  art_id,
+  person_id,
+  von_kultur_id,
+  datum,
+  nach_ausgepflanzt,
+  von_anzahl_individuen,
+  gramm_samen,
+  andere_menge,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  art_id,
+  person_id,
+  von_kultur_id,
+  to_date(datum, 'DD.MM.YYYY'),
+  nach_ausgepflanzt,
+  von_anzahl_individuen,
+  gramm_samen,
+  andere_menge,
+  bemerkungen,
+  changed_by
+from lieferung_import_aus_1_samen;
+
+create table lieferung_import_aus_1_pflanzen (
+  id uuid primary key,
+  art_id uuid default null,
+  person_id uuid default null,
+  von_kultur_id uuid default null,
+  datum text default null,
+  nach_ausgepflanzt boolean default false,
+  anzahl_pflanzen integer default null,
+  changed_by text default null
+);
+
+insert into lieferung (
+  id,
+  art_id,
+  person_id,
+  von_kultur_id,
+  datum,
+  nach_ausgepflanzt,
+  anzahl_pflanzen,
+  changed_by
+)
+select 
+  id,
+  art_id,
+  person_id,
+  von_kultur_id,
+  to_date(datum, 'DD.MM.YYYY'),
+  nach_ausgepflanzt,
+  anzahl_pflanzen,
+  changed_by
+from lieferung_import_aus_1_pflanzen;
