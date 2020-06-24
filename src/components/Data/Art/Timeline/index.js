@@ -42,15 +42,6 @@ const Content = styled.div`
   justify-content: center;
 `
 
-const query = gql`
-  query ArtSumsQuery($id: uuid!) {
-    art_sums(where: { art_id: { _eq: $id } }) {
-      ...ArtSumsFields
-    }
-  }
-  ${artSumsFragment}
-`
-
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const store = useContext(StoreContext)
   const { online } = store
@@ -73,10 +64,14 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
     [open],
   )
 
-  const { data, error, loading } = useQuery(query, {
-    variables: { id: artId ?? '99999999-9999-9999-9999-999999999999' },
-  })
+  const { data, error, loading } = useQuery((store) =>
+    store.queryArt_sums({
+      where: { art_id: { _eq: artId } },
+    }),
+  )
   const artSums = data?.art_sums ?? []
+
+  console.log('TimelineArea', { artSums, artId, data, error, loading })
 
   if (!online) {
     return (
@@ -122,7 +117,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
           ) : error ? (
             `Fehler: ${error.message}`
           ) : (
-            <Timeline artSums={artSums} />
+            <Timeline key={artId} artSums={artSums} />
           )}
         </>
       )}
