@@ -2,6 +2,7 @@ import { selectFromart } from '../models/artModel.base'
 import { selectFromart_qk } from '../models/art_qkModel.base'
 import { selectFromart_qk_choosen } from '../models/art_qk_choosenModel.base'
 import { selectFromart_file } from '../models/art_fileModel.base'
+import { selectFromart_sums } from '../models/art_sumsModel.base'
 import { selectFromae_art } from '../models/ae_artModel.base'
 import { selectFromav } from '../models/avModel.base'
 import { selectFromevent } from '../models/eventModel.base'
@@ -32,6 +33,7 @@ let ART_FRAGMENT
 let ART_QK_FRAGMENT
 let ART_QK_CHOOSEN_FRAGMENT
 let ART_FILE_FRAGMENT
+let ART_SUMS_FRAGMENT
 let AE_ART_FRAGMENT
 let AV_FRAGMENT
 let EVENT_FRAGMENT
@@ -81,6 +83,8 @@ ART_QK_CHOOSEN_FRAGMENT = selectFromart_qk_choosen()
 ART_FILE_FRAGMENT = selectFromart_file()
   .id.art_id.file_id.file_mime_type.name.beschreibung.art()
   .toString()
+
+ART_SUMS_FRAGMENT = selectFromart_sums().id.art_id.action.prognose.partitioner.datum.anzahl_pflanzen.anzahl_auspflanzbereit.sum_anzahl_pflanzen.sum_anzahl_auspflanzbereit.anzahl_mutterpflanzen.von_anzahl_individuen.gramm_samen.andere_menge.auspflanzbereit_beschreibung.bemerkungen.toString()
 
 AE_ART_FRAGMENT = selectFromae_art().id.name.ae_art_art().toString()
 
@@ -261,6 +265,7 @@ export {
   ART_QK_FRAGMENT,
   ART_QK_CHOOSEN_FRAGMENT,
   ART_FILE_FRAGMENT,
+  ART_SUMS_FRAGMENT,
   AE_ART_FRAGMENT,
   AV_FRAGMENT,
   EVENT_FRAGMENT,
