@@ -34,6 +34,7 @@ export const art_sumsModelBase = ModelBase
     bemerkungen: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     gramm_samen: types.union(types.undefined, types.null, types.frozen()),
+    id: types.identifier,
     partitioner: types.union(types.undefined, types.null, types.frozen()),
     prognose: types.union(types.undefined, types.null, types.boolean),
     sum_anzahl_auspflanzbereit: types.union(types.undefined, types.null, types.frozen()),
@@ -57,6 +58,7 @@ export class art_sumsModelSelector extends QueryBuilder {
   get bemerkungen() { return this.__attr(`bemerkungen`) }
   get datum() { return this.__attr(`datum`) }
   get gramm_samen() { return this.__attr(`gramm_samen`) }
+  get id() { return this.__attr(`id`) }
   get partitioner() { return this.__attr(`partitioner`) }
   get prognose() { return this.__attr(`prognose`) }
   get sum_anzahl_auspflanzbereit() { return this.__attr(`sum_anzahl_auspflanzbereit`) }

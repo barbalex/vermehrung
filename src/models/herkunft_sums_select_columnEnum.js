@@ -19,6 +19,7 @@ export const herkunft_sums_select_columnEnumType = types.enumeration("herkunft_s
   "datum",
   "gramm_samen",
   "herkunft_id",
+  "id",
   "partitioner",
   "prognose",
   "sum_anzahl_auspflanzbereit",
