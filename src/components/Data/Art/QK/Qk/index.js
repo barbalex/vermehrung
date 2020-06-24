@@ -87,7 +87,7 @@ const ApQkQk = ({ artId, qks }) => {
         />
       </StyledFormControl>
       <ResultTitle>{`${messageGroupsFiltered.length} ${
-        messageGroupsFiltered.length === 1 ? 'Gruppe' : 'Gruppen'
+        messageGroupsFiltered.length === 1 ? 'Kontrolle' : 'Kontrollen'
       }:`}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
