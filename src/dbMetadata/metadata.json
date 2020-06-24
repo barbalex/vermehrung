@@ -1877,6 +1877,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "id",
               "art_id",
               "action",
               "prognose",
@@ -1911,17 +1912,18 @@
               "datum",
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
-              "art_id",
-              "gramm_samen",
-              "partitioner",
               "von_anzahl_individuen",
               "anzahl_mutterpflanzen",
+              "gramm_samen",
               "sum_anzahl_auspflanzbereit",
               "sum_anzahl_pflanzen",
               "action",
               "andere_menge",
               "auspflanzbereit_beschreibung",
-              "bemerkungen"
+              "bemerkungen",
+              "art_id",
+              "id",
+              "partitioner"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -3063,6 +3065,20 @@
           }
         },
         {
+          "name": "garten_sums",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "garten_teilzaehlung_sums"
+              },
+              "column_mapping": {
+                "id": "garten_id"
+              }
+            }
+          }
+        },
+        {
           "name": "gvs",
           "using": {
             "foreign_key_constraint_on": {
@@ -4091,6 +4107,7 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
+              "id",
               "garten_id",
               "garten_name",
               "garten_person_id",
@@ -4228,6 +4245,7 @@
               "zaehlung_bemerkungen",
               "garten_id",
               "garten_person_id",
+              "id",
               "kultur_art_id",
               "kultur_id",
               "kultur_letzter_event_id",
@@ -4298,6 +4316,7 @@
               "zaehlung_bemerkungen",
               "garten_id",
               "garten_person_id",
+              "id",
               "kultur_art_id",
               "kultur_id",
               "kultur_letzter_event_id",
@@ -5326,22 +5345,23 @@
           "role": "artverantwortlich",
           "permission": {
             "columns": [
-              "prognose",
-              "datum",
-              "anzahl_auspflanzbereit",
-              "anzahl_pflanzen",
-              "gramm_samen",
-              "von_anzahl_individuen",
-              "anzahl_mutterpflanzen",
-              "sum_anzahl_auspflanzbereit",
-              "sum_anzahl_pflanzen",
-              "action",
-              "andere_menge",
-              "auspflanzbereit_beschreibung",
-              "bemerkungen",
+              "id",
               "art_id",
               "herkunft_id",
-              "partitioner"
+              "action",
+              "prognose",
+              "partitioner",
+              "datum",
+              "anzahl_pflanzen",
+              "anzahl_auspflanzbereit",
+              "sum_anzahl_pflanzen",
+              "sum_anzahl_auspflanzbereit",
+              "anzahl_mutterpflanzen",
+              "von_anzahl_individuen",
+              "gramm_samen",
+              "andere_menge",
+              "auspflanzbereit_beschreibung",
+              "bemerkungen"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -5355,15 +5375,16 @@
               "datum",
               "anzahl_auspflanzbereit",
               "anzahl_pflanzen",
-              "gramm_samen",
               "von_anzahl_individuen",
               "anzahl_mutterpflanzen",
+              "gramm_samen",
               "sum_anzahl_auspflanzbereit",
               "sum_anzahl_pflanzen",
               "action",
               "andere_menge",
               "auspflanzbereit_beschreibung",
               "bemerkungen",
+              "id",
               "art_id",
               "herkunft_id",
               "partitioner"
