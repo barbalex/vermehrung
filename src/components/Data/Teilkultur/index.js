@@ -21,6 +21,7 @@ import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Zaehlungen from './Zaehlungen'
+import Events from './Events'
 import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
@@ -309,7 +310,10 @@ const Teilkultur = ({
                   />
                 )}
               {!showFilter && (
-                <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
+                <>
+                  <Zaehlungen kulturId={row.kultur_id} teilkulturId={row.id} />
+                  <Events kulturId={row.kultur_id} teilkulturId={row.id} />
+                </>
               )}
             </FieldsContainer>
             <>
