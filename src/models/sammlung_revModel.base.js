@@ -43,7 +43,7 @@ export const sammlung_revModelBase = ModelBase
     datum: types.union(types.undefined, types.null, types.frozen()),
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
-    gramm_samen: types.union(types.undefined, types.null, types.integer),
+    gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     herkunft: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunftModel))),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,

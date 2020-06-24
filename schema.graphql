@@ -3381,7 +3381,7 @@ type art_sums {
   ): av_aggregate!
   bemerkungen: String
   datum: date
-  gramm_samen: bigint
+  gramm_samen: numeric
   partitioner: uuid
   prognose: Boolean
   sum_anzahl_auspflanzbereit: numeric
@@ -3464,7 +3464,7 @@ input art_sums_bool_exp {
   avs: av_bool_exp
   bemerkungen: String_comparison_exp
   datum: date_comparison_exp
-  gramm_samen: bigint_comparison_exp
+  gramm_samen: numeric_comparison_exp
   partitioner: uuid_comparison_exp
   prognose: Boolean_comparison_exp
   sum_anzahl_auspflanzbereit: numeric_comparison_exp
@@ -3483,7 +3483,7 @@ type art_sums_max_fields {
   auspflanzbereit_beschreibung: String
   bemerkungen: String
   datum: date
-  gramm_samen: bigint
+  gramm_samen: numeric
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
@@ -3519,7 +3519,7 @@ type art_sums_min_fields {
   auspflanzbereit_beschreibung: String
   bemerkungen: String
   datum: date
-  gramm_samen: bigint
+  gramm_samen: numeric
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
@@ -3685,7 +3685,7 @@ type art_sums_sum_fields {
   anzahl_auspflanzbereit: bigint
   anzahl_mutterpflanzen: numeric
   anzahl_pflanzen: bigint
-  gramm_samen: bigint
+  gramm_samen: numeric
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
   von_anzahl_individuen: bigint
@@ -10187,7 +10187,7 @@ type herkunft_sums {
   auspflanzbereit_beschreibung: String
   bemerkungen: String
   datum: date
-  gramm_samen: bigint
+  gramm_samen: numeric
 
   # An object relationship
   herkunft: herkunft
@@ -10271,7 +10271,7 @@ input herkunft_sums_bool_exp {
   auspflanzbereit_beschreibung: String_comparison_exp
   bemerkungen: String_comparison_exp
   datum: date_comparison_exp
-  gramm_samen: bigint_comparison_exp
+  gramm_samen: numeric_comparison_exp
   herkunft: herkunft_bool_exp
   herkunft_id: uuid_comparison_exp
   partitioner: uuid_comparison_exp
@@ -10292,7 +10292,7 @@ type herkunft_sums_max_fields {
   auspflanzbereit_beschreibung: String
   bemerkungen: String
   datum: date
-  gramm_samen: bigint
+  gramm_samen: numeric
   herkunft_id: uuid
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
@@ -10330,7 +10330,7 @@ type herkunft_sums_min_fields {
   auspflanzbereit_beschreibung: String
   bemerkungen: String
   datum: date
-  gramm_samen: bigint
+  gramm_samen: numeric
   herkunft_id: uuid
   partitioner: uuid
   sum_anzahl_auspflanzbereit: numeric
@@ -10500,7 +10500,7 @@ type herkunft_sums_sum_fields {
   anzahl_auspflanzbereit: bigint
   anzahl_mutterpflanzen: numeric
   anzahl_pflanzen: bigint
-  gramm_samen: bigint
+  gramm_samen: numeric
   sum_anzahl_auspflanzbereit: numeric
   sum_anzahl_pflanzen: numeric
   von_anzahl_individuen: bigint
@@ -15385,7 +15385,7 @@ type lieferung {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID!
 
   # An object relationship
@@ -15528,7 +15528,7 @@ input lieferung_bool_exp {
   changed_by: String_comparison_exp
   datum: date_comparison_exp
   geplant: Boolean_comparison_exp
-  gramm_samen: Int_comparison_exp
+  gramm_samen: numeric_comparison_exp
   id: uuid_comparison_exp
   kulturByNachKulturId: kultur_bool_exp
   kulturByVonKulturId: kultur_bool_exp
@@ -15756,7 +15756,7 @@ input lieferung_inc_input {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -15778,7 +15778,7 @@ input lieferung_insert_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   kulturByNachKulturId: kultur_obj_rel_insert_input
   kulturByVonKulturId: kultur_obj_rel_insert_input
@@ -15808,7 +15808,7 @@ type lieferung_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_kultur_id: uuid
   person_id: uuid
@@ -15854,7 +15854,7 @@ type lieferung_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_kultur_id: uuid
   person_id: uuid
@@ -15968,7 +15968,7 @@ type lieferung_rev {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID!
 
   # An object relationship
@@ -16075,7 +16075,7 @@ input lieferung_rev_bool_exp {
   changed_by: String_comparison_exp
   datum: date_comparison_exp
   geplant: Boolean_comparison_exp
-  gramm_samen: Int_comparison_exp
+  gramm_samen: numeric_comparison_exp
   id: uuid_comparison_exp
   kulturByNachKulturId: kultur_bool_exp
   kulturByVonKulturId: kultur_bool_exp
@@ -16106,7 +16106,7 @@ input lieferung_rev_inc_input {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -16127,7 +16127,7 @@ input lieferung_rev_insert_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   kulturByNachKulturId: kultur_obj_rel_insert_input
   kulturByVonKulturId: kultur_obj_rel_insert_input
@@ -16157,7 +16157,7 @@ type lieferung_rev_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   lieferung_id: uuid
   nach_kultur_id: uuid
@@ -16205,7 +16205,7 @@ type lieferung_rev_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   lieferung_id: uuid
   nach_kultur_id: uuid
@@ -16392,7 +16392,7 @@ input lieferung_rev_set_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   lieferung_id: uuid
   nach_ausgepflanzt: Boolean
@@ -16463,7 +16463,7 @@ type lieferung_rev_sum_fields {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -16697,7 +16697,7 @@ input lieferung_set_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_ausgepflanzt: Boolean
   nach_kultur_id: uuid
@@ -16767,7 +16767,7 @@ type lieferung_sum_fields {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -24736,7 +24736,7 @@ type sammel_lieferung {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID!
 
   # An object relationship
@@ -24875,7 +24875,7 @@ input sammel_lieferung_bool_exp {
   changed_by: String_comparison_exp
   datum: date_comparison_exp
   geplant: Boolean_comparison_exp
-  gramm_samen: Int_comparison_exp
+  gramm_samen: numeric_comparison_exp
   id: uuid_comparison_exp
   kulturByNachKulturId: kultur_bool_exp
   kulturByVonKulturId: kultur_bool_exp
@@ -24901,7 +24901,7 @@ input sammel_lieferung_inc_input {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -24923,7 +24923,7 @@ input sammel_lieferung_insert_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   kulturByNachKulturId: kultur_obj_rel_insert_input
   kulturByVonKulturId: kultur_obj_rel_insert_input
@@ -24951,7 +24951,7 @@ type sammel_lieferung_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_kultur_id: uuid
   person_id: uuid
@@ -24995,7 +24995,7 @@ type sammel_lieferung_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_kultur_id: uuid
   person_id: uuid
@@ -25105,7 +25105,7 @@ type sammel_lieferung_rev {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID!
 
   # An object relationship
@@ -25244,7 +25244,7 @@ input sammel_lieferung_rev_bool_exp {
   changed_by: String_comparison_exp
   datum: date_comparison_exp
   geplant: Boolean_comparison_exp
-  gramm_samen: Int_comparison_exp
+  gramm_samen: numeric_comparison_exp
   id: uuid_comparison_exp
   kulturByNachKulturId: kultur_bool_exp
   kulturByVonKulturId: kultur_bool_exp
@@ -25274,7 +25274,7 @@ input sammel_lieferung_rev_inc_input {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -25295,7 +25295,7 @@ input sammel_lieferung_rev_insert_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   kulturByNachKulturId: kultur_obj_rel_insert_input
   kulturByVonKulturId: kultur_obj_rel_insert_input
@@ -25324,7 +25324,7 @@ type sammel_lieferung_rev_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_kultur_id: uuid
   person_id: uuid
@@ -25370,7 +25370,7 @@ type sammel_lieferung_rev_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_kultur_id: uuid
   person_id: uuid
@@ -25551,7 +25551,7 @@ input sammel_lieferung_rev_set_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_ausgepflanzt: Boolean
   nach_kultur_id: uuid
@@ -25621,7 +25621,7 @@ type sammel_lieferung_rev_sum_fields {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -25849,7 +25849,7 @@ input sammel_lieferung_set_input {
   changed_by: String
   datum: date
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   id: ID
   nach_ausgepflanzt: Boolean
   nach_kultur_id: uuid
@@ -25918,7 +25918,7 @@ type sammel_lieferung_sum_fields {
   _depth: Int
   anzahl_auspflanzbereit: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -26077,7 +26077,7 @@ type sammlung {
   datum: date
   geom_point: geometry
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
 
   # An object relationship
   herkunft: herkunft
@@ -26362,7 +26362,7 @@ input sammlung_bool_exp {
   datum: date_comparison_exp
   geom_point: geometry_comparison_exp
   geplant: Boolean_comparison_exp
-  gramm_samen: Int_comparison_exp
+  gramm_samen: numeric_comparison_exp
   herkunft: herkunft_bool_exp
   herkunft_id: uuid_comparison_exp
   id: uuid_comparison_exp
@@ -26591,7 +26591,7 @@ enum sammlung_file_update_column {
 input sammlung_inc_input {
   _depth: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   lv95_x: numeric
   lv95_y: numeric
   von_anzahl_individuen: Int
@@ -26617,7 +26617,7 @@ input sammlung_insert_input {
   datum: date
   geom_point: geometry
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft: herkunft_obj_rel_insert_input
   herkunft_id: uuid
   id: ID
@@ -26648,7 +26648,7 @@ type sammlung_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft_id: uuid
   id: ID
   lv95_x: numeric
@@ -26696,7 +26696,7 @@ type sammlung_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft_id: uuid
   id: ID
   lv95_x: numeric
@@ -26815,7 +26815,7 @@ type sammlung_rev {
   datum: date
   geom_point: geometry
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
 
   # An object relationship
   herkunft: herkunft
@@ -26980,7 +26980,7 @@ input sammlung_rev_bool_exp {
   datum: date_comparison_exp
   geom_point: geometry_comparison_exp
   geplant: Boolean_comparison_exp
-  gramm_samen: Int_comparison_exp
+  gramm_samen: numeric_comparison_exp
   herkunft: herkunft_bool_exp
   herkunft_id: uuid_comparison_exp
   id: uuid_comparison_exp
@@ -27006,7 +27006,7 @@ enum sammlung_rev_constraint {
 input sammlung_rev_inc_input {
   _depth: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -27027,7 +27027,7 @@ input sammlung_rev_insert_input {
   datum: date
   geom_point: geometry
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft: herkunft_obj_rel_insert_input
   herkunft_id: uuid
   id: ID
@@ -27052,7 +27052,7 @@ type sammlung_rev_max_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft_id: uuid
   id: ID
   nr: String
@@ -27094,7 +27094,7 @@ type sammlung_rev_min_fields {
   changed: timestamp
   changed_by: String
   datum: date
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft_id: uuid
   id: ID
   nr: String
@@ -27263,7 +27263,7 @@ input sammlung_rev_set_input {
   datum: date
   geom_point: geometry
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft_id: uuid
   id: ID
   nr: String
@@ -27324,7 +27324,7 @@ input sammlung_rev_stddev_samp_order_by {
 type sammlung_rev_sum_fields {
   _depth: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   von_anzahl_individuen: Int
 }
 
@@ -27545,7 +27545,7 @@ input sammlung_set_input {
   datum: date
   geom_point: geometry
   geplant: Boolean
-  gramm_samen: Int
+  gramm_samen: numeric
   herkunft_id: uuid
   id: ID
   lv95_x: numeric
@@ -27633,7 +27633,7 @@ input sammlung_stddev_samp_order_by {
 type sammlung_sum_fields {
   _depth: Int
   anzahl_pflanzen: Int
-  gramm_samen: Int
+  gramm_samen: numeric
   lv95_x: numeric
   lv95_y: numeric
   von_anzahl_individuen: Int

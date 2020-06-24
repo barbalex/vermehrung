@@ -24,7 +24,7 @@ export const sammlung_min_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    gramm_samen: types.union(types.undefined, types.null, types.integer),
+    gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     herkunft_id: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     lv95_x: types.union(types.undefined, types.null, types.frozen()),

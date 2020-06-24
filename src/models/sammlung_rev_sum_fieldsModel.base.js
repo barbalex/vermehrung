@@ -16,7 +16,7 @@ export const sammlung_rev_sum_fieldsModelBase = ModelBase
     __typename: types.optional(types.literal("sammlung_rev_sum_fields"), "sammlung_rev_sum_fields"),
     _depth: types.union(types.undefined, types.null, types.integer),
     anzahl_pflanzen: types.union(types.undefined, types.null, types.integer),
-    gramm_samen: types.union(types.undefined, types.null, types.integer),
+    gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     von_anzahl_individuen: types.union(types.undefined, types.null, types.integer),
   })
   .views(self => ({
