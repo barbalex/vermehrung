@@ -639,6 +639,7 @@ export const zaehlung = gql`
 `
 export const artSums = gql`
   fragment ArtSumsFields on art_sums {
+    id
     art_id
     __typename
     action
