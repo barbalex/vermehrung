@@ -71,3 +71,184 @@ create table art_import (
 
 insert into art (id, ae_id, changed_by)
 select id, ae_id, changed_by from art_import;
+
+create table herkunft_import (
+  id uuid primary key,
+  nr text default null, -- DO NOT set unique - does not work for offline
+  lokalname text default null,
+  gemeinde text default null,
+  kanton text default null,
+  land text default null,
+  wgs84x numeric default null,
+  wgs84y numeric default null,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into herkunft (
+  id,
+  nr,
+  lokalname,
+  gemeinde,
+  kanton,
+  land,
+  geom_point,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  nr,
+  lokalname,
+  gemeinde,
+  kanton,
+  land,
+  ST_SetSRID(ST_MakePoint(wgs84x, wgs84y), 4326) as geom_point,
+  bemerkungen,
+  changed_by
+from herkunft_import;
+
+create table sammlung_import (
+  id uuid primary key,
+  art_id uuid default null,
+  person_id uuid default null,
+  herkunft_id uuid default null,
+  nr text default null, -- DO NOT set unique - does not work for offline
+  datum text default null,
+  von_anzahl_individuen integer default null,
+  anzahl_pflanzen integer default null,
+  gramm_samen integer default null,
+  andere_menge text default null,
+  wgs84x numeric default null,
+  wgs84y numeric default null,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into sammlung (
+  id,
+  art_id,
+  person_id,
+  herkunft_id,
+  nr,
+  datum,
+  von_anzahl_individuen,
+  anzahl_pflanzen,
+  gramm_samen,
+  andere_menge,
+  geom_point,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  art_id,
+  person_id,
+  herkunft_id,
+  nr,
+  to_date(datum, 'DD.MM.YYYY'),
+  von_anzahl_individuen,
+  anzahl_pflanzen,
+  gramm_samen,
+  andere_menge,
+  ST_SetSRID(ST_MakePoint(wgs84x, wgs84y), 4326) as geom_point,
+  bemerkungen,
+  changed_by
+from sammlung_import;
+
+
+create table garten_import (
+  id uuid primary key,
+  name text default null,
+  person_id uuid default null,
+  strasse text default null,
+  plz integer default null,
+  ort text default null,
+  aktiv boolean default true,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into garten (
+  id,
+  name,
+  person_id,
+  strasse,
+  plz,
+  ort,
+  aktiv,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  name,
+  person_id,
+  strasse,
+  plz,
+  ort,
+  aktiv,
+  bemerkungen,
+  changed_by
+from garten_import;
+
+create table kultur_import_1 (
+  id uuid primary key,
+  art_id uuid default null,
+  herkunft_id uuid default null,
+  garten_id uuid default null,
+  von_anzahl_individuen integer default null,
+  bemerkungen text default null,
+  aktiv boolean default true,
+  changed_by text default null
+);
+
+insert into kultur (
+  id,
+  art_id,
+  herkunft_id,
+  garten_id,
+  von_anzahl_individuen,
+  bemerkungen,
+  aktiv,
+  changed_by
+)
+select 
+  id,
+  art_id,
+  herkunft_id,
+  garten_id,
+  von_anzahl_individuen,
+  bemerkungen,
+  aktiv,
+  changed_by
+from kultur_import_1;
+
+create table kultur_import_gaw (
+  id uuid primary key,
+  art_id uuid default null,
+  herkunft_id uuid default null,
+  garten_id uuid default null,
+  von_anzahl_individuen integer default null,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into kultur (
+  id,
+  art_id,
+  herkunft_id,
+  garten_id,
+  von_anzahl_individuen,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  art_id,
+  herkunft_id,
+  garten_id,
+  von_anzahl_individuen,
+  bemerkungen,
+  changed_by
+from kultur_import_gaw;
