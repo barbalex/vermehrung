@@ -564,3 +564,50 @@ select
   auspflanzbereit_beschreibung,
   changed_by
 from teilzaehlung_import_gaw;
+
+2324:
+select * from teilzaehlung
+where 
+  zaehlung_id is not null
+  and teilkultur_id is null
+  and anzahl_pflanzen is null
+  and anzahl_auspflanzbereit is null
+  and anzahl_mutterpflanzen is null
+  and andere_menge is null
+  and auspflanzbereit_beschreibung is null
+  and bemerkungen is null
+  and changed_by is null;
+
+
+delete from teilzaehlung tz
+where 
+  teilkultur_id is null
+  and anzahl_pflanzen is null
+  and anzahl_auspflanzbereit is null
+  and anzahl_mutterpflanzen is null
+  and andere_menge is null
+  and auspflanzbereit_beschreibung is null
+  and bemerkungen is null
+  and changed_by is null
+  and exists (
+    select id from teilzaehlung tz2
+    where tz.zaehlung_id = tz2.zaehlung_id
+    and (
+      tz2.teilkultur_id is not null
+      or tz2.anzahl_pflanzen is not null
+      or tz2.anzahl_auspflanzbereit is not null
+      or tz2.anzahl_mutterpflanzen is not null
+      or tz2.andere_menge is not null
+      or tz2.auspflanzbereit_beschreibung is not null
+      or tz2.bemerkungen is not null
+      or tz2.changed_by is not null
+    )
+  )
+
+select 
+id, (
+  select count(*) from teilzaehlung
+  where zaehlung_id = zaehlung.id
+) as count_tz
+from zaehlung
+where count_tz > 1
