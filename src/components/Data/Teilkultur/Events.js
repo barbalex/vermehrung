@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import format from 'date-fns/format'
 
 import { StoreContext } from '../../../models/reactUtils'
-import exists from '../../../utils/exists'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
