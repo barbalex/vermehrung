@@ -369,3 +369,29 @@ select
   anzahl_pflanzen,
   changed_by
 from lieferung_import_aus_1_pflanzen;
+
+create table event_import_1 (
+  id uuid primary key,
+  kultur_id uuid default null,
+  person_id uuid default null,
+  beschreibung text default null,
+  datum text default null,
+  changed_by text default null
+);
+
+insert into event (
+  id,
+  kultur_id,
+  person_id,
+  beschreibung,
+  datum,
+  changed_by
+)
+select 
+  id,
+  kultur_id,
+  person_id,
+  beschreibung,
+  to_date(datum, 'DD.MM.YYYY'),
+  changed_by
+from event_import_1;
