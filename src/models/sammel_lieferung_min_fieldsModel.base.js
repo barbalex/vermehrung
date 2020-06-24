@@ -25,7 +25,7 @@ export const sammel_lieferung_min_fieldsModelBase = ModelBase
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
-    gramm_samen: types.union(types.undefined, types.null, types.integer),
+    gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     nach_kultur_id: types.union(types.undefined, types.null, types.frozen()),
     person_id: types.union(types.undefined, types.null, types.frozen()),

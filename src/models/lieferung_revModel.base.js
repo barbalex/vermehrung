@@ -39,7 +39,7 @@ export const lieferung_revModelBase = ModelBase
     changed_by: types.union(types.undefined, types.null, types.string),
     datum: types.union(types.undefined, types.null, types.frozen()),
     geplant: types.union(types.undefined, types.null, types.boolean),
-    gramm_samen: types.union(types.undefined, types.null, types.integer),
+    gramm_samen: types.union(types.undefined, types.null, types.frozen()),
     id: types.identifier,
     kulturByNachKulturId: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
     kulturByVonKulturId: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
