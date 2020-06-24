@@ -395,3 +395,88 @@ select
   to_date(datum, 'DD.MM.YYYY'),
   changed_by
 from event_import_1;
+
+create table teilkultur_import_gaw (
+  id uuid primary key,
+  kultur_id uuid default null,
+  name text default null,
+  ort1 text default null,
+  ort2 text default null,
+  ort3 text default null,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into teilkultur (
+  id,
+  kultur_id,
+  name,
+  ort1,
+  ort2,
+  ort3,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  kultur_id,
+  name,
+  ort1,
+  ort2,
+  ort3,
+  bemerkungen,
+  changed_by
+from teilkultur_import_gaw;
+
+
+create table zaehlung_import_gaw (
+  id uuid primary key,
+  kultur_id uuid default null,
+  datum text default null,
+  bemerkungen text default null,
+  changed_by text default null
+);
+
+insert into zaehlung (
+  id,
+  kultur_id,
+  datum,
+  bemerkungen,
+  changed_by
+)
+select 
+  id,
+  kultur_id,
+  to_date(datum, 'DD.MM.YYYY'),
+  bemerkungen,
+  changed_by
+from zaehlung_import_gaw;
+
+create table event_import_gaw (
+  id uuid primary key,
+  kultur_id uuid default null,
+  teilkultur_id uuid default null,
+  beschreibung text default null,
+  datum text default null,
+  geplant boolean default false,
+  changed_by text default null
+);
+
+insert into event (
+  id,
+  kultur_id,
+  teilkultur_id,
+  beschreibung,
+  datum,
+  geplant,
+  changed_by
+)
+select 
+  id,
+  kultur_id,
+  teilkultur_id,
+  beschreibung,
+  to_date(datum, 'DD.MM.YYYY'),
+  geplant,
+  changed_by
+from event_import_gaw;
