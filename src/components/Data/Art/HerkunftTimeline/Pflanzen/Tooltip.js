@@ -29,7 +29,7 @@ const CustomTooltip = ({ payload, label, active }) => {
           {moment(label).format('YYYY.MM.DD')}
           <Ereignis>{payload?.[0]?.payload?.title ?? ''}</Ereignis>
         </PTitle>
-        {payload.map((o, i) => {
+        {payload.map((o) => {
           const label = o.dataKey
           return <PRow key={label}>{`${label}: ${o.value}`}</PRow>
         })}
