@@ -75,7 +75,7 @@ const KulturTimeline = ({ row, width }) => {
     .filter((z) => z.kultur_id === row.id)
     .filter((z) => z.prognose === false)
     .filter((z) => !!z.datum)
-    .filter((z) => z.datum <= format(new Date(), 'yyyy-mm-dd'))
+    .filter((z) => new Date(z.datum).getTime() <= new Date().getTime())
   const lastZaehlungDone = zaehlungenDone.slice(-1)[0] ?? {}
   const zaehlungenPlanned = zaehlungsSorted
     .filter((z) => z.kultur_id === row.id)

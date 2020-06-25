@@ -23,111 +23,8 @@ import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
-const ArtTimeline = ({ artSums, width }) => {
+const ArtTimeline = ({ datasets, width }) => {
   const [narrow, setNarrow] = useState(false)
-
-  // zaehlungen data is special because it is
-  // devided in two lines
-  // THAT SHOULD BE CONNECTED
-  // so need to divide data,
-  // add last done zaehlung as first point to planned
-  // NOOOOO: add last: done zaehlung/lieferung as first point to planned
-  // and then recombine
-  const zaehlungenDone = artSums.filter(
-    (s) => s.action === 'zaehlung' && !s.prognose,
-  )
-  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] || {}
-  const zaehlungenPlanned = artSums.filter(
-    (s) => s.action === 'zaehlung' && s.prognose,
-  )
-  const zaehlungenDoneData = useMemo(
-    () =>
-      zaehlungenDone.map((l) => ({
-        datum: new Date(l.datum).getTime(),
-        'Zählung Pflanzen': l.sum_anzahl_pflanzen,
-        'Zählung Pflanzen auspflanzbereit': l.sum_anzahl_auspflanzbereit,
-        ereignis: 'Zählung',
-      })),
-    [zaehlungenDone],
-  )
-  const zaehlungenPlannedData = useMemo(
-    () =>
-      [lastZaehlungDone, ...zaehlungenPlanned].map((l) => ({
-        datum: new Date(l.datum).getTime(),
-        'Zählung Pflanzen Prognose': l.sum_anzahl_pflanzen,
-        'Zählung Pflanzen auspflanzbereit Prognose':
-          l.sum_anzahl_auspflanzbereit,
-        ereignis: 'Zählung',
-      })),
-    [lastZaehlungDone, zaehlungenPlanned],
-  )
-  const zaehlungenDataGroupedByDatum = useMemo(
-    () => groupBy([...zaehlungenDoneData, ...zaehlungenPlannedData], 'datum'),
-    [zaehlungenDoneData, zaehlungenPlannedData],
-  )
-  const zaehlungenData = useMemo(
-    () =>
-      Object.entries(
-        zaehlungenDataGroupedByDatum,
-        // eslint-disable-next-line no-unused-vars
-      ).map(([key, value]) => Object.assign({}, ...value)),
-    [zaehlungenDataGroupedByDatum],
-  )
-
-  const sammlungen = artSums.filter((s) => s.action === 'sammlung')
-  const sammlungenData = useMemo(
-    () =>
-      sammlungen.map((l) => ({
-        datum: new Date(l.datum).getTime(),
-        [`Sammlung Pflanzen${l.prognose ? ' geplant' : ''}`]:
-          l.anzahl_pflanzen || 0,
-        'Sammlung andere Mengen': l.andere_menge,
-        'Sammlung Gramm Samen': l.gramm_samen,
-        'Sammlung von Anzahl Individuen': l.von_anzahl_individuen,
-        'Sammlung Bemerkungen': l.bemerkungen,
-        [`Zählung Pflanzen${
-          l.prognose ? ' Prognose' : ''
-        }`]: l.sum_anzahl_pflanzen,
-        [`Zählung Pflanzen auspflanzbereit${
-          l.prognose ? ' Prognose' : ''
-        }`]: l.sum_anzahl_auspflanzbereit,
-        ereignis: 'Sammlung',
-      })),
-    [sammlungen],
-  )
-  const auspflanzungen = artSums.filter((s) => s.action === 'auspflanzung')
-  const auspflanzungenData = useMemo(
-    () =>
-      auspflanzungen.map((l) => ({
-        datum: new Date(l.datum).getTime(),
-        [`Auspflanzung Pflanzen${l.prognose ? ' geplant' : ''}`]:
-          l.anzahl_pflanzen || 0,
-        [`Auspflanzung Pflanzen auspflanzbereit${
-          l.prognose ? ' geplant' : ''
-        }`]: l.anzahl_auspflanzbereit || 0,
-        'Auspflanzung andere Mengen': l.andere_menge,
-        'Auspflanzung Gramm Samen': l.gramm_samen,
-        'Auspflanzung von Anzahl Individuen': l.von_anzahl_individuen,
-        'Auspflanzung Bemerkungen': l.bemerkungen,
-        [`Zählung Pflanzen${
-          l.prognose ? ' Prognose' : ''
-        }`]: l.sum_anzahl_pflanzen,
-        [`Zählung Pflanzen auspflanzbereit${
-          l.prognose ? ' Prognose' : ''
-        }`]: l.sum_anzahl_auspflanzbereit,
-        ereignis: 'Auspflanzung',
-      })),
-    [auspflanzungen],
-  )
-
-  const allData = useMemo(
-    () =>
-      sortBy(
-        [...sammlungenData, ...auspflanzungenData, ...zaehlungenData],
-        'datum',
-      ),
-    [sammlungenData, auspflanzungenData, zaehlungenData],
-  )
 
   useEffect(() => {
     if (width < 1100 && !narrow) {
@@ -138,7 +35,7 @@ const ArtTimeline = ({ artSums, width }) => {
     }
   }, [narrow, width])
 
-  if (!allData.length) return null
+  if (!datasets.length) return null
 
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
@@ -147,7 +44,7 @@ const ArtTimeline = ({ artSums, width }) => {
     <ErrorBoundary>
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
-          data={allData}
+          data={datasets}
           margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
         >
           <CartesianGrid strokeDasharray="3 3" horizontal={false} />
