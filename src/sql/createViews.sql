@@ -4,6 +4,7 @@
 --    partitioner is the id of last zaehlung done
 -- 2. union them
 -- 3. calculate sum_anzahl_pflanzen partitioning by art_id and partitioner
+-- NOT IN USE
 drop view if exists art_sums;
 create or replace view art_sums as
 with 
@@ -227,6 +228,7 @@ order by
   art_id,
   datum;
 
+-- NOT IN USE
 drop view if exists herkunft_sums;
 create or replace view herkunft_sums as
 with 
