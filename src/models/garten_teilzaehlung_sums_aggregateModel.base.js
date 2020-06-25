@@ -2,7 +2,7 @@
 /* eslint-disable */
 
 import { types } from "mobx-state-tree"
-import { QueryBuilder } from "mst-gql"
+import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { garten_teilzaehlung_sumsModel } from "./garten_teilzaehlung_sumsModel"
 import { garten_teilzaehlung_sumsModelSelector } from "./garten_teilzaehlung_sumsModel.base"
@@ -19,7 +19,7 @@ export const garten_teilzaehlung_sums_aggregateModelBase = ModelBase
   .props({
     __typename: types.optional(types.literal("garten_teilzaehlung_sums_aggregate"), "garten_teilzaehlung_sums_aggregate"),
     aggregate: types.union(types.undefined, types.null, types.late(() => garten_teilzaehlung_sums_aggregate_fieldsModel)),
-    nodes: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
+    nodes: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_teilzaehlung_sumsModel)))),
   })
   .views(self => ({
     get store() {

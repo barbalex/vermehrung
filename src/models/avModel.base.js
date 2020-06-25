@@ -30,7 +30,7 @@ export const avModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
-    art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
+    art_sums: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_sumsModel)))),
     art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
