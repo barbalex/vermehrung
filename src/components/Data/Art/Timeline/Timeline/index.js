@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useMemo, useState } from 'react'
-import sortBy from 'lodash/sortBy'
-import groupBy from 'lodash/groupBy'
+import React, { useEffect, useMemo, useState, useContext } from 'react'
 import {
   ComposedChart,
   Bar,
+  LabelList,
   Line,
   XAxis,
   YAxis,
@@ -13,18 +12,29 @@ import {
   Legend,
   ReferenceLine,
   ResponsiveContainer,
+  Scatter,
 } from 'recharts'
 import { observer } from 'mobx-react-lite'
 import { withResizeDetector } from 'react-resize-detector'
+import styled from 'styled-components'
 
 import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../../models/reactUtils'
+import buildData from './buildData'
 
-const ArtTimeline = ({ datasets, width }) => {
+const NoData = styled.div`
+  padding: 0 10px 10px 10px;
+`
+
+const ArtTimeline = ({ artId, width }) => {
+  const store = useContext(StoreContext)
   const [narrow, setNarrow] = useState(false)
+
+  const data = useMemo(() => buildData({ store, artId }), [])
 
   useEffect(() => {
     if (width < 1100 && !narrow) {
@@ -35,7 +45,9 @@ const ArtTimeline = ({ datasets, width }) => {
     }
   }, [narrow, width])
 
-  if (!datasets.length) return null
+  if (!data.length) {
+    return <NoData>Keine Daten verfügbar für Anzahl Pflanzen</NoData>
+  }
 
   // need to disable animation or labels will not show on first render
   // https://github.com/recharts/recharts/issues/806
@@ -44,18 +56,19 @@ const ArtTimeline = ({ datasets, width }) => {
     <ErrorBoundary>
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
-          data={datasets}
-          margin={{ top: 15, right: 0, left: 0, bottom: 45 }}
+          data={data}
+          margin={{ top: 25, right: 0, left: 0, bottom: 45 }}
         >
           <CartesianGrid strokeDasharray="3 3" horizontal={false} />
           <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
           <YAxis
             label={{
-              value: 'Anzahl',
+              value: 'Anzahl Pflanzen',
               angle: -90,
               position: 'insideLeft',
-              offset: 25,
-              fontSize: 12,
+              offset: 15,
+              fontSize: 14,
+              fontWeight: 800,
             }}
             fontSize={12}
           />
@@ -75,75 +88,57 @@ const ArtTimeline = ({ datasets, width }) => {
           )}
           <ReferenceLine y={0} stroke="#000" />
           <Bar
-            dataKey="Sammlung Pflanzen"
-            fill="#4a148c"
+            dataKey="Sammlung"
+            fill="orange"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
-            dataKey="Sammlung Pflanzen geplant"
-            fill="#ceceeb"
+            dataKey="Sammlung geplant"
+            fill="yellow"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
-            dataKey="Auspflanzung Pflanzen"
-            fill="#4a148c"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Bar
-            dataKey="Auspflanzung Pflanzen geplant"
-            fill="#ceceeb"
-            label={<LabelLieferung />}
-            isAnimationActive={false}
-          />
-          <Bar
-            dataKey="Auspflanzung Pflanzen auspflanzbereit"
+            dataKey="Auspflanzung"
             fill="#016526"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
           <Bar
-            dataKey="Auspflanzung Pflanzen auspflanzbereit geplant"
+            dataKey="Auspflanzung geplant"
             fill="#9cffc0"
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
+          <Scatter
+            dataKey="Zählung"
+            stroke="#4a148c"
+            fill="#4a148c"
+            // fill white makes legend go completely white...
+            //fill="white"
+            strokeWidth={3}
+            isAnimationActive={false}
+          >
+            <LabelList dataKey="Zählung" content={<LabelZaehlung />} />
+          </Scatter>
+          <Scatter
+            dataKey="Prognose"
+            stroke="#e0e0ff"
+            fill="#e0e0ff"
+            strokeWidth={3}
+            isAnimationActive={false}
+          >
+            <LabelList dataKey="Zählung" content={<LabelZaehlung />} />
+          </Scatter>
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Zählung Pflanzen"
+            dataKey="berechnet"
             stroke="#4a148c"
             strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen Prognose"
-            stroke="#e0e0ff"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit"
-            stroke="#016526"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
-            isAnimationActive={false}
-          />
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="Zählung Pflanzen auspflanzbereit Prognose"
-            stroke="#9cffc0"
-            strokeWidth={3}
-            label={<LabelZaehlung />}
+            dot={false}
+            label={false}
             isAnimationActive={false}
           />
         </ComposedChart>

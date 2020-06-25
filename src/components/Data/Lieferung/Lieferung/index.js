@@ -26,6 +26,7 @@ import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import appBaseUrl from '../../../../utils/appBaseUrl'
+import kulturSort from '../../../../utils/kulturSort'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
@@ -155,7 +156,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     artsSorted,
     filter,
     kulturIdInActiveNodeArray,
-    kultursSorted,
     lieferungsSorted,
     lieferungsFiltered,
     online,
@@ -171,6 +171,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
+  // BEWARE: need to include inactive kulturs, persons
+  const kultursSorted = [...store.kulturs.values()].sort(kulturSort)
 
   const id = showFilter
     ? '99999999-9999-9999-9999-999999999999'
@@ -214,7 +216,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const urlLastName = activeNodeArray[activeNodeArray.length - 2]
   const isAnlieferung = urlLastName === 'An-Lieferungen'
-  const isAuslieferung = urlLastName === 'Aus-Lieferungen'
 
   const ifNeeded = useCallback(
     (field) => {
@@ -232,10 +233,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     (fields) => fields.some((f) => ifNeeded(f)),
     [ifNeeded],
   )
-  const ifAllNeeded = useCallback(
-    (fields) => fields.every((f) => ifNeeded(f)),
-    [ifNeeded],
-  )
 
   const herkunftByKultur = isAnlieferung
     ? row?.kulturByNachKulturId?.herkunft
@@ -251,13 +248,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         herkunft?.gemeinde || '(keine Gemeinde)'
       }, ${herkunft.lokalname || '(kein Lokalname)'}`
     : ''
-  const showVon =
-    (!!row?.art_id && !isAuslieferung) ||
-    (existsSammelLieferung && ifAllNeeded(['von_sammlung_id', 'von_kultur_id']))
-  const showNach =
-    (herkunft && !isAnlieferung) ||
-    (existsSammelLieferung &&
-      ifAllNeeded(['nach_kultur_id', 'nach_ausgepflanzt']))
 
   useEffect(() => {
     unsetError('lieferung')
@@ -551,75 +541,67 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                   )}
                 </>
               )}
-              {showVon && (
-                <>
-                  <TitleRow>
-                    <Title>von</Title>
-                  </TitleRow>
-                  {ifNeeded('von_sammlung_id') && (
-                    <Select
-                      key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-                      name="von_sammlung_id"
-                      value={row.von_sammlung_id}
-                      field="von_sammlung_id"
-                      label={`Sammlung${
-                        exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                      }`}
-                      options={sammlungWerte}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.von_sammlung_id}
-                    />
-                  )}
-                  {ifNeeded('von_kultur_id') && (
-                    <Select
-                      key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-                      name="von_kultur_id"
-                      value={row.von_kultur_id}
-                      field="von_kultur_id"
-                      label={`Kultur${
-                        exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                      }`}
-                      options={vonKulturWerte}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.von_kultur_id}
-                    />
-                  )}
-                </>
+              <TitleRow>
+                <Title>von</Title>
+              </TitleRow>
+              {ifNeeded('von_sammlung_id') && (
+                <Select
+                  key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
+                  name="von_sammlung_id"
+                  value={row.von_sammlung_id}
+                  field="von_sammlung_id"
+                  label={`Sammlung${
+                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                  }`}
+                  options={sammlungWerte}
+                  saveToDb={saveToDb}
+                  error={errors?.lieferung?.von_sammlung_id}
+                />
               )}
-              {showNach && (
-                <>
-                  <TitleRow>
-                    <Title>nach</Title>
-                  </TitleRow>
-                  {ifNeeded('nach_kultur_id') && (
-                    <Select
-                      key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-                      name="nach_kultur_id"
-                      value={row.nach_kultur_id}
-                      field="nach_kultur_id"
-                      label={`Kultur${
-                        exists(row.art_id)
-                          ? ` (Kulturen derselben Art und Herkunft${
-                              row.von_kultur_id ? ', ohne die von-Kultur' : ''
-                            })`
-                          : ''
-                      }`}
-                      options={nachKulturWerte}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.nach_kultur_id}
-                    />
-                  )}
-                  {ifNeeded('nach_ausgepflanzt') && (
-                    <Checkbox2States
-                      key={`${row.id}nach_ausgepflanzt`}
-                      label="ausgepflanzt"
-                      name="nach_ausgepflanzt"
-                      value={row.nach_ausgepflanzt}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.nach_ausgepflanzt}
-                    />
-                  )}
-                </>
+              {ifNeeded('von_kultur_id') && (
+                <Select
+                  key={`${row.id}${row.von_kultur_id}von_kultur_id`}
+                  name="von_kultur_id"
+                  value={row.von_kultur_id}
+                  field="von_kultur_id"
+                  label={`Kultur${
+                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
+                  }`}
+                  options={vonKulturWerte}
+                  saveToDb={saveToDb}
+                  error={errors?.lieferung?.von_kultur_id}
+                />
+              )}
+              <TitleRow>
+                <Title>nach</Title>
+              </TitleRow>
+              {ifNeeded('nach_kultur_id') && (
+                <Select
+                  key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
+                  name="nach_kultur_id"
+                  value={row.nach_kultur_id}
+                  field="nach_kultur_id"
+                  label={`Kultur${
+                    exists(row.art_id)
+                      ? ` (Kulturen derselben Art und Herkunft${
+                          row.von_kultur_id ? ', ohne die von-Kultur' : ''
+                        })`
+                      : ''
+                  }`}
+                  options={nachKulturWerte}
+                  saveToDb={saveToDb}
+                  error={errors?.lieferung?.nach_kultur_id}
+                />
+              )}
+              {ifNeeded('nach_ausgepflanzt') && (
+                <Checkbox2States
+                  key={`${row.id}nach_ausgepflanzt`}
+                  label="ausgepflanzt"
+                  name="nach_ausgepflanzt"
+                  value={row.nach_ausgepflanzt}
+                  saveToDb={saveToDb}
+                  error={errors?.lieferung?.nach_ausgepflanzt}
+                />
               )}
               {ifSomeNeeded(['datum', 'geplant']) && (
                 <>
