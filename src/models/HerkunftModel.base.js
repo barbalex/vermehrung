@@ -51,7 +51,7 @@ export const herkunftModelBase = ModelBase
     geom_point: types.union(types.undefined, types.null, types.frozen()),
     herkunft_files: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_fileModel)))),
     herkunft_files_aggregate: types.union(types.undefined, types.late(() => herkunft_file_aggregateModel)),
-    herkunft_sums: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_sumsModel)))),
+    herkunft_sums: types.union(types.undefined, types.array(types.late(() => herkunft_sumsModel))),
     herkunft_sums_aggregate: types.union(types.undefined, types.late(() => herkunft_sums_aggregateModel)),
     id: types.identifier,
     kanton: types.union(types.undefined, types.null, types.string),
