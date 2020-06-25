@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import uniq from 'lodash/uniq'
 
 import Pflanzen from './Pflanzen'
-import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../models/reactUtils'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -35,17 +35,18 @@ const Title = styled.div`
 `
 
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
+  const store = useContext(StoreContext)
   const [open, setOpen] = useState(false)
+  const herkunftIds = uniq(
+    store.sammlungsSorted
+      .filter((s) => s.art_id === artId)
+      .map((s) => s.herkunft_id)
+      .filter((i) => !!i),
+  )
+  const herkunftsSorted = store.herkunftsSorted.filter((h) =>
+    herkunftIds.includes(h.id),
+  )
 
-  const openDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Zeitachse-Art`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
   const onClickToggle = useCallback(
     (e) => {
       e.stopPropagation()
@@ -61,15 +62,8 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>Zeit-Achse</Title>
+        <Title>Zeit-Achsen Herkünfte</Title>
         <div>
-          <IconButton
-            aria-label="Anleitung öffnen"
-            title="Anleitung öffnen"
-            onClick={openDocs}
-          >
-            <IoMdInformationCircleOutline />
-          </IconButton>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
             title={open ? 'schliessen' : 'öffnen'}
@@ -79,7 +73,10 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
           </IconButton>
         </div>
       </TitleRow>
-      {open && <Pflanzen key={artId} artId={artId} />}
+      {open &&
+        herkunftsSorted.map((herkunft) => (
+          <Pflanzen key={herkunft.id} artId={artId} herkunft={herkunft} />
+        ))}
     </ErrorBoundary>
   )
 }

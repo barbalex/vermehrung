@@ -11,7 +11,7 @@ import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Timeline from './Timeline'
-import Herkunft from './Herkunft'
+import HerkunftTimeline from './HerkunftTimeline'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import QK from './QK'
@@ -279,7 +279,7 @@ const Art = ({
                 <>
                   <Personen artId={id} />
                   <Timeline artId={id} />
-                  <Herkunft artId={id} />
+                  <HerkunftTimeline artId={id} />
                   <QK artId={id} />
                   <Files parentId={id} parent="art" />
                 </>
