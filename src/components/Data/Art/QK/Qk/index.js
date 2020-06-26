@@ -91,7 +91,7 @@ const ApQkQk = ({ artId, qks }) => {
       }:`}</ResultTitle>
       {messageGroupsFiltered.map((messageGroup) => (
         <StyledPaper key={messageGroup.title} elevation={2}>
-          <Title>{messageGroup.title}</Title>
+          <Title>{`${messageGroup.messages.length} ${messageGroup.title}`}</Title>
           {messageGroup.messages.map((m, i) => (
             <Row key={`${m.text}Index${i}`}>
               <StyledA
