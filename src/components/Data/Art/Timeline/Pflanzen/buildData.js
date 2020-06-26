@@ -1,10 +1,8 @@
-import sortBy from 'lodash/sortBy'
 import uniq from 'lodash/uniq'
 import sum from 'lodash/sum'
 import max from 'lodash/max'
 
 import exists from '../../../../../utils/exists'
-import kulturSort from '../../../../../utils/kulturSort'
 
 export default ({ artId, store }) => {
   const { zaehlungsSorted, sammlungsSorted, lieferungsSorted } = store
