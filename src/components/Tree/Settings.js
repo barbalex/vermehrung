@@ -15,8 +15,8 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 
 const Container = styled.div`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2px;
+  right: 12px;
   z-index: 1;
 `
 const TitleRow = styled.div`
