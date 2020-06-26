@@ -7,8 +7,9 @@ const LabelZaehlung = ({ x, y, stroke, value }) => {
     <Text
       x={x}
       y={y}
-      dy={-5}
-      dx={4}
+      dy={-20}
+      dx={3}
+      angle={-90}
       fill={stroke}
       fontSize={10}
       fontWeight={700}
