@@ -394,8 +394,6 @@ const SammelLieferung = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('SammelLieferung:', { row, sl_auto_copy_edits, printPreview })
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>

@@ -1,6 +1,7 @@
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
+import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
 import exists from '../../utils/exists'
@@ -74,11 +75,20 @@ export default async ({ node, store }) => {
     const sammelLieferung = sammelLieferungsSorted.find(
       (s) => s.id === parentId,
     )
+    if (!sammelLieferung) return console.log('no sammelLieferung found!')
     const entries = Object.entries(sammelLieferung)
       .filter(
         // eslint-disable-next-line no-unused-vars
         ([key, value]) =>
-          !['__typename', '_conflicts', 'lieferungs'].includes(key),
+          !key.startsWith('_') &&
+          ![
+            'lieferungs',
+            'lieferungs_aggregate',
+            'kulturByNachKulturId',
+            'kulturByVonKulturId',
+            'person',
+            'sammlung',
+          ].includes(key),
       )
       // eslint-disable-next-line no-unused-vars
       .filter(([key, value]) => exists(value))
