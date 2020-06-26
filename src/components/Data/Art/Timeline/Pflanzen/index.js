@@ -57,7 +57,7 @@ const ArtTimeline = ({ artId, width }) => {
       <ResponsiveContainer width="99%" height={450}>
         <ComposedChart
           data={data}
-          margin={{ top: 25, right: 0, left: 0, bottom: 45 }}
+          margin={{ top: 35, right: 0, left: 0, bottom: 45 }}
         >
           <CartesianGrid strokeDasharray="3 3" horizontal={false} />
           <XAxis dataKey="datum" tick={CustomAxisTick} interval={0} />
@@ -114,7 +114,7 @@ const ArtTimeline = ({ artId, width }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="berechnet"
+            dataKey="Anzahl Pflanzen"
             stroke="#4a148c"
             strokeWidth={3}
             label={<LabelZaehlung />}

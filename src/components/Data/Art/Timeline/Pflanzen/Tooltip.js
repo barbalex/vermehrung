@@ -16,9 +16,8 @@ const PTitle = styled.div`
   font-size: 0.8em;
   font-weight: 800;
 `
-const Ereignis = styled.span`
+const Ereignis = styled.div`
   font-weight: 600;
-  padding-left: 5px;
 `
 
 const CustomTooltip = ({ payload, label, active }) => {
@@ -26,7 +25,7 @@ const CustomTooltip = ({ payload, label, active }) => {
     return (
       <Popup>
         <PTitle>
-          {moment(label).format('YYYY.MM.DD')}
+          <div>{moment(label).format('YYYY.MM.DD')}</div>
           <Ereignis>{payload?.[0]?.payload?.title ?? ''}</Ereignis>
         </PTitle>
         {payload.map((o) => {
