@@ -16,9 +16,8 @@ const PTitle = styled.div`
   font-size: 0.8em;
   font-weight: 800;
 `
-const Ereignis = styled.span`
+const Ereignis = styled.div`
   font-weight: 600;
-  padding-left: 5px;
 `
 
 const CustomTooltip = ({ payload, label, active }) => {
@@ -26,13 +25,22 @@ const CustomTooltip = ({ payload, label, active }) => {
     return (
       <Popup>
         <PTitle>
-          {moment(label).format('YYYY.MM.DD')}
+          <div>{moment(label).format('YYYY.MM.DD')}</div>
           <Ereignis>{payload?.[0]?.payload?.title ?? ''}</Ereignis>
         </PTitle>
-        {payload.map((o) => {
-          const label = o.dataKey
-          return <PRow key={label}>{`${label}: ${o.value}`}</PRow>
-        })}
+        {payload
+          // Zählung and Prognose are only used for the optics,
+          // do not want them in the tooltip
+          .filter((p) => !['Zählung', 'Prognose'].includes(p.dataKey))
+          .map((o) => {
+            const label = o.dataKey
+            const value =
+              label === 'Auspflanzung' && Math.abs(o.value)
+                ? Math.abs(o.value)
+                : o.value
+
+            return <PRow key={label}>{`${label}: ${value}`}</PRow>
+          })}
       </Popup>
     )
   }

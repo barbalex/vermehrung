@@ -36,7 +36,7 @@ const Title = styled.div`
 
 const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const store = useContext(StoreContext)
-  const [open, setOpen] = useState(false)
+
   const herkunftIds = uniq(
     store.sammlungsSorted
       .filter((s) => s.art_id === artId)
@@ -47,6 +47,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
     herkunftIds.includes(h.id),
   )
 
+  const [open, setOpen] = useState(false)
   const onClickToggle = useCallback(
     (e) => {
       e.stopPropagation()

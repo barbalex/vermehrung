@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState, useContext } from 'react'
 import {
   ComposedChart,
   Bar,
-  LabelList,
   Line,
   XAxis,
   YAxis,
@@ -35,11 +34,11 @@ const NoData = styled.div`
 
 const ArtTimeline = ({ artId, herkunft, width }) => {
   const store = useContext(StoreContext)
-  const [narrow, setNarrow] = useState(false)
   const herkunftId = herkunft.id
 
   const data = useMemo(() => buildData({ store, artId, herkunftId }), [])
 
+  const [narrow, setNarrow] = useState(false)
   useEffect(() => {
     if (width < 1100 && !narrow) {
       setNarrow(true)
@@ -125,6 +124,16 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
+          <Line
+            type="monotone"
+            connectNulls={true}
+            dataKey="Anzahl berechnet"
+            stroke="#4a148c"
+            strokeWidth={3}
+            label={<LabelZaehlung />}
+            isAnimationActive={false}
+            dot={false}
+          />
           <Scatter
             dataKey="Zählung"
             stroke="#4a148c"
@@ -133,28 +142,14 @@ const ArtTimeline = ({ artId, herkunft, width }) => {
             //fill="white"
             strokeWidth={3}
             isAnimationActive={false}
-          >
-            <LabelList dataKey="Zählung" content={<LabelZaehlung />} />
-          </Scatter>
+          ></Scatter>
           <Scatter
             dataKey="Prognose"
             stroke="#e0e0ff"
             fill="#e0e0ff"
             strokeWidth={3}
             isAnimationActive={false}
-          >
-            <LabelList dataKey="Zählung" content={<LabelZaehlung />} />
-          </Scatter>
-          <Line
-            type="monotone"
-            connectNulls={true}
-            dataKey="berechnet"
-            stroke="#4a148c"
-            strokeWidth={3}
-            dot={false}
-            label={false}
-            isAnimationActive={false}
-          />
+          ></Scatter>
         </ComposedChart>
       </ResponsiveContainer>
     </ErrorBoundary>
