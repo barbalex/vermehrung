@@ -111,26 +111,6 @@ const ArtTimeline = ({ artId, width }) => {
             label={<LabelLieferung />}
             isAnimationActive={false}
           />
-          <Scatter
-            dataKey="Zählung"
-            stroke="#4a148c"
-            fill="#4a148c"
-            // fill white makes legend go completely white...
-            //fill="white"
-            strokeWidth={3}
-            isAnimationActive={false}
-          >
-            <LabelList dataKey="Zählung" content={<LabelZaehlung />} />
-          </Scatter>
-          <Scatter
-            dataKey="Prognose"
-            stroke="#e0e0ff"
-            fill="#e0e0ff"
-            strokeWidth={3}
-            isAnimationActive={false}
-          >
-            <LabelList dataKey="Zählung" content={<LabelZaehlung />} />
-          </Scatter>
           <Line
             type="monotone"
             connectNulls={true}
