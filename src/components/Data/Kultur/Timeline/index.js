@@ -33,6 +33,7 @@ import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
 import appBaseUrl from '../../../../utils/appBaseUrl'
+import exists from '../../../../utils/exists'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { StoreContext } from '../../../../models/reactUtils'
 
@@ -108,9 +109,11 @@ const KulturTimeline = ({ row, width }) => {
         return {
           datum: new Date(l.datum).getTime(),
           'Zählung Pflanzen':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ??
+            undefined,
           'Zählung Pflanzen auspflanzbereit':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum
+              ?.anzahl_auspflanzbereit ?? undefined,
           'Zählung Mutterpflanzen':
             l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen,
           'Zählung andere Mengen': teilzaehlungs
@@ -135,11 +138,14 @@ const KulturTimeline = ({ row, width }) => {
         return {
           datum: new Date(l.datum).getTime(),
           'Zählung Pflanzen Prognose':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ??
+            undefined,
           'Zählung Pflanzen auspflanzbereit Prognose':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum
+              ?.anzahl_auspflanzbereit ?? undefined,
           'Zählung Mutterpflanzen Prognose':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
+            undefined,
           'Zählung Prognose': teilzaehlungs
             .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
@@ -165,11 +171,14 @@ const KulturTimeline = ({ row, width }) => {
         return {
           datum: new Date(l.datum).getTime(),
           'Zählung Pflanzen Prognose, ignoriert':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen ??
+            undefined,
           'Zählung Pflanzen auspflanzbereit Prognose, ignoriert':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_auspflanzbereit,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum
+              ?.anzahl_auspflanzbereit ?? undefined,
           'Zählung Mutterpflanzen Prognose, ignoriert':
-            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen,
+            l?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_mutterpflanzen ??
+            undefined,
           'Zählung Prognose': teilzaehlungs
             .map((t) => (t.prognose ? 'ja' : 'nein'))
             .join(', '),
@@ -292,15 +301,17 @@ const KulturTimeline = ({ row, width }) => {
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Lieferung Pflanzen': l.anzahl_pflanzen,
-          'Lieferung Pflanzen auspflanzbereit': l.anzahl_auspflanzbereit,
+          'Lieferung Pflanzen': l.anzahl_pflanzen || undefined,
+          'Lieferung Pflanzen auspflanzbereit':
+            l.anzahl_auspflanzbereit || undefined,
           'Lieferung andere Mengen': l.andere_menge,
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
           'Lieferung Bemerkungen': l.bemerkungen,
-          'Zählung Pflanzen': sumAnzahlPflanzen + l.anzahl_pflanzen,
+          'Zählung Pflanzen':
+            sumAnzahlPflanzen + l.anzahl_pflanzen ?? undefined,
           'Zählung Pflanzen auspflanzbereit':
-            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit,
+            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined,
           ereignis: 'Lieferung',
         }
       }),
@@ -342,15 +353,17 @@ const KulturTimeline = ({ row, width }) => {
 
         return {
           datum: new Date(l.datum).getTime(),
-          'Lieferung Pflanzen': -l.anzahl_pflanzen,
-          'Lieferung Pflanzen auspflanzbereit': -l.anzahl_auspflanzbereit,
+          'Lieferung Pflanzen': -l.anzahl_pflanzen || undefined,
+          'Lieferung Pflanzen auspflanzbereit':
+            -l.anzahl_auspflanzbereit || undefined,
           'Lieferung andere Mengen': l.andere_menge,
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
           'Lieferung Bemerkungen': l.bemerkungen,
-          'Zählung Pflanzen': sumAnzahlPflanzen - l.anzahl_pflanzen,
+          'Zählung Pflanzen':
+            sumAnzahlPflanzen - l.anzahl_pflanzen ?? undefined,
           'Zählung Pflanzen auspflanzbereit':
-            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit,
+            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined,
           ereignis: 'Lieferung',
         }
       }),
@@ -393,9 +406,9 @@ const KulturTimeline = ({ row, width }) => {
 
         const data = {
           datum: new Date(l.datum).getTime(),
-          'Lieferung Pflanzen geplant': l.anzahl_pflanzen,
+          'Lieferung Pflanzen geplant': l.anzahl_pflanzen || undefined,
           'Lieferung Pflanzen auspflanzbereit geplant':
-            l.anzahl_auspflanzbereit,
+            l.anzahl_auspflanzbereit || undefined,
           'Lieferung andere Mengen': l.andere_menge,
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
@@ -403,14 +416,15 @@ const KulturTimeline = ({ row, width }) => {
           ereignis: 'Lieferung',
         }
         if (data.datum < new Date(lastZaehlungDone.datum).getTime()) {
-          data['Zählung Pflanzen'] = sumAnzahlPflanzen + l.anzahl_pflanzen
+          data['Zählung Pflanzen'] =
+            sumAnzahlPflanzen + l.anzahl_pflanzen ?? undefined
           data['Zählung Pflanzen auspflanzbereit'] =
-            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
+            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined
         } else {
           data['Zählung Pflanzen Prognose'] =
-            sumAnzahlPflanzen + l.anzahl_pflanzen
+            sumAnzahlPflanzen + l.anzahl_pflanzen ?? undefined
           data['Zählung Pflanzen auspflanzbereit Prognose'] =
-            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit
+            sumAnzahlAuspflanzbereit + l.anzahl_auspflanzbereit ?? undefined
         }
         return data
       }),
@@ -425,9 +439,9 @@ const KulturTimeline = ({ row, width }) => {
     () =>
       anLieferungenPlannedIgnored.map((l) => ({
         datum: new Date(l.datum).getTime(),
-        'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen,
+        'Lieferung Pflanzen geplant, ignoriert': l.anzahl_pflanzen || undefined,
         'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
-          l.anzahl_auspflanzbereit,
+          l.anzahl_auspflanzbereit || undefined,
         'Lieferung andere Mengen': l.andere_menge,
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
@@ -468,8 +482,9 @@ const KulturTimeline = ({ row, width }) => {
 
         const data = {
           datum: new Date(l.datum).getTime(),
-          'Lieferung Pflanzen geplant': -l.anzahl_pflanzen,
-          'Lieferung Pflanzen auspflanzbereit geplant': -l.anzahl_auspflanzbereit,
+          'Lieferung Pflanzen geplant': -l.anzahl_pflanzen || undefined,
+          'Lieferung Pflanzen auspflanzbereit geplant':
+            -l.anzahl_auspflanzbereit || undefined,
           'Lieferung andere Mengen': l.andere_menge,
           'Lieferung Gramm Samen': l.gramm_samen,
           'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
@@ -477,14 +492,15 @@ const KulturTimeline = ({ row, width }) => {
           ereignis: 'Lieferung',
         }
         if (data.datum < new Date(lastZaehlungDone.datum).getTime()) {
-          data['Zählung Pflanzen'] = sumAnzahlPflanzen - l.anzahl_pflanzen
+          data['Zählung Pflanzen'] =
+            sumAnzahlPflanzen - l.anzahl_pflanzen ?? undefined
           data['Zählung Pflanzen auspflanzbereit'] =
-            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
+            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined
         } else {
           data['Zählung Pflanzen Prognose'] =
-            sumAnzahlPflanzen - l.anzahl_pflanzen
+            sumAnzahlPflanzen - l.anzahl_pflanzen ?? undefined
           data['Zählung Pflanzen auspflanzbereit Prognose'] =
-            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit
+            sumAnzahlAuspflanzbereit - l.anzahl_auspflanzbereit ?? undefined
         }
         return data
       }),
@@ -499,8 +515,10 @@ const KulturTimeline = ({ row, width }) => {
     () =>
       ausLieferungenPlannedIgnored.map((l) => ({
         datum: new Date(l.datum).getTime(),
-        'Lieferung Pflanzen geplant, ignoriert': -l.anzahl_pflanzen,
-        'Lieferung Pflanzen auspflanzbereit geplant, ignoriert': -l.anzahl_auspflanzbereit,
+        'Lieferung Pflanzen geplant, ignoriert':
+          -l.anzahl_pflanzen || undefined,
+        'Lieferung Pflanzen auspflanzbereit geplant, ignoriert':
+          -l.anzahl_auspflanzbereit || undefined,
         'Lieferung andere Mengen': l.andere_menge,
         'Lieferung Gramm Samen': l.gramm_samen,
         'Lieferung von Anzahl Individuen': l.von_anzahl_individuen,
@@ -561,6 +579,12 @@ const KulturTimeline = ({ row, width }) => {
       setOpen(!open)
     },
     [open],
+  )
+
+  const showCategory = useCallback(
+    (category) =>
+      !!allData.map((d) => d[category]).filter((d) => exists(d)).length,
+    [allData],
   )
 
   if (!row || !allData.length) {
@@ -632,127 +656,161 @@ const KulturTimeline = ({ row, width }) => {
               <Legend
                 layout="vertical"
                 align="right"
-                wrapperStyle={{ right: -10, bottom: 12, fontSize: 12 }}
+                wrapperStyle={{ right: -10, top: 50, fontSize: 12 }}
               />
             )}
             <ReferenceLine y={0} stroke="#000" />
-            <Bar
-              dataKey="Lieferung Pflanzen"
-              fill="#4a148c"
-              label={<LabelLieferung />}
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="Lieferung Pflanzen geplant"
-              fill="#ceceeb"
-              label={<LabelLieferung />}
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="Lieferung Pflanzen geplant, ignoriert"
-              fill="#ebebf9"
-              label={<LabelLieferung />}
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="Lieferung Pflanzen auspflanzbereit"
-              fill="#016526"
-              label={<LabelLieferung />}
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="Lieferung Pflanzen auspflanzbereit geplant"
-              fill="#9cffc0"
-              label={<LabelLieferung />}
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="Lieferung Pflanzen auspflanzbereit geplant, ignoriert"
-              fill="#e6ffef"
-              label={<LabelLieferung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="monotone"
-              connectNulls={true}
-              dataKey="Zählung Pflanzen"
-              stroke="#4a148c"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="monotone"
-              connectNulls={true}
-              dataKey="Zählung Pflanzen Prognose"
-              stroke="#e0e0ff"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="basis"
-              dataKey="Zählung Pflanzen Prognose, ignoriert"
-              legendType="circle"
-              stroke="#ebebf9"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="monotone"
-              connectNulls={true}
-              dataKey="Zählung Pflanzen auspflanzbereit"
-              stroke="#016526"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="monotone"
-              connectNulls={true}
-              dataKey="Zählung Pflanzen auspflanzbereit Prognose"
-              stroke="#9cffc0"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="basis"
-              dataKey="Zählung Pflanzen auspflanzbereit Prognose, ignoriert"
-              legendType="circle"
-              stroke="#e6ffef"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="monotone"
-              connectNulls={true}
-              dataKey="Zählung Mutterpflanzen"
-              stroke="#cc0000"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="monotone"
-              connectNulls={true}
-              dataKey="Zählung Mutterpflanzen Prognose"
-              stroke="#ffb3b3"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
-            <Line
-              type="basis"
-              dataKey="Zählung Mutterpflanzen Prognose, ignoriert"
-              legendType="circle"
-              stroke="#ffe6e6"
-              strokeWidth={3}
-              label={<LabelZaehlung />}
-              isAnimationActive={false}
-            />
+            {showCategory('Lieferung Pflanzen') && (
+              <Bar
+                dataKey="Lieferung Pflanzen"
+                fill="#4a148c"
+                label={<LabelLieferung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Lieferung Pflanzen geplant') && (
+              <Bar
+                dataKey="Lieferung Pflanzen geplant"
+                fill="#ceceeb"
+                label={<LabelLieferung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Lieferung Pflanzen geplant, ignoriert') && (
+              <Bar
+                dataKey="Lieferung Pflanzen geplant, ignoriert"
+                fill="#ebebf9"
+                label={<LabelLieferung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Lieferung Pflanzen auspflanzbereit') && (
+              <Bar
+                dataKey="Lieferung Pflanzen auspflanzbereit"
+                fill="#016526"
+                label={<LabelLieferung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Lieferung Pflanzen auspflanzbereit geplant') && (
+              <Bar
+                dataKey="Lieferung Pflanzen auspflanzbereit geplant"
+                fill="#9cffc0"
+                label={<LabelLieferung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory(
+              'Lieferung Pflanzen auspflanzbereit geplant, ignoriert',
+            ) && (
+              <Bar
+                dataKey="Lieferung Pflanzen auspflanzbereit geplant, ignoriert"
+                fill="#e6ffef"
+                label={<LabelLieferung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Pflanzen') && (
+              <Line
+                type="monotone"
+                connectNulls={true}
+                dataKey="Zählung Pflanzen"
+                stroke="#4a148c"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Pflanzen Prognose') && (
+              <Line
+                type="monotone"
+                connectNulls={true}
+                dataKey="Zählung Pflanzen Prognose"
+                stroke="#e0e0ff"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Pflanzen Prognose, ignoriert') && (
+              <Line
+                type="basis"
+                dataKey="Zählung Pflanzen Prognose, ignoriert"
+                legendType="circle"
+                stroke="#ebebf9"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Pflanzen auspflanzbereit') && (
+              <Line
+                type="monotone"
+                connectNulls={true}
+                dataKey="Zählung Pflanzen auspflanzbereit"
+                stroke="#016526"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Pflanzen auspflanzbereit Prognose') && (
+              <Line
+                type="monotone"
+                connectNulls={true}
+                dataKey="Zählung Pflanzen auspflanzbereit Prognose"
+                stroke="#9cffc0"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory(
+              'Zählung Pflanzen auspflanzbereit Prognose, ignoriert',
+            ) && (
+              <Line
+                type="basis"
+                dataKey="Zählung Pflanzen auspflanzbereit Prognose, ignoriert"
+                legendType="circle"
+                stroke="#e6ffef"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Mutterpflanzen') && (
+              <Line
+                type="monotone"
+                connectNulls={true}
+                dataKey="Zählung Mutterpflanzen"
+                stroke="#cc0000"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Mutterpflanzen Prognose') && (
+              <Line
+                type="monotone"
+                connectNulls={true}
+                dataKey="Zählung Mutterpflanzen Prognose"
+                stroke="#ffb3b3"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
+            {showCategory('Zählung Mutterpflanzen Prognose, ignoriert') && (
+              <Line
+                type="basis"
+                dataKey="Zählung Mutterpflanzen Prognose, ignoriert"
+                legendType="circle"
+                stroke="#ffe6e6"
+                strokeWidth={3}
+                label={<LabelZaehlung />}
+                isAnimationActive={false}
+              />
+            )}
           </ComposedChart>
         </ResponsiveContainer>
       )}
