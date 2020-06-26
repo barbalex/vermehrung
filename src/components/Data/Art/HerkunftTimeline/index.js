@@ -63,7 +63,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
       >
-        <Title>Zeit-Achsen Herkünfte</Title>
+        <Title>{`Zeit-Achsen ${herkunftsSorted.length} Herkünfte`}</Title>
         <div>
           <IconButton
             aria-label={open ? 'schliessen' : 'öffnen'}
