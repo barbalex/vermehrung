@@ -96,10 +96,7 @@ export default ({ artId, store }) => {
   //    - whether last zahlung includes prognose
 
   return dates.map((date) => {
-    const sammlungsDoneNow = [...sammlungsDone, ...sammlungsPlanned].filter(
-      (s) => s.datum === date,
-    )
-    const sammlungsCountNow = sammlungsDoneNow.length
+    const sammlungsDoneNow = sammlungsDone.filter((s) => s.datum === date)
     const sammlungNowSumList = sammlungsDoneNow
       .map((s) => s.anzahl_pflanzen)
       .filter((s) => exists(s))
@@ -115,10 +112,7 @@ export default ({ artId, store }) => {
       ? sum(sammlungPlannedNowSumList)
       : undefined
 
-    const lieferungsNow = [...lieferungsDone, ...lieferungsPlanned].filter(
-      (s) => s.datum === date,
-    )
-    const lieferungsCountNow = lieferungsNow.length
+    const lieferungsNow = lieferungsDone.filter((s) => s.datum === date)
     const lieferungNowSumList = lieferungsNow.map((s) => s.anzahl_pflanzen)
     const lieferungNow = lieferungNowSumList.length
       ? -sum(lieferungNowSumList)
@@ -133,7 +127,7 @@ export default ({ artId, store }) => {
       ? -sum(lieferungPlannedNowSumList)
       : undefined
 
-    const lastZaehlungen = kultursOfArt.map((k) => {
+    const lastZaehlungsByKultur = kultursOfArt.map((k) => {
       // for every kultur return
       // last zaehlung and whether it is prognose
       const lastZaehlungDatum = max(
@@ -142,7 +136,7 @@ export default ({ artId, store }) => {
           .filter((d) => !!d)
           .filter((d) => d <= date),
       )
-      const lastZaehlungs = k?.zaehlungs
+      const lastZaehlungsOfKultur = k?.zaehlungs
         .filter((z) => !!z.datum)
         .filter((z) => z.datum === lastZaehlungDatum)
         .filter(
@@ -150,19 +144,19 @@ export default ({ artId, store }) => {
         )
       // if no zaehlung exists yet, need to set 0
       const lastZaehlungAnzahlPflanzen = sum(
-        lastZaehlungs.map(
+        lastZaehlungsOfKultur.map(
           (z) => z.teilzaehlungs_aggregate.aggregate.sum.anzahl_pflanzen,
         ),
       )
 
       return {
         anzahl_pflanzen: lastZaehlungAnzahlPflanzen,
-        geplant: lastZaehlungs.some((z) => z.prognose),
+        geplant: lastZaehlungsOfKultur.some((z) => z.prognose),
       }
     })
-    const lastZaehlungenSum = {
-      anzahl_pflanzen: sum(lastZaehlungen.map((z) => z.anzahl_pflanzen)),
-      geplant: lastZaehlungen.some((z) => z.geplant),
+    const lastZaehlungs = {
+      anzahl_pflanzen: sum(lastZaehlungsByKultur.map((z) => z.anzahl_pflanzen)),
+      geplant: lastZaehlungsByKultur.some((z) => z.geplant),
     }
 
     const lastZaehlungDatum =
@@ -176,17 +170,27 @@ export default ({ artId, store }) => {
       ...sammlungsDone,
       ...sammlungsPlanned,
     ].filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
-    const sammlungsSinceAnzahlPflanzen = sum(
-      sammlungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
-    )
+    const sammlungsSince = {
+      anzahl_pflanzen: sum(
+        sammlungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
+      ),
+      geplant: !!sammlungsPlanned.filter(
+        (l) => l.datum > lastZaehlungDatum && l.datum <= date,
+      ).length,
+    }
 
     const lieferungsSinceLastZaehlung = [
       ...lieferungsDone,
       ...lieferungsPlanned,
     ].filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
-    const lieferungsSinceAnzahlPflanzen = sum(
-      lieferungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
-    )
+    const lieferungsSince = {
+      anzahl_pflanzen: sum(
+        lieferungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
+      ),
+      geplant: !!lieferungsPlanned.filter(
+        (l) => l.datum > lastZaehlungDatum && l.datum <= date,
+      ).length,
+    }
 
     const zaehlungsNow = [...zaehlungsDone, ...zaehlungsPlanned].filter(
       (s) => s.datum === date,
@@ -198,23 +202,45 @@ export default ({ artId, store }) => {
         ? `${zaehlungsCountNow} Zählung`
         : `${zaehlungsCountNow} Zählungen`
       : undefined
-    const sammlungsTitle = sammlungsCountNow
-      ? sammlungsCountNow === 1
-        ? `${sammlungsCountNow} Sammlung`
-        : `${sammlungsCountNow} Sammlungen`
+    const sCount = [...sammlungsDone, ...sammlungsPlanned].filter(
+      (s) => s.datum === date,
+    ).length
+    const sammlungsTitle = sCount
+      ? sCount === 1
+        ? `${sCount} Sammlung`
+        : `${sCount} Sammlungen`
       : undefined
-    const lieferungsTitle = lieferungsCountNow
-      ? lieferungsCountNow === 1
-        ? `${lieferungsCountNow} Auspflanzung`
-        : `${lieferungsCountNow} Auspflanzungen`
+    const lfCount = [...lieferungsDone, ...lieferungsPlanned].filter(
+      (s) => s.datum === date,
+    ).length
+    const lieferungsTitle = lfCount
+      ? lfCount === 1
+        ? `${lfCount} Auspflanzung`
+        : `${lfCount} Auspflanzungen`
       : undefined
 
     const data = {
       datum: date,
-      'Anzahl Pflanzen':
-        lastZaehlungenSum.anzahl_pflanzen +
-        sammlungsSinceAnzahlPflanzen -
-        lieferungsSinceAnzahlPflanzen,
+      'Anzahl berechnet':
+        lastZaehlungs.anzahl_pflanzen +
+        sammlungsSince.anzahl_pflanzen -
+        lieferungsSince.anzahl_pflanzen,
+      Zählung:
+        lastZaehlungs.prognose ||
+        sammlungsSince.geplant ||
+        lieferungsSince.geplant
+          ? undefined
+          : lastZaehlungs.anzahl_pflanzen +
+            sammlungsSince.anzahl_pflanzen -
+            lieferungsSince.anzahl_pflanzen,
+      Prognose:
+        lastZaehlungs.prognose ||
+        sammlungsSince.geplant ||
+        lieferungsSince.geplant
+          ? lastZaehlungs.anzahl_pflanzen +
+            sammlungsSince.anzahl_pflanzen -
+            lieferungsSince.anzahl_pflanzen
+          : undefined,
       Sammlung: sammlungNow,
       'Sammlung geplant': sammlungPlannedNow,
       Auspflanzung: lieferungNow,
