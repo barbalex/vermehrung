@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState, useContext } from 'react'
 import {
   ComposedChart,
   Bar,
-  LabelList,
   Line,
   XAxis,
   YAxis,
@@ -114,12 +113,29 @@ const ArtTimeline = ({ artId, width }) => {
           <Line
             type="monotone"
             connectNulls={true}
-            dataKey="Anzahl Pflanzen"
+            dataKey="Anzahl berechnet"
             stroke="#4a148c"
             strokeWidth={3}
             label={<LabelZaehlung />}
             isAnimationActive={false}
+            dot={false}
           />
+          <Scatter
+            dataKey="Zählung"
+            stroke="#4a148c"
+            fill="#4a148c"
+            // fill white makes legend go completely white...
+            //fill="white"
+            strokeWidth={3}
+            isAnimationActive={false}
+          ></Scatter>
+          <Scatter
+            dataKey="Prognose"
+            stroke="#e0e0ff"
+            fill="#e0e0ff"
+            strokeWidth={3}
+            isAnimationActive={false}
+          ></Scatter>
         </ComposedChart>
       </ResponsiveContainer>
     </ErrorBoundary>
