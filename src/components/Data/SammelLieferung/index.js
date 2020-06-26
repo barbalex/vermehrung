@@ -172,7 +172,7 @@ const SammelLieferung = ({
     unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
-  const { setWidthInPercentOfScreen } = store.tree
+  const { setWidthInPercentOfScreen, activeNodeArray } = store.tree
 
   const isFiltered = runIsFiltered()
   const hierarchyFilter = () => {
@@ -343,6 +343,8 @@ const SammelLieferung = ({
       window.open(url)
     }
   }, [])
+  const shownAsSammelLieferung =
+    activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
 
   // setting initial value like this is necessary
   // because during printing page Vermehrung re-renders without tree
@@ -370,6 +372,7 @@ const SammelLieferung = ({
   const ifNeeded = useCallback(
     (field) => {
       if (sl_show_empty_when_next_to_li) return true
+      if (shownAsSammelLieferung) return true
       if (
         id &&
         !sl_show_empty_when_next_to_li &&
@@ -378,7 +381,7 @@ const SammelLieferung = ({
         return false
       return true
     },
-    [id, row, sl_show_empty_when_next_to_li],
+    [id, row, shownAsSammelLieferung, sl_show_empty_when_next_to_li],
   )
   const ifSomeNeeded = useCallback(
     (fields) => fields.some((f) => ifNeeded(f)),
@@ -390,6 +393,8 @@ const SammelLieferung = ({
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
+
+  console.log('SammelLieferung:', { row, sl_auto_copy_edits, printPreview })
 
   return (
     <ErrorBoundary>
