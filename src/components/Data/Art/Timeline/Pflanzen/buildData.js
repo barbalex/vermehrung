@@ -5,7 +5,6 @@ import max from 'lodash/max'
 
 import exists from '../../../../../utils/exists'
 import kulturSort from '../../../../../utils/kulturSort'
-import zaehlungSort from '../../../../../utils/zaehlungSort'
 
 export default ({ artId, store }) => {
   const { zaehlungsSorted, sammlungsSorted, lieferungsSorted } = store
@@ -165,44 +164,8 @@ export default ({ artId, store }) => {
         ),
       )
 
-      const sammlungsSinceLastZaehlung = k?.lieferungsByNachKulturId
-        .filter((l) => !!l.von_sammlung_id)
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !!l.datum)
-        .filter((l) => !!l.anzahl_pflanzen)
-        .filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
-      const sammlungsSinceAnzahlPflanzen = sum(
-        sammlungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
-      )
-
-      const lieferungsSinceLastZaehlung = k?.lieferungsByVonKulturId
-        .filter((l) => !!l.nach_ausgepflanzt)
-        .filter((l) => l.art_id === artId)
-        .filter((l) => !!l.datum)
-        .filter((l) => !!l.anzahl_pflanzen)
-        .filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
-      const lieferungsSinceAnzahlPflanzen = sum(
-        lieferungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
-      )
-      const anzahlNow =
-        lastZaehlungAnzahlPflanzen +
-        sammlungsSinceAnzahlPflanzen -
-        lieferungsSinceAnzahlPflanzen
-
-      date === '2021-09-01' &&
-        console.log('buildData, lastZaehlungen', {
-          lastZaehlungAnzahlPflanzen,
-          sammlungsSinceAnzahlPflanzen,
-          lieferungsSinceAnzahlPflanzen,
-          lastZaehlungDatum,
-          anzahlNow,
-          lieferungsSinceLastZaehlung,
-          sammlungsSinceLastZaehlung,
-          lastZaehlungsLength: lastZaehlungs.length,
-        })
-
       return {
-        anzahl_pflanzen: anzahlNow,
+        anzahl_pflanzen: lastZaehlungAnzahlPflanzen,
         geplant: lastZaehlungs.some((z) => z.prognose),
       }
     })
@@ -210,6 +173,29 @@ export default ({ artId, store }) => {
       anzahl_pflanzen: sum(lastZaehlungen.map((z) => z.anzahl_pflanzen)),
       geplant: lastZaehlungen.some((z) => z.geplant),
     }
+
+    const lastZaehlungDatum =
+      max(
+        [...zaehlungsDone, ...zaehlungsPlanned]
+          .map((z) => z.datum)
+          .filter((d) => !!d)
+          .filter((d) => d <= date),
+      ) || '1900-01-01'
+    const sammlungsSinceLastZaehlung = [
+      ...sammlungsDone,
+      ...sammlungsPlanned,
+    ].filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
+    const sammlungsSinceAnzahlPflanzen = sum(
+      sammlungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
+    )
+
+    const lieferungsSinceLastZaehlung = [
+      ...lieferungsDone,
+      ...lieferungsPlanned,
+    ].filter((l) => l.datum > lastZaehlungDatum && l.datum <= date)
+    const lieferungsSinceAnzahlPflanzen = sum(
+      lieferungsSinceLastZaehlung.map((s) => s.anzahl_pflanzen),
+    )
 
     const zaehlungsDoneNow = zaehlungsDone.filter((s) => s.datum === date)
     const zaehlungsCountNow = zaehlungsDoneNow.length
@@ -234,8 +220,8 @@ export default ({ artId, store }) => {
       datum: date,
       berechnet:
         lastZaehlungenSum.anzahl_pflanzen +
-        sammlungNowSum.anzahl_pflanzen -
-        lieferungNowSum.anzahl_pflanzen,
+        sammlungsSinceAnzahlPflanzen -
+        lieferungsSinceAnzahlPflanzen,
       Sammlung: sammlungNow,
       'Sammlung geplant': sammlungPlannedNow,
       Auspflanzung: lieferungNow,
@@ -244,13 +230,17 @@ export default ({ artId, store }) => {
         .filter((e) => !!e)
         .join(', '),
     }
-    date === '2021-09-01' &&
+    date === '2020-06-04' &&
       console.log('buildData', {
+        lastZaehlungDatum,
         lieferungsDone,
         lieferungPlannedNow,
         lieferungNowSum,
         lastZaehlungenSum,
         sammlungNowSum,
+        sammlungsSinceAnzahlPflanzen,
+        sammlungsSinceLastZaehlung,
+        lieferungsSinceAnzahlPflanzen,
         lieferungNow,
         data,
         lieferungsDoneNow,
