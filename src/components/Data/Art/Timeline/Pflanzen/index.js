@@ -137,8 +137,7 @@ const ArtTimeline = ({ artId, width }) => {
             dataKey="berechnet"
             stroke="#4a148c"
             strokeWidth={3}
-            dot={false}
-            label={false}
+            label={<LabelZaehlung />}
             isAnimationActive={false}
           />
         </ComposedChart>
