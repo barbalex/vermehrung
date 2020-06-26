@@ -1,8 +1,10 @@
 import sortBy from 'lodash/sortBy'
 import uniq from 'lodash/uniq'
 import sum from 'lodash/sum'
+import max from 'lodash/max'
 
 import exists from '../../../../../utils/exists'
+import kulturSort from '../../../../../utils/kulturSort'
 
 export default ({ artId, store }) => {
   const { zaehlungsSorted, sammlungsSorted, lieferungsSorted } = store
@@ -17,7 +19,7 @@ export default ({ artId, store }) => {
     .filter((z) =>
       exists(z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen),
     )
-  const zaehlungsPlanned = zaehlungsSorted
+  const zaehlungsPlannedAll = zaehlungsSorted
     .filter((z) => z?.kultur?.art_id === artId)
     .filter((z) => z.prognose === true)
     .filter((z) => !!z.datum)
@@ -25,13 +27,13 @@ export default ({ artId, store }) => {
     .filter((z) =>
       exists(z?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen),
     )
-  const zaehlungsPlannedIgnored = zaehlungsPlanned.filter((zg) =>
+  const zaehlungsPlannedIgnored = zaehlungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     zaehlungsDone.some(
       (z) => new Date(z.datum).getTime() >= new Date(zg.datum).getTime(),
     ),
   )
-  const zaehlungsPlannedIncluded = zaehlungsPlanned.filter(
+  const zaehlungsPlanned = zaehlungsPlannedAll.filter(
     (lg) => !zaehlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
@@ -42,17 +44,17 @@ export default ({ artId, store }) => {
     .filter((z) => new Date(z.datum).getTime() <= now)
     // TODO: need to add here when adding other anzahlen
     .filter((z) => exists(z.anzahl_pflanzen))
-  const sammlungsPlanned = sammlungsSorted
+  const sammlungsPlannedAll = sammlungsSorted
     .filter((z) => z.art_id === artId)
     .filter((z) => z.geplant)
     .filter((z) => !!z.datum)
     // TODO: need to add here when adding other anzahlen
     .filter((z) => exists(z.anzahl_pflanzen))
-  const sammlungsPlannedIgnored = sammlungsPlanned.filter((zg) =>
+  const sammlungsPlannedIgnored = sammlungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     sammlungsDone.some((z) => z.datum >= zg.datum),
   )
-  const sammlungsPlannedIncluded = sammlungsPlanned.filter(
+  const sammlungsPlanned = sammlungsPlannedAll.filter(
     (lg) => !sammlungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
@@ -64,34 +66,47 @@ export default ({ artId, store }) => {
     .filter((z) => new Date(z.datum).getTime() <= now)
     // TODO: need to add here when adding other anzahlen
     .filter((z) => exists(z.anzahl_pflanzen))
-  const lieferungsPlanned = lieferungsSorted
+  const lieferungsPlannedAll = lieferungsSorted
     .filter((z) => z.art_id === artId)
     .filter((z) => z.nach_ausgepflanzt)
     .filter((z) => z.geplant)
     .filter((z) => !!z.datum)
     // TODO: need to add here when adding other anzahlen
     .filter((z) => exists(z.anzahl_pflanzen))
-  const lieferungsPlannedIgnored = lieferungsPlanned.filter((zg) =>
+  const lieferungsPlannedIgnored = lieferungsPlannedAll.filter((zg) =>
     // check if more recent zaehlungsDone exists
     lieferungsDone.some((z) => z.datum >= zg.datum),
   )
-  const lieferungsPlannedIncluded = lieferungsPlanned.filter(
+  const lieferungsPlanned = lieferungsPlannedAll.filter(
     (lg) => !lieferungsPlannedIgnored.map((l) => l.id).includes(lg.id),
   )
 
   const allDataRaw = sortBy(
     [
       ...zaehlungsDone,
-      ...zaehlungsPlannedIncluded,
+      ...zaehlungsPlanned,
       ...sammlungsDone,
-      ...sammlungsPlannedIncluded,
+      ...sammlungsPlanned,
       ...lieferungsDone,
-      ...lieferungsPlannedIncluded,
+      ...lieferungsPlanned,
     ],
     'datum',
   )
 
+  // 1. get list of all dates when something was counted
   const dates = uniq(allDataRaw.map((z) => z.datum))
+  // 2. get list of all non deleted kulturs
+  //    these are the basis for counting:
+  //    at every date the last count is used
+  const kultursOfArt = [...store.kulturs.values()]
+    .filter((a) => !a._deleted)
+    .filter((z) => z.art_id === artId)
+    // sorting not needed?
+    .sort(kulturSort)
+  // 3. for every date get:
+  //    - sum of last zaehlung
+  //    - whether last zahlung includes prognose
+
   const datasets = dates.map((date) => {
     const sammlungsDoneNow = sammlungsDone.filter((s) => s.datum === date)
     const sammlungsCountNow = sammlungsDoneNow.length
@@ -101,9 +116,7 @@ export default ({ artId, store }) => {
     const sammlungNow = sammlungNowSumList.length
       ? sum(sammlungNowSumList)
       : undefined
-    const sammlungsPlannedNow = sammlungsPlannedIncluded.filter(
-      (s) => s.datum === date,
-    )
+    const sammlungsPlannedNow = sammlungsPlanned.filter((s) => s.datum === date)
     // ensure no value returned of no anzahl exist
     const sammlungPlannedNowSumList = sammlungsPlannedNow
       .map((s) => s?.anzahl_pflanzen)
@@ -111,13 +124,14 @@ export default ({ artId, store }) => {
     const sammlungPlannedNow = sammlungPlannedNowSumList.length
       ? sum(sammlungPlannedNowSumList)
       : undefined
+
     const lieferungsDoneNow = lieferungsDone.filter((s) => s.datum === date)
     const lieferungsCountNow = lieferungsDoneNow.length
     const lieferungNowSumList = lieferungsDoneNow.map((s) => s.anzahl_pflanzen)
     const lieferungNow = lieferungNowSumList.length
       ? -sum(lieferungNowSumList)
       : undefined
-    const lieferungsPlannedNow = lieferungsPlannedIncluded.filter(
+    const lieferungsPlannedNow = lieferungsPlanned.filter(
       (s) => s.datum === date,
     )
     const lieferungPlannedNowSumList = lieferungsPlannedNow.map(
@@ -127,6 +141,30 @@ export default ({ artId, store }) => {
       ? -sum(lieferungPlannedNowSumList)
       : undefined
 
+    const lastZaehlungen = kultursOfArt.map((k) => {
+      // for every kultur return
+      // last zaehlung and whether it is prognose
+      const lastZaehlungDatum = max(
+        k?.zaehlungs
+          .map((z) => z.datum)
+          .filter((d) => !!d)
+          .filter((d) => d <= date),
+      )
+      const lastZaehlung = k?.zaehlungs.find(
+        (z) => z.datum === lastZaehlungDatum,
+      )
+      return {
+        anzahl_pflanzen:
+          lastZaehlung?.teilzaehlungs_aggregate?.aggregate?.sum
+            ?.anzahl_pflanzen,
+        geplant: lastZaehlung?.prognose,
+      }
+    })
+    const lastZaehlungenSum = {
+      anzahl_pflanzen: sum(lastZaehlungen.map((z) => z.anzahl_pflanzen)),
+      geplant: lastZaehlungen.some((z) => z.geplant),
+    }
+
     const zaehlungsDoneNow = zaehlungsDone.filter((s) => s.datum === date)
     const zaehlungsCountNow = zaehlungsDoneNow.length
     const zaehlungNowSumList = zaehlungsDoneNow.map(
@@ -135,9 +173,7 @@ export default ({ artId, store }) => {
     const zaehlungNow = zaehlungNowSumList.length
       ? sum(zaehlungNowSumList)
       : undefined
-    const zaehlungsPlannedNow = zaehlungsPlannedIncluded.filter(
-      (s) => s.datum === date,
-    )
+    const zaehlungsPlannedNow = zaehlungsPlanned.filter((s) => s.datum === date)
     const zaehlungPlannedNowSumList = zaehlungsPlannedNow.map(
       (s) => s?.teilzaehlungs_aggregate?.aggregate?.sum?.anzahl_pflanzen,
     )
@@ -205,13 +241,11 @@ export default ({ artId, store }) => {
 
     return {
       datum: date,
-      berechnet: anzahlNow,
+      berechnet: lastZaehlungenSum.anzahl_pflanzen,
       Sammlung: sammlungNow,
       'Sammlung geplant': sammlungPlannedNow,
       Auspflanzung: lieferungNow,
       'Auspflanzung geplant': lieferungPlannedNow,
-      Zählung: zaehlungNow,
-      Prognose: zaehlungPlannedNow,
       title: [zaehlungsTitle, sammlungsTitle, lieferungsTitle]
         .filter((e) => !!e)
         .join(', '),
