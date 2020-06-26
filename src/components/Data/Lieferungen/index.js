@@ -10,6 +10,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import exists from '../../../utils/exists'
 
 const Container = styled.div`
   height: 100%;
@@ -98,8 +99,40 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
   const filteredNr = lieferungsFiltered.filter(hierarchyFilter).length
 
   const add = useCallback(() => {
+    const isSammelLieferung =
+      activeNodeArray.length >= 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
+    if (isSammelLieferung) {
+      const slId = activeNodeArray[1]
+      const sl = store.sammel_lieferungs.get(slId)
+      let additionalValuesToSet = {}
+
+      const entries = Object.entries(sl)
+        .filter(
+          // eslint-disable-next-line no-unused-vars
+          ([key, value]) =>
+            !key.startsWith('_') &&
+            ![
+              'lieferungs',
+              'lieferungs_aggregate',
+              'kulturByNachKulturId',
+              'kulturByVonKulturId',
+              'person',
+              'sammlung',
+            ].includes(key),
+        )
+        // eslint-disable-next-line no-unused-vars
+        .filter(([key, value]) => exists(value))
+      for (const [key, value] of entries) {
+        const keyToUse = key === 'id' ? 'sammel_lieferung_id' : key
+        additionalValuesToSet[keyToUse] = value
+      }
+      additionalValuesToSet.sammel_lieferung_id = slId
+      return insertLieferungRev({
+        values: additionalValuesToSet,
+      })
+    }
     insertLieferungRev()
-  }, [insertLieferungRev])
+  }, [activeNodeArray, insertLieferungRev, store.sammel_lieferungs])
 
   return (
     <ErrorBoundary>
