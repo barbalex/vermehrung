@@ -13,6 +13,7 @@ export default ({ kulturId, store }) => {
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
+  const now = new Date()
 
   return {
     kultursWithoutVonAnzahlIndividuen: () =>
@@ -96,6 +97,30 @@ export default ({ kulturId, store }) => {
             text,
           }
         }),
+    zaehlungsInFutureNotPrognose: () =>
+      zaehlungsSorted
+        .filter((z) => z.kultur_id === kulturId)
+        .filter((z) => !!z.datum)
+        .filter((z) => new Date(z.datum).getTime() > now)
+        .map((z) => {
+          const garten =
+            z?.kultur?.garten?.name ??
+            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
+
+          return {
+            url: [
+              'Arten',
+              z?.kultur?.art_id,
+              'Kulturen',
+              z.id,
+              'Zaehlungen',
+              z.id,
+            ],
+            text,
+          }
+        }),
     zaehlungsWithoutDatum: () =>
       zaehlungsSorted
         .filter((z) => z.kultur_id === kulturId)
@@ -108,7 +133,14 @@ export default ({ kulturId, store }) => {
           const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
 
           return {
-            url: ['Kulturen', kulturId, 'Zaehlungen', z.id],
+            url: [
+              'Arten',
+              z?.kultur?.art_id,
+              'Kulturen',
+              kulturId,
+              'Zaehlungen',
+              z.id,
+            ],
             text,
           }
         }),
@@ -135,7 +167,14 @@ export default ({ kulturId, store }) => {
           const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
           return {
-            url: ['Kulturen', kulturId, 'Zaehlungen', z.id],
+            url: [
+              'Arten',
+              z?.kultur?.art_id,
+              'Kulturen',
+              kulturId,
+              'Zaehlungen',
+              z.id,
+            ],
             text,
           }
         }),
@@ -162,7 +201,14 @@ export default ({ kulturId, store }) => {
           const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
           return {
-            url: ['Kulturen', kulturId, 'Zaehlungen', z.id],
+            url: [
+              'Arten',
+              z?.kultur?.art_id,
+              'Kulturen',
+              kulturId,
+              'Zaehlungen',
+              z.id,
+            ],
             text,
           }
         }),
@@ -189,7 +235,14 @@ export default ({ kulturId, store }) => {
           const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
 
           return {
-            url: ['Kulturen', kulturId, 'Zaehlungen', z.id],
+            url: [
+              'Arten',
+              z?.kultur?.art_id,
+              'Kulturen',
+              kulturId,
+              'Zaehlungen',
+              z.id,
+            ],
             text,
           }
         }),

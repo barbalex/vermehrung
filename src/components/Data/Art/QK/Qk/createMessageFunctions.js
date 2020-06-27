@@ -18,6 +18,7 @@ export default ({ artId, store }) => {
   const year = +format(new Date(), 'yyyy')
   const startYear = `${year}-01-01`
   const startNextYear = `${year + 1}-01-01`
+  const now = new Date()
 
   return {
     sammlungsWithoutLieferung: () =>
@@ -273,6 +274,23 @@ export default ({ artId, store }) => {
               'Teilkulturen',
               tk.id,
             ],
+            text,
+          }
+        }),
+    zaehlungsInFutureNotPrognose: () =>
+      zaehlungsSorted
+        .filter((z) => z?.kultur?.art_id === artId)
+        .filter((z) => !!z.datum)
+        .filter((z) => new Date(z.datum).getTime() > now)
+        .map((z) => {
+          const garten =
+            z?.kultur?.garten?.name ??
+            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
+
+          return {
+            url: ['Arten', artId, 'Kulturen', z.id, 'Zaehlungen', z.id],
             text,
           }
         }),
