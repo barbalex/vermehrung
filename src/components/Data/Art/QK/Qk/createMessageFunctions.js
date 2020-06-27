@@ -20,8 +20,23 @@ export default ({ artId, store }) => {
   const startNextYear = `${year + 1}-01-01`
 
   return {
+    sammlungsWithoutLieferung: () =>
+      sammlungsSorted
+        .filter((s) => s.art_id === artId)
+        .filter(
+          (s) => !lieferungsSorted.find((l) => l.von_sammlung_id === s.id),
+        )
+        .map((v) => ({
+          url: ['Sammlungen', v.id],
+          text: `${v.nr}${
+            v?.art?.art_ae_art?.name ? `, ${v?.art?.art_ae_art?.name}` : ''
+          }${v?.person?.name ? `, ${v?.person?.name}` : ''}`,
+        })),
     sammlungsWithNonUniqueNr: () => {
-      const sGroupedByNr = groupBy(sammlungsSorted, (h) => h.nr)
+      const sGroupedByNr = groupBy(
+        sammlungsSorted.filter((s) => s.art_id === artId),
+        (h) => h.nr,
+      )
       return Object.values(sGroupedByNr)
         .filter((v) => v.length > 1)
         .flatMap((vs) =>
