@@ -1,7 +1,6 @@
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import isUuid from 'is-uuid'
-import { getSnapshot } from 'mobx-state-tree'
 
 import tableFromTitleHash from '../../utils/tableFromTitleHash'
 import exists from '../../utils/exists'
