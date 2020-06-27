@@ -362,6 +362,40 @@ export default ({ artId, store }) => {
             text,
           }
         }),
+    lieferungsWithMultipleVon: () =>
+      lieferungsSorted
+        .filter((l) => l.art_id === artId)
+        .filter((l) => !!l.von_sammlung_id)
+        .filter((l) => !!l.von_kultur_id)
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
+
+          return {
+            url: ['Lieferungen', l.id],
+            text,
+          }
+        }),
+    lieferungsWithMultipleNach: () =>
+      lieferungsSorted
+        .filter((l) => l.art_id === artId)
+        .filter((l) => l.nach_ausgepflanzt)
+        .filter((l) => !!l.nach_kultur_id)
+        .map((l) => {
+          const datum = l.datum
+            ? format(new Date(l.datum), 'yyyy.MM.dd')
+            : `kein Datum`
+          const geplant = l.geplant ? ', (geplant)' : ''
+          const text = `${datum}, ID: ${l.id}${geplant}`
+
+          return {
+            url: ['Lieferungen', l.id],
+            text,
+          }
+        }),
     lieferungsWithoutAnzahlPflanzen: () =>
       lieferungsSorted
         .filter((l) => l.art_id === artId)
