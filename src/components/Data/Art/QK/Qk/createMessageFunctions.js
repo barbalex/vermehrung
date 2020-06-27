@@ -1,14 +1,17 @@
 import format from 'date-fns/format'
+import groupBy from 'lodash/groupBy'
+
 import exists from '../../../../../utils/exists'
 
 export default ({ artId, store }) => {
   const {
     artsSorted,
-    lieferungsSorted,
-    kultursSorted,
-    teilkultursSorted,
     eventsSorted,
+    herkunftsSorted,
+    kultursSorted,
+    lieferungsSorted,
     sammlungsSorted,
+    teilkultursSorted,
     zaehlungsSorted,
   } = store
   const year = +format(new Date(), 'yyyy')
@@ -16,6 +19,19 @@ export default ({ artId, store }) => {
   const startNextYear = `${year + 1}-01-01`
 
   return {
+    herkunftsWithNonUniqueNr: () => {
+      const hkGroupedByNr = groupBy(herkunftsSorted, (h) => h.nr)
+      return Object.values(hkGroupedByNr)
+        .filter((v) => v.length > 1)
+        .flatMap((vs) =>
+          vs.map((v) => ({
+            url: ['Herkuenfte', v.id],
+            text: `${v.nr}${v.lokalname ? `, ${v.lokalname}` : ''}${
+              v.gemeinde ? `, ${v.gemeinde}` : ''
+            }`,
+          })),
+        )
+    },
     artsOhneAv: () =>
       artsSorted
         .filter((a) => a.id === artId)
