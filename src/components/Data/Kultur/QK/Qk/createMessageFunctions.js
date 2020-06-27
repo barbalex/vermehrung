@@ -246,6 +246,39 @@ export default ({ kulturId, store }) => {
             text,
           }
         }),
+    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: () =>
+      zaehlungsSorted
+        .filter((z) => z.kultur_id === kulturId)
+        .filter((z) => !!z?.kultur?.kultur_option?.tk)
+        .filter(
+          (z) =>
+            (z.teilzaehlungs || []).length &&
+            (z.teilzaehlungs || []).filter((tz) => !tz.teilkultur_id).length,
+        )
+        .map((z) => {
+          const garten =
+            z?.kultur?.garten?.name ??
+            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const zaehlung = z.datum
+            ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            : `Zählung-ID: ${z.id}`
+          const anzTz = (z?.teilzaehlungs ?? []).length
+          const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
+          const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
+
+          return {
+            url: [
+              'Arten',
+              z?.kultur?.art_id,
+              'Kulturen',
+              z?.kultur?.id,
+              'Zaehlungen',
+              z.id,
+            ],
+            text,
+          }
+        }),
     lieferungsWithMultipleVon: () =>
       lieferungsSorted
         .filter((l) => l.von_kultur_id === kulturId)
