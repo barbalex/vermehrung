@@ -65,7 +65,7 @@ const ApQkQk = ({ artId, qks }) => {
       title: qk?.art_qk?.titel,
       messages: messageFunctions[qk?.art_qk?.name](),
     }))
-    .filter((q) => q.messages.length)
+    .filter((q) => !!q?.messages?.length)
   const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())

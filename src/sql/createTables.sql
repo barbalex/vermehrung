@@ -214,7 +214,8 @@ create index on art_qk_choosen using btree (_deleted);
 
 --insert into art_qk_choosen (art_id, qk_name)
 --select art.id, art_qk.name
---from art_qk, art;
+--from art_qk, art
+--on conflict do nothing;
 
 drop table if exists art_qk_choosen_rev cascade;
 create table art_qk_choosen_rev (
