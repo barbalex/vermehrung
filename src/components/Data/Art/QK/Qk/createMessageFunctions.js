@@ -20,6 +20,19 @@ export default ({ artId, store }) => {
   const startNextYear = `${year + 1}-01-01`
 
   return {
+    sammlungsWithNonUniqueNr: () => {
+      const sGroupedByNr = groupBy(sammlungsSorted, (h) => h.nr)
+      return Object.values(sGroupedByNr)
+        .filter((v) => v.length > 1)
+        .flatMap((vs) =>
+          vs.map((v) => ({
+            url: ['Sammlungen', v.id],
+            text: `${v.nr}${
+              v?.art?.art_ae_art?.name ? `, ${v?.art?.art_ae_art?.name}` : ''
+            }${v?.person?.name ? `, ${v?.person?.name}` : ''}`,
+          })),
+        )
+    },
     personsWithNonUniqueNr: () => {
       const pGroupedByNr = groupBy(personsSorted, (h) => h.nr)
       return Object.values(pGroupedByNr)
