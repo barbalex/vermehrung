@@ -3,6 +3,7 @@ import exists from '../../../../../utils/exists'
 
 export default ({ artId, store }) => {
   const {
+    artsSorted,
     lieferungsSorted,
     kultursSorted,
     teilkultursSorted,
@@ -15,6 +16,14 @@ export default ({ artId, store }) => {
   const startNextYear = `${year + 1}-01-01`
 
   return {
+    artsOhneAv: () =>
+      artsSorted
+        .filter((a) => a.id === artId)
+        .filter((a) => !a?.avs?.map((av) => !av._deleted).length)
+        .map((a) => ({
+          url: ['Arten', a.id],
+          text: a?.art_ae_art?.name ?? '(kein Artname)',
+        })),
     sammlungsWithoutNr: () =>
       sammlungsSorted
         .filter((s) => s.art_id === artId)
