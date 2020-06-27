@@ -13,6 +13,7 @@ export default ({ artId, store }) => {
     personsSorted,
     sammlungsSorted,
     teilkultursSorted,
+    teilzaehlungsSorted,
     zaehlungsSorted,
   } = store
   const year = +format(new Date(), 'yyyy')
@@ -370,6 +371,39 @@ export default ({ artId, store }) => {
             (z.teilzaehlungs ?? [])
               .filter((tz) => !tz._deleted)
               .filter((tz) => !exists(tz.anzahl_mutterpflanzen)).length,
+        )
+        .map((z) => {
+          const garten =
+            z?.kultur?.garten?.name ??
+            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+          const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
+          const zaehlung = z.datum
+            ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
+            : `Zählung-ID: ${z.id}`
+          const anzTz = (z?.teilzaehlungs ?? []).length
+          const teilzaehlung = anzTz > 1 ? ` (${anzTz} Teilzählungen)` : ''
+          const text = `von: ${herkunft}, in: ${garten}, ${zaehlung}${teilzaehlung}`
+
+          return {
+            url: [
+              'Arten',
+              artId,
+              'Kulturen',
+              z?.kultur?.id,
+              'Zaehlungen',
+              z.id,
+            ],
+            text,
+          }
+        }),
+    zaehlungsWithTeilzaehlungsWithoutTeilkulturThoughTeilkulturIsChoosen: () =>
+      zaehlungsSorted
+        .filter((z) => z?.kultur?.art_id === artId)
+        .filter((z) => !!z?.kultur?.kultur_option?.tk)
+        .filter(
+          (z) =>
+            (z.teilzaehlungs || []).length &&
+            (z.teilzaehlungs || []).filter((tz) => !tz.teilkultur_id).length,
         )
         .map((z) => {
           const garten =
