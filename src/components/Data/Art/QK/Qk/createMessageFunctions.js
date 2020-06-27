@@ -10,6 +10,7 @@ export default ({ artId, store }) => {
     herkunftsSorted,
     kultursSorted,
     lieferungsSorted,
+    personsSorted,
     sammlungsSorted,
     teilkultursSorted,
     zaehlungsSorted,
@@ -19,6 +20,17 @@ export default ({ artId, store }) => {
   const startNextYear = `${year + 1}-01-01`
 
   return {
+    personsWithNonUniqueNr: () => {
+      const pGroupedByNr = groupBy(personsSorted, (h) => h.nr)
+      return Object.values(pGroupedByNr)
+        .filter((v) => v.length > 1)
+        .flatMap((vs) =>
+          vs.map((v) => ({
+            url: ['Personen', v.id],
+            text: `${v.nr}${v.fullname ? `, ${v.fullname}` : ''}`,
+          })),
+        )
+    },
     herkunftsWithNonUniqueNr: () => {
       const hkGroupedByNr = groupBy(herkunftsSorted, (h) => h.nr)
       return Object.values(hkGroupedByNr)
