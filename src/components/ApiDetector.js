@@ -13,7 +13,7 @@ import getConstants from '../utils/constants.js'
 const constants = getConstants()
 
 const config = {
-  url: constants.heaslthUri,
+  url: constants.healthUri,
   timeout: 5000,
   interval: 5000,
 }
