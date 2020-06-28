@@ -28,6 +28,8 @@ export default types.model('QueuedQuery', {
     types.boolean,
     types.null,
     types.undefined,
+    // needed for geom_point
+    types.frozen(),
   ),
   revertValues: types.union(types.string, types.null, types.undefined),
 })
