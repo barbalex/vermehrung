@@ -4,5 +4,5 @@
 
 Dieses Projekt ist in Entwicklung. Ab Juli 2020 soll damit gearbeitet werden.
 
-Eine Übersicht über die Funktionen finden Sie [auf der Starseite](https://vermehrung.ch).
+Eine Übersicht über die Funktionen finden Sie [auf der Startseite](https://vermehrung.ch).
 Und die detaillierte Dokumentation [in der App selbst](https://vermehrung.ch/Dokumentation/Ziele).
