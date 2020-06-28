@@ -10,8 +10,10 @@ import { FaCog } from 'react-icons/fa'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleRow = styled.div`
   display: flex;
@@ -54,7 +56,7 @@ const SettingsGarten = () => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${appBaseUrl()}/Dokumentation/Felder-blenden`
+    const url = `${constants.appUri}/Dokumentation/Felder-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
