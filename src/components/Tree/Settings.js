@@ -10,8 +10,10 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../models/reactUtils'
-import appBaseUrl from '../../utils/appBaseUrl'
+import getConstants from '../../utils/constants'
 import ErrorBoundary from '../shared/ErrorBoundary'
+
+const constants = getConstants()
 
 const Container = styled.div`
   position: absolute;
@@ -59,7 +61,7 @@ const SettingsTree = () => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${appBaseUrl()}/Dokumentation/Ordner-blenden`
+    const url = `${constants.appUri}/Dokumentation/Ordner-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
