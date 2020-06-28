@@ -10,6 +10,9 @@ import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../utils/logout'
 import queryAllData from '../../../utils/queryAllData'
+import getConstants from '../../../utils/constants.js'
+
+const constants = getConstants()
 
 const StyledUserIcon = styled(UserIcon)`
   color: white;
@@ -43,7 +46,7 @@ const Account = () => {
     setResetTitle('...')
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
-        url: 'https://vermehrung.ch/Vermehrung',
+        url: `${constants.appUri}/Vermehrung`,
         handleCodeInApp: true,
       })
     } catch (error) {

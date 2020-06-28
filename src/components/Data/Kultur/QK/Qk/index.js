@@ -96,7 +96,7 @@ const KulturQkQk = ({ kultur, qks }) => {
               <StyledA
                 onClick={() =>
                   typeof window !== 'undefined' &&
-                  window.open(`${appBaseUrl}Vermehrung/${m.url.join('/')}`)
+                  window.open(`${appBaseUrl}/Vermehrung/${m.url.join('/')}`)
                 }
                 title="in neuem Fenster öffnen"
               >

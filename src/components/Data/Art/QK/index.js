@@ -61,7 +61,7 @@ const ApQk = ({ artId }) => {
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
-    const url = `${appBaseUrl()}Dokumentation/Qualitaets-Kontrollen`
+    const url = `${appBaseUrl()}/Dokumentation/Qualitaets-Kontrollen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

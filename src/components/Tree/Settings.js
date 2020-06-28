@@ -59,7 +59,7 @@ const SettingsTree = () => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${appBaseUrl()}Dokumentation/Ordner-blenden`
+    const url = `${appBaseUrl()}/Dokumentation/Ordner-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

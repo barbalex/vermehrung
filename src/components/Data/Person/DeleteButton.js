@@ -9,6 +9,9 @@ import axios from 'axios'
 
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import getConstants from '../../../utils/constants.js'
+
+const constants = getConstants()
 
 const TitleRow = styled.div`
   display: flex;
@@ -45,9 +48,7 @@ const PersonDeleteButton = ({ row }) => {
     // delete firebase user
     if (row.account_id) {
       try {
-        await axios.get(
-          `https://auth.vermehrung.ch/delete-user/${row.account_id}`,
-        )
+        await axios.get(`${constants.authUri}/delete-user/${row.account_id}`)
       } catch (error) {
         addNotification({
           message: error.response.data,

@@ -260,7 +260,7 @@ const Kultur = ({
     [filter, row, showFilter],
   )
   const openKulturDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Kulturen`
+    const url = `${appBaseUrl()}/Dokumentation/Kulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -269,7 +269,7 @@ const Kultur = ({
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Genetische-Vielfalt`
+    const url = `${appBaseUrl()}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

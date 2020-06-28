@@ -49,7 +49,7 @@ const SettingsKultur = ({ kulturId }) => {
   )
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${appBaseUrl()}Dokumentation/Teilkulturen`
+    const url = `${appBaseUrl()}/Dokumentation/Teilkulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

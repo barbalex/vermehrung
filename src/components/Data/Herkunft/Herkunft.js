@@ -114,7 +114,7 @@ const Herkunft = ({
     [filter, row, showFilter],
   )
   const openHerkunftDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Herkuenfte`
+    const url = `${appBaseUrl()}/Dokumentation/Herkuenfte`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

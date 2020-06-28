@@ -154,7 +154,7 @@ const PrognoseMenu = ({
   )
   const onClickAbbrechen = useCallback(() => setAnchorEl(null), [setAnchorEl])
   const openDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Planen`
+    const url = `${appBaseUrl()}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
