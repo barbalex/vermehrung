@@ -6,8 +6,10 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
 import Pflanzen from './Pflanzen'
-import appBaseUrl from '../../../../utils/appBaseUrl'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import getConstants from '../../../../utils/constants'
+
+const constants = getConstants()
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -38,7 +40,7 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
   const [open, setOpen] = useState(false)
 
   const openDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Zeitachse-Art`
+    const url = `${constants.appUri}/Dokumentation/Zeitachse-Art`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
