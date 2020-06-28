@@ -5,9 +5,15 @@ export default () => {
   const hostname = isLocalhost ? 'localhost' : window.location.hostname
 
   return {
-    graphQlUri: 'https://api.vermehrung.ch/v1/graphql',
-    graphQlWsUri: 'wss://api.vermehrung.ch/v1/graphql',
-    healthUri: 'https://api.vermehrung.ch/healthz',
+    graphQlUri: isLocalhost
+      ? `http://${hostname}:8080/v1/graphql`
+      : 'https://api.vermehrung.ch/v1/graphql',
+    graphQlWsUri: isLocalhost
+      ? `ws://${hostname}:8080/v1/graphql`
+      : 'wss://api.vermehrung.ch/v1/graphql',
+    healthUri: isLocalhost
+      ? `http://${hostname}:8080/healthz`
+      : 'https://api.vermehrung.ch/healthz',
     authUri: 'https://auth.vermehrung.ch',
     appUri: isLocalhost ? `http://${hostname}:8000` : 'https://vermehrung.ch',
     testArten: ['1ab6bbb1-979a-4232-a5d8-62efb5cb984a'],
