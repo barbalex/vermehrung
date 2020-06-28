@@ -22,11 +22,13 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
-import appBaseUrl from '../../../utils/appBaseUrl'
+import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -214,7 +216,7 @@ const Sammlung = ({
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Planen`
+    const url = `${constants.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -223,7 +225,7 @@ const Sammlung = ({
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants.appUri}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -232,7 +234,7 @@ const Sammlung = ({
     }
   }, [])
   const openSammlungDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Sammlungen`
+    const url = `${constants.appUri}/Dokumentation/Sammlungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

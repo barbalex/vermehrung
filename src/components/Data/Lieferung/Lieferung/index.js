@@ -25,13 +25,15 @@ import Files from '../../Files'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
-import appBaseUrl from '../../../../utils/appBaseUrl'
+import getConstants from '../../../../utils/constants'
 import kulturSort from '../../../../utils/kulturSort'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -363,7 +365,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Planen`
+    const url = `${constants.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -372,7 +374,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }, [])
   const openLieferungDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Lieferungen`
+    const url = `${constants.appUri}/Dokumentation/Lieferungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -381,7 +383,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants.appUri}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
