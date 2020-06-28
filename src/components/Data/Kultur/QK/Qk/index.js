@@ -97,7 +97,7 @@ const KulturQkQk = ({ kultur, qks }) => {
                 onClick={() =>
                   typeof window !== 'undefined' &&
                   window.open(
-                    `${constants.appUri}/Vermehrung/${m.url.join('/')}`,
+                    `${constants?.appUri}/Vermehrung/${m.url.join('/')}`,
                   )
                 }
                 title="in neuem Fenster öffnen"

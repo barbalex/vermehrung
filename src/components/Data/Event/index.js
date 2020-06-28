@@ -215,7 +215,7 @@ const Event = ({
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Planen`
+    const url = `${constants?.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -224,7 +224,7 @@ const Event = ({
     }
   }, [])
   const openEventdDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Events`
+    const url = `${constants?.appUri}/Dokumentation/Events`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

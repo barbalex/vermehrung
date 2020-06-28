@@ -51,7 +51,7 @@ const SettingsZaehlungen = ({ zaehlungId }) => {
   )
   const openSettingsDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${constants.appUri}/Dokumentation/Felder-blenden`
+    const url = `${constants?.appUri}/Dokumentation/Felder-blenden`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

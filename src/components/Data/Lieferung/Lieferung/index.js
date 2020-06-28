@@ -365,7 +365,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Planen`
+    const url = `${constants?.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -374,7 +374,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }, [])
   const openLieferungDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Lieferungen`
+    const url = `${constants?.appUri}/Dokumentation/Lieferungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -383,7 +383,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

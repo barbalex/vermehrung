@@ -180,7 +180,7 @@ const Teilkultur = ({
     [filter, row, showFilter],
   )
   const openTeilkulturDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Teilkulturen`
+    const url = `${constants?.appUri}/Dokumentation/Teilkulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

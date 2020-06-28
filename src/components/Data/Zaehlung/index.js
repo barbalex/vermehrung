@@ -192,7 +192,7 @@ const Zaehlung = ({
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Planen`
+    const url = `${constants?.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -201,7 +201,7 @@ const Zaehlung = ({
     }
   }, [])
   const openZaehlungDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Zaehlungen`
+    const url = `${constants?.appUri}/Dokumentation/Zaehlungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

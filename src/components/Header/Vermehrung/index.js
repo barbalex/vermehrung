@@ -64,16 +64,16 @@ const HeaderVermehrung = ({ width }) => {
     showFilter,
   ])
   useEffect(() => {
-    if (width > constants.tree.minimalWindowWidth && exists(widthEnforced)) {
+    if (width > constants?.tree?.minimalWindowWidth && exists(widthEnforced)) {
       setWidthEnforced(null)
     }
-    if (width < constants.tree.minimalWindowWidth && widthEnforced === null) {
+    if (width < constants?.tree?.minimalWindowWidth && widthEnforced === null) {
       setWidthEnforced(0)
     }
   }, [setWidthEnforced, widthEnforced, width])
   const onClickTreeMenu = useCallback(() => {
     if (widthEnforced === 0) {
-      setWidthEnforced(constants.tree.minimalWidth)
+      setWidthEnforced(constants?.tree?.minimalWidth)
     }
     if (widthEnforced > 0) {
       setWidthEnforced(0)
