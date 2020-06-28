@@ -226,6 +226,7 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
   const onClickMapsZhCh = useCallback(() => {
     if (lv95_x && lv95_y) {
       // BEWARE: maps.zh.ch seems to only work in production
+      // nope. Does it only work for certain urls??????
       lv95_y - typeof window !== 'undefined' &&
         window.open(
           `https://maps.zh.ch/?x=${lv95_x}&y=${lv95_y}&scale=3000&markers=ring`,
@@ -365,8 +366,8 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
         <MapButton
           aria-label="Öffnen in map.geo.admin.ch"
           title="Öffnen in map.geo.admin.ch"
-          onClick={(event) => setMapMenuAnchorEl(event.currentTarget)}
-          //onClick={onClickGeoAdmin}
+          //onClick={(event) => setMapMenuAnchorEl(event.currentTarget)}
+          onClick={onClickGeoAdmin}
           aria-owns={mapMenuOpen ? 'mapMenu' : undefined}
           aria-haspopup="true"
         >
