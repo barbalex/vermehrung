@@ -25,7 +25,7 @@ Weil vermehrung alle Daten, die Sie lesen dürfen, voraus lädt und auf Ihrem Ge
 
 ### Schlange für Operationen
 
-Arbeiten Sie offline, packt vermehrung jede Daten-Änderung in "Päckchen" (genannt: Operationen). Diese Päckchen warten geduldig. Das Offline-Symbol zeigt die Länge der Warteschlange an:<br/>
+Arbeiten Sie offline, packt vermehrung jede Daten-Änderung in "Päckchen" (genannt: Operation). Diese Päckchen warten geduldig. Das Offline-Symbol zeigt die Länge der Warteschlange an:<br/>
 ![3 wartende Operationen](003.png)<br/>
 
 Sobald vermehrung wieder online ist, werden die Päckchen dem Server geschickt...<br/>
@@ -40,7 +40,7 @@ Was macht der Server mit Ihren Päckchen? Er speichert sie natürlich, wie jeder
 #### Konflikte finden
 
 Gibt es widersprüchliche Versionen des gleichen Datensatzes, nennen wir dies einen Konflikt.<br/>
-Konflikte entstehen, wenn mehrere Personen gleichzeitig denselben Datensatz ändern. Oder: während jemand offline war.<br/>
+Konflikte entstehen, wenn mehrere Personen gleichzeitig denselben Datensatz ändern. Oder während jemand offline war.<br/>
 Konflikte können auch entstehen, wenn dieselbe Person vermehrung.ch auf mehreren Geräten (teilweise offline) benutzt.<br/><br/>
 
 #### Sieger wählen
