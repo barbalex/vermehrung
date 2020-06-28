@@ -22,11 +22,13 @@ import Teilzaehlungen from './Teilzaehlungen'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DelteButton from './DeleteButton'
-import appBaseUrl from '../../../utils/appBaseUrl'
+import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from '../Teilkultur/kulturLabelFromKultur'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -190,7 +192,7 @@ const Zaehlung = ({
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Planen`
+    const url = `${constants.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -199,7 +201,7 @@ const Zaehlung = ({
     }
   }, [])
   const openZaehlungDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Zaehlungen`
+    const url = `${constants.appUri}/Dokumentation/Zaehlungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

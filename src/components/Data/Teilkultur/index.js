@@ -22,11 +22,13 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Zaehlungen from './Zaehlungen'
 import Events from './Events'
-import appBaseUrl from '../../../utils/appBaseUrl'
+import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -178,7 +180,7 @@ const Teilkultur = ({
     [filter, row, showFilter],
   )
   const openTeilkulturDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Teilkulturen`
+    const url = `${constants.appUri}/Dokumentation/Teilkulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
