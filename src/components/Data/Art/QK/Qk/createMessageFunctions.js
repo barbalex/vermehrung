@@ -13,7 +13,6 @@ export default ({ artId, store }) => {
     personsSorted,
     sammlungsSorted,
     teilkultursSorted,
-    teilzaehlungsSorted,
     zaehlungsSorted,
   } = store
   const year = +format(new Date(), 'yyyy')
