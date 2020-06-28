@@ -10,8 +10,10 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../models/reactUtils'
-import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Title = styled.div`
   padding: 12px 16px;
@@ -49,7 +51,7 @@ const SettingsKultur = ({ kulturId }) => {
   )
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
-    const url = `${appBaseUrl()}/Dokumentation/Teilkulturen`
+    const url = `${constants.appUri}/Dokumentation/Teilkulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
