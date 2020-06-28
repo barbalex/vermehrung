@@ -20,6 +20,9 @@ import toggleNode from './toggleNode'
 import toggleNodeSymbol from './toggleNodeSymbol'
 import createNew from './createNew'
 import deleteDataset from './delete'
+import getConstants from '../../utils/constants.js'
+
+const constants = getConstants()
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -260,7 +263,7 @@ const Row = ({ style, node, nodes }) => {
     // delete firebase user
     if (accountId) {
       try {
-        axios.get(`https://auth.vermehrung.ch/delete-user/${accountId}`)
+        axios.get(`${constants.authUri}/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
         if (online) {
@@ -285,7 +288,7 @@ const Row = ({ style, node, nodes }) => {
     const email = person?.email
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
-        url: 'https://vermehrung.ch/Vermehrung',
+        url: `${constants.appUri}/Vermehrung`,
         handleCodeInApp: true,
       })
     } catch (error) {
@@ -302,7 +305,7 @@ const Row = ({ style, node, nodes }) => {
     // delete firebase user
     if (accountId) {
       try {
-        await axios.get(`https://auth.vermehrung.ch/delete-user/${accountId}`)
+        await axios.get(`${constants.authUri}/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
         if (online) {
@@ -342,7 +345,7 @@ const Row = ({ style, node, nodes }) => {
     }
     let res
     try {
-      res = await axios.get(`https://auth.vermehrung.ch/create-user/${email}`)
+      res = await axios.get(`${constants.authUri}/create-user/${email}`)
     } catch (error) {
       console.log(error)
       if (online) {

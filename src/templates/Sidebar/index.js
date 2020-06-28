@@ -6,7 +6,9 @@ import { observer } from 'mobx-react-lite'
 import { StoreContext } from '../../models/reactUtils'
 import MenuItems from './MenuItems'
 import Filter from './Filter'
-import constants from '../../utils/constants'
+import getConstants from '../../utils/constants'
+
+const constants = getConstants()
 
 const Menu = styled.div`
   width: ${constants.sidebar.width}px;

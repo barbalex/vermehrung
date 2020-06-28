@@ -15,6 +15,9 @@ import styled from 'styled-components'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import { StoreContext } from '../models/reactUtils'
+import getConstants from '../utils/constants.js'
+
+const constants = getConstants()
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -101,7 +104,7 @@ const Login = () => {
     setResetTitle('...')
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
-        url: 'https://vermehrung.ch/Vermehrung',
+        url: `${constants.appUri}/Vermehrung`,
         handleCodeInApp: true,
       })
     } catch (error) {

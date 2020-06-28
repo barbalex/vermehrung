@@ -7,8 +7,8 @@ export default () => {
   const hostname = isLocalhost ? 'localhost' : window.location.hostname
 
   const appHost = isLocalhost
-    ? `http://${hostname}:8000/`
-    : 'https://vermehrung.ch/'
+    ? `http://${hostname}:8000`
+    : 'https://vermehrung.ch'
 
   return appHost
 }

@@ -10,9 +10,11 @@ import { withResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../models/reactUtils'
-import constants from '../../utils/constants'
+import getConstants from '../../utils/constants'
 import exists from '../../utils/exists'
 import ErrorBoundary from '../shared/ErrorBoundary'
+
+const constants = getConstants()
 
 const SiteTitle = styled(Button)`
   display: none;

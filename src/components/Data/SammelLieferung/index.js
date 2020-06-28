@@ -326,7 +326,7 @@ const SammelLieferung = ({
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Planen`
+    const url = `${appBaseUrl()}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -335,7 +335,7 @@ const SammelLieferung = ({
     }
   }, [])
   const openSettingsDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Sammel-Lieferungen`
+    const url = `${appBaseUrl()}/Dokumentation/Sammel-Lieferungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -361,7 +361,7 @@ const SammelLieferung = ({
   }, [setIsPrint])
 
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${appBaseUrl()}Dokumentation/Genetische-Vielfalt`
+    const url = `${appBaseUrl()}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

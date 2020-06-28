@@ -15,9 +15,11 @@ import Online from './Online'
 //import More from './More'
 import Search from './Search'
 import { StoreContext } from '../../../models/reactUtils'
-import constants from '../../../utils/constants'
+import getConstants from '../../../utils/constants'
 import exists from '../../../utils/exists'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+
+const constants = getConstants()
 
 const SiteTitle = styled(Button)`
   display: none;
