@@ -16,9 +16,9 @@ const getToken = () => {
 
 export default async () => {
   // https://github.com/mobxjs/mst-gql/issues/247
-  //const gqlHttpClient = createHttpClient(constants.graphQlUri)
+  //const gqlHttpClient = createHttpClient(constants?.graphQlUri)
   const gqlHttpClient = (() => {
-    const client = createHttpClient(constants.graphQlUri)
+    const client = createHttpClient(constants?.graphQlUri)
     client.setHeaders({ authorization: `Bearer ${getToken()}` })
     return client
   })()
@@ -38,7 +38,7 @@ export default async () => {
     gqlWsClient = (() => {
       let token = getToken()
 
-      return new SubscriptionClient(constants.graphQlWsUri, {
+      return new SubscriptionClient(constants?.graphQlWsUri, {
         reconnect: true,
         lazy: true,
         connectionCallback: (error) => {

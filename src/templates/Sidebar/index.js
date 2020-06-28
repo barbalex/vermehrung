@@ -11,8 +11,8 @@ import getConstants from '../../utils/constants'
 const constants = getConstants()
 
 const Menu = styled.div`
-  width: ${constants.sidebar.width}px;
-  min-width: ${constants.sidebar.width}px;
+  width: ${constants?.sidebar?.width}px;
+  min-width: ${constants?.sidebar?.width}px;
   height: calc(100vh - 64px);
   overflow-y: auto;
   padding: 25px 0;

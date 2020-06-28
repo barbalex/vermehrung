@@ -20,7 +20,7 @@ import toggleNode from './toggleNode'
 import toggleNodeSymbol from './toggleNodeSymbol'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import getConstants from '../../utils/constants.js'
+import getConstants from '../../utils/constants'
 
 const constants = getConstants()
 
@@ -263,7 +263,7 @@ const Row = ({ style, node, nodes }) => {
     // delete firebase user
     if (accountId) {
       try {
-        axios.get(`${constants.authUri}/delete-user/${accountId}`)
+        axios.get(`${constants?.authUri}/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
         if (online) {
@@ -288,7 +288,7 @@ const Row = ({ style, node, nodes }) => {
     const email = person?.email
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
-        url: `${constants.appUri}/Vermehrung`,
+        url: `${constants?.appUri}/Vermehrung`,
         handleCodeInApp: true,
       })
     } catch (error) {
@@ -305,7 +305,7 @@ const Row = ({ style, node, nodes }) => {
     // delete firebase user
     if (accountId) {
       try {
-        await axios.get(`${constants.authUri}/delete-user/${accountId}`)
+        await axios.get(`${constants?.authUri}/delete-user/${accountId}`)
       } catch (error) {
         console.log(error)
         if (online) {
@@ -345,7 +345,7 @@ const Row = ({ style, node, nodes }) => {
     }
     let res
     try {
-      res = await axios.get(`${constants.authUri}/create-user/${email}`)
+      res = await axios.get(`${constants?.authUri}/create-user/${email}`)
     } catch (error) {
       console.log(error)
       if (online) {

@@ -50,13 +50,13 @@ const HeaderDoku = ({ width }) => {
   useEffect(
     (width) => {
       if (
-        width > constants.sidebar.minimalWindowWidth &&
+        width > constants?.sidebar?.minimalWindowWidth &&
         exists(sidebarWidth)
       ) {
         setSidebarWidth(null)
       }
       if (
-        width < constants.sidebar.minimalWindowWidth &&
+        width < constants?.sidebar?.minimalWindowWidth &&
         sidebarWidth === null
       ) {
         setSidebarWidth(0)
@@ -66,7 +66,7 @@ const HeaderDoku = ({ width }) => {
   )
   const onClickMenu = useCallback(() => {
     if (sidebarWidth === 0) {
-      setSidebarWidth(constants.sidebar.width)
+      setSidebarWidth(constants?.sidebar?.width)
     }
     if (sidebarWidth > 0) {
       setSidebarWidth(0)

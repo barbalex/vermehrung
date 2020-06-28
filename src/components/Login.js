@@ -15,7 +15,7 @@ import styled from 'styled-components'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import { StoreContext } from '../models/reactUtils'
-import getConstants from '../utils/constants.js'
+import getConstants from '../utils/constants'
 
 const constants = getConstants()
 
@@ -104,7 +104,7 @@ const Login = () => {
     setResetTitle('...')
     try {
       await firebase.auth().sendPasswordResetEmail(email, {
-        url: `${constants.appUri}/Vermehrung`,
+        url: `${constants?.appUri}/Vermehrung`,
         handleCodeInApp: true,
       })
     } catch (error) {

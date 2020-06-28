@@ -8,12 +8,12 @@ import { observer } from 'mobx-react-lite'
 import axios from 'axios'
 
 import { StoreContext } from '../models/reactUtils'
-import getConstants from '../utils/constants.js'
+import getConstants from '../utils/constants'
 
 const constants = getConstants()
 
 const config = {
-  url: constants.healthUri,
+  url: constants?.healthUri,
   timeout: 5000,
   interval: 5000,
 }

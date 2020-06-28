@@ -216,7 +216,7 @@ const Sammlung = ({
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Planen`
+    const url = `${constants?.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -225,7 +225,7 @@ const Sammlung = ({
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -234,7 +234,7 @@ const Sammlung = ({
     }
   }, [])
   const openSammlungDocs = useCallback(() => {
-    const url = `${constants.appUri}/Dokumentation/Sammlungen`
+    const url = `${constants?.appUri}/Dokumentation/Sammlungen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
