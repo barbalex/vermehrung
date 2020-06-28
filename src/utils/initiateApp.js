@@ -2,7 +2,9 @@ import { createHttpClient } from 'mst-gql'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { RootStore } from '../models'
-import constants from './constants'
+import getConstants from './constants'
+
+const constants = getConstants()
 
 // TODO: this never runs. Why?
 const getToken = () => {
