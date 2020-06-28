@@ -29,12 +29,14 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import buildExceljsWorksheets from './buildExceljsWorksheets'
 import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
-import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from './gartenLabelFromGarten'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -260,7 +262,7 @@ const Kultur = ({
     [filter, row, showFilter],
   )
   const openKulturDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Kulturen`
+    const url = `${constants.appUri}/Dokumentation/Kulturen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -269,7 +271,7 @@ const Kultur = ({
     }
   }, [])
   const openGenVielfaldDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Genetische-Vielfalt`
+    const url = `${constants.appUri}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

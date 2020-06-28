@@ -10,8 +10,10 @@ import Tab from '@material-ui/core/Tab'
 import { StoreContext } from '../../../../models/reactUtils'
 import Qk from './Qk'
 import Choose from './Choose'
-import appBaseUrl from '../../../../utils/appBaseUrl'
+import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+
+const constants = getConstants()
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
@@ -61,7 +63,7 @@ const KulturQk = ({ kultur }) => {
 
   const openDocs = useCallback((e) => {
     e.stopPropagation()
-    const url = `${appBaseUrl()}/Dokumentation/Qualitaets-Kontrollen`
+    const url = `${constants.appUri}/Dokumentation/Qualitaets-Kontrollen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

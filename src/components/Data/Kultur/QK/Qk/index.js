@@ -7,10 +7,10 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 
 import createMessageFunctions from './createMessageFunctions'
-import getAppBaseUrl from '../../../../../utils/appBaseUrl'
+import getConstants from '../../../../../utils/constants'
 import { StoreContext } from '../../../../../models/reactUtils'
 
-const appBaseUrl = getAppBaseUrl()
+const constants = getConstants()
 
 const Container = styled.div`
   padding-top: 5px;
@@ -96,7 +96,9 @@ const KulturQkQk = ({ kultur, qks }) => {
               <StyledA
                 onClick={() =>
                   typeof window !== 'undefined' &&
-                  window.open(`${appBaseUrl}/Vermehrung/${m.url.join('/')}`)
+                  window.open(
+                    `${constants.appUri}/Vermehrung/${m.url.join('/')}`,
+                  )
                 }
                 title="in neuem Fenster öffnen"
               >
