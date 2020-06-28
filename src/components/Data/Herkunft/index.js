@@ -15,10 +15,12 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
-import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -168,7 +170,7 @@ const Herkunft = ({
     [filter, row, showFilter],
   )
   const openHerkunftDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Herkuenfte`
+    const url = `${constants.appUri}/Dokumentation/Herkuenfte`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

@@ -22,11 +22,13 @@ import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
-import appBaseUrl from '../../../utils/appBaseUrl'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   height: 100%;
@@ -213,7 +215,7 @@ const Event = ({
     [filter, row, showFilter],
   )
   const openPlanenDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Planen`
+    const url = `${constants.appUri}/Dokumentation/Planen`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
@@ -222,7 +224,7 @@ const Event = ({
     }
   }, [])
   const openEventdDocs = useCallback(() => {
-    const url = `${appBaseUrl()}/Dokumentation/Events`
+    const url = `${constants.appUri}/Dokumentation/Events`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')

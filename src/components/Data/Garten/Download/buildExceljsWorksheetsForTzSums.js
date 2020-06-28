@@ -1,32 +1,34 @@
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
-import checkForOnlineError from '../../../../utils/checkForOnlineError'
 
 /**
  * this function cann be used from higher up
  * that is why it receives a workbook and _can_ recieve calledFromHigherUp
  */
 export default async ({ store, garten_id, workbook }) => {
-  const { addNotification } = store
+  const { teilzaehlungsSorted } = store
 
-  let gaertenResult
-  try {
-    gaertenResult = await store.queryGarten_teilzaehlung_sums({
-      where: { garten_id: { _eq: garten_id } },
-    })
-  } catch (error) {
-    checkForOnlineError(error)
-    return addNotification({
-      message: error.message,
-    })
-  }
-  const data = gaertenResult?.garten_teilzaehlung_sums ?? []
-  for (let row of data) {
-    delete row.__typename
-  }
+  const teilzaehlungenArray = teilzaehlungsSorted.filter(
+    (t) => t?.zaehlung?.kultur?.garten_id === garten_id,
+  )
+  const teilzaehlungen = teilzaehlungenArray.map((z) => {
+    const newZ = {
+      id: z.id,
+      zaehlung_id: z.zaehlung_id,
+      teilkultur_id: z.teilkultur_id,
+      teilkultur_name: z?.teilkultur?.name ?? '',
+      anzahl_pflanzen: z.anzahl_pflanzen,
+      anzahl_auspflanzbereit: z.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen: z.anzahl_mutterpflanzen,
+      andere_menge: z.andere_menge,
+      auspflanzbereit_beschreibung: z.auspflanzbereit_beschreibung,
+      bemerkungen: z.bemerkungen,
+    }
+    return newZ
+  })
   addWorksheetToExceljsWorkbook({
     workbook,
     title: `teilzahlungen_von_garten_${garten_id}`,
-    data,
+    data: teilzaehlungen,
   })
   return
 }
