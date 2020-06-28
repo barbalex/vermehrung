@@ -8,9 +8,9 @@ import FormControl from '@material-ui/core/FormControl'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import createMessageFunctions from './createMessageFunctions'
-import getAppBaseUrl from '../../../../../utils/appBaseUrl'
+import getConstants from '../../../../../utils/constants'
 
-const appBaseUrl = getAppBaseUrl()
+const constants = getConstants()
 
 const Container = styled.div`
   padding-top: 5px;
@@ -97,7 +97,9 @@ const ApQkQk = ({ artId, qks }) => {
               <StyledA
                 onClick={() =>
                   typeof window !== 'undefined' &&
-                  window.open(`${appBaseUrl}/Vermehrung/${m.url.join('/')}`)
+                  window.open(
+                    `${constants.appUri}/Vermehrung/${m.url.join('/')}`,
+                  )
                 }
                 title="in neuem Fenster öffnen"
               >
