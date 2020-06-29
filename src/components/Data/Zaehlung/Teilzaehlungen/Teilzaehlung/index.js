@@ -96,6 +96,9 @@ const Rev = styled.span`
   color: rgba(0, 0, 0, 0.4);
   font-size: 0.8em;
 `
+const ConflictListContainer = styled.div`
+  align-self: center;
+`
 
 const Teilzaehlung = ({
   id,
@@ -290,13 +293,6 @@ const Teilzaehlung = ({
                 />
               </Last>
             )}
-            {online && row._conflicts && row._conflicts.map && (
-              <ConflictList
-                conflicts={row._conflicts}
-                activeConflict={activeConflict}
-                setActiveConflict={setActiveConflict}
-              />
-            )}
             <div>
               {showDeleted && row._deleted ? (
                 <Checkbox2States
@@ -333,6 +329,15 @@ const Teilzaehlung = ({
                 />
               )}
             </div>
+            {online && row._conflicts && row._conflicts.map && (
+              <ConflictListContainer>
+                <ConflictList
+                  conflicts={row._conflicts}
+                  activeConflict={activeConflict}
+                  setActiveConflict={setActiveConflict}
+                />
+              </ConflictListContainer>
+            )}
           </FieldContainer>
           <>
             {online && !!activeConflict && (

@@ -3,22 +3,30 @@ import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
-import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../utils/checkForOnlineError'
 import Conflict from '../../../../shared/Conflict'
+import teilkulturLabelFromTeilkultur from './teilkulturLabelFromTeilkultur'
 
-const zaehlungRevQuery = gql`
-  query zaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
+const teilzaehlungRevQuery = gql`
+  query teilzaehlungRevForConflictQuery($id: uuid!, $rev: String!) {
     teilzaehlung_rev(
-      where: { zaehlung_id: { _eq: $id }, _rev: { _eq: $rev } }
+      where: { teilzaehlung_id: { _eq: $id }, _rev: { _eq: $rev } }
     ) {
       id
       __typename
       teilzaehlung_id
       zaehlung_id
       teilkultur_id
+      teilkultur {
+        id
+        __typename
+        name
+        ort1
+        ort2
+        ort3
+      }
       anzahl_pflanzen
       anzahl_auspflanzbereit
       anzahl_mutterpflanzen
@@ -48,7 +56,7 @@ const TeilzaehlungConflict = ({
   const { user, addNotification } = store
 
   // need to use this query to ensure that the person's name is queried
-  const { error, loading } = useQuery(zaehlungRevQuery, {
+  const { error, loading } = useQuery(teilzaehlungRevQuery, {
     variables: {
       rev,
       id,
@@ -58,22 +66,45 @@ const TeilzaehlungConflict = ({
 
   // need to grab store object to ensure this remains up to date
   const revRow =
-    [...store.zaehlung_revs.values()].find(
-      (v) => v._rev === rev && v.zaehlung_id === id,
+    [...store.teilzaehlung_revs.values()].find(
+      (v) => v._rev === rev && v.teilzaehlung_id === id,
     ) || {}
 
   const dataArray = [
     {
-      valueInRow: row?.datum ? moment(row.datum).format('DD.MM.YYYY') : null,
-      valueInRev: revRow?.datum
-        ? moment(revRow.datum).format('DD.MM.YYYY')
-        : null,
-      label: 'Datum',
+      valueInRow: row?.zaehlung_id,
+      valueInRev: revRow?.zaehlung_id,
+      label: 'Zaehlung ID',
     },
     {
-      valueInRow: row?.prognose == true,
-      valueInRev: revRow?.prognose == true,
-      label: 'Prognose',
+      valueInRow: teilkulturLabelFromTeilkultur(row?.teilkultur),
+      valueInRev: teilkulturLabelFromTeilkultur(revRow?.teilkultur),
+      label: 'Teilkultur',
+    },
+    {
+      valueInRow: row?.anzahl_pflanzen,
+      valueInRev: revRow?.anzahl_pflanzen,
+      label: 'Anzahl Pflanzen',
+    },
+    {
+      valueInRow: row?.anzahl_auspflanzbereit,
+      valueInRev: revRow?.anzahl_auspflanzbereit,
+      label: 'Anzahl auspflanzbereit',
+    },
+    {
+      valueInRow: row?.anzahl_mutterpflanzen,
+      valueInRev: revRow?.anzahl_mutterpflanzen,
+      label: 'Anzahl Mutterpflanzen',
+    },
+    {
+      valueInRow: row?.andere_menge,
+      valueInRev: revRow?.andere_menge,
+      label: 'Andere Menge',
+    },
+    {
+      valueInRow: row?.auspflanzbereit_beschreibung,
+      valueInRev: revRow?.auspflanzbereit_beschreibung,
+      label: 'Auspflanzbereit Beschreibung',
     },
     {
       valueInRow: row?.bemerkungen,
@@ -106,11 +137,16 @@ const TeilzaehlungConflict = ({
     // otherwise risk to still have lower depth and thus loosing
     const newDepth = row._depth + 1
     const newObject = {
+      teilzaehlung_id: revRow.teilzaehlung_id,
       zaehlung_id: revRow.zaehlung_id,
-      kultur_id: revRow.kultur_id,
-      datum: revRow.datum,
-      prognose: revRow.prognose,
+      teilkultur_id: revRow.teilkultur_id,
+      anzahl_pflanzen: revRow.anzahl_pflanzen,
+      anzahl_auspflanzbereit: revRow.anzahl_auspflanzbereit,
+      anzahl_mutterpflanzen: revRow.anzahl_mutterpflanzen,
+      andere_menge: revRow.andere_menge,
+      auspflanzbereit_beschreibung: revRow.auspflanzbereit_beschreibung,
       bemerkungen: revRow.bemerkungen,
+      prognose_von_tz: revRow.prognose_von_tz,
       changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
@@ -122,10 +158,10 @@ const TeilzaehlungConflict = ({
     newObject.changed = new window.Date().toISOString()
     //console.log('Zaehlung Conflict', { row, revRow, newObject })
     try {
-      await store.mutateInsert_zaehlung_rev_one({
+      await store.mutateInsert_teilzaehlung_rev_one({
         object: newObject,
         on_conflict: {
-          constraint: 'zaehlung_rev_pkey',
+          constraint: 'teilzaehlung_rev_pkey',
           update_columns: ['id'],
         },
       })
@@ -140,10 +176,15 @@ const TeilzaehlungConflict = ({
     addNotification,
     callbackAfterUebernehmen,
     revRow._deleted,
+    revRow.andere_menge,
+    revRow.anzahl_auspflanzbereit,
+    revRow.anzahl_mutterpflanzen,
+    revRow.anzahl_pflanzen,
+    revRow.auspflanzbereit_beschreibung,
     revRow.bemerkungen,
-    revRow.datum,
-    revRow.kultur_id,
-    revRow.prognose,
+    revRow.prognose_von_tz,
+    revRow.teilkultur_id,
+    revRow.teilzaehlung_id,
     revRow.zaehlung_id,
     row._depth,
     row._rev,
