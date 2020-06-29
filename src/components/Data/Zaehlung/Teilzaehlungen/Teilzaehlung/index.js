@@ -99,6 +99,12 @@ const Rev = styled.span`
 const ConflictListContainer = styled.div`
   align-self: center;
 `
+const DeletedContainer = styled.div`
+  padding-right: 5px;
+  position: relative;
+  margin-top: -8px;
+}
+`
 
 const Teilzaehlung = ({
   id,
@@ -197,14 +203,16 @@ const Teilzaehlung = ({
               </CaseConflictTitle>
             )}
             {showDeleted && (
-              <Checkbox2States
-                key={`${row.id}_deleted`}
-                label="gelöscht"
-                name="_deleted"
-                value={row._deleted}
-                saveToDb={saveToDb}
-                error={errors?.teilzaehlung?._deleted}
-              />
+              <DeletedContainer>
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.teilzaehlung?._deleted}
+                />
+              </DeletedContainer>
             )}
             {tk && tz_teilkultur_id && (
               <Teilkultur>
@@ -294,16 +302,7 @@ const Teilzaehlung = ({
               </Last>
             )}
             <div>
-              {showDeleted && row._deleted ? (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.teilzaehlung?._deleted}
-                />
-              ) : (
+              {showDeleted && !row._deleted && (
                 <IconButton
                   aria-label="löschen"
                   title="löschen"
