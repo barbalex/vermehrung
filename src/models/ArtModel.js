@@ -70,9 +70,16 @@ export const artModel = artModelBase.actions((self) => ({
     delete newObjectForStore.art_id
     // optimistically update store
     upsertArtModel(newObjectForStore)
+    if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
-    self.sammlungs.forEach((s) => s.edit({ field: '_deleted', value: true }))
+  },
+  deleteNSide() {
+    const store = getParent(self, 2)
+
+    store.sammlungsSorted
+      .filter((o) => o.art_id === self.id)
+      .forEach((z) => z.delete())
   },
 }))

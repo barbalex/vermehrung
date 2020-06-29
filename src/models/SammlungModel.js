@@ -88,9 +88,16 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     delete newObjectForStore.sammlung_id
     // optimistically update store
     upsertSammlungModel(newObjectForStore)
+    if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
-    self.lieferungs.forEach((l) => l.edit({ field: '_deleted', value: true }))
+  },
+  deleteNSide() {
+    const store = getParent(self, 2)
+
+    store.lieferungsSorted
+      .filter((o) => o.von_sammlung_id === self.id)
+      .forEach((z) => z.delete())
   },
 }))

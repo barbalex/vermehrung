@@ -79,9 +79,16 @@ export const gartenModel = gartenModelBase.actions((self) => ({
     delete newObjectForStore.garten_id
     // optimistically update store
     upsertGartenModel(newObjectForStore)
+    if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
-    self.kulturs.forEach((k) => k.edit({ field: '_deleted', value: true }))
+  },
+  deleteNSide() {
+    const store = getParent(self, 2)
+
+    store.kultursSorted
+      .filter((o) => o.garten_id === self.id)
+      .forEach((z) => z.delete())
   },
 }))

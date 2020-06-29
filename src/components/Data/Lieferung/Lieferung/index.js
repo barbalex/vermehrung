@@ -156,20 +156,21 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const {
     artsSorted,
+    errors,
     filter,
-    kulturIdInActiveNodeArray,
-    lieferungsSorted,
-    lieferungsFiltered,
-    online,
     herkunftsSorted,
+    kulturIdInActiveNodeArray,
+    lieferungsFiltered,
+    lieferungsSorted,
+    online,
     personIdInActiveNodeArray,
     personsSorted,
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
     sammlungsSorted,
-    userPersonOption,
-    errors,
+    showDeleted,
     unsetError,
+    userPersonOption,
   } = store
   const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray } = store.tree
@@ -440,6 +441,16 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                 <CaseConflictTitle>
                   Aktuelle Version<Rev>{row._rev}</Rev>
                 </CaseConflictTitle>
+              )}
+              {showDeleted && (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.kultur?._deleted}
+                />
               )}
               {ifSomeNeeded([
                 'art_id',

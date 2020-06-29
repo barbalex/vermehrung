@@ -75,11 +75,16 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     upsertZaehlungModel(newObjectForStore)
+    if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
-    self.teilzaehlungs.forEach((tz) =>
-      tz.edit({ field: '_deleted', value: true }),
-    )
+  },
+  deleteNSide() {
+    const store = getParent(self, 2)
+
+    store.teilzaehlungsSorted
+      .filter((o) => o.zaehlung_id === self.id)
+      .forEach((z) => z.delete())
   },
 }))
