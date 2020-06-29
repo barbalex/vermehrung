@@ -46,12 +46,12 @@ export const kulturModel = kulturModelBase.actions((self) => ({
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
-    const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
+    const newObjectForStore = { ...newObject }
     addQueuedQuery({
       name: 'mutateInsert_kultur_rev_one',
       variables: JSON.stringify({
@@ -81,20 +81,29 @@ export const kulturModel = kulturModelBase.actions((self) => ({
     delete newObjectForStore.kultur_id
     // optimistically update store
     upsertKulturModel(newObjectForStore)
+    if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
-    self.teilkulturs.forEach((tk) =>
-      tk.edit({ field: '_deleted', value: true }),
-    )
-    self.zaehlungs.forEach((z) => z.edit({ field: '_deleted', value: true }))
-    self.events.forEach((e) => e.edit({ field: '_deleted', value: true }))
-    self.kultur_option.edit({ field: '_deleted', value: true })
-    self.lieferungsByVonKulturId.forEach((l) =>
-      l.edit({ field: '_deleted', value: true }),
-    )
-    self.lieferungsByNachKulturId.forEach((l) =>
-      l.edit({ field: '_deleted', value: true }),
-    )
+  },
+  deleteNSide() {
+    const store = getParent(self, 2)
+
+    store.teilkultursSorted
+      .filter((o) => o.kultur_id === self.id)
+      .forEach((z) => z.delete())
+    store.zaehlungsSorted
+      .filter((o) => o.kultur_id === self.id)
+      .forEach((z) => z.delete())
+    store.eventsSorted
+      .filter((o) => o.kultur_id === self.id)
+      .forEach((e) => e.delete())
+    store.kultur_options.get(self.id).delete()
+    store.lieferungsSorted
+      .filter((o) => o.von_kultur_id === self.id)
+      .forEach((l) => l.delete())
+    store.lieferungsSorted
+      .filter((o) => o.nach_kultur_id === self.id)
+      .forEach((l) => l.delete())
   },
 }))

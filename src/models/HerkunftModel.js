@@ -80,9 +80,16 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     delete newObjectForStore.herkunft_id
     // optimistically update store
     upsertHerkunftModel(newObjectForStore)
+    if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
-    self.sammlungs.forEach((s) => s.edit({ field: '_deleted', value: true }))
+  },
+  deleteNSide() {
+    const store = getParent(self, 2)
+
+    store.sammlungsSorted
+      .filter((o) => o.herkunft_id === self.id)
+      .forEach((z) => z.delete())
   },
 }))
