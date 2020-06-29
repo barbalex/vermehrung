@@ -3,16 +3,23 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { FaRegTrashAlt, FaChartLine } from 'react-icons/fa'
+import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
 import Checkbox2States from '../../../../shared/Checkbox2States'
 import Select from '../../../../shared/SelectCreatable'
+import ConflictList from '../../../../shared/ConflictList'
 import ifIsNumericAsNumber from '../../../../../utils/ifIsNumericAsNumber'
 import PrognoseMenu from './PrognoseMenu'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import Conflict from './Conflict'
 
 const Container = styled.div`
+  padding-left: 10px;
+  position: relative;
+`
+const FieldContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -53,6 +60,42 @@ const TopLine = styled.div`
   margin-right: -10px;
   margin-bottom: 10px;
 `
+const StyledSplitPane = styled(SplitPane)`
+  height: calc(100vh - 64px - 48px) !important;
+  .Resizer {
+    background: rgba(74, 20, 140, 0.1);
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 7px;
+    cursor: col-resize;
+  }
+  .Resizer:hover {
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    background-color: #fff59d !important;
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
+  }
+`
+const CaseConflictTitle = styled.h4`
+  margin-bottom: 10px;
+`
+const Rev = styled.span`
+  font-weight: normal;
+  padding-left: 7px;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.8em;
+`
 
 const Teilzaehlung = ({
   id,
@@ -63,7 +106,7 @@ const Teilzaehlung = ({
   index,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, showDeleted, errors, unsetError } = store
+  const { insertTeilkulturRev, showDeleted, errors, unsetError, online } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -123,133 +166,187 @@ const Teilzaehlung = ({
     row.delete()
   }, [row])
 
+  const [activeConflict, setActiveConflict] = useState(null)
+  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
+  const callbackAfterUebernehmen = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
+
+  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !activeConflict ? { width: 0 } : {}
+
   return (
     <ErrorBoundary>
       {!!index && <TopLine />}
       <Container>
-        {tk && tz_teilkultur_id && (
-          <Teilkultur>
-            <Select
-              key={`${row.id}teilkultur_id`}
-              row={row}
-              field="teilkultur_id"
-              label="Teilkultur"
-              options={teilkulturenWerte}
-              error={errors?.teilzaehlung?.teilkultur_id}
-              onCreateNew={onCreateNewTeilkultur}
-            />
-          </Teilkultur>
-        )}
-        <Anzahl>
-          <TextField
-            key={`${row.id}anzahl_pflanzen`}
-            name="anzahl_pflanzen"
-            label="Anzahl Pflanzen"
-            value={row.anzahl_pflanzen}
-            saveToDb={saveToDb}
-            error={errors?.teilzaehlung?.anzahl_pflanzen}
-            type="number"
-          />
-        </Anzahl>
-        <Anzahl>
-          <TextField
-            key={`${row.id}anzahl_auspflanzbereit`}
-            name="anzahl_auspflanzbereit"
-            label="Anzahl auspflanz-bereit"
-            value={row.anzahl_auspflanzbereit}
-            saveToDb={saveToDb}
-            error={errors?.teilzaehlung?.anzahl_auspflanzbereit}
-            type="number"
-          />
-        </Anzahl>
-        {tz_anzahl_mutterpflanzen && (
-          <Anzahl>
-            <TextField
-              key={`${row.id}anzahl_mutterpflanzen`}
-              name="anzahl_mutterpflanzen"
-              label="Anzahl Mutter-Pflanzen"
-              value={row.anzahl_mutterpflanzen}
-              saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.anzahl_mutterpflanzen}
-              type="number"
-            />
-          </Anzahl>
-        )}
-        {tz_andere_menge && (
-          <Other>
-            <TextField
-              key={`${row.id}andere_menge`}
-              name="andere_menge"
-              label={`Andere Menge (z.B. "3 Zwiebeln")`}
-              value={row.andere_menge}
-              saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.andere_menge}
-              type="text"
-            />
-          </Other>
-        )}
-        {tz_auspflanzbereit_beschreibung && (
-          <Auspflanzbereit>
-            <TextField
-              key={`${row.id}auspflanzbereit_beschreibung`}
-              name="auspflanzbereit_beschreibung"
-              label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
-              value={row.auspflanzbereit_beschreibung}
-              saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.auspflanzbereit_beschreibung}
-              type="text"
-            />
-          </Auspflanzbereit>
-        )}
-        {tz_bemerkungen && (
-          <Last>
-            <TextField
-              key={`${row.id}bemerkungen`}
-              name="bemerkungen"
-              label="Bemerkungen"
-              value={row.bemerkungen}
-              saveToDb={saveToDb}
-              error={errors?.teilzaehlung?.bemerkungen}
-              multiLine
-            />
-          </Last>
-        )}
-        <div>
-          {showDeleted && row._deleted ? (
-            <Checkbox2States
-              key={`${row.id}_deleted`}
-              label="gelöscht"
-              name="_deleted"
-              value={row._deleted}
-              saveToDb={saveToDb}
-              error={errors?.teilzaehlung?._deleted}
-            />
-          ) : (
-            <IconButton
-              aria-label="löschen"
-              title="löschen"
-              onClick={onClickDelete}
-            >
-              <FaRegTrashAlt />
-            </IconButton>
-          )}
-          <IconButton
-            aria-label="Prognose"
-            title="Prognose"
-            onClick={onClickPrognosis}
-          >
-            <FaChartLine />
-          </IconButton>
-          {openPrognosis && (
-            <PrognoseMenu
-              onClosePrognosis={onClosePrognosis}
-              anchorEl={anchorEl}
-              setAnchorEl={setAnchorEl}
-              teilzaehlung={row}
-              zaehlungId={zaehlungId}
-            />
-          )}
-        </div>
+        <StyledSplitPane
+          split="vertical"
+          size={firstPaneWidth}
+          minSize={200}
+          resizerStyle={resizerStyle}
+        >
+          <FieldContainer>
+            {activeConflict && (
+              <CaseConflictTitle>
+                Aktuelle Version<Rev>{row._rev}</Rev>
+              </CaseConflictTitle>
+            )}
+            {showDeleted && (
+              <Checkbox2States
+                key={`${row.id}_deleted`}
+                label="gelöscht"
+                name="_deleted"
+                value={row._deleted}
+                saveToDb={saveToDb}
+                error={errors?.teilzaehlung?._deleted}
+              />
+            )}
+            {tk && tz_teilkultur_id && (
+              <Teilkultur>
+                <Select
+                  key={`${row.id}teilkultur_id`}
+                  row={row}
+                  field="teilkultur_id"
+                  label="Teilkultur"
+                  options={teilkulturenWerte}
+                  error={errors?.teilzaehlung?.teilkultur_id}
+                  onCreateNew={onCreateNewTeilkultur}
+                />
+              </Teilkultur>
+            )}
+            <Anzahl>
+              <TextField
+                key={`${row.id}anzahl_pflanzen`}
+                name="anzahl_pflanzen"
+                label="Anzahl Pflanzen"
+                value={row.anzahl_pflanzen}
+                saveToDb={saveToDb}
+                error={errors?.teilzaehlung?.anzahl_pflanzen}
+                type="number"
+              />
+            </Anzahl>
+            <Anzahl>
+              <TextField
+                key={`${row.id}anzahl_auspflanzbereit`}
+                name="anzahl_auspflanzbereit"
+                label="Anzahl auspflanz-bereit"
+                value={row.anzahl_auspflanzbereit}
+                saveToDb={saveToDb}
+                error={errors?.teilzaehlung?.anzahl_auspflanzbereit}
+                type="number"
+              />
+            </Anzahl>
+            {tz_anzahl_mutterpflanzen && (
+              <Anzahl>
+                <TextField
+                  key={`${row.id}anzahl_mutterpflanzen`}
+                  name="anzahl_mutterpflanzen"
+                  label="Anzahl Mutter-Pflanzen"
+                  value={row.anzahl_mutterpflanzen}
+                  saveToDb={saveToDb}
+                  error={errors?.teilzaehlung?.anzahl_mutterpflanzen}
+                  type="number"
+                />
+              </Anzahl>
+            )}
+            {tz_andere_menge && (
+              <Other>
+                <TextField
+                  key={`${row.id}andere_menge`}
+                  name="andere_menge"
+                  label={`Andere Menge (z.B. "3 Zwiebeln")`}
+                  value={row.andere_menge}
+                  saveToDb={saveToDb}
+                  error={errors?.teilzaehlung?.andere_menge}
+                  type="text"
+                />
+              </Other>
+            )}
+            {tz_auspflanzbereit_beschreibung && (
+              <Auspflanzbereit>
+                <TextField
+                  key={`${row.id}auspflanzbereit_beschreibung`}
+                  name="auspflanzbereit_beschreibung"
+                  label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
+                  value={row.auspflanzbereit_beschreibung}
+                  saveToDb={saveToDb}
+                  error={errors?.teilzaehlung?.auspflanzbereit_beschreibung}
+                  type="text"
+                />
+              </Auspflanzbereit>
+            )}
+            {tz_bemerkungen && (
+              <Last>
+                <TextField
+                  key={`${row.id}bemerkungen`}
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  value={row.bemerkungen}
+                  saveToDb={saveToDb}
+                  error={errors?.teilzaehlung?.bemerkungen}
+                  multiLine
+                />
+              </Last>
+            )}
+            {online && row._conflicts && row._conflicts.map && (
+              <ConflictList
+                conflicts={row._conflicts}
+                activeConflict={activeConflict}
+                setActiveConflict={setActiveConflict}
+              />
+            )}
+            <div>
+              {showDeleted && row._deleted ? (
+                <Checkbox2States
+                  key={`${row.id}_deleted`}
+                  label="gelöscht"
+                  name="_deleted"
+                  value={row._deleted}
+                  saveToDb={saveToDb}
+                  error={errors?.teilzaehlung?._deleted}
+                />
+              ) : (
+                <IconButton
+                  aria-label="löschen"
+                  title="löschen"
+                  onClick={onClickDelete}
+                >
+                  <FaRegTrashAlt />
+                </IconButton>
+              )}
+              <IconButton
+                aria-label="Prognose"
+                title="Prognose"
+                onClick={onClickPrognosis}
+              >
+                <FaChartLine />
+              </IconButton>
+              {openPrognosis && (
+                <PrognoseMenu
+                  onClosePrognosis={onClosePrognosis}
+                  anchorEl={anchorEl}
+                  setAnchorEl={setAnchorEl}
+                  teilzaehlung={row}
+                  zaehlungId={zaehlungId}
+                />
+              )}
+            </div>
+          </FieldContainer>
+          <>
+            {online && !!activeConflict && (
+              <Conflict
+                rev={activeConflict}
+                id={id}
+                row={row}
+                callbackAfterVerwerfen={callbackAfterVerwerfen}
+                callbackAfterUebernehmen={callbackAfterUebernehmen}
+                setActiveConflict={setActiveConflict}
+              />
+            )}
+          </>
+        </StyledSplitPane>
       </Container>
     </ErrorBoundary>
   )
