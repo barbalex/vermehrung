@@ -78,5 +78,8 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
+    self.teilzaehlungs.forEach((tz) =>
+      tz.edit({ field: '_deleted', value: true }),
+    )
   },
 }))

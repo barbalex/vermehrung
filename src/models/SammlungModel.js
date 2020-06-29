@@ -91,5 +91,6 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
+    self.lieferungs.forEach((l) => l.edit({ field: '_deleted', value: true }))
   },
 }))

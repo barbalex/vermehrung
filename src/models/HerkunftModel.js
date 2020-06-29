@@ -83,5 +83,6 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
+    self.sammlungs.forEach((s) => s.edit({ field: '_deleted', value: true }))
   },
 }))
