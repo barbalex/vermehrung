@@ -82,5 +82,6 @@ export const gartenModel = gartenModelBase.actions((self) => ({
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
+    self.kulturs.forEach((k) => k.edit({ field: '_deleted', value: true }))
   },
 }))

@@ -84,5 +84,17 @@ export const kulturModel = kulturModelBase.actions((self) => ({
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
+    self.teilkulturs.forEach((tk) =>
+      tk.edit({ field: '_deleted', value: true }),
+    )
+    self.zaehlungs.forEach((z) => z.edit({ field: '_deleted', value: true }))
+    self.events.forEach((e) => e.edit({ field: '_deleted', value: true }))
+    self.kultur_option.edit({ field: '_deleted', value: true })
+    self.lieferungsByVonKulturId.forEach((l) =>
+      l.edit({ field: '_deleted', value: true }),
+    )
+    self.lieferungsByNachKulturId.forEach((l) =>
+      l.edit({ field: '_deleted', value: true }),
+    )
   },
 }))
