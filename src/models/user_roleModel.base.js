@@ -24,6 +24,7 @@ export const user_roleModelBase = ModelBase
     __typename: types.optional(types.literal("user_role"), "user_role"),
     comment: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
+    label: types.union(types.undefined, types.null, types.string),
     name: types.union(types.undefined, types.string),
     person_revs: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => person_revModel)))),
     person_revs_aggregate: types.union(types.undefined, types.late(() => person_rev_aggregateModel)),
@@ -40,6 +41,7 @@ export const user_roleModelBase = ModelBase
 export class user_roleModelSelector extends QueryBuilder {
   get comment() { return this.__attr(`comment`) }
   get id() { return this.__attr(`id`) }
+  get label() { return this.__attr(`label`) }
   get name() { return this.__attr(`name`) }
   get sort() { return this.__attr(`sort`) }
   person_revs(builder) { return this.__child(`person_revs`, person_revModelSelector, builder) }
@@ -51,4 +53,4 @@ export function selectFromuser_role() {
   return new user_roleModelSelector()
 }
 
-export const user_roleModelPrimitives = selectFromuser_role().comment.name.sort
+export const user_roleModelPrimitives = selectFromuser_role().comment.label.name.sort
