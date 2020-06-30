@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import Badge from '@material-ui/core/Badge'
 import {
@@ -11,7 +11,7 @@ import { observer } from 'mobx-react-lite'
 import { StoreContext } from '../../../models/reactUtils'
 
 const OnlineButton = styled(IconButton)`
-  cursor: default !important;
+  /*cursor: default !important;*/
 `
 const StyledBadge = styled(Badge)`
   .MuiBadge-badge {
@@ -21,7 +21,12 @@ const StyledBadge = styled(Badge)`
 
 const Online = () => {
   const store = useContext(StoreContext)
-  const { online, queuedQueries } = store
+  const {
+    online,
+    queuedQueries,
+    showQueuedQueries,
+    setShowQueuedQueries,
+  } = store
   const title = online
     ? 'Sie sind online'
     : queuedQueries.size
@@ -31,9 +36,17 @@ const Online = () => {
   // TODO:
   // 1. add menu to link to info
   // 2. add menu to list and edit pending queries
+  const onClick = useCallback(() => {
+    setShowQueuedQueries(!showQueuedQueries)
+  }, [showQueuedQueries, setShowQueuedQueries])
 
   return (
-    <OnlineButton color="inherit" aria-label={title} title={title}>
+    <OnlineButton
+      color="inherit"
+      aria-label={title}
+      title={title}
+      onClick={onClick}
+    >
       <StyledBadge color="primary" badgeContent={queuedQueries.size} max={999}>
         {online ? <NetworkOn /> : <NetworkOff />}
       </StyledBadge>
