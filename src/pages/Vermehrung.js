@@ -17,6 +17,7 @@ import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import ApiDetector from '../components/ApiDetector'
 import queryAllData from '../utils/queryAllData'
+import QueuedQueries from '../components/QueuedQueries'
 
 const Container = styled.div`
   min-height: calc(100vh - 64px);
@@ -72,6 +73,7 @@ const Vermehrung = ({ location }) => {
     initialDataQueried,
     queryingAllData,
     queuedQueries,
+    showQueuedQueries,
   } = store
 
   const existsUser = !!user?.uid
@@ -213,6 +215,19 @@ const Vermehrung = ({ location }) => {
   if (error && error.message.includes('JWT')) {
     checkAuthOnError({ error, store })
   }*/
+  if (showQueuedQueries) {
+    return (
+      <>
+        <Layout>
+          <Container>
+            <QueuedQueries />
+          </Container>
+        </Layout>
+        <ApiDetector />
+      </>
+    )
+  }
+
   // hide resizer when tree is hidden
   const resizerStyle = treeWidth === 0 ? { width: 0 } : {}
 
