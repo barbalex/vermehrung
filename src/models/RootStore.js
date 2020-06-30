@@ -75,6 +75,7 @@ export const RootStore = RootStoreBase.props({
    * When offline they remain queued until connectivity is back
    */
   queuedQueries: types.map(QueuedQueryType),
+  showQueuedQueries: types.optional(types.boolean, false),
   notifications: types.map(NotificationType),
   // on startup need to wait with showing data
   // until hasura claims have been added
@@ -137,6 +138,8 @@ export const RootStore = RootStoreBase.props({
                 console.log(
                   'There is a conflict with exact same changes - ingoring the error thrown',
                 )
+              } else if (error.message.includes('failed to fetch')) {
+                return console.log('ignore fetch failing')
               } else {
                 self.setError({
                   path: `${revertTable}.${revertField}`,
@@ -199,6 +202,9 @@ export const RootStore = RootStoreBase.props({
       },
     )
     return {
+      setShowQueuedQueries(val) {
+        self.showQueuedQueries = val
+      },
       setError({ path, value }) {
         set(self.errors, path, value)
       },
