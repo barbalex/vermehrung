@@ -130,7 +130,7 @@ const Person = ({
     () =>
       userRolesSorted.map((el) => ({
         value: el.name,
-        label: `${el.name} (${el.comment})`,
+        label: `${el.label} (${el.comment})`,
       })),
     [userRolesSorted],
   )
