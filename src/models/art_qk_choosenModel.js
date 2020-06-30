@@ -63,6 +63,7 @@ export const art_qk_choosenModel = art_qk_choosenModelBase.actions((self) => ({
       revertId: self.id,
       revertField: field,
       revertValue: self[field],
+      newValue: value,
     })
     // do not stringify revisions for store
     // as _that_ is a real array
