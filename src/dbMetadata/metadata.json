@@ -17372,7 +17372,8 @@
               "name",
               "sort",
               "comment",
-              "id"
+              "id",
+              "label"
             ],
             "filter": {},
             "allow_aggregations": true
@@ -17384,6 +17385,7 @@
             "columns": [
               "sort",
               "comment",
+              "label",
               "name",
               "id"
             ],
@@ -17397,6 +17399,7 @@
             "columns": [
               "sort",
               "comment",
+              "label",
               "name",
               "id"
             ],
