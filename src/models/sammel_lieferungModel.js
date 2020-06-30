@@ -92,6 +92,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
         revertId: self.id,
         revertField: field,
         revertValue: self[field],
+        newValue: value,
       })
       // do not stringify revisions for store
       // as _that_ is a real array
