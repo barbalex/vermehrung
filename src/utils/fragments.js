@@ -615,6 +615,7 @@ export const userRole = gql`
     id
     __typename
     name
+    label
     sort
     comment
   }
