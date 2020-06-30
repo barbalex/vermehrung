@@ -6,6 +6,7 @@ drop table if exists user_role cascade;
 create table user_role (
   id uuid primary key default uuid_generate_v1mc(),
   name text unique,
+  label text default null,
   sort integer,
   comment text
 );
