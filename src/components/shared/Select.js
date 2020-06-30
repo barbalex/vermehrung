@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import Select from 'react-select'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -80,6 +81,7 @@ const SharedSelect = ({
   label,
   name,
   error,
+  helperText,
   options,
   loading = false,
   maxHeight = null,
@@ -124,6 +126,7 @@ const SharedSelect = ({
         nocaret={noCaret}
       />
       {error && <Error>{error}</Error>}
+      {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
     </Container>
   )
 }
