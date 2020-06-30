@@ -6,10 +6,6 @@ import { MSTGQLRef, QueryBuilder } from "mst-gql"
 import { ModelBase } from "./ModelBase"
 import { artModel } from "./artModel"
 import { artModelSelector } from "./artModel.base"
-import { art_sumsModel } from "./art_sumsModel"
-import { art_sumsModelSelector } from "./art_sumsModel.base"
-import { art_sums_aggregateModel } from "./art_sums_aggregateModel"
-import { art_sums_aggregateModelSelector } from "./art_sums_aggregateModel.base"
 import { personModel } from "./personModel"
 import { personModelSelector } from "./personModel.base"
 
@@ -30,8 +26,6 @@ export const avModelBase = ModelBase
     _revisions: types.union(types.undefined, types.null, types.frozen()),
     art: types.union(types.undefined, MSTGQLRef(types.late(() => artModel))),
     art_id: types.union(types.undefined, types.frozen()),
-    art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
-    art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
     changed: types.union(types.undefined, types.null, types.frozen()),
     changed_by: types.union(types.undefined, types.null, types.string),
     id: types.identifier,
@@ -57,8 +51,6 @@ export class avModelSelector extends QueryBuilder {
   get id() { return this.__attr(`id`) }
   get person_id() { return this.__attr(`person_id`) }
   art(builder) { return this.__child(`art`, artModelSelector, builder) }
-  art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
-  art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
   person(builder) { return this.__child(`person`, personModelSelector, builder) }
 }
 export function selectFromav() {

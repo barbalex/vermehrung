@@ -36,10 +36,6 @@ import { art_revModel } from "./art_revModel"
 import { art_revModelSelector } from "./art_revModel.base"
 import { art_rev_aggregateModel } from "./art_rev_aggregateModel"
 import { art_rev_aggregateModelSelector } from "./art_rev_aggregateModel.base"
-import { art_sumsModel } from "./art_sumsModel"
-import { art_sumsModelSelector } from "./art_sumsModel.base"
-import { art_sums_aggregateModel } from "./art_sums_aggregateModel"
-import { art_sums_aggregateModelSelector } from "./art_sums_aggregateModel.base"
 import { avModel } from "./avModel"
 import { avModelSelector } from "./avModel.base"
 import { av_aggregateModel } from "./av_aggregateModel"
@@ -68,10 +64,6 @@ import { garten_revModel } from "./garten_revModel"
 import { garten_revModelSelector } from "./garten_revModel.base"
 import { garten_rev_aggregateModel } from "./garten_rev_aggregateModel"
 import { garten_rev_aggregateModelSelector } from "./garten_rev_aggregateModel.base"
-import { garten_teilzaehlung_sumsModel } from "./garten_teilzaehlung_sumsModel"
-import { garten_teilzaehlung_sumsModelSelector } from "./garten_teilzaehlung_sumsModel.base"
-import { garten_teilzaehlung_sums_aggregateModel } from "./garten_teilzaehlung_sums_aggregateModel"
-import { garten_teilzaehlung_sums_aggregateModelSelector } from "./garten_teilzaehlung_sums_aggregateModel.base"
 import { gvModel } from "./gvModel"
 import { gvModelSelector } from "./gvModel.base"
 import { gv_aggregateModel } from "./gv_aggregateModel"
@@ -92,10 +84,6 @@ import { herkunft_revModel } from "./herkunft_revModel"
 import { herkunft_revModelSelector } from "./herkunft_revModel.base"
 import { herkunft_rev_aggregateModel } from "./herkunft_rev_aggregateModel"
 import { herkunft_rev_aggregateModelSelector } from "./herkunft_rev_aggregateModel.base"
-import { herkunft_sumsModel } from "./herkunft_sumsModel"
-import { herkunft_sumsModelSelector } from "./herkunft_sumsModel.base"
-import { herkunft_sums_aggregateModel } from "./herkunft_sums_aggregateModel"
-import { herkunft_sums_aggregateModelSelector } from "./herkunft_sums_aggregateModel.base"
 import { kulturModel } from "./kulturModel"
 import { kulturModelSelector } from "./kulturModel.base"
 import { kultur_aggregateModel } from "./kultur_aggregateModel"
@@ -249,8 +237,6 @@ export const query_rootModelBase = ModelBase
     art_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => art_revModel)))),
     art_rev_aggregate: types.union(types.undefined, types.late(() => art_rev_aggregateModel)),
     art_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => art_revModel))),
-    art_sums: types.union(types.undefined, types.array(types.late(() => art_sumsModel))),
-    art_sums_aggregate: types.union(types.undefined, types.late(() => art_sums_aggregateModel)),
     av: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => avModel)))),
     av_aggregate: types.union(types.undefined, types.late(() => av_aggregateModel)),
     av_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => avModel))),
@@ -272,8 +258,6 @@ export const query_rootModelBase = ModelBase
     garten_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => garten_revModel)))),
     garten_rev_aggregate: types.union(types.undefined, types.late(() => garten_rev_aggregateModel)),
     garten_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => garten_revModel))),
-    garten_teilzaehlung_sums: types.union(types.undefined, types.array(types.late(() => garten_teilzaehlung_sumsModel))),
-    garten_teilzaehlung_sums_aggregate: types.union(types.undefined, types.late(() => garten_teilzaehlung_sums_aggregateModel)),
     gv: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => gvModel)))),
     gv_aggregate: types.union(types.undefined, types.late(() => gv_aggregateModel)),
     gv_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => gvModel))),
@@ -289,8 +273,6 @@ export const query_rootModelBase = ModelBase
     herkunft_rev: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => herkunft_revModel)))),
     herkunft_rev_aggregate: types.union(types.undefined, types.late(() => herkunft_rev_aggregateModel)),
     herkunft_rev_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => herkunft_revModel))),
-    herkunft_sums: types.union(types.undefined, types.array(types.late(() => herkunft_sumsModel))),
-    herkunft_sums_aggregate: types.union(types.undefined, types.late(() => herkunft_sums_aggregateModel)),
     kultur: types.union(types.undefined, types.array(MSTGQLRef(types.late(() => kulturModel)))),
     kultur_aggregate: types.union(types.undefined, types.late(() => kultur_aggregateModel)),
     kultur_by_pk: types.union(types.undefined, types.null, MSTGQLRef(types.late(() => kulturModel))),
@@ -410,8 +392,6 @@ export class query_rootModelSelector extends QueryBuilder {
   art_rev(builder) { return this.__child(`art_rev`, art_revModelSelector, builder) }
   art_rev_aggregate(builder) { return this.__child(`art_rev_aggregate`, art_rev_aggregateModelSelector, builder) }
   art_rev_by_pk(builder) { return this.__child(`art_rev_by_pk`, art_revModelSelector, builder) }
-  art_sums(builder) { return this.__child(`art_sums`, art_sumsModelSelector, builder) }
-  art_sums_aggregate(builder) { return this.__child(`art_sums_aggregate`, art_sums_aggregateModelSelector, builder) }
   av(builder) { return this.__child(`av`, avModelSelector, builder) }
   av_aggregate(builder) { return this.__child(`av_aggregate`, av_aggregateModelSelector, builder) }
   av_by_pk(builder) { return this.__child(`av_by_pk`, avModelSelector, builder) }
@@ -433,8 +413,6 @@ export class query_rootModelSelector extends QueryBuilder {
   garten_rev(builder) { return this.__child(`garten_rev`, garten_revModelSelector, builder) }
   garten_rev_aggregate(builder) { return this.__child(`garten_rev_aggregate`, garten_rev_aggregateModelSelector, builder) }
   garten_rev_by_pk(builder) { return this.__child(`garten_rev_by_pk`, garten_revModelSelector, builder) }
-  garten_teilzaehlung_sums(builder) { return this.__child(`garten_teilzaehlung_sums`, garten_teilzaehlung_sumsModelSelector, builder) }
-  garten_teilzaehlung_sums_aggregate(builder) { return this.__child(`garten_teilzaehlung_sums_aggregate`, garten_teilzaehlung_sums_aggregateModelSelector, builder) }
   gv(builder) { return this.__child(`gv`, gvModelSelector, builder) }
   gv_aggregate(builder) { return this.__child(`gv_aggregate`, gv_aggregateModelSelector, builder) }
   gv_by_pk(builder) { return this.__child(`gv_by_pk`, gvModelSelector, builder) }
@@ -450,8 +428,6 @@ export class query_rootModelSelector extends QueryBuilder {
   herkunft_rev(builder) { return this.__child(`herkunft_rev`, herkunft_revModelSelector, builder) }
   herkunft_rev_aggregate(builder) { return this.__child(`herkunft_rev_aggregate`, herkunft_rev_aggregateModelSelector, builder) }
   herkunft_rev_by_pk(builder) { return this.__child(`herkunft_rev_by_pk`, herkunft_revModelSelector, builder) }
-  herkunft_sums(builder) { return this.__child(`herkunft_sums`, herkunft_sumsModelSelector, builder) }
-  herkunft_sums_aggregate(builder) { return this.__child(`herkunft_sums_aggregate`, herkunft_sums_aggregateModelSelector, builder) }
   kultur(builder) { return this.__child(`kultur`, kulturModelSelector, builder) }
   kultur_aggregate(builder) { return this.__child(`kultur_aggregate`, kultur_aggregateModelSelector, builder) }
   kultur_by_pk(builder) { return this.__child(`kultur_by_pk`, kulturModelSelector, builder) }
