@@ -21,6 +21,9 @@ import toggleNodeSymbol from './toggleNodeSymbol'
 import createNew from './createNew'
 import deleteDataset from './delete'
 import getConstants from '../../utils/constants'
+import signup from '../../utils/signup'
+import deleteAccount from '../../utils/deleteAccount'
+import setPassword from '../../utils/setPassword'
 
 const constants = getConstants()
 
@@ -201,15 +204,7 @@ const MenuSubtitle = styled.div`
 const Row = ({ style, node, nodes }) => {
   const store = useContext(StoreContext)
 
-  const {
-    tree,
-    addNotification,
-    userPerson,
-    firebase,
-    online,
-    setOnline,
-    personsSorted,
-  } = store
+  const { tree, addNotification, userPerson, online, setOnline } = store
   const { activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -283,93 +278,18 @@ const Row = ({ style, node, nodes }) => {
     }
   }, [accountId, addNotification, node, online, setOnline, store])
 
-  const onClickSetPassword = useCallback(async () => {
-    // fetch email of this person
-    const email = person?.email
-    try {
-      await firebase.auth().sendPasswordResetEmail(email, {
-        url: `${constants?.appUri}/Vermehrung`,
-        handleCodeInApp: true,
-      })
-    } catch (error) {
-      addNotification({
-        message: error.message,
-      })
-    }
-    store.addNotification({
-      message: `${email} erhält einen Link, um ein Passwort zu setzen`,
-      type: 'success',
-    })
-  }, [addNotification, firebase, person?.email, store])
-  const onClickDeleteAccout = useCallback(async () => {
-    // delete firebase user
-    if (accountId) {
-      try {
-        await axios.get(`${constants?.authUri}/delete-user/${accountId}`)
-      } catch (error) {
-        console.log(error)
-        if (online) {
-          setOnline(false)
-        }
-        return addNotification({
-          message: error.response.data,
-        })
-      }
-      if (!online) {
-        setOnline(true)
-      }
-    }
-    if (!person) {
-      return addNotification({
-        message: `Keine Person mit id ${last(node.url)} gefunden`,
-      })
-    }
-    // remove users account_id
-    person.edit({ field: 'account_id', value: null })
-  }, [accountId, addNotification, node.url, online, person, setOnline])
-  const onClickSignup = useCallback(async () => {
-    // fetch email of this person
-    const email = person?.email
-    if (!email) {
-      return addNotification({
-        message: 'Eine email-Adresse muss erfasst sein',
-        type: 'warning',
-      })
-    }
-    const userRole = person?.user_role
-    if (!userRole) {
-      return addNotification({
-        message: 'Eine Rolle muss erfasst sein',
-        type: 'warning',
-      })
-    }
-    let res
-    try {
-      res = await axios.get(`${constants?.authUri}/create-user/${email}`)
-    } catch (error) {
-      console.log(error)
-      if (online) {
-        setOnline(false)
-      }
-      return addNotification({
-        message: error.response.data,
-      })
-    }
-    if (!online) {
-      setOnline(true)
-    }
-    store.addNotification({
-      message: `Für ${email} wurde ein Konto erstellt. Schicken Sie ein Email, um das Passwort zu setzen (nur 2 Stunden gültig). Oder sagen Sie dem Benutzer, bei der ersten Anmeldung 1. Email einzugeben und 2. "neues Passwort setzen" zu wählen`,
-      type: 'success',
-    })
-    if (!person) {
-      return addNotification({
-        message: `Keine Person mit id ${last(node.url)} gefunden`,
-      })
-    }
-    console.log('res:', res)
-    person.edit({ field: 'account_id', value: res.data })
-  }, [addNotification, node.url, online, personsSorted, setOnline, store])
+  const onClickSetPassword = useCallback(() => setPassword({ store, person }), [
+    person,
+    store,
+  ])
+  const onClickDeleteAccout = useCallback(
+    () => deleteAccount({ store, person }),
+    [person, store],
+  )
+  const onClickSignup = useCallback(() => signup({ store, person }), [
+    person,
+    store,
+  ])
 
   const onClickOpenAllChildren = useCallback(
     () => openAllChildren({ node, store, nodes }),
