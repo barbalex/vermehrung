@@ -241,7 +241,7 @@ TEILZAEHLUNG_FRAGMENT = selectFromteilzaehlung()
   .teilkultur(() => TEILKULTUR_FRAGMENT)
   .toString()
 
-USER_ROLE_FRAGMENT = selectFromuser_role().id.name.sort.comment.toString()
+USER_ROLE_FRAGMENT = selectFromuser_role().id.name.label.sort.comment.toString()
 
 ZAEHLUNG_FRAGMENT = selectFromzaehlung()
   .id.kultur_id.datum.prognose.bemerkungen.changed.changed_by._rev._parent_rev._revisions._depth._conflicts._deleted.teilzaehlungs_aggregate(
