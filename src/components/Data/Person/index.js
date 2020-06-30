@@ -8,7 +8,6 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
-
 import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
@@ -23,6 +22,7 @@ import DeleteButton from './DeleteButton'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import KontoMenu from './KontoMenu'
 
 const Container = styled.div`
   height: 100%;
@@ -130,7 +130,7 @@ const Person = ({
     () =>
       userRolesSorted.map((el) => ({
         value: el.name,
-        label: `${el.label} (${el.comment})`,
+        label: el.label,
       })),
     [userRolesSorted],
   )
@@ -191,6 +191,7 @@ const Person = ({
           <TitleContainer>
             <Title>Person</Title>
             <TitleSymbols>
+              <KontoMenu row={row} />
               {user_role === 'manager' && (
                 <>
                   <AddButton />
@@ -222,6 +223,7 @@ const Person = ({
                 value={row.user_role}
                 field="user_role"
                 label="Rolle"
+                helperText={row?.userRoleByUserRole?.comment}
                 options={userRoleWerte}
                 saveToDb={saveToDb}
                 error={errors?.person?.user_role}
