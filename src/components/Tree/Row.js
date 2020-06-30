@@ -359,7 +359,7 @@ const Row = ({ style, node, nodes }) => {
       setOnline(true)
     }
     store.addNotification({
-      message: `Für ${email} wurde ein Konto erstellt. Schicken Sie ein Email, um das Passwort zu setzen.`,
+      message: `Für ${email} wurde ein Konto erstellt. Schicken Sie ein Email, um das Passwort zu setzen (nur 2 Stunden gültig). Oder sagen Sie dem Benutzer, bei der ersten Anmeldung 1. Email einzugeben und 2. "neues Passwort setzen" zu wählen`,
       type: 'success',
     })
     if (!person) {
