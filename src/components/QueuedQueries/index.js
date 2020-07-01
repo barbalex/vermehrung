@@ -69,7 +69,7 @@ const QueuedQueries = () => {
     return (
       <Container>
         <TitleRow>
-          <Title>Ausstehende Operationen:</Title>
+          <Title>Ausstehende Operationen</Title>
           <div>
             <IconButton
               aria-label="Informationen zu Offline arbeiten öffnen"
