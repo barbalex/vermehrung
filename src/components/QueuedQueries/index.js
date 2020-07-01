@@ -2,17 +2,25 @@ import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import { StoreContext } from '../../models/reactUtils'
 import QueuedQuery from './QueuedQuery'
+import getConstants from '../../utils/constants'
 
+const constants = getConstants()
+
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
 const Title = styled.h3`
   padding: 15px 15px 0 15px;
 `
 const NoOpsContainer = styled.div`
-  padding: 15px;
+  padding: 0 15px;
 `
 const Container = styled.div``
 const OuterContainer = styled.div`
@@ -37,9 +45,7 @@ const RevertHeading = styled.div`
   justify-self: center;
 `
 const CloseIcon = styled(IconButton)`
-  position: absolute !important;
-  right: 3px;
-  top: 70px;
+  margin-right: 5px !important;
 `
 
 const QueuedQueries = () => {
@@ -49,33 +55,67 @@ const QueuedQueries = () => {
   const onClickCloseIcon = useCallback(() => setShowQueuedQueries(false), [
     setShowQueuedQueries,
   ])
+  const openDocs = useCallback(() => {
+    const url = `${constants?.appUri}/Dokumentation/offline`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
+  }, [])
 
   if (!queuedQueries.size) {
     return (
-      <NoOpsContainer>
-        <CloseIcon
-          title="schliessen"
-          aria-label="schliessen"
-          onClick={onClickCloseIcon}
-        >
-          <FaTimes />
-        </CloseIcon>
-        Es gibt momentan keine pendenten Operationen
-      </NoOpsContainer>
+      <Container>
+        <TitleRow>
+          <Title>Ausstehende Operationen:</Title>
+          <div>
+            <IconButton
+              aria-label="Informationen zu Offline arbeiten öffnen"
+              title="Informationen zu Offline arbeiten öffnen"
+              onClick={openDocs}
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
+            <CloseIcon
+              title="schliessen"
+              aria-label="schliessen"
+              onClick={onClickCloseIcon}
+            >
+              <FaTimes />
+            </CloseIcon>
+          </div>
+        </TitleRow>
+        <NoOpsContainer>
+          Es gibt momentan keine pendenten Operationen
+        </NoOpsContainer>
+      </Container>
     )
   }
 
   return (
     <ErrorBoundary>
       <Container>
-        <CloseIcon
-          title="schliessen"
-          aria-label="schliessen"
-          onClick={onClickCloseIcon}
-        >
-          <FaTimes />
-        </CloseIcon>
-        <Title>Ausstehende Operationen:</Title>
+        <TitleRow>
+          <Title>Ausstehende Operationen:</Title>
+          <div>
+            <IconButton
+              aria-label="Anleitung öffnen"
+              title="Anleitung öffnen"
+              onClick={openDocs}
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
+            <CloseIcon
+              title="schliessen"
+              aria-label="schliessen"
+              onClick={onClickCloseIcon}
+            >
+              <FaTimes />
+            </CloseIcon>
+          </div>
+        </TitleRow>
         <OuterContainer>
           <QueriesContainer>
             <Heading>Zeit</Heading>
