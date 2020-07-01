@@ -34,7 +34,7 @@ Sobald vermehrung wieder online ist, werden die Päckchen dem Server geschickt..
 ...und dort verarbeitet. Sobald die Zahl verschwunden ist, ist ihr Gerät mit dem Server synchronisiert.<br/><br/>
 
 Sie können sich durch Klick auf das Online-Symbol auch die Schlange auflisten lassen:
-![Operationen-Liste](005.png)<br/>
+![Operationen-Liste](005.png)
 ...und sogar Operationen widerrufen.<br/><br/>
 
 ### Konflikte
