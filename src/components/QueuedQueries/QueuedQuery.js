@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 
 import { StoreContext } from '../../models/reactUtils'
 
+// to hover and style row, see: https://stackoverflow.com/a/48109479/712005
 const Value = styled.div`
   padding: 5px 0;
   &:before {
