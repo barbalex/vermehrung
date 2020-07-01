@@ -33,6 +33,10 @@ Sobald vermehrung wieder online ist, werden die Päckchen dem Server geschickt..
 
 ...und dort verarbeitet. Sobald die Zahl verschwunden ist, ist ihr Gerät mit dem Server synchronisiert.<br/><br/>
 
+Sie können sich durch Klick auf das Online-Symbol auch die Schlange auflisten lassen:
+![Operationen-Liste](005.png)<br/>
+...und sogar Operationen widerrufen.<br/><br/>
+
 ### Konflikte
 
 Was macht der Server mit Ihren Päckchen? Er speichert sie natürlich, wie jeder gute Server. Zusätzlich sucht er **Konflikte** und wählt **Sieger**.<br/><br/>
@@ -46,10 +50,10 @@ Konflikte können auch entstehen, wenn dieselbe Person vermehrung.ch auf mehrere
 #### Sieger wählen
 
 Der Server von vermehrung.ch wählt automatisch Sieger. Leider ist er nicht allwissend. Darum notiert er beim Sieger auch, welche widersprüchlichen Versionen es gibt. Das wird im Formular angezeigt:<br/>
-![Konflikt gefunden](005.png)<br/>
+![Konflikt gefunden](006.png)<br/>
 
 Klickt man auf den Konflikt, öffnet sich das Formular mit der widersprüchlichen Version:<br/>
-![widersprüchliche Version](006.png)<br/>
+![widersprüchliche Version](007.png)<br/>
 
 Hier sehen Sie die Unterschiede. Sie haben drei Optionen:
 
