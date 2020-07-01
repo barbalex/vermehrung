@@ -97,6 +97,6 @@
     "copyfiles": "2.3.0"
   },
   "dev-comments": {
-    "gatsby": "DO NOT UPGRADE over 2.20.36. 2.21.19 tested to be bad in production. See: https://github.com/gatsbyjs/gatsby/issues/19618#issuecomment-625350450"
+    "gatsby": "DO NOT UPGRADE over 2.20.36. 2.23.12 tested to be bad in production. See: https://github.com/gatsbyjs/gatsby/issues/19618#issuecomment-625350450"
   }
 }
