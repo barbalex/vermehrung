@@ -138,7 +138,7 @@ export const RootStore = RootStoreBase.props({
                 console.log(
                   'There is a conflict with exact same changes - ingoring the error thrown',
                 )
-              } else if (error.message.includes('failed to fetch')) {
+              } else if (error.message.includes('Failed to fetch')) {
                 return console.log('ignore fetch failing')
               } else {
                 self.setError({
@@ -324,6 +324,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertArtModel(newObjectForStore)
@@ -395,6 +396,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertArtQkChoosenModel(newObjectForStore)
@@ -469,6 +471,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertAvModel(newObjectForStore)
@@ -545,6 +548,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertEventModel(newObjectForStore)
@@ -629,6 +633,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertGartenModel(newObjectForStore)
@@ -705,6 +710,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertGvModel(newObjectForStore)
@@ -775,6 +781,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertHerkunftModel(newObjectForStore)
@@ -866,6 +873,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertKulturModel(newObjectForStore)
@@ -964,6 +972,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertKulturQkChoosenModel(newObjectForStore)
@@ -1059,6 +1068,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertLieferungModel(newObjectForStore)
@@ -1152,6 +1162,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertPersonModel(newObjectForStore)
@@ -1266,6 +1277,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertSammelLieferungModel(newObjectForStore)
@@ -1446,6 +1458,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertTeilkulturModel(newObjectForStore)
@@ -1532,6 +1545,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertTeilzaehlungModel(newObjectForStore)
@@ -1610,6 +1624,7 @@ export const RootStore = RootStoreBase.props({
           revertId: id,
           revertField: '_deleted',
           revertValue: true,
+          isInsert: true,
         })
         // optimistically update store
         upsertZaehlungModel(newObjectForStore)

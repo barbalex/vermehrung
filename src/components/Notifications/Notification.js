@@ -28,6 +28,7 @@ const StyledIconButton = styled(IconButton)`
 const StyledButton = styled(Button)`
   color: white !important;
   border-color: white !important;
+  margin-left: 10px;
   > span {
     text-transform: none;
   }
