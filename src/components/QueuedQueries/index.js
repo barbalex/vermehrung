@@ -8,8 +8,33 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import { StoreContext } from '../../models/reactUtils'
 import QueuedQuery from './QueuedQuery'
 
-const Container = styled.div`
+const Title = styled.h3`
+  padding: 15px 15px 0 15px;
+`
+const NoOpsContainer = styled.div`
   padding: 15px;
+`
+const Container = styled.div``
+const OuterContainer = styled.div`
+  height: calc(100vh - 64px - 15px - 23px - 23px);
+  overflow-y: auto;
+  overflow-x: hidden;
+`
+const QueriesContainer = styled.div`
+  padding: 0 15px;
+  display: grid;
+  grid-template-columns: 180px auto auto auto auto auto 100px;
+  column-gap: 5px;
+  > * {
+    position: relative;
+  }
+`
+const Heading = styled.div`
+  font-weight: 600;
+`
+const RevertHeading = styled.div`
+  font-weight: 600;
+  justify-self: center;
 `
 const CloseIcon = styled(IconButton)`
   position: absolute !important;
@@ -27,7 +52,7 @@ const QueuedQueries = () => {
 
   if (!queuedQueries.size) {
     return (
-      <Container>
+      <NoOpsContainer>
         <CloseIcon
           title="schliessen"
           aria-label="schliessen"
@@ -36,7 +61,7 @@ const QueuedQueries = () => {
           <FaTimes />
         </CloseIcon>
         Es gibt momentan keine pendenten Operationen
-      </Container>
+      </NoOpsContainer>
     )
   }
 
@@ -50,9 +75,21 @@ const QueuedQueries = () => {
         >
           <FaTimes />
         </CloseIcon>
-        {[...queuedQueries.values()].map((qq) => (
-          <QueuedQuery key={qq.id} qq={qq} />
-        ))}
+        <Title>Ausstehende Operationen:</Title>
+        <OuterContainer>
+          <QueriesContainer>
+            <Heading>Zeit</Heading>
+            <Heading>Tabelle</Heading>
+            <Heading>Feld / Operation</Heading>
+            <Heading>ID</Heading>
+            <Heading>vorher</Heading>
+            <Heading>nachher</Heading>
+            <RevertHeading>widerrufen</RevertHeading>
+            {[...queuedQueries.values()].reverse().map((qq, i) => (
+              <QueuedQuery key={qq.id} qq={qq} index={i} />
+            ))}
+          </QueriesContainer>
+        </OuterContainer>
       </Container>
     </ErrorBoundary>
   )

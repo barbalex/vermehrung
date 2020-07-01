@@ -41,4 +41,5 @@ export default types.model('QueuedQuery', {
     types.frozen(),
   ),
   revertValues: types.union(types.string, types.null, types.undefined),
+  isInsert: types.optional(types.maybeNull(types.boolean), false),
 })
