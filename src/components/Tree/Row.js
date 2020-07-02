@@ -5,7 +5,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
+//import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
 import axios from 'axios'
 
@@ -24,6 +24,11 @@ import getConstants from '../../utils/constants'
 import signup from '../../utils/signup'
 import deleteAccount from '../../utils/deleteAccount'
 import setPassword from '../../utils/setPassword'
+import {
+  ContextMenuTrigger,
+  ContextMenu,
+  MenuItem,
+} from '../../utils/react-contextmenu'
 
 const constants = getConstants()
 
@@ -208,22 +213,22 @@ const Row = ({ style, node, nodes }) => {
   const { activeNodeArray } = tree
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
-  const nodeIsOpen = isNodeOpen({ store, url: node.url })
+  const nodeIsOpen = isNodeOpen({ store, url: node?.url })
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
   let symbolIcon
   if (
-    node.hasChildren &&
+    node?.hasChildren &&
     nodeIsOpen &&
     // If is folder: only open if childrenCount is > 0
-    ((node.nodeType === 'folder' && node.childrenCount) ||
-      node.nodeType !== 'folder')
+    ((node?.nodeType === 'folder' && node?.childrenCount) ||
+      node?.nodeType !== 'folder')
   ) {
     symbolIcon = 'expandMore'
-  } else if (node.hasChildren) {
+  } else if (node?.hasChildren) {
     symbolIcon = 'chevronRight'
-  } else if (node.label === 'lade Daten...') {
+  } else if (node?.label === 'lade Daten...') {
     symbolIcon = 'moreHoriz'
   } else {
     useSymbolSpan = true
@@ -232,8 +237,8 @@ const Row = ({ style, node, nodes }) => {
 
   const { user_role: role } = userPerson
   const person =
-    node.nodeType === 'table' && node.table === 'person'
-      ? store.persons.get(last(node.url))
+    node?.nodeType === 'table' && node.table === 'person'
+      ? store.persons.get(last(node?.url))
       : null
   const accountId = person?.account_id ?? null
 
@@ -301,14 +306,14 @@ const Row = ({ style, node, nodes }) => {
   )
 
   // for unknows reaseon this happens momentarily when new art is created
-  if (!node.url) return null
+  if (!node?.url) return null
 
   const level =
-    node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
+    node?.url[0] === 'Projekte' ? node?.url?.length - 1 : node?.url?.length
 
   return (
     <Container style={style}>
-      <ContextMenuTrigger id={`cm${node.id}`}>
+      <ContextMenuTrigger id={`cm${node?.id}`}>
         <StyledNode
           data-level={level}
           data-nodeisinactivenodepath={nodeIsInActiveNodePath}
@@ -338,36 +343,37 @@ const Row = ({ style, node, nodes }) => {
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
             node={node}
             onClick={onClickNode}
-            data-mono={!!node.mono}
+            data-mono={!!node?.mono}
           >
-            {node.label}
+            {node?.label ?? '(kein Label)'}
           </TextSpan>
           {accountId && <StyledAccountIcon title="hat ein Konto" />}
         </StyledNode>
       </ContextMenuTrigger>
-      {['table', 'folder'].includes(node.nodeType) && (
-        <ContextMenu id={`cm${node.id}`}>
-          <div className="react-contextmenu-title">{node.menuTitle}</div>
+      {['table', 'folder'].includes(node?.nodeType) && (
+        <ContextMenu id={`cm${node?.id}`}>
+          <div className="react-contextmenu-title">{node?.menuTitle}</div>
           <MenuItem onClick={onClickNeu}>neu</MenuItem>
-          {node.nodeType === 'table' && (
+          {node?.nodeType === 'table' && (
             <MenuItem onClick={onClickDelete}>löschen</MenuItem>
           )}
-          {node.nodeType === 'folder' && isNodeOpen({ store, url: node.url }) && (
-            <>
-              {someChildrenAreOpen({ store, nodes, url: node.url }) && (
-                <MenuItem onClick={onClickCloseAllChildren}>
-                  alle schliessen
-                </MenuItem>
-              )}
-              {someChildrenAreClosed({ store, nodes, url: node.url }) && (
-                <MenuItem onClick={onClickOpenAllChildren}>
-                  alle öffnen
-                </MenuItem>
-              )}
-            </>
-          )}
-          {node.nodeType === 'table' &&
-            node.menuTitle === 'Person' &&
+          {node?.nodeType === 'folder' &&
+            isNodeOpen({ store, url: node?.url }) && (
+              <>
+                {someChildrenAreOpen({ store, nodes, url: node?.url }) && (
+                  <MenuItem onClick={onClickCloseAllChildren}>
+                    alle schliessen
+                  </MenuItem>
+                )}
+                {someChildrenAreClosed({ store, nodes, url: node?.url }) && (
+                  <MenuItem onClick={onClickOpenAllChildren}>
+                    alle öffnen
+                  </MenuItem>
+                )}
+              </>
+            )}
+          {node?.nodeType === 'table' &&
+            node?.menuTitle === 'Person' &&
             role === 'manager' &&
             !accountId && (
               <>
@@ -377,8 +383,8 @@ const Row = ({ style, node, nodes }) => {
                 <MenuItem onClick={onClickSignup}>neu</MenuItem>
               </>
             )}
-          {node.nodeType === 'table' &&
-            node.menuTitle === 'Person' &&
+          {node?.nodeType === 'table' &&
+            node?.menuTitle === 'Person' &&
             role === 'manager' &&
             accountId && (
               <>
