@@ -43,29 +43,15 @@ exports.createPages = async ({ actions, graphql }) => {
 }
 
 // see: https://auth0.com/blog/securing-gatsby-with-auth0/
-exports.onCreateWebpackConfig = ({ stage, loaders, actions, getConfig }) => {
+exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   if (stage === 'build-html') {
     /*
-     * During the build step, `auth0-js` will break because it relies on
+     * During the build step, `firebase` will break because it relies on
      * browser-specific APIs. Fortunately, we don’t need it during the build.
-     * Using Webpack’s null loader, we’re able to effectively ignore `auth0-js`
-     * during the build. (See `src/utils/auth.js` to see how we prevent this
-     * from breaking the app.)
+     * Using Webpack’s null loader, we’re able to effectively ignore `firebase`
+     * during the build
      */
     actions.setWebpackConfig({
-      // see: https://github.com/firebase/firebase-js-sdk/issues/2222#issuecomment-538072948
-      /*externals: getConfig().externals.concat(function(
-        context,
-        request,
-        callback,
-      ) {
-        const regex = /^@?firebase(\/(.+))?/
-        // exclude firebase products from being bundled, so they will be loaded using require() at runtime.
-        if (regex.test(request)) {
-          return callback(null, 'umd ' + request)
-        }
-        callback()
-      }),*/
       module: {
         rules: [
           {
