@@ -93,7 +93,7 @@ export const teilzaehlungModel = teilzaehlungModelBase.actions((self) => ({
     delete newObjectForStore.teilzaehlung_id
     // optimistically update store
     upsertTeilzaehlungModel(newObjectForStore)
-    unsetError({ path: `herkunft.${field}` })
+    unsetError({ path: `teilzaehlung.${field}` })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
