@@ -70,3 +70,5 @@ public/
 
 google-application-credentials.json
 dropbox_uploader.conf
+
+.yarn
