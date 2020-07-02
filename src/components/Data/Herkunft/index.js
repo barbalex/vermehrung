@@ -199,7 +199,6 @@ const Herkunft = ({
       })
     }
   }, [nrCount, setError])
-  console.log('Herkunft', { nrCount, row, nrError: errors?.herkunft?.nr })
 
   if (!row || (!showFilter && filter.show)) return null
 
