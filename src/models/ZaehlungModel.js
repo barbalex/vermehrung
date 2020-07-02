@@ -19,7 +19,7 @@ export {
 export const zaehlungModel = zaehlungModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertZaehlungModel } = store
+    const { addQueuedQuery, user, upsertZaehlungModel, unsetError } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -76,6 +76,7 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     upsertZaehlungModel(newObjectForStore)
+    unsetError({ path: `herkunft.${field}` })
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
