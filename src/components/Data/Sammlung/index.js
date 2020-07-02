@@ -27,6 +27,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
+import exists from '../../../utils/exists'
 
 const constants = getConstants()
 
@@ -137,6 +138,7 @@ const Sammlung = ({
     showDeleted,
     errors,
     unsetError,
+    setError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -242,6 +244,19 @@ const Sammlung = ({
       window.open(url)
     }
   }, [])
+
+  const nrCount = useMemo(() => {
+    if (!exists(row?.nr)) return 0
+    return sammlungsSorted.filter((h) => h.nr === row.nr).length
+  }, [sammlungsSorted, row?.nr])
+  useEffect(() => {
+    if (nrCount > 1) {
+      setError({
+        path: 'sammlung.nr',
+        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Sammlungen eindeutig sein`,
+      })
+    }
+  }, [nrCount, setError])
 
   if (!row || (!showFilter && filter.show)) return null
 
