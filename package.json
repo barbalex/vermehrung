@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "gatsby develop",
     "clean": "gatsby clean",
-    "build": "gatsby clean && gatsby build",
-    "postbuild": "copyfiles .now/* public && copyfiles now.json public",
+    "build": "gatsby clean && gatsby build && copyfiles .now/* public && copyfiles now.json public",
     "serve": "gatsby serve"
   },
   "dependencies": {
@@ -51,6 +50,7 @@
     "gatsby-source-filesystem": "2.3.17",
     "gatsby-transformer-remark": "2.8.23",
     "gatsby-transformer-sharp": "2.5.10",
+    "get-urls": "9.2.1",
     "graphql-request": "2.0.0",
     "graphql-tag": "2.10.3",
     "is-uuid": "1.0.2",
@@ -70,6 +70,7 @@
     "proj4": "2.6.2",
     "react": "16.13.1",
     "react-contextmenu": "2.14.0",
+    "react-copy-to-clipboard": "5.0.2",
     "react-datepicker": "3.0.0",
     "react-dom": "16.13.1",
     "react-error-boundary": "2.2.3",
@@ -95,9 +96,18 @@
   },
   "devDependencies": {
     "copyfiles": "2.3.0",
-    "gatsby-cli": "2.12.56"
+    "gatsby-cli": "2.12.54"
   },
   "dev-comments": {
-    "gatsby": "DO NOT UPGRADE over 2.20.36. 2.23.12 tested to be bad in production. See: https://github.com/gatsbyjs/gatsby/issues/19618#issuecomment-625350450"
+    "gatsby": "DO NOT UPGRADE over 2.20.36. 2.23.12 tested to be bad in production. See: https://github.com/gatsbyjs/gatsby/issues/19618#issuecomment-625350450",
+    "gatsby-cli": "DO NOT UPGRADE over 2.12.54, see: https://github.com/gatsbyjs/gatsby/issues/20082#issuecomment-653114043"
+  },
+  "peerDependencies": {
+    "@babel/types": "7.x",
+    "babel-plugin-styled-components": "1.x",
+    "graphql": "14.x",
+    "prop-types": "15.x",
+    "react-is": "16.x",
+    "webpack": "4.x"
   }
 }
