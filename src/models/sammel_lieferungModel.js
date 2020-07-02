@@ -110,7 +110,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       delete newObjectForStore.sammel_lieferung_id
       // optimistically update store
       upsertSammelLieferungModel(newObjectForStore)
-      unsetError({ path: `herkunft.${field}` })
+      unsetError({ path: `sammel_lieferung.${field}` })
       const userPerson = [...store.persons.values()].find(
         (o) => o.account_id === store.user.uid,
       )

@@ -80,7 +80,7 @@ export const kultur_qkModel = kultur_qkModelBase.actions((self) => ({
     delete newObjectForStore.kultur_qk_id
     // optimistically update store
     upsertKulturQkModel(newObjectForStore)
-    unsetError({ path: `herkunft.${field}` })
+    unsetError({ path: `kultur_qk.${field}` })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
