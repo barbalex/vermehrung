@@ -19,7 +19,7 @@ export {
 export const gartenModel = gartenModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertGartenModel } = store
+    const { addQueuedQuery, user, upsertGartenModel, unsetError } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -80,6 +80,7 @@ export const gartenModel = gartenModelBase.actions((self) => ({
     delete newObjectForStore.garten_id
     // optimistically update store
     upsertGartenModel(newObjectForStore)
+    unsetError({ path: `herkunft.${field}` })
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
