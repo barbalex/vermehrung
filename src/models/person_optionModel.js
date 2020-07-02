@@ -20,7 +20,7 @@ export {
 export const person_optionModel = person_optionModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertPersonOptionModel } = store
+    const { addQueuedQuery, user, upsertPersonOptionModel, unsetError } = store
 
     //console.log('store, person_optionModel:', { self, field, value })
 
@@ -102,6 +102,7 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
     delete newObjectForStore.person_id
     // optimistically update store
     upsertPersonOptionModel(newObjectForStore)
+    unsetError({ path: `herkunft.${field}` })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
