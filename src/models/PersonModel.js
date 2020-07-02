@@ -20,7 +20,7 @@ export const personModel = personModelBase
   .actions((self) => ({
     edit({ field, value }) {
       const store = getParent(self, 2)
-      const { addQueuedQuery, user, upsertPersonModel } = store
+      const { addQueuedQuery, user, upsertPersonModel, unsetError } = store
 
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
@@ -107,6 +107,7 @@ export const personModel = personModelBase
       delete newObjectForStore.person_id
       // optimistically update store
       upsertPersonModel(newObjectForStore)
+      unsetError({ path: `herkunft.${field}` })
     },
     delete() {
       self.edit({ field: '_deleted', value: true })

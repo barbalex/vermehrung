@@ -23,7 +23,12 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
   (self) => ({
     edit({ field, value }) {
       const store = getParent(self, 2)
-      const { addQueuedQuery, user, upsertSammelLieferungModel } = store
+      const {
+        addQueuedQuery,
+        user,
+        upsertSammelLieferungModel,
+        unsetError,
+      } = store
 
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
@@ -105,6 +110,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       delete newObjectForStore.sammel_lieferung_id
       // optimistically update store
       upsertSammelLieferungModel(newObjectForStore)
+      unsetError({ path: `herkunft.${field}` })
       const userPerson = [...store.persons.values()].find(
         (o) => o.account_id === store.user.uid,
       )
