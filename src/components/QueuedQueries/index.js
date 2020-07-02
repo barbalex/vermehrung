@@ -72,8 +72,8 @@ const QueuedQueries = () => {
           <Title>Ausstehende Operationen</Title>
           <div>
             <IconButton
-              aria-label="Informationen zu Offline arbeiten öffnen"
-              title="Informationen zu Offline arbeiten öffnen"
+              aria-label={`Dokumentation zu "offline arbeiten" lesen`}
+              title={`Dokumentation zu "offline arbeiten" lesen`}
               onClick={openDocs}
             >
               <IoMdInformationCircleOutline />
