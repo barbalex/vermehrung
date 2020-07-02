@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
@@ -19,6 +25,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import getConstants from '../../../utils/constants'
+import exists from '../../../utils/exists'
 
 const constants = getConstants()
 
@@ -114,6 +121,7 @@ const Herkunft = ({
     showDeleted,
     sammlungIdInActiveNodeArray,
     errors,
+    setError,
     unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
@@ -178,6 +186,20 @@ const Herkunft = ({
       window.open(url)
     }
   }, [])
+
+  const nrCount = useMemo(() => {
+    if (!exists(row?.nr)) return 0
+    return herkunftsSorted.filter((h) => h.nr === row.nr).length
+  }, [herkunftsSorted, row?.nr])
+  useEffect(() => {
+    if (nrCount > 1) {
+      setError({
+        path: 'herkunft.nr',
+        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Herkünfte eindeutig sein`,
+      })
+    }
+  }, [nrCount, setError])
+  console.log('Herkunft', { nrCount, row, nrError: errors?.herkunft?.nr })
 
   if (!row || (!showFilter && filter.show)) return null
 
