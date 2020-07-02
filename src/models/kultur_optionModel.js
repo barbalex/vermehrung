@@ -95,7 +95,7 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     delete newObjectForStore.kultur_id
     // optimistically update store
     upsertKulturOptionModel(newObjectForStore)
-    unsetError({ path: `herkunft.${field}` })
+    unsetError({ path: `kultur_option.${field}` })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

@@ -107,7 +107,7 @@ export const personModel = personModelBase
       delete newObjectForStore.person_id
       // optimistically update store
       upsertPersonModel(newObjectForStore)
-      unsetError({ path: `herkunft.${field}` })
+      unsetError({ path: `person.${field}` })
     },
     delete() {
       self.edit({ field: '_deleted', value: true })

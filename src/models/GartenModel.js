@@ -80,7 +80,7 @@ export const gartenModel = gartenModelBase.actions((self) => ({
     delete newObjectForStore.garten_id
     // optimistically update store
     upsertGartenModel(newObjectForStore)
-    unsetError({ path: `herkunft.${field}` })
+    unsetError({ path: `garten.${field}` })
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
