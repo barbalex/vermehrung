@@ -78,7 +78,7 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     delete newObjectForStore.teilkultur_id
     // optimistically update store
     upsertTeilkulturModel(newObjectForStore)
-    unsetError({ path: `herkunft.${field}` })
+    unsetError({ path: `teilkultur.${field}` })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
