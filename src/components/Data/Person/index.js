@@ -23,6 +23,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import KontoMenu from './KontoMenu'
+import exists from '../../../utils/exists'
 
 const Container = styled.div`
   height: 100%;
@@ -117,6 +118,7 @@ const Person = ({
     userRolesSorted,
     errors,
     unsetError,
+    setError,
   } = store
   const { isFiltered: runIsFiltered } = filter
 
@@ -170,6 +172,19 @@ const Person = ({
     },
     [filter, row, showFilter],
   )
+
+  const nrCount = useMemo(() => {
+    if (!exists(row?.nr)) return 0
+    return personsSorted.filter((h) => h.nr === row.nr).length
+  }, [personsSorted, row?.nr])
+  useEffect(() => {
+    if (nrCount > 1) {
+      setError({
+        path: 'person.nr',
+        value: `Diese Nummer wird ${nrCount} mal verwendet. Sie sollte aber über alle Personen eindeutig sein`,
+      })
+    }
+  }, [nrCount, setError])
 
   if (!row || (!showFilter && filter.show)) return null
 
