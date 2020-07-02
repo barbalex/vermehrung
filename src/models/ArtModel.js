@@ -18,7 +18,7 @@ export {
 export const artModel = artModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertArtModel } = store
+    const { addQueuedQuery, user, upsertArtModel, unsetError } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -71,6 +71,7 @@ export const artModel = artModelBase.actions((self) => ({
     delete newObjectForStore.art_id
     // optimistically update store
     upsertArtModel(newObjectForStore)
+    unsetError({ path: `herkunft.${field}` })
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {

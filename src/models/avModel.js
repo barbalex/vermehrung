@@ -18,7 +18,7 @@ export {
 export const avModel = avModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertAvModel } = store
+    const { addQueuedQuery, user, upsertAvModel, unsetError } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -72,6 +72,7 @@ export const avModel = avModelBase.actions((self) => ({
     delete newObjectForStore.av_id
     // optimistically update store
     upsertAvModel(newObjectForStore)
+    unsetError({ path: `herkunft.${field}` })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
