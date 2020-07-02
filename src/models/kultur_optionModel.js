@@ -20,7 +20,7 @@ export {
 export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertKulturOptionModel } = store
+    const { addQueuedQuery, user, upsertKulturOptionModel, unsetError } = store
 
     //console.log('store, kultur_optionModel:', { self, field, value })
 
@@ -95,6 +95,7 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     delete newObjectForStore.kultur_id
     // optimistically update store
     upsertKulturOptionModel(newObjectForStore)
+    unsetError({ path: `herkunft.${field}` })
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

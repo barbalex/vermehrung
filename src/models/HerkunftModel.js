@@ -19,7 +19,7 @@ export {
 export const herkunftModel = herkunftModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertHerkunftModel } = store
+    const { addQueuedQuery, user, upsertHerkunftModel, unsetError } = store
 
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
@@ -81,6 +81,7 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     delete newObjectForStore.herkunft_id
     // optimistically update store
     upsertHerkunftModel(newObjectForStore)
+    unsetError({ path: `herkunft.${field}` })
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {

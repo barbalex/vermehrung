@@ -22,7 +22,12 @@ export const kultur_qk_choosenModel = kultur_qk_choosenModelBase.actions(
   (self) => ({
     edit({ field, value }) {
       const store = getParent(self, 2)
-      const { addQueuedQuery, user, upsertKulturQkChoosenModel } = store
+      const {
+        addQueuedQuery,
+        user,
+        upsertKulturQkChoosenModel,
+        unsetError,
+      } = store
 
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
@@ -77,6 +82,7 @@ export const kultur_qk_choosenModel = kultur_qk_choosenModelBase.actions(
       delete newObjectForStore.kultur_qk_choosen_id
       // optimistically update store
       upsertKulturQkChoosenModel(newObjectForStore)
+      unsetError({ path: `herkunft.${field}` })
     },
     delete() {
       self.edit({ field: '_deleted', value: true })
