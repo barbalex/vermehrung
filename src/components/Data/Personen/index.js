@@ -10,6 +10,7 @@ import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import { StoreContext } from '../../../models/reactUtils'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -57,9 +58,14 @@ const singleRowHeight = 48
 
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { userPerson, personsSorted, personsFiltered } = store
-
-  const { filter, insertPersonRev } = store
+  const {
+    filter,
+    insertPersonRev,
+    personsFiltered,
+    personsSorted,
+    userPerson,
+  } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
@@ -78,6 +84,15 @@ const Personen = ({ filter: showFilter, width, height }) => {
     insertPersonRev()
   }, [insertPersonRev])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Personen') {
+    upTitle = 'Zu allen Listen'
+  }
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -92,6 +107,9 @@ const Personen = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Personen</Title>
             <TitleSymbols>
+              <IconButton title={upTitle} onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               {user_role === 'manager' && (
                 <IconButton
                   aria-label="neue Person"
