@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,9 +58,9 @@
      id="text878"
      y="291.50247"
      x="281.59277"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:399.00515747px;line-height:1.25;font-family:sans-serif;stroke-width:1.42130303"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:399.00515747px;line-height:1.25;font-family:sans-serif;stroke-width:1.42130303;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:399.00515747px;font-family:sans-serif;stroke-width:1.42130303"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:399.00515747px;font-family:sans-serif;stroke-width:1.42130303;"
        id="tspan876"
        y="291.50247"
        x="281.59277">H</tspan></text>
@@ -69,9 +69,9 @@
      id="text872"
      y="582.63379"
      x="284.85275"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:441.01953125px;line-height:1.25;font-family:sans-serif;stroke-width:1.17984605"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:441.01953125px;line-height:1.25;font-family:sans-serif;stroke-width:1.17984605;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:441.01953125px;font-family:sans-serif;stroke-width:1.17984605"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:441.01953125px;font-family:sans-serif;stroke-width:1.17984605;"
        id="tspan870"
        y="582.63379"
        x="284.85275">e</tspan></text>
