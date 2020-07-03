@@ -35,6 +35,11 @@ import ConflictList from '../../shared/ConflictList'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from './gartenLabelFromGarten'
 import getConstants from '../../../utils/constants'
+import KuUpSvg from '../../../svg/to_ku_up.inline.svg'
+import ZaDownSvg from '../../../svg/to_za_down.inline.svg'
+import AnLiDownSvg from '../../../svg/to_anli_down.inline.svg'
+import AusLiDownSvg from '../../../svg/to_ausli_down.inline.svg'
+import EvDownSvg from '../../../svg/to_ev_down.inline.svg'
 
 const constants = getConstants()
 
@@ -147,6 +152,7 @@ const Kultur = ({
     unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
+  const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const isFiltered = runIsFiltered()
 
@@ -205,6 +211,11 @@ const Kultur = ({
   const callbackAfterUebernehmen = useCallback(
     () => setActiveConflict(null),
     [],
+  )
+
+  const onClickToKulturen = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
   )
 
   useEffect(() => {
@@ -305,6 +316,9 @@ const Kultur = ({
           <TitleContainer>
             <Title>Kultur</Title>
             <TitleSymbols>
+              <IconButton title="Zu allen Kulturen" onClick={onClickToKulturen}>
+                <KuUpSvg />
+              </IconButton>
               <AddButton />
               <DeleteButton row={row} />
               <IconButton
