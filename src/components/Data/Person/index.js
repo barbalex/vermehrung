@@ -8,6 +8,8 @@ import React, {
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
+import IconButton from '@material-ui/core/IconButton'
+
 import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
@@ -24,6 +26,10 @@ import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import KontoMenu from './KontoMenu'
 import exists from '../../../utils/exists'
+import UpSvg from '../../../svg/to_up.inline.svg'
+import SaDownSvg from '../../../svg/to_sa_down.inline.svg'
+import GaDownSvg from '../../../svg/to_ga_down.inline.svg'
+import LiDownSvg from '../../../svg/to_li_down.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -120,6 +126,7 @@ const Person = ({
     unsetError,
     setError,
   } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -186,6 +193,23 @@ const Person = ({
     }
   }, [nrCount, setError])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToSammlungen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToGaerten = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Gaerten']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToLieferungen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Lieferungen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -206,6 +230,24 @@ const Person = ({
           <TitleContainer>
             <Title>Person</Title>
             <TitleSymbols>
+              <IconButton title="Zur Liste" onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
+              <IconButton
+                title="Zu den Sammlungen"
+                onClick={onClickToSammlungen}
+              >
+                <SaDownSvg />
+              </IconButton>
+              <IconButton title="Zu den Gärten" onClick={onClickToGaerten}>
+                <GaDownSvg />
+              </IconButton>
+              <IconButton
+                title="Zu den Lieferungen"
+                onClick={onClickToLieferungen}
+              >
+                <LiDownSvg />
+              </IconButton>
               <KontoMenu row={row} />
               {user_role === 'manager' && (
                 <>
