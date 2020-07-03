@@ -275,6 +275,7 @@ const Sammlung = ({
     [activeNodeArray, setActiveNodeArray],
   )
   const showToHe = activeNodeArray[0] === 'Sammlungen'
+  const showToLi = activeNodeArray[0] !== 'Personen'
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -307,12 +308,14 @@ const Sammlung = ({
                   <HeDownSvg />
                 </IconButton>
               )}
-              <IconButton
-                title="Zu den Aus-Lieferungen dieser Sammlung"
-                onClick={onClickToLieferungen}
-              >
-                <LiDownSvg />
-              </IconButton>
+              {showToLi && (
+                <IconButton
+                  title="Zu den Aus-Lieferungen dieser Sammlung"
+                  onClick={onClickToLieferungen}
+                >
+                  <LiDownSvg />
+                </IconButton>
+              )}
               <AddButton />
               <DeleteButton row={row} />
               <IconButton
