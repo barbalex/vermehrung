@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,9 +58,9 @@
      id="text878"
      y="288.52484"
      x="271.93945"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:394.53720093px;line-height:1.25;font-family:sans-serif;stroke-width:1.26688254"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:394.53720093px;line-height:1.25;font-family:sans-serif;stroke-width:1.26688254;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:394.53720093px;font-family:sans-serif;stroke-width:1.26688254"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:394.53720093px;font-family:sans-serif;stroke-width:1.26688254;"
        id="tspan876"
        y="288.52484"
        x="271.93945">Z</tspan></text>
@@ -69,9 +69,9 @@
      id="text872"
      y="599.89172"
      x="255.35312"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:486.99679565px;line-height:1.25;font-family:sans-serif;stroke-width:1.4645443"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:486.99679565px;line-height:1.25;font-family:sans-serif;stroke-width:1.4645443;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:486.99679565px;font-family:sans-serif;stroke-width:1.4645443"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:486.99679565px;font-family:sans-serif;stroke-width:1.4645443;"
        id="tspan870"
        y="599.89172"
        x="255.35312">a</tspan></text>
