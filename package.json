@@ -27,7 +27,7 @@
     "file-saver": "2.0.2",
     "firebase": "7.15.5",
     "fuse.js": "6.4.0",
-    "gatsby": "2.23.17",
+    "gatsby": "2.23.19",
     "gatsby-image": "2.4.12",
     "gatsby-link": "2.4.11",
     "gatsby-plugin-create-client-paths": "2.3.9",
@@ -47,7 +47,7 @@
     "gatsby-remark-images": "3.3.17",
     "gatsby-remark-images-medium-zoom": "1.7.0",
     "gatsby-remark-prismjs": "3.5.9",
-    "gatsby-source-filesystem": "2.3.17",
+    "gatsby-source-filesystem": "2.3.18",
     "gatsby-transformer-remark": "2.8.23",
     "gatsby-transformer-sharp": "2.5.10",
     "get-urls": "9.2.1",
@@ -96,7 +96,7 @@
   },
   "devDependencies": {
     "copyfiles": "2.3.0",
-    "gatsby-cli": "2.12.54"
+    "gatsby-cli": "2.12.57"
   },
   "dev-comments": {
     "gatsby-cli": "DO NOT UPGRADE over 2.12.54, see: https://github.com/gatsbyjs/gatsby/issues/20082#issuecomment-653114043",
