@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,9 +58,9 @@
      id="text878"
      y="311.8468"
      x="269.11609"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:419.94088745px;line-height:1.25;font-family:sans-serif;stroke-width:1.4958787"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:419.94088745px;line-height:1.25;font-family:sans-serif;stroke-width:1.4958787;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:419.94088745px;font-family:sans-serif;stroke-width:1.4958787"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:419.94088745px;font-family:sans-serif;stroke-width:1.4958787;"
        id="tspan876"
        y="311.8468"
        x="269.11609">S</tspan></text>
@@ -69,9 +69,9 @@
      id="text872"
      y="588.69061"
      x="285.18173"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;line-height:1.25;font-family:sans-serif;stroke-width:1.18940353"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;line-height:1.25;font-family:sans-serif;stroke-width:1.18940353;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;font-family:sans-serif;stroke-width:1.18940353"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;font-family:sans-serif;stroke-width:1.18940353;"
        id="tspan870"
        y="588.69061"
        x="285.18173">a</tspan></text>
