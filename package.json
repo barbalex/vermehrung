@@ -98,8 +98,7 @@
     "gatsby-cli": "2.12.57"
   },
   "dev-comments": {
-    "gatsby-cli": "DO NOT UPGRADE over 2.12.54, see: https://github.com/gatsbyjs/gatsby/issues/20082#issuecomment-653114043",
-    "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284"
+    "react-contextmenu": "using file copied from own build. When using v2.14.0 get Error in production: https://github.com/vkbansal/react-contextmenu/issues/284, https://github.com/gatsbyjs/gatsby/issues/19618"
   },
   "peerDependencies": {
     "@babel/types": "7.x",
