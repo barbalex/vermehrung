@@ -11,6 +11,7 @@ import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import exists from '../../../utils/exists'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -69,7 +70,7 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     sammlungIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
@@ -134,6 +135,24 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
     insertLieferungRev()
   }, [activeNodeArray, insertLieferungRev, store.sammel_lieferungs])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Lieferungen') {
+    upTitle = 'Zu allen Listen'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Kulturen') {
+    upTitle = 'Zur Kultur'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Sammlungen') {
+    upTitle = 'Zur Sammlung'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Sammel-Lieferungen') {
+    upTitle = 'Zur Sammel-Lieferung'
+  }
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -148,6 +167,9 @@ const Lieferungen = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Lieferungen</Title>
             <TitleSymbols>
+              <IconButton title={upTitle} onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               <IconButton
                 aria-label="neue Lieferung"
                 title="neue Lieferung"
