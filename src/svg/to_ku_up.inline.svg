@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -40,7 +40,7 @@
      id="namedview3913"
      showgrid="false"
      inkscape:zoom="55.625733"
-     inkscape:cx="31.147535"
+     inkscape:cx="27.561065"
      inkscape:cy="9.3145792"
      inkscape:window-x="-11"
      inkscape:window-y="-11"
@@ -58,9 +58,9 @@
      id="text878"
      y="274.2225"
      x="307.50586"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:374.7819519px;line-height:1.25;font-family:sans-serif;stroke-width:1.3350172"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:374.7819519px;line-height:1.25;font-family:sans-serif;stroke-width:1.3350172;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:374.7819519px;font-family:sans-serif;stroke-width:1.3350172"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:374.7819519px;font-family:sans-serif;stroke-width:1.3350172;"
        id="tspan876"
        y="274.2225"
        x="307.50586">K</tspan></text>
@@ -69,9 +69,9 @@
      id="text872"
      y="594.93036"
      x="278.08136"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;line-height:1.25;font-family:sans-serif;stroke-width:1.18940353"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;line-height:1.25;font-family:sans-serif;stroke-width:1.18940353;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;font-family:sans-serif;stroke-width:1.18940353"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:444.59207153px;font-family:sans-serif;stroke-width:1.18940353;"
        id="tspan870"
        y="594.93036"
        x="278.08136">u</tspan></text>

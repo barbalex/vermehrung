@@ -28,7 +28,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,14 +64,14 @@
      id="text878"
      y="298.47586"
      x="260.90707"
-     style="font-style:normal;font-weight:normal;font-size:401.76602173px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:10.04415131"
+     style="font-style:normal;font-weight:normal;font-size:401.76602173px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:10.04415131;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="stroke-width:10.04415131"
+       style="stroke-width:10.04415131;"
        id="tspan876"
        y="298.47586"
        x="260.90707"><tspan
          id="tspan874"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;stroke-width:10.04415131"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;stroke-width:10.04415131;"
          y="298.47586"
          x="260.90707">L</tspan></tspan></text>
   <text
@@ -79,14 +79,14 @@
      id="text872"
      y="729.71722"
      x="285.23975"
-     style="font-style:normal;font-weight:normal;font-size:451.25198364px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.28130054"
+     style="font-style:normal;font-weight:normal;font-size:451.25198364px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:11.28130054;opacity:0.54;"
      xml:space="preserve"><tspan
-       style="stroke-width:11.28130054"
+       style="stroke-width:11.28130054;"
        id="tspan870"
        y="729.71722"
        x="285.23975">i<tspan
    id="tspan868"
-   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;stroke-width:11.28130054"
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;stroke-width:11.28130054;"
    y="729.71722"
    x="285.23975" /></tspan></text>
   <text
