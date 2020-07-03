@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -25,6 +26,8 @@ import Download from './Download'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import UpSvg from '../../../svg/to_up.inline.svg'
+import KuDownSvg from '../../../svg/to_ku_down.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -124,6 +127,7 @@ const Garten = ({
     insertGvRev,
   } = store
   const { isFiltered: runIsFiltered } = filter
+  const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const isFiltered = runIsFiltered()
   const hierarchyFilter = (e) => {
@@ -187,6 +191,15 @@ const Garten = ({
     [filter, insertGvRev, row, showFilter],
   )
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToKulturen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -207,6 +220,12 @@ const Garten = ({
           <TitleContainer>
             <Title>Garten</Title>
             <TitleSymbols>
+              <IconButton title="Zur Liste" onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
+              <IconButton title="Zu den Kulturen" onClick={onClickToKulturen}>
+                <KuDownSvg />
+              </IconButton>
               <AddButton />
               <DeleteButton row={row} />
               <Download gartenId={row.id} />
