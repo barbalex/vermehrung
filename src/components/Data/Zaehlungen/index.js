@@ -10,6 +10,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -65,6 +66,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     kulturIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (r) => {
@@ -88,6 +90,18 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
     insertZaehlungRev()
   }, [insertZaehlungRev])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Zaehlungen') {
+    upTitle = 'Zu allen Listen'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Kulturen') {
+    upTitle = 'Zur Kultur'
+  }
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -102,6 +116,9 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Zählungen</Title>
             <TitleSymbols>
+              <IconButton title={upTitle} onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               <IconButton
                 aria-label="neue Zählung"
                 title="neue Zählung"

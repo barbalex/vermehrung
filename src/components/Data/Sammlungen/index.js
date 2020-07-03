@@ -10,6 +10,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -66,6 +67,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     herkunftIdInActiveNodeArray,
     personIdInActiveNodeArray,
   } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
@@ -91,6 +93,21 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     insertSammlungRev()
   }, [insertSammlungRev])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Sammlungen') {
+    upTitle = 'Zu allen Listen'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Arten') {
+    upTitle = 'Zur Art'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Personen') {
+    upTitle = 'Zur Person'
+  }
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -105,6 +122,9 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Sammlungen</Title>
             <TitleSymbols>
+              <IconButton title={upTitle} onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               <IconButton
                 aria-label="neue Sammlung"
                 title="neue Sammlung"
