@@ -27,6 +27,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from '../Teilkultur/kulturLabelFromKultur'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const constants = getConstants()
 
@@ -131,6 +132,7 @@ const Zaehlung = ({
     errors,
     unsetError,
   } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -210,6 +212,11 @@ const Zaehlung = ({
     }
   }, [])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -231,6 +238,9 @@ const Zaehlung = ({
             <TitleContainer>
               <Title>Zählung</Title>
               <TitleSymbols>
+                <IconButton title="Zur Liste" onClick={onClickUp}>
+                  <UpSvg />
+                </IconButton>
                 <AddButton />
                 <DelteButton row={row} />
                 {row.kultur_id && (
