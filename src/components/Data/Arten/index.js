@@ -5,6 +5,7 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import { FixedSizeList } from 'react-window'
 import { withResizeDetector } from 'react-resize-detector'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 import { StoreContext } from '../../../models/reactUtils'
 import FormTitle from '../../shared/FormTitle'
@@ -64,6 +65,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
     artsSorted,
     loadingInitialData,
   } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
 
@@ -73,6 +75,15 @@ const Arten = ({ filter: showFilter, width, height }) => {
   const add = useCallback(() => {
     insertArtRev()
   }, [insertArtRev])
+
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Arten') {
+    upTitle = 'Zu allen Listen'
+  }
 
   if (loadingInitialData && !artsFiltered.length) {
     return (
@@ -97,6 +108,9 @@ const Arten = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Arten</Title>
             <TitleSymbols>
+              <IconButton title={upTitle} onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               <IconButton aria-label="neue Art" title="neue Art" onClick={add}>
                 <FaPlus />
               </IconButton>

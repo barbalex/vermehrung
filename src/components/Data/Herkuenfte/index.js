@@ -10,6 +10,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -66,7 +67,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
   } = store
   const { isFiltered: runIsFiltered } = filter
   const isFiltered = runIsFiltered()
-  const { activeNodeArray: anaRaw } = store.tree
+  const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
   const hierarchyFilter = (e) => {
@@ -87,6 +88,15 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
     insertHerkunftRev()
   }, [insertHerkunftRev])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Herkuenfte') {
+    upTitle = 'Zu allen Listen'
+  }
+
   // herkuenfte is top node
   // never enable adding below that
   const showPlus = activeNodeArray.length < 2
@@ -105,6 +115,9 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Herkünfte</Title>
             <TitleSymbols>
+              <IconButton title={upTitle} onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               {showPlus && (
                 <IconButton
                   aria-label="neue Herkunft"

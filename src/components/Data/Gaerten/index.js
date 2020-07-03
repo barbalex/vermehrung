@@ -10,6 +10,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -65,6 +66,7 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     gartensFiltered,
   } = store
   const { isFiltered: runIsFiltered } = filter
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
@@ -82,6 +84,18 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
     insertGartenRev()
   }, [insertGartenRev])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Gaerten') {
+    upTitle = 'Zu allen Listen'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Personen') {
+    upTitle = 'Zur Person'
+  }
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -96,6 +110,9 @@ const Gaerten = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Gärten</Title>
             <TitleSymbols>
+              <IconButton title={upTitle} onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               <IconButton
                 aria-label="neuer Garten"
                 title="neuer Garten"

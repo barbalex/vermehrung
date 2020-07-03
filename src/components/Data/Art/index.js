@@ -16,7 +16,7 @@ import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import QK from './QK'
 import Personen from './Personen'
-import ArUpSvg from '../../../svg/to_ar_up.inline.svg'
+import UpSvg from '../../../svg/to_up.inline.svg'
 import SaDownSvg from '../../../svg/to_sa_down.inline.svg'
 import KuDownSvg from '../../../svg/to_ku_down.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -155,7 +155,7 @@ const Art = ({
     [filter, row, showFilter],
   )
 
-  const onClickToArten = useCallback(
+  const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
     [activeNodeArray, setActiveNodeArray],
   )
@@ -206,8 +206,8 @@ const Art = ({
           <TitleContainer>
             <Title>Art</Title>
             <TitleSymbols>
-              <IconButton title="Zu allen Arten" onClick={onClickToArten}>
-                <ArUpSvg />
+              <IconButton title="Zur Arten-Liste" onClick={onClickUp}>
+                <UpSvg />
               </IconButton>
               <IconButton
                 title="Zu den Sammlungen dieser Art"
