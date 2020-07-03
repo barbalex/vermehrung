@@ -28,6 +28,9 @@ import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import exists from '../../../utils/exists'
+import UpSvg from '../../../svg/to_up.inline.svg'
+import LiDownSvg from '../../../svg/to_ausli_down.inline.svg'
+import HeDownSvg from '../../../svg/to_he_down.inline.svg'
 
 const constants = getConstants()
 
@@ -141,6 +144,7 @@ const Sammlung = ({
     setError,
   } = store
   const { isFiltered: runIsFiltered } = filter
+  const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const isFiltered = runIsFiltered()
 
@@ -258,6 +262,20 @@ const Sammlung = ({
     }
   }, [nrCount, setError])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToLieferungen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToHerkuenfte = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Herkuenfte']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const showToHe = activeNodeArray[0] === 'Sammlungen'
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -278,6 +296,23 @@ const Sammlung = ({
           <TitleContainer>
             <Title>Sammlung</Title>
             <TitleSymbols>
+              <IconButton title="Zur Sammlungs-Liste" onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
+              {showToHe && (
+                <IconButton
+                  title="Zu den Herkünften dieser Sammlung"
+                  onClick={onClickToHerkuenfte}
+                >
+                  <HeDownSvg />
+                </IconButton>
+              )}
+              <IconButton
+                title="Zu den Aus-Lieferungen dieser Sammlung"
+                onClick={onClickToLieferungen}
+              >
+                <LiDownSvg />
+              </IconButton>
               <AddButton />
               <DeleteButton row={row} />
               <IconButton
