@@ -35,12 +35,12 @@ import ConflictList from '../../shared/ConflictList'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from './gartenLabelFromGarten'
 import getConstants from '../../../utils/constants'
-import KuUpSvg from '../../../svg/to_ku_up.inline.svg'
 import ZaDownSvg from '../../../svg/to_za_down.inline.svg'
 import AnLiDownSvg from '../../../svg/to_anli_down.inline.svg'
 import AusLiDownSvg from '../../../svg/to_ausli_down.inline.svg'
 import EvDownSvg from '../../../svg/to_ev_down.inline.svg'
 import TkDownSvg from '../../../svg/to_tk_down.inline.svg'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const constants = getConstants()
 
@@ -337,8 +337,8 @@ const Kultur = ({
           <TitleContainer>
             <Title>Kultur</Title>
             <TitleSymbols>
-              <IconButton title="Zu allen Kulturen" onClick={onClickToKulturen}>
-                <KuUpSvg />
+              <IconButton title="Zur Kultur-Liste" onClick={onClickToKulturen}>
+                <UpSvg />
               </IconButton>
               {row?.kultur_option?.tk && (
                 <IconButton title="Zu den Teilkulturen" onClick={onClickToTks}>

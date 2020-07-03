@@ -84,6 +84,16 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
     [activeNodeArray, setActiveNodeArray],
   )
+  let upTitle = 'Eine Ebene höher'
+  if (activeNodeArray[0] === 'Kulturen') {
+    upTitle = 'Zu allen Listen'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Arten') {
+    upTitle = 'Zur Art'
+  }
+  if (activeNodeArray[activeNodeArray.length - 3] === 'Gaerten') {
+    upTitle = 'Zum Garten'
+  }
 
   const storeRowsFiltered = kultursFiltered.filter(hierarchyFilter)
 
@@ -108,7 +118,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Kulturen</Title>
             <TitleSymbols>
-              <IconButton title="Zu allen Listen" onClick={onClickUp}>
+              <IconButton title={upTitle} onClick={onClickUp}>
                 <UpSvg />
               </IconButton>
               <IconButton
