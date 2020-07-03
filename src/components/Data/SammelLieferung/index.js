@@ -32,6 +32,8 @@ import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../Lieferung/Lieferung/kulturLabelFromKultur'
+import UpSvg from '../../../svg/to_up.inline.svg'
+import LiDownSvg from '../../../svg/to_li_down.inline.svg'
 
 const constants = getConstants()
 
@@ -174,7 +176,11 @@ const SammelLieferung = ({
     unsetError,
   } = store
   const { isFiltered: runIsFiltered } = filter
-  const { setWidthInPercentOfScreen, activeNodeArray } = store.tree
+  const {
+    setWidthInPercentOfScreen,
+    activeNodeArray,
+    setActiveNodeArray,
+  } = store.tree
 
   const isFiltered = runIsFiltered()
   const hierarchyFilter = () => {
@@ -390,6 +396,15 @@ const SammelLieferung = ({
     [ifNeeded],
   )
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToLieferungen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Lieferungen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -413,35 +428,51 @@ const SammelLieferung = ({
               {!sl_auto_copy_edits && (
                 <Copy sammelLieferung={row} lieferungId={lieferungId} />
               )}
-              <AddButton />
-              <DeleteButton row={row} />
-              <IconButton
-                aria-label={printPreview ? 'Formular' : 'Lieferschein'}
-                title={printPreview ? 'Formular' : 'Lieferschein'}
-                onClick={showLieferschein}
-              >
-                {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
-              </IconButton>
-              {printPreview && (
+              {shownAsSammelLieferung && (
+                <>
+                  <IconButton title="Zur Liste" onClick={onClickUp}>
+                    <UpSvg />
+                  </IconButton>
+                  <IconButton
+                    title="Zu den Lieferungen"
+                    onClick={onClickToLieferungen}
+                  >
+                    <LiDownSvg />
+                  </IconButton>
+                  <AddButton />
+                  <DeleteButton row={row} />
+                  <IconButton
+                    aria-label={printPreview ? 'Formular' : 'Lieferschein'}
+                    title={printPreview ? 'Formular' : 'Lieferschein'}
+                    onClick={showLieferschein}
+                  >
+                    {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
+                  </IconButton>
+                  {printPreview && (
+                    <IconButton
+                      aria-label="drucken"
+                      title="drucken"
+                      onClick={printLieferschein}
+                    >
+                      <MdPrint />
+                    </IconButton>
+                  )}
+                </>
+              )}
+              <>
+                {id && <Settings />}
                 <IconButton
-                  aria-label="drucken"
-                  title="drucken"
-                  onClick={printLieferschein}
+                  aria-label="Anleitung öffnen"
+                  title="Anleitung öffnen"
+                  onClick={openSettingsDocs}
                 >
-                  <MdPrint />
+                  <IoMdInformationCircleOutline />
                 </IconButton>
-              )}
-              {id && <Settings />}
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openSettingsDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
-              )}
+                {(store.filter.show || isFiltered) &&
+                  shownAsSammelLieferung && (
+                    <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+                  )}
+              </>
             </TitleSymbols>
           </TitleContainer>
         )}
