@@ -27,6 +27,7 @@ import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 import getConstants from '../../../utils/constants'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const constants = getConstants()
 
@@ -134,6 +135,7 @@ const Event = ({
     errors,
     unsetError,
   } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -247,6 +249,11 @@ const Event = ({
     [insertTeilkulturRev, row],
   )
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -267,6 +274,9 @@ const Event = ({
           <TitleContainer>
             <Title>Event</Title>
             <TitleSymbols>
+              <IconButton title="Zur Liste" onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               <AddButton />
               <DeleteButton row={row} />
               {row.kultur_id && <Settings kulturId={row.kultur_id} />}
