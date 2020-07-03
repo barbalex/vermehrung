@@ -10,6 +10,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
   height: 100%;
@@ -66,6 +67,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     artIdInActiveNodeArray,
   } = store
   const { isFiltered: runIsFiltered } = filter
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
@@ -77,6 +79,11 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
     }
     return true
   }
+
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
 
   const storeRowsFiltered = kultursFiltered.filter(hierarchyFilter)
 
@@ -101,6 +108,9 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
           <TitleContainer>
             <Title>Kulturen</Title>
             <TitleSymbols>
+              <IconButton title="Zu allen Listen" onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
               <IconButton
                 aria-label="neue Kultur"
                 title="neue Kultur"
