@@ -26,6 +26,8 @@ import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import getConstants from '../../../utils/constants'
 import exists from '../../../utils/exists'
+import UpSvg from '../../../svg/to_up.inline.svg'
+import SaDownSvg from '../../../svg/to_sa_down.inline.svg'
 
 const constants = getConstants()
 
@@ -124,6 +126,7 @@ const Herkunft = ({
     setError,
     unsetError,
   } = store
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   const { isFiltered: runIsFiltered } = filter
 
   const isFiltered = runIsFiltered()
@@ -200,6 +203,16 @@ const Herkunft = ({
     }
   }, [nrCount, setError])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToSammlungen = useCallback(
+    () => setActiveNodeArray([...activeNodeArray, 'Sammlungen']),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const showToSa = activeNodeArray[0] === 'Herkuenfte'
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -222,6 +235,17 @@ const Herkunft = ({
               activeConflict ? ': Konflikt lösen' : ''
             }`}</Title>
             <TitleSymbols>
+              <IconButton title="Zur Liste" onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
+              {showToSa && (
+                <IconButton
+                  title="Zu den Sammlungen"
+                  onClick={onClickToSammlungen}
+                >
+                  <SaDownSvg />
+                </IconButton>
+              )}
               <AddButton />
               <DeleteButton row={row} />
               <IconButton
