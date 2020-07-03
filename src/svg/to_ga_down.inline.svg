@@ -63,7 +63,7 @@
        d="m 176.01121,-11360.812 h -48 v -305.947 c 0,-8.892 -7.16345,-16.102 -16,-16.102 H 80.011205 c -8.83656,0 -16,7.21 -16,16.102 v 305.947 h -48 c -14.2099999,0 -21.3799999,17.35 -11.3099999,27.484 l 79.9999999,96.615 c 6.24754,6.284 16.372465,6.284 22.620005,0 l 80,-96.615 c 10.04,-10.114 2.91,-27.484 -11.31,-27.484 z" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:286.59713745px;line-height:1.25;font-family:sans-serif;stroke-width:1.1061157"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:286.59713745px;line-height:1.25;font-family:sans-serif;stroke-width:1.1061157;opacity:0.54;"
        x="202.35097"
        y="-11967.103"
        id="text878"
@@ -71,10 +71,10 @@
          x="202.35097"
          y="-11967.103"
          id="tspan876"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:286.59713745px;font-family:sans-serif;stroke-width:1.1061157">G</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:286.59713745px;font-family:sans-serif;stroke-width:1.1061157;">G</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:360.38775635px;line-height:1.25;font-family:sans-serif;stroke-width:1.03770089"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:360.38775635px;line-height:1.25;font-family:sans-serif;stroke-width:1.03770089;opacity:0.54;"
        x="215.53091"
        y="-11325.894"
        id="text872"
@@ -82,7 +82,7 @@
          x="215.53091"
          y="-11325.894"
          id="tspan870"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:360.38775635px;font-family:sans-serif;stroke-width:1.03770089">a</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:360.38775635px;font-family:sans-serif;stroke-width:1.03770089;">a</tspan></text>
   </g>
   <text
      xml:space="preserve"
