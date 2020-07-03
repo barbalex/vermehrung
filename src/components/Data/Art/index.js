@@ -206,7 +206,7 @@ const Art = ({
           <TitleContainer>
             <Title>Art</Title>
             <TitleSymbols>
-              <IconButton title="Zur Arten-Liste" onClick={onClickUp}>
+              <IconButton title="Zur Liste" onClick={onClickUp}>
                 <UpSvg />
               </IconButton>
               <IconButton
