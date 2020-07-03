@@ -17,8 +17,8 @@ import AddButton from './AddButton'
 import QK from './QK'
 import Personen from './Personen'
 import ArUpSvg from '../../../svg/to_ar_up.inline.svg'
-import SaSvg from '../../../svg/to_sa_down.inline.svg'
-import KuSvg from '../../../svg/to_ku_down.inline.svg'
+import SaDownSvg from '../../../svg/to_sa_down.inline.svg'
+import KuDownSvg from '../../../svg/to_ku_down.inline.svg'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
@@ -213,13 +213,13 @@ const Art = ({
                 title="Zu den Sammlungen dieser Art"
                 onClick={onClickToSammlungen}
               >
-                <SaSvg />
+                <SaDownSvg />
               </IconButton>
               <IconButton
                 title="Zu den Kulturen dieser Art"
                 onClick={onClickToKulturen}
               >
-                <KuSvg />
+                <KuDownSvg />
               </IconButton>
               <AddButton />
               <DeleteButton row={row} />
