@@ -32,6 +32,8 @@ import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
 import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
+import UpSvg from '../../../../svg/to_up.inline.svg'
+import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 
 const constants = getConstants()
 
@@ -173,7 +175,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     userPersonOption,
   } = store
   const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray } = store.tree
+  const { activeNodeArray, setActiveNodeArray } = store.tree
   // BEWARE: need to include inactive kulturs, persons
   const kultursSorted = [...store.kulturs.values()].sort(kulturSort)
 
@@ -393,6 +395,21 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     }
   }, [])
 
+  const onClickUp = useCallback(
+    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
+    [activeNodeArray, setActiveNodeArray],
+  )
+  const onClickToKultur = useCallback(
+    () =>
+      setActiveNodeArray([
+        ...activeNodeArray.filter((n) => n !== 'Kulturen'),
+        'Kulturen',
+        row?.nach_kultur_id,
+      ]),
+    [activeNodeArray, row?.nach_kultur_id, setActiveNodeArray],
+  )
+  const showToKu = activeNodeArray[0] === 'Sammlungen'
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -413,6 +430,14 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
           <TitleContainer>
             <Title>Lieferung</Title>
             <TitleSymbols>
+              <IconButton title="Zur Liste" onClick={onClickUp}>
+                <UpSvg />
+              </IconButton>
+              {showToKu && (
+                <IconButton title="Zur Kultur" onClick={onClickToKultur}>
+                  <KuDownSvg />
+                </IconButton>
+              )}
               <AddButton />
               <DeleteButton row={row} />
               <Settings />
