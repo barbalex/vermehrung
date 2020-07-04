@@ -16,7 +16,6 @@ import Filter from '../components/Filter'
 import Login from '../components/Login'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import ApiDetector from '../components/ApiDetector'
-import queryAllData from '../utils/queryAllData'
 import QueuedQueries from '../components/QueuedQueries'
 
 const Container = styled.div`
@@ -70,9 +69,6 @@ const Vermehrung = ({ location }) => {
     gettingAuthUser,
     initialDataQueried,
     isPrint,
-    online,
-    queryingAllData,
-    queuedQueries,
     showQueuedQueries,
     user,
   } = store
@@ -112,29 +108,6 @@ const Vermehrung = ({ location }) => {
     // need not to navigate or app is blocked
     setActiveNodeArray(activeNodeArray, 'nonavigate')
   }, [activeNodeArray, pathname, setActiveNodeArray])
-
-  useEffect(() => {
-    // wait with querying all data until all queued queries have been applied
-    // otherwise app-side the optimistically applied changes would be replaced
-    // with stale data from the server
-    if (
-      existsUser &&
-      !initialDataQueried &&
-      !queryingAllData &&
-      !queuedQueries.length &&
-      online
-    ) {
-      //console.log('Vermehrung querying all data')
-      queryAllData({ store })
-    }
-  }, [
-    existsUser,
-    initialDataQueried,
-    online,
-    queryingAllData,
-    queuedQueries.length,
-    store,
-  ])
 
   useEffect(() => {
     let unsubscribe

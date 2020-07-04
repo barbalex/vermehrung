@@ -3,6 +3,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { RootStore } from '../models'
 import getConstants from './constants'
+import queryAllData from './queryAllData'
 
 const constants = getConstants()
 
@@ -82,6 +83,10 @@ export default async () => {
   const module = await import('./recreatePersistedStore')
   const recreatePersistedStore = module.default
   const unregister = await recreatePersistedStore({ store })
+  if (store.online) {
+    console.log('initiateApp querying initial data')
+    queryAllData({ store })
+  }
 
   return { store, unregister }
 }
