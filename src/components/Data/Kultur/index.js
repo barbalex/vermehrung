@@ -32,6 +32,7 @@ import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
+import FilterNumbers from '../../shared/FilterNumbers'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from './gartenLabelFromGarten'
 import getConstants from '../../../utils/constants'
@@ -70,15 +71,6 @@ const TitleSymbols = styled.div`
   display: flex;
   margin-top: auto;
   margin-bottom: auto;
-`
-const TitleFilterNumbers = styled.div`
-  cursor: default;
-  user-select: none;
-  padding: 0 5px;
-  margin-top: auto;
-  margin-bottom: auto;
-  min-width: 48px;
-  text-align: center;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -384,7 +376,7 @@ const Kultur = ({
               </IconButton>
               <Settings kulturId={id} />
               {(store.filter.show || isFiltered) && (
-                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
               )}
             </TitleSymbols>
           </TitleContainer>
