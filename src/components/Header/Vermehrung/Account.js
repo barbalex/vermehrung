@@ -25,7 +25,7 @@ const Line = styled.hr`
 const Account = () => {
   const store = useContext(StoreContext)
 
-  const { user, firebase, userPerson, flushData } = store
+  const { user, firebase, userPerson, flushData, online } = store
 
   const [anchorEl, setAnchorEl] = useState(null)
   const [resetTitle, setResetTitle] = useState('Passwort zurücksetzen')
@@ -69,6 +69,8 @@ const Account = () => {
     flushData()
     queryAllData({ store })
   }, [flushData, store])
+
+  if (!online) return null
 
   return (
     <ErrorBoundary>
