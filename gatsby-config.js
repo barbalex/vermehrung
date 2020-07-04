@@ -125,7 +125,12 @@ module.exports = {
         ],
       },
     },
-    'gatsby-plugin-offline',
+    {
+      resolve: 'gatsby-plugin-offline',
+      options: {
+        precachePages: ['/Dokumentation/', '/Dokumentation/*'],
+      },
+    },
     {
       resolve: 'gatsby-plugin-react-svg',
       options: {
