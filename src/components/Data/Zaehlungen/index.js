@@ -10,6 +10,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 
 const Container = styled.div`
@@ -39,15 +40,6 @@ const TitleSymbols = styled.div`
   display: flex;
   margin-top: auto;
   margin-bottom: auto;
-`
-const TitleFilterNumbers = styled.div`
-  cursor: default;
-  user-select: none;
-  padding: 0 5px;
-  margin-top: auto;
-  margin-bottom: auto;
-  min-width: 48px;
-  text-align: center;
 `
 const FieldsContainer = styled.div`
   overflow: auto !important;
@@ -127,7 +119,7 @@ const Zaehlungen = ({ filter: showFilter, width, height }) => {
                 <FaPlus />
               </IconButton>
               {(store.filter.show || isFiltered) && (
-                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
               )}
             </TitleSymbols>
           </TitleContainer>
