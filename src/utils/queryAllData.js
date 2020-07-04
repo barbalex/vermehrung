@@ -160,6 +160,7 @@ export default async ({ store }) => {
   if (!store.online) {
     return
   }
+  // TODO: do this in worker?
   const { setInitialDataQueried, setQueryingAllData } = store
   setQueryingAllData(true)
   let data
