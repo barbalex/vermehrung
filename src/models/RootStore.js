@@ -2095,7 +2095,7 @@ export const RootStore = RootStoreBase.props({
     get searchPersonSuggestions() {
       return self.personsFiltered.map((o) => ({
         value: o.id,
-        label: `${o.nr ? `${o.nr}: ` : ''}${o?.name ?? ''}${
+        label: `${o.nr ? `${o.nr}: ` : ''}${o?.fullname ?? ''}${
           o.ort ? `, ${o.ort}` : ''
         }`,
         nr: o.nr,
