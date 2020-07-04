@@ -425,9 +425,6 @@ const SammelLieferung = ({
           <TitleContainer>
             <Title>Sammel-Lieferung</Title>
             <TitleSymbols>
-              {!sl_auto_copy_edits && (
-                <Copy sammelLieferung={row} lieferungId={lieferungId} />
-              )}
               {shownAsSammelLieferung && (
                 <>
                   <IconButton title="Zur Liste" onClick={onClickUp}>
@@ -458,6 +455,9 @@ const SammelLieferung = ({
                     </IconButton>
                   )}
                 </>
+              )}
+              {!sl_auto_copy_edits && (
+                <Copy sammelLieferung={row} lieferungId={lieferungId} />
               )}
               <>
                 {id && <Settings />}
