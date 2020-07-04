@@ -53,6 +53,7 @@ import kulturIdOfAnLieferungInUrl from '../utils/kulturIdOfAnLieferungInUrl'
 import kulturIdOfAusLieferungInUrl from '../utils/kulturIdOfAusLieferungInUrl'
 import zaehlungIdInUrl from '../utils/zaehlungIdInUrl'
 import getAuthToken from '../utils/getAuthToken'
+import queryAllData from '../utils/queryAllData'
 import Errors, { defaultValue as defaultErrors } from './Errors'
 
 const formatDatumForSearch = (datum) =>
@@ -95,112 +96,122 @@ export const RootStore = RootStoreBase.props({
   }))
   .actions((self) => {
     reaction(
-      () => `${self.queuedQueries}/${self.online}`,
-      flow(function* () {
-        /**
-         * TODO:
-         * When new query is added
-         * check if same exists already
-         * then combine them into one
-         * Goal: reduce network traffic and revision numbers when many fields were updated
-         * Build new reaction for this that only depends on self.queuedQueries.length? (but must run first...)
-         * Also big problem: How to combine when online?
-         */
-        if (self.online) {
-          // execute operation
-          const query = self.queuedQueriesSorted[0]
-          if (!query) return
-          if (query) {
-            const {
-              name,
-              variables,
-              callbackQuery,
-              callbackQueryVariables,
-              revertTable,
-              revertField,
-            } = query
-            try {
-              if (variables) {
-                yield self[name](JSON.parse(variables))
-              } else {
-                yield self[name]()
-              }
-            } catch (error) {
-              console.log({ error })
-              // In case a conflict was caused by two EXACT SAME changes,
-              // this will bounce because of the same rev. We want to ignore this:
-              if (error.message.includes('JWT')) {
-                return getAuthToken({ store: self })
-              } else if (
-                error.message.includes('Uniqueness violation') &&
-                error.message.includes('_rev_id__rev_key')
-              ) {
-                console.log(
-                  'There is a conflict with exact same changes - ingoring the error thrown',
-                )
-              } else if (error.message.includes('Failed to fetch')) {
-                return console.log('ignore fetch failing')
-              } else {
-                self.setError({
-                  path: `${revertTable}.${revertField}`,
-                  value: error.message,
-                })
-                // Maybe do it like superhuman and check if network error
-                // then retry and set online without using tool?
-                // TODO: describe operation better. User should know what is happening
-                // TODO: add button to remove all queued operations
-                // use new notification system for this
-                // TODO: need to revert model
-                return self.addNotification({
-                  title:
-                    'Eine offline durchgeführte Operation kann nicht in die Datenbank geschrieben werden',
-                  message: error.message,
-                  actionLabel: 'Operation löschen',
-                  actionName: 'removeQueuedQueryById',
-                  actionArgument: query.id,
-                })
-              }
-            }
-            // query to refresh the data updated in all used views (tree...)
-            // could remove if live updates work
-            // but keep it until auth problems solved
-            if (callbackQuery) {
-              // delay to prevent app from requerying BEFORE trigger updated the winner
-              if (callbackQueryVariables) {
-                setTimeout(async () => {
-                  try {
-                    await self[callbackQuery](
-                      JSON.parse(callbackQueryVariables),
-                    )
-                  } catch (error) {
-                    checkForOnlineError(error)
-                  }
-                }, 500)
-              } else {
-                setTimeout(async () => {
-                  try {
-                    await self[callbackQuery]()
-                  } catch (error) {
-                    checkForOnlineError(error)
-                  }
-                }, 500)
-              }
-            }
-          }
-          // remove operation from queue
-          // use action because this is async
-          self.removeQueuedQueryById(query.id)
+      () => `${self.initialDataQueried}/${self.online}`,
+      () => {
+        const { initialDataQueried, online } = self
+        if (!initialDataQueried && online) {
+          console.log('store reaction querying initial data')
+          queryAllData({ store: self })
         }
-      }),
-      {
-        // make sure retried in a minute
-        // https://github.com/mobxjs/mst-gql/issues/198#issuecomment-628083160
-        scheduler: (run) => {
-          run() // ensure it runs immediately if online
-          setInterval(run, 30000) // 30000 = thirty seconds
-        },
       },
-    )
+    ),
+      reaction(
+        () => `${self.queuedQueries}/${self.online}`,
+        flow(function* () {
+          /**
+           * TODO:
+           * When new query is added
+           * check if same exists already
+           * then combine them into one
+           * Goal: reduce network traffic and revision numbers when many fields were updated
+           * Build new reaction for this that only depends on self.queuedQueries.length? (but must run first...)
+           * Also big problem: How to combine when online?
+           */
+          if (self.online) {
+            // execute operation
+            const query = self.queuedQueriesSorted[0]
+            if (!query) return
+            if (query) {
+              const {
+                name,
+                variables,
+                callbackQuery,
+                callbackQueryVariables,
+                revertTable,
+                revertField,
+              } = query
+              try {
+                if (variables) {
+                  yield self[name](JSON.parse(variables))
+                } else {
+                  yield self[name]()
+                }
+              } catch (error) {
+                console.log({ error })
+                // In case a conflict was caused by two EXACT SAME changes,
+                // this will bounce because of the same rev. We want to ignore this:
+                if (error.message.includes('JWT')) {
+                  return getAuthToken({ store: self })
+                } else if (
+                  error.message.includes('Uniqueness violation') &&
+                  error.message.includes('_rev_id__rev_key')
+                ) {
+                  console.log(
+                    'There is a conflict with exact same changes - ingoring the error thrown',
+                  )
+                } else if (error.message.includes('Failed to fetch')) {
+                  return console.log('ignore fetch failing')
+                } else {
+                  self.setError({
+                    path: `${revertTable}.${revertField}`,
+                    value: error.message,
+                  })
+                  // Maybe do it like superhuman and check if network error
+                  // then retry and set online without using tool?
+                  // TODO: describe operation better. User should know what is happening
+                  // TODO: add button to remove all queued operations
+                  // use new notification system for this
+                  // TODO: need to revert model
+                  return self.addNotification({
+                    title:
+                      'Eine offline durchgeführte Operation kann nicht in die Datenbank geschrieben werden',
+                    message: error.message,
+                    actionLabel: 'Operation löschen',
+                    actionName: 'removeQueuedQueryById',
+                    actionArgument: query.id,
+                  })
+                }
+              }
+              // query to refresh the data updated in all used views (tree...)
+              // could remove if live updates work
+              // but keep it until auth problems solved
+              if (callbackQuery) {
+                // delay to prevent app from requerying BEFORE trigger updated the winner
+                if (callbackQueryVariables) {
+                  setTimeout(async () => {
+                    try {
+                      await self[callbackQuery](
+                        JSON.parse(callbackQueryVariables),
+                      )
+                    } catch (error) {
+                      checkForOnlineError(error)
+                    }
+                  }, 500)
+                } else {
+                  setTimeout(async () => {
+                    try {
+                      await self[callbackQuery]()
+                    } catch (error) {
+                      checkForOnlineError(error)
+                    }
+                  }, 500)
+                }
+              }
+            }
+            // remove operation from queue
+            // use action because this is async
+            self.removeQueuedQueryById(query.id)
+          }
+        }),
+        {
+          // make sure retried in a minute
+          // https://github.com/mobxjs/mst-gql/issues/198#issuecomment-628083160
+          scheduler: (run) => {
+            run() // ensure it runs immediately if online
+            setInterval(run, 30000) // 30000 = thirty seconds
+          },
+        },
+      )
     return {
       setShowQueuedQueries(val) {
         self.showQueuedQueries = val
