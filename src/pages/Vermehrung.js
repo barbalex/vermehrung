@@ -67,13 +67,14 @@ const Vermehrung = ({ location }) => {
   const store = useContext(StoreContext)
   const {
     activeForm,
-    isPrint,
-    user,
     gettingAuthUser,
     initialDataQueried,
+    isPrint,
+    online,
     queryingAllData,
     queuedQueries,
     showQueuedQueries,
+    user,
   } = store
 
   const existsUser = !!user?.uid
@@ -120,7 +121,8 @@ const Vermehrung = ({ location }) => {
       existsUser &&
       !initialDataQueried &&
       !queryingAllData &&
-      !queuedQueries.length
+      !queuedQueries.length &&
+      online
     ) {
       //console.log('Vermehrung querying all data')
       queryAllData({ store })
@@ -128,6 +130,7 @@ const Vermehrung = ({ location }) => {
   }, [
     existsUser,
     initialDataQueried,
+    online,
     queryingAllData,
     queuedQueries.length,
     store,
