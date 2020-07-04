@@ -157,6 +157,9 @@ const allDataQuery = gql`
 `
 
 export default async ({ store }) => {
+  if (!store.online) {
+    return
+  }
   const { setInitialDataQueried, setQueryingAllData } = store
   setQueryingAllData(true)
   let data
