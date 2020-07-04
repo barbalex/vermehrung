@@ -131,7 +131,7 @@ module.exports = {
         precachePages: [
           '/Dokumentation/',
           '/Dokumentation/*',
-          'Dokumentation/Ziele/*',
+          '/Dokumentation/Ziele/*',
         ],
       },
     },
