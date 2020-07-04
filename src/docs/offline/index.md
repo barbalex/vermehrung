@@ -25,7 +25,7 @@ Weil vermehrung alle Daten, die Sie lesen dürfen, voraus lädt und auf Ihrem Ge
 
 ### Schlange für Operationen
 
-Arbeiten Sie offline, packt vermehrung jede Daten-Änderung in "Päckchen" (genannt: Operation). Diese Päckchen warten geduldig. Das Offline-Symbol zeigt die Länge der Warteschlange an:<br/>
+Arbeiten Sie offline, packt vermehrung jede Daten-Änderung in "Päckchen" (genannt: Operation). Diese Päckchen warten geduldig. Das offline-Symbol zeigt die Länge der Warteschlange an:<br/>
 ![3 wartende Operationen](003.png)<br/>
 
 Sobald vermehrung wieder online ist, werden die Päckchen dem Server geschickt...<br/>
@@ -63,4 +63,4 @@ Hier sehen Sie die Unterschiede. Sie haben drei Optionen:
 
 Im Gegensatz zum Server sind sie hoffentlich allwissend genug, um den Konflikt abschliessend zu bereinigen 😁<br/><br/>
 
-Es steckt mehr hinter der Offline-Fähigkeit von vermehrung.ch. Aber das ist alles, was für Sie direkt nützlich ist. Neugierige [lesen hier weiter](../offline-wie).
+Es steckt mehr hinter der offline-Fähigkeit von vermehrung.ch. Aber das ist alles, was für Sie direkt nützlich ist. Neugierige [lesen hier weiter](../offline-wie).
