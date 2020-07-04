@@ -63,4 +63,4 @@ Hier sehen Sie die Unterschiede. Sie haben drei Optionen:
 
 Im Gegensatz zum Server sind sie hoffentlich allwissend genug, um den Konflikt abschliessend zu bereinigen 😁<br/><br/>
 
-Es steckt mehr hinter der offline-Fähigkeit von vermehrung.ch. Aber das ist alles, was für Sie direkt nützlich ist. Neugierige [lesen hier weiter](../offline-wie).
+Es steckt mehr hinter der offline-Fähigkeit von vermehrung.ch. Neugierige [lesen hier weiter](../offline-wie).
