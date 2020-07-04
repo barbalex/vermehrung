@@ -1,6 +1,6 @@
 import updateLieferung from './updateLieferung'
 
-export default async ({ sammelLieferung, store }) => {
+export default async ({ sammelLieferung, store, field }) => {
   // pass field to mark which field should be updated
   // even if it has value null
   const lieferungs = [...store.lieferungs.values()].filter(
@@ -13,9 +13,11 @@ export default async ({ sammelLieferung, store }) => {
         lieferungId: l.id,
         sammelLieferung,
         store,
+        field,
       })
     } catch (err) {
       error = true
+      console.log('updateAllLieferungen, error:', err)
     }
   }
   if (!error && lieferungs.length) {
