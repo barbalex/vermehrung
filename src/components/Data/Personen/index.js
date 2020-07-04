@@ -9,6 +9,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import FilterNumbers from '../../shared/FilterNumbers'
 import { StoreContext } from '../../../models/reactUtils'
 import UpSvg from '../../../svg/to_up.inline.svg'
 
@@ -39,15 +40,6 @@ const TitleSymbols = styled.div`
   display: flex;
   margin-top: auto;
   margin-bottom: auto;
-`
-const TitleFilterNumbers = styled.div`
-  cursor: default;
-  user-select: none;
-  padding: 0 5px;
-  margin-top: auto;
-  margin-bottom: auto;
-  min-width: 48px;
-  text-align: center;
 `
 const FieldsContainer = styled.div`
   overflow: auto !important;
@@ -120,7 +112,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
                 </IconButton>
               )}
               {(store.filter.show || isFiltered) && (
-                <TitleFilterNumbers>{`${filteredNr}/${totalNr}`}</TitleFilterNumbers>
+                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
               )}
             </TitleSymbols>
           </TitleContainer>
