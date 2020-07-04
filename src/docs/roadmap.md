@@ -50,4 +50,4 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Es kann ohne Netzwerk-Verbindung gearbeitet werden
 - :white_check_mark: Vorhandene Daten importiert
 - :white_medium_square: Produktive Version 1 ist live (geplant: Juli 2020)
-- :white_medium_square: Änderungen an Datensätzen anzeigen und rückgängig machen können
+- :white_medium_square: Änderungen an Datensätzen können angezeigt und rückgängig gemacht werden. Beliebig weit zurück
