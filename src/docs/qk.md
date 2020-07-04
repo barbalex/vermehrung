@@ -13,4 +13,4 @@ sort1: 17
 - Manager und Art-Verantwortliche können auf Ebene Art und Kultur Qualitäts-Kontrollen ausführen
 - Gärtner können auf Ebene Kultur Qualitäts-Kontrollen ausführen
 - Ein paar Dutzend Abfragen listen Verdachtsfälle. Die Liste besteht aus Links, welche direkt den entsprechenden Datensatz öffnen
-- Die Liste kann gefiltert und (z.B. nach Korrekturen). Sie aktualisiert sich nach korrekturen automatisch selbst
+- Die Liste kann gefiltert werden. Sie aktualisiert sich nach Korrekturen automatisch selbst
