@@ -35,8 +35,7 @@ const Arten = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const label =
-    row.name || `(${row?.person?.fullname ?? 'keine Person gewählt'})`
+  const label = row.name || `${row?.person?.fullname ?? 'keine Person gewählt'}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
