@@ -2,7 +2,6 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import uniq from 'lodash/uniq'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -10,7 +9,6 @@ import Settings from './Settings'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import FilterNumbers from '../../../shared/FilterNumbers'
-import getConstants from '../../../../utils/constants'
 import ZaDownSvg from '../../../../svg/to_za_down.inline.svg'
 import AnLiDownSvg from '../../../../svg/to_anli_down.inline.svg'
 import AusLiDownSvg from '../../../../svg/to_ausli_down.inline.svg'
@@ -18,8 +16,7 @@ import EvDownSvg from '../../../../svg/to_ev_down.inline.svg'
 import TkDownSvg from '../../../../svg/to_tk_down.inline.svg'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import Download from './Download'
-
-const constants = getConstants()
+import Anleitung from './Anleitung'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -131,16 +128,6 @@ const Kultur = ({ row }) => {
     [activeNodeArray, setActiveNodeArray],
   )
 
-  const openKulturDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Kulturen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
-
   return (
     <TitleContainer>
       <Title>Kultur</Title>
@@ -174,13 +161,7 @@ const Kultur = ({ row }) => {
         <AddButton />
         <DeleteButton row={row} />
         <Download row={row} />
-        <IconButton
-          aria-label="Anleitung öffnen"
-          title="Anleitung öffnen"
-          onClick={openKulturDocs}
-        >
-          <IoMdInformationCircleOutline />
-        </IconButton>
+        <Anleitung />
         <Settings kulturId={row.id} />
         {(store.filter.show || isFiltered) && (
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
