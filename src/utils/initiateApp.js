@@ -85,7 +85,8 @@ export default async () => {
   const unregister = await recreatePersistedStore({ store })
   if (store.online) {
     console.log('initiateApp querying initial data')
-    queryAllData({ store })
+    // wait a tick - had trouble with user.uid not existing yet
+    setTimeout(() => queryAllData({ store }))
   }
 
   return { store, unregister }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default async ({ store }) => {
+const getAuthToken = async ({ store }) => {
   const {
     addNotification,
     setAuthorizing,
@@ -13,6 +13,7 @@ export default async ({ store }) => {
   } = store
   if (!user?.uid) {
     console.log('getAuthToken returning because of missing user.uid')
+    setTimeout(() => getAuthToken({ store }), 50)
     return
   }
   /*if (authorizing) {
@@ -75,3 +76,5 @@ export default async ({ store }) => {
   }
   setAuthorizing(false)
 }
+
+export default getAuthToken
