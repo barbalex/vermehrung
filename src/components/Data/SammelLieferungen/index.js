@@ -51,14 +51,11 @@ const singleRowHeight = 48
 const SammelLieferungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
-    filter,
     insertSammelLieferungRev,
     sammelLieferungsFiltered,
     sammelLieferungsSorted,
   } = store
-  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = () => {
     return true
@@ -104,9 +101,7 @@ const SammelLieferungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

@@ -135,10 +135,7 @@ const Sammlung = ({
     unsetError,
     setError,
   } = store
-  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setActiveNodeArray } = store.tree
-
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (s) => {
     if (artIdInActiveNodeArray) {
@@ -317,9 +314,7 @@ const Sammlung = ({
               >
                 <IoMdInformationCircleOutline />
               </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

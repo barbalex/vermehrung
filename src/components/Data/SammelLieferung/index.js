@@ -167,14 +167,12 @@ const SammelLieferung = ({
     errors,
     unsetError,
   } = store
-  const { isFiltered: runIsFiltered } = filter
   const {
     setWidthInPercentOfScreen,
     activeNodeArray,
     setActiveNodeArray,
   } = store.tree
 
-  const isFiltered = runIsFiltered()
   const hierarchyFilter = () => {
     return true
   }
@@ -460,10 +458,9 @@ const SammelLieferung = ({
                 >
                   <IoMdInformationCircleOutline />
                 </IconButton>
-                {(store.filter.show || isFiltered) &&
-                  shownAsSammelLieferung && (
-                    <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-                  )}
+                {shownAsSammelLieferung && (
+                  <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+                )}
               </>
             </TitleSymbols>
           </TitleContainer>
