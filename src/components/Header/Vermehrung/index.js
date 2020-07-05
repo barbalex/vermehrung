@@ -19,6 +19,7 @@ import exists from '../../../utils/exists'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import NavTree from './NavTree'
 import Docu from './Docu'
+import Filter from './Filter'
 
 const constants = getConstants()
 
@@ -89,24 +90,7 @@ const HeaderVermehrung = ({ width }) => {
           )}
           <Spacer />
           <Docu widthEnforced={widthEnforced} />
-          {exists(widthEnforced) ? (
-            <IconButton
-              color="inherit"
-              aria-label="Filter"
-              onClick={onClickFilter}
-              title="Filter"
-            >
-              <FaFilter />
-            </IconButton>
-          ) : (
-            <FilterButton
-              variant="outlined"
-              onClick={onClickFilter}
-              data-active={showFilter}
-            >
-              Filter
-            </FilterButton>
-          )}
+          <Filter widthEnforced={widthEnforced} />
           <Search />
           <Online />
           <Account />
