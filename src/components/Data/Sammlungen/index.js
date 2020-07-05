@@ -51,7 +51,6 @@ const singleRowHeight = 48
 const Sammlungen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
-    filter,
     insertSammlungRev,
     sammlungsFiltered,
     sammlungsSorted,
@@ -60,8 +59,6 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
     personIdInActiveNodeArray,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const { isFiltered: runIsFiltered } = filter
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (s) => {
     if (artIdInActiveNodeArray) {
@@ -124,9 +121,7 @@ const Sammlungen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}
