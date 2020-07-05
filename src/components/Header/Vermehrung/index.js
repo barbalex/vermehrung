@@ -38,6 +38,28 @@ const HeaderVermehrung = ({ width }) => {
     }
   }, [setWidthEnforced, widthEnforced, width])
 
+  if (width < 552) {
+    return (
+      <ErrorBoundary>
+        <AppBar position="fixed">
+          <Toolbar>
+            <NavTree />
+            <Home />
+            <Spacer />
+            <Filter />
+            <Search />
+            <Online />
+            <Account />
+            <Settings />
+            <Menu>
+              <Docu width={width} />
+            </Menu>
+          </Toolbar>
+        </AppBar>
+      </ErrorBoundary>
+    )
+  }
+
   if (width < 600) {
     return (
       <ErrorBoundary>
