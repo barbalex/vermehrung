@@ -3,7 +3,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import { FaBook, FaFilter } from 'react-icons/fa'
+import { FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
@@ -17,7 +17,8 @@ import { StoreContext } from '../../../models/reactUtils'
 import getConstants from '../../../utils/constants'
 import exists from '../../../utils/exists'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import NavTreeButton from './NavTreeButton'
+import NavTree from './NavTree'
+import Docu from './Docu'
 
 const constants = getConstants()
 
@@ -77,7 +78,7 @@ const HeaderVermehrung = ({ width }) => {
       <AppBar position="fixed">
         <Toolbar>
           {exists(widthEnforced) ? (
-            <NavTreeButton
+            <NavTree
               widthEnforced={widthEnforced}
               setWidthEnforced={setWidthEnforced}
             />
@@ -87,25 +88,7 @@ const HeaderVermehrung = ({ width }) => {
             </SiteTitle>
           )}
           <Spacer />
-          {exists(widthEnforced) ? (
-            <IconButton
-              color="inherit"
-              aria-label="Dokumentation"
-              component={Link}
-              to="/Dokumentation/"
-              title="Dokumentation"
-            >
-              <FaBook />
-            </IconButton>
-          ) : (
-            <StyledButton
-              variant="outlined"
-              component={Link}
-              to="/Dokumentation/"
-            >
-              Dokumentation
-            </StyledButton>
-          )}
+          <Docu widthEnforced={widthEnforced} />
           {exists(widthEnforced) ? (
             <IconButton
               color="inherit"

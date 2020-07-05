@@ -5,7 +5,6 @@ import NavTree from '../../../svg/nav_tree.inline.svg'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
-import { withResizeDetector } from 'react-resize-detector'
 
 import getConstants from '../../../utils/constants'
 
@@ -54,4 +53,4 @@ const NavTreeButton = ({ widthEnforced, setWidthEnforced }) => {
   )
 }
 
-export default withResizeDetector(observer(NavTreeButton))
+export default observer(NavTreeButton)
