@@ -20,6 +20,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import NavTree from './NavTree'
 import Docu from './Docu'
 import Filter from './Filter'
+import Home from './Home'
 
 const constants = getConstants()
 
@@ -58,24 +59,8 @@ const HeaderVermehrung = ({ width }) => {
     <ErrorBoundary>
       <AppBar position="fixed">
         <Toolbar>
-          {exists(widthEnforced) ? (
-            <>
-              <NavTree />
-              <IconButton
-                color="inherit"
-                aria-label="Home"
-                component={Link}
-                to="/"
-                title="Home"
-              >
-                <FaHome />
-              </IconButton>
-            </>
-          ) : (
-            <SiteTitle variant="outlined" component={Link} to="/" title="Home">
-              Vermehrung
-            </SiteTitle>
-          )}
+          <NavTree />
+          <Home />
           <Spacer />
           <Docu />
           <Filter />

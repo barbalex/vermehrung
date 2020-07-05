@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import getConstants from '../../../utils/constants'
+import exists from '../../../utils/exists'
 import { StoreContext } from '../../../models/reactUtils'
 
 const constants = getConstants()
@@ -27,6 +28,8 @@ const NavTreeButton = () => {
       setWidthEnforced(0)
     }
   }, [setWidthEnforced, widthEnforced])
+
+  if (!exists(widthEnforced)) return null
 
   return (
     <IconButton
