@@ -21,12 +21,12 @@ const StyledButton = styled(Button)`
   }
 `
 
-const DocuButton = ({ width }) => {
+const DocuButton = ({ asMenu }) => {
   const store = useContext(StoreContext)
   const { widthEnforced } = store.tree
 
   if (exists(widthEnforced)) {
-    if (width < 600) {
+    if (asMenu) {
       return (
         <MenuItem component={Link} to="/Dokumentation/">
           Dokumentation
