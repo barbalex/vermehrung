@@ -32,10 +32,6 @@ const ChooseKulturQkRow = ({ kulturId, qk }) => {
     (v) => v.kultur_id === kulturId && v.qk_name === qk.name,
   )
   const checked = kulturQkChoosen?.choosen
-  qk.name === 'kultursWithoutVonAnzahlIndividuen' &&
-    console.log('ChooseKulturQkRow', {
-      checked,
-    })
 
   const onChange = useCallback(() => {
     console.log('ChooseKulturQkRow', {

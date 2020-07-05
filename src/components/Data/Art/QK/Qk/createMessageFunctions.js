@@ -7,6 +7,7 @@ export default ({ artId, store }) => {
   const {
     artsSorted,
     eventsSorted,
+    gartensSorted,
     herkunftsSorted,
     kultursSorted,
     lieferungsSorted,
@@ -189,13 +190,28 @@ export default ({ artId, store }) => {
             text,
           }
         }),
+    gartensAllKultursInactive: () =>
+      gartensSorted
+        .filter((g) => {
+          const kultursCount = g.kulturs.length
+          const activeKultursCount = g.kulturs.filter((k) => k.aktiv).length
+          return !!kultursCount && !activeKultursCount
+        })
+        .map((g) => {
+          const text = g?.name ?? `${g?.person?.fullname ?? 'kein Name'}`
+
+          return {
+            url: ['Gaerten', g.id],
+            text,
+          }
+        }),
     kultursWithoutVonAnzahlIndividuen: () =>
       kultursSorted
         .filter((s) => s.art_id === artId)
         .filter((s) => !exists(s.von_anzahl_individuen))
         .map((k) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.fullname ?? 'kein Name'})`
+            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}`
 
@@ -223,7 +239,7 @@ export default ({ artId, store }) => {
         .filter((s) => !s.herkunft_id)
         .map((k) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.fullname ?? 'kein Name'})`
+            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
           const text = `ID: ${k.id}, in: ${garten}`
 
           return {
@@ -245,7 +261,7 @@ export default ({ artId, store }) => {
         )
         .map((k) => {
           const garten =
-            k?.garten?.name ?? `(${k?.garten?.person?.fullname ?? 'kein Name'})`
+            k?.garten?.name ?? `${k?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = k?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}`
 
@@ -261,7 +277,7 @@ export default ({ artId, store }) => {
         .map((tk) => {
           const garten =
             tk.kultur?.garten?.name ??
-            `(${tk.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${tk.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = tk.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Teilkultur-ID: ${tk.id}`
 
@@ -285,7 +301,7 @@ export default ({ artId, store }) => {
         .map((z) => {
           const garten =
             z?.kultur?.garten?.name ??
-            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
 
@@ -301,7 +317,7 @@ export default ({ artId, store }) => {
         .map((z) => {
           const garten =
             z?.kultur?.garten?.name ??
-            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Zählung-ID: ${z.id}`
 
@@ -322,7 +338,7 @@ export default ({ artId, store }) => {
         .map((z) => {
           const garten =
             z?.kultur?.garten?.name ??
-            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
@@ -348,7 +364,7 @@ export default ({ artId, store }) => {
         .map((z) => {
           const garten =
             z?.kultur?.garten?.name ??
-            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
@@ -374,7 +390,7 @@ export default ({ artId, store }) => {
         .map((z) => {
           const garten =
             z?.kultur?.garten?.name ??
-            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
@@ -407,7 +423,7 @@ export default ({ artId, store }) => {
         .map((z) => {
           const garten =
             z?.kultur?.garten?.name ??
-            `(${z?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${z?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = z?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const zaehlung = z.datum
             ? `Zählung vom ${format(new Date(z.datum), 'yyyy.MM.dd')}`
@@ -584,7 +600,7 @@ export default ({ artId, store }) => {
         .map((e) => {
           const garten =
             e?.kultur?.garten?.name ??
-            `(${e?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${e?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = e?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${e.id}`
 
@@ -600,7 +616,7 @@ export default ({ artId, store }) => {
         .map((e) => {
           const garten =
             e?.kultur?.garten?.name ??
-            `(${e?.kultur?.garten?.person?.fullname ?? 'kein Name'})`
+            `${e?.kultur?.garten?.person?.fullname ?? 'kein Name'}`
           const herkunft = e?.kultur?.herkunft?.nr ?? '(Herkunft ohne Nr)'
           const text = `von: ${herkunft}, in: ${garten}, Event-ID: ${e.id}`
 
