@@ -248,7 +248,7 @@ const Kultur = ({
             filteredNr={filteredNr}
           />
         ) : (
-          <FormTitle row={row} />
+          <FormTitle row={row} showFilter={showFilter} />
         )}
         <Container>
           <StyledSplitPane
