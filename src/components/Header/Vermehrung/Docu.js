@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
+import MenuItem from '@material-ui/core/MenuItem'
 import { FaBook } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
@@ -20,11 +21,19 @@ const StyledButton = styled(Button)`
   }
 `
 
-const DocuButton = () => {
+const DocuButton = ({ width }) => {
   const store = useContext(StoreContext)
   const { widthEnforced } = store.tree
 
   if (exists(widthEnforced)) {
+    if (width < 600) {
+      return (
+        <MenuItem component={Link} to="/Dokumentation/">
+          Dokumentation
+        </MenuItem>
+      )
+    }
+
     return (
       <IconButton
         color="inherit"
