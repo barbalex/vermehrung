@@ -1,10 +1,9 @@
-import React, { useContext, useCallback, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import { FaHome } from 'react-icons/fa'
-import { FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
@@ -41,31 +40,11 @@ const SiteTitle = styled(Button)`
 const Spacer = styled.div`
   flex-grow: 1;
 `
-const StyledButton = styled(Button)`
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 0 !important;
-  text-transform: none !important;
-  margin-right: 5px !important;
-  &:hover {
-    border-width: 1px !important;
-  }
-`
-const FilterButton = styled(StyledButton)`
-  border-width: ${(props) =>
-    props['data-active'] ? '1px !important' : '0 !important'};
-`
 
 const HeaderVermehrung = ({ width }) => {
   const store = useContext(StoreContext)
-  const { filter } = store
-  const { show: showFilter, setShow: setShowFilter } = filter
   const { widthEnforced, setWidthEnforced } = store.tree
 
-  const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
-    setShowFilter,
-    showFilter,
-  ])
   useEffect(() => {
     if (width > constants?.tree?.minimalWindowWidth && exists(widthEnforced)) {
       setWidthEnforced(null)
@@ -81,11 +60,7 @@ const HeaderVermehrung = ({ width }) => {
         <Toolbar>
           {exists(widthEnforced) ? (
             <>
-              <NavTree
-                widthEnforced={widthEnforced}
-                setWidthEnforced={setWidthEnforced}
-              />
-
+              <NavTree />
               <IconButton
                 color="inherit"
                 aria-label="Home"
@@ -102,8 +77,8 @@ const HeaderVermehrung = ({ width }) => {
             </SiteTitle>
           )}
           <Spacer />
-          <Docu widthEnforced={widthEnforced} />
-          <Filter widthEnforced={widthEnforced} />
+          <Docu />
+          <Filter />
           <Search />
           <Online />
           <Account />

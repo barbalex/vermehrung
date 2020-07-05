@@ -23,9 +23,10 @@ const FilterButton = styled(StyledButton)`
     props['data-active'] ? '1px !important' : '0 !important'};
 `
 
-const Filter = ({ widthEnforced }) => {
+const Filter = () => {
   const store = useContext(StoreContext)
   const { filter } = store
+  const { widthEnforced } = store.tree
   const { show: showFilter, setShow: setShowFilter } = filter
 
   const onClickFilter = useCallback(() => setShowFilter(!showFilter), [

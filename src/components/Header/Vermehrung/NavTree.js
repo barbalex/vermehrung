@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import NavTree from '../../../svg/nav_tree.inline.svg'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import getConstants from '../../../utils/constants'
+import { StoreContext } from '../../../models/reactUtils'
 
 const constants = getConstants()
 
@@ -14,7 +15,10 @@ const StyledNavTree = styled(NavTree)`
   color: white;
 `
 
-const NavTreeButton = ({ widthEnforced, setWidthEnforced }) => {
+const NavTreeButton = () => {
+  const store = useContext(StoreContext)
+  const { widthEnforced, setWidthEnforced } = store.tree
+
   const onClickTreeMenu = useCallback(() => {
     if (widthEnforced === 0) {
       setWidthEnforced(constants?.tree?.minimalWidth)

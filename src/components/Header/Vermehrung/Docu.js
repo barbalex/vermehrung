@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import { FaBook } from 'react-icons/fa'
@@ -7,6 +7,7 @@ import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 
 import exists from '../../../utils/exists'
+import { StoreContext } from '../../../models/reactUtils'
 
 const StyledButton = styled(Button)`
   color: white !important;
@@ -19,7 +20,10 @@ const StyledButton = styled(Button)`
   }
 `
 
-const DocuButton = ({ widthEnforced }) => {
+const DocuButton = () => {
+  const store = useContext(StoreContext)
+  const { widthEnforced } = store.tree
+
   if (exists(widthEnforced)) {
     return (
       <IconButton
