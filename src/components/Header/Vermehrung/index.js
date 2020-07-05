@@ -71,14 +71,6 @@ const HeaderVermehrung = ({ width }) => {
       setWidthEnforced(0)
     }
   }, [setWidthEnforced, widthEnforced, width])
-  const onClickTreeMenu = useCallback(() => {
-    if (widthEnforced === 0) {
-      setWidthEnforced(constants?.tree?.minimalWidth)
-    }
-    if (widthEnforced > 0) {
-      setWidthEnforced(0)
-    }
-  }, [setWidthEnforced, widthEnforced])
 
   return (
     <ErrorBoundary>
