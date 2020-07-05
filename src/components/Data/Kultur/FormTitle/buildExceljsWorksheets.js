@@ -1,5 +1,5 @@
-import addWorksheetToExceljsWorkbook from '../../../utils/addWorksheetToExceljsWorkbook'
-import removeMetadataFromDataset from '../../../utils/removeMetadataFromDataset'
+import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
+import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
 
 /**
  * this function cann be used from higher up

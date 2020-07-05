@@ -9,10 +9,7 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import uniq from 'lodash/uniq'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import { FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
-// see: https://github.com/guyonroche/exceljs/issues/313
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -22,26 +19,15 @@ import Checkbox2States from '../../shared/Checkbox2States'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
-import Settings from './Settings'
 import Timeline from './Timeline'
 import QK from './QK'
-import DeleteButton from './DeleteButton'
-import AddButton from './AddButton'
-import buildExceljsWorksheets from './buildExceljsWorksheets'
-import downloadExceljsWorkbook from '../../../utils/downloadExceljsWorkbook'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import FilterNumbers from '../../shared/FilterNumbers'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from './gartenLabelFromGarten'
 import getConstants from '../../../utils/constants'
-import ZaDownSvg from '../../../svg/to_za_down.inline.svg'
-import AnLiDownSvg from '../../../svg/to_anli_down.inline.svg'
-import AusLiDownSvg from '../../../svg/to_ausli_down.inline.svg'
-import EvDownSvg from '../../../svg/to_ev_down.inline.svg'
-import TkDownSvg from '../../../svg/to_tk_down.inline.svg'
-import UpSvg from '../../../svg/to_up.inline.svg'
+import FormTitle from './FormTitle'
 
 const constants = getConstants()
 
@@ -50,27 +36,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-  padding 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -144,10 +109,6 @@ const Kultur = ({
     errors,
     unsetError,
   } = store
-  const { isFiltered: runIsFiltered } = filter
-  const { activeNodeArray, setActiveNodeArray } = store.tree
-
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
     if (gartenIdInActiveNodeArray) {
@@ -206,31 +167,6 @@ const Kultur = ({
     [],
   )
 
-  const onClickToKulturen = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToZaehlungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Zaehlungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToAnLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'An-Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToAusLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Aus-Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToEvents = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Events']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToTks = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Teilkulturen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-
   useEffect(() => {
     unsetError('kultur')
   }, [id, unsetError])
@@ -285,15 +221,6 @@ const Kultur = ({
     },
     [filter, row, showFilter],
   )
-  const openKulturDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Kulturen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
     if (typeof window !== 'undefined') {
@@ -303,11 +230,6 @@ const Kultur = ({
       window.open(url)
     }
   }, [])
-  const onClickDownload = useCallback(async () => {
-    const workbook = new ExcelJs.Workbook()
-    await buildExceljsWorksheets({ store, kultur_id: row.id, workbook })
-    downloadExceljsWorkbook({ store, fileName: `Kultur_${row.id}`, workbook })
-  }, [row.id, store])
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -326,60 +248,7 @@ const Kultur = ({
             filteredNr={filteredNr}
           />
         ) : (
-          <TitleContainer>
-            <Title>Kultur</Title>
-            <TitleSymbols>
-              <IconButton title="Zur Kultur-Liste" onClick={onClickToKulturen}>
-                <UpSvg />
-              </IconButton>
-              {row?.kultur_option?.tk && (
-                <IconButton title="Zu den Teilkulturen" onClick={onClickToTks}>
-                  <TkDownSvg />
-                </IconButton>
-              )}
-              <IconButton
-                title="Zu den Zählungen"
-                onClick={onClickToZaehlungen}
-              >
-                <ZaDownSvg />
-              </IconButton>
-              <IconButton
-                title="Zu den An-Lieferungen"
-                onClick={onClickToAnLieferungen}
-              >
-                <AnLiDownSvg />
-              </IconButton>
-              <IconButton
-                title="Zu den Aus-Lieferungen"
-                onClick={onClickToAusLieferungen}
-              >
-                <AusLiDownSvg />
-              </IconButton>
-              <IconButton title="Zu den Events" onClick={onClickToEvents}>
-                <EvDownSvg />
-              </IconButton>
-              <AddButton />
-              <DeleteButton row={row} />
-              <IconButton
-                aria-label="Daten herunterladen"
-                title="Daten herunterladen"
-                onClick={onClickDownload}
-              >
-                <FaDownload />
-              </IconButton>
-              <IconButton
-                aria-label="Anleitung öffnen"
-                title="Anleitung öffnen"
-                onClick={openKulturDocs}
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-              <Settings kulturId={id} />
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
-            </TitleSymbols>
-          </TitleContainer>
+          <FormTitle row={row} />
         )}
         <Container>
           <StyledSplitPane

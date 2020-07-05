@@ -1,5 +1,5 @@
 import addWorksheetToExceljsWorkbook from '../../../../utils/addWorksheetToExceljsWorkbook'
-import buildExceljsWorksheetsForKultur from '../../Kultur/buildExceljsWorksheets'
+import buildExceljsWorksheetsForKultur from '../../Kultur/FormTitle/buildExceljsWorksheets'
 import removeMetadataFromDataset from '../../../../utils/removeMetadataFromDataset'
 
 /**
