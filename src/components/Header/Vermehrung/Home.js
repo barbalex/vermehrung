@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
+import MenuItem from '@material-ui/core/MenuItem'
 import { FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
@@ -24,9 +25,17 @@ const SiteTitle = styled(Button)`
   }
 `
 
-const Home = () => {
+const Home = ({ asMenu }) => {
   const store = useContext(StoreContext)
   const { widthEnforced } = store.tree
+
+  if (asMenu) {
+    return (
+      <MenuItem aria-label="Home" title="Home" component={Link} to="/">
+        Home
+      </MenuItem>
+    )
+  }
 
   if (exists(widthEnforced)) {
     return (
