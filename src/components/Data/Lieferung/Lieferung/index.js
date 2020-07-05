@@ -166,7 +166,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     unsetError,
     userPersonOption,
   } = store
-  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setActiveNodeArray } = store.tree
   // BEWARE: need to include inactive kulturs, persons
   const kultursSorted = [...store.kulturs.values()].sort(kulturSort)
@@ -174,7 +173,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const id = showFilter
     ? '99999999-9999-9999-9999-999999999999'
     : last(activeNodeArray.filter((e) => isUuid.v1(e)))
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
     if (kulturIdInActiveNodeArray) {
@@ -440,9 +438,7 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
               >
                 <IoMdInformationCircleOutline />
               </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

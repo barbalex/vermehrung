@@ -50,16 +50,8 @@ const singleRowHeight = 48
 
 const Personen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    insertPersonRev,
-    personsFiltered,
-    personsSorted,
-    userPerson,
-  } = store
+  const { insertPersonRev, personsFiltered, personsSorted, userPerson } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const { isFiltered: runIsFiltered } = filter
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = () => {
     return true
@@ -111,9 +103,7 @@ const Personen = ({ filter: showFilter, width, height }) => {
                   <FaPlus />
                 </IconButton>
               )}
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

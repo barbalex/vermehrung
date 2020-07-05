@@ -51,16 +51,13 @@ const singleRowHeight = 48
 const Kulturen = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
-    filter,
     insertKulturRev,
     kultursSorted,
     kultursFiltered,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
   } = store
-  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
     if (gartenIdInActiveNodeArray) {
@@ -120,9 +117,7 @@ const Kulturen = ({ filter: showFilter, width, height }) => {
               >
                 <FaPlus />
               </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}
