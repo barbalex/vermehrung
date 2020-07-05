@@ -4,6 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import { FaBars, FaHome, FaBook, FaFilter } from 'react-icons/fa'
+import NavTree from '../../../svg/nav_tree.inline.svg'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
@@ -52,6 +53,11 @@ const FilterButton = styled(StyledButton)`
   border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
 `
+const StyledNavTree = styled(NavTree)`
+  width: 24px;
+  height: 24px;
+  color: white;
+`
 
 const HeaderVermehrung = ({ width }) => {
   const store = useContext(StoreContext)
@@ -96,7 +102,7 @@ const HeaderVermehrung = ({ width }) => {
                     : 'Navigations-Baum schliessen'
                 }
               >
-                <FaBars />
+                <StyledNavTree />
               </IconButton>
               <IconButton
                 color="inherit"
