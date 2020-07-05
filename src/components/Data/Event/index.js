@@ -128,9 +128,6 @@ const Event = ({
     unsetError,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const { isFiltered: runIsFiltered } = filter
-
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
     if (kulturIdInActiveNodeArray)
@@ -279,9 +276,7 @@ const Event = ({
               >
                 <IoMdInformationCircleOutline />
               </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

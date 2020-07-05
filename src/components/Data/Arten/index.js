@@ -50,16 +50,8 @@ const singleRowHeight = 48
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    insertArtRev,
-    artsFiltered,
-    artsSorted,
-    loadingInitialData,
-  } = store
+  const { insertArtRev, artsFiltered, artsSorted, loadingInitialData } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const { isFiltered: runIsFiltered } = filter
-  const isFiltered = runIsFiltered()
 
   const totalNr = artsSorted.length
   const filteredNr = artsFiltered.length
@@ -106,9 +98,7 @@ const Arten = ({ filter: showFilter, width, height }) => {
               <IconButton aria-label="neue Art" title="neue Art" onClick={add}>
                 <FaPlus />
               </IconButton>
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}
