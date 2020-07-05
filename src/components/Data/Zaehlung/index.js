@@ -125,9 +125,6 @@ const Zaehlung = ({
     unsetError,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const { isFiltered: runIsFiltered } = filter
-
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (r) => {
     if (kulturIdInActiveNodeArray) {
@@ -245,9 +242,7 @@ const Zaehlung = ({
                 >
                   <IoMdInformationCircleOutline />
                 </IconButton>
-                {(store.filter.show || isFiltered) && (
-                  <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-                )}
+                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
               </TitleSymbols>
             </TitleContainer>
           )}
