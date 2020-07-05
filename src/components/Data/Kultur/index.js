@@ -240,16 +240,7 @@ const Kultur = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Kultur"
-            table="kultur"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <FormTitle row={row} showFilter={showFilter} />
-        )}
+        <FormTitle row={row} showFilter={showFilter} />
         <Container>
           <StyledSplitPane
             split="vertical"
