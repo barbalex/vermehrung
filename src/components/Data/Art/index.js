@@ -109,8 +109,6 @@ const Art = ({
     errors,
     unsetError,
   } = store
-  const { isFiltered: runIsFiltered } = filter
-  const isFiltered = runIsFiltered()
   const { activeNodeArray, setActiveNodeArray } = tree
 
   const totalNr = artsSorted.length
@@ -215,9 +213,7 @@ const Art = ({
               </IconButton>
               <AddButton />
               <DeleteButton row={row} />
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

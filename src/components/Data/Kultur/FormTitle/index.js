@@ -37,16 +37,12 @@ const TitleSymbols = styled.div`
 const Kultur = ({ row }) => {
   const store = useContext(StoreContext)
   const {
-    filter,
     gartenIdInActiveNodeArray,
     artIdInActiveNodeArray,
     kultursSorted,
     kultursFiltered,
     sammlungsSorted,
   } = store
-  const { isFiltered: runIsFiltered } = filter
-
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
     if (gartenIdInActiveNodeArray) {
@@ -106,9 +102,7 @@ const Kultur = ({ row }) => {
         <Download row={row} />
         <Anleitung />
         <Settings kulturId={row.id} />
-        {(store.filter.show || isFiltered) && (
-          <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-        )}
+        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
       </TitleSymbols>
     </TitleContainer>
   )

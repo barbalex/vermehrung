@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+
+import { StoreContext } from '../../models/reactUtils'
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +22,12 @@ const Total = styled.div`
 `
 
 const FilterNumbers = ({ filteredNr, totalNr }) => {
+  const store = useContext(StoreContext)
+  const { isFiltered: runIsFiltered, show } = store.filter
+  const isFiltered = runIsFiltered()
+
+  if (!(show || isFiltered)) return null
+
   return (
     <Container>
       <Filtered title="gefilterte Anzahl">{filteredNr}</Filtered>
