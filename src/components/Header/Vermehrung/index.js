@@ -3,6 +3,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
+import { FaHome } from 'react-icons/fa'
 import { FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
@@ -79,10 +80,22 @@ const HeaderVermehrung = ({ width }) => {
       <AppBar position="fixed">
         <Toolbar>
           {exists(widthEnforced) ? (
-            <NavTree
-              widthEnforced={widthEnforced}
-              setWidthEnforced={setWidthEnforced}
-            />
+            <>
+              <NavTree
+                widthEnforced={widthEnforced}
+                setWidthEnforced={setWidthEnforced}
+              />
+
+              <IconButton
+                color="inherit"
+                aria-label="Home"
+                component={Link}
+                to="/"
+                title="Home"
+              >
+                <FaHome />
+              </IconButton>
+            </>
           ) : (
             <SiteTitle variant="outlined" component={Link} to="/" title="Home">
               Vermehrung
