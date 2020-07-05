@@ -3,8 +3,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import { FaBars, FaHome, FaBook, FaFilter } from 'react-icons/fa'
-import NavTree from '../../../svg/nav_tree.inline.svg'
+import { FaBook, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
@@ -18,6 +17,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import getConstants from '../../../utils/constants'
 import exists from '../../../utils/exists'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import NavTreeButton from './NavTreeButton'
 
 const constants = getConstants()
 
@@ -52,11 +52,6 @@ const FilterButton = styled(StyledButton)`
   border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
 `
-const StyledNavTree = styled(NavTree)`
-  width: 24px;
-  height: 24px;
-  color: white;
-`
 
 const HeaderVermehrung = ({ width }) => {
   const store = useContext(StoreContext)
@@ -90,29 +85,10 @@ const HeaderVermehrung = ({ width }) => {
       <AppBar position="fixed">
         <Toolbar>
           {exists(widthEnforced) ? (
-            <>
-              <IconButton
-                color="inherit"
-                aria-label="Navigations-Baum öffnen"
-                onClick={onClickTreeMenu}
-                title={
-                  widthEnforced === 0
-                    ? 'Navigations-Baum öffnen'
-                    : 'Navigations-Baum schliessen'
-                }
-              >
-                <StyledNavTree />
-              </IconButton>
-              <IconButton
-                color="inherit"
-                aria-label="Home"
-                component={Link}
-                to="/"
-                title="Home"
-              >
-                <FaHome />
-              </IconButton>
-            </>
+            <NavTreeButton
+              widthEnforced={widthEnforced}
+              setWidthEnforced={setWidthEnforced}
+            />
           ) : (
             <SiteTitle variant="outlined" component={Link} to="/" title="Home">
               Vermehrung
