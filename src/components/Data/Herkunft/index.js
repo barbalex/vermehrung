@@ -119,9 +119,6 @@ const Herkunft = ({
     unsetError,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const { isFiltered: runIsFiltered } = filter
-
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = (e) => {
     if (sammlungIdInActiveNodeArray) {
@@ -248,9 +245,7 @@ const Herkunft = ({
                 <IoMdInformationCircleOutline />
               </IconButton>
               <Settings />
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}
