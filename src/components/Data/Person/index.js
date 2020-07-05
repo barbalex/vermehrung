@@ -119,9 +119,6 @@ const Person = ({
     setError,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const { isFiltered: runIsFiltered } = filter
-
-  const isFiltered = runIsFiltered()
 
   const hierarchyFilter = () => {
     return true
@@ -247,9 +244,7 @@ const Person = ({
                   <DeleteButton row={row} />
                 </>
               )}
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

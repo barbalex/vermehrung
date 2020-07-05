@@ -51,14 +51,11 @@ const singleRowHeight = 48
 const Herkuenfte = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
   const {
-    filter,
     insertHerkunftRev,
     herkunftsSorted,
     herkunftsFiltered,
     sammlungIdInActiveNodeArray,
   } = store
-  const { isFiltered: runIsFiltered } = filter
-  const isFiltered = runIsFiltered()
   const { activeNodeArray: anaRaw, setActiveNodeArray } = store.tree
   const activeNodeArray = anaRaw.toJSON()
 
@@ -119,9 +116,7 @@ const Herkuenfte = ({ filter: showFilter, width, height }) => {
                   <FaPlus />
                 </IconButton>
               )}
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}

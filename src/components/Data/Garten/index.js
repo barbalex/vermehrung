@@ -118,10 +118,8 @@ const Garten = ({
     unsetError,
     insertGvRev,
   } = store
-  const { isFiltered: runIsFiltered } = filter
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
-  const isFiltered = runIsFiltered()
   const hierarchyFilter = (e) => {
     if (personIdInActiveNodeArray)
       return e.person_id === personIdInActiveNodeArray
@@ -222,9 +220,7 @@ const Garten = ({
               <DeleteButton row={row} />
               <Download gartenId={row.id} />
               <Settings />
-              {(store.filter.show || isFiltered) && (
-                <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-              )}
+              <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
             </TitleSymbols>
           </TitleContainer>
         )}
