@@ -3,8 +3,6 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
-import { MdPrint } from 'react-icons/md'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
@@ -14,6 +12,7 @@ import Delete from './Delete'
 import getConstants from '../../../../utils/constants'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import NavButtons from './NavButtons'
+import PrintButtons from './PrintButtons'
 
 const constants = getConstants()
 
@@ -50,7 +49,7 @@ const SammelLieferungFormTitle = ({
 }) => {
   const store = useContext(StoreContext)
 
-  const { filter, setIsPrint, userPersonOption } = store
+  const { filter, userPersonOption } = store
   const { activeNodeArray } = store.tree
 
   const { sl_auto_copy_edits } = userPersonOption
@@ -67,17 +66,6 @@ const SammelLieferungFormTitle = ({
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
 
-  const showLieferschein = useCallback(() => {
-    setPrintPreview(!printPreview)
-  }, [printPreview, setPrintPreview])
-  const printLieferschein = useCallback(() => {
-    setIsPrint(true)
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-    })
-  }, [setIsPrint])
-
   if (!row || (!showFilter && filter.show)) return null
 
   return (
@@ -89,22 +77,10 @@ const SammelLieferungFormTitle = ({
             <NavButtons />
             <Add />
             <Delete row={row} />
-            <IconButton
-              aria-label={printPreview ? 'Formular' : 'Lieferschein'}
-              title={printPreview ? 'Formular' : 'Lieferschein'}
-              onClick={showLieferschein}
-            >
-              {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
-            </IconButton>
-            {printPreview && (
-              <IconButton
-                aria-label="drucken"
-                title="drucken"
-                onClick={printLieferschein}
-              >
-                <MdPrint />
-              </IconButton>
-            )}
+            <PrintButtons
+              printPreview={printPreview}
+              setPrintPreview={setPrintPreview}
+            />
           </>
         )}
         {!sl_auto_copy_edits && (
