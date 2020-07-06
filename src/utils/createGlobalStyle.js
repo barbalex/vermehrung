@@ -5,7 +5,11 @@ export default () => createGlobalStyle`
     overflow: hidden !important;
   }
 
-  /* https://stackoverflow.com/a/60660207/712005 */
+  /*
+   * on mobile titles are invisible
+   * make them appear on press
+   * source: https://stackoverflow.com/a/60660207/712005 
+  */
   @media (pointer: coarse), (hover: none) {
     [title] {
       position: relative;
@@ -17,10 +21,11 @@ export default () => createGlobalStyle`
       position: absolute;
       top: 90%;
       color: #000;
-      background-color: #fff;
+      background-color: rgba(255, 255, 255, 0.8);
       border: 1px solid;
       width: fit-content;
       padding: 3px;
+      font-size: 0.6em;
     }
   }
 
