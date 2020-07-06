@@ -5,27 +5,29 @@ export default () => createGlobalStyle`
     overflow: hidden !important;
   }
 
-@media print {
+  
 
   /* https://stackoverflow.com/a/60660207/712005 */
   @media (pointer: coarse), (hover: none) {
-      [title] {
-        position: relative;
-        display: inline-flex;
-        justify-content: center;
-      }
-      [title]:focus::after {
-        content: attr(title);
-        position: absolute;
-        top: 90%;
-        color: #000;
-        background-color: #fff;
-        border: 1px solid;
-        width: fit-content;
-        padding: 3px;
-      }
+    [title] {
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
     }
+    [title]:focus::after {
+      content: attr(title);
+      position: absolute;
+      top: 90%;
+      color: #000;
+      background-color: #fff;
+      border: 1px solid;
+      width: fit-content;
+      padding: 3px;
+    }
+  }
 
+
+@media print {
   /*
   * hide everything BUT what shall be printed
   */
