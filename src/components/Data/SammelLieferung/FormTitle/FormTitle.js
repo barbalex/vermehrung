@@ -1,21 +1,16 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
 import Copy from './Copy'
 import Add from './Add'
 import Delete from './Delete'
-import getConstants from '../../../../utils/constants'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
 import Anleitung from './Anleitung'
-
-const constants = getConstants()
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -52,18 +47,8 @@ const SammelLieferungFormTitle = ({
 
   const { filter, userPersonOption } = store
   const { activeNodeArray } = store.tree
-
   const { sl_auto_copy_edits } = userPersonOption
 
-  const openSettingsDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Sammel-Lieferungen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
 
