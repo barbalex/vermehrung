@@ -31,7 +31,7 @@ const Home = ({ asMenu }) => {
 
   if (asMenu) {
     return (
-      <MenuItem aria-label="Home" title="Home" component={Link} to="/">
+      <MenuItem component={Link} to="/">
         Home
       </MenuItem>
     )
