@@ -13,6 +13,7 @@ import getConstants from '../../../../utils/constants'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
+import Anleitung from './Anleitung'
 
 const constants = getConstants()
 
@@ -88,13 +89,7 @@ const SammelLieferungFormTitle = ({
         )}
         <>
           {row.id && <Settings />}
-          <IconButton
-            aria-label="Anleitung öffnen"
-            title="Anleitung öffnen"
-            onClick={openSettingsDocs}
-          >
-            <IoMdInformationCircleOutline />
-          </IconButton>
+          <Anleitung />
           {shownAsSammelLieferung && (
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           )}
