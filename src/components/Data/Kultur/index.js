@@ -16,7 +16,6 @@ import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Timeline from './Timeline'
@@ -97,11 +96,7 @@ const Kultur = ({
   const {
     filter,
     online,
-    gartenIdInActiveNodeArray,
-    artIdInActiveNodeArray,
     artsSorted,
-    kultursSorted,
-    kultursFiltered,
     gartensSorted,
     herkunftsSorted,
     sammlungsSorted,
@@ -109,16 +104,6 @@ const Kultur = ({
     errors,
     unsetError,
   } = store
-
-  const hierarchyFilter = (e) => {
-    if (gartenIdInActiveNodeArray) {
-      return e.garten_id === gartenIdInActiveNodeArray
-    }
-    if (artIdInActiveNodeArray) {
-      return e.art_id === artIdInActiveNodeArray
-    }
-    return true
-  }
 
   const row = showFilter ? filter.kultur : store.kulturs.get(id) ?? {}
 
@@ -156,9 +141,6 @@ const Kultur = ({
   if (row?.herkunft_id && !herkunftToChoose.includes(row?.herkunft_id)) {
     herkunftToChoose.push(row?.herkunft_id)
   }
-
-  const totalNr = kultursSorted.filter(hierarchyFilter).length
-  const filteredNr = kultursFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
