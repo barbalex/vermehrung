@@ -5,8 +5,6 @@ export default () => createGlobalStyle`
     overflow: hidden !important;
   }
 
-  
-
   /* https://stackoverflow.com/a/60660207/712005 */
   @media (pointer: coarse), (hover: none) {
     [title] {
@@ -25,7 +23,6 @@ export default () => createGlobalStyle`
       padding: 3px;
     }
   }
-
 
 @media print {
   /*
