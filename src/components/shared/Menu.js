@@ -6,10 +6,10 @@ import { FaBars } from 'react-icons/fa'
 import styled from 'styled-components'
 
 const MenuButton = styled(IconButton)`
-  color: white !important;
+  ${(props) => props['data-white'] && 'color: white !important;'}
 `
 
-const HeaderMenu = ({ children, title = 'Menu' }) => {
+const HeaderMenu = ({ children, title = 'Menu', white = true }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
     setAnchorEl(null)
@@ -27,6 +27,7 @@ const HeaderMenu = ({ children, title = 'Menu' }) => {
         aria-label={title}
         title={title}
         onClick={onClickButton}
+        data-white={white}
       >
         <FaBars />
       </MenuButton>
