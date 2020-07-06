@@ -43,16 +43,12 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
         <TitleSymbols>
           <NavButtons row={row} />
           <Menu white={false}>
-            <Add asMenu={true} />
-            <Delete asMenu={true} row={row} />
-            <Download row={row} asMenu={true} />
-            <Anleitung asMenu={true} />
-            <Settings kulturId={row.id} asMenu={true} />
-            <FilterNumbers
-              filteredNr={filteredNr}
-              totalNr={totalNr}
-              asMenu={true}
-            />
+            <Add asMenu />
+            <Delete asMenu row={row} />
+            <Download row={row} asMenu />
+            <Anleitung asMenu />
+            <Settings kulturId={row.id} asMenu />
+            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -68,14 +64,10 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Add />
           <Delete row={row} />
           <Menu white={false}>
-            <Download row={row} asMenu={true} />
-            <Anleitung asMenu={true} />
-            <Settings kulturId={row.id} asMenu={true} />
-            <FilterNumbers
-              filteredNr={filteredNr}
-              totalNr={totalNr}
-              asMenu={true}
-            />
+            <Download row={row} asMenu />
+            <Anleitung asMenu />
+            <Settings kulturId={row.id} asMenu />
+            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -92,13 +84,9 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Delete row={row} />
           <Settings kulturId={row.id} />
           <Menu white={false}>
-            <Download row={row} asMenu={true} />
-            <Anleitung asMenu={true} />
-            <FilterNumbers
-              filteredNr={filteredNr}
-              totalNr={totalNr}
-              asMenu={true}
-            />
+            <Download row={row} asMenu />
+            <Anleitung asMenu />
+            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
@@ -116,8 +104,8 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Settings kulturId={row.id} />
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           <Menu white={false}>
-            <Download row={row} asMenu={true} />
-            <Anleitung asMenu={true} />
+            <Download row={row} asMenu />
+            <Anleitung asMenu />
           </Menu>
         </TitleSymbols>
       </TitleContainer>
