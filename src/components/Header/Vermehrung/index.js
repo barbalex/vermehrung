@@ -38,7 +38,7 @@ const HeaderVermehrung = ({ width }) => {
     }
   }, [setWidthEnforced, widthEnforced, width])
 
-  if (width < 504) {
+  if (width < 509) {
     return (
       <ErrorBoundary>
         <AppBar position="fixed">
@@ -60,7 +60,7 @@ const HeaderVermehrung = ({ width }) => {
     )
   }
 
-  if (width < 552) {
+  if (width < 557) {
     return (
       <ErrorBoundary>
         <AppBar position="fixed">
@@ -82,7 +82,7 @@ const HeaderVermehrung = ({ width }) => {
     )
   }
 
-  if (width < 600) {
+  if (width < 605) {
     return (
       <ErrorBoundary>
         <AppBar position="fixed">
