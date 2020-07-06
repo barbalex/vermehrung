@@ -24,10 +24,8 @@ const SettingsOverall = ({ asMenu }) => {
     return (
       <>
         <MenuItem
-          aria-label="Optionen wählen"
           aria-owns={anchorEl ? 'menu' : null}
           aria-haspopup="true"
-          title="Optionen wählen"
           onClick={onClickConfig}
         >
           Optionen wählen
