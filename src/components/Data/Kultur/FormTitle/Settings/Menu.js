@@ -40,7 +40,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
     [kulturOption],
   )
 
-  const onClose = useCallback(() => setAnchorEl(null), [])
+  const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
   const openOptionDocs = useCallback(() => {
     setAnchorEl(null)
     const url = `${constants?.appUri}/Dokumentation/Teilkulturen`
@@ -50,7 +50,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
       }
       window.open(url)
     }
-  }, [])
+  }, [setAnchorEl])
 
   return (
     <Menu
