@@ -50,9 +50,9 @@ const HeaderVermehrung = ({ width }) => {
             <Online />
             <Account />
             <Menu>
-              <Home asMenu={true} />
-              <Docu asMenu={true} />
-              <Settings asMenu={true} />
+              <Home asMenu />
+              <Docu asMenu />
+              <Settings asMenu />
             </Menu>
           </Toolbar>
         </AppBar>
@@ -73,8 +73,8 @@ const HeaderVermehrung = ({ width }) => {
             <Online />
             <Account />
             <Menu>
-              <Docu asMenu={true} />
-              <Settings asMenu={true} />
+              <Docu asMenu />
+              <Settings asMenu />
             </Menu>
           </Toolbar>
         </AppBar>
@@ -96,7 +96,7 @@ const HeaderVermehrung = ({ width }) => {
             <Account />
             <Settings />
             <Menu>
-              <Docu asMenu={true} />
+              <Docu asMenu />
             </Menu>
           </Toolbar>
         </AppBar>
