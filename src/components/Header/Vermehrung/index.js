@@ -17,7 +17,7 @@ import NavTree from './NavTree'
 import Docu from './Docu'
 import Filter from './Filter'
 import Home from './Home'
-import Menu from './Menu'
+import Menu from '../../shared/Menu'
 
 const constants = getConstants()
 
