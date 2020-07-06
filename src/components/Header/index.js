@@ -15,7 +15,7 @@ const StyledAppBar = styled(AppBar)`
   .MuiToolbar-root {
     min-height: 64px !important;
     padding-left: 0 !important;
-    padding-right: 5px !important;
+    padding-right: 10px !important;
   }
   @media print {
     display: none !important;
