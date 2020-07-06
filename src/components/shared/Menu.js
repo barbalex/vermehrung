@@ -9,7 +9,7 @@ const MenuButton = styled(IconButton)`
   color: white !important;
 `
 
-const HeaderMenu = ({ children }) => {
+const HeaderMenu = ({ children, title = 'Menu' }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => {
     setAnchorEl(null)
@@ -24,8 +24,8 @@ const HeaderMenu = ({ children }) => {
       <MenuButton
         aria-controls="menu"
         aria-haspopup="true"
-        aria-label="Menu"
-        title="Menu"
+        aria-label={title}
+        title={title}
         onClick={onClickButton}
       >
         <FaBars />
