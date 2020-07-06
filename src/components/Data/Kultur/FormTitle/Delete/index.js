@@ -6,8 +6,8 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../../../models/reactUtils'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../../models/reactUtils'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
