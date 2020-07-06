@@ -26,6 +26,9 @@ const Total = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.54);
   text-align: center;
 `
+const StyledMenuItem = styled(MenuItem)`
+  color: rgba(0, 0, 0, 0.54) !important;
+`
 
 const FilterNumbers = ({ filteredNr, totalNr, asMenu }) => {
   const store = useContext(StoreContext)
@@ -35,7 +38,12 @@ const FilterNumbers = ({ filteredNr, totalNr, asMenu }) => {
   if (!(show || isFiltered)) return null
 
   if (asMenu) {
-    return <MenuItem>{`${filteredNr}/${totalNr}`}</MenuItem>
+    return (
+      <StyledMenuItem dense>
+        <span title="gefilterte Anzahl">{filteredNr}</span>/
+        <span title="totale Anzahl">{totalNr}</span>
+      </StyledMenuItem>
+    )
   }
 
   return (
