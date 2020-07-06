@@ -5,7 +5,7 @@ import { v1 as uuidv1 } from 'uuid'
 import { sammel_lieferungModelBase } from './sammel_lieferungModel.base'
 import toPgArray from '../utils/toPgArray'
 import toStringIfPossible from '../utils/toStringIfPossible'
-import updateAllLieferungen from '../components/Data/SammelLieferung/Copy/updateAllLieferungen'
+import updateAllLieferungen from '../components/Data/SammelLieferung/FormTitle/Copy/updateAllLieferungen'
 
 /* A graphql query fragment builders for sammel_lieferungModel */
 export {

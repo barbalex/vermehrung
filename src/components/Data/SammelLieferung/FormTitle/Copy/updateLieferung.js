@@ -5,10 +5,10 @@ import { v1 as uuidv1 } from 'uuid'
 import {
   lieferung_rev as lieferungRevFragment,
   lieferung as lieferungFragment,
-} from '../../../../utils/fragments'
-import fieldsFromFragment from '../../../../utils/fieldsFromFragment'
-import toPgArray from '../../../../utils/toPgArray'
-import exists from '../../../../utils/exists'
+} from '../../../../../utils/fragments'
+import fieldsFromFragment from '../../../../../utils/fieldsFromFragment'
+import toPgArray from '../../../../../utils/toPgArray'
+import exists from '../../../../../utils/exists'
 
 const lieferungRevFields = fieldsFromFragment(lieferungRevFragment)
 const lieferungFields = fieldsFromFragment(lieferungFragment)

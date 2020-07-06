@@ -9,8 +9,6 @@ import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import { FaEnvelopeOpenText, FaEdit } from 'react-icons/fa'
-import { MdPrint } from 'react-icons/md'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -18,23 +16,16 @@ import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
-import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import exists from '../../../utils/exists'
-import Settings from './Settings'
-import Copy from './Copy'
 import Lieferschein from './Lieferschein'
-import AddButton from './AddButton'
-import DeleteButton from './DeleteButton'
 import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import FilterNumbers from '../../shared/FilterNumbers'
 import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../Lieferung/Lieferung/kulturLabelFromKultur'
-import UpSvg from '../../../svg/to_up.inline.svg'
-import LiDownSvg from '../../../svg/to_li_down.inline.svg'
+import FormTitle from './FormTitle'
 
 const constants = getConstants()
 
@@ -44,24 +35,8 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
-const TitleContainer = styled.div`
-  background-color: rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-  padding 0 10px;
-`
 const Title = styled.div`
   font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
   margin-top: auto;
   margin-bottom: auto;
 `
@@ -154,35 +129,21 @@ const SammelLieferung = ({
   const {
     filter,
     isPrint,
-    setIsPrint,
     online,
     userPersonOption,
     artsSorted,
     kultursSorted,
     personsSorted,
-    sammelLieferungsFiltered,
-    sammelLieferungsSorted,
     sammlungsSorted,
     showDeleted,
     errors,
     unsetError,
   } = store
-  const {
-    setWidthInPercentOfScreen,
-    activeNodeArray,
-    setActiveNodeArray,
-  } = store.tree
-
-  const hierarchyFilter = () => {
-    return true
-  }
+  const { setWidthInPercentOfScreen, activeNodeArray } = store.tree
 
   const row = showFilter
     ? filter.sammel_lieferung
     : store.sammel_lieferungs.get(id) || {}
-
-  const totalNr = sammelLieferungsSorted.filter(hierarchyFilter).length
-  const filteredNr = sammelLieferungsFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -191,7 +152,7 @@ const SammelLieferung = ({
     [],
   )
 
-  const { sl_show_empty_when_next_to_li, sl_auto_copy_edits } = userPersonOption
+  const { sl_show_empty_when_next_to_li } = userPersonOption
 
   const herkunftByNachKultur = row?.kulturByNachKulturId?.herkunft
   const herkunftByVonKultur = row?.kulturByVonKulturId?.herkunft
@@ -332,31 +293,12 @@ const SammelLieferung = ({
       window.open(url)
     }
   }, [])
-  const openSettingsDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Sammel-Lieferungen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
 
   // setting initial value like this is necessary
   // because during printing page Vermehrung re-renders without tree
   const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
-  const showLieferschein = useCallback(() => {
-    setPrintPreview(!printPreview)
-  }, [printPreview])
-  const printLieferschein = useCallback(() => {
-    setIsPrint(true)
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-    })
-  }, [setIsPrint])
 
   const openGenVielfaldDocs = useCallback(() => {
     const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
@@ -386,15 +328,6 @@ const SammelLieferung = ({
     [ifNeeded],
   )
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -404,67 +337,13 @@ const SammelLieferung = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Sammel-Lieferung"
-            table="sammel_lieferung"
-            totalNr={totalNr}
-            filteredNr={filteredNr}
-          />
-        ) : (
-          <TitleContainer>
-            <Title>Sammel-Lieferung</Title>
-            <TitleSymbols>
-              {shownAsSammelLieferung && (
-                <>
-                  <IconButton title="Zur Liste" onClick={onClickUp}>
-                    <UpSvg />
-                  </IconButton>
-                  <IconButton
-                    title="Zu den Lieferungen"
-                    onClick={onClickToLieferungen}
-                  >
-                    <LiDownSvg />
-                  </IconButton>
-                  <AddButton />
-                  <DeleteButton row={row} />
-                  <IconButton
-                    aria-label={printPreview ? 'Formular' : 'Lieferschein'}
-                    title={printPreview ? 'Formular' : 'Lieferschein'}
-                    onClick={showLieferschein}
-                  >
-                    {printPreview ? <FaEdit /> : <FaEnvelopeOpenText />}
-                  </IconButton>
-                  {printPreview && (
-                    <IconButton
-                      aria-label="drucken"
-                      title="drucken"
-                      onClick={printLieferschein}
-                    >
-                      <MdPrint />
-                    </IconButton>
-                  )}
-                </>
-              )}
-              {!sl_auto_copy_edits && (
-                <Copy sammelLieferung={row} lieferungId={lieferungId} />
-              )}
-              <>
-                {id && <Settings />}
-                <IconButton
-                  aria-label="Anleitung öffnen"
-                  title="Anleitung öffnen"
-                  onClick={openSettingsDocs}
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-                {shownAsSammelLieferung && (
-                  <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-                )}
-              </>
-            </TitleSymbols>
-          </TitleContainer>
-        )}
+        <FormTitle
+          showFilter={showFilter}
+          row={row}
+          lieferungId={lieferungId}
+          printPreview={printPreview}
+          setPrintPreview={setPrintPreview}
+        />
         {printPreview ? (
           <Lieferschein row={row} />
         ) : (
