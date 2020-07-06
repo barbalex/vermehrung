@@ -5,8 +5,8 @@ import { withResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
-import DeleteButton from './DeleteButton'
-import AddButton from './AddButton'
+import Delete from './Delete'
+import Add from './Add'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
 import Download from './Download'
@@ -47,8 +47,8 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
         <Title>Kultur</Title>
         <TitleSymbols>
           <NavButtons row={row} />
-          <AddButton />
-          <DeleteButton row={row} />
+          <Add />
+          <Delete row={row} />
           <Menu white={false}>
             <Download row={row} asMenu={true} />
             <Anleitung asMenu={true} />
@@ -70,8 +70,8 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
         <Title>Kultur</Title>
         <TitleSymbols>
           <NavButtons row={row} />
-          <AddButton />
-          <DeleteButton row={row} />
+          <Add />
+          <Delete row={row} />
           <Settings kulturId={row.id} />
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           <Menu white={false}>
@@ -88,8 +88,8 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
       <Title>Kultur</Title>
       <TitleSymbols>
         <NavButtons row={row} />
-        <AddButton />
-        <DeleteButton row={row} />
+        <Add />
+        <Delete row={row} />
         <Download row={row} />
         <Anleitung />
         <Settings kulturId={row.id} />
