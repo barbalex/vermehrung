@@ -9,12 +9,11 @@ import { MdPrint } from 'react-icons/md'
 import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
 import Copy from './Copy'
-import AddButton from './AddButton'
-import DeleteButton from './DeleteButton'
+import Add from './Add'
+import Delete from './Delete'
 import getConstants from '../../../../utils/constants'
 import FilterNumbers from '../../../shared/FilterNumbers'
-import UpSvg from '../../../../svg/to_up.inline.svg'
-import LiDownSvg from '../../../../svg/to_li_down.inline.svg'
+import NavButtons from './NavButtons'
 
 const constants = getConstants()
 
@@ -52,7 +51,7 @@ const SammelLieferungFormTitle = ({
   const store = useContext(StoreContext)
 
   const { filter, setIsPrint, userPersonOption } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+  const { activeNodeArray } = store.tree
 
   const { sl_auto_copy_edits } = userPersonOption
 
@@ -79,15 +78,6 @@ const SammelLieferungFormTitle = ({
     })
   }, [setIsPrint])
 
-  const onClickUp = useCallback(
-    () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
-    [activeNodeArray, setActiveNodeArray],
-  )
-  const onClickToLieferungen = useCallback(
-    () => setActiveNodeArray([...activeNodeArray, 'Lieferungen']),
-    [activeNodeArray, setActiveNodeArray],
-  )
-
   if (!row || (!showFilter && filter.show)) return null
 
   return (
@@ -96,17 +86,9 @@ const SammelLieferungFormTitle = ({
       <TitleSymbols>
         {shownAsSammelLieferung && (
           <>
-            <IconButton title="Zur Liste" onClick={onClickUp}>
-              <UpSvg />
-            </IconButton>
-            <IconButton
-              title="Zu den Lieferungen"
-              onClick={onClickToLieferungen}
-            >
-              <LiDownSvg />
-            </IconButton>
-            <AddButton />
-            <DeleteButton row={row} />
+            <NavButtons />
+            <Add />
+            <Delete row={row} />
             <IconButton
               aria-label={printPreview ? 'Formular' : 'Lieferschein'}
               title={printPreview ? 'Formular' : 'Lieferschein'}
