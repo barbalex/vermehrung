@@ -9,7 +9,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const KulturAddButton = ({ asMenu }) => {
   const store = useContext(StoreContext)
-  const { insertKulturRev } = store.tree
+  const { insertKulturRev } = store
 
   const add = useCallback(() => {
     insertKulturRev()

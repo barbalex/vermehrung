@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
 import Delete from './Delete'
 import Add from './Add'
@@ -37,11 +36,30 @@ const TitleSymbols = styled.div`
 `
 
 const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
-  const store = useContext(StoreContext)
+  if (width < 520) {
+    return (
+      <TitleContainer>
+        <Title>Kultur</Title>
+        <TitleSymbols>
+          <NavButtons row={row} />
+          <Menu white={false}>
+            <Add asMenu={true} />
+            <Delete asMenu={true} row={row} />
+            <Download row={row} asMenu={true} />
+            <Anleitung asMenu={true} />
+            <Settings kulturId={row.id} asMenu={true} />
+            <FilterNumbers
+              filteredNr={filteredNr}
+              totalNr={totalNr}
+              asMenu={true}
+            />
+          </Menu>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
 
-  console.log('KulturFormTitle, width:', width)
-
-  if (width < 573) {
+  if (width < 567) {
     return (
       <TitleContainer>
         <Title>Kultur</Title>
@@ -64,7 +82,30 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
     )
   }
 
-  if (width < 620) {
+  if (width < 613) {
+    return (
+      <TitleContainer>
+        <Title>Kultur</Title>
+        <TitleSymbols>
+          <NavButtons row={row} />
+          <Add />
+          <Delete row={row} />
+          <Settings kulturId={row.id} />
+          <Menu white={false}>
+            <Download row={row} asMenu={true} />
+            <Anleitung asMenu={true} />
+            <FilterNumbers
+              filteredNr={filteredNr}
+              totalNr={totalNr}
+              asMenu={true}
+            />
+          </Menu>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
+
+  if (width < 660) {
     return (
       <TitleContainer>
         <Title>Kultur</Title>
