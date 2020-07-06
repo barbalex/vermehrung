@@ -49,10 +49,10 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <NavButtons row={row} />
           <AddButton />
           <DeleteButton row={row} />
-          <Settings kulturId={row.id} />
           <Menu white={false}>
             <Download row={row} asMenu={true} />
             <Anleitung asMenu={true} />
+            <Settings kulturId={row.id} asMenu={true} />
             <FilterNumbers
               filteredNr={filteredNr}
               totalNr={totalNr}
