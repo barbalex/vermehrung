@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import { navigate } from 'gatsby'
 import MListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -7,8 +7,6 @@ import { FaChevronRight, FaChevronDown } from 'react-icons/fa'
 import { Location } from '@reach/router'
 import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
-
-import { StoreContext } from '../../../models/reactUtils'
 
 const ListItem = styled(MListItem)`
   display: flex;
@@ -22,13 +20,9 @@ const ListItem = styled(MListItem)`
 `
 
 const MenuItem = ({ node }) => {
-  const { sidebarWidth, setSidebarWidth } = useContext(StoreContext)
   const { path, sort2 } = node.frontmatter
 
-  const onClickMenuItem = useCallback(() => {
-    navigate(`${path}/`)
-    sidebarWidth && setSidebarWidth(null)
-  }, [path, setSidebarWidth, sidebarWidth])
+  const onClickMenuItem = useCallback(() => navigate(`${path}/`), [path])
 
   return (
     <Location>
@@ -42,6 +36,7 @@ const MenuItem = ({ node }) => {
         let active = isEqual(pathname, pathSplit)
 
         if (isChildClosed) return null
+
         return (
           <>
             <ListItem
