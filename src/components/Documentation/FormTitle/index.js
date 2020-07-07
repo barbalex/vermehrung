@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { navigate } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import IconButton from '@material-ui/core/IconButton'
 
 import UpSvg from '../../../svg/to_up.inline.svg'
 
@@ -23,19 +24,27 @@ const Title = styled.div`
   margin-bottom: auto;
   padding-left: 10px;
 `
-/*const TitleSymbols = styled.div`
+const TitleSymbols = styled.div`
   display: flex;
   margin-top: auto;
   margin-bottom: auto;
-`*/
+`
 
-const DocumentationFormTitle = ({ location, mobile }) => {
-  console.log('DocumentationFormTitle', { location, mobile })
+const DocumentationFormTitle = ({ location }) => {
+  const onClickUp = useCallback(() => {
+    const path = location.pathname.split('/').filter((e) => !!e)
+    const newPath = `/${path.slice(0, -1).join('/')}`
+    navigate(newPath)
+  }, [location.pathname])
 
   return (
     <TitleContainer>
       <Title>Dokumentation</Title>
-      {/*<TitleSymbols>'TODO:'</TitleSymbols>*/}
+      <TitleSymbols>
+        <IconButton title="zurück" onClick={onClickUp}>
+          <UpSvg />
+        </IconButton>
+      </TitleSymbols>
     </TitleContainer>
   )
 }
