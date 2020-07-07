@@ -3,7 +3,9 @@ import { graphql } from 'gatsby'
 
 import Documentation from '../components/Documentation'
 
-const DocTemplate = ({ data }) => <Documentation data={data} />
+const DocTemplate = ({ data, location }) => (
+  <Documentation data={data} location={location} />
+)
 
 export const pageQuery = graphql`
   query($path: String!) {

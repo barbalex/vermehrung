@@ -31,13 +31,17 @@ const DokuDate = styled.p`
   color: grey;
 `
 
-const DokuComponent = ({ frontmatter, html }) => (
-  <Doku>
-    <FormTitle />
-    <h1>{frontmatter.title}</h1>
-    <DokuDate>{frontmatter.date}</DokuDate>
-    <div dangerouslySetInnerHTML={{ __html: html }} />
-  </Doku>
-)
+const DokuComponent = ({ frontmatter, html, mobile, location }) => {
+  console.log('DokuComponent, location:', location)
+
+  return (
+    <Doku>
+      <FormTitle location={location} mobile={mobile} />
+      <h1>{frontmatter.title}</h1>
+      <DokuDate>{frontmatter.date}</DokuDate>
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+    </Doku>
+  )
+}
 
 export default observer(DokuComponent)

@@ -6,8 +6,14 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
+import styled from 'styled-components'
 
 import Header from './Header'
+
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+`
 
 const query = graphql`
   query SiteTitleQuery {
@@ -23,7 +29,7 @@ const Layout = ({ children }) => {
   const data = useStaticQuery(query)
 
   return (
-    <>
+    <Container>
       <Helmet
         title={data.site.siteMetadata.title}
         meta={[
@@ -41,7 +47,7 @@ const Layout = ({ children }) => {
       </Helmet>
       <Header />
       {children}
-    </>
+    </Container>
   )
 }
 
