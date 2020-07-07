@@ -5,10 +5,10 @@ import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { StoreContext } from '../../../models/reactUtils'
-import signup from '../../../utils/signup'
-import deleteAccount from '../../../utils/deleteAccount'
-import setPassword from '../../../utils/setPassword'
+import { StoreContext } from '../../../../models/reactUtils'
+import signup from '../../../../utils/signup'
+import deleteAccount from '../../../../utils/deleteAccount'
+import setPassword from '../../../../utils/setPassword'
 
 const StyledButton = styled(Button)`
   text-transform: none !important;
