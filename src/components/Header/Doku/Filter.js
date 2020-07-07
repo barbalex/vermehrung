@@ -54,7 +54,7 @@ const Filter = () => {
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        placeholder="filtern"
+        placeholder="Artikel filtern"
         variant="outlined"
         startAdornment={
           <InputAdornment position="start">
