@@ -7,9 +7,9 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import axios from 'axios'
 
-import { StoreContext } from '../../../models/reactUtils'
-import ErrorBoundary from '../../shared/ErrorBoundary'
-import getConstants from '../../../utils/constants'
+import { StoreContext } from '../../../../models/reactUtils'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+import getConstants from '../../../../utils/constants'
 
 const constants = getConstants()
 
