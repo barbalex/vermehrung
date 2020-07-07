@@ -62,13 +62,11 @@ const formatDatumForSearch = (datum) =>
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
   filter: types.optional(Filter, initialFilterValues),
-  docFilter: types.optional(types.union(types.string, types.number), ''),
   hideInactive: types.optional(types.maybeNull(types.boolean), true),
-  sidebarWidth: types.maybeNull(types.number, null),
+  docFilter: types.optional(types.union(types.string, types.number), ''),
   docsCount: types.maybeNull(types.number, null),
   docsFilteredCount: types.maybeNull(types.number, null),
   isPrint: types.optional(types.boolean, false),
-  updateExists: types.optional(types.boolean, false), // not in use!
   online: types.optional(types.boolean, true),
   // register initial loading
   loading: types.optional(types.boolean, false),
@@ -1690,14 +1688,8 @@ export const RootStore = RootStoreBase.props({
       setUser(val) {
         self.user = val || {}
       },
-      setUpdateExists(val) {
-        self.updateExists = val // not in use!
-      },
       setIsPrint(val) {
         self.isPrint = val
-      },
-      setSidebarWidth(val) {
-        self.sidebarWidth = val
       },
       setHideInactive(val) {
         self.hideInactive = val
