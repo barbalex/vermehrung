@@ -26,7 +26,7 @@ const KontoMenuMenu = ({ row, menuAnchorEl, setMenuAnchorEl, asMenu }) => {
       // return MenuItems directly as they are only ones
       <>
         <MenuItem onClick={onClickResetPassword}>
-          Email schicken, um Passwort zu setzen (nur 2 Stunden gültig)
+          Konto: Email schicken, um Passwort zu setzen (2 Std. gültig)
         </MenuItem>
         <MenuItem onClick={onClickDeleteAccount}>Konto löschen</MenuItem>
       </>
