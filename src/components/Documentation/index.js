@@ -45,14 +45,16 @@ const StyledSplitPane = styled(SplitPane)`
   }
 `
 
-const Documentation = ({ data, width }) => {
+const Documentation = ({ data, location, width }) => {
   const store = useContext(StoreContext)
   const { docFilter, setDocsCount, setDocsFilteredCount } = store
   const frontmatter = data?.markdownRemark?.frontmatter
   const html = data?.markdownRemark?.html
   const edges = data?.allMarkdownRemark?.edges ?? []
 
-  const [mobile, setMobile] = useState(true)
+  const path = location.pathname.split('/').filter((e) => !!e)
+
+  const [mobile, setMobile] = useState(false)
 
   useEffect(() => {
     if (width >= constants?.tree?.minimalWindowWidth && mobile) {
@@ -62,6 +64,11 @@ const Documentation = ({ data, width }) => {
       setMobile(true)
     }
   }, [mobile, width])
+
+  const showList =
+    width < constants?.tree?.minimalWindowWidth && path.length === 1
+  const showArticle =
+    width < constants?.tree?.minimalWindowWidth && path.length > 1
 
   const [items, setItems] = useState([])
   useEffect(() => {
@@ -81,7 +88,36 @@ const Documentation = ({ data, width }) => {
     }
   }, [docFilter, edges, setDocsCount, setDocsFilteredCount])
 
-  console.log('Documentation, items:', items)
+  console.log('Documentation', { width })
+
+  if (showList) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <Container>
+            <ArticleList items={items} />
+          </Container>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
+
+  if (showArticle) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <Container>
+            <Doku
+              frontmatter={frontmatter}
+              html={html}
+              location={location}
+              mobile
+            />
+          </Container>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <ErrorBoundary>

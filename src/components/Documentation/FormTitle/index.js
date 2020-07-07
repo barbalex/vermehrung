@@ -1,6 +1,9 @@
 import React from 'react'
+import { navigate } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -26,7 +29,9 @@ const Title = styled.div`
   margin-bottom: auto;
 `*/
 
-const KulturFormTitle = () => {
+const DocumentationFormTitle = ({ location, mobile }) => {
+  console.log('DocumentationFormTitle', { location, mobile })
+
   return (
     <TitleContainer>
       <Title>Dokumentation</Title>
@@ -35,4 +40,4 @@ const KulturFormTitle = () => {
   )
 }
 
-export default observer(KulturFormTitle)
+export default observer(DocumentationFormTitle)
