@@ -6,8 +6,7 @@ import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 
 import Layout from '../components/Layout'
-import Sidebar from './Sidebar'
-import FormTitle from './FormTitle'
+import ArticleList from './ArticleList'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 import getConstants from '../utils/constants'
 import { StoreContext } from '../models/reactUtils'
@@ -46,16 +45,14 @@ const StyledSplitPane = styled(SplitPane)`
     overflow: hidden;
   }
 `
-const DokuDate = styled.p`
-  margin-bottom: 15px !important;
-  color: grey;
-`
 
 const DocTemplate = ({ data, width }) => {
   const store = useContext(StoreContext)
+  const { docFilter, setDocsCount, setDocsFilteredCount } = store
   const { markdownRemark, allMarkdownRemark } = data
   const { frontmatter, html } = markdownRemark
   const { edges } = allMarkdownRemark
+  console.log('DocTemplate, edges:', edges)
 
   const [mobile, setMobile] = useState(true)
 
@@ -72,20 +69,24 @@ const DocTemplate = ({ data, width }) => {
   const resizerStyle = mobile ? { width: 0 } : {}
 
   const treeWidth = mobile ? '100%' : `30%`
-  const { docFilter } = store
 
-  const items = (edges || [])
-    .filter((n) => !!n && !!n.node)
-    .filter((n) =>
-      docFilter
-        ? (n?.node?.frontmatter?.title ?? '(Titel fehlt)')
-            .toLowerCase()
-            .includes(docFilter.toLowerCase())
-        : true,
-    )
-
-  const totalNr = edges.length
-  const filteredNr = items.length
+  const [items, setItems] = useState([])
+  useEffect(() => {
+    if (edges && edges.length) {
+      const items = edges
+        .filter((n) => !!n && !!n.node)
+        .filter((n) =>
+          docFilter
+            ? (n?.node?.frontmatter?.title ?? '(Titel fehlt)')
+                .toLowerCase()
+                .includes(docFilter.toLowerCase())
+            : true,
+        )
+      setItems(items)
+      setDocsCount(edges.length)
+      setDocsFilteredCount(items.length)
+    }
+  }, [docFilter, edges, setDocsCount, setDocsFilteredCount])
 
   return (
     <ErrorBoundary>
@@ -97,13 +98,8 @@ const DocTemplate = ({ data, width }) => {
             minSize={200}
             //resizerStyle={resizerStyle}
           >
-            <Sidebar items={items} />
-            <Doku
-              totalNr={totalNr}
-              filteredNr={filteredNr}
-              frontmatter={frontmatter}
-              html={html}
-            />
+            <ArticleList items={items} />
+            <Doku frontmatter={frontmatter} html={html} />
           </StyledSplitPane>
         </Container>
       </Layout>

@@ -31,13 +31,13 @@ const DokuDate = styled.p`
   color: grey;
 `
 
-const DocTemplate = ({ totalNr, filteredNr, frontmatter, html }) => (
+const DokuComponent = ({ frontmatter, html }) => (
   <Doku>
-    <FormTitle totalNr={totalNr} filteredNr={filteredNr} />
+    <FormTitle />
     <h1>{frontmatter.title}</h1>
     <DokuDate>{frontmatter.date}</DokuDate>
     <div dangerouslySetInnerHTML={{ __html: html }} />
   </Doku>
 )
 
-export default observer(DocTemplate)
+export default observer(DokuComponent)
