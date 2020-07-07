@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { graphql } from 'gatsby'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 import SplitPane from 'react-split-pane'
@@ -99,46 +98,12 @@ const Documentation = ({ data, width }) => {
             //resizerStyle={resizerStyle}
           >
             <ArticleList items={items} />
-            {html ? (
-              <Doku frontmatter={frontmatter} html={html} />
-            ) : (
-              <div></div>
-            )}
+            {html ? <Doku frontmatter={frontmatter} html={html} /> : <div />}
           </StyledSplitPane>
         </Container>
       </Layout>
     </ErrorBoundary>
   )
 }
-
-export const pageQuery = graphql`
-  query($path: String!) {
-    markdownRemark(frontmatter: { path: { eq: $path } }) {
-      html
-      frontmatter {
-        date(formatString: "DD.MM.YYYY")
-        path
-        title
-      }
-    }
-    allMarkdownRemark(
-      sort: { order: ASC, fields: [frontmatter___sort1, frontmatter___sort2] }
-      filter: { fileAbsolutePath: { regex: "/(/docs)/.*.md$/" } }
-    ) {
-      edges {
-        node {
-          id
-          frontmatter {
-            date(formatString: "DD.MM.YYYY")
-            path
-            title
-            sort1
-            sort2
-          }
-        }
-      }
-    }
-  }
-`
 
 export default withResizeDetector(observer(Documentation))
