@@ -38,8 +38,6 @@ const PersonFormTitle = ({ row, totalNr, filteredNr, width }) => {
   const { userPerson } = store
   const { user_role } = userPerson
 
-  console.log('PersonFormTitle, width:', width)
-
   if (width < 520) {
     return (
       <TitleContainer>
