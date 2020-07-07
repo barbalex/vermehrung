@@ -1,19 +1,16 @@
-import React, { useContext, useCallback, useEffect } from 'react'
+import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import { FaBars, FaHome } from 'react-icons/fa'
+import { FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { withResizeDetector } from 'react-resize-detector'
-import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../models/reactUtils'
-import getConstants from '../../../utils/constants'
-import exists from '../../../utils/exists'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Filter from './Filter'
+import getConstants from '../../../utils/constants'
 
 const constants = getConstants()
 
@@ -47,57 +44,22 @@ const NavButton = styled(Button)`
 `
 
 const HeaderDoku = ({ width }) => {
-  const { sidebarWidth, setSidebarWidth } = useContext(StoreContext)
-  useEffect(
-    (width) => {
-      if (
-        width > constants?.sidebar?.minimalWindowWidth &&
-        exists(sidebarWidth)
-      ) {
-        setSidebarWidth(null)
-      }
-      if (
-        width < constants?.sidebar?.minimalWindowWidth &&
-        sidebarWidth === null
-      ) {
-        setSidebarWidth(0)
-      }
-    },
-    [setSidebarWidth, sidebarWidth, width],
-  )
-  const onClickMenu = useCallback(() => {
-    if (sidebarWidth === 0) {
-      setSidebarWidth(constants?.sidebar?.width)
-    }
-    if (sidebarWidth > 0) {
-      setSidebarWidth(0)
-    }
-  }, [setSidebarWidth, sidebarWidth])
+  const mobile = width && width < constants?.tree?.minimalWindowWidth
 
   return (
     <ErrorBoundary>
       <AppBar position="fixed">
         <Toolbar>
-          {exists(sidebarWidth) ? (
-            <>
-              <IconButton
-                color="inherit"
-                aria-label="Navigations-Baum öffnen"
-                onClick={onClickMenu}
-                title="Menü öffnen"
-              >
-                <FaBars />
-              </IconButton>
-              <IconButton
-                color="inherit"
-                aria-label="Home"
-                component={Link}
-                to="/"
-                title="Home"
-              >
-                <FaHome />
-              </IconButton>
-            </>
+          {mobile ? (
+            <IconButton
+              color="inherit"
+              aria-label="Home"
+              component={Link}
+              to="/"
+              title="Home"
+            >
+              <FaHome />
+            </IconButton>
           ) : (
             <SiteTitle variant="outlined" component={Link} to="/" title="Home">
               Vermehrung
@@ -106,7 +68,7 @@ const HeaderDoku = ({ width }) => {
           <Spacer />
           <Filter />
           <NavButton variant="outlined" component={Link} to="/Vermehrung/">
-            Daten bearbeiten
+            Daten
           </NavButton>
         </Toolbar>
       </AppBar>
@@ -114,4 +76,4 @@ const HeaderDoku = ({ width }) => {
   )
 }
 
-export default withResizeDetector(observer(HeaderDoku))
+export default withResizeDetector(HeaderDoku)
