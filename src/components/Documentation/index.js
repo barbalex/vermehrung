@@ -63,10 +63,6 @@ const Documentation = ({ data, width }) => {
     }
   }, [mobile, width])
 
-  // hide resizer when is mobile
-  const resizerStyle = mobile ? { width: 0 } : {}
-  const treeWidth = mobile ? '100%' : `30%`
-
   const [items, setItems] = useState([])
   useEffect(() => {
     if (edges.length) {
@@ -91,12 +87,7 @@ const Documentation = ({ data, width }) => {
     <ErrorBoundary>
       <Layout>
         <Container>
-          <StyledSplitPane
-            split="vertical"
-            size="30%"
-            minSize={200}
-            //resizerStyle={resizerStyle}
-          >
+          <StyledSplitPane split="vertical" size="30%" minSize={200}>
             <ArticleList items={items} />
             {html ? <Doku frontmatter={frontmatter} html={html} /> : <div />}
           </StyledSplitPane>
