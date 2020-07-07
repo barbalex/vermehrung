@@ -4,7 +4,7 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import getConstants from '../../../../utils/constants'
+import getConstants from '../../../utils/constants'
 
 const constants = getConstants()
 

@@ -3,7 +3,7 @@ import List from '@material-ui/core/List'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 import Article from './Article'
 
 const Container = styled.div`
@@ -11,7 +11,7 @@ const Container = styled.div`
   overflow-y: auto;
 `
 
-const Sidebar = ({ items }) => {
+const ArticleList = ({ items }) => {
   const store = useContext(StoreContext)
   const { sidebarWidth } = store
 
@@ -27,4 +27,4 @@ const Sidebar = ({ items }) => {
   )
 }
 
-export default observer(Sidebar)
+export default observer(ArticleList)

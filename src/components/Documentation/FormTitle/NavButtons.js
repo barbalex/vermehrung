@@ -2,13 +2,13 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 
-import { StoreContext } from '../../../../models/reactUtils'
-import ZaDownSvg from '../../../../svg/to_za_down.inline.svg'
-import AnLiDownSvg from '../../../../svg/to_anli_down.inline.svg'
-import AusLiDownSvg from '../../../../svg/to_ausli_down.inline.svg'
-import EvDownSvg from '../../../../svg/to_ev_down.inline.svg'
-import TkDownSvg from '../../../../svg/to_tk_down.inline.svg'
-import UpSvg from '../../../../svg/to_up.inline.svg'
+import { StoreContext } from '../../../models/reactUtils'
+import ZaDownSvg from '../../../svg/to_za_down.inline.svg'
+import AnLiDownSvg from '../../../svg/to_anli_down.inline.svg'
+import AusLiDownSvg from '../../../svg/to_ausli_down.inline.svg'
+import EvDownSvg from '../../../svg/to_ev_down.inline.svg'
+import TkDownSvg from '../../../svg/to_tk_down.inline.svg'
+import UpSvg from '../../../svg/to_up.inline.svg'
 
 const KulturNavButtons = ({ row }) => {
   const store = useContext(StoreContext)

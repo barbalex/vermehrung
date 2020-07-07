@@ -8,7 +8,7 @@ import { Location } from '@reach/router'
 import styled from 'styled-components'
 import isEqual from 'lodash/isEqual'
 
-import { StoreContext } from '../../models/reactUtils'
+import { StoreContext } from '../../../models/reactUtils'
 
 const ListItem = styled(MListItem)`
   display: flex;
