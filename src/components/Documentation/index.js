@@ -88,8 +88,6 @@ const Documentation = ({ data, location, width }) => {
     }
   }, [docFilter, edges, setDocsCount, setDocsFilteredCount])
 
-  console.log('Documentation', { width })
-
   if (showList) {
     return (
       <ErrorBoundary>
@@ -125,7 +123,11 @@ const Documentation = ({ data, location, width }) => {
         <Container>
           <StyledSplitPane split="vertical" size="30%" minSize={200}>
             <ArticleList items={items} />
-            {html ? <Doku frontmatter={frontmatter} html={html} /> : <div />}
+            {html ? (
+              <Doku frontmatter={frontmatter} html={html} location={location} />
+            ) : (
+              <div />
+            )}
           </StyledSplitPane>
         </Container>
       </Layout>
