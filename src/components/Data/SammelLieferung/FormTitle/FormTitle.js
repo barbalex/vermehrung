@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
+import { withResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
@@ -8,6 +9,7 @@ import Copy from './Copy'
 import Add from './Add'
 import Delete from './Delete'
 import FilterNumbers from '../../../shared/FilterNumbers'
+import Menu from '../../../shared/Menu'
 import NavButtons from './NavButtons'
 import PrintButtons from './PrintButtons'
 import Anleitung from './Anleitung'
@@ -42,6 +44,7 @@ const SammelLieferungFormTitle = ({
   lieferungId,
   printPreview,
   setPrintPreview,
+  width,
 }) => {
   const store = useContext(StoreContext)
 
@@ -53,6 +56,119 @@ const SammelLieferungFormTitle = ({
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
 
   if (!row || (!showFilter && filter.show)) return null
+
+  if (width < 515) {
+    return (
+      <TitleContainer>
+        <Title>Sammel-Lieferung</Title>
+        <TitleSymbols>
+          {shownAsSammelLieferung && (
+            <>
+              <NavButtons />
+              <Add />
+              <Delete row={row} />
+            </>
+          )}
+          {!sl_auto_copy_edits && (
+            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+          )}
+          <>
+            <Menu white={false}>
+              <PrintButtons
+                printPreview={printPreview}
+                setPrintPreview={setPrintPreview}
+                asMenu
+              />
+              <Anleitung asMenu />
+              {row.id && <Settings asMenu />}
+              {shownAsSammelLieferung && (
+                <FilterNumbers
+                  filteredNr={filteredNr}
+                  totalNr={totalNr}
+                  asMenu
+                />
+              )}
+            </Menu>
+          </>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
+
+  if (width < 563) {
+    return (
+      <TitleContainer>
+        <Title>Sammel-Lieferung</Title>
+        <TitleSymbols>
+          {shownAsSammelLieferung && (
+            <>
+              <NavButtons />
+              <Add />
+              <Delete row={row} />
+            </>
+          )}
+          {!sl_auto_copy_edits && (
+            <Copy sammelLieferung={row} lieferungId={lieferungId} asMenu />
+          )}
+          <>
+            {row.id && <Settings />}
+            <Menu white={false}>
+              <PrintButtons
+                printPreview={printPreview}
+                setPrintPreview={setPrintPreview}
+                asMenu
+              />
+              <Anleitung asMenu />
+              {shownAsSammelLieferung && (
+                <FilterNumbers
+                  filteredNr={filteredNr}
+                  totalNr={totalNr}
+                  asMenu
+                />
+              )}
+            </Menu>
+          </>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
+
+  if (width < 610) {
+    return (
+      <TitleContainer>
+        <Title>Sammel-Lieferung</Title>
+        <TitleSymbols>
+          {shownAsSammelLieferung && (
+            <>
+              <NavButtons />
+              <Add />
+              <Delete row={row} />
+              <PrintButtons
+                printPreview={printPreview}
+                setPrintPreview={setPrintPreview}
+              />
+            </>
+          )}
+          {!sl_auto_copy_edits && (
+            <Copy sammelLieferung={row} lieferungId={lieferungId} />
+          )}
+          <>
+            {row.id && <Settings />}
+            <Menu white={false}>
+              <Anleitung asMenu />
+              {shownAsSammelLieferung && (
+                <FilterNumbers
+                  filteredNr={filteredNr}
+                  totalNr={totalNr}
+                  asMenu
+                />
+              )}
+            </Menu>
+          </>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
 
   return (
     <TitleContainer>
@@ -84,4 +200,4 @@ const SammelLieferungFormTitle = ({
   )
 }
 
-export default observer(SammelLieferungFormTitle)
+export default withResizeDetector(observer(SammelLieferungFormTitle))
