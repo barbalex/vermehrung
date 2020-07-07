@@ -8,7 +8,6 @@ import UpSvg from '../../../svg/to_up.inline.svg'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
-  margin: -25px -25px 20px -25px;
   padding: 0 10px;
   flex-shrink: 0;
   display: flex;
