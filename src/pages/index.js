@@ -107,7 +107,7 @@ const Index = ({ data }) => (
             fluid={data.file.childImageSharp.fluid}
             style={bgImageStyle}
           />
-          <PageTitle align="center" variant="h6" color="inherit" noWrap>
+          <PageTitle align="center" variant="h6" color="inherit">
             Bedrohte Pflanzenarten vermehren
           </PageTitle>
           <CardContainer>
