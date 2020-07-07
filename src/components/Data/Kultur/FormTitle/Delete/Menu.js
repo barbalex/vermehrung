@@ -1,13 +1,10 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import { FaMinus } from 'react-icons/fa'
-import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { StoreContext } from '../../../../../models/reactUtils'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   display: flex;
