@@ -4,10 +4,8 @@ import { observer } from 'mobx-react-lite'
 
 import FormTitle from './FormTitle'
 
-const Doku = styled.div`
+const Container = styled.div`
   width: 100%;
-  padding: 25px;
-  overflow-y: auto;
   ul {
     margin-top: 0;
   }
@@ -30,14 +28,21 @@ const DokuDate = styled.p`
   margin-bottom: 15px !important;
   color: grey;
 `
+const Body = styled.div`
+  height: calc(100vh - 64px - 48px);
+  padding: 25px;
+  overflow-y: auto;
+`
 
 const DokuComponent = ({ frontmatter, html, location }) => (
-  <Doku>
+  <Container>
     <FormTitle location={location} />
-    <h1>{frontmatter.title}</h1>
-    <DokuDate>{frontmatter.date}</DokuDate>
-    <div dangerouslySetInnerHTML={{ __html: html }} />
-  </Doku>
+    <Body>
+      <h1>{frontmatter.title}</h1>
+      <DokuDate>{frontmatter.date}</DokuDate>
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+    </Body>
+  </Container>
 )
 
 export default observer(DokuComponent)
