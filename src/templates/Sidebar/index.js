@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
+import List from '@material-ui/core/List'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../models/reactUtils'
-import MenuItems from './MenuItems'
+import Article from './Article'
 
-const Menu = styled.div`
+const Container = styled.div`
   height: calc(100vh - 64px);
   overflow-y: auto;
 `
@@ -16,9 +17,13 @@ const Sidebar = ({ items }) => {
 
   if (sidebarWidth === 0) return null
   return (
-    <Menu>
-      <MenuItems items={items} />
-    </Menu>
+    <Container>
+      <List component="nav">
+        {items.map(({ node }) => (
+          <Article node={node} key={node.id} />
+        ))}
+      </List>
+    </Container>
   )
 }
 
