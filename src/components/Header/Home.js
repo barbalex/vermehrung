@@ -2,10 +2,16 @@ import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import { FaHome } from 'react-icons/fa'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
+import { withResizeDetector } from 'react-resize-detector'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
+import getConstants from '../../utils/constants'
+
+const constants = getConstants()
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -35,23 +41,39 @@ const NavButton = styled(Button)`
   }
 `
 
-const HeaderHome = () => (
-  <ErrorBoundary>
-    <AppBar position="fixed">
-      <Toolbar>
-        <SiteTitle variant="outlined" component={Link} to="/" title="Home">
-          Vermehrung
-        </SiteTitle>
-        <Spacer />
-        <NavButton variant="outlined" component={Link} to="/Dokumentation/">
-          Dokumentation
-        </NavButton>
-        <NavButton variant="outlined" component={Link} to="/Vermehrung/">
-          Daten bearbeiten
-        </NavButton>
-      </Toolbar>
-    </AppBar>
-  </ErrorBoundary>
-)
+const HeaderHome = ({ width }) => {
+  const mobile = width && width < constants?.tree?.minimalWindowWidth
 
-export default HeaderHome
+  return (
+    <ErrorBoundary>
+      <AppBar position="fixed">
+        <Toolbar>
+          {mobile ? (
+            <IconButton
+              color="inherit"
+              aria-label="Home"
+              component={Link}
+              to="/"
+              title="Home"
+            >
+              <FaHome />
+            </IconButton>
+          ) : (
+            <SiteTitle variant="outlined" component={Link} to="/" title="Home">
+              Vermehrung
+            </SiteTitle>
+          )}
+          <Spacer />
+          <NavButton variant="outlined" component={Link} to="/Dokumentation/">
+            Dokumentation
+          </NavButton>
+          <NavButton variant="outlined" component={Link} to="/Vermehrung/">
+            Daten
+          </NavButton>
+        </Toolbar>
+      </AppBar>
+    </ErrorBoundary>
+  )
+}
+
+export default withResizeDetector(HeaderHome)
