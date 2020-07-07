@@ -4,14 +4,9 @@ import IconButton from '@material-ui/core/IconButton'
 
 import MenuItem from '@material-ui/core/MenuItem'
 import { FaCog } from 'react-icons/fa'
-import styled from 'styled-components'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import Menu from './Menu'
-
-const Icon = styled(FaCog)`
-  color: white;
-`
 
 const SettingsOverall = ({ asMenu, kulturId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -48,7 +43,7 @@ const SettingsOverall = ({ asMenu, kulturId }) => {
         title="Optionen wählen"
         onClick={onClickConfig}
       >
-        <Icon />
+        <FaCog />
       </IconButton>
       <Menu anchorEl={anchorEl} setAnchorEl={setAnchorEl} kulturId={kulturId} />
     </ErrorBoundary>
