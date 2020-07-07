@@ -108,7 +108,7 @@ const Index = ({ data }) => (
             style={bgImageStyle}
           />
           <PageTitle align="center" variant="h6" color="inherit">
-            Bedrohte Pflanzenarten vermehren
+            Bedrohte Pflanzen vermehren
           </PageTitle>
           <CardContainer>
             <Card>
@@ -122,7 +122,7 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Sammlungen</CardTitle>
-              ...beschreiben das Sammeln von Arten an Herkunfts-Orten.
+              ...beschreiben das Sammeln an Herkunfts-Orten.
             </Card>
             <Card>
               <CardTitle>Gärten</CardTitle>
@@ -131,12 +131,12 @@ const Index = ({ data }) => (
             </Card>
             <Card>
               <CardTitle>Kulturen</CardTitle>
-              Die Pflanzen einer Art und einer Herkunft in einem Garten bilden
-              eine Kultur.
+              Pflanzen einer Art und einer Herkunft in einem Garten bilden eine
+              Kultur.
             </Card>
             <Card>
               <CardTitle>Teil-Kulturen</CardTitle>
-              {`Grössere Gärten oder Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: "Beete", "Kästen", "Reihen".`}
+              {`Gärtnereien organisieren ihre Kulturen oft in Untereinheiten, wie zum Beispiel: "Beete", "Kästen", "Reihen".`}
             </Card>
             <Card>
               <CardTitle>Lieferungen</CardTitle>
