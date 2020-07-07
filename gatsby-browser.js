@@ -17,9 +17,6 @@ export const wrapRootElement = ({ element }) => <App element={element} />
 
 // https://github.com/gatsbyjs/gatsby/issues/9087#issuecomment-459105021
 export const onServiceWorkerUpdateReady = () => {
-  // turned off because updateExits was not reset if user simply restarted
-  // instead of clicking on the button
-  //setTimeout(() => window.store.setUpdateExists(true))
   if (
     window.confirm(
       'vermehrung.ch neu laden, um die neuste Version zu installieren?',
