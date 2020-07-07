@@ -3,7 +3,7 @@ import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
 import Layout from '../components/Layout'
-import Sidebar from '../templates/Sidebar'
+import Sidebar from '../templates/ArticleList'
 import ErrorBoundary from '../components/shared/ErrorBoundary'
 
 const Container = styled.div`

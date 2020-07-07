@@ -29,13 +29,11 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const KulturFormTitle = ({ totalNr, filteredNr, width }) => {
+const KulturFormTitle = ({ width }) => {
   return (
     <TitleContainer>
       <Title>Dokumentation</Title>
-      <TitleSymbols>
-        <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
-      </TitleSymbols>
+      <TitleSymbols>'TODO:'</TitleSymbols>
     </TitleContainer>
   )
 }

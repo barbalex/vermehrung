@@ -65,6 +65,8 @@ export const RootStore = RootStoreBase.props({
   docFilter: types.optional(types.union(types.string, types.number), ''),
   hideInactive: types.optional(types.maybeNull(types.boolean), true),
   sidebarWidth: types.maybeNull(types.number, null),
+  docsCount: types.maybeNull(types.number, null),
+  docsFilteredCount: types.maybeNull(types.number, null),
   isPrint: types.optional(types.boolean, false),
   updateExists: types.optional(types.boolean, false), // not in use!
   online: types.optional(types.boolean, true),
@@ -213,6 +215,12 @@ export const RootStore = RootStoreBase.props({
         },
       )
     return {
+      setDocsCount(val) {
+        self.docsCount = val
+      },
+      setDocsFilteredCount(val) {
+        self.docsFilteredCount = val
+      },
       setShowQueuedQueries(val) {
         self.showQueuedQueries = val
       },

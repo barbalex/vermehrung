@@ -5,14 +5,13 @@ import { FaTimes, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../models/reactUtils'
+import { StoreContext } from '../../../../models/reactUtils'
+import Numbers from './Numbers'
 
 const Container = styled.div`
   height: 100%;
   padding: 3px 6px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   border-radius: 3px;
   background-color: #6625b5 !important;
 `
@@ -38,7 +37,7 @@ const StyledDeleteFilterIcon = styled(FaTimes)`
 
 const Filter = () => {
   const store = useContext(StoreContext)
-  const { docFilter, setDocFilter } = store
+  const { docFilter, setDocFilter, docsCount, docsFilteredCount } = store
   const onChange = useCallback((e) => setDocFilter(e.target.value), [
     setDocFilter,
   ])
@@ -71,6 +70,7 @@ const Filter = () => {
           </InputAdornment>
         }
       />
+      <Numbers totalNr={docsCount} filteredNr={docsFilteredCount} />
     </Container>
   )
 }
