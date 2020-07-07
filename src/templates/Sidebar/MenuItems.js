@@ -4,7 +4,8 @@ import Divider from '@material-ui/core/Divider'
 
 import MenuItem from './MenuItem'
 
-const MenuItems = ({ items }) => {
+const MenuItems = ({ items = [] }) => {
+  console.log('MenuItems, items:', items)
   return (
     <List component="nav">
       <Divider />

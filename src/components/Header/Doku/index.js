@@ -9,10 +9,11 @@ import { Link } from 'gatsby'
 import { withResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../models/reactUtils'
-import getConstants from '../../utils/constants'
-import exists from '../../utils/exists'
-import ErrorBoundary from '../shared/ErrorBoundary'
+import { StoreContext } from '../../../models/reactUtils'
+import getConstants from '../../../utils/constants'
+import exists from '../../../utils/exists'
+import ErrorBoundary from '../../shared/ErrorBoundary'
+import Filter from './Filter'
 
 const constants = getConstants()
 
@@ -103,6 +104,7 @@ const HeaderDoku = ({ width }) => {
             </SiteTitle>
           )}
           <Spacer />
+          <Filter />
           <NavButton variant="outlined" component={Link} to="/Vermehrung/">
             Daten bearbeiten
           </NavButton>
