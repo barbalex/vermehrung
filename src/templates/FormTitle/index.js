@@ -1,9 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import { withResizeDetector } from 'react-resize-detector'
-
-import FilterNumbers from '../../components/shared/FilterNumbers'
 
 const TitleContainer = styled.div`
   background-color: rgba(74, 20, 140, 0.1);
@@ -23,19 +20,19 @@ const Title = styled.div`
   margin-bottom: auto;
   padding-left: 10px;
 `
-const TitleSymbols = styled.div`
+/*const TitleSymbols = styled.div`
   display: flex;
   margin-top: auto;
   margin-bottom: auto;
-`
+`*/
 
-const KulturFormTitle = ({ width }) => {
+const KulturFormTitle = () => {
   return (
     <TitleContainer>
       <Title>Dokumentation</Title>
-      <TitleSymbols>'TODO:'</TitleSymbols>
+      {/*<TitleSymbols>'TODO:'</TitleSymbols>*/}
     </TitleContainer>
   )
 }
 
-export default withResizeDetector(observer(KulturFormTitle))
+export default observer(KulturFormTitle)
