@@ -22,10 +22,9 @@ const StyledList = styled(List)`
   }
 `
 
-const singleRowHeight = 23
-
 const Tree = ({ width, height }) => {
   const store = useContext(StoreContext)
+  const { singleRowHeight } = store.tree
 
   const { activeNodeArray: aNA, nodes } = store.tree
 
