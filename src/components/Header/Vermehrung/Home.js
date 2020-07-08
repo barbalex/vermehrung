@@ -8,7 +8,6 @@ import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../models/reactUtils'
-import exists from '../../../utils/exists'
 
 const SiteTitle = styled(Button)`
   display: none;
@@ -27,7 +26,7 @@ const SiteTitle = styled(Button)`
 
 const Home = ({ asMenu }) => {
   const store = useContext(StoreContext)
-  const { widthEnforced } = store.tree
+  const { singleColumnView } = store
 
   if (asMenu) {
     return (
@@ -37,7 +36,7 @@ const Home = ({ asMenu }) => {
     )
   }
 
-  if (exists(widthEnforced)) {
+  if (singleColumnView) {
     return (
       <IconButton
         color="inherit"

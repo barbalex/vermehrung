@@ -4,46 +4,45 @@ import NavTree from '../../../svg/nav_tree.inline.svg'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import getConstants from '../../../utils/constants'
-import exists from '../../../utils/exists'
 import { StoreContext } from '../../../models/reactUtils'
-
-const constants = getConstants()
 
 const StyledNavTree = styled(NavTree)`
   width: 24px;
   height: 24px;
   color: white;
 `
+const StyledIconButton = styled(IconButton)`
+  ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
+`
 
 const NavTreeButton = () => {
   const store = useContext(StoreContext)
-  const { widthEnforced, setWidthEnforced } = store.tree
+  const {
+    setShowTreeInSingleColumnView,
+    showTreeInSingleColumnView,
+    singleColumnView,
+  } = store
 
   const onClickTreeMenu = useCallback(() => {
-    if (widthEnforced === 0) {
-      setWidthEnforced(constants?.tree?.minimalWidth)
-    }
-    if (widthEnforced > 0) {
-      setWidthEnforced(0)
-    }
-  }, [setWidthEnforced, widthEnforced])
+    setShowTreeInSingleColumnView(!showTreeInSingleColumnView)
+  }, [setShowTreeInSingleColumnView, showTreeInSingleColumnView])
 
-  if (!exists(widthEnforced)) return null
+  if (!singleColumnView) return null
 
   return (
-    <IconButton
+    <StyledIconButton
       color="inherit"
       aria-label="Navigations-Baum öffnen"
       onClick={onClickTreeMenu}
       title={
-        widthEnforced === 0
-          ? 'Navigations-Baum öffnen'
-          : 'Navigations-Baum schliessen'
+        showTreeInSingleColumnView
+          ? 'Navigations-Baum schliessen'
+          : 'Navigations-Baum öffnen'
       }
+      data-active={showTreeInSingleColumnView}
     >
       <StyledNavTree />
-    </IconButton>
+    </StyledIconButton>
   )
 }
 

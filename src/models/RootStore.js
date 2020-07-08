@@ -67,6 +67,8 @@ export const RootStore = RootStoreBase.props({
   docsCount: types.maybeNull(types.number, null),
   docsFilteredCount: types.maybeNull(types.number, null),
   isPrint: types.optional(types.boolean, false),
+  singleColumnView: types.optional(types.boolean, false),
+  showTreeInSingleColumnView: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
   // register initial loading
   loading: types.optional(types.boolean, false),
@@ -213,6 +215,12 @@ export const RootStore = RootStoreBase.props({
         },
       )
     return {
+      setShowTreeInSingleColumnView(val) {
+        self.showTreeInSingleColumnView = val
+      },
+      setSingleColumnView(val) {
+        self.singleColumnView = val
+      },
       setDocsCount(val) {
         self.docsCount = val
       },
