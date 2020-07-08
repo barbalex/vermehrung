@@ -21,6 +21,9 @@ const FilterButton = styled(StyledButton)`
   border-width: ${(props) =>
     props['data-active'] ? '1px !important' : '0 !important'};
 `
+const StyledIconButton = styled(IconButton)`
+  ${(props) => props['data-active'] && 'border: 1px solid #9762d9 !important;'}
+`
 
 const Filter = () => {
   const store = useContext(StoreContext)
@@ -34,14 +37,15 @@ const Filter = () => {
 
   if (singleColumnView) {
     return (
-      <IconButton
+      <StyledIconButton
         color="inherit"
         aria-label="Filter"
         onClick={onClickFilter}
         title="Filter"
+        data-active={showFilter}
       >
         <FaFilter />
-      </IconButton>
+      </StyledIconButton>
     )
   }
 
