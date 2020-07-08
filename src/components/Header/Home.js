@@ -41,23 +41,29 @@ const NavButton = styled(Button)`
   }
 `
 
-const HeaderHome = ({ width }) => {
+const HeaderHome = ({ width, location }) => {
   const mobile = width && width < constants?.tree?.minimalWindowWidth
+  const { pathname } = location
+  const isHome = pathname === '/'
 
   return (
     <ErrorBoundary>
       <AppBar position="fixed">
         <Toolbar>
           {mobile ? (
-            <IconButton
-              color="inherit"
-              aria-label="Home"
-              component={Link}
-              to="/"
-              title="Home"
-            >
-              <FaHome />
-            </IconButton>
+            isHome ? (
+              <div />
+            ) : (
+              <IconButton
+                color="inherit"
+                aria-label="Home"
+                component={Link}
+                to="/"
+                title="Home"
+              >
+                <FaHome />
+              </IconButton>
+            )
           ) : (
             <SiteTitle variant="outlined" component={Link} to="/" title="Home">
               Vermehrung
