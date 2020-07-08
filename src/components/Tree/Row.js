@@ -120,14 +120,14 @@ const StyledNode = styled.div`
   margin: 0;
   display: flex;
   flex-direction: row;
+  align-items: center;
   white-space: nowrap;
   user-select: none;
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
-  margin-top: ${(props) =>
-    props['data-nodeisopen'] ? '-5px !important' : '1px !important'};
+  margin-top: -5px !important;
   margin-left: ${(props) => (props['data-nodeisopen'] ? '-1px !important' : 0)};
   margin-right: ${(props) =>
     props['data-nodeisopen'] ? '-5px !important' : 0};
@@ -153,10 +153,6 @@ const StyledChevronRightIcon = styled(ChevronRightIcon)`
   }
 `
 const StyledMoreHorizIcon = styled(MoreHorizIcon)`
-  margin-top: ${(props) =>
-    props['data-nodeisinactivenodepath']
-      ? '-5px !important'
-      : '-2px !important'};
   padding-left: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
   height: ${(props) =>
@@ -177,17 +173,20 @@ const StyledAccountIcon = styled(AccountIcon)`
 `
 const SymbolDiv = styled.div`
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 const SymbolSpan = styled.span`
-  padding-right: 11px !important;
+  padding-right: ${(props) =>
+    props['data-mobile'] ? '13px !important' : '11px !important'};
   padding-left: 9px;
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   margin-top: ${(props) =>
-    props['data-mobile'] ? '-12px !important' : '-10px !important'};
+    props['data-mobile'] ? '-2px !important' : '-1px !important'};
   font-size: ${(props) =>
     props['data-mobile'] ? '32px !important' : '28px !important'};
-  width: 9px;
   width: ${(props) => (props['data-mobile'] ? '12px' : '9px')};
 `
 const TextSpan = styled.span`
