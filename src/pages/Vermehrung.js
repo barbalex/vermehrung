@@ -70,6 +70,8 @@ const Vermehrung = ({ location }) => {
     initialDataQueried,
     isPrint,
     showQueuedQueries,
+    singleColumnView,
+    showTreeInSingleColumnView,
     user,
   } = store
 
@@ -78,12 +80,11 @@ const Vermehrung = ({ location }) => {
     setOpenNodes,
     setActiveNodeArray,
     widthInPercentOfScreen,
-    widthEnforced,
   } = store.tree
   const showFilter = store.filter.show
-  let treeWidth = exists(widthEnforced)
-    ? activeForm || showFilter
-      ? widthEnforced
+  let treeWidth = singleColumnView
+    ? (!showTreeInSingleColumnView && activeForm) || showFilter
+      ? 0
       : // if no form is active, show only tree
         '100%'
     : `${widthInPercentOfScreen}%`

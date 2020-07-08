@@ -55,8 +55,9 @@ const Search = () => {
     searchPersonSuggestions,
     searchSammlungSuggestions,
     searchZaehlungSuggestions,
+    singleColumnView,
   } = store
-  const { widthEnforced, setActiveNodeArray } = store.tree
+  const { setActiveNodeArray } = store.tree
 
   const onChange = useCallback(
     (option) => {
@@ -326,7 +327,7 @@ const Search = () => {
         borderRadius: '3px',
         backgroundColor: 'rgba(0, 0, 0, 0)',
         marginLeft: 0,
-        paddingLeft: exists(widthEnforced) ? '2px' : '25px',
+        paddingLeft: singleColumnView ? '2px' : '25px',
       }),
       valueContainer: (provided) => ({
         ...provided,
@@ -391,12 +392,12 @@ const Search = () => {
         color: '#ac87d0',
       }),
     }),
-    [maxWidth, widthEnforced],
+    [maxWidth, singleColumnView],
   )
 
   return (
     <Container ref={ref}>
-      {!exists(widthEnforced) && <SearchIcon />}
+      {!singleColumnView && <SearchIcon />}
       <StyledSelect
         styles={customStyles}
         onChange={onChange}

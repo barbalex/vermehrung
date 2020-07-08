@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { observer } from 'mobx-react-lite'
 
-import exists from '../../../utils/exists'
 import { StoreContext } from '../../../models/reactUtils'
 
 const StyledButton = styled(Button)`
@@ -23,9 +22,9 @@ const StyledButton = styled(Button)`
 
 const DocuButton = ({ asMenu }) => {
   const store = useContext(StoreContext)
-  const { widthEnforced } = store.tree
+  const { singleColumnView } = store
 
-  if (exists(widthEnforced)) {
+  if (singleColumnView) {
     if (asMenu) {
       return (
         <MenuItem component={Link} to="/Dokumentation/">

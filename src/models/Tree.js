@@ -140,14 +140,10 @@ export default types
       types.array(types.union(types.string, types.number)),
     ),
     widthInPercentOfScreen: types.optional(types.number, 33),
-    widthEnforced: types.maybeNull(types.number, null),
   })
   .actions((self) => ({
     setWidthInPercentOfScreen(val) {
       self.widthInPercentOfScreen = val
-    },
-    setWidthEnforced(val) {
-      self.widthEnforced = val
     },
     setActiveNodeArray(val, nonavigate) {
       self.activeNodeArray = val

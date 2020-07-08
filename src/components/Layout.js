@@ -3,10 +3,16 @@
  * because neither StaticQuery nor AppQuery
  * work there :-(
  */
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
+import { withResizeDetector } from 'react-resize-detector'
+
+import { StoreContext } from '../models/reactUtils'
+import getConstants from '../utils/constants'
+
+const constants = getConstants()
 
 import Header from './Header'
 
@@ -25,7 +31,19 @@ const query = graphql`
   }
 `
 
-const Layout = ({ children }) => {
+const Layout = ({ children, width }) => {
+  const store = useContext(StoreContext)
+  const { singleColumnView, setSingleColumnView } = store
+
+  useEffect(() => {
+    if (width > constants?.tree?.minimalWindowWidth && singleColumnView) {
+      setSingleColumnView(false)
+    }
+    if (width < constants?.tree?.minimalWindowWidth && !singleColumnView) {
+      setSingleColumnView(true)
+    }
+  }, [setSingleColumnView, singleColumnView, width])
+
   const data = useStaticQuery(query)
 
   return (
@@ -51,4 +69,4 @@ const Layout = ({ children }) => {
   )
 }
 
-export default Layout
+export default withResizeDetector(Layout)

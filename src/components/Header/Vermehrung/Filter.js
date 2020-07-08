@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from '../../../models/reactUtils'
-import exists from '../../../utils/exists'
 
 const StyledButton = styled(Button)`
   color: white !important;
@@ -25,8 +24,7 @@ const FilterButton = styled(StyledButton)`
 
 const Filter = () => {
   const store = useContext(StoreContext)
-  const { filter } = store
-  const { widthEnforced } = store.tree
+  const { filter, singleColumnView } = store
   const { show: showFilter, setShow: setShowFilter } = filter
 
   const onClickFilter = useCallback(() => setShowFilter(!showFilter), [
@@ -34,7 +32,7 @@ const Filter = () => {
     showFilter,
   ])
 
-  if (exists(widthEnforced)) {
+  if (singleColumnView) {
     return (
       <IconButton
         color="inherit"
