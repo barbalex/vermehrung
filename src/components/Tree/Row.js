@@ -32,7 +32,6 @@ import {
 
 const constants = getConstants()
 
-const singleRowHeight = 23
 const Container = styled.div`
   padding-right: 4px;
   .react-contextmenu {
@@ -115,8 +114,8 @@ const Container = styled.div`
 `
 const StyledNode = styled.div`
   padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
-  height: ${singleRowHeight}px;
-  max-height: ${singleRowHeight}px;
+  height: ${(props) => props['data-row-height']}px;
+  max-height: ${(props) => props['data-row-height']}px;
   box-sizing: border-box;
   margin: 0;
   display: flex;
@@ -184,16 +183,18 @@ const SymbolSpan = styled.span`
   padding-left: 9px;
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
-  margin-top: -10px !important;
-  font-size: 28px !important;
+  margin-top: ${(props) =>
+    props['data-mobile'] ? '-12px !important' : '-10px !important'};
+  font-size: ${(props) =>
+    props['data-mobile'] ? '32px !important' : '28px !important'};
   width: 9px;
+  width: ${(props) => (props['data-mobile'] ? '12px' : '9px')};
 `
 const TextSpan = styled.span`
   margin-left: 0;
   padding-right: 4px;
   font-family: ${(props) => (props['data-mono'] ? 'Roboto Mono' : 'Roboto')};
-  font-size: ${(props) =>
-    props['data-mono'] ? '15px !important' : '16px !important'};
+  font-size: ${(props) => `${props['data-font-size']}px !important`};
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   white-space: nowrap;
@@ -209,8 +210,25 @@ const MenuSubtitle = styled.div`
 const Row = ({ style, node, nodes }) => {
   const store = useContext(StoreContext)
 
-  const { tree, addNotification, userPerson, online, setOnline } = store
-  const { activeNodeArray } = tree
+  const {
+    addNotification,
+    online,
+    setOnline,
+    showTreeInSingleColumnView,
+    singleColumnView,
+    tree,
+    userPerson,
+  } = store
+  const { activeNodeArray, singleRowHeight } = tree
+
+  const isMobile = showTreeInSingleColumnView && singleColumnView
+  let fontSize = node?.mono ? 15 : 16
+  if (isMobile) fontSize = node?.mono ? 17 : 18
+  console.log('row', {
+    isMobile,
+    singleColumnView,
+    showTreeInSingleColumnView,
+  })
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen({ store, url: node?.url })
@@ -316,10 +334,11 @@ const Row = ({ style, node, nodes }) => {
       <ContextMenuTrigger id={`cm${node?.id}`}>
         <StyledNode
           data-level={level}
+          data-row-height={singleRowHeight}
           data-nodeisinactivenodepath={nodeIsInActiveNodePath}
         >
           {useSymbolIcon && (
-            <SymbolDiv onClick={onClickNodeSymbol}>
+            <SymbolDiv onClick={onClickNodeSymbol} data-mobile={isMobile}>
               {symbolIcon === 'expandMore' && (
                 <StyledExpandMoreIcon
                   data-nodeisinactivenodepath={nodeIsInActiveNodePath}
@@ -335,7 +354,10 @@ const Row = ({ style, node, nodes }) => {
             </SymbolDiv>
           )}
           {useSymbolSpan && (
-            <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
+            <SymbolSpan
+              data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+              data-mobile={isMobile}
+            >
               {'-'}
             </SymbolSpan>
           )}
@@ -344,6 +366,7 @@ const Row = ({ style, node, nodes }) => {
             node={node}
             onClick={onClickNode}
             data-mono={!!node?.mono}
+            data-font-size={fontSize}
           >
             {node?.label ?? '(kein Label)'}
           </TextSpan>

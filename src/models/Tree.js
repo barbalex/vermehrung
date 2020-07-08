@@ -181,6 +181,13 @@ export default types
     },
   }))
   .views((self) => ({
+    get singleRowHeight() {
+      const store = getParent(self, 1)
+      const { showTreeInSingleColumnView, singleColumnView } = store
+      const isMobile = showTreeInSingleColumnView && singleColumnView
+      const singleRowHeight = isMobile ? 30 : 23
+      return singleRowHeight
+    },
     get activeNode() {
       return self.nodes.find((n) => isEqual(n.url, self.activeNodeArray))
     },
