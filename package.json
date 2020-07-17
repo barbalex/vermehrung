@@ -103,7 +103,7 @@
   "peerDependencies": {
     "@babel/types": "7.x",
     "babel-plugin-styled-components": "1.x",
-    "graphql": "14.x",
+    "graphql": "15.3.0",
     "prop-types": "15.x",
     "react-is": "16.x",
     "webpack": "4.x"
