@@ -223,11 +223,6 @@ const Row = ({ style, node, nodes }) => {
   const isMobile = showTreeInSingleColumnView && singleColumnView
   let fontSize = node?.mono ? 15 : 16
   if (isMobile) fontSize = node?.mono ? 17 : 18
-  console.log('row', {
-    isMobile,
-    singleColumnView,
-    showTreeInSingleColumnView,
-  })
 
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen({ store, url: node?.url })
