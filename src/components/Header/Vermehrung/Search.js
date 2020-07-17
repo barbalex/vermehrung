@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 
 import { StoreContext } from '../../../models/reactUtils'
-import exists from '../../../utils/exists'
 
 const Container = styled.div`
   border-radius: 3px;
