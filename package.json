@@ -1,12 +1,12 @@
 {
   "name": "vermehrung.ch",
   "description": "breeding endangered plant species",
-  "version": "0.43.5",
+  "version": "0.43.6",
   "license": "MIT",
   "scripts": {
     "dev": "gatsby develop",
     "clean": "gatsby clean",
-    "build": "gatsby clean && gatsby build && copyfiles .now/* public && copyfiles now.json public",
+    "build": "gatsby clean && gatsby build && copyfiles .now/* public && copyfiles now.json public && copyfiles assetlinks.json public/.well-known",
     "serve": "gatsby serve"
   },
   "dependencies": {
