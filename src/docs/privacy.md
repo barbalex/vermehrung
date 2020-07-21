@@ -5,7 +5,7 @@ title: "Datenschutz"
 sort1: 29
 ---
 
-Weil eine Datenschutzvereinbarung verlangt wird und rechtlich heikel ist, habe ich nachfolgend den Text aus einer Vorlage kopiert und leicht angepasst. Im Zweifel gilt der vernünftige Menschenverstand.<br/><br/>
+Weil eine Datenschutzvereinbarung nötig und rechtlich heikel ist, habe ich nachfolgend den Text aus einer Vorlage kopiert und leicht angepasst. Im Zweifel gilt der vernünftige Menschenverstand.<br/><br/>
 
 This Privacy Policy describes Our policies and procedures on the
 collection, use and disclosure of Your information when You use the
