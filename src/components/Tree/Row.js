@@ -7,7 +7,6 @@ import { MdAccountCircle as AccountIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 //import { ContextMenuTrigger, ContextMenu, MenuItem } from 'react-contextmenu'
 import last from 'lodash/last'
-import axios from 'axios'
 
 import { StoreContext } from '../../models/reactUtils'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
@@ -20,7 +19,6 @@ import toggleNode from './toggleNode'
 import toggleNodeSymbol from './toggleNodeSymbol'
 import createNew from './createNew'
 import deleteDataset from './delete'
-import getConstants from '../../utils/constants'
 import signup from '../../utils/signup'
 import deleteAccount from '../../utils/deleteAccount'
 import setPassword from '../../utils/setPassword'
@@ -29,8 +27,6 @@ import {
   ContextMenu,
   MenuItem,
 } from '../../utils/react-contextmenu'
-
-const constants = getConstants()
 
 const Container = styled.div`
   padding-right: 4px;
@@ -210,9 +206,6 @@ const Row = ({ style, node, nodes }) => {
   const store = useContext(StoreContext)
 
   const {
-    addNotification,
-    online,
-    setOnline,
     showTreeInSingleColumnView,
     singleColumnView,
     tree,
@@ -270,30 +263,10 @@ const Row = ({ style, node, nodes }) => {
     node,
     store,
   ])
-  const onClickDelete = useCallback(async () => {
-    deleteDataset({ node, store })
-    // delete firebase user
-    if (accountId) {
-      try {
-        axios.get(`${constants?.authUri}/delete-user/${accountId}`)
-      } catch (error) {
-        console.log(error)
-        if (online) {
-          setOnline(false)
-        }
-        addNotification({
-          message: error.response.data,
-        })
-      }
-      if (!online) {
-        setOnline(true)
-      }
-      addNotification({
-        message: 'Das Konto wurde auch gelöscht',
-        type: 'info',
-      })
-    }
-  }, [accountId, addNotification, node, online, setOnline, store])
+  const onClickDelete = useCallback(() => deleteDataset({ node, store }), [
+    node,
+    store,
+  ])
 
   const onClickSetPassword = useCallback(() => setPassword({ store, person }), [
     person,

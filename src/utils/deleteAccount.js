@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'redaxios'
 
 import getConstants from './constants'
 
@@ -31,7 +31,7 @@ export default async ({ store, person }) => {
   // remove users account_id
   person.edit({ field: 'account_id', value: null })
   return addNotification({
-    message: `Das Konto wurde entfernt`,
+    message: `Das Benutzerkonto wurde entfernt`,
     type: 'info',
   })
 }

@@ -3366,7 +3366,7 @@ axe-core@^3.5.4:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.5.5.tgz#84315073b53fa3c0c51676c588d59da09a192227"
   integrity sha512-5P0QZ6J5xGikH780pghEdbEKijCTrruK9KxtPZCFWUpef0f6GipO+xEZ5GKCb020mmqgbiNO6TcA55CriL784Q==
 
-axios@0.19.2, axios@^0.19.2:
+axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
@@ -13942,6 +13942,11 @@ recursive-readdir@2.2.1:
   integrity sha1-kO8jHQd4xc4JPJpI105cVCLROpk=
   dependencies:
     minimatch "3.0.3"
+
+redaxios@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/redaxios/-/redaxios-0.3.0.tgz#83bf141494afbe210c44f32b142b8fd73c953f02"
+  integrity sha512-9C4Wvdp/jn4wwBCGMntqu0JCAw+Kfr/uGfMR+JwC0Bg94ORTRzo2dPdHSIPxwSE9/4ORYKmOjhH28mHiuzZSJA==
 
 redent@^1.0.0:
   version "1.0.0"
