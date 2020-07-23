@@ -5,7 +5,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import axios from 'axios'
+import axios from 'redaxios'
 
 import { StoreContext } from '../models/reactUtils'
 import getConstants from '../utils/constants'

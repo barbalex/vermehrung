@@ -5,6 +5,7 @@ import { v1 as uuidv1 } from 'uuid'
 import { personModelBase } from './personModel.base'
 import toPgArray from '../utils/toPgArray'
 import toStringIfPossible from '../utils/toStringIfPossible'
+import deleteAccount from '../utils/deleteAccount'
 
 /* A graphql query fragment builders for personModel */
 export {
@@ -110,7 +111,10 @@ export const personModel = personModelBase
       unsetError({ path: `person.${field}` })
     },
     delete() {
+      const store = getParent(self, 2)
       self.edit({ field: '_deleted', value: true })
+      // delete firebase user
+      deleteAccount({ store, person: self })
     },
   }))
   .views((self) => ({

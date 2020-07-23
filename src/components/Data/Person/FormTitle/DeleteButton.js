@@ -5,13 +5,9 @@ import { FaMinus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import axios from 'axios'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import getConstants from '../../../../utils/constants'
-
-const constants = getConstants()
 
 const TitleRow = styled.div`
   display: flex;
@@ -28,7 +24,7 @@ const Title = styled.div`
 
 const PersonDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
-  const { addNotification, showDeleted, online, setOnline } = store
+  const { showDeleted } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -45,19 +41,6 @@ const PersonDeleteButton = ({ row }) => {
     [],
   )
   const remove = useCallback(async () => {
-    // delete firebase user
-    if (row.account_id) {
-      try {
-        await axios.get(`${constants?.authUri}/delete-user/${row.account_id}`)
-      } catch (error) {
-        addNotification({
-          message: error.response.data,
-        })
-        if (online) {
-          setOnline(false)
-        }
-      }
-    }
     row.delete()
     setAnchorEl(null)
     if (!showDeleted) {
@@ -67,12 +50,9 @@ const PersonDeleteButton = ({ row }) => {
     }
   }, [
     activeNodeArray,
-    addNotification,
-    online,
     removeOpenNodeWithChildren,
     row,
     setActiveNodeArray,
-    setOnline,
     showDeleted,
   ])
 
