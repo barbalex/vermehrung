@@ -127,10 +127,11 @@ const Person = ({
     [filter, row, showFilter],
   )
 
+  const rowNr = row?.nr
   const nrCount = useMemo(() => {
-    if (!exists(row?.nr)) return 0
-    return personsSorted.filter((h) => h.nr === row.nr).length
-  }, [personsSorted, row?.nr])
+    if (!exists(rowNr)) return 0
+    return personsSorted.filter((h) => h.nr === rowNr).length
+  }, [personsSorted, rowNr])
 
   useEffect(() => {
     if (nrCount > 1) {
