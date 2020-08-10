@@ -159,15 +159,16 @@ const Event = ({
     [kultursSorted],
   )
 
+  const kulturId = row?.kultur_id
   const teilkulturWerte = useMemo(
     () =>
       teilkultursSorted
-        .filter((t) => t.kultur_id === row?.kultur_id)
+        .filter((t) => t.kultur_id === kulturId)
         .map((t) => ({
           value: t.id,
           label: t.name || '(kein Name)',
         })),
-    [row?.kultur_id, teilkultursSorted],
+    [kulturId, teilkultursSorted],
   )
 
   const personWerte = useMemo(
