@@ -179,10 +179,11 @@ const Herkunft = ({
     }
   }, [])
 
+  const rowNr = row?.nr
   const nrCount = useMemo(() => {
-    if (!exists(row?.nr)) return 0
-    return herkunftsSorted.filter((h) => h.nr === row.nr).length
-  }, [herkunftsSorted, row?.nr])
+    if (!exists(rowNr)) return 0
+    return herkunftsSorted.filter((h) => h.nr === rowNr).length
+  }, [herkunftsSorted, rowNr])
   useEffect(() => {
     if (nrCount > 1) {
       setError({
