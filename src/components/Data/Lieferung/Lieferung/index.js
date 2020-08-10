@@ -389,14 +389,15 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
     [activeNodeArray, setActiveNodeArray],
   )
+  const nachKulturId = row?.nach_kultur_id
   const onClickToKultur = useCallback(
     () =>
       setActiveNodeArray([
         ...activeNodeArray.filter((n) => n !== 'Kulturen'),
         'Kulturen',
-        row?.nach_kultur_id,
+        nachKulturId,
       ]),
-    [activeNodeArray, row?.nach_kultur_id, setActiveNodeArray],
+    [activeNodeArray, nachKulturId, setActiveNodeArray],
   )
   const showToKu = activeNodeArray[0] === 'Sammlungen'
 
