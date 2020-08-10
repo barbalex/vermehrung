@@ -165,9 +165,9 @@ const SammelLieferung = ({
     ? 'von-Kultur'
     : 'Sammlung'
   const herkunftValue = herkunft
-    ? `${herkunft.nr || '(keine Nr)'}: ${
-        herkunft?.gemeinde || '(keine Gemeinde)'
-      }, ${herkunft.lokalname || '(kein Lokalname)'}`
+    ? `${herkunft?.nr ?? '(keine Nr)'}: ${
+        herkunft?.gemeinde ?? '(keine Gemeinde)'
+      }, ${herkunft.lokalname ?? '(kein Lokalname)'}`
     : ''
 
   useEffect(() => {
