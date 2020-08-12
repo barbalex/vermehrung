@@ -102,11 +102,7 @@ const Index = ({ data }) => (
     <Layout>
       <ScrollContainer>
         <Container>
-          <Img
-            sizes={data.file.childImageSharp.sizes}
-            fluid={data.file.childImageSharp.fluid}
-            style={bgImageStyle}
-          />
+          <Img fluid={data.file.childImageSharp.fluid} style={bgImageStyle} />
           <PageTitle align="center" variant="h6" color="inherit">
             Bedrohte Pflanzen vermehren
           </PageTitle>
@@ -220,9 +216,6 @@ export const query = graphql`
       childImageSharp {
         fluid {
           ...GatsbyImageSharpFluid
-        }
-        sizes {
-          ...GatsbyImageSharpSizes
         }
       }
     }
