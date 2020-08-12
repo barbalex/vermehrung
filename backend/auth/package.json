@@ -8,8 +8,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@hapi/hapi": "19.1.1",
-    "firebase-admin": "8.12.1",
+    "@hapi/hapi": "20.0.0",
+    "firebase-admin": "9.0.0",
     "postgres": "1.0.2"
   }
 }
