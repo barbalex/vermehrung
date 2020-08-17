@@ -35,7 +35,7 @@ const EventsRows = ({ row, style, last }) => {
     () => setActiveNodeArray([...activeNodeArray, row.id]),
     [activeNodeArray, row.id, setActiveNodeArray],
   )
-  const label = row?.name ?? '(kein Name)'
+  const label = row?.fullname ?? '(kein Name)'
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
