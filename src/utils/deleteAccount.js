@@ -29,9 +29,12 @@ export default async ({ store, person }) => {
     })
   }
   // remove users account_id
-  person.edit({ field: 'account_id', value: null })
-  return addNotification({
-    message: `Das Benutzerkonto wurde entfernt`,
-    type: 'info',
-  })
+  // but only if it exists
+  if (person?.account_id) {
+    person.edit({ field: 'account_id', value: null })
+    return addNotification({
+      message: `Das Benutzerkonto wurde entfernt`,
+      type: 'info',
+    })
+  }
 }
