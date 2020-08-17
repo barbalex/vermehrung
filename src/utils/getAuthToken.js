@@ -7,7 +7,6 @@ const getAuthToken = async ({ store }) => {
     setQueryingAllData,
     user,
     gqlHttpClient,
-    gqlWsClient,
     online,
     setOnline,
   } = store
@@ -59,14 +58,6 @@ const getAuthToken = async ({ store }) => {
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     setAuthorizing(false)
     setQueryingAllData(false)
-    /*setTimeout(() => {
-      console.log('getAuthToken closing gqlWsClient')
-      gqlWsClient.close(false, false)
-      // ws client only works if app is reloaded after closing it :-(
-      // otherwise keeps getting jwt errors
-      console.log('getAuthToken reloading')
-      window.location.reload(true)
-    }, 1000)*/
   } else {
     //console.log('getAuthToken, got no new token')
     setAuthorizing(false)
