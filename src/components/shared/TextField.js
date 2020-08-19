@@ -12,10 +12,14 @@ const StyledFormControl = styled(FormControl)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const StyledInputLabel = styled(InputLabel)`
+  font-weight: ${(props) => props['data-weight']};
+`
 
 const MyTextField = ({
   value,
   label,
+  labelWeight = 400,
   name,
   type = 'text',
   multiLine = false,
@@ -54,9 +58,13 @@ const MyTextField = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
     >
-      <InputLabel htmlFor={label} shrink={schrink}>
+      <StyledInputLabel
+        htmlFor={label}
+        shrink={schrink}
+        data-weight={labelWeight}
+      >
         {label}
-      </InputLabel>
+      </StyledInputLabel>
       <Input
         id={label}
         name={name}

@@ -7,6 +7,7 @@ import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../../../models/reactUtils'
 import TextField from '../../../../shared/TextField'
+import TextFieldNonUpdatable from '../../../../shared/TextFieldNonUpdatable'
 import Checkbox2States from '../../../../shared/Checkbox2States'
 import Select from '../../../../shared/SelectCreatable'
 import ConflictList from '../../../../shared/ConflictList'
@@ -230,6 +231,7 @@ const Teilzaehlung = ({
             <Anzahl>
               <TextField
                 key={`${row.id}anzahl_pflanzen`}
+                labelWeight={600}
                 name="anzahl_pflanzen"
                 label="Anzahl Pflanzen"
                 value={row.anzahl_pflanzen}
@@ -262,12 +264,23 @@ const Teilzaehlung = ({
                 />
               </Anzahl>
             )}
+            <Anzahl>
+              <TextFieldNonUpdatable
+                key={`${row.id}anzahl_jungpflanzen`}
+                label="Anzahl Jungpflanzen"
+                schrinkLabel={true}
+                value={row.anzahl_jungpflanzen}
+                type="number"
+                message="Wird berechnet aus: Anzahl Pflanzen - auspflanzbereit - Mutterpflanzen"
+              />
+            </Anzahl>
             {tz_andere_menge && (
               <Other>
                 <TextField
                   key={`${row.id}andere_menge`}
                   name="andere_menge"
                   label={`Andere Menge (z.B. "3 Zwiebeln")`}
+                  labelWeight={600}
                   value={row.andere_menge}
                   saveToDb={saveToDb}
                   error={errors?.teilzaehlung?.andere_menge}
@@ -281,6 +294,7 @@ const Teilzaehlung = ({
                   key={`${row.id}auspflanzbereit_beschreibung`}
                   name="auspflanzbereit_beschreibung"
                   label="Beschreibung auspflanzbereite Pflanzen (z.B. Topfgrösse)"
+                  labelWeight={600}
                   value={row.auspflanzbereit_beschreibung}
                   saveToDb={saveToDb}
                   error={errors?.teilzaehlung?.auspflanzbereit_beschreibung}
@@ -294,6 +308,7 @@ const Teilzaehlung = ({
                   key={`${row.id}bemerkungen`}
                   name="bemerkungen"
                   label="Bemerkungen"
+                  labelWeight={600}
                   value={row.bemerkungen}
                   saveToDb={saveToDb}
                   error={errors?.teilzaehlung?.bemerkungen}
