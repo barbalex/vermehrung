@@ -119,7 +119,7 @@ const ZaehlungConflict = ({
     },
   ]
 
-  const onClickVerwerfen = useCallback(async () => {
+  const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
     callbackAfterVerwerfen()
   }, [callbackAfterVerwerfen, revRow])
