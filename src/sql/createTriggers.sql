@@ -1,4 +1,3 @@
-
 DROP TRIGGER IF EXISTS zaehlung_has_teilzaehlung ON teilzaehlung cascade;
 DROP FUNCTION IF EXISTS zaehlung_has_teilzaehlung() cascade;
 CREATE FUNCTION zaehlung_has_teilzaehlung() RETURNS trigger AS $zaehlung_has_teilzaehlung$
