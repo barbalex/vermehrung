@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -80,10 +80,13 @@ const SammlungConflict = ({
   error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
-  const revRow =
-    [...store.sammlung_revs.values()].find(
-      (v) => v._rev === rev && v.sammlung_id === id,
-    ) || {}
+  const revRow = useMemo(
+    () =>
+      [...store.sammlung_revs.values()].find(
+        (v) => v._rev === rev && v.sammlung_id === id,
+      ) || {},
+    [id, rev, store.sammlung_revs],
+  )
 
   const dataArray = [
     {
@@ -163,7 +166,7 @@ const SammlungConflict = ({
     },
   ]
 
-  const onClickVerwerfen = useCallback(async () => {
+  const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
     callbackAfterVerwerfen()
   }, [callbackAfterVerwerfen, revRow])
