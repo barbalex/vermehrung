@@ -131,3 +131,24 @@ create trigger garten_person_has_gv after update on garten
 --select person_id, id from garten
 --where person_id is not null;
 
+
+DROP TRIGGER IF EXISTS zwischenvermehrung_exists_for_herkunft_in_gaw ON teilzaehlung cascade;
+DROP FUNCTION IF EXISTS zwischenvermehrung_exists_for_herkunft_in_gaw() cascade;
+CREATE FUNCTION zwischenvermehrung_exists_for_herkunft_in_gaw() RETURNS trigger AS $zwischenvermehrung_exists_for_herkunft_in_gaw$
+BEGIN
+  -- if art_id and herkunft_id exist
+  -- insert: art_id, herkunft_id, garten_id of gaw, zwischenlager
+  if 
+    new.art_id is not null
+    and new.herkunft_id is not null
+    then
+  INSERT INTO
+    kultur (art_id, herkunft_id, garten_id, zwischenlager)
+  VALUES (NEW.art_id, NEW.herkunft_id, 'cc033efa-b555-11ea-b3de-0242ac130004', true)
+  ON CONFLICT DO NOTHING;
+  RETURN NEW;
+END;
+$zwischenvermehrung_exists_for_herkunft_in_gaw$ LANGUAGE plpgsql;
+
+CREATE TRIGGER zwischenvermehrung_exists_for_herkunft_in_gaw AFTER UPDATE ON sammlung
+  FOR EACH ROW EXECUTE PROCEDURE zwischenvermehrung_exists_for_herkunft_in_gaw();
