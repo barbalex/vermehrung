@@ -13,7 +13,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 const StyledInputLabel = styled(InputLabel)`
-  font-weight: ${(props) => props['data-weight']};
+  font-weight: ${(props) => props['data-weight']} !important;
 `
 
 const MyTextField = ({
