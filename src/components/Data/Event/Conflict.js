@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -86,10 +86,13 @@ const EventConflict = ({
   error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
-  const revRow =
-    [...store.event_revs.values()].find(
-      (v) => v._rev === rev && v.event_id === id,
-    ) || {}
+  const revRow = useMemo(
+    () =>
+      [...store.event_revs.values()].find(
+        (v) => v._rev === rev && v.event_id === id,
+      ) || {},
+    [id, rev, store.event_revs],
+  )
 
   const dataArray = [
     {
@@ -139,7 +142,7 @@ const EventConflict = ({
     },
   ]
 
-  const onClickVerwerfen = useCallback(async () => {
+  const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
     callbackAfterVerwerfen()
   }, [callbackAfterVerwerfen, revRow])
