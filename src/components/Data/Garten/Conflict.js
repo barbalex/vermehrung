@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -57,10 +57,13 @@ const GartenConflict = ({
   error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
-  const revRow =
-    [...store.garten_revs.values()].find(
-      (v) => v._rev === rev && v.garten_id === id,
-    ) || {}
+  const revRow = useMemo(
+    () =>
+      [...store.garten_revs.values()].find(
+        (v) => v._rev === rev && v.garten_id === id,
+      ) || {},
+    [id, rev, store.garten_revs],
+  )
 
   const dataArray = [
     {
@@ -112,7 +115,7 @@ const GartenConflict = ({
     },
   ]
 
-  const onClickVerwerfen = useCallback(async () => {
+  const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
     callbackAfterVerwerfen()
   }, [callbackAfterVerwerfen, revRow])
