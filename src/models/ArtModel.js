@@ -71,7 +71,7 @@ export const artModel = artModelBase.actions((self) => ({
     delete newObjectForStore.art_id
     // optimistically update store
     upsertArtModel(newObjectForStore)
-    unsetError({ path: `art.${field}` })
+    unsetError(`art.${field}`)
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
