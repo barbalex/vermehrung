@@ -503,8 +503,10 @@ create table kultur (
   _deleted boolean default false,
   _conflicts text[] default null
 );
-create unique index single_active_herkunft_per_art_and_garden_idx on kultur (art_id, herkunft_id, garten_id, zwischenlager) 
-where aktiv is true and art_id is not null and herkunft_id is not null;
+create unique index single_art_herkunft_garden_active_idx on kultur (art_id, herkunft_id, garten_id) 
+where aktiv is true and zwischenlager is false and art_id is not null and herkunft_id is not null;
+create unique index single_art_herkunft_garden_zwischenlager_active_idx on kultur (art_id, herkunft_id, garten_id, zwischenlager) 
+where aktiv is true and zwischenlager is true and art_id is not null and herkunft_id is not null;
 create index on kultur using btree (id);
 create index on kultur using btree (art_id);
 create index on kultur using btree (herkunft_id);
