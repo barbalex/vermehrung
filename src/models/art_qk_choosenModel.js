@@ -76,7 +76,7 @@ export const art_qk_choosenModel = art_qk_choosenModelBase.actions((self) => ({
     delete newObjectForStore.art_qk_choosen_id
     // optimistically update store
     upsertArtQkChoosenModel(newObjectForStore)
-    unsetError({ path: `art_qk_choosen.${field}` })
+    unsetError(`art_qk_choosen.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
