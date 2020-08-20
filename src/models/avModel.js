@@ -72,7 +72,7 @@ export const avModel = avModelBase.actions((self) => ({
     delete newObjectForStore.av_id
     // optimistically update store
     upsertAvModel(newObjectForStore)
-    unsetError({ path: `av.${field}` })
+    unsetError(`av.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

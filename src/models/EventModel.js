@@ -80,7 +80,7 @@ export const eventModel = eventModelBase.actions((self) => ({
     delete newObjectForStore.event_id
     // optimistically update store
     upsertEventModel(newObjectForStore)
-    unsetError({ path: `event.${field}` })
+    unsetError(`event.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

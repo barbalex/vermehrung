@@ -81,7 +81,7 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
     delete newObjectForStore.herkunft_id
     // optimistically update store
     upsertHerkunftModel(newObjectForStore)
-    unsetError({ path: `herkunft.${field}` })
+    unsetError(`herkunft.${field}`)
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
