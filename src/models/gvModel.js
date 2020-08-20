@@ -72,7 +72,7 @@ export const gvModel = gvModelBase.actions((self) => ({
     delete newObjectForStore.gv_id
     // optimistically update store
     upsertGvModel(newObjectForStore)
-    unsetError({ path: `gv.${field}` })
+    unsetError(`gv.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
