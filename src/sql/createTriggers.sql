@@ -141,14 +141,25 @@ BEGIN
   if 
     new.art_id is not null
     and new.herkunft_id is not null
-    then
-  INSERT INTO
-    kultur (art_id, herkunft_id, garten_id, zwischenlager)
-  VALUES (NEW.art_id, NEW.herkunft_id, 'cc033efa-b555-11ea-b3de-0242ac130004', true)
-  ON CONFLICT DO NOTHING;
+  then
+    INSERT INTO kultur (art_id, herkunft_id, garten_id, zwischenlager)
+    VALUES (NEW.art_id, NEW.herkunft_id, 'cc033efa-b555-11ea-b3de-0242ac130004', true)
+    ON CONFLICT DO NOTHING;
+  end if;
   RETURN NEW;
 END;
 $zwischenvermehrung_exists_for_herkunft_in_gaw$ LANGUAGE plpgsql;
 
 CREATE TRIGGER zwischenvermehrung_exists_for_herkunft_in_gaw AFTER UPDATE ON sammlung
   FOR EACH ROW EXECUTE PROCEDURE zwischenvermehrung_exists_for_herkunft_in_gaw();
+
+insert into kultur (art_id, herkunft_id, garten_id, zwischenlager)
+select
+  art_id,
+  herkunft_id,
+  'cc033efa-b555-11ea-b3de-0242ac130004',
+  true
+from sammlung
+where art_id is not null and herkunft_id is not null
+group by art_id, herkunft_id
+ON CONFLICT DO NOTHING;
