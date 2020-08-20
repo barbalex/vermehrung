@@ -111,7 +111,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       delete newObjectForStore.sammel_lieferung_id
       // optimistically update store
       upsertSammelLieferungModel(newObjectForStore)
-      unsetError({ path: `sammel_lieferung.${field}` })
+      unsetError(`sammel_lieferung.${field}`)
       const { sl_auto_copy_edits } = userPersonOption
       console.log('sammel_lieferungModel', {
         sl_auto_copy_edits,
