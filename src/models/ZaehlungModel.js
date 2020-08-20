@@ -76,7 +76,7 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     upsertZaehlungModel(newObjectForStore)
-    unsetError({ path: `zaehlung.${field}` })
+    unsetError(`zaehlung.${field}`)
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {

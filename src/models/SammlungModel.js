@@ -89,7 +89,7 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     delete newObjectForStore.sammlung_id
     // optimistically update store
     upsertSammlungModel(newObjectForStore)
-    unsetError({ path: `sammlung.${field}` })
+    unsetError(`sammlung.${field}`)
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {
