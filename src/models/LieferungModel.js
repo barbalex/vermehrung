@@ -98,7 +98,7 @@ export const lieferungModel = lieferungModelBase.actions((self) => ({
     delete newObjectForStore.lieferung_id
     // optimistically update store
     upsertLieferungModel(newObjectForStore)
-    unsetError({ path: `lieferung.${field}` })
+    unsetError(`lieferung.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

@@ -108,7 +108,7 @@ export const personModel = personModelBase
       delete newObjectForStore.person_id
       // optimistically update store
       upsertPersonModel(newObjectForStore)
-      unsetError({ path: `person.${field}` })
+      unsetError(`person.${field}`)
     },
     delete() {
       const store = getParent(self, 2)
