@@ -63,10 +63,6 @@ export const kultur_qk_choosenModel = kultur_qk_choosenModelBase.actions(
             update_columns: ['id'],
           },
         }),
-        callbackQuery: 'queryKultur_qk_choosen',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
         revertTable: 'kultur_qk_choosen',
         revertId: self.id,
         revertField: field,
