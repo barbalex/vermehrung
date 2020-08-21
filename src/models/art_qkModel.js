@@ -23,6 +23,7 @@ export const art_qkModel = art_qkModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertArtQkModel, unsetError } = store
 
+    unsetError(`art_qk.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -80,7 +81,6 @@ export const art_qkModel = art_qkModelBase.actions((self) => ({
     delete newObjectForStore.art_qk_id
     // optimistically update store
     upsertArtQkModel(newObjectForStore)
-    unsetError(`art_qk.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

@@ -24,6 +24,7 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
 
     //console.log('store, kultur_optionModel:', { self, field, value })
 
+    unsetError(`kultur_option.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -95,7 +96,6 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     delete newObjectForStore.kultur_id
     // optimistically update store
     upsertKulturOptionModel(newObjectForStore)
-    unsetError(`kultur_option.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
