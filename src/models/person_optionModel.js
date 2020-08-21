@@ -83,10 +83,6 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryPerson_option',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'person_option',
       revertId: self.id,
       revertField: field,
