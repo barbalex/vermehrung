@@ -48,10 +48,6 @@ export const gv_revModel = gv_revModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryGv',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'gv',
       revertId: self.gv_id,
       revertField: '_deleted',

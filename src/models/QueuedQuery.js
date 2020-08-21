@@ -5,10 +5,6 @@ export default types.model('QueuedQuery', {
   time: types.union(types.number, types.undefined),
   name: types.string,
   variables: types.maybeNull(types.string, null),
-  // a query to run after the first
-  // to refresh the data from the server
-  callbackQuery: types.maybeNull(types.string, null),
-  callbackQueryVariables: types.maybeNull(types.string, null),
   revertTable: types.union(types.string, types.null, types.undefined),
   revertId: types.union(
     types.string,
