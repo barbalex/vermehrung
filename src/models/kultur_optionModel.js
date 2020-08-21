@@ -50,8 +50,6 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
       ev_geplant: field === 'ev_geplant' ? value : self.ev_geplant,
       ev_person_id: field === 'ev_person_id' ? value : self.ev_person_id,
       ev_datum: field === 'ev_datum' ? value : self.ev_datum,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : self._deleted,
@@ -60,6 +58,9 @@ export const kultur_optionModel = kultur_optionModelBase.actions((self) => ({
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
