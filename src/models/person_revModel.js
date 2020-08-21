@@ -67,10 +67,6 @@ export const person_revModel = person_revModelBase
             update_columns: ['id'],
           },
         }),
-        callbackQuery: 'queryPerson',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
         revertTable: 'person',
         revertId: self.person_id,
         revertField: '_deleted',
