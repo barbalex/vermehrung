@@ -21,6 +21,7 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertZaehlungModel, unsetError } = store
 
+    unsetError(`zaehlung.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -76,7 +77,6 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
     delete newObjectForStore.zaehlung_id
     // optimistically update store
     upsertZaehlungModel(newObjectForStore)
-    unsetError(`zaehlung.${field}`)
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {

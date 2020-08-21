@@ -21,6 +21,7 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertTeilkulturModel, unsetError } = store
 
+    unsetError(`teilkultur.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -78,7 +79,6 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
     delete newObjectForStore.teilkultur_id
     // optimistically update store
     upsertTeilkulturModel(newObjectForStore)
-    unsetError(`teilkultur.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

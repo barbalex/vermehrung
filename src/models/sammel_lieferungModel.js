@@ -31,6 +31,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
         userPersonOption,
       } = store
 
+      unsetError(`sammel_lieferung.${field}`)
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
       const newObject = {
@@ -111,13 +112,7 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
       delete newObjectForStore.sammel_lieferung_id
       // optimistically update store
       upsertSammelLieferungModel(newObjectForStore)
-      unsetError(`sammel_lieferung.${field}`)
       const { sl_auto_copy_edits } = userPersonOption
-      console.log('sammel_lieferungModel', {
-        sl_auto_copy_edits,
-        newObject,
-        field,
-      })
       setTimeout(() => {
         // copy to all lieferungen
         if (sl_auto_copy_edits) {
