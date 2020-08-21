@@ -96,7 +96,10 @@ const Person = ({
     [userRolesSorted],
   )
 
-  const row = showFilter ? filter.person : store.persons.get(id) ?? {}
+  const row = useMemo(
+    () => (showFilter ? filter.person : store.persons.get(id) ?? {}),
+    [filter.person, id, showFilter, store.persons],
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])

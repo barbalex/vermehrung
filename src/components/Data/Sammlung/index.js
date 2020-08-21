@@ -153,7 +153,10 @@ const Sammlung = ({
   const totalNr = sammlungsSorted.filter(hierarchyFilter).length
   const filteredNr = sammlungsFiltered.filter(hierarchyFilter).length
 
-  const row = showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}
+  const row = useMemo(
+    () => (showFilter ? filter.sammlung : store.sammlungs.get(id) ?? {}),
+    [filter.sammlung, id, showFilter, store.sammlungs],
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])

@@ -141,9 +141,13 @@ const SammelLieferung = ({
   } = store
   const { setWidthInPercentOfScreen, activeNodeArray } = store.tree
 
-  const row = showFilter
-    ? filter.sammel_lieferung
-    : store.sammel_lieferungs.get(id) || {}
+  const row = useMemo(
+    () =>
+      showFilter
+        ? filter.sammel_lieferung
+        : store.sammel_lieferungs.get(id) || {},
+    [filter.sammel_lieferung, id, showFilter, store.sammel_lieferungs],
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
