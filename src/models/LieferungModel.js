@@ -79,10 +79,6 @@ export const lieferungModel = lieferungModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryLieferung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'lieferung',
       revertId: self.id,
       revertField: field,

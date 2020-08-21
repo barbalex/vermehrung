@@ -85,10 +85,6 @@ export const teilzaehlungModel = teilzaehlungModelBase
             update_columns: ['id'],
           },
         }),
-        callbackQuery: 'queryTeilzaehlung',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
         revertTable: 'teilzaehlung',
         revertId: self.id,
         revertField: field,
