@@ -21,6 +21,7 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertSammlungModel, unsetError } = store
 
+    unsetError(`sammlung.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -89,7 +90,6 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
     delete newObjectForStore.sammlung_id
     // optimistically update store
     upsertSammlungModel(newObjectForStore)
-    unsetError(`sammlung.${field}`)
     if (field === '_deleted' && value) self.deleteNSide()
   },
   delete() {

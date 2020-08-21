@@ -23,6 +23,7 @@ export const personModel = personModelBase
       const store = getParent(self, 2)
       const { addQueuedQuery, user, upsertPersonModel, unsetError } = store
 
+      unsetError(`person.${field}`)
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
       const newObject = {
@@ -108,7 +109,6 @@ export const personModel = personModelBase
       delete newObjectForStore.person_id
       // optimistically update store
       upsertPersonModel(newObjectForStore)
-      unsetError(`person.${field}`)
     },
     delete() {
       const store = getParent(self, 2)
