@@ -129,7 +129,10 @@ const Garten = ({
   const totalNr = gartensSorted.filter(hierarchyFilter).length
   const filteredNr = gartensFiltered.filter(hierarchyFilter).length
 
-  const row = showFilter ? filter.garten : store.gartens.get(id) || {}
+  const row = useMemo(
+    () => (showFilter ? filter.garten : store.gartens.get(id) || {}),
+    [filter.garten, id, showFilter, store.gartens],
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
