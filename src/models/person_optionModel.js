@@ -57,8 +57,6 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
       tree_zaehlung: field === 'tree_zaehlung' ? value : self.tree_zaehlung,
       tree_lieferung: field === 'tree_lieferung' ? value : self.tree_lieferung,
       tree_event: field === 'tree_event' ? value : self.tree_event,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : self._deleted,
@@ -67,6 +65,9 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
