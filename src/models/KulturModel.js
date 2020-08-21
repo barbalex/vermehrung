@@ -22,7 +22,7 @@ export const kulturModel = kulturModelBase.actions((self) => ({
     const { addQueuedQuery, user, upsertKulturModel, unsetError } = store
 
     // TODO: do this in all models?
-    unsetError('kultur')
+    unsetError(`kultur.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {

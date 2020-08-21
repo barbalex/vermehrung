@@ -29,6 +29,7 @@ export const kultur_qk_choosenModel = kultur_qk_choosenModelBase.actions(
         unsetError,
       } = store
 
+      unsetError(`kultur_qk_choosen.${field}`)
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
       const newObject = {
@@ -82,7 +83,6 @@ export const kultur_qk_choosenModel = kultur_qk_choosenModelBase.actions(
       delete newObjectForStore.kultur_qk_choosen_id
       // optimistically update store
       upsertKulturQkChoosenModel(newObjectForStore)
-      unsetError(`kultur_qk_choosen.${field}`)
     },
     delete() {
       self.edit({ field: '_deleted', value: true })
