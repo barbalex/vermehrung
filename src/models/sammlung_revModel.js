@@ -60,10 +60,6 @@ export const sammlung_revModel = sammlung_revModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'querySammlung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'sammlung',
       revertId: self.sammlung_id,
       revertField: '_deleted',
