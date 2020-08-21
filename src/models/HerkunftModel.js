@@ -62,10 +62,6 @@ export const herkunftModel = herkunftModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryHerkunft',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'herkunft',
       revertId: self.id,
       revertField: field,
