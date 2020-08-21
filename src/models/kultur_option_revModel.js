@@ -61,10 +61,6 @@ export const kultur_option_revModel = kultur_option_revModelBase.actions(
             update_columns: ['id'],
           },
         }),
-        callbackQuery: 'queryKultur_option',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
         revertTable: 'kultur_option',
         revertId: self.kultur_id,
         revertField: '_deleted',
