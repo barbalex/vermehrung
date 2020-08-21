@@ -57,10 +57,6 @@ export const art_qk_choosenModel = art_qk_choosenModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryArt_qk_choosen',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'art_qk_choosen',
       revertId: self.id,
       revertField: field,
