@@ -52,10 +52,6 @@ export const zaehlung_revModel = zaehlung_revModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryZaehlung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'zaehlung',
       revertId: self.zaehlung_id,
       revertField: '_deleted',
