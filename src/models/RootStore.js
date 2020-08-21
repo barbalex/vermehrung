@@ -14,7 +14,6 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import Filter from './Filter/types'
 import initialFilterValues from './Filter/initialValues'
 import activeFormFromActiveNodeArray from '../utils/activeFormFromActiveNodeArray'
-import checkForOnlineError from '../utils/checkForOnlineError'
 import treeLabelKultur from '../utils/treeLabelKultur'
 import queryFromTable from '../utils/queryFromTable'
 import queryFromStore from '../utils/queryFromStore'
@@ -123,82 +122,65 @@ export const RootStore = RootStoreBase.props({
             // execute operation
             const query = self.queuedQueriesSorted[0]
             if (!query) return
-            if (query) {
-              const {
-                name,
-                variables,
-                callbackQuery,
-                callbackQueryVariables,
-                revertTable,
-                revertField,
-              } = query
-              try {
-                if (variables) {
-                  yield self[name](JSON.parse(variables))
-                } else {
-                  yield self[name]()
-                }
-              } catch (error) {
-                console.log({ error })
-                // In case a conflict was caused by two EXACT SAME changes,
-                // this will bounce because of the same rev. We want to ignore this:
-                if (error.message.includes('JWT')) {
-                  return getAuthToken({ store: self })
-                } else if (
-                  error.message.includes('Uniqueness violation') &&
-                  error.message.includes('_rev_id__rev_key')
-                ) {
-                  console.log(
-                    'There is a conflict with exact same changes - ingoring the error thrown',
-                  )
-                } else if (error.message.includes('Failed to fetch')) {
-                  return console.log('ignore fetch failing')
-                } else {
-                  self.setError({
-                    path: `${revertTable}.${revertField}`,
-                    value: error.message,
-                  })
-                  // Maybe do it like superhuman and check if network error
-                  // then retry and set online without using tool?
-                  // TODO: describe operation better. User should know what is happening
-                  // TODO: add button to remove all queued operations
-                  // use new notification system for this
-                  // TODO: need to revert model
-                  return self.addNotification({
-                    title:
-                      'Eine offline durchgeführte Operation kann nicht in die Datenbank geschrieben werden',
-                    message: error.message,
-                    actionLabel: 'Operation löschen',
-                    actionName: 'removeQueuedQueryById',
-                    actionArgument: query.id,
-                  })
-                }
+            const {
+              name,
+              variables,
+              revertTable,
+              revertField,
+              revertId,
+              revertValue,
+            } = query
+            try {
+              if (variables) {
+                yield self[name](JSON.parse(variables))
+              } else {
+                yield self[name]()
               }
-              // query to refresh the data updated in all used views (tree...)
-              // could remove if live updates work
-              // but keep it until auth problems solved
-              if (callbackQuery) {
-                // delay to prevent app from requerying BEFORE trigger updated the winner
-                if (callbackQueryVariables) {
-                  setTimeout(async () => {
-                    try {
-                      await self[callbackQuery](
-                        JSON.parse(callbackQueryVariables),
-                      )
-                    } catch (error) {
-                      checkForOnlineError(error)
-                    }
-                  }, 500)
-                } else {
-                  setTimeout(async () => {
-                    try {
-                      await self[callbackQuery]()
-                    } catch (error) {
-                      checkForOnlineError(error)
-                    }
-                  }, 500)
-                }
+            } catch (error) {
+              console.log('store, error:', { error, query })
+              // In case a conflict was caused by two EXACT SAME changes,
+              // this will bounce because of the same rev. We want to ignore this:
+              if (error.message.includes('JWT')) {
+                return getAuthToken({ store: self })
+              } else if (
+                error.message.includes('Uniqueness violation') &&
+                error.message.includes('_rev_id__rev_key')
+              ) {
+                //self.removeNotificationById(query.id)
+                return console.log(
+                  'There is a conflict with exact same changes - ingoring the error thrown',
+                )
+              } else if (error.message.includes('Unique-Constraint')) {
+                // do not add a notification: show this error below the field
+                self.setError({
+                  path: `${revertTable}.${revertField}`,
+                  value: error.message,
+                })
+                //self.removeQueuedQueryById(query.id)
+                console.log('a unique constraint was violated')
+              } else if (error.message.includes('Failed to fetch')) {
+                return console.log('ignore fetch failing')
+              } else {
+                self.setError({
+                  path: `${revertTable}.${revertField}`,
+                  value: error.message,
+                })
+                return self.addNotification({
+                  title:
+                    'Eine Operation kann nicht in die Datenbank geschrieben werden',
+                  message: error.message,
+                  actionLabel: 'Operation löschen',
+                  actionName: 'removeQueuedQueryById',
+                  actionArgument: query.id,
+                })
               }
+              // revert change
+              self.updateModelValue({
+                table: revertTable,
+                id: revertId,
+                field: revertField,
+                value: revertValue,
+              })
             }
             // remove operation from queue
             // use action because this is async
@@ -233,7 +215,7 @@ export const RootStore = RootStoreBase.props({
       setError({ path, value }) {
         set(self.errors, path, value)
       },
-      unsetError({ path }) {
+      unsetError(path) {
         unset(self.errors, path)
       },
       setQueryingAllData(val) {

@@ -19,8 +19,10 @@ export {
 export const kulturModel = kulturModelBase.actions((self) => ({
   edit({ field, value }) {
     const store = getParent(self, 2)
-    const { addQueuedQuery, user, upsertKulturModel } = store
+    const { addQueuedQuery, user, upsertKulturModel, unsetError } = store
 
+    // TODO: do this in all models?
+    unsetError('kultur')
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -36,8 +38,6 @@ export const kulturModel = kulturModelBase.actions((self) => ({
       bemerkungen:
         field === 'bemerkungen' ? toStringIfPossible(value) : self.bemerkungen,
       aktiv: field === 'aktiv' ? value : self.aktiv,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : self._deleted,
@@ -46,6 +46,9 @@ export const kulturModel = kulturModelBase.actions((self) => ({
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
     newObject._revisions = self._revisions
@@ -60,10 +63,6 @@ export const kulturModel = kulturModelBase.actions((self) => ({
           constraint: 'kultur_rev_pkey',
           update_columns: ['id'],
         },
-      }),
-      callbackQuery: 'queryKultur',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
       }),
       revertTable: 'kultur',
       revertId: self.id,

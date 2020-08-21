@@ -103,28 +103,44 @@ const Kultur = ({
     showDeleted,
     errors,
     unsetError,
+    hideInactive,
   } = store
 
-  const row = showFilter ? filter.kultur : store.kulturs.get(id) ?? {}
+  const row = useMemo(
+    () => (showFilter ? filter.kultur : store.kulturs.get(id) ?? {}),
+    [filter.kultur, id, showFilter, store.kulturs],
+  )
 
   // From all collected combinations of art and herkunft show only arten of those not present in this garten
   // => find all combinations of art and herkunft in sammlungen
   // => substract the ones existing in this garden
+  // => substract the ones with two existing in this garden?
   // => present arten of the rest
+  // TODO: allow additional zwischenlager
   const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
+    .filter((k) => (hideInactive ? k.aktiv : true))
+    .filter((k) => !k.zwischenlager)
+  const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
+    .filter((k) => (hideInactive ? k.aktiv : true))
+    .filter((k) => k.zwischenlager)
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => o.art_id && o.herkunft_id)
   const sammlungs = sammlungsSorted.filter((s) => !!s.art_id && !!s.herkunft_id)
-  const artHerkunftToChoose = sammlungs.filter(
+  const artHerkunftToChoose = sammlungs /*.filter(
     (s) =>
-      !artHerkunftInGarten.find(
-        (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+      !(
+        !!artHerkunftInGarten.find(
+          (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+        ) &&
+        !!artHerkunftZwischenlagerInGarten.find(
+          (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+        )
       ),
-  )
+  )*/
   const artenToChoose = uniq(
     artHerkunftToChoose
       .filter((ah) =>
-        row?.herkunft_id ? ah.herkunft_id === row?.herkunft_id : true,
+        row?.herkunft_id ? ah.herkunft_id === row.herkunft_id : true,
       )
       .map((a) => a.art_id),
   )
@@ -133,8 +149,8 @@ const Kultur = ({
     artenToChoose.push(row?.art_id)
   }
   const herkunftToChoose = uniq(
-    artHerkunftToChoose
-      .filter((ah) => (row?.art_id ? ah.art_id === row?.art_id : true))
+    sammlungs
+      .filter((s) => (row?.art_id ? s.art_id === row?.art_id : true))
       .map((a) => a.herkunft_id),
   )
   // do show own herkunft
@@ -153,16 +169,17 @@ const Kultur = ({
     unsetError('kultur')
   }, [id, unsetError])
 
-  const artForArtWerte = artsSorted.filter(
+  // artForArtWerte not used because too complicated
+  /*const artForArtWerte = artsSorted.filter(
     (a) => !!a.ae_id && artenToChoose.includes(a.id),
-  )
+  )*/
   const artWerte = useMemo(
     () =>
-      artForArtWerte.map((el) => ({
+      artsSorted.map((el) => ({
         value: el.id,
-        label: el?.art_ae_art?.name ?? '(keine Art)',
+        label: el?.art_ae_art?.name ?? '...',
       })),
-    [artForArtWerte],
+    [artsSorted],
   )
 
   const gartenWerte = useMemo(
@@ -213,11 +230,31 @@ const Kultur = ({
     }
   }, [])
 
+  const zwischenlagerError = errors.kultur?.zwischenlager?.includes(
+    'Unique-Constraint',
+  )
+    ? 'Von einer Herkunft einer Art darf in einem Garten maximal ein aktives Zwischenlager existieren'
+    : errors.kultur?.zwischenlager
+  const artError = errors.kultur?.art_id?.includes('Unique-Constraint')
+    ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
+    : errors.kultur?.art_id
+  const herkunftError = errors.kultur?.herkunft_id?.includes(
+    'Unique-Constraint',
+  )
+    ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
+    : errors.kultur?.herkunft_id
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
+
+  console.log('Kultur', {
+    zwischenlagerError,
+    kulturErrors: errors.kultur,
+    errors,
+  })
 
   return (
     <ErrorBoundary>
@@ -243,7 +280,7 @@ const Kultur = ({
                   name="_deleted"
                   value={row._deleted}
                   saveToDb={saveToDb}
-                  error={errors?.kultur?._deleted}
+                  error={errors.kultur?._deleted}
                 />
               )}
               <Select
@@ -254,7 +291,7 @@ const Kultur = ({
                 label="Art"
                 options={artWerte}
                 saveToDb={saveToDb}
-                error={errors?.kultur?.art_id}
+                error={artError}
               />
               <Select
                 key={`${row.id}${row.herkunft_id}herkunft_id`}
@@ -264,7 +301,7 @@ const Kultur = ({
                 label="Herkunft"
                 options={herkunftWerte}
                 saveToDb={saveToDb}
-                error={errors?.kultur?.herkunft_id}
+                error={herkunftError}
               />
               <Select
                 key={`${row.id}${row.garten_id}garten_id`}
@@ -274,7 +311,7 @@ const Kultur = ({
                 label="Garten"
                 options={gartenWerte}
                 saveToDb={saveToDb}
-                error={errors?.kultur?.garten_id}
+                error={errors.kultur?.garten_id}
               />
               <Checkbox2States
                 key={`${row.id}zwischenlager`}
@@ -282,7 +319,7 @@ const Kultur = ({
                 name="zwischenlager"
                 value={row.zwischenlager}
                 saveToDb={saveToDb}
-                error={errors?.kultur?.zwischenlager}
+                error={zwischenlagerError}
               />
               <Checkbox2States
                 key={`${row.id}erhaltungskultur`}
@@ -290,7 +327,7 @@ const Kultur = ({
                 name="erhaltungskultur"
                 value={row.erhaltungskultur}
                 saveToDb={saveToDb}
-                error={errors?.kultur?.erhaltungskultur}
+                error={errors.kultur?.erhaltungskultur}
               />
               <FieldRow>
                 <TextField
@@ -299,7 +336,7 @@ const Kultur = ({
                   label="von Anzahl Individuen"
                   value={row.von_anzahl_individuen}
                   saveToDb={saveToDb}
-                  error={errors?.kultur?.von_anzahl_individuen}
+                  error={errors.kultur?.von_anzahl_individuen}
                   type="number"
                 />
                 <div>
@@ -318,7 +355,7 @@ const Kultur = ({
                 name="aktiv"
                 value={row.aktiv}
                 saveToDb={saveToDb}
-                error={errors?.kultur?.aktiv}
+                error={errors.kultur?.aktiv}
               />
               <TextField
                 key={`${row.id}bemerkungen`}
@@ -326,7 +363,7 @@ const Kultur = ({
                 label="Bemerkungen"
                 value={row.bemerkungen}
                 saveToDb={saveToDb}
-                error={errors?.kultur?.bemerkungen}
+                error={errors.kultur?.bemerkungen}
                 multiLine
               />
               {online &&
