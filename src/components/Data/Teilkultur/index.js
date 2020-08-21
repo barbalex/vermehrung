@@ -118,7 +118,10 @@ const Teilkultur = ({
     unsetError,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  const row = showFilter ? filter.teilkultur : store.teilkulturs.get(id) || {}
+  const row = useMemo(
+    () => (showFilter ? filter.teilkultur : store.teilkulturs.get(id) || {}),
+    [filter.teilkultur, id, showFilter, store.teilkulturs],
+  )
 
   const hierarchyFilter = (r) => {
     if (kulturIdInActiveNodeArray) {
