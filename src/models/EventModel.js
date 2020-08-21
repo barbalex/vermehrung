@@ -21,6 +21,7 @@ export const eventModel = eventModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertEventModel, unsetError } = store
 
+    unsetError(`event.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -80,7 +81,6 @@ export const eventModel = eventModelBase.actions((self) => ({
     delete newObjectForStore.event_id
     // optimistically update store
     upsertEventModel(newObjectForStore)
-    unsetError(`event.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
