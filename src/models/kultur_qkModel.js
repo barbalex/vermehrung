@@ -35,8 +35,6 @@ export const kultur_qkModel = kultur_qkModelBase.actions((self) => ({
           ? toStringIfPossible(value)
           : self.beschreibung,
       sort: field === 'sort' ? value : self.sort,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: field === '_deleted' ? value : self._deleted,
@@ -45,6 +43,9 @@ export const kultur_qkModel = kultur_qkModelBase.actions((self) => ({
     // DO NOT include id in rev - or revs with same data will conflict
     newObject.id = uuidv1()
     newObject._rev = rev
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     const newObjectForStore = { ...newObject }
     // convert to string as hasura does not support arrays yet
     // https://github.com/hasura/graphql-engine/pull/2243
