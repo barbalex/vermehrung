@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 import { observer } from 'mobx-react-lite'
@@ -74,10 +74,13 @@ const ZaehlungConflict = ({
   error && checkForOnlineError(error)
 
   // need to grab store object to ensure this remains up to date
-  const revRow =
-    [...store.zaehlung_revs.values()].find(
-      (v) => v._rev === rev && v.zaehlung_id === id,
-    ) || {}
+  const revRow = useMemo(
+    () =>
+      [...store.zaehlung_revs.values()].find(
+        (v) => v._rev === rev && v.zaehlung_id === id,
+      ) || {},
+    [id, rev, store.zaehlung_revs],
+  )
 
   const dataArray = [
     {

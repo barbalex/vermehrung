@@ -133,7 +133,10 @@ const Zaehlung = ({
     return true
   }
 
-  const row = showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}
+  const row = useMemo(
+    () => (showFilter ? filter.zaehlung : store.zaehlungs.get(id) || {}),
+    [filter.zaehlung, id, showFilter, store.zaehlungs],
+  )
 
   const totalNr = zaehlungsSorted.filter(hierarchyFilter).length
   const filteredNr = zaehlungsFiltered.filter(hierarchyFilter).length
