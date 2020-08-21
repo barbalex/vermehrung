@@ -24,6 +24,7 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
 
     //console.log('store, person_optionModel:', { self, field, value })
 
+    unsetError(`person_option.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -102,7 +103,6 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
     delete newObjectForStore.person_id
     // optimistically update store
     upsertPersonOptionModel(newObjectForStore)
-    unsetError(`person_option.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })

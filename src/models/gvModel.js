@@ -20,6 +20,7 @@ export const gvModel = gvModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertGvModel, unsetError } = store
 
+    unsetError(`gv.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -72,7 +73,6 @@ export const gvModel = gvModelBase.actions((self) => ({
     delete newObjectForStore.gv_id
     // optimistically update store
     upsertGvModel(newObjectForStore)
-    unsetError(`gv.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
