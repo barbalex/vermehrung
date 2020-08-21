@@ -61,10 +61,6 @@ export const eventModel = eventModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryEvent',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'event',
       revertId: self.id,
       revertField: field,

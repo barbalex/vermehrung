@@ -61,10 +61,6 @@ export const gartenModel = gartenModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryGarten',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'garten',
       revertId: self.id,
       revertField: field,

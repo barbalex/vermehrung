@@ -53,10 +53,6 @@ export const avModel = avModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryAv',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'av',
       revertId: self.id,
       revertField: field,
