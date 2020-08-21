@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
@@ -114,7 +120,10 @@ const Art = ({
   const totalNr = artsSorted.length
   const filteredNr = artsFiltered.length
 
-  const row = showFilter ? filter.art : store.arts.get(id) || {}
+  const row = useMemo(
+    () => (showFilter ? filter.art : store.arts.get(id) || {}),
+    [filter.art, id, showFilter, store.arts],
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])

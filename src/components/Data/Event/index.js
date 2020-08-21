@@ -137,7 +137,10 @@ const Event = ({
   const totalNr = eventsSorted.filter(hierarchyFilter).length
   const filteredNr = eventsFiltered.filter(hierarchyFilter).length
 
-  const row = showFilter ? filter.event : store.events.get(id) || {}
+  const row = useMemo(
+    () => (showFilter ? filter.event : store.events.get(id) || {}),
+    [filter.event, id, showFilter, store.events],
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
