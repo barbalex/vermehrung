@@ -129,7 +129,10 @@ const Herkunft = ({
     return true
   }
 
-  const row = showFilter ? filter.herkunft : store.herkunfts.get(id) || {}
+  const row = useMemo(
+    () => (showFilter ? filter.herkunft : store.herkunfts.get(id) || {}),
+    [filter.herkunft, id, showFilter, store.herkunfts],
+  )
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])

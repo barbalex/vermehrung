@@ -79,7 +79,9 @@ const KulturTimeline = ({ row, width }) => {
     .filter((z) => z.prognose === false)
     .filter((z) => !!z.datum)
     .filter((z) => new Date(z.datum).getTime() <= new Date().getTime())
-  const lastZaehlungDone = zaehlungenDone.slice(-1)[0] ?? {}
+  const lastZaehlungDone = useMemo(() => zaehlungenDone.slice(-1)[0] ?? {}, [
+    zaehlungenDone,
+  ])
   const zaehlungenPlanned = zaehlungsSorted
     .filter((z) => z.kultur_id === row.id)
     .filter((z) => z.prognose === true)

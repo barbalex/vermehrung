@@ -195,7 +195,10 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     return true
   }
 
-  const row = showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}
+  const row = useMemo(
+    () => (showFilter ? filter.lieferung : store.lieferungs.get(id) ?? {}),
+    [filter.lieferung, id, showFilter, store.lieferungs],
+  )
 
   const totalNr = lieferungsSorted.filter(hierarchyFilter).length
   const filteredNr = lieferungsFiltered.filter(hierarchyFilter).length
