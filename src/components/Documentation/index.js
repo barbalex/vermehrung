@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { withResizeDetector } from 'react-resize-detector'
 import SplitPane from 'react-split-pane'
@@ -50,7 +50,9 @@ const Documentation = ({ data, location, width }) => {
   const { docFilter, setDocsCount, setDocsFilteredCount } = store
   const frontmatter = data?.markdownRemark?.frontmatter
   const html = data?.markdownRemark?.html
-  const edges = data?.allMarkdownRemark?.edges ?? []
+  const edges = useMemo(() => data?.allMarkdownRemark?.edges ?? [], [
+    data.allMarkdownRemark.edges,
+  ])
 
   const path = location.pathname.split('/').filter((e) => !!e)
 

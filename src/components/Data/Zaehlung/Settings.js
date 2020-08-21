@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useContext, useCallback, useState, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
@@ -35,10 +35,14 @@ const Info = styled.div`
 
 const SettingsZaehlungen = ({ zaehlungId }) => {
   const store = useContext(StoreContext)
+  const { zaehlungs, kultur_options } = store
 
-  const zaehlung = store.zaehlungs.get(zaehlungId) ?? {}
+  const zaehlung = zaehlungs.get(zaehlungId) ?? {}
   const kulturId = zaehlung.kultur_id
-  const kulturOption = store.kultur_options.get(kulturId) ?? {}
+  const kulturOption = useMemo(() => kultur_options.get(kulturId) ?? {}, [
+    kulturId,
+    kultur_options,
+  ])
   const { z_bemerkungen } = kulturOption
 
   const saveToDb = useCallback(
