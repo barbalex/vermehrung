@@ -70,10 +70,6 @@ export default async ({ lieferungId, sammelLieferung, store, field }) => {
         update_columns: ['id'],
       },
     }),
-    callbackQuery: 'queryLieferung',
-    callbackQueryVariables: JSON.stringify({
-      where: { id: { _eq: lieferungId } },
-    }),
     revertTable: 'lieferung',
     revertId: lieferungId,
     revertValues: JSON.stringify(newObject),

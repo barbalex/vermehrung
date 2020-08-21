@@ -56,10 +56,6 @@ export const garten_revModel = garten_revModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryGarten',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'garten',
       revertId: self.garten_id,
       revertField: '_deleted',
