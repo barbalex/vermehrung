@@ -92,10 +92,6 @@ export const sammel_lieferungModel = sammel_lieferungModelBase.actions(
             update_columns: ['id'],
           },
         }),
-        callbackQuery: 'querySammel_lieferung',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
         revertTable: 'sammel_lieferung',
         revertId: self.id,
         revertField: field,

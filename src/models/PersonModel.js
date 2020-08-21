@@ -89,10 +89,6 @@ export const personModel = personModelBase
             update_columns: ['id'],
           },
         }),
-        callbackQuery: 'queryPerson',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
         revertTable: 'person',
         revertId: self.id,
         revertField: field,

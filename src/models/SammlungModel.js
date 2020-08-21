@@ -70,10 +70,6 @@ export const sammlungModel = sammlungModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'querySammlung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'sammlung',
       revertId: self.id,
       revertField: field,

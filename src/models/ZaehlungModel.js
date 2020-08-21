@@ -57,10 +57,6 @@ export const zaehlungModel = zaehlungModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryZaehlung',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'zaehlung',
       revertId: self.id,
       revertField: field,
