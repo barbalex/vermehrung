@@ -59,10 +59,6 @@ export const teilkulturModel = teilkulturModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryTeilkultur',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'teilkultur',
       revertId: self.id,
       revertField: field,
