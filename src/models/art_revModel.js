@@ -49,10 +49,6 @@ export const art_revModel = art_revModelBase.actions((self) => ({
           update_columns: ['id'],
         },
       }),
-      callbackQuery: 'queryArt',
-      callbackQueryVariables: JSON.stringify({
-        where: { id: { _eq: self.id } },
-      }),
       revertTable: 'art',
       revertId: self.art_id,
       revertField: '_deleted',
