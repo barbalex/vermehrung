@@ -70,10 +70,6 @@ export const person_option_revModel = person_option_revModelBase.actions(
             update_columns: ['id'],
           },
         }),
-        callbackQuery: 'queryPerson_option',
-        callbackQueryVariables: JSON.stringify({
-          where: { id: { _eq: self.id } },
-        }),
         revertTable: 'person_option',
         revertId: self.person_id,
         revertField: '_deleted',
