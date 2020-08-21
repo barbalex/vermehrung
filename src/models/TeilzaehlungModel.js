@@ -28,6 +28,7 @@ export const teilzaehlungModel = teilzaehlungModelBase
         unsetError,
       } = store
 
+      unsetError(`teilzaehlung.${field}`)
       // first build the part that will be revisioned
       const newDepth = self._depth + 1
       const newObject = {
@@ -104,7 +105,6 @@ export const teilzaehlungModel = teilzaehlungModelBase
       delete newObjectForStore.teilzaehlung_id
       // optimistically update store
       upsertTeilzaehlungModel(newObjectForStore)
-      unsetError(`teilzaehlung.${field}`)
     },
     delete() {
       self.edit({ field: '_deleted', value: true })

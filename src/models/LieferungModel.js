@@ -21,6 +21,7 @@ export const lieferungModel = lieferungModelBase.actions((self) => ({
     const store = getParent(self, 2)
     const { addQueuedQuery, user, upsertLieferungModel, unsetError } = store
 
+    unsetError(`lieferung.${field}`)
     // first build the part that will be revisioned
     const newDepth = self._depth + 1
     const newObject = {
@@ -98,7 +99,6 @@ export const lieferungModel = lieferungModelBase.actions((self) => ({
     delete newObjectForStore.lieferung_id
     // optimistically update store
     upsertLieferungModel(newObjectForStore)
-    unsetError(`lieferung.${field}`)
   },
   delete() {
     self.edit({ field: '_deleted', value: true })
