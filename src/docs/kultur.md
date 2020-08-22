@@ -1,6 +1,6 @@
 ---
 path: "/Dokumentation/Kulturen"
-date: "2019-09-20"
+date: "2020-08-22"
 title: "Kulturen"
 sort1: 7
 ---
