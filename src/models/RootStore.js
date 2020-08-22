@@ -7,6 +7,7 @@ import md5 from 'blueimp-md5'
 import last from 'lodash/last'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
+import uniqBy from 'lodash/uniqBy'
 import isUuid from 'is-uuid'
 import moment from 'moment'
 
@@ -1661,6 +1662,16 @@ export const RootStore = RootStoreBase.props({
     }
   })
   .views((self) => ({
+    get artHerkuenfte() {
+      const { sammlungsSorted } = self
+      return uniqBy(
+        sammlungsSorted.map((a) => ({
+          art_id: a.art_id,
+          herkunft_id: a.herkunft_id,
+        })),
+        (ah) => `${ah.art_id}/${ah.herkunft_id}`,
+      )
+    },
     get activeForm() {
       return activeFormFromActiveNodeArray(self.tree.activeNodeArray)
     },
