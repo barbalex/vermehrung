@@ -370,6 +370,7 @@ const Coordinates = ({ row, saveToDb: originalSaveToDb }) => {
           onClick={onClickGeoAdmin}
           aria-owns={mapMenuOpen ? 'mapMenu' : undefined}
           aria-haspopup="true"
+          disabled={!(lv95_x && lv95_y)}
         >
           <FaGlobeEurope />
         </MapButton>
