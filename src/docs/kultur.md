@@ -25,6 +25,20 @@ In einem Garten kann es pro Herkunft einer Art immer nur eine aktive Kultur gebe
 - Erhaltungs-Kulturen
 - Zwischenlager
 
+### Zwischenlager in der *G*arten*a*nlage *W*angen (GAW)
+
+Der normale Ablauf einer Auspflanzung ist:
+
+- Die Gärten liefern an die GAW
+- Artverantwortliche holen die Pflanzen in der GAW ab
+- Für die GAW ist das meist keine normale Kultur, sondern ein kurzfristiges **Zwischenlager**
+- Es kann vorkommen, dass die GAW mit einem Teil des Zwischenlagers eine neue Kultur gründet. Das wird in der App abgebildet, indem eine Lieferung vom Zwischenlager an diese Kultur erfasst wird
+
+Weil in der GAW daher von allen Arten zeitweise Zwischenlager existieren müssen, wurde vermehrung.ch folgendermassen angepasst:
+
+- Dieselbe "Art aus Herkunft" muss nun in einem Garten zwei mal vorkommen können: Ein mal als normale Kultur. Und ein mal als Zwischenlager. Darüber hinaus kann es beliebig viele inaktive Kulturen geben
+- Wird eine Sammlung erstellt bzw. geändert, prüft vermehrung.ch: Gibt es diese Kombination von Art und Herkunft schon als Zwischenlager im GAW? Wenn nicht, wird sie automatisch erstellt
+
 ### Genetische Vielfalt
 Das Feld "von Anzahl Individuen" nennt oder schätzt die Anzahl Pflanzen, welche die Basis für die genetische Vielfalt der Kultur bildet. Es ist manuell nachzuführen, wenn An-Lieferungen erfolgen.<br/><br/>
 
