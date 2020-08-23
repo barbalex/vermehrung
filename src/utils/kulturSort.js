@@ -33,5 +33,7 @@ export default (a, b) => {
   if (gartenPersonNameA < gartenPersonNameB) return -1
   if (gartenPersonNameA > gartenPersonNameB) return 1
 
+  if (a?.zwischenlager) return 1
+
   return 0
 }
