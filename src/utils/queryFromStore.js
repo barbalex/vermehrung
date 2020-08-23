@@ -50,7 +50,7 @@ export default ({ store, table }) => {
   if (!store[`${table}s`]) throw new Error(`no store found for table ${table}`)
 
   const filterValues = Object.entries(storeFilter[table]).filter(
-    (e) => !!e?.[1],
+    (e) => !!e?.[1] || e?.[1] === false,
   )
   const values = [...store[`${table}s`].values()]
     .filter((v) => showDeleted || notDeletedOrHasConflict(v))
@@ -83,6 +83,7 @@ export default ({ store, table }) => {
       }
       return value === filterValue
     })
+
     return !testArray.includes(false)
   }
 
