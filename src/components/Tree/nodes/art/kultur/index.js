@@ -19,7 +19,8 @@ export default ({ store }) => {
         const garten =
           el?.garten?.name ?? `${el?.garten?.person?.fullname ?? 'kein Name'}`
         const herkunft = el?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-        const label = `von: ${herkunft}, in: ${garten}`
+        const zwischenlager = el?.zwischenlager ? ', Zwischenlager' : ''
+        const label = `von: ${herkunft}, in: ${garten}${zwischenlager}`
 
         return {
           nodeType: 'table',
