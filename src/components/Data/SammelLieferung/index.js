@@ -16,6 +16,7 @@ import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import exists from '../../../utils/exists'
 import Lieferschein from './Lieferschein'
@@ -46,7 +47,8 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 const TitleRow = styled.div`
-  background: rgba(248, 243, 254, 1);
+  background-color: ${(props) =>
+    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
   flex-shrink: 0;
   display: flex;
   height: 40px;
@@ -366,14 +368,27 @@ const SammelLieferung = ({
                   </CaseConflictTitle>
                 )}
                 {showDeleted && (
-                  <Checkbox2States
-                    key={`${row.id}_deleted`}
-                    label="gelöscht"
-                    name="_deleted"
-                    value={row._deleted}
-                    saveToDb={saveToDb}
-                    error={errors?.sammel_lieferung?._deleted}
-                  />
+                  <>
+                    {showFilter ? (
+                      <Checkbox3States
+                        key={`${row.id}_deleted`}
+                        label="gelöscht"
+                        name="_deleted"
+                        value={row._deleted}
+                        saveToDb={saveToDb}
+                        error={errors?.sammel_lieferung?._deleted}
+                      />
+                    ) : (
+                      <Checkbox2States
+                        key={`${row.id}_deleted`}
+                        label="gelöscht"
+                        name="_deleted"
+                        value={row._deleted}
+                        saveToDb={saveToDb}
+                        error={errors?.sammel_lieferung?._deleted}
+                      />
+                    )}
+                  </>
                 )}
                 {ifSomeNeeded([
                   'art_id',
@@ -384,7 +399,7 @@ const SammelLieferung = ({
                   'von_anzahl_individuen',
                 ]) && (
                   <>
-                    <TitleRow>
+                    <TitleRow data-filter={showFilter}>
                       <Title>was</Title>
                     </TitleRow>
                     {ifNeeded('art_id') && (
@@ -483,7 +498,7 @@ const SammelLieferung = ({
                 )}
                 {ifSomeNeeded(['von_sammlung_id', 'von_kultur_id']) && (
                   <>
-                    <TitleRow>
+                    <TitleRow data-filter={showFilter}>
                       <Title>von</Title>
                     </TitleRow>
                     {ifNeeded('von_sammlung_id') && (
@@ -522,7 +537,7 @@ const SammelLieferung = ({
                 )}
                 {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
                   <>
-                    <TitleRow>
+                    <TitleRow data-filter={showFilter}>
                       <Title>nach</Title>
                     </TitleRow>
                     {ifNeeded('nach_kultur_id') && (
@@ -544,20 +559,33 @@ const SammelLieferung = ({
                       />
                     )}
                     {ifNeeded('nach_ausgepflanzt') && (
-                      <Checkbox2States
-                        key={`${row.id}nach_ausgepflanzt`}
-                        label="Ausgepflanzt"
-                        name="nach_ausgepflanzt"
-                        value={row.nach_ausgepflanzt}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.nach_ausgepflanzt}
-                      />
+                      <>
+                        {showFilter ? (
+                          <Checkbox3States
+                            key={`${row.id}nach_ausgepflanzt`}
+                            label="Ausgepflanzt"
+                            name="nach_ausgepflanzt"
+                            value={row.nach_ausgepflanzt}
+                            saveToDb={saveToDb}
+                            error={errors?.sammel_lieferung?.nach_ausgepflanzt}
+                          />
+                        ) : (
+                          <Checkbox2States
+                            key={`${row.id}nach_ausgepflanzt`}
+                            label="Ausgepflanzt"
+                            name="nach_ausgepflanzt"
+                            value={row.nach_ausgepflanzt}
+                            saveToDb={saveToDb}
+                            error={errors?.sammel_lieferung?.nach_ausgepflanzt}
+                          />
+                        )}
+                      </>
                     )}
                   </>
                 )}
                 {ifSomeNeeded(['datum', 'geplant']) && (
                   <>
-                    <TitleRow>
+                    <TitleRow data-filter={showFilter}>
                       <Title>wann</Title>
                     </TitleRow>
                     {ifNeeded('datum') && (
@@ -572,14 +600,25 @@ const SammelLieferung = ({
                     )}
                     {ifNeeded('geplant') && (
                       <FieldRow>
-                        <Checkbox2States
-                          key={`${row.id}geplant`}
-                          label="Geplant"
-                          name="geplant"
-                          value={row.geplant}
-                          saveToDb={saveToDb}
-                          error={errors?.sammel_lieferung?.geplant}
-                        />
+                        {showFilter ? (
+                          <Checkbox3States
+                            key={`${row.id}geplant`}
+                            label="Geplant"
+                            name="geplant"
+                            value={row.geplant}
+                            saveToDb={saveToDb}
+                            error={errors?.sammel_lieferung?.geplant}
+                          />
+                        ) : (
+                          <Checkbox2States
+                            key={`${row.id}geplant`}
+                            label="Geplant"
+                            name="geplant"
+                            value={row.geplant}
+                            saveToDb={saveToDb}
+                            error={errors?.sammel_lieferung?.geplant}
+                          />
+                        )}
                         <div>
                           <IconButton
                             aria-label="Anleitung öffnen"
@@ -595,7 +634,7 @@ const SammelLieferung = ({
                 )}
                 {ifSomeNeeded(['person_id', 'bemerkungen']) && (
                   <>
-                    <TitleRow>
+                    <TitleRow data-filter={showFilter}>
                       <Title>wer</Title>
                     </TitleRow>
                     {ifNeeded('person_id') && (

@@ -15,6 +15,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
@@ -240,14 +241,27 @@ const Teilkultur = ({
                 </CaseConflictTitle>
               )}
               {showDeleted && (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.teilkultur?._deleted}
-                />
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.teilkultur?._deleted}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.teilkultur?._deleted}
+                    />
+                  )}
+                </>
               )}
               <Select
                 key={`${row.id}${row.kultur_id}kultur_id`}

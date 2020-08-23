@@ -13,6 +13,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import Select from '../../shared/Select'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Arten from './Arten'
@@ -269,38 +270,82 @@ const Person = ({
                 saveToDb={saveToDb}
                 error={errors?.person?.email}
               />
-              <Checkbox2States
-                key={`${row.id}kein_email`}
-                label="Kein Email"
-                name="kein_email"
-                value={row.kein_email}
-                saveToDb={saveToDb}
-                error={errors?.person?.kein_email}
-              />
-              <Checkbox2States
-                key={`${row.id}kommerziell`}
-                label="Kommerziell"
-                name="kommerziell"
-                value={row.kommerziell}
-                saveToDb={saveToDb}
-                error={errors?.person?.kommerziell}
-              />
-              <Checkbox2States
-                key={`${row.id}info`}
-                label="Info"
-                name="info"
-                value={row.info}
-                saveToDb={saveToDb}
-                error={errors?.person?.info}
-              />
-              <Checkbox2States
-                key={`${row.id}aktiv`}
-                label="aktiv"
-                name="aktiv"
-                value={row.aktiv}
-                saveToDb={saveToDb}
-                error={errors?.person?.aktiv}
-              />
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}kein_email`}
+                  label="Kein Email"
+                  name="kein_email"
+                  value={row.kein_email}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.kein_email}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}kein_email`}
+                  label="Kein Email"
+                  name="kein_email"
+                  value={row.kein_email}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.kein_email}
+                />
+              )}
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}kommerziell`}
+                  label="Kommerziell"
+                  name="kommerziell"
+                  value={row.kommerziell}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.kommerziell}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}kommerziell`}
+                  label="Kommerziell"
+                  name="kommerziell"
+                  value={row.kommerziell}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.kommerziell}
+                />
+              )}
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}info`}
+                  label="Info"
+                  name="info"
+                  value={row.info}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.info}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}info`}
+                  label="Info"
+                  name="info"
+                  value={row.info}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.info}
+                />
+              )}
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}aktiv`}
+                  label="aktiv"
+                  name="aktiv"
+                  value={row.aktiv}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.aktiv}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}aktiv`}
+                  label="aktiv"
+                  name="aktiv"
+                  value={row.aktiv}
+                  saveToDb={saveToDb}
+                  error={errors?.person?.aktiv}
+                />
+              )}
               <TextField
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"
