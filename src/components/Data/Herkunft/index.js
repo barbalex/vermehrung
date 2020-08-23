@@ -14,6 +14,7 @@ import SplitPane from 'react-split-pane'
 import { StoreContext } from '../../../models/reactUtils'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -268,14 +269,27 @@ const Herkunft = ({
                 </CaseConflictTitle>
               )}
               {showDeleted && (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.herkunft?._deleted}
-                />
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.herkunft?._deleted}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.herkunft?._deleted}
+                    />
+                  )}
+                </>
               )}
               <TextField
                 key={`${row.id}nr`}
