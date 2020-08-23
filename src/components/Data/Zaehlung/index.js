@@ -15,6 +15,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import Date from '../../shared/Date'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
@@ -264,14 +265,27 @@ const Zaehlung = ({
                   </CaseConflictTitle>
                 )}
                 {showDeleted && (
-                  <Checkbox2States
-                    key={`${row.id}_deleted`}
-                    label="gelöscht"
-                    name="_deleted"
-                    value={row._deleted}
-                    saveToDb={saveToDb}
-                    error={errors?.zaehlung?._deleted}
-                  />
+                  <>
+                    {showFilter ? (
+                      <Checkbox3States
+                        key={`${row.id}_deleted`}
+                        label="gelöscht"
+                        name="_deleted"
+                        value={row._deleted}
+                        saveToDb={saveToDb}
+                        error={errors?.zaehlung?._deleted}
+                      />
+                    ) : (
+                      <Checkbox2States
+                        key={`${row.id}_deleted`}
+                        label="gelöscht"
+                        name="_deleted"
+                        value={row._deleted}
+                        saveToDb={saveToDb}
+                        error={errors?.zaehlung?._deleted}
+                      />
+                    )}
+                  </>
                 )}
                 <Select
                   key={`${row.id}${row.kultur_id}kultur_id`}
@@ -293,14 +307,25 @@ const Zaehlung = ({
                   error={errors?.zaehlung?.datum}
                 />
                 <FieldRow>
-                  <Checkbox2States
-                    key={`${row.id}prognose`}
-                    label="Prognose"
-                    name="prognose"
-                    value={row.prognose}
-                    saveToDb={saveToDb}
-                    error={errors?.zaehlung?.prognose}
-                  />
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}prognose`}
+                      label="Prognose"
+                      name="prognose"
+                      value={row.prognose}
+                      saveToDb={saveToDb}
+                      error={errors?.zaehlung?.prognose}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}prognose`}
+                      label="Prognose"
+                      name="prognose"
+                      value={row.prognose}
+                      saveToDb={saveToDb}
+                      error={errors?.zaehlung?.prognose}
+                    />
+                  )}
                   <div>
                     <IconButton
                       aria-label="Anleitung öffnen"

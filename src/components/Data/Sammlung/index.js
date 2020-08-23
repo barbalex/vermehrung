@@ -17,6 +17,7 @@ import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
 import FilterTitle from '../../shared/FilterTitle'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import Coordinates from '../../shared/Coordinates'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -337,14 +338,27 @@ const Sammlung = ({
                 </CaseConflictTitle>
               )}
               {showDeleted && (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.sammlung?._deleted}
-                />
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.sammlung?._deleted}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.sammlung?._deleted}
+                    />
+                  )}
+                </>
               )}
               <TextField
                 key={`${row.id}nr`}
@@ -444,14 +458,25 @@ const Sammlung = ({
               </FieldRow>
               {!showFilter && <Coordinates row={row} saveToDb={saveToDb} />}
               <FieldRow>
-                <Checkbox2States
-                  key={`${row.id}geplant`}
-                  label="Geplant"
-                  name="geplant"
-                  value={row.geplant}
-                  saveToDb={saveToDb}
-                  error={errors?.sammlung?.geplant}
-                />
+                {showFilter ? (
+                  <Checkbox3States
+                    key={`${row.id}geplant`}
+                    label="Geplant"
+                    name="geplant"
+                    value={row.geplant}
+                    saveToDb={saveToDb}
+                    error={errors?.sammlung?.geplant}
+                  />
+                ) : (
+                  <Checkbox2States
+                    key={`${row.id}geplant`}
+                    label="Geplant"
+                    name="geplant"
+                    value={row.geplant}
+                    saveToDb={saveToDb}
+                    error={errors?.sammlung?.geplant}
+                  />
+                )}
                 <div>
                   <IconButton
                     aria-label="Anleitung öffnen"
