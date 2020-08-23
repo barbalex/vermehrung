@@ -162,13 +162,14 @@ const Teilkultur = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
 
       if (showFilter) {
         return filter.setValue({ table: 'teilkultur', key: field, value })
       }
+
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       row.edit({ field, value })
     },
     [filter, row, showFilter],
