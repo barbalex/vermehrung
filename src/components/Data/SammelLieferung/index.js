@@ -278,12 +278,13 @@ const SammelLieferung = ({
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
       const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
 
       if (showFilter) {
         return filter.setValue({ table: 'sammel_lieferung', key: field, value })
       }
+
+      // only update if value has changed
+      if (value === previousValue) return
       row.edit({ field, value })
     },
     [filter, row, showFilter],
