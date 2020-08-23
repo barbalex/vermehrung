@@ -14,6 +14,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
@@ -242,14 +243,27 @@ const Garten = ({
                 </CaseConflictTitle>
               )}
               {showDeleted && (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.garten?._deleted}
-                />
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.garten?._deleted}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.garten?._deleted}
+                    />
+                  )}
+                </>
               )}
               <TextField
                 key={`${row.id}name`}
@@ -304,14 +318,27 @@ const Garten = ({
                 <Coordinates row={row} saveToDb={saveToDb} />
               )}
               {ga_aktiv && (
-                <Checkbox2States
-                  key={`${row.id}aktiv`}
-                  label="aktiv"
-                  name="aktiv"
-                  value={row.aktiv}
-                  saveToDb={saveToDb}
-                  error={errors?.garten?.aktiv}
-                />
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}aktiv`}
+                      label="aktiv"
+                      name="aktiv"
+                      value={row.aktiv}
+                      saveToDb={saveToDb}
+                      error={errors?.garten?.aktiv}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}aktiv`}
+                      label="aktiv"
+                      name="aktiv"
+                      value={row.aktiv}
+                      saveToDb={saveToDb}
+                      error={errors?.garten?.aktiv}
+                    />
+                  )}
+                </>
               )}
               {ga_bemerkungen && (
                 <TextField

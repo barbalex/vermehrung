@@ -16,6 +16,7 @@ import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Files from '../Files'
 import Timeline from './Timeline'
@@ -104,6 +105,8 @@ const Kultur = ({
     errors,
     unsetError,
     hideInactive,
+    artHerkuenfte,
+    kulturIdInActiveNodeArray,
   } = store
 
   const row = useMemo(
@@ -117,14 +120,7 @@ const Kultur = ({
   // => substract the ones with two existing in this garden?
   // => present arten of the rest
   // TODO: allow additional zwischenlager
-  const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
-    .filter((k) => !k.zwischenlager)
-  const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
-    .filter((k) => k.zwischenlager)
-    // only consider kulturen with both art and herkunft chosen
-    .filter((o) => o.art_id && o.herkunft_id)
+
   const sammlungs = sammlungsSorted.filter((s) => !!s.art_id && !!s.herkunft_id)
   const artHerkunftToChoose = sammlungs /*.filter(
     (s) =>
@@ -138,10 +134,34 @@ const Kultur = ({
       ),
   )*/
   const artenToChoose = uniq(
-    artHerkunftToChoose
+    artHerkuenfte
+      // only arten with herkunft
       .filter((ah) =>
         row?.herkunft_id ? ah.herkunft_id === row.herkunft_id : true,
       )
+      .filter((s) => {
+        const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
+          .filter((k) => (hideInactive ? k.aktiv : true))
+          // only consider kulturen with both art and herkunft chosen
+          .filter((o) => o.art_id && o.herkunft_id)
+          .filter((k) => !k.zwischenlager)
+        const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
+          .filter((k) => (hideInactive ? k.aktiv : true))
+          // only consider kulturen with both art and herkunft chosen
+          .filter((o) => o.art_id && o.herkunft_id)
+          .filter((k) => k.zwischenlager)
+        return !(
+          !!artHerkunftInGarten.find(
+            (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+          ) &&
+          !!artHerkunftZwischenlagerInGarten.find(
+            (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+          )
+        )
+      })
+      // TODO:
+      // if garden is active, only
+      // only arten
       .map((a) => a.art_id),
   )
   // do show own art
@@ -209,13 +229,14 @@ const Kultur = ({
       let value = ifIsNumericAsNumber(event.target.value)
       if (event.target.value === undefined) value = null
       if (event.target.value === '') value = null
-      const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
 
       if (showFilter) {
         return filter.setValue({ table: 'kultur', key: field, value })
       }
+
+      const previousValue = row[field]
+      // only update if value has changed
+      if (value === previousValue) return
       row.edit({ field, value })
     },
     [filter, row, showFilter],
@@ -250,12 +271,6 @@ const Kultur = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('Kultur', {
-    zwischenlagerError,
-    kulturErrors: errors.kultur,
-    errors,
-  })
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -274,14 +289,27 @@ const Kultur = ({
                 </CaseConflictTitle>
               )}
               {showDeleted && (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors.kultur?._deleted}
-                />
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors.kultur?._deleted}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors.kultur?._deleted}
+                    />
+                  )}
+                </>
               )}
               <Select
                 key={`${row.id}${row.art_id}art_id`}
@@ -313,22 +341,44 @@ const Kultur = ({
                 saveToDb={saveToDb}
                 error={errors.kultur?.garten_id}
               />
-              <Checkbox2States
-                key={`${row.id}zwischenlager`}
-                label="Zwischenlager"
-                name="zwischenlager"
-                value={row.zwischenlager}
-                saveToDb={saveToDb}
-                error={zwischenlagerError}
-              />
-              <Checkbox2States
-                key={`${row.id}erhaltungskultur`}
-                label="Erhaltungskultur"
-                name="erhaltungskultur"
-                value={row.erhaltungskultur}
-                saveToDb={saveToDb}
-                error={errors.kultur?.erhaltungskultur}
-              />
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}zwischenlager`}
+                  label="Zwischenlager"
+                  name="zwischenlager"
+                  value={row.zwischenlager}
+                  saveToDb={saveToDb}
+                  error={zwischenlagerError}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}zwischenlager`}
+                  label="Zwischenlager"
+                  name="zwischenlager"
+                  value={row.zwischenlager}
+                  saveToDb={saveToDb}
+                  error={zwischenlagerError}
+                />
+              )}
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}erhaltungskultur`}
+                  label="Erhaltungskultur"
+                  name="erhaltungskultur"
+                  value={row.erhaltungskultur}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?.erhaltungskultur}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}erhaltungskultur`}
+                  label="Erhaltungskultur"
+                  name="erhaltungskultur"
+                  value={row.erhaltungskultur}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?.erhaltungskultur}
+                />
+              )}
               <FieldRow>
                 <TextField
                   key={`${row.id}von_anzahl_individuen`}
@@ -349,14 +399,25 @@ const Kultur = ({
                   </IconButton>
                 </div>
               </FieldRow>
-              <Checkbox2States
-                key={`${row.id}aktiv`}
-                label="aktiv"
-                name="aktiv"
-                value={row.aktiv}
-                saveToDb={saveToDb}
-                error={errors.kultur?.aktiv}
-              />
+              {showFilter ? (
+                <Checkbox3States
+                  key={`${row.id}aktiv`}
+                  label="aktiv"
+                  name="aktiv"
+                  value={row.aktiv}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?.aktiv}
+                />
+              ) : (
+                <Checkbox2States
+                  key={`${row.id}aktiv`}
+                  label="aktiv"
+                  name="aktiv"
+                  value={row.aktiv}
+                  saveToDb={saveToDb}
+                  error={errors.kultur?.aktiv}
+                />
+              )}
               <TextField
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"

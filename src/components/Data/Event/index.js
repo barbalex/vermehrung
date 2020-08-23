@@ -17,6 +17,7 @@ import SelectCreatable from '../../shared/SelectCreatable'
 import TextField from '../../shared/TextField'
 import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
+import Checkbox3States from '../../shared/Checkbox3States'
 import FilterTitle from '../../shared/FilterTitle'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import Settings from './Settings'
@@ -202,7 +203,7 @@ const Event = ({
       if (showFilter) {
         return filter.setValue({ table: 'event', key: field, value })
       }
-      
+
       const previousValue = row?.[field]
       // only update if value has changed
       if (value === previousValue) return
@@ -299,14 +300,27 @@ const Event = ({
                 </CaseConflictTitle>
               )}
               {showDeleted && (
-                <Checkbox2States
-                  key={`${row.id}_deleted`}
-                  label="gelöscht"
-                  name="_deleted"
-                  value={row._deleted}
-                  saveToDb={saveToDb}
-                  error={errors?.event?._deleted}
-                />
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.event?._deleted}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.event?._deleted}
+                    />
+                  )}
+                </>
               )}
               <Select
                 key={`${row.id}${row.kultur_id}kultur_id`}
@@ -362,14 +376,25 @@ const Event = ({
               )}
               {(ev_geplant || showFilter) && (
                 <FieldRow>
-                  <Checkbox2States
-                    key={`${row.id}geplant`}
-                    label="geplant"
-                    name="geplant"
-                    value={row.geplant}
-                    saveToDb={saveToDb}
-                    error={errors?.event?.geplant}
-                  />
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}geplant`}
+                      label="geplant"
+                      name="geplant"
+                      value={row.geplant}
+                      saveToDb={saveToDb}
+                      error={errors?.event?.geplant}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}geplant`}
+                      label="geplant"
+                      name="geplant"
+                      value={row.geplant}
+                      saveToDb={saveToDb}
+                      error={errors?.event?.geplant}
+                    />
+                  )}
                   <div>
                     <IconButton
                       aria-label="Anleitung öffnen"
