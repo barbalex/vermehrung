@@ -12,7 +12,7 @@ const Container = styled.div`
 `
 const StyledFormControl = styled(FormControl)`
   padding-left: 1px !important;
-  padding-bottom: 15px !important;
+  /*padding-bottom: 15px !important;*/
 `
 const StyledFormLabel = styled(FormLabel)`
   padding-top: 10px !important;
@@ -53,7 +53,7 @@ const Checkbox3States = ({ label, name, value, error, saveToDb }) => {
   }, [value, name, saveToDb])
 
   const indeterminate = value === null
-  const checked = value === true  
+  const checked = value === true
   const asideText =
     value === true ? `Ja` : value === false ? `Nein` : `Unbestimmt`
   const asideComment =
