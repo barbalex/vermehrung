@@ -39,7 +39,8 @@ const Arten = ({ row, style, last }) => {
     row?.garten?.name ?? `${row?.garten?.person?.fullname ?? 'kein Name'}`
   const art = row?.art?.art_ae_art?.name ?? '(keine Art)'
   const herkunft = row?.herkunft?.nr ?? '(Herkunft ohne Nr)'
-  const label = `${art}, von: ${herkunft}, in: ${garten}`
+  const zwischenlager = row?.zwischenlager ? `, Zwischenlager` : ''
+  const label = `${art}, von: ${herkunft}, in: ${garten}${zwischenlager}`
 
   return (
     <Row key={row.id} onClick={onClickRow} style={style} data-last={last}>
