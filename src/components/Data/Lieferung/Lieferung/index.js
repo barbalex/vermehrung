@@ -27,12 +27,10 @@ import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import getConstants from '../../../../utils/constants'
-import kulturSort from '../../../../utils/kulturSort'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
 import FilterNumbers from '../../../shared/FilterNumbers'
-import kulturLabelFromKultur from './kulturLabelFromKultur'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 import Was from './Was'
@@ -148,7 +146,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   const {
     errors,
     filter,
-    herkunftsSorted,
     kulturIdInActiveNodeArray,
     lieferungsFiltered,
     lieferungsSorted,
@@ -162,8 +159,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     userPersonOption,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-  // BEWARE: need to include inactive kulturs, persons
-  const kultursSorted = [...store.kulturs.values()].sort(kulturSort)
 
   const id = showFilter
     ? '99999999-9999-9999-9999-999999999999'
@@ -207,9 +202,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
 
   const { li_show_sl_felder } = userPersonOption
 
-  const urlLastName = activeNodeArray[activeNodeArray.length - 2]
-  const isAnlieferung = urlLastName === 'An-Lieferungen'
-
   const ifNeeded = useCallback(
     (field) => {
       if (existsSammelLieferung && li_show_sl_felder) return true
@@ -227,45 +219,9 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     [ifNeeded],
   )
 
-  const herkunftByKultur = isAnlieferung
-    ? row?.kulturByNachKulturId?.herkunft
-    : row?.kulturByVonKulturId?.herkunft
-  const vonSammlung = row?.sammlung //sammlungsSorted.find((s) => s.id === row.von_sammlung_id)
-  const herkunftBySammlung = vonSammlung
-    ? herkunftsSorted.find((s) => s.id === vonSammlung.herkunft_id)
-    : null
-  const herkunft = herkunftByKultur || herkunftBySammlung
-
   useEffect(() => {
     unsetError('lieferung')
   }, [id, unsetError])
-
-  const nachKulturWerteData = kultursSorted
-    // show only kulturen of art_id
-    .filter((k) => {
-      if (row?.art_id) return k.art_id === row.art_id
-      return true
-    })
-    // show only kulturen with same herkunft
-    .filter((k) => {
-      if (herkunft?.id) return k.herkunft_id === herkunft.id
-      return true
-    })
-    // shall not be delivered to same kultur it came from
-    .filter((k) => {
-      if (row?.von_kultur_id && row?.von_kultur_id !== row?.nach_kultur_id) {
-        return k.id !== row.von_kultur_id
-      }
-      return true
-    })
-  const nachKulturWerte = useMemo(
-    () =>
-      nachKulturWerteData.map((el) => ({
-        value: el.id,
-        label: kulturLabelFromKultur(el),
-      })),
-    [nachKulturWerteData],
-  )
 
   const personWerte = useMemo(
     () =>
