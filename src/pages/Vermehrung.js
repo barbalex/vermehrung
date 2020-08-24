@@ -123,7 +123,7 @@ const Vermehrung = ({ location }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existsUser, initialDataQueried])
 
-  if (gettingAuthUser && !initialDataQueried) {
+  if (gettingAuthUser) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -134,9 +134,25 @@ const Vermehrung = ({ location }) => {
               backColor="#4a148c1a"
               loading={true}
             />
-            <SpinnerText>
-              {gettingAuthUser ? 'autorisiere' : 'lade Daten'}
-            </SpinnerText>
+            <SpinnerText>autorisiere</SpinnerText>
+          </SpinnerContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
+
+  if (!initialDataQueried) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <SpinnerContainer>
+            <Spinner
+              size={50}
+              frontColor="#4a148c"
+              backColor="#4a148c1a"
+              loading={true}
+            />
+            <SpinnerText>lade Daten</SpinnerText>
           </SpinnerContainer>
         </Layout>
       </ErrorBoundary>
