@@ -20,11 +20,9 @@ export default async ({ store }) => {
   const blacklist = [
     'authorizing',
     'user',
-    'loading',
     'gqlHttpClient',
     'gqlWsClient',
     'initialDataQueried',
-    'queryingAllData',
     'gettingAuthUser',
     'online',
     'errors',
