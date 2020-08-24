@@ -106,7 +106,6 @@ const Kultur = ({
     unsetError,
     hideInactive,
     artHerkuenfte,
-    kulturIdInActiveNodeArray,
   } = store
 
   const row = useMemo(
@@ -119,63 +118,85 @@ const Kultur = ({
   // => substract the ones existing in this garden
   // => substract the ones with two existing in this garden?
   // => present arten of the rest
-  // TODO: allow additional zwischenlager
 
-  const sammlungs = sammlungsSorted.filter((s) => !!s.art_id && !!s.herkunft_id)
-  const artHerkunftToChoose = sammlungs /*.filter(
-    (s) =>
-      !(
-        !!artHerkunftInGarten.find(
-          (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-        ) &&
-        !!artHerkunftZwischenlagerInGarten.find(
-          (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-        )
-      ),
-  )*/
-  const artenToChoose = uniq(
-    artHerkuenfte
-      // only arten with herkunft
-      .filter((ah) =>
-        row?.herkunft_id ? ah.herkunft_id === row.herkunft_id : true,
+  const garten_id = row?.garten?.id
+  const art_id = row?.art_id
+  const herkunft_id = row?.herkunft_id
+  const artHerkunftInGartenNichtZl = (row?.garten?.kulturs ?? [])
+    .filter((k) => (hideInactive ? k.aktiv : true))
+    // only consider kulturen with both art and herkunft chosen
+    .filter((o) => !!o.art_id && !!o.herkunft_id)
+    .filter((k) => !k.zwischenlager)
+  const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
+    .filter((k) => (hideInactive ? k.aktiv : true))
+    // only consider kulturen with both art and herkunft chosen
+    .filter((o) => !!o.art_id && !!o.herkunft_id)
+    .filter((k) => k.zwischenlager)
+  const artenToChoose = useMemo(
+    () =>
+      uniq(
+        artHerkuenfte
+          // only arten with herkunft
+          .filter((ah) => (herkunft_id ? ah.herkunft_id === herkunft_id : true))
+          .filter((s) => {
+            // do not filter if no garten choosen
+            if (!garten_id) return true
+            // do not return if exists nicht zl AND zl
+            return !(
+              !!artHerkunftInGartenNichtZl.find(
+                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+              ) &&
+              !!artHerkunftZwischenlagerInGarten.find(
+                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+              )
+            )
+          }),
       )
-      .filter((s) => {
-        const artHerkunftInGarten = (row?.garten?.kulturs ?? [])
-          .filter((k) => (hideInactive ? k.aktiv : true))
-          // only consider kulturen with both art and herkunft chosen
-          .filter((o) => o.art_id && o.herkunft_id)
-          .filter((k) => !k.zwischenlager)
-        const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
-          .filter((k) => (hideInactive ? k.aktiv : true))
-          // only consider kulturen with both art and herkunft chosen
-          .filter((o) => o.art_id && o.herkunft_id)
-          .filter((k) => k.zwischenlager)
-        return !(
-          !!artHerkunftInGarten.find(
-            (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-          ) &&
-          !!artHerkunftZwischenlagerInGarten.find(
-            (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-          )
-        )
-      })
-      // TODO:
-      // if garden is active, only
-      // only arten
-      .map((a) => a.art_id),
+        // only arten
+        .map((a) => a.art_id),
+    [
+      artHerkuenfte,
+      artHerkunftInGartenNichtZl,
+      artHerkunftZwischenlagerInGarten,
+      garten_id,
+      herkunft_id,
+    ],
   )
   // do show own art
-  if (row?.art_id && !artenToChoose.includes(row?.art_id)) {
-    artenToChoose.push(row?.art_id)
+  if (art_id && !artenToChoose.includes(art_id)) {
+    artenToChoose.push(art_id)
   }
-  const herkunftToChoose = uniq(
-    sammlungs
-      .filter((s) => (row?.art_id ? s.art_id === row?.art_id : true))
-      .map((a) => a.herkunft_id),
+  const herkunftToChoose = useMemo(
+    () =>
+      uniq(
+        artHerkuenfte
+          .filter((s) => (art_id ? s.art_id === art_id : true))
+          .filter((s) => {
+            // do not filter if no garten choosen
+            if (!garten_id) return true
+            // do not return if exists nicht zl AND zl
+            return !(
+              !!artHerkunftInGartenNichtZl.find(
+                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+              ) &&
+              !!artHerkunftZwischenlagerInGarten.find(
+                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
+              )
+            )
+          })
+          .map((a) => a.herkunft_id),
+      ),
+    [
+      artHerkuenfte,
+      artHerkunftInGartenNichtZl,
+      artHerkunftZwischenlagerInGarten,
+      garten_id,
+      art_id,
+    ],
   )
   // do show own herkunft
-  if (row?.herkunft_id && !herkunftToChoose.includes(row?.herkunft_id)) {
-    herkunftToChoose.push(row?.herkunft_id)
+  if (herkunft_id && !herkunftToChoose.includes(herkunft_id)) {
+    herkunftToChoose.push(herkunft_id)
   }
 
   const [activeConflict, setActiveConflict] = useState(null)
@@ -195,11 +216,13 @@ const Kultur = ({
   )*/
   const artWerte = useMemo(
     () =>
-      artsSorted.map((el) => ({
-        value: el.id,
-        label: el?.art_ae_art?.name ?? '...',
-      })),
-    [artsSorted],
+      artsSorted
+        .filter((a) => !!a.ae_id && artenToChoose.includes(a.id))
+        .map((el) => ({
+          value: el.id,
+          label: el?.art_ae_art?.name ?? '...',
+        })),
+    [artenToChoose, artsSorted],
   )
 
   const gartenWerte = useMemo(
@@ -271,6 +294,8 @@ const Kultur = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
+  console.log('Kultur', { row })
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -312,9 +337,9 @@ const Kultur = ({
                 </>
               )}
               <Select
-                key={`${row.id}${row.art_id}art_id`}
+                key={`${row.id}${art_id}art_id`}
                 name="art_id"
-                value={row.art_id}
+                value={art_id}
                 field="art_id"
                 label="Art"
                 options={artWerte}
@@ -322,9 +347,9 @@ const Kultur = ({
                 error={artError}
               />
               <Select
-                key={`${row.id}${row.herkunft_id}herkunft_id`}
+                key={`${row.id}${herkunft_id}herkunft_id`}
                 name="herkunft_id"
-                value={row.herkunft_id}
+                value={herkunft_id}
                 field="herkunft_id"
                 label="Herkunft"
                 options={herkunftWerte}
@@ -332,9 +357,9 @@ const Kultur = ({
                 error={herkunftError}
               />
               <Select
-                key={`${row.id}${row.garten_id}garten_id`}
+                key={`${row.id}${garten_id}garten_id`}
                 name="garten_id"
-                value={row.garten_id}
+                value={garten_id}
                 field="garten_id"
                 label="Garten"
                 options={gartenWerte}
