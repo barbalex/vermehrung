@@ -24,9 +24,10 @@ import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
-import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
-import kulturLabelFromKultur from '../Lieferung/Lieferung/kulturLabelFromKultur'
 import FormTitle from './FormTitle'
+import Was from './Was'
+import Von from './Von'
+import Nach from './Nach'
 
 const constants = getConstants()
 
@@ -58,6 +59,8 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   position: sticky;
+  ${(props) =>
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   user-select: none;
   top: -10px;
   z-index: 1;
@@ -74,15 +77,6 @@ const FieldRow = styled.div`
   > div > button {
     margin-top: 8px;
   }
-`
-const Herkunft = styled.div`
-  height: 54px;
-  user-select: none;
-`
-const HerkunftLabel = styled.div`
-  color: rgb(0, 0, 0, 0.54);
-  font-size: 12px;
-  padding-bottom: 2px;
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px - 48px) !important;
@@ -133,10 +127,7 @@ const SammelLieferung = ({
     isPrint,
     online,
     userPersonOption,
-    artsSorted,
-    kultursSorted,
     personsSorted,
-    sammlungsSorted,
     showDeleted,
     errors,
     unsetError,
@@ -160,22 +151,6 @@ const SammelLieferung = ({
 
   const { sl_show_empty_when_next_to_li } = userPersonOption
 
-  const herkunftByNachKultur = row?.kulturByNachKulturId?.herkunft
-  const herkunftByVonKultur = row?.kulturByVonKulturId?.herkunft
-  const herkunftBySammlung = row?.sammlung?.herkunft
-  const herkunft =
-    herkunftByNachKultur ?? herkunftByVonKultur ?? herkunftBySammlung
-  const herkunftQuelle = herkunftByNachKultur
-    ? 'nach-Kultur'
-    : herkunftByVonKultur
-    ? 'von-Kultur'
-    : 'Sammlung'
-  const herkunftValue = herkunft
-    ? `${herkunft?.nr ?? '(keine Nr)'}: ${
-        herkunft?.gemeinde ?? '(keine Gemeinde)'
-      }, ${herkunft.lokalname ?? '(kein Lokalname)'}`
-    : ''
-
   useEffect(() => {
     unsetError('sammel_lieferung')
   }, [id, unsetError])
@@ -187,74 +162,6 @@ const SammelLieferung = ({
     }
   }, [id, setWidthInPercentOfScreen])
 
-  const vonKulturWerteData = kultursSorted
-    // show only kulturen of art_id
-    .filter((k) => {
-      if (row?.art_id) return k.art_id === row.art_id
-      return true
-    })
-    // show only kulturen with same herkunft
-    .filter((k) => {
-      if (herkunft?.id) return k?.herkunft_id === herkunft.id
-      return true
-    })
-    // shall not be delivered to same kultur it came from
-    .filter((k) => {
-      if (row?.nach_kultur_id && row?.von_kultur_id !== row?.nach_kultur_id) {
-        return k.id !== row.nach_kultur_id
-      }
-      return true
-    })
-  const vonKulturWerte = useMemo(
-    () =>
-      vonKulturWerteData.map((el) => ({
-        value: el?.id,
-        label: kulturLabelFromKultur(el),
-      })),
-    [vonKulturWerteData],
-  )
-
-  const nachKulturWerteData = kultursSorted
-    // show only kulturen of art_id
-    .filter((k) => {
-      if (row?.art_id) return k.art_id === row.art_id
-      return true
-    })
-    // show only kulturen with same herkunft
-    .filter((k) => {
-      if (herkunft?.id) return k.herkunft_id === herkunft.id
-      return true
-    })
-    // shall not be delivered to same kultur it came from
-    .filter((k) => {
-      if (row?.von_kultur_id && row?.von_kultur_id !== row?.nach_kultur_id) {
-        return k.id !== row.von_kultur_id
-      }
-      return true
-    })
-  const nachKulturWerte = useMemo(
-    () =>
-      nachKulturWerteData.map((el) => ({
-        value: el?.id,
-        label: kulturLabelFromKultur(el),
-      })),
-    [nachKulturWerteData],
-  )
-
-  const sammlungWerte = useMemo(
-    () =>
-      sammlungsSorted
-        .filter((s) => {
-          if (row.art_id) return s.art_id === row.art_id
-          return true
-        })
-        .map((el) => ({
-          value: el?.id,
-          label: sammlungLabelFromSammlung(el),
-        })),
-    [row.art_id, sammlungsSorted],
-  )
-
   const personWerte = useMemo(
     () =>
       personsSorted.map((el) => ({
@@ -262,15 +169,6 @@ const SammelLieferung = ({
         label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
       })),
     [personsSorted],
-  )
-
-  const artWerte = useMemo(
-    () =>
-      artsSorted.map((el) => ({
-        value: el.id,
-        label: el?.art_ae_art?.name ?? '(kein Artname)',
-      })),
-    [artsSorted],
   )
 
   const saveToDb = useCallback(
@@ -307,15 +205,6 @@ const SammelLieferung = ({
   // because during printing page Vermehrung re-renders without tree
   const [printPreview, setPrintPreview] = useState(isPrint && !printPreview)
 
-  const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
   const ifNeeded = useCallback(
     (field) => {
       if (sl_show_empty_when_next_to_li) return true
@@ -398,190 +287,28 @@ const SammelLieferung = ({
                   'andere_menge',
                   'von_anzahl_individuen',
                 ]) && (
-                  <>
-                    <TitleRow data-filter={showFilter}>
-                      <Title>was</Title>
-                    </TitleRow>
-                    {ifNeeded('art_id') && (
-                      <Select
-                        key={`${row.id}art_id`}
-                        name="art_id"
-                        value={row.art_id}
-                        field="art_id"
-                        label="Art"
-                        options={artWerte}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.art_id}
-                      />
-                    )}
-                    {herkunftValue && (
-                      <Herkunft>
-                        <HerkunftLabel>{`Herkunft (berechnet aus ${herkunftQuelle})`}</HerkunftLabel>
-                        {herkunftValue}
-                      </Herkunft>
-                    )}
-                    <FieldRow>
-                      {ifNeeded('anzahl_pflanzen') && (
-                        <TextField
-                          key={`${row.id}anzahl_pflanzen`}
-                          name="anzahl_pflanzen"
-                          label="Anzahl Pflanzen"
-                          value={row.anzahl_pflanzen}
-                          saveToDb={saveToDb}
-                          error={errors?.sammel_lieferung?.anzahl_pflanzen}
-                          type="number"
-                        />
-                      )}
-                      {ifNeeded('anzahl_auspflanzbereit') && (
-                        <TextField
-                          key={`${row.id}anzahl_auspflanzbereit`}
-                          name="anzahl_auspflanzbereit"
-                          label="Anzahl auspflanzbereit"
-                          value={row.anzahl_auspflanzbereit}
-                          saveToDb={saveToDb}
-                          error={
-                            errors?.sammel_lieferung?.anzahl_auspflanzbereit
-                          }
-                          type="number"
-                        />
-                      )}
-                    </FieldRow>
-                    <FieldRow>
-                      {ifNeeded('gramm_samen') && (
-                        <TextField
-                          key={`${row.id}gramm_samen`}
-                          name="gramm_samen"
-                          label="Gramm Samen"
-                          value={row.gramm_samen}
-                          saveToDb={saveToDb}
-                          error={errors?.sammel_lieferung?.gramm_samen}
-                          type="number"
-                        />
-                      )}
-                      {ifNeeded('andere_menge') && (
-                        <TextField
-                          key={`${row.id}andere_menge`}
-                          name="andere_menge"
-                          label={`Andere Menge (z.B. "3 Zwiebeln")`}
-                          value={row.andere_menge}
-                          saveToDb={saveToDb}
-                          error={errors?.sammel_lieferung?.andere_menge}
-                          type="text"
-                        />
-                      )}
-                    </FieldRow>
-                    {ifNeeded('von_anzahl_individuen') && (
-                      <FieldRow>
-                        <TextField
-                          key={`${row.id}von_anzahl_individuen`}
-                          name="von_anzahl_individuen"
-                          label="von Anzahl Individuen"
-                          value={row.von_anzahl_individuen}
-                          saveToDb={saveToDb}
-                          error={
-                            errors?.sammel_lieferung?.von_anzahl_individuen
-                          }
-                          type="number"
-                        />
-                        <div>
-                          <IconButton
-                            aria-label="Anleitung öffnen"
-                            title="Anleitung öffnen"
-                            onClick={openGenVielfaldDocs}
-                          >
-                            <IoMdInformationCircleOutline />
-                          </IconButton>
-                        </div>
-                      </FieldRow>
-                    )}
-                  </>
+                  <Was
+                    showFilter={showFilter}
+                    row={row}
+                    ifNeeded={ifNeeded}
+                    saveToDb={saveToDb}
+                  />
                 )}
                 {ifSomeNeeded(['von_sammlung_id', 'von_kultur_id']) && (
-                  <>
-                    <TitleRow data-filter={showFilter}>
-                      <Title>von</Title>
-                    </TitleRow>
-                    {ifNeeded('von_sammlung_id') && (
-                      <Select
-                        key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-                        name="von_sammlung_id"
-                        value={row.von_sammlung_id}
-                        field="von_sammlung_id"
-                        label={`Sammlung${
-                          exists(row.art_id)
-                            ? ' (nur solche derselben Art)'
-                            : ''
-                        }`}
-                        options={sammlungWerte}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.von_sammlung_id}
-                      />
-                    )}
-                    {ifNeeded('von_kultur_id') && (
-                      <Select
-                        key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-                        name="von_kultur_id"
-                        value={row.von_kultur_id}
-                        field="von_kultur_id"
-                        label={`Kultur${
-                          exists(row.art_id)
-                            ? ' (nur solche derselben Art)'
-                            : ''
-                        }`}
-                        options={vonKulturWerte}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.von_kultur_id}
-                      />
-                    )}
-                  </>
+                  <Von
+                    showFilter={showFilter}
+                    row={row}
+                    ifNeeded={ifNeeded}
+                    saveToDb={saveToDb}
+                  />
                 )}
                 {ifSomeNeeded(['nach_kultur_id', 'nach_ausgepflanzt']) && (
-                  <>
-                    <TitleRow data-filter={showFilter}>
-                      <Title>nach</Title>
-                    </TitleRow>
-                    {ifNeeded('nach_kultur_id') && (
-                      <Select
-                        key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-                        name="nach_kultur_id"
-                        value={row.nach_kultur_id}
-                        field="nach_kultur_id"
-                        label={`Kultur${
-                          exists(row.art_id)
-                            ? ` (Kulturen derselben Art und Herkunft${
-                                row.von_kultur_id ? ', ohne die von-Kultur' : ''
-                              })`
-                            : ''
-                        }`}
-                        options={nachKulturWerte}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.nach_kultur_id}
-                      />
-                    )}
-                    {ifNeeded('nach_ausgepflanzt') && (
-                      <>
-                        {showFilter ? (
-                          <Checkbox3States
-                            key={`${row.id}nach_ausgepflanzt`}
-                            label="Ausgepflanzt"
-                            name="nach_ausgepflanzt"
-                            value={row.nach_ausgepflanzt}
-                            saveToDb={saveToDb}
-                            error={errors?.sammel_lieferung?.nach_ausgepflanzt}
-                          />
-                        ) : (
-                          <Checkbox2States
-                            key={`${row.id}nach_ausgepflanzt`}
-                            label="Ausgepflanzt"
-                            name="nach_ausgepflanzt"
-                            value={row.nach_ausgepflanzt}
-                            saveToDb={saveToDb}
-                            error={errors?.sammel_lieferung?.nach_ausgepflanzt}
-                          />
-                        )}
-                      </>
-                    )}
-                  </>
+                  <Nach
+                    showFilter={showFilter}
+                    row={row}
+                    ifNeeded={ifNeeded}
+                    saveToDb={saveToDb}
+                  />
                 )}
                 {ifSomeNeeded(['datum', 'geplant']) && (
                   <>
