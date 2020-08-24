@@ -70,8 +70,6 @@ export const RootStore = RootStoreBase.props({
   singleColumnView: types.optional(types.boolean, false),
   showTreeInSingleColumnView: types.optional(types.boolean, false),
   online: types.optional(types.boolean, true),
-  // register initial loading
-  loading: types.optional(types.boolean, false),
   /**
    * This is a queue of all queries
    * When online they they are immediatly executed by the reaction
@@ -87,7 +85,6 @@ export const RootStore = RootStoreBase.props({
   authorizing: types.optional(types.boolean, true),
   showDeleted: types.optional(types.boolean, false),
   initialDataQueried: types.optional(types.boolean, false),
-  queryingAllData: types.optional(types.boolean, false),
   errors: types.optional(Errors, defaultErrors),
 })
   .volatile(() => ({
@@ -219,9 +216,6 @@ export const RootStore = RootStoreBase.props({
       unsetError(path) {
         unset(self.errors, path)
       },
-      setQueryingAllData(val) {
-        self.queryingAllData = val
-      },
       setInitialDataQueried(val) {
         self.initialDataQueried = val
       },
@@ -230,9 +224,6 @@ export const RootStore = RootStoreBase.props({
       },
       setGqlWsClient(val) {
         self.gqlWsClient = val
-      },
-      setLoading(val) {
-        self.loading = val
       },
       updateModelValue({ table, id, field, value }) {
         // used to revert offline operations if they error
