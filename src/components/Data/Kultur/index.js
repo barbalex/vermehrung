@@ -225,6 +225,9 @@ const Kultur = ({
     [artenToChoose, artsSorted],
   )
 
+  // TODO:
+  // if art was choosen: remove gartens where this art has two kulturs for every herkunft?
+  // if herkunft was choosen: remove gartens where this herkunft has two kulturs
   const gartenWerte = useMemo(
     () =>
       gartensSorted.map((el) => ({
