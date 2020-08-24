@@ -10,8 +10,6 @@ import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
-import Select from '../../shared/Select'
-import TextField from '../../shared/TextField'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Checkbox3States from '../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
@@ -25,6 +23,7 @@ import Was from './Was'
 import Von from './Von'
 import Nach from './Nach'
 import Wann from './Wann'
+import Wer from './Wer'
 
 const Container = styled.div`
   height: 100%;
@@ -32,36 +31,10 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
 `
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
-  user-select: none;
-  top: -10px;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px - 48px) !important;
@@ -112,7 +85,6 @@ const SammelLieferung = ({
     isPrint,
     online,
     userPersonOption,
-    personsSorted,
     showDeleted,
     errors,
     unsetError,
@@ -146,15 +118,6 @@ const SammelLieferung = ({
       if (id) setWidthInPercentOfScreen(33)
     }
   }, [id, setWidthInPercentOfScreen])
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
 
   const saveToDb = useCallback(
     (event) => {
@@ -295,34 +258,12 @@ const SammelLieferung = ({
                   />
                 )}
                 {ifSomeNeeded(['person_id', 'bemerkungen']) && (
-                  <>
-                    <TitleRow data-filter={showFilter}>
-                      <Title>wer</Title>
-                    </TitleRow>
-                    {ifNeeded('person_id') && (
-                      <Select
-                        key={`${row.id}person_id`}
-                        name="person_id"
-                        value={row.person_id}
-                        field="person_id"
-                        label="Person"
-                        options={personWerte}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.person_id}
-                      />
-                    )}
-                    {ifNeeded('bemerkungen') && (
-                      <TextField
-                        key={`${row.id}bemerkungen`}
-                        name="bemerkungen"
-                        label="Bemerkungen"
-                        value={row.bemerkungen}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.bemerkungen}
-                        multiLine
-                      />
-                    )}
-                  </>
+                  <Wer
+                    showFilter={showFilter}
+                    row={row}
+                    ifNeeded={ifNeeded}
+                    saveToDb={saveToDb}
+                  />
                 )}
                 {online &&
                   !showFilter &&
