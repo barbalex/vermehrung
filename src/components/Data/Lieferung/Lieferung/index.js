@@ -37,6 +37,7 @@ import UpSvg from '../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 import Was from './Was'
 import Von from './Von'
+import Nach from './Nach'
 
 const constants = getConstants()
 
@@ -427,50 +428,12 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                 saveToDb={saveToDb}
                 ifNeeded={ifNeeded}
               />
-              <TitleRow data-filter={showFilter}>
-                <Title>nach</Title>
-              </TitleRow>
-              {ifNeeded('nach_kultur_id') && (
-                <Select
-                  key={`${row.id}${row.nach_kultur_id}nach_kultur_id`}
-                  name="nach_kultur_id"
-                  value={row.nach_kultur_id}
-                  field="nach_kultur_id"
-                  label={`Kultur${
-                    exists(row.art_id)
-                      ? ` (Kulturen derselben Art und Herkunft${
-                          row.von_kultur_id ? ', ohne die von-Kultur' : ''
-                        })`
-                      : ''
-                  }`}
-                  options={nachKulturWerte}
-                  saveToDb={saveToDb}
-                  error={errors?.lieferung?.nach_kultur_id}
-                />
-              )}
-              {ifNeeded('nach_ausgepflanzt') && (
-                <>
-                  {showFilter ? (
-                    <Checkbox3States
-                      key={`${row.id}nach_ausgepflanzt`}
-                      label="ausgepflanzt"
-                      name="nach_ausgepflanzt"
-                      value={row.nach_ausgepflanzt}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.nach_ausgepflanzt}
-                    />
-                  ) : (
-                    <Checkbox2States
-                      key={`${row.id}nach_ausgepflanzt`}
-                      label="ausgepflanzt"
-                      name="nach_ausgepflanzt"
-                      value={row.nach_ausgepflanzt}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.nach_ausgepflanzt}
-                    />
-                  )}
-                </>
-              )}
+              <Nach
+                showFilter={showFilter}
+                row={row}
+                saveToDb={saveToDb}
+                ifNeeded={ifNeeded}
+              />
               {ifSomeNeeded(['datum', 'geplant']) && (
                 <>
                   <TitleRow data-filter={showFilter}>
