@@ -33,7 +33,7 @@ export const type = types.model({
     null,
   ),
   // geomPoint missing
-  geplant: types.optional(types.maybeNull(types.boolean), false),
+  geplant: types.optional(types.maybeNull(types.boolean), null),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -51,7 +51,7 @@ export const initial = {
   anzahl_pflanzen: null,
   gramm_samen: null,
   andere_menge: null,
-  geplant: false,
+  geplant: null,
   bemerkungen: null,
 }
 
@@ -66,7 +66,7 @@ export const empty = {
   anzahl_pflanzen: null,
   gramm_samen: null,
   andere_menge: null,
-  geplant: false,
+  geplant: null,
   bemerkungen: null,
 }
 

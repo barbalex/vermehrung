@@ -13,7 +13,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  prognose: types.optional(types.maybeNull(types.boolean), false),
+  prognose: types.optional(types.maybeNull(types.boolean), null),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -24,7 +24,7 @@ export const initial = {
   id: null,
   kultur_id: null,
   datum: null,
-  prognose: false,
+  prognose: null,
   bemerkungen: null,
 }
 
@@ -32,7 +32,7 @@ export const empty = {
   id: null,
   kultur_id: null,
   datum: null,
-  prognose: false,
+  prognose: null,
   bemerkungen: null,
 }
 
