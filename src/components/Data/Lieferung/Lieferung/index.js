@@ -14,21 +14,17 @@ import isUuid from 'is-uuid'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../../models/reactUtils'
-import Select from '../../../shared/Select'
-import TextField from '../../../shared/TextField'
 import Checkbox2States from '../../../shared/Checkbox2States'
 import Checkbox3States from '../../../shared/Checkbox3States'
 import FilterTitle from '../../../shared/FilterTitle'
 import exists from '../../../../utils/exists'
 import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
-import Files from '../../Files'
 import Settings from './Settings'
 import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import getConstants from '../../../../utils/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Conflict from './Conflict'
-import ConflictList from '../../../shared/ConflictList'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
@@ -36,6 +32,7 @@ import Was from './Was'
 import Von from './Von'
 import Nach from './Nach'
 import Wann from './Wann'
+import Wer from './Wer'
 
 const constants = getConstants()
 
@@ -70,27 +67,6 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
-`
-const TitleRow = styled.div`
-  background-color: ${(props) =>
-    props['data-filter'] ? '#ffe0b2' : 'rgba(248, 243, 254, 1)'};
-  flex-shrink: 0;
-  display: flex;
-  height: 40px;
-  justify-content: space-between;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  position: sticky;
-  ${(props) =>
-    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
-  user-select: none;
-  top: -10px;
-  z-index: 1;
-  &:first-of-type {
-    margin-top: -10px;
-  }
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px - 48px) !important;
@@ -141,7 +117,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     lieferungsSorted,
     online,
     personIdInActiveNodeArray,
-    personsSorted,
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
     showDeleted,
@@ -212,15 +187,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
   useEffect(() => {
     unsetError('lieferung')
   }, [id, unsetError])
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
 
   const saveToDb = useCallback(
     async (event) => {
@@ -380,47 +346,12 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                 />
               )}
               {ifSomeNeeded(['person_id', 'bemerkungen']) && (
-                <>
-                  <TitleRow data-filter={showFilter}>
-                    <Title>wer</Title>
-                  </TitleRow>
-                  {ifNeeded('person_id') && (
-                    <Select
-                      key={`${row.id}person_id`}
-                      name="person_id"
-                      value={row.person_id}
-                      field="person_id"
-                      label="Person"
-                      options={personWerte}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.person_id}
-                    />
-                  )}
-                  {ifNeeded('bemerkungen') && (
-                    <TextField
-                      key={`${row.id}bemerkungen`}
-                      name="bemerkungen"
-                      label="Bemerkungen"
-                      value={row.bemerkungen}
-                      saveToDb={saveToDb}
-                      error={errors?.lieferung?.bemerkungen}
-                      multiLine
-                    />
-                  )}
-                  {online &&
-                    !showFilter &&
-                    row._conflicts &&
-                    row._conflicts.map && (
-                      <ConflictList
-                        conflicts={row._conflicts}
-                        activeConflict={activeConflict}
-                        setActiveConflict={setActiveConflict}
-                      />
-                    )}
-                  {!showFilter && (
-                    <Files parentId={row.id} parent="lieferung" />
-                  )}
-                </>
+                <Wer
+                  showFilter={showFilter}
+                  row={row}
+                  saveToDb={saveToDb}
+                  ifNeeded={ifNeeded}
+                />
               )}
             </FieldsContainer>
             <>
