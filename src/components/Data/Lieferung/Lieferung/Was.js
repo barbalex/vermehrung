@@ -14,7 +14,6 @@ import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { StoreContext } from '../../../../models/reactUtils'
 import Select from '../../../shared/Select'
 import TextField from '../../../shared/TextField'
-import exists from '../../../../utils/exists'
 import getConstants from '../../../../utils/constants'
 
 const constants = getConstants()
