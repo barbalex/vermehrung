@@ -34,10 +34,10 @@ const TitleRow = styled.div`
   cursor: pointer;
   user-select: none;
   position: sticky;
-  top: -10px;
-  z-index: 1;
   ${(props) =>
     props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
+  top: -10px;
+  z-index: 1;
   &:first-of-type {
     margin-top: -10px;
   }
