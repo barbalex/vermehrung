@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useContext } from 'react'
+import React, {
+  useCallback,
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
@@ -30,6 +36,8 @@ const TitleRow = styled.div`
   position: sticky;
   top: -10px;
   z-index: 1;
+  ${(props) =>
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   &:first-of-type {
     margin-top: -10px;
   }
@@ -49,6 +57,20 @@ const Body = styled.div`
 const KulturQk = ({ kultur }) => {
   const store = useContext(StoreContext)
   const [open, setOpen] = useState(false)
+
+  const titleRowRef = useRef(null)
+  const [isSticky, setIsSticky] = useState(false)
+  const scrollHandler = useCallback(() => {
+    const { top } = titleRowRef?.current?.getBoundingClientRect()
+    if (top < 112 && !isSticky) return setIsSticky(true)
+    if (top > 112 && isSticky) setIsSticky(false)
+  }, [isSticky])
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler, true)
+    return () => {
+      window.removeEventListener('scroll', scrollHandler, true)
+    }
+  }, [scrollHandler])
 
   const [tab, setTab] = useState('qk')
   const onChangeTab = useCallback((event, value) => setTab(value), [])
@@ -81,7 +103,12 @@ const KulturQk = ({ kultur }) => {
 
   return (
     <ErrorBoundary>
-      <TitleRow onClick={onClickToggle} title={open ? 'schliessen' : 'öffnen'}>
+      <TitleRow
+        onClick={onClickToggle}
+        title={open ? 'schliessen' : 'öffnen'}
+        ref={titleRowRef}
+        data-sticky={isSticky}
+      >
         <Title>Qualitäts-Kontrollen</Title>
         <div>
           <IconButton
