@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useContext } from 'react'
+import React, {
+  useCallback,
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+} from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
@@ -22,6 +28,9 @@ const TitleRow = styled.div`
   cursor: pointer;
   user-select: none;
   ${(props) => props['data-open'] && 'position: sticky;'}
+  ${(props) =>
+    props['data-sticky'] &&
+    'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
   &:first-of-type {
@@ -56,12 +65,28 @@ const TimelineArea = ({ artId = '99999999-9999-9999-9999-999999999999' }) => {
     [open],
   )
 
+  const titleRowRef = useRef(null)
+  const [isSticky, setIsSticky] = useState(false)
+  const scrollHandler = useCallback(() => {
+    const { top } = titleRowRef?.current?.getBoundingClientRect()
+    if (top < 112 && !isSticky) return setIsSticky(true)
+    if (top > 112 && isSticky) setIsSticky(false)
+  }, [isSticky])
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler, true)
+    return () => {
+      window.removeEventListener('scroll', scrollHandler, true)
+    }
+  }, [scrollHandler])
+
   return (
     <ErrorBoundary>
       <TitleRow
         onClick={onClickToggle}
         title={open ? 'schliessen' : 'öffnen'}
         data-open={open}
+        ref={titleRowRef}
+        data-sticky={isSticky}
       >
         <Title>{`Zeit-Achsen ${herkunftsSorted.length} Herkünfte`}</Title>
         <div>
