@@ -65,7 +65,7 @@ const HerkunftLabel = styled.div`
   padding-bottom: 2px;
 `
 
-const Lieferung = ({ showFilter, row, saveToDb, ifNeeded }) => {
+const LieferungWas = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const store = useContext(StoreContext)
 
   const { artsSorted, errors, herkunftsSorted } = store
@@ -224,4 +224,4 @@ const Lieferung = ({ showFilter, row, saveToDb, ifNeeded }) => {
   )
 }
 
-export default observer(Lieferung)
+export default observer(LieferungWas)
