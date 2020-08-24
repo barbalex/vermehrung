@@ -21,7 +21,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  geplant: types.optional(types.maybeNull(types.boolean), false),
+  geplant: types.optional(types.maybeNull(types.boolean), null),
   datum: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -34,7 +34,7 @@ export const initial = {
   teilkultur_id: null,
   person_id: null,
   beschreibung: null,
-  geplant: false,
+  geplant: null,
   datum: null,
 }
 
