@@ -29,7 +29,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  nach_ausgepflanzt: types.optional(types.maybeNull(types.boolean), false),
+  nach_ausgepflanzt: types.optional(types.maybeNull(types.boolean), null),
   von_anzahl_individuen: types.optional(types.maybeNull(types.number), null),
   anzahl_pflanzen: types.optional(types.maybeNull(types.number), null),
   anzahl_auspflanzbereit: types.optional(types.maybeNull(types.number), null),
@@ -38,7 +38,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  geplant: types.optional(types.maybeNull(types.boolean), false),
+  geplant: types.optional(types.maybeNull(types.boolean), null),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -53,13 +53,13 @@ export const initial = {
   von_kultur_id: null,
   datum: null,
   nach_kultur_id: null,
-  nach_ausgepflanzt: false,
+  nach_ausgepflanzt: null,
   von_anzahl_individuen: null,
   anzahl_pflanzen: null,
   anzahl_auspflanzbereit: null,
   gramm_samen: null,
   andere_menge: null,
-  geplant: false,
+  geplant: null,
   bemerkungen: null,
 }
 
