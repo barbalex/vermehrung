@@ -42,7 +42,7 @@ const TitleRow = styled.div`
   }
 `
 
-const Lieferung = ({ showFilter, row, saveToDb, ifNeeded }) => {
+const LieferungVon = ({ showFilter, row, saveToDb, ifNeeded }) => {
   const store = useContext(StoreContext)
 
   const { errors, herkunftsSorted, sammlungsSorted } = store
@@ -165,4 +165,4 @@ const Lieferung = ({ showFilter, row, saveToDb, ifNeeded }) => {
   )
 }
 
-export default observer(Lieferung)
+export default observer(LieferungVon)
