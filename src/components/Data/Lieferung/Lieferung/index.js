@@ -37,6 +37,7 @@ import kulturLabelFromKultur from './kulturLabelFromKultur'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 import Was from './Was'
+import Von from './Von'
 
 const constants = getConstants()
 
@@ -469,37 +470,12 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
                   ifNeeded={ifNeeded}
                 />
               )}
-              <TitleRow data-filter={showFilter}>
-                <Title>von</Title>
-              </TitleRow>
-              {ifNeeded('von_sammlung_id') && (
-                <Select
-                  key={`${row.id}${row.von_sammlung_id}von_sammlung_id`}
-                  name="von_sammlung_id"
-                  value={row.von_sammlung_id}
-                  field="von_sammlung_id"
-                  label={`Sammlung${
-                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                  }`}
-                  options={sammlungWerte}
-                  saveToDb={saveToDb}
-                  error={errors?.lieferung?.von_sammlung_id}
-                />
-              )}
-              {ifNeeded('von_kultur_id') && (
-                <Select
-                  key={`${row.id}${row.von_kultur_id}von_kultur_id`}
-                  name="von_kultur_id"
-                  value={row.von_kultur_id}
-                  field="von_kultur_id"
-                  label={`Kultur${
-                    exists(row.art_id) ? ' (nur solche derselben Art)' : ''
-                  }`}
-                  options={vonKulturWerte}
-                  saveToDb={saveToDb}
-                  error={errors?.lieferung?.von_kultur_id}
-                />
-              )}
+              <Von
+                showFilter={showFilter}
+                row={row}
+                saveToDb={saveToDb}
+                ifNeeded={ifNeeded}
+              />
               <TitleRow data-filter={showFilter}>
                 <Title>nach</Title>
               </TitleRow>
