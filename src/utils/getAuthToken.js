@@ -4,7 +4,6 @@ const getAuthToken = async ({ store }) => {
   const {
     addNotification,
     setAuthorizing,
-    setQueryingAllData,
     user,
     gqlHttpClient,
     online,
@@ -57,7 +56,6 @@ const getAuthToken = async ({ store }) => {
     window.localStorage.setItem('token', token)
     gqlHttpClient.setHeaders({ authorization: `Bearer ${token}` })
     setAuthorizing(false)
-    setQueryingAllData(false)
   } else {
     //console.log('getAuthToken, got no new token')
     setAuthorizing(false)
