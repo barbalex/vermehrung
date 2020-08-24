@@ -32,7 +32,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../../shared/ConflictList'
 import FilterNumbers from '../../../shared/FilterNumbers'
-import sammlungLabelFromSammlung from './sammlungLabelFromSammlung'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
@@ -157,7 +156,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     personsSorted,
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
-    sammlungsSorted,
     showDeleted,
     unsetError,
     userPersonOption,
@@ -241,39 +239,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     unsetError('lieferung')
   }, [id, unsetError])
 
-  const vonKulturWerteData = kultursSorted
-    // show only kulturen of art_id
-    .filter((k) => {
-      if (row?.art_id) return k.art_id === row.art_id
-      return true
-    })
-    // show only kulturen with same herkunft
-    .filter((k) => {
-      if (herkunft?.id) return k?.herkunft_id === herkunft.id
-      return true
-    })
-    // shall not be delivered to same kultur it came from
-    .filter((k) => {
-      if (row?.nach_kultur_id && row?.von_kultur_id !== row?.nach_kultur_id) {
-        return k.id !== row.nach_kultur_id
-      }
-      return true
-    })
-  const vonKulturWerte = useMemo(
-    () =>
-      vonKulturWerteData.map((el) => {
-        const personName = el?.garten?.person?.fullname ?? '(kein Name)'
-        const personOrt = el?.garten?.person?.ort ?? null
-        const personLabel = `${personName}${personOrt ? ` (${personOrt})` : ''}`
-        const label = el?.garten?.name ?? personLabel
-
-        return {
-          value: el.id,
-          label,
-        }
-      }),
-    [vonKulturWerteData],
-  )
   const nachKulturWerteData = kultursSorted
     // show only kulturen of art_id
     .filter((k) => {
@@ -299,20 +264,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
         label: kulturLabelFromKultur(el),
       })),
     [nachKulturWerteData],
-  )
-
-  const sammlungWerte = useMemo(
-    () =>
-      sammlungsSorted
-        .filter((s) => {
-          if (row.art_id) return s.art_id === row.art_id
-          return true
-        })
-        .map((el) => ({
-          value: el.id,
-          label: sammlungLabelFromSammlung(el),
-        })),
-    [row.art_id, sammlungsSorted],
   )
 
   const personWerte = useMemo(
