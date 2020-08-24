@@ -1,4 +1,5 @@
 import types from '../models/Filter/simpleTypes'
+import camelCase from 'lodash/camelCase'
 
 import aeArtSort from './aeArtSort'
 import artSort from './artSort'
@@ -45,25 +46,19 @@ const nonSorter = () => true
 // list of teilkulturs of a kultur
 // > kultur_id is passed as filter
 export default ({ store, table }) => {
-  const { filter: storeFilter, showDeleted, hideInactive } = store
+  const { filter: storeFilter } = store
+  const viewName = `${camelCase(table)}sSorted`
 
-  if (!store[`${table}s`]) throw new Error(`no store found for table ${table}`)
+  if (!store[viewName]) {
+    throw new Error(`no sorted view found for table ${table}`)
+  }
 
   const filterValues = Object.entries(storeFilter[table]).filter(
     (e) => !!e?.[1] || e?.[1] === false,
   )
-  const values = [...store[`${table}s`].values()]
-    .filter((v) => showDeleted || notDeletedOrHasConflict(v))
-    .filter((v) => {
-      if (['person', 'garten', 'kultur'].includes(table) && hideInactive) {
-        return v.aktiv === true
-      }
-      return true
-    })
+  const values = [...store[viewName].values()]
 
-  const sortFunction = sorters[table] ?? nonSorter
-
-  if (!filterValues.length) return values.sort(sortFunction)
+  if (!filterValues.length) return values
 
   const test = (val) => {
     const testArray = filterValues.map(([key, filterValue]) => {
@@ -89,5 +84,6 @@ export default ({ store, table }) => {
 
   const filteredValues = values.filter(test)
 
+  const sortFunction = sorters[table] ?? nonSorter
   return filteredValues.sort(sortFunction)
 }
