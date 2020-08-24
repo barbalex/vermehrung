@@ -100,7 +100,6 @@ const Kultur = ({
     artsSorted,
     gartensSorted,
     herkunftsSorted,
-    sammlungsSorted,
     showDeleted,
     errors,
     unsetError,
