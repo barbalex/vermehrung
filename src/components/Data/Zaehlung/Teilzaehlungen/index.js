@@ -1,4 +1,10 @@
-import React, { useContext, useCallback } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
@@ -24,6 +30,8 @@ const TitleRow = styled.div`
   margin-bottom: 10px;
   padding: 0 10px;
   position: sticky;
+  ${(props) =>
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
   user-select: none;
@@ -55,10 +63,24 @@ const Teilzaehlungen = ({ zaehlungId }) => {
   const showNew = storeRowsFiltered.length === 0 || tk
   const title = tk ? 'Teil-Zählungen' : 'Mengen'
 
+  const titleRowRef = useRef(null)
+  const [isSticky, setIsSticky] = useState(false)
+  const scrollHandler = useCallback(() => {
+    const { top } = titleRowRef?.current?.getBoundingClientRect()
+    if (top < 112 && !isSticky) return setIsSticky(true)
+    if (top > 112 && isSticky) setIsSticky(false)
+  }, [isSticky])
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler, true)
+    return () => {
+      window.removeEventListener('scroll', scrollHandler, true)
+    }
+  }, [scrollHandler])
+
   return (
     <ErrorBoundary>
       <Container>
-        <TitleRow>
+        <TitleRow ref={titleRowRef} data-sticky={isSticky}>
           <Title>{title}</Title>
           <div>
             {kulturId && <Settings kulturId={kulturId} />}
