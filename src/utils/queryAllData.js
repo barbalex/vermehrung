@@ -32,7 +32,7 @@ import {
   zaehlung,
 } from './fragments'
 import getAuthToken from './getAuthToken'
-import removeSuplusNotRevModels from './removeSuplusNotRevModels'
+import removeSurplusNotRevModels from './removeSurplusNotRevModels'
 import checkForOnlineError from './checkForOnlineError'
 
 const allDataQuery = gql`
@@ -161,8 +161,7 @@ export default async ({ store }) => {
     return
   }
   // TODO: do this in worker?
-  const { setInitialDataQueried, setQueryingAllData } = store
-  setQueryingAllData(true)
+  const { setInitialDataQueried } = store
   let data
   try {
     data = await store.query(allDataQuery, undefined, {
@@ -174,10 +173,9 @@ export default async ({ store }) => {
     } else {
       checkForOnlineError(error)
     }
-    setQueryingAllData(false)
+    setInitialDataQueried(true)
     return
   }
-  removeSuplusNotRevModels({ store, data })
+  removeSurplusNotRevModels({ store, data })
   setInitialDataQueried(true)
-  setQueryingAllData(false)
 }
