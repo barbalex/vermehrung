@@ -7,20 +7,16 @@ import React, {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
 import Select from '../../shared/Select'
 import TextField from '../../shared/TextField'
-import Date from '../../shared/Date'
 import Checkbox2States from '../../shared/Checkbox2States'
 import Checkbox3States from '../../shared/Checkbox3States'
 import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
 import exists from '../../../utils/exists'
 import Lieferschein from './Lieferschein'
-import getConstants from '../../../utils/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
@@ -28,8 +24,7 @@ import FormTitle from './FormTitle'
 import Was from './Was'
 import Von from './Von'
 import Nach from './Nach'
-
-const constants = getConstants()
+import Wann from './Wann'
 
 const Container = styled.div`
   height: 100%;
@@ -66,16 +61,6 @@ const TitleRow = styled.div`
   z-index: 1;
   &:first-of-type {
     margin-top: -10px;
-  }
-`
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div:not(:last-of-type) {
-    padding-right: 8px;
-  }
-  > div > button {
-    margin-top: 8px;
   }
 `
 const StyledSplitPane = styled(SplitPane)`
@@ -189,15 +174,6 @@ const SammelLieferung = ({
     },
     [filter, row, showFilter],
   )
-  const openPlanenDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Planen`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
   const shownAsSammelLieferung =
     activeNodeArray.length === 2 && activeNodeArray[0] === 'Sammel-Lieferungen'
 
@@ -311,53 +287,12 @@ const SammelLieferung = ({
                   />
                 )}
                 {ifSomeNeeded(['datum', 'geplant']) && (
-                  <>
-                    <TitleRow data-filter={showFilter}>
-                      <Title>wann</Title>
-                    </TitleRow>
-                    {ifNeeded('datum') && (
-                      <Date
-                        key={`${row.id}datum`}
-                        name="datum"
-                        label="Datum"
-                        value={row.datum}
-                        saveToDb={saveToDb}
-                        error={errors?.sammel_lieferung?.datum}
-                      />
-                    )}
-                    {ifNeeded('geplant') && (
-                      <FieldRow>
-                        {showFilter ? (
-                          <Checkbox3States
-                            key={`${row.id}geplant`}
-                            label="Geplant"
-                            name="geplant"
-                            value={row.geplant}
-                            saveToDb={saveToDb}
-                            error={errors?.sammel_lieferung?.geplant}
-                          />
-                        ) : (
-                          <Checkbox2States
-                            key={`${row.id}geplant`}
-                            label="Geplant"
-                            name="geplant"
-                            value={row.geplant}
-                            saveToDb={saveToDb}
-                            error={errors?.sammel_lieferung?.geplant}
-                          />
-                        )}
-                        <div>
-                          <IconButton
-                            aria-label="Anleitung öffnen"
-                            title="Anleitung öffnen"
-                            onClick={openPlanenDocs}
-                          >
-                            <IoMdInformationCircleOutline />
-                          </IconButton>
-                        </div>
-                      </FieldRow>
-                    )}
-                  </>
+                  <Wann
+                    showFilter={showFilter}
+                    row={row}
+                    ifNeeded={ifNeeded}
+                    saveToDb={saveToDb}
+                  />
                 )}
                 {ifSomeNeeded(['person_id', 'bemerkungen']) && (
                   <>
