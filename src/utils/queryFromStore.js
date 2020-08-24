@@ -16,7 +16,6 @@ import qkSort from './qkSort'
 import sammlungSort from './sammlungSort'
 import teilkulturSort from './teilkulturSort'
 import zaehlungSort from './zaehlungSort'
-import notDeletedOrHasConflict from './notDeletedOrHasConflict'
 
 const sorters = {
   ae_art: aeArtSort,
