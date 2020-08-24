@@ -15,10 +15,6 @@ import TeilzaehlungenRows from './TeilzaehlungenRows'
 import Settings from './Settings'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
   flex-shrink: 0;
@@ -79,24 +75,22 @@ const Teilzaehlungen = ({ zaehlungId }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <TitleRow ref={titleRowRef} data-sticky={isSticky}>
-          <Title>{title}</Title>
-          <div>
-            {kulturId && <Settings kulturId={kulturId} />}
-            {showNew && (
-              <IconButton
-                aria-label="Neu"
-                title="Neue Teil-Zählung"
-                onClick={onClickNew}
-              >
-                <FaPlus />
-              </IconButton>
-            )}
-          </div>
-        </TitleRow>
-        <TeilzaehlungenRows zaehlungId={zaehlungId} kulturId={kulturId} />
-      </Container>
+      <TitleRow ref={titleRowRef} data-sticky={isSticky}>
+        <Title>{title}</Title>
+        <div>
+          {kulturId && <Settings kulturId={kulturId} />}
+          {showNew && (
+            <IconButton
+              aria-label="Neu"
+              title="Neue Teil-Zählung"
+              onClick={onClickNew}
+            >
+              <FaPlus />
+            </IconButton>
+          )}
+        </div>
+      </TitleRow>
+      <TeilzaehlungenRows zaehlungId={zaehlungId} kulturId={kulturId} />
     </ErrorBoundary>
   )
 }
