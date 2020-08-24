@@ -1,4 +1,10 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, {
+  useContext,
+  useCallback,
+  useState,
+  useRef,
+  useEffect,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Lightbox from 'react-image-lightbox'
@@ -12,11 +18,6 @@ import 'react-image-lightbox/style.css'
 import isImageFile from './isImageFile'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
   flex-shrink: 0;
@@ -28,8 +29,10 @@ const TitleRow = styled.div`
   ${(props) => props['data-margin-bottom'] && 'margin-bottom: 15px;'}
   padding: 0 10px;
   ${(props) => props['data-online'] && 'cursor: pointer;'}
-  position: sticky;
   user-select: none;
+  position: sticky;
+  ${(props) =>
+    props['data-sticky'] && 'border-top: 1px solid rgba(0, 0, 0, 0.3);'}
   top: -10px;
   z-index: 1;
 `
@@ -114,10 +117,24 @@ const Files = ({ parentId, parent }) => {
     [imageIndex, images.length],
   )
 
+  const titleRowRef = useRef(null)
+  const [isSticky, setIsSticky] = useState(false)
+  const scrollHandler = useCallback(() => {
+    const { top } = titleRowRef?.current?.getBoundingClientRect()
+    if (top < 112 && !isSticky) return setIsSticky(true)
+    if (top > 112 && isSticky) setIsSticky(false)
+  }, [isSticky])
+  useEffect(() => {
+    window.addEventListener('scroll', scrollHandler, true)
+    return () => {
+      window.removeEventListener('scroll', scrollHandler, true)
+    }
+  }, [scrollHandler])
+
   if (!online) {
     return (
       <ErrorBoundary>
-        <TitleRow data-online={online}>
+        <TitleRow data-online={online} ref={titleRowRef} data-sticky={isSticky}>
           <Title>Dateien</Title>
           <Content>Sorry, nur online verfügbar</Content>
         </TitleRow>
@@ -127,53 +144,54 @@ const Files = ({ parentId, parent }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <TitleRow data-online={online} data-margin-bottom={!!files.length}>
-          <Title>Dateien</Title>
-          <Buttons>
-            <Uploader
-              id="file"
-              name="file"
-              onChange={onChangeUploader}
-              content="test"
-            />
-            {!!images.length && (
-              <LightboxButton
-                color="primary"
-                variant="outlined"
-                onClick={onClickLightboxButton}
-              >
-                Bilder in Gallerie öffnen
-              </LightboxButton>
-            )}
-          </Buttons>
-        </TitleRow>
-        {lightboxIsOpen && (
-          <Lightbox
-            mainSrc={imageUrls[imageIndex]}
-            nextSrc={imageUrls[(imageIndex + 1) % images.length]}
-            prevSrc={
-              imageUrls[(imageIndex + images.length - 1) % images.length]
-            }
-            onCloseRequest={onCloseLightboxRequest}
-            onMovePrevRequest={onMovePrevImageRequest}
-            onMoveNextRequest={onMoveNextImageRequest}
-            imageTitle={images[imageIndex].name || ''}
-            imageCaption={images[imageIndex].beschreibung || ''}
-            wrapperClassName="lightbox"
-            nextLabel="Nächstes Bild"
-            prevLabel="Voriges Bild"
+      <TitleRow
+        data-online={online}
+        data-margin-bottom={!!files.length}
+        ref={titleRowRef}
+        data-sticky={isSticky}
+      >
+        <Title>Dateien</Title>
+        <Buttons>
+          <Uploader
+            id="file"
+            name="file"
+            onChange={onChangeUploader}
+            content="test"
           />
-        )}
-        {!!files.length && (
-          <>
-            <Spacer />
-            {files.map((file) => (
-              <File key={file.file_id} file={file} parent={parent} />
-            ))}
-          </>
-        )}
-      </Container>
+          {!!images.length && (
+            <LightboxButton
+              color="primary"
+              variant="outlined"
+              onClick={onClickLightboxButton}
+            >
+              Bilder in Gallerie öffnen
+            </LightboxButton>
+          )}
+        </Buttons>
+      </TitleRow>
+      {lightboxIsOpen && (
+        <Lightbox
+          mainSrc={imageUrls[imageIndex]}
+          nextSrc={imageUrls[(imageIndex + 1) % images.length]}
+          prevSrc={imageUrls[(imageIndex + images.length - 1) % images.length]}
+          onCloseRequest={onCloseLightboxRequest}
+          onMovePrevRequest={onMovePrevImageRequest}
+          onMoveNextRequest={onMoveNextImageRequest}
+          imageTitle={images[imageIndex].name || ''}
+          imageCaption={images[imageIndex].beschreibung || ''}
+          wrapperClassName="lightbox"
+          nextLabel="Nächstes Bild"
+          prevLabel="Voriges Bild"
+        />
+      )}
+      {!!files.length && (
+        <>
+          <Spacer />
+          {files.map((file) => (
+            <File key={file.file_id} file={file} parent={parent} />
+          ))}
+        </>
+      )}
     </ErrorBoundary>
   )
 }
