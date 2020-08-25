@@ -13,7 +13,7 @@ sort1: 8
 ### Umsetzung
 
 Bei einer Zählung erfasst man **den ganzen Bestand** einer Kultur. Es sollen immer die totalen Anzahlen der drei grundlegenden Einheiten erhoben werden:
-- Anzahl Pflanzen
+- Anzahl Pflanzen (Total, inklusive auspflanzungsbereite, Mutter- und Jungpflanzen)
 - Anzahl auspflanz-bereite Pflanzen
 - Anzahl Mutter-Pflanzen
 
