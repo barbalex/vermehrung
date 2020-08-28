@@ -10,22 +10,24 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const StyledMenuItem = styled(MenuItem)`
   ${(props) =>
-    !props['data-online'] && 'color: rgba(0, 0, 0, 0.54) !important;'}
-  ${(props) => !props['data-online'] && 'cursor: not-allowed !important;'}
+    !props['data-disabled'] && 'color: rgba(0, 0, 0, 0.54) !important;'}
+  ${(props) => !props['data-disabled'] && 'cursor: not-allowed !important;'}
 `
 
 const KulturHistoryButton = ({ asMenu, row }) => {
   const store = useContext(StoreContext)
   const { online } = store
+  const existMultipleRevisions = (row?._revisions || []).length > 1
+  const disabled = !online || !existMultipleRevisions
 
   const show = useCallback(() => {
-    if (!online) return
+    if (disabled) return
     console.log('TODO!')
-  }, [online])
+  }, [disabled])
 
   if (asMenu) {
     return (
-      <StyledMenuItem onClick={show} data-online={online}>
+      <StyledMenuItem onClick={show} data-disabled={disabled}>
         Frühere Versionen anzeigen
       </StyledMenuItem>
     )
@@ -37,7 +39,7 @@ const KulturHistoryButton = ({ asMenu, row }) => {
         aria-label="Frühere Versionen anzeigen"
         title="Frühere Versionen anzeigen"
         onClick={show}
-        disabled={!online}
+        disabled={disabled}
       >
         <FaHistory />
       </IconButton>
