@@ -6,6 +6,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import Settings from './Settings'
 import Delete from './Delete'
 import Add from './Add'
+import History from './History'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
 import Download from './Download'
@@ -45,6 +46,7 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
             <Add asMenu />
             <Delete asMenu row={row} />
             <Download row={row} asMenu />
+            <History row={row} asMenu />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
@@ -64,6 +66,7 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Delete row={row} />
           <Menu white={false}>
             <Download row={row} asMenu />
+            <History row={row} asMenu />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
@@ -84,6 +87,7 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Settings kulturId={row.id} />
           <Menu white={false}>
             <Download row={row} asMenu />
+            <History row={row} asMenu />
             <Anleitung asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
@@ -104,6 +108,27 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           <Menu white={false}>
             <Download row={row} asMenu />
+            <History row={row} asMenu />
+            <Anleitung asMenu />
+          </Menu>
+        </TitleSymbols>
+      </TitleContainer>
+    )
+  }
+
+  if (width < 703) {
+    return (
+      <TitleContainer>
+        <Title>Kultur</Title>
+        <TitleSymbols>
+          <NavButtons row={row} />
+          <Add />
+          <Delete row={row} />
+          <Download row={row} />
+          <Settings kulturId={row.id} />
+          <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
+          <Menu white={false}>
+            <History row={row} asMenu />
             <Anleitung asMenu />
           </Menu>
         </TitleSymbols>
@@ -119,6 +144,7 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
         <Add />
         <Delete row={row} />
         <Download row={row} />
+        <History row={row} />
         <Anleitung />
         <Settings kulturId={row.id} />
         <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
