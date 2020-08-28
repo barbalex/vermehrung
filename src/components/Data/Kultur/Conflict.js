@@ -89,8 +89,6 @@ const KulturConflict = ({
     [id, rev, store.kultur_revs],
   )
 
-  console.log('Kultur Conflict', { row, revRow })
-
   const dataArray = [
     {
       valueInRow: row?.art?.art_ae_art?.name,
