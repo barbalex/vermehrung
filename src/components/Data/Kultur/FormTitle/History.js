@@ -20,13 +20,6 @@ const KulturHistoryButton = ({ asMenu, row }) => {
   const existMultipleRevisions = (row?._revisions || []).length > 1
   const disabled = !online || !existMultipleRevisions
 
-  console.log('KulturHistoryButton', {
-    row,
-    existMultipleRevisions,
-    online,
-    disabled,
-  })
-
   const show = useCallback(() => {
     if (disabled) return
     console.log('TODO!')
