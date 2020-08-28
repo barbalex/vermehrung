@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import { observer } from 'mobx-react-lite'
+import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.inline.svg'
+import {
+  FaTimes,
+  FaExchangeAlt,
+  FaRegTrashAlt,
+  FaArrowsAltH,
+} from 'react-icons/fa'
 
 import Explainer from './Explainer'
 import Data from './Data'
+import { StoreContext } from '../../../models/reactUtils'
 
 const Container = styled.div`
   padding: 10px;
@@ -41,6 +49,14 @@ const Conflict = ({
   onClickUebernehmen,
   onClickSchliessen,
 }) => {
+  const store = useContext(StoreContext)
+  const { diffConflict, setDiffConflict } = store
+
+  const onClickToggleDiff = useCallback(() => setDiffConflict(!diffConflict), [
+    diffConflict,
+    setDiffConflict,
+  ])
+
   if (error) {
     return <Container>{error.message}</Container>
   }
@@ -57,6 +73,7 @@ const Conflict = ({
           onClick={onClickVerwerfen}
           variant="outlined"
           title="Der Konflikt gilt er als gelöst und erscheint nicht mehr"
+          startIcon={<FaRegTrashAlt />}
         >
           verwerfen
         </StyledButton>
@@ -64,13 +81,27 @@ const Conflict = ({
           onClick={onClickUebernehmen}
           variant="outlined"
           title="Die widersprüchliche Version wird zur aktuellen. Die bisher aktuelle wird zur widersprüchlichen"
+          startIcon={<FaExchangeAlt />}
         >
           übernehmen
+        </StyledButton>
+        <StyledButton
+          onClick={onClickToggleDiff}
+          variant="outlined"
+          title={
+            diffConflict
+              ? 'Versionen nicht vergleichen'
+              : 'Versionen vergleichen'
+          }
+          startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
+        >
+          {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
         </StyledButton>
         <StyledButton
           onClick={onClickSchliessen}
           variant="outlined"
           title="Die Spalte mit dem Konflikt wird geschlossen. Der Konflikt bleibt erhalten"
+          startIcon={<FaTimes />}
         >
           schliessen
         </StyledButton>

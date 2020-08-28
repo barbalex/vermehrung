@@ -86,6 +86,7 @@ export const RootStore = RootStoreBase.props({
   showDeleted: types.optional(types.boolean, false),
   initialDataQueried: types.optional(types.boolean, false),
   errors: types.optional(Errors, defaultErrors),
+  diffConflict: types.optional(types.boolean, true),
 })
   .volatile(() => ({
     user: {},
@@ -195,6 +196,9 @@ export const RootStore = RootStoreBase.props({
         },
       )
     return {
+      setDiffConflict(val) {
+        self.diffConflict = val
+      },
       setShowTreeInSingleColumnView(val) {
         self.showTreeInSingleColumnView = val
       },
