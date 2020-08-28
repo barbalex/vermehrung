@@ -10,8 +10,8 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const StyledMenuItem = styled(MenuItem)`
   ${(props) =>
-    !props['data-disabled'] && 'color: rgba(0, 0, 0, 0.54) !important;'}
-  ${(props) => !props['data-disabled'] && 'cursor: not-allowed !important;'}
+    props['data-disabled'] && 'color: rgba(0, 0, 0, 0.54) !important;'}
+  ${(props) => props['data-disabled'] && 'cursor: not-allowed !important;'}
 `
 
 const KulturHistoryButton = ({ asMenu, row }) => {
@@ -19,6 +19,13 @@ const KulturHistoryButton = ({ asMenu, row }) => {
   const { online } = store
   const existMultipleRevisions = (row?._revisions || []).length > 1
   const disabled = !online || !existMultipleRevisions
+
+  console.log('KulturHistoryButton', {
+    row,
+    existMultipleRevisions,
+    online,
+    disabled,
+  })
 
   const show = useCallback(() => {
     if (disabled) return
