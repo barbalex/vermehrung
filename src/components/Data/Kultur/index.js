@@ -296,7 +296,7 @@ const Kultur = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('Kultur', { row })
+  //console.log('Kultur', { row })
 
   return (
     <ErrorBoundary>
