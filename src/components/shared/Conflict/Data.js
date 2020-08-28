@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import Diff from 'react-stylable-diff'
 import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../utils/toStringIfPossible'
+import { StoreContext } from '../../../models/reactUtils'
 
 const Row = styled.div`
   display: flex;
@@ -28,6 +29,9 @@ const Key = styled.div`
 `
 
 const ConflictData = ({ dataArray, loading }) => {
+  const store = useContext(StoreContext)
+  const { diffConflict } = store
+
   if (loading) return 'Lade...'
 
   return dataArray.map((d, index) => {
@@ -44,7 +48,11 @@ const ConflictData = ({ dataArray, loading }) => {
     return (
       <Row key={d.label} data-last={index + 1 === dataArray.length}>
         <Key>{`${d.label}:`}</Key>
-        <Diff inputA={inputA} inputB={inputB} type="sentences" />
+        {diffConflict ? (
+          <Diff inputA={inputA} inputB={inputB} type="sentences" />
+        ) : (
+          <div>{inputA}</div>
+        )}
       </Row>
     )
   })
