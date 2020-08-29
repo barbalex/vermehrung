@@ -65,20 +65,27 @@ const Kultur = ({
     [],
   )
 
-  const [activeHistory, setActiveHistory] = useState(null)
+  const [showHistory, setShowHistory] = useState(null)
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
-  // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
+  const paneIsSplit = online && (activeConflict || showHistory)
 
-  console.log('Kultur', { row })
+  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
+  // hide resizer when tree is hidden
+  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
+
+  console.log('Kultur', { row, showHistory, online })
 
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle row={row} showFilter={showFilter} />
+        <FormTitle
+          row={row}
+          showFilter={showFilter}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <Container>
           <StyledSplitPane
             split="vertical"
@@ -96,7 +103,7 @@ const Kultur = ({
             <>
               {online && (
                 <>
-                  {!!activeConflict && (
+                  {activeConflict ? (
                     <Conflict
                       rev={activeConflict}
                       id={id}
@@ -105,7 +112,9 @@ const Kultur = ({
                       conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
                     />
-                  )}
+                  ) : showHistory ? (
+                    <div>history</div>
+                  ) : null}
                 </>
               )}
             </>

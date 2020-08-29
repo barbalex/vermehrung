@@ -35,7 +35,14 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
+const KulturFormTitle = ({
+  row,
+  totalNr,
+  filteredNr,
+  width,
+  showHistory,
+  setShowHistory,
+}) => {
   if (width < 520) {
     return (
       <TitleContainer>
@@ -46,7 +53,12 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
             <Add asMenu />
             <Delete asMenu row={row} />
             <Download row={row} asMenu />
-            <History row={row} asMenu />
+            <History
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
@@ -66,7 +78,12 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Delete row={row} />
           <Menu white={false}>
             <Download row={row} asMenu />
-            <History row={row} asMenu />
+            <History
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
             <Anleitung asMenu />
             <Settings kulturId={row.id} asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
@@ -87,7 +104,12 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Settings kulturId={row.id} />
           <Menu white={false}>
             <Download row={row} asMenu />
-            <History row={row} asMenu />
+            <History
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
             <Anleitung asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
@@ -108,7 +130,12 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           <Menu white={false}>
             <Download row={row} asMenu />
-            <History row={row} asMenu />
+            <History
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
             <Anleitung asMenu />
           </Menu>
         </TitleSymbols>
@@ -128,7 +155,12 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
           <Settings kulturId={row.id} />
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           <Menu white={false}>
-            <History row={row} asMenu />
+            <History
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
             <Anleitung asMenu />
           </Menu>
         </TitleSymbols>
@@ -144,7 +176,11 @@ const KulturFormTitle = ({ row, totalNr, filteredNr, width }) => {
         <Add />
         <Delete row={row} />
         <Download row={row} />
-        <History row={row} />
+        <History
+          row={row}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <Anleitung />
         <Settings kulturId={row.id} />
         <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />

@@ -5,7 +5,12 @@ import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
 
-const KulturFormTitleChooser = ({ row, showFilter }) => {
+const KulturFormTitleChooser = ({
+  row,
+  showFilter,
+  showHistory,
+  setShowHistory,
+}) => {
   const store = useContext(StoreContext)
   const {
     gartenIdInActiveNodeArray,
@@ -38,7 +43,15 @@ const KulturFormTitleChooser = ({ row, showFilter }) => {
     )
   }
 
-  return <FormTitle row={row} totalNr={totalNr} filteredNr={filteredNr} />
+  return (
+    <FormTitle
+      row={row}
+      totalNr={totalNr}
+      filteredNr={filteredNr}
+      showHistory={showHistory}
+      setShowHistory={setShowHistory}
+    />
+  )
 }
 
 export default observer(KulturFormTitleChooser)
