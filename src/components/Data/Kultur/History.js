@@ -62,6 +62,13 @@ const Container = styled.div`
   height: 100%;
 `
 
+/**
+ * TODO:
+ * load react-slick
+ * load revisions
+ * present revisions in Data component in carousel
+ */
+
 const KulturHistory = ({ row, setShowHistory }) => {
   const store = useContext(StoreContext)
   const { user, addNotification } = store
