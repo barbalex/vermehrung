@@ -1,7 +1,6 @@
 import React, { useContext, useState, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import uniq from 'lodash/uniq'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
@@ -49,98 +48,12 @@ const Kultur = ({
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const { filter, online, hideInactive, artHerkuenfte } = store
+  const { filter, online } = store
 
   const row = useMemo(
     () => (showFilter ? filter.kultur : store.kulturs.get(id) ?? {}),
     [filter.kultur, id, showFilter, store.kulturs],
   )
-
-  // From all collected combinations of art and herkunft show only arten of those not present in this garten
-  // => find all combinations of art and herkunft in sammlungen
-  // => substract the ones existing in this garden
-  // => substract the ones with two existing in this garden?
-  // => present arten of the rest
-
-  const garten_id = row?.garten?.id
-  const art_id = row?.art_id
-  const herkunft_id = row?.herkunft_id
-  const artHerkunftInGartenNichtZl = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
-    // only consider kulturen with both art and herkunft chosen
-    .filter((o) => !!o.art_id && !!o.herkunft_id)
-    .filter((k) => !k.zwischenlager)
-  const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
-    // only consider kulturen with both art and herkunft chosen
-    .filter((o) => !!o.art_id && !!o.herkunft_id)
-    .filter((k) => k.zwischenlager)
-  const artenToChoose = useMemo(
-    () =>
-      uniq(
-        artHerkuenfte
-          // only arten with herkunft
-          .filter((ah) => (herkunft_id ? ah.herkunft_id === herkunft_id : true))
-          .filter((s) => {
-            // do not filter if no garten choosen
-            if (!garten_id) return true
-            // do not return if exists nicht zl AND zl
-            return !(
-              !!artHerkunftInGartenNichtZl.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              ) &&
-              !!artHerkunftZwischenlagerInGarten.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              )
-            )
-          }),
-      )
-        // only arten
-        .map((a) => a.art_id),
-    [
-      artHerkuenfte,
-      artHerkunftInGartenNichtZl,
-      artHerkunftZwischenlagerInGarten,
-      garten_id,
-      herkunft_id,
-    ],
-  )
-  // do show own art
-  if (art_id && !artenToChoose.includes(art_id)) {
-    artenToChoose.push(art_id)
-  }
-  const herkunftToChoose = useMemo(
-    () =>
-      uniq(
-        artHerkuenfte
-          .filter((s) => (art_id ? s.art_id === art_id : true))
-          .filter((s) => {
-            // do not filter if no garten choosen
-            if (!garten_id) return true
-            // do not return if exists nicht zl AND zl
-            return !(
-              !!artHerkunftInGartenNichtZl.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              ) &&
-              !!artHerkunftZwischenlagerInGarten.find(
-                (a) => a.art_id === s.art_id && a.herkunft_id === s.herkunft_id,
-              )
-            )
-          })
-          .map((a) => a.herkunft_id),
-      ),
-    [
-      artHerkuenfte,
-      artHerkunftInGartenNichtZl,
-      artHerkunftZwischenlagerInGarten,
-      garten_id,
-      art_id,
-    ],
-  )
-  // do show own herkunft
-  if (herkunft_id && !herkunftToChoose.includes(herkunft_id)) {
-    herkunftToChoose.push(herkunft_id)
-  }
 
   const [activeConflict, setActiveConflict] = useState(null)
   const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
@@ -155,7 +68,7 @@ const Kultur = ({
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('Kultur', { row, online, activeConflict })
+  console.log('Kultur', { row })
 
   return (
     <ErrorBoundary>
@@ -171,6 +84,7 @@ const Kultur = ({
             <Form
               showFilter={showFilter}
               id={id}
+              row={row}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
             />
