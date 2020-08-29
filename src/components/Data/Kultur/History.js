@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
+import styled from 'styled-components'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
@@ -55,6 +56,12 @@ const kulturRevQuery = gql`
   }
 `
 
+const Container = styled.div`
+  padding: 10px;
+  overflow: auto !important;
+  height: 100%;
+`
+
 const KulturHistory = ({ row, setShowHistory }) => {
   const store = useContext(StoreContext)
   const { user, addNotification } = store
@@ -71,7 +78,7 @@ const KulturHistory = ({ row, setShowHistory }) => {
     setShowHistory,
   ])
 
-  return <div>Hier wird gebaut 👀</div>
+  return <Container>Hier wird gebaut 👀</Container>
 }
 
 export default observer(KulturHistory)
