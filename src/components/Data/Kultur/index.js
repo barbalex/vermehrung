@@ -89,15 +89,19 @@ const Kultur = ({
               setActiveConflict={setActiveConflict}
             />
             <>
-              {online && !!activeConflict && (
-                <Conflict
-                  rev={activeConflict}
-                  id={id}
-                  row={row}
-                  callbackAfterVerwerfen={callbackAfterVerwerfen}
-                  callbackAfterUebernehmen={callbackAfterUebernehmen}
-                  setActiveConflict={setActiveConflict}
-                />
+              {online && (
+                <>
+                  {!!activeConflict && (
+                    <Conflict
+                      rev={activeConflict}
+                      id={id}
+                      row={row}
+                      callbackAfterVerwerfen={callbackAfterVerwerfen}
+                      callbackAfterUebernehmen={callbackAfterUebernehmen}
+                      setActiveConflict={setActiveConflict}
+                    />
+                  )}
+                </>
               )}
             </>
           </StyledSplitPane>
