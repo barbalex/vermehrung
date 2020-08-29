@@ -56,11 +56,16 @@ const Kultur = ({
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
-  const callbackAfterUebernehmen = useCallback(
+  const conflictDisposalCallback = useCallback(
     () => setActiveConflict(null),
     [],
   )
+  const conflictSelectionCallback = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
+
+  const [activeHistory, setActiveHistory] = useState(null)
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -96,8 +101,8 @@ const Kultur = ({
                       rev={activeConflict}
                       id={id}
                       row={row}
-                      callbackAfterVerwerfen={callbackAfterVerwerfen}
-                      callbackAfterUebernehmen={callbackAfterUebernehmen}
+                      conflictDisposalCallback={conflictDisposalCallback}
+                      conflictSelectionCallback={conflictSelectionCallback}
                       setActiveConflict={setActiveConflict}
                     />
                   )}
