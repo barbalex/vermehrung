@@ -233,8 +233,6 @@ const Kultur = ({ showFilter, id, row, activeConflict, setActiveConflict }) => {
     ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
     : errors.kultur?.herkunft_id
 
-  if (!row || (!showFilter && filter.show)) return null
-
   return (
     <ErrorBoundary>
       <Container>
