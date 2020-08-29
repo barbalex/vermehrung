@@ -7,8 +7,8 @@ import gql from 'graphql-tag'
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import Conflict from '../../shared/Conflict'
-import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from './gartenLabelFromGarten'
+import herkunftLabelFromHerkunft from './Form/herkunftLabelFromHerkunft'
+import gartenLabelFromGarten from './Form/gartenLabelFromGarten'
 
 const kulturRevQuery = gql`
   query kulturRevForConflictQuery($id: uuid!, $rev: String!) {

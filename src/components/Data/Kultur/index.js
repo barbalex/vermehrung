@@ -1,56 +1,20 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useState, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import uniq from 'lodash/uniq'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
-import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
-import Select from '../../shared/Select'
-import TextField from '../../shared/TextField'
-import Checkbox2States from '../../shared/Checkbox2States'
-import Checkbox3States from '../../shared/Checkbox3States'
-import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import Files from '../Files'
-import Timeline from './Timeline'
-import QK from './QK'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
-import ConflictList from '../../shared/ConflictList'
-import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from './gartenLabelFromGarten'
-import getConstants from '../../../utils/constants'
 import FormTitle from './FormTitle'
-
-const constants = getConstants()
+import Form from './Form'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const FieldsContainer = styled.div`
-  padding: 10px;
-  overflow: auto !important;
-  height: 100%;
-`
-const FieldRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  > div:not(:last-of-type) {
-    padding-right: 8px;
-  }
-  > div > button {
-    margin-top: 8px;
-  }
 `
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px - 48px) !important;
@@ -79,33 +43,13 @@ const StyledSplitPane = styled(SplitPane)`
     overflow: hidden;
   }
 `
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
 
 const Kultur = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-  const {
-    filter,
-    online,
-    artsSorted,
-    gartensSorted,
-    herkunftsSorted,
-    showDeleted,
-    errors,
-    unsetError,
-    hideInactive,
-    artHerkuenfte,
-  } = store
+  const { filter, online, hideInactive, artHerkuenfte } = store
 
   const row = useMemo(
     () => (showFilter ? filter.kultur : store.kulturs.get(id) ?? {}),
@@ -205,100 +149,13 @@ const Kultur = ({
     [],
   )
 
-  const [activeHistory, setActiveHistory] = useState(null)
-
-  useEffect(() => {
-    unsetError('kultur')
-  }, [id, unsetError])
-
-  // artForArtWerte not used because too complicated
-  /*const artForArtWerte = artsSorted.filter(
-    (a) => !!a.ae_id && artenToChoose.includes(a.id),
-  )*/
-  const artWerte = useMemo(
-    () =>
-      artsSorted
-        .filter((a) => !!a.ae_id && artenToChoose.includes(a.id))
-        .map((el) => ({
-          value: el.id,
-          label: el?.art_ae_art?.name ?? '...',
-        })),
-    [artenToChoose, artsSorted],
-  )
-
-  // TODO:
-  // if art was choosen: remove gartens where this art has two kulturs for every herkunft?
-  // if herkunft was choosen: remove gartens where this herkunft has two kulturs
-  const gartenWerte = useMemo(
-    () =>
-      gartensSorted.map((el) => ({
-        value: el.id,
-        label: gartenLabelFromGarten(el),
-      })),
-    [gartensSorted],
-  )
-
-  const herkunftWerteData = herkunftsSorted.filter((h) =>
-    herkunftToChoose.includes(h.id),
-  )
-  const herkunftWerte = useMemo(
-    () =>
-      herkunftWerteData.map((el) => ({
-        value: el.id,
-        label: herkunftLabelFromHerkunft(el),
-      })),
-    [herkunftWerteData],
-  )
-
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if (event.target.value === undefined) value = null
-      if (event.target.value === '') value = null
-
-      if (showFilter) {
-        return filter.setValue({ table: 'kultur', key: field, value })
-      }
-
-      const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
-      row.edit({ field, value })
-    },
-    [filter, row, showFilter],
-  )
-  const openGenVielfaldDocs = useCallback(() => {
-    const url = `${constants?.appUri}/Dokumentation/Genetische-Vielfalt`
-    if (typeof window !== 'undefined') {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        return window.open(url, '_blank', 'toolbar=no')
-      }
-      window.open(url)
-    }
-  }, [])
-
-  const zwischenlagerError = errors.kultur?.zwischenlager?.includes(
-    'Unique-Constraint',
-  )
-    ? 'Von einer Herkunft einer Art darf in einem Garten maximal ein aktives Zwischenlager existieren'
-    : errors.kultur?.zwischenlager
-  const artError = errors.kultur?.art_id?.includes('Unique-Constraint')
-    ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
-    : errors.kultur?.art_id
-  const herkunftError = errors.kultur?.herkunft_id?.includes(
-    'Unique-Constraint',
-  )
-    ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
-    : errors.kultur?.herkunft_id
-
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !activeConflict ? { width: 0 } : {}
 
-  console.log('Kultur, row:', row)
+  console.log('Kultur', { row, online, activeConflict })
 
   return (
     <ErrorBoundary>
@@ -311,169 +168,12 @@ const Kultur = ({
             minSize={200}
             resizerStyle={resizerStyle}
           >
-            <FieldsContainer>
-              {activeConflict && (
-                <CaseConflictTitle>
-                  Aktuelle Version<Rev>{row._rev}</Rev>
-                </CaseConflictTitle>
-              )}
-              {showDeleted && (
-                <>
-                  {showFilter ? (
-                    <Checkbox3States
-                      key={`${row.id}_deleted`}
-                      label="gelöscht"
-                      name="_deleted"
-                      value={row._deleted}
-                      saveToDb={saveToDb}
-                      error={errors.kultur?._deleted}
-                    />
-                  ) : (
-                    <Checkbox2States
-                      key={`${row.id}_deleted`}
-                      label="gelöscht"
-                      name="_deleted"
-                      value={row._deleted}
-                      saveToDb={saveToDb}
-                      error={errors.kultur?._deleted}
-                    />
-                  )}
-                </>
-              )}
-              <Select
-                key={`${row.id}${art_id}art_id`}
-                name="art_id"
-                value={art_id}
-                field="art_id"
-                label="Art"
-                options={artWerte}
-                saveToDb={saveToDb}
-                error={artError}
-              />
-              <Select
-                key={`${row.id}${herkunft_id}herkunft_id`}
-                name="herkunft_id"
-                value={herkunft_id}
-                field="herkunft_id"
-                label="Herkunft"
-                options={herkunftWerte}
-                saveToDb={saveToDb}
-                error={herkunftError}
-              />
-              <Select
-                key={`${row.id}${garten_id}garten_id`}
-                name="garten_id"
-                value={garten_id}
-                field="garten_id"
-                label="Garten"
-                options={gartenWerte}
-                saveToDb={saveToDb}
-                error={errors.kultur?.garten_id}
-              />
-              {showFilter ? (
-                <Checkbox3States
-                  key={`${row.id}zwischenlager`}
-                  label="Zwischenlager"
-                  name="zwischenlager"
-                  value={row.zwischenlager}
-                  saveToDb={saveToDb}
-                  error={zwischenlagerError}
-                />
-              ) : (
-                <Checkbox2States
-                  key={`${row.id}zwischenlager`}
-                  label="Zwischenlager"
-                  name="zwischenlager"
-                  value={row.zwischenlager}
-                  saveToDb={saveToDb}
-                  error={zwischenlagerError}
-                />
-              )}
-              {showFilter ? (
-                <Checkbox3States
-                  key={`${row.id}erhaltungskultur`}
-                  label="Erhaltungskultur"
-                  name="erhaltungskultur"
-                  value={row.erhaltungskultur}
-                  saveToDb={saveToDb}
-                  error={errors.kultur?.erhaltungskultur}
-                />
-              ) : (
-                <Checkbox2States
-                  key={`${row.id}erhaltungskultur`}
-                  label="Erhaltungskultur"
-                  name="erhaltungskultur"
-                  value={row.erhaltungskultur}
-                  saveToDb={saveToDb}
-                  error={errors.kultur?.erhaltungskultur}
-                />
-              )}
-              <FieldRow>
-                <TextField
-                  key={`${row.id}von_anzahl_individuen`}
-                  name="von_anzahl_individuen"
-                  label="von Anzahl Individuen"
-                  value={row.von_anzahl_individuen}
-                  saveToDb={saveToDb}
-                  error={errors.kultur?.von_anzahl_individuen}
-                  type="number"
-                />
-                <div>
-                  <IconButton
-                    aria-label="Anleitung öffnen"
-                    title="Anleitung öffnen"
-                    onClick={openGenVielfaldDocs}
-                  >
-                    <IoMdInformationCircleOutline />
-                  </IconButton>
-                </div>
-              </FieldRow>
-              {showFilter ? (
-                <Checkbox3States
-                  key={`${row.id}aktiv`}
-                  label="aktiv"
-                  name="aktiv"
-                  value={row.aktiv}
-                  saveToDb={saveToDb}
-                  error={errors.kultur?.aktiv}
-                />
-              ) : (
-                <Checkbox2States
-                  key={`${row.id}aktiv`}
-                  label="aktiv"
-                  name="aktiv"
-                  value={row.aktiv}
-                  saveToDb={saveToDb}
-                  error={errors.kultur?.aktiv}
-                />
-              )}
-              <TextField
-                key={`${row.id}bemerkungen`}
-                name="bemerkungen"
-                label="Bemerkungen"
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={errors.kultur?.bemerkungen}
-                multiLine
-              />
-              {online &&
-                !showFilter &&
-                row._conflicts &&
-                row._conflicts.map && (
-                  <ConflictList
-                    conflicts={row._conflicts}
-                    activeConflict={activeConflict}
-                    setActiveConflict={setActiveConflict}
-                  />
-                )}
-              {!showFilter && row.id && (
-                <>
-                  <Timeline row={row} />
-                  <QK kultur={row} />
-                  <Files parentId={row.id} parent="kultur" />
-                </>
-              )}
-            </FieldsContainer>
+            <Form
+              showFilter={showFilter}
+              id={id}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
+            />
             <>
               {online && !!activeConflict && (
                 <Conflict

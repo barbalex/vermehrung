@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
 
-import exists from '../../../../utils/exists'
+import exists from '../../../../../utils/exists'
 
 const Popup = styled.div`
   background-color: white;

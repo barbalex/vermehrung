@@ -33,10 +33,10 @@ import CustomTooltip from './Tooltip'
 import LabelLieferung from './LabelLieferung'
 import LabelZaehlung from './LabelZaehlung'
 import CustomAxisTick from './CustomAxisTick'
-import getConstants from '../../../../utils/constants'
-import exists from '../../../../utils/exists'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
-import { StoreContext } from '../../../../models/reactUtils'
+import getConstants from '../../../../../utils/constants'
+import exists from '../../../../../utils/exists'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../../models/reactUtils'
 
 const constants = getConstants()
 
