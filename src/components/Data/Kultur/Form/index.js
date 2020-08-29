@@ -47,7 +47,7 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const Kultur = ({ showFilter, id, activeConflict, setActiveConflict }) => {
+const Kultur = ({ showFilter, id, row, activeConflict, setActiveConflict }) => {
   const store = useContext(StoreContext)
   const {
     filter,
@@ -61,11 +61,6 @@ const Kultur = ({ showFilter, id, activeConflict, setActiveConflict }) => {
     hideInactive,
     artHerkuenfte,
   } = store
-
-  const row = useMemo(
-    () => (showFilter ? filter.kultur : store.kulturs.get(id) ?? {}),
-    [filter.kultur, id, showFilter, store.kulturs],
-  )
 
   // From all collected combinations of art and herkunft show only arten of those not present in this garten
   // => find all combinations of art and herkunft in sammlungen
