@@ -13,8 +13,16 @@ const StyledMenuItem = styled(MenuItem)`
     props['data-disabled'] && 'color: rgba(0, 0, 0, 0.54) !important;'}
   ${(props) => props['data-disabled'] && 'cursor: not-allowed !important;'}
 `
+const StyledIconButton = styled(IconButton)`
+  box-sizing: border-box;
+  ${(props) =>
+    props['data-active'] && 'background-color: rgba(0, 0, 0, 0.04) !important;'}
+  ${(props) =>
+    props['data-active'] &&
+    'box-shadow:inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04);'}
+`
 
-const KulturHistoryButton = ({ asMenu, row }) => {
+const KulturHistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
   const store = useContext(StoreContext)
   const { online } = store
   const existMultipleRevisions = (row?._revisions || []).length > 1
@@ -22,27 +30,32 @@ const KulturHistoryButton = ({ asMenu, row }) => {
 
   const show = useCallback(() => {
     if (disabled) return
-    console.log('TODO!')
-  }, [disabled])
+    setShowHistory(!showHistory)
+  }, [disabled, setShowHistory, showHistory])
+
+  const title = showHistory
+    ? 'Frühere Versionen ausblenden'
+    : 'Frühere Versionen anzeigen'
 
   if (asMenu) {
     return (
       <StyledMenuItem onClick={show} data-disabled={disabled}>
-        Frühere Versionen anzeigen
+        {title}
       </StyledMenuItem>
     )
   }
 
   return (
     <ErrorBoundary>
-      <IconButton
-        aria-label="Frühere Versionen anzeigen"
-        title="Frühere Versionen anzeigen"
+      <StyledIconButton
+        aria-label={title}
+        title={title}
         onClick={show}
         disabled={disabled}
+        data-active={showHistory}
       >
         <FaHistory />
-      </IconButton>
+      </StyledIconButton>
     </ErrorBoundary>
   )
 }
