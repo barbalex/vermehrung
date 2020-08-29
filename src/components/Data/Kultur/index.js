@@ -8,6 +8,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import FormTitle from './FormTitle'
 import Form from './Form'
+import History from './History'
 
 const Container = styled.div`
   height: 100%;
@@ -75,8 +76,6 @@ const Kultur = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
-  console.log('Kultur', { row, showHistory, online })
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -113,7 +112,7 @@ const Kultur = ({
                       setActiveConflict={setActiveConflict}
                     />
                   ) : showHistory ? (
-                    <div>history</div>
+                    <History row={row} setShowHistory={setShowHistory} />
                   ) : null}
                 </>
               )}
