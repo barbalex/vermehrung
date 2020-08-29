@@ -13,11 +13,11 @@ import IconButton from '@material-ui/core/IconButton'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 import Qk from './Qk'
 import Choose from './Choose'
-import getConstants from '../../../../utils/constants'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import getConstants from '../../../../../utils/constants'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const constants = getConstants()
 

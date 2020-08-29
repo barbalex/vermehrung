@@ -5,8 +5,8 @@ import last from 'lodash/last'
 import isUuid from 'is-uuid'
 
 import Row from './Row'
-import { StoreContext } from '../../../../../models/reactUtils'
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
+import { StoreContext } from '../../../../../../models/reactUtils'
+import ErrorBoundary from '../../../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   display: flex;

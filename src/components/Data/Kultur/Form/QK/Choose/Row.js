@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import Checkbox from '@material-ui/core/Checkbox'
 
-import { StoreContext } from '../../../../../models/reactUtils'
+import { StoreContext } from '../../../../../../models/reactUtils'
 
 const Row = styled.div`
   display: flex;

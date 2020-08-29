@@ -1,6 +1,6 @@
 import format from 'date-fns/format'
 
-import exists from '../../../../../utils/exists'
+import exists from '../../../../../../utils/exists'
 
 export default ({ kulturId, store }) => {
   const {

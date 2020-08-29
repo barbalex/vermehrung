@@ -7,8 +7,8 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 
 import createMessageFunctions from './createMessageFunctions'
-import getConstants from '../../../../../utils/constants'
-import { StoreContext } from '../../../../../models/reactUtils'
+import getConstants from '../../../../../../utils/constants'
+import { StoreContext } from '../../../../../../models/reactUtils'
 
 const constants = getConstants()
 
