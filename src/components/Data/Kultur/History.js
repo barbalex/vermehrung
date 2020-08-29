@@ -71,7 +71,7 @@ const KulturHistory = ({ row, setShowHistory }) => {
     setShowHistory,
   ])
 
-  return <div>Das ist noch eine Baustelle</div>
+  return <div>Hier wird gebaut 👀</div>
 }
 
 export default observer(KulturHistory)
