@@ -83,17 +83,9 @@ const sliderSettings = {
   infinite: false,
 }
 
-/**
- * TODO:
- * load react-slick
- * load revisions
- * present revisions in Data component in carousel
- */
-
 const KulturHistory = ({ row }) => {
   const store = useContext(StoreContext)
 
-  console.log('Kultur History, revisions:', row._revisions)
   // need to use this query to ensure that the person's name is queried
   const { error, loading } = useQuery(kulturRevQuery, {
     variables: {
@@ -106,7 +98,7 @@ const KulturHistory = ({ row }) => {
   const revRows = useMemo(
     () =>
       [...store.kultur_revs.values()]
-        .filter((v) => row._revisions.includes(v._rev))
+        .filter((v) => row?._revisions?.includes(v._rev) ?? true)
         .filter((r) => r._rev !== row._rev)
         .sort((a, b) => b._depth - a._depth) || {},
     [row._rev, row._revisions, store.kultur_revs],

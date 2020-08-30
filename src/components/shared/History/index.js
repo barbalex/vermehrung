@@ -49,14 +49,14 @@ const History = ({ rev, dataArray, onClickUebernehmen }) => {
       </Title>
       <Data dataArray={dataArray} />
       <ButtonRow>
-        <StyledButton
+        {/*<StyledButton
           onClick={onClickUebernehmen}
           variant="outlined"
           title="Diese Version wiederherstellen"
           startIcon={<FaUndoAlt />}
         >
           wiederherstellen
-        </StyledButton>
+        </StyledButton>*/}
         <StyledButton
           onClick={onClickToggleDiff}
           variant="outlined"
