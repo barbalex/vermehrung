@@ -59,9 +59,23 @@ const kulturRevQuery = gql`
 `
 
 const Container = styled.div`
-  padding: 10px 25px;
+  padding: 0 25px;
   overflow: auto !important;
   height: 100%;
+  .slick-prev:before,
+  .slick-next:before,
+  .slick-dots li button:before {
+    color: #4a148c;
+  }
+  .slick-prev {
+    left: -20px;
+  }
+  .slick-next {
+    right: -20px;
+  }
+  .slick-dots {
+    bottom: -10px;
+  }
 `
 
 const sliderSettings = {
@@ -92,10 +106,10 @@ const KulturHistory = ({ row, setShowHistory }) => {
   // need to grab store object to ensure this remains up to date
   const revRows = useMemo(
     () =>
-      [...store.kultur_revs.values()].filter((v) =>
-        row._revisions.includes(v._rev),
-      ) || {},
-    [row._revisions, store.kultur_revs],
+      [...store.kultur_revs.values()]
+        .filter((v) => row._revisions.includes(v._rev))
+        .filter((r) => r._rev !== row._rev) || {},
+    [row._rev, row._revisions, store.kultur_revs],
   )
 
   const onClickSchliessen = useCallback(() => setShowHistory(false), [
@@ -113,9 +127,11 @@ const KulturHistory = ({ row, setShowHistory }) => {
   return (
     <Container>
       <Slider {...sliderSettings}>
-        {revRows.map((r) => (
-          <Row key={row._rev} revRow={r} row={row} />
-        ))}
+        {revRows
+          .sort((r) => r.changed)
+          .map((r) => (
+            <Row key={row._rev} revRow={r} row={row} />
+          ))}
       </Slider>
     </Container>
   )
