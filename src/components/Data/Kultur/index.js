@@ -98,6 +98,7 @@ const Kultur = ({
               row={row}
               activeConflict={activeConflict}
               setActiveConflict={setActiveConflict}
+              showHistory={showHistory}
             />
             <>
               {online && (

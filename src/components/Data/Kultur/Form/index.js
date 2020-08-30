@@ -47,7 +47,14 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const Kultur = ({ showFilter, id, row, activeConflict, setActiveConflict }) => {
+const Kultur = ({
+  showFilter,
+  id,
+  row,
+  activeConflict,
+  setActiveConflict,
+  showHistory,
+}) => {
   const store = useContext(StoreContext)
   const {
     filter,
@@ -236,7 +243,7 @@ const Kultur = ({ showFilter, id, row, activeConflict, setActiveConflict }) => {
   return (
     <ErrorBoundary>
       <Container>
-        {activeConflict && (
+        {(activeConflict || showHistory) && (
           <CaseConflictTitle>
             Aktuelle Version<Rev>{row._rev}</Rev>
           </CaseConflictTitle>

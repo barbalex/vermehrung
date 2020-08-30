@@ -108,7 +108,8 @@ const KulturHistory = ({ row, setShowHistory }) => {
     () =>
       [...store.kultur_revs.values()]
         .filter((v) => row._revisions.includes(v._rev))
-        .filter((r) => r._rev !== row._rev) || {},
+        .filter((r) => r._rev !== row._rev)
+        .sort((r) => r.changed) || {},
     [row._rev, row._revisions, store.kultur_revs],
   )
 
@@ -127,11 +128,9 @@ const KulturHistory = ({ row, setShowHistory }) => {
   return (
     <Container>
       <Slider {...sliderSettings}>
-        {revRows
-          .sort((r) => r.changed)
-          .map((r) => (
-            <Row key={row._rev} revRow={r} row={row} />
-          ))}
+        {revRows.map((r) => (
+          <Row key={row._rev} revRow={r} row={row} />
+        ))}
       </Slider>
     </Container>
   )
