@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
@@ -7,8 +7,8 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 
 const kulturRevQuery = gql`
-  query kulturRevForConflictQuery($id: uuid!, $rev: String!) {
-    kultur_rev(where: { kultur_id: { _eq: $id }, _rev: { _eq: $rev } }) {
+  query kulturRevForHistoryQuery($rev: [String!]) {
+    kultur_rev(where: { _rev: { _in: $rev } }) {
       id
       __typename
       kultur_id
@@ -73,17 +73,29 @@ const KulturHistory = ({ row, setShowHistory }) => {
   const store = useContext(StoreContext)
   const { user, addNotification } = store
 
+  console.log('Kultur History, revisions:', row._revisions)
   // need to use this query to ensure that the person's name is queried
   const { error, loading } = useQuery(kulturRevQuery, {
     variables: {
-      id: row.id,
+      rev: row._revisions,
     },
   })
   error && checkForOnlineError(error)
 
+  // need to grab store object to ensure this remains up to date
+  const revRows = useMemo(
+    () =>
+      [...store.kultur_revs.values()].filter((v) =>
+        row._revisions.includes(v._rev),
+      ) || {},
+    [row._revisions, store.kultur_revs],
+  )
+
   const onClickSchliessen = useCallback(() => setShowHistory(false), [
     setShowHistory,
   ])
+
+  console.log('Kultur History', { loading, revRows })
 
   return <Container>Hier wird gebaut 👀</Container>
 }
