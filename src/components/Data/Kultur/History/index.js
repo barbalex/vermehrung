@@ -59,14 +59,14 @@ const kulturRevQuery = gql`
 `
 
 const Container = styled.div`
-  padding: 10px;
+  padding: 10px 25px;
   overflow: auto !important;
   height: 100%;
-  font-family: 'slick';
 `
 
 const sliderSettings = {
   dots: true,
+  infinite: false,
 }
 
 /**
@@ -111,11 +111,13 @@ const KulturHistory = ({ row, setShowHistory }) => {
   }
 
   return (
-    <Slider {...sliderSettings}>
-      {revRows.map((r) => (
-        <Row key={row._rev} revRow={r} row={row} />
-      ))}
-    </Slider>
+    <Container>
+      <Slider {...sliderSettings}>
+        {revRows.map((r) => (
+          <Row key={row._rev} revRow={r} row={row} />
+        ))}
+      </Slider>
+    </Container>
   )
 }
 
