@@ -11,6 +11,9 @@ import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
 import 'react-datepicker/dist/react-datepicker.css'
 
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+
 import Notifications from './components/Notifications'
 
 import materialTheme from './utils/materialTheme'
@@ -30,7 +33,7 @@ if (typeof window !== 'undefined') {
     text: {
       msg: 'Ihr Browser ({brow_name}) ist veraltet.',
       msgmore:
-        'Aktualisieren Sie ihn für mehr Sicherheit, Geschwindigkeit und weil vermehrung.ch einen aktuellen Browser voraussetzt.',
+        'Aktualisieren Sie ihn bitte für mehr Sicherheit, Geschwindigkeit und weil vermehrung.ch das voraussetzt.',
       bupdate: 'Browser aktualisieren',
       bignore: 'Ignorieren',
     },
