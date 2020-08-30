@@ -90,9 +90,8 @@ const sliderSettings = {
  * present revisions in Data component in carousel
  */
 
-const KulturHistory = ({ row, setShowHistory }) => {
+const KulturHistory = ({ row }) => {
   const store = useContext(StoreContext)
-  const { user, addNotification } = store
 
   console.log('Kultur History, revisions:', row._revisions)
   // need to use this query to ensure that the person's name is queried
@@ -109,15 +108,11 @@ const KulturHistory = ({ row, setShowHistory }) => {
       [...store.kultur_revs.values()]
         .filter((v) => row._revisions.includes(v._rev))
         .filter((r) => r._rev !== row._rev)
-        .sort((r) => r.changed) || {},
+        .sort((a, b) => b._depth - a._depth) || {},
     [row._rev, row._revisions, store.kultur_revs],
   )
 
-  const onClickSchliessen = useCallback(() => setShowHistory(false), [
-    setShowHistory,
-  ])
-
-  console.log('Kultur History', { loading, revRows })
+  const onClickUebernehmen = useCallback(() => console.log('TODO!'), [])
 
   if (loading) return 'Lade...'
 
@@ -129,7 +124,12 @@ const KulturHistory = ({ row, setShowHistory }) => {
     <Container>
       <Slider {...sliderSettings}>
         {revRows.map((r) => (
-          <Row key={row._rev} revRow={r} row={row} />
+          <Row
+            key={row._rev}
+            revRow={r}
+            row={row}
+            onClickUebernehmen={onClickUebernehmen}
+          />
         ))}
       </Slider>
     </Container>

@@ -113,7 +113,7 @@ const Kultur = ({
                       setActiveConflict={setActiveConflict}
                     />
                   ) : showHistory ? (
-                    <History row={row} setShowHistory={setShowHistory} />
+                    <History row={row} />
                   ) : null}
                 </>
               )}

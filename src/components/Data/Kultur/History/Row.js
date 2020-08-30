@@ -5,7 +5,7 @@ import History from '../../../shared/History'
 import herkunftLabelFromHerkunft from '../Form/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from '../Form/gartenLabelFromGarten'
 
-const HistoryRow = ({ row, revRow }) => {
+const HistoryRow = ({ row, revRow, onClickUebernehmen }) => {
   const dataArray = [
     {
       valueInRow: row?.art?.art_ae_art?.name,
@@ -69,8 +69,7 @@ const HistoryRow = ({ row, revRow }) => {
     <History
       rev={revRow._rev}
       dataArray={dataArray}
-      //onClickUebernehmen={onClickUebernehmen}
-      //onClickSchliessen={onClickSchliessen}
+      onClickUebernehmen={onClickUebernehmen}
     />
   )
 }

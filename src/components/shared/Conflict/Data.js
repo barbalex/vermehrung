@@ -45,10 +45,13 @@ const ConflictData = ({ dataArray, loading }) => {
       inputB = inputB ?? '(kein Wert)'
     }
 
+    const showDiff =
+      diffConflict && !['geändert', 'geändert von'].includes(d.label)
+
     return (
       <Row key={d.label} data-last={index + 1 === dataArray.length}>
         <Key>{`${d.label}:`}</Key>
-        {diffConflict ? (
+        {showDiff ? (
           <Diff inputA={inputA} inputB={inputB} type="sentences" />
         ) : (
           <div>{inputA}</div>

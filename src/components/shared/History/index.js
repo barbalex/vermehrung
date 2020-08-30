@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import { observer } from 'mobx-react-lite'
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.inline.svg'
-import { FaTimes, FaExchangeAlt, FaArrowsAltH } from 'react-icons/fa'
+import { FaUndoAlt, FaArrowsAltH } from 'react-icons/fa'
 
 import Data from '../Conflict/Data'
 import { StoreContext } from '../../../models/reactUtils'
@@ -33,7 +33,7 @@ const StyledButton = styled(Button)`
   }
 `
 
-const History = ({ rev, dataArray, onClickUebernehmen, onClickSchliessen }) => {
+const History = ({ rev, dataArray, onClickUebernehmen }) => {
   const store = useContext(StoreContext)
   const { diffConflict, setDiffConflict } = store
 
@@ -52,10 +52,10 @@ const History = ({ rev, dataArray, onClickUebernehmen, onClickSchliessen }) => {
         <StyledButton
           onClick={onClickUebernehmen}
           variant="outlined"
-          title="Die historische Version wird zur aktuellen. Die bisher aktuelle wird zur widersprüchlichen"
-          startIcon={<FaExchangeAlt />}
+          title="Diese Version wiederherstellen"
+          startIcon={<FaUndoAlt />}
         >
-          übernehmen
+          wiederherstellen
         </StyledButton>
         <StyledButton
           onClick={onClickToggleDiff}
@@ -68,14 +68,6 @@ const History = ({ rev, dataArray, onClickUebernehmen, onClickSchliessen }) => {
           startIcon={diffConflict ? <DoubleArrowCrossed /> : <FaArrowsAltH />}
         >
           {diffConflict ? 'nicht vergleichen' : 'vergleichen'}
-        </StyledButton>
-        <StyledButton
-          onClick={onClickSchliessen}
-          variant="outlined"
-          title="Die Spalte mit der historischen Version wird geschlossen"
-          startIcon={<FaTimes />}
-        >
-          schliessen
         </StyledButton>
       </ButtonRow>
     </Container>
