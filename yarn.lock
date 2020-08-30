@@ -14428,7 +14428,7 @@ react-side-effect@^2.1.0:
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-2.1.0.tgz#1ce4a8b4445168c487ed24dab886421f74d380d3"
   integrity sha512-IgmcegOSi5SNX+2Snh1vqmF0Vg/CbkycU9XZbOHJlZ6kMzTmi3yc254oB1WCkgA7OQtIAoLmcSFuHTc/tlcqXg==
 
-react-slick@^0.27.10:
+react-slick@0.27.10:
   version "0.27.10"
   resolved "https://registry.yarnpkg.com/react-slick/-/react-slick-0.27.10.tgz#13e599f5dcb617f84a1050c99bb76fd8cca1a7ad"
   integrity sha512-8HJH+dEZH2+lVxLJq4sQ37iPcAzAma0H4v19qX2dmPKr+j+no4NVRo3U3kjT/eVxhKWh+wZ00FWKR2s+Q+Lgng==
@@ -15685,6 +15685,11 @@ slice-ansi@^3.0.0:
     ansi-styles "^4.0.0"
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
+
+slick-carousel@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/slick-carousel/-/slick-carousel-1.8.1.tgz#a4bfb29014887bb66ce528b90bd0cda262cc8f8d"
+  integrity sha512-XB9Ftrf2EEKfzoQXt3Nitrt/IPbT+f1fgqBdoxO3W/+JYvtEOW6EgxnWfr9GH6nmULv7Y2tPmEX3koxThVmebA==
 
 slugify@^1.4.4:
   version "1.4.5"

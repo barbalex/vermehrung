@@ -2,9 +2,11 @@ import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
+import Slider from 'react-slick'
 
-import { useQuery, StoreContext } from '../../../models/reactUtils'
-import checkForOnlineError from '../../../utils/checkForOnlineError'
+import { useQuery, StoreContext } from '../../../../models/reactUtils'
+import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import Row from './Row'
 
 const kulturRevQuery = gql`
   query kulturRevForHistoryQuery($rev: [String!]) {
@@ -60,7 +62,12 @@ const Container = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
+  font-family: 'slick';
 `
+
+const sliderSettings = {
+  dots: true,
+}
 
 /**
  * TODO:
@@ -97,7 +104,19 @@ const KulturHistory = ({ row, setShowHistory }) => {
 
   console.log('Kultur History', { loading, revRows })
 
-  return <Container>Hier wird gebaut 👀</Container>
+  if (loading) return 'Lade...'
+
+  if (error) {
+    return <Container>{error.message}</Container>
+  }
+
+  return (
+    <Slider {...sliderSettings}>
+      {revRows.map((r) => (
+        <Row key={row._rev} revRow={r} row={row} />
+      ))}
+    </Slider>
+  )
 }
 
 export default observer(KulturHistory)
