@@ -9,7 +9,6 @@ import { observer } from 'mobx-react-lite'
 import { StoreContext } from '../../../models/reactUtils'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../utils/logout'
-import queryAllData from '../../../utils/queryAllData'
 import getConstants from '../../../utils/constants'
 
 const constants = getConstants()
@@ -87,18 +86,19 @@ const Account = () => {
   const onClickRefresh = useCallback(async () => {
     setRefreshing('yes')
     flushData()
-    await queryAllData({ store })
+    window.location.reload(true)
+    /*await queryAllData({ store })
     setRefreshing('done')
     setTimeout(() => {
       setAnchorEl(null)
       setTimeout(() => setRefreshing('no'))
-    }, 1500)
-  }, [flushData, store])
+    }, 1500)*/
+  }, [flushData])
   const refreshText =
     refreshing === 'no'
       ? 'Daten neu laden'
       : refreshing === 'yes'
-      ? 'Lade Daten...'
+      ? 'Entferne lokale Daten...'
       : 'Die Daten wurden neu geladen'
 
   if (!online) return null
