@@ -87,7 +87,7 @@ export default async () => {
     console.log('initiateApp querying initial data')
     // wait a tick - had trouble with user.uid not existing yet
     //setTimeout(() => queryAllData({ store }))
-    await queryAllData({ store })
+    queryAllData({ store })
   }
 
   return { store, unregister }
