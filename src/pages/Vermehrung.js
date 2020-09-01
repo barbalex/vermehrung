@@ -141,39 +141,10 @@ const Vermehrung = ({ location }) => {
     )
   }
 
-  if (!initialDataQueried) {
-    return (
-      <ErrorBoundary>
-        <Layout>
-          <SpinnerContainer>
-            <Spinner
-              size={50}
-              frontColor="#4a148c"
-              backColor="#4a148c1a"
-              loading={true}
-            />
-            <SpinnerText>lade Daten</SpinnerText>
-          </SpinnerContainer>
-        </Layout>
-      </ErrorBoundary>
-    )
-  }
-
-  if (!existsUser) {
-    return (
-      <ErrorBoundary>
-        <Layout>
-          <LoginContainer>
-            <Login />
-          </LoginContainer>
-        </Layout>
-      </ErrorBoundary>
-    )
-  }
-
-  // unfortunately this results in permanent loading
-  // on first load after emptying cache
-  /*if (loading && !artsSorted.length) {
+  // uncommented this because:
+  // quite often there will already exist data
+  // so show it ealier instead of waiting for loading to be finished
+  /*if (!initialDataQueried) {
     return (
       <ErrorBoundary>
         <Layout>
@@ -190,6 +161,18 @@ const Vermehrung = ({ location }) => {
       </ErrorBoundary>
     )
   }*/
+
+  if (!existsUser) {
+    return (
+      <ErrorBoundary>
+        <Layout>
+          <LoginContainer>
+            <Login />
+          </LoginContainer>
+        </Layout>
+      </ErrorBoundary>
+    )
+  }
 
   /*if (
     error &&
