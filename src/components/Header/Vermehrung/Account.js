@@ -23,6 +23,20 @@ const Line = styled.hr`
 `
 const StyledMenuItem = styled(MenuItem)`
   ${(props) => props['data-active'] === 'yes' && 'font-style: italic;'}
+  ${(props) =>
+    props['data-active'] === 'yes' &&
+    'animation: flickerAnimation 1s infinite;'}
+  @keyframes flickerAnimation {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 `
 
 const Account = () => {
