@@ -21,6 +21,9 @@ const Line = styled.hr`
   background: rgba(74, 20, 140, 0.3) !important;
   margin: 5px 0;
 `
+const StyledMenuItem = styled(MenuItem)`
+  ${(props) => props['data-active'] === 'yes' && 'font-style: italic;'}
+`
 
 const Account = () => {
   const store = useContext(StoreContext)
@@ -65,10 +68,24 @@ const Account = () => {
   const onClickLogoutAndClear = useCallback(() => {
     logout({ store })
   }, [store])
-  const onClickRefresh = useCallback(() => {
+
+  const [refreshing, setRefreshing] = useState('no')
+  const onClickRefresh = useCallback(async () => {
+    setRefreshing('yes')
     flushData()
-    queryAllData({ store })
+    await queryAllData({ store })
+    setRefreshing('done')
+    setTimeout(() => {
+      setAnchorEl(null)
+      setTimeout(() => setRefreshing('no'))
+    }, 1500)
   }, [flushData, store])
+  const refreshText =
+    refreshing === 'no'
+      ? 'Daten neu laden'
+      : refreshing === 'yes'
+      ? 'Lade Daten...'
+      : 'Die Daten wurden neu geladen'
 
   if (!online) return null
 
@@ -103,9 +120,13 @@ const Account = () => {
           } abmelden`}</MenuItem>
           <MenuItem onClick={onClickResetPassword}>{resetTitle}</MenuItem>
           <Line />
-          <MenuItem onClick={onClickRefresh} data-id="appbar-more-logout">
-            Daten neu laden
-          </MenuItem>
+          <StyledMenuItem
+            onClick={onClickRefresh}
+            data-id="appbar-more-logout"
+            data-active={refreshing}
+          >
+            {refreshText}
+          </StyledMenuItem>
           <MenuItem
             onClick={onClickLogoutAndClear}
             data-id="appbar-more-logout"
