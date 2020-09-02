@@ -62,7 +62,6 @@ const formatDatumForSearch = (datum) =>
 export const RootStore = RootStoreBase.props({
   tree: types.optional(Tree, defaultTree),
   filter: types.optional(Filter, initialFilterValues),
-  hideInactive: types.optional(types.maybeNull(types.boolean), true),
   docFilter: types.optional(types.union(types.string, types.number), ''),
   docsCount: types.maybeNull(types.number, null),
   docsFilteredCount: types.maybeNull(types.number, null),
@@ -1613,14 +1612,6 @@ export const RootStore = RootStoreBase.props({
       setIsPrint(val) {
         self.isPrint = val
       },
-      setHideInactive(val) {
-        self.hideInactive = val
-        const key = 'aktiv'
-        const value = val
-        self.filter.setValue({ table: 'person', key, value })
-        self.filter.setValue({ table: 'garten', key, value })
-        self.filter.setValue({ table: 'kultur', key, value })
-      },
       setDocFilter(val) {
         self.docFilter = val
       },
@@ -1787,7 +1778,9 @@ export const RootStore = RootStoreBase.props({
     get gartensSorted() {
       return [...self.gartens.values()]
         .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
-        .filter((a) => (self.hideInactive ? a.aktiv === true : true))
+        .filter((a) =>
+          self.filter.garten.aktiv === true ? a.aktiv === true : true,
+        )
         .sort(gartenSort)
     },
     get herkunftFilter() {
@@ -1810,7 +1803,9 @@ export const RootStore = RootStoreBase.props({
     get kultursSorted() {
       return [...self.kulturs.values()]
         .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
-        .filter((a) => (self.hideInactive ? a.aktiv === true : true))
+        .filter((a) =>
+          self.filter.kultur.aktiv === true ? a.aktiv === true : true,
+        )
         .sort(kulturSort)
     },
     get lieferungFilter() {
@@ -1833,7 +1828,9 @@ export const RootStore = RootStoreBase.props({
     get personsSorted() {
       return [...self.persons.values()]
         .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
-        .filter((a) => (self.hideInactive ? a.aktiv === true : true))
+        .filter((a) =>
+          self.filter.person.aktiv === true ? a.aktiv === true : true,
+        )
         .sort(personSort)
     },
     get kulturQksSorted() {
@@ -1904,12 +1901,6 @@ export const RootStore = RootStoreBase.props({
           },
         ],
       }
-    },
-    get inactiveFilter() {
-      if (self.hideInactive) {
-        return { aktiv: { _eq: true } }
-      }
-      return true
     },
     get loadingInitialData() {
       return [
