@@ -1,4 +1,4 @@
-import { types, getParent } from 'mobx-state-tree'
+import { types } from 'mobx-state-tree'
 
 import { type as art } from './art'
 import { type as event } from './event'
