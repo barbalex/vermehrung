@@ -116,7 +116,7 @@ const Teilzaehlung = ({
   index,
 }) => {
   const store = useContext(StoreContext)
-  const { insertTeilkulturRev, showDeleted, errors, unsetError, online } = store
+  const { insertTeilkulturRev, errors, unsetError, online } = store
 
   const [openPrognosis, setOpenPrognosis] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -182,6 +182,8 @@ const Teilzaehlung = ({
     () => setActiveConflict(null),
     [],
   )
+
+  const showDeleted = row._deleted
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
   // hide resizer when tree is hidden
@@ -317,7 +319,7 @@ const Teilzaehlung = ({
               </Last>
             )}
             <div>
-              {showDeleted && !row._deleted && (
+              {!row._deleted && (
                 <IconButton
                   aria-label="löschen"
                   title="löschen"
