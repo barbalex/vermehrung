@@ -121,7 +121,6 @@ const Zaehlung = ({
     kultursSorted,
     zaehlungsFiltered,
     zaehlungsSorted,
-    showDeleted,
     errors,
     unsetError,
   } = store
@@ -210,6 +209,8 @@ const Zaehlung = ({
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
     [activeNodeArray, setActiveNodeArray],
   )
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 

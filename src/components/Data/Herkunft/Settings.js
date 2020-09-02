@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
@@ -99,7 +99,7 @@ const SettingsHerkunft = () => {
             <FormControlLabel
               value={hk_kanton === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={hk_kanton}
                   onClick={saveToDb}
@@ -114,7 +114,7 @@ const SettingsHerkunft = () => {
             <FormControlLabel
               value={hk_land === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={hk_land}
                   onClick={saveToDb}
@@ -129,7 +129,7 @@ const SettingsHerkunft = () => {
             <FormControlLabel
               value={hk_geom_point === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={hk_geom_point}
                   onClick={saveToDb}
@@ -144,7 +144,7 @@ const SettingsHerkunft = () => {
             <FormControlLabel
               value={hk_bemerkungen === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={hk_bemerkungen}
                   onClick={saveToDb}

@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { FaCog } from 'react-icons/fa'
 import styled from 'styled-components'
@@ -106,7 +106,7 @@ const SettingsGarten = () => {
             <FormControlLabel
               value={ga_strasse === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ga_strasse}
                   onClick={saveToDb}
@@ -121,7 +121,7 @@ const SettingsGarten = () => {
             <FormControlLabel
               value={ga_plz === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ga_plz}
                   onClick={saveToDb}
@@ -136,7 +136,7 @@ const SettingsGarten = () => {
             <FormControlLabel
               value={ga_ort === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ga_ort}
                   onClick={saveToDb}
@@ -151,7 +151,7 @@ const SettingsGarten = () => {
             <FormControlLabel
               value={ga_geom_point === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ga_geom_point}
                   onClick={saveToDb}
@@ -166,7 +166,7 @@ const SettingsGarten = () => {
             <FormControlLabel
               value={ga_lat_lng === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ga_lat_lng}
                   onClick={saveToDb}
@@ -181,7 +181,7 @@ const SettingsGarten = () => {
             <FormControlLabel
               value={ga_aktiv === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ga_aktiv}
                   onClick={saveToDb}
@@ -196,7 +196,7 @@ const SettingsGarten = () => {
             <FormControlLabel
               value={ga_bemerkungen === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ga_bemerkungen}
                   onClick={saveToDb}

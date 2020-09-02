@@ -21,7 +21,7 @@ const Title = styled.div`
 
 const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
-  const { showDeleted } = store
+  const { filter } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -35,18 +35,18 @@ const KulturDeleteMenu = ({ row, anchorEl, setAnchorEl }) => {
   const remove = useCallback(() => {
     row.delete()
     setAnchorEl(null)
-    if (!showDeleted) {
+    if (filter.kultur.delete === false) {
       // need to remove openNode from openNodes
       removeOpenNodeWithChildren(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
   }, [
     activeNodeArray,
+    filter.kultur.delete,
     removeOpenNodeWithChildren,
     row,
     setActiveNodeArray,
     setAnchorEl,
-    showDeleted,
   ])
 
   return (

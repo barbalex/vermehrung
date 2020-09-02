@@ -147,6 +147,8 @@ const Person = ({
     }
   }, [nrCount, setError])
 
+  const showDeleted = showFilter || row._deleted
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -169,6 +171,29 @@ const Person = ({
                 <CaseConflictTitle>
                   Aktuelle Version<Rev>{row._rev}</Rev>
                 </CaseConflictTitle>
+              )}
+              {showDeleted && (
+                <>
+                  {showFilter ? (
+                    <Checkbox3States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.person?._deleted}
+                    />
+                  ) : (
+                    <Checkbox2States
+                      key={`${row.id}_deleted`}
+                      label="gelöscht"
+                      name="_deleted"
+                      value={row._deleted}
+                      saveToDb={saveToDb}
+                      error={errors?.person?._deleted}
+                    />
+                  )}
+                </>
               )}
               <Select
                 key={`${row.id}${row.user_role}user_role`}

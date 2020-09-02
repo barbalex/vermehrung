@@ -9,19 +9,23 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  _deleted: types.optional(types.maybeNull(types.boolean), false),
 })
 
 export const initial = {
   id: null,
   ae_id: null,
+  _deleted: false,
 }
 
 export const empty = {
   id: null,
   ae_id: null,
+  _deleted: false,
 }
 
 export const simpleTypes = {
   id: 'uuid',
   ae_id: 'uuid',
+  _deleted: 'boolean',
 }

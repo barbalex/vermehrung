@@ -85,8 +85,7 @@ create table person_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (person_id, _rev)
+  _deleted boolean default false
 );
 create index on person_rev using btree (id);
 create index on person_rev using btree (person_id);
@@ -137,8 +136,7 @@ create table art_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (art_id, _rev)
+  _deleted boolean default false
 );
 create index on art_rev using btree (id);
 create index on art_rev using btree (art_id);
@@ -299,8 +297,7 @@ create table herkunft_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (herkunft_id, _rev)
+  _deleted boolean default false
 );
 create index on herkunft_rev using btree (id);
 create index on herkunft_rev using btree (herkunft_id);
@@ -384,8 +381,7 @@ create table sammlung_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (sammlung_id, _rev)
+  _deleted boolean default false
 );
 create index on sammlung_rev using btree (rev_id);
 create index on sammlung_rev using btree (id);
@@ -459,8 +455,7 @@ create table garten_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (garten_id, _rev)
+  _deleted boolean default false
 );
 create index on garten_rev using btree (rev_id);
 create index on garten_rev using btree (id);
@@ -535,8 +530,7 @@ create table kultur_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (kultur_id, _rev)
+  _deleted boolean default false
 );
 create index on kultur_rev using btree (rev_id);
 create index on kultur_rev using btree (id);
@@ -690,8 +684,7 @@ create table teilkultur_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (teilkultur_id, _rev)
+  _deleted boolean default false
 );
 create index on teilkultur_rev using btree (rev_id);
 create index on teilkultur_rev using btree (id);
@@ -743,8 +736,7 @@ create table event_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (event_id, _rev)
+  _deleted boolean default false
 );
 create index on event_rev using btree (rev_id);
 create index on event_rev using btree (id);
@@ -789,8 +781,7 @@ create table zaehlung_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (zaehlung_id, _rev)
+  _deleted boolean default false
 );
 create index on zaehlung_rev using btree (rev_id);
 create index on zaehlung_rev using btree (id);
@@ -849,8 +840,7 @@ create table teilzaehlung_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (teilzaehlung_id, _rev)
+  _deleted boolean default false
 );
 create index on teilzaehlung_rev using btree (rev_id);
 create index on teilzaehlung_rev using btree (id);
@@ -909,8 +899,7 @@ create table kultur_option_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (kultur_id, _rev)
+  _deleted boolean default false
 );
 create index on kultur_option_rev using btree (id);
 create index on kultur_option_rev using btree (kultur_id);
@@ -990,8 +979,7 @@ create table person_option_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (person_id, _rev)
+  _deleted boolean default false
 );
 create index on person_option_rev using btree (rev_id);
 create index on person_option_rev using btree (id);
@@ -1069,8 +1057,7 @@ create table lieferung_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (lieferung_id, _rev)
+  _deleted boolean default false
 );
 create index on lieferung_rev using btree (rev_id);
 create index on lieferung_rev using btree (id);
@@ -1134,8 +1121,7 @@ create table sammel_lieferung_rev (
   _parent_rev text default null,
   _revisions text[] default null,
   _depth integer default 1,
-  _deleted boolean default false,
-  unique (sammel_lieferung_id, _rev)
+  _deleted boolean default false
 );
 create index on sammel_lieferung_rev using btree (rev_id);
 create index on sammel_lieferung_rev using btree (id);

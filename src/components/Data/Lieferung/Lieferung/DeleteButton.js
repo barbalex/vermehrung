@@ -24,7 +24,7 @@ const Title = styled.div`
 
 const LieferungDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
-  const { showDeleted } = store
+  const { filter } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -43,17 +43,17 @@ const LieferungDeleteButton = ({ row }) => {
   const remove = useCallback(() => {
     row.delete()
     setAnchorEl(null)
-    if (!showDeleted) {
+    if (filter.lieferung._deleted === false) {
       // need to remove openNode from openNodes
       removeOpenNodeWithChildren(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
   }, [
-    activeNodeArray,
     row,
+    filter.lieferung._deleted,
     removeOpenNodeWithChildren,
+    activeNodeArray,
     setActiveNodeArray,
-    showDeleted,
   ])
 
   return (
