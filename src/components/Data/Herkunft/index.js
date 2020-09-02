@@ -113,7 +113,6 @@ const Herkunft = ({
     userPersonOption,
     herkunftsSorted,
     herkunftsFiltered,
-    showDeleted,
     sammlungIdInActiveNodeArray,
     errors,
     setError,
@@ -207,6 +206,8 @@ const Herkunft = ({
     [activeNodeArray, setActiveNodeArray],
   )
   const showToSa = activeNodeArray[0] === 'Herkuenfte'
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 

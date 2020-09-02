@@ -119,7 +119,6 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     personIdInActiveNodeArray,
     sammelLieferungIdInActiveNodeArray,
     sammlungIdInActiveNodeArray,
-    showDeleted,
     unsetError,
     userPersonOption,
   } = store
@@ -231,6 +230,8 @@ const Lieferung = ({ showFilter, sammelLieferung = {} }) => {
     [activeNodeArray, nachKulturId, setActiveNodeArray],
   )
   const showToKu = activeNodeArray[0] === 'Sammlungen'
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 
