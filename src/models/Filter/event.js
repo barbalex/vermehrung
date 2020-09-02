@@ -26,7 +26,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  deleted: types.optional(types.maybeNull(types.boolean), false),
+  _deleted: types.optional(types.maybeNull(types.boolean), false),
 })
 
 export const initial = {
@@ -37,6 +37,7 @@ export const initial = {
   beschreibung: null,
   geplant: null,
   datum: null,
+  _deleted: false,
 }
 
 export const empty = {
@@ -47,6 +48,7 @@ export const empty = {
   beschreibung: null,
   geplant: null,
   datum: null,
+  _deleted: false,
 }
 
 export const simpleTypes = {
@@ -57,4 +59,5 @@ export const simpleTypes = {
   beschreibung: 'string',
   geplant: 'boolean',
   datum: 'date',
+  _deleted: 'boolean',
 }

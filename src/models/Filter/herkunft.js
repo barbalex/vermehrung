@@ -30,7 +30,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  deleted: types.optional(types.maybeNull(types.boolean), false),
+  _deleted: types.optional(types.maybeNull(types.boolean), false),
 })
 
 export const initial = {
@@ -41,7 +41,7 @@ export const initial = {
   kanton: null,
   land: null,
   bemerkungen: null,
-  deleted: false,
+  _deleted: false,
 }
 
 export const empty = {
@@ -52,7 +52,7 @@ export const empty = {
   kanton: null,
   land: null,
   bemerkungen: null,
-  deleted: false,
+  _deleted: false,
 }
 
 export const simpleTypes = {
@@ -63,5 +63,5 @@ export const simpleTypes = {
   kanton: 'string',
   land: 'string',
   bemerkungen: 'string',
-  deleted: 'boolean',
+  _deleted: 'boolean',
 }
