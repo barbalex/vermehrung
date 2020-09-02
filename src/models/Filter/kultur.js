@@ -25,6 +25,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  deleted: types.optional(types.maybeNull(types.boolean), false),
 })
 
 export const initial = {
@@ -37,6 +38,7 @@ export const initial = {
   von_anzahl_individuen: null,
   aktiv: true,
   bemerkungen: null,
+  deleted: false,
 }
 
 export const empty = {
@@ -49,6 +51,7 @@ export const empty = {
   von_anzahl_individuen: null,
   aktiv: true,
   bemerkungen: null,
+  deleted: false,
 }
 
 export const simpleTypes = {
@@ -61,4 +64,5 @@ export const simpleTypes = {
   von_anzahl_individuen: 'number',
   aktiv: 'boolean',
   bemerkungen: 'string',
+  deleted: 'boolean',
 }
