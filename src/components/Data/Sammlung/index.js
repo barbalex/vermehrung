@@ -131,7 +131,6 @@ const Sammlung = ({
     personsSorted,
     sammlungsFiltered,
     sammlungsSorted,
-    showDeleted,
     errors,
     unsetError,
     setError,
@@ -271,6 +270,8 @@ const Sammlung = ({
   )
   const showToHe = activeNodeArray[0] === 'Sammlungen'
   const showToLi = activeNodeArray[0] !== 'Personen'
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 
