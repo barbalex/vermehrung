@@ -62,10 +62,8 @@ const Kultur = ({
     artsSorted,
     gartensSorted,
     herkunftsSorted,
-    showDeleted,
     errors,
     unsetError,
-    hideInactive,
     artHerkuenfte,
   } = store
 
@@ -79,12 +77,12 @@ const Kultur = ({
   const art_id = row?.art_id
   const herkunft_id = row?.herkunft_id
   const artHerkunftInGartenNichtZl = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
+    .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => !k.zwischenlager)
   const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
+    .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => k.zwischenlager)
@@ -239,6 +237,8 @@ const Kultur = ({
   )
     ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
     : errors.kultur?.herkunft_id
+
+  const showDeleted = showFilter || row._deleted
 
   return (
     <ErrorBoundary>

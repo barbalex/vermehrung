@@ -112,7 +112,6 @@ const Teilkultur = ({
     online,
     kulturIdInActiveNodeArray,
     kultursSorted,
-    showDeleted,
     teilkultursSorted,
     teilkultursFiltered,
     errors,
@@ -189,6 +188,8 @@ const Teilkultur = ({
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
     [activeNodeArray, setActiveNodeArray],
   )
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 

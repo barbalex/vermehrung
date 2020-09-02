@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
@@ -108,7 +108,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
             <FormControlLabel
               value={tz_teilkultur_id === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tz_teilkultur_id}
                   onClick={saveToDb}
@@ -123,7 +123,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
             <FormControlLabel
               value={tz_anzahl_mutterpflanzen === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tz_anzahl_mutterpflanzen}
                   onClick={saveToDb}
@@ -138,7 +138,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
             <FormControlLabel
               value={tz_andere_menge === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tz_andere_menge}
                   onClick={saveToDb}
@@ -155,7 +155,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
                 tz_auspflanzbereit_beschreibung === true ? 'true' : 'false'
               }
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tz_auspflanzbereit_beschreibung}
                   onClick={saveToDb}
@@ -170,7 +170,7 @@ const SettingsTeilzaehlungen = ({ kulturId }) => {
             <FormControlLabel
               value={tz_bemerkungen === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tz_bemerkungen}
                   onClick={saveToDb}

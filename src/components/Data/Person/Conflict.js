@@ -197,7 +197,6 @@ const PersonConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
-    //console.log('Person Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_person_rev_one({
         object: newObject,
@@ -244,8 +243,6 @@ const PersonConflict = ({
   const onClickSchliessen = useCallback(() => setActiveConflict(null), [
     setActiveConflict,
   ])
-
-  //console.log('Person Conflict', { dataArray, row, revRow })
 
   return (
     <Conflict

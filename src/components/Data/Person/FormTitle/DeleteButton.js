@@ -24,7 +24,7 @@ const Title = styled.div`
 
 const PersonDeleteButton = ({ row }) => {
   const store = useContext(StoreContext)
-  const { showDeleted } = store
+  const { filter } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -43,17 +43,17 @@ const PersonDeleteButton = ({ row }) => {
   const remove = useCallback(async () => {
     row.delete()
     setAnchorEl(null)
-    if (!showDeleted) {
+    if (filter.person._deleted === false) {
       // need to remove openNode from openNodes
       removeOpenNodeWithChildren(activeNodeArray)
       setActiveNodeArray(activeNodeArray.slice(0, -1))
     }
   }, [
     activeNodeArray,
+    filter.person._deleted,
     removeOpenNodeWithChildren,
     row,
     setActiveNodeArray,
-    showDeleted,
   ])
 
   return (

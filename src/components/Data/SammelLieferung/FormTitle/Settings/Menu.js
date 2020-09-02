@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../../models/reactUtils'
@@ -52,7 +52,7 @@ const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
         <FormControlLabel
           value={sl_show_empty_when_next_to_li === true ? 'true' : 'false'}
           control={
-            <Radio
+            <Checkbox
               color="primary"
               checked={sl_show_empty_when_next_to_li}
               onClick={saveToDb}
@@ -67,7 +67,7 @@ const SettingsSammelLieferungMenu = ({ anchorEl, setAnchorEl }) => {
         <FormControlLabel
           value={sl_auto_copy_edits === true ? 'true' : 'false'}
           control={
-            <Radio
+            <Checkbox
               color="primary"
               checked={sl_auto_copy_edits}
               onClick={saveToDb}

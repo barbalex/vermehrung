@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
 
@@ -67,7 +67,12 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
         <FormControlLabel
           value={tk === true ? 'true' : 'false'}
           control={
-            <Radio color="primary" checked={tk} onClick={saveToDb} name="tk" />
+            <Checkbox
+              color="primary"
+              checked={tk}
+              onClick={saveToDb}
+              name="tk"
+            />
           }
           label="Mit Teil-Kulturen arbeiten"
           labelPlacement="end"

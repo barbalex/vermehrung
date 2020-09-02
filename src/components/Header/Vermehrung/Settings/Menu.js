@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -22,22 +22,52 @@ const Title = styled.div`
 
 const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
-  const { showDeleted, setShowDeleted, setHideInactive, hideInactive } = store
+  const { filter } = store
 
   const onClickShowDeleted = useCallback(
-    async (event) => {
-      const value = event.target.value === 'false'
-      setShowDeleted(value)
+    (event) => {
+      const value = event.target.checked ? false : null
+      filter.setValue({ table: 'art', key: '_deleted', value })
+      filter.setValue({ table: 'event', key: '_deleted', value })
+      filter.setValue({ table: 'garten', key: '_deleted', value })
+      filter.setValue({ table: 'herkunft', key: '_deleted', value })
+      filter.setValue({ table: 'kultur', key: '_deleted', value })
+      filter.setValue({ table: 'lieferung', key: '_deleted', value })
+      filter.setValue({ table: 'person', key: '_deleted', value })
+      filter.setValue({ table: 'sammel_lieferung', key: '_deleted', value })
+      filter.setValue({ table: 'sammlung', key: '_deleted', value })
+      filter.setValue({ table: 'teilkultur', key: '_deleted', value })
+      filter.setValue({ table: 'teilzaehlung', key: '_deleted', value })
+      filter.setValue({ table: 'zaehlung', key: '_deleted', value })
     },
-    [setShowDeleted],
+    [filter],
   )
   const onClickShowActive = useCallback(
-    async (event) => {
-      const value = event.target.value === 'false'
-      setHideInactive(value)
+    (event) => {
+      const value = event.target.checked ? false : null
+      filter.setValue({ table: 'garten', key: 'aktiv', value })
+      filter.setValue({ table: 'kultur', key: 'aktiv', value })
+      filter.setValue({ table: 'person', key: 'aktiv', value })
     },
-    [setHideInactive],
+    [filter],
   )
+  const activeValue =
+    filter.garten.aktiv === false &&
+    filter.kultur.aktiv === false &&
+    filter.person.aktiv === false
+  const deletedValue =
+    filter.art._deleted === false &&
+    filter.event._deleted === false &&
+    filter.garten._deleted === false &&
+    filter.herkunft._deleted === false &&
+    filter.kultur._deleted === false &&
+    filter.lieferung._deleted === false &&
+    filter.person._deleted === false &&
+    filter.sammel_lieferung._deleted === false &&
+    filter.sammlung._deleted === false &&
+    filter.teilkultur._deleted === false &&
+    filter.teilzaehlung._deleted === false &&
+    filter.zaehlung._deleted === false
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
 
@@ -53,12 +83,11 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
       </TitleRow>
       <MenuItem>
         <FormControlLabel
-          value={showDeleted === true ? 'true' : 'false'}
           control={
-            <Radio
+            <Checkbox
               color="primary"
-              checked={!showDeleted}
-              onClick={onClickShowDeleted}
+              checked={deletedValue}
+              onChange={onClickShowDeleted}
             />
           }
           label="Gelöschte Datensätze verbergen"
@@ -67,12 +96,12 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
       </MenuItem>
       <MenuItem>
         <FormControlLabel
-          value={hideInactive === true ? 'true' : 'false'}
           control={
-            <Radio
+            <Checkbox
               color="primary"
-              checked={hideInactive}
-              onClick={onClickShowActive}
+              checked={activeValue}
+              onChange={onClickShowActive}
+              name="why-is-this-not-working"
             />
           }
           label="Inaktive Gärten, Kulturen und Personen verbergen"

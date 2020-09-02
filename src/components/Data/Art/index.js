@@ -110,7 +110,6 @@ const Art = ({
     artsSorted,
     filter,
     online,
-    showDeleted,
     tree,
     aeArtsSorted,
     errors,
@@ -186,6 +185,8 @@ const Art = ({
     }
     return aeArtsSorted.filter((a) => !aeArtIdsNotToShow.includes(a.id))
   }
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 
