@@ -62,7 +62,6 @@ const Kultur = ({
     artsSorted,
     gartensSorted,
     herkunftsSorted,
-    showDeleted,
     errors,
     unsetError,
     artHerkuenfte,
@@ -238,6 +237,8 @@ const Kultur = ({
   )
     ? 'Von einer Herkunft einer Art dürfen in einem Garten maximal zwei aktive Kulturen existieren: eine "normale" und ein Zwischenlager'
     : errors.kultur?.herkunft_id
+
+  const showDeleted = showFilter || row._deleted
 
   return (
     <ErrorBoundary>
