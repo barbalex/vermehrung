@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
@@ -111,7 +111,7 @@ const SettingsTree = () => {
             <FormControlLabel
               value={tree_kultur === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tree_kultur}
                   onClick={saveToDb}
@@ -126,7 +126,7 @@ const SettingsTree = () => {
             <FormControlLabel
               value={tree_teilkultur === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tree_teilkultur}
                   onClick={saveToDb}
@@ -141,7 +141,7 @@ const SettingsTree = () => {
             <FormControlLabel
               value={tree_zaehlung === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tree_zaehlung}
                   onClick={saveToDb}
@@ -156,7 +156,7 @@ const SettingsTree = () => {
             <FormControlLabel
               value={tree_lieferung === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tree_lieferung}
                   onClick={saveToDb}
@@ -171,7 +171,7 @@ const SettingsTree = () => {
             <FormControlLabel
               value={tree_event === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={tree_event}
                   onClick={saveToDb}

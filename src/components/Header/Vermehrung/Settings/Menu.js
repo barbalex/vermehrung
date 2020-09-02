@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 
 import { StoreContext } from '../../../../models/reactUtils'
@@ -22,34 +22,29 @@ const Title = styled.div`
 
 const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
-  const { showDeleted, setShowDeleted, filter } = store
+  const { filter } = store
 
   const onClickShowDeleted = useCallback(
-    async (event) => {
-      const value = event.target.value === 'false' ? true : null
-      console.log('Menu, onClickShowDeleted', {
-        value,
-        eventValue: event.target.value,
-      })
-      filter.setValue({ table: 'art', key: 'deleted', value })
-      filter.setValue({ table: 'event', key: 'deleted', value })
-      filter.setValue({ table: 'garten', key: 'deleted', value })
-      filter.setValue({ table: 'herkunft', key: 'deleted', value })
-      filter.setValue({ table: 'kultur', key: 'deleted', value })
-      filter.setValue({ table: 'lieferung', key: 'deleted', value })
-      filter.setValue({ table: 'person', key: 'deleted', value })
-      filter.setValue({ table: 'sammel_lieferung', key: 'deleted', value })
-      filter.setValue({ table: 'sammlung', key: 'deleted', value })
-      filter.setValue({ table: 'teilkultur', key: 'deleted', value })
-      filter.setValue({ table: 'teilzaehlung', key: 'deleted', value })
-      filter.setValue({ table: 'zaehlung', key: 'deleted', value })
-      //setShowDeleted(value)
+    (event) => {
+      const value = event.target.checked ? false : null
+      filter.setValue({ table: 'art', key: '_deleted', value })
+      filter.setValue({ table: 'event', key: '_deleted', value })
+      filter.setValue({ table: 'garten', key: '_deleted', value })
+      filter.setValue({ table: 'herkunft', key: '_deleted', value })
+      filter.setValue({ table: 'kultur', key: '_deleted', value })
+      filter.setValue({ table: 'lieferung', key: '_deleted', value })
+      filter.setValue({ table: 'person', key: '_deleted', value })
+      filter.setValue({ table: 'sammel_lieferung', key: '_deleted', value })
+      filter.setValue({ table: 'sammlung', key: '_deleted', value })
+      filter.setValue({ table: 'teilkultur', key: '_deleted', value })
+      filter.setValue({ table: 'teilzaehlung', key: '_deleted', value })
+      filter.setValue({ table: 'zaehlung', key: '_deleted', value })
     },
     [filter],
   )
   const onClickShowActive = useCallback(
-    async (event) => {
-      const value = event.target.value === 'false' ? true : null
+    (event) => {
+      const value = event.target.checked ? false : null
       filter.setValue({ table: 'garten', key: 'aktiv', value })
       filter.setValue({ table: 'kultur', key: 'aktiv', value })
       filter.setValue({ table: 'person', key: 'aktiv', value })
@@ -57,26 +52,24 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
     [filter],
   )
   const activeValue =
-    filter.garten.aktiv === true &&
-    filter.kultur.aktiv === true &&
-    filter.person.aktiv === true
+    filter.garten.aktiv === false &&
+    filter.kultur.aktiv === false &&
+    filter.person.aktiv === false
   const deletedValue =
-    filter.art._deleted === true &&
-    filter.event.aktiv === true &&
-    filter.garten.aktiv === true &&
-    filter.herkunft.aktiv === true &&
-    filter.kultur.aktiv === true &&
-    filter.lieferung.aktiv === true &&
-    filter.person.aktiv === true &&
-    filter.sammel_lieferung.aktiv === true &&
-    filter.sammlung.aktiv === true &&
-    filter.teilkultur.aktiv === true &&
-    filter.teilzaehlung.aktiv === true &&
-    filter.zaehlung.aktiv === true
+    filter.art._deleted === false &&
+    filter.event._deleted === false &&
+    filter.garten._deleted === false &&
+    filter.herkunft._deleted === false &&
+    filter.kultur._deleted === false &&
+    filter.lieferung._deleted === false &&
+    filter.person._deleted === false &&
+    filter.sammel_lieferung._deleted === false &&
+    filter.sammlung._deleted === false &&
+    filter.teilkultur._deleted === false &&
+    filter.teilzaehlung._deleted === false &&
+    filter.zaehlung._deleted === false
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
-
-  console.log('Menu', { filter, deletedValue })
 
   return (
     <Menu
@@ -90,12 +83,11 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
       </TitleRow>
       <MenuItem>
         <FormControlLabel
-          value={deletedValue === true ? 'true' : 'false'}
           control={
-            <Radio
+            <Checkbox
               color="primary"
               checked={deletedValue}
-              onClick={onClickShowDeleted}
+              onChange={onClickShowDeleted}
             />
           }
           label="Gelöschte Datensätze verbergen"
@@ -104,12 +96,12 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
       </MenuItem>
       <MenuItem>
         <FormControlLabel
-          value={activeValue === true ? 'true' : 'false'}
           control={
-            <Radio
+            <Checkbox
               color="primary"
               checked={activeValue}
-              onClick={onClickShowActive}
+              onChange={onClickShowActive}
+              name="why-is-this-not-working"
             />
           }
           label="Inaktive Gärten, Kulturen und Personen verbergen"
