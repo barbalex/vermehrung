@@ -85,7 +85,6 @@ const SammelLieferung = ({
     isPrint,
     online,
     userPersonOption,
-    showDeleted,
     errors,
     unsetError,
   } = store
@@ -162,6 +161,8 @@ const SammelLieferung = ({
     (fields) => fields.some((f) => ifNeeded(f)),
     [ifNeeded],
   )
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 
