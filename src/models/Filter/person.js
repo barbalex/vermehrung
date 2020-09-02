@@ -62,7 +62,7 @@ export const type = types.model({
   kommerziell: types.optional(types.maybeNull(types.boolean), null),
   info: types.optional(types.maybeNull(types.boolean), null),
   aktiv: types.optional(types.maybeNull(types.boolean), true),
-  deleted: types.optional(types.maybeNull(types.boolean), false),
+  _deleted: types.optional(types.maybeNull(types.boolean), false),
 })
 
 export const initial = {
@@ -85,7 +85,7 @@ export const initial = {
   kommerziell: null,
   info: null,
   aktiv: true,
-  deleted: false,
+  _deleted: false,
 }
 
 export const empty = {
@@ -108,7 +108,7 @@ export const empty = {
   kommerziell: null,
   info: null,
   aktiv: null,
-  deleted: false,
+  _deleted: false,
 }
 
 export const simpleTypes = {
@@ -131,5 +131,5 @@ export const simpleTypes = {
   kommerziell: 'boolean',
   info: 'boolean',
   aktiv: 'boolean',
-  deleted: 'boolean',
+  _deleted: 'boolean',
 }
