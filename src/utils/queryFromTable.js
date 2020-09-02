@@ -1,13 +1,12 @@
 import types from '../models/Filter/simpleTypes'
 
 export default ({ store, table, filter: filterPassed = {} }) => {
-  const { filter: storeFilter, deletedTableFilter, inactiveFilter } = store
+  const { filter: storeFilter, deletedTableFilter } = store
   const baseFilter = { id: { _is_null: false } }
   const filter = {
     ...baseFilter,
     ...filterPassed,
     ...deletedTableFilter,
-    ...(['person', 'garten', 'kultur'].includes(table) ? inactiveFilter : {}),
   }
 
   if (!storeFilter[table]) return filter

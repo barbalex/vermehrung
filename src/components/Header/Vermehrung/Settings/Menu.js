@@ -22,7 +22,7 @@ const Title = styled.div`
 
 const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
   const store = useContext(StoreContext)
-  const { showDeleted, setShowDeleted, setHideInactive, hideInactive } = store
+  const { showDeleted, setShowDeleted, filter } = store
 
   const onClickShowDeleted = useCallback(
     async (event) => {
@@ -33,13 +33,25 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
   )
   const onClickShowActive = useCallback(
     async (event) => {
-      const value = event.target.value === 'false'
-      setHideInactive(value)
+      const value = event.target.value === 'false' ? true : null
+      console.log('Menu, onClickShowActive', {
+        value,
+        eventValue: event.target.value,
+      })
+      filter.setValue({ table: 'garten', key: 'aktiv', value })
+      filter.setValue({ table: 'kultur', key: 'aktiv', value })
+      filter.setValue({ table: 'person', key: 'aktiv', value })
     },
-    [setHideInactive],
+    [filter],
   )
+  const activeValue =
+    filter.garten.aktiv === true &&
+    filter.kultur.aktiv === true &&
+    filter.person.aktiv === true
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
+
+  console.log('Menu', { filter, activeValue })
 
   return (
     <Menu
@@ -67,11 +79,11 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
       </MenuItem>
       <MenuItem>
         <FormControlLabel
-          value={hideInactive === true ? 'true' : 'false'}
+          value={activeValue === true ? 'true' : 'false'}
           control={
             <Radio
               color="primary"
-              checked={hideInactive}
+              checked={activeValue}
               onClick={onClickShowActive}
             />
           }

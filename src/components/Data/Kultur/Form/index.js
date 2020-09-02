@@ -65,7 +65,6 @@ const Kultur = ({
     showDeleted,
     errors,
     unsetError,
-    hideInactive,
     artHerkuenfte,
   } = store
 
@@ -79,12 +78,12 @@ const Kultur = ({
   const art_id = row?.art_id
   const herkunft_id = row?.herkunft_id
   const artHerkunftInGartenNichtZl = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
+    .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => !k.zwischenlager)
   const artHerkunftZwischenlagerInGarten = (row?.garten?.kulturs ?? [])
-    .filter((k) => (hideInactive ? k.aktiv : true))
+    .filter((k) => (filter.garten.aktiv === true ? k.aktiv : true))
     // only consider kulturen with both art and herkunft chosen
     .filter((o) => !!o.art_id && !!o.herkunft_id)
     .filter((k) => k.zwischenlager)
