@@ -9,6 +9,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
+  deleted: types.optional(types.maybeNull(types.boolean), false),
 })
 
 export const initial = {
