@@ -26,18 +26,30 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
 
   const onClickShowDeleted = useCallback(
     async (event) => {
-      const value = event.target.value === 'false'
-      setShowDeleted(value)
+      const value = event.target.value === 'false' ? true : null
+      console.log('Menu, onClickShowDeleted', {
+        value,
+        eventValue: event.target.value,
+      })
+      filter.setValue({ table: 'art', key: 'deleted', value })
+      filter.setValue({ table: 'event', key: 'deleted', value })
+      filter.setValue({ table: 'garten', key: 'deleted', value })
+      filter.setValue({ table: 'herkunft', key: 'deleted', value })
+      filter.setValue({ table: 'kultur', key: 'deleted', value })
+      filter.setValue({ table: 'lieferung', key: 'deleted', value })
+      filter.setValue({ table: 'person', key: 'deleted', value })
+      filter.setValue({ table: 'sammel_lieferung', key: 'deleted', value })
+      filter.setValue({ table: 'sammlung', key: 'deleted', value })
+      filter.setValue({ table: 'teilkultur', key: 'deleted', value })
+      filter.setValue({ table: 'teilzaehlung', key: 'deleted', value })
+      filter.setValue({ table: 'zaehlung', key: 'deleted', value })
+      //setShowDeleted(value)
     },
-    [setShowDeleted],
+    [filter],
   )
   const onClickShowActive = useCallback(
     async (event) => {
       const value = event.target.value === 'false' ? true : null
-      console.log('Menu, onClickShowActive', {
-        value,
-        eventValue: event.target.value,
-      })
       filter.setValue({ table: 'garten', key: 'aktiv', value })
       filter.setValue({ table: 'kultur', key: 'aktiv', value })
       filter.setValue({ table: 'person', key: 'aktiv', value })
@@ -48,10 +60,23 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
     filter.garten.aktiv === true &&
     filter.kultur.aktiv === true &&
     filter.person.aktiv === true
+  const deletedValue =
+    filter.art._deleted === true &&
+    filter.event.aktiv === true &&
+    filter.garten.aktiv === true &&
+    filter.herkunft.aktiv === true &&
+    filter.kultur.aktiv === true &&
+    filter.lieferung.aktiv === true &&
+    filter.person.aktiv === true &&
+    filter.sammel_lieferung.aktiv === true &&
+    filter.sammlung.aktiv === true &&
+    filter.teilkultur.aktiv === true &&
+    filter.teilzaehlung.aktiv === true &&
+    filter.zaehlung.aktiv === true
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
 
-  console.log('Menu', { filter, activeValue })
+  console.log('Menu', { filter, deletedValue })
 
   return (
     <Menu
@@ -65,11 +90,11 @@ const SettingsOverallMenu = ({ anchorEl, setAnchorEl }) => {
       </TitleRow>
       <MenuItem>
         <FormControlLabel
-          value={showDeleted === true ? 'true' : 'false'}
+          value={deletedValue === true ? 'true' : 'false'}
           control={
             <Radio
               color="primary"
-              checked={!showDeleted}
+              checked={deletedValue}
               onClick={onClickShowDeleted}
             />
           }
