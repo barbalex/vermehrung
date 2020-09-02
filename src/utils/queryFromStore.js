@@ -61,6 +61,7 @@ export default ({ store, table }) => {
 
   const test = (val) => {
     const testArray = filterValues.map(([key, filterValue]) => {
+      if (filterValue === null) return true
       const type = types[table][key] || 'string'
       const value = val[key]
       if (type === 'string' && value) {
