@@ -114,7 +114,6 @@ const Garten = ({
     userPersonOption,
     personIdInActiveNodeArray,
     personsSorted,
-    showDeleted,
     errors,
     unsetError,
     insertGvRev,
@@ -194,6 +193,8 @@ const Garten = ({
     () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
     [activeNodeArray, setActiveNodeArray],
   )
+
+  const showDeleted = showFilter || row._deleted
 
   if (!row || (!showFilter && filter.show)) return null
 
