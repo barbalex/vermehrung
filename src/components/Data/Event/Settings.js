@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import { FaCog } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import styled from 'styled-components'
@@ -102,7 +102,7 @@ const SettingsEvents = ({ kulturId }) => {
             <FormControlLabel
               value={ev_teilkultur_id === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ev_teilkultur_id}
                   onClick={saveToDb}
@@ -117,7 +117,7 @@ const SettingsEvents = ({ kulturId }) => {
             <FormControlLabel
               value={ev_person_id === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ev_person_id}
                   onClick={saveToDb}
@@ -132,7 +132,7 @@ const SettingsEvents = ({ kulturId }) => {
             <FormControlLabel
               value={ev_datum === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ev_datum}
                   onClick={saveToDb}
@@ -147,7 +147,7 @@ const SettingsEvents = ({ kulturId }) => {
             <FormControlLabel
               value={ev_geplant === true ? 'true' : 'false'}
               control={
-                <Radio
+                <Checkbox
                   color="primary"
                   checked={ev_geplant}
                   onClick={saveToDb}
