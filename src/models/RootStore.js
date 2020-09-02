@@ -82,7 +82,6 @@ export const RootStore = RootStoreBase.props({
   // this is _after_ user is set so need another variable
   gettingAuthUser: types.optional(types.boolean, true),
   authorizing: types.optional(types.boolean, true),
-  showDeleted: types.optional(types.boolean, false),
   initialDataQueried: types.optional(types.boolean, false),
   errors: types.optional(Errors, defaultErrors),
   diffConflict: types.optional(types.boolean, true),
@@ -239,9 +238,6 @@ export const RootStore = RootStoreBase.props({
         const model = self[`${table}s`].get(id)
         if (!model) return
         self[`${table}s`].set(id, { ...model, ...values })
-      },
-      setShowDeleted(val) {
-        self.showDeleted = val
       },
       removeQueuedQueryById(id) {
         self.queuedQueries.delete(id)
@@ -1740,22 +1736,27 @@ export const RootStore = RootStoreBase.props({
     },
     get artsSorted() {
       return [...self.arts.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.art._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(artSort)
     },
     get artQksSorted() {
       return [...self.art_qks.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => notDeletedOrHasConflict(a))
         .sort(qkSort)
     },
     get avsSorted() {
       return [...self.avs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => notDeletedOrHasConflict(a))
         .sort(avSort)
     },
     get gvsSorted() {
       return [...self.gvs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => notDeletedOrHasConflict(a))
         .sort(gvSort)
     },
     get eventFilter() {
@@ -1766,7 +1767,12 @@ export const RootStore = RootStoreBase.props({
     },
     get eventsSorted() {
       return [...self.events.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.event._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(eventSort)
     },
     get gartenFilter() {
@@ -1777,7 +1783,12 @@ export const RootStore = RootStoreBase.props({
     },
     get gartensSorted() {
       return [...self.gartens.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.garten._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .filter((a) =>
           self.filter.garten.aktiv === true ? a.aktiv === true : true,
         )
@@ -1791,7 +1802,12 @@ export const RootStore = RootStoreBase.props({
     },
     get herkunftsSorted() {
       return [...self.herkunfts.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.herkunft._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(herkunftSort)
     },
     get kulturFilter() {
@@ -1802,7 +1818,12 @@ export const RootStore = RootStoreBase.props({
     },
     get kultursSorted() {
       return [...self.kulturs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.kultur._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .filter((a) =>
           self.filter.kultur.aktiv === true ? a.aktiv === true : true,
         )
@@ -1816,7 +1837,12 @@ export const RootStore = RootStoreBase.props({
     },
     get lieferungsSorted() {
       return [...self.lieferungs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.lieferung._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(lieferungSort)
     },
     get personFilter() {
@@ -1827,7 +1853,12 @@ export const RootStore = RootStoreBase.props({
     },
     get personsSorted() {
       return [...self.persons.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.person._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .filter((a) =>
           self.filter.person.aktiv === true ? a.aktiv === true : true,
         )
@@ -1835,7 +1866,7 @@ export const RootStore = RootStoreBase.props({
     },
     get kulturQksSorted() {
       return [...self.kultur_qks.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => notDeletedOrHasConflict(a))
         .sort(qkSort)
     },
     get sammelLieferungFilter() {
@@ -1846,7 +1877,12 @@ export const RootStore = RootStoreBase.props({
     },
     get sammelLieferungsSorted() {
       return [...self.sammel_lieferungs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.sammel_lieferung._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(lieferungSort)
     },
     get sammlungFilter() {
@@ -1857,7 +1893,12 @@ export const RootStore = RootStoreBase.props({
     },
     get sammlungsSorted() {
       return [...self.sammlungs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.sammlung._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(sammlungSort)
     },
     get teilkulturFilter() {
@@ -1868,12 +1909,22 @@ export const RootStore = RootStoreBase.props({
     },
     get teilkultursSorted() {
       return [...self.teilkulturs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.teilkultur._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(teilkulturSort)
     },
     get teilzaehlungsSorted() {
       return [...self.teilzaehlungs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.teilzaehlung._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(teilzaehlungSort)
     },
     get userRolesSorted() {
@@ -1887,20 +1938,13 @@ export const RootStore = RootStoreBase.props({
     },
     get zaehlungsSorted() {
       return [...self.zaehlungs.values()]
-        .filter((a) => self.showDeleted || notDeletedOrHasConflict(a))
+        .filter((a) => {
+          if (self.filter.zaehlung._deleted === false) {
+            return notDeletedOrHasConflict(a)
+          }
+          return true
+        })
         .sort(zaehlungSort)
-    },
-    get deletedTableFilter() {
-      if (self.showDeleted) return true
-      return {
-        _or: [
-          { _deleted: { _eq: false } },
-          // filtering for empty array, see: https://stackoverflow.com/a/737678/712005
-          {
-            _and: [{ _deleted: { _eq: true } }, { _conflicts: { _neq: '{}' } }],
-          },
-        ],
-      }
     },
     get loadingInitialData() {
       return [
