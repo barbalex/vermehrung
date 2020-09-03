@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
@@ -83,7 +83,7 @@ const sliderSettings = {
   infinite: false,
 }
 
-const KulturHistory = ({ row }) => {
+const KulturHistory = ({ row, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
 
   // need to use this query to ensure that the person's name is queried
@@ -104,8 +104,6 @@ const KulturHistory = ({ row }) => {
     [row._rev, row._revisions, store.kultur_revs],
   )
 
-  const onClickUebernehmen = useCallback(() => console.log('TODO!'), [])
-
   if (loading) return 'Lade...'
 
   if (error) {
@@ -120,7 +118,7 @@ const KulturHistory = ({ row }) => {
             key={row._rev}
             revRow={r}
             row={row}
-            onClickUebernehmen={onClickUebernehmen}
+            historyTakeoverCallback={historyTakeoverCallback}
           />
         ))}
       </Slider>
