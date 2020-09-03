@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import toStringIfPossible from '../../../utils/toStringIfPossible'
 import { StoreContext } from '../../../models/reactUtils'
+import Spinner from '../../shared/Spinner'
 
 const Row = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const ConflictData = ({ dataArray, loading }) => {
   const store = useContext(StoreContext)
   const { diffConflict } = store
 
-  if (loading) return 'Lade...'
+  if (loading) return <Spinner message="lade Daten" />
 
   return dataArray.map((d, index) => {
     // need to use get to enable passing paths as key, for instance 'person.name'
@@ -41,8 +42,10 @@ const ConflictData = ({ dataArray, loading }) => {
     let inputB = toStringIfPossible(d.valueInRev)
     // explicitly show when only one of the values is empty
     if (inputA !== inputB) {
-      inputA = inputA ?? '(kein Wert)'
-      inputB = inputB ?? '(kein Wert)'
+      inputA =
+        !!inputA || inputA === 0 || inputA === false ? inputA : '(nichts)'
+      inputB =
+        !!inputB || inputB === 0 || inputB === false ? inputB : '(nichts)'
     }
 
     const showDiff =
