@@ -77,6 +77,9 @@ const Container = styled.div`
     bottom: -10px;
   }
 `
+const OtherContainer = styled.div`
+  padding: 25px;
+`
 
 const sliderSettings = {
   dots: true,
@@ -104,10 +107,10 @@ const KulturHistory = ({ row, historyTakeoverCallback }) => {
     [row._rev, row._revisions, store.kultur_revs],
   )
 
-  if (loading) return 'Lade...'
+  if (loading) return <OtherContainer>Lade...</OtherContainer>
 
   if (error) {
-    return <Container>{error.message}</Container>
+    return <OtherContainer>{error.message}</OtherContainer>
   }
 
   return (
