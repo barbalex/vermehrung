@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import md5 from 'blueimp-md5'
 import { v1 as uuidv1 } from 'uuid'
 
-import History from '../../../shared/History'
-import herkunftLabelFromHerkunft from '../Form/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from '../Form/gartenLabelFromGarten'
-import { StoreContext } from '../../../../models/reactUtils'
-import checkForOnlineError from '../../../../utils/checkForOnlineError'
-import toPgArray from '../../../../utils/toPgArray'
+import History from '../../../../shared/History'
+import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
+import gartenLabelFromGarten from './gartenLabelFromGarten'
+import { StoreContext } from '../../../../../models/reactUtils'
+import checkForOnlineError from '../../../../../utils/checkForOnlineError'
+import toPgArray from '../../../../../utils/toPgArray'
 
 const HistoryRow = ({ row, revRow, historyTakeoverCallback }) => {
   const store = useContext(StoreContext)
