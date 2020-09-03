@@ -22,4 +22,4 @@ Nun öffnet sich rechts der aktuellen Version eine neue Spalte. Sie stellt alle 
 - Mit den Pfeil-Symbolen, Pfeil-Tasten auf der Tastatur oder Wischgesten kann man sich nun Version um Version durch die Historie bewegen
 - Die Punkte zuunterst stellen je eine Version dar. Durch Klick auf einen Punkt navigiert man zur entsprechenden Version
 - Klickt man auf die "wiederherstellen"-Schaltfläche, wird die aktuelle Version durch die historische ersetzt
-- Die "i"-Schaltfläche führt zu dieser Dokumentations-Seite
+- Die "i"-Schaltfläche rechts neben der Versions-Nummer führt zu dieser Dokumentations-Seite
