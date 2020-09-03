@@ -32,8 +32,6 @@ export const teilkultur_revModel = teilkultur_revModelBase.actions((self) => ({
       ort2: self.ort2,
       ort3: self.ort3,
       bemerkungen: self.bemerkungen,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: true,
@@ -41,6 +39,8 @@ export const teilkultur_revModel = teilkultur_revModelBase.actions((self) => ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])

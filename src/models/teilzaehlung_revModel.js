@@ -36,8 +36,6 @@ export const teilzaehlung_revModel = teilzaehlung_revModelBase.actions(
         auspflanzbereit_beschreibung: self.auspflanzbereit_beschreibung,
         bemerkungen: self.bemerkungen,
         prognose_von_tz: self.prognose_von_tz,
-        changed: new window.Date().toISOString(),
-        changed_by: user.email,
         _parent_rev: self._rev,
         _depth: newDepth,
         _deleted: true,
@@ -45,6 +43,8 @@ export const teilzaehlung_revModel = teilzaehlung_revModelBase.actions(
       const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       newObject.id = uuidv1()
+      newObject.changed = new window.Date().toISOString()
+      newObject.changed_by = user.email
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])
