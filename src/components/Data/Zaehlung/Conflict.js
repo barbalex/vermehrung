@@ -7,6 +7,7 @@ import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 
@@ -136,7 +137,6 @@ const ZaehlungConflict = ({
       datum: revRow.datum,
       prognose: revRow.prognose,
       bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -145,6 +145,10 @@ const ZaehlungConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     //console.log('Zaehlung Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_zaehlung_rev_one({
@@ -172,6 +176,7 @@ const ZaehlungConflict = ({
     revRow.zaehlung_id,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])

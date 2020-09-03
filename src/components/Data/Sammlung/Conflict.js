@@ -7,6 +7,7 @@ import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 import herkunftLabelFromHerkunft from './herkunftLabelFromHerkunft'
 
@@ -188,7 +189,6 @@ const SammlungConflict = ({
       geom_point: revRow.geom_point,
       geplant: revRow.geplant,
       bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -197,6 +197,10 @@ const SammlungConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     //console.log('Sammlung Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_sammlung_rev_one({
@@ -232,6 +236,7 @@ const SammlungConflict = ({
     revRow.von_anzahl_individuen,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])
