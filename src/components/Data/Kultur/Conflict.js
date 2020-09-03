@@ -8,8 +8,8 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
 import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
-import herkunftLabelFromHerkunft from './Form/herkunftLabelFromHerkunft'
-import gartenLabelFromGarten from './Form/gartenLabelFromGarten'
+import herkunftLabelFromHerkunft from './History/Row/herkunftLabelFromHerkunft'
+import gartenLabelFromGarten from './History/Row/gartenLabelFromGarten'
 
 const kulturRevQuery = gql`
   query kulturRevForConflictQuery($id: uuid!, $rev: String!) {
