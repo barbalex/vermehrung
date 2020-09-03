@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 
@@ -141,7 +142,6 @@ const TeilkulturConflict = ({
       ort2: revRow.ort2,
       ort3: revRow.ort3,
       bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -150,6 +150,10 @@ const TeilkulturConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     //console.log('Teilkultur Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_teilkultur_rev_one({
@@ -179,6 +183,7 @@ const TeilkulturConflict = ({
     revRow.teilkultur_id,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])

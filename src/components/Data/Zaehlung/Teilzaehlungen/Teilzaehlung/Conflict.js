@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../../../models/reactUtils'
 import checkForOnlineError from '../../../../../utils/checkForOnlineError'
+import toPgArray from '../../../../../utils/toPgArray'
 import Conflict from '../../../../shared/Conflict'
 import teilkulturLabelFromTeilkultur from './teilkulturLabelFromTeilkultur'
 
@@ -150,7 +151,6 @@ const TeilzaehlungConflict = ({
       auspflanzbereit_beschreibung: revRow.auspflanzbereit_beschreibung,
       bemerkungen: revRow.bemerkungen,
       prognose_von_tz: revRow.prognose_von_tz,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -159,6 +159,10 @@ const TeilzaehlungConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     //console.log('Zaehlung Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_teilzaehlung_rev_one({
@@ -191,6 +195,7 @@ const TeilzaehlungConflict = ({
     revRow.zaehlung_id,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])
