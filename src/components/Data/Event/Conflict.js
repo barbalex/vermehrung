@@ -8,6 +8,7 @@ import { useQuery, StoreContext } from '../../../models/reactUtils'
 import Conflict from '../../shared/Conflict'
 import kulturLabelFromKultur from './kulturLabelFromKultur'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 
 const eventRevQuery = gql`
   query eventRevForConflictQuery($id: uuid!, $rev: String!) {
@@ -158,7 +159,6 @@ const EventConflict = ({
       beschreibung: revRow.beschreibung,
       geplant: revRow.geplant,
       datum: revRow.datum,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -167,6 +167,10 @@ const EventConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     try {
       await store.mutateInsert_event_rev_one({
         object: newObject,
@@ -195,6 +199,7 @@ const EventConflict = ({
     revRow.teilkultur_id,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])

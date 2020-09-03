@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 
 const gartenRevQuery = gql`
@@ -133,7 +134,6 @@ const GartenConflict = ({
       geom_point: revRow.geom_point,
       aktiv: revRow.aktiv,
       bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -142,6 +142,10 @@ const GartenConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     //console.log('Garten Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_garten_rev_one({
@@ -173,6 +177,7 @@ const GartenConflict = ({
     revRow.strasse,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])
