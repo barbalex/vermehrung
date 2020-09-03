@@ -45,8 +45,6 @@ export const person_revModel = person_revModelBase
         kommerziell: self.kommerziell,
         info: self.info,
         aktiv: self.aktiv,
-        changed: new window.Date().toISOString(),
-        changed_by: user.email,
         _parent_rev: self._rev,
         _depth: newDepth,
         _deleted: true,
@@ -54,6 +52,8 @@ export const person_revModel = person_revModelBase
       const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       newObject.id = uuidv1()
+      newObject.changed = new window.Date().toISOString()
+      newObject.changed_by = user.email
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])
