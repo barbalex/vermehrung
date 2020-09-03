@@ -28,7 +28,7 @@ Meine erste anspruchsvolle App baute (vor mehr als 10 Jahren) auf der eher unbek
 
 CouchDB und darum herum entstandene Werkzeuge erleben gerade ein revival. "offline" und "live updates" sind neuerdings gefragt.<br/><br/>
 
-CouchDB selbst ist (als no-sql-Datenbank) für apflora.ch und vermehrung.ch nicht geeignet. Ihre Methodik, Konflikte zu managen, kann allerdings auf andere Datenbanken und Apps übertragen werden. Die für vermehrung.ch verwendete Datenbank PostgreSQL ist dafür sehr gut geeignet.<br/><br/>
+CouchDB selbst ist (als no-sql-Datenbank) für apflora.ch und vermehrung.ch nicht geeignet. Ihre Methodik, Konflikte zu managen, kann allerdings auf andere Datenbanken und Apps übertragen werden ([mehr dazu hier](https://hasura.io/blog/couchdb-style-conflict-resolution-rxdb-hasura/#conflict-resolution-impl)). Die für vermehrung.ch verwendete Datenbank PostgreSQL ist dafür sehr gut geeignet.<br/><br/>
 
 Vereinfacht gesagt funktioniert das so:
 
