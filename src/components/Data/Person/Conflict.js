@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 
 const personRevQuery = gql`
@@ -183,7 +184,6 @@ const PersonConflict = ({
       email: revRow.email,
       kein_email: revRow.kein_email,
       bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
       account_id: revRow.account_id,
       user_role: revRow.user_role,
       kommerziell: revRow.kommerziell,
@@ -197,6 +197,10 @@ const PersonConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     try {
       await store.mutateInsert_person_rev_one({
         object: newObject,
@@ -237,6 +241,7 @@ const PersonConflict = ({
     revRow.vorname,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])
