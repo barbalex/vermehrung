@@ -26,8 +26,6 @@ export const gv_revModel = gv_revModelBase.actions((self) => ({
       gv_id: self.gv_id,
       garten_id: self.garten_id,
       person_id: self.person_id,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: true,
@@ -35,6 +33,8 @@ export const gv_revModel = gv_revModelBase.actions((self) => ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
