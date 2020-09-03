@@ -77,8 +77,6 @@ const Kultur = ({
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
-  console.log('Kultur, row:', row)
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
