@@ -1,7 +1,7 @@
 ---
-path: "/Dokumentation/offline-wie"
-date: "2020-06-28"
-title: "Offline: Wie es funktioniert"
+path: '/Dokumentation/offline-wie'
+date: '2020-09-03'
+title: 'Offline: Wie es funktioniert'
 sort1: 24
 ---
 
@@ -12,6 +12,7 @@ Schon lange würden wir in apflora.ch gerne offline arbeiten können. In vermehr
 Das grösste Problem von Offline-Apps ist der Umgang mit Konflikten. Ist eine App offline, weiss die Benutzerin direkt nach der Speicherung eines Datensatzes (= "Operation") nicht, ob alles geklappt hat. Oder jemand anderes am selben Datensatz gearbeitet hat und damit einen Konflikt geschaffen hat. Oder ob jemand nächste Woche bereits geänderte Daten synchronisiert und dabei einen bestehenden Konflikt sichtbar macht. Auch wenn dieselbe Person an mehreren Geräten arbeitet, kann es Konflikte geben.<br/><br/>
 
 Es muss also eine Methode geben:
+
 - Alle Änderungen an Datensätzen jederzeit zurück zu verfolgen
 - Konflikte automatisiert festzustellen
 - Konflikte automatisiert zu lösen
@@ -30,16 +31,19 @@ CouchDB und darum herum entstandene Werkzeuge erleben gerade ein revival. "offli
 CouchDB selbst ist (als no-sql-Datenbank) für apflora.ch und vermehrung.ch nicht geeignet. Ihre Methodik, Konflikte zu managen, kann allerdings auf andere Datenbanken und Apps übertragen werden. Die für vermehrung.ch verwendete Datenbank PostgreSQL ist dafür sehr gut geeignet.<br/><br/>
 
 Vereinfacht gesagt funktioniert das so:
+
 - Datensätze werden nie geändert. Jede Änderung wird in eine neue Version geschrieben
 - Datensätze speichern eine Liste ihrer "Vorfahren" (= frühere Versionen)
 - Wird derselbe Datensatz parallel von mehreren Benutzern verändert, entsteht eine "Ast-Gabel" im "Ahnen-Baum". Der Stamm ist der Ur-Ahne dieses Datensatzes. So entsteht mit der Zeit für jeden Datensatz ein mehr oder weniger stark verästelter Ahnen-Baum
 
 Nun gibt es schlaue Abfragen, welche immer wenn eine Version eintrifft:
+
 - Konflikte finden (Ast-Gabeln)
 - Automatisch einen "Sieger" wählen
 - Eine Liste aller "Sieger" bauen, mit Hinweis auf allfällige Konflikte
 
 **Das Konzept ist**:
+
 - Die Datenbank führt jede Tabelle doppelt:
   - Eine Tabelle mit allen "Versionen"
   - Eine Tabelle mit den "Siegern"
@@ -54,54 +58,45 @@ Nun gibt es schlaue Abfragen, welche immer wenn eine Version eintrifft:
   - Den richtigen Sieger zu bestimmen
   - Informationen aller Konflikte zu vereinigen
 
-Umsetzungstand: umgesetzt.<br/><br/>
-
 ### 2. Warteschlange für Operationen
 
 Die App verpackt alle Daten-Änderungen (Operationen) in "Päckli". Die Päckli werden online sofort verarbeitet bzw. der Datenbank übermittelt. Offline werden sie zwischen-gespeichert. Und verarbeitet, sobald die App wieder online ist.<br/><br/>
 
-Umsetzungstand: umgesetzt.<br/><br/>
-
 ### 3. Daten voraus laden
 
 Bevor die App offline ist, muss sie die für die Feld- bzw. Garten-Arbeit gewünschten Daten geladen haben:
+
 - Die App lädt bei jedem Start alle Daten, welche der jeweilige Benutzer lesen darf
 - Daten werden dauernd live aktualisiert
-
-Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 4. Authentifikation
 
 Offline ist Authentifikation nicht möglich. Die App muss mit den vorhandenen Daten auch dann weiter funktionieren, wenn die Authentifikation während der Offline-Zeit ablaufen sollte. Sobald sie online ist, muss die Authentifikation erneuert werden.<br/><br/>
 
-Umsetzungstand: umgesetzt.<br/><br/>
-
 ### 5. Suche, Auswertungen
 
 Suche, Zeit-Achsen und Exporte sollen auch offline funktionieren.<br/><br/>
-
-Umsetzungstand: umgesetzt.<br/><br/>
 
 ### 6. Dateien
 
 Dateien können offline nicht verwaltet werden, da keine Verbindung zum Speicherdienst besteht. Sie werden daher ausgeblendet.<br/><br/>
 
-Umsetzungstand: umgesetzt.<br/><br/>
-
 ### 7. Schrittweise Umsetzung
 
 Es gibt viel Arbeit. Sehr viel. Beispiele:
+
 - Die Anzahl Tabellen in der Datenbank wird verdoppelt (!)
 - Die Datenbank muss lernen, mit Konflikten umzugehen
 - Die lokale Datenhaltung der App muss von Grund auf neu aufgebaut werden (!)
-- Das Management der Operationen (App), Konflikte und Daten (Datenbank) werden künftig mehr Ressourcen (Leistung und Speicher) beanspruchen
+- Das Management der Operationen (App), Konflikte und Daten (Datenbank) und die Daten-Schnittstelle werden künftig mehr Ressourcen (Leistung und Speicher) beanspruchen
 - Während die neue App aufgebaut wird, muss die bisherige weiter betrieben werden (sobald der Import erfolgt ist)
 
-Weil apflora.ch viel komplexer ist (ca. Faktor 2), werde ich das zuerst in vermehrung.ch einführen. Je nach vorhandenen Kapazitäten kann es eine Weile dauern, bis es umgesetzt ist. Wenn möglich noch 2020.<br/><br/>
+Weil apflora.ch viel komplexer ist (ca. Faktor 2), wurde das zuerst in vermehrung.ch eingeführt.<br/><br/>
 
-Vorläufige Zwischenbilanz: Die Implementation war ca. 6 Wochen Aufwand.<br/><br/>
+Bilanz: Die Implementation war ca. 7 Wochen Aufwand.<br/><br/>
 
 Wenn:
+
 - es sich in vermehrung.ch bewährt,
 - für apflora.ch gewünscht wird,
 - der Aufwand gerechtfertigt und finanziert werden kann,
