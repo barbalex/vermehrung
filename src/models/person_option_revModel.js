@@ -48,8 +48,6 @@ export const person_option_revModel = person_option_revModelBase.actions(
         tree_zaehlung: self.tree_zaehlung,
         tree_lieferung: self.tree_lieferung,
         tree_event: self.tree_event,
-        changed: new window.Date().toISOString(),
-        changed_by: user.email,
         _parent_rev: self._rev,
         _depth: newDepth,
         _deleted: true,
@@ -57,6 +55,8 @@ export const person_option_revModel = person_option_revModelBase.actions(
       const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       newObject.id = uuidv1()
+      newObject.changed = new window.Date().toISOString()
+      newObject.changed_by = user.email
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])

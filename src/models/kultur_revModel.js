@@ -34,8 +34,6 @@ export const kultur_revModel = kultur_revModelBase.actions((self) => ({
       von_anzahl_individuen: self.von_anzahl_individuen,
       bemerkungen: self.bemerkungen,
       aktiv: self.aktiv,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: true,
@@ -43,6 +41,9 @@ export const kultur_revModel = kultur_revModelBase.actions((self) => ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    // do not revision the following fields as this leads to unwanted conflicts
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
