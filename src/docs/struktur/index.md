@@ -1,8 +1,8 @@
 ---
-path: "/Dokumentation/Struktur"
-date: "2020-01-20"
-title: "Daten-Struktur"
-sort1: 26
+path: '/Dokumentation/Struktur'
+date: '2020-01-20'
+title: 'Daten-Struktur'
+sort1: 27
 ---
 
 ![Daten-Struktur](structure.png)
