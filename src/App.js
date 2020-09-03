@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import 'isomorphic-fetch'
-import 'mobx-react-lite/batchingForReactDom'
 import { observer } from 'mobx-react-lite'
 
 import { StoreContext } from './models'
