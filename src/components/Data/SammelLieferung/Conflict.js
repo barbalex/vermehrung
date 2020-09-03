@@ -7,6 +7,7 @@ import moment from 'moment'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 import sammlungLabelFromSammlung from '../Lieferung/Lieferung/sammlungLabelFromSammlung'
 import kulturLabelFromKultur from '../Lieferung/Lieferung/kulturLabelFromKultur'
@@ -243,7 +244,6 @@ const SammelLieferungConflict = ({
       andere_menge: revRow.andere_menge,
       geplant: revRow.geplant,
       bemerkungen: revRow.bemerkungen,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -252,6 +252,10 @@ const SammelLieferungConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     //console.log('SammelLieferung Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_sammel_lieferung_rev_one({
@@ -289,6 +293,7 @@ const SammelLieferungConflict = ({
     revRow.von_sammlung_id,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])
