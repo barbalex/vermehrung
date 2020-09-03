@@ -150,6 +150,7 @@ const KulturConflict = ({
   ]
 
   const onClickVerwerfen = useCallback(() => {
+    console.log('Kultur Conflict, onClickVerwerfen, revRow:', revRow)
     revRow.setDeleted()
     conflictDisposalCallback()
   }, [conflictDisposalCallback, revRow])
@@ -167,7 +168,6 @@ const KulturConflict = ({
       von_anzahl_individuen: revRow.von_anzahl_individuen,
       bemerkungen: revRow.bemerkungen,
       aktiv: revRow.aktiv,
-      changed_by: user.email,
       _parent_rev: row._rev,
       _depth: newDepth,
       _deleted: revRow._deleted,
@@ -176,6 +176,7 @@ const KulturConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     newObject._revisions = row._revisions
       ? toPgArray([rev, ...row._revisions])
       : toPgArray([rev])
@@ -218,7 +219,7 @@ const KulturConflict = ({
     setActiveConflict,
   ])
 
-  //console.log('Kultur Conflict', { dataArray, row, revRow })
+  console.log('Kultur Conflict', { dataArray, row, revRow })
 
   return (
     <Conflict

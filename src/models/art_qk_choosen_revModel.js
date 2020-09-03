@@ -28,8 +28,6 @@ export const art_qk_choosen_revModel = art_qk_choosen_revModelBase.actions(
         art_id: self.art_id,
         qk_name: self.qk_name,
         choosen: self.choosen,
-        changed: new window.Date().toISOString(),
-        changed_by: user.email,
         _parent_rev: self._rev,
         _depth: newDepth,
         _deleted: true,
@@ -37,6 +35,8 @@ export const art_qk_choosen_revModel = art_qk_choosen_revModelBase.actions(
       const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
       newObject._rev = rev
       newObject.id = uuidv1()
+      newObject.changed = new window.Date().toISOString()
+      newObject.changed_by = user.email
       newObject._revisions = self._revisions
         ? toPgArray([rev, ...self._revisions])
         : toPgArray([rev])
