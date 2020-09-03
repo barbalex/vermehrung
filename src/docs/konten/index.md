@@ -1,8 +1,8 @@
 ---
-path: "/Dokumentation/Konten"
-date: "2020-06-30"
-title: "Konten und Benutzerrechte"
-sort1: 28
+path: '/Dokumentation/Konten'
+date: '2020-06-30'
+title: 'Konten und Benutzerrechte'
+sort1: 29
 ---
 
 ### Begriffe
@@ -19,6 +19,7 @@ Die Konten von vermehrung.ch sind nicht mit denjenigen von apflora.ch verbunden.
 ### Rollen
 
 Einem Benutzer wird eine Rolle zugeordnet. Davon gibt es drei:
+
 - Gärtner: liest und editiert Daten von Gärten, in denen er/sie als Mitarbeiter erfasst ist
 - Artverantwortlich: liest und editiert Daten für Arten, in denen er/sie als Mitarbeiter erfasst ist. Plus: liest und editiert Daten von Gärten, in denen er/sie als Mitarbeiter erfasst ist
 - Manager: liest und editiert (beinahe) alle Daten
@@ -29,7 +30,6 @@ Bei Benutzern mit der Rolle "Artverantwortlich", kann bzw. muss gewählt werden,
 
 - im Formular der Person
 - im Formular der Art
-
 
 Auf Daten anderer Arten hat dieser Benutzer keinen Zugriff.<br/>
 Artverantwortliche haben Zugriff auf die Daten aller Herkünfte.
@@ -52,13 +52,14 @@ Gärtner haben ausschliesslich Zugriff auf diese Daten. Artverantwortliche zusä
 3. Auf "Neues Konto" klicken
 4. Die Person bei den betreffenden Arten und Gärten als Mitarbeiter erfassen
 5. Die Person informieren
-<br/><br/>
+   <br/><br/>
 
 ### Erstmalige Anmeldung
+
 1. vermerhung.ch besuchen
 1. Auf "Daten bearbeiten" klicken
 1. Login-Formular erscheint
-1. Email eingeben 
+1. Email eingeben
 1. Auf "neues Passwort setzen" klicken
 1. Sobald email ankommt, dem Link folgen und ein Passwort setzen
 1. In vermehrung.ch damit anmelden
