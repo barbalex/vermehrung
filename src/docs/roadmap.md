@@ -1,16 +1,17 @@
 ---
-path: "/Dokumentation/Roadmap"
-date: "2020-07-04"
-title: "Roadmap"
-sort1: 27
+path: '/Dokumentation/Roadmap'
+date: '2020-07-04'
+title: 'Roadmap'
+sort1: 28
 ---
 
 vermehrung.ch ist (noch) in Entwicklung. Ziel ist, dass ab Juli 2020 damit gearbeitet wird.<br/><br/>
 
 Symbole:
-* :white_check_mark:: erledigt
-* :ballot_box_with_check:: teilweise erledigt
-* :white_medium_square:: todo
+
+- :white_check_mark:: erledigt
+- :ballot_box_with_check:: teilweise erledigt
+- :white_medium_square:: todo
 
 Die wichtigsten Schritte sind:
 
@@ -53,7 +54,7 @@ Die wichtigsten Schritte sind:
 - :white_check_mark: Vorhandene Daten sind importiert:
 
   | Daten        | Anzahl |
-  |--------------|--------|
+  | ------------ | ------ |
   | person       | 148    |
   | garten       | 114    |
   | art          | 126    |
@@ -66,6 +67,6 @@ Die wichtigsten Schritte sind:
   | teilzaehlung | 2'324  |
   | event        | 889    |
   | total        | 9'343  |
-  
+
 - :white_medium_square: Produktive Version 1 ist live (geplant: Juli 2020)
 - :white_medium_square: Änderungen an Datensätzen können angezeigt und rückgängig gemacht werden. Beliebig weit zurück
