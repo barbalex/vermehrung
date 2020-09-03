@@ -5,7 +5,7 @@ title: 'Daten-Historie'
 sort1: 25
 ---
 
-Um [offline fähig zu sein](../offline-wie) erstellt vermehrung.ch bei jeder Änderung eines Datensatzes eine neue Version. Somit **verfügt vermehrung.ch über eine vollständige Historisierung aller Datensätze**.<br/><br/>
+Um [offline fähig zu sein](../offline-wie) erstellt vermehrung.ch bei jeder Änderung eines Datensatzes eine neue Version. Somit **verfügt vermehrung.ch über eine vollständige Historisierung aller Datensätze**, beginnend seit dem Import in vermehrung.ch (im Sommer 2020).<br/><br/>
 
 Um die Historie eines Datensatzes zu sehen, klickt man auf das entsprechende Symbol (in der Mobil-Ansicht gibt es dafür einen Menü-Eintrag):<br/>
 ![Symbol](001_button.png)<br/>
