@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 import { useQuery, StoreContext } from '../../../models/reactUtils'
 import checkForOnlineError from '../../../utils/checkForOnlineError'
+import toPgArray from '../../../utils/toPgArray'
 import Conflict from '../../shared/Conflict'
 import herkunftLabelFromHerkunft from './Form/herkunftLabelFromHerkunft'
 import gartenLabelFromGarten from './Form/gartenLabelFromGarten'
@@ -175,6 +176,9 @@ const KulturConflict = ({
     newObject._rev = rev
     newObject.id = uuidv1()
     newObject.changed = new window.Date().toISOString()
+    newObject._revisions = row._revisions
+      ? toPgArray([rev, ...row._revisions])
+      : toPgArray([rev])
     //console.log('Kultur Conflict', { row, revRow, newObject })
     try {
       await store.mutateInsert_kultur_rev_one({
@@ -206,6 +210,7 @@ const KulturConflict = ({
     revRow.zwischenlager,
     row._depth,
     row._rev,
+    row._revisions,
     store,
     user.email,
   ])

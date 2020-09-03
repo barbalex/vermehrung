@@ -67,6 +67,7 @@ const Kultur = ({
   )
 
   const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row || (!showFilter && filter.show)) return null
 
@@ -75,6 +76,8 @@ const Kultur = ({
   const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
   const resizerStyle = !paneIsSplit ? { width: 0 } : {}
+
+  console.log('Kultur, row:', row)
 
   return (
     <ErrorBoundary>
@@ -113,7 +116,10 @@ const Kultur = ({
                       setActiveConflict={setActiveConflict}
                     />
                   ) : showHistory ? (
-                    <History row={row} />
+                    <History
+                      row={row}
+                      historyTakeoverCallback={historyTakeoverCallback}
+                    />
                   ) : null}
                 </>
               )}
