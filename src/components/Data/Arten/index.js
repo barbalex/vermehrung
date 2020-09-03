@@ -8,7 +8,6 @@ import { withResizeDetector } from 'react-resize-detector'
 import UpSvg from '../../../svg/to_up.inline.svg'
 
 import { StoreContext } from '../../../models/reactUtils'
-import FormTitle from '../../shared/FormTitle'
 import FilterTitle from '../../shared/FilterTitle'
 import Row from './Row'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -50,7 +49,7 @@ const singleRowHeight = 48
 
 const Arten = ({ filter: showFilter, width, height }) => {
   const store = useContext(StoreContext)
-  const { insertArtRev, artsFiltered, artsSorted, loadingInitialData } = store
+  const { insertArtRev, artsFiltered, artsSorted } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
   const totalNr = artsSorted.length
@@ -67,15 +66,6 @@ const Arten = ({ filter: showFilter, width, height }) => {
   let upTitle = 'Eine Ebene höher'
   if (activeNodeArray[0] === 'Arten') {
     upTitle = 'Zu allen Listen'
-  }
-
-  if (loadingInitialData && !artsFiltered.length) {
-    return (
-      <Container>
-        <FormTitle title="Arten" />
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
   }
 
   return (
