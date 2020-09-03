@@ -4,15 +4,28 @@ import Button from '@material-ui/core/Button'
 import { observer } from 'mobx-react-lite'
 import DoubleArrowCrossed from '../../../svg/double_arrow_crossed.inline.svg'
 import { FaUndoAlt, FaArrowsAltH } from 'react-icons/fa'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
+import IconButton from '@material-ui/core/IconButton'
 
 import Data from '../Conflict/Data'
 import { StoreContext } from '../../../models/reactUtils'
+import getConstants from '../../../utils/constants'
+
+const constants = getConstants()
 
 const Container = styled.div`
   padding: 10px;
 `
 const Title = styled.h4`
+  margin-bottom: 0;
+`
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
+`
+const StyledIconButton = styled(IconButton)`
+  height: 18px;
 `
 const Rev = styled.span`
   font-weight: normal;
@@ -41,12 +54,31 @@ const History = ({ rev, dataArray, onClickUebernehmen }) => {
     diffConflict,
     setDiffConflict,
   ])
+  const openDocs = useCallback(() => {
+    const url = `${constants?.appUri}/Dokumentation/Historisierung`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        return window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
+  }, [])
 
   return (
     <Container>
-      <Title>
-        Historische Version<Rev>{rev}</Rev>
-      </Title>
+      <TitleRow>
+        <Title>
+          Historische Version<Rev>{rev}</Rev>
+        </Title>
+        <StyledIconButton
+          aria-label="Anleitung öffnen"
+          title="Anleitung öffnen"
+          onClick={openDocs}
+          size="small"
+        >
+          <IoMdInformationCircleOutline />
+        </StyledIconButton>
+      </TitleRow>
       <Data dataArray={dataArray} />
       <ButtonRow>
         <StyledButton
