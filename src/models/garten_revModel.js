@@ -34,8 +34,6 @@ export const garten_revModel = garten_revModelBase.actions((self) => ({
       geom_point: self.geom_point,
       aktiv: self.aktiv,
       bemerkungen: self.bemerkungen,
-      changed: new window.Date().toISOString(),
-      changed_by: user.email,
       _parent_rev: self._rev,
       _depth: newDepth,
       _deleted: true,
@@ -43,6 +41,8 @@ export const garten_revModel = garten_revModelBase.actions((self) => ({
     const rev = `${newDepth}-${md5(JSON.stringify(newObject))}`
     newObject._rev = rev
     newObject.id = uuidv1()
+    newObject.changed = new window.Date().toISOString()
+    newObject.changed_by = user.email
     newObject._revisions = self._revisions
       ? toPgArray([rev, ...self._revisions])
       : toPgArray([rev])
