@@ -1,18 +1,18 @@
 ---
-path: '/Dokumentation/historisierung'
+path: '/Dokumentation/Historisierung'
 date: '2020-09-03'
 title: 'Daten-Historie'
 sort1: 25
 ---
 
-Um [offline fähig zu sein](../offline-wie) erstellt vermehrung.ch bei jeder Änderung eines Datensatzes eine neue Version. Somit **verfügt vermehrung.ch über eine vollständige Historisierung aller Datensätze**, beginnend seit dem Import in vermehrung.ch (im Sommer 2020). Aktuell (im Herbst 2020) gibt es bei den meisten Daten noch keine historischen Versionen, weil die Daten gerade erst importiert und noch nicht bearbeitet wurden.<br/><br/>
+Um offline fähig zu sein ([mehr dazu](../offline-wie)) erstellt vermehrung.ch bei jeder Änderung eines Datensatzes eine neue Version. Somit **verfügt vermehrung.ch über eine vollständige Historisierung aller Datensätze**, beginnend seit deren Import im Sommer 2020. Aktuell (im Herbst 2020) gibt es bei den meisten Daten noch keine historischen Versionen, weil sie noch kaum bearbeitet wurden.<br/><br/>
 
 Um die Historie eines Datensatzes zu sehen, klickt man auf das entsprechende Symbol:<br/>
 ![Symbol](001_button.png)
 
-- In der Mobil-Ansicht gibt es statt dem Symbol einen Menü-Eintrag
+- In der Mobil-Ansicht gibt es statt des Symbols einen Menü-Eintrag
 - Das Historie-Symbol wird deaktiviert, wenn es keine historische Versionen gibt
-- Aktuell (Anfang September 2020) ist diese Funktionalität erst für Kulturen implementiert
+- Aktuell (Anfang September 2020) ist die Benutzer-Oberfläche für die Historisierung erst für Kulturen implementiert
 
 Nun öffnet sich rechts der aktuellen Version eine neue Spalte. Sie stellt alle verfügbaren Versionen in einem "Karussell" dar:<br/>
 ![Version](002_version.png)<br/>
