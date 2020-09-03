@@ -6,6 +6,7 @@ import Slider from 'react-slick'
 
 import { useQuery, StoreContext } from '../../../../models/reactUtils'
 import checkForOnlineError from '../../../../utils/checkForOnlineError'
+import Spinner from '../../../shared/Spinner'
 import Row from './Row'
 
 const kulturRevQuery = gql`
@@ -77,7 +78,7 @@ const Container = styled.div`
     bottom: -10px;
   }
 `
-const OtherContainer = styled.div`
+const ErrorContainer = styled.div`
   padding: 25px;
 `
 
@@ -107,10 +108,12 @@ const KulturHistory = ({ row, historyTakeoverCallback }) => {
     [row._rev, row._revisions, store.kultur_revs],
   )
 
-  if (loading) return <OtherContainer>Lade...</OtherContainer>
+  if (loading) {
+    return <Spinner message="lade Versionen" />
+  }
 
   if (error) {
-    return <OtherContainer>{error.message}</OtherContainer>
+    return <ErrorContainer>{error.message}</ErrorContainer>
   }
 
   return (
