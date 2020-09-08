@@ -142,8 +142,11 @@ const Zaehlung = ({
   const filteredNr = zaehlungsFiltered.filter(hierarchyFilter).length
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
-  const callbackAfterUebernehmen = useCallback(
+  const conflictDisposalCallback = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
+  const conflictSelectionCallback = useCallback(
     () => setActiveConflict(null),
     [],
   )
@@ -366,8 +369,8 @@ const Zaehlung = ({
                     rev={activeConflict}
                     id={id}
                     row={row}
-                    callbackAfterVerwerfen={callbackAfterVerwerfen}
-                    callbackAfterUebernehmen={callbackAfterUebernehmen}
+                    conflictDisposalCallback={conflictDisposalCallback}
+                    conflictSelectionCallback={conflictSelectionCallback}
                     setActiveConflict={setActiveConflict}
                   />
                 )}
