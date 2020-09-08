@@ -11,25 +11,17 @@ import IconButton from '@material-ui/core/IconButton'
 import SplitPane from 'react-split-pane'
 
 import { StoreContext } from '../../../models/reactUtils'
-import Select from '../../shared/Select'
-import TextField from '../../shared/TextField'
-import Checkbox2States from '../../shared/Checkbox2States'
-import Checkbox3States from '../../shared/Checkbox3States'
 import FilterTitle from '../../shared/FilterTitle'
-import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import Files from '../Files'
-import Coordinates from '../../shared/Coordinates'
 import Settings from './Settings'
-import Personen from './Personen'
 import DeleteButton from './DeleteButton'
 import AddButton from './AddButton'
 import Download from './Download'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
-import ConflictList from '../../shared/ConflictList'
 import FilterNumbers from '../../shared/FilterNumbers'
 import UpSvg from '../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../svg/to_ku_down.inline.svg'
+import Form from './Form'
 
 const Container = styled.div`
   height: 100%;
@@ -58,11 +50,6 @@ const TitleSymbols = styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-const FieldsContainer = styled.div`
-  padding: 10px;
-  overflow: auto !important;
-  height: 100%;
-`
 const StyledSplitPane = styled(SplitPane)`
   height: calc(100vh - 64px - 48px) !important;
   .Resizer {
@@ -90,33 +77,19 @@ const StyledSplitPane = styled(SplitPane)`
     overflow: hidden;
   }
 `
-const CaseConflictTitle = styled.h4`
-  margin-bottom: 10px;
-`
-const Rev = styled.span`
-  font-weight: normal;
-  padding-left: 7px;
-  color: rgba(0, 0, 0, 0.4);
-  font-size: 0.8em;
-`
 
 const Garten = ({
   filter: showFilter,
   id = '99999999-9999-9999-9999-999999999999',
 }) => {
   const store = useContext(StoreContext)
-
   const {
     filter,
     online,
     gartensSorted,
     gartensFiltered,
-    userPersonOption,
     personIdInActiveNodeArray,
-    personsSorted,
-    errors,
     unsetError,
-    insertGvRev,
   } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
 
@@ -144,49 +117,9 @@ const Garten = ({
     [],
   )
 
-  const {
-    ga_strasse,
-    ga_plz,
-    ga_ort,
-    ga_geom_point,
-    ga_aktiv,
-    ga_bemerkungen,
-  } = userPersonOption
-
   useEffect(() => {
     unsetError('garten')
   }, [id, unsetError])
-
-  const personWerte = useMemo(
-    () =>
-      personsSorted.map((el) => ({
-        value: el.id,
-        label: `${el.fullname || '(kein Name)'} (${el.ort || 'kein Ort'})`,
-      })),
-    [personsSorted],
-  )
-
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if (event.target.value === undefined) value = null
-      if (event.target.value === '') value = null
-
-      if (showFilter) {
-        return filter.setValue({ table: 'garten', key: field, value })
-      }
-
-      const previousValue = row[field]
-      // only update if value has changed
-      if (value === previousValue) return
-      row.edit({ field, value })
-      if (field === 'person_id') {
-        insertGvRev({ values: { garten_id: row.id, person_id: value } })
-      }
-    },
-    [filter, insertGvRev, row, showFilter],
-  )
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
@@ -197,13 +130,16 @@ const Garten = ({
     [activeNodeArray, setActiveNodeArray],
   )
 
-  const showDeleted = showFilter || row._deleted
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
 
   if (!row || (!showFilter && filter.show)) return null
 
-  const firstPaneWidth = activeConflict ? '50%' : '100%'
+  const paneIsSplit = online && (activeConflict || showHistory)
+
+  const firstPaneWidth = paneIsSplit ? '50%' : '100%'
   // hide resizer when tree is hidden
-  const resizerStyle = !activeConflict ? { width: 0 } : {}
+  const resizerStyle = !paneIsSplit ? { width: 0 } : {}
 
   return (
     <ErrorBoundary>
@@ -240,134 +176,14 @@ const Garten = ({
             minSize={200}
             resizerStyle={resizerStyle}
           >
-            <FieldsContainer>
-              {activeConflict && (
-                <CaseConflictTitle>
-                  Aktuelle Version<Rev>{row._rev}</Rev>
-                </CaseConflictTitle>
-              )}
-              {showDeleted && (
-                <>
-                  {showFilter ? (
-                    <Checkbox3States
-                      key={`${row.id}_deleted`}
-                      label="gelöscht"
-                      name="_deleted"
-                      value={row._deleted}
-                      saveToDb={saveToDb}
-                      error={errors?.garten?._deleted}
-                    />
-                  ) : (
-                    <Checkbox2States
-                      key={`${row.id}_deleted`}
-                      label="gelöscht"
-                      name="_deleted"
-                      value={row._deleted}
-                      saveToDb={saveToDb}
-                      error={errors?.garten?._deleted}
-                    />
-                  )}
-                </>
-              )}
-              <TextField
-                key={`${row.id}name`}
-                name="name"
-                label="Name"
-                value={row.name}
-                saveToDb={saveToDb}
-                error={errors?.garten?.name}
-              />
-              <Select
-                key={`${row.id}${row.person_id}person_id`}
-                name="person_id"
-                value={row.person_id}
-                field="person_id"
-                label="Person"
-                options={personWerte}
-                saveToDb={saveToDb}
-                error={errors?.garten?.person_id}
-              />
-              {ga_strasse && (
-                <TextField
-                  key={`${row.id}strasse`}
-                  name="strasse"
-                  label="Strasse"
-                  value={row.strasse}
-                  saveToDb={saveToDb}
-                  error={errors?.garten?.strasse}
-                />
-              )}
-              {ga_plz && (
-                <TextField
-                  key={`${row.id}plz`}
-                  name="plz"
-                  label="PLZ"
-                  value={row.plz}
-                  saveToDb={saveToDb}
-                  error={errors?.garten?.plz}
-                  type="number"
-                />
-              )}
-              {ga_ort && (
-                <TextField
-                  key={`${row.id}ort`}
-                  name="ort"
-                  label="Ort"
-                  value={row.ort}
-                  saveToDb={saveToDb}
-                  error={errors?.garten?.ort}
-                />
-              )}
-              {!showFilter && ga_geom_point && (
-                <Coordinates row={row} saveToDb={saveToDb} />
-              )}
-              {ga_aktiv && (
-                <>
-                  {showFilter ? (
-                    <Checkbox3States
-                      key={`${row.id}aktiv`}
-                      label="aktiv"
-                      name="aktiv"
-                      value={row.aktiv}
-                      saveToDb={saveToDb}
-                      error={errors?.garten?.aktiv}
-                    />
-                  ) : (
-                    <Checkbox2States
-                      key={`${row.id}aktiv`}
-                      label="aktiv"
-                      name="aktiv"
-                      value={row.aktiv}
-                      saveToDb={saveToDb}
-                      error={errors?.garten?.aktiv}
-                    />
-                  )}
-                </>
-              )}
-              {ga_bemerkungen && (
-                <TextField
-                  key={`${row.id}bemerkungen`}
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  value={row.bemerkungen}
-                  saveToDb={saveToDb}
-                  error={errors?.garten?.bemerkungen}
-                  multiLine
-                />
-              )}
-              {online &&
-                !showFilter &&
-                row._conflicts &&
-                row._conflicts.map && (
-                  <ConflictList
-                    conflicts={row._conflicts}
-                    activeConflict={activeConflict}
-                    setActiveConflict={setActiveConflict}
-                  />
-                )}
-              <Personen gartenId={row.id} />
-              {!showFilter && <Files parentId={row.id} parent="garten" />}
-            </FieldsContainer>
+            <Form
+              showFilter={showFilter}
+              id={id}
+              row={row}
+              activeConflict={activeConflict}
+              setActiveConflict={setActiveConflict}
+              showHistory={showHistory}
+            />
             <>
               {online && !!activeConflict && (
                 <Conflict
