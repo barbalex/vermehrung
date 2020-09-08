@@ -8,6 +8,7 @@ import AddButton from './AddButton'
 import DeleteButton from './DeleteButton'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
+import HistoryButton from '../../../shared/HistoryButton'
 import KontoMenu from './KontoMenu'
 import NavButtons from './NavButtons'
 
@@ -33,12 +34,19 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const PersonFormTitle = ({ row, totalNr, filteredNr, width }) => {
+const PersonFormTitle = ({
+  row,
+  totalNr,
+  filteredNr,
+  width,
+  showHistory,
+  setShowHistory,
+}) => {
   const store = useContext(StoreContext)
   const { userPerson } = store
   const { user_role } = userPerson
 
-  if (width < 520) {
+  if (width < 568) {
     return (
       <TitleContainer>
         <Title>Person</Title>
@@ -51,6 +59,12 @@ const PersonFormTitle = ({ row, totalNr, filteredNr, width }) => {
             </>
           )}
           <Menu white={false}>
+            <HistoryButton
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
             <KontoMenu row={row} asMenu />
             <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
           </Menu>
@@ -70,6 +84,11 @@ const PersonFormTitle = ({ row, totalNr, filteredNr, width }) => {
             <DeleteButton row={row} />
           </>
         )}
+        <HistoryButton
+          row={row}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <KontoMenu row={row} />
         <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
       </TitleSymbols>

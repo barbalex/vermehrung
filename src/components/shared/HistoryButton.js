@@ -5,8 +5,8 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 
-import { StoreContext } from '../../../../models/reactUtils'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import { StoreContext } from '../../models/reactUtils'
+import ErrorBoundary from './ErrorBoundary'
 
 const StyledMenuItem = styled(MenuItem)`
   ${(props) =>
@@ -22,7 +22,7 @@ const StyledIconButton = styled(IconButton)`
     'box-shadow:inset 0px 0px 0px 1px rgba(0, 0, 0, 0.04);'}
 `
 
-const KulturHistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
+const HistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
   const store = useContext(StoreContext)
   const { online } = store
   const existMultipleRevisions = (row?._revisions || []).length > 1
@@ -60,4 +60,4 @@ const KulturHistoryButton = ({ asMenu, row, showHistory, setShowHistory }) => {
   )
 }
 
-export default observer(KulturHistoryButton)
+export default observer(HistoryButton)
