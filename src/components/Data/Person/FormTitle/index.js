@@ -5,7 +5,12 @@ import { StoreContext } from '../../../../models/reactUtils'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from './FormTitle'
 
-const PersonFormTitleChooser = ({ showFilter, row }) => {
+const PersonFormTitleChooser = ({
+  showFilter,
+  row,
+  showHistory,
+  setShowHistory,
+}) => {
   const store = useContext(StoreContext)
   const { personsSorted, personsFiltered } = store
 
@@ -26,7 +31,15 @@ const PersonFormTitleChooser = ({ showFilter, row }) => {
     )
   }
 
-  return <FormTitle row={row} totalNr={totalNr} filteredNr={filteredNr} />
+  return (
+    <FormTitle
+      row={row}
+      totalNr={totalNr}
+      filteredNr={filteredNr}
+      showHistory={showHistory}
+      setShowHistory={setShowHistory}
+    />
+  )
 }
 
 export default observer(PersonFormTitleChooser)

@@ -6,7 +6,7 @@ import { withResizeDetector } from 'react-resize-detector'
 import Settings from './Settings'
 import Delete from './Delete'
 import Add from './Add'
-import History from './History'
+import HistoryButton from '../../../shared/HistoryButton'
 import FilterNumbers from '../../../shared/FilterNumbers'
 import Menu from '../../../shared/Menu'
 import Download from './Download'
@@ -53,7 +53,7 @@ const KulturFormTitle = ({
             <Add asMenu />
             <Delete asMenu row={row} />
             <Download row={row} asMenu />
-            <History
+            <HistoryButton
               row={row}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
@@ -78,7 +78,7 @@ const KulturFormTitle = ({
           <Delete row={row} />
           <Menu white={false}>
             <Download row={row} asMenu />
-            <History
+            <HistoryButton
               row={row}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
@@ -104,7 +104,7 @@ const KulturFormTitle = ({
           <Settings kulturId={row.id} />
           <Menu white={false}>
             <Download row={row} asMenu />
-            <History
+            <HistoryButton
               row={row}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
@@ -130,7 +130,7 @@ const KulturFormTitle = ({
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           <Menu white={false}>
             <Download row={row} asMenu />
-            <History
+            <HistoryButton
               row={row}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
@@ -155,7 +155,7 @@ const KulturFormTitle = ({
           <Settings kulturId={row.id} />
           <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} />
           <Menu white={false}>
-            <History
+            <HistoryButton
               row={row}
               showHistory={showHistory}
               setShowHistory={setShowHistory}
@@ -176,7 +176,7 @@ const KulturFormTitle = ({
         <Add />
         <Delete row={row} />
         <Download row={row} />
-        <History
+        <HistoryButton
           row={row}
           showHistory={showHistory}
           setShowHistory={setShowHistory}

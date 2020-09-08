@@ -23,6 +23,7 @@ import Conflict from './Conflict'
 import ConflictList from '../../shared/ConflictList'
 import exists from '../../../utils/exists'
 import FormTitle from './FormTitle'
+import History from './History'
 
 const Container = styled.div`
   height: 100%;
@@ -149,6 +150,9 @@ const Person = ({
 
   const showDeleted = showFilter || row._deleted
 
+  const [showHistory, setShowHistory] = useState(null)
+  const historyTakeoverCallback = useCallback(() => setShowHistory(null), [])
+
   if (!row || (!showFilter && filter.show)) return null
 
   const firstPaneWidth = activeConflict ? '50%' : '100%'
@@ -158,7 +162,12 @@ const Person = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle showFilter={showFilter} row={row} />
+        <FormTitle
+          showFilter={showFilter}
+          row={row}
+          showHistory={showHistory}
+          setShowHistory={setShowHistory}
+        />
         <Container>
           <StyledSplitPane
             split="vertical"
