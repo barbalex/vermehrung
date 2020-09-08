@@ -11,8 +11,8 @@ import Conflict from '../../shared/Conflict'
 const HerkunftConflict = ({
   rev,
   row,
-  callbackAfterVerwerfen,
-  callbackAfterUebernehmen,
+  conflictDisposalCallback,
+  conflictSelectionCallback,
   setActiveConflict,
 }) => {
   const store = useContext(StoreContext)
@@ -77,8 +77,8 @@ const HerkunftConflict = ({
 
   const onClickVerwerfen = useCallback(() => {
     revRow.setDeleted()
-    setTimeout(() => callbackAfterVerwerfen())
-  }, [callbackAfterVerwerfen, revRow])
+    setTimeout(() => conflictDisposalCallback())
+  }, [conflictDisposalCallback, revRow])
   const onClickUebernehmen = useCallback(async () => {
     // need to attach to the winner, that is row
     // otherwise risk to still have lower depth and thus loosing
@@ -118,10 +118,10 @@ const HerkunftConflict = ({
         message: error.message,
       })
     }
-    callbackAfterUebernehmen()
+    conflictSelectionCallback()
   }, [
     addNotification,
-    callbackAfterUebernehmen,
+    conflictSelectionCallback,
     revRow._deleted,
     revRow.bemerkungen,
     revRow.gemeinde,
