@@ -1,94 +1,22 @@
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import IconButton from '@material-ui/core/IconButton'
-import SplitPane from 'react-split-pane'
 
-import { StoreContext } from '../../../models/reactUtils'
-import Select from '../../shared/Select'
-import TextField from '../../shared/TextField'
-import Checkbox2States from '../../shared/Checkbox2States'
-import Checkbox3States from '../../shared/Checkbox3States'
-import FilterTitle from '../../shared/FilterTitle'
-import ifIsNumericAsNumber from '../../../utils/ifIsNumericAsNumber'
-import Files from '../Files'
-import Coordinates from '../../shared/Coordinates'
-import Settings from './Settings'
+import { StoreContext } from '../../../../models/reactUtils'
+import Select from '../../../shared/Select'
+import TextField from '../../../shared/TextField'
+import Checkbox2States from '../../../shared/Checkbox2States'
+import Checkbox3States from '../../../shared/Checkbox3States'
+import ifIsNumericAsNumber from '../../../../utils/ifIsNumericAsNumber'
+import Files from '../../Files'
+import Coordinates from '../../../shared/Coordinates'
 import Personen from './Personen'
-import DeleteButton from './DeleteButton'
-import AddButton from './AddButton'
-import Download from './Download'
-import ErrorBoundary from '../../shared/ErrorBoundary'
-import Conflict from './Conflict'
-import ConflictList from '../../shared/ConflictList'
-import FilterNumbers from '../../shared/FilterNumbers'
-import UpSvg from '../../../svg/to_up.inline.svg'
-import KuDownSvg from '../../../svg/to_ku_down.inline.svg'
+import ConflictList from '../../../shared/ConflictList'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#fff3e0' : 'unset')};
-`
-const TitleContainer = styled.div`
-  background-color:rgba(74, 20, 140, 0.1);
-  flex-shrink: 0;
-  display: flex;
-  @media print {
-    display: none !important;
-  }
-  height: 48px;
-  justify-content: space-between;
-  padding 0 10px;
-`
-const Title = styled.div`
-  font-weight: bold;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const TitleSymbols = styled.div`
-  display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
-`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
-`
-const StyledSplitPane = styled(SplitPane)`
-  height: calc(100vh - 64px - 48px) !important;
-  .Resizer {
-    background: rgba(74, 20, 140, 0.1);
-    opacity: 1;
-    z-index: 1;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 7px;
-    cursor: col-resize;
-  }
-  .Resizer:hover {
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    background-color: #fff59d !important;
-  }
-  .Resizer.disabled {
-    cursor: not-allowed;
-  }
-  .Resizer.disabled:hover {
-    border-color: transparent;
-  }
-  .Pane {
-    overflow: hidden;
-  }
 `
 const CaseConflictTitle = styled.h4`
   margin-bottom: 10px;
@@ -100,49 +28,25 @@ const Rev = styled.span`
   font-size: 0.8em;
 `
 
-const Garten = ({
-  filter: showFilter,
-  id = '99999999-9999-9999-9999-999999999999',
+const GartenForm = ({
+  showFilter,
+  id,
+  row,
+  activeConflict,
+  setActiveConflict,
+  showHistory,
 }) => {
   const store = useContext(StoreContext)
 
   const {
     filter,
     online,
-    gartensSorted,
-    gartensFiltered,
     userPersonOption,
-    personIdInActiveNodeArray,
     personsSorted,
     errors,
     unsetError,
     insertGvRev,
   } = store
-  const { activeNodeArray, setActiveNodeArray } = store.tree
-
-  const hierarchyFilter = (e) => {
-    if (personIdInActiveNodeArray)
-      return e.person_id === personIdInActiveNodeArray
-    return true
-  }
-
-  const totalNr = gartensSorted.filter(hierarchyFilter).length
-  const filteredNr = gartensFiltered.filter(hierarchyFilter).length
-
-  const row = useMemo(
-    () => (showFilter ? filter.garten : store.gartens.get(id) || {}),
-    [filter.garten, id, showFilter, store.gartens],
-  )
-
-  const [activeConflict, setActiveConflict] = useState(null)
-  const conflictDisposalCallback = useCallback(
-    () => setActiveConflict(null),
-    [],
-  )
-  const conflictSelectionCallback = useCallback(
-    () => setActiveConflict(null),
-    [],
-  )
 
   const {
     ga_strasse,
@@ -192,7 +96,7 @@ const Garten = ({
 
   return (
     <FieldsContainer>
-      {activeConflict && (
+      {(activeConflict || showHistory) && (
         <CaseConflictTitle>
           Aktuelle Version<Rev>{row._rev}</Rev>
         </CaseConflictTitle>
@@ -319,4 +223,4 @@ const Garten = ({
   )
 }
 
-export default observer(Garten)
+export default observer(GartenForm)
