@@ -34,6 +34,8 @@ const GartenFormTitle = ({ showFilter, row, showHistory, setShowHistory }) => {
       row={row}
       showHistory={showHistory}
       setShowHistory={setShowHistory}
+      totalNr={totalNr}
+      filteredNr={filteredNr}
     />
   )
 }
