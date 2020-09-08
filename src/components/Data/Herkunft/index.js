@@ -135,8 +135,11 @@ const Herkunft = ({
   )
 
   const [activeConflict, setActiveConflict] = useState(null)
-  const callbackAfterVerwerfen = useCallback(() => setActiveConflict(null), [])
-  const callbackAfterUebernehmen = useCallback(
+  const conflictDisposalCallback = useCallback(
+    () => setActiveConflict(null),
+    [],
+  )
+  const conflictSelectionCallback = useCallback(
     async () => setActiveConflict(null),
     [],
   )
@@ -369,8 +372,8 @@ const Herkunft = ({
                 <Conflict
                   rev={activeConflict}
                   row={row}
-                  callbackAfterVerwerfen={callbackAfterVerwerfen}
-                  callbackAfterUebernehmen={callbackAfterUebernehmen}
+                  conflictDisposalCallback={conflictDisposalCallback}
+                  conflictSelectionCallback={conflictSelectionCallback}
                   setActiveConflict={setActiveConflict}
                 />
               )}
