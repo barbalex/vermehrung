@@ -11,10 +11,10 @@ import { observer } from 'mobx-react-lite'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 
-import { StoreContext } from '../../../../models/reactUtils'
+import { StoreContext } from '../../../../../models/reactUtils'
 import Art from './Art'
-import Select from '../../../shared/Select'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import Select from '../../../../shared/Select'
+import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
 const TitleRow = styled.div`
   background-color: rgba(237, 230, 244, 1);
