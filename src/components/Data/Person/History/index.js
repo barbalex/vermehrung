@@ -10,8 +10,8 @@ import Spinner from '../../../shared/Spinner'
 import Row from './Row'
 
 const personRevQuery = gql`
-  query personRevForHistoryQuery($id: uuid!, $rev: String!) {
-    person_rev(where: { person_id: { _eq: $id }, _rev: { _eq: $rev } }) {
+  query personRevForHistoryQuery($rev: [String!]) {
+    person_rev(where: { _rev: { _in: $rev } }) {
       id
       __typename
       person_id
