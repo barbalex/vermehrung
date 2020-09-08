@@ -2,6 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
+import { withResizeDetector } from 'react-resize-detector'
 
 import { StoreContext } from '../../../../models/reactUtils'
 import Settings from './Settings'
@@ -12,6 +13,7 @@ import FilterNumbers from '../../../shared/FilterNumbers'
 import UpSvg from '../../../../svg/to_up.inline.svg'
 import KuDownSvg from '../../../../svg/to_ku_down.inline.svg'
 import HistoryButton from '../../../shared/HistoryButton'
+import Menu from '../../../shared/Menu'
 
 const Container = styled.div`
   background-color:rgba(74, 20, 140, 0.1);
@@ -35,19 +37,16 @@ const TitleSymbols = styled.div`
   margin-bottom: auto;
 `
 
-const GartenFormTitle = ({ row, showHistory, setShowHistory }) => {
+const GartenFormTitle = ({
+  row,
+  showHistory,
+  setShowHistory,
+  width,
+  totalNr,
+  filteredNr,
+}) => {
   const store = useContext(StoreContext)
-  const { gartensSorted, gartensFiltered, personIdInActiveNodeArray } = store
   const { activeNodeArray, setActiveNodeArray } = store.tree
-
-  const hierarchyFilter = (e) => {
-    if (personIdInActiveNodeArray)
-      return e.person_id === personIdInActiveNodeArray
-    return true
-  }
-
-  const totalNr = gartensSorted.filter(hierarchyFilter).length
-  const filteredNr = gartensFiltered.filter(hierarchyFilter).length
 
   const onClickUp = useCallback(
     () => setActiveNodeArray(activeNodeArray.slice(0, -1)),
@@ -57,6 +56,35 @@ const GartenFormTitle = ({ row, showHistory, setShowHistory }) => {
     () => setActiveNodeArray([...activeNodeArray, 'Kulturen']),
     [activeNodeArray, setActiveNodeArray],
   )
+
+  if (width < 520) {
+    return (
+      <Container>
+        <Title>Garten</Title>
+        <TitleSymbols>
+          <IconButton title="Zur Liste" onClick={onClickUp}>
+            <UpSvg />
+          </IconButton>
+          <IconButton title="Zu den Kulturen" onClick={onClickToKulturen}>
+            <KuDownSvg />
+          </IconButton>
+          <AddButton />
+          <DeleteButton row={row} />
+          <Download gartenId={row.id} />
+          <Menu white={false}>
+            <HistoryButton
+              row={row}
+              showHistory={showHistory}
+              setShowHistory={setShowHistory}
+              asMenu
+            />
+            <Settings asMenu />
+            <FilterNumbers filteredNr={filteredNr} totalNr={totalNr} asMenu />
+          </Menu>
+        </TitleSymbols>
+      </Container>
+    )
+  }
 
   return (
     <Container>
@@ -83,4 +111,4 @@ const GartenFormTitle = ({ row, showHistory, setShowHistory }) => {
   )
 }
 
-export default observer(GartenFormTitle)
+export default withResizeDetector(observer(GartenFormTitle))
