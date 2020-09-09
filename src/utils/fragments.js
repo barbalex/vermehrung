@@ -502,6 +502,8 @@ export const personOption = gql`
     hk_land
     hk_bemerkungen
     hk_geom_point
+    ku_zwischenlager
+    ku_erhaltungskultur
     li_show_sl_felder
     li_show_sl
     sl_show_empty_when_next_to_li

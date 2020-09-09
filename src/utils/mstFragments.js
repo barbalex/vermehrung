@@ -194,7 +194,7 @@ PERSON_FRAGMENT = selectFromperson()
   .userRoleByUserRole()
   .toString()
 
-PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse.ga_plz.ga_ort.ga_geom_point.ga_lat_lng.ga_aktiv.ga_bemerkungen.hk_kanton.hk_land.hk_bemerkungen.hk_geom_point.li_show_sl_felder.li_show_sl.sl_show_empty_when_next_to_li.sl_auto_copy_edits.tree_kultur.tree_teilkultur.tree_zaehlung.tree_lieferung.tree_event._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
+PERSON_OPTION_FRAGMENT = selectFromperson_option().id.ar_name_deutsch.ga_strasse.ga_plz.ga_ort.ga_geom_point.ga_lat_lng.ga_aktiv.ga_bemerkungen.hk_kanton.hk_land.hk_bemerkungen.hk_geom_point.ku_zwischenlager.ku_erhaltungskultur.li_show_sl_felder.li_show_sl.sl_show_empty_when_next_to_li.sl_auto_copy_edits.tree_kultur.tree_teilkultur.tree_zaehlung.tree_lieferung.tree_event._rev._parent_rev._revisions._depth._conflicts._deleted.toString()
 
 PERSON_FILE_FRAGMENT = selectFromperson_file()
   .id.person_id.file_id.file_mime_type.name.beschreibung.person()
