@@ -304,7 +304,7 @@ const Kultur = ({
           saveToDb={saveToDb}
           error={errors.kultur?.garten_id}
         />
-        {ku_zwischenlager && (
+        {(ku_zwischenlager || !!row?.zwischenlager) && (
           <>
             {showFilter ? (
               <Checkbox3States
@@ -327,7 +327,7 @@ const Kultur = ({
             )}
           </>
         )}
-        {ku_erhaltungskultur && (
+        {(ku_erhaltungskultur || !!row?.erhaltungskultur) && (
           <>
             {showFilter ? (
               <Checkbox3States
