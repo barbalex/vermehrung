@@ -8,6 +8,5 @@ import { types } from "mobx-state-tree"
 * garten_rev_constraint
 */
 export const garten_rev_constraintEnumType = types.enumeration("garten_rev_constraint", [
-        "garten_rev_id__rev_key",
-  "garten_rev_pkey",
+        "garten_rev_pkey",
       ])

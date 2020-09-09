@@ -28,6 +28,8 @@ export const person_option_rev_select_columnEnumType = types.enumeration("person
   "hk_kanton",
   "hk_land",
   "id",
+  "ku_erhaltungskultur",
+  "ku_zwischenlager",
   "li_show_sl",
   "li_show_sl_felder",
   "person_id",

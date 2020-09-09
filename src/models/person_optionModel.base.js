@@ -37,6 +37,8 @@ export const person_optionModelBase = ModelBase
     hk_kanton: types.union(types.undefined, types.null, types.boolean),
     hk_land: types.union(types.undefined, types.null, types.boolean),
     id: types.identifier,
+    ku_erhaltungskultur: types.union(types.undefined, types.null, types.boolean),
+    ku_zwischenlager: types.union(types.undefined, types.null, types.boolean),
     li_show_sl: types.union(types.undefined, types.null, types.boolean),
     li_show_sl_felder: types.union(types.undefined, types.null, types.boolean),
     person: types.union(types.undefined, MSTGQLRef(types.late(() => personModel))),
@@ -76,6 +78,8 @@ export class person_optionModelSelector extends QueryBuilder {
   get hk_kanton() { return this.__attr(`hk_kanton`) }
   get hk_land() { return this.__attr(`hk_land`) }
   get id() { return this.__attr(`id`) }
+  get ku_erhaltungskultur() { return this.__attr(`ku_erhaltungskultur`) }
+  get ku_zwischenlager() { return this.__attr(`ku_zwischenlager`) }
   get li_show_sl() { return this.__attr(`li_show_sl`) }
   get li_show_sl_felder() { return this.__attr(`li_show_sl_felder`) }
   get sl_auto_copy_edits() { return this.__attr(`sl_auto_copy_edits`) }
@@ -91,4 +95,4 @@ export function selectFromperson_option() {
   return new person_optionModelSelector()
 }
 
-export const person_optionModelPrimitives = selectFromperson_option()._conflicts._deleted._depth._parent_rev._rev._revisions.ar_name_deutsch.changed.changed_by.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.li_show_sl.li_show_sl_felder.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung
+export const person_optionModelPrimitives = selectFromperson_option()._conflicts._deleted._depth._parent_rev._rev._revisions.ar_name_deutsch.changed.changed_by.ga_aktiv.ga_bemerkungen.ga_geom_point.ga_lat_lng.ga_ort.ga_plz.ga_strasse.hk_bemerkungen.hk_geom_point.hk_kanton.hk_land.ku_erhaltungskultur.ku_zwischenlager.li_show_sl.li_show_sl_felder.sl_auto_copy_edits.sl_show_empty_when_next_to_li.tree_event.tree_kultur.tree_lieferung.tree_teilkultur.tree_zaehlung
