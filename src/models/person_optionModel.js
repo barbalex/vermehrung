@@ -42,6 +42,10 @@ export const person_optionModel = person_optionModelBase.actions((self) => ({
       hk_land: field === 'hk_land' ? value : self.hk_land,
       hk_bemerkungen: field === 'hk_bemerkungen' ? value : self.hk_bemerkungen,
       hk_geom_point: field === 'hk_geom_point' ? value : self.hk_geom_point,
+      ku_zwischenlager:
+        field === 'ku_zwischenlager' ? value : self.ku_zwischenlager,
+      ku_erhaltungskultur:
+        field === 'ku_erhaltungskultur' ? value : self.ku_erhaltungskultur,
       li_show_sl_felder:
         field === 'li_show_sl_felder' ? value : self.li_show_sl_felder,
       li_show_sl: field === 'li_show_sl' ? value : self.li_show_sl,

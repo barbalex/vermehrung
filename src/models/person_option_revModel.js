@@ -39,6 +39,8 @@ export const person_option_revModel = person_option_revModelBase.actions(
         hk_land: self.hk_land,
         hk_bemerkungen: self.hk_bemerkungen,
         hk_geom_point: self.hk_geom_point,
+        ku_zwischenlager: self.ku_zwischenlager,
+        ku_erhaltungskultur: self.ku_erhaltungskultur,
         li_show_sl_felder: self.li_show_sl_felder,
         li_show_sl: self.li_show_sl,
         sl_show_empty_when_next_to_li: self.sl_show_empty_when_next_to_li,
