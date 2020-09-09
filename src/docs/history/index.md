@@ -1,9 +1,11 @@
 ---
 path: '/Dokumentation/Historisierung'
-date: '2020-09-03'
+date: '2020-09-09'
 title: 'Daten-Historie'
 sort1: 25
 ---
+
+Die Historisierung ermöglicht, Änderungen an Daten rückgängig zu machen. Aber sie zeigt alle bisherigen Versionen eines Datensatzes an, unabhängig davon wer sie wann durchführte. Und sie ermöglicht, jeden dieser Zustände wieder herzustellen.<br/><br/>
 
 Um offline fähig zu sein ([mehr dazu](../offline-wie)) erstellt vermehrung.ch bei jeder Änderung eines Datensatzes eine neue Version. Somit **verfügt vermehrung.ch über eine vollständige Historisierung aller Datensätze**, beginnend seit deren Import im Sommer 2020. Aktuell (im Herbst 2020) gibt es bei den meisten Daten noch keine historischen Versionen, weil sie noch kaum bearbeitet wurden.<br/><br/>
 
@@ -12,7 +14,7 @@ Um die Historie eines Datensatzes zu sehen, klickt man auf das entsprechende Sym
 
 - In der Mobil-Ansicht gibt es statt des Symbols einen Menü-Eintrag
 - Das Historie-Symbol wird deaktiviert, wenn es keine historische Versionen gibt
-- Aktuell (Anfang September 2020) ist die Benutzer-Oberfläche für die Historisierung erst für Kulturen implementiert
+- Aktuell (Anfang September 2020) ist die Benutzer-Oberfläche für die Historisierung erst für Kulturen, Personen und Gärten implementiert
 
 Nun öffnet sich rechts der aktuellen Version eine neue Spalte. Sie stellt alle verfügbaren Versionen in einem "Karussell" dar:<br/>
 ![Version](002_version.png)<br/>
