@@ -8,6 +8,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import Conflict from './Conflict'
 import Form from './Form'
 import FormTitle from './FormTitle'
+import History from './History'
 
 const Container = styled.div`
   height: 100%;
@@ -101,15 +102,24 @@ const Garten = ({
               showHistory={showHistory}
             />
             <>
-              {online && !!activeConflict && (
-                <Conflict
-                  rev={activeConflict}
-                  id={id}
-                  row={row}
-                  conflictDisposalCallback={conflictDisposalCallback}
-                  conflictSelectionCallback={conflictSelectionCallback}
-                  setActiveConflict={setActiveConflict}
-                />
+              {online && (
+                <>
+                  {activeConflict ? (
+                    <Conflict
+                      rev={activeConflict}
+                      id={id}
+                      row={row}
+                      conflictDisposalCallback={conflictDisposalCallback}
+                      conflictSelectionCallback={conflictSelectionCallback}
+                      setActiveConflict={setActiveConflict}
+                    />
+                  ) : showHistory ? (
+                    <History
+                      row={row}
+                      historyTakeoverCallback={historyTakeoverCallback}
+                    />
+                  ) : null}
+                </>
               )}
             </>
           </StyledSplitPane>
