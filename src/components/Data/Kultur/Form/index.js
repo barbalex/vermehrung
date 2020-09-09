@@ -57,15 +57,18 @@ const Kultur = ({
 }) => {
   const store = useContext(StoreContext)
   const {
-    filter,
-    online,
+    artHerkuenfte,
     artsSorted,
+    errors,
+    filter,
     gartensSorted,
     herkunftsSorted,
-    errors,
+    online,
     unsetError,
-    artHerkuenfte,
+    userPersonOption,
   } = store
+
+  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
 
   // From all collected combinations of art and herkunft show only arten of those not present in this garten
   // => find all combinations of art and herkunft in sammlungen
@@ -301,43 +304,51 @@ const Kultur = ({
           saveToDb={saveToDb}
           error={errors.kultur?.garten_id}
         />
-        {showFilter ? (
-          <Checkbox3States
-            key={`${row.id}zwischenlager`}
-            label="Zwischenlager"
-            name="zwischenlager"
-            value={row.zwischenlager}
-            saveToDb={saveToDb}
-            error={zwischenlagerError}
-          />
-        ) : (
-          <Checkbox2States
-            key={`${row.id}zwischenlager`}
-            label="Zwischenlager"
-            name="zwischenlager"
-            value={row.zwischenlager}
-            saveToDb={saveToDb}
-            error={zwischenlagerError}
-          />
+        {ku_zwischenlager && (
+          <>
+            {showFilter ? (
+              <Checkbox3States
+                key={`${row.id}zwischenlager`}
+                label="Zwischenlager"
+                name="zwischenlager"
+                value={row.zwischenlager}
+                saveToDb={saveToDb}
+                error={zwischenlagerError}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}zwischenlager`}
+                label="Zwischenlager"
+                name="zwischenlager"
+                value={row.zwischenlager}
+                saveToDb={saveToDb}
+                error={zwischenlagerError}
+              />
+            )}
+          </>
         )}
-        {showFilter ? (
-          <Checkbox3States
-            key={`${row.id}erhaltungskultur`}
-            label="Erhaltungskultur"
-            name="erhaltungskultur"
-            value={row.erhaltungskultur}
-            saveToDb={saveToDb}
-            error={errors.kultur?.erhaltungskultur}
-          />
-        ) : (
-          <Checkbox2States
-            key={`${row.id}erhaltungskultur`}
-            label="Erhaltungskultur"
-            name="erhaltungskultur"
-            value={row.erhaltungskultur}
-            saveToDb={saveToDb}
-            error={errors.kultur?.erhaltungskultur}
-          />
+        {ku_erhaltungskultur && (
+          <>
+            {showFilter ? (
+              <Checkbox3States
+                key={`${row.id}erhaltungskultur`}
+                label="Erhaltungskultur"
+                name="erhaltungskultur"
+                value={row.erhaltungskultur}
+                saveToDb={saveToDb}
+                error={errors.kultur?.erhaltungskultur}
+              />
+            ) : (
+              <Checkbox2States
+                key={`${row.id}erhaltungskultur`}
+                label="Erhaltungskultur"
+                name="erhaltungskultur"
+                value={row.erhaltungskultur}
+                saveToDb={saveToDb}
+                error={errors.kultur?.erhaltungskultur}
+              />
+            )}
+          </>
         )}
         <FieldRow>
           <TextField

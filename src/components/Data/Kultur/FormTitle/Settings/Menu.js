@@ -19,14 +19,10 @@ const Title = styled.div`
   font-weight: 800;
   user-select: none;
 `
-const Info = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.4);
-  user-select: none;
-`
 
 const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   const store = useContext(StoreContext)
+  const { userPersonOption } = store
 
   const kulturOption = useMemo(() => store.kultur_options.get(kulturId) ?? {}, [
     kulturId,
@@ -34,13 +30,24 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
   ])
   const { tk } = kulturOption
 
-  const saveToDb = useCallback(
+  const { ku_zwischenlager, ku_erhaltungskultur } = userPersonOption
+
+  const saveToDbKulturOption = useCallback(
     async (event) => {
       const field = event.target.name
       const value = event.target.value === 'false'
       kulturOption.edit({ field, value })
     },
     [kulturOption],
+  )
+
+  const saveToDbPersonOption = useCallback(
+    async (event) => {
+      const field = event.target.name
+      const value = event.target.value === 'false'
+      userPersonOption.edit({ field, value })
+    },
+    [userPersonOption],
   )
 
   const onClose = useCallback(() => setAnchorEl(null), [setAnchorEl])
@@ -70,7 +77,7 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
             <Checkbox
               color="primary"
               checked={tk}
-              onClick={saveToDb}
+              onClick={saveToDbKulturOption}
               name="tk"
             />
           }
@@ -87,7 +94,37 @@ const SettingsKulturMenu = ({ anchorEl, setAnchorEl, kulturId }) => {
           </IconButton>
         </div>
       </MenuItem>
-      <Info>Die Wahl gilt (nur) für diese Kultur.</Info>
+      <Title>Optionale Felder wählen (für alle Kulturen):</Title>
+      <MenuItem>
+        <FormControlLabel
+          value={ku_zwischenlager === true ? 'true' : 'false'}
+          control={
+            <Checkbox
+              color="primary"
+              checked={ku_zwischenlager}
+              onClick={saveToDbPersonOption}
+              name="ku_zwischenlager"
+            />
+          }
+          label="Zwischenlager"
+          labelPlacement="end"
+        />
+      </MenuItem>
+      <MenuItem>
+        <FormControlLabel
+          value={ku_erhaltungskultur === true ? 'true' : 'false'}
+          control={
+            <Checkbox
+              color="primary"
+              checked={ku_erhaltungskultur}
+              onClick={saveToDbPersonOption}
+              name="ku_erhaltungskultur"
+            />
+          }
+          label="Erhaltungskultur"
+          labelPlacement="end"
+        />
+      </MenuItem>
     </Menu>
   )
 }
