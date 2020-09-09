@@ -87,7 +87,7 @@ const LieferungWer = ({ showFilter, row, saveToDb, ifNeeded }) => {
           name="person_id"
           value={row.person_id}
           field="person_id"
-          label="Person"
+          label="liefernde Person"
           options={personWerte}
           saveToDb={saveToDb}
           error={errors?.lieferung?.person_id}
